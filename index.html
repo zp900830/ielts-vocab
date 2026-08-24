@@ -117,9 +117,12 @@ select,input{font-family:inherit;}
 .sn-nav button{position:relative; display:flex; align-items:center; gap:11px; padding:11px 13px; border:none; border-radius:12px;
   background:transparent; color:var(--iel-ink3); font-size:14px; font-family:inherit; cursor:pointer; text-align:left;
   transition:background var(--iel-t-fast), color var(--iel-t-fast), box-shadow var(--iel-t-fast);}
-.sn-nav button svg{width:18px; height:18px; flex:none;}
+.sn-nav button svg{width:19px; height:19px; flex:none;}
+/* 图标双态：未选中=线条，选中=填充（形状自动切换，随 color 变色） */
+.sn-nav button svg .s{fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;}
+.sn-nav button.on svg .s{fill:currentColor; stroke:none;}
 .sn-nav button:hover{background:rgba(255,255,255,.66); color:var(--iel-accent-deep);}
-.sn-nav button.on{background:var(--iel-accent-soft); color:var(--iel-accent-deep); font-weight:600; box-shadow:inset 0 0 0 1px var(--iel-accent-line);}
+.sn-nav button.on{background:var(--iel-grad); color:#fff; font-weight:600; box-shadow:var(--iel-grad-shadow), 0 2px 6px rgba(16,180,135,.18);}
 #shell{margin-left:200px; transition:margin-left var(--iel-t);}
 body.reading #sidenav{transform:translateX(-102%); visibility:hidden;}   /* 阅读页沉浸：隐藏侧栏 */
 body.reading #shell{margin-left:0;}
@@ -518,19 +521,24 @@ body.reading main{padding-top:64px;}
   .sn-logo{display:none;}
   .sn-nav{flex-direction:row; flex:1; gap:2px;}
   .sn-nav button{flex:1; flex-direction:column; align-items:center; gap:3px; padding:6px 2px; font-size:10.5px; border-radius:10px;}
-  .sn-nav button svg{width:20px; height:20px;}
+  .sn-nav button svg{width:21px; height:21px;}
+  /* 底部导航选中态：iOS 惯例——无背景块，图标填充 + accent 色文字（覆盖桌面绿渐变底） */
+  .sn-nav button.on{background:transparent; color:var(--iel-accent-deep); font-weight:600; box-shadow:none;}
   .sn-nav button .tab-badge{position:absolute; top:2px; right:calc(50% - 24px); margin-left:0;}   /* 底部导航：到期角标贴图标右上 */
   #shell{margin-left:0;}
   body.reading #sidenav{transform:translateY(102%);}   /* 阅读页沉浸：隐藏底部导航 */
 
-  /* 顶栏（二级导航） */
-  #topbar{padding:8px 12px; gap:8px;}
-  .accent-btn{padding:5px 10px; font-size:11.5px;}
-  #topbar.compact{padding:5px 12px;}
-  #topbar.compact .tabs button{padding:5px 11px; font-size:12.5px;}
-  #topbar.compact .chsel select{max-width:112px;}
-  .tabs button{padding:7px 14px; font-size:13.5px;}
-  .chsel select{max-width:150px;}
+  /* 顶栏（二级导航）：三件套强制单行（393px 宽 iPhone 也放得下）——
+     nowrap 保证绝不换行；tabs/口音钮收紧且固定宽，章节 select 弹性伸缩吸收剩余空间
+     （超长章名自动截断省略，不再把英音钮挤换行） */
+  #topbar{padding:7px 10px; gap:6px; flex-wrap:nowrap;}
+  .accent-btn{padding:5px 8px; font-size:11.5px;}
+  #topbar.compact{padding:5px 10px;}
+  #topbar.compact .tabs button{padding:5px 10px; font-size:12.5px;}
+  .tabs{flex:none;}
+  .tabs button{padding:6px 11px; font-size:13px; white-space:nowrap;}
+  .chsel{flex:1; min-width:0;}
+  .chsel select{flex:1; width:auto; max-width:none; min-width:0; text-overflow:ellipsis;}
   /* iOS 聚焦自动缩放只作用于文本输入框（input/textarea）；select 弹原生选择器不触发缩放，
      故仅 input 保持 16px，所有 select 降回常规字号——否则筛选控件显得巨大 */
   input,.stat-controls input[type=search],.wq-search{font-size:16px;}
@@ -615,8 +623,10 @@ body.reading main{padding-top:64px;}
   .wq-ex{font-size:12.5px;}
   .wq-list{padding:0 12px 10px;}
 
-  /* 统计 / 生词本 / 复习 */
-  .ov-cell{padding:10px 12px;}
+  /* 统计 / 生词本 / 复习：指标卡 3 列紧凑排布省纵向空间，整体掌握度通栏保持主指标权重 */
+  .ov-grid{grid-template-columns:repeat(auto-fit,minmax(96px,1fr)); gap:8px;}
+  .ov-cell{padding:9px 8px;}
+  .ov-cell.hi{grid-column:1 / -1;}
   .ov-cell .n{font-size:19px;}
   .ov-cell.hi .n{font-size:26px;}
   .w-row .w{width:100px;}
@@ -765,10 +775,10 @@ body.reading #lsFab{display:none;}
 <aside id="sidenav">
   <div class="sn-logo"><span class="sn-em">📖</span><span class="sn-name">雅思词汇<br>情境训练</span></div>
   <nav class="sn-nav" id="snNav">
-    <button data-view="home" class="on"><svg viewBox="0 0 20 20"><path d="M3.2 9.3 10 3.2l6.8 6.1M5.2 8.2V17h3.6v-4.2h2.4V17h3.6V8.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sn-t">首页</span></button>
-    <button data-view="stats"><svg viewBox="0 0 20 20"><path d="M3 17h14M5.5 17v-5M10 17V7M14.5 17V3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="sn-t">学习统计</span></button>
-    <button data-view="fav"><svg viewBox="0 0 20 20"><path d="M6 3h8a1 1 0 0 1 1 1v13l-5-3.6L5 17V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span class="sn-t">生词本</span></button>
-    <button data-view="me"><svg viewBox="0 0 20 20"><circle cx="10" cy="6.6" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 16.6c1.2-3 3.6-4.4 6-4.4s4.8 1.4 6 4.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="sn-t">我的</span></button>
+    <button data-view="home" class="on"><svg viewBox="0 0 24 24"><path class="s" d="M4.2 10.9 12 4.3l7.8 6.6M6.4 9.7v8.8c0 .6.4 1 1 1h2.9v-4.4h3.4v4.4h2.9c.6 0 1-.4 1-1V9.7"/></svg><span class="sn-t">首页</span></button>
+    <button data-view="stats"><svg viewBox="0 0 24 24"><rect class="s" x="4" y="12.8" width="3.8" height="8.6" rx="1.7"/><rect class="s" x="9.9" y="8.6" width="3.8" height="12.8" rx="1.7"/><rect class="s" x="15.8" y="4.6" width="3.8" height="16.8" rx="1.7"/><path d="M3.2 21.6h17.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span class="sn-t">学习统计</span></button>
+    <button data-view="fav"><svg viewBox="0 0 24 24"><path class="s" d="M12 7.1C10.2 5.6 8 5 4.4 5c-.6 0-1 .4-1 1v11.5c0 .6.4 1 1 1 3.6 0 5.8.6 7.6 2.1 1.8-1.5 4-2.1 7.6-2.1.6 0 1-.4 1-1V6c0-.6-.4-1-1-1-3.6 0-5.8.6-7.6 2.1z"/><path class="s" d="M12 7.1v11.5"/></svg><span class="sn-t">生词本</span></button>
+    <button data-view="me"><svg viewBox="0 0 24 24"><circle class="s" cx="12" cy="8" r="3.7"/><path class="s" d="M5.4 19.8c.8-3.4 3.4-5.2 6.6-5.2s5.8 1.8 6.6 5.2"/></svg><span class="sn-t">我的</span></button>
   </nav>
 </aside>
 <div id="shell">
@@ -2588,20 +2598,16 @@ function renderStats(){
     const lv=mz?levelIdx(mz.score):-1;
     return {w, mz, st, lv, ns:(WORD_STORIES[w]||[]).length};
   });
-  const tested=rows.filter(r=>r.mz&&r.mz.tested);
   const touched=rows.filter(r=>r.mz);
   const avg=touched.length?Math.round(touched.reduce((a,r)=>a+r.mz.score,0)/touched.length):0;
   const lvCount=[0,0,0,0]; rows.forEach(r=>{ if(r.lv>=0) lvCount[r.lv]++; });
   const untouched=rows.length-touched.length;
-  const totC=rows.reduce((a,r)=>a+r.st.c,0), totW=rows.reduce((a,r)=>a+r.st.w,0);
   const totAttempts=Object.values(S.quiz).reduce((a,q)=>a+q.attempts,0);
-  const acc=totC+totW?Math.round(totC/(totC+totW)*100):0;
 
   let html=`<div class="view-sub">${ch==="all"?"全部 22 章":"第"+ch+"章 · "+esc(chName(ch).replace(/^\d+\s*/,""))} · 共 ${rows.length} 个目标词。数据保存在本机浏览器（localStorage），离线可用。</div>
   <div class="card">
     <div class="ov-grid">
       <div class="ov-cell hi"><div class="n">${avg}<small style="font-size:14px;color:var(--iel-mute)">%</small></div><div class="t">整体掌握度</div></div>
-      <div class="ov-cell hi"><div class="n">${totC+totW?acc+"%":"—"}</div><div class="t">测验总正确率（${totC} 对 / ${totW} 错）</div></div>
       <div class="ov-cell"><div class="n">${rows.length}</div><div class="t">目标词汇总数</div></div>
       <div class="ov-cell"><div class="n" style="color:${LEVEL_COLORS[3]}">${lvCount[3]}</div><div class="t">牢固</div></div>
       <div class="ov-cell"><div class="n" style="color:${LEVEL_COLORS[2]}">${lvCount[2]}</div><div class="t">基本掌握</div></div>
