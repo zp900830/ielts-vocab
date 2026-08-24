@@ -797,11 +797,19 @@ body.reading #lsFab{display:none;}
 <div id="toast"></div>
 
 <script>
-/* 加载完整性自检（须在主脚本之前注册）：本页为单个大 HTML（约 2.9MB），弱网/代理切换时
-   可能被截断——截断处落在主脚本中段时页面只剩导航、主内容空白且末尾自检永远执行不到。
-   故在前部挂 load 监听：主脚本未完整执行（无 __APP_TAIL__ 标记）即弹红色警告，避免"静默坏掉"。 */
+/* 加载完整性自检 + 自动重试（须在主脚本之前注册）：本页为单个大 HTML（约 2.9MB），CDN/弱网
+   间歇性断流时会被截断——截断处落在主脚本中段时页面只剩导航、主内容空白且末尾自检执行不到。
+   前部挂 load 监听：主脚本未完整执行（无 __APP_TAIL__ 标记）时先自动换参重拉（sessionStorage
+   计数，最多 2 次防死循环），重试仍失败才弹红色警告，避免"静默坏掉"。 */
 window.addEventListener("load",function(){
-  if(window.__APP_TAIL__) return;
+  if(window.__APP_TAIL__){ try{sessionStorage.removeItem("_appRetry");}catch(e){} return; }
+  var n=0; try{ n=parseInt(sessionStorage.getItem("_appRetry")||"0",10)||0; }catch(e){}
+  if(n<2){
+    try{ sessionStorage.setItem("_appRetry", String(n+1)); }catch(e){}
+    var sep = location.search.indexOf("?")>=0 ? "&" : "?";
+    setTimeout(function(){ location.replace(location.pathname+location.search+sep+"_r="+Date.now()+location.hash); }, 300);
+    return;
+  }
   var b=document.createElement("div");
   b.textContent="⚠ 页面加载不完整（网络不稳），请刷新重试；若反复出现，请切换网络后再刷新";
   b.style.cssText="position:fixed;left:0;right:0;top:0;z-index:99999;background:#e74c3c;color:#fff;font:14px/1.6 -apple-system,sans-serif;text-align:center;padding:10px 16px;box-sizing:border-box";
