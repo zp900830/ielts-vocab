@@ -413,7 +413,9 @@ body.reading main{padding-top:64px;}
 .wq-empty{display:none; text-align:center; color:var(--iel-ink-faint); font-size:12.5px; padding:30px 0 20px;}
 .wq-empty.show{display:block;}
 /* 单词行：透明列表行 + 故事列表同款虚线分割；悬浮/选中统一 1px 绿描边 */
-.wq-item{position:relative; border-radius:var(--iel-radius-xs); padding:10px 6px; background:transparent; border:1px solid transparent; transition:background var(--iel-t-fast), border-color var(--iel-t-fast), box-shadow var(--iel-t-fast); -webkit-tap-highlight-color:transparent;}
+.wq-item{position:relative; border-radius:var(--iel-radius-xs); padding:10px 6px; background:transparent; border:1px solid transparent; transition:background var(--iel-t-fast), border-color var(--iel-t-fast), box-shadow var(--iel-t-fast); -webkit-tap-highlight-color:transparent; cursor:pointer;}
+.accent-btn{flex:none; border:1px solid var(--iel-accent-line); background:#fff; color:var(--iel-accent-deep); border-radius:999px; padding:6px 13px; font-size:12.5px; font-weight:600; white-space:nowrap; cursor:pointer; transition:background var(--iel-t-fast), border-color var(--iel-t-fast);}
+.accent-btn:hover{background:var(--iel-accent-soft); border-color:var(--iel-accent);}
 .wq-item:not(:last-child)::after{content:""; position:absolute; left:6px; right:6px; bottom:0; border-bottom:1px dashed var(--iel-line); pointer-events:none;}
 .wq-item:hover::after,.wq-item.sel::after{display:none;}
 .wq-item:hover,.wq-item.sel{background:#fff; border-color:var(--iel-accent); box-shadow:0 1px 6px rgba(16,180,135,.14);}
@@ -482,6 +484,7 @@ body.reading main{padding-top:64px;}
   /* 顶栏 */
   #topbar{padding:8px 12px; gap:8px;}
   .brand{font-size:15.5px;}
+  .accent-btn{padding:5px 10px; font-size:11.5px;}
   #topbar.compact{padding:5px 12px;}
   #topbar.compact .brand{left:12px;}
   #topbar.compact .tabs button{padding:4px 9px; font-size:12px;}
@@ -685,6 +688,7 @@ body.reading #lsFab{display:none;}
     <button data-view="fav">生词本</button>
   </div>
   <div class="chsel"><span class="sel-label">章节</span><select id="chapterSel"></select></div>
+  <button class="accent-btn" id="accentBtn" title="全局默认发音口音：点击切换 英式/美式（影响单词卡点击、音标显示与朗读）">🇬🇧 英音</button>
 </nav>
 <main id="app"></main>
 <div id="scrim"></div>
@@ -1005,7 +1009,9 @@ function renderWordPanel(s, markedWords){
       item.classList.add("sel");
       if(TOUCH) setOpen(false);   // 手机端收起面板，露出定位后的句子
       locateWordInStory(item.dataset.w);
+      return;
     }
+    speakWord(item.dataset.w);   // 点击单词卡任意空白处：用全局默认口音朗读
   };
 }
 
@@ -1390,6 +1396,8 @@ function speakWordLocal(w,want){
 let POP_WORD=null, POP_SURFACE=null;
 function setAccent(acc){
   S.accent=acc; save();
+  const ab=document.getElementById("accentBtn");
+  if(ab) ab.textContent=acc==="US"?"🇺🇸 美音":"🇬🇧 英音";
   const phEl=document.querySelector("#wpop .wp-ph");
   if(phEl&&POP_WORD){ const d=DICT[POP_WORD]; if(d) phEl.outerHTML=phBothHtml(d); }
   document.querySelectorAll(".wq-item").forEach(it=>{
@@ -2838,6 +2846,13 @@ document.addEventListener("keydown",e=>{
 /* ================= 初始化 ================= */
 migrateFav();
 updateFavBadge();
+(function(){
+  const ab=document.getElementById("accentBtn");
+  if(ab){
+    ab.textContent=S.accent==="US"?"🇺🇸 美音":"🇬🇧 英音";
+    ab.onclick=()=>{ const next=S.accent==="US"?"GB":"US"; setAccent(next); toast(next==="US"?"全局发音已切换为 🇺🇸 美式":"全局发音已切换为 🇬🇧 英式"); };
+  }
+})();
 audio.loadVoices(renderAudioBarIfReader);
 function renderAudioBarIfReader(){ if(VIEW==="reader") renderAudioBar(); }
 lsState();
