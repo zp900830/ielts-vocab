@@ -107,22 +107,26 @@ select,input{font-family:inherit;}
    一级导航：桌面左侧边栏（移动端改为底部导航，见 15 块媒体查询）
    二级导航：顶部条（首页二级 = 情景阅读 / 随身听；右侧章节筛选 + 口音）
    ============================================================ */
-#sidenav{position:fixed; left:0; top:0; bottom:0; width:200px; z-index:70; display:flex; flex-direction:column; padding:20px 12px;
-  background:rgba(255,255,255,.42); -webkit-backdrop-filter:blur(14px) saturate(160%); backdrop-filter:blur(14px) saturate(160%);
-  border-right:1px solid rgba(231,238,233,.7); transition:transform var(--iel-t), visibility var(--iel-t);}
-.sn-logo{display:flex; align-items:center; gap:9px; padding:2px 10px 16px; color:var(--iel-accent-deep);}
-.sn-logo .sn-em{font-size:21px;}
-.sn-name{font-weight:700; font-size:14.5px; line-height:1.35;}
-.sn-nav{display:flex; flex-direction:column; gap:5px;}
-.sn-nav button{position:relative; display:flex; align-items:center; gap:11px; padding:11px 13px; border:none; border-radius:12px;
-  background:transparent; color:var(--iel-ink3); font-size:14px; font-family:inherit; cursor:pointer; text-align:left;
-  transition:background var(--iel-t-fast), color var(--iel-t-fast), box-shadow var(--iel-t-fast);}
-.sn-nav button svg{width:19px; height:19px; flex:none;}
+/* 一级导航：苹果玻璃侧栏——重模糊+高饱和+发丝级描边；选中=轻染 tint（macOS 侧栏语言，非色块按钮） */
+#sidenav{position:fixed; left:0; top:0; bottom:0; width:200px; z-index:70; display:flex; flex-direction:column; padding:16px 12px 14px;
+  background:rgba(250,252,251,.6); -webkit-backdrop-filter:blur(30px) saturate(180%); backdrop-filter:blur(30px) saturate(180%);
+  border-right:.5px solid rgba(31,45,38,.09); box-shadow:inset 0 0 0 .5px rgba(255,255,255,.55);
+  transition:transform var(--iel-t), visibility var(--iel-t);}
+.sn-logo{display:flex; align-items:center; gap:10px; padding:2px 8px 16px; color:var(--iel-ink1);}
+.sn-logo .sn-mark{width:34px; height:34px; flex:none; border-radius:9px; background:var(--iel-grad); color:#fff;
+  box-shadow:var(--iel-grad-shadow), inset 0 1px 0 rgba(255,255,255,.28); display:flex; align-items:center; justify-content:center;}
+.sn-logo .sn-mark svg{width:18px; height:18px;}
+.sn-name{font-weight:700; font-size:13.5px; line-height:1.4; letter-spacing:.2px;}
+.sn-nav{display:flex; flex-direction:column; gap:2px;}
+.sn-nav button{position:relative; display:flex; align-items:center; gap:10px; padding:8px 11px; border:none; border-radius:8px;
+  background:transparent; color:var(--iel-ink3); font-size:13.5px; font-family:inherit; cursor:pointer; text-align:left;
+  transition:background var(--iel-t-fast), color var(--iel-t-fast);}
+.sn-nav button svg{width:18px; height:18px; flex:none;}
 /* 图标双态：未选中=线条，选中=填充（形状自动切换，随 color 变色） */
 .sn-nav button svg .s{fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;}
 .sn-nav button.on svg .s{fill:currentColor; stroke:none;}
-.sn-nav button:hover{background:rgba(255,255,255,.66); color:var(--iel-accent-deep);}
-.sn-nav button.on{background:var(--iel-grad); color:#fff; font-weight:600; box-shadow:var(--iel-grad-shadow), 0 2px 6px rgba(16,180,135,.18);}
+.sn-nav button:hover{background:rgba(31,45,38,.05); color:var(--iel-ink1);}
+.sn-nav button.on{background:rgba(16,180,135,.12); color:var(--iel-accent-deep); font-weight:600;}
 #shell{margin-left:200px; transition:margin-left var(--iel-t);}
 body.reading #sidenav{transform:translateX(-102%); visibility:hidden;}   /* 阅读页沉浸：隐藏侧栏 */
 body.reading #shell{margin-left:0;}
@@ -133,13 +137,15 @@ body.reading #shell{margin-left:0;}
   display:flex; align-items:center; gap:14px; flex-wrap:wrap; transition:transform var(--iel-t), padding .3s ease;}
 body.reading #topbar{position:fixed; left:0; right:0; transform:translateY(-110%);}
 body.reading{padding-top:0;}
-/* 二级导航（分段控件）：核心导航，用主操作级视觉权重——选中=绿渐变实底白字 */
-.tabs{display:flex; gap:4px; background:rgba(255,255,255,.62); border:1px solid rgba(191,230,214,.6);
-  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
-  border-radius:999px; padding:4px; box-shadow:var(--iel-shadow);}
-.tabs button{border:none; background:transparent; padding:8px 22px; border-radius:999px; font-size:15px; font-weight:500; color:var(--iel-ink3); transition:color var(--iel-t-fast), background var(--iel-t-fast), box-shadow var(--iel-t-fast);}
-.tabs button:hover:not(.on){color:var(--iel-accent-deep); background:rgba(16,180,135,.09);}
-.tabs button.on{background:var(--iel-grad); color:#fff; font-weight:600; box-shadow:var(--iel-grad-shadow), 0 2px 6px rgba(16,180,135,.2);}
+/* 二级导航：iOS 分段控件（Segmented Control）——细灰轨道 + 白色浮起选中段（直接挂在 .on 按钮上，
+   纯 CSS 零定位风险；等宽两段由 grid 保证；替代原"一排填充按钮"） */
+.tabs{display:grid; grid-template-columns:1fr 1fr; flex:none; padding:3px; background:rgba(31,45,38,.07); border-radius:10px;}
+.tabs button{border:none; background:transparent; padding:6px 20px; border-radius:7px;
+  font-size:13.5px; font-weight:500; color:var(--iel-ink3); white-space:nowrap; cursor:pointer; font-family:inherit;
+  transition:color .25s, background .25s, box-shadow .25s;}
+.tabs button:hover:not(.on){color:var(--iel-ink1);}
+.tabs button.on{background:#fff; color:var(--iel-ink1); font-weight:600;
+  box-shadow:0 1px 3px rgba(31,45,38,.18), 0 0 0 .5px rgba(31,45,38,.04);}
 body:not(.v-home) #tabs{display:none;}   /* 非首页一级栏目：无二级导航，顶栏只留章节筛选与口音 */
 .chsel{margin-left:auto; display:flex; align-items:center; gap:6px; color:var(--iel-ink2); font-size:13px;}
 /* 顶栏英音/美音切换胶囊 */
@@ -503,7 +509,7 @@ body.reading main{padding-top:64px;}
 /* 平板/窄桌面：章节选择器收窄，避免与二级导航挤压 */
 @media (max-width:780px){
   .chsel select{max-width:150px;}
-  .tabs button{padding:7px 15px; font-size:13.5px;}
+  .tabs button{padding:6px 16px; font-size:13px;}
 }
 
 @media (max-width:640px){
@@ -515,9 +521,10 @@ body.reading main{padding-top:64px;}
       linear-gradient(170deg,#f8fdfa 0%,#ffffff 40%,#ffffff 100%);
     background-size:100% 64px, 100% 100%; background-repeat:no-repeat;}
 
-  /* 一级导航：移动端侧边栏变为底部导航 */
-  #sidenav{top:auto; right:0; bottom:0; width:auto; flex-direction:row; padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px));
-    border-right:none; border-top:1px solid rgba(231,238,233,.7);}
+  /* 一级导航：移动端侧边栏变为底部导航（同款苹果玻璃：重模糊+发丝上描边） */
+  #sidenav{top:auto; right:0; bottom:0; width:auto; flex-direction:row; padding:5px 8px calc(5px + env(safe-area-inset-bottom,0px));
+    background:rgba(252,253,252,.8); -webkit-backdrop-filter:blur(24px) saturate(180%); backdrop-filter:blur(24px) saturate(180%);
+    border-right:none; border-top:.5px solid rgba(31,45,38,.09); box-shadow:none;}
   .sn-logo{display:none;}
   .sn-nav{flex-direction:row; flex:1; gap:2px;}
   .sn-nav button{flex:1; flex-direction:column; align-items:center; gap:3px; padding:6px 2px; font-size:10.5px; border-radius:10px;}
@@ -773,7 +780,7 @@ body.reading #lsFab{display:none;}
 </head>
 <body>
 <aside id="sidenav">
-  <div class="sn-logo"><span class="sn-em">📖</span><span class="sn-name">雅思词汇<br>情境训练</span></div>
+  <div class="sn-logo"><span class="sn-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.8 6.2c0-.7.6-1.2 1.3-1.2 3.4 0 5.6.7 6.9 2.1 1.3-1.4 3.5-2.1 6.9-2.1.7 0 1.3.5 1.3 1.2v10.3c0 .7-.6 1.2-1.3 1.2-3.4 0-5.6.7-6.9 2.1-1.3-1.4-3.5-2.1-6.9-2.1-.7 0-1.3-.5-1.3-1.2V6.2z"/></svg></span><span class="sn-name">雅思词汇<br>情境训练</span></div>
   <nav class="sn-nav" id="snNav">
     <button data-view="home" class="on"><svg viewBox="0 0 24 24"><path class="s" d="M4.2 10.9 12 4.3l7.8 6.6M6.4 9.7v8.8c0 .6.4 1 1 1h2.9v-4.4h3.4v4.4h2.9c.6 0 1-.4 1-1V9.7"/></svg><span class="sn-t">首页</span></button>
     <button data-view="stats"><svg viewBox="0 0 24 24"><rect class="s" x="4" y="12.8" width="3.8" height="8.6" rx="1.7"/><rect class="s" x="9.9" y="8.6" width="3.8" height="12.8" rx="1.7"/><rect class="s" x="15.8" y="4.6" width="3.8" height="16.8" rx="1.7"/><path d="M3.2 21.6h17.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span class="sn-t">学习统计</span></button>
@@ -931,7 +938,7 @@ function syncNav(){
   document.body.classList.toggle("v-home", VIEW==="home"||VIEW==="listen"||VIEW==="reader");
   document.querySelectorAll("#snNav button").forEach(b=>b.classList.toggle("on",
     b.dataset.view===VIEW||(b.dataset.view==="home"&&(VIEW==="listen"||VIEW==="reader"))));
-  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.view===VIEW));
+  document.getElementById("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.view===VIEW));
 }
 function switchView(v){
   VIEW=v;
