@@ -103,29 +103,45 @@ select,input{font-family:inherit;}
 .q-submit:disabled{box-shadow:none;}
 
 /* ============================================================
-   4. 顶栏
+   4. 导航框架
+   一级导航：桌面左侧边栏（移动端改为底部导航，见 15 块媒体查询）
+   二级导航：顶部条（首页二级 = 情景阅读 / 随身听；右侧章节筛选 + 口音）
    ============================================================ */
+#sidenav{position:fixed; left:0; top:0; bottom:0; width:200px; z-index:70; display:flex; flex-direction:column; padding:20px 12px;
+  background:rgba(255,255,255,.42); -webkit-backdrop-filter:blur(14px) saturate(160%); backdrop-filter:blur(14px) saturate(160%);
+  border-right:1px solid rgba(231,238,233,.7); transition:transform var(--iel-t), visibility var(--iel-t);}
+.sn-logo{display:flex; align-items:center; gap:9px; padding:2px 10px 16px; color:var(--iel-accent-deep);}
+.sn-logo .sn-em{font-size:21px;}
+.sn-name{font-weight:700; font-size:14.5px; line-height:1.35;}
+.sn-nav{display:flex; flex-direction:column; gap:5px;}
+.sn-nav button{position:relative; display:flex; align-items:center; gap:11px; padding:11px 13px; border:none; border-radius:12px;
+  background:transparent; color:var(--iel-ink3); font-size:14px; font-family:inherit; cursor:pointer; text-align:left;
+  transition:background var(--iel-t-fast), color var(--iel-t-fast), box-shadow var(--iel-t-fast);}
+.sn-nav button svg{width:18px; height:18px; flex:none;}
+.sn-nav button:hover{background:rgba(255,255,255,.66); color:var(--iel-accent-deep);}
+.sn-nav button.on{background:var(--iel-accent-soft); color:var(--iel-accent-deep); font-weight:600; box-shadow:inset 0 0 0 1px var(--iel-accent-line);}
+#shell{margin-left:200px; transition:margin-left var(--iel-t);}
+body.reading #sidenav{transform:translateX(-102%); visibility:hidden;}   /* 阅读页沉浸：隐藏侧栏 */
+body.reading #shell{margin-left:0;}
+
 #topbar{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.42);
   -webkit-backdrop-filter:blur(14px) saturate(160%); backdrop-filter:blur(14px) saturate(160%);
   border-bottom:1px solid rgba(231,238,233,.7); padding:10px 18px;
   display:flex; align-items:center; gap:14px; flex-wrap:wrap; transition:transform var(--iel-t), padding .3s ease;}
 body.reading #topbar{position:fixed; left:0; right:0; transform:translateY(-110%);}
 body.reading{padding-top:0;}
-.brand{font-weight:700; font-size:17px; color:var(--iel-accent-deep); white-space:nowrap;}
 .tabs{display:flex; gap:4px; background:rgba(255,255,255,.48); border:1px solid rgba(255,255,255,.7);
   -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
-  border-radius:999px; padding:3px; position:absolute; left:50%; transform:translateX(-50%); box-shadow:var(--iel-shadow);}
+  border-radius:999px; padding:3px; box-shadow:var(--iel-shadow);}
 .tabs button{border:none; background:transparent; padding:6px 16px; border-radius:999px; font-size:14px; color:var(--iel-ink2); transition:color var(--iel-t-fast), background var(--iel-t-fast);}
 .tabs button.on{background:#fff; color:var(--iel-accent-deep); font-weight:600; box-shadow:0 2px 8px rgba(16,180,135,.16);}
+body:not(.v-home) #tabs{display:none;}   /* 非首页一级栏目：无二级导航，顶栏只留章节筛选与口音 */
 .chsel{margin-left:auto; display:flex; align-items:center; gap:6px; color:var(--iel-ink2); font-size:13px;}
 .chsel select{max-width:190px; box-shadow:var(--iel-shadow);}
-/* 顶栏滚动收缩态：滚入正文时隐藏品牌名、章节筛选靠右；
-   桌面端 tabs 保持居中不动，仅移动端（≤780px，tabs 平时在第二行）收缩时移到最左。
-   brand 原位淡出（可动画）；tabs 的位置变化由 JS FLIP 动画平滑过渡 */
-#topbar.compact{padding:6px 18px;}
-.brand{transition:opacity .22s ease;}
-#topbar.compact .brand{position:absolute; left:18px; opacity:0; pointer-events:none;}
-#topbar.compact .chsel{margin-left:auto; min-width:0;}
+/* 顶栏滚动收缩态：滚入正文时收紧上下 padding */
+#topbar.compact{padding:5px 18px;}
+/* 桌面端非阅读视图：播放条在内容区（侧栏右侧）内居中 */
+@media (min-width:641px){ body:not(.reading) .audiobar{left:calc(50% + 100px);} }
 
 /* ============================================================
    5. 布局与首页
@@ -138,6 +154,8 @@ h2.view-title{font-size:20px; margin-bottom:4px;}
 .guide h3{font-size:15px; color:var(--iel-accent-deep); margin-bottom:8px;}
 .guide ol{margin-left:20px; font-size:13.5px; color:var(--iel-ink3);}
 .guide ol li{margin:3px 0;}
+.me-h{font-size:15px; color:var(--iel-accent-deep); margin-bottom:8px;}
+.me-p{font-size:13px; color:var(--iel-ink3); line-height:1.7;}
 .view-sub .toggle-g{background:var(--iel-accent-soft); border:none; color:var(--iel-accent-deep); font-size:12px; padding:2px 10px; border-radius:999px; margin-left:8px; vertical-align:1px; white-space:nowrap;}
 .view-sub .toggle-g:hover{background:var(--iel-accent-hover);}
 .story-item{display:flex; align-items:center; gap:16px; padding:16px 6px; border-bottom:1px dashed var(--iel-line);}
@@ -472,13 +490,10 @@ body.reading main{padding-top:64px;}
 #toast{position:fixed; left:50%; bottom:36px; transform:translateX(-50%) translateY(20px); background:rgba(43,58,52,.92); color:#fff; padding:10px 22px; border-radius:999px; font-size:13.5px; opacity:0; transition:var(--iel-t); z-index:300; pointer-events:none; white-space:nowrap;}
 #toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 
-/* 平板/窄桌面：顶栏标签换行，避免与章节选择器重叠 */
+/* 平板/窄桌面：章节选择器收窄，避免与二级导航挤压 */
 @media (max-width:780px){
-  .tabs{position:static; transform:none; order:3; margin:0 auto;}
-  /* 收缩态：单行排布，tab 左、筛选右 */
-  #topbar.compact{flex-wrap:nowrap;}
-  #topbar.compact .tabs{order:0; margin:0;}
-  #topbar.compact .chsel{margin-left:auto;}
+  .chsel select{max-width:150px;}
+  .tabs button{padding:6px 13px; font-size:13px;}
 }
 
 @media (max-width:640px){
@@ -490,20 +505,33 @@ body.reading main{padding-top:64px;}
       linear-gradient(170deg,#f8fdfa 0%,#ffffff 40%,#ffffff 100%);
     background-size:100% 64px, 100% 100%; background-repeat:no-repeat;}
 
-  /* 顶栏 */
+  /* 一级导航：移动端侧边栏变为底部导航 */
+  #sidenav{top:auto; right:0; bottom:0; width:auto; flex-direction:row; padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px));
+    border-right:none; border-top:1px solid rgba(231,238,233,.7);}
+  .sn-logo{display:none;}
+  .sn-nav{flex-direction:row; flex:1; gap:2px;}
+  .sn-nav button{flex:1; flex-direction:column; align-items:center; gap:3px; padding:6px 2px; font-size:10.5px; border-radius:10px;}
+  .sn-nav button svg{width:20px; height:20px;}
+  .sn-nav button .tab-badge{position:absolute; top:2px; right:calc(50% - 24px); margin-left:0;}   /* 底部导航：到期角标贴图标右上 */
+  #shell{margin-left:0;}
+  body.reading #sidenav{transform:translateY(102%);}   /* 阅读页沉浸：隐藏底部导航 */
+
+  /* 顶栏（二级导航） */
   #topbar{padding:8px 12px; gap:8px;}
-  .brand{font-size:15.5px;}
   .accent-btn{padding:5px 10px; font-size:11.5px;}
   #topbar.compact{padding:5px 12px;}
-  #topbar.compact .brand{left:12px;}
   #topbar.compact .tabs button{padding:4px 9px; font-size:12px;}
   #topbar.compact .chsel select{max-width:112px;}
   .tabs button{padding:5px 12px; font-size:13px;}
   .chsel select{max-width:150px;}
   select,input,.chsel select,.abar-sel,.stat-controls input[type=search],.stat-controls select,.wq-search{font-size:16px;}
 
-  /* 布局 */
-  main{padding:16px 12px 150px;}
+  /* 布局：默认预留底部导航高度；阅读页（底部导航隐藏，有朗读条）与随身听页（导航+播放条叠加）分别加高 */
+  main{padding:16px 12px calc(84px + env(safe-area-inset-bottom,0px));}
+  body.reading main{padding-bottom:150px;}
+  body[data-view="listen"] main{padding-bottom:calc(200px + env(safe-area-inset-bottom,0px));}
+  body[data-view="listen"] .audiobar{bottom:calc(72px + env(safe-area-inset-bottom,0px));}   /* 播放条抬到底部导航之上 */
+  #lsFab{bottom:calc(88px + env(safe-area-inset-bottom,0px));}   /* 悬浮球抬到底部导航之上 */
   .card{padding:14px; border-radius:14px;}
   h2.view-title{font-size:18px;}
   .view-sub{font-size:12.5px;}
@@ -598,36 +626,14 @@ body.reading main{padding-top:64px;}
 }
 
 /* ============================================================
-   16. 随身听 —— 标题行入口 / 全屏播放器浮窗 / 右下角旋转悬浮球
+   16. 随身听 —— 二级 tab 视图 / 右下角旋转悬浮球（离开随身听页且播放中时显示）
    ============================================================ */
 .home-head{display:flex; align-items:flex-end; gap:12px;}
 .home-head .view-title{flex:1;}
-/* 随身听入口：右下角固定玻璃胶囊（渐变小圆盘 + 文字），与悬浮球同位互斥 */
-.ls-open{position:fixed; right:calc(16px + env(safe-area-inset-right,0px)); bottom:calc(28px + env(safe-area-inset-bottom,0px)); z-index:110; display:inline-flex; align-items:center; gap:9px; padding:7px 17px 7px 7px; border-radius:999px; border:1px solid rgba(255,255,255,.88); background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.46)); -webkit-backdrop-filter:blur(24px) saturate(190%); backdrop-filter:blur(24px) saturate(190%); font-size:13.5px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 14px 38px rgba(30,90,70,.2), 0 2px 6px rgba(30,90,70,.08), inset 0 1px 0 rgba(255,255,255,.95); transition:opacity .28s ease, transform .3s cubic-bezier(.32,.72,.35,1), box-shadow var(--iel-t-fast), border-color var(--iel-t-fast);}
-.ls-open:hover{border-color:var(--iel-accent); box-shadow:0 16px 42px rgba(16,180,135,.24), 0 2px 6px rgba(30,90,70,.1), inset 0 1px 0 #fff; transform:translateY(-1px);}
-.ls-open:active{transform:translateY(0);}
-.ls-go-ic{width:34px; height:34px; border-radius:50%; flex:none; background:var(--iel-grad); color:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(16,180,135,.42), inset 0 1px 0 rgba(255,255,255,.4), inset 0 -2px 4px rgba(6,84,62,.25);}
-.ls-go-ic::after{content:""; position:absolute; width:34px; height:34px; border-radius:50%; pointer-events:none; background:radial-gradient(ellipse at 30% 18%, rgba(255,255,255,.45), rgba(255,255,255,0) 60%);}
-.ls-go-ic{position:relative;}
-.ls-go-ic .ic{width:15px; height:15px; display:block;}
-.ls-go-t{color:var(--iel-accent-deep); padding-right:3px; letter-spacing:.5px;}
-.ls-open .pulse{width:7px; height:7px; border-radius:50%; background:var(--iel-accent); animation:ls-pulse 1.6s ease infinite;}
-body.ls-active #lsGo{opacity:0; pointer-events:none; transform:translateY(12px) scale(.9);}   /* 播放/暂停态：让位给悬浮球 */
-body.reading #lsGo{display:none;}   /* 阅读页（底部有朗读条）不显示，避免遮挡 */
 @keyframes ls-pulse{0%,100%{opacity:.35; transform:scale(.8);}50%{opacity:1; transform:scale(1.15);}}
 
-/* 全屏播放器浮窗：覆盖式独立层，关闭后播放不中断 */
-#lsPanel{position:fixed; inset:0; z-index:120; display:none; flex-direction:column;
-  background:linear-gradient(180deg,rgba(255,255,255,.5) 0%,rgba(243,251,247,.72) 22%,rgba(241,250,246,.8) 100%);
-  -webkit-backdrop-filter:blur(28px) saturate(175%); backdrop-filter:blur(28px) saturate(175%);}
-#lsPanel.open{display:flex; animation:ls-up .3s cubic-bezier(.32,.72,.35,1);}
-@keyframes ls-up{from{opacity:0; transform:translateY(36px);}to{opacity:1; transform:translateY(0);}}
-@media (prefers-reduced-motion:reduce){ #lsPanel.open{animation:none;} }
-.ls-ph{display:flex; align-items:flex-start; gap:10px; padding:16px 20px 8px; max-width:860px; width:100%; margin:0 auto; flex:none;}
-.ls-ph-t{flex:1; min-width:0;}
-.ls-ph h2{font-size:18px;}
 /* 头部状态胶囊：呼吸圆点 + 动态文字（播放中实时刷新） */
-.ls-sub{display:inline-flex; align-items:center; gap:7px; max-width:100%; margin-top:7px; padding:4px 13px; border-radius:999px;
+.ls-sub{display:inline-flex; align-items:center; gap:7px; max-width:100%; padding:4px 13px; border-radius:999px;
   background:rgba(255,255,255,.55); border:1px solid rgba(255,255,255,.75);
   -webkit-backdrop-filter:blur(10px) saturate(150%); backdrop-filter:blur(10px) saturate(150%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.85); font-size:12px; font-weight:500; color:var(--iel-ink2);}
@@ -635,11 +641,6 @@ body.reading #lsGo{display:none;}   /* 阅读页（底部有朗读条）不显�
 .ls-sub .txt{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 .ls-sub.live{color:var(--iel-accent-deep);}
 .ls-sub.live .dot{background:var(--iel-accent); box-shadow:0 0 0 3px rgba(16,180,135,.16); animation:ls-pulse 1.6s ease infinite;}
-.ls-close{border:1px solid rgba(255,255,255,.78); background:rgba(255,255,255,.55); -webkit-backdrop-filter:blur(12px) saturate(160%); backdrop-filter:blur(12px) saturate(160%); color:var(--iel-ink3); border-radius:999px; padding:7px 16px; font-size:13px; font-weight:600; box-shadow:inset 0 1px 0 rgba(255,255,255,.85); transition:background var(--iel-t-fast), border-color var(--iel-t-fast), color var(--iel-t-fast);}
-.ls-close:hover{background:var(--iel-accent-soft); border-color:var(--iel-accent); color:var(--iel-accent-deep);}
-.ls-body{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:6px 18px 168px; width:100%; max-width:860px; margin:0 auto;}
-#lsPanel .audiobar{bottom:calc(14px + env(safe-area-inset-bottom,0px));}
-body.ls-lock{overflow:hidden;}
 
 /* 右下角旋转封面悬浮球：整体玻璃胶囊（唱片 + 玻璃钮一体成型），淡入淡出切换 */
 #lsFab{position:fixed; right:calc(16px + env(safe-area-inset-right,0px)); bottom:calc(20px + env(safe-area-inset-bottom,0px)); z-index:110; display:flex; align-items:center; gap:8px; padding:8px 9px; border-radius:999px;
@@ -647,9 +648,9 @@ body.ls-lock{overflow:hidden;}
   -webkit-backdrop-filter:blur(24px) saturate(190%); backdrop-filter:blur(24px) saturate(190%);
   border:1px solid rgba(255,255,255,.88);
   box-shadow:0 18px 44px rgba(30,90,70,.22), 0 2px 6px rgba(30,90,70,.1), inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(255,255,255,.4);
-  opacity:0; pointer-events:none; transform:translateY(14px) scale(.92);
-  transition:opacity .28s ease, transform .3s cubic-bezier(.32,.72,.35,1);}
-#lsFab.on{opacity:1; pointer-events:auto; transform:translateY(0) scale(1);}
+  opacity:0; visibility:hidden; pointer-events:none; transform:translateY(14px) scale(.92);
+  transition:opacity .28s ease, transform .3s cubic-bezier(.32,.72,.35,1), visibility .28s;}
+#lsFab.on{opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0) scale(1);}
 @keyframes ls-fab-in{from{opacity:0; transform:translateY(14px);}to{opacity:1; transform:translateY(0);}}
 .fab-cover{position:relative; width:62px; height:62px; border-radius:50%; border:none; padding:0; cursor:pointer; flex:none;
   background:var(--iel-grad) center/cover no-repeat; color:#fff;
@@ -671,13 +672,6 @@ body.ls-lock{overflow:hidden;}
 .fab-btn .ic{width:17px; height:17px; display:block;}
 @media (max-width:640px){
   .home-head{gap:8px;}
-  .ls-open{padding:6px 14px 6px 6px; font-size:12.5px;}
-  .ls-go-ic{width:30px; height:30px;}
-  .ls-go-ic::after{width:30px; height:30px;}
-  .ls-go-ic .ic{width:13px; height:13px;}
-  .ls-ph{padding:12px 14px 6px;}
-  .ls-close{padding:6px 13px; font-size:12.5px;}
-  .ls-body{padding:2px 12px 158px;}
   .fab-cover{width:54px; height:54px;}
   .fab-cover .fab-letter{font-size:19px;}
   .fab-btn{width:42px; height:42px;}
@@ -741,9 +735,6 @@ body.reading #lsFab{display:none;}
 .ls-sen.speaking{background:var(--iel-mark); border-radius:6px; padding:1px 3px; box-shadow:inset 0 -2px 0 var(--iel-mark-line);}
 .ls-tr{font-size:13.5px; color:var(--iel-ink3); text-align:left; margin-top:8px; padding-top:8px; border-top:1px dashed var(--iel-line); line-height:1.75;}
 @media (max-width:640px){
-  .ls-entry{padding:12px 14px; gap:11px;}
-  .ls-entry .ls-e-ico{width:38px; height:38px; font-size:18px; border-radius:12px;}
-  .ls-entry .ls-e-t{font-size:14px;}
   .ls-set{grid-template-columns:repeat(2,1fr); gap:7px;}
   .ls-set .ls-opt{padding:8px 9px 7px;}
   .ls-set select{font-size:16px; padding:5px 16px 5px 7px;}   /* 16px 防 iOS 聚焦缩放 */
@@ -764,17 +755,26 @@ body.reading #lsFab{display:none;}
 <link rel="manifest" href='data:application/manifest+json,{"name":"雅思词汇情境训练","short_name":"雅思随身听","display":"standalone","background_color":"#f8fdfa","theme_color":"#f8fdfa","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2310b487'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23fff' font-family='serif'%3EW%3C/text%3E%3C/svg%3E","sizes":"any","type":"image/svg+xml","purpose":"any"}]}'>
 </head>
 <body>
+<aside id="sidenav">
+  <div class="sn-logo"><span class="sn-em">📖</span><span class="sn-name">雅思词汇<br>情境训练</span></div>
+  <nav class="sn-nav" id="snNav">
+    <button data-view="home" class="on"><svg viewBox="0 0 20 20"><path d="M3.2 9.3 10 3.2l6.8 6.1M5.2 8.2V17h3.6v-4.2h2.4V17h3.6V8.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sn-t">首页</span></button>
+    <button data-view="stats"><svg viewBox="0 0 20 20"><path d="M3 17h14M5.5 17v-5M10 17V7M14.5 17V3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="sn-t">学习统计</span></button>
+    <button data-view="fav"><svg viewBox="0 0 20 20"><path d="M6 3h8a1 1 0 0 1 1 1v13l-5-3.6L5 17V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span class="sn-t">生词本</span></button>
+    <button data-view="me"><svg viewBox="0 0 20 20"><circle cx="10" cy="6.6" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 16.6c1.2-3 3.6-4.4 6-4.4s4.8 1.4 6 4.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="sn-t">我的</span></button>
+  </nav>
+</aside>
+<div id="shell">
 <nav id="topbar">
-  <div class="brand">📖 雅思词汇情境训练</div>
   <div class="tabs" id="tabs">
-    <button data-view="home" class="on">故事阅读</button>
-    <button data-view="stats">学习统计</button>
-    <button data-view="fav">生词本</button>
+    <button data-view="home" class="on">情景阅读</button>
+    <button data-view="listen">随身听</button>
   </div>
   <div class="chsel"><span class="sel-label">章节</span><select id="chapterSel"></select></div>
   <button class="accent-btn" id="accentBtn" title="全局默认发音口音：点击切换 英式/美式（影响单词卡点击、音标显示与朗读）">🇬🇧 英音</button>
 </nav>
 <main id="app"></main>
+</div>
 <div id="scrim"></div>
 <div id="wpop"></div>
 <div id="toast"></div>
@@ -888,21 +888,32 @@ function chName(n){ const c=CHAPTERS.find(x=>parseInt(x,10)===n); return c|| (n+
 let VIEW="home", CUR_STORY=null, REVIEW=null, TR_SENS=[];
 const TOUCH=!!(window.matchMedia&&matchMedia("(hover: none)").matches);
 const app=document.getElementById("app");
+/* 一级（侧栏）+ 二级（顶栏）导航选中态同步：阅读/随身听归属于「首页」 */
+function syncNav(){
+  document.body.classList.toggle("v-home", VIEW==="home"||VIEW==="listen"||VIEW==="reader");
+  document.querySelectorAll("#snNav button").forEach(b=>b.classList.toggle("on",
+    b.dataset.view===VIEW||(b.dataset.view==="home"&&(VIEW==="listen"||VIEW==="reader"))));
+  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.view===VIEW));
+}
 function switchView(v){
   VIEW=v;
   document.body.classList.toggle("reading", v==="reader");
-  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.view===v));
+  document.body.dataset.view=v;
+  syncNav();
   audio.stop();
   closePop();
   REVIEW=null;
   if(window._rhScroll){ window.removeEventListener("scroll", window._rhScroll); window._rhScroll=null; }
-  if(typeof closeListenPanel==="function") closeListenPanel();   // 切换视图时收起随身听浮窗（播放不中断）
   if(v==="home") renderHome();
+  else if(v==="listen") renderListen();
   else if(v==="stats") renderStats();
   else if(v==="fav") renderFav();
+  else if(v==="me") renderMe();
   window.scrollTo(0,0);
+  updateFab();
 }
 document.getElementById("tabs").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) switchView(b.dataset.view); });
+document.getElementById("snNav").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) switchView(b.dataset.view); });
 
 /* 章节选择 */
 const chSel=document.getElementById("chapterSel");
@@ -910,21 +921,14 @@ chSel.innerHTML = '<option value="all">全部章节</option>'+CHAPTERS.map(c=>`<
 chSel.value = String(S.chapter||1);
 chSel.addEventListener("change",()=>{ const v=chSel.value; S.chapter = v==="all"?"all":parseInt(v,10); save();
   if(VIEW==="home") renderHome(); else if(VIEW==="stats") renderStats();
-  if(LISTEN.story||lsPanelVisible()) LISTEN.changeCfg("scope",lsState().cfg.scope); });   // 章节变化：重建随身听队列并尽量恢复断点
+  if(LISTEN.story||VIEW==="listen") LISTEN.changeCfg("scope",lsState().cfg.scope); });   // 章节变化：重建随身听队列并尽量恢复断点
 
 /* ================= 首页 ================= */
 function renderHome(){
   const ch=S.chapter;
   let list=STORIES.filter(s=>ch==="all"||s.ch===ch);
   let html=`<div class="home-head"><h2 class="view-title">情景故事</h2></div>
-    <div class="view-sub">读故事 → 点词查义 → 自测 → 统计定位弱项。目标词已高亮，非目标词也可点击查询并收藏。<button class="toggle-g" id="toggleGuide">📖 使用方法</button></div>`;
-  html+=`<div class="card guide" id="guideCard" hidden><h3>使用方法</h3><ol>
-  <li><b>读英文故事</b>：高亮下划线的是本篇目标词，点击看音标与释义（每次点查都会计入掌握度统计）；其他任何单词也可以点击查义。</li>
-  <li><b>先自己心里翻译</b>，再点击对应的英文句子核对该句译文（默认隐藏，防止瞟一眼）；点"朗读此句"可从此句开始朗读。</li>
-  <li><b>完成篇末选择题</b>：题干与选项全英文，提交后有中文详细解析，对错自动计入统计。</li>
-  <li><b>打开"学习统计"</b>：按掌握度排序找出薄弱词，点击单词可跳回故事针对性复习。</li>
-  <li>非目标生词随手<b>收藏进生词本</b>，可导出 CSV/TXT 导入 Anki、欧路词典等。</li>
-  </ol></div>`;
+    <div class="view-sub">读故事 → 点词查义 → 自测 → 统计定位弱项。目标词已高亮，非目标词也可点击查询并收藏。<button class="toggle-g" id="goGuide">📖 使用方法</button></div>`;
 
   if(!list.length){
     html+=`<div class="card empty-box"><b>第${ch}章的情境故事还在制作中</b>目前已完成：第1章（15 篇故事，覆盖全部 241 个目标词）。<br>可以先切换到第 1 章开始学习，或在"学习统计"里浏览本章词汇。</div>`;
@@ -944,8 +948,8 @@ function renderHome(){
     }).join("")+`</div>`;
   }
   app.innerHTML=html;
-  const tg=document.getElementById("toggleGuide");
-  if(tg) tg.onclick=()=>{ const g=document.getElementById("guideCard"); const show=g.hasAttribute("hidden"); if(show) g.removeAttribute("hidden"); else g.setAttribute("hidden",""); tg.textContent=show?"✕ 收起指引":"📖 使用方法"; };
+  const gg=document.getElementById("goGuide");
+  if(gg) gg.onclick=()=>switchView("me");   // 使用方法已迁入「我的」页
   app.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openStory(b.dataset.open));
 }
 
@@ -954,11 +958,11 @@ function openStory(id, focusWord, occ){
   const s=storyById(id); if(!s) return;
   CUR_STORY=s; VIEW="reader";
   document.body.classList.add("reading");
-  document.querySelectorAll("#tabs button").forEach(b=>b.classList.remove("on"));
+  document.body.dataset.view="reader";
+  syncNav();
   S.read[id]=Date.now(); save();
   audio.stop();
   if(typeof LISTEN!=="undefined") LISTEN.pause();   // 进阅读页自动暂停随身听，避免双声叠加
-  if(typeof closeListenPanel==="function") closeListenPanel();
   const markedWords=[...new Set((s.text.match(/\{\{([^}|]+)(?:\|[^}]+)?\}\}/g)||[]).map(m=>m.replace(/\{\{([^}|]+).*/,"$1").toLowerCase()))];
   const pool=(S.chapter==="all")?STORIES:STORIES.filter(x=>x.ch===S.chapter);
   const pi=pool.findIndex(x=>x.id===s.id);
@@ -2228,7 +2232,7 @@ const LISTEN={
   },
   /* ---- Now Playing 卡片渲染 ---- */
   _paint(){
-    if(!lsPanelVisible()) return;
+    if(VIEW!=="listen") return;
     const el=document.getElementById("lsNow"); if(!el) return;
     const s=this.story;
     if(!s){
@@ -2289,7 +2293,7 @@ const LISTEN={
   },
   /* ---- 播放条状态刷新（随身听浮窗内 #audiobar） ---- */
   _bar(){
-    if(!lsPanelVisible()) return;
+    if(VIEW!=="listen") return;
     const bp=document.getElementById("btnPlay");
     if(bp) bp.innerHTML=(this.playing?ICONS.pause:ICONS.play)+'<span class="nb-l">'+(this.playing?"暂停":"播放")+"</span>";
     const pr=document.getElementById("progRange"), lab=document.getElementById("progLab");
@@ -2338,40 +2342,8 @@ const LISTEN={
   }
 };
 
-/* ---- 随身听：全屏播放器浮窗 + 右下角悬浮球 ---- */
-function lsPanelVisible(){
-  const p=document.getElementById("lsPanel");
-  return !!(p&&p.classList.contains("open"));
-}
-function ensureListenPanel(){
-  let p=document.getElementById("lsPanel");
-  if(p) return p;
-  p=document.createElement("div");
-  p.id="lsPanel";
-  p.innerHTML=`<div class="ls-ph"><div class="ls-ph-t"><h2>🎧 随身听</h2>
-      <div class="ls-sub" id="lsSub"><span class="dot"></span><span class="txt" id="lsSubTxt"></span></div></div>
-    <button class="ls-close" id="lsClose" title="收起播放器（播放不中断，右下角悬浮球可继续控制）">↓ 收起播放器</button></div>
-    <div class="ls-body" id="lsBody"></div>`;
-  document.body.appendChild(p);
-  document.getElementById("lsClose").onclick=()=>closeListenPanel();
-  return p;
-}
-function openListenPanel(){
-  const p=ensureListenPanel();
-  renderListen();
-  p.classList.add("open");
-  document.body.classList.add("ls-lock");
-  LISTEN._paint();   // 面板可见后再渲染（_paint 依赖 lsPanelVisible）
-  updateFab();
-}
-function closeListenPanel(){
-  const p=document.getElementById("lsPanel");
-  if(p) p.classList.remove("open");
-  document.body.classList.remove("ls-lock");
-  updateFab();
-}
-/* 右下角旋转封面悬浮球：浮窗关闭且处于播放/暂停态时显示
-   圆形封面 = 当前文章章节号 + 标题首字母（唱片式旋转，播放快/暂停慢） */
+/* ---- 随身听：二级 tab 视图（renderListen 渲染进 #app）+ 右下角悬浮球 ----
+   悬浮球：播放/暂停中且当前不在随身听视图时显示；点封面回到随身听视图，播放不中断 */
 function ensureFab(){
   let f=document.getElementById("lsFab");
   if(!f){
@@ -2379,28 +2351,18 @@ function ensureFab(){
     f.id="lsFab";
     f.innerHTML=`<button class="fab-btn" id="fabPause" title="暂停 / 继续" aria-label="暂停或继续播放"></button>
     <button class="fab-btn" id="fabStop" title="停止播放" aria-label="停止播放">${ICONS.stop}</button>
-    <button class="fab-cover" id="fabCover" title="打开随身听播放器" aria-label="打开随身听播放器"><span class="fab-ch" id="fabCh"></span><span class="fab-letter" id="fabLetter">🎧</span></button>`;
+    <button class="fab-cover" id="fabCover" title="返回随身听" aria-label="返回随身听"><span class="fab-ch" id="fabCh"></span><span class="fab-letter" id="fabLetter">🎧</span></button>`;
     document.body.appendChild(f);
-    document.getElementById("fabCover").onclick=()=>openListenPanel();
+    document.getElementById("fabCover").onclick=()=>switchView("listen");
     document.getElementById("fabPause").onclick=()=>{ if(LISTEN.playing) LISTEN.pause(); else LISTEN.play(); };
     document.getElementById("fabStop").onclick=()=>LISTEN.stop();
   }
-  let g=document.getElementById("lsGo");   // 入口按钮：全局固定右下角，与悬浮球同位互斥
-  if(!g){
-    g=document.createElement("button");
-    g.className="ls-open"; g.id="lsGo";
-    g.innerHTML=`<span class="ls-go-ic"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.2c-3.1 0-5.4 2.4-5.4 5.4v3.7c0 1.3 1 2.3 2.3 2.3h.8c.5 0 .9-.4.9-.9V9.5c0-.5-.4-.9-.9-.9H4.1v-1c0-2.1 1.8-3.9 3.9-3.9s3.9 1.8 3.9 3.9v1h-1.6c-.5 0-.9.4-.9.9v3.2c0 .5.4.9.9.9h.8c1.3 0 2.3-1 2.3-2.3V7.6c0-3-2.4-5.4-5.4-5.4z" fill="currentColor"/></svg></span><span class="ls-go-t">随身听</span>`;
-    g.onclick=()=>openListenPanel();   // 打开全屏播放器浮窗（关闭后悬浮球控制，播放不中断）
-    document.body.appendChild(g);
-  }
-  g.title=lsResumeText();
   return f;
 }
 function updateFab(){
   const f=ensureFab();
   const playing=!!(LISTEN.story&&(LISTEN.playing||LISTEN.paused));
-  document.body.classList.toggle("ls-active",playing);   // 播放/暂停态：入口按钮 ↔ 悬浮球 形态互斥
-  const active=playing&&!lsPanelVisible();
+  const active=playing&&VIEW!=="listen";
   f.classList.toggle("on",active);
   if(!active) return;
   f.classList.toggle("playing",LISTEN.playing);
@@ -2422,7 +2384,8 @@ function renderListen(){
   const sel=(id,opts)=>`<label class="ls-opt"><span>${opts.label}</span><select id="${id}">${opts.items.map(o=>`<option value="${o[0]}" ${String(o[0])===String(opts.cur)?"selected":""}>${o[1]}</option>`).join("")}</select></label>`;
   const cfgSum=()=>{ const c=lsState().cfg;
     return `${{all:"全部",unread:"未读",read:"已读"}[c.scope]}文章 · ${c.order==="rand"?"随机":"顺序"} · ${c.mode==="enzh"?"英中对照":"纯英文"} · ${{list:"列表循环",one:"单篇循环",stop:"播完即停"}[c.loop]}`; };
-  const html=`
+  const html=`<h2 class="view-title">随身听</h2>
+    <div class="view-sub"><span class="ls-sub" id="lsSub"><span class="dot"></span><span class="txt" id="lsSubTxt"></span></span></div>
     <div class="card ls-now" id="lsNow"></div>
     <div class="ls-cfg" id="lsCfg">
       <button class="ls-cfg-head" id="lsCfgHead" title="展开 / 收起播放设置">
@@ -2444,7 +2407,7 @@ function renderListen(){
       </div>
     </div>
     <div class="audiobar" id="audiobar"></div>`;
-  document.getElementById("lsBody").innerHTML=html;
+  app.innerHTML=html;
   const head=document.getElementById("lsCfgHead");
   if(head) head.onclick=()=>document.getElementById("lsCfg").classList.toggle("open");
   const cfgIds=[["lsScope","scope"],["lsOrder","order"],["lsMode","mode"],["lsLoop","loop"],["lsPause","pause"],["lsReport","report"],["lsTimer","timer"]];
@@ -2642,8 +2605,6 @@ function renderStats(){
     </div>
     <div id="statList"></div>
     <button class="load-more" id="statMore" style="display:none">显示更多 ↓</button>
-    <div class="backup-zone"><button id="exportData">📦 导出学习数据备份</button><button id="importData">📥 导入备份恢复数据</button><input type="file" id="importFile" accept="application/json,.json" style="display:none"></div>
-    <div class="danger-zone"><button id="resetBtn">🗑 重置全部学习数据</button></div>
   </div>`;
   app.innerHTML=html;
   document.getElementById("statSort").value=STAT_FILTER.sort;
@@ -2655,10 +2616,6 @@ function renderStats(){
   paintChips();
   document.getElementById("statSearch").oninput=e=>{ STAT_FILTER.q=e.target.value.trim().toLowerCase(); renderStatList(); };
   document.getElementById("statSort").onchange=e=>{ STAT_FILTER.sort=e.target.value; renderStatList(); };
-  document.getElementById("resetBtn").onclick=resetAll;
-  document.getElementById("exportData").onclick=exportBackup;
-  document.getElementById("importData").onclick=()=>document.getElementById("importFile").click();
-  document.getElementById("importFile").onchange=importBackup;
   window._statRows=rows;
   renderStatList();
 }
@@ -2767,6 +2724,29 @@ function renderFav(){
   const txt=document.getElementById("expTxt"); if(txt) txt.onclick=()=>exportWords("txt");
   const ank=document.getElementById("expAnki"); if(ank) ank.onclick=()=>exportWords("anki");
 }
+/* ================= 我的（使用指南 / 数据管理） ================= */
+function renderMe(){
+  app.innerHTML=`<h2 class="view-title">我的</h2>
+  <div class="view-sub">使用指南与数据管理。全部学习数据仅保存在本机浏览器（localStorage），离线可用；换设备或清理浏览器数据前请先导出备份。</div>
+  <div class="card guide"><h3>使用方法</h3><ol>
+  <li><b>读英文故事</b>：高亮下划线的是本篇目标词，点击看音标与释义（每次点查都会计入掌握度统计）；其他任何单词也可以点击查义。</li>
+  <li><b>先自己心里翻译</b>，再点击对应的英文句子核对该句译文（默认隐藏，防止瞟一眼）；点击句子本身可从此句开始朗读。</li>
+  <li><b>完成篇末选择题</b>：题干与选项全英文，提交后有中文详细解析，对错自动计入统计。</li>
+  <li><b>打开"学习统计"</b>：按掌握度排序找出薄弱词，点击单词可跳回故事针对性复习。</li>
+  <li>非目标生词随手<b>收藏进生词本</b>，可按艾宾浩斯间隔复习，或导出 CSV/TXT 导入 Anki、欧路词典等。</li>
+  <li><b>随身听</b>：在"首页 → 随身听"连播当前章节文章，锁屏后台可续播，自动断点续听。</li>
+  </ol></div>
+  <div class="card"><h3 class="me-h">学习数据备份</h3>
+    <div class="me-p">备份文件为 JSON 格式，包含阅读进度、掌握度统计、测验记录、生词本与复习计划。</div>
+    <div class="backup-zone"><button id="exportData">📦 导出学习数据备份</button><button id="importData">📥 导入备份恢复数据</button><input type="file" id="importFile" accept="application/json,.json" style="display:none"></div>
+    <div class="danger-zone"><button id="resetBtn">🗑 重置全部学习数据</button></div>
+  </div>`;
+  document.getElementById("resetBtn").onclick=resetAll;
+  document.getElementById("exportData").onclick=exportBackup;
+  document.getElementById("importData").onclick=()=>document.getElementById("importFile").click();
+  document.getElementById("importFile").onchange=importBackup;
+}
+
 /* ================= 间隔复习（艾宾浩斯） ================= */
 const RV_INTERVALS=[5,30,720,1440,4320,10080,21600,43200]; /* 分钟：5分/30分/12时/1天/3天/7天/15天/30天 */
 function favDueTs(f){ return f.due!==undefined? f.due : (f.t||0); }
@@ -2780,7 +2760,7 @@ function migrateFav(){
   if(m) save();
 }
 function updateFavBadge(){
-  const btn=document.querySelector('#tabs button[data-view="fav"]');
+  const btn=document.querySelector('#snNav button[data-view="fav"]');
   if(!btn) return;
   const n=dueWords().length;
   let b=btn.querySelector(".tab-badge");
@@ -2893,7 +2873,8 @@ function resetAll(){
   if(!confirm("再次确认：真的要重置吗？\n（重置后所有单词回到“未测”状态，生词本清空）")) return;
   S={stats:{}, fav:{}, quiz:{}, read:{}, chapter:S.chapter, voiceName:S.voiceName, rate:S.rate, favHide:S.favHide};
   save(); toast("学习数据已重置");
-  renderStats();
+  updateFavBadge();
+  if(VIEW==="me") renderMe(); else if(VIEW==="stats") renderStats(); else if(VIEW==="fav"&&!REVIEW) renderFav();
 }
 
 /* ================= 学习数据备份 ================= */
@@ -2927,7 +2908,7 @@ function importBackup(e){
     audio.rate=S.rate||audio.rate;
     updateFavBadge();
     toast("导入成功，学习数据已恢复");
-    renderStats();
+    if(VIEW==="me") renderMe(); else if(VIEW==="stats") renderStats(); else if(VIEW==="fav"&&!REVIEW) renderFav();
   };
   rd.readAsText(f);
   e.target.value="";
@@ -2944,11 +2925,10 @@ document.addEventListener("keydown",e=>{
     else if(REVIEW.revealed&&e.key==="ArrowLeft"){ e.preventDefault(); gradeReview(false); }
     return;
   }
-  if(lsPanelVisible()){
+  if(VIEW==="listen"){
     if(e.code==="Space"){ e.preventDefault(); const bp=document.getElementById("btnPlay"); if(bp) bp.click(); }
     else if(e.key==="ArrowLeft"){ e.preventDefault(); LISTEN.step(-1); }
     else if(e.key==="ArrowRight"){ e.preventDefault(); LISTEN.step(1); }
-    else if(e.key==="Escape"){ e.preventDefault(); closeListenPanel(); }
     return;
   }
   if(VIEW!=="reader"||(!audio.ok()&&!audio.cloudVoiceId)) return;
@@ -3006,7 +2986,7 @@ updateFavBadge();
 audio.loadVoices(renderAudioBarIfReader);
 function renderAudioBarIfReader(){ if(VIEW==="reader") renderAudioBar(); }
 lsState();
-ensureFab();   // 创建右下角随身听入口按钮（全局固定，与悬浮球同位互斥）
+ensureFab();   // 预建右下角悬浮球（默认隐藏；随身听播放中离开该页时浮现）
 LISTEN._msBind();
 /* 锁屏/切后台被系统中断后，回前台自动从断点续播（用户手动暂停则不恢复） */
 document.addEventListener("visibilitychange",()=>{
