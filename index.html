@@ -2872,6 +2872,18 @@ document.addEventListener("visibilitychange",()=>{
   }
 });
 switchView("home");
+window.__APP_TAIL__=1;   // 主脚本完整执行到的末尾标记（供下方自检）
+</script>
+<script>
+/* 加载完整性自检：本页为单个大 HTML，弱网下可能被截断导致功能残缺（如随身听点开无内容）。
+   主脚本未完整执行（无末尾标记）时，给出明确的刷新提示，避免"静默坏掉"。 */
+(function(){
+  if(window.__APP_TAIL__) return;
+  var b=document.createElement("div");
+  b.textContent="⚠ 页面加载不完整（网络不稳），请刷新重试；若反复出现，请切换网络后再刷新";
+  b.style.cssText="position:fixed;left:0;right:0;top:0;z-index:99999;background:#e74c3c;color:#fff;font:14px/1.6 -apple-system,sans-serif;text-align:center;padding:10px 16px;box-sizing:border-box";
+  (document.body||document.documentElement).appendChild(b);
+})();
 </script>
 </body>
 </html>
