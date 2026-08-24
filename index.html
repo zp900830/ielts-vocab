@@ -425,12 +425,6 @@ body.reading main{padding-top:64px;}
 .wq-item{position:relative; border-radius:var(--iel-radius-xs); padding:10px 6px; background:transparent; border:1px solid transparent; transition:background var(--iel-t-fast), border-color var(--iel-t-fast), box-shadow var(--iel-t-fast); -webkit-tap-highlight-color:transparent; cursor:pointer;}
 .accent-btn{flex:none; border:1px solid var(--iel-accent-line); background:#fff; color:var(--iel-accent-deep); border-radius:999px; padding:6px 13px; font-size:12.5px; font-weight:600; white-space:nowrap; cursor:pointer; transition:background var(--iel-t-fast), border-color var(--iel-t-fast);}
 .accent-btn:hover{background:var(--iel-accent-soft); border-color:var(--iel-accent);}
-/* 顶栏随身听入口（仅移动端显示）：圆形玻璃图标钮，与发音按钮并列；播放中角标呼吸点 */
-.tb-ls{display:none; flex:none; width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,.85); background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.55)); -webkit-backdrop-filter:blur(14px) saturate(170%); backdrop-filter:blur(14px) saturate(170%); color:var(--iel-accent-deep); cursor:pointer; align-items:center; justify-content:center; position:relative; box-shadow:0 3px 10px rgba(30,90,70,.12), inset 0 1px 0 rgba(255,255,255,.95); transition:border-color var(--iel-t-fast), transform var(--iel-t-fast);}
-.tb-ls:hover{border-color:var(--iel-accent);}
-.tb-ls:active{transform:scale(.94);}
-.tb-ls .ic{width:15px; height:15px; display:block;}
-body.ls-active .tb-ls::after{content:""; position:absolute; top:-1px; right:-1px; width:8px; height:8px; border-radius:50%; background:var(--iel-accent); border:1.5px solid #fff; animation:ls-pulse 1.6s ease infinite;}
 .wq-item:not(:last-child)::after{content:""; position:absolute; left:6px; right:6px; bottom:0; border-bottom:1px dashed var(--iel-line); pointer-events:none;}
 .wq-item:hover::after,.wq-item.sel::after{display:none;}
 .wq-item:hover,.wq-item.sel{background:#fff; border-color:var(--iel-accent); box-shadow:0 1px 6px rgba(16,180,135,.14);}
@@ -676,9 +670,11 @@ body.ls-lock{overflow:hidden;}
 #fabPause:hover{background:var(--iel-grad); color:#fff; filter:brightness(1.07); transform:translateY(-1px); border:none; box-shadow:0 8px 20px rgba(16,180,135,.5), inset 0 1px 0 rgba(255,255,255,.4);}
 .fab-btn .ic{width:17px; height:17px; display:block;}
 @media (max-width:640px){
-  .tb-ls{display:inline-flex;}          /* 移动端：顶栏图标入口 */
-  .ls-open{display:none;}               /* 移动端：隐藏右下角胶囊（PC 保留） */
   .home-head{gap:8px;}
+  .ls-open{padding:6px 14px 6px 6px; font-size:12.5px;}
+  .ls-go-ic{width:30px; height:30px;}
+  .ls-go-ic::after{width:30px; height:30px;}
+  .ls-go-ic .ic{width:13px; height:13px;}
   .ls-ph{padding:12px 14px 6px;}
   .ls-close{padding:6px 13px; font-size:12.5px;}
   .ls-body{padding:2px 12px 158px;}
@@ -776,7 +772,6 @@ body.reading #lsFab{display:none;}
     <button data-view="fav">生词本</button>
   </div>
   <div class="chsel"><span class="sel-label">章节</span><select id="chapterSel"></select></div>
-  <button class="tb-ls" id="tbLs" title="随身听" aria-label="打开随身听"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.2c-3.1 0-5.4 2.4-5.4 5.4v3.7c0 1.3 1 2.3 2.3 2.3h.8c.5 0 .9-.4.9-.9V9.5c0-.5-.4-.9-.9-.9H4.1v-1c0-2.1 1.8-3.9 3.9-3.9s3.9 1.8 3.9 3.9v1h-1.6c-.5 0-.9.4-.9.9v3.2c0 .5.4.9.9.9h.8c1.3 0 2.3-1 2.3-2.3V7.6c0-3-2.4-5.4-5.4-5.4z" fill="currentColor"/></svg></button>
   <button class="accent-btn" id="accentBtn" title="全局默认发音口音：点击切换 英式/美式（影响单词卡点击、音标显示与朗读）">🇬🇧 英音</button>
 </nav>
 <main id="app"></main>
@@ -2399,8 +2394,6 @@ function ensureFab(){
     document.body.appendChild(g);
   }
   g.title=lsResumeText();
-  const tb=document.getElementById("tbLs");   // 移动端顶栏图标入口
-  if(tb){ tb.onclick=()=>openListenPanel(); tb.title="随身听 · "+lsResumeText(); }
   return f;
 }
 function updateFab(){
