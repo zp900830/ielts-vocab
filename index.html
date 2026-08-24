@@ -153,12 +153,12 @@ body:not(.v-home) #tabs{display:none;}   /* 非首页一级栏目：无二级导
    ============================================================ */
 main{max-width:860px; margin:0 auto; padding:24px 18px 130px;}
 .card{background:var(--iel-glass); border:1px solid var(--iel-glass-line); border-radius:var(--iel-radius); padding:20px 22px; margin-bottom:18px; box-shadow:var(--iel-shadow);}
+/* 卡片区块标题：全站统一层级（指南/数据管理/测验等卡片内 h3） */
+.card h3{font-size:15px; font-weight:700; color:var(--iel-accent-deep); margin-bottom:10px;}
 .view-sub{color:var(--iel-ink2); font-size:13px; margin-bottom:16px;}
 .guide{background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(250,253,252,.93));}
-.guide h3{font-size:15px; color:var(--iel-accent-deep); margin-bottom:8px;}
 .guide ol{margin-left:20px; font-size:13.5px; color:var(--iel-ink3);}
 .guide ol li{margin:3px 0;}
-.me-h{font-size:15px; color:var(--iel-accent-deep); margin-bottom:8px;}
 .me-p{font-size:13px; color:var(--iel-ink3); line-height:1.7;}
 .view-sub .toggle-g{background:var(--iel-accent-soft); border:none; color:var(--iel-accent-deep); font-size:12px; padding:2px 10px; border-radius:999px; margin-left:8px; vertical-align:1px; white-space:nowrap;}
 .view-sub .toggle-g:hover{background:var(--iel-accent-hover);}
@@ -166,7 +166,7 @@ main{max-width:860px; margin:0 auto; padding:24px 18px 130px;}
 .story-item:last-child{border-bottom:none;}
 .s-num{flex:none; width:44px; height:44px; border-radius:14px; background:var(--iel-accent-soft); color:var(--iel-accent-deep); font-weight:700; display:flex; align-items:center; justify-content:center; font-size:15px;}
 .s-info{flex:1; min-width:0;}
-.s-title{font-weight:600; font-size:15.5px;}
+.s-title{font-weight:600; font-size:16px; letter-spacing:.1px;}
 .s-title .tcn{color:var(--iel-ink2); font-weight:400; font-size:13px; margin-left:8px;}
 .s-meta{font-size:12.5px; color:var(--iel-ink2); margin-top:3px; display:flex; gap:12px; flex-wrap:wrap;}
 .s-meta .done{color:var(--iel-lv3); font-weight:600;}
@@ -371,11 +371,16 @@ body.reading main{padding-top:64px;}
    ============================================================ */
 .ov-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:6px;}
 .ov-cell{background:var(--iel-glass); border:1px solid var(--iel-glass-line); border-radius:var(--iel-radius); padding:12px 14px;}
+/* 核心指标格：占据视觉焦点（大数字 + 主题底 + 跨两列），次要指标保持原规格 */
+.ov-cell.hi{grid-column:span 2; background:linear-gradient(135deg,rgba(224,245,236,.92),rgba(248,253,251,.75)); border-color:var(--iel-accent-line); box-shadow:0 2px 10px rgba(16,180,135,.08);}
 .ov-cell .n{font-size:22px; font-weight:700; color:var(--iel-accent-deep); font-variant-numeric:tabular-nums;}
+.ov-cell.hi .n{font-size:30px; line-height:1.25;}
 .ov-cell .t{font-size:12px; color:var(--iel-ink2); margin-top:2px;}
-.lv-legend{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 4px;}
-.lv-chip{font-size:12px; border-radius:999px; padding:3px 12px; border:1.5px solid; cursor:pointer; background:#fff; user-select:none;}
-.lv-chip.on{color:#fff !important;}
+.ov-cell.hi .t{color:var(--iel-ink3); font-size:12.5px;}
+.lv-legend{display:flex; gap:6px; flex-wrap:wrap; margin:10px 0 4px;}
+.lv-chip{font-size:11.5px; border-radius:999px; padding:2px 10px; border:1px solid; cursor:pointer; background:#fff; user-select:none; opacity:.85; transition:opacity var(--iel-t-fast), transform var(--iel-t-fast);}
+.lv-chip:hover{opacity:1;}
+.lv-chip.on{color:#fff !important; opacity:1;}
 .stat-controls{display:flex; gap:10px; flex-wrap:wrap; margin:14px 0; align-items:center;}
 .stat-controls input[type=search]{flex:1; min-width:160px;}
 .w-row{display:flex; align-items:center; gap:12px; padding:10px 8px; border-bottom:1px dashed var(--iel-line); cursor:pointer; border-radius:var(--iel-radius-xs); transition:background var(--iel-t-fast);}
@@ -397,10 +402,10 @@ body.reading main{padding-top:64px;}
    12. 间隔复习
    ============================================================ */
 .tab-badge{display:inline-block; min-width:17px; padding:0 5px; margin-left:6px; border-radius:9px; background:var(--iel-lv0); color:#fff; font-size:10.5px; line-height:17px; text-align:center; font-weight:600; vertical-align:1px;}
-.rv-tools{display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap;}
+.rv-tools{display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;}
 .rv-tools .rv-btn{margin:0;}
 .rv-due{font-size:12.5px; color:var(--iel-ink2);}
-.rv-btn{padding:8px 18px; font-size:13px;}
+.rv-btn{padding:10px 24px; font-size:14.5px;}
 .rv-btn.ghost{padding:7px 14px; font-size:13px;}
 .rv-know{background:#fff; color:var(--iel-accent-deep); border:1.5px solid var(--iel-accent-line); box-shadow:none; font-size:15px; padding:12px 26px; transition:background var(--iel-t-fast);}
 .rv-know:hover{background:var(--iel-tint);}
@@ -481,8 +486,10 @@ body.reading main{padding-top:64px;}
 .f-row .fd{flex:1; font-size:13.5px; color:var(--iel-ink3); line-height:1.65; min-width:0;}
 .f-row .fs{font-size:11.5px; color:var(--iel-tw); cursor:pointer; white-space:nowrap; margin-top:3px;}
 .f-row .fx{flex:none; border:none; background:none; color:#d98a80; font-size:12.5px; padding:6px;}
-.fav-tools{display:flex; gap:10px; margin:14px 0 6px; flex-wrap:wrap;}
-.fav-tools button{padding:9px 16px; font-size:13.5px;}
+/* 导出工具：低频操作，置于列表底部并整体降级（主操作是「开始复习」） */
+.fav-tools{display:flex; gap:8px; margin-top:18px; padding-top:14px; border-top:1px dashed var(--iel-line); flex-wrap:wrap; align-items:center;}
+.fav-tools::before{content:"导出备份"; font-size:11.5px; color:var(--iel-mute); margin-right:2px;}
+.fav-tools button{padding:7px 14px; font-size:12.5px;}
 
 /* ============================================================
    15. 全局提示与响应式
@@ -608,6 +615,7 @@ body.reading main{padding-top:64px;}
   /* 统计 / 生词本 / 复习 */
   .ov-cell{padding:10px 12px;}
   .ov-cell .n{font-size:19px;}
+  .ov-cell.hi .n{font-size:26px;}
   .w-row .w{width:100px;}
   .w-mini{display:none;}
   .w-lv{width:64px;}
@@ -665,7 +673,6 @@ body.reading main{padding-top:64px;}
 #fabPause:hover{background:var(--iel-grad); color:#fff; filter:brightness(1.07); transform:translateY(-1px); border:none; box-shadow:0 8px 20px rgba(16,180,135,.5), inset 0 1px 0 rgba(255,255,255,.4);}
 .fab-btn .ic{width:17px; height:17px; display:block;}
 @media (max-width:640px){
-  .home-head{gap:8px;}
   /* 悬浮球做窄 + 吸底：紧贴底部导航顶缘（导航高≈61px+安全区），不再悬空遮挡内容 */
   .fab-cover{width:44px; height:44px;}
   .fab-cover::before{inset:4px;}
@@ -2590,14 +2597,14 @@ function renderStats(){
   let html=`<div class="view-sub">${ch==="all"?"全部 22 章":"第"+ch+"章 · "+esc(chName(ch).replace(/^\d+\s*/,""))} · 共 ${rows.length} 个目标词。数据保存在本机浏览器（localStorage），离线可用。</div>
   <div class="card">
     <div class="ov-grid">
+      <div class="ov-cell hi"><div class="n">${avg}<small style="font-size:14px;color:var(--iel-mute)">%</small></div><div class="t">整体掌握度</div></div>
+      <div class="ov-cell hi"><div class="n">${totC+totW?acc+"%":"—"}</div><div class="t">测验总正确率（${totC} 对 / ${totW} 错）</div></div>
       <div class="ov-cell"><div class="n">${rows.length}</div><div class="t">目标词汇总数</div></div>
       <div class="ov-cell"><div class="n" style="color:${LEVEL_COLORS[3]}">${lvCount[3]}</div><div class="t">牢固</div></div>
       <div class="ov-cell"><div class="n" style="color:${LEVEL_COLORS[2]}">${lvCount[2]}</div><div class="t">基本掌握</div></div>
       <div class="ov-cell"><div class="n" style="color:${LEVEL_COLORS[1]}">${lvCount[1]}</div><div class="t">眼熟</div></div>
       <div class="ov-cell"><div class="n" style="color:${LEVEL_COLORS[0]}">${lvCount[0]}</div><div class="t">陌生</div></div>
-      <div class="ov-cell"><div class="n">${avg}<small style="font-size:13px;color:var(--iel-mute)">%</small></div><div class="t">整体掌握度</div></div>
       <div class="ov-cell"><div class="n">${totAttempts}</div><div class="t">测验总次数</div></div>
-      <div class="ov-cell"><div class="n">${totC+totW?acc+"%":"—"}</div><div class="t">测验总正确率（${totC}对/${totW}错）</div></div>
     </div>
     <div class="lv-legend">${LEVELS.map((l,i)=>`<span class="lv-chip" data-lv="${i}" style="color:${LEVEL_COLORS[i]};border-color:${LEVEL_COLORS[i]}">${l.name} ${lvCount[i]}</span>`).join("")}<span class="lv-chip ${STAT_FILTER.lv==="all"?"on":""}" data-lv="all" style="color:#8a8477;border-color:#c9c2b4">全部</span><span class="lv-chip" data-lv="-1" style="color:#8a8477;border-color:#c9c2b4">未测 ${untouched}</span></div>
     <div class="stat-controls">
@@ -2713,13 +2720,13 @@ function renderFav(){
     else { const nd=Math.min(...words.map(([w,f])=>favDueTs(f))); const dd=new Date(nd);
       nextTxt=nd>Date.now()?`下次复习：${(nd-Date.now())<864e5?"今天":"更晚"} ${String(dd.getHours()).padStart(2,"0")}:${String(dd.getMinutes()).padStart(2,"0")}`:"暂无到期单词"; }
     html+=`<div class="rv-tools"><button class="rv-btn" id="startReview">🎯 开始复习（${due.length} 词到期）</button><span class="rv-due">${nextTxt}</span></div>`;
-    html+=`<div class="fav-tools"><button class="pri" id="expCsv">⬇ 导出 CSV</button><button id="expTxt">⬇ 导出 TXT</button><button id="expAnki">⬇ 导出 Anki 制表符文本</button></div>`;
     html+=words.map(([w,f])=>{
       const src=storyById(f.src);
       return `<div class="f-row"><div class="fw"><div class="w">${esc(w)}</div><div class="p">/${esc(wordPh(w,f.ph))}/</div></div>
       <div class="fd">${esc(f.def||"")}<div class="fs" data-goto="${esc(f.src||"")}" data-w="${esc(w)}">来源：${src?esc(src.title)+" · "+esc(src.tcn):"—"}</div></div>
       <button class="fx" data-del="${esc(w)}">✕ 移除</button></div>`;
     }).join("");
+    html+=`<div class="fav-tools"><button id="expCsv">⬇ CSV</button><button id="expTxt">⬇ TXT</button><button id="expAnki">⬇ Anki 制表符</button></div>`;
   }
   html+=`</div>`;
   app.innerHTML=html;
@@ -2742,7 +2749,7 @@ function renderMe(){
   <li>非目标生词随手<b>收藏进生词本</b>，可按艾宾浩斯间隔复习，或导出 CSV/TXT 导入 Anki、欧路词典等。</li>
   <li><b>随身听</b>：在"首页 → 随身听"连播当前章节文章，锁屏后台可续播，自动断点续听。</li>
   </ol></div>
-  <div class="card"><h3 class="me-h">学习数据备份</h3>
+  <div class="card"><h3>学习数据备份</h3>
     <div class="me-p">备份文件为 JSON 格式，包含阅读进度、掌握度统计、测验记录、生词本与复习计划。</div>
     <div class="backup-zone"><button id="exportData">📦 导出学习数据备份</button><button id="importData">📥 导入备份恢复数据</button><input type="file" id="importFile" accept="application/json,.json" style="display:none"></div>
     <div class="danger-zone"><button id="resetBtn">🗑 重置全部学习数据</button></div>
