@@ -797,6 +797,19 @@ body.reading #lsFab{display:none;}
 <div id="toast"></div>
 
 <script>
+/* 加载完整性自检（须在主脚本之前注册）：本页为单个大 HTML（约 2.9MB），弱网/代理切换时
+   可能被截断——截断处落在主脚本中段时页面只剩导航、主内容空白且末尾自检永远执行不到。
+   故在前部挂 load 监听：主脚本未完整执行（无 __APP_TAIL__ 标记）即弹红色警告，避免"静默坏掉"。 */
+window.addEventListener("load",function(){
+  if(window.__APP_TAIL__) return;
+  var b=document.createElement("div");
+  b.textContent="⚠ 页面加载不完整（网络不稳），请刷新重试；若反复出现，请切换网络后再刷新";
+  b.style.cssText="position:fixed;left:0;right:0;top:0;z-index:99999;background:#e74c3c;color:#fff;font:14px/1.6 -apple-system,sans-serif;text-align:center;padding:10px 16px;box-sizing:border-box";
+  (document.body||document.documentElement).appendChild(b);
+});
+</script>
+
+<script>
 "use strict";
 /* ================= 数据 ================= */
 const CHAPTERS = ["1 自然地理","2 植物研究","3 动物保护","4 太空探索","5 学校教育","6 科技发明","7 文化历史","8 语言演化","9 娱乐活动","10 物品材料","11 时尚潮流","12 饮食健康","13 建筑场所","14 交通旅行","15 国家政府-2","16 社会经济","17 法律法规","18 沙场争锋","19 社会角色","20 行为动作","21 身心健康","22 时间日期"];
@@ -3025,18 +3038,7 @@ document.addEventListener("visibilitychange",()=>{
   }
 });
 switchView("home");
-window.__APP_TAIL__=1;   // 主脚本完整执行到的末尾标记（供下方自检）
-</script>
-<script>
-/* 加载完整性自检：本页为单个大 HTML，弱网下可能被截断导致功能残缺（如随身听点开无内容）。
-   主脚本未完整执行（无末尾标记）时，给出明确的刷新提示，避免"静默坏掉"。 */
-(function(){
-  if(window.__APP_TAIL__) return;
-  var b=document.createElement("div");
-  b.textContent="⚠ 页面加载不完整（网络不稳），请刷新重试；若反复出现，请切换网络后再刷新";
-  b.style.cssText="position:fixed;left:0;right:0;top:0;z-index:99999;background:#e74c3c;color:#fff;font:14px/1.6 -apple-system,sans-serif;text-align:center;padding:10px 16px;box-sizing:border-box";
-  (document.body||document.documentElement).appendChild(b);
-})();
+window.__APP_TAIL__=1;   // 主脚本完整执行到的末尾标记（供前部 load 自检）
 </script>
 </body>
 </html>
