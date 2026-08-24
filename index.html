@@ -2316,6 +2316,7 @@ function openListenPanel(){
   renderListen();
   p.classList.add("open");
   document.body.classList.add("ls-lock");
+  LISTEN._paint();   // 面板可见后再渲染（_paint 依赖 lsPanelVisible）
   updateFab();
 }
 function closeListenPanel(){
@@ -2381,8 +2382,8 @@ function renderListen(){
     .forEach(([id,key])=>{ const el=document.getElementById(id); if(el) el.onchange=e=>LISTEN.changeCfg(key,e.target.value); });
   if(LISTEN.playing||LISTEN.paused){ /* 播放/暂停中打开浮窗：保持状态仅重绘 */ }
   else{
-    LISTEN.story=null;   // 浮窗重开以保存断点恢复
-    if(S.listen&&S.listen.sid){ LISTEN.buildQueue(); LISTEN._prepare({resume:true}); }
+    LISTEN.story=null;   // 空闲打开：显示待播引导卡片，点「继续播放」自动从断点恢复
+    LISTEN.buildQueue();
   }
   LISTEN._paint();
   renderListenBar();
