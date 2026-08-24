@@ -529,7 +529,7 @@ body.reading main{padding-top:64px;}
   main{padding:16px 12px calc(84px + env(safe-area-inset-bottom,0px));}
   body[data-view="listen"] main{padding-bottom:calc(200px + env(safe-area-inset-bottom,0px));}
   body[data-view="listen"] .audiobar{bottom:calc(72px + env(safe-area-inset-bottom,0px));}   /* 播放条抬到底部导航之上 */
-  #lsFab{bottom:calc(88px + env(safe-area-inset-bottom,0px));}   /* 悬浮球抬到底部导航之上 */
+  #lsFab{bottom:calc(61px + env(safe-area-inset-bottom,0px));}   /* 吸底：紧贴底部导航顶缘 */
   .card{padding:14px; border-radius:14px;}
   h2.view-title{font-size:18px;}
   .view-sub{font-size:12.5px;}
@@ -668,11 +668,14 @@ body.reading main{padding-top:64px;}
 .fab-btn .ic{width:17px; height:17px; display:block;}
 @media (max-width:640px){
   .home-head{gap:8px;}
-  .fab-cover{width:54px; height:54px;}
-  .fab-cover .fab-letter{font-size:19px;}
-  .fab-btn{width:42px; height:42px;}
-  .fab-btn .ic{width:16px; height:16px;}
-  #lsFab{padding:7px 8px; gap:6px;}
+  /* 悬浮球做窄 + 吸底：紧贴底部导航顶缘（导航高≈61px+安全区），不再悬空遮挡内容 */
+  .fab-cover{width:44px; height:44px;}
+  .fab-cover::before{inset:4px;}
+  .fab-cover .fab-ch{font-size:9px; top:3px;}
+  .fab-cover .fab-letter{font-size:15px; margin-top:4px;}
+  .fab-btn{width:34px; height:34px;}
+  .fab-btn .ic{width:13px; height:13px;}
+  #lsFab{padding:5px 6px; gap:5px;}
 }
 body.reading #lsFab{display:none;}
 /* 设置区：玻璃小卡片网格（标签在上、控件占满宽） */
