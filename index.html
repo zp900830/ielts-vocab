@@ -1777,7 +1777,7 @@ const audio={
     this.playing=false; this.paused=false; this.gen++;
     if(this._cloudAu){ try{ this._cloudAu.pause(); this._cloudAu.removeAttribute("src"); this._cloudAu.load(); }catch(e){} }
     if(this.ok()) speechSynthesis.cancel();
-    this.idx=0; this._paint(); this._updateBar(); this._fab();   // 停止后：悬浮球淡出、入口按钮回归
+    this.idx=0; this._paint(); this._updateBar();
   },
   _unlockCloud(){
     if(this._cloudAu) return;
