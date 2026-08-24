@@ -531,7 +531,10 @@ body.reading main{padding-top:64px;}
   #topbar.compact .chsel select{max-width:112px;}
   .tabs button{padding:7px 14px; font-size:13.5px;}
   .chsel select{max-width:150px;}
-  select,input,.chsel select,.abar-sel,.stat-controls input[type=search],.stat-controls select,.wq-search{font-size:16px;}
+  /* iOS 聚焦自动缩放只作用于文本输入框（input/textarea）；select 弹原生选择器不触发缩放，
+     故仅 input 保持 16px，所有 select 降回常规字号——否则筛选控件显得巨大 */
+  input,.stat-controls input[type=search],.wq-search{font-size:16px;}
+  select,.chsel select,.abar-sel,.stat-controls select{font-size:13.5px; padding:5px 9px;}
 
   /* 布局：默认预留底部导航高度；阅读页（底部导航隐藏，有朗读条）与随身听页（导航+播放条叠加）分别加高 */
   main{padding:16px 12px calc(84px + env(safe-area-inset-bottom,0px));}
@@ -541,12 +544,12 @@ body.reading main{padding-top:64px;}
   .card{padding:14px; border-radius:14px;}
   .view-sub{font-size:12.5px;}
 
-  /* 首页故事列表 */
+  /* 首页故事列表：中文副标题独立成行——长英文标题换行时不再把中文挤到行中错乱 */
   .story-item{gap:10px; padding:13px 2px;}
   .s-num{width:38px; height:38px; border-radius:12px; font-size:13px;}
-  .s-title{font-size:14.5px;}
-  .s-title .tcn{font-size:12px; margin-left:6px;}
-  .s-meta{font-size:11.5px; gap:8px;}
+  .s-title{font-size:14.5px; line-height:1.35;}
+  .s-title .tcn{display:block; font-size:12px; margin:2px 0 0;}
+  .s-meta{font-size:11.5px; gap:8px; margin-top:6px;}
   .s-go,.s-go.sub{padding:8px 12px; font-size:12.5px;}
 
   /* 悬浮标题条 */
@@ -741,7 +744,7 @@ body.reading #lsFab{display:none;}
 @media (max-width:640px){
   .ls-set{grid-template-columns:repeat(2,1fr); gap:7px;}
   .ls-set .ls-opt{padding:8px 9px 7px;}
-  .ls-set select{font-size:16px; padding:5px 16px 5px 7px;}   /* 16px 防 iOS 聚焦缩放 */
+  .ls-set select{font-size:13.5px; padding:5px 16px 5px 7px;}   /* select 无 iOS 聚焦缩放问题，用常规字号 */
   .ls-cfg-body{padding:2px 9px 9px;}
   .ls-cfg-head{padding:9px 12px; font-size:11.5px;}
   .ls-now{padding:18px 12px 14px;}
