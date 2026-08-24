@@ -602,9 +602,15 @@ body.reading main{padding-top:64px;}
    ============================================================ */
 .home-head{display:flex; align-items:flex-end; gap:12px;}
 .home-head .view-title{flex:1;}
-/* 随身听入口：右下角固定玻璃胶囊，与悬浮球同位互斥（停止后原地回归） */
-.ls-open{position:fixed; right:calc(16px + env(safe-area-inset-right,0px)); bottom:calc(28px + env(safe-area-inset-bottom,0px)); z-index:110; display:inline-flex; align-items:center; gap:7px; padding:12px 18px; border-radius:999px; border:1px solid rgba(255,255,255,.88); background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.46)); -webkit-backdrop-filter:blur(24px) saturate(190%); backdrop-filter:blur(24px) saturate(190%); color:var(--iel-accent-deep); font-size:13.5px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 14px 38px rgba(30,90,70,.2), inset 0 1px 0 rgba(255,255,255,.95); transition:opacity .28s ease, transform .3s cubic-bezier(.32,.72,.35,1), background var(--iel-t-fast), border-color var(--iel-t-fast), box-shadow var(--iel-t-fast);}
-.ls-open:hover{background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,255,255,.62)); border-color:var(--iel-accent); box-shadow:0 16px 42px rgba(16,180,135,.22), inset 0 1px 0 #fff;}
+/* 随身听入口：右下角固定玻璃胶囊（渐变小圆盘 + 文字），与悬浮球同位互斥 */
+.ls-open{position:fixed; right:calc(16px + env(safe-area-inset-right,0px)); bottom:calc(28px + env(safe-area-inset-bottom,0px)); z-index:110; display:inline-flex; align-items:center; gap:9px; padding:7px 17px 7px 7px; border-radius:999px; border:1px solid rgba(255,255,255,.88); background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.46)); -webkit-backdrop-filter:blur(24px) saturate(190%); backdrop-filter:blur(24px) saturate(190%); font-size:13.5px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 14px 38px rgba(30,90,70,.2), 0 2px 6px rgba(30,90,70,.08), inset 0 1px 0 rgba(255,255,255,.95); transition:opacity .28s ease, transform .3s cubic-bezier(.32,.72,.35,1), box-shadow var(--iel-t-fast), border-color var(--iel-t-fast);}
+.ls-open:hover{border-color:var(--iel-accent); box-shadow:0 16px 42px rgba(16,180,135,.24), 0 2px 6px rgba(30,90,70,.1), inset 0 1px 0 #fff; transform:translateY(-1px);}
+.ls-open:active{transform:translateY(0);}
+.ls-go-ic{width:34px; height:34px; border-radius:50%; flex:none; background:var(--iel-grad); color:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(16,180,135,.42), inset 0 1px 0 rgba(255,255,255,.4), inset 0 -2px 4px rgba(6,84,62,.25);}
+.ls-go-ic::after{content:""; position:absolute; width:34px; height:34px; border-radius:50%; pointer-events:none; background:radial-gradient(ellipse at 30% 18%, rgba(255,255,255,.45), rgba(255,255,255,0) 60%);}
+.ls-go-ic{position:relative;}
+.ls-go-ic .ic{width:15px; height:15px; display:block;}
+.ls-go-t{color:var(--iel-accent-deep); padding-right:3px; letter-spacing:.5px;}
 .ls-open .pulse{width:7px; height:7px; border-radius:50%; background:var(--iel-accent); animation:ls-pulse 1.6s ease infinite;}
 body.ls-active #lsGo{opacity:0; pointer-events:none; transform:translateY(12px) scale(.9);}   /* 播放/暂停态：让位给悬浮球 */
 body.reading #lsGo{display:none;}   /* 阅读页（底部有朗读条）不显示，避免遮挡 */
@@ -665,7 +671,10 @@ body.ls-lock{overflow:hidden;}
 .fab-btn .ic{width:17px; height:17px; display:block;}
 @media (max-width:640px){
   .home-head{gap:8px;}
-  .ls-open{padding:10px 15px; font-size:12.5px;}
+  .ls-open{padding:6px 14px 6px 6px; font-size:12.5px;}
+  .ls-go-ic{width:30px; height:30px;}
+  .ls-go-ic::after{width:30px; height:30px;}
+  .ls-go-ic .ic{width:13px; height:13px;}
   .ls-ph{padding:12px 14px 6px;}
   .ls-close{padding:6px 13px; font-size:12.5px;}
   .ls-body{padding:2px 12px 158px;}
@@ -2380,7 +2389,7 @@ function ensureFab(){
   if(!g){
     g=document.createElement("button");
     g.className="ls-open"; g.id="lsGo";
-    g.innerHTML="🎧 随身听";
+    g.innerHTML=`<span class="ls-go-ic"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.2c-3.1 0-5.4 2.4-5.4 5.4v3.7c0 1.3 1 2.3 2.3 2.3h.8c.5 0 .9-.4.9-.9V9.5c0-.5-.4-.9-.9-.9H4.1v-1c0-2.1 1.8-3.9 3.9-3.9s3.9 1.8 3.9 3.9v1h-1.6c-.5 0-.9.4-.9.9v3.2c0 .5.4.9.9.9h.8c1.3 0 2.3-1 2.3-2.3V7.6c0-3-2.4-5.4-5.4-5.4z" fill="currentColor"/></svg></span><span class="ls-go-t">随身听</span>`;
     g.onclick=()=>openListenPanel();   // 打开全屏播放器浮窗（关闭后悬浮球控制，播放不中断）
     document.body.appendChild(g);
   }
