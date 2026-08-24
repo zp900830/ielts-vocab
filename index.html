@@ -602,11 +602,12 @@ body.reading main{padding-top:64px;}
    ============================================================ */
 .home-head{display:flex; align-items:flex-end; gap:12px;}
 .home-head .view-title{flex:1;}
-.ls-open{border:1px solid rgba(255,255,255,.88); background:rgba(255,255,255,.62); -webkit-backdrop-filter:blur(14px) saturate(165%); backdrop-filter:blur(14px) saturate(165%); color:var(--iel-accent-deep); border-radius:999px; padding:7px 16px; font-size:13px; font-weight:600; white-space:nowrap; margin-bottom:10px; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 16px rgba(30,90,70,.1), inset 0 1px 0 rgba(255,255,255,.92); transition:background var(--iel-t-fast), border-color var(--iel-t-fast), box-shadow var(--iel-t-fast);}
-.ls-open:hover{background:rgba(255,255,255,.85); border-color:var(--iel-accent); box-shadow:0 6px 20px rgba(16,180,135,.18), inset 0 1px 0 rgba(255,255,255,.96);}
+/* 随身听入口：右下角固定玻璃胶囊，与悬浮球同位互斥（停止后原地回归） */
+.ls-open{position:fixed; right:calc(16px + env(safe-area-inset-right,0px)); bottom:calc(28px + env(safe-area-inset-bottom,0px)); z-index:110; display:inline-flex; align-items:center; gap:7px; padding:12px 18px; border-radius:999px; border:1px solid rgba(255,255,255,.88); background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.46)); -webkit-backdrop-filter:blur(24px) saturate(190%); backdrop-filter:blur(24px) saturate(190%); color:var(--iel-accent-deep); font-size:13.5px; font-weight:600; white-space:nowrap; cursor:pointer; box-shadow:0 14px 38px rgba(30,90,70,.2), inset 0 1px 0 rgba(255,255,255,.95); transition:opacity .28s ease, transform .3s cubic-bezier(.32,.72,.35,1), background var(--iel-t-fast), border-color var(--iel-t-fast), box-shadow var(--iel-t-fast);}
+.ls-open:hover{background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,255,255,.62)); border-color:var(--iel-accent); box-shadow:0 16px 42px rgba(16,180,135,.22), inset 0 1px 0 #fff;}
 .ls-open .pulse{width:7px; height:7px; border-radius:50%; background:var(--iel-accent); animation:ls-pulse 1.6s ease infinite;}
-/* 播放/暂停态：入口按钮让位给右下角悬浮球（形态互斥，停止后按钮回归） */
-body.ls-active #lsGo{display:none;}
+body.ls-active #lsGo{opacity:0; pointer-events:none; transform:translateY(12px) scale(.9);}   /* 播放/暂停态：让位给悬浮球 */
+body.reading #lsGo{display:none;}   /* 阅读页（底部有朗读条）不显示，避免遮挡 */
 @keyframes ls-pulse{0%,100%{opacity:.35; transform:scale(.8);}50%{opacity:1; transform:scale(1.15);}}
 
 /* 全屏播放器浮窗：覆盖式独立层，关闭后播放不中断 */
@@ -664,7 +665,7 @@ body.ls-lock{overflow:hidden;}
 .fab-btn .ic{width:17px; height:17px; display:block;}
 @media (max-width:640px){
   .home-head{gap:8px;}
-  .ls-open{padding:6px 13px; font-size:12.5px; margin-bottom:8px;}
+  .ls-open{padding:10px 15px; font-size:12.5px;}
   .ls-ph{padding:12px 14px 6px;}
   .ls-close{padding:6px 13px; font-size:12.5px;}
   .ls-body{padding:2px 12px 158px;}
@@ -906,8 +907,7 @@ chSel.addEventListener("change",()=>{ const v=chSel.value; S.chapter = v==="all"
 function renderHome(){
   const ch=S.chapter;
   let list=STORIES.filter(s=>ch==="all"||s.ch===ch);
-  let html=`<div class="home-head"><h2 class="view-title">情景故事</h2>
-    <button class="ls-open" id="lsGo" title="${esc(lsResumeText())}">${LISTEN.playing?'<span class="pulse"></span>':"🎧 "}随身听</button></div>
+  let html=`<div class="home-head"><h2 class="view-title">情景故事</h2></div>
     <div class="view-sub">读故事 → 点词查义 → 自测 → 统计定位弱项。目标词已高亮，非目标词也可点击查询并收藏。<button class="toggle-g" id="toggleGuide">📖 使用方法</button></div>`;
   html+=`<div class="card guide" id="guideCard" hidden><h3>使用方法</h3><ol>
   <li><b>读英文故事</b>：高亮下划线的是本篇目标词，点击看音标与释义（每次点查都会计入掌握度统计）；其他任何单词也可以点击查义。</li>
@@ -938,8 +938,6 @@ function renderHome(){
   const tg=document.getElementById("toggleGuide");
   if(tg) tg.onclick=()=>{ const g=document.getElementById("guideCard"); const show=g.hasAttribute("hidden"); if(show) g.removeAttribute("hidden"); else g.setAttribute("hidden",""); tg.textContent=show?"✕ 收起指引":"📖 使用方法"; };
   app.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openStory(b.dataset.open));
-  const lg=document.getElementById("lsGo");
-  if(lg) lg.onclick=()=>openListenPanel();   // 打开全屏播放器浮窗（关闭后悬浮球控制，播放不中断）
 }
 
 /* ================= 阅读器 ================= */
@@ -2367,16 +2365,26 @@ function closeListenPanel(){
    圆形封面 = 当前文章章节号 + 标题首字母（唱片式旋转，播放快/暂停慢） */
 function ensureFab(){
   let f=document.getElementById("lsFab");
-  if(f) return f;
-  f=document.createElement("div");
-  f.id="lsFab";
-  f.innerHTML=`<button class="fab-btn" id="fabPause" title="暂停 / 继续" aria-label="暂停或继续播放"></button>
+  if(!f){
+    f=document.createElement("div");
+    f.id="lsFab";
+    f.innerHTML=`<button class="fab-btn" id="fabPause" title="暂停 / 继续" aria-label="暂停或继续播放"></button>
     <button class="fab-btn" id="fabStop" title="停止播放" aria-label="停止播放">${ICONS.stop}</button>
     <button class="fab-cover" id="fabCover" title="打开随身听播放器" aria-label="打开随身听播放器"><span class="fab-ch" id="fabCh"></span><span class="fab-letter" id="fabLetter">🎧</span></button>`;
-  document.body.appendChild(f);
-  document.getElementById("fabCover").onclick=()=>openListenPanel();
-  document.getElementById("fabPause").onclick=()=>{ if(LISTEN.playing) LISTEN.pause(); else LISTEN.play(); };
-  document.getElementById("fabStop").onclick=()=>LISTEN.stop();
+    document.body.appendChild(f);
+    document.getElementById("fabCover").onclick=()=>openListenPanel();
+    document.getElementById("fabPause").onclick=()=>{ if(LISTEN.playing) LISTEN.pause(); else LISTEN.play(); };
+    document.getElementById("fabStop").onclick=()=>LISTEN.stop();
+  }
+  let g=document.getElementById("lsGo");   // 入口按钮：全局固定右下角，与悬浮球同位互斥
+  if(!g){
+    g=document.createElement("button");
+    g.className="ls-open"; g.id="lsGo";
+    g.innerHTML="🎧 随身听";
+    g.onclick=()=>openListenPanel();   // 打开全屏播放器浮窗（关闭后悬浮球控制，播放不中断）
+    document.body.appendChild(g);
+  }
+  g.title=lsResumeText();
   return f;
 }
 function updateFab(){
@@ -2989,6 +2997,7 @@ updateFavBadge();
 audio.loadVoices(renderAudioBarIfReader);
 function renderAudioBarIfReader(){ if(VIEW==="reader") renderAudioBar(); }
 lsState();
+ensureFab();   // 创建右下角随身听入口按钮（全局固定，与悬浮球同位互斥）
 LISTEN._msBind();
 /* 锁屏/切后台被系统中断后，回前台自动从断点续播（用户手动暂停则不恢复） */
 document.addEventListener("visibilitychange",()=>{
