@@ -130,11 +130,13 @@ body.reading #shell{margin-left:0;}
   display:flex; align-items:center; gap:14px; flex-wrap:wrap; transition:transform var(--iel-t), padding .3s ease;}
 body.reading #topbar{position:fixed; left:0; right:0; transform:translateY(-110%);}
 body.reading{padding-top:0;}
-.tabs{display:flex; gap:4px; background:rgba(255,255,255,.48); border:1px solid rgba(255,255,255,.7);
+/* 二级导航（分段控件）：核心导航，用主操作级视觉权重——选中=绿渐变实底白字 */
+.tabs{display:flex; gap:4px; background:rgba(255,255,255,.62); border:1px solid rgba(191,230,214,.6);
   -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
-  border-radius:999px; padding:3px; box-shadow:var(--iel-shadow);}
-.tabs button{border:none; background:transparent; padding:6px 16px; border-radius:999px; font-size:14px; color:var(--iel-ink2); transition:color var(--iel-t-fast), background var(--iel-t-fast);}
-.tabs button.on{background:#fff; color:var(--iel-accent-deep); font-weight:600; box-shadow:0 2px 8px rgba(16,180,135,.16);}
+  border-radius:999px; padding:4px; box-shadow:var(--iel-shadow);}
+.tabs button{border:none; background:transparent; padding:8px 22px; border-radius:999px; font-size:15px; font-weight:500; color:var(--iel-ink3); transition:color var(--iel-t-fast), background var(--iel-t-fast), box-shadow var(--iel-t-fast);}
+.tabs button:hover:not(.on){color:var(--iel-accent-deep); background:rgba(16,180,135,.09);}
+.tabs button.on{background:var(--iel-grad); color:#fff; font-weight:600; box-shadow:var(--iel-grad-shadow), 0 2px 6px rgba(16,180,135,.2);}
 body:not(.v-home) #tabs{display:none;}   /* 非首页一级栏目：无二级导航，顶栏只留章节筛选与口音 */
 .chsel{margin-left:auto; display:flex; align-items:center; gap:6px; color:var(--iel-ink2); font-size:13px;}
 /* 顶栏英音/美音切换胶囊 */
@@ -492,7 +494,7 @@ body.reading main{padding-top:64px;}
 /* 平板/窄桌面：章节选择器收窄，避免与二级导航挤压 */
 @media (max-width:780px){
   .chsel select{max-width:150px;}
-  .tabs button{padding:6px 13px; font-size:13px;}
+  .tabs button{padding:7px 15px; font-size:13.5px;}
 }
 
 @media (max-width:640px){
@@ -519,9 +521,9 @@ body.reading main{padding-top:64px;}
   #topbar{padding:8px 12px; gap:8px;}
   .accent-btn{padding:5px 10px; font-size:11.5px;}
   #topbar.compact{padding:5px 12px;}
-  #topbar.compact .tabs button{padding:4px 9px; font-size:12px;}
+  #topbar.compact .tabs button{padding:5px 11px; font-size:12.5px;}
   #topbar.compact .chsel select{max-width:112px;}
-  .tabs button{padding:5px 12px; font-size:13px;}
+  .tabs button{padding:7px 14px; font-size:13.5px;}
   .chsel select{max-width:150px;}
   select,input,.chsel select,.abar-sel,.stat-controls input[type=search],.stat-controls select,.wq-search{font-size:16px;}
 
