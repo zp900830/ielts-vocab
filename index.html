@@ -153,7 +153,6 @@ body:not(.v-home) #tabs{display:none;}   /* 非首页一级栏目：无二级导
    ============================================================ */
 main{max-width:860px; margin:0 auto; padding:24px 18px 130px;}
 .card{background:var(--iel-glass); border:1px solid var(--iel-glass-line); border-radius:var(--iel-radius); padding:20px 22px; margin-bottom:18px; box-shadow:var(--iel-shadow);}
-h2.view-title{font-size:20px; margin-bottom:4px;}
 .view-sub{color:var(--iel-ink2); font-size:13px; margin-bottom:16px;}
 .guide{background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(250,253,252,.93));}
 .guide h3{font-size:15px; color:var(--iel-accent-deep); margin-bottom:8px;}
@@ -533,7 +532,6 @@ body.reading main{padding-top:64px;}
   body[data-view="listen"] .audiobar{bottom:calc(72px + env(safe-area-inset-bottom,0px));}   /* 播放条抬到底部导航之上 */
   #lsFab{bottom:calc(66px + env(safe-area-inset-bottom,0px));}   /* 兜底值≈导航真实高；snapFabToTabbar() 会以实际渲染高度覆盖 */
   .card{padding:14px; border-radius:14px;}
-  h2.view-title{font-size:18px;}
   .view-sub{font-size:12.5px;}
 
   /* 首页故事列表 */
@@ -627,8 +625,6 @@ body.reading main{padding-top:64px;}
 /* ============================================================
    16. 随身听 —— 二级 tab 视图 / 右下角旋转悬浮球（离开随身听页且播放中时显示）
    ============================================================ */
-.home-head{display:flex; align-items:flex-end; gap:12px;}
-.home-head .view-title{flex:1;}
 @keyframes ls-pulse{0%,100%{opacity:.35; transform:scale(.8);}50%{opacity:1; transform:scale(1.15);}}
 
 /* 头部状态胶囊：呼吸圆点 + 动态文字（播放中实时刷新） */
@@ -928,8 +924,7 @@ chSel.addEventListener("change",()=>{ const v=chSel.value; S.chapter = v==="all"
 function renderHome(){
   const ch=S.chapter;
   let list=STORIES.filter(s=>ch==="all"||s.ch===ch);
-  let html=`<div class="home-head"><h2 class="view-title">情景故事</h2></div>
-    <div class="view-sub">读故事 → 点词查义 → 自测 → 统计定位弱项。目标词已高亮，非目标词也可点击查询并收藏。<button class="toggle-g" id="goGuide">📖 使用方法</button></div>`;
+  let html=`<div class="view-sub">读故事 → 点词查义 → 自测 → 统计定位弱项。目标词已高亮，非目标词也可点击查询并收藏。<button class="toggle-g" id="goGuide">📖 使用方法</button></div>`;
 
   if(!list.length){
     html+=`<div class="card empty-box"><b>第${ch}章的情境故事还在制作中</b>目前已完成：第1章（15 篇故事，覆盖全部 241 个目标词）。<br>可以先切换到第 1 章开始学习，或在"学习统计"里浏览本章词汇。</div>`;
@@ -2397,8 +2392,7 @@ function renderListen(){
   const sel=(id,opts)=>`<label class="ls-opt"><span>${opts.label}</span><select id="${id}">${opts.items.map(o=>`<option value="${o[0]}" ${String(o[0])===String(opts.cur)?"selected":""}>${o[1]}</option>`).join("")}</select></label>`;
   const cfgSum=()=>{ const c=lsState().cfg;
     return `${{all:"全部",unread:"未读",read:"已读"}[c.scope]}文章 · ${c.order==="rand"?"随机":"顺序"} · ${c.mode==="enzh"?"英中对照":"纯英文"} · ${{list:"列表循环",one:"单篇循环",stop:"播完即停"}[c.loop]}`; };
-  const html=`<h2 class="view-title">随身听</h2>
-    <div class="view-sub"><span class="ls-sub" id="lsSub"><span class="dot"></span><span class="txt" id="lsSubTxt"></span></span></div>
+  const html=`<div class="view-sub"><span class="ls-sub" id="lsSub"><span class="dot"></span><span class="txt" id="lsSubTxt"></span></span></div>
     <div class="card ls-now" id="lsNow"></div>
     <div class="ls-cfg" id="lsCfg">
       <button class="ls-cfg-head" id="lsCfgHead" title="展开 / 收起播放设置">
@@ -2593,7 +2587,7 @@ function renderStats(){
   const totAttempts=Object.values(S.quiz).reduce((a,q)=>a+q.attempts,0);
   const acc=totC+totW?Math.round(totC/(totC+totW)*100):0;
 
-  let html=`<h2 class="view-title">学习统计</h2><div class="view-sub">${ch==="all"?"全部 22 章":"第"+ch+"章 · "+esc(chName(ch).replace(/^\d+\s*/,""))} · 共 ${rows.length} 个目标词。数据保存在本机浏览器（localStorage），离线可用。</div>
+  let html=`<div class="view-sub">${ch==="all"?"全部 22 章":"第"+ch+"章 · "+esc(chName(ch).replace(/^\d+\s*/,""))} · 共 ${rows.length} 个目标词。数据保存在本机浏览器（localStorage），离线可用。</div>
   <div class="card">
     <div class="ov-grid">
       <div class="ov-cell"><div class="n">${rows.length}</div><div class="t">目标词汇总数</div></div>
@@ -2710,7 +2704,7 @@ function renderFav(){
   migrateFav();
   const words=Object.entries(S.fav).sort((a,b)=>b[1].t-a[1].t);
   const due=dueWords();
-  let html=`<h2 class="view-title">生词本</h2><div class="view-sub">阅读时收藏的非目标生词（共 ${words.length} 个）。可导出 CSV / TXT，导入 Anki、欧路词典等继续学习。数据保存在本机。</div><div class="card">`;
+  let html=`<div class="view-sub">阅读时收藏的非目标生词（共 ${words.length} 个）。可导出 CSV / TXT，导入 Anki、欧路词典等继续学习。数据保存在本机。</div><div class="card">`;
   if(!words.length){
     html+=`<div class="empty-box"><b>还没有收藏任何生词</b>阅读故事时，点击任意非目标单词即可查询并 ☆ 收藏。收藏的词会自动进入间隔复习计划。</div>`;
   } else {
@@ -2739,8 +2733,7 @@ function renderFav(){
 }
 /* ================= 我的（使用指南 / 数据管理） ================= */
 function renderMe(){
-  app.innerHTML=`<h2 class="view-title">我的</h2>
-  <div class="view-sub">使用指南与数据管理。全部学习数据仅保存在本机浏览器（localStorage），离线可用；换设备或清理浏览器数据前请先导出备份。</div>
+  app.innerHTML=`<div class="view-sub">使用指南与数据管理。全部学习数据仅保存在本机浏览器（localStorage），离线可用；换设备或清理浏览器数据前请先导出备份。</div>
   <div class="card guide"><h3>使用方法</h3><ol>
   <li><b>读英文故事</b>：高亮下划线的是本篇目标词，点击看音标与释义（每次点查都会计入掌握度统计）；其他任何单词也可以点击查义。</li>
   <li><b>先自己心里翻译</b>，再点击对应的英文句子核对该句译文（默认隐藏，防止瞟一眼）；点击句子本身可从此句开始朗读。</li>
