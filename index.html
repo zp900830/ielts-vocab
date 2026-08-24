@@ -137,6 +137,9 @@ body.reading{padding-top:0;}
 .tabs button.on{background:#fff; color:var(--iel-accent-deep); font-weight:600; box-shadow:0 2px 8px rgba(16,180,135,.16);}
 body:not(.v-home) #tabs{display:none;}   /* 非首页一级栏目：无二级导航，顶栏只留章节筛选与口音 */
 .chsel{margin-left:auto; display:flex; align-items:center; gap:6px; color:var(--iel-ink2); font-size:13px;}
+/* 顶栏英音/美音切换胶囊 */
+.accent-btn{flex:none; border:1px solid var(--iel-accent-line); background:#fff; color:var(--iel-accent-deep); border-radius:999px; padding:6px 13px; font-size:12.5px; font-weight:600; white-space:nowrap; cursor:pointer; transition:background var(--iel-t-fast), border-color var(--iel-t-fast);}
+.accent-btn:hover{background:var(--iel-accent-soft); border-color:var(--iel-accent);}
 .chsel select{max-width:190px; box-shadow:var(--iel-shadow);}
 /* 顶栏滚动收缩态：滚入正文时收紧上下 padding */
 #topbar.compact{padding:5px 18px;}
@@ -167,8 +170,7 @@ h2.view-title{font-size:20px; margin-bottom:4px;}
 .s-meta{font-size:12.5px; color:var(--iel-ink2); margin-top:3px; display:flex; gap:12px; flex-wrap:wrap;}
 .s-meta .done{color:var(--iel-lv3); font-weight:600;}
 .s-meta .part{color:var(--iel-lv1); font-weight:600;}
-.s-go{padding:9px 18px; font-size:13.5px;}
-.s-go.sub{padding:9px 18px; font-size:13.5px;}
+.s-go{padding:9px 18px; font-size:13.5px;}   /* .sub 仅需覆写配色，尺寸继承本规则 */
 .empty-box{text-align:center; color:var(--iel-ink2); padding:34px 10px; font-size:14px;}
 .empty-box b{display:block; font-size:16px; color:var(--iel-ink); margin-bottom:8px;}
 
@@ -422,7 +424,6 @@ body.reading main{padding-top:64px;}
 /* 速查竖标签：近全透玻璃（3% 白底 + 1.5px 微模糊）；宽≤25px 不压字形 */
 .wq-tab{position:fixed; right:0; top:130px; z-index:110; border:1px solid rgba(93,190,157,.35); border-right:none; background:rgba(255,255,255,.03); -webkit-backdrop-filter:blur(1.5px) saturate(120%); backdrop-filter:blur(1.5px) saturate(120%); border-radius:var(--iel-radius-sm) 0 0 var(--iel-radius-sm); padding:14px 6px; font-size:11.5px; color:var(--iel-accent-deep); font-weight:600; box-shadow:0 4px 16px rgba(30,90,70,.10); writing-mode:vertical-rl; letter-spacing:2.5px; cursor:pointer; transition:right .28s ease, opacity .28s ease;}
 .wq-tab:hover{color:var(--iel-accent);}
-.wq-tab.shift{right:0; opacity:0; pointer-events:none;}
 .wq-panel{position:fixed; right:14px; top:74px; bottom:18px; width:340px; max-width:calc(100vw - 28px); z-index:115; background:var(--iel-glass-strong); border:1px solid var(--iel-glass-line); border-radius:var(--iel-radius); box-shadow:var(--iel-shadow-lg); display:flex; flex-direction:column; transform:translateX(calc(100% + 30px)); transition:transform .28s ease, visibility 0s linear .28s; visibility:hidden;}
 .wq-panel.open{transform:none; visibility:visible; transition:transform .28s ease;}
 .wq-head{display:flex; align-items:center; gap:8px; padding:12px 12px 6px;}
@@ -441,8 +442,6 @@ body.reading main{padding-top:64px;}
 .wq-empty.show{display:block;}
 /* 单词行：透明列表行 + 故事列表同款虚线分割；悬浮/选中统一 1px 绿描边 */
 .wq-item{position:relative; border-radius:var(--iel-radius-xs); padding:10px 6px; background:transparent; border:1px solid transparent; transition:background var(--iel-t-fast), border-color var(--iel-t-fast), box-shadow var(--iel-t-fast); -webkit-tap-highlight-color:transparent; cursor:pointer;}
-.accent-btn{flex:none; border:1px solid var(--iel-accent-line); background:#fff; color:var(--iel-accent-deep); border-radius:999px; padding:6px 13px; font-size:12.5px; font-weight:600; white-space:nowrap; cursor:pointer; transition:background var(--iel-t-fast), border-color var(--iel-t-fast);}
-.accent-btn:hover{background:var(--iel-accent-soft); border-color:var(--iel-accent);}
 .wq-item:not(:last-child)::after{content:""; position:absolute; left:6px; right:6px; bottom:0; border-bottom:1px dashed var(--iel-line); pointer-events:none;}
 .wq-item:hover::after,.wq-item.sel::after{display:none;}
 .wq-item:hover,.wq-item.sel{background:#fff; border-color:var(--iel-accent); box-shadow:0 1px 6px rgba(16,180,135,.14);}
@@ -528,7 +527,6 @@ body.reading main{padding-top:64px;}
 
   /* 布局：默认预留底部导航高度；阅读页（底部导航隐藏，有朗读条）与随身听页（导航+播放条叠加）分别加高 */
   main{padding:16px 12px calc(84px + env(safe-area-inset-bottom,0px));}
-  body.reading main{padding-bottom:150px;}
   body[data-view="listen"] main{padding-bottom:calc(200px + env(safe-area-inset-bottom,0px));}
   body[data-view="listen"] .audiobar{bottom:calc(72px + env(safe-area-inset-bottom,0px));}   /* 播放条抬到底部导航之上 */
   #lsFab{bottom:calc(88px + env(safe-area-inset-bottom,0px));}   /* 悬浮球抬到底部导航之上 */
@@ -550,7 +548,7 @@ body.reading main{padding-top:64px;}
   .r-title .tcn{font-size:10.5px; margin-left:5px;}
   .r-title .r-pos{font-size:10px; padding:1px 5px; margin-left:6px;}
   .nav-arrow{padding:0 8px; height:24px; font-size:11px;}
-  body.reading main{padding-top:56px;}
+  body.reading main{padding-top:56px; padding-bottom:150px;}
   .r-badges{gap:6px; margin-bottom:10px;}
   .r-badge{font-size:11px; padding:2px 8px;}
   .tr-all{padding:4px 11px; font-size:11.5px;}
@@ -576,7 +574,6 @@ body.reading main{padding-top:64px;}
   .story-en{padding-left:20px;}
   .story-en p{font-size:17px; line-height:1.95; text-align:left;}
   .sen-trig{left:-21px; width:19px; height:19px; font-size:10px;}
-  .sen-trig::before{left:19px; width:6px;}
   .sen-tr.show{padding:8px 11px 7px; font-size:13.5px; line-height:1.75;}
 
   /* 测验 */
@@ -651,7 +648,6 @@ body.reading main{padding-top:64px;}
   opacity:0; visibility:hidden; pointer-events:none; transform:translateY(14px) scale(.92);
   transition:opacity .28s ease, transform .3s cubic-bezier(.32,.72,.35,1), visibility .28s;}
 #lsFab.on{opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0) scale(1);}
-@keyframes ls-fab-in{from{opacity:0; transform:translateY(14px);}to{opacity:1; transform:translateY(0);}}
 .fab-cover{position:relative; width:62px; height:62px; border-radius:50%; border:none; padding:0; cursor:pointer; flex:none;
   background:var(--iel-grad) center/cover no-repeat; color:#fff;
   box-shadow:0 5px 16px rgba(16,180,135,.42), 0 0 0 3px rgba(255,255,255,.65), inset 0 2px 5px rgba(255,255,255,.38), inset 0 -3px 6px rgba(6,84,62,.28);
