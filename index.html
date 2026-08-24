@@ -529,7 +529,7 @@ body.reading main{padding-top:64px;}
   main{padding:16px 12px calc(84px + env(safe-area-inset-bottom,0px));}
   body[data-view="listen"] main{padding-bottom:calc(200px + env(safe-area-inset-bottom,0px));}
   body[data-view="listen"] .audiobar{bottom:calc(72px + env(safe-area-inset-bottom,0px));}   /* 播放条抬到底部导航之上 */
-  #lsFab{bottom:calc(61px + env(safe-area-inset-bottom,0px));}   /* 吸底：紧贴底部导航顶缘 */
+  #lsFab{bottom:calc(66px + env(safe-area-inset-bottom,0px));}   /* 兜底值≈导航真实高；snapFabToTabbar() 会以实际渲染高度覆盖 */
   .card{padding:14px; border-radius:14px;}
   h2.view-title{font-size:18px;}
   .view-sub{font-size:12.5px;}
@@ -2358,8 +2358,20 @@ function ensureFab(){
   }
   return f;
 }
+/* 悬浮球吸底对齐：移动端实时读底部导航真实渲染高度（文字行高/字体/安全区都会影响，
+   估算值不可靠），桌面端清除内联样式回到 CSS 的 20px */
+function snapFabToTabbar(){
+  const fab=document.getElementById("lsFab"), nav=document.getElementById("sidenav");
+  if(!fab||!nav) return;
+  if(window.innerWidth<=640) fab.style.bottom=nav.offsetHeight+"px";
+  else fab.style.bottom="";
+}
+if(!window._fabRz){ window._fabRz=1;
+  window.addEventListener("resize",()=>snapFabToTabbar());   /* iOS 地址栏伸缩/转屏时重新贴底 */
+}
 function updateFab(){
   const f=ensureFab();
+  snapFabToTabbar();
   const playing=!!(LISTEN.story&&(LISTEN.playing||LISTEN.paused));
   const active=playing&&VIEW!=="listen";
   f.classList.toggle("on",active);
