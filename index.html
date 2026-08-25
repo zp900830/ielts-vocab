@@ -82,10 +82,10 @@ select,input{font-family:inherit;}
 .s-go:hover,.audiobar .ab:hover,.q-submit:hover:not(:disabled),.q-actions button.pri:hover,.rv-btn:hover,.fav-tools button.pri:hover{filter:brightness(1.05);}
 
 /* 次按钮：白底绿描边胶囊，悬停统一浅绿底 */
-.s-go.sub,.audiobar .ab.ghost,.q-actions button,.rv-btn.ghost,.backup-zone button,.fav-tools button,.key-row button{
+.s-go.sub,.audiobar .ab.ghost,.q-actions button,.rv-btn.ghost,.backup-zone button,.fav-tools button,.key-row button,.acc-acts button{
   background:#fff; border:1px solid var(--iel-accent-line); color:var(--iel-accent-deep); box-shadow:none; font-weight:500;
   transition:background var(--iel-t-fast), border-color var(--iel-t-fast);}
-.s-go.sub:hover,.audiobar .ab.ghost:hover,.q-actions button:hover:not(.pri),.rv-btn.ghost:hover,.backup-zone button:hover,.fav-tools button:hover,.key-row button:hover{
+.s-go.sub:hover,.audiobar .ab.ghost:hover,.q-actions button:hover:not(.pri),.rv-btn.ghost:hover,.backup-zone button:hover,.fav-tools button:hover,.key-row button:hover,.acc-acts button:hover{
   background:var(--iel-accent-soft); border-color:var(--iel-accent);}
 
 /* 输入控件：统一白底圆角规格 */
@@ -412,8 +412,14 @@ body.reading main{padding-top:64px;}
 .key-row{display:flex; gap:10px; margin-top:14px; border-top:1px dashed var(--iel-line); padding-top:16px; flex-wrap:wrap; align-items:center;}
 .key-row input{flex:1; min-width:200px; border:1px solid var(--iel-line); background:#fff; color:var(--iel-ink); border-radius:999px; padding:8px 14px; font-size:13px; font-family:inherit;}
 .key-row input:focus{outline:none; border-color:var(--iel-accent);}
+.key-row select{border:1px solid var(--iel-line); background:#fff; color:var(--iel-ink); border-radius:999px; padding:8px 10px; font-size:13px; font-family:inherit;}
 .key-row button{padding:8px 16px; font-size:13px; border-radius:999px; cursor:pointer; font-family:inherit;}
 .key-stat{font-size:12.5px; color:var(--iel-mute); margin-top:8px; line-height:1.6;}
+.acc-form{display:flex; flex-direction:column; gap:8px; margin-top:14px; max-width:360px;}
+.acc-form input{border:1px solid var(--iel-line); background:#fff; color:var(--iel-ink); border-radius:999px; padding:8px 14px; font-size:13px; font-family:inherit;}
+.acc-form input:focus{outline:none; border-color:var(--iel-accent);}
+.acc-acts{display:flex; gap:10px; flex-wrap:wrap;}
+.acc-acts button{padding:8px 16px; font-size:13px; border-radius:999px; cursor:pointer; font-family:inherit;}
 
 /* ============================================================
    12. 间隔复习
@@ -910,11 +916,26 @@ function resolveWord(w){
   return null;
 }
 
-/* ================= 状态持久化 ================= */
-const LS_KEY="yasiVocabV1";
-let S = {stats:{}, fav:{}, quiz:{}, read:{}, listened:{}, listen:null, chapter:1, accent:"GB"};
-try{ const raw=localStorage.getItem(LS_KEY); if(raw){ const p=JSON.parse(raw); S=Object.assign(S,p); } }catch(e){}
-function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} }
+/* ================= 状态持久化（多账号隔离） =================
+   游客数据存 LS_KEY；注册账号后各账号数据存 LS_KEY@用户名，互不干扰。
+   账户注册表与当前会话存于 localStorage；密码仅保存加盐 SHA-256 哈希，绝不明文存储。 */
+const LS_KEY="yasiVocabV1", ACC_KEY="iel_accounts", SES_KEY="iel_session";
+function freshS(){ return {stats:{}, fav:{}, quiz:{}, read:{}, listened:{}, listen:null, chapter:1, accent:"GB"}; }
+function getAccounts(){ try{ return JSON.parse(localStorage.getItem(ACC_KEY))||{users:{}}; }catch(e){ return {users:{}}; } }
+function setAccounts(a){ try{ localStorage.setItem(ACC_KEY, JSON.stringify(a)); }catch(e){} }
+async function pwHash(pw,salt){
+  try{
+    const buf=await crypto.subtle.digest("SHA-256", new TextEncoder().encode(salt+"|"+pw));
+    return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
+  }catch(e){ return "p"+btoa(unescape(encodeURIComponent(salt+"|"+pw))); }   // 非安全上下文降级
+}
+let CUR_USER=null;   // null = 游客（未登录）
+try{ const u=localStorage.getItem(SES_KEY); if(u&&getAccounts().users[u]) CUR_USER=u; }catch(e){}
+function userKey(){ return CUR_USER? LS_KEY+"@"+CUR_USER : LS_KEY; }
+let S=freshS();
+function loadS(){ S=freshS(); try{ const raw=localStorage.getItem(userKey()); if(raw) S=Object.assign(S,JSON.parse(raw)); }catch(e){} }
+loadS();
+function save(){ try{ localStorage.setItem(userKey(), JSON.stringify(S)); }catch(e){} }
 function statOf(w){ return S.stats[w] || (S.stats[w]={l:0,c:0,w:0,lr:0,lw:0}); }
 
 /* ================= 掌握度 ================= */
@@ -1031,10 +1052,10 @@ function openStory(id, focusWord, occ){
     <div class="r-badges"><span class="r-badge">第${s.ch}章 · ${esc(chName(s.ch).replace(/^\d+\s*/,""))}</span>
     <span class="r-badge" style="background:#f3ede0;color:#8a6d1f">本篇目标词 ${markedWords.length} 个</span>
     <button class="r-badge fav-badge" id="favToggle" style="background:#fdf1dc;color:#b07a10"></button>
-    <button class="tr-msw" id="trMsw" aria-pressed="false" title="点句译文模式：开启后点击任意句子显示/收起该句译文"><span class="knob"></span>点句译文</button>
+    <button class="tr-msw" id="trMsw" aria-pressed="false" title="显示句尾「译」按钮，点按钮展开/收起该句译文"><span class="knob"></span>点句译文</button>
     <button class="tr-all" id="trAll">显示全部译文</button>
     <button class="tr-help" id="trHelp" aria-label="使用说明">?</button>
-    <div class="tr-bubble" id="trBubble" role="tooltip">电脑端：鼠标移到句子上，左侧出现“译”按钮，点它显示 / 收起该句译文；点击句子本身从此句开始朗读。手机端：点“点句译文”开关（“显示全部译文”左侧）开启点句模式，此后点任意句子显示 / 收起该句译文（点一下译文卡片也可收起），再点开关退出恢复查词（译文中括号英文即目标词）</div></div>
+    <div class="tr-bubble" id="trBubble" role="tooltip">电脑端：鼠标移到句子上，左侧出现“译”按钮，点它显示 / 收起该句译文；点击句子本身朗读该句（读完自动停，点播放键可继续连读）。手机端：打开“点句译文”开关（“显示全部译文”左侧）显示句尾「译」按钮，点按钮展开 / 收起该句译文；点单词查词不受影响（译文中括号英文即目标词）</div></div>
     <div class="audiobar" id="audiobar"></div>
     <div class="story-en" id="storyEn"></div>
     <div class="quiz-sec card" id="quizSec"></div>
@@ -1209,7 +1230,7 @@ function renderStoryText(text){
     const sHtml=sens.map(sen=>{
       const tr=TR_SENS[si]||"";
       const h=`<span class="sen" data-si="${si}">${tr?`<button class="sen-trig" data-si="${si}" title="显示/收起本句译文" aria-label="显示或收起本句译文">译</button>`:""}${renderInner(sen)}${tr?`<button class="sen-chip" data-si="${si}" title="显示/收起本句译文" aria-label="显示或收起本句译文">译</button>`:""}</span>`
-        +(tr?`<span class="sen-tr" data-for="${si}">${renderTrSentence(tr)}<button class="tr-play" data-si="${si}" title="从此句开始朗读"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M6 4.5v15l13-7.5-13-7.5z"/></svg>朗读此句</button></span>`:"");
+        +(tr?`<span class="sen-tr" data-for="${si}">${renderTrSentence(tr)}<button class="tr-play" data-si="${si}" title="朗读此句（读完自动停）"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M6 4.5v15l13-7.5-13-7.5z"/></svg>朗读此句</button></span>`:"");
       si++; return h;
     }).join(" ");
     return `<p>${sHtml}</p>`;
@@ -1362,7 +1383,7 @@ function tabsIdleShow(delay){
   _tabT=setTimeout(()=>{ if(!audio.playing&&VIEW==="reader") showTabs(true); },delay);
 }
 
-/* 点句译文模式（触屏）：开启后点击句子任意处（含单词）切换该句译文，查词暂缓 */
+/* 点句译文模式（触屏）：开启后显示句尾「译」圆钮，点圆钮切换该句译文；点单词查词不受影响 */
 let TRMODE=false;
 function setTrMode(on){
   TRMODE=on;
@@ -1370,26 +1391,15 @@ function setTrMode(on){
   const t=document.getElementById("trMsw"); if(t){ t.classList.toggle("on",on); t.setAttribute("aria-pressed",on?"true":"false"); }
   if(on){
     app.querySelectorAll(".sen-tr").forEach(tr=>{ const c=app.querySelector(`.sen-chip[data-si="${tr.dataset.for}"]`); if(c){ c.classList.toggle("on",tr.classList.contains("show")); c.textContent=tr.classList.contains("show")?"✕":"译"; } });
-    toast("点句译文模式：点任意句子显示 / 收起译文，再点“点句译文”开关退出");
+    toast("已显示句尾「译」按钮：点它展开 / 收起该句译文，点单词查词不受影响");
   }else{
-    toast("已退出点句译文模式");
+    toast("已隐藏句尾「译」按钮");
   }
 }
 
-/* 词点击（事件委托）：词弹窗 / 朗读此句 / 点句切换译文 */
+/* 词点击（事件委托）：词弹窗 / 朗读此句 / “译”按钮切换译文 */
 app.addEventListener("click",e=>{
   if(VIEW==="reader"&&e.target.closest&&e.target.closest("#storyEn,#wpop,#quizSec")) showTabs(true);   // 正文有操作 → 竖标签浮现
-  if(TRMODE&&VIEW==="reader"){
-    const sen=e.target.closest(".sen");
-    if(sen){
-      const si=sen.dataset.si;
-      const tr=app.querySelector(`.sen-tr[data-for="${si}"]`);
-      if(tr) setTrOpen(si,!tr.classList.contains("show"));
-      else toast("本句暂无对应译文");
-      sen.classList.remove("flash"); void sen.offsetWidth; sen.classList.add("flash");
-      return;
-    }
-  }
   const tw=e.target.closest(".tw");
   if(tw){ showPop(tw.dataset.l,{target:true, el:tw}); return; }
   const ow=e.target.closest(".ow");
@@ -1402,7 +1412,7 @@ app.addEventListener("click",e=>{
     if(tp&&audio.ok()){
       const si=parseInt(tp.dataset.si,10)||0;
       if(!audio.ready()) audio.prepare();
-      if(audio.ready()){ audio.seek(si); if(!audio.playing) audio.play(); }
+      if(audio.ready()){ audio.seek(si); audio.single=true; if(!audio.playing) audio.play(); }   // 单句朗读：读完自动停
       return;
     }
     const chip=e.target.closest(".sen-chip");
@@ -1428,7 +1438,7 @@ app.addEventListener("click",e=>{
     if(sen&&!e.target.closest(".tw,.ow")&&!TOUCH&&audio.ok()){
       const si=parseInt(sen.dataset.si,10)||0;
       if(!audio.ready()) audio.prepare();
-      if(audio.ready()){ audio.seek(si); if(!audio.playing) audio.play(); }
+      if(audio.ready()){ audio.seek(si); audio.single=true; if(!audio.playing) audio.play(); }   // 单句朗读：读完自动停
     }
   }
 });
@@ -1550,38 +1560,38 @@ function setAccent(acc){
   if(VIEW==="stats") renderStats(); else if(VIEW==="fav"&&!REVIEW) renderFav();
 }
 
-/* ================= 云端自然语音引擎（硅基流动 CosyVoice2） =================
-   调用硅基流动 audio/speech 接口（OpenAI 兼容）合成自然语音：拟真度远超系统 TTS。
-   官方预置英文音色 8 个（男女各 4），风格含沉稳/低沉/磁性/欢快/激情/温柔；英文输出为美式口音（官方未区分英美音）。
-   需在「我的」视图配置 API 密钥（仅存本机 localStorage，不随备份导出、不上传）；未配置时用本机语音。
-   按字符计费（¥0.5/万字符）：合成结果双级缓存（内存 blob + IndexedDB 持久化），同一句重复收听不再计费。
-   请求经内部队列串行 + 150ms 间隔，避免触发平台限流（429）；失败自动重试一次。 */
+/* ================= 云端自然语音引擎（Azure Speech） =================
+   调用 Azure 语音服务 REST 接口合成神经网络语音：英式/美式男女声各 2 个，自然度远超系统 TTS。
+   免费层（F0）每月 50 万字符；需在「我的」视图配置密钥与区域（仅存本机 localStorage，不随备份导出、不上传）。
+   合成结果双级缓存（内存 blob + IndexedDB 持久化），同一句重复收听不再计费。
+   请求经内部队列串行 + 150ms 间隔；失败自动重试一次。端点已验证支持 CORS，浏览器可直连。 */
 const CLOUD_TTS={
-  API:"https://api.siliconflow.cn/v1/audio/speech",
-  MODEL:"FunAudioLLM/CosyVoice2-0.5B",
-  KEYSTORE:"iel_sf_key",
-  DEFAULT:"anna",
+  KEYSTORE:"iel_azure_key",
+  REGIONSTORE:"iel_azure_region",
+  DEFAULT:"en-GB-SoniaNeural",
   VOICES:[
-    {id:"alex",     name:"沉稳男声", region:"美音"},
-    {id:"benjamin", name:"低沉男声", region:"美音"},
-    {id:"charles",  name:"磁性男声", region:"美音"},
-    {id:"david",    name:"欢快男声", region:"美音"},
-    {id:"anna",     name:"沉稳女声", region:"美音"},
-    {id:"bella",    name:"激情女声", region:"美音"},
-    {id:"claire",   name:"温柔女声", region:"美音"},
-    {id:"diana",    name:"欢快女声", region:"美音"}
+    {id:"en-GB-SoniaNeural",  name:"Sonia 女声",   region:"英式"},
+    {id:"en-GB-LibbyNeural",  name:"Libby 女声",   region:"英式"},
+    {id:"en-GB-RyanNeural",   name:"Ryan 男声",    region:"英式"},
+    {id:"en-GB-ThomasNeural", name:"Thomas 男声",  region:"英式"},
+    {id:"en-US-AriaNeural",   name:"Aria 女声",    region:"美式"},
+    {id:"en-US-JennyNeural",  name:"Jenny 女声",   region:"美式"},
+    {id:"en-US-GuyNeural",    name:"Guy 男声",     region:"美式"},
+    {id:"en-US-AndrewNeural", name:"Andrew 男声",  region:"美式"}
   ],
+  REGIONS:[["eastasia","东亚（香港）"],["southeastasia","东南亚（新加坡）"],["eastus","美国东部"],["westeurope","西欧"],["japaneast","日本东部"]],
   cache:new Map(),             // key(voice|rate|text) -> blob URL，避免重复合成
   _pend:new Map(),             // key -> 进行中的合成 Promise（并发去重）
   _q:[], _busy:false,          // 请求队列：串行 + 间隔，防限流
   key(){ try{ return (localStorage.getItem(this.KEYSTORE)||"").trim(); }catch(e){ return ""; } },
   setKey(k){ try{ k?localStorage.setItem(this.KEYSTORE,k):localStorage.removeItem(this.KEYSTORE); }catch(e){} },
-  available(){ return !!this.key(); },
+  region(){ try{ return (localStorage.getItem(this.REGIONSTORE)||"").trim().toLowerCase(); }catch(e){ return ""; } },
+  setRegion(r){ try{ r?localStorage.setItem(this.REGIONSTORE,String(r).toLowerCase()):localStorage.removeItem(this.REGIONSTORE); }catch(e){} },
+  available(){ return !!(this.key()&&this.region()); },
   friendlyErr(m){
     m=String(m||"");
-    if(/\b401\b|unauthorized/i.test(m)||(/token/i.test(m)&&/invalid/i.test(m))) return "硅基流动密钥无效，请检查后重新保存";
-    if(/balance|arrear|\b402\b/i.test(m)) return "硅基流动账户余额不足，请到平台充值";
-    if(/rate limit|\b429\b/i.test(m)) return "请求过于频繁，已自动稍候重试";
+    if(/\b401\b|\b403\b|unauthorized|forbidden/i.test(m)) return "Azure 密钥无效或与所选区域不匹配，请检查后重新保存";
+    if(/quota|\b429\b|rate.?limit/i.test(m)) return "请求过于频繁或配额用尽（免费层每月 50 万字符）";
     return m;
   },
   _cacheSet(key,url){
@@ -1639,23 +1649,25 @@ const CLOUD_TTS={
     });
   },
   _fetch(text,voiceId,speed){
-    return this._enqueue(()=>fetch(this.API,{
+    const escXml=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    const ssml=`<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US"><voice name="${voiceId}"><prosody rate="${Math.round(speed*100)}%">${escXml(text)}</prosody></voice></speak>`;
+    return this._enqueue(()=>fetch("https://"+this.region()+".tts.speech.microsoft.com/cognitiveservices/v1",{
       method:"POST",
-      headers:{"Content-Type":"application/json","Authorization":"Bearer "+this.key()},
-      body:JSON.stringify({
-        model:this.MODEL, input:text,
-        voice:this.MODEL+":"+voiceId,
-        response_format:"mp3", stream:false, speed:speed
-      })
+      headers:{
+        "Ocp-Apim-Subscription-Key":this.key(),
+        "Content-Type":"application/ssml+xml",
+        "X-Microsoft-OutputFormat":"audio-24khz-48kbitrate-mono-mp3"
+      },
+      body:ssml
     }).then(async r=>{
       if(!r.ok){
         let msg="api "+r.status;
-        try{ const j=await r.json(); msg=(j&&(j.message||j.msg||j.error))||msg; }catch(e){}
+        try{ const t=await r.text(); if(t) msg=t.slice(0,120); }catch(e){}
         throw new Error(msg);
       }
       const blob=await r.blob();
       if(!blob||!blob.size) throw new Error("no audio");
-      return blob.type?blob:new Blob([blob],{type:"audio/mpeg"});
+      return blob;
     }));
   },
   /* 合成一句话，返回可播放的 blob URL（内存 → IndexedDB → API，三层命中） */
@@ -1684,7 +1696,7 @@ const CLOUD_TTS={
 /* ================= 朗读（Web Speech API + 云端语音） ================= */
 const audio={
   rate:S.rate||0.85, voice:null, voices:[], idx:0, sens:[], playing:false, paused:false, gen:0, storyId:null, ests:[],
-  cloudVoiceId:null, _cloudAu:null, _cloudSrc:"", _cloudFailed:false,
+  cloudVoiceId:null, _cloudAu:null, _cloudSrc:"", _cloudFailed:false, single:false,
   ok(){ return "speechSynthesis" in window; },
   voiceTier(v){
     const n=(v.name||"").trim();
@@ -1698,7 +1710,10 @@ const audio={
     if(!this.ok()) return;
     let tries=0;
     const load=()=>{
-      const all=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
+      const raw=speechSynthesis.getVoices()||[];
+      /* Edge 150 缺陷：在线音色名返回 "Microsoft undefined Online (Natural)"，需过滤并提示升级 */
+      this.edgeBroken=raw.some(v=>/Online \(Natural\)/i.test(v.name||"")&&/undefined/i.test(v.name||""));
+      const all=raw.filter(v=>/^en/i.test(v.lang)&&!/undefined/i.test(v.name||""));
       let list=all.filter(v=>this.voiceTier(v)>=2);
       if(!list.length) list=all;   // 设备没有高品质语音时，列出全部英语语音供选择
       list.sort((a,b)=>{
@@ -1708,7 +1723,9 @@ const audio={
         const d=pr(a)-pr(b); if(d) return d;
         return a.name.localeCompare(b.name);
       });
-      const changed=list.length!==this.voices.length;
+      const sig=list.map(v=>v.name).join("|");
+      const changed=sig!==this._vsig;
+      this._vsig=sig;
       this.voices=list;
       if(S.voiceName&&S.voiceName.indexOf("cloud:")===0){
         const cid=S.voiceName.slice(6);
@@ -1732,6 +1749,17 @@ const audio={
     };
     load();
     speechSynthesis.onvoiceschanged=load;
+    /* Edge 云端音色常延迟数秒注册且不触发 onvoiceschanged，前 30 秒每 2 秒轮询兜底 */
+    if(!this._pollT){
+      let n=0;
+      this._pollT=setInterval(()=>{
+        try{
+          const sig=(speechSynthesis.getVoices()||[]).filter(v=>/^en/i.test(v.lang)&&!/undefined/i.test(v.name||"")).map(v=>v.name).join("|");
+          if(sig!==this._vsig) load();
+        }catch(e){}
+        if(++n>=15){ clearInterval(this._pollT); this._pollT=null; }
+      },2000);
+    }
   },
   prepare(){
     if(!CUR_STORY) return;
@@ -1766,6 +1794,7 @@ const audio={
     if(!this.cloudVoiceId&&!this.ok()) return;
     i=Math.max(0,Math.min(this.sens.length-1,parseInt(i,10)||0));
     this.gen++;
+    this.single=false;
     this._cloudSrc="";
     const wasPlaying=this.playing;
     this.playing=false;
@@ -1789,9 +1818,13 @@ const audio={
     u.rate=this.rate;
     this._cur=u;   // 保留引用，避免部分浏览器 GC 掉 utterance 导致朗读中断
     const self=this, g=this.gen;
-    u.onend=()=>{ if(self.playing&&g===self.gen){ self.idx++; self._next(); } };
-    u.onerror=()=>{ if(self.playing&&g===self.gen){ self.idx++; self._next(); } };
+    u.onend=()=>{ if(g!==self.gen||!self.playing) return; if(self.single){ self._endSingle(); } else { self.idx++; self._next(); } };
+    u.onerror=()=>{ if(g!==self.gen||!self.playing) return; if(self.single){ self._endSingle(); } else { self.idx++; self._next(); } };
     speechSynthesis.speak(u);
+  },
+  _endSingle(){   // 单句朗读完毕：停在当前句不继续，可点“播放”从下一句连读
+    this.playing=false; this.paused=false; this.single=false; this.gen++;
+    this._paint(); this._updateBar();
   },
   _cloudSpeak(text){
     const self=this, g=this.gen;
@@ -1801,7 +1834,7 @@ const audio={
       if(g!==self.gen||!self.playing) return;
       const au=self._cloudAu||(self._cloudAu=new Audio());
       au.src=url; self._cloudSrc=url;
-      au.onended=()=>{ if(self.playing&&g===self.gen){ self.idx++; self._next(); } };
+      au.onended=()=>{ if(g!==self.gen||!self.playing) return; if(self.single){ self._endSingle(); } else { self.idx++; self._next(); } };
       au.onerror=()=>{ if(self.playing&&g===self.gen) self._cloudFallback(); };
       au.play().catch(()=>{ if(self.playing&&g===self.gen) self._cloudFallback(); });
       if(self.idx+1<self.sens.length) CLOUD_TTS.synth(self.sens[self.idx+1],self.cloudVoiceId,ratePct).catch(()=>{});   // 预取下一句，消除句间等待
@@ -1891,7 +1924,7 @@ function voiceLabel(v){
 }
 /* Edge 云端音色：名称含 "Online (Natural)"，由微软云端渲染、免费，仅在 Edge 浏览器中出现 */
 function edgeCloudVoice(v){ return /Online \(Natural\)/i.test(v.name||""); }
-/* 音色下拉框选项（朗读条与随身听共用）：☁ 硅基流动 → ⚡ Edge 免费 → 本机 */
+/* 音色下拉框选项（朗读条与随身听共用）：☁ Azure → ⚡ Edge 免费 → 本机 */
 function voiceOptionsHtml(cloudOpts){
   const sel=v=>(!audio.cloudVoiceId&&audio.voice&&v.name===audio.voice.name)?"selected":"";
   const edgeOpts=audio.voices.filter(edgeCloudVoice).map(v=>`<option value="${esc(v.name)}" ${sel(v)}>${esc(voiceLabel(v))}</option>`).join("");
@@ -1920,6 +1953,7 @@ function stepAudio(d){
 }
 /* 无顶级本地语音时，在音色下拉框顶部给出可见提示（手机无悬停，tooltip 看不到） */
 function voiceHintOpt(){
+  if(audio.edgeBroken) return `<option disabled>⚠ 检测到 Edge 云端音色异常（名称含 undefined，Edge 150 已知缺陷）：到 edge://settings/help 更新 Edge 至最新版并重启即可恢复</option>`;
   if(audio.voices.some(v=>audio.voiceTier(v)>=3)) return "";
   if(CLOUD_TTS.available()) return `<option disabled>💡 选 ☁ 云端语音即点即用；用 Edge 浏览器打开本页还有 ⚡ 免费自然语音</option>`;
   const ua=(typeof navigator!=="undefined"&&navigator.userAgent)||"";
@@ -2787,19 +2821,32 @@ function renderFav(){
 }
 /* ================= 我的（使用指南 / 数据管理） ================= */
 function renderMe(){
-  app.innerHTML=`<div class="view-sub">使用指南与数据管理。全部学习数据仅保存在本机浏览器（localStorage），离线可用；换设备或清理浏览器数据前请先导出备份。</div>
+  app.innerHTML=`<div class="view-sub">使用指南与数据管理。学习数据保存在本机浏览器（localStorage），支持多账号隔离，离线可用；换设备或清理浏览器数据前请先导出备份。</div>
+  <div class="card"><h3>账号</h3>
+    ${CUR_USER?`
+    <div class="me-p">当前登录：<b>${esc(CUR_USER)}</b>。学习数据保存在独立账号空间，与本机其他账号互不影响；换设备时可在新设备登录同一账号，再导入备份文件恢复进度。</div>
+    <div class="backup-zone"><button id="accLogout">退出登录</button></div>`
+    :`
+    <div class="me-p">当前为游客模式，数据仅保存在本机浏览器。注册 / 登录账号后，各账号的学习数据（阅读进度、掌握度统计、生词本、复习计划）完全隔离，同一浏览器可随时切换账号。</div>
+    <div class="acc-form">
+      <input id="accName" placeholder="用户名（2-20 个字符）" maxlength="20" autocomplete="username">
+      <input id="accPw" type="password" placeholder="密码（至少 6 位）" autocomplete="current-password">
+      <div class="acc-acts"><button id="accLogin">登录</button><button id="accReg">注册（带入当前数据）</button></div>
+    </div>`}
+  </div>
   <div class="card guide"><h3>使用方法</h3><ol>
   <li><b>读英文故事</b>：高亮下划线的是本篇目标词，点击看音标与释义（每次点查都会计入掌握度统计）；其他任何单词也可以点击查义。</li>
-  <li><b>先自己心里翻译</b>，再点击对应的英文句子核对该句译文（默认隐藏，防止瞟一眼）；点击句子本身可从此句开始朗读。</li>
+  <li><b>先自己心里翻译</b>，再点句旁「译」按钮核对该句译文（默认隐藏，防止瞟一眼）；点击句子本身朗读该句，读完自动停（点播放键可继续连读）。</li>
   <li><b>完成篇末选择题</b>：题干与选项全英文，提交后有中文详细解析，对错自动计入统计。</li>
   <li><b>打开"学习统计"</b>：按掌握度排序找出薄弱词，点击单词可跳回故事针对性复习。</li>
   <li>非目标生词随手<b>收藏进生词本</b>，可按艾宾浩斯间隔复习，或导出 CSV/TXT 导入 Anki、欧路词典等。</li>
   <li><b>随身听</b>：在"首页 → 随身听"连播当前章节文章，锁屏后台可续播，自动断点续听。</li>
   </ol></div>
-  <div class="card"><h3>云端语音（硅基流动）</h3>
-    <div class="me-p">配置后朗读使用云端高自然度语音（CosyVoice2），拟真度远超本机语音。预置英文音色 8 个：男声 alex 沉稳 / benjamin 低沉 / charles 磁性 / david 欢快，女声 anna 沉稳 / bella 激情 / claire 温柔 / diana 欢快；英文均为美式口音（官方未提供英音音色，如需英音请配合本机语音或留言反馈）。密钥仅保存在本机浏览器，不上传、不随备份导出。按量计费约 ¥0.5/万字符，注册即送 ¥14 额度；已合成内容自动缓存，重复收听不重复计费。密钥获取：<a href="https://cloud.siliconflow.cn/account/ak" target="_blank" rel="noopener">cloud.siliconflow.cn</a> → API 密钥 → 新建。零成本替代：用 Edge 浏览器打开本页，音色列表会免费出现「⚡ Edge 云端语音」（微软云端渲染，含英式 Sonia / 美式 Aria 等自然音色，无需配置密钥）。</div>
+  <div class="card"><h3>云端语音（Azure）</h3>
+    <div class="me-p">配置后朗读使用微软 Azure 神经网络语音，自然度远超本机语音。音色 8 个：英式 Sonia / Libby（女）、Ryan / Thomas（男），美式 Aria / Jenny（女）、Guy / Andrew（男）。免费层 F0 每月 50 万字符，个人学习足够。密钥与区域仅保存在本机浏览器，不上传、不随备份导出；已合成内容自动缓存，重复收听不重复计费。获取：Azure 门户 → 创建「语音服务」资源（定价选 F0 免费层）→ 「密钥和终结点」页复制 KEY 1，并记下区域（必须与下方选择一致，否则报 403）。零成本替代：用 Edge 浏览器打开本页，音色列表免费出现「⚡ Edge 云端语音」。</div>
     <div class="key-row">
-      <input type="password" id="ttsKey" placeholder="粘贴 API 密钥（sk- 开头）" autocomplete="off" spellcheck="false" value="${esc(CLOUD_TTS.key())}">
+      <input type="password" id="ttsKey" placeholder="粘贴密钥 KEY 1（32 位）" autocomplete="off" spellcheck="false" value="${esc(CLOUD_TTS.key())}">
+      <select id="ttsRegion" aria-label="区域">${CLOUD_TTS.REGIONS.map(r=>`<option value="${r[0]}" ${CLOUD_TTS.region()===r[0]?"selected":""}>${r[1]}（${r[0]}）</option>`).join("")}</select>
       <button id="ttsKeySave">保存</button>
     </div>
     <div class="key-stat" id="ttsKeyStat"></div>
@@ -2813,20 +2860,69 @@ function renderMe(){
   document.getElementById("exportData").onclick=exportBackup;
   document.getElementById("importData").onclick=()=>document.getElementById("importFile").click();
   document.getElementById("importFile").onchange=importBackup;
+  /* —— 账号登录 / 注册 / 退出 —— */
+  const applyUser=()=>{
+    loadS();
+    audio.rate=S.rate||0.85;
+    audio.voice=null; audio.cloudVoiceId=null; audio._cloudFailed=false;
+    audio.loadVoices();
+    updateFavBadge();
+    renderMe();
+  };
+  const lo=document.getElementById("accLogout");
+  if(lo) lo.onclick=()=>{
+    CUR_USER=null; try{ localStorage.removeItem(SES_KEY); }catch(e){}
+    applyUser();
+    toast("已退出登录，切换为游客数据");
+  };
+  const al=document.getElementById("accLogin");
+  if(al) al.onclick=async()=>{
+    const nameEl=document.getElementById("accName"), pwEl=document.getElementById("accPw");
+    const name=(nameEl.value||"").trim(), pw=pwEl.value||"";
+    if(!name||!pw) return toast("请输入用户名和密码");
+    const acc=getAccounts().users[name];
+    if(!acc) return toast("用户名不存在，请先注册");
+    if(await pwHash(pw,acc.salt)!==acc.hash) return toast("密码错误");
+    CUR_USER=name; try{ localStorage.setItem(SES_KEY,name); }catch(e){}
+    applyUser();
+    toast("已登录："+name);
+  };
+  const ar=document.getElementById("accReg");
+  if(ar) ar.onclick=async()=>{
+    const nameEl=document.getElementById("accName"), pwEl=document.getElementById("accPw");
+    const name=(nameEl.value||"").trim(), pw=pwEl.value||"";
+    if(name.length<2) return toast("用户名至少 2 个字符");
+    if(pw.length<6) return toast("密码至少 6 位");
+    const accs=getAccounts();
+    if(accs.users[name]) return toast("用户名已存在");
+    const salt=Math.random().toString(36).slice(2,10);
+    accs.users[name]={salt, hash:await pwHash(pw,salt), t:Date.now()};
+    setAccounts(accs);
+    CUR_USER=name; try{ localStorage.setItem(SES_KEY,name); }catch(e){}
+    save();   // 当前（游客）学习数据直接写入账号空间，完成带入
+    updateFavBadge();
+    renderMe();
+    toast("注册成功，当前学习数据已绑定账号 "+name);
+  };
+  /* —— Azure 密钥与区域 —— */
   const ki=document.getElementById("ttsKey"), ks=document.getElementById("ttsKeySave"), kst=document.getElementById("ttsKeyStat");
+  const kr=document.getElementById("ttsRegion");
   const paintKeyStat=()=>{
     kst.innerHTML=CLOUD_TTS.available()
       ?"✅ 已配置：到朗读条或随身听的音色下拉框，选 ☁ 开头的云端语音即可使用。"
-      :"未配置时使用本机系统语音（免费，但自然度较低）。";
+      :CLOUD_TTS.key()&&!CLOUD_TTS.region()
+        ?"已填密钥，还差区域：请选择资源所在区域后保存。"
+        :"未配置时使用本机系统语音（免费，但自然度较低）。";
   };
   paintKeyStat();
   ks.onclick=()=>{
     const v=(ki.value||"").trim();
-    CLOUD_TTS.setKey(v);
+    const reg=kr?kr.value:"";
+    CLOUD_TTS.setKey(v); CLOUD_TTS.setRegion(reg);
     if(!v&&audio.cloudVoiceId){ audio.cloudVoiceId=null; audio.voice=null; }   // 清空密钥时回退本机语音
     audio.loadVoices();
     paintKeyStat();
-    toast(v?"密钥已保存，到音色下拉框选 ☁ 云端语音":"密钥已清除，改用本机语音");
+    toast(v&&reg?"密钥已保存，到音色下拉框选 ☁ 云端语音":"已清除，改用本机语音");
   };
 }
 
