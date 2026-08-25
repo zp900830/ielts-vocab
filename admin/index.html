@@ -167,7 +167,7 @@ body{
           <el-table-column label="生词" width="65" align="right"><template #default="{row}"><span class="mono">{{row.summary.favCount}}</span></template></el-table-column>
           <el-table-column label="操作" width="80" fixed="right">
             <template #default="{row}">
-              <el-dropdown trigger="click" @command="cmd=>$userCmd(cmd,row)">
+              <el-dropdown trigger="click" @command="cmd=>userCmd(cmd,row)">
                 <el-button size="small" round>管理</el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
@@ -400,7 +400,7 @@ createApp({
         (!uRole.value||u.role===uRole.value)&&
         (!uState.value||(uState.value==="banned")===!!u.banned));
     });
-    const $userCmd=async(cmd,row)=>{
+    const userCmd=async(cmd,row)=>{
       const conf=async(title,txt,type="warning")=>{
         try{ await ElBox.confirm(txt,title,{type,confirmButtonText:"确认",cancelButtonText:"取消",roundButton:true}); return true; }
         catch(e){ return false; }
@@ -504,7 +504,7 @@ createApp({
     });
 
     return {user,view,menus,go,cfg,cfgReady,saveCfg,form,login,loginErr,logout,loading,
-      st,trendChart,levelChart,storyChart,users,uQuery,uRole,uState,filteredUsers,loadUsers,$userCmd,
+      st,trendChart,levelChart,storyChart,users,uQuery,uRole,uState,filteredUsers,loadUsers,userCmd,
       dUser,dInfo,loadData,dCmd,hisDays,inaDays,inaConfirm,exportAll,cleanupHistory,cleanupInactive,
       logs,loadAudit,tagOf,actionName,fmtDate,fmtTime,ago};
   },
