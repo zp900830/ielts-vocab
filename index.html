@@ -137,22 +137,16 @@ body.reading #shell{margin-left:0;}
 #topbar{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.42);
   -webkit-backdrop-filter:blur(14px) saturate(160%); backdrop-filter:blur(14px) saturate(160%);
   border-bottom:1px solid rgba(231,238,233,.7); padding:10px 18px;
-  display:flex; align-items:center; gap:14px; flex-wrap:wrap; transition:transform var(--iel-t), padding .3s ease;}
+  display:flex; justify-content:center; transition:transform var(--iel-t), padding .3s ease;}
 body.reading #topbar{position:fixed; left:0; right:0; transform:translateY(-110%);}
 body.reading{padding-top:0;}
-/* 二级导航：iOS 分段控件（Segmented Control）——细灰轨道 + 白色浮起选中段（直接挂在 .on 按钮上，
-   纯 CSS 零定位风险；等宽两段由 grid 保证；替代原"一排填充按钮"） */
-.tabs{display:grid; grid-template-columns:1fr 1fr; flex:none; padding:3px; background:rgba(31,45,38,.07); border-radius:10px;}
-.tabs button{border:none; background:transparent; padding:6px 20px; border-radius:7px;
-  font-size:13.5px; font-weight:500; color:var(--iel-ink3); white-space:nowrap; cursor:pointer; font-family:inherit;
-  transition:color .25s, background .25s, box-shadow .25s;}
-.tabs button:hover:not(.on){color:var(--iel-ink1);}
-.tabs button.on{background:#fff; color:var(--iel-ink1); font-weight:600;
-  box-shadow:0 1px 3px rgba(31,45,38,.18), 0 0 0 .5px rgba(31,45,38,.04);}
-body:not(.v-home) #tabs{display:none;}   /* 非首页一级栏目：无二级导航，顶栏只留章节筛选与口音 */
-.chsel{margin-left:auto; display:flex; align-items:center; gap:6px; color:var(--iel-ink2); font-size:13px;}
+/* 顶栏内容与正文同列（max-width:860px 居中）：每个页面宽度规则一致；
+   章节筛选贴内容区最左，口音钮靠右；「我的」页无筛选需求，整个顶栏隐藏 */
+.topbar-in{width:100%; max-width:860px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+body[data-view="me"] #topbar{display:none;}
+.chsel{display:flex; align-items:center; gap:6px; color:var(--iel-ink2); font-size:13px; min-width:0;}
 /* 顶栏英音/美音切换胶囊 */
-.accent-btn{flex:none; border:1px solid var(--iel-accent-line); background:#fff; color:var(--iel-accent-deep); border-radius:999px; padding:6px 13px; font-size:12.5px; font-weight:600; white-space:nowrap; cursor:pointer; transition:background var(--iel-t-fast), border-color var(--iel-t-fast);}
+.accent-btn{flex:none; margin-left:auto; border:1px solid var(--iel-accent-line); background:#fff; color:var(--iel-accent-deep); border-radius:999px; padding:6px 13px; font-size:12.5px; font-weight:600; white-space:nowrap; cursor:pointer; transition:background var(--iel-t-fast), border-color var(--iel-t-fast);}
 .accent-btn:hover{background:var(--iel-accent-soft); border-color:var(--iel-accent);}
 .chsel select{max-width:190px; box-shadow:var(--iel-shadow);}
 /* 顶栏滚动收缩态：滚入正文时收紧上下 padding */
@@ -535,10 +529,9 @@ body.reading main{padding-top:64px;}
 .boot-err button{margin-top:10px; padding:8px 22px; border:1px solid var(--iel-accent-line); background:#fff; color:var(--iel-accent-deep); border-radius:999px; font-size:13.5px; font-family:inherit; cursor:pointer;}
 #toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 
-/* 平板/窄桌面：章节选择器收窄，避免与二级导航挤压 */
+/* 平板/窄桌面：章节选择器收窄 */
 @media (max-width:780px){
   .chsel select{max-width:150px;}
-  .tabs button{padding:6px 16px; font-size:13px;}
 }
 
 @media (max-width:640px){
@@ -564,27 +557,22 @@ body.reading main{padding-top:64px;}
   #shell{margin-left:0;}
   body.reading #sidenav{transform:translateY(102%);}   /* 阅读页沉浸：隐藏底部导航 */
 
-  /* 顶栏（二级导航）：三件套强制单行（393px 宽 iPhone 也放得下）——
-     nowrap 保证绝不换行；tabs/口音钮收紧且固定宽，章节 select 弹性伸缩吸收剩余空间
-     （超长章名自动截断省略，不再把英音钮挤换行） */
-  #topbar{padding:7px 10px; gap:6px; flex-wrap:nowrap;}
+  /* 顶栏：章节筛选（左，自然宽）+ 口音钮（右）——与桌面同一条宽度规则，各页一致 */
+  #topbar{padding:7px 12px;}
+  .topbar-in{gap:8px;}
   .accent-btn{padding:5px 8px; font-size:11.5px;}
-  #topbar.compact{padding:5px 10px;}
-  #topbar.compact .tabs button{padding:5px 10px; font-size:12.5px;}
-  .tabs{flex:none;}
-  .tabs button{padding:6px 11px; font-size:13px; white-space:nowrap;}
-  .chsel{flex:1; min-width:0;}
-  .chsel select{flex:1; width:auto; max-width:none; min-width:0; text-overflow:ellipsis;}
+  #topbar.compact{padding:5px 12px;}
+  .chsel select{max-width:56vw; min-width:0; text-overflow:ellipsis;}
   /* iOS 聚焦自动缩放只作用于文本输入框（input/textarea）；select 弹原生选择器不触发缩放，
      故仅 input 保持 16px，所有 select 降回常规字号——否则筛选控件显得巨大 */
   input,.stat-controls input[type=search],.wq-search{font-size:16px;}
   select,.chsel select,.abar-sel,.stat-controls select{font-size:13.5px; padding:5px 9px;}
 
-  /* 布局：默认预留底部导航高度；阅读页（底部导航隐藏，有朗读条）与随身听页（导航+播放条叠加）分别加高 */
+  /* 布局：默认预留底部导航高度；阅读页（底部导航隐藏，有朗读条）单独加高 */
   main{padding:16px 12px calc(84px + env(safe-area-inset-bottom,0px));}
-  body[data-view="listen"] main{padding-bottom:calc(200px + env(safe-area-inset-bottom,0px));}
-  body[data-view="listen"] .audiobar{bottom:calc(72px + env(safe-area-inset-bottom,0px));}   /* 播放条抬到底部导航之上 */
-  #lsFab{bottom:calc(66px + env(safe-area-inset-bottom,0px));}   /* 兜底值≈导航真实高；snapFabToTabbar() 会以实际渲染高度覆盖 */
+  /* 随身听悬浮球/入口胶囊：贴底部导航顶缘（snapFabToTabbar 以实际渲染高度覆盖兜底值） */
+  #lsFab,#lsGo{bottom:calc(66px + env(safe-area-inset-bottom,0px));}
+  #lsPanel .audiobar{bottom:calc(10px + env(safe-area-inset-bottom,0px));}
   .card{padding:14px; border-radius:14px;}
   .view-sub{font-size:12.5px;}
 
@@ -683,9 +671,37 @@ body.reading main{padding-top:64px;}
 }
 
 /* ============================================================
-   16. 随身听 —— 二级 tab 视图 / 右下角旋转悬浮球（离开随身听页且播放中时显示）
+   16. 随身听 —— 右下角入口胶囊 / 全屏播放器浮窗 / 右下角旋转悬浮球
    ============================================================ */
 @keyframes ls-pulse{0%,100%{opacity:.35; transform:scale(.8);}50%{opacity:1; transform:scale(1.15);}}
+
+/* 随身听入口：右下角固定玻璃胶囊（渐变小圆盘 + 文字），与悬浮球同位互斥 */
+.ls-open{position:fixed; right:calc(16px + env(safe-area-inset-right,0px)); bottom:calc(28px + env(safe-area-inset-bottom,0px)); z-index:110; display:inline-flex; align-items:center; gap:9px; padding:7px 17px 7px 7px; border-radius:999px; border:1px solid rgba(255,255,255,.88); background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.46)); -webkit-backdrop-filter:blur(24px) saturate(190%); backdrop-filter:blur(24px) saturate(190%); font-size:13.5px; font-weight:600; white-space:nowrap; cursor:pointer; font-family:inherit; box-shadow:0 14px 38px rgba(30,90,70,.2), 0 2px 6px rgba(30,90,70,.08), inset 0 1px 0 rgba(255,255,255,.95); transition:opacity .28s ease, transform .3s cubic-bezier(.32,.72,.35,1), box-shadow var(--iel-t-fast), border-color var(--iel-t-fast); -webkit-tap-highlight-color:transparent;}
+.ls-open:hover{border-color:var(--iel-accent); box-shadow:0 16px 42px rgba(16,180,135,.24), 0 2px 6px rgba(30,90,70,.1), inset 0 1px 0 #fff; transform:translateY(-1px);}
+.ls-open:active{transform:translateY(0);}
+.ls-go-ic{position:relative; width:34px; height:34px; border-radius:50%; flex:none; background:var(--iel-grad); color:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(16,180,135,.42), inset 0 1px 0 rgba(255,255,255,.4), inset 0 -2px 4px rgba(6,84,62,.25); font-size:16px;}
+.ls-go-ic::after{content:""; position:absolute; inset:0; border-radius:50%; pointer-events:none; background:radial-gradient(ellipse at 30% 18%, rgba(255,255,255,.45), rgba(255,255,255,0) 60%);}
+.ls-go-t{color:var(--iel-accent-deep); padding-right:3px; letter-spacing:.5px;}
+.ls-open .pulse{width:7px; height:7px; border-radius:50%; background:var(--iel-accent); animation:ls-pulse 1.6s ease infinite;}
+body.ls-active #lsGo{opacity:0; pointer-events:none; transform:translateY(12px) scale(.9);}   /* 播放/暂停态：让位给悬浮球 */
+body.reading #lsGo{display:none;}   /* 阅读页（底部有朗读条）不显示，避免遮挡 */
+
+/* 全屏播放器浮窗：覆盖式独立层，关闭后播放不中断 */
+#lsPanel{position:fixed; inset:0; z-index:120; display:none; flex-direction:column;
+  background:linear-gradient(180deg,rgba(255,255,255,.5) 0%,rgba(243,251,247,.72) 22%,rgba(241,250,246,.8) 100%);
+  -webkit-backdrop-filter:blur(28px) saturate(175%); backdrop-filter:blur(28px) saturate(175%);}
+#lsPanel.open{display:flex; animation:ls-up .3s cubic-bezier(.32,.72,.35,1);}
+@keyframes ls-up{from{opacity:0; transform:translateY(36px);}to{opacity:1; transform:translateY(0);}}
+@media (prefers-reduced-motion:reduce){ #lsPanel.open{animation:none;} }
+.ls-ph{display:flex; align-items:flex-start; gap:10px; padding:16px 20px 8px; max-width:860px; width:100%; margin:0 auto; flex:none;}
+.ls-ph-t{flex:1; min-width:0;}
+.ls-ph h2{font-size:18px; margin-bottom:4px;}
+.ls-close{flex:none; border:1px solid rgba(255,255,255,.78); background:rgba(255,255,255,.55); -webkit-backdrop-filter:blur(12px) saturate(160%); backdrop-filter:blur(12px) saturate(160%); color:var(--iel-ink3); border-radius:999px; padding:7px 16px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; box-shadow:inset 0 1px 0 rgba(255,255,255,.85); transition:background var(--iel-t-fast), border-color var(--iel-t-fast), color var(--iel-t-fast);}
+.ls-close:hover{background:var(--iel-accent-soft); border-color:var(--iel-accent); color:var(--iel-accent-deep);}
+.ls-body{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:6px 18px 168px; width:100%; max-width:860px; margin:0 auto;}
+#lsPanel .audiobar{bottom:calc(14px + env(safe-area-inset-bottom,0px));}
+body.ls-lock{overflow:hidden;}
+@media (min-width:641px){ #lsPanel{padding-left:200px;} }   /* 桌面端内容列与主区对齐（避开侧栏），播放条 left:calc(50%+100px) 同步居中 */
 
 /* 头部状态胶囊：呼吸圆点 + 动态文字（播放中实时刷新） */
 .ls-sub{display:inline-flex; align-items:center; gap:7px; max-width:100%; padding:4px 13px; border-radius:999px;
@@ -733,6 +749,12 @@ body.reading main{padding-top:64px;}
   .fab-btn{width:34px; height:34px;}
   .fab-btn .ic{font-size:13px;}
   #lsFab{padding:5px 6px; gap:5px;}
+  .ls-open{padding:6px 14px 6px 6px; font-size:12.5px;}
+  .ls-go-ic{width:30px; height:30px; font-size:14px;}
+  .ls-ph{padding:12px 14px 6px;}
+  .ls-ph h2{font-size:16px;}
+  .ls-close{padding:6px 13px; font-size:12.5px;}
+  .ls-body{padding:2px 12px 158px;}
 }
 body.reading #lsFab{display:none;}
 /* 设置区：玻璃小卡片网格（标签在上、控件占满宽） */
@@ -823,12 +845,10 @@ body.reading #lsFab{display:none;}
 </aside>
 <div id="shell">
 <nav id="topbar">
-  <div class="tabs" id="tabs">
-    <button data-view="home" class="on">情景阅读</button>
-    <button data-view="listen">随身听</button>
+  <div class="topbar-in">
+    <div class="chsel"><span class="sel-label">章节</span><select id="chapterSel"></select></div>
+    <button class="accent-btn" id="accentBtn" title="全局默认发音口音：点击切换 英式/美式（影响单词卡点击、音标显示与朗读）">🇬🇧 英音</button>
   </div>
-  <div class="chsel"><span class="sel-label">章节</span><select id="chapterSel"></select></div>
-  <button class="accent-btn" id="accentBtn" title="全局默认发音口音：点击切换 英式/美式（影响单词卡点击、音标显示与朗读）">🇬🇧 英音</button>
 </nav>
 <main id="app"><div id="boot" class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-txt">正在加载学习数据…<span class="boot-spin"></span></div><div class="boot-sub">首次加载约 1 秒，之后有缓存秒开</div></div></main>
 </div>
@@ -1191,35 +1211,32 @@ function needLogin(msg){
 function freeStory(){ return STORIES[0]; }
 const TOUCH=!!(window.matchMedia&&matchMedia("(hover: none)").matches);
 const app=document.getElementById("app");
-/* 一级（侧栏）+ 二级（顶栏）导航选中态同步：阅读/随身听归属于「首页」 */
+/* 一级（侧栏）导航选中态同步：阅读页归属于「首页」；随身听是浮窗不算视图 */
 function syncNav(){
-  document.body.classList.toggle("v-home", VIEW==="home"||VIEW==="listen"||VIEW==="reader");
   document.querySelectorAll("#snNav button").forEach(b=>b.classList.toggle("on",
-    b.dataset.view===VIEW||(b.dataset.view==="home"&&(VIEW==="listen"||VIEW==="reader"))));
-  document.getElementById("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.view===VIEW));
+    b.dataset.view===VIEW||(b.dataset.view==="home"&&VIEW==="reader")));
 }
 function switchView(v){
-  /* 游客拦截：统计 / 生词本 / 随身听 需登录（home / me / reader 由 openStory 单独控制） */
-  if(isGuest() && (v==="stats"||v==="fav"||v==="listen")){
-    return needLogin(v==="stats"?"登录后查看学习统计":v==="fav"?"登录后使用生词本与复习计划":"登录后使用随身听连播");
+  /* 游客拦截：统计 / 生词本 需登录（home / me / reader 由 openStory 单独控制；随身听入口单独拦截） */
+  if(isGuest() && (v==="stats"||v==="fav")){
+    return needLogin(v==="stats"?"登录后查看学习统计":"登录后使用生词本与复习计划");
   }
   VIEW=v;
   document.body.classList.toggle("reading", v==="reader");
   document.body.dataset.view=v;
   syncNav();
+  closeListenPanel();   // 切换视图时收起随身听浮窗（播放不中断，悬浮球可继续控制）
   audio.stop();
   closePop();
   REVIEW=null;
   if(window._rhScroll){ window.removeEventListener("scroll", window._rhScroll); window._rhScroll=null; }
   if(v==="home") renderHome();
-  else if(v==="listen") renderListen();
   else if(v==="stats") renderStats();
   else if(v==="fav") renderFav();
   else if(v==="me") renderMe();
   window.scrollTo(0,0);
   updateFab();
 }
-document.getElementById("tabs").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) switchView(b.dataset.view); });
 document.getElementById("snNav").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) switchView(b.dataset.view); });
 
 /* 章节选择 */
@@ -1228,7 +1245,7 @@ chSel.innerHTML = '<option value="all">全部章节</option>'+CHAPTERS.map(c=>`<
 chSel.value = String(S.chapter||1);
 chSel.addEventListener("change",()=>{ const v=chSel.value; S.chapter = v==="all"?"all":parseInt(v,10); save();
   if(VIEW==="home") renderHome(); else if(VIEW==="stats") renderStats();
-  if(LISTEN.story||VIEW==="listen") LISTEN.changeCfg("scope",lsState().cfg.scope); });   // 章节变化：重建随身听队列并尽量恢复断点
+  if(LISTEN.story||lsPanelVisible()) LISTEN.changeCfg("scope",lsState().cfg.scope); });   // 章节变化：重建随身听队列并尽量恢复断点
 
 /* ================= 首页 ================= */
 function renderHome(){
@@ -2586,7 +2603,7 @@ const LISTEN={
   },
   /* ---- Now Playing 卡片渲染 ---- */
   _paint(){
-    if(VIEW!=="listen") return;
+    if(!lsPanelVisible()) return;
     const el=document.getElementById("lsNow"); if(!el) return;
     const s=this.story;
     if(!s){
@@ -2647,7 +2664,7 @@ const LISTEN={
   },
   /* ---- 播放条状态刷新（随身听浮窗内 #audiobar） ---- */
   _bar(){
-    if(VIEW!=="listen") return;
+    if(!lsPanelVisible()) return;
     const bp=document.getElementById("btnPlay");
     if(bp) bp.innerHTML=(this.playing?ICONS.pause:ICONS.play)+'<span class="nb-l">'+(this.playing?"暂停":"播放")+"</span>";
     const pr=document.getElementById("progRange"), lab=document.getElementById("progLab");
@@ -2696,8 +2713,42 @@ const LISTEN={
   }
 };
 
-/* ---- 随身听：二级 tab 视图（renderListen 渲染进 #app）+ 右下角悬浮球 ----
-   悬浮球：播放/暂停中且当前不在随身听视图时显示；点封面回到随身听视图，播放不中断 */
+/* ---- 随身听：全屏播放器浮窗 + 右下角入口胶囊 + 播放中旋转悬浮球 ----
+   浮窗关闭后播放不中断，由悬浮球（暂停/停止/点封面重开浮窗）继续控制 */
+function lsPanelVisible(){
+  const p=document.getElementById("lsPanel");
+  return !!(p&&p.classList.contains("open"));
+}
+function ensureListenPanel(){
+  let p=document.getElementById("lsPanel");
+  if(p) return p;
+  p=document.createElement("div");
+  p.id="lsPanel";
+  p.innerHTML=`<div class="ls-ph"><div class="ls-ph-t"><h2>🎧 随身听</h2>
+      <div class="ls-sub" id="lsSub"><span class="dot"></span><span class="txt" id="lsSubTxt"></span></div></div>
+    <button class="ls-close" id="lsClose" title="收起播放器（播放不中断，右下角悬浮球可继续控制）">↓ 收起播放器</button></div>
+    <div class="ls-body" id="lsBody"></div>`;
+  document.body.appendChild(p);
+  document.getElementById("lsClose").onclick=()=>closeListenPanel();
+  return p;
+}
+function openListenPanel(){
+  if(isGuest()) return needLogin("登录后使用随身听连播");   // 游客/待审批拦截
+  const p=ensureListenPanel();
+  renderListen();
+  p.classList.add("open");
+  document.body.classList.add("ls-lock");
+  LISTEN._paint();   // 面板可见后再渲染（_paint 依赖 lsPanelVisible）
+  updateFab();
+}
+function closeListenPanel(){
+  const p=document.getElementById("lsPanel");
+  if(p) p.classList.remove("open");
+  document.body.classList.remove("ls-lock");
+  updateFab();
+}
+/* 右下角旋转封面悬浮球：浮窗关闭且处于播放/暂停态时显示
+   圆形封面 = 当前文章章节号 + 标题首字母（唱片式旋转，播放快/暂停慢） */
 function ensureFab(){
   let f=document.getElementById("lsFab");
   if(!f){
@@ -2705,21 +2756,31 @@ function ensureFab(){
     f.id="lsFab";
     f.innerHTML=`<button class="fab-btn" id="fabPause" title="暂停 / 继续" aria-label="暂停或继续播放"></button>
     <button class="fab-btn" id="fabStop" title="停止播放" aria-label="停止播放">${ICONS.stop}</button>
-    <button class="fab-cover" id="fabCover" title="返回随身听" aria-label="返回随身听"><span class="fab-ch" id="fabCh"></span><span class="fab-letter" id="fabLetter">🎧</span></button>`;
+    <button class="fab-cover" id="fabCover" title="打开随身听播放器" aria-label="打开随身听播放器"><span class="fab-ch" id="fabCh"></span><span class="fab-letter" id="fabLetter">🎧</span></button>`;
     document.body.appendChild(f);
-    document.getElementById("fabCover").onclick=()=>switchView("listen");
+    document.getElementById("fabCover").onclick=()=>openListenPanel();
     document.getElementById("fabPause").onclick=()=>{ if(LISTEN.playing) LISTEN.pause(); else LISTEN.play(); };
     document.getElementById("fabStop").onclick=()=>LISTEN.stop();
   }
+  let g=document.getElementById("lsGo");   // 入口按钮：全局固定右下角，与悬浮球同位互斥
+  if(!g){
+    g=document.createElement("button");
+    g.className="ls-open"; g.id="lsGo";
+    g.innerHTML=`<span class="ls-go-ic"><i class="ri-headphone-line" aria-hidden="true"></i></span><span class="ls-go-t">随身听</span><span class="pulse" aria-hidden="true"></span>`;
+    g.onclick=()=>openListenPanel();   // 打开全屏播放器浮窗（关闭后悬浮球控制，播放不中断）
+    document.body.appendChild(g);
+  }
+  g.title=lsResumeText();
   return f;
 }
-/* 悬浮球吸底对齐：移动端实时读底部导航真实渲染高度（文字行高/字体/安全区都会影响，
-   估算值不可靠），桌面端清除内联样式回到 CSS 的 20px */
+/* 悬浮球/入口胶囊吸底对齐：移动端实时读底部导航真实渲染高度（文字行高/字体/安全区都会影响，
+   估算值不可靠），桌面端清除内联样式回到 CSS 的默认值 */
 function snapFabToTabbar(){
-  const fab=document.getElementById("lsFab"), nav=document.getElementById("sidenav");
-  if(!fab||!nav) return;
-  if(window.innerWidth<=640) fab.style.bottom=nav.offsetHeight+"px";
-  else fab.style.bottom="";
+  const fab=document.getElementById("lsFab"), go=document.getElementById("lsGo"), nav=document.getElementById("sidenav");
+  if(!nav) return;
+  const b=window.innerWidth<=640?nav.offsetHeight+"px":"";
+  if(fab) fab.style.bottom=b;
+  if(go) go.style.bottom=b;
 }
 if(!window._fabRz){ window._fabRz=1;
   window.addEventListener("resize",()=>snapFabToTabbar());   /* iOS 地址栏伸缩/转屏时重新贴底 */
@@ -2728,7 +2789,8 @@ function updateFab(){
   const f=ensureFab();
   snapFabToTabbar();
   const playing=!!(LISTEN.story&&(LISTEN.playing||LISTEN.paused));
-  const active=playing&&VIEW!=="listen";
+  document.body.classList.toggle("ls-active",playing);   // 播放/暂停态：入口胶囊 ↔ 悬浮球 形态互斥
+  const active=playing&&!lsPanelVisible();
   f.classList.toggle("on",active);
   if(!active) return;
   f.classList.toggle("playing",LISTEN.playing);
@@ -2750,8 +2812,7 @@ function renderListen(){
   const sel=(id,opts)=>`<label class="ls-opt"><span>${opts.label}</span><select id="${id}">${opts.items.map(o=>`<option value="${o[0]}" ${String(o[0])===String(opts.cur)?"selected":""}>${o[1]}</option>`).join("")}</select></label>`;
   const cfgSum=()=>{ const c=lsState().cfg;
     return `${{all:"全部",unread:"未读",read:"已读"}[c.scope]}文章 · ${c.order==="rand"?"随机":"顺序"} · ${c.mode==="enzh"?"英中对照":"纯英文"} · ${{list:"列表循环",one:"单篇循环",stop:"播完即停"}[c.loop]}`; };
-  const html=`<div class="view-sub"><span class="ls-sub" id="lsSub"><span class="dot"></span><span class="txt" id="lsSubTxt"></span></span></div>
-    <div class="card ls-now" id="lsNow"></div>
+  const html=`<div class="card ls-now" id="lsNow"></div>
     <div class="ls-cfg" id="lsCfg">
       <button class="ls-cfg-head" id="lsCfgHead" title="展开 / 收起播放设置">
         <span class="ls-cfg-ico">⚙</span><span class="ls-cfg-sum" id="lsCfgSum">${cfgSum()}</span><span class="ls-cfg-caret"></span>
@@ -2774,7 +2835,7 @@ function renderListen(){
       </div>
     </div>
     <div class="audiobar" id="audiobar"></div>`;
-  app.innerHTML=html;
+  document.getElementById("lsBody").innerHTML=html;
   const head=document.getElementById("lsCfgHead");
   if(head) head.onclick=()=>document.getElementById("lsCfg").classList.toggle("open");
   const cfgIds=[["lsScope","scope"],["lsOrder","order"],["lsMode","mode"],["lsLoop","loop"],["lsPause","pause"],["lsReport","report"],["lsTimer","timer"]];
@@ -3332,8 +3393,9 @@ document.addEventListener("keydown",e=>{
     else if(REVIEW.revealed&&e.key==="ArrowLeft"){ e.preventDefault(); gradeReview(false); }
     return;
   }
-  if(VIEW==="listen"){
-    if(e.code==="Space"){ e.preventDefault(); const bp=document.getElementById("btnPlay"); if(bp) bp.click(); }
+  if(lsPanelVisible()){
+    if(e.key==="Escape"){ e.preventDefault(); closeListenPanel(); }
+    else if(e.code==="Space"){ e.preventDefault(); const bp=document.getElementById("btnPlay"); if(bp) bp.click(); }
     else if(e.key==="ArrowLeft"){ e.preventDefault(); LISTEN.step(-1); }
     else if(e.key==="ArrowRight"){ e.preventDefault(); LISTEN.step(1); }
     return;
@@ -3344,37 +3406,18 @@ document.addEventListener("keydown",e=>{
   else if(e.key==="ArrowRight"){ e.preventDefault(); stepAudio(1); }
 });
 
-/* ================= 顶栏滚动收缩（FLIP 平滑动画） =================
-   滚入正文(页面上移) → 只留 tab(左) + 章节筛选(右)；回顶(页面下移) → 恢复完整顶栏。
-   brand 原位淡出（CSS 过渡）；tabs 记录切换前后位置差，用 WAAPI 反向补偿再归零，实现平滑滑动 */
+/* ================= 顶栏滚动收缩 =================
+   滚入正文(页面上移) → 收紧顶栏上下 padding；回顶(页面下移) → 恢复。
+   顶栏只剩章节筛选 + 口音钮（同一行），无位移动画需求 */
 (function(){
-  const tb=document.getElementById("topbar"), tabs=document.getElementById("tabs");
+  const tb=document.getElementById("topbar");
   if(!tb) return;
-  const reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let anim=null, lastY=window.scrollY||0;
-  const setCompact=(on)=>{
-    if(tb.classList.contains("compact")===on) return;
-    if(anim){anim.cancel(); anim=null;}
-    if(!tabs||!tabs.animate||reduced){ tb.classList.toggle("compact",on); return; }
-    const r1=tabs.getBoundingClientRect();
-    tb.classList.toggle("compact",on);
-    const r2=tabs.getBoundingClientRect();
-    const dx=r1.left-r2.left, dy=r1.top-r2.top;
-    if(!dx&&!dy) return;
-    /* 终态基准 transform（桌面展开态为 translateX(-50%)，其余为 none），
-       起止关键帧都以它为基准拼接，动画结束值与 CSS 计算值一致，避免收尾跳变 */
-    const base=getComputedStyle(tabs).transform;
-    const hasBase=base&&base!=="none";
-    const endT=hasBase?base:"translate(0px, 0px)";
-    const startT=hasBase?`${base} translate(${dx}px, ${dy}px)`:`translate(${dx}px, ${dy}px)`;
-    anim=tabs.animate([{transform:startT},{transform:endT}],
-      {duration:300,easing:"cubic-bezier(.4,0,.2,1)"});
-  };
+  let lastY=window.scrollY||0;
   window.addEventListener("scroll",()=>{
     const y=window.scrollY||0;
-    if(VIEW!=="reader"){
-      if(y>lastY+3 && y>24) setCompact(true);
-      else if(y<lastY-3 || y<=24) setCompact(false);
+    if(VIEW!=="reader"&&VIEW!=="me"){
+      if(y>lastY+3 && y>24) tb.classList.add("compact");
+      else if(y<lastY-3 || y<=24) tb.classList.remove("compact");
     }
     lastY=y;
   },{passive:true});
@@ -3393,7 +3436,7 @@ updateFavBadge();
 audio.loadVoices(renderAudioBarIfReader);
 function renderAudioBarIfReader(){ if(VIEW==="reader") renderAudioBar(); }
 lsState();
-ensureFab();   // 预建右下角悬浮球（默认隐藏；随身听播放中离开该页时浮现）
+ensureFab();   // 预建右下角随身听入口胶囊（播放/暂停态让位给悬浮球）
 LISTEN._msBind();
 /* 锁屏/切后台被系统中断后，回前台自动从断点续播（用户手动暂停则不恢复） */
 document.addEventListener("visibilitychange",()=>{
