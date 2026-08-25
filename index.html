@@ -1889,6 +1889,19 @@ function voiceLabel(v){
   const tag=t===3?"★★★ 自然":t===2?"★★ 清晰":"★";
   return n+" · "+region+" · "+tag;
 }
+/* Edge 云端音色：名称含 "Online (Natural)"，由微软云端渲染、免费，仅在 Edge 浏览器中出现 */
+function edgeCloudVoice(v){ return /Online \(Natural\)/i.test(v.name||""); }
+/* 音色下拉框选项（朗读条与随身听共用）：☁ 硅基流动 → ⚡ Edge 免费 → 本机 */
+function voiceOptionsHtml(cloudOpts){
+  const sel=v=>(!audio.cloudVoiceId&&audio.voice&&v.name===audio.voice.name)?"selected":"";
+  const edgeOpts=audio.voices.filter(edgeCloudVoice).map(v=>`<option value="${esc(v.name)}" ${sel(v)}>${esc(voiceLabel(v))}</option>`).join("");
+  const localOpts=audio.voices.filter(v=>!edgeCloudVoice(v)).map(v=>`<option value="${esc(v.name)}" ${sel(v)}">${esc(voiceLabel(v))}</option>`).join("");
+  let h=voiceHintOpt();
+  if(cloudOpts) h+=`<optgroup label="☁ 云端自然语音（需联网）">${cloudOpts}</optgroup>`;
+  if(edgeOpts) h+=`<optgroup label="⚡ Edge 云端语音（免费）">${edgeOpts}</optgroup>`;
+  if(localOpts) h+=`<optgroup label="本机语音">${localOpts}</optgroup>`;
+  return h;
+}
 const RATES=[0.5,0.6,0.75,0.85,1.0,1.1,1.25];
 const RATE_LAB={"0.5":"0.5x 特慢","0.6":"0.6x 慢速","0.75":"0.75x 稍慢","0.85":"0.85x 适中","1":"1.0x 常速","1.1":"1.1x 稍快","1.25":"1.25x 快速"};
 /* 播放条图标：SVG 绘制，避免 Unicode 媒体字符在移动端渲染成方框/emoji */
@@ -1908,8 +1921,13 @@ function stepAudio(d){
 /* 无顶级本地语音时，在音色下拉框顶部给出可见提示（手机无悬停，tooltip 看不到） */
 function voiceHintOpt(){
   if(audio.voices.some(v=>audio.voiceTier(v)>=3)) return "";
-  if(CLOUD_TTS.available()) return `<option disabled>💡 选顶部 ☁ 开头的云端语音，免下载、即点即用（需联网）</option>`;
-  return `<option disabled>💡 到「我的 → 云端语音」配置密钥，即可用 ☁ 高自然度语音</option>`;
+  if(CLOUD_TTS.available()) return `<option disabled>💡 选 ☁ 云端语音即点即用；用 Edge 浏览器打开本页还有 ⚡ 免费自然语音</option>`;
+  const ua=(typeof navigator!=="undefined"&&navigator.userAgent)||"";
+  const ios=/iPhone|iPad|iPod/i.test(ua);
+  const edgeTip=ios
+    ?"用 Edge 浏览器打开本页可免费用 ⚡ 云端自然语音；或在 设置→辅助功能→朗读内容→声音 下载增强版语音"
+    :"用 Edge 浏览器打开本页可免费用 ⚡ 云端自然语音（无需配置）";
+  return `<option disabled>💡 ${edgeTip}；或到「我的 → 云端语音」配置密钥</option>`;
 }
 function renderAudioBar(){
   const bar=document.getElementById("audiobar"); if(!bar) return;
@@ -1921,12 +1939,7 @@ function renderAudioBar(){
   if(CUR_STORY && !audio.ready()) audio.prepare();
   if(!audio.voices.length) audio.loadVoices(renderAudioBarIfReader);   // 移动端语音列表常延迟就绪，进入阅读页时再拉一次
   const cloudOpts=cloudOn?CLOUD_TTS.VOICES.map(v=>`<option value="cloud:${v.id}" ${audio.cloudVoiceId===v.id?"selected":""}>☁ ${v.name} · ${v.region}</option>`).join(""):"";
-  const localOpts=audio.voices.map(v=>`<option value="${esc(v.name)}" ${!audio.cloudVoiceId&&audio.voice&&v.name===audio.voice.name?"selected":""}>${esc(voiceLabel(v))}</option>`).join("");
-  let voiceOpts=voiceHintOpt();
-  if(cloudOpts){
-    voiceOpts+=`<optgroup label="☁ 云端自然语音（需联网）">${cloudOpts}</optgroup>`;
-    if(localOpts) voiceOpts+=`<optgroup label="本机语音">${localOpts}</optgroup>`;
-  } else voiceOpts+=localOpts;
+  const voiceOpts=voiceOptionsHtml(cloudOpts);
   bar.innerHTML=`
     <button class="ab" id="btnPlay">${ICONS.play}<span class="nb-l">播放</span></button>
     <button class="ab ghost" id="btnStop" title="停止并回到第 1 句">${ICONS.stop}<span class="nb-l">停止</span></button>
@@ -1934,7 +1947,7 @@ function renderAudioBar(){
     <button class="navbtn" id="btnPrev" title="跳到上一句">${ICONS.prev}<span class="nb-l">上一句</span></button>
     <button class="navbtn" id="btnNext" title="跳到下一句"><span class="nb-l">下一句</span>${ICONS.next}</button>
     <select class="abar-sel" id="rateSel" aria-label="朗读语速" title="朗读语速">${RATES.map(r=>`<option value="${r}" ${r===audio.rate?"selected":""}>${RATE_LAB[String(r)]}</option>`).join("")}</select>
-    ${hasVoiceSel?`<select class="abar-sel" id="voiceSel" title="音色选择（★★★ 最自然）：&#10;☁ 云端语音：到「我的 → 云端语音」配置密钥后，选 ☁ 开头的音色，免下载、即点即用（需联网）；&#10;本机高品质语音：iPhone/iPad 在 设置→辅助功能→朗读内容→声音 下载增强版；macOS 在 系统设置→辅助功能 下载 Premium 语音。">${voiceOpts}</select>`:""}`;
+    ${hasVoiceSel?`<select class="abar-sel" id="voiceSel" title="音色选择（★★★ 最自然）：&#10;☁ 云端语音：到「我的 → 云端语音」配置密钥后，选 ☁ 开头的音色，免下载、即点即用（需联网）；&#10;⚡ Edge 云端语音：用 Edge 浏览器打开本页免费出现，含英式/美式多种自然音色；&#10;本机高品质语音：iPhone/iPad 在 设置→辅助功能→朗读内容→声音 下载增强版；macOS 在 系统设置→辅助功能 下载 Premium 语音。">${voiceOpts}</select>`:""}`;
   document.getElementById("btnPlay").onclick=()=>{ if(audio.playing){ audio.pause(); } else if(!audio.cloudVoiceId&&audio.ok()&&speechSynthesis.paused&&speechSynthesis.speaking){ speechSynthesis.resume(); audio.playing=true; audio.paused=false; audio._updateBar(); } else audio.play(); };
   document.getElementById("btnStop").onclick=()=>audio.stop();
   document.getElementById("btnPrev").onclick=()=>stepAudio(-1);
@@ -2458,7 +2471,9 @@ function renderListen(){
       </div>
       <div class="ls-hint">${CLOUD_TTS.available()
         ?"✅ 已启用云端自然语音：连播效果最好，锁屏后台可续播。"
-        :"💡 到「我的 → 云端语音」配置密钥，可解锁高自然度云端语音，连播更稳。"}iPhone 用户建议用 Safari「分享 → 添加到主屏幕」，以独立窗口打开后锁屏不易中断；若锁屏被系统暂停，回到页面会自动从断点继续。</div>
+        :audio.voices.some(edgeCloudVoice)
+          ?"✅ 检测到 ⚡ Edge 云端语音（免费）：熄屏后台连播效果最好，锁屏界面可直接控制播放/切篇。"
+          :"💡 用 Edge 浏览器打开本页可免费用 ⚡ 自然语音；或到「我的 → 云端语音」配置密钥，连播更稳。"}iPhone 用户建议用 Safari「分享 → 添加到主屏幕」，以独立窗口打开后锁屏不易中断；若锁屏被系统暂停，回到页面会自动从断点继续。</div>
       </div>
     </div>
     <div class="audiobar" id="audiobar"></div>`;
@@ -2484,12 +2499,7 @@ function renderListenBar(){
   if(near!==audio.rate){ audio.setRate(near); S.rate=near; save(); }
   if(!audio.voices.length) audio.loadVoices();   // 本机语音列表异步就绪时兜底拉取
   const cloudOpts=cloudOn?CLOUD_TTS.VOICES.map(v=>`<option value="cloud:${v.id}" ${audio.cloudVoiceId===v.id?"selected":""}>☁ ${v.name} · ${v.region}</option>`).join(""):"";
-  const localOpts=audio.voices.map(v=>`<option value="${esc(v.name)}" ${!audio.cloudVoiceId&&audio.voice&&v.name===audio.voice.name?"selected":""}>${esc(voiceLabel(v))}</option>`).join("");
-  let voiceOpts=voiceHintOpt();
-  if(cloudOpts){
-    voiceOpts+=`<optgroup label="☁ 云端自然语音（需联网）">${cloudOpts}</optgroup>`;
-    if(localOpts) voiceOpts+=`<optgroup label="本机语音">${localOpts}</optgroup>`;
-  } else voiceOpts+=localOpts;
+  const voiceOpts=voiceOptionsHtml(cloudOpts);
   bar.innerHTML=`
     <button class="ab" id="btnPlay">${ICONS.play}<span class="nb-l">播放</span></button>
     <button class="ab ghost" id="btnStop" title="停止（记住当前位置，下次继续）">${ICONS.stop}<span class="nb-l">停止</span></button>
@@ -2497,7 +2507,7 @@ function renderListenBar(){
     <button class="navbtn" id="btnPrev" title="重听上一句">${ICONS.prev}<span class="nb-l">上一句</span></button>
     <button class="navbtn" id="btnNext" title="跳到下一句"><span class="nb-l">下一句</span>${ICONS.next}</button>
     <select class="abar-sel" id="rateSel" aria-label="朗读语速" title="朗读语速">${RATES.map(r=>`<option value="${r}" ${r===audio.rate?"selected":""}>${RATE_LAB[String(r)]}</option>`).join("")}</select>
-    ${hasVoiceSel?`<select class="abar-sel" id="voiceSel" title="音色选择：☁ 云端语音熄屏连播最稳">${voiceOpts}</select>`:""}`;
+    ${hasVoiceSel?`<select class="abar-sel" id="voiceSel" title="音色选择：☁ 云端语音与 ⚡ Edge 云端语音熄屏连播最稳">${voiceOpts}</select>`:""}`;
   document.getElementById("btnPlay").onclick=()=>{ if(LISTEN.playing) LISTEN.pause(); else LISTEN.play(); };
   document.getElementById("btnStop").onclick=()=>LISTEN.stop();
   document.getElementById("btnPrev").onclick=()=>LISTEN.step(-1);
@@ -2787,7 +2797,7 @@ function renderMe(){
   <li><b>随身听</b>：在"首页 → 随身听"连播当前章节文章，锁屏后台可续播，自动断点续听。</li>
   </ol></div>
   <div class="card"><h3>云端语音（硅基流动）</h3>
-    <div class="me-p">配置后朗读使用云端高自然度语音（CosyVoice2），拟真度远超本机语音。预置英文音色 8 个：男声 alex 沉稳 / benjamin 低沉 / charles 磁性 / david 欢快，女声 anna 沉稳 / bella 激情 / claire 温柔 / diana 欢快；英文均为美式口音（官方未提供英音音色，如需英音请配合本机语音或留言反馈）。密钥仅保存在本机浏览器，不上传、不随备份导出。按量计费约 ¥0.5/万字符，注册即送 ¥14 额度；已合成内容自动缓存，重复收听不重复计费。密钥获取：<a href="https://cloud.siliconflow.cn/account/ak" target="_blank" rel="noopener">cloud.siliconflow.cn</a> → API 密钥 → 新建。</div>
+    <div class="me-p">配置后朗读使用云端高自然度语音（CosyVoice2），拟真度远超本机语音。预置英文音色 8 个：男声 alex 沉稳 / benjamin 低沉 / charles 磁性 / david 欢快，女声 anna 沉稳 / bella 激情 / claire 温柔 / diana 欢快；英文均为美式口音（官方未提供英音音色，如需英音请配合本机语音或留言反馈）。密钥仅保存在本机浏览器，不上传、不随备份导出。按量计费约 ¥0.5/万字符，注册即送 ¥14 额度；已合成内容自动缓存，重复收听不重复计费。密钥获取：<a href="https://cloud.siliconflow.cn/account/ak" target="_blank" rel="noopener">cloud.siliconflow.cn</a> → API 密钥 → 新建。零成本替代：用 Edge 浏览器打开本页，音色列表会免费出现「⚡ Edge 云端语音」（微软云端渲染，含英式 Sonia / 美式 Aria 等自然音色，无需配置密钥）。</div>
     <div class="key-row">
       <input type="password" id="ttsKey" placeholder="粘贴 API 密钥（sk- 开头）" autocomplete="off" spellcheck="false" value="${esc(CLOUD_TTS.key())}">
       <button id="ttsKeySave">保存</button>
