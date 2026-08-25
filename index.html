@@ -916,26 +916,138 @@ function resolveWord(w){
   return null;
 }
 
-/* ================= 状态持久化（多账号隔离） =================
-   游客数据存 LS_KEY；注册账号后各账号数据存 LS_KEY@用户名，互不干扰。
-   账户注册表与当前会话存于 localStorage；密码仅保存加盐 SHA-256 哈希，绝不明文存储。 */
-const LS_KEY="yasiVocabV1", ACC_KEY="iel_accounts", SES_KEY="iel_session";
+/* ================= 状态持久化（多账号隔离 + 云同步） =================
+   游客数据存 LS_KEY；登录账号后数据存 LS_KEY@邮箱，本机多账号互不干扰。
+   配置 Supabase 后支持云端同步：登录拉取云端数据（按修改时间新者胜），保存自动防抖推送。 */
+const LS_KEY="yasiVocabV1";
 function freshS(){ return {stats:{}, fav:{}, quiz:{}, read:{}, listened:{}, listen:null, chapter:1, accent:"GB"}; }
-function getAccounts(){ try{ return JSON.parse(localStorage.getItem(ACC_KEY))||{users:{}}; }catch(e){ return {users:{}}; } }
-function setAccounts(a){ try{ localStorage.setItem(ACC_KEY, JSON.stringify(a)); }catch(e){} }
-async function pwHash(pw,salt){
-  try{
-    const buf=await crypto.subtle.digest("SHA-256", new TextEncoder().encode(salt+"|"+pw));
-    return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
-  }catch(e){ return "p"+btoa(unescape(encodeURIComponent(salt+"|"+pw))); }   // 非安全上下文降级
-}
-let CUR_USER=null;   // null = 游客（未登录）
-try{ const u=localStorage.getItem(SES_KEY); if(u&&getAccounts().users[u]) CUR_USER=u; }catch(e){}
+let CUR_USER=null;   // null = 游客；值为账号邮箱（由 Supabase 会话驱动）
 function userKey(){ return CUR_USER? LS_KEY+"@"+CUR_USER : LS_KEY; }
 let S=freshS();
 function loadS(){ S=freshS(); try{ const raw=localStorage.getItem(userKey()); if(raw) S=Object.assign(S,JSON.parse(raw)); }catch(e){} }
 loadS();
-function save(){ try{ localStorage.setItem(userKey(), JSON.stringify(S)); }catch(e){} }
+function save(){
+  S._m=Date.now();   // 本地修改时间戳：云同步冲突时新者胜
+  try{ localStorage.setItem(userKey(), JSON.stringify(S)); }catch(e){}
+  SB.schedulePush();
+}
+
+/* ================= 云同步（Supabase 免费版） =================
+   邮箱注册 / 登录，学习数据自动云端同步：登录时拉取云端并与本地按修改时间合并（新者胜），
+   之后每次保存防抖 4 秒推送到 learning_data 表（RLS 行级安全，各账号只能读写自己的行）。
+   URL 与 anon 密钥仅存本机 localStorage；anon 密钥是公开密钥，安全由 RLS 保证。 */
+const SB={
+  URLSTORE:"iel_sb_url", KEYSTORE:"iel_sb_key",
+  _c:null, _sdkP:null, _pushT:null, _pushing:false, user:null, lastSync:0, _errShown:false,
+  url(){ try{ return (localStorage.getItem(this.URLSTORE)||"").trim(); }catch(e){ return ""; } },
+  anonKey(){ try{ return (localStorage.getItem(this.KEYSTORE)||"").trim(); }catch(e){ return ""; } },
+  setCfg(u,k){ try{ localStorage.setItem(this.URLSTORE,String(u).trim()); localStorage.setItem(this.KEYSTORE,String(k).trim()); }catch(e){} },
+  configured(){ return !!(this.url()&&this.anonKey()); },
+  /* 按需加载 Supabase SDK（约 130KB）：未配置/未使用的设备零加载开销 */
+  sdk(){
+    if(window.supabase) return Promise.resolve(window.supabase);
+    if(this._sdkP) return this._sdkP;
+    this._sdkP=new Promise((res,rej)=>{
+      const s=document.createElement("script");
+      s.src="https://fastly.jsdelivr.net/npm/@supabase/supabase-js@2";
+      s.onload=()=>res(window.supabase);
+      s.onerror=()=>{ this._sdkP=null; rej(new Error("SDK 加载失败（网络受限或被拦截）")); };
+      document.head.appendChild(s);
+    });
+    return this._sdkP;
+  },
+  async client(){
+    if(!this.configured()) return null;
+    if(this._c) return this._c;
+    const sdk=await this.sdk();
+    this._c=sdk.createClient(this.url(), this.anonKey());
+    return this._c;
+  },
+  /* 应用启动：恢复上次会话并订阅登录/登出事件 */
+  async init(){
+    if(!this.configured()) return;
+    try{
+      const c=await this.client();
+      const {data:{session}}=await c.auth.getSession();
+      this.setUser((session&&session.user)||null);
+      c.auth.onAuthStateChange((_ev,sess)=>this.setUser((sess&&sess.user)||null));
+    }catch(e){ /* 配置有误时 UI 卡片会给出提示，这里静默 */ }
+    document.addEventListener("visibilitychange",()=>{   // 切后台立即冲刷待推送数据
+      if(document.visibilityState==="hidden"&&this.user) this.push();
+    });
+  },
+  setUser(u){
+    const email=u?(u.email||""):"";
+    if(email===CUR_USER) return;
+    CUR_USER=email||null;
+    this.user=u||null;
+    loadS();
+    try{
+      audio.rate=S.rate||0.85;
+      audio.voice=null; audio.cloudVoiceId=null; audio._cloudFailed=false;
+      audio.loadVoices();
+    }catch(e){}
+    if(email) this.pull();          // 登录 / 切换账号：拉取云端数据合并
+    if(typeof switchView==="function"&&typeof VIEW!=="undefined") switchView(VIEW);   // 用新账号数据重渲染当前视图
+    if(typeof updateFavBadge==="function") updateFavBadge();
+  },
+  /* 拉取云端并与本地合并：云端新 → 覆盖本地；本地新或云端空 → 推送本地 */
+  async pull(){
+    if(!this.user) return;
+    try{
+      const c=await this.client();
+      const {data,error}=await c.from("learning_data").select("data,updated_at").eq("user_id",this.user.id).maybeSingle();
+      if(error) throw error;
+      this.lastSync=Date.now(); this._errShown=false;
+      if(data&&data.data){
+        const rts=data.updated_at?Date.parse(data.updated_at):0, lts=S._m||0;
+        if(rts>lts){
+          S=Object.assign(freshS(),data.data);
+          try{ localStorage.setItem(userKey(),JSON.stringify(S)); }catch(e){}
+          if(typeof switchView==="function"&&typeof VIEW!=="undefined") switchView(VIEW);
+          if(typeof updateFavBadge==="function") updateFavBadge();
+          toast("已从云端同步最新学习数据");
+        } else if(lts>rts){ this.push(); }
+      } else { this.push(); }   // 云端无数据（新账号或首次同步）→ 上传本地
+    }catch(e){ this._toastErr(e,"云端数据拉取失败"); }
+  },
+  async push(){
+    if(!this.user||this._pushing) return;
+    this._pushing=true;
+    try{
+      const c=await this.client();
+      const {error}=await c.from("learning_data").upsert({user_id:this.user.id, data:S, updated_at:new Date().toISOString()});
+      if(error) throw error;
+      this.lastSync=Date.now(); this._errShown=false;
+    }catch(e){ this._toastErr(e,"云端同步失败（数据已保存在本机）"); }
+    finally{ this._pushing=false; }
+  },
+  schedulePush(){
+    if(!this.user) return;
+    clearTimeout(this._pushT);
+    this._pushT=setTimeout(()=>this.push(),4000);
+  },
+  async signUp(email,pw){
+    const c=await this.client();
+    const {data,error}=await c.auth.signUp({email,password:pw});
+    if(error) throw error;
+    return !!(data&&data.session);   // false = 平台开启了邮箱确认，需点确认链接
+  },
+  async signIn(email,pw){
+    const c=await this.client();
+    const {error}=await c.auth.signInWithPassword({email,password:pw});
+    if(error) throw error;
+  },
+  async signOut(){
+    try{ const c=await this.client(); await c.auth.signOut(); }catch(e){}
+    this.setUser(null);
+  },
+  _toastErr(e,msg){
+    if(this._errShown) return;
+    this._errShown=true;
+    toast(msg+"："+((e&&e.message)||e));
+  }
+};
 function statOf(w){ return S.stats[w] || (S.stats[w]={l:0,c:0,w:0,lr:0,lw:0}); }
 
 /* ================= 掌握度 ================= */
@@ -2821,18 +2933,30 @@ function renderFav(){
 }
 /* ================= 我的（使用指南 / 数据管理） ================= */
 function renderMe(){
-  app.innerHTML=`<div class="view-sub">使用指南与数据管理。学习数据保存在本机浏览器（localStorage），支持多账号隔离，离线可用；换设备或清理浏览器数据前请先导出备份。</div>
-  <div class="card"><h3>账号</h3>
-    ${CUR_USER?`
-    <div class="me-p">当前登录：<b>${esc(CUR_USER)}</b>。学习数据保存在独立账号空间，与本机其他账号互不影响；换设备时可在新设备登录同一账号，再导入备份文件恢复进度。</div>
-    <div class="backup-zone"><button id="accLogout">退出登录</button></div>`
-    :`
-    <div class="me-p">当前为游客模式，数据仅保存在本机浏览器。注册 / 登录账号后，各账号的学习数据（阅读进度、掌握度统计、生词本、复习计划）完全隔离，同一浏览器可随时切换账号。</div>
+  app.innerHTML=`<div class="view-sub">使用指南与数据管理。学习数据保存在本机浏览器，登录账号后自动云端同步（多设备共享），离线可用。</div>
+  <div class="card"><h3>账号与云同步</h3>
+    ${!SB.configured()
+    ?`<div class="me-p">游客模式，数据仅保存在本机。开启云同步（免费）：到 Supabase 新建项目并完成一次性配置（见下方「云同步配置」），即可注册账号、多设备同步学习进度。</div>`
+    :SB.user
+    ?`<div class="me-p">当前登录：<b>${esc(SB.user.email||"")}</b>${SB.lastSync?`<br>上次同步：${new Date(SB.lastSync).toLocaleString()}`:""}。学习数据自动云端同步：登录时拉取云端最新数据（与本地冲突时新者胜），此后每次修改自动推送；多设备登录同一账号即可共享进度。离线时的修改保存在本机，联网后会自动补传。</div>
+    <div class="backup-zone"><button id="sbSync">↻ 立即同步</button><button id="sbLogout">退出登录</button></div>`
+    :`<div class="me-p">当前为游客模式，数据仅保存在本机浏览器。注册 / 登录账号后，学习数据（阅读进度、掌握度统计、生词本、复习计划）自动云端同步，换设备登录同一账号即可无缝续学。账号密码由 Supabase 托管，本站不存储密码。</div>
     <div class="acc-form">
-      <input id="accName" placeholder="用户名（2-20 个字符）" maxlength="20" autocomplete="username">
-      <input id="accPw" type="password" placeholder="密码（至少 6 位）" autocomplete="current-password">
-      <div class="acc-acts"><button id="accLogin">登录</button><button id="accReg">注册（带入当前数据）</button></div>
+      <input id="sbEmail" type="email" placeholder="邮箱" autocomplete="email">
+      <input id="sbPw" type="password" placeholder="密码（至少 6 位）" autocomplete="current-password">
+      <div class="acc-acts"><button id="sbLogin">登录</button><button id="sbReg">注册（带入当前数据）</button></div>
     </div>`}
+  </div>
+  <div class="card"><h3>云同步配置（Supabase，一次性）</h3>
+    <div class="me-p">① 到 <a href="https://supabase.com" target="_blank" rel="noopener">supabase.com</a> 注册（免费）并 New project；② 项目 SQL Editor 执行下方建表 SQL；③ 「Settings → API」复制 Project URL 与 anon public 密钥填到此处保存；④ 建议到「Authentication → Providers → Email」关闭 Confirm email，注册即登录。配置仅存本机浏览器，anon 密钥是公开密钥，安全由数据库行级权限（RLS）保证：每个账号只能读写自己的数据行。</div>
+    <div class="key-row">
+      <input type="text" id="sbUrl" placeholder="Project URL（https://xxxx.supabase.co）" spellcheck="false" value="${esc(SB.url())}">
+    </div>
+    <div class="key-row">
+      <input type="password" id="sbKey" placeholder="anon public 密钥" autocomplete="off" spellcheck="false" value="${esc(SB.anonKey())}">
+      <button id="sbSave">保存</button>
+    </div>
+    <div class="key-stat">建表 SQL（在 Supabase SQL Editor 执行一次）：<br><code style="word-break:break-all;user-select:all">create table learning_data (user_id uuid primary key references auth.users on delete cascade, data jsonb not null, updated_at timestamptz default now()); alter table learning_data enable row level security; create policy "own row only" on learning_data for all using (auth.uid() = user_id) with check (auth.uid() = user_id);</code></div>
   </div>
   <div class="card guide"><h3>使用方法</h3><ol>
   <li><b>读英文故事</b>：高亮下划线的是本篇目标词，点击看音标与释义（每次点查都会计入掌握度统计）；其他任何单词也可以点击查义。</li>
@@ -2860,49 +2984,51 @@ function renderMe(){
   document.getElementById("exportData").onclick=exportBackup;
   document.getElementById("importData").onclick=()=>document.getElementById("importFile").click();
   document.getElementById("importFile").onchange=importBackup;
-  /* —— 账号登录 / 注册 / 退出 —— */
-  const applyUser=()=>{
-    loadS();
-    audio.rate=S.rate||0.85;
-    audio.voice=null; audio.cloudVoiceId=null; audio._cloudFailed=false;
-    audio.loadVoices();
-    updateFavBadge();
+  /* —— Supabase 配置 —— */
+  const sbSave=document.getElementById("sbSave");
+  if(sbSave) sbSave.onclick=()=>{
+    const u=document.getElementById("sbUrl").value.trim(), k=document.getElementById("sbKey").value.trim();
+    if(u&&!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(u)) return toast("URL 格式不对，应形如 https://xxxx.supabase.co");
+    SB.setCfg(u,k);
+    SB._c=null; SB._sdkP=null;
     renderMe();
+    toast(u&&k?"配置已保存，现在可以注册 / 登录账号了":"已清空云同步配置");
   };
-  const lo=document.getElementById("accLogout");
-  if(lo) lo.onclick=()=>{
-    CUR_USER=null; try{ localStorage.removeItem(SES_KEY); }catch(e){}
-    applyUser();
-    toast("已退出登录，切换为游客数据");
+  /* —— 登录 / 注册 / 登出 / 手动同步 —— */
+  const em=()=>document.getElementById("sbEmail"), pw=()=>document.getElementById("sbPw");
+  const bl=document.getElementById("sbLogin");
+  if(bl) bl.onclick=async()=>{
+    const e=(em().value||"").trim(), p=pw().value||"";
+    if(!e||!p) return toast("请输入邮箱和密码");
+    bl.disabled=true;
+    try{
+      await SB.signIn(e,p);
+      toast("登录成功，正在同步云端数据…");   // 会话建立后事件回调完成切换与同步
+    }catch(err){ toast("登录失败："+((err&&err.message)||err)); }
+    finally{ bl.disabled=false; }
   };
-  const al=document.getElementById("accLogin");
-  if(al) al.onclick=async()=>{
-    const nameEl=document.getElementById("accName"), pwEl=document.getElementById("accPw");
-    const name=(nameEl.value||"").trim(), pw=pwEl.value||"";
-    if(!name||!pw) return toast("请输入用户名和密码");
-    const acc=getAccounts().users[name];
-    if(!acc) return toast("用户名不存在，请先注册");
-    if(await pwHash(pw,acc.salt)!==acc.hash) return toast("密码错误");
-    CUR_USER=name; try{ localStorage.setItem(SES_KEY,name); }catch(e){}
-    applyUser();
-    toast("已登录："+name);
+  const br=document.getElementById("sbReg");
+  if(br) br.onclick=async()=>{
+    const e=(em().value||"").trim(), p=pw().value||"";
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) return toast("请输入有效的邮箱地址");
+    if(p.length<6) return toast("密码至少 6 位");
+    br.disabled=true;
+    try{
+      const ok=await SB.signUp(e,p);
+      if(ok){ toast("注册成功，当前学习数据已上传云端"); }
+      else{ toast("注册成功！请到邮箱点击确认链接后，再回来登录"); }
+    }catch(err){ toast("注册失败："+((err&&err.message)||err)); }
+    finally{ br.disabled=false; }
   };
-  const ar=document.getElementById("accReg");
-  if(ar) ar.onclick=async()=>{
-    const nameEl=document.getElementById("accName"), pwEl=document.getElementById("accPw");
-    const name=(nameEl.value||"").trim(), pw=pwEl.value||"";
-    if(name.length<2) return toast("用户名至少 2 个字符");
-    if(pw.length<6) return toast("密码至少 6 位");
-    const accs=getAccounts();
-    if(accs.users[name]) return toast("用户名已存在");
-    const salt=Math.random().toString(36).slice(2,10);
-    accs.users[name]={salt, hash:await pwHash(pw,salt), t:Date.now()};
-    setAccounts(accs);
-    CUR_USER=name; try{ localStorage.setItem(SES_KEY,name); }catch(e){}
-    save();   // 当前（游客）学习数据直接写入账号空间，完成带入
-    updateFavBadge();
-    renderMe();
-    toast("注册成功，当前学习数据已绑定账号 "+name);
+  const bo=document.getElementById("sbLogout");
+  if(bo) bo.onclick=async()=>{ await SB.signOut(); toast("已退出登录，切换为游客数据"); };
+  const bs=document.getElementById("sbSync");
+  if(bs) bs.onclick=async()=>{
+    bs.disabled=true;
+    await SB.pull();
+    await SB.push();
+    bs.disabled=false;
+    if(SB.lastSync) toast("同步完成："+new Date(SB.lastSync).toLocaleTimeString());
   };
   /* —— Azure 密钥与区域 —— */
   const ki=document.getElementById("ttsKey"), ks=document.getElementById("ttsKeySave"), kst=document.getElementById("ttsKeyStat");
@@ -3182,6 +3308,7 @@ document.addEventListener("visibilitychange",()=>{
   }
 });
 switchView("home");
+SB.init();   // 恢复上次登录会话（已配置云同步时），异步拉取云端数据
 window.__APP_TAIL__=1;   // 主脚本完整执行到的末尾标记（供前部 load 自检）
 </script>
 </body>
