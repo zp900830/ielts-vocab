@@ -115,16 +115,19 @@ select,input{font-family:inherit;}
 .sn-logo{display:flex; align-items:center; gap:10px; padding:2px 8px 16px; color:var(--iel-ink1);}
 .sn-logo .sn-mark{width:34px; height:34px; flex:none; border-radius:9px; background:var(--iel-grad); color:#fff;
   box-shadow:var(--iel-grad-shadow), inset 0 1px 0 rgba(255,255,255,.28); display:flex; align-items:center; justify-content:center;}
-.sn-logo .sn-mark svg{width:18px; height:18px;}
-.sn-name{font-weight:700; font-size:13.5px; line-height:1.4; letter-spacing:.2px;}
+.sn-logo .sn-mark i{font-size:18px; line-height:1;}
+.sn-name{font-weight:700; font-size:13.5px; line-height:1.4; letter-spacing:.2px; white-space:nowrap;}
 .sn-nav{display:flex; flex-direction:column; gap:2px;}
 .sn-nav button{position:relative; display:flex; align-items:center; gap:10px; padding:8px 11px; border:none; border-radius:8px;
   background:transparent; color:var(--iel-ink3); font-size:13.5px; font-family:inherit; cursor:pointer; text-align:left;
   transition:background var(--iel-t-fast), color var(--iel-t-fast);}
-.sn-nav button svg{width:18px; height:18px; flex:none;}
-/* 图标双态：未选中=线条，选中=填充（形状自动切换，随 color 变色） */
-.sn-nav button svg .s{fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;}
-.sn-nav button.on svg .s{fill:currentColor; stroke:none;}
+/* 图标双态（Remix Icon）：未选中=线条，选中=填充（随 color 变色） */
+.sn-nav button .sn-ic{font-size:19px; line-height:1; flex:none; width:19px; text-align:center;}
+.sn-nav button .sn-ic-fill{display:none;}
+.sn-nav button.on .sn-ic-line{display:none;}
+.sn-nav button.on .sn-ic-fill{display:inline-block;}
+/* Remix Icon 通用：行内图标与文字基线对齐（按钮/标签内的小图标） */
+i[class^="ri-"], i[class*=" ri-"]{vertical-align:-.125em;}
 .sn-nav button:hover{background:rgba(31,45,38,.05); color:var(--iel-ink1);}
 .sn-nav button.on{background:rgba(16,180,135,.12); color:var(--iel-accent-deep); font-weight:600;}
 #shell{margin-left:200px; transition:margin-left var(--iel-t);}
@@ -233,7 +236,7 @@ body.reading main{padding-top:64px;}
   border:1px solid rgba(255,255,255,.9); border-radius:var(--iel-radius); padding:10px 12px; margin-bottom:0;
   box-shadow:0 18px 44px rgba(30,90,70,.2), 0 2px 8px rgba(30,90,70,.08), inset 0 1px 0 rgba(255,255,255,.96), inset 0 -1px 0 rgba(255,255,255,.4);}
 .audiobar .ab{padding:8px 14px; min-width:68px; font-size:13px; display:inline-flex; align-items:center; justify-content:center; gap:5px; box-shadow:var(--iel-grad-shadow), inset 0 1px 0 rgba(255,255,255,.38);}
-.audiobar .ic{width:12px; height:12px; flex:none; display:block;}
+.audiobar .ic{font-size:12px; line-height:1; flex:none; display:block;}
 .audiobar .ab.ghost{padding:7px 14px; font-size:13px;}
 .abar-sel{cursor:pointer; min-width:0; flex:0 1 auto; text-overflow:ellipsis;}
 /* 播放器条内部控件：实白底 + 清晰描边，在玻璃底板上高对比可辨 */
@@ -310,7 +313,7 @@ body.reading main{padding-top:64px;}
 .sen-tr .anno{color:var(--iel-tw); font-weight:600; font-size:.92em;}
 .tr-play{display:inline-flex; align-items:center; gap:4px; margin-top:6px; border:none; background:transparent; color:var(--iel-accent); font-size:12px; font-weight:500; padding:3px 6px; border-radius:6px; cursor:pointer;}
 .tr-play:hover{background:rgba(16,180,135,.09);}
-.tr-play .ic{width:10px; height:10px; fill:currentColor;}
+.tr-play .ic{font-size:10px; line-height:1;}
 
 .quiz-sec{margin-top:8px;}
 .quiz-sec h3{font-size:17px; margin-bottom:4px;}
@@ -481,7 +484,7 @@ body.reading main{padding-top:64px;}
 .wq-item .wq-ph{font-size:11px; color:var(--iel-ink2); font-family:var(--iel-font-serif); white-space:nowrap; flex:0 1 auto; min-width:0; max-width:100%;}
 /* 定位钮：padding 撑热区 + 负外边距拉至行缘，图标与左侧行内边距对齐 */
 .wq-loc{flex:none; width:auto; height:auto; padding:6px; margin:-6px -6px 0 0; border:none; background:none; color:var(--iel-ink-faint); border-radius:8px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; -webkit-tap-highlight-color:transparent;}
-.wq-loc svg{width:15px; height:15px; display:block;}
+.wq-loc i{font-size:15px; line-height:1; display:block;}
 .wq-loc:hover{color:var(--iel-accent); background:var(--iel-accent-soft);}
 .wq-loc:active{color:var(--iel-accent-deep);}
 /* 热区 = 音标 + 🔊 整体（按钮包裹音标文本与图标） */
@@ -551,7 +554,7 @@ body.reading main{padding-top:64px;}
   .sn-logo{display:none;}
   .sn-nav{flex-direction:row; flex:1; gap:2px;}
   .sn-nav button{flex:1; flex-direction:column; align-items:center; gap:3px; padding:6px 2px; font-size:10.5px; border-radius:10px;}
-  .sn-nav button svg{width:21px; height:21px;}
+  .sn-nav button .sn-ic{width:21px; font-size:21px;}
   /* 底部导航选中态：iOS 惯例——无背景块，图标填充 + accent 色文字（覆盖桌面绿渐变底） */
   .sn-nav button.on{background:transparent; color:var(--iel-accent-deep); font-weight:600; box-shadow:none;}
   .sn-nav button .tab-badge{position:absolute; top:2px; right:calc(50% - 24px); margin-left:0;}   /* 底部导航：到期角标贴图标右上 */
@@ -606,8 +609,8 @@ body.reading main{padding-top:64px;}
   .audiobar{flex-wrap:wrap; gap:6px; padding:8px 10px; bottom:calc(10px + env(safe-area-inset-bottom,0px)); width:calc(100% - 24px);}
   #btnPlay{order:1;} #btnStop{order:2;} #btnPrev{order:3;} #btnNext{order:4;}
   .audiobar .ab,.audiobar .ab.ghost{flex:none; min-width:44px; height:46px; padding:3px 7px; font-size:14px; flex-direction:column; gap:2px;}
-  .audiobar .ab .ic{width:14px; height:14px;}
-  .audiobar .navbtn .ic{width:13px; height:13px;}
+  .audiobar .ab .ic{font-size:14px;}
+  .audiobar .navbtn .ic{font-size:13px;}
   .navbtn{flex:none; min-width:44px; height:46px; padding:3px 7px; font-size:13px; flex-direction:column; gap:2px;}
   .nb-l{display:block; font-size:10px; font-weight:500; line-height:1.2;}
   .prog{order:5; flex:1 1 auto; min-width:60px; gap:2px; flex-direction:column; justify-content:center;}
@@ -650,7 +653,7 @@ body.reading main{padding-top:64px;}
   .wq-item .wq-w b{font-size:16px;}
   .wq-item .wq-ph{white-space:normal;}
   .wq-loc{padding:9px 12px; margin:-9px -12px 0 0;}
-  .wq-loc svg{width:17px; height:17px;}
+  .wq-loc i{font-size:17px;}
   .wq-spk{min-height:30px;}
   .wq-line{font-size:13px;}
   .wq-ex{font-size:12.5px;}
@@ -717,7 +720,7 @@ body.reading main{padding-top:64px;}
 .fab-btn:active{transform:translateY(0);}
 #fabPause{background:var(--iel-grad); border:none; color:#fff; box-shadow:0 6px 18px rgba(16,180,135,.42), inset 0 1px 0 rgba(255,255,255,.35);}
 #fabPause:hover{background:var(--iel-grad); color:#fff; filter:brightness(1.07); transform:translateY(-1px); border:none; box-shadow:0 8px 20px rgba(16,180,135,.5), inset 0 1px 0 rgba(255,255,255,.4);}
-.fab-btn .ic{width:17px; height:17px; display:block;}
+.fab-btn .ic{font-size:17px; line-height:1; display:block;}
 @media (max-width:640px){
   /* 悬浮球做窄 + 吸底：紧贴底部导航顶缘（导航高≈61px+安全区），不再悬空遮挡内容 */
   .fab-cover{width:44px; height:44px;}
@@ -725,7 +728,7 @@ body.reading main{padding-top:64px;}
   .fab-cover .fab-ch{font-size:9px; top:3px;}
   .fab-cover .fab-letter{font-size:15px; margin-top:4px;}
   .fab-btn{width:34px; height:34px;}
-  .fab-btn .ic{width:13px; height:13px;}
+  .fab-btn .ic{font-size:13px;}
   #lsFab{padding:5px 6px; gap:5px;}
 }
 body.reading #lsFab{display:none;}
@@ -803,15 +806,16 @@ body.reading #lsFab{display:none;}
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="雅思随身听">
 <link rel="manifest" href='data:application/manifest+json,{"name":"雅思词汇情境训练","short_name":"雅思随身听","display":"standalone","background_color":"#f8fdfa","theme_color":"#f8fdfa","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2310b487'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23fff' font-family='serif'%3EW%3C/text%3E%3C/svg%3E","sizes":"any","type":"image/svg+xml","purpose":"any"}]}'>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css">
 </head>
 <body>
 <aside id="sidenav">
-  <div class="sn-logo"><span class="sn-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.8 6.2c0-.7.6-1.2 1.3-1.2 3.4 0 5.6.7 6.9 2.1 1.3-1.4 3.5-2.1 6.9-2.1.7 0 1.3.5 1.3 1.2v10.3c0 .7-.6 1.2-1.3 1.2-3.4 0-5.6.7-6.9 2.1-1.3-1.4-3.5-2.1-6.9-2.1-.7 0-1.3-.5-1.3-1.2V6.2z"/></svg></span><span class="sn-name">雅思词汇<br>情境训练</span></div>
+  <div class="sn-logo"><span class="sn-mark"><i class="ri-book-open-fill" aria-hidden="true"></i></span><span class="sn-name">雅思词汇情境训练</span></div>
   <nav class="sn-nav" id="snNav">
-    <button data-view="home" class="on"><svg viewBox="0 0 24 24"><path class="s" d="M4.2 10.9 12 4.3l7.8 6.6M6.4 9.7v8.8c0 .6.4 1 1 1h2.9v-4.4h3.4v4.4h2.9c.6 0 1-.4 1-1V9.7"/></svg><span class="sn-t">首页</span></button>
-    <button data-view="stats"><svg viewBox="0 0 24 24"><rect class="s" x="4" y="12.8" width="3.8" height="8.6" rx="1.7"/><rect class="s" x="9.9" y="8.6" width="3.8" height="12.8" rx="1.7"/><rect class="s" x="15.8" y="4.6" width="3.8" height="16.8" rx="1.7"/><path d="M3.2 21.6h17.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span class="sn-t">学习统计</span></button>
-    <button data-view="fav"><svg viewBox="0 0 24 24"><path class="s" d="M12 7.1C10.2 5.6 8 5 4.4 5c-.6 0-1 .4-1 1v11.5c0 .6.4 1 1 1 3.6 0 5.8.6 7.6 2.1 1.8-1.5 4-2.1 7.6-2.1.6 0 1-.4 1-1V6c0-.6-.4-1-1-1-3.6 0-5.8.6-7.6 2.1z"/><path class="s" d="M12 7.1v11.5"/></svg><span class="sn-t">生词本</span></button>
-    <button data-view="me"><svg viewBox="0 0 24 24"><circle class="s" cx="12" cy="8" r="3.7"/><path class="s" d="M5.4 19.8c.8-3.4 3.4-5.2 6.6-5.2s5.8 1.8 6.6 5.2"/></svg><span class="sn-t">我的</span></button>
+    <button data-view="home" class="on"><i class="sn-ic sn-ic-line ri-home-5-line" aria-hidden="true"></i><i class="sn-ic sn-ic-fill ri-home-5-fill" aria-hidden="true"></i><span class="sn-t">首页</span></button>
+    <button data-view="stats"><i class="sn-ic sn-ic-line ri-bar-chart-line" aria-hidden="true"></i><i class="sn-ic sn-ic-fill ri-bar-chart-fill" aria-hidden="true"></i><span class="sn-t">学习统计</span></button>
+    <button data-view="fav"><i class="sn-ic sn-ic-line ri-book-2-line" aria-hidden="true"></i><i class="sn-ic sn-ic-fill ri-book-2-fill" aria-hidden="true"></i><span class="sn-t">生词本</span></button>
+    <button data-view="me"><i class="sn-ic sn-ic-line ri-user-smile-line" aria-hidden="true"></i><i class="sn-ic sn-ic-fill ri-user-smile-fill" aria-hidden="true"></i><span class="sn-t">我的</span></button>
   </nav>
 </aside>
 <div id="shell">
@@ -823,7 +827,7 @@ body.reading #lsFab{display:none;}
   <div class="chsel"><span class="sel-label">章节</span><select id="chapterSel"></select></div>
   <button class="accent-btn" id="accentBtn" title="全局默认发音口音：点击切换 英式/美式（影响单词卡点击、音标显示与朗读）">🇬🇧 英音</button>
 </nav>
-<main id="app"><div id="boot" class="boot"><div class="boot-logo">📖</div><div class="boot-txt">正在加载学习数据…<span class="boot-spin"></span></div><div class="boot-sub">首次加载约 1 秒，之后有缓存秒开</div></div></main>
+<main id="app"><div id="boot" class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-txt">正在加载学习数据…<span class="boot-spin"></span></div><div class="boot-sub">首次加载约 1 秒，之后有缓存秒开</div></div></main>
 </div>
 <div id="scrim"></div>
 <div id="wpop"></div>
@@ -876,7 +880,7 @@ function phFor(d){ if(!d) return ""; return S.accent==="US" ? (d.phUS||d.ph||"")
 function wordPh(w,fb){ const d=DICT[w]; return d?phFor(d):(fb||""); }
 function phBothHtml(d,cls){
   const c=cls||"wp-ph";
-  const spk=(a,inner)=>`<button class="ph-spk" data-acc="${a}" title="${a==="GB"?"英式":"美式"}发音 · 点击朗读并设为默认口音">${inner||""}<i class="ph-ico">🔊</i></button>`;
+  const spk=(a,inner)=>`<button class="ph-spk" data-acc="${a}" title="${a==="GB"?"英式":"美式"}发音 · 点击朗读并设为默认口音">${inner||""}<i class="ph-ico ri-volume-up-line" aria-hidden="true"></i></button>`;
   if(!d) return `<div class="${c}"></div>`;
   const uk=d.phUK||"", us=d.phUS||"";
   if(!uk&&!us) return `<div class="${c}">${spk(S.accent==="US"?"US":"GB","/"+esc(d.ph||"")+"/")}</div>`;
@@ -1199,7 +1203,7 @@ chSel.addEventListener("change",()=>{ const v=chSel.value; S.chapter = v==="all"
 function renderHome(){
   const ch=S.chapter;
   let list=STORIES.filter(s=>ch==="all"||s.ch===ch);
-  let html=`<div class="view-sub">读故事 → 点词查义 → 自测 → 统计定位弱项。目标词已高亮，非目标词也可点击查询并收藏。<button class="toggle-g" id="goGuide">📖 使用方法</button></div>`;
+  let html=`<div class="view-sub">读故事 → 点词查义 → 自测 → 统计定位弱项。目标词已高亮，非目标词也可点击查询并收藏。<button class="toggle-g" id="goGuide"><i class="ri-book-open-line" aria-hidden="true"></i> 使用方法</button></div>`;
 
   if(!list.length){
     html+=`<div class="card empty-box"><b>第${ch}章的情境故事还在制作中</b>目前已完成：第1章（15 篇故事，覆盖全部 241 个目标词）。<br>可以先切换到第 1 章开始学习，或在"学习统计"里浏览本章词汇。</div>`;
@@ -1210,7 +1214,7 @@ function renderHome(){
       let meta=`<span>目标词出现 ${marked} 处</span><span>测验 ${s.quiz.length} 题</span>`;
       if(q){ const pct=Math.round(q.best/s.quiz.length*100);
         meta+= q.best>=s.quiz.length? `<span class="done">✓ 测验满分</span>` : `<span class="part">最好成绩 ${q.best}/${s.quiz.length}（${pct}%）</span>`; }
-      if(S.listened[s.id]) meta+=`<span class="done">🎧 已听</span>`;
+      if(S.listened[s.id]) meta+=`<span class="done"><i class="ri-headphone-line" aria-hidden="true"></i> 已听</span>`;
       if(!S.read[s.id]) meta+=`<span>未读</span>`;
       return `<div class="story-item"><div class="s-num">${String(i+1).padStart(2,"0")}</div>
       <div class="s-info"><div class="s-title">${esc(s.title)}<span class="tcn">${esc(s.tcn)}</span></div>
@@ -1241,7 +1245,7 @@ function openStory(id, focusWord, occ){
   const next=pi<pool.length-1?pool[pi+1]:null;
   const scope=S.chapter==="all"?"全部章节":("第"+S.chapter+"章");
   const posTxt=S.chapter==="all" ? `第${pi+1}/${pool.length}篇` : `本章 ${pi+1}/${pool.length}`;
-  let html=`<div class="reader-head"><button class="back" id="backBtn" title="返回目录">←</button>
+  let html=`<div class="reader-head"><button class="back" id="backBtn" title="返回目录"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
     <div class="r-title">${esc(s.title)}<span class="tcn">${esc(s.tcn)}</span><span class="r-pos">${posTxt}</span></div>
     <div class="r-nav"><button class="nav-arrow" id="prevBtn" title="${scope}上一篇：${prev?esc(prev.title):"已是"+scope+"第一篇"}"${prev?"":" disabled"}>上一篇</button><button class="nav-arrow" id="nextBtn" title="${scope}下一篇：${next?esc(next.title):"已是"+scope+"最后一篇"}"${next?"":" disabled"}>下一篇</button></div></div>
     <div class="r-badges"><span class="r-badge">第${s.ch}章 · ${esc(chName(s.ch).replace(/^\d+\s*/,""))}</span>
@@ -1313,13 +1317,13 @@ function openStory(id, focusWord, occ){
 
 function wqPhHtml(d){
   const tag=(t)=>`<i class="ph-tag">${t}</i>`;
-  const spk=(a,inner)=>`<button class="wq-spk" data-acc="${a}" title="${a==="US"?"美":"英"}式发音">${inner||""}<i class="ph-ico">🔊</i></button>`;
+  const spk=(a,inner)=>`<button class="wq-spk" data-acc="${a}" title="${a==="US"?"美":"英"}式发音">${inner||""}<i class="ph-ico ri-volume-up-line" aria-hidden="true"></i></button>`;
   const uk=d?(d.phUK||d.ph||""):"", us=d?(d.phUS||d.ph||""):"";
   if(!uk&&!us) return `<span class="wq-ph">${spk("GB",tag("英"))} ${spk("US",tag("美"))}</span>`;
   return `<span class="wq-ph">${spk("GB",tag("英")+"/"+esc(uk)+"/")} ${spk("US",tag("美")+"/"+esc(us)+"/")}</span>`;
 }
 
-const WQ_LOC_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5v3.5M12 18v3.5M2.5 12H6M18 12h3.5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+const WQ_LOC_SVG='<i class="ri-focus-3-line" aria-hidden="true"></i>';
 
 function renderWordPanel(s, markedWords){
   const panel=document.getElementById("wqPanel"); if(!panel) return;
@@ -1425,7 +1429,7 @@ function renderStoryText(text){
     const sHtml=sens.map(sen=>{
       const tr=TR_SENS[si]||"";
       const h=`<span class="sen" data-si="${si}">${tr?`<button class="sen-trig" data-si="${si}" title="显示/收起本句译文" aria-label="显示或收起本句译文">译</button>`:""}${renderInner(sen)}${tr?`<button class="sen-chip" data-si="${si}" title="显示/收起本句译文" aria-label="显示或收起本句译文">译</button>`:""}</span>`
-        +(tr?`<span class="sen-tr" data-for="${si}">${renderTrSentence(tr)}<button class="tr-play" data-si="${si}" title="朗读此句（读完自动停）"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M6 4.5v15l13-7.5-13-7.5z"/></svg>朗读此句</button></span>`:"");
+        +(tr?`<span class="sen-tr" data-for="${si}">${renderTrSentence(tr)}<button class="tr-play" data-si="${si}" title="朗读此句（读完自动停）"><i class="ic ri-play-fill" aria-hidden="true"></i>朗读此句</button></span>`:"");
       si++; return h;
     }).join(" ");
     return `<p>${sHtml}</p>`;
@@ -2132,12 +2136,12 @@ function voiceOptionsHtml(cloudOpts){
 }
 const RATES=[0.5,0.6,0.75,0.85,1.0,1.1,1.25];
 const RATE_LAB={"0.5":"0.5x 特慢","0.6":"0.6x 慢速","0.75":"0.75x 稍慢","0.85":"0.85x 适中","1":"1.0x 常速","1.1":"1.1x 稍快","1.25":"1.25x 快速"};
-/* 播放条图标：SVG 绘制，避免 Unicode 媒体字符在移动端渲染成方框/emoji */
+/* 播放条图标：Remix Icon（字体图标，避免 Unicode 媒体字符在移动端渲染成方框/emoji） */
 const ICONS={
-  play:'<svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.6 2.7v10.6c0 .6.66.96 1.16.64l8.5-5.3a.76.76 0 0 0 0-1.28l-8.5-5.3a.76.76 0 0 0-1.16.64z" fill="currentColor"/></svg>',
-  pause:'<svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="3.8" y="2.7" width="3" height="10.6" rx="1.1" fill="currentColor"/><rect x="9.2" y="2.7" width="3" height="10.6" rx="1.1" fill="currentColor"/></svg>',
-  stop:'<svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="3.4" y="3.4" width="9.2" height="9.2" rx="1.8" fill="currentColor"/></svg>',
-  prev:'<svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.4 2.7v10.6c0 .6-.66.96-1.16.64l-8.5-5.3a.76.76 0 0 1 0-1.28l8.5-5.3a.76.76 0 0 1 1.16.64z" fill="currentColor"/></svg>'
+  play:'<i class="ic ri-play-fill" aria-hidden="true"></i>',
+  pause:'<i class="ic ri-pause-fill" aria-hidden="true"></i>',
+  stop:'<i class="ic ri-stop-fill" aria-hidden="true"></i>',
+  prev:'<i class="ic ri-play-reverse-fill" aria-hidden="true"></i>'
 };
 ICONS.next=ICONS.play;
 function stepAudio(d){
@@ -2528,14 +2532,14 @@ const LISTEN={
             <div class="ls-idle-disc">🎧</div>
             <div class="ls-idle-t">从上次的位置继续</div>
             <div class="ls-idle-resume">上次听到 第${r.ch}章《<b>${esc(r.title)}</b>》第 <b>${r.sen+1}</b> 句</div>
-            <button class="ls-idle-go" id="lsIdleGo" title="从上次断点继续播放">▶ 继续播放</button>
+            <button class="ls-idle-go" id="lsIdleGo" title="从上次断点继续播放"><i class="ri-play-fill" aria-hidden="true"></i> 继续播放</button>
             <div class="ls-idle-meta">${lsQueueDesc()} · 锁屏后台连播 · 自动断点续听</div>
           </div>`
         :`<div class="ls-idle">
             <div class="ls-idle-disc">🎧</div>
             <div class="ls-idle-t">开始今天的听力</div>
             <div class="ls-idle-resume">连播当前章节的文章，通勤路上锁屏也能听</div>
-            <button class="ls-idle-go" id="lsIdleGo" title="开始连播">▶ 开始播放</button>
+            <button class="ls-idle-go" id="lsIdleGo" title="开始连播"><i class="ri-play-fill" aria-hidden="true"></i> 开始播放</button>
             <div class="ls-idle-meta">${lsQueueDesc()}</div>
           </div>`;
       const go=document.getElementById("lsIdleGo"); if(go) go.onclick=()=>LISTEN.play();
@@ -2559,12 +2563,12 @@ const LISTEN={
     el.innerHTML=`
       <div class="ls-pos">
         <button class="ls-snav" id="lsPrevS" title="上一篇"${N>1?"":" disabled"}>‹ 上一篇</button>
-        <span>${N?`第 ${this.qi+1}/${N} 篇 · `:""}第${s.ch}章${S.listened[s.id]?" · 🎧 已听":""}</span>
+        <span>${N?`第 ${this.qi+1}/${N} 篇 · `:""}第${s.ch}章${S.listened[s.id]?" · <i class=\"ri-headphone-line\" aria-hidden=\"true\"></i> 已听":""}</span>
         <button class="ls-snav" id="lsNextS" title="下一篇"${N>1?"":" disabled"}>下一篇 ›</button>
       </div>
       <div class="ls-title">${esc(s.title)}</div>
       <div class="ls-tcn">${esc(s.tcn)}</div>
-      <div class="ls-chip"><span>${stageLab}${stateTxt}</span><button id="lsReplay" title="从本篇开头重听">↻ 重听本篇</button></div>
+      <div class="ls-chip"><span>${stageLab}${stateTxt}</span><button id="lsReplay" title="从本篇开头重听"><i class="ri-refresh-line" aria-hidden="true"></i> 重听本篇</button></div>
       <div class="ls-sen-box" id="lsSenBox" title="点击显示 / 隐藏本句译文">
         <div class="ls-stage">${stageLab}${stateTxt}</div>
         <div class="ls-sen speaking">${esc(sen)}</div>
@@ -2779,7 +2783,7 @@ let QUIZ=null;
 function renderQuizSec(s){
   QUIZ={answers:new Array(s.quiz.length).fill(null), submitted:false};
   const sec=document.getElementById("quizSec");
-  sec.innerHTML=`<h3>🎯 本篇测验</h3>
+  sec.innerHTML=`<h3><i class="ri-focus-3-line" aria-hidden="true"></i> 本篇测验</h3>
     <div class="q-count">共 ${s.quiz.length} 题 · 题干与选项均为英文（避免靠中文蒙答案），提交后显示中文详细解析，结果计入学习统计</div>
     <div id="qList"></div>
     <button class="q-submit" id="qSubmit" disabled>提交答案</button>`;
@@ -2832,7 +2836,7 @@ function submitQuiz(){
   const res=document.createElement("div");
   res.className="q-result";
   res.innerHTML=`<span class="big">得分 ${right} / ${s.quiz.length}</span>（${pct}%）· 本次结果已计入学习统计<br>${msg}
-    <div class="q-actions"><button class="pri" id="qRedo">↻ 重做本篇测验</button><button id="qNext">下一篇故事 →</button><button id="qStats">📊 查看学习统计</button></div>`;
+    <div class="q-actions"><button class="pri" id="qRedo"><i class="ri-refresh-line" aria-hidden="true"></i> 重做本篇测验</button><button id="qNext">下一篇故事 →</button><button id="qStats"><i class="ri-bar-chart-line" aria-hidden="true"></i> 查看学习统计</button></div>`;
   listEl.parentNode.insertBefore(res,listEl);
   res.scrollIntoView({block:"start",behavior:"smooth"});
   document.getElementById("qSubmit").disabled=true;
@@ -2995,7 +2999,7 @@ function renderFav(){
     if(due.length){ nextTxt=`其中 <b>${due.length}</b> 个已到期`; }
     else { const nd=Math.min(...words.map(([w,f])=>favDueTs(f))); const dd=new Date(nd);
       nextTxt=nd>Date.now()?`下次复习：${(nd-Date.now())<864e5?"今天":"更晚"} ${String(dd.getHours()).padStart(2,"0")}:${String(dd.getMinutes()).padStart(2,"0")}`:"暂无到期单词"; }
-    html+=`<div class="rv-tools"><button class="rv-btn" id="startReview">🎯 开始复习（${due.length} 词到期）</button><span class="rv-due">${nextTxt}</span></div>`;
+    html+=`<div class="rv-tools"><button class="rv-btn" id="startReview"><i class="ri-focus-3-line" aria-hidden="true"></i> 开始复习（${due.length} 词到期）</button><span class="rv-due">${nextTxt}</span></div>`;
     html+=words.map(([w,f])=>{
       const src=storyById(f.src);
       return `<div class="f-row"><div class="fw"><div class="w">${esc(w)}</div><div class="p">/${esc(wordPh(w,f.ph))}/</div></div>
@@ -3025,7 +3029,7 @@ function renderMe(){
       ?`<div class="me-p">当前登录：<b>${esc(SB.user.email||"")}</b><br>⏳ <b>账号待管理员审批</b>。审批通过后学习数据将自动云端同步；等待期间本机学习数据不受影响，可正常使用。</div>
       <div class="backup-zone"><button id="sbLogout">退出登录</button></div>`
       :`<div class="me-p">当前登录：<b>${esc(SB.user.email||"")}</b>${SB.lastSync?`<br>上次同步：${new Date(SB.lastSync).toLocaleString()}`:""}。学习数据自动云端同步：登录时拉取云端最新数据（与本地冲突时新者胜），此后每次修改自动推送；多设备登录同一账号即可共享进度。离线时的修改保存在本机，联网后会自动补传。</div>
-      <div class="backup-zone"><button id="sbSync">↻ 立即同步</button><button id="sbLogout">退出登录</button></div>`)
+      <div class="backup-zone"><button id="sbSync"><i class="ri-refresh-line" aria-hidden="true"></i> 立即同步</button><button id="sbLogout">退出登录</button></div>`)
     :`<div class="me-p">当前为游客模式，数据仅保存在本机浏览器。注册账号（注册后需管理员审批通过），学习数据（阅读进度、掌握度统计、生词本、复习计划）即可云端同步，换设备登录同一账号无缝续学。账号密码由 Supabase 托管，本站不存储密码。</div>
     <div class="acc-form">
       <input id="sbEmail" type="email" placeholder="邮箱" autocomplete="email">
@@ -3052,8 +3056,8 @@ function renderMe(){
   </div>
   <div class="card"><h3>学习数据备份</h3>
     <div class="me-p">备份文件为 JSON 格式，包含阅读进度、掌握度统计、测验记录、生词本与复习计划。</div>
-    <div class="backup-zone"><button id="exportData">📦 导出学习数据备份</button><button id="importData">📥 导入备份恢复数据</button><input type="file" id="importFile" accept="application/json,.json" style="display:none"></div>
-    <div class="danger-zone"><button id="resetBtn">🗑 重置全部学习数据</button></div>
+    <div class="backup-zone"><button id="exportData"><i class="ri-download-2-line" aria-hidden="true"></i> 导出学习数据备份</button><button id="importData"><i class="ri-upload-2-line" aria-hidden="true"></i> 导入备份恢复数据</button><input type="file" id="importFile" accept="application/json,.json" style="display:none"></div>
+    <div class="danger-zone"><button id="resetBtn"><i class="ri-delete-bin-line" aria-hidden="true"></i> 重置全部学习数据</button></div>
   </div>`;
   document.getElementById("resetBtn").onclick=resetAll;
   document.getElementById("exportData").onclick=exportBackup;
@@ -3151,15 +3155,15 @@ function renderReview(){
   const pct=Math.min(100,Math.round(REVIEW.seen/REVIEW.total*100));
   app.innerHTML=`<h2 class="view-title">间隔复习</h2><div class="view-sub">看英文回想释义，翻转自评：认识则拉长间隔，不认识则 5 分钟后重现。</div>
   <div class="card">
-    <div class="rv-prog"><span>${REVIEW.seen} / ${REVIEW.total} · 认识 ${REVIEW.done} · 不认识 ${REVIEW.again}</span><button class="rv-exit" id="rvExit">✕ 退出复习</button></div>
+    <div class="rv-prog"><span>${REVIEW.seen} / ${REVIEW.total} · 认识 ${REVIEW.done} · 不认识 ${REVIEW.again}</span><button class="rv-exit" id="rvExit"><i class="ri-close-line" aria-hidden="true"></i> 退出复习</button></div>
     <div class="rv-bar"><i style="width:${pct}%"></i></div>
     <div class="rv-card">
       <div class="rv-word">${esc(w)}</div>
       ${phBothHtml(DICT[w]||{ph:f.ph||""}, "rv-ph")}
       <div class="rv-def" id="rvDef">${esc(f.def||"（无释义）")}${src?`<div class="rv-src">来源：${esc(src.title)} · ${esc(src.tcn)}</div>`:""}</div>
       <div class="rv-acts" id="rvActs" style="display:none">
-        <button class="rv-btn rv-dont" id="rvNo">😵 不认识</button>
-        <button class="rv-btn rv-know" id="rvYes">😀 认识</button>
+        <button class="rv-btn rv-dont" id="rvNo"><i class="ri-emotion-sad-line" aria-hidden="true"></i> 不认识</button>
+        <button class="rv-btn rv-know" id="rvYes"><i class="ri-emotion-laugh-line" aria-hidden="true"></i> 认识</button>
       </div>
       <button class="rv-btn ghost" id="rvReveal" style="margin-top:4px">显示释义（空格）</button>
       <div class="rv-hint">空格 = 翻转 · 翻转后 ← 不认识 / → 认识</div>
@@ -3207,7 +3211,7 @@ function finishReview(){
     <div style="font-size:36px">🎉</div>
     <div style="font-size:17px;font-weight:600">本轮复习 ${r.total} 词：认识 ${r.done} · 不认识 ${r.again}</div>
     <div class="rv-def show">不认识的词将在 <b>5 分钟后</b>再次到期，届时可再来一轮巩固。认识的词按 5分钟 → 30分钟 → 12小时 → 1天 → 3天 → 7天 → 15天 → 30天 间隔自动排期。</div>
-    <div class="rv-acts"><button class="rv-btn ghost" id="rvBack">← 返回生词本</button></div>
+    <div class="rv-acts"><button class="rv-btn ghost" id="rvBack"><i class="ri-arrow-left-s-line" aria-hidden="true"></i> 返回生词本</button></div>
   </div></div>`;
   document.getElementById("rvBack").onclick=()=>switchView("fav");
 }
