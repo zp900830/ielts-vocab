@@ -99,19 +99,10 @@ body{
     <div class="logo">雅</div>
     <h1>管理后台</h1>
     <p>雅思词汇真经 · 仅限管理员访问</p>
-    <template v-if="!cfgReady">
-      <el-input v-model="cfg.url" placeholder="Project URL（https://xxxx.supabase.co）" size="large"></el-input>
-      <el-input v-model="cfg.key" placeholder="Anon Key（公开密钥）" size="large"></el-input>
-      <el-button type="primary" size="large" round style="width:100%" :loading="loading" @click="saveCfg">连接</el-button>
-      <p style="margin:14px 0 0;font-size:11.5px">首次使用需填入 Supabase 项目地址与公开密钥（与主站一致，仅存本机）</p>
-    </template>
-    <template v-else>
-      <el-input v-model="form.email" placeholder="管理员邮箱" size="large"></el-input>
-      <el-input v-model="form.password" type="password" placeholder="密码" size="large" show-password @keyup.enter="login"></el-input>
-      <div class="err">{{loginErr}}</div>
-      <el-button type="primary" size="large" round style="width:100%" :loading="loading" @click="login">登录</el-button>
-      <p style="margin:14px 0 0;font-size:11.5px">{{cfg.url}} <a href="javascript:;" style="color:var(--accent)" @click="cfgReady=false">更换项目</a></p>
-    </template>
+    <el-input v-model="form.email" placeholder="管理员邮箱" size="large"></el-input>
+    <el-input v-model="form.password" type="password" placeholder="密码" size="large" show-password @keyup.enter="login"></el-input>
+    <div class="err">{{loginErr}}</div>
+    <el-button type="primary" size="large" round style="width:100%" :loading="loading" @click="login">登录</el-button>
   </div>
 </div>
 
@@ -256,6 +247,26 @@ body{
       </div>
     </div>
 
+    <!-- ===== 语音设置 ===== -->
+    <div v-if="view==='settings'" class="page">
+      <div><h2>语音设置</h2><div class="sub">配置 Azure 云端自然语音，配置后全站已审批用户均可使用</div></div>
+      <div class="glass card">
+        <h3>Azure 语音服务</h3>
+        <p class="sub" style="margin-bottom:12px">
+          密钥仅保存在服务端（客户端不可见），客户端经云端代理合成，按句缓存不重复计费。
+          获取：Azure 门户 → 创建「语音服务」资源（F0 免费层每月 50 万字符）→ 「密钥和终结点」页复制 KEY 1，区域须与下方一致。
+        </p>
+        <div class="tools" style="margin-bottom:10px">
+          <el-input v-model="tts.key" type="password" placeholder="Azure 密钥 KEY 1（32 位）" style="width:320px" show-password spellcheck="false"></el-input>
+          <el-select v-model="tts.region" placeholder="区域" style="width:200px">
+            <el-option v-for="r in ttsRegions" :key="r[0]" :value="r[0]" :label="r[1]+'（'+r[0]+'）'"></el-option>
+          </el-select>
+          <el-button type="primary" round :loading="loading" @click="saveTts">保存配置</el-button>
+        </div>
+        <el-alert v-if="ttsStatus" :title="ttsStatus" :type="ttsConfigured?'success':'info'" :closable="false" show-icon></el-alert>
+      </div>
+    </div>
+
     <!-- ===== 审计日志 ===== -->
     <div v-if="view==='audit'" class="page">
       <div><h2>审计日志</h2><div class="sub">最近 200 条管理操作记录</div></div>
@@ -289,15 +300,14 @@ const ICONS={
   data:"M4 4h16v16H4zM4 9h16M9 9v11",
   bulk:"M19 9l-7-6-7 6M5 15l7 6 7-6M12 3v6M12 15v6",
   audit:"M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M9 5h6M9 12l2 2 4-4",
+  settings:"M12 2a3 3 0 0 0-3 3v.2A7 7 0 0 0 7.1 6.3l-.2-.2a3 3 0 0 0-4.2 4.2l.2.2A7 7 0 0 0 2.6 12v.2a7 7 0 0 0-.7 1.5l-.2.2a3 3 0 0 0 4.2 4.2l.2-.2a7 7 0 0 0 1.9.8V19a3 3 0 0 0 6 0v-.3a7 7 0 0 0 1.9-.8l.2.2a3 3 0 0 0 4.2-4.2l-.2-.2a7 7 0 0 0 .8-1.9H22a3 3 0 0 0 0-6h-.3a7 7 0 0 0-.8-1.9l.2-.2a3 3 0 0 0-4.2-4.2l-.2.2A7 7 0 0 0 15 5.2V5a3 3 0 0 0-3-3z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z",
 };
-const ACTION_NAMES={approve:"通过审批",disable:"禁用账号",enable:"启用账号",promote:"提升管理员",demote:"降级管理员",delete:"删除账号",delete_snapshot:"删除快照",reset_pw:"重置密码",backup:"手动备份",restore:"恢复快照",rollback:"撤销恢复",clear:"清空数据",export_all:"全站导出",cleanup_history:"清理快照",cleanup_inactive:"清理账号"};
+const ACTION_NAMES={approve:"通过审批",disable:"禁用账号",enable:"启用账号",promote:"提升管理员",demote:"降级管理员",delete:"删除账号",delete_snapshot:"删除快照",reset_pw:"重置密码",backup:"手动备份",restore:"恢复快照",rollback:"撤销恢复",clear:"清空数据",export_all:"全站导出",cleanup_history:"清理快照",cleanup_inactive:"清理账号",save_tts:"保存语音配置"};
 
 createApp({
   setup(){
-    /* ---------- 配置与会话 ---------- */
-    const LS={u:"iel_sb_url",k:"iel_sb_key"};
-    const cfg=reactive({url:localStorage.getItem(LS.u)||"",key:localStorage.getItem(LS.k)||""});
-    const cfgReady=!!(cfg.url&&cfg.key);
+    /* ---------- 会话（项目配置构建时内置，与主站一致） ---------- */
+    const SB_URL="https://nhqevdkjqzgnyjbijwso.supabase.co", SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ocWV2ZGtqcXpnbnlqYmlqd3NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NDQ2MDYsImV4cCI6MjEwMzIyMDYwNn0.WXX79gPNdvV_q37jvwTcACHPGZAvi3bw7CeFpw0QKpE";
     const form=reactive({email:"",password:""});
     const loading=ref(false), loginErr=ref(""), user=ref(null), view=ref("dash");
     let sb=null;
@@ -305,26 +315,20 @@ createApp({
     const menus=[
       {k:"dash",t:"数据总览",d:ICONS.dash},{k:"users",t:"账号管理",d:ICONS.users},
       {k:"data",t:"数据恢复",d:ICONS.data},{k:"bulk",t:"批量操作",d:ICONS.bulk},
-      {k:"audit",t:"审计日志",d:ICONS.audit},
+      {k:"settings",t:"语音设置",d:ICONS.settings},{k:"audit",t:"审计日志",d:ICONS.audit},
     ];
     const go=async k=>{view.value=k; await nextTick();
       if(k==="dash"&&st.value.totals) drawCharts();
       if(k==="users"&&!users.value.length) loadUsers();
       if(k==="data"&&!users.value.length) loadUsers();
+      if(k==="settings") loadTts();
       if(k==="audit"&&!logs.value.length) loadAudit();
     };
 
-    const saveCfg=()=>{
-      const u=cfg.url.trim(),k=cfg.key.trim();
-      if(!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(u)) return ElMsg.error("URL 格式不对，应形如 https://xxxx.supabase.co");
-      if(!k) return ElMsg.error("请填写 Anon Key");
-      localStorage.setItem(LS.u,u.replace(/\/$/,"")); localStorage.setItem(LS.k,k);
-      location.reload();
-    };
     const login=async()=>{
       loading.value=true; loginErr.value="";
       try{
-        sb=window.supabase.createClient(localStorage.getItem(LS.u),localStorage.getItem(LS.k));
+        sb=window.supabase.createClient(SB_URL,SB_KEY);
         const {data,error}=await sb.auth.signInWithPassword({email:form.email.trim(),password:form.password});
         if(error) throw error;
         user.value=data.user;
@@ -343,7 +347,7 @@ createApp({
     async function api(name,opts={}){
       const {data:{session}}=await sb.auth.getSession();
       if(!session){ user.value=null; return {ok:false,body:{error:"会话过期，请重新登录"}}; }
-      const r=await fetch(localStorage.getItem(LS.u)+"/functions/v1/"+name,{
+      const r=await fetch(SB_URL+"/functions/v1/"+name,{
         ...(opts.body?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(opts.body)}:{method:"GET"}),
         headers:{...(opts.body?{"Content-Type":"application/json"}:{}),Authorization:"Bearer "+session.access_token},
       });
@@ -449,7 +453,7 @@ createApp({
     const exportAll=async()=>{
       loading.value=true;
       const {data:{session}}=await sb.auth.getSession();
-      const r=await fetch(localStorage.getItem(LS.u)+"/functions/v1/admin-bulk",{
+      const r=await fetch(SB_URL+"/functions/v1/admin-bulk",{
         method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+session.access_token},
         body:JSON.stringify({action:"export_all"})});
       loading.value=false;
@@ -474,6 +478,32 @@ createApp({
       r.ok?(ElMsg.success(r.body.message),loadUsers()):ElMsg.error(r.body.error||"操作失败");
     };
 
+    /* ---------- 语音设置 ---------- */
+    const ttsRegions=[["eastasia","东亚（香港）"],["southeastasia","东南亚（新加坡）"],["eastus","美国东部"],["westeurope","西欧"],["japaneast","日本东部"]];
+    const tts=reactive({key:"",region:""});
+    const ttsConfigured=ref(false), ttsStatus=ref("");
+    const loadTts=async()=>{
+      const r=await api("admin-settings");
+      if(r.ok){
+        ttsConfigured.value=!!r.body.configured;
+        tts.key=""; tts.region=r.body.region||"";
+        ttsStatus.value=r.body.configured
+          ?"已配置（区域 "+r.body.region+"，密钥尾号 …"+r.body.keyTail+"）。全站已审批用户可在音色下拉选择 ☁ 云端语音。"
+          :"未配置：填写密钥与区域后保存，全站用户即可使用云端自然语音。";
+      }else ElMsg.error(r.body.error||"加载失败");
+    };
+    const saveTts=async()=>{
+      const k=tts.key.trim(), rg=(tts.region||"").trim().toLowerCase();
+      if(k&&k.length!==32) return ElMsg.error("Azure 密钥应为 32 位（KEY 1）");
+      if(!k&&!ttsConfigured.value) return ElMsg.error("请填写密钥");
+      if(k&&!rg) return ElMsg.error("请选择区域");
+      loading.value=true;
+      const r=await api("admin-settings",{body:{action:"save_tts",key:k,region:rg}});
+      loading.value=false;
+      if(r.ok){ ElMsg.success(r.body.message||"已保存"); loadTts(); }
+      else ElMsg.error(r.body.error||"保存失败");
+    };
+
     /* ---------- 审计日志 ---------- */
     const logs=ref([]);
     const loadAudit=async()=>{
@@ -482,7 +512,7 @@ createApp({
       if(r.ok) logs.value=r.body.logs; else ElMsg.error(r.body.error||"加载失败");
       loading.value=false;
     };
-    const tagOf=a=>({approve:"success",delete:"danger",cleanup_inactive:"danger",clear:"danger",delete_snapshot:"danger",restore:"warning",rollback:"warning",export_all:"success"}[a]||"info");
+    const tagOf=a=>({approve:"success",delete:"danger",cleanup_inactive:"danger",clear:"danger",delete_snapshot:"danger",restore:"warning",rollback:"warning",export_all:"success",save_tts:"success"}[a]||"info");
     const actionName=a=>ACTION_NAMES[a]||a;
 
     /* ---------- 工具 ---------- */
@@ -495,9 +525,8 @@ createApp({
 
     /* ---------- 启动：恢复会话 ---------- */
     onMounted(async()=>{
-      if(!cfgReady) return;
       try{
-        sb=window.supabase.createClient(localStorage.getItem(LS.u),localStorage.getItem(LS.k));
+        sb=window.supabase.createClient(SB_URL,SB_KEY);
         const {data:{session}}=await sb.auth.getSession();
         if(!session) return;
         const r=await api("admin-stats");
@@ -505,9 +534,10 @@ createApp({
       }catch(e){}
     });
 
-    return {user,view,menus,go,cfg,cfgReady,saveCfg,form,login,loginErr,logout,loading,
+    return {user,view,menus,go,form,login,loginErr,logout,loading,
       st,trendChart,levelChart,storyChart,users,uQuery,uRole,uState,filteredUsers,loadUsers,userCmd,
       dUser,dInfo,loadData,dCmd,hisDays,inaDays,inaConfirm,exportAll,cleanupHistory,cleanupInactive,
+      ttsRegions,tts,ttsConfigured,ttsStatus,loadTts,saveTts,
       logs,loadAudit,tagOf,actionName,fmtDate,fmtTime,ago};
   },
 }).use(EP,{locale:window.ElementPlusLocaleZhCn}).mount("#app");

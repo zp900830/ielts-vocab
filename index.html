@@ -82,10 +82,10 @@ select,input{font-family:inherit;}
 .s-go:hover,.audiobar .ab:hover,.q-submit:hover:not(:disabled),.q-actions button.pri:hover,.rv-btn:hover,.fav-tools button.pri:hover{filter:brightness(1.05);}
 
 /* 次按钮：白底绿描边胶囊，悬停统一浅绿底 */
-.s-go.sub,.audiobar .ab.ghost,.q-actions button,.rv-btn.ghost,.backup-zone button,.fav-tools button,.key-row button,.acc-acts button{
+.s-go.sub,.audiobar .ab.ghost,.q-actions button,.rv-btn.ghost,.backup-zone button,.fav-tools button,.acc-acts button{
   background:#fff; border:1px solid var(--iel-accent-line); color:var(--iel-accent-deep); box-shadow:none; font-weight:500;
   transition:background var(--iel-t-fast), border-color var(--iel-t-fast);}
-.s-go.sub:hover,.audiobar .ab.ghost:hover,.q-actions button:hover:not(.pri),.rv-btn.ghost:hover,.backup-zone button:hover,.fav-tools button:hover,.key-row button:hover,.acc-acts button:hover{
+.s-go.sub:hover,.audiobar .ab.ghost:hover,.q-actions button:hover:not(.pri),.rv-btn.ghost:hover,.backup-zone button:hover,.fav-tools button:hover,.acc-acts button:hover{
   background:var(--iel-accent-soft); border-color:var(--iel-accent);}
 
 /* 输入控件：统一白底圆角规格 */
@@ -421,12 +421,6 @@ body.reading main{padding-top:64px;}
 .danger-zone button{border:1px solid var(--iel-coral-line); background:var(--iel-coral-bg); color:var(--iel-coral-deep); border-radius:999px; padding:8px 16px; font-size:13px;}
 .backup-zone{display:flex; gap:10px; margin-top:22px; border-top:1px dashed var(--iel-line); padding-top:16px; justify-content:flex-end; flex-wrap:wrap;}
 .backup-zone button{padding:8px 16px; font-size:13px;}
-.key-row{display:flex; gap:10px; margin-top:14px; border-top:1px dashed var(--iel-line); padding-top:16px; flex-wrap:wrap; align-items:center;}
-.key-row input{flex:1; min-width:200px; border:1px solid var(--iel-line); background:#fff; color:var(--iel-ink); border-radius:999px; padding:8px 14px; font-size:13px; font-family:inherit;}
-.key-row input:focus{outline:none; border-color:var(--iel-accent);}
-.key-row select{border:1px solid var(--iel-line); background:#fff; color:var(--iel-ink); border-radius:999px; padding:8px 10px; font-size:13px; font-family:inherit;}
-.key-row button{padding:8px 16px; font-size:13px; border-radius:999px; cursor:pointer; font-family:inherit;}
-.key-stat{font-size:12.5px; color:var(--iel-mute); margin-top:8px; line-height:1.6;}
 .acc-form{display:flex; flex-direction:column; gap:8px; margin-top:14px; max-width:360px;}
 .acc-form input{border:1px solid var(--iel-line); background:#fff; color:var(--iel-ink); border-radius:999px; padding:8px 14px; font-size:13px; font-family:inherit;}
 .acc-form input:focus{outline:none; border-color:var(--iel-accent);}
@@ -1042,6 +1036,7 @@ const SB={
     CUR_USER=email||null;
     this.user=u||null;
     this.role=null;
+    CLOUD_TTS._on=false;   // 云端语音可用性跟随账号变化，登录成功后由 afterLogin 重新探测
     loadS();
     try{
       audio.rate=S.rate||0.85;
@@ -1052,13 +1047,14 @@ const SB={
     if(typeof switchView==="function"&&typeof VIEW!=="undefined") switchView(VIEW);   // 用新账号数据重渲染当前视图
     if(typeof updateFavBadge==="function") updateFavBadge();
   },
-  /* 登录后：先查角色（审批状态）——待审批只提示不同步；正常账号拉取云端 + 上报活跃 */
+  /* 登录后：先查角色（审批状态）——待审批视同游客（重渲染以套用锁定）；正常账号拉取云端 + 上报活跃 */
   async afterLogin(){
     await this.fetchRole();
     this.touch();
+    CLOUD_TTS.checkStatus().then(()=>{ try{ audio.loadVoices(); }catch(e){} });   // 云端语音可用性就绪后重载音色
     if(this.role==="pending"){
-      if(typeof renderMe==="function"&&VIEW==="me") renderMe();
-      toast("账号待管理员审批，通过后即可云端同步");
+      if(typeof switchView==="function"&&typeof VIEW!=="undefined") switchView(VIEW);   // 角色影响首页锁定态，需重渲染
+      toast("账号待管理员审批，通过后即可解锁全部功能与云端同步");
       return;
     }
     this.pull();
@@ -1071,6 +1067,19 @@ const SB={
       const {data}=await c.from("profiles").select("role").eq("user_id",this.user.id).maybeSingle();
       this.role=(data&&data.role)||"user";
     }catch(e){}
+    /* 待审批期间每 60s 轮询一次：管理员通过审批后本端自动解锁，无需重新登录 */
+    clearTimeout(this._roleT);
+    if(this.role==="pending"){
+      this._roleT=setTimeout(async()=>{
+        const was=this.role;
+        await this.fetchRole();
+        if(this.role!=="pending"&&was==="pending"){
+          toast("审批已通过，全部功能已解锁");
+          this.pull();
+          if(typeof switchView==="function"&&typeof VIEW!=="undefined") switchView(VIEW);
+        }
+      },60*1000);
+    }
   },
   /* 上报活跃时间：登录时 + 每 15 分钟一次（security definer 函数，仅更新自己的行） */
   _touchT:null,
@@ -1166,9 +1175,14 @@ function chName(n){ const c=CHAPTERS.find(x=>parseInt(x,10)===n); return c|| (n+
 /* ================= 视图路由 ================= */
 let VIEW="home", CUR_STORY=null, REVIEW=null, TR_SENS=[];
 /* 游客权限：仅可阅读第 1 章第 1 篇故事（含篇内测验/朗读/查词）；
-   其他故事、学习统计、生词本、随身听、收藏均需登录后使用 */
-function isGuest(){ return !SB.user; }
+   其他故事、学习统计、生词本、随身听、收藏均需登录且通过审批后使用。
+   待审批（pending）用户视同游客，防止刷新/新开页面绕过限制 */
+function isGuest(){ return !SB.user || SB.role==="pending"; }
 function needLogin(msg){
+  if(SB.user && SB.role==="pending"){
+    toast("账号待管理员审批，通过后解锁全部功能");
+    return false;
+  }
   toast(msg||"登录后即可使用");
   switchView("me");
   setTimeout(()=>{ const e=document.getElementById("sbEmail"); if(e) e.focus(); },60);
@@ -1223,10 +1237,16 @@ function renderHome(){
   let list=STORIES.filter(s=>ch==="all"||s.ch===ch);
   let html=`<div class="view-sub">读故事 → 点词查义 → 自测 → 统计定位弱项。目标词已高亮，非目标词也可点击查询并收藏。<button class="toggle-g" id="goGuide"><i class="ri-book-open-line" aria-hidden="true"></i> 使用方法</button></div>`;
   if(guest){
-    html+=`<div class="card guest-banner"><i class="ri-lock-2-line gb-ic" aria-hidden="true"></i>
-      <div><b>游客模式</b> · 可免费阅读第 1 篇《${esc(free.title)}》<br>
-      <span class="gb-sub">登录（注册需管理员审批）后解锁全部章节故事、学习统计、生词本与随身听。</span></div>
-      <button class="gb-go" id="gbLogin">免费注册 / 登录</button></div>`;
+    if(SB.user){   // 待审批用户：已登录但未通过审批
+      html+=`<div class="card guest-banner"><i class="ri-time-line gb-ic" aria-hidden="true"></i>
+        <div><b>账号待审批</b> · 目前可先读第 1 篇《${esc(free.title)}》<br>
+        <span class="gb-sub">管理员审批通过后自动解锁全部章节故事、学习统计、生词本与随身听，无需重新登录。</span></div></div>`;
+    }else{
+      html+=`<div class="card guest-banner"><i class="ri-lock-2-line gb-ic" aria-hidden="true"></i>
+        <div><b>游客模式</b> · 可免费阅读第 1 篇《${esc(free.title)}》<br>
+        <span class="gb-sub">登录（注册需管理员审批）后解锁全部章节故事、学习统计、生词本与随身听。</span></div>
+        <button class="gb-go" id="gbLogin">免费注册 / 登录</button></div>`;
+    }
   }
 
   if(!list.length){
@@ -1718,7 +1738,8 @@ function showPop(word,opt){
     foot=`<div class="wp-stats">${mzHtml}</div>
       <div class="wp-links">出现在：${occLinksHtml(sts)}${sts.length?"":"<span style='color:var(--iel-mute)'>—</span>"}</div>`;
   } else if(isGuest()){
-    foot=`<div class="wp-actions"><button class="fav needlogin"><i class="ri-lock-line" aria-hidden="true"></i> 登录后收藏到生词本</button></div>`;
+    const lab=SB.user?"审批通过后可收藏到生词本":"登录后收藏到生词本";
+    foot=`<div class="wp-actions"><button class="fav needlogin"><i class="ri-lock-line" aria-hidden="true"></i> ${lab}</button></div>`;
   } else {
     const fav=S.fav[word];
     foot=`<div class="wp-actions">
@@ -1792,14 +1813,12 @@ function setAccent(acc){
   if(VIEW==="stats") renderStats(); else if(VIEW==="fav"&&!REVIEW) renderFav();
 }
 
-/* ================= 云端自然语音引擎（Azure Speech） =================
-   调用 Azure 语音服务 REST 接口合成神经网络语音：英式/美式男女声各 2 个，自然度远超系统 TTS。
-   免费层（F0）每月 50 万字符；需在「我的」视图配置密钥与区域（仅存本机 localStorage，不随备份导出、不上传）。
+/* ================= 云端自然语音引擎（Azure Speech，服务端代理） =================
+   密钥由管理员在管理后台配置、仅存服务端；客户端经 Edge Function（tts）代理合成，
+   浏览器全程接触不到密钥。英式/美式男女声各 2 个，自然度远超系统 TTS。
    合成结果双级缓存（内存 blob + IndexedDB 持久化），同一句重复收听不再计费。
-   请求经内部队列串行 + 150ms 间隔；失败自动重试一次。端点已验证支持 CORS，浏览器可直连。 */
+   请求经内部队列串行 + 150ms 间隔；失败自动重试一次。仅已审批登录用户可用。 */
 const CLOUD_TTS={
-  KEYSTORE:"iel_azure_key",
-  REGIONSTORE:"iel_azure_region",
   DEFAULT:"en-GB-SoniaNeural",
   VOICES:[
     {id:"en-GB-SoniaNeural",  name:"Sonia 女声",   region:"英式"},
@@ -1811,18 +1830,32 @@ const CLOUD_TTS={
     {id:"en-US-GuyNeural",    name:"Guy 男声",     region:"美式"},
     {id:"en-US-AndrewNeural", name:"Andrew 男声",  region:"美式"}
   ],
-  REGIONS:[["eastasia","东亚（香港）"],["southeastasia","东南亚（新加坡）"],["eastus","美国东部"],["westeurope","西欧"],["japaneast","日本东部"]],
   cache:new Map(),             // key(voice|rate|text) -> blob URL，避免重复合成
   _pend:new Map(),             // key -> 进行中的合成 Promise（并发去重）
   _q:[], _busy:false,          // 请求队列：串行 + 间隔，防限流
-  key(){ try{ return (localStorage.getItem(this.KEYSTORE)||"").trim(); }catch(e){ return ""; } },
-  setKey(k){ try{ k?localStorage.setItem(this.KEYSTORE,k):localStorage.removeItem(this.KEYSTORE); }catch(e){} },
-  region(){ try{ return (localStorage.getItem(this.REGIONSTORE)||"").trim().toLowerCase(); }catch(e){ return ""; } },
-  setRegion(r){ try{ r?localStorage.setItem(this.REGIONSTORE,String(r).toLowerCase()):localStorage.removeItem(this.REGIONSTORE); }catch(e){} },
-  available(){ return !!(this.key()&&this.region()); },
+  _on:false,                   // 服务端已配置云端语音（登录后异步探测）
+  /* 登录后探测服务端是否已配置语音（管理员在后台开启即全站可用） */
+  async checkStatus(){
+    this._on=false;
+    if(!SB.user) return;
+    try{
+      const c=await SB.client();
+      const {data:{session}}=await c.auth.getSession();
+      if(!session) return;
+      const r=await fetch(SB.DEF_URL+"/functions/v1/tts",{
+        method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+session.access_token},
+        body:JSON.stringify({action:"status"})
+      });
+      if(r.ok){ const d=await r.json(); this._on=!!d.configured; }
+    }catch(e){}
+  },
+  available(){ return this._on && !!SB.user && SB.role!=="pending"; },
   friendlyErr(m){
     m=String(m||"");
-    if(/\b401\b|\b403\b|unauthorized|forbidden/i.test(m)) return "Azure 密钥无效或与所选区域不匹配，请检查后重新保存";
+    if(/forbidden/i.test(m)) return "云端语音需账号审批通过后使用";
+    if(/unauthorized|\b401\b/i.test(m)) return "登录后才能使用云端语音";
+    if(/未配置|503/.test(m)) return "云端语音暂未开放（管理员未配置）";
+    if(/\b403\b/i.test(m)) return "Azure 密钥无效或与区域不匹配，请联系管理员";
     if(/quota|\b429\b|rate.?limit/i.test(m)) return "请求过于频繁或配额用尽（免费层每月 50 万字符）";
     return m;
   },
@@ -1881,26 +1914,24 @@ const CLOUD_TTS={
     });
   },
   _fetch(text,voiceId,speed){
-    const escXml=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-    const ssml=`<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US"><voice name="${voiceId}"><prosody rate="${Math.round(speed*100)}%">${escXml(text)}</prosody></voice></speak>`;
-    return this._enqueue(()=>fetch("https://"+this.region()+".tts.speech.microsoft.com/cognitiveservices/v1",{
-      method:"POST",
-      headers:{
-        "Ocp-Apim-Subscription-Key":this.key(),
-        "Content-Type":"application/ssml+xml",
-        "X-Microsoft-OutputFormat":"audio-24khz-48kbitrate-mono-mp3"
-      },
-      body:ssml
-    }).then(async r=>{
+    return this._enqueue(async()=>{
+      const c=await SB.client();
+      const {data:{session}}=await c.auth.getSession();
+      if(!session) throw new Error("unauthorized：登录后才能使用云端语音");
+      const r=await fetch(SB.DEF_URL+"/functions/v1/tts",{
+        method:"POST",
+        headers:{"Content-Type":"application/json",Authorization:"Bearer "+session.access_token},
+        body:JSON.stringify({text,voice:voiceId,rate:speed})
+      });
       if(!r.ok){
         let msg="api "+r.status;
-        try{ const t=await r.text(); if(t) msg=t.slice(0,120); }catch(e){}
+        try{ const t=await r.text(); const j=JSON.parse(t); if(j&&j.error) msg=j.error; }catch(e){}
         throw new Error(msg);
       }
       const blob=await r.blob();
       if(!blob||!blob.size) throw new Error("no audio");
       return blob;
-    }));
+    });
   },
   /* 合成一句话，返回可播放的 blob URL（内存 → IndexedDB → API，三层命中） */
   async synth(text,voiceId,ratePct){
@@ -2193,7 +2224,7 @@ function voiceHintOpt(){
   const edgeTip=ios
     ?"用 Edge 浏览器打开本页可免费用 ⚡ 云端自然语音；或在 设置→辅助功能→朗读内容→声音 下载增强版语音"
     :"用 Edge 浏览器打开本页可免费用 ⚡ 云端自然语音（无需配置）";
-  return `<option disabled>💡 ${edgeTip}；或到「我的 → 云端语音」配置密钥</option>`;
+  return `<option disabled>💡 ${edgeTip}；登录已审批账号还可用 ☁ 云端语音</option>`;
 }
 function renderAudioBar(){
   const bar=document.getElementById("audiobar"); if(!bar) return;
@@ -2739,7 +2770,7 @@ function renderListen(){
         ?"✅ 已启用云端自然语音：连播效果最好，锁屏后台可续播。"
         :audio.voices.some(edgeCloudVoice)
           ?"✅ 检测到 ⚡ Edge 云端语音（免费）：熄屏后台连播效果最好，锁屏界面可直接控制播放/切篇。"
-          :"💡 用 Edge 浏览器打开本页可免费用 ⚡ 自然语音；或到「我的 → 云端语音」配置密钥，连播更稳。"}iPhone 用户建议用 Safari「分享 → 添加到主屏幕」，以独立窗口打开后锁屏不易中断；若锁屏被系统暂停，回到页面会自动从断点继续。</div>
+          :"💡 用 Edge 浏览器打开本页可免费用 ⚡ 自然语音；已审批账号登录后还可用 ☁ 云端自然语音，连播更稳。"}iPhone 用户建议用 Safari「分享 → 添加到主屏幕」，以独立窗口打开后锁屏不易中断；若锁屏被系统暂停，回到页面会自动从断点继续。</div>
       </div>
     </div>
     <div class="audiobar" id="audiobar"></div>`;
@@ -3076,15 +3107,6 @@ function renderMe(){
   <li>非目标生词随手<b>收藏进生词本</b>，可按艾宾浩斯间隔复习，或导出 CSV/TXT 导入 Anki、欧路词典等。</li>
   <li><b>随身听</b>：在"首页 → 随身听"连播当前章节文章，锁屏后台可续播，自动断点续听。</li>
   </ol></div>
-  <div class="card"><h3>云端语音（Azure）</h3>
-    <div class="me-p">配置后朗读使用微软 Azure 神经网络语音，自然度远超本机语音。音色 8 个：英式 Sonia / Libby（女）、Ryan / Thomas（男），美式 Aria / Jenny（女）、Guy / Andrew（男）。免费层 F0 每月 50 万字符，个人学习足够。密钥与区域仅保存在本机浏览器，不上传、不随备份导出；已合成内容自动缓存，重复收听不重复计费。获取：Azure 门户 → 创建「语音服务」资源（定价选 F0 免费层）→ 「密钥和终结点」页复制 KEY 1，并记下区域（必须与下方选择一致，否则报 403）。零成本替代：用 Edge 浏览器打开本页，音色列表免费出现「⚡ Edge 云端语音」。</div>
-    <div class="key-row">
-      <input type="password" id="ttsKey" placeholder="粘贴密钥 KEY 1（32 位）" autocomplete="off" spellcheck="false" value="${esc(CLOUD_TTS.key())}">
-      <select id="ttsRegion" aria-label="区域">${CLOUD_TTS.REGIONS.map(r=>`<option value="${r[0]}" ${CLOUD_TTS.region()===r[0]?"selected":""}>${r[1]}（${r[0]}）</option>`).join("")}</select>
-      <button id="ttsKeySave">保存</button>
-    </div>
-    <div class="key-stat" id="ttsKeyStat"></div>
-  </div>
   <div class="card"><h3>学习数据备份</h3>
     <div class="me-p">备份文件为 JSON 格式，包含阅读进度、掌握度统计、测验记录、生词本与复习计划。</div>
     <div class="backup-zone"><button id="exportData"><i class="ri-download-2-line" aria-hidden="true"></i> 导出学习数据备份</button><button id="importData"><i class="ri-upload-2-line" aria-hidden="true"></i> 导入备份恢复数据</button><input type="file" id="importFile" accept="application/json,.json" style="display:none"></div>
@@ -3129,26 +3151,6 @@ function renderMe(){
     await SB.push();
     bs.disabled=false;
     if(SB.lastSync) toast("同步完成："+new Date(SB.lastSync).toLocaleTimeString());
-  };
-  /* —— Azure 密钥与区域 —— */
-  const ki=document.getElementById("ttsKey"), ks=document.getElementById("ttsKeySave"), kst=document.getElementById("ttsKeyStat");
-  const kr=document.getElementById("ttsRegion");
-  const paintKeyStat=()=>{
-    kst.innerHTML=CLOUD_TTS.available()
-      ?"✅ 已配置：到朗读条或随身听的音色下拉框，选 ☁ 开头的云端语音即可使用。"
-      :CLOUD_TTS.key()&&!CLOUD_TTS.region()
-        ?"已填密钥，还差区域：请选择资源所在区域后保存。"
-        :"未配置时使用本机系统语音（免费，但自然度较低）。";
-  };
-  paintKeyStat();
-  ks.onclick=()=>{
-    const v=(ki.value||"").trim();
-    const reg=kr?kr.value:"";
-    CLOUD_TTS.setKey(v); CLOUD_TTS.setRegion(reg);
-    if(!v&&audio.cloudVoiceId){ audio.cloudVoiceId=null; audio.voice=null; }   // 清空密钥时回退本机语音
-    audio.loadVoices();
-    paintKeyStat();
-    toast(v&&reg?"密钥已保存，到音色下拉框选 ☁ 云端语音":"已清除，改用本机语音");
   };
 }
 
