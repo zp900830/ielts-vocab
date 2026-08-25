@@ -216,7 +216,7 @@ main{max-width:860px; margin:0 auto; padding:24px 18px 130px;}
 body.reading main{padding-top:64px;}
 .r-badges{position:relative; display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
 .r-badge{display:inline-block; font-size:12px; padding:2px 10px;}
-.r-badges .tr-all{margin-left:auto;}
+.r-badges .tr-msw{margin-left:auto;}
 .tr-help{width:22px; height:22px; border-radius:50%; border:1px solid var(--iel-line); background:#fff; color:var(--iel-ink2); font-size:12px; font-weight:600; line-height:1; cursor:pointer; flex:none; transition:border-color var(--iel-t-fast), color var(--iel-t-fast), background var(--iel-t-fast);}
 .tr-help:hover{border-color:var(--iel-accent); color:var(--iel-accent-deep); background:var(--iel-tint);}
 .tr-help.on{background:var(--iel-accent-soft); border-color:var(--iel-accent); color:var(--iel-accent-deep);}
@@ -280,17 +280,20 @@ body.reading main{padding-top:64px;}
 .sen-trig.shown{background:var(--iel-accent-soft); border-color:var(--iel-accent);}
 @media (hover:none){ .sen-trig{display:none;} }
 /* 手机端句尾“译”圆钮：仅在“点句译文”模式中显示（默认完全隐藏，零干扰）；桌面隐藏 */
-@media (hover:hover){ .sen-chip, .tr-tab{display:none;} }
+@media (hover:hover){ .sen-chip, .tr-msw{display:none;} }
 .sen-chip{display:none; align-items:center; justify-content:center; vertical-align:middle; margin-left:6px; width:22px; height:22px; padding:0; border-radius:50%; border:1px solid var(--iel-accent-line); background:rgba(255,255,255,.55); color:var(--iel-accent-deep); font-size:10.5px; line-height:1; font-weight:600; cursor:pointer; -webkit-tap-highlight-color:transparent; touch-action:manipulation;}
 .sen-chip:active{background:var(--iel-accent-soft);}
 .sen-chip.on{background:var(--iel-accent); border-color:var(--iel-accent); color:#fff;}
 #app.tr-mode .sen-chip{display:inline-flex;}
-/* 触屏右缘“译”竖标签：开关点句译文模式（视觉同速查竖标签，桌面隐藏） */
-.tr-tab{position:fixed; right:0; top:248px; z-index:110; border:1px solid rgba(93,190,157,.35); border-right:none; background:rgba(255,255,255,.03); -webkit-backdrop-filter:blur(1.5px) saturate(120%); backdrop-filter:blur(1.5px) saturate(120%); border-radius:var(--iel-radius-sm) 0 0 var(--iel-radius-sm); padding:14px 6px; font-size:11.5px; color:var(--iel-accent-deep); font-weight:600; box-shadow:0 4px 16px rgba(30,90,70,.10); writing-mode:vertical-rl; letter-spacing:2.5px; cursor:pointer; transition:background .25s ease, color .25s ease, opacity .25s ease; -webkit-tap-highlight-color:transparent;}
-.tr-tab:hover{color:var(--iel-accent);}
-.tr-tab.on{background:var(--iel-accent); border-color:var(--iel-accent); color:#fff;}
+/* 触屏“点句译文”开关（iOS 拨杆样式）：置于“显示全部译文”左侧；桌面隐藏（桌面用句旁 hover“译”按钮） */
+.tr-msw{display:inline-flex; align-items:center; gap:7px; flex:none; border:1px solid var(--iel-mark-line); background:#fff; border-radius:999px; padding:5px 12px 5px 5px; font-size:12.5px; font-weight:500; color:var(--iel-accent-deep); cursor:pointer; font-family:inherit; -webkit-tap-highlight-color:transparent; touch-action:manipulation; transition:background var(--iel-t-fast), border-color var(--iel-t-fast);}
+.tr-msw .knob{width:28px; height:17px; border-radius:999px; background:rgba(31,45,38,.18); position:relative; flex:none; transition:background .25s;}
+.tr-msw .knob::after{content:""; position:absolute; top:2px; left:2px; width:13px; height:13px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(31,45,38,.28); transition:left .25s;}
+.tr-msw.on{border-color:var(--iel-accent); background:var(--iel-accent-soft);}
+.tr-msw.on .knob{background:var(--iel-accent);}
+.tr-msw.on .knob::after{left:13px;}
 /* 竖标签智能显隐：仅滚动停止 / 朗读暂停 / 正文有操作时浮现，避免常驻干扰阅读 */
-.wq-tab.auto-off,.tr-tab.auto-off{opacity:0; pointer-events:none;}
+.wq-tab.auto-off{opacity:0; pointer-events:none;}
 /* 触屏点句反馈：绿色一闪，确认点击已命中句子 */
 @keyframes senflash{from{background:rgba(16,180,135,.16);}to{background:transparent;}}
 .sen.flash{animation:senflash .55s ease-out;}
@@ -620,7 +623,10 @@ body.reading main{padding-top:64px;}
   .wq-panel{right:12px; left:12px; width:auto; top:auto; bottom:calc(122px + env(safe-area-inset-bottom,0px)); max-height:62vh;}
   /* 手机端竖标签再收窄（正文右缘留白 26px，按钮 ~22px 不触字） */
   .wq-tab{padding:12px 5px; font-size:11px; letter-spacing:2px;}
-  .tr-tab{top:238px; padding:12px 5px; font-size:11px; letter-spacing:2px;}
+  .tr-msw{padding:4px 11px 4px 4px; font-size:11.5px;}
+  .tr-msw .knob{width:25px; height:15px;}
+  .tr-msw .knob::after{width:11px; height:11px;}
+  .tr-msw.on .knob::after{left:12px;}
   .sen-chip{width:20px; height:20px; font-size:10px;}
   /* 手机端速查面板：更大的点按目标与字号 */
   .wq-head{padding:12px 12px 4px;}
@@ -1025,21 +1031,21 @@ function openStory(id, focusWord, occ){
     <div class="r-badges"><span class="r-badge">第${s.ch}章 · ${esc(chName(s.ch).replace(/^\d+\s*/,""))}</span>
     <span class="r-badge" style="background:#f3ede0;color:#8a6d1f">本篇目标词 ${markedWords.length} 个</span>
     <button class="r-badge fav-badge" id="favToggle" style="background:#fdf1dc;color:#b07a10"></button>
+    <button class="tr-msw" id="trMsw" aria-pressed="false" title="点句译文模式：开启后点击任意句子显示/收起该句译文"><span class="knob"></span>点句译文</button>
     <button class="tr-all" id="trAll">显示全部译文</button>
     <button class="tr-help" id="trHelp" aria-label="使用说明">?</button>
-    <div class="tr-bubble" id="trBubble" role="tooltip">电脑端：鼠标移到句子上，左侧出现“译”按钮，点它显示 / 收起该句译文；点击句子本身从此句开始朗读。手机端：点右缘“译文”竖标签开启点句模式，此后点任意句子显示 / 收起该句译文（点一下译文卡片也可收起），再点竖标签退出恢复查词（译文中括号英文即目标词）</div></div>
+    <div class="tr-bubble" id="trBubble" role="tooltip">电脑端：鼠标移到句子上，左侧出现“译”按钮，点它显示 / 收起该句译文；点击句子本身从此句开始朗读。手机端：点“点句译文”开关（“显示全部译文”左侧）开启点句模式，此后点任意句子显示 / 收起该句译文（点一下译文卡片也可收起），再点开关退出恢复查词（译文中括号英文即目标词）</div></div>
     <div class="audiobar" id="audiobar"></div>
     <div class="story-en" id="storyEn"></div>
     <div class="quiz-sec card" id="quizSec"></div>
     <button class="wq-tab" id="wqTab" title="展开目标词速查">目标词速查</button>
-    <button class="tr-tab" id="trTab" title="点句译文模式：开启后点击任意句子显示/收起译文">译文</button>
     <aside class="wq-panel" id="wqPanel" aria-label="本篇目标词速查"></aside>`;
   app.innerHTML=html;
   document.getElementById("backBtn").onclick=()=>switchView("home");
   const pBtn=document.getElementById("prevBtn"); if(pBtn&&prev) pBtn.onclick=()=>openStory(prev.id);
   const nBtn=document.getElementById("nextBtn"); if(nBtn&&next) nBtn.onclick=()=>openStory(next.id);
   TRMODE=false; app.classList.remove("tr-mode");
-  document.getElementById("trTab").onclick=()=>setTrMode(!TRMODE);
+  document.getElementById("trMsw").onclick=()=>setTrMode(!TRMODE);
   TR_SENS=mapTrSens(s.text,s.tr);
   document.getElementById("storyEn").innerHTML=renderStoryText(s.text);
   initSenHover();
@@ -1347,7 +1353,7 @@ let TAB_OFF=false, _tabT=null;
 function showTabs(on){
   if(TAB_OFF===!on) return;
   TAB_OFF=!on;
-  document.querySelectorAll(".wq-tab,.tr-tab").forEach(b=>b.classList.toggle("auto-off",!on));
+  document.querySelectorAll(".wq-tab").forEach(b=>b.classList.toggle("auto-off",!on));
 }
 function tabsIdleShow(delay){
   if(!document.getElementById("wqTab")) return;
@@ -1361,10 +1367,10 @@ let TRMODE=false;
 function setTrMode(on){
   TRMODE=on;
   app.classList.toggle("tr-mode",on);
-  const t=document.getElementById("trTab"); if(t) t.classList.toggle("on",on);
+  const t=document.getElementById("trMsw"); if(t){ t.classList.toggle("on",on); t.setAttribute("aria-pressed",on?"true":"false"); }
   if(on){
     app.querySelectorAll(".sen-tr").forEach(tr=>{ const c=app.querySelector(`.sen-chip[data-si="${tr.dataset.for}"]`); if(c){ c.classList.toggle("on",tr.classList.contains("show")); c.textContent=tr.classList.contains("show")?"✕":"译"; } });
-    toast("点句译文模式：点任意句子显示 / 收起译文，再点右缘“译文”退出");
+    toast("点句译文模式：点任意句子显示 / 收起译文，再点“点句译文”开关退出");
   }else{
     toast("已退出点句译文模式");
   }
@@ -1545,7 +1551,8 @@ function setAccent(acc){
 }
 
 /* ================= 云端自然语音引擎（硅基流动 CosyVoice2） =================
-   调用硅基流动 audio/speech 接口（OpenAI 兼容）合成自然语音：拟真度远超系统 TTS，英文男女声各 4 个。
+   调用硅基流动 audio/speech 接口（OpenAI 兼容）合成自然语音：拟真度远超系统 TTS。
+   官方预置英文音色 8 个（男女各 4），风格含沉稳/低沉/磁性/欢快/激情/温柔；英文输出为美式口音（官方未区分英美音）。
    需在「我的」视图配置 API 密钥（仅存本机 localStorage，不随备份导出、不上传）；未配置时用本机语音。
    按字符计费（¥0.5/万字符）：合成结果双级缓存（内存 blob + IndexedDB 持久化），同一句重复收听不再计费。
    请求经内部队列串行 + 150ms 间隔，避免触发平台限流（429）；失败自动重试一次。 */
@@ -1555,14 +1562,14 @@ const CLOUD_TTS={
   KEYSTORE:"iel_sf_key",
   DEFAULT:"anna",
   VOICES:[
-    {id:"anna",     name:"安娜 女声",   region:"女声"},
-    {id:"bella",    name:"贝拉 女声",   region:"女声"},
-    {id:"claire",   name:"克莱尔 女声", region:"女声"},
-    {id:"diana",    name:"黛安娜 女声", region:"女声"},
-    {id:"alex",     name:"亚历克斯 男声", region:"男声"},
-    {id:"benjamin", name:"本杰明 男声",   region:"男声"},
-    {id:"charles",  name:"查尔斯 男声",   region:"男声"},
-    {id:"david",    name:"大卫 男声",   region:"男声"}
+    {id:"alex",     name:"沉稳男声", region:"美音"},
+    {id:"benjamin", name:"低沉男声", region:"美音"},
+    {id:"charles",  name:"磁性男声", region:"美音"},
+    {id:"david",    name:"欢快男声", region:"美音"},
+    {id:"anna",     name:"沉稳女声", region:"美音"},
+    {id:"bella",    name:"激情女声", region:"美音"},
+    {id:"claire",   name:"温柔女声", region:"美音"},
+    {id:"diana",    name:"欢快女声", region:"美音"}
   ],
   cache:new Map(),             // key(voice|rate|text) -> blob URL，避免重复合成
   _pend:new Map(),             // key -> 进行中的合成 Promise（并发去重）
@@ -1913,7 +1920,7 @@ function renderAudioBar(){
   if(near!==audio.rate){ audio.setRate(near); S.rate=near; save(); }
   if(CUR_STORY && !audio.ready()) audio.prepare();
   if(!audio.voices.length) audio.loadVoices(renderAudioBarIfReader);   // 移动端语音列表常延迟就绪，进入阅读页时再拉一次
-  const cloudOpts=cloudOn?CLOUD_TTS.VOICES.map(v=>`<option value="cloud:${v.id}" ${audio.cloudVoiceId===v.id?"selected":""}>☁ ${v.name} · ${v.region} · 云端自然</option>`).join(""):"";
+  const cloudOpts=cloudOn?CLOUD_TTS.VOICES.map(v=>`<option value="cloud:${v.id}" ${audio.cloudVoiceId===v.id?"selected":""}>☁ ${v.name} · ${v.region}</option>`).join(""):"";
   const localOpts=audio.voices.map(v=>`<option value="${esc(v.name)}" ${!audio.cloudVoiceId&&audio.voice&&v.name===audio.voice.name?"selected":""}>${esc(voiceLabel(v))}</option>`).join("");
   let voiceOpts=voiceHintOpt();
   if(cloudOpts){
@@ -2476,7 +2483,7 @@ function renderListenBar(){
   const near=RATES.reduce((a,b)=>Math.abs(b-audio.rate)<Math.abs(a-audio.rate)?b:a);
   if(near!==audio.rate){ audio.setRate(near); S.rate=near; save(); }
   if(!audio.voices.length) audio.loadVoices();   // 本机语音列表异步就绪时兜底拉取
-  const cloudOpts=cloudOn?CLOUD_TTS.VOICES.map(v=>`<option value="cloud:${v.id}" ${audio.cloudVoiceId===v.id?"selected":""}>☁ ${v.name} · ${v.region} · 云端自然</option>`).join(""):"";
+  const cloudOpts=cloudOn?CLOUD_TTS.VOICES.map(v=>`<option value="cloud:${v.id}" ${audio.cloudVoiceId===v.id?"selected":""}>☁ ${v.name} · ${v.region}</option>`).join(""):"";
   const localOpts=audio.voices.map(v=>`<option value="${esc(v.name)}" ${!audio.cloudVoiceId&&audio.voice&&v.name===audio.voice.name?"selected":""}>${esc(voiceLabel(v))}</option>`).join("");
   let voiceOpts=voiceHintOpt();
   if(cloudOpts){
@@ -2780,7 +2787,7 @@ function renderMe(){
   <li><b>随身听</b>：在"首页 → 随身听"连播当前章节文章，锁屏后台可续播，自动断点续听。</li>
   </ol></div>
   <div class="card"><h3>云端语音（硅基流动）</h3>
-    <div class="me-p">配置后朗读使用云端高自然度语音（CosyVoice2，英文男女声各 4 个），拟真度远超本机语音。密钥仅保存在本机浏览器，不上传、不随备份导出。按量计费约 ¥0.5/万字符，注册即送 ¥14 额度；已合成内容自动缓存，重复收听不重复计费。密钥获取：<a href="https://cloud.siliconflow.cn/account/ak" target="_blank" rel="noopener">cloud.siliconflow.cn</a> → API 密钥 → 新建。</div>
+    <div class="me-p">配置后朗读使用云端高自然度语音（CosyVoice2），拟真度远超本机语音。预置英文音色 8 个：男声 alex 沉稳 / benjamin 低沉 / charles 磁性 / david 欢快，女声 anna 沉稳 / bella 激情 / claire 温柔 / diana 欢快；英文均为美式口音（官方未提供英音音色，如需英音请配合本机语音或留言反馈）。密钥仅保存在本机浏览器，不上传、不随备份导出。按量计费约 ¥0.5/万字符，注册即送 ¥14 额度；已合成内容自动缓存，重复收听不重复计费。密钥获取：<a href="https://cloud.siliconflow.cn/account/ak" target="_blank" rel="noopener">cloud.siliconflow.cn</a> → API 密钥 → 新建。</div>
     <div class="key-row">
       <input type="password" id="ttsKey" placeholder="粘贴 API 密钥（sk- 开头）" autocomplete="off" spellcheck="false" value="${esc(CLOUD_TTS.key())}">
       <button id="ttsKeySave">保存</button>
