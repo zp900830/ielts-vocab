@@ -1039,8 +1039,17 @@ const SB={
       audio.loadVoices();
     }catch(e){}
     if(email) this.pull();          // 登录 / 切换账号：拉取云端数据合并
+    if(email) this.touch();         // 上报活跃（profiles.last_seen，供管理后台统计）
     if(typeof switchView==="function"&&typeof VIEW!=="undefined") switchView(VIEW);   // 用新账号数据重渲染当前视图
     if(typeof updateFavBadge==="function") updateFavBadge();
+  },
+  /* 上报活跃时间：登录时 + 每 15 分钟一次（security definer 函数，仅更新自己的行） */
+  _touchT:null,
+  touch(){
+    if(!this.user) return;
+    clearTimeout(this._touchT);
+    this._touchT=setTimeout(()=>this.touch(),15*60*1000);
+    this.client().then(c=>c.rpc("touch_profile")).catch(()=>{});
   },
   /* 拉取云端并与本地合并：云端新 → 覆盖本地；本地新或云端空 → 推送本地 */
   async pull(){

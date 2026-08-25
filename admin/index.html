@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>管理后台 · 雅思词汇真经</title>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/element-plus@2/dist/index.css">
+<style>
+:root{
+  --glass:rgba(255,255,255,.62); --glass2:rgba(255,255,255,.42);
+  --stroke:rgba(255,255,255,.55); --hair:rgba(0,0,0,.06);
+  --ink:#1d1d1f; --ink2:#6e6e73; --accent:#0071e3; --bg1:#e8eef6; --bg2:#f5f0ea;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Helvetica Neue",sans-serif;
+  color:var(--ink); background:linear-gradient(160deg,var(--bg1),var(--bg2) 60%,#eef1f4);
+  -webkit-font-smoothing:antialiased;
+}
+#app{min-height:100%;display:flex;flex-direction:column}
+/* ---------- 玻璃卡片 ---------- */
+.glass{
+  background:var(--glass); backdrop-filter:blur(24px) saturate(1.6); -webkit-backdrop-filter:blur(24px) saturate(1.6);
+  border:1px solid var(--stroke); border-radius:18px;
+  box-shadow:0 1px 0 rgba(255,255,255,.7) inset, 0 8px 28px rgba(20,30,60,.10);
+}
+/* ---------- 布局 ---------- */
+.shell{display:flex;flex:1;min-height:100vh}
+.side{
+  width:216px;margin:14px 0 14px 14px;padding:14px 10px;position:sticky;top:14px;height:calc(100vh - 28px);
+  display:flex;flex-direction:column;gap:4px;flex-shrink:0;
+}
+.side .brand{display:flex;align-items:center;gap:10px;padding:8px 10px 16px}
+.logo{
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(145deg,#0a84ff,#0044cc);
+  box-shadow:0 4px 10px rgba(10,90,220,.35), 0 1px 0 rgba(255,255,255,.4) inset;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px;
+}
+.brand b{font-size:15px;letter-spacing:.2px}
+.brand small{display:block;font-weight:400;color:var(--ink2);font-size:11px;margin-top:1px}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;cursor:pointer;
+  font-size:13.5px;color:var(--ink);border:1px solid transparent;transition:all .18s ease;user-select:none;
+}
+.nav-item:hover{background:rgba(255,255,255,.5)}
+.nav-item.on{
+  background:rgba(255,255,255,.78); border:1px solid var(--stroke);
+  box-shadow:0 1px 0 rgba(255,255,255,.8) inset, 0 3px 10px rgba(20,30,60,.08); font-weight:600;
+}
+.nav-item svg{width:17px;height:17px;flex-shrink:0;opacity:.75}
+.side .foot{margin-top:auto;padding:10px 12px;border-top:1px solid var(--hair)}
+.side .foot .em{font-size:12px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.main{flex:1;padding:14px;min-width:0}
+.page{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.page h2{font-size:21px;font-weight:700;letter-spacing:-.2px}
+.page .sub{color:var(--ink2);font-size:13px;margin-top:2px}
+/* ---------- 指标卡 ---------- */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.metric{padding:16px 16px 14px;position:relative;overflow:hidden}
+.metric .k{font-size:12px;color:var(--ink2)}
+.metric .v{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-top:4px;font-variant-numeric:tabular-nums}
+.metric .hint{font-size:11px;color:var(--ink2);margin-top:3px}
+.card{padding:18px}
+.card h3{font-size:15px;font-weight:600;margin-bottom:12px}
+.card .full{width:100%}
+/* ---------- 表格 ---------- */
+.el-table{--el-table-header-bg-color:transparent;--el-table-tr-bg-color:transparent;background:transparent}
+.el-table :deep(.el-table__inner-wrapper::before){display:none}
+.mono{font-variant-numeric:tabular-nums}
+/* ---------- 登录页 ---------- */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login{width:min(400px,100%);padding:34px 30px}
+.login .logo{width:52px;height:52px;border-radius:13px;font-size:21px;margin:0 auto 16px}
+.login h1{font-size:22px;text-align:center;font-weight:700;letter-spacing:-.3px}
+.login p{text-align:center;color:var(--ink2);font-size:13px;margin:6px 0 22px}
+.login .el-input{margin-bottom:14px}
+.err{color:#d93026;font-size:12.5px;margin:-6px 0 10px;text-align:center;min-height:16px}
+/* ---------- 操作反馈 ---------- */
+.el-message-box{border-radius:16px!important;border:1px solid var(--stroke)!important}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.tools .grow{flex:1}
+@media (max-width:760px){
+  .shell{flex-direction:column}
+  .side{width:auto;margin:14px 14px 0;height:auto;position:static;flex-direction:row;align-items:center;padding:8px;overflow-x:auto}
+  .side .brand{padding:0 10px 0 4px}.brand small,.side .foot{display:none}
+  .nav-item{padding:8px 12px;white-space:nowrap}
+  .main{padding:12px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ============ 登录 ============ -->
+<div v-if="!user" class="login-wrap">
+  <div class="glass login">
+    <div class="logo">雅</div>
+    <h1>管理后台</h1>
+    <p>雅思词汇真经 · 仅限管理员访问</p>
+    <template v-if="!cfgReady">
+      <el-input v-model="cfg.url" placeholder="Project URL（https://xxxx.supabase.co）" size="large"></el-input>
+      <el-input v-model="cfg.key" placeholder="Anon Key（公开密钥）" size="large"></el-input>
+      <el-button type="primary" size="large" round style="width:100%" :loading="loading" @click="saveCfg">连接</el-button>
+      <p style="margin:14px 0 0;font-size:11.5px">首次使用需填入 Supabase 项目地址与公开密钥（与主站一致，仅存本机）</p>
+    </template>
+    <template v-else>
+      <el-input v-model="form.email" placeholder="管理员邮箱" size="large"></el-input>
+      <el-input v-model="form.password" type="password" placeholder="密码" size="large" show-password @keyup.enter="login"></el-input>
+      <div class="err">{{loginErr}}</div>
+      <el-button type="primary" size="large" round style="width:100%" :loading="loading" @click="login">登录</el-button>
+      <p style="margin:14px 0 0;font-size:11.5px">{{cfg.url}} <a href="javascript:;" style="color:var(--accent)" @click="cfgReady=false">更换项目</a></p>
+    </template>
+  </div>
+</div>
+
+<!-- ============ 主界面 ============ -->
+<div v-else class="shell">
+  <aside class="glass side">
+    <div class="brand"><div class="logo">雅</div><div><b>词汇真经</b><small>Admin Console</small></div></div>
+    <div class="nav-item" v-for="m in menus" :key="m.k" :class="{on:view===m.k}" @click="go(m.k)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path :d="m.d"/></svg>{{m.t}}
+    </div>
+    <div class="foot">
+      <div class="em" :title="user.email">{{user.email}}</div>
+      <el-button size="small" text type="danger" style="margin-top:6px;padding:0" @click="logout">退出登录</el-button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- ===== 总览 ===== -->
+    <div v-if="view==='dash'" class="page">
+      <div><h2>数据总览</h2><div class="sub">全站用户与学习数据的关键指标</div></div>
+      <div class="metrics">
+        <div class="glass metric"><div class="k">注册用户</div><div class="v">{{st.totals.users}}</div><div class="hint">管理员 {{st.totals.admins}} 名</div></div>
+        <div class="glass metric"><div class="k">7 日活跃</div><div class="v">{{st.totals.active7}}</div><div class="hint">30 日 {{st.totals.active30}}</div></div>
+        <div class="glass metric"><div class="k">有数据用户</div><div class="v">{{st.totals.withData}}</div><div class="hint">产生学习行为 {{st.totals.activeLearners}}</div></div>
+        <div class="glass metric"><div class="k">近 7 日新增</div><div class="v">{{st.totals.newLast7}}</div><div class="hint">其中已学习 {{st.totals.retained}}</div></div>
+        <div class="glass metric"><div class="k">测验正确率</div><div class="v">{{st.learning.accuracy===null?'—':st.learning.accuracy+'%'}}</div><div class="hint">共 {{st.learning.quizAttempts}} 次作答</div></div>
+      </div>
+      <div class="glass card"><h3>注册趋势（近 30 天）</h3><div ref="trendChart" style="height:260px"></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px">
+        <div class="glass card"><h3>词汇掌握度分布</h3><div ref="levelChart" style="height:250px"></div></div>
+        <div class="glass card"><h3>阅读量 TOP 故事</h3><div ref="storyChart" style="height:250px"></div></div>
+      </div>
+    </div>
+
+    <!-- ===== 账号管理 ===== -->
+    <div v-if="view==='users'" class="page">
+      <div><h2>账号管理</h2><div class="sub">查看与操作已注册账号</div></div>
+      <div class="glass card">
+        <div class="tools">
+          <el-input v-model="uQuery" placeholder="搜索邮箱…" clearable style="width:240px"></el-input>
+          <el-select v-model="uRole" clearable placeholder="角色" style="width:120px"><el-option label="管理员" value="admin"/><el-option label="普通用户" value="user"/></el-select>
+          <el-select v-model="uState" clearable placeholder="状态" style="width:120px"><el-option label="正常" value="ok"/><el-option label="已禁用" value="banned"/></el-select>
+          <div class="grow"></div>
+          <el-button :loading="loading" @click="loadUsers" round>刷新</el-button>
+        </div>
+        <el-table :data="filteredUsers" style="width:100%;margin-top:12px" v-loading="loading">
+          <el-table-column label="邮箱" min-width="200"><template #default="{row}"><b style="font-weight:600">{{row.email}}</b><el-tag v-if="row.role==='admin'" size="small" type="warning" style="margin-left:6px">管理员</el-tag></template></el-table-column>
+          <el-table-column label="状态" width="80"><template #default="{row}"><el-tag :type="row.banned?'danger':'success'" size="small" effect="plain">{{row.banned?'禁用':'正常'}}</el-tag></template></el-table-column>
+          <el-table-column label="注册时间" width="110"><template #default="{row}"><span class="mono">{{fmtDate(row.created_at)}}</span></template></el-table-column>
+          <el-table-column label="最近活跃" width="110"><template #default="{row}"><span class="mono">{{ago(row.last_seen)}}</span></template></el-table-column>
+          <el-table-column label="词汇量" width="80" align="right"><template #default="{row}"><span class="mono">{{row.summary.words}}</span></template></el-table-column>
+          <el-table-column label="阅读/听力" width="95" align="right"><template #default="{row}"><span class="mono">{{row.summary.readCount}}/{{row.summary.listenedCount}}</span></template></el-table-column>
+          <el-table-column label="生词" width="65" align="right"><template #default="{row}"><span class="mono">{{row.summary.favCount}}</span></template></el-table-column>
+          <el-table-column label="操作" width="80" fixed="right">
+            <template #default="{row}">
+              <el-dropdown trigger="click" @command="cmd=>$userCmd(cmd,row)">
+                <el-button size="small" round>管理</el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="data">数据恢复…</el-dropdown-item>
+                    <el-dropdown-item command="reset_pw">发送重置密码邮件</el-dropdown-item>
+                    <el-dropdown-item :command="row.banned?'enable':'disable'" divided>{{row.banned?'启用账号':'禁用账号'}}</el-dropdown-item>
+                    <el-dropdown-item :command="row.role==='admin'?'demote':'promote'">{{row.role==='admin'?'降为普通用户':'提升为管理员'}}</el-dropdown-item>
+                    <el-dropdown-item command="delete" style="color:#d93026">删除账号</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="sub" style="margin-top:10px">共 {{filteredUsers.length}} 个账号（{{users.length}} / 全部）</div>
+      </div>
+    </div>
+
+    <!-- ===== 数据恢复 ===== -->
+    <div v-if="view==='data'" class="page">
+      <div><h2>数据恢复</h2><div class="sub">查看用户学习数据、管理快照与恢复历史版本</div></div>
+      <div class="glass card">
+        <div class="tools">
+          <el-select v-model="dUser" filterable placeholder="选择用户（搜索邮箱）" style="width:280px" @change="loadData">
+            <el-option v-for="u in users" :key="u.id" :value="u.id" :label="u.email"></el-option>
+          </el-select>
+          <div class="grow"></div>
+          <el-button round @click="loadData" :disabled="!dUser" :loading="loading">刷新</el-button>
+        </div>
+      </div>
+      <template v-if="dUser && dInfo">
+        <div class="metrics">
+          <div class="glass metric"><div class="k">当前词汇量</div><div class="v">{{dInfo.current?dInfo.current.brief.words:0}}</div><div class="hint">{{dInfo.current?ago(dInfo.current.updated_at):'无数据'}}</div></div>
+          <div class="glass metric"><div class="k">已读故事</div><div class="v">{{dInfo.current?dInfo.current.brief.readCount:0}}</div><div class="hint">听力 {{dInfo.current?dInfo.current.brief.listenedCount:0}} · 生词 {{dInfo.current?dInfo.current.brief.favCount:0}}</div></div>
+          <div class="glass metric"><div class="k">快照数量</div><div class="v">{{dInfo.snapshots.length}}</div><div class="hint">手动备份 + 恢复前存档</div></div>
+        </div>
+        <div class="glass card">
+          <div class="tools" style="margin-bottom:12px">
+            <h3 style="margin:0">快照列表</h3><div class="grow"></div>
+            <el-button round size="small" @click="dCmd('backup')">备份当前数据</el-button>
+            <el-button round size="small" @click="dCmd('rollback')">撤销最近恢复</el-button>
+            <el-button round size="small" type="danger" plain @click="dCmd('clear')">清空该用户数据</el-button>
+          </div>
+          <el-table :data="dInfo.snapshots" style="width:100%">
+            <el-table-column label="时间" width="160"><template #default="{row}"><span class="mono">{{fmtTime(row.created_at)}}</span></template></el-table-column>
+            <el-table-column label="类型" width="100"><template #default="{row}"><el-tag size="small" :type="row.reason==='manual'?'primary':'info'" effect="plain">{{row.reason==='manual'?'手动备份':'恢复前存档'}}</el-tag></template></el-table-column>
+            <el-table-column label="内容摘要" min-width="200"><template #default="{row}"><span class="mono">词汇 {{row.brief.words}} · 阅读 {{row.brief.readCount}} · 生词 {{row.brief.favCount}}</span></template></el-table-column>
+            <el-table-column label="操作" width="150" fixed="right">
+              <template #default="{row}">
+                <el-button size="small" round type="primary" plain @click="dCmd('restore',row.id)">恢复</el-button>
+                <el-button size="small" round type="danger" text @click="dCmd('delete_snapshot',row.id)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </template>
+      <div v-else-if="dUser&&!dInfo" class="glass card sub" style="text-align:center;padding:40px" v-loading="loading">加载中…</div>
+    </div>
+
+    <!-- ===== 批量操作 ===== -->
+    <div v-if="view==='bulk'" class="page">
+      <div><h2>批量操作</h2><div class="sub">全站备份导出与数据清理（危险操作均有确认提示）</div></div>
+      <div class="glass card">
+        <h3>全站数据导出</h3>
+        <p class="sub" style="margin-bottom:12px">导出全部用户的学习数据为 JSON 文件（用于离线备份）</p>
+        <el-button type="primary" round :loading="loading" @click="exportAll">导出全站数据</el-button>
+      </div>
+      <div class="glass card">
+        <h3>清理陈旧快照</h3>
+        <p class="sub" style="margin-bottom:12px">删除超过保留期的历史快照（每用户至少保留最近 5 条）</p>
+        <div class="tools">
+          <el-select v-model="hisDays" style="width:160px"><el-option :value="30" label="保留 30 天"/><el-option :value="90" label="保留 90 天"/><el-option :value="365" label="保留 365 天"/></el-select>
+          <el-button round :loading="loading" @click="cleanupHistory">开始清理</el-button>
+        </div>
+      </div>
+      <div class="glass card" style="border-color:rgba(217,48,38,.25)">
+        <h3 style="color:#d93026">清理不活跃账号</h3>
+        <p class="sub" style="margin-bottom:12px">删除超过 N 天未登录且<b>无任何学习数据</b>的账号（管理员永不清理）</p>
+        <div class="tools">
+          <el-select v-model="inaDays" style="width:160px"><el-option :value="90" label="90 天未活跃"/><el-option :value="180" label="180 天未活跃"/><el-option :value="365" label="365 天未活跃"/></el-select>
+          <el-checkbox v-model="inaConfirm">我已知晓此操作不可撤销</el-checkbox>
+          <el-button round type="danger" :disabled="!inaConfirm" :loading="loading" @click="cleanupInactive">删除账号</el-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 审计日志 ===== -->
+    <div v-if="view==='audit'" class="page">
+      <div><h2>审计日志</h2><div class="sub">最近 200 条管理操作记录</div></div>
+      <div class="glass card">
+        <el-button round :loading="loading" @click="loadAudit" style="margin-bottom:12px">刷新</el-button>
+        <el-table :data="logs" style="width:100%">
+          <el-table-column label="时间" width="160"><template #default="{row}"><span class="mono">{{fmtTime(row.created_at)}}</span></template></el-table-column>
+          <el-table-column label="管理员" min-width="170"><template #default="{row}">{{row.admin_email}}</template></el-table-column>
+          <el-table-column label="操作" width="130"><template #default="{row}"><el-tag size="small" :type="tagOf(row.action)" effect="plain">{{actionName(row.action)}}</el-tag></template></el-table-column>
+          <el-table-column label="目标" min-width="160"><template #default="{row}"><span class="mono" style="font-size:12px">{{row.target}}</span></template></el-table-column>
+          <el-table-column label="详情" min-width="180"><template #default="{row}"><span class="mono" style="font-size:11.5px;color:var(--ink2)">{{row.detail?JSON.stringify(row.detail):'—'}}</span></template></el-table-column>
+        </el-table>
+      </div>
+    </div>
+  </main>
+</div>
+</div>
+
+<script src="https://fastly.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/element-plus@2/dist/index.full.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/element-plus@2/dist/locale/zh-cn.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const {createApp,reactive,ref,computed,nextTick,onMounted}=Vue;
+const EP=ElementPlus, ElMsg=EP.ElMessage, ElBox=EP.ElMessageBox;
+
+const ICONS={
+  dash:"M3 12h7V3H3v9zm11 9h7v-9h-7v9zM3 21h7v-6H3v6zM14 3v6h7V3h-7z",
+  users:"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm13 10v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",
+  data:"M4 4h16v16H4zM4 9h16M9 9v11",
+  bulk:"M19 9l-7-6-7 6M5 15l7 6 7-6M12 3v6M12 15v6",
+  audit:"M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M9 5h6M9 12l2 2 4-4",
+};
+const ACTION_NAMES={disable:"禁用账号",enable:"启用账号",promote:"提升管理员",demote:"降级管理员",delete:"删除账号",delete_snapshot:"删除快照",reset_pw:"重置密码",backup:"手动备份",restore:"恢复快照",rollback:"撤销恢复",clear:"清空数据",export_all:"全站导出",cleanup_history:"清理快照",cleanup_inactive:"清理账号"};
+
+createApp({
+  setup(){
+    /* ---------- 配置与会话 ---------- */
+    const LS={u:"iel_sb_url",k:"iel_sb_key"};
+    const cfg=reactive({url:localStorage.getItem(LS.u)||"",key:localStorage.getItem(LS.k)||""});
+    const cfgReady=!!(cfg.url&&cfg.key);
+    const form=reactive({email:"",password:""});
+    const loading=ref(false), loginErr=ref(""), user=ref(null), view=ref("dash");
+    let sb=null;
+
+    const menus=[
+      {k:"dash",t:"数据总览",d:ICONS.dash},{k:"users",t:"账号管理",d:ICONS.users},
+      {k:"data",t:"数据恢复",d:ICONS.data},{k:"bulk",t:"批量操作",d:ICONS.bulk},
+      {k:"audit",t:"审计日志",d:ICONS.audit},
+    ];
+    const go=async k=>{view.value=k; await nextTick();
+      if(k==="dash"&&st.value.totals) drawCharts();
+      if(k==="users"&&!users.value.length) loadUsers();
+      if(k==="data"&&!users.value.length) loadUsers();
+      if(k==="audit"&&!logs.value.length) loadAudit();
+    };
+
+    const saveCfg=()=>{
+      const u=cfg.url.trim(),k=cfg.key.trim();
+      if(!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(u)) return ElMsg.error("URL 格式不对，应形如 https://xxxx.supabase.co");
+      if(!k) return ElMsg.error("请填写 Anon Key");
+      localStorage.setItem(LS.u,u.replace(/\/$/,"")); localStorage.setItem(LS.k,k);
+      location.reload();
+    };
+    const login=async()=>{
+      loading.value=true; loginErr.value="";
+      try{
+        sb=window.supabase.createClient(localStorage.getItem(LS.u),localStorage.getItem(LS.k));
+        const {data,error}=await sb.auth.signInWithPassword({email:form.email.trim(),password:form.password});
+        if(error) throw error;
+        user.value=data.user;
+        // 校验管理员（调 stats 接口，403 即无权限）
+        const r=await api("admin-stats");
+        if(!r.ok){ await sb.auth.signOut(); user.value=null; loginErr.value=r.body.error||"无管理员权限"; return; }
+        st.value=await r.json();
+        await nextTick(); drawCharts();
+        loadUsers();
+      }catch(e){ loginErr.value=e.message||"登录失败"; }
+      finally{ loading.value=false; }
+    };
+    const logout=async()=>{ try{await sb.auth.signOut();}catch(e){} user.value=null; };
+
+    /* ---------- API ---------- */
+    async function api(name,opts={}){
+      const {data:{session}}=await sb.auth.getSession();
+      if(!session){ user.value=null; return {ok:false,body:{error:"会话过期，请重新登录"}}; }
+      const r=await fetch(localStorage.getItem(LS.u)+"/functions/v1/"+name,{
+        ...(opts.body?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(opts.body)}:{method:"GET"}),
+        headers:{...(opts.body?{"Content-Type":"application/json"}:{}),Authorization:"Bearer "+session.access_token},
+      });
+      if(r.status===401){ user.value=null; return {ok:false,body:{error:"会话过期，请重新登录"}}; }
+      const body=await r.json().catch(()=>({}));
+      if(!r.ok) return {ok:false,body};
+      return {ok:true,json:async()=>body,body};
+    }
+
+    /* ---------- 总览 ---------- */
+    const st=ref({totals:{},learning:{},signupTrend:[]});
+    const trendChart=ref(null),levelChart=ref(null),storyChart=ref(null);
+    let charts={};
+    const drawCharts=()=>{
+      if(!window.echarts||!st.value.totals.users&&st.value.totals.users!==0) return;
+      const mk=(el,fn)=>{ if(!el)return; (charts[el]||(charts[el]=echarts.init(el))).clear(); fn(charts[el]); };
+      mk(trendChart.value,c=>c.setOption({
+        grid:{left:36,right:12,top:14,bottom:24},
+        xAxis:{type:"category",data:st.value.signupTrend.map(t=>t.date.slice(5))},
+        yAxis:{type:"value",minInterval:1,splitLine:{lineStyle:{color:"rgba(0,0,0,.05)"}}},
+        tooltip:{trigger:"axis"},
+        series:[{type:"line",smooth:true,symbolSize:5,data:st.value.signupTrend.map(t=>t.count),
+          lineStyle:{color:"#0071e3",width:2.5},itemStyle:{color:"#0071e3"},
+          areaStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:"rgba(0,113,227,.25)"},{offset:1,color:"rgba(0,113,227,0)"}]}}}],
+      }));
+      const LV=["陌生","初识","熟悉","掌握"];
+      mk(levelChart.value,c=>c.setOption({
+        tooltip:{trigger:"item"},legend:{bottom:0,itemWidth:10,itemHeight:10},
+        series:[{type:"pie",radius:["45%","68%"],center:["50%","44%"],
+          data:st.value.learning.masteryLevels.map((v,i)=>({name:LV[i],value:v})),
+          label:{formatter:"{b} {d}%"},itemStyle:{borderRadius:6,borderColor:"rgba(255,255,255,.8)",borderWidth:2},
+          color:["#ff6b6b","#ffa94d","#4dabf7","#30d158"]}],
+      }));
+      mk(storyChart.value,c=>c.setOption({
+        grid:{left:60,right:16,top:8,bottom:24},
+        tooltip:{},xAxis:{type:"value",minInterval:1,splitLine:{lineStyle:{color:"rgba(0,0,0,.05)"}}},
+        yAxis:{type:"category",data:st.value.learning.topStories.map(s=>"#"+s.id).reverse()},
+        series:[{type:"bar",barWidth:14,itemStyle:{color:"#0071e3",borderRadius:[0,7,7,0]},
+          data:st.value.learning.topStories.map(s=>s.count).reverse()}],
+      }));
+    };
+
+    /* ---------- 账号管理 ---------- */
+    const users=ref([]), uQuery=ref(""), uRole=ref(""), uState=ref("");
+    const loadUsers=async()=>{
+      loading.value=true;
+      const r=await api("admin-users");
+      if(r.ok) users.value=r.body.users;
+      else ElMsg.error(r.body.error||"加载失败");
+      loading.value=false;
+    };
+    const filteredUsers=computed(()=>{
+      const q=uQuery.value.trim().toLowerCase();
+      return users.value.filter(u=>
+        (!q||u.email.toLowerCase().includes(q))&&
+        (!uRole.value||u.role===uRole.value)&&
+        (!uState.value||(uState.value==="banned")===!!u.banned));
+    });
+    const $userCmd=async(cmd,row)=>{
+      const conf=async(title,txt,type="warning")=>{
+        try{ await ElBox.confirm(txt,title,{type,confirmButtonText:"确认",cancelButtonText:"取消",roundButton:true}); return true; }
+        catch(e){ return false; }
+      };
+      if(cmd==="data"){ dUser.value=row.id; return go("data"); }
+      const needConfirm={disable:["禁用账号","该用户将无法登录，确定禁用？"],
+        delete:["删除账号","将永久删除该账号及其全部学习数据，不可恢复！","error"],
+        promote:["提升管理员","该用户将获得全部管理权限，确定？"]};
+      if(needConfirm[cmd]&&!await conf(...needConfirm[cmd])) return;
+      loading.value=true;
+      const r=await api("admin-users",{body:{action:cmd,user_id:row.id}});
+      loading.value=false;
+      if(r.ok){ ElMsg.success(r.body.message); loadUsers(); }
+      else ElMsg.error(r.body.error||"操作失败");
+    };
+
+    /* ---------- 数据恢复 ---------- */
+    const dUser=ref(""), dInfo=ref(null);
+    const loadData=async()=>{
+      if(!dUser.value) return;
+      loading.value=true; dInfo.value=null;
+      const r=await api("admin-data?user_id="+dUser.value);
+      if(r.ok) dInfo.value=r.body; else ElMsg.error(r.body.error||"加载失败");
+      loading.value=false;
+    };
+    const dCmd=async(action,sid)=>{
+      const map={
+        backup:["备份当前数据","为该用户当前学习数据创建手动快照？"],
+        rollback:["撤销最近恢复","把最近一次恢复前的数据写回（当前数据会先自动存档）？"],
+        clear:["清空用户数据","将清空该用户全部学习数据（先自动存档，可再恢复），确定？","error"],
+        restore:["恢复快照","将把该用户数据恢复到此快照版本（当前数据自动存档，可撤销），确定？"],
+        delete_snapshot:["删除快照","删除后不可恢复，确定？","error"],
+      };
+      if(!await (async()=>{try{await ElBox.confirm(map[action][1],map[action][0],{type:map[action][2]||"warning",roundButton:true});return true;}catch(e){return false;}})()) return;
+      loading.value=true;
+      const r=await api("admin-data",{body:{action,user_id:dUser.value,snapshot_id:sid}});
+      loading.value=false;
+      if(r.ok){ ElMsg.success(r.body.message); loadData(); }
+      else ElMsg.error(r.body.error||"操作失败");
+    };
+
+    /* ---------- 批量操作 ---------- */
+    const hisDays=ref(90), inaDays=ref(90), inaConfirm=ref(false);
+    const exportAll=async()=>{
+      loading.value=true;
+      const {data:{session}}=await sb.auth.getSession();
+      const r=await fetch(localStorage.getItem(LS.u)+"/functions/v1/admin-bulk",{
+        method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+session.access_token},
+        body:JSON.stringify({action:"export_all"})});
+      loading.value=false;
+      if(!r.ok){ const b=await r.json().catch(()=>({})); return ElMsg.error(b.error||"导出失败"); }
+      const blob=await r.blob();
+      const a=document.createElement("a");
+      a.href=URL.createObjectURL(blob); a.download="site-data-export.json"; a.click();
+      URL.revokeObjectURL(a.href); ElMsg.success("已导出全站数据");
+    };
+    const cleanupHistory=async()=>{
+      loading.value=true;
+      const r=await api("admin-bulk",{body:{action:"cleanup_history",days:hisDays.value}});
+      loading.value=false;
+      r.ok?ElMsg.success(r.body.message):ElMsg.error(r.body.error||"操作失败");
+    };
+    const cleanupInactive=async()=>{
+      try{ await ElBox.confirm(`将永久删除 ${inaDays.value} 天未登录且无学习数据的账号，此操作不可撤销！`,"清理不活跃账号",{type:"error",confirmButtonText:"确认删除",cancelButtonText:"取消",roundButton:true}); }
+      catch(e){ return; }
+      loading.value=true;
+      const r=await api("admin-bulk",{body:{action:"cleanup_inactive",days:inaDays.value,confirm:true}});
+      loading.value=false; inaConfirm.value=false;
+      r.ok?(ElMsg.success(r.body.message),loadUsers()):ElMsg.error(r.body.error||"操作失败");
+    };
+
+    /* ---------- 审计日志 ---------- */
+    const logs=ref([]);
+    const loadAudit=async()=>{
+      loading.value=true;
+      const r=await api("admin-bulk");
+      if(r.ok) logs.value=r.body.logs; else ElMsg.error(r.body.error||"加载失败");
+      loading.value=false;
+    };
+    const tagOf=a=>({delete:"danger",cleanup_inactive:"danger",clear:"danger",delete_snapshot:"danger",restore:"warning",rollback:"warning",export_all:"success"}[a]||"info");
+    const actionName=a=>ACTION_NAMES[a]||a;
+
+    /* ---------- 工具 ---------- */
+    const fmtDate=s=>s?String(s).slice(0,10):"—";
+    const fmtTime=s=>s?String(s).replace("T"," ").slice(0,16):"—";
+    const ago=s=>{ if(!s) return "从未"; const t=(Date.now()-new Date(s).getTime())/6e4;
+      if(t<1) return "刚刚"; if(t<60) return Math.floor(t)+" 分钟前";
+      if(t<1440) return Math.floor(t/60)+" 小时前"; if(t<43200) return Math.floor(t/1440)+" 天前";
+      return fmtDate(s); };
+
+    /* ---------- 启动：恢复会话 ---------- */
+    onMounted(async()=>{
+      if(!cfgReady) return;
+      try{
+        sb=window.supabase.createClient(localStorage.getItem(LS.u),localStorage.getItem(LS.k));
+        const {data:{session}}=await sb.auth.getSession();
+        if(!session) return;
+        const r=await api("admin-stats");
+        if(r.ok){ user.value=session.user; st.value=await r.json(); await nextTick(); drawCharts(); loadUsers(); }
+      }catch(e){}
+    });
+
+    return {user,view,menus,go,cfg,cfgReady,saveCfg,form,login,loginErr,logout,loading,
+      st,trendChart,levelChart,storyChart,users,uQuery,uRole,uState,filteredUsers,loadUsers,$userCmd,
+      dUser,dInfo,loadData,dCmd,hisDays,inaDays,inaConfirm,exportAll,cleanupHistory,cleanupInactive,
+      logs,loadAudit,tagOf,actionName,fmtDate,fmtTime,ago};
+  },
+}).use(EP,{locale:window.ElementPlusLocaleZhCn}).mount("#app");
+</script>
+</body>
+</html>
