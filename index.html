@@ -998,17 +998,12 @@ function save(){
 
 /* ================= 云同步（Supabase 免费版） =================
    邮箱注册 / 登录，注册后需管理员审批（通过前数据仅存本机）。
-   项目地址与 anon 公开密钥由构建脚本内置进页面；如本机 localStorage 有自定义配置则优先。
+   项目地址与 anon 公开密钥由构建脚本内置进页面（anon 为公开密钥，安全由 RLS 保证）。
    学习数据存 learning_data 表（RLS 行级安全：各账号只能读写自己的行，待审批用户无云端权限）。 */
 const SB={
-  URLSTORE:"iel_sb_url", KEYSTORE:"iel_sb_key",
   DEF_URL:"https://nhqevdkjqzgnyjbijwso.supabase.co", DEF_KEY:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ocWV2ZGtqcXpnbnlqYmlqd3NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NDQ2MDYsImV4cCI6MjEwMzIyMDYwNn0.WXX79gPNdvV_q37jvwTcACHPGZAvi3bw7CeFpw0QKpE",   /* 构建时替换为内置项目配置 */
   _c:null, _sdkP:null, _pushT:null, _pushing:false, user:null, lastSync:0, _errShown:false,
   role:null,   /* null=未登录/未知 / pending=待审批 / user / admin */
-  url(){ try{ return (localStorage.getItem(this.URLSTORE)||"").trim()||this.DEF_URL; }catch(e){ return this.DEF_URL; } },
-  anonKey(){ try{ return (localStorage.getItem(this.KEYSTORE)||"").trim()||this.DEF_KEY; }catch(e){ return this.DEF_KEY; } },
-  setCfg(u,k){ try{ localStorage.setItem(this.URLSTORE,String(u).trim()); localStorage.setItem(this.KEYSTORE,String(k).trim()); }catch(e){} },
-  configured(){ return !!(this.url()&&this.anonKey()); },
   /* 按需加载 Supabase SDK（约 130KB）：未配置/未使用的设备零加载开销 */
   sdk(){
     if(window.supabase) return Promise.resolve(window.supabase);
@@ -1023,15 +1018,14 @@ const SB={
     return this._sdkP;
   },
   async client(){
-    if(!this.configured()) return null;
     if(this._c) return this._c;
     const sdk=await this.sdk();
-    this._c=sdk.createClient(this.url(), this.anonKey());
+    this._c=sdk.createClient(this.DEF_URL, this.DEF_KEY);
     return this._c;
   },
   /* 应用启动：恢复上次会话并订阅登录/登出事件 */
   async init(){
-    if(!this.configured()) return;
+    try{ localStorage.removeItem("iel_sb_url"); localStorage.removeItem("iel_sb_key"); }catch(e){}   // 清理旧版自定义配置残留
     try{
       const c=await this.client();
       const {data:{session}}=await c.auth.getSession();
@@ -3061,9 +3055,7 @@ function renderFav(){
 function renderMe(){
   app.innerHTML=`<div class="view-sub">使用指南与数据管理。学习数据保存在本机浏览器，登录账号后自动云端同步（多设备共享），离线可用。</div>
   <div class="card"><h3>账号与云同步</h3>
-    ${!SB.configured()
-    ?`<div class="me-p">本版本未内置云同步配置，数据仅保存在本机。</div>`
-    :SB.user
+    ${SB.user
     ?(SB.role==="pending"
       ?`<div class="me-p">当前登录：<b>${esc(SB.user.email||"")}</b><br>⏳ <b>账号待管理员审批</b>。审批通过后学习数据将自动云端同步；等待期间本机学习数据不受影响，可正常使用。</div>
       <div class="backup-zone"><button id="sbLogout">退出登录</button></div>`
