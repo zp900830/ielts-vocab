@@ -152,25 +152,27 @@ body{
       <div class="glass card">
         <div class="tools">
           <el-input v-model="uQuery" placeholder="搜索邮箱…" clearable style="width:240px"></el-input>
-          <el-select v-model="uRole" clearable placeholder="角色" style="width:120px"><el-option label="管理员" value="admin"/><el-option label="普通用户" value="user"/></el-select>
+          <el-select v-model="uRole" clearable placeholder="角色" style="width:130px"><el-option label="待审批" value="pending"/><el-option label="普通用户" value="user"/><el-option label="管理员" value="admin"/></el-select>
           <el-select v-model="uState" clearable placeholder="状态" style="width:120px"><el-option label="正常" value="ok"/><el-option label="已禁用" value="banned"/></el-select>
           <div class="grow"></div>
           <el-button :loading="loading" @click="loadUsers" round>刷新</el-button>
         </div>
         <el-table :data="filteredUsers" style="width:100%;margin-top:12px" v-loading="loading">
-          <el-table-column label="邮箱" min-width="200"><template #default="{row}"><b style="font-weight:600">{{row.email}}</b><el-tag v-if="row.role==='admin'" size="small" type="warning" style="margin-left:6px">管理员</el-tag></template></el-table-column>
+          <el-table-column label="邮箱" min-width="200"><template #default="{row}"><b style="font-weight:600">{{row.email}}</b><el-tag v-if="row.role==='pending'" size="small" type="warning" style="margin-left:6px">待审批</el-tag><el-tag v-else-if="row.role==='admin'" size="small" type="warning" style="margin-left:6px">管理员</el-tag></template></el-table-column>
           <el-table-column label="状态" width="80"><template #default="{row}"><el-tag :type="row.banned?'danger':'success'" size="small" effect="plain">{{row.banned?'禁用':'正常'}}</el-tag></template></el-table-column>
           <el-table-column label="注册时间" width="110"><template #default="{row}"><span class="mono">{{fmtDate(row.created_at)}}</span></template></el-table-column>
           <el-table-column label="最近活跃" width="110"><template #default="{row}"><span class="mono">{{ago(row.last_seen)}}</span></template></el-table-column>
           <el-table-column label="词汇量" width="80" align="right"><template #default="{row}"><span class="mono">{{row.summary.words}}</span></template></el-table-column>
           <el-table-column label="阅读/听力" width="95" align="right"><template #default="{row}"><span class="mono">{{row.summary.readCount}}/{{row.summary.listenedCount}}</span></template></el-table-column>
           <el-table-column label="生词" width="65" align="right"><template #default="{row}"><span class="mono">{{row.summary.favCount}}</span></template></el-table-column>
-          <el-table-column label="操作" width="80" fixed="right">
+          <el-table-column label="操作" width="130" fixed="right">
             <template #default="{row}">
+              <el-button v-if="row.role==='pending'" size="small" type="primary" round @click="userCmd('approve',row)">通过审批</el-button>
               <el-dropdown trigger="click" @command="cmd=>userCmd(cmd,row)">
                 <el-button size="small" round>管理</el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
+                    <el-dropdown-item v-if="row.role==='pending'" command="approve" style="color:#0071e3">通过审批</el-dropdown-item>
                     <el-dropdown-item command="data">数据恢复…</el-dropdown-item>
                     <el-dropdown-item command="reset_pw">发送重置密码邮件</el-dropdown-item>
                     <el-dropdown-item :command="row.banned?'enable':'disable'" divided>{{row.banned?'启用账号':'禁用账号'}}</el-dropdown-item>
@@ -182,7 +184,7 @@ body{
             </template>
           </el-table-column>
         </el-table>
-        <div class="sub" style="margin-top:10px">共 {{filteredUsers.length}} 个账号（{{users.length}} / 全部）</div>
+        <div class="sub" style="margin-top:10px">共 {{filteredUsers.length}} 个账号（全部 {{users.length}}，待审批 {{users.filter(u=>u.role==='pending').length}}）</div>
       </div>
     </div>
 
@@ -288,7 +290,7 @@ const ICONS={
   bulk:"M19 9l-7-6-7 6M5 15l7 6 7-6M12 3v6M12 15v6",
   audit:"M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M9 5h6M9 12l2 2 4-4",
 };
-const ACTION_NAMES={disable:"禁用账号",enable:"启用账号",promote:"提升管理员",demote:"降级管理员",delete:"删除账号",delete_snapshot:"删除快照",reset_pw:"重置密码",backup:"手动备份",restore:"恢复快照",rollback:"撤销恢复",clear:"清空数据",export_all:"全站导出",cleanup_history:"清理快照",cleanup_inactive:"清理账号"};
+const ACTION_NAMES={approve:"通过审批",disable:"禁用账号",enable:"启用账号",promote:"提升管理员",demote:"降级管理员",delete:"删除账号",delete_snapshot:"删除快照",reset_pw:"重置密码",backup:"手动备份",restore:"恢复快照",rollback:"撤销恢复",clear:"清空数据",export_all:"全站导出",cleanup_history:"清理快照",cleanup_inactive:"清理账号"};
 
 createApp({
   setup(){
@@ -480,7 +482,7 @@ createApp({
       if(r.ok) logs.value=r.body.logs; else ElMsg.error(r.body.error||"加载失败");
       loading.value=false;
     };
-    const tagOf=a=>({delete:"danger",cleanup_inactive:"danger",clear:"danger",delete_snapshot:"danger",restore:"warning",rollback:"warning",export_all:"success"}[a]||"info");
+    const tagOf=a=>({approve:"success",delete:"danger",cleanup_inactive:"danger",clear:"danger",delete_snapshot:"danger",restore:"warning",rollback:"warning",export_all:"success"}[a]||"info");
     const actionName=a=>ACTION_NAMES[a]||a;
 
     /* ---------- 工具 ---------- */
