@@ -353,6 +353,9 @@ body.reading main{padding-top:64px;}
 .wp-ph{color:var(--iel-ink2); font-size:14px; margin:3px 0 8px; font-family:var(--iel-font-serif);}
 .wp-def{font-size:14.5px; line-height:1.75; border-top:1px dashed var(--iel-line); padding-top:9px;}
 .wp-def .dl{display:block;}
+.wp-def .dl.ctx{color:var(--iel-accent-deep);}
+.wp-def .dl .hit{color:var(--iel-accent-deep); font-weight:700;}
+.wp-ex .ex-tag{display:inline-block; font-size:10.5px; font-weight:600; font-style:normal; background:var(--iel-accent-soft); color:var(--iel-accent-deep); border-radius:999px; padding:1px 8px; margin-bottom:4px;}
 .ph-uk,.ph-us{margin-right:4px; white-space:nowrap;}
 .ph-tag{font-size:11px; margin-right:3px; color:var(--iel-ink-faint); font-style:normal;}
 .ph-uk.on,.ph-us.on{color:var(--iel-ink); font-weight:600;}
@@ -678,7 +681,6 @@ body.reading main{padding-top:64px;}
 .ls-go-ic{position:relative; width:34px; height:34px; border-radius:50%; flex:none; background:var(--iel-grad); color:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(16,180,135,.42), inset 0 1px 0 rgba(255,255,255,.4), inset 0 -2px 4px rgba(6,84,62,.25); font-size:16px;}
 .ls-go-ic::after{content:""; position:absolute; inset:0; border-radius:50%; pointer-events:none; background:radial-gradient(ellipse at 30% 18%, rgba(255,255,255,.45), rgba(255,255,255,0) 60%);}
 .ls-go-t{color:var(--iel-accent-deep); padding-right:3px; letter-spacing:.5px;}
-.ls-open .pulse{width:7px; height:7px; border-radius:50%; background:var(--iel-accent); animation:ls-pulse 1.6s ease infinite;}
 body.ls-active #lsGo{opacity:0; pointer-events:none; transform:translateY(12px) scale(.9);}   /* 播放/暂停态：让位给悬浮球 */
 body.reading #lsGo{display:none;}   /* 阅读页（底部有朗读条）不显示，避免遮挡 */
 
@@ -881,7 +883,7 @@ window.addEventListener("load",function(){
    DATA loader 从 data/*.json 拉取，Cache API 按内容版本持久缓存——数据未变时
    二次访问零网络请求。 */
 const DATA_INLINE = false;
-const DATA_VER = "a722345a6c";
+const DATA_VER = "a44592387b";
 const CHAPTERS = ["1 自然地理","2 植物研究","3 动物保护","4 太空探索","5 学校教育","6 科技发明","7 文化历史","8 语言演化","9 娱乐活动","10 物品材料","11 时尚潮流","12 饮食健康","13 建筑场所","14 交通旅行","15 国家政府-2","16 社会经济","17 法律法规","18 沙场争锋","19 社会角色","20 行为动作","21 身心健康","22 时间日期"];
 let BOOK = [];     // [chNum, word, phonetic, def, example, example_cn, phUK, phUS]
 let SUP = [];       // [word, phonetic, pos, cn, phUK, phUS]
@@ -1664,7 +1666,9 @@ app.addEventListener("click",e=>{
   const ow=e.target.closest(".ow");
   if(ow){ const base=resolveWord(ow.dataset.w);
     if(!base){ toast("此词暂无离线释义（可能是专有名词）"); return; }
-    showPop(base,{target:false, el:ow, surface:ow.textContent});
+    const senEl=ow.closest(".sen");
+    const si=senEl?parseInt(senEl.dataset.si,10):-1;
+    showPop(base,{target:false, el:ow, surface:ow.textContent, si:isNaN(si)?-1:si});
     return; }
   if(VIEW==="reader"){
     const tp=e.target.closest(".tr-play");
@@ -1720,6 +1724,61 @@ document.addEventListener("click",e=>{
   const h=document.getElementById("trHelp"); if(h) h.classList.remove("on");
 });
 
+/* ---- 非目标词语境消歧：用所在句的官方译文挑出当下义项（tap→轻敲 而非 利用） ---- */
+function rankDefLines(def,tr){
+  const lines=def.split("\n").filter(x=>x.trim());
+  if(!tr||lines.length<2) return {lines,hit:-1};
+  const scored=lines.map(l=>{
+    const cn=l.replace(/^[a-z]+\.\s*/i,"");
+    const parts=[];
+    cn.split(/[;；，,、]/).forEach(s=>{ s=s.trim(); if(s.length>1){ parts.push(s); if(/的$/.test(s)) parts.push(s.slice(0,-1)); } });
+    let score=0;
+    parts.forEach(p=>{ if(tr.indexOf(p)>=0) score+=p.length; });
+    if(!score){   // 词组全不中时退化为汉字重合度（“轻敲”↔“轻轻一敲”共享 轻/敲）
+      const chars=[...new Set(cn.match(/[\u4e00-\u9fff]/g)||[])];
+      const n=chars.filter(c=>tr.indexOf(c)>=0).length;
+      if(n>=2) score=n*0.4;
+    }
+    return {l,score};
+  });
+  const top=scored.reduce((a,b)=>b.score>a.score?b:a,{score:0});
+  if(top.score<=0) return {lines,hit:-1};
+  const order=scored.map((s,i)=>i).sort((a,b)=>scored[b].score-scored[a].score||a-b);
+  return {lines:order.map(i=>scored[i].l), hit:order[0]};
+}
+/* 命中义项内的具体词组加高亮（如“轻敲”），返回 HTML 或 null */
+function hlSense(l,tr){
+  const parts=[];
+  l.replace(/^[a-z]+\.\s*/i,"").split(/[;；，,、]/).forEach(s=>{ s=s.trim(); if(s.length>1){ parts.push(s); if(/的$/.test(s)) parts.push(s.slice(0,-1)); } });
+  const hits=[...new Set(parts.filter(p=>tr.indexOf(p)>=0))].sort((a,b)=>b.length-a.length);
+  if(!hits.length) return null;
+  let segs=[[l,false]];
+  hits.forEach(p=>{
+    for(let i=0;i<segs.length;i++){
+      if(segs[i][1]) continue;
+      const k=segs[i][0].indexOf(p);
+      if(k<0) continue;
+      segs.splice(i,1,[segs[i][0].slice(0,k),false],[p,true],[segs[i][0].slice(k+p.length),false]);
+      i+=2;
+    }
+  });
+  return segs.map(([s,h])=>h?`<span class="hit">${esc(s)}</span>`:esc(s)).join("");
+}
+/* 点词所在句（与 renderStoryText 同一套切分，按 data-si 对齐），用于展示“本句”例句 */
+function storySenBySi(si){
+  if(!CUR_STORY||VIEW!=="reader"||si==null||si<0) return null;
+  let n=0, out=null;
+  CUR_STORY.text.split(/\n\n+/).forEach(par=>{ splitSentences(par).forEach(sen=>{ if(n===si) out=sen; n++; }); });
+  return out;
+}
+function ctxExHtml(si){
+  const tr=(si!=null&&si>=0)?(TR_SENS[si]||""):"";
+  const en=storySenBySi(si);
+  if(!en||!tr) return "";
+  const plain=en.replace(/\{\{([^}|]+)(?:\|([^}]+))?\}\}/g,(m,a,b)=>b||a);
+  return `<div class="wp-ex"><span class="ex-tag">本句</span><div class="en">${esc(plain)}</div><div>${esc(tr)}</div></div>`;
+}
+
 function showPop(word,opt){
   const pop=document.getElementById("wpop");
   const d=DICT[word]; if(!d) return;
@@ -1729,13 +1788,25 @@ function showPop(word,opt){
   let head=`<div class="wp-head"><span class="wp-word">${esc(opt.surface||word)}</span>
     <span class="wp-badge ${isTarget?"":"sup"}">${isTarget?("第"+d.ch+"章 · 目标词"):"非目标词"}</span></div>
     ${phBothHtml(d)}`;
-  let body="";
+  let body="", favDef=null;
   if(d.book){
     const lines=d.def.split("\n").filter(x=>x.trim());
-    body=`<div class="wp-def">`+(isTarget? lines.map(l=>`<span class="dl">${esc(l)}</span>`).join("") : `<span class="dl">${esc(lines[0])}</span>`)+`</div>`;
-    if(isTarget&&d.ex) body+=`<div class="wp-ex"><div class="en">${esc(d.ex)}</div><div>${esc(d.excn||"")}</div></div>`;
+    if(isTarget){
+      body=`<div class="wp-def">`+lines.map(l=>`<span class="dl">${esc(l)}</span>`).join("")+`</div>`;
+      if(d.ex) body+=`<div class="wp-ex"><div class="en">${esc(d.ex)}</div><div>${esc(d.excn||"")}</div></div>`;
+    }else{
+      const tr=(opt.si!=null&&opt.si>=0)?(TR_SENS[opt.si]||""):"";
+      const r=rankDefLines(d.def,tr);
+      if(r.hit>=0) favDef=r.lines[0];
+      body=`<div class="wp-def">`+r.lines.map((l,i)=>{
+        const h=(i===0&&r.hit>=0)?hlSense(l,tr):null;
+        return `<span class="dl${i===0&&r.hit>=0?" ctx":""}">${h||esc(l)}</span>`;
+      }).join("")+`</div>`;
+      body+=ctxExHtml(opt.si);
+    }
   } else {
     body=`<div class="wp-def"><span class="dl">${esc(d.pos)} ${esc(d.cn)}</span></div>`;
+    body+=ctxExHtml(opt.si);
   }
   let foot="";
   if(isTarget){
@@ -1765,7 +1836,7 @@ function showPop(word,opt){
   const fb=pop.querySelector(".fav:not(.needlogin)");
   if(fb) fb.onclick=()=>{
     if(S.fav[word]){ delete S.fav[word]; save(); fb.classList.remove("on"); fb.textContent="☆ 收藏到生词本"; toast("已从生词本移除"); updateFavMarks(); updateFavBadge(); }
-    else{ S.fav[word]={ph:d.ph, phUK:d.phUK||"", phUS:d.phUS||"", def:(d.book? d.def.split("\n")[0] : (d.pos+" "+d.cn)), src:CUR_STORY?CUR_STORY.id:"", t:Date.now(), rv:0, due:Date.now()}; save();
+    else{ S.fav[word]={ph:d.ph, phUK:d.phUK||"", phUS:d.phUS||"", def:(d.book? (favDef||d.def.split("\n")[0]) : (d.pos+" "+d.cn)), src:CUR_STORY?CUR_STORY.id:"", t:Date.now(), rv:0, due:Date.now()}; save();
       fb.classList.add("on"); fb.textContent="★ 已收藏，点击取消"; toast("已加入生词本"); updateFavMarks(); updateFavBadge(); }
   };
   pop.querySelectorAll("[data-goto]").forEach(a=>a.onclick=(ev)=>{ ev.preventDefault(); closePop(); openStory(a.dataset.goto, a.dataset.w, a.dataset.occ?parseInt(a.dataset.occ,10):0); });
@@ -2760,7 +2831,7 @@ function ensureFab(){
   if(!g){
     g=document.createElement("button");
     g.className="ls-open"; g.id="lsGo";
-    g.innerHTML=`<span class="ls-go-ic"><i class="ri-headphone-line" aria-hidden="true"></i></span><span class="ls-go-t">随身听</span><span class="pulse" aria-hidden="true"></span>`;
+    g.innerHTML=`<span class="ls-go-ic"><i class="ri-headphone-line" aria-hidden="true"></i></span><span class="ls-go-t">随身听</span>`;
     g.onclick=()=>openListenPanel();   // 打开全屏播放器浮窗（关闭后悬浮球控制，播放不中断）
     document.body.appendChild(g);
   }
