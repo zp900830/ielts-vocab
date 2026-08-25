@@ -257,7 +257,7 @@ body{
           获取：Azure 门户 → 创建「语音服务」资源（F0 免费层每月 50 万字符）→ 「密钥和终结点」页复制 KEY 1，区域须与下方一致。
         </p>
         <div class="tools" style="margin-bottom:10px">
-          <el-input v-model="tts.key" type="password" placeholder="Azure 密钥 KEY 1（32 位）" style="width:320px" show-password spellcheck="false"></el-input>
+          <el-input v-model="tts.key" type="password" placeholder="Azure 密钥 KEY 1" style="width:320px" show-password spellcheck="false"></el-input>
           <el-select v-model="tts.region" placeholder="区域" style="width:200px">
             <el-option v-for="r in ttsRegions" :key="r[0]" :value="r[0]" :label="r[1]+'（'+r[0]+'）'"></el-option>
           </el-select>
@@ -494,7 +494,7 @@ createApp({
     };
     const saveTts=async()=>{
       const k=tts.key.trim(), rg=(tts.region||"").trim().toLowerCase();
-      if(k&&k.length!==32) return ElMsg.error("Azure 密钥应为 32 位（KEY 1）");
+      if(k&&k.length<32) return ElMsg.error("密钥长度不对，请完整复制「密钥和终结点」页的密钥 1");
       if(!k&&!ttsConfigured.value) return ElMsg.error("请填写密钥");
       if(k&&!rg) return ElMsg.error("请选择区域");
       loading.value=true;
