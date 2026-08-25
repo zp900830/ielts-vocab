@@ -161,13 +161,10 @@ main{max-width:860px; margin:0 auto; padding:24px 18px 130px;}
 .card{background:var(--iel-glass); border:1px solid var(--iel-glass-line); border-radius:var(--iel-radius); padding:20px 22px; margin-bottom:18px; box-shadow:var(--iel-shadow);}
 /* 卡片区块标题：全站统一层级（指南/数据管理/测验等卡片内 h3） */
 .card h3{font-size:15px; font-weight:700; color:var(--iel-accent-deep); margin-bottom:10px;}
-.view-sub{color:var(--iel-ink2); font-size:13px; margin-bottom:16px;}
 .guide{background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(250,253,252,.93));}
 .guide ol{margin-left:20px; font-size:13.5px; color:var(--iel-ink3);}
 .guide ol li{margin:3px 0;}
 .me-p{font-size:13px; color:var(--iel-ink3); line-height:1.7;}
-.view-sub .toggle-g{background:var(--iel-accent-soft); border:none; color:var(--iel-accent-deep); font-size:12px; padding:2px 10px; border-radius:999px; margin-left:8px; vertical-align:1px; white-space:nowrap;}
-.view-sub .toggle-g:hover{background:var(--iel-accent-hover);}
 .story-item{display:flex; align-items:center; gap:16px; padding:16px 6px; border-bottom:1px dashed var(--iel-line);}
 .story-item:last-child{border-bottom:none;}
 .s-num{flex:none; width:44px; height:44px; border-radius:14px; background:var(--iel-accent-soft); color:var(--iel-accent-deep); font-weight:700; display:flex; align-items:center; justify-content:center; font-size:15px;}
@@ -574,7 +571,6 @@ body.reading main{padding-top:64px;}
   #lsFab,#lsGo{bottom:calc(66px + env(safe-area-inset-bottom,0px));}
   #lsPanel .audiobar{bottom:calc(10px + env(safe-area-inset-bottom,0px));}
   .card{padding:14px; border-radius:14px;}
-  .view-sub{font-size:12.5px;}
 
   /* 首页故事列表：中文副标题独立成行——长英文标题换行时不再把中文挤到行中错乱 */
   .story-item{gap:10px; padding:13px 2px;}
@@ -1252,7 +1248,7 @@ function renderHome(){
   const ch=S.chapter;
   const guest=isGuest(), free=freeStory();
   let list=STORIES.filter(s=>ch==="all"||s.ch===ch);
-  let html=`<div class="view-sub">读故事 → 点词查义 → 自测 → 统计定位弱项。目标词已高亮，非目标词也可点击查询并收藏。<button class="toggle-g" id="goGuide"><i class="ri-book-open-line" aria-hidden="true"></i> 使用方法</button></div>`;
+  let html="";
   if(guest){
     if(SB.user){   // 待审批用户：已登录但未通过审批
       html+=`<div class="card guest-banner"><i class="ri-time-line gb-ic" aria-hidden="true"></i>
@@ -1285,8 +1281,6 @@ function renderHome(){
     }).join("")+`</div>`;
   }
   app.innerHTML=html;
-  const gg=document.getElementById("goGuide");
-  if(gg) gg.onclick=()=>switchView("me");   // 使用方法已迁入「我的」页
   const gl=document.getElementById("gbLogin");
   if(gl) gl.onclick=()=>switchView("me");
   app.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openStory(b.dataset.open));
@@ -1952,7 +1946,7 @@ const CLOUD_TTS={
   },
   /* 合成一句话，返回可播放的 blob URL（内存 → IndexedDB → API，三层命中） */
   async synth(text,voiceId,ratePct){
-    const key=voiceId+"|"+ratePct+"|"+text;
+    const key="r2|"+voiceId+"|"+ratePct+"|"+text;   // r2：服务端语速格式修正后作废旧缓存
     if(this.cache.has(key)) return this.cache.get(key);
     if(this._pend.has(key)) return this._pend.get(key);
     const speed=Math.min(2,Math.max(0.5,(100+ratePct)/100));
@@ -3000,8 +2994,7 @@ function renderStats(){
   const untouched=rows.length-touched.length;
   const totAttempts=Object.values(S.quiz).reduce((a,q)=>a+q.attempts,0);
 
-  let html=`<div class="view-sub">${ch==="all"?"全部 22 章":"第"+ch+"章 · "+esc(chName(ch).replace(/^\d+\s*/,""))} · 共 ${rows.length} 个目标词。数据保存在本机浏览器（localStorage），离线可用。</div>
-  <div class="card">
+  let html=`<div class="card">
     <div class="ov-grid">
       <div class="ov-cell hi"><div class="n">${avg}<small style="font-size:14px;color:var(--iel-mute)">%</small></div><div class="t">整体掌握度</div></div>
       <div class="ov-cell"><div class="n">${rows.length}</div><div class="t">目标词汇总数</div></div>
@@ -3116,7 +3109,7 @@ function renderFav(){
   migrateFav();
   const words=Object.entries(S.fav).sort((a,b)=>b[1].t-a[1].t);
   const due=dueWords();
-  let html=`<div class="view-sub">阅读时收藏的非目标生词（共 ${words.length} 个）。可导出 CSV / TXT，导入 Anki、欧路词典等继续学习。数据保存在本机。</div><div class="card">`;
+  let html=`<div class="card">`;
   if(!words.length){
     html+=`<div class="empty-box"><b>还没有收藏任何生词</b>阅读故事时，点击任意非目标单词即可查询并 ☆ 收藏。收藏的词会自动进入间隔复习计划。</div>`;
   } else {
@@ -3145,8 +3138,7 @@ function renderFav(){
 }
 /* ================= 我的（使用指南 / 数据管理） ================= */
 function renderMe(){
-  app.innerHTML=`<div class="view-sub">使用指南与数据管理。学习数据保存在本机浏览器，登录账号后自动云端同步（多设备共享），离线可用。</div>
-  <div class="card"><h3>账号与云同步</h3>
+  app.innerHTML=`<div class="card"><h3>账号与云同步</h3>
     ${SB.user
     ?(SB.role==="pending"
       ?`<div class="me-p">当前登录：<b>${esc(SB.user.email||"")}</b><br>⏳ <b>账号待管理员审批</b>。审批通过后学习数据将自动云端同步；等待期间本机学习数据不受影响，可正常使用。</div>
@@ -3166,7 +3158,7 @@ function renderMe(){
   <li><b>完成篇末选择题</b>：题干与选项全英文，提交后有中文详细解析，对错自动计入统计。</li>
   <li><b>打开"学习统计"</b>：按掌握度排序找出薄弱词，点击单词可跳回故事针对性复习。</li>
   <li>非目标生词随手<b>收藏进生词本</b>，可按艾宾浩斯间隔复习，或导出 CSV/TXT 导入 Anki、欧路词典等。</li>
-  <li><b>随身听</b>：在"首页 → 随身听"连播当前章节文章，锁屏后台可续播，自动断点续听。</li>
+  <li><b>随身听</b>：点右下角「随身听」连播当前章节文章，锁屏后台可续播，自动断点续听。</li>
   </ol></div>
   <div class="card"><h3>学习数据备份</h3>
     <div class="me-p">备份文件为 JSON 格式，包含阅读进度、掌握度统计、测验记录、生词本与复习计划。</div>
@@ -3247,7 +3239,7 @@ function renderReview(){
   const f=S.fav[w]||{};
   const src=storyById(f.src);
   const pct=Math.min(100,Math.round(REVIEW.seen/REVIEW.total*100));
-  app.innerHTML=`<h2 class="view-title">间隔复习</h2><div class="view-sub">看英文回想释义，翻转自评：认识则拉长间隔，不认识则 5 分钟后重现。</div>
+  app.innerHTML=`<h2 class="view-title">间隔复习</h2>
   <div class="card">
     <div class="rv-prog"><span>${REVIEW.seen} / ${REVIEW.total} · 认识 ${REVIEW.done} · 不认识 ${REVIEW.again}</span><button class="rv-exit" id="rvExit"><i class="ri-close-line" aria-hidden="true"></i> 退出复习</button></div>
     <div class="rv-bar"><i style="width:${pct}%"></i></div>
