@@ -184,6 +184,15 @@ main{max-width:860px; margin:0 auto; padding:24px 18px 130px;}
 .s-meta .done{color:var(--iel-lv3); font-weight:600;}
 .s-meta .part{color:var(--iel-lv1); font-weight:600;}
 .s-go{padding:9px 18px; font-size:13.5px;}   /* .sub 仅需覆写配色，尺寸继承本规则 */
+/* 游客锁定：提示条 + 锁定故事项 */
+.guest-banner{display:flex; align-items:center; gap:14px; padding:14px 16px; background:linear-gradient(135deg,#fdf6e3,#f2f8f3);}
+.gb-ic{flex:none; font-size:22px; color:#b07a10;}
+.gb-sub{font-size:12.5px; color:var(--iel-ink2);}
+.gb-go{flex:none; margin-left:auto; padding:8px 16px;}
+.story-item.locked .s-num{background:#f3f2ee; color:#a8a49c;}
+.story-item.locked .s-title{color:var(--iel-ink2);}
+.story-item.locked .s-go{background:#f3f2ee; color:#8a867c; box-shadow:none;}
+.story-item.locked .s-go i{margin-right:2px; font-size:12px; vertical-align:-.125em;}
 .empty-box{text-align:center; color:var(--iel-ink2); padding:34px 10px; font-size:14px;}
 .empty-box b{display:block; font-size:16px; color:var(--iel-ink); margin-bottom:8px;}
 
@@ -1162,6 +1171,16 @@ function chName(n){ const c=CHAPTERS.find(x=>parseInt(x,10)===n); return c|| (n+
 
 /* ================= 视图路由 ================= */
 let VIEW="home", CUR_STORY=null, REVIEW=null, TR_SENS=[];
+/* 游客权限：仅可阅读第 1 章第 1 篇故事（含篇内测验/朗读/查词）；
+   其他故事、学习统计、生词本、随身听、收藏均需登录后使用 */
+function isGuest(){ return !SB.user; }
+function needLogin(msg){
+  toast(msg||"登录后即可使用");
+  switchView("me");
+  setTimeout(()=>{ const e=document.getElementById("sbEmail"); if(e) e.focus(); },60);
+  return false;
+}
+function freeStory(){ return STORIES[0]; }
 const TOUCH=!!(window.matchMedia&&matchMedia("(hover: none)").matches);
 const app=document.getElementById("app");
 /* 一级（侧栏）+ 二级（顶栏）导航选中态同步：阅读/随身听归属于「首页」 */
@@ -1172,6 +1191,10 @@ function syncNav(){
   document.getElementById("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.view===VIEW));
 }
 function switchView(v){
+  /* 游客拦截：统计 / 生词本 / 随身听 需登录（home / me / reader 由 openStory 单独控制） */
+  if(isGuest() && (v==="stats"||v==="fav"||v==="listen")){
+    return needLogin(v==="stats"?"登录后查看学习统计":v==="fav"?"登录后使用生词本与复习计划":"登录后使用随身听连播");
+  }
   VIEW=v;
   document.body.classList.toggle("reading", v==="reader");
   document.body.dataset.view=v;
@@ -1202,8 +1225,15 @@ chSel.addEventListener("change",()=>{ const v=chSel.value; S.chapter = v==="all"
 /* ================= 首页 ================= */
 function renderHome(){
   const ch=S.chapter;
+  const guest=isGuest(), free=freeStory();
   let list=STORIES.filter(s=>ch==="all"||s.ch===ch);
   let html=`<div class="view-sub">读故事 → 点词查义 → 自测 → 统计定位弱项。目标词已高亮，非目标词也可点击查询并收藏。<button class="toggle-g" id="goGuide"><i class="ri-book-open-line" aria-hidden="true"></i> 使用方法</button></div>`;
+  if(guest){
+    html+=`<div class="card guest-banner"><i class="ri-lock-2-line gb-ic" aria-hidden="true"></i>
+      <div><b>游客模式</b> · 可免费阅读第 1 篇《${esc(free.title)}》<br>
+      <span class="gb-sub">登录（注册需管理员审批）后解锁全部章节故事、学习统计、生词本与随身听。</span></div>
+      <button class="gb-go" id="gbLogin">免费注册 / 登录</button></div>`;
+  }
 
   if(!list.length){
     html+=`<div class="card empty-box"><b>第${ch}章的情境故事还在制作中</b>目前已完成：第1章（15 篇故事，覆盖全部 241 个目标词）。<br>可以先切换到第 1 章开始学习，或在"学习统计"里浏览本章词汇。</div>`;
@@ -1211,26 +1241,31 @@ function renderHome(){
     html+=`<div class="card">`+list.map((s,i)=>{
       const q=S.quiz[s.id];
       const marked=(s.text.match(/\{\{/g)||[]).length;
+      const locked=guest && s.id!==free.id;
       let meta=`<span>目标词出现 ${marked} 处</span><span>测验 ${s.quiz.length} 题</span>`;
       if(q){ const pct=Math.round(q.best/s.quiz.length*100);
         meta+= q.best>=s.quiz.length? `<span class="done">✓ 测验满分</span>` : `<span class="part">最好成绩 ${q.best}/${s.quiz.length}（${pct}%）</span>`; }
       if(S.listened[s.id]) meta+=`<span class="done"><i class="ri-headphone-line" aria-hidden="true"></i> 已听</span>`;
       if(!S.read[s.id]) meta+=`<span>未读</span>`;
-      return `<div class="story-item"><div class="s-num">${String(i+1).padStart(2,"0")}</div>
+      return `<div class="story-item${locked?" locked":""}"><div class="s-num">${String(i+1).padStart(2,"0")}</div>
       <div class="s-info"><div class="s-title">${esc(s.title)}<span class="tcn">${esc(s.tcn)}</span></div>
       <div class="s-meta">${meta}</div></div>
-      <button class="s-go ${S.read[s.id]?"sub":""}" data-open="${s.id}">${S.read[s.id]?"继续":"开始"}阅读</button></div>`;
+      <button class="s-go ${S.read[s.id]?"sub":""}" ${locked?"data-lock":"data-open="+s.id}>${locked?'<i class="ri-lock-line" aria-hidden="true"></i> 登录解锁':(S.read[s.id]?"继续":"开始")+"阅读"}</button></div>`;
     }).join("")+`</div>`;
   }
   app.innerHTML=html;
   const gg=document.getElementById("goGuide");
   if(gg) gg.onclick=()=>switchView("me");   // 使用方法已迁入「我的」页
+  const gl=document.getElementById("gbLogin");
+  if(gl) gl.onclick=()=>switchView("me");
   app.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openStory(b.dataset.open));
+  app.querySelectorAll("[data-lock]").forEach(b=>b.onclick=()=>needLogin("登录后解锁全部故事"));
 }
 
 /* ================= 阅读器 ================= */
 function openStory(id, focusWord, occ){
   const s=storyById(id); if(!s) return;
+  if(isGuest() && s.id!==freeStory().id) return needLogin("游客可免费阅读第 1 篇，登录后解锁全部故事");
   CUR_STORY=s; VIEW="reader";
   document.body.classList.add("reading");
   document.body.dataset.view="reader";
@@ -1688,6 +1723,8 @@ function showPop(word,opt){
     const sts=WORD_STORIES[word]||[];
     foot=`<div class="wp-stats">${mzHtml}</div>
       <div class="wp-links">出现在：${occLinksHtml(sts)}${sts.length?"":"<span style='color:var(--iel-mute)'>—</span>"}</div>`;
+  } else if(isGuest()){
+    foot=`<div class="wp-actions"><button class="fav needlogin"><i class="ri-lock-line" aria-hidden="true"></i> 登录后收藏到生词本</button></div>`;
   } else {
     const fav=S.fav[word];
     foot=`<div class="wp-actions">
@@ -1697,7 +1734,9 @@ function showPop(word,opt){
   pop.classList.add("show");
   document.getElementById("scrim").classList.add("show");
   pop.querySelector(".wp-x").onclick=closePop;
-  const fb=pop.querySelector(".fav");
+  const nlb=pop.querySelector(".fav.needlogin");
+  if(nlb) nlb.onclick=()=>needLogin("登录后使用生词本");
+  const fb=pop.querySelector(".fav:not(.needlogin)");
   if(fb) fb.onclick=()=>{
     if(S.fav[word]){ delete S.fav[word]; save(); fb.classList.remove("on"); fb.textContent="☆ 收藏到生词本"; toast("已从生词本移除"); updateFavMarks(); updateFavBadge(); }
     else{ S.fav[word]={ph:d.ph, phUK:d.phUK||"", phUS:d.phUS||"", def:(d.book? d.def.split("\n")[0] : (d.pos+" "+d.cn)), src:CUR_STORY?CUR_STORY.id:"", t:Date.now(), rv:0, due:Date.now()}; save();
