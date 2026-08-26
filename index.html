@@ -71,8 +71,11 @@ select,input{font-family:inherit;}
 /* ============================================================
    3. 共享原语 —— 毛玻璃 / 主次按钮 / 输入控件 / 胶囊标签
    ============================================================ */
-/* 毛玻璃表面：卡片、弹层、悬浮条统一应用 */
-.card,.audiobar,.q-item,.q-result,.ov-cell,#wpop,.wq-panel,.rv-def{
+/* 毛玻璃表面：仅固定/浮层元素实时模糊（朗读条、词弹窗、速查面板——它们悬浮于正文之上，模糊可见且必要）。
+   文档流内卡片（.card/.q-item/.q-result/.ov-cell/.rv-def）不做实时模糊：背后只有静态页面渐变、
+   底色不透明度 ≥.94，blur 视觉不可感知；但首页故事列表是一张贯穿整页的巨型卡片，
+   滚动时逐帧重采样大面积 backdrop-filter 是卡顿主源，故文档流卡片直接用半透明底色（视觉等效、滚动流畅）。 */
+.audiobar,#wpop,.wq-panel{
   -webkit-backdrop-filter:var(--iel-blur); backdrop-filter:var(--iel-blur);}
 
 /* 主按钮：渐变胶囊（各处只覆写尺寸） */
@@ -948,38 +951,83 @@ function buildIndexes(){
   CHAPTERS.forEach(c=>{ const n=parseInt(c,10); CH_WORDS[n]=[]; });
   BOOK.forEach(r=>{ const n=r[0]; (CH_WORDS[n]=CH_WORDS[n]||[]).push(r[1].toLowerCase()); });
   STORIES.forEach(s=>{
-    const pat=/\{\{([^}|]+)(?:\|([^}]+))?\}\}/g; let m;
-    while((m=pat.exec(s.text))){ const w=m[1].toLowerCase(); (WORD_STORIES[w]=WORD_STORIES[w]||[]).push(s.id); }
+    const pat=/\{\{([^}|]+)(?:\|([^}]+))?\}\}/g; let m, n=0;
+    while((m=pat.exec(s.text))){ const w=m[1].toLowerCase(); (WORD_STORIES[w]=WORD_STORIES[w]||[]).push(s.id); n++; }
+    s._mk=n;   // 本篇目标词出现次数（首页列表用）：构建时一次算好，避免 renderHome 每次全量重扫全文
   });
 }
 
 /* —— 数据加载（部署版）：fetch JSON + Cache API 内容版本缓存 —— */
-async function fetchCached(path){
+/* 弱网容灾（2026-08-26 修复安卓端永远停在加载中）：
+   ① 单文件 15 秒超时——被限速/干扰的连接会无限挂起且永不报错，必须主动掐断；
+   ② Cloudflare 线路失败后自动改走 GitHub Pages 镜像（其响应带 access-control-allow-origin:*，跨域可取），
+      成功后仍缓存到本站路径键下，下次秒开；
+   ③ 全部失败 → 加载屏给出「打开备用线路」按钮，并自动跳转一次（URL 带 _sw=1 防两线路互跳死循环）。 */
+const DATA_TIMEOUT=15000;
+const _locHost=(typeof location!=="undefined"&&location&&location.hostname)||"";
+const DATA_MIRROR=(_locHost==="ielts-vocab.bond")?"https://zp900830.github.io/ielts-vocab/":"";
+const DATA_ALT=(_locHost==="ielts-vocab.bond")?"https://zp900830.github.io/ielts-vocab/"
+  :(/github\.io$/.test(_locHost)?"https://ielts-vocab.bond/":"");
+async function fetchOne(url){
+  const ctl=new AbortController();
+  const tm=setTimeout(()=>ctl.abort(),DATA_TIMEOUT);
+  try{
+    const r=await fetch(url,{signal:ctl.signal});
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    return await r.json();
+  }catch(e){
+    throw (e&&e.name==="AbortError") ? new Error("网络超时（"+Math.round(DATA_TIMEOUT/1000)+" 秒无响应）") : e;
+  }finally{ clearTimeout(tm); }
+}
+async function fetchCached(path,onDone){
   const ver=String(DATA_VER);
   let c=null;
   try{
     c=await caches.open("iel-data");
     const hit=await c.match(path);
-    if(hit&&hit.headers.get("x-ver")===ver) return await hit.json();
+    if(hit&&hit.headers.get("x-ver")===ver){ onDone&&onDone(); return await hit.json(); }
   }catch(e){}   // Cache API 不可用（隐私模式等）→ 直接网络
-  const r=await fetch(path+"?v="+DATA_VER);
-  if(!r.ok) throw new Error("HTTP "+r.status);
-  const data=await r.json();
-  if(c){ try{ await c.put(path, new Response(JSON.stringify(data), {headers:{"x-ver":ver,"content-type":"application/json"}})); }catch(e){} }
-  return data;
+  const urls=[path+"?v="+DATA_VER].concat(DATA_MIRROR?[DATA_MIRROR+path]:[]);
+  let lastErr=null;
+  for(let i=0;i<urls.length;i++){
+    try{
+      const data=await fetchOne(urls[i]);
+      if(c){ try{ await c.put(path, new Response(JSON.stringify(data), {headers:{"x-ver":ver,"content-type":"application/json"}})); }catch(e){} }
+      onDone&&onDone();
+      return data;
+    }catch(e){ lastErr=e; }
+  }
+  throw lastErr||new Error("网络不可达");
 }
 let DATA_READY=Promise.resolve();
 if(!DATA_INLINE){
   DATA_READY=(async()=>{
     try{
+      /* 加载进度：4 个数据文件每完成一个更新 boot 文案（弱网下让用户看到在推进而非死掉） */
+      let done=0; const TOTAL=4;
+      const tick=()=>{ done++;
+        const t=document.querySelector("#boot .boot-txt");
+        if(t&&done<TOTAL) t.innerHTML=`正在加载学习数据 ${done}/${TOTAL}…<span class="boot-spin"></span>`;
+      };
+      const slowT=setTimeout(()=>{ const s=document.querySelector("#boot .boot-sub");
+        if(s) s.textContent="当前网络较慢，正在尝试备用线路…"; },10000);
       const [book,sup,stories,covers]=await Promise.all([
-        fetchCached("data/book.json"), fetchCached("data/sup.json"),
-        fetchCached("data/stories.json"), fetchCached("data/covers.json")
+        fetchCached("data/book.json",tick), fetchCached("data/sup.json",tick),
+        fetchCached("data/stories.json",tick), fetchCached("data/covers.json",tick)
       ]);
+      clearTimeout(slowT);
       BOOK=book; SUP=sup; STORIES=stories; COVERS=covers;
     }catch(e){
       const el=document.getElementById("boot");
-      if(el) el.innerHTML=`<div class="boot-err">⚠ 数据加载失败（${esc(e.message||e)}）<br>请检查网络后重试<button onclick="location.reload()">重新加载</button></div>`;
+      if(el){
+        const alt=DATA_ALT;
+        const switched=location.search.indexOf("_sw=1")>=0;   // 已自动切过线路：只给按钮，不再自动跳（防两线路互跳死循环）
+        el.innerHTML=`<div class="boot-err">⚠ 数据加载失败（${esc(e.message||e)}）<br>当前网络无法从本线路获取数据${alt&&!switched?"，正在尝试备用线路…":""}
+          ${alt?`<button onclick="location.replace('${alt}'+(location.search?'&':'?')+'_sw=1')">打开备用线路</button>`:""}
+          <button onclick="location.reload()">重新加载</button>
+          ${alt?`<div style="font-size:12px;margin-top:8px;color:#888">备用线路：${esc(alt)}</div>`:""}</div>`;
+        if(alt&&!switched) setTimeout(()=>location.replace(alt+(location.search?"&":"?")+"_sw=1"),1500);
+      }
       throw e;
     }
   })();
@@ -1017,8 +1065,15 @@ function lemmaCandidates(w){
   if(hy>0){ const parts=w.split("-"); parts.forEach(p=>{ if(p.length>2) out.push(p); }); }
   return out;
 }
+const _rwCache=new Map();   // resolveWord 结果缓存：updateFavMarks 等会按词表批量调用，避免重复屈折还原运算
 function resolveWord(w){
   w=w.toLowerCase().replace(/’/g,"'").replace(/'+$/,"");
+  if(_rwCache.has(w)) return _rwCache.get(w);
+  const r=_resolveWord(w);
+  _rwCache.set(w,r);
+  return r;
+}
+function _resolveWord(w){
   if(DICT[w]) return w;
   if(IRREG[w]){ const b=IRREG[w]; if(b==="do not"){ if(DICT["do"]) return "do"; } else if(DICT[b]) return b; }
   const cands=lemmaCandidates(w);
@@ -1344,7 +1399,7 @@ function renderHome(){
     html+=`<div class="ch-sum"><b>${chTitle}</b><span class="cs-n">目标词 ${nWords} 个</span><span>${list.length} 篇故事</span></div>`;
     html+=`<div class="card">`+list.map((s,i)=>{
       const q=S.quiz[s.id];
-      const marked=(s.text.match(/\{\{/g)||[]).length;
+      const marked=s._mk!=null?s._mk:(s.text.match(/\{\{/g)||[]).length;   // _mk 为构建时缓存的计数
       const locked=guest && s.id!==free.id;
       let meta=`<span>目标词出现 ${marked} 处</span><span>测验 ${s.quiz.length} 题</span>`;
       if(q){ const pct=Math.round(q.best/s.quiz.length*100);
@@ -1613,6 +1668,7 @@ function placeAllSenTrigs(){
   const pairs=[];
   box.querySelectorAll(".sen").forEach(el=>{ const t=el.querySelector(".sen-trig"); if(t) pairs.push([t, el.getBoundingClientRect().left]); });
   pairs.forEach(p=>{ p[0].style.left=(br.left+2-p[1])+"px"; });
+  initSenHover.invalidate&&initSenHover.invalidate();   // 布局重排过（开关译文/换故事/resize），句子矩形缓存失效
 }
 function placeSenTrig(t){
   const sen=t.closest(".sen"), box=document.getElementById("storyEn");
@@ -1622,8 +1678,20 @@ function placeSenTrig(t){
 function initSenHover(){
   const box=document.getElementById("storyEn"); if(!box||TOUCH) return;
   const pad=parseFloat(getComputedStyle(box).paddingLeft)||26;
-  let cur=null, hideT=null;
+  let cur=null, hideT=null, cache=null;
+  initSenHover.invalidate=()=>{ cache=null; };
   const trigOf=el=>el.querySelector(".sen-trig");
+  /* 句子行矩形缓存（页面坐标系，滚动不失效）：mousemove 命中判定只做算术比较，
+     原实现每次鼠标移动都遍历全部句子并 getClientRects 强制布局读取——长文篇目下造成严重布局抖动（卡顿主因） */
+  const build=()=>{
+    cache=[]; const sy=window.scrollY;
+    box.querySelectorAll(".sen").forEach(el=>{
+      if(!el.querySelector(".sen-trig")) return;
+      const lines=[];
+      for(const r of el.getClientRects()) lines.push({t:r.top+sy, b:r.bottom+sy, l:r.left, r:r.right+8});
+      if(lines.length) cache.push({el, lines});
+    });
+  };
   const show=el=>{ if(hideT){clearTimeout(hideT); hideT=null;}
     if(cur===el) return;
     if(cur){ const t=trigOf(cur); if(t) t.classList.remove("hovering"); }
@@ -1635,20 +1703,19 @@ function initSenHover(){
     if(tr){ show(tr.closest(".sen")); return; }
     const s=e.target.closest(".sen");
     if(s){ if(s.querySelector(".sen-trig")) show(s); else sched(); return; }
+    if(!cache) build();
+    const py=e.clientY+window.scrollY;
     const br=box.getBoundingClientRect();
     const inGutter=e.clientX<br.left+pad && e.clientX>br.left-40 && e.clientY>=br.top && e.clientY<=br.bottom;
     let hit=null;
-    for(const el of box.querySelectorAll(".sen")){
-      if(!el.querySelector(".sen-trig")) continue;
-      const rects=el.getClientRects();
-      if(inGutter){
-        const r=rects[0];
-        if(r&&e.clientY>=r.top-4&&e.clientY<=r.bottom+4){ hit=el; break; }
-      }else{
-        for(const r of rects){
-          if(e.clientY>=r.top-4&&e.clientY<=r.bottom+4&&e.clientX>=r.left&&e.clientX<=r.right+8){ hit=el; break; }
-        }
-        if(hit) break;
+    outer:
+    for(const c of cache){
+      const lines=c.lines;
+      for(let li=0;li<lines.length;li++){
+        const ln=lines[li];
+        if(ln.t-4>py) break outer;   // 句子按文档序排列，后续都在鼠标下方，提前结束
+        if(inGutter){ if(li===0 && py>=ln.t-4 && py<=ln.b+4){ hit=c.el; break outer; } }
+        else if(py>=ln.t-4 && py<=ln.b+4 && e.clientX>=ln.l && e.clientX<=ln.r){ hit=c.el; break outer; }
       }
     }
     if(hit) show(hit); else sched();
@@ -1656,6 +1723,7 @@ function initSenHover(){
   box.addEventListener("mouseleave",sched);
   if(!initSenHover._rz){ initSenHover._rz=1;
     window.addEventListener("resize",placeAllSenTrigs);
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>initSenHover.invalidate());   // 字体加载后行高变化，缓存失效
   }
 }
 function renderInner(t){
@@ -1731,6 +1799,7 @@ function setTrOpen(si,on){
   if(trig) trig.classList.toggle("shown",on);
   const chip=app.querySelector(`.sen-chip[data-si="${si}"]`);
   if(chip){ chip.classList.toggle("on",on); chip.textContent=on?"✕":"译"; }
+  initSenHover.invalidate&&initSenHover.invalidate();   // 译文展开/收起改变下方布局，句子矩形缓存失效
   return true;
 }
 
