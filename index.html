@@ -393,11 +393,11 @@ body.reading main{padding-top:64px;}
 .wp-ex{margin-top:9px; background:rgba(255,255,255,.92); border-radius:var(--iel-radius-xs); padding:9px 12px; font-size:13px; line-height:1.65; color:var(--iel-ink3);}
 .wp-ex .en{font-family:var(--iel-font-serif); font-style:italic;}
 .wp-stats{margin-top:10px; font-size:12.5px; color:var(--iel-ink2); border-top:1px dashed var(--iel-line); padding-top:8px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
-.wp-links{margin-top:8px; font-size:12.5px;}
-.wp-links a{color:var(--iel-tw); text-decoration:none; margin-right:10px; white-space:nowrap; display:inline-block; padding:3px 0; position:relative;}
+.wp-links{margin-top:8px; font-size:12.5px; word-break:break-all; display:flex; flex-wrap:wrap; gap:2px 0; align-items:center;}
+.wp-links a{color:var(--iel-tw); text-decoration:none; margin-right:10px; display:inline-block; padding:3px 0; position:relative;}
 .wp-links a::after{content:""; position:absolute; inset:-9px 0;}   /* 行内链接纵向热区 40px */
 .wp-links a:hover{text-decoration:underline;}
-.wp-links .occ-g{margin-right:10px; white-space:nowrap; display:inline-block; padding:3px 0;}
+.wp-links .occ-g{margin-right:8px; display:inline-flex; align-items:center; flex-wrap:wrap; padding:2px 0; gap:0;}
 .wp-links .occ-g a{margin-right:0; padding:1px 0;}
 .wp-links a.occ{margin-left:-6px; padding:1px 2px; color:var(--iel-accent-deep); font-size:12px; text-decoration:none;}
 .wp-links a.occ:hover{background:var(--iel-accent-soft); border-radius:4px; text-decoration:none;}
@@ -918,7 +918,7 @@ window.addEventListener("load",function(){
    DATA loader 从 data/*.json 拉取，Cache API 按内容版本持久缓存——数据未变时
    二次访问零网络请求。 */
 const DATA_INLINE = false;
-const DATA_VER = "f2833503d9";
+const DATA_VER = "5e1868d8c9";
 const CHAPTERS = ["1 自然地理","2 植物研究","3 动物保护","4 太空探索","5 学校教育","6 科技发明","7 文化历史","8 语言演化","9 娱乐活动","10 物品材料","11 时尚潮流","12 饮食健康","13 建筑场所","14 交通旅行","15 国家政府","16 社会经济","17 法律法规","18 沙场争锋","19 社会角色","20 行为动作","21 身心健康","22 时间日期"];
 let BOOK = [];     // [chNum, word, phonetic, def, example, example_cn, phUK, phUS]
 let SUP = [];       // [word, phonetic, pos, cn, phUK, phUS]
@@ -1369,7 +1369,7 @@ function fillChapterSel(){
 }
 fillChapterSel();
 chSel.addEventListener("change",()=>{ const v=chSel.value; S.chapter = v==="all"?"all":parseInt(v,10); save();
-  if(VIEW==="home") renderHome(); else if(VIEW==="stats") renderStats();
+  if(VIEW==="home"){ renderHome(); window.scrollTo(0,0); } else if(VIEW==="stats") renderStats();
   if(LISTEN.story||lsPanelVisible()) LISTEN.changeCfg("scope",lsState().cfg.scope); });   // 章节变化：重建随身听队列并尽量恢复断点
 
 /* ================= 首页 ================= */
@@ -1423,6 +1423,12 @@ function renderHome(){
 function openStory(id, focusWord, occ, resumeY){
   const s=storyById(id); if(!s) return;
   if(isGuest() && s.id!==freeStory().id) return needLogin("游客可免费阅读第 1 篇，登录后解锁全部故事");
+  /* 故事所属章节与当前筛选不同时自动同步（修复：从第五章定位回来后筛选器仍显示第一章） */
+  if(s.ch && s.ch!==S.chapter){
+    S.chapter=s.ch; save();
+    const sel=document.getElementById("chapterSel");
+    if(sel) sel.value=String(s.ch);
+  }
   CUR_STORY=s; VIEW="reader";
   writePos({id, y:0, view:"reader", t:Date.now()});   // 进入新故事从顶部起算，滚动后由 markReadPos 更新
   document.body.classList.add("reading");
@@ -1455,7 +1461,10 @@ function openStory(id, focusWord, occ, resumeY){
   document.getElementById("backBtn").onclick=()=>switchView("home");
   const pBtn=document.getElementById("prevBtn"); if(pBtn&&prev) pBtn.onclick=()=>openStory(prev.id);
   const nBtn=document.getElementById("nextBtn"); if(nBtn&&next) nBtn.onclick=()=>openStory(next.id);
-  TRMODE=false; app.classList.remove("tr-mode");
+  /* 触摸设备首次进入阅读页自动开启点句译文（否则句尾「译」按钮隐藏，句子完全不可交互）；
+     用户手动切换后记住偏好（S.trMode），后续尊重用户选择 */
+  TRMODE = (S.trMode!=null) ? S.trMode : !!TOUCH;
+  app.classList.toggle("tr-mode", TRMODE);
   document.getElementById("trMsw").onclick=()=>setTrMode(!TRMODE);
   TR_SENS=mapTrSens(s.text,s.tr);
   document.getElementById("storyEn").innerHTML=renderStoryText(s.text);
@@ -1821,6 +1830,7 @@ function tabsIdleShow(delay){
 let TRMODE=false;
 function setTrMode(on){
   TRMODE=on;
+  S.trMode=on; save();   // 记住用户偏好（首次触摸设备默认开启，用户切换后尊重选择）
   app.classList.toggle("tr-mode",on);
   const t=document.getElementById("trMsw"); if(t){ t.classList.toggle("on",on); t.setAttribute("aria-pressed",on?"true":"false"); }
   if(on){
@@ -2335,8 +2345,8 @@ const audio={
       this._next();
       return;
     }
-    if(!this.ok()){ toast("当前浏览器不支持语音朗读"); return; }
-    if(this.playing){ speechSynthesis.resume(); return; }
+    if(!this.ok()&&!CLOUD_TTS.available()){ toast("当前浏览器不支持语音朗读"); return; }
+    if(this.playing){ if(this.ok()) speechSynthesis.resume(); return; }
     if(!this.ready()) this.prepare();
     this._next();
   },
