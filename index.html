@@ -10,7 +10,7 @@
    ============================================================ */
 :root{
   /* 文字色阶：主文字 → 次要 → 卡片正文 → 弱化辅助 → 极弱 */
-  --iel-ink:#2b3a34; --iel-ink2:#8a958f; --iel-ink3:#4d5a53; --iel-mute:#9aa69f; --iel-ink-faint:#b3bdb7;
+  --iel-ink:#2b3a34; --iel-ink2:#63706a; --iel-ink3:#4d5a53; --iel-mute:#6e7973; --iel-ink-faint:#b3bdb7;
   /* 线条 */
   --iel-line:#e7eee9; --iel-line2:#edf2ee;
   /* 主题色（薄荷绿） */
@@ -220,6 +220,9 @@ body.reading main{padding-top:64px;}
 .r-badges{position:relative; display:flex; align-items:center; gap:8px; flex-wrap:nowrap; margin-bottom:14px;}
 .r-badge{display:inline-block; font-size:12px; padding:2px 10px;}
 .r-badges .fav-badge{margin-left:auto; flex:none;}
+.ch-sum{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin:0 4px 12px; font-size:12.5px; color:var(--iel-mute); font-variant-numeric:tabular-nums;}
+.ch-sum b{font-size:15px; font-weight:650; color:var(--iel-ink1); letter-spacing:.2px;}
+.ch-sum .cs-n{color:var(--iel-accent-deep); font-weight:600;}
 .tr-help{width:22px; height:22px; border-radius:50%; border:1px solid var(--iel-line); background:#fff; color:var(--iel-ink2); font-size:12px; font-weight:600; line-height:1; cursor:pointer; flex:none; transition:border-color var(--iel-t-fast), color var(--iel-t-fast), background var(--iel-t-fast);}
 .tr-help:hover{border-color:var(--iel-accent); color:var(--iel-accent-deep); background:var(--iel-tint);}
 .tr-help.on{background:var(--iel-accent-soft); border-color:var(--iel-accent); color:var(--iel-accent-deep);}
@@ -350,6 +353,10 @@ body.reading main{padding-top:64px;}
 .wp-word{font-size:23px; font-weight:700; letter-spacing:.2px; font-family:var(--iel-font-serif); color:var(--iel-coral);}
 .wp-badge{font-size:11px; padding:2px 9px;}
 .wp-badge.sup{background:var(--iel-gold-bg); color:var(--iel-gold-deep);}
+.wp-fav{margin-left:auto; margin-right:16px; align-self:center; border:none; background:none; cursor:pointer; width:34px; height:34px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; font-size:20px; color:var(--iel-ink-faint); flex:none; -webkit-tap-highlight-color:transparent; transition:background var(--iel-t-fast), color var(--iel-t-fast);}
+.wp-fav:hover{background:var(--iel-accent-soft); color:var(--iel-accent-deep);}
+.wp-fav.on{color:var(--iel-gold);}
+.wp-fav.on:hover{color:var(--iel-gold-deep);}
 .wp-ph{color:var(--iel-ink2); font-size:14px; margin:3px 0 8px; font-family:var(--iel-font-serif);}
 .wp-def{font-size:14.5px; line-height:1.75; border-top:1px dashed var(--iel-line); padding-top:9px;}
 .wp-def .dl{display:block;}
@@ -370,9 +377,6 @@ body.reading main{padding-top:64px;}
 .wp-ex{margin-top:9px; background:rgba(255,255,255,.92); border-radius:var(--iel-radius-xs); padding:9px 12px; font-size:13px; line-height:1.65; color:var(--iel-ink3);}
 .wp-ex .en{font-family:var(--iel-font-serif); font-style:italic;}
 .wp-stats{margin-top:10px; font-size:12.5px; color:var(--iel-ink2); border-top:1px dashed var(--iel-line); padding-top:8px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
-.wp-actions{margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;}
-.wp-actions button,.wp-actions a{border:1px solid var(--iel-line); background:#fff; border-radius:999px; padding:7px 13px; font-size:13px; color:var(--iel-ink); text-decoration:none;}
-.wp-actions .fav.on{background:var(--iel-gold-bg); border-color:var(--iel-gold-line); color:var(--iel-gold-deep);}
 .wp-links{margin-top:8px; font-size:12.5px;}
 .wp-links a{color:var(--iel-tw); text-decoration:none; margin-right:10px; white-space:nowrap; display:inline-block; padding:3px 0;}
 .wp-links a:hover{text-decoration:underline;}
@@ -890,7 +894,7 @@ window.addEventListener("load",function(){
    二次访问零网络请求。 */
 const DATA_INLINE = false;
 const DATA_VER = "a44592387b";
-const CHAPTERS = ["1 自然地理","2 植物研究","3 动物保护","4 太空探索","5 学校教育","6 科技发明","7 文化历史","8 语言演化","9 娱乐活动","10 物品材料","11 时尚潮流","12 饮食健康","13 建筑场所","14 交通旅行","15 国家政府-2","16 社会经济","17 法律法规","18 沙场争锋","19 社会角色","20 行为动作","21 身心健康","22 时间日期"];
+const CHAPTERS = ["1 自然地理","2 植物研究","3 动物保护","4 太空探索","5 学校教育","6 科技发明","7 文化历史","8 语言演化","9 娱乐活动","10 物品材料","11 时尚潮流","12 饮食健康","13 建筑场所","14 交通旅行","15 国家政府","16 社会经济","17 法律法规","18 沙场争锋","19 社会角色","20 行为动作","21 身心健康","22 时间日期"];
 let BOOK = [];     // [chNum, word, phonetic, def, example, example_cn, phUK, phUS]
 let SUP = [];       // [word, phonetic, pos, cn, phUK, phUS]
 let STORIES = [];
@@ -958,7 +962,7 @@ if(!DATA_INLINE){
     }
   })();
 }
-if(DATA_INLINE){ buildDict(); buildIndexes(); }   // 单文件版数据已内联，立即构建；部署版在启动序列中构建
+if(DATA_INLINE){ buildDict(); buildIndexes(); }   // 单文件版数据已内联，立即构建；部署版在启动序列中构建（其后 fillChapterSel 补词数）
 function circledNum(n){ return n>=1&&n<=20 ? String.fromCodePoint(0x245F+n) : "("+n+")"; }
 function occLinksHtml(sts, word){
   const counts={}, order=[];
@@ -1242,10 +1246,18 @@ function switchView(v){
 }
 document.getElementById("snNav").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) switchView(b.dataset.view); });
 
-/* 章节选择 */
+/* 章节选择（选项带各章目标词总数，数据就绪后由 fillChapterSel 重填） */
 const chSel=document.getElementById("chapterSel");
-chSel.innerHTML = '<option value="all">全部章节</option>'+CHAPTERS.map(c=>`<option value="${parseInt(c,10)}">第${parseInt(c,10)}章 · ${c.replace(/^\d+\s*/,"")}</option>`).join("");
-chSel.value = String(S.chapter||1);
+function fillChapterSel(){
+  const sel=document.getElementById("chapterSel"); if(!sel) return;
+  const total=Object.values(CH_WORDS).reduce((a,v)=>a+v.length,0);
+  sel.innerHTML='<option value="all">全部章节'+(total?` · ${total} 词`:"")+'</option>'+CHAPTERS.map(c=>{
+    const n=parseInt(c,10), cnt=(CH_WORDS[n]||[]).length;
+    return `<option value="${n}">第${n}章 · ${c.replace(/^\d+\s*/,"")}${cnt?` · ${cnt} 词`:""}</option>`;
+  }).join("");
+  sel.value=String(S.chapter||1);
+}
+fillChapterSel();
 chSel.addEventListener("change",()=>{ const v=chSel.value; S.chapter = v==="all"?"all":parseInt(v,10); save();
   if(VIEW==="home") renderHome(); else if(VIEW==="stats") renderStats();
   if(LISTEN.story||lsPanelVisible()) LISTEN.changeCfg("scope",lsState().cfg.scope); });   // 章节变化：重建随身听队列并尽量恢复断点
@@ -1272,6 +1284,9 @@ function renderHome(){
   if(!list.length){
     html+=`<div class="card empty-box"><b>第${ch}章的情境故事还在制作中</b>目前已完成：第1章（15 篇故事，覆盖全部 241 个目标词）。<br>可以先切换到第 1 章开始学习，或在"学习统计"里浏览本章词汇。</div>`;
   } else {
+    const chTitle=ch==="all" ? `全部 ${CHAPTERS.length} 章` : `第${ch}章 · ${esc((CHAPTERS.find(c=>parseInt(c,10)===ch)||"").replace(/^\d+\s*/,""))}`;
+    const nWords=ch==="all" ? Object.values(CH_WORDS).reduce((a,v)=>a+v.length,0) : (CH_WORDS[ch]||[]).length;
+    html+=`<div class="ch-sum"><b>${chTitle}</b><span class="cs-n">目标词 ${nWords} 个</span><span>${list.length} 篇故事</span></div>`;
     html+=`<div class="card">`+list.map((s,i)=>{
       const q=S.quiz[s.id];
       const marked=(s.text.match(/\{\{/g)||[]).length;
@@ -1438,8 +1453,15 @@ function renderWordPanel(s, markedWords){
       locateWordInStory(item.dataset.w);
       return;
     }
-    speakWord(item.dataset.w);   // 点击单词卡任意空白处：用全局默认口音朗读
+    panel.querySelectorAll(".wq-item.sel").forEach(x=>x.classList.remove("sel"));
+    item.classList.add("sel");
+    speakWordCard(item.dataset.w);   // 点击单词卡任意空白处：默认口音读单词 + 例句
   };
+  /* 空闲时预取前几张卡的单词音频：点击即响（不与整篇朗读抢队列） */
+  if(CLOUD_TTS.available()&&!audio.playing&&!LISTEN.playing){
+    const voice=cloudVoiceFor(S.accent||"GB");
+    words.slice(0,4).forEach(w=>CLOUD_TTS.synth(w,voice,0).catch(()=>{}));
+  }
 }
 
 function locateWordInStory(w){
@@ -1448,6 +1470,21 @@ function locateWordInStory(w){
   el.scrollIntoView({block:"center",behavior:"smooth"});
   el.classList.add("flash");
   setTimeout(()=>el.classList.remove("flash"),3400);
+}
+/* 速查面板 ↑/↓ 键盘导航（全局快捷键分发，见文末 keydown） */
+function wqNav(step){
+  const panel=document.getElementById("wqPanel"); if(!panel) return;
+  const vis=[...panel.querySelectorAll(".wq-item")].filter(it=>it.style.display!=="none");
+  if(!vis.length) return;
+  let i=vis.findIndex(it=>it.classList.contains("sel"));
+  i=i<0?(step>0?0:vis.length-1):Math.min(vis.length-1,Math.max(0,i+step));
+  panel.querySelectorAll(".wq-item.sel").forEach(x=>x.classList.remove("sel"));
+  vis[i].classList.add("sel");
+  vis[i].scrollIntoView({block:"nearest"});
+}
+function wqSpeakSel(){
+  const it=document.querySelector("#wqPanel .wq-item.sel");
+  if(it) speakWordCard(it.dataset.w);
 }
 
 function splitSentences(text){
@@ -1788,8 +1825,10 @@ function showPop(word,opt){
   POP_WORD=word; POP_SURFACE=opt.surface||word;
   const isTarget=opt.target;
   if(isTarget){ const st=statOf(word); st.l++; save(); }
+  const favOn=S.fav[word];
   let head=`<div class="wp-head"><span class="wp-word">${esc(opt.surface||word)}</span>
-    <span class="wp-badge ${isTarget?"":"sup"}">${isTarget?("第"+d.ch+"章 · 目标词"):"非目标词"}</span></div>
+    <span class="wp-badge ${isTarget?"":"sup"}">${isTarget?("第"+d.ch+"章 · 目标词"):"非目标词"}</span>
+    <button class="wp-fav${favOn?" on":""}" title="${favOn?"★ 已收藏，点击取消":"☆ 收藏到生词本"}" aria-label="${favOn?"取消收藏":"收藏到生词本"}"><i class="ri-star-${favOn?"fill":"line"}" aria-hidden="true"></i></button></div>
     ${phBothHtml(d)}`;
   let body="", favDef=null;
   if(d.book){
@@ -1822,25 +1861,18 @@ function showPop(word,opt){
     const sts=WORD_STORIES[word]||[];
     foot=`<div class="wp-stats">${mzHtml}</div>
       <div class="wp-links">出现在：${occLinksHtml(sts)}${sts.length?"":"<span style='color:var(--iel-mute)'>—</span>"}</div>`;
-  } else if(isGuest()){
-    const lab=SB.user?"审批通过后可收藏到生词本":"登录后收藏到生词本";
-    foot=`<div class="wp-actions"><button class="fav needlogin"><i class="ri-lock-line" aria-hidden="true"></i> ${lab}</button></div>`;
-  } else {
-    const fav=S.fav[word];
-    foot=`<div class="wp-actions">
-      <button class="fav ${fav?"on":""}">${fav?"★ 已收藏，点击取消":"☆ 收藏到生词本"}</button></div>`;
   }
   pop.innerHTML=`<button class="wp-x">×</button>${head}${body}${foot}`;
   pop.classList.add("show");
   document.getElementById("scrim").classList.add("show");
   pop.querySelector(".wp-x").onclick=closePop;
-  const nlb=pop.querySelector(".fav.needlogin");
-  if(nlb) nlb.onclick=()=>needLogin("登录后使用生词本");
-  const fb=pop.querySelector(".fav:not(.needlogin)");
+  const fb=pop.querySelector(".wp-fav");
   if(fb) fb.onclick=()=>{
-    if(S.fav[word]){ delete S.fav[word]; save(); fb.classList.remove("on"); fb.textContent="☆ 收藏到生词本"; toast("已从生词本移除"); updateFavMarks(); updateFavBadge(); }
+    if(isGuest()){ needLogin(SB.user?"审批通过后可收藏到生词本":"登录后使用生词本"); return; }
+    const ic=fb.querySelector("i");
+    if(S.fav[word]){ delete S.fav[word]; save(); fb.classList.remove("on"); ic.className="ri-star-line"; fb.title="☆ 收藏到生词本"; toast("已从生词本移除"); updateFavMarks(); updateFavBadge(); }
     else{ S.fav[word]={ph:d.ph, phUK:d.phUK||"", phUS:d.phUS||"", def:(d.book? (favDef||d.def.split("\n")[0]) : (d.pos+" "+d.cn)), src:CUR_STORY?CUR_STORY.id:"", t:Date.now(), rv:0, due:Date.now()}; save();
-      fb.classList.add("on"); fb.textContent="★ 已收藏，点击取消"; toast("已加入生词本"); updateFavMarks(); updateFavBadge(); }
+      fb.classList.add("on"); ic.className="ri-star-fill"; fb.title="★ 已收藏，点击取消"; toast("已加入生词本"); updateFavMarks(); updateFavBadge(); }
   };
   pop.querySelectorAll("[data-goto]").forEach(a=>a.onclick=(ev)=>{ ev.preventDefault(); closePop(); openStory(a.dataset.goto, a.dataset.w, a.dataset.occ?parseInt(a.dataset.occ,10):0); });
   // 定位
@@ -1863,14 +1895,37 @@ function wordVoiceFor(acc){
 }
 function speakWord(w,acc){
   const want=acc||S.accent||"GB";
-  if(audio.cloudVoiceId&&CLOUD_TTS.available()){
-    CLOUD_TTS.synth(w,audio.cloudVoiceId,0).then(url=>{
+  if(CLOUD_TTS.available()){
+    CLOUD_TTS.synth(w,cloudVoiceFor(want),0).then(url=>{
       const au=new Audio();   // 独立元素，避免打断正在播放的故事音频
       au.src=url; au.play().catch(()=>speakWordLocal(w,want));   // iOS 自动播放策略拦截时回退本地
     }).catch(()=>speakWordLocal(w,want));
     return;
   }
   speakWordLocal(w,want);
+}
+/* 口音 → 云端音色：用户选的音色口音一致则沿用，否则换该口音的默认音色（修复英/美按钮同声） */
+function cloudVoiceFor(want){
+  const cur=audio.cloudVoiceId||CLOUD_TTS.DEFAULT;
+  if((want==="US")===/^en-US/i.test(cur)) return cur;
+  return want==="US" ? "en-US-AriaNeural" : "en-GB-SoniaNeural";
+}
+let WORD_SEQ=0;
+/* 单词卡点击：先读单词（默认口音），读完接着朗读词典例句 */
+function speakWordCard(w,acc){
+  const want=acc||S.accent||"GB";
+  const d=DICT[w];
+  const ex=d&&d.ex?d.ex.replace(/\s+/g," ").trim():"";
+  if(!CLOUD_TTS.available()||!ex){ speakWord(w,want); return; }
+  const seq=++WORD_SEQ, voice=cloudVoiceFor(want);
+  Promise.all([CLOUD_TTS.synth(w,voice,0),CLOUD_TTS.synth(ex,voice,0)])
+    .then(([wu,eu])=>{
+      if(seq!==WORD_SEQ) return;
+      const a1=new Audio(wu);
+      a1.onended=()=>{ if(seq!==WORD_SEQ) return; new Audio(eu).play().catch(()=>{}); };
+      a1.play().catch(()=>speakWordLocal(w,want));
+    })
+    .catch(()=>speakWord(w,want));
 }
 function speakWordLocal(w,want){
   if(!audio.ok()){ toast("当前浏览器不支持语音朗读"); return; }
@@ -2185,7 +2240,7 @@ const audio={
       au.onended=()=>{ if(g!==self.gen||!self.playing) return; if(self.single){ self._endSingle(); } else { self.idx++; self._next(); } };
       au.onerror=()=>{ if(self.playing&&g===self.gen) self._cloudFallback(); };
       au.play().catch(()=>{ if(self.playing&&g===self.gen) self._cloudFallback(); });
-      if(self.idx+1<self.sens.length) CLOUD_TTS.synth(self.sens[self.idx+1],self.cloudVoiceId,ratePct).catch(()=>{});   // 预取下一句，消除句间等待
+      for(let k=1;k<=3&&self.idx+k<self.sens.length;k++) CLOUD_TTS.synth(self.sens[self.idx+k],self.cloudVoiceId,ratePct).catch(()=>{});   // 预取后 3 句，消除句间等待
     }).catch(e=>{ if(g===self.gen&&self.playing) self._cloudFallback(e); });
   },
   _cloudFallback(err){
@@ -3466,6 +3521,13 @@ document.addEventListener("keydown",e=>{
     else if(e.key==="ArrowRight"){ e.preventDefault(); LISTEN.step(1); }
     return;
   }
+  if(VIEW==="reader"){
+    const wp=document.getElementById("wqPanel");
+    if(wp&&wp.classList.contains("open")){
+      if(e.key==="ArrowUp"||e.key==="ArrowDown"){ e.preventDefault(); wqNav(e.key==="ArrowDown"?1:-1); return; }
+      if(e.key==="Enter"){ e.preventDefault(); wqSpeakSel(); return; }
+    }
+  }
   if(VIEW!=="reader"||(!audio.ok()&&!audio.cloudVoiceId)) return;
   if(e.code==="Space"){ e.preventDefault(); const bp=document.getElementById("btnPlay"); if(bp) bp.click(); }
   else if(e.key==="ArrowLeft"){ e.preventDefault(); stepAudio(-1); }
@@ -3519,7 +3581,7 @@ document.addEventListener("visibilitychange",()=>{
   }
 });
 DATA_READY.then(()=>{
-  if(!DATA_INLINE){ buildDict(); buildIndexes(); }
+  if(!DATA_INLINE){ buildDict(); buildIndexes(); fillChapterSel(); }
   switchView("home");
   SB.init();   // 恢复上次登录会话（已配置云同步时），异步拉取云端数据
 }).catch(()=>{});   // 失败已在加载屏提示，不进应用
