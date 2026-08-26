@@ -217,9 +217,9 @@ main{max-width:860px; margin:0 auto; padding:24px 18px 130px;}
 .reader-head.shrunk .r-pos{font-size:10px; padding:1px 5px; margin-left:6px;}
 .r-nav{display:flex; gap:8px; flex:none; pointer-events:auto;}
 body.reading main{padding-top:64px;}
-.r-badges{position:relative; display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
+.r-badges{position:relative; display:flex; align-items:center; gap:8px; flex-wrap:nowrap; margin-bottom:14px;}
 .r-badge{display:inline-block; font-size:12px; padding:2px 10px;}
-.r-badges .tr-msw{margin-left:auto;}
+.r-badges .fav-badge{margin-left:auto; flex:none;}
 .tr-help{width:22px; height:22px; border-radius:50%; border:1px solid var(--iel-line); background:#fff; color:var(--iel-ink2); font-size:12px; font-weight:600; line-height:1; cursor:pointer; flex:none; transition:border-color var(--iel-t-fast), color var(--iel-t-fast), background var(--iel-t-fast);}
 .tr-help:hover{border-color:var(--iel-accent); color:var(--iel-accent-deep); background:var(--iel-tint);}
 .tr-help.on{background:var(--iel-accent-soft); border-color:var(--iel-accent); color:var(--iel-accent-deep);}
@@ -594,6 +594,13 @@ body.reading main{padding-top:64px;}
   .r-badge{font-size:11px; padding:2px 8px;}
   .tr-all{padding:4px 11px; font-size:11.5px;}
   .tr-bubble{width:calc(100vw - 32px); font-size:12px;}
+  /* 超窄屏（≤350px）：徽章行整体收紧，保证一排放下 */
+  @media (max-width:350px){
+    .r-badges{gap:4px;}
+    .r-badge{font-size:10px; padding:2px 6px;}
+    .tr-msw{padding:4px 8px 4px 4px; font-size:10.5px;}
+    .tr-all{padding:4px 8px; font-size:10.5px;}
+  }
 
   /* 播放条：两行紧凑布局（第一行控制与进度，第二行语速/音色）；按钮为图标+文字竖排，一眼可辨 */
   .audiobar{flex-wrap:wrap; gap:6px; padding:8px 10px; bottom:calc(10px + env(safe-area-inset-bottom,0px)); width:calc(100% - 24px);}
@@ -1187,7 +1194,6 @@ function fmtDate(ts){ if(!ts) return "—"; const d=new Date(ts); return (d.getM
 let toastTimer=null;
 function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove("show"),1800); }
 function storyById(id){ return STORIES.find(s=>s.id===id); }
-function chName(n){ const c=CHAPTERS.find(x=>parseInt(x,10)===n); return c|| (n+"章"); }
 
 /* ================= 视图路由 ================= */
 let VIEW="home", CUR_STORY=null, REVIEW=null, TR_SENS=[];
@@ -1309,11 +1315,10 @@ function openStory(id, focusWord, occ){
   let html=`<div class="reader-head"><button class="back" id="backBtn" title="返回目录"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
     <div class="r-title">${esc(s.title)}<span class="tcn">${esc(s.tcn)}</span><span class="r-pos">${posTxt}</span></div>
     <div class="r-nav"><button class="nav-arrow" id="prevBtn" title="${scope}上一篇：${prev?esc(prev.title):"已是"+scope+"第一篇"}"${prev?"":" disabled"}>上一篇</button><button class="nav-arrow" id="nextBtn" title="${scope}下一篇：${next?esc(next.title):"已是"+scope+"最后一篇"}"${next?"":" disabled"}>下一篇</button></div></div>
-    <div class="r-badges"><span class="r-badge">第${s.ch}章 · ${esc(chName(s.ch).replace(/^\d+\s*/,""))}</span>
-    <button class="r-badge fav-badge" id="favToggle" style="background:#fdf1dc;color:#b07a10" title="${S.favHide?"显示正文生词标记":"隐藏正文生词标记"}"></button>
-    <button class="tr-msw" id="trMsw" aria-pressed="false" title="显示句尾「译」按钮，点按钮展开/收起该句译文"><span class="knob"></span>点句译文</button>
+    <div class="r-badges"><button class="tr-msw" id="trMsw" aria-pressed="false" title="显示句尾「译」按钮，点按钮展开/收起该句译文"><span class="knob"></span>点句译文</button>
     <button class="tr-all" id="trAll">显示全部译文</button>
     <button class="tr-help" id="trHelp" aria-label="使用说明">?</button>
+    <button class="r-badge fav-badge" id="favToggle" style="background:#fdf1dc;color:#b07a10" title="${S.favHide?"显示正文生词标记":"隐藏正文生词标记"}"></button>
     <div class="tr-bubble" id="trBubble" role="tooltip">电脑端：鼠标移到句子上，左侧出现“译”按钮，点它显示 / 收起该句译文；点击句子本身朗读该句（读完自动停，点播放键可继续连读）。手机端：打开“点句译文”开关（“显示全部译文”左侧）显示句尾「译」按钮，点按钮展开 / 收起该句译文；点单词查词不受影响（译文中括号英文即目标词）</div></div>
     <div class="audiobar" id="audiobar"></div>
     <div class="story-en" id="storyEn"></div>
