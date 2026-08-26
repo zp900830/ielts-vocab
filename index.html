@@ -1003,12 +1003,15 @@ function lemmaCandidates(w){
   const out=[w];
   if(w.endsWith("'s")||w.endsWith("’s")) out.push(w.slice(0,-2));
   if(w.endsWith("ies")&&w.length>4) out.push(w.slice(0,-3)+"y");
-  if(w.endsWith("es")&&w.length>4){ out.push(w.slice(0,-2)); out.push(w.slice(0,-1)); }
+  /* 屈折还原：阈值放宽到 ≥4/≥5（原 >4/>5 把 owed、goes、owing 这类恰为 4/5 字母的常用屈折形式整个漏掉）；
+     真实短词（feed/need/king 等）不受影响——resolveWord 先做 DICT 精确命中，候选仅兜底。
+     候选顺序=长词干优先（先试去掉尾字母的完整词干），避免 using→us、united→unit、user→us 截过头误命中 */
+  if(w.endsWith("es")&&w.length>=4){ out.push(w.slice(0,-1)); out.push(w.slice(0,-2)); }
   if(w.endsWith("s")&&w.length>3) out.push(w.slice(0,-1));
-  if(w.endsWith("ing")&&w.length>5){ out.push(w.slice(0,-3)); out.push(w.slice(0,-3)+"e"); if(w.length>6&&w[w.length-4]===w[w.length-5]) out.push(w.slice(0,-4)); }
-  if(w.endsWith("ed")&&w.length>4){ out.push(w.slice(0,-2)); out.push(w.slice(0,-1)); if(w.length>5&&w[w.length-3]===w[w.length-4]) out.push(w.slice(0,-3)); }
-  if(w.endsWith("er")&&w.length>4){ out.push(w.slice(0,-2)); out.push(w.slice(0,-1)); }
-  if(w.endsWith("est")&&w.length>5){ out.push(w.slice(0,-3)); out.push(w.slice(0,-2)); }
+  if(w.endsWith("ing")&&w.length>=5){ out.push(w.slice(0,-3)+"e"); out.push(w.slice(0,-3)); if(w.length>6&&w[w.length-4]===w[w.length-5]) out.push(w.slice(0,-4)); }
+  if(w.endsWith("ed")&&w.length>=4){ out.push(w.slice(0,-1)); out.push(w.slice(0,-2)); if(w.length>5&&w[w.length-3]===w[w.length-4]) out.push(w.slice(0,-3)); }
+  if(w.endsWith("er")&&w.length>=4){ out.push(w.slice(0,-1)); out.push(w.slice(0,-2)); }
+  if(w.endsWith("est")&&w.length>=5){ out.push(w.slice(0,-2)); out.push(w.slice(0,-3)); }
   if(w.endsWith("ly")&&w.length>4) out.push(w.slice(0,-2));
   const hy=w.indexOf("-");
   if(hy>0){ const parts=w.split("-"); parts.forEach(p=>{ if(p.length>2) out.push(p); }); }
