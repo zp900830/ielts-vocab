@@ -864,6 +864,7 @@ body.reading #lsFab{display:none;}
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="雅思随身听">
 <link rel="manifest" href='data:application/manifest+json,{"name":"雅思词汇情境训练","short_name":"雅思随身听","display":"standalone","background_color":"#f8fdfa","theme_color":"#f8fdfa","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2310b487'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23fff' font-family='serif'%3EW%3C/text%3E%3C/svg%3E","sizes":"any","type":"image/svg+xml","purpose":"any"}]}'>
+<link rel="preload" href="https://fastly.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css">
 </head>
 <body>
@@ -1890,7 +1891,7 @@ app.addEventListener("click",e=>{
 });
 
 /* ================= 单词弹窗 ================= */
-function closePop(){ POP_WORD=null; POP_SURFACE=null; document.getElementById("wpop").classList.remove("show"); document.getElementById("scrim").classList.remove("show"); }
+function closePop(){ POP_WORD=null; POP_SURFACE=null; document.getElementById("wpop").classList.remove("show"); document.getElementById("scrim").classList.remove("show"); document.body.classList.remove("ls-lock"); }
 document.getElementById("scrim").addEventListener("click",closePop);
 document.addEventListener("click",e=>{
   const b=e.target.closest(".ph-spk"); if(!b) return;
@@ -2020,6 +2021,7 @@ function showPop(word,opt){
   pop.innerHTML=`<button class="wp-x">×</button>${head}${body}${foot}<div class="wp-fav-slot" aria-hidden="true"></div>`;
   pop.classList.add("show");
   document.getElementById("scrim").classList.add("show");
+  document.body.classList.add("ls-lock");   // 锁定 body 滚动，防止移动端弹窗后背景仍可滚动
   pop.querySelector(".wp-x").onclick=closePop;
   const fb=pop.querySelector(".wp-fav");
   if(fb) fb.onclick=()=>{
@@ -3313,7 +3315,8 @@ function renderStats(){
     renderStatList();
   });
   paintChips();
-  document.getElementById("statSearch").oninput=e=>{ STAT_FILTER.q=e.target.value.trim().toLowerCase(); renderStatList(); };
+  let _stSearchT=null;
+  document.getElementById("statSearch").oninput=e=>{ clearTimeout(_stSearchT); _stSearchT=setTimeout(()=>{ STAT_FILTER.q=e.target.value.trim().toLowerCase(); renderStatList(); },200); };
   document.getElementById("statSort").onchange=e=>{ STAT_FILTER.sort=e.target.value; renderStatList(); };
   window._statRows=rows;
   renderStatList();
@@ -3382,6 +3385,7 @@ function showStatDetail(w,rowEl){
     <div class="wp-links">跳转复习：${sts.length?occLinksHtml(sts,w):"<span style='color:var(--iel-mute)'>该词暂未编入故事</span>"}</div>`;
   pop.classList.add("show");
   document.getElementById("scrim").classList.add("show");
+  document.body.classList.add("ls-lock");
   pop.querySelector(".wp-x").onclick=closePop;
   pop.querySelectorAll("[data-goto]").forEach(a=>a.onclick=(ev)=>{ ev.preventDefault(); closePop(); openStory(a.dataset.goto,a.dataset.w, a.dataset.occ?parseInt(a.dataset.occ,10):0); });
   const r=rowEl.getBoundingClientRect();
@@ -3521,6 +3525,7 @@ function startReview(){
   renderReview();
 }
 function renderReview(){
+  if(REVIEW) REVIEW._grading=false;   // 新卡片渲染完成，重置防重复标记
   const w=REVIEW.queue[0];
   if(w===undefined){ return finishReview(); }
   const f=S.fav[w]||{};
@@ -3555,7 +3560,8 @@ function revealReview(){
   const a=document.getElementById("rvActs"); if(a) a.style.display="flex";
 }
 function gradeReview(know){
-  if(!REVIEW||!REVIEW.revealed) return;
+  if(!REVIEW||!REVIEW.revealed||REVIEW._grading) return;
+  REVIEW._grading=true;   // 防重复点击（移动端快速双击会触发两次）
   const w=REVIEW.queue.shift();
   const f=S.fav[w];
   REVIEW.seen++;
@@ -3618,7 +3624,7 @@ function exportWords(type){
 function resetAll(){
   if(!confirm("确定要清空全部学习数据吗？\n包括：掌握度统计、测验记录、生词本收藏。\n此操作不可恢复。")) return;
   if(!confirm("再次确认：真的要重置吗？\n（重置后所有单词回到“未测”状态，生词本清空）")) return;
-  S={stats:{}, fav:{}, quiz:{}, read:{}, chapter:S.chapter, voiceName:S.voiceName, rate:S.rate, favHide:S.favHide};
+  S=Object.assign(freshS(), {chapter:S.chapter, accent:S.accent, trMode:S.trMode, voiceName:S.voiceName, rate:S.rate, favHide:S.favHide});
   save(); toast("学习数据已重置");
   updateFavBadge();
   if(VIEW==="me") renderMe(); else if(VIEW==="stats") renderStats(); else if(VIEW==="fav"&&!REVIEW) renderFav();
@@ -3649,7 +3655,7 @@ function importBackup(e){
       return;
     }
     if(!confirm("导入将覆盖当前全部学习数据（进度、生词本、测验记录、复习计划）。\n确定继续吗？")) return;
-    S=Object.assign({stats:{},fav:{},quiz:{},read:{},chapter:1},d);
+    S=Object.assign(freshS(), d);
     migrateFav();
     save();
     audio.rate=S.rate||audio.rate;
