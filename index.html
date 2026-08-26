@@ -1348,7 +1348,7 @@ function switchView(v){
   closePop();
   REVIEW=null;
   if(window._rhScroll){ window.removeEventListener("scroll", window._rhScroll); window._rhScroll=null; }
-  if(v==="home") renderHome();
+  if(v==="home"){ const sel=document.getElementById("chapterSel"); if(sel&&S.chapter) sel.value=String(S.chapter); renderHome(); }
   else if(v==="stats") renderStats();
   else if(v==="fav") renderFav();
   else if(v==="me") renderMe();
@@ -2088,7 +2088,8 @@ function speakWordCard(w,acc){
     .catch(()=>speakWord(w,want));
 }
 function speakWordLocal(w,want){
-  if(!audio.ok()){ toast("当前浏览器不支持语音朗读"); return; }
+  if(!audio.ok()&&!CLOUD_TTS.available()){ toast("当前浏览器不支持语音朗读"); return; }
+  if(!audio.ok()&&CLOUD_TTS.available()){ CLOUD_TTS.synth(w,cloudVoiceFor(want),0).then(u=>{ new Audio(u).play().catch(()=>{}); }).catch(()=>{}); return; }
   const u=new SpeechSynthesisUtterance(w);
   const v=wordVoiceFor(want);
   if(v){ u.voice=v; u.lang=v.lang; }
@@ -2528,7 +2529,7 @@ function voiceHintOpt(){
 }
 function renderAudioBar(){
   const bar=document.getElementById("audiobar"); if(!bar) return;
-  if(!audio.ok()&&!CLOUD_TTS.available()){ bar.innerHTML=`<span style="font-size:13px;color:var(--iel-mute)">当前浏览器不支持语音朗读（Web Speech API）</span>`; return; }
+  if(!audio.ok()&&!CLOUD_TTS.available()){ bar.innerHTML=`<span style="font-size:13px;color:var(--iel-mute)">本浏览器不支持本地语音；已登录且管理员配置云端语音后可用 ☁ 云端朗读</span>`; return; }
   const cloudOn=CLOUD_TTS.available();
   const hasVoiceSel = audio.voices.length>1 || cloudOn;
   const near=RATES.reduce((a,b)=>Math.abs(b-audio.rate)<Math.abs(a-audio.rate)?b:a);
@@ -3133,7 +3134,7 @@ function renderListen(){
 }
 function renderListenBar(){
   const bar=document.getElementById("audiobar"); if(!bar) return;
-  if(!audio.ok()&&!CLOUD_TTS.available()){ bar.innerHTML=`<span style="font-size:13px;color:var(--iel-mute)">当前浏览器不支持语音朗读（Web Speech API）</span>`; return; }
+  if(!audio.ok()&&!CLOUD_TTS.available()){ bar.innerHTML=`<span style="font-size:13px;color:var(--iel-mute)">本浏览器不支持本地语音；已登录且管理员配置云端语音后可用 ☁ 云端朗读</span>`; return; }
   const cloudOn=CLOUD_TTS.available();
   const hasVoiceSel=audio.voices.length>1||cloudOn;
   const near=RATES.reduce((a,b)=>Math.abs(b-audio.rate)<Math.abs(a-audio.rate)?b:a);
