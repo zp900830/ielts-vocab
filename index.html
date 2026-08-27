@@ -857,6 +857,54 @@ body.reading #lsFab{display:none;}
   .ls-sen{font-size:15.5px;}
   .ls-sen-box{padding:12px 12px; min-height:88px;}
 }
+
+/* ================= 学习分析 & 内容扩展 & 性能监控 新增样式 ================= */
+.stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:12px 0;}
+.stat-item{text-align:center; padding:12px 8px; background:var(--iel-accent-soft); border-radius:var(--iel-radius-xs); border:1px solid var(--iel-accent-line);}
+.stat-val{font-size:22px; font-weight:700; color:var(--iel-accent-deep); font-variant-numeric:tabular-nums;}
+.stat-lbl{font-size:11px; color:var(--iel-ink2); margin-top:2px;}
+.trend-section{margin-top:16px; padding-top:14px; border-top:1px dashed var(--iel-line);}
+.trend-section h4{font-size:13px; color:var(--iel-ink2); margin-bottom:10px;}
+.trend-chart{display:flex; gap:6px; align-items:flex-end; height:80px; padding:0 4px;}
+.trend-bar{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%;}
+.trend-fill{width:100%; background:var(--iel-grad); border-radius:4px 4px 0 0; min-height:2px; transition:height .3s ease;}
+.trend-label{font-size:10px; color:var(--iel-mute); margin-top:4px;}
+.recs-section{margin-top:14px; padding-top:12px; border-top:1px dashed var(--iel-line);}
+.recs-section h4{font-size:13px; color:var(--iel-ink2); margin-bottom:8px;}
+.rec-item{padding:8px 12px; margin-bottom:6px; border-radius:var(--iel-radius-xs); font-size:13px; line-height:1.5;}
+.rec-high{background:var(--iel-coral-bg); border:1px solid var(--iel-coral-line); color:var(--iel-coral-deep);}
+.rec-medium{background:var(--iel-warn-bg); border:1px solid var(--iel-warn-line); color:var(--iel-warn);}
+.rec-low{background:var(--iel-ok-bg); border:1px solid var(--iel-ok-line); color:var(--iel-accent-deep);}
+.diff-grid{display:grid; gap:8px; margin:12px 0;}
+.diff-item{display:grid; grid-template-columns:60px 1fr 80px 40px; align-items:center; gap:8px; padding:8px 10px; background:var(--iel-tint); border-radius:var(--iel-radius-xs); font-size:13px;}
+.diff-name{font-weight:600; color:var(--iel-accent-deep);}
+.diff-stats{color:var(--iel-ink2); font-size:12px;}
+.diff-progress{height:6px; background:var(--iel-track); border-radius:3px; overflow:hidden;}
+.diff-bar{height:100%; background:var(--iel-grad); border-radius:3px; transition:width .3s ease;}
+.diff-pct{text-align:right; font-weight:600; color:var(--iel-ink); font-variant-numeric:tabular-nums;}
+.rec-chapters{margin-top:14px; padding-top:12px; border-top:1px dashed var(--iel-line);}
+.rec-chapters h4{font-size:13px; color:var(--iel-ink2); margin-bottom:8px;}
+.rec-list{display:grid; gap:6px;}
+.rec-ch{display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--iel-tint); border-radius:var(--iel-radius-xs); font-size:13px;}
+.rec-ch-num{font-weight:600; color:var(--iel-accent-deep);}
+.rec-ch-diff{font-size:11px; color:var(--iel-mute); background:var(--iel-accent-soft); padding:2px 8px; border-radius:999px;}
+.rec-ch-prog{margin-left:auto; font-weight:600; color:var(--iel-ink); font-variant-numeric:tabular-nums;}
+.perf-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:12px 0;}
+.perf-item{display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:var(--iel-tint); border-radius:var(--iel-radius-xs); font-size:13px;}
+.perf-label{color:var(--iel-ink2);}
+.perf-val{font-weight:600; color:var(--iel-ink); font-variant-numeric:tabular-nums;}
+.error-section{margin-top:14px; padding-top:12px; border-top:1px dashed var(--iel-line);}
+.error-section h4{font-size:13px; color:var(--iel-ink2); margin-bottom:8px;}
+.error-list{display:grid; gap:6px;}
+.error-item{display:flex; gap:8px; align-items:center; padding:8px 10px; background:var(--iel-coral-bg); border:1px solid var(--iel-coral-line); border-radius:var(--iel-radius-xs); font-size:12px;}
+.error-type{font-weight:600; color:var(--iel-coral-deep); white-space:nowrap;}
+.error-msg{flex:1; color:var(--iel-ink2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.error-time{color:var(--iel-mute); white-space:nowrap;}
+@media (max-width:640px){
+  .stat-grid{grid-template-columns:repeat(2,1fr);}
+  .diff-item{grid-template-columns:50px 1fr 60px 36px;}
+  .perf-grid{grid-template-columns:1fr;}
+}
 </style>
 <meta name="theme-color" content="#f8fdfa">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -3461,6 +3509,12 @@ function renderFav(){
 }
 /* ================= 我的（使用指南 / 数据管理） ================= */
 function renderMe(){
+  const eff=LearningAnalytics.getEfficiency();
+  const trend=LearningAnalytics.getDailyTrend();
+  const recs=LearningAnalytics.getRecommendations();
+  const dist=ContentExpansion.getDifficultyDistribution();
+  const perf=PerfMonitor.getSummary();
+
   app.innerHTML=`<div class="card"><h3>账号与云同步</h3>
     ${SB.user
     ?(SB.role==="pending"
@@ -3475,6 +3529,29 @@ function renderMe(){
       <div class="acc-acts"><button id="sbLogin">登录</button><button id="sbReg">注册（带入当前数据）</button></div>
     </div>`}
   </div>
+
+  <div class="card"><h3><i class="ri-bar-chart-line" aria-hidden="true"></i> 学习分析</h3>
+    <div class="stat-grid">
+      <div class="stat-item"><div class="stat-val">${eff.totalWords}</div><div class="stat-lbl">目标词汇</div></div>
+      <div class="stat-item"><div class="stat-val">${eff.testedWords}</div><div class="stat-lbl">已学习</div></div>
+      <div class="stat-item"><div class="stat-val">${eff.accuracy}%</div><div class="stat-lbl">测验正确率</div></div>
+      <div class="stat-item"><div class="stat-val">${eff.strongWords}</div><div class="stat-lbl">牢固掌握</div></div>
+    </div>
+    <div class="trend-section">
+      <h4>近7天学习趋势</h4>
+      <div class="trend-chart">${trend.map(d=>`<div class="trend-bar" title="${d.date}: ${d.wordsStudied}词"><div class="trend-fill" style="height:${Math.min(100,d.wordsStudied*2)}%"></div><div class="trend-label">${d.date.slice(-2)}</div></div>`).join("")}</div>
+    </div>
+    ${recs.length>0?`<div class="recs-section"><h4>学习建议</h4>${recs.map(r=>`<div class="rec-item rec-${r.priority}">${r.message}</div>`).join("")}</div>`:""}
+  </div>
+
+  <div class="card"><h3><i class="ri-book-open-line" aria-hidden="true"></i> 内容扩展</h3>
+    <div class="me-p">当前包含 <b>22</b> 个章节，涵盖从入门到挑战的完整难度梯度。</div>
+    <div class="diff-grid">${Object.entries(dist).map(([name,d])=>`<div class="diff-item"><div class="diff-name">${name}</div><div class="diff-stats">${d.chapters}章 · ${d.words}词</div><div class="diff-progress"><div class="diff-bar" style="width:${d.progress}%"></div></div><div class="diff-pct">${d.progress}%</div></div>`).join("")}</div>
+    <div class="rec-chapters"><h4>推荐学习章节</h4>
+      <div class="rec-list">${ContentExpansion.getRecommendedChapters().map(ch=>`<div class="rec-ch"><span class="rec-ch-num">第${ch.chapter}章</span><span class="rec-ch-diff">${ch.difficulty}</span><span class="rec-ch-prog">${ch.progress}%</span></div>`).join("")}</div>
+    </div>
+  </div>
+
   <div class="card guide"><h3>使用方法</h3><ol>
   <li><b>读英文故事</b>：高亮下划线的是本篇目标词，点击看音标与释义（每次点查都会计入掌握度统计）；其他任何单词也可以点击查义。</li>
   <li><b>先自己心里翻译</b>，再点句旁「译」按钮核对该句译文（默认隐藏，防止瞟一眼）；点击句子本身朗读该句，读完自动停（点播放键可继续连读）。</li>
@@ -3483,15 +3560,28 @@ function renderMe(){
   <li>非目标生词随手<b>收藏进生词本</b>，可按艾宾浩斯间隔复习，或导出 CSV/TXT 导入 Anki、欧路词典等。</li>
   <li><b>随身听</b>：点右下角「随身听」连播当前章节文章，锁屏后台可续播，自动断点续听。</li>
   </ol></div>
-  <div class="card"><h3>学习数据备份</h3>
+
+  <div class="card"><h3><i class="ri-download-2-line" aria-hidden="true"></i> 学习数据备份</h3>
     <div class="me-p">备份文件为 JSON 格式，包含阅读进度、掌握度统计、测验记录、生词本与复习计划。</div>
     <div class="backup-zone"><button id="exportData"><i class="ri-download-2-line" aria-hidden="true"></i> 导出学习数据备份</button><button id="importData"><i class="ri-upload-2-line" aria-hidden="true"></i> 导入备份恢复数据</button><input type="file" id="importFile" accept="application/json,.json" style="display:none"></div>
     <div class="danger-zone"><button id="resetBtn"><i class="ri-delete-bin-line" aria-hidden="true"></i> 重置全部学习数据</button></div>
+  </div>
+
+  <div class="card"><h3><i class="ri-speed-line" aria-hidden="true"></i> 性能与错误</h3>
+    <div class="perf-grid">
+      <div class="perf-item"><span class="perf-label">页面加载</span><span class="perf-val">${perf.load||"—"}ms</span></div>
+      <div class="perf-item"><span class="perf-label">数据加载</span><span class="perf-val">${perf.dataLoadTime||"—"}ms</span></div>
+      <div class="perf-item"><span class="perf-label">资源数</span><span class="perf-val">${perf.resources||"—"}</span></div>
+      <div class="perf-item"><span class="perf-label">错误数</span><span class="perf-val">${ErrorTracker.getErrors().length}</span></div>
+    </div>
+    ${ErrorTracker.getErrors().length>0?`<div class="error-section"><h4>最近错误</h4><div class="error-list">${ErrorTracker.getErrors().slice(-5).reverse().map(e=>`<div class="error-item"><span class="error-type">${e.type}</span><span class="error-msg">${esc(e.message).slice(0,60)}</span><span class="error-time">${new Date(e.ts).toLocaleTimeString()}</span></div>`).join("")}</div><div class="backup-zone"><button id="clearErrors"><i class="ri-delete-bin-line" aria-hidden="true"></i> 清除错误记录</button></div></div>`:""}
   </div>`;
   document.getElementById("resetBtn").onclick=resetAll;
   document.getElementById("exportData").onclick=exportBackup;
   document.getElementById("importData").onclick=()=>document.getElementById("importFile").click();
   document.getElementById("importFile").onchange=importBackup;
+  const clearBtn=document.getElementById("clearErrors");
+  if(clearBtn) clearBtn.onclick=()=>{ ErrorTracker.clear(); renderMe(); toast("错误记录已清除"); };
   /* —— 登录 / 注册 / 登出 / 手动同步 —— */
   const em=()=>document.getElementById("sbEmail"), pw=()=>document.getElementById("sbPw");
   const bl=document.getElementById("sbLogin");
@@ -3777,6 +3867,404 @@ document.addEventListener("visibilitychange",()=>{
     },400);
   }
 });
+/* ================= 性能监控 ================= */
+const PerfMonitor={
+  _metrics:{},
+  _marks:{},
+  /* 标记时间点 */
+  mark(name){
+    try{ this._marks[name]=performance.now(); }catch(e){}
+  },
+  /* 测量两个时间点之间的耗时 */
+  measure(name,startMark,endMark){
+    try{
+      const s=this._marks[startMark], e=this._marks[endMark];
+      if(s!==undefined&&e!==undefined){
+        this._metrics[name]=Math.round(e-s);
+        return this._metrics[name];
+      }
+    }catch(e){}
+    return null;
+  },
+  /* 记录页面加载性能 */
+  recordPageLoad(){
+    try{
+      const p=performance.getEntriesByType("navigation")[0];
+      if(p){
+        this._metrics.dns=Math.round(p.domainLookupEnd-p.domainLookupStart);
+        this._metrics.tcp=Math.round(p.connectEnd-p.connectStart);
+        this._metrics.ttfb=Math.round(p.responseStart-p.requestStart);
+        this._metrics.domReady=Math.round(p.domContentLoadedEventEnd-p.startTime);
+        this._metrics.load=Math.round(p.loadEventEnd-p.startTime);
+      }
+      const r=performance.getEntriesByType("resource");
+      this._metrics.resources=r.length;
+      this._metrics.totalSize=r.reduce((a,x)=>a+(x.transferSize||0),0);
+    }catch(e){}
+  },
+  /* 记录关键操作耗时 */
+  recordAction(name,durationMs){
+    this._metrics["action_"+name]=Math.round(durationMs);
+  },
+  /* 获取性能摘要 */
+  getSummary(){
+    return Object.assign({},this._metrics);
+  },
+  /* 上报性能数据（存入本地，可选上报到Supabase） */
+  flush(){
+    try{
+      const data=this.getSummary();
+      if(Object.keys(data).length>0){
+        localStorage.setItem("iel_perf_"+Date.now(),JSON.stringify(data));
+        this._cleanupOld();
+      }
+    }catch(e){}
+  },
+  /* 清理旧的性能数据（保留最近50条） */
+  _cleanupOld(){
+    try{
+      const keys=[];
+      for(let i=0;i<localStorage.length;i++){
+        const k=localStorage.key(i);
+        if(k&&k.startsWith("iel_perf_")) keys.push(k);
+      }
+      if(keys.length>50){
+        keys.sort();
+        for(let i=0;i<keys.length-50;i++) localStorage.removeItem(keys[i]);
+      }
+    }catch(e){}
+  }
+};
+
+/* ================= 错误追踪 ================= */
+const ErrorTracker={
+  _errors:[],
+  _maxErrors:100,
+  /* 初始化全局错误监听 */
+  init(){
+    /* JavaScript 运行时错误 */
+    window.addEventListener("error",e=>{
+      this.capture({
+        type:"js",
+        message:e.message||"Unknown error",
+        filename:e.filename||"",
+        lineno:e.lineno||0,
+        colno:e.colno||0,
+        stack:e.error?(e.error.stack||""):""
+      });
+    });
+    /* 未处理的 Promise 拒绝 */
+    window.addEventListener("unhandledrejection",e=>{
+      const reason=e.reason||{};
+      this.capture({
+        type:"promise",
+        message:reason.message||String(reason),
+        stack:reason.stack||""
+      });
+    });
+    /* 资源加载失败 */
+    window.addEventListener("error",e=>{
+      if(e.target&&e.target.tagName){
+        const tag=e.target.tagName.toLowerCase();
+        if(tag==="img"||tag==="script"||tag==="link"||tag==="audio"){
+          this.capture({
+            type:"resource",
+            element:tag,
+            src:e.target.src||e.target.href||"",
+            message:tag+" 资源加载失败"
+          });
+        }
+      }
+    },true);
+  },
+  /* 捕获错误 */
+  capture(err){
+    try{
+      const entry=Object.assign({
+        ts:Date.now(),
+        url:location.href,
+        userAgent:navigator.userAgent.slice(0,100)
+      },err);
+      this._errors.push(entry);
+      if(this._errors.length>this._maxErrors) this._errors.shift();
+      localStorage.setItem("iel_errors",JSON.stringify(this._errors));
+      console.error("[IEL ErrorTracker]",entry.type,entry.message);
+    }catch(e){}
+  },
+  /* 捕获自定义错误（供业务代码调用） */
+  captureCustom(category,message,details){
+    this.capture({
+      type:"custom",
+      category:category,
+      message:message,
+      details:details||{}
+    });
+  },
+  /* 获取所有错误 */
+  getErrors(){
+    return this._errors.slice();
+  },
+  /* 清除错误记录 */
+  clear(){
+    this._errors=[];
+    try{ localStorage.removeItem("iel_errors"); }catch(e){}
+  },
+  /* 从 localStorage 恢复 */
+  restore(){
+    try{
+      const raw=localStorage.getItem("iel_errors");
+      if(raw){
+        const arr=JSON.parse(raw);
+        if(Array.isArray(arr)) this._errors=arr.slice(-this._maxErrors);
+      }
+    }catch(e){}
+  }
+};
+ErrorTracker.restore();
+ErrorTracker.init();
+
+/* ================= 离线支持（Service Worker 注册） ================= */
+const OfflineSupport={
+  _registered:false,
+  async init(){
+    if(!("serviceWorker" in navigator)) return;
+    try{
+      /* 动态生成 Service Worker 脚本并注册 */
+      const swCode=`
+const CACHE_NAME="ielts-vocab-v${DATA_VER||1}";
+const STATIC_ASSETS=["/"];
+self.addEventListener("install",e=>{
+  e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(STATIC_ASSETS)));
+  self.skipWaiting();
+});
+self.addEventListener("activate",e=>{
+  e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))));
+  self.clients.claim();
+});
+self.addEventListener("fetch",e=>{
+  if(e.request.method!=="GET") return;
+  e.respondWith(
+    caches.match(e.request).then(r=>{
+      const fetchPromise=fetch(e.request).then(res=>{
+        if(res&&res.status===200){
+          const clone=res.clone();
+          caches.open(CACHE_NAME).then(c=>c.put(e.request,clone));
+        }
+        return res;
+      }).catch(()=>r);
+      return r||fetchPromise;
+    })
+  );
+});
+`;
+      const blob=new Blob([swCode],{type:"application/javascript"});
+      const swUrl=URL.createObjectURL(blob);
+      const reg=await navigator.serviceWorker.register(swUrl,{scope:"/"});
+      this._registered=true;
+      console.log("[IEL] Service Worker registered",reg.scope);
+    }catch(e){
+      console.log("[IEL] Service Worker registration failed (expected for blob/file://)",e.message);
+    }
+  }
+};
+
+/* ================= 学习分析增强 ================= */
+const LearningAnalytics={
+  /* 计算学习效率指标 */
+  getEfficiency(){
+    const stats=S.stats||{};
+    const quiz=S.quiz||{};
+    let totalWords=0, testedWords=0, correctTotal=0, wrongTotal=0;
+    let strongWords=0, weakWords=0;
+    for(const [w,st] of Object.entries(stats)){
+      totalWords++;
+      const a=st.c+st.w;
+      if(a>0){
+        testedWords++;
+        correctTotal+=st.c;
+        wrongTotal+=st.w;
+        const acc=st.c/a;
+        if(acc>=0.8&&a>=3) strongWords++;
+        else if(acc<0.5) weakWords++;
+      }
+    }
+    const quizAttempts=Object.values(quiz);
+    const totalQuizAttempts=quizAttempts.reduce((a,q)=>a+q.attempts,0);
+    const quizPerfect=quizAttempts.filter(q=>q.best>0).length;
+    return {
+      totalWords,
+      testedWords,
+      untestedWords:totalWords-testedWords,
+      correctTotal,
+      wrongTotal,
+      accuracy:testedWords>0?Math.round(correctTotal/(correctTotal+wrongTotal)*100):0,
+      strongWords,
+      weakWords,
+      quizAttempts:totalQuizAttempts,
+      quizPerfectRate:quizAttempts.length>0?Math.round(quizPerfect/quizAttempts.length*100):0
+    };
+  },
+  /* 计算每日学习趋势（近7天） */
+  getDailyTrend(){
+    const now=Date.now();
+    const days=[];
+    for(let i=6;i>=0;i--){
+      const dayStart=now-i*24*60*60*1000;
+      const dayEnd=dayStart+24*60*60*1000;
+      let wordsStudied=0, quizzesTaken=0;
+      for(const st of Object.values(S.stats||{})){
+        if((st.lr>=dayStart&&st.lr<dayEnd)||(st.lw>=dayStart&&st.lw<dayEnd)) wordsStudied++;
+      }
+      for(const q of Object.values(S.quiz||{})){
+        if(q.lastTs>=dayStart&&q.lastTs<dayEnd) quizzesTaken++;
+      }
+      const d=new Date(dayStart);
+      days.push({
+        date:(d.getMonth()+1)+"/"+d.getDate(),
+        wordsStudied,
+        quizzesTaken
+      });
+    }
+    return days;
+  },
+  /* 计算章节完成度 */
+  getChapterProgress(){
+    const result=[];
+    if(typeof CH_WORDS!=="undefined"){
+      for(const [ch,words] of Object.entries(CH_WORDS)){
+        const total=words.length;
+        let mastered=0, familiar=0;
+        for(const w of words){
+          const mz=mastery(w);
+          if(mz&&mz.score>=65) mastered++;
+          else if(mz&&mz.score>=40) familiar++;
+        }
+        result.push({
+          chapter:parseInt(ch),
+          total,
+          mastered,
+          familiar,
+          progress:total>0?Math.round((mastered+familiar/2)/total*100):0
+        });
+      }
+    }
+    return result;
+  },
+  /* 获取学习建议 */
+  getRecommendations(){
+    const eff=this.getEfficiency();
+    const recs=[];
+    if(eff.weakWords>10){
+      recs.push({type:"review",priority:"high",message:`有 ${eff.weakWords} 个薄弱词需要重点复习，建议使用间隔复习功能`});
+    }
+    if(eff.accuracy<60&&eff.testedWords>10){
+      recs.push({type:"practice",priority:"high",message:`正确率仅 ${eff.accuracy}%，建议先回顾原文再做测验`});
+    }
+    if(eff.untestedWords>50){
+      recs.push({type:"explore",priority:"medium",message:`还有 ${eff.untestedWords} 个词未学习，可以开始阅读新章节`});
+    }
+    if(eff.quizPerfectRate>80&&eff.testedWords>30){
+      recs.push({type:"advance",priority:"low",message:`测验表现优秀（${eff.quizPerfectRate}% 满分率），可以挑战更高难度`});
+    }
+    return recs;
+  }
+};
+
+/* ================= 内容扩展（难度分级与章节管理） ================= */
+const ContentExpansion={
+  /* 章节难度映射 */
+  CHAPTER_DIFFICULTY:{
+    1:"入门",2:"入门",3:"入门",4:"基础",5:"基础",
+    6:"基础",7:"进阶",8:"进阶",9:"进阶",10:"进阶",
+    11:"提高",12:"提高",13:"提高",14:"提高",15:"提高",
+    16:"高级",17:"高级",18:"高级",19:"高级",20:"高级",
+    21:"挑战",22:"挑战"
+  },
+  /* 获取章节信息 */
+  getChapterInfo(chapterNum){
+    const words=CH_WORDS[chapterNum]||[];
+    const diff=this.CHAPTER_DIFFICULTY[chapterNum]||"未知";
+    const stories=STORIES.filter(s=>s.ch===chapterNum);
+    let mastered=0;
+    for(const w of words){
+      const mz=mastery(w);
+      if(mz&&mz.score>=65) mastered++;
+    }
+    return {
+      chapter:chapterNum,
+      difficulty:diff,
+      wordCount:words.length,
+      storyCount:stories.length,
+      mastered,
+      progress:words.length>0?Math.round(mastered/words.length*100):0
+    };
+  },
+  /* 获取所有章节概览 */
+  getAllChapters(){
+    const chapters=[];
+    if(typeof CHAPTERS!=="undefined"){
+      for(const ch of CHAPTERS){
+        const num=parseInt(ch);
+        chapters.push(this.getChapterInfo(num));
+      }
+    }
+    return chapters;
+  },
+  /* 获取推荐章节（基于当前掌握度） */
+  getRecommendedChapters(){
+    const chapters=this.getAllChapters();
+    const eff=LearningAnalytics.getEfficiency();
+    /* 按难度和进度排序推荐 */
+    return chapters.sort((a,b)=>{
+      /* 优先推荐进度>0%但<80%的章节 */
+      const aActive=a.progress>0&&a.progress<80;
+      const bActive=b.progress>0&&b.progress<80;
+      if(aActive&&!bActive) return -1;
+      if(!aActive&&bActive) return 1;
+      /* 其次按章节顺序 */
+      return a.chapter-b.chapter;
+    }).slice(0,5);
+  },
+  /* 获取难度分布统计 */
+  getDifficultyDistribution(){
+    const chapters=this.getAllChapters();
+    const dist={};
+    for(const ch of chapters){
+      if(!dist[ch.difficulty]) dist[ch.difficulty]={chapters:0,words:0,progress:0};
+      dist[ch.difficulty].chapters++;
+      dist[ch.difficulty].words+=ch.wordCount;
+      dist[ch.difficulty].progress+=ch.progress;
+    }
+    /* 计算平均进度 */
+    for(const d of Object.values(dist)){
+      d.progress=d.chapters>0?Math.round(d.progress/d.chapters):0;
+    }
+    return dist;
+  }
+};
+
+/* ================= 初始化新功能 ================= */
+/* 性能监控：记录页面加载 */
+PerfMonitor.mark("appStart");
+window.addEventListener("load",()=>{
+  PerfMonitor.mark("appLoaded");
+  PerfMonitor.measure("appLoadTime","appStart","appLoaded");
+  PerfMonitor.recordPageLoad();
+  PerfMonitor.flush();
+});
+
+/* 离线支持：页面加载后初始化 */
+OfflineSupport.init();
+
+/* DATA_READY 后记录数据加载完成时间 */
+const _origDataReady=DATA_READY;
+if(_origDataReady&&_origDataReady.then){
+  _origDataReady.then(()=>{
+    PerfMonitor.mark("dataReady");
+    PerfMonitor.measure("dataLoadTime","appStart","dataReady");
+  }).catch(()=>{});
+}
+
 DATA_READY.then(()=>{
   if(!DATA_INLINE){ buildDict(); buildIndexes(); fillChapterSel(); }
   switchView("home");
