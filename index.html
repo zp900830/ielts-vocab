@@ -1393,6 +1393,15 @@ function hideVoiceLoading(){
   setTimeout(()=>el.remove(),250);
 }
 
+/* 已验证可用语音记忆：夸克等浏览器默认语音可能静默失效，
+   一旦某语音成功发声（onstart），记住它，下次启动优先选用，避免反复卡死 */
+function rememberGoodVoice(name){
+  try{ localStorage.setItem("iel_good_voice", name||""); }catch(e){}
+}
+function getGoodVoice(){
+  try{ return localStorage.getItem("iel_good_voice")||""; }catch(e){ return ""; }
+}
+
 /* ================= 视图路由 ================= */
 let VIEW="home", CUR_STORY=null, REVIEW=null, TR_SENS=[];
 /* 游客权限：仅可阅读第 1 章第 1 篇故事（含篇内测验/朗读/查词）；
@@ -2399,6 +2408,10 @@ const audio={
         this.voice=null;
         if(S.voiceName&&S.voiceName.indexOf("cloud:")!==0){ this.voice=this.voices.find(v=>v.name===S.voiceName)||null; }
         if(!this.voice){
+          const good=getGoodVoice();   // 优先用上次验证过能发声的语音（夸克等浏览器默认语音可能静默失效）
+          this.voice=this.voices.find(v=>v.name===good)||null;
+        }
+        if(!this.voice){
           const gb=this.voices.filter(v=>/en[-_]GB/i.test(v.lang));
           this.voice=gb[0]||this.voices.find(v=>/en[-_]US/i.test(v.lang))||this.voices[0]||null;
         }
@@ -2519,31 +2532,31 @@ const audio={
     const self=this, g=this.gen;
     let done=false;
     const finish=()=>{ if(done) return; done=true; clearTimeout(stuckTimer); };
-    u.onstart=()=>finish();
+    u.onstart=()=>{ finish(); if(self.voice) rememberGoodVoice(self.voice.name); };
     u.onend=()=>{ finish(); if(g!==self.gen||!self.playing) return; if(self.single){ self._endSingle(); } else { self.idx++; self._next(); } };
     u.onerror=()=>{ finish(); if(g!==self.gen||!self.playing) return; if(self.single){ self._endSingle(); } else { self.idx++; self._next(); } };
     try{ speechSynthesis.cancel(); }catch(e){}   // 清除可能卡住的旧队列
     speechSynthesis.speak(u);
-    /* 防卡死：2秒内没触发任何事件 → 该语音不可用 */
+    /* 防卡死：2秒内没触发任何事件 → 该语音不可用。
+       注意：setTimeout 里的 speak() 不是用户手势，移动端浏览器会静默忽略，
+       所以这里只切换语音 + 暂停，让用户再点一次播放（手势）用新语音成功发声 */
     const stuckTimer=setTimeout(()=>{
       if(done) return;
       done=true;
       try{ speechSynthesis.cancel(); }catch(e){}   // 清掉卡死的 utterance
-      if(self._voiceRetried){   // 已自动切换过一次仍卡死：暂停，让用户手势重新触发
-        self.playing=false; self.paused=true;
-        self._paint(); self._updateBar();
-        toast("语音引擎卡住了，请再点一次播放");
-        return;
-      }
-      self._voiceRetried=true;
       const idx=self.voices.indexOf(self.voice);
       const next=self.voices[(idx+1)%self.voices.length];
       if(next&&next!==self.voice){
         self.voice=next;
         S.voiceName=next.name; save();
         if(typeof renderAudioBar==="function") renderAudioBar();
-        toast("当前语音不可用，已切换，即将重试…");
-        setTimeout(()=>{ if(g===self.gen&&self.playing) self._doSpeakLocal(text); },100);
+        self.playing=false; self.paused=true;
+        self._paint(); self._updateBar();
+        toast("默认语音不可用，已切换，请再点一次播放");
+      } else {
+        self.playing=false; self.paused=true;
+        self._paint(); self._updateBar();
+        toast("语音引擎无响应，请再点一次播放");
       }
     },2000);
   },
@@ -3086,32 +3099,29 @@ const LISTEN={
     this._curU=u;
     let done=false;
     const finish=()=>{ if(done) return; done=true; clearTimeout(stuckTimer); };
-    u.onstart=()=>finish();
+    u.onstart=()=>{ finish(); if(audio.voice) rememberGoodVoice(audio.voice.name); };
     u.onend=()=>{ finish(); if(g===self.gen) cb(); };
     u.onerror=()=>{ finish(); if(g===self.gen) cb(); };
     try{ speechSynthesis.cancel(); }catch(e){}   // 清除可能卡住的旧队列
     speechSynthesis.speak(u);
-    /* 防卡死：2秒内没触发任何事件 → 该语音不可用 */
+    /* 防卡死：2秒内没触发任何事件 → 该语音不可用。
+       注意：setTimeout 里的 speak() 不是用户手势，移动端浏览器会静默忽略，
+       所以只切换语音 + 暂停，让用户再点一次播放（手势）用新语音成功发声 */
     const stuckTimer=setTimeout(()=>{
       if(done) return;
       done=true;
       try{ speechSynthesis.cancel(); }catch(e){}   // 清掉卡死的 utterance
-      if(this._voiceRetried){   // 已自动切换过一次仍卡死：暂停，让用户手势重新触发
-        this.pause();
-        toast("语音引擎卡住了，请再点一次播放");
-        return;
-      }
-      this._voiceRetried=true;
       const idx=audio.voices.indexOf(audio.voice);
       const next=audio.voices[(idx+1)%audio.voices.length];
       if(next&&next!==audio.voice){
         audio.voice=next;
         S.voiceName=next.name; save();
         if(typeof renderAudioBar==="function") renderAudioBar();
-        toast("当前语音不可用，已切换，即将重试…");
-        setTimeout(()=>{ if(g===self.gen&&this.playing) this._doSpeakLocalEn(text,cb); },100);
+        this.pause();
+        toast("默认语音不可用，已切换，请再点一次播放");
       } else {
-        cb();   // 没有其他语音了，跳过
+        this.pause();
+        toast("语音引擎无响应，请再点一次播放");
       }
     },2000);
   },
