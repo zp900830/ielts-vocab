@@ -557,6 +557,20 @@ body.reading main{padding-top:64px;}
 .boot-err{font-size:14px; color:#c0392b; line-height:1.8;}
 .boot-err button{margin-top:10px; padding:8px 22px; border:1px solid var(--iel-accent-line); background:#fff; color:var(--iel-accent-deep); border-radius:999px; font-size:13.5px; font-family:inherit; cursor:pointer;}
 #toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+/* 语音加载进度条 */
+.voice-loading{position:fixed; bottom:80px; left:50%; transform:translateX(-50%); z-index:200;
+  display:flex; align-items:center; gap:10px; padding:10px 18px;
+  background:var(--iel-glass-strong); border:1px solid var(--iel-glass-line); border-radius:999px;
+  box-shadow:var(--iel-shadow-lg); font-size:13px; color:var(--iel-ink2);
+  -webkit-backdrop-filter:var(--iel-blur); backdrop-filter:var(--iel-blur);
+  animation:voice-load-in .25s ease;}
+.voice-loading.hide{animation:voice-load-out .2s ease forwards;}
+@keyframes voice-load-in{from{opacity:0; transform:translateX(-50%) translateY(10px);}to{opacity:1; transform:translateX(-50%) translateY(0);}}
+@keyframes voice-load-out{to{opacity:0; transform:translateX(-50%) translateY(10px);}}
+.voice-loading-bar{width:80px; height:4px; background:var(--iel-track); border-radius:2px; overflow:hidden;}
+.voice-loading-fill{height:100%; background:var(--iel-grad); border-radius:2px; animation:voice-load-progress 3s linear;}
+@keyframes voice-load-progress{from{width:0%;}to{width:100%;}}
+.voice-loading .boot-spin{width:12px; height:12px;}
 
 /* 平板/窄桌面：章节选择器收窄 */
 @media (max-width:780px){
@@ -1361,6 +1375,23 @@ function fmtDate(ts){ if(!ts) return "—"; const d=new Date(ts); return (d.getM
 let toastTimer=null;
 function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove("show"),1800); }
 function storyById(id){ return STORIES.find(s=>s.id===id); }
+
+/* 语音加载进度条 */
+let _voiceLoadEl=null, _voiceLoadTimer=null;
+function showVoiceLoading(){
+  if(_voiceLoadEl) return;
+  _voiceLoadEl=document.createElement("div");
+  _voiceLoadEl.className="voice-loading";
+  _voiceLoadEl.innerHTML=`<span class="boot-spin"></span><span>正在加载语音</span><div class="voice-loading-bar"><div class="voice-loading-fill"></div></div>`;
+  document.body.appendChild(_voiceLoadEl);
+}
+function hideVoiceLoading(){
+  if(!_voiceLoadEl) return;
+  _voiceLoadEl.classList.add("hide");
+  const el=_voiceLoadEl;
+  _voiceLoadEl=null;
+  setTimeout(()=>el.remove(),250);
+}
 
 /* ================= 视图路由 ================= */
 let VIEW="home", CUR_STORY=null, REVIEW=null, TR_SENS=[];
@@ -2452,7 +2483,9 @@ const audio={
     /* 语音列表未就绪：等待加载后重试 */
     if(!this.voice&&this.voices.length===0&&!this._voicesLoaded){
       const g=this.gen, self=this;
+      showVoiceLoading();   // 显示进度条
       const waitVoices=()=>{
+        hideVoiceLoading();   // 隐藏进度条
         if(g!==self.gen) return;
         if(self.voices.length>0||self._voicesLoaded){
           self._speakLocal(text);   // 语音就绪，重试
@@ -2969,7 +3002,9 @@ const LISTEN={
     if(!audio.ok()){
       /* 本地语音不可用：不跳句，尝试等待云端语音就绪后重试 */
       if(CLOUD_TTS._checking||(SB._initP&&!SB._initP._done)){
+        showVoiceLoading();
         CLOUD_TTS._whenReady(()=>{
+          hideVoiceLoading();
           if(this.gen!==this._waitGen) return;   // 用户已操作（停止/切歌），放弃
           if(CLOUD_TTS.available()){
             this._speakEn(text,cb);   // 云端就绪，用云端重试当前句
@@ -2988,7 +3023,9 @@ const LISTEN={
     /* 语音列表未就绪：等待加载后重试当前句 */
     if(!audio.voice&&audio.voices.length===0&&!audio._voicesLoaded){
       const g=this.gen, self=this;
+      showVoiceLoading();   // 显示进度条
       const waitVoices=()=>{
+        hideVoiceLoading();   // 隐藏进度条
         if(g!==self.gen) return;
         if(audio.voices.length>0||audio._voicesLoaded){
           self._speakLocalEn(text,cb);   // 语音就绪，重试
