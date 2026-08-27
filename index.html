@@ -2516,9 +2516,28 @@ const audio={
     u.rate=this.rate||0.85;
     this._cur=u;   // 保留引用，避免部分浏览器 GC 掉 utterance 导致朗读中断
     const self=this, g=this.gen;
-    u.onend=()=>{ if(g!==self.gen||!self.playing) return; if(self.single){ self._endSingle(); } else { self.idx++; self._next(); } };
-    u.onerror=()=>{ if(g!==self.gen||!self.playing) return; if(self.single){ self._endSingle(); } else { self.idx++; self._next(); } };
+    let done=false;
+    const finish=()=>{ if(done) return; done=true; clearTimeout(stuckTimer); };
+    u.onstart=()=>finish();
+    u.onend=()=>{ finish(); if(g!==self.gen||!self.playing) return; if(self.single){ self._endSingle(); } else { self.idx++; self._next(); } };
+    u.onerror=()=>{ finish(); if(g!==self.gen||!self.playing) return; if(self.single){ self._endSingle(); } else { self.idx++; self._next(); } };
     speechSynthesis.speak(u);
+    /* 防卡死：2秒内没触发任何事件 → 该语音不可用，自动切换到下一个 */
+    const stuckTimer=setTimeout(()=>{
+      if(done) return;
+      done=true;
+      if(self._stuckVoice===self.voice) return;   // 已经试过这个语音，不再循环
+      self._stuckVoice=self.voice;
+      const idx=self.voices.indexOf(self.voice);
+      const next=self.voices[(idx+1)%self.voices.length];
+      if(next&&next!==self.voice){
+        self.voice=next;
+        S.voiceName=next.name; save();
+        if(typeof renderAudioBar==="function") renderAudioBar();
+        toast("当前语音不可用，已自动切换");
+        self._doSpeakLocal(text);   // 用新语音重试
+      }
+    },2000);
   },
   _endSingle(){   // 单句朗读完毕：停在当前句不继续，可点“播放”从下一句连读
     this.playing=false; this.paused=false; this.single=false; this.gen++;
@@ -3056,9 +3075,30 @@ const LISTEN={
     if(audio.voice) u.voice=audio.voice;
     u.rate=audio.rate||0.85;
     this._curU=u;
-    u.onend=()=>{ if(g===self.gen) cb(); };
-    u.onerror=()=>{ if(g===self.gen) cb(); };
+    let done=false;
+    const finish=()=>{ if(done) return; done=true; clearTimeout(stuckTimer); };
+    u.onstart=()=>finish();
+    u.onend=()=>{ finish(); if(g===self.gen) cb(); };
+    u.onerror=()=>{ finish(); if(g===self.gen) cb(); };
     speechSynthesis.speak(u);
+    /* 防卡死：2秒内没触发任何事件 → 该语音不可用，自动切换到下一个 */
+    const stuckTimer=setTimeout(()=>{
+      if(done) return;
+      done=true;
+      if(audio._stuckVoice===audio.voice) return;
+      audio._stuckVoice=audio.voice;
+      const idx=audio.voices.indexOf(audio.voice);
+      const next=audio.voices[(idx+1)%audio.voices.length];
+      if(next&&next!==audio.voice){
+        audio.voice=next;
+        S.voiceName=next.name; save();
+        if(typeof renderAudioBar==="function") renderAudioBar();
+        toast("当前语音不可用，已自动切换");
+        self._doSpeakLocalEn(text,cb);
+      } else {
+        cb();   // 没有其他语音了，跳过
+      }
+    },2000);
   },
   _speakZh(text,v,cb){
     const g=this.gen, self=this;
