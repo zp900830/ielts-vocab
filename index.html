@@ -2088,7 +2088,8 @@ function speakWordCard(w,acc){
     .catch(()=>speakWord(w,want));
 }
 function speakWordLocal(w,want){
-  if(!audio.ok()&&!CLOUD_TTS.available()){ toast("当前浏览器不支持语音朗读"); return; }
+  if(!audio.ok()&&!CLOUD_TTS.available()&&!CLOUD_TTS._checking){ toast("当前浏览器不支持语音朗读"); return; }
+  if(!audio.ok()&&CLOUD_TTS._checking){ CLOUD_TTS._whenReady(()=>speakWordLocal(w,want)); return; }
   if(!audio.ok()&&CLOUD_TTS.available()){ CLOUD_TTS.synth(w,cloudVoiceFor(want),0).then(u=>{ new Audio(u).play().catch(()=>{}); }).catch(()=>{}); return; }
   const u=new SpeechSynthesisUtterance(w);
   const v=wordVoiceFor(want);
@@ -2135,10 +2136,12 @@ const CLOUD_TTS={
   _pend:new Map(),             // key -> 进行中的合成 Promise（并发去重）
   _q:[], _busy:false,          // 请求队列：串行 + 间隔，防限流
   _on:false,                   // 服务端已配置云端语音（登录后异步探测）
+  _checking:false,             // checkStatus 进行中（朗读条显示加载态，不误报"不支持"）
+  _onReady:null,               // checkStatus 完成后的回调队列
   /* 登录后探测服务端是否已配置语音（管理员在后台开启即全站可用） */
   async checkStatus(){
-    this._on=false;
-    if(!SB.user) return;
+    this._on=false; this._checking=true;
+    if(!SB.user){ this._checking=false; this._fireReady(); return; }
     try{
       const c=await SB.client();
       const {data:{session}}=await c.auth.getSession();
@@ -2149,7 +2152,11 @@ const CLOUD_TTS={
       });
       if(r.ok){ const d=await r.json(); this._on=!!d.configured; }
     }catch(e){}
+    this._checking=false;
+    this._fireReady();
   },
+  _fireReady(){ const cbs=this._onReady; this._onReady=null; if(cbs) cbs.forEach(fn=>{ try{ fn(); }catch(e){} }); },
+  _whenReady(fn){ if(!this._checking){ fn(); } else { (this._onReady=this._onReady||[]).push(fn); } },
   available(){ return this._on && !!SB.user && SB.role!=="pending"; },
   friendlyErr(m){
     m=String(m||"");
@@ -2342,13 +2349,15 @@ const audio={
         if(this._cloudAu&&this._cloudSrc){ this._cloudAu.play().catch(()=>{}); this.playing=true; this.paused=false; this._updateBar(); return; }
         this.gen++; this.paused=false; if(!this.ready()) this.prepare(); this._next(); return;   // 合成中途暂停的恢复：作废旧请求，重发当前句
       }
-      if(!this.ok()&&!CLOUD_TTS.available()){ toast("当前浏览器不支持语音朗读"); return; }
+      if(!this.ok()&&!CLOUD_TTS.available()&&!CLOUD_TTS._checking){ toast("当前浏览器不支持语音朗读"); return; }
+      if(!this.ok()&&CLOUD_TTS._checking){ toast("正在检测云端语音，请稍候…"); CLOUD_TTS._whenReady(()=>this.play()); return; }
       this._unlockCloud();
       if(!this.ready()) this.prepare();
       this._next();
       return;
     }
-    if(!this.ok()&&!CLOUD_TTS.available()){ toast("当前浏览器不支持语音朗读"); return; }
+    if(!this.ok()&&!CLOUD_TTS.available()&&!CLOUD_TTS._checking){ toast("当前浏览器不支持语音朗读"); return; }
+    if(!this.ok()&&CLOUD_TTS._checking){ toast("正在检测云端语音，请稍候…"); CLOUD_TTS._whenReady(()=>this.play()); return; }
     if(this.playing){ if(this.ok()) speechSynthesis.resume(); return; }
     if(!this.ready()) this.prepare();
     this._next();
@@ -2419,7 +2428,7 @@ const audio={
     }
     if(typeof renderAudioBar==="function") renderAudioBar();
     if(wasPlaying&&this.ok()){ this.playing=true; this._speakLocal(this.sens[this.idx]); this._updateBar(); }
-    else { this.playing=false; this._updateBar(); }
+    else { this.stop(); }   // 本地也不可用时彻底停止（防止自动跳下一句无限循环）
   },
   pause(){
     if(this.cloudVoiceId){ if(this._cloudAu){ try{ this._cloudAu.pause(); }catch(e){} } this.playing=false; this.paused=true; this._updateBar(); return; }
@@ -2529,7 +2538,11 @@ function voiceHintOpt(){
 }
 function renderAudioBar(){
   const bar=document.getElementById("audiobar"); if(!bar) return;
-  if(!audio.ok()&&!CLOUD_TTS.available()){ bar.innerHTML=`<span style="font-size:13px;color:var(--iel-mute)">本浏览器不支持本地语音；已登录且管理员配置云端语音后可用 ☁ 云端朗读</span>`; return; }
+  if(!audio.ok()&&!CLOUD_TTS.available()&&!CLOUD_TTS._checking){
+    bar.innerHTML=`<span style="font-size:13px;color:var(--iel-mute)">本浏览器不支持本地语音；已登录且管理员配置云端语音后可用 ☁ 云端朗读</span>`; return; }
+  if(!audio.ok()&&CLOUD_TTS._checking){
+    bar.innerHTML=`<span style="font-size:13px;color:var(--iel-mute)"><span class="boot-spin" style="display:inline-block;vertical-align:middle;margin-right:6px"></span>正在检测云端语音…</span>`;
+    CLOUD_TTS._whenReady(()=>renderAudioBar()); return; }
   const cloudOn=CLOUD_TTS.available();
   const hasVoiceSel = audio.voices.length>1 || cloudOn;
   const near=RATES.reduce((a,b)=>Math.abs(b-audio.rate)<Math.abs(a-audio.rate)?b:a);
@@ -3134,7 +3147,11 @@ function renderListen(){
 }
 function renderListenBar(){
   const bar=document.getElementById("audiobar"); if(!bar) return;
-  if(!audio.ok()&&!CLOUD_TTS.available()){ bar.innerHTML=`<span style="font-size:13px;color:var(--iel-mute)">本浏览器不支持本地语音；已登录且管理员配置云端语音后可用 ☁ 云端朗读</span>`; return; }
+  if(!audio.ok()&&!CLOUD_TTS.available()&&!CLOUD_TTS._checking){
+    bar.innerHTML=`<span style="font-size:13px;color:var(--iel-mute)">本浏览器不支持本地语音；已登录且管理员配置云端语音后可用 ☁ 云端朗读</span>`; return; }
+  if(!audio.ok()&&CLOUD_TTS._checking){
+    bar.innerHTML=`<span style="font-size:13px;color:var(--iel-mute)"><span class="boot-spin" style="display:inline-block;vertical-align:middle;margin-right:6px"></span>正在检测云端语音…</span>`;
+    CLOUD_TTS._whenReady(()=>renderListenBar()); return; }
   const cloudOn=CLOUD_TTS.available();
   const hasVoiceSel=audio.voices.length>1||cloudOn;
   const near=RATES.reduce((a,b)=>Math.abs(b-audio.rate)<Math.abs(a-audio.rate)?b:a);
