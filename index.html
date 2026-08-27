@@ -2352,6 +2352,14 @@ const audio={
       const changed=sig!==this._vsig;
       this._vsig=sig;
       this.voices=list;
+      /* 语音列表加载完成：标记并通知等待的播放函数 */
+      if(list.length>0||all.length>0||tries>=5){
+        this._voicesLoaded=true;
+        clearTimeout(this._voicesWaitTimer);
+        this._voicesWaitTimer=null;
+        (this._voicesWaiting||[]).forEach(fn=>{ try{fn();}catch(e){} });
+        this._voicesWaiting=[];
+      }
       if(S.voiceName&&S.voiceName.indexOf("cloud:")===0){
         const cid=S.voiceName.slice(6);
         if(CLOUD_TTS.available()&&CLOUD_TTS.VOICES.some(v=>v.id===cid)){ this.cloudVoiceId=cid; this.voice=null; }
@@ -2441,10 +2449,38 @@ const audio={
     this._updateBar();
   },
   _speakLocal(text){
+    /* 语音列表未就绪：等待加载后重试 */
+    if(!this.voice&&this.voices.length===0&&!this._voicesLoaded){
+      const g=this.gen, self=this;
+      const waitVoices=()=>{
+        if(g!==self.gen) return;
+        if(self.voices.length>0||self._voicesLoaded){
+          self._speakLocal(text);   // 语音就绪，重试
+        } else {
+          /* 超时：用默认语言尝试播放 */
+          self._doSpeakLocal(text);
+        }
+      };
+      this._voicesWaiting=this._voicesWaiting||[];
+      this._voicesWaiting.push(waitVoices);
+      if(!this._voicesWaitTimer){
+        this._voicesWaitTimer=setTimeout(()=>{
+          this._voicesLoaded=true;
+          (this._voicesWaiting||[]).forEach(fn=>fn());
+          this._voicesWaiting=[];
+          this._voicesWaitTimer=null;
+        },3000);   // 3秒超时
+      }
+      return;
+    }
+    this._doSpeakLocal(text);
+  },
+  _doSpeakLocal(text){
+    if(!this.ok()) return;
     const u=new SpeechSynthesisUtterance(text);
     u.lang=this.voice&&/^en/i.test(this.voice.lang)?this.voice.lang:"en-GB";
     if(this.voice) u.voice=this.voice;
-    u.rate=this.rate;
+    u.rate=this.rate||0.85;
     this._cur=u;   // 保留引用，避免部分浏览器 GC 掉 utterance 导致朗读中断
     const self=this, g=this.gen;
     u.onend=()=>{ if(g!==self.gen||!self.playing) return; if(self.single){ self._endSingle(); } else { self.idx++; self._next(); } };
@@ -2949,11 +2985,39 @@ const LISTEN={
       toast("本浏览器不支持语音朗读，推荐使用 Edge 浏览器");
       return;
     }
+    /* 语音列表未就绪：等待加载后重试当前句 */
+    if(!audio.voice&&audio.voices.length===0&&!audio._voicesLoaded){
+      const g=this.gen, self=this;
+      const waitVoices=()=>{
+        if(g!==self.gen) return;
+        if(audio.voices.length>0||audio._voicesLoaded){
+          self._speakLocalEn(text,cb);   // 语音就绪，重试
+        } else {
+          /* 超时：用默认语言尝试播放 */
+          self._doSpeakLocalEn(text,cb);
+        }
+      };
+      audio._voicesWaiting=audio._voicesWaiting||[];
+      audio._voicesWaiting.push(waitVoices);
+      if(!audio._voicesWaitTimer){
+        audio._voicesWaitTimer=setTimeout(()=>{
+          audio._voicesLoaded=true;
+          (audio._voicesWaiting||[]).forEach(fn=>fn());
+          audio._voicesWaiting=[];
+          audio._voicesWaitTimer=null;
+        },3000);   // 3秒超时
+      }
+      return;
+    }
+    this._doSpeakLocalEn(text,cb);
+  },
+  _doSpeakLocalEn(text,cb){
+    if(!audio.ok()){ cb(); return; }
     const g=this.gen, self=this;
     const u=new SpeechSynthesisUtterance(text);
     u.lang=audio.voice&&/^en/i.test(audio.voice.lang)?audio.voice.lang:"en-GB";
     if(audio.voice) u.voice=audio.voice;
-    u.rate=audio.rate;
+    u.rate=audio.rate||0.85;
     this._curU=u;
     u.onend=()=>{ if(g===self.gen) cb(); };
     u.onerror=()=>{ if(g===self.gen) cb(); };
