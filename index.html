@@ -2436,6 +2436,7 @@ const audio={
   },
   ready(){ return this.sens.length&&this.storyId===CUR_STORY.id; },
   play(){
+    this._voiceRetried=false;   // 用户手势触发：重置语音自动切换标记
     if(this.cloudVoiceId){
       if(this.playing) return;
       if(this.paused){
@@ -2521,21 +2522,28 @@ const audio={
     u.onstart=()=>finish();
     u.onend=()=>{ finish(); if(g!==self.gen||!self.playing) return; if(self.single){ self._endSingle(); } else { self.idx++; self._next(); } };
     u.onerror=()=>{ finish(); if(g!==self.gen||!self.playing) return; if(self.single){ self._endSingle(); } else { self.idx++; self._next(); } };
+    try{ speechSynthesis.cancel(); }catch(e){}   // 清除可能卡住的旧队列
     speechSynthesis.speak(u);
-    /* 防卡死：2秒内没触发任何事件 → 该语音不可用，自动切换到下一个 */
+    /* 防卡死：2秒内没触发任何事件 → 该语音不可用 */
     const stuckTimer=setTimeout(()=>{
       if(done) return;
       done=true;
-      if(self._stuckVoice===self.voice) return;   // 已经试过这个语音，不再循环
-      self._stuckVoice=self.voice;
+      try{ speechSynthesis.cancel(); }catch(e){}   // 清掉卡死的 utterance
+      if(self._voiceRetried){   // 已自动切换过一次仍卡死：暂停，让用户手势重新触发
+        self.playing=false; self.paused=true;
+        self._paint(); self._updateBar();
+        toast("语音引擎卡住了，请再点一次播放");
+        return;
+      }
+      self._voiceRetried=true;
       const idx=self.voices.indexOf(self.voice);
       const next=self.voices[(idx+1)%self.voices.length];
       if(next&&next!==self.voice){
         self.voice=next;
         S.voiceName=next.name; save();
         if(typeof renderAudioBar==="function") renderAudioBar();
-        toast("当前语音不可用，已自动切换");
-        self._doSpeakLocal(text);   // 用新语音重试
+        toast("当前语音不可用，已切换，即将重试…");
+        setTimeout(()=>{ if(g===self.gen&&self.playing) self._doSpeakLocal(text); },100);
       }
     },2000);
   },
@@ -2841,6 +2849,7 @@ const LISTEN={
   play(){
     const st=lsState();
     if(this.playing) return;
+    this._voiceRetried=false;   // 用户手势触发：重置语音自动切换标记
     if(!this._au){ this._au=new Audio(); this._au.src=LS_SILENT_WAV; const p=this._au.play(); if(p&&p.catch) p.catch(()=>{}); }   // iOS 手势期解锁
     if(st.cfg.timer>0) this._timerEnd=Date.now()+st.cfg.timer*60000;
     if(this.paused){
@@ -3080,21 +3089,27 @@ const LISTEN={
     u.onstart=()=>finish();
     u.onend=()=>{ finish(); if(g===self.gen) cb(); };
     u.onerror=()=>{ finish(); if(g===self.gen) cb(); };
+    try{ speechSynthesis.cancel(); }catch(e){}   // 清除可能卡住的旧队列
     speechSynthesis.speak(u);
-    /* 防卡死：2秒内没触发任何事件 → 该语音不可用，自动切换到下一个 */
+    /* 防卡死：2秒内没触发任何事件 → 该语音不可用 */
     const stuckTimer=setTimeout(()=>{
       if(done) return;
       done=true;
-      if(audio._stuckVoice===audio.voice) return;
-      audio._stuckVoice=audio.voice;
+      try{ speechSynthesis.cancel(); }catch(e){}   // 清掉卡死的 utterance
+      if(this._voiceRetried){   // 已自动切换过一次仍卡死：暂停，让用户手势重新触发
+        this.pause();
+        toast("语音引擎卡住了，请再点一次播放");
+        return;
+      }
+      this._voiceRetried=true;
       const idx=audio.voices.indexOf(audio.voice);
       const next=audio.voices[(idx+1)%audio.voices.length];
       if(next&&next!==audio.voice){
         audio.voice=next;
         S.voiceName=next.name; save();
         if(typeof renderAudioBar==="function") renderAudioBar();
-        toast("当前语音不可用，已自动切换");
-        self._doSpeakLocalEn(text,cb);
+        toast("当前语音不可用，已切换，即将重试…");
+        setTimeout(()=>{ if(g===self.gen&&this.playing) this._doSpeakLocalEn(text,cb); },100);
       } else {
         cb();   // 没有其他语音了，跳过
       }
