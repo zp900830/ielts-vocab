@@ -109,15 +109,29 @@
     background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(170%);
     backdrop-filter: blur(22px) saturate(170%);
     border: 1px solid rgba(255,255,255,.7); border-radius: 22px;
-    padding: 8px 16px 10px; box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,.85); }
+    padding: 4px 16px 10px; box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,.85); }
+  #rateCycle { flex: none; }
+  .rate-wrap { position: relative; flex: none; }
+  .rate-menu { position: absolute; bottom: calc(100% + 10px); left: 50%;
+    transform: translateX(-50%) translateY(4px); min-width: 92px;
+    background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
+    backdrop-filter: blur(22px) saturate(170%); border: 1px solid rgba(255,255,255,.7);
+    border-radius: 14px; box-shadow: var(--shadow-lg); padding: 6px;
+    display: flex; flex-direction: column; gap: 2px;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index: 5; }
+  .rate-wrap:hover .rate-menu, .rate-wrap.open .rate-menu { opacity: 1; visibility: visible;
+    pointer-events: auto; transform: translateX(-50%) translateY(0); }
+  .rate-menu button { border: none; background: transparent; border-radius: 10px;
+    padding: 7px 10px; font-size: 13px; color: var(--text); text-align: center; }
+  .rate-menu button:hover { background: var(--accent-soft); }
+  .rate-menu button.active { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
   .ab-row { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; justify-content: center; }
   .audiobar .btn { min-height: 34px; position: relative; white-space: nowrap; }
   .audiobar .btn::after { content: ""; position: absolute; inset: -6px -2px; } /* 纵向 hit-slop：触达 40px 不撑大视觉 */
   .audiobar .btn + .btn { margin-left: 6px; } /* hit-slop 横向延伸的补偿，防止盖住相邻按钮 */
   .audiobar .btn.play { font-size: 14px; padding: 7px 20px; }
-  .audiobar .ab-sep { width: 1px; height: 22px; background: var(--border); }
   .audiobar .seg { min-width: 0; }
-  #rateCycle { display: none; }
   /* 左侧章节锚点（低调小点） */
   #anchors { position: fixed; left: 8px; top: 50%; transform: translateY(-50%);
     z-index: 110; display: flex; flex-direction: column; gap: 12px; opacity: .55;
@@ -134,7 +148,7 @@
     display: none; box-shadow: var(--shadow); }
   #anchors .adot:hover .atip { display: block; }
   /* 底部音乐式进度条（每句一阻尼）：桌面端收进播放条右侧，固定宽单行 */
-  #seekWrap { position: relative; padding: 0 2px; }
+  #seekWrap { position: absolute; top: 0; left: 14px; right: 14px; height: 26px; }
   #seekTip { bottom: calc(100% + 2px); }
   .audiobar .seg { align-self: center; flex: none; }
   #seekTip { position: absolute; left: 0; bottom: 100%; transform: translateX(-50%);
@@ -143,24 +157,24 @@
     display: none; box-shadow: var(--shadow); white-space: nowrap; overflow: hidden;
     text-overflow: ellipsis; pointer-events: none; z-index: 5; }
   #seekTrack { position: relative; height: 26px; cursor: pointer; touch-action: none; }
-  #seekRail { position: absolute; left: 0; right: 0; top: 11.5px; height: 3px;
+  #seekRail { position: absolute; left: 0; right: 0; top: 5px; height: 1px;
     background: var(--border); border-radius: 2px;
     transition: height .18s ease, top .18s ease, background .18s ease; }
-  #seekFill { position: absolute; left: 0; top: 11.5px; height: 3px; width: 0;
+  #seekFill { position: absolute; left: 0; top: 5px; height: 1px; width: 0;
     background: var(--grad); border-radius: 2px;
     transition: height .18s ease, top .18s ease; }
   #seekTrack:hover #seekRail, #seekTrack.active #seekRail,
-  #seekTrack:hover #seekFill, #seekTrack.active #seekFill { height: 6px; top: 10px; }
+  #seekTrack:hover #seekFill, #seekTrack.active #seekFill { height: 6px; top: 3px; }
   #seekTrack:hover #seekRail, #seekTrack.active #seekRail { background: var(--accent-line); }
   #seekTicks { position: absolute; inset: 0; }
-  #seekTicks .tick { position: absolute; top: 9px; width: 8px; height: 8px;
+  #seekTicks .tick { position: absolute; top: 2px; width: 8px; height: 8px;
     border-radius: 50%; background: #b9d4c7; border: none; padding: 0; cursor: pointer;
     transform: translateX(-50%); transition: transform var(--t-fast), background var(--t-fast); }
   #seekTicks .tick:hover { background: var(--accent-bright); transform: translateX(-50%) scale(1.5); }
   #seekTicks .tick.done { background: var(--accent); }
   #seekTicks .tick.cur { background: var(--coral-deep); transform: translateX(-50%) scale(1.7);
     box-shadow: 0 0 6px rgba(201,86,74,.6); }
-  #seekKnob { position: absolute; top: 13px; width: 14px; height: 14px; border-radius: 50%;
+  #seekKnob { position: absolute; top: -1px; width: 14px; height: 14px; border-radius: 50%;
     background: #fff; border: 3px solid var(--accent-bright); transform: translate(-50%, -50%) scale(.6);
     box-shadow: var(--shadow); pointer-events: none; opacity: 0;
     transition: opacity .18s ease, transform .18s ease; }
@@ -275,22 +289,20 @@
       border-radius: 18px; padding: 14px 14px 12px; }
     .pop .pw { font-size: 20px; }
     /* 播放条：单行图标化，不再两行大方块 */
-    .audiobar { gap: 2px; padding: 6px 10px 7px; border-radius: 18px;
+    .audiobar { gap: 2px; padding: 4px 10px 7px; border-radius: 18px;
       bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
     .ab-row { gap: 5px; justify-content: space-between; }
     .audiobar .btn { font-size: 12px; padding: 6px 9px; min-height: 34px; min-width: 0; flex: none; }
     .audiobar .btn.play { font-size: 13px; padding: 6px 16px; flex: none; }
     .audiobar .btn::after { display: none; }
-    .audiobar [data-rate] { display: none; }
     #rateCycle { display: inline-block; flex: none; }
     .audiobar .seg { display: none; }
-    .ab-sep { display: none; }
     .audiobar .btn + .btn { margin-left: 0; } /* 移动端 hit-slop 已关，还原间距 */
-    #seekWrap { padding: 0 2px; }
+    #seekWrap { left: 8px; right: 8px; top: 0; }
     #seekTrack { height: 26px; }
-    #seekRail, #seekFill { top: 11.5px; height: 3px; }
-    #seekTicks .tick { top: 9px; }
-    #seekKnob { top: 13px; width: 14px; height: 14px; }
+    #seekRail, #seekFill { top: 5px; height: 1px; }
+    #seekTicks .tick { top: 2px; }
+    #seekKnob { top: -1px; width: 14px; height: 14px; }
   }
   /* 超窄屏（≤360px）：播放条进一步收纳 */
   @media (max-width: 360px) {
@@ -348,12 +360,15 @@
   <button class="btn" onclick="step(-1)" data-page-node-id="pa6tUuO8W9TWF1ZbpJP7m7"><i class="ri-arrow-left-s-line"></i> 上一句</button>
   <button class="btn play" id="btnPlay" onclick="togglePlay()" data-page-node-id="uV7tSS9BAoNLRfxY9cYutw"><i class="ri-play-fill"></i> 朗读</button>
   <button class="btn" onclick="step(1)" data-page-node-id="cloZ32G8EuzFNR8CVLw1W1"><i class="ri-arrow-right-s-line"></i> 下一句</button>
-  <button class="btn" id="rateCycle" onclick="cycleRate()" title="切换倍速"><i class="ri-time-s-line"></i> 1x</button>
-  <span class="ab-sep"></span>
-  <button class="btn" data-rate="0.75" onclick="setRate(0.75)" data-page-node-id="sKbj6wBb8nb8v6fEknHrBe"><i class="ri-arrow-contract-s-line"></i> 0.75x</button>
-  <button class="btn active" data-rate="1" onclick="setRate(1)" data-page-node-id="ZN5SHzrjlgnrhK5gtiPFhX"><i class="ri-check-line"></i> 1x</button>
-  <button class="btn" data-rate="1.25" onclick="setRate(1.25)" data-page-node-id="uK88uwYm4JZ7pChbUAmo20"><i class="ri-arrow-expand-s-line"></i> 1.25x</button>
-  <button class="btn" data-rate="1.5" onclick="setRate(1.5)" data-page-node-id="Ekz6YRmBCmrz7T9zItKoai"><i class="ri-arrow-expand-s-line"></i> 1.5x</button>
+  <div class="rate-wrap" id="rateWrap">
+    <button class="btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速"><i class="ri-time-s-line"></i> 1x</button>
+    <div class="rate-menu">
+      <button data-mrate="0.75" onclick="pickRate(0.75)">0.75x</button>
+      <button data-mrate="1" class="active" onclick="pickRate(1)">1x</button>
+      <button data-mrate="1.25" onclick="pickRate(1.25)">1.25x</button>
+      <button data-mrate="1.5" onclick="pickRate(1.5)">1.5x</button>
+    </div>
+  </div>
   <div class="seg" id="segLbl" data-page-node-id="GOTpB4eiD2ZqNQ1CUm9HER">—</div>
   </div>
 </div>
@@ -1221,17 +1236,28 @@ function setAccent(a) {
   else if (cur) speakAside(cur);
   else speakAside(a === 'en-GB' ? 'British accent.' : 'American accent.');
 }
-const RATES = [0.75, 1, 1.25, 1.5];
+function toggleRateMenu(e) {
+  if (e) e.stopPropagation();
+  const w = document.getElementById('rateWrap');
+  if (!w) return;
+  const open = w.classList.toggle('open');
+  if (open) setTimeout(() => document.addEventListener('pointerdown', function h(ev) {
+    if (!ev.target.closest('#rateWrap')) { w.classList.remove('open'); document.removeEventListener('pointerdown', h); }
+  }), 0);
+}
+function pickRate(r) {
+  setRate(r);
+  const w = document.getElementById('rateWrap');
+  if (w) w.classList.remove('open');
+}
 function setRate(r) {
   rate = r;
-  document.querySelectorAll('[data-rate]').forEach(b =>
-    b.classList.toggle('active', parseFloat(b.dataset.rate) === r));
+  document.querySelectorAll('.rate-menu [data-mrate]').forEach(b =>
+    b.classList.toggle('active', parseFloat(b.dataset.mrate) === r));
   const c = document.getElementById('rateCycle');
   if (c) c.innerHTML = `<i class="ri-time-s-line"></i> ${r}x`;
 }
-function cycleRate() {
-  setRate(RATES[(RATES.indexOf(rate) + 1) % RATES.length]);
-}
+
 
 /* ============ 单词弹窗 ============ */
 const pop = document.getElementById('pop');
