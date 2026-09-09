@@ -107,8 +107,7 @@
     background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(170%);
     backdrop-filter: blur(22px) saturate(170%);
     border: 1px solid rgba(255,255,255,.65); border-radius: 999px;
-    padding: 8px 16px; box-shadow: var(--shadow-lg); max-width: calc(100vw - 24px); overflow-x: auto; scrollbar-width: none; }
-  .audiobar::-webkit-scrollbar { display: none; }
+    padding: 8px 16px; box-shadow: var(--shadow-lg); max-width: calc(100vw - 24px); }
   .audiobar .btn { min-height: 34px; position: relative; white-space: nowrap; }
   .audiobar .btn::after { content: ""; position: absolute; inset: -6px -2px; } /* 纵向 hit-slop：触达 40px 不撑大视觉 */
   .audiobar .btn + .btn { margin-left: 6px; } /* hit-slop 横向延伸的补偿，防止盖住相邻按钮 */
@@ -132,7 +131,10 @@
     display: none; box-shadow: var(--shadow); }
   #anchors .adot:hover .atip { display: block; }
   /* 底部音乐式进度条（每句一阻尼）：桌面端收进播放条右侧，固定宽单行 */
-  #seekWrap { position: relative; flex: 1 1 170px; min-width: 120px; max-width: 260px; align-self: center; padding: 0 6px; }
+  #seekWrap { position: absolute; left: 14px; right: 14px; bottom: calc(100% + 8px);
+    padding: 3px 14px 5px; background: var(--glass);
+    -webkit-backdrop-filter: blur(22px) saturate(170%); backdrop-filter: blur(22px) saturate(170%);
+    border: 1px solid rgba(255,255,255,.65); border-radius: 999px; box-shadow: var(--shadow); }
   #seekTip { bottom: calc(100% + 2px); }
   .audiobar .seg { align-self: center; flex: none; }
   #seekTip { position: absolute; left: 0; bottom: 100%; transform: translateX(-50%);
@@ -140,20 +142,20 @@
     border-radius: 8px; padding: 4px 10px; font-size: 12px; font-family: var(--serif);
     display: none; box-shadow: var(--shadow); white-space: nowrap; overflow: hidden;
     text-overflow: ellipsis; pointer-events: none; z-index: 5; }
-  #seekTrack { position: relative; height: 22px; cursor: pointer; touch-action: none; }
-  #seekRail { position: absolute; left: 0; right: 0; top: 9px; height: 4px;
+  #seekTrack { position: relative; height: 26px; cursor: pointer; touch-action: none; }
+  #seekRail { position: absolute; left: 0; right: 0; top: 11px; height: 4px;
     background: var(--border); border-radius: 2px; }
-  #seekFill { position: absolute; left: 0; top: 9px; height: 4px; width: 0;
+  #seekFill { position: absolute; left: 0; top: 11px; height: 4px; width: 0;
     background: var(--grad); border-radius: 2px; }
   #seekTicks { position: absolute; inset: 0; }
-  #seekTicks .tick { position: absolute; top: 8px; width: 6px; height: 6px;
+  #seekTicks .tick { position: absolute; top: 9px; width: 8px; height: 8px;
     border-radius: 50%; background: #b9d4c7; border: none; padding: 0; cursor: pointer;
     transform: translateX(-50%); transition: transform var(--t-fast), background var(--t-fast); }
   #seekTicks .tick:hover { background: var(--accent-bright); transform: translateX(-50%) scale(1.5); }
   #seekTicks .tick.done { background: var(--accent); }
   #seekTicks .tick.cur { background: var(--coral-deep); transform: translateX(-50%) scale(1.7);
     box-shadow: 0 0 6px rgba(201,86,74,.6); }
-  #seekKnob { position: absolute; top: 11px; width: 14px; height: 14px; border-radius: 50%;
+  #seekKnob { position: absolute; top: 13px; width: 14px; height: 14px; border-radius: 50%;
     background: #fff; border: 3px solid var(--accent-bright); transform: translate(-50%, -50%);
     box-shadow: var(--shadow); pointer-events: none; }
   @media (max-width: 900px) { #anchors { display: none; } }
@@ -277,11 +279,11 @@
     .audiobar .seg { display: none; }
     .ab-sep { display: none; }
     .audiobar .btn + .btn { margin-left: 0; } /* 移动端 hit-slop 已关，还原间距 */
-    #seekWrap { flex: 1 1 100%; padding: 6px 2px 0; }
-    #seekTrack { height: 18px; }
-    #seekRail, #seekFill { top: 7px; }
-    #seekTicks .tick { top: 6px; }
-    #seekKnob { top: 9px; width: 12px; height: 12px; }
+    #seekWrap { left: 8px; right: 8px; bottom: calc(100% + 6px); padding: 3px 12px 5px; }
+    #seekTrack { height: 26px; }
+    #seekRail, #seekFill { top: 11px; }
+    #seekTicks .tick { top: 9px; }
+    #seekKnob { top: 13px; width: 14px; height: 14px; }
   }
   /* 超窄屏（≤360px）：播放条进一步收纳 */
   @media (max-width: 360px) {
@@ -330,7 +332,7 @@
 
 <div class="audiobar">
   <button class="btn" onclick="step(-1)" data-page-node-id="pa6tUuO8W9TWF1ZbpJP7m7"><i class="ri-arrow-left-s-line"></i> 上一句</button>
-  <button class="btn play" id="btnPlay" onclick="togglePlay()" data-page-node-id="uV7tSS9BAoNLRfxY9cYutw"><i class="ri-play-line"></i> 朗读</button>
+  <button class="btn play" id="btnPlay" onclick="togglePlay()" data-page-node-id="uV7tSS9BAoNLRfxY9cYutw"><i class="ri-play-fill"></i> 朗读</button>
   <button class="btn" onclick="step(1)" data-page-node-id="cloZ32G8EuzFNR8CVLw1W1"><i class="ri-arrow-right-s-line"></i> 下一句</button>
   <button class="btn" id="rateCycle" onclick="cycleRate()" title="切换倍速"><i class="ri-time-s-line"></i> 1x</button>
   <span class="ab-sep"></span>
@@ -1120,7 +1122,7 @@ function paint() {
     if (r.top < 0 || r.bottom > innerHeight) sents[idx].scrollIntoView({ block: 'center', behavior: 'smooth' });
   }
   const bp = document.getElementById('btnPlay');
-  if (bp) bp.innerHTML = playing ? '<i class="ri-pause-line"></i> 暂停' : '<i class="ri-play-line"></i> 朗读';
+  if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i> 暂停' : '<i class="ri-play-fill"></i> 朗读';
   if (idx >= 0) document.getElementById('segLbl').textContent = `${idx+1} / ${sents.length}`;
   paintSeek();
   if (idx >= 0 && artOfSent[idx] !== undefined) markAnchor(artOfSent[idx]);
