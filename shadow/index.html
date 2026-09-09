@@ -875,14 +875,14 @@ function loadVoices() {
   }
   const ok = pool.filter(v => tierOf(v) >= 1);
   /* 音色三分类（参考词汇真经）：☁ Azure 云端 → ⚡ Edge 免费 → 🖥 本机，每组 ≤4 */
-  const cloudList = CLOUD._on ? CLOUD.VOICES.filter(v =>
-    accent === 'en-GB' ? v.region === '英式' : accent === 'en-US' ? v.region === '美式' : true)
-    .map(v => ({ cloud: v.id, voiceURI: 'cloud:' + v.id, name: v.id, lang: v.region === '英式' ? 'en-GB' : 'en-US', labelOverride: v.label }))
-    : [];
+  const toCloud = v => ({ cloud: v.id, voiceURI: 'cloud:' + v.id, name: v.id, lang: v.region === '英式' ? 'en-GB' : 'en-US', labelOverride: '☁ ' + v.label });
+  const cloudGB = CLOUD._on ? CLOUD.VOICES.filter(v => v.region === '英式').map(toCloud) : [];
+  const cloudUS = CLOUD._on ? CLOUD.VOICES.filter(v => v.region === '美式').map(toCloud) : [];
   const edgeList = balance(ok.filter(isEdgeCloudVoice));
   const localList = balance(ok.filter(v => !isEdgeCloudVoice(v)));
   const groups = [
-    ...(cloudList.length ? [{ label: '☁ Azure 云端自然语音（登录后可用）', list: cloudList, cloud: true }] : []),
+    ...(cloudGB.length ? [{ label: '☁ 云端 · 英式', list: cloudGB, cloud: true }] : []),
+    ...(cloudUS.length ? [{ label: '☁ 云端 · 美式', list: cloudUS, cloud: true }] : []),
     ...(edgeList.length ? [{ label: '⚡ Edge 免费自然语音', list: edgeList }] : []),
     ...(localList.length ? [{ label: '🖥 本机语音', list: localList }] : []),
   ].filter(g => g.list.length);
@@ -1148,6 +1148,14 @@ async function voiceSelfTest() {
   }
   if (btn) { btn.disabled = false; btn.textContent = '自检'; }
 }
+let _AC = null;
+function unlockAudio() {
+  try {
+    _AC = _AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (_AC && _AC.state === 'suspended') _AC.resume();
+  } catch (e) {}
+}
+window.addEventListener('pointerdown', unlockAudio, { passive: true });
 // 首次手势预热：Chrome 语音列表常延迟到达，点 anything 时刷新一次，避免首播时列表为空
 window.addEventListener('pointerdown', function chromeWarm() {
   window.removeEventListener('pointerdown', chromeWarm);
