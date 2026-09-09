@@ -110,7 +110,7 @@
     -webkit-backdrop-filter: blur(32px) saturate(190%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(190%) brightness(1.02);
     border: 1px solid rgba(255,255,255,.62); border-radius: 22px;
-    padding: 0 12px 12px;
+    padding: 0 12px 10px;
     box-shadow: 0 24px 64px rgba(17, 36, 28, .22), 0 6px 20px rgba(17, 36, 28, .08),
       inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.32); }
   .audiobar::before { content: ""; position: absolute; left: 12px; right: 12px; top: 6px;
@@ -154,7 +154,7 @@
     display: none; box-shadow: var(--shadow); }
   #anchors .adot:hover .atip { display: block; }
   /* 进度线：播放器内部的装饰线（默认极细，hover/触摸才展开），与下方内容留间距 */
-  #seekWrap { position: relative; width: 100%; height: 11px; margin: 0 0 6px; padding: 0; z-index: 6; }
+  #seekWrap { position: relative; width: 100%; height: 11px; margin: 0 0 3px; padding: 0; z-index: 6; }
   .audiobar .seg { align-self: center; flex: none; }
   #seekTip { position: absolute; left: 0; bottom: calc(100% + 8px); transform: translateX(-50%);
     max-width: 92%; background: var(--glass-strong); border: 1px solid var(--border);
@@ -204,7 +204,21 @@
     #seekKnob { opacity: 1; transform: translate(-50%, -50%) scale(.55); }
     #seekTrack.active #seekKnob { transform: translate(-50%, -50%) scale(1); }
   }
-  @media (max-width: 900px) { #anchors { display: none; } }
+  @media (max-width: 900px) {
+    #anchors { display: flex; position: static; transform: none; flex-direction: row;
+      gap: 8px; overflow-x: auto; opacity: 1; padding: 12px 12px 0; scrollbar-width: none; }
+    #anchors::-webkit-scrollbar { display: none; }
+    #anchors .adot { width: auto; height: auto; border-radius: 999px; padding: 5px 12px 5px 10px;
+      background: var(--glass); border: 1px solid var(--border); display: flex; align-items: center;
+      gap: 6px; flex: none; }
+    #anchors .adot::before { content: ""; width: 8px; height: 8px; border-radius: 50%;
+      background: #b9d4c7; flex: none; }
+    #anchors .adot:hover { background: var(--glass); transform: none; }
+    #anchors .adot.on { background: var(--accent-soft); border-color: var(--accent-bright); transform: none; }
+    #anchors .adot.on::before { background: var(--accent); }
+    #anchors .adot .atip { display: block; position: static; transform: none; background: none;
+      border: none; box-shadow: none; padding: 0; font-size: 12px; white-space: nowrap; color: var(--text); }
+  }
   #dbg { position: fixed; left: 8px; bottom: 8px; z-index: 999; width: min(480px, 90vw);
     max-height: 30vh; overflow-y: auto; background: rgba(20,20,20,.92); color: #7dfd9a;
     font: 11px/1.5 monospace; padding: 8px 10px; border-radius: 8px; display: none; }
@@ -289,7 +303,6 @@
     .topbar h1 { width: auto; margin-right: 0; font-size: 14px; white-space: nowrap; flex: none; }
     .ctrl { font-size: 12px; gap: 5px; flex: none; }
     .ctrl > label { display: none; }
-    #btnGloss { display: none; }          /* 词义开关并入"全文"行内逻辑，移动端默认显示 */
     .btn { padding: 6px 10px; font-size: 12px; min-height: 30px; white-space: nowrap; flex: none; }
     .voice-sel { max-width: 150px; font-size: 12px; }
     #btnCloud { flex: none; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
@@ -298,8 +311,6 @@
     .sec { padding: 14px; border-radius: 14px; margin-bottom: 14px; }
     article { font-size: 17.5px; }
     .sec p { line-height: 1.85; }
-    .gl { display: none; }                /* 行内词义手机上挤成竖条，收起（点词弹窗里有全义+音标） */
-    body.hide-gl .gl { display: inline; } /* 隐藏词义开关仍可反向展开（兼容原逻辑） */
     /* 词库：改为底部抽屉（划上即用，不占正文空间） */
     aside { position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 190;
       max-height: 62vh; height: auto; border-radius: 18px 18px 0 0; transform: translateY(102%);
@@ -314,7 +325,7 @@
       border-radius: 18px; padding: 14px 14px 12px; }
     .pop .pw { font-size: 20px; }
     /* 播放条：保持 Liquid Glass，内容紧凑；进度线与操作行分隔 */
-    .audiobar { gap: 2px; padding: 0 8px 12px; border-radius: 20px;
+    .audiobar { gap: 2px; padding: 0 8px 10px; border-radius: 20px;
       bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
     .ab-row { gap: 5px; justify-content: space-between; }
     .audiobar .btn { font-size: 12px; padding: 4px 8px; min-height: 26px; min-width: 0; flex: none; }
@@ -323,7 +334,7 @@
     #rateCycle { display: inline-block; flex: none; }
     .audiobar .seg { display: none; }
     .audiobar .btn + .btn { margin-left: 0; } /* 移动端 hit-slop 已关，还原间距 */
-    #seekWrap { width: 100%; height: 11px; margin: 0 0 6px; }
+    #seekWrap { width: 100%; height: 11px; margin: 0 0 3px; }
     #seekTrack { height: 11px; }
     #seekRail, #seekFill { top: 0; }
     #seekTicks .tick { top: 0; }
@@ -334,7 +345,7 @@
   }
   /* 超窄屏（≤360px）：播放条进一步收纳 */
   @media (max-width: 360px) {
-    .audiobar { gap: 3px; padding: 0 8px 12px; }
+    .audiobar { gap: 3px; padding: 0 8px 10px; }
     .audiobar .btn { padding: 6px 7px; }
     .voice-sel { max-width: 118px; }
   }
@@ -1177,8 +1188,11 @@ function paint() {
     _paintIdx = idx;
   }
   if (idx >= 0 && sents[idx]) {
-    const r = sents[idx].getBoundingClientRect();
-    if (r.top < 0 || r.bottom > innerHeight) sents[idx].scrollIntoView({ block: 'center', behavior: 'smooth' });
+    if (playing) sents[idx].scrollIntoView({ block: 'center', behavior: 'smooth' });
+    else {
+      const r = sents[idx].getBoundingClientRect();
+      if (r.top < 0 || r.bottom > innerHeight) sents[idx].scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
   }
   const bp = document.getElementById('btnPlay');
   if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i> 暂停' : '<i class="ri-play-fill"></i> 朗读';
