@@ -155,6 +155,9 @@
     background: #fff; border: 3px solid var(--accent-bright); transform: translate(-50%, -50%);
     box-shadow: var(--shadow); pointer-events: none; }
   @media (max-width: 900px) { #anchors { display: none; } }
+  #dbg { position: fixed; left: 8px; bottom: 8px; z-index: 999; width: min(480px, 90vw);
+    max-height: 30vh; overflow-y: auto; background: rgba(20,20,20,.92); color: #7dfd9a;
+    font: 11px/1.5 monospace; padding: 8px 10px; border-radius: 8px; display: none; }
   /* 云端登录弹窗 */
   .cpop { position: fixed; top: 64px; right: 16px; z-index: 210; width: 300px;
     background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
@@ -305,6 +308,7 @@
     <button class="btn" id="btnUS" onclick="setAccent('en-US')" data-page-node-id="l0SD1b8W7i6lQi8WR7UuZO">🇺🇸 美</button>
     <select class="voice-sel" id="voiceSel" title="选择语音（云端/神经网络/Google/本机）"></select>
     <button class="btn" id="btnVoiceTest" onclick="voiceSelfTest()" title="逐个实测音色能否出声，自动选用能响的">自检</button>
+    <button class="btn" id="btnCompat" onclick="toggleCompat()" title="回到第一版直连播法（无队列无延迟），Chrome无声时试它">兼容</button>
   </div>
   <button class="btn" onclick="togglePanel()" data-page-node-id="afCqMtIZsG8AlBtSemx2C9">📚 词库</button>
   <button class="btn" id="btnCloud" onclick="toggleCloudPop()" title="登录后可用 Azure 云端自然语音">☁️ 未登录</button>
@@ -342,6 +346,7 @@
 </div>
 
 <nav id="anchors" aria-label="章节锚点"></nav>
+<div id="dbg"></div>
 
 <div class="layout" data-page-node-id="53uy68VKfpD4cdWWopvQgU">
   <article id="art" data-page-node-id="uxTU1X8qOAVNhidrfuu7Zq"></article>
@@ -935,6 +940,7 @@ try { if (HAS_SPEECH && 'onvoiceschanged' in speechSynthesis) speechSynthesis.on
 let errStreak = 0;
 function isCloudURI(uri) { return (uri || '').indexOf('cloud:') === 0; }
 function resolveVoice(exclude) {
+  dlog('resolve', 'want=' + selVoiceURI, 'exclude=' + (exclude || '-'));
   // 每次用最新 voices 列表解析，旧 voice 对象/URI 失效则自动降级；exclude 跳过已知坏音色
   if (!HAS_SPEECH) return null;
   const vs = speechSynthesis.getVoices();
@@ -962,6 +968,34 @@ function resolveVoice(exclude) {
   return v;
 }
 let speakToken = 0; // Chrome: cancel() 后立刻 speak() 会被吞掉，手动起播才延迟；token 防旧调用抢跑
+let DBG = /[?&]debug=1/.test(location.search);
+function dlog() {
+  if (!DBG) return;
+  try {
+    const el = document.getElementById('dbg');
+    if (!el) return;
+    el.style.display = 'block';
+    const d = document.createElement('div');
+    d.textContent = new Date().toISOString().slice(14, 23) + ' ' + [...arguments].join(' ');
+    el.appendChild(d);
+    while (el.children.length > 60) el.firstChild.remove();
+    el.scrollTop = el.scrollHeight;
+  } catch (e) {}
+}
+function compatMode() { try { return localStorage.getItem('ielts-compat') === '1'; } catch (e) { return false; } }
+function toggleCompat() {
+  try {
+    const on = compatMode() ? '' : '1';
+    if (on) localStorage.setItem('ielts-compat', '1');
+    else localStorage.removeItem('ielts-compat');
+  } catch (e) {}
+  initCompat();
+  alert(compatMode() ? '已切兼容模式：回到第一版直连播法（点 ▶ 试试）。' : '已退出兼容模式。');
+}
+function initCompat() {
+  const b = document.getElementById('btnCompat');
+  if (b) b.classList.toggle('active', compatMode());
+}
 function speak(text, cb, opts, tokenIn) {
   opts = opts || {};
   const immediate = !!opts.immediate;
@@ -971,6 +1005,25 @@ function speak(text, cb, opts, tokenIn) {
   text = (text || '').trim();
   if (!text) { if (cb) cb(); return; }
   const my = (tokenIn !== undefined) ? tokenIn : ++speakToken;
+  if (compatMode()) {
+    // 第一版播法原样：cancel 直播，不延迟、不排队、不管错（ rapid连点可能重叠，不断链即可 ）
+    dlog('speak[compat]', (text || '').slice(0, 24));
+    try { speechSynthesis.cancel(); } catch (e) {}
+    const u0 = new SpeechSynthesisUtterance((text || '').trim());
+    u0.lang = accent; u0.rate = rate;
+    try {
+      const vs0 = speechSynthesis.getVoices();
+      const pick = (V[accent] && vs0.includes(V[accent])) ? V[accent]
+        : vs0.find(x => x.lang === accent) || null;
+      if (pick) { u0.voice = pick; u0.lang = pick.lang; }
+    } catch (e) {}
+    if (cb) { u0.onend = cb; u0.onerror = () => {}; }
+    u0.onstart = () => dlog('onstart[compat]');
+    try { speechSynthesis.speak(u0); } catch (e) { if (cb) cb(); }
+    return;
+  }
+  dlog('speak', 'plain=' + (!!opts && !!opts.plain), 'imm=' + (!!opts && !!opts.immediate),
+    'tok=' + my, (text || '').slice(0, 24));
   // ☁ 云端分支（登录后）：走 Audio；失败则排除该云音色降级本地
   if (!plain && isCloudURI(selVoiceURI)) {
     if (typeof CLOUD !== 'undefined' && CLOUD._on) {
@@ -1012,15 +1065,16 @@ function speak(text, cb, opts, tokenIn) {
     };
     const remember = () => { try { if (u.voice) rememberGoodVoice(u.voice.voiceURI); } catch (e) {} errStreak = 0; };
     if (cb) {
-      u.onstart = () => { started = true; clearWd(); remember(); };
-      u.onend = () => { if (finished) return; finished = true; clearWd(); errStreak = 0; cb(); };
+      u.onstart = () => { started = true; clearWd(); remember(); dlog('onstart', u.voice ? u.voice.name : '(default)', 'tok=' + my); };
+      u.onend = () => { if (finished) return; finished = true; clearWd(); errStreak = 0; dlog('onend', 'tok=' + my); cb(); };
       u.onerror = ev => {
         // cancel/interrupted 是主动打断（切句/暂停），绝不能当“播完”推进，否则多链互 cancel 疯转
-        if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) return;
+        if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) { dlog('onerror-ignored', ev.error); return; }
+        dlog('onerror', ev ? ev.error : '?');
         failOnce();
       };
       // 无声看门狗：4 秒既不开始也不结束 = 静默卡死，走失败路径（重试/停下提示），不许无声空转
-      wd = setTimeout(() => { if (!started && !finished) failOnce(); }, 4000);
+      wd = setTimeout(() => { dlog('watchdog-fire', 'started=' + started); if (!started && !finished) failOnce(); }, 4000);
     } else {
       u.onstart = remember;
       u.onerror = () => {};
@@ -1063,7 +1117,8 @@ async function voiceSelfTest() {
       u.volume = 1; u.rate = 1;
       u.onstart = u.onend = () => { if (!done) { done = true; clearTimeout(to); res(true); } };
       u.onerror = ev => {
-        if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) return;
+        if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) { dlog('onerror-ignored', ev.error); return; }
+        dlog('onerror', ev ? ev.error : '?');
         if (!done) { done = true; clearTimeout(to); res(false); }
       };
       speechSynthesis.cancel();
@@ -1128,8 +1183,10 @@ function launch(i, my, immediate) {
   speak(sentText(sents[i]), () => {
     if (!playing || my !== speakToken) return;
     idx = i; paint(); syncSeek(i);
-    launch(i + 1, my, true);
-    launch(i + 2, my, true); // 永远多备一句（去重靠 launchedUpTo）
+    if (!compatMode()) {
+      launch(i + 1, my, true);
+      launch(i + 2, my, true); // 永远多备一句（去重靠 launchedUpTo）
+    }
   }, { immediate }, my);
 }
 function playFrom(i) {
@@ -1151,7 +1208,7 @@ function playFrom(i) {
     setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 250);
   } else {
     launch(i, my, true);  // 空闲：手势上下文内同步发射，杜绝 setTimeout 丢失用户激活
-    setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 120);
+    if (!compatMode()) setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 200);
   }
 }
 function togglePlay() {
@@ -1339,6 +1396,7 @@ function mobileBtnIcons() { // 移动端播放条：上一句/下一句去文字
 mobileBtnIcons();
 window.addEventListener('resize', mobileBtnIcons);
 if (typeof CLOUD !== 'undefined') CLOUD.boot();
+initCompat();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => loadVoices());
 setTimeout(loadVoices, 500);
 </script>
