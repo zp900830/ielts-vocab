@@ -50,7 +50,6 @@
     background: var(--grad); -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent; }
   .ctrl { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-  .ctrl label { color: var(--muted); }
   button, select { font-family: inherit; cursor: pointer; }
   .btn { border: 1px solid var(--accent-line); background: #fff; border-radius: 999px;
     padding: 7px 14px; font-size: 13px; font-weight: 500; color: var(--accent);
@@ -324,7 +323,6 @@
     .topbar::-webkit-scrollbar { display: none; }
     .topbar h1 { width: auto; margin-right: 0; font-size: 14px; white-space: nowrap; flex: none; }
     .ctrl { font-size: 12px; gap: 5px; flex: none; }
-    .ctrl > label { display: none; }
     .btn { padding: 6px 10px; font-size: 12px; min-height: 30px; white-space: nowrap; flex: none; }
     .voice-sel { max-width: 150px; font-size: 12px; }
     #btnCloud { flex: none; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
@@ -382,15 +380,12 @@
 <div class="topbar" data-page-node-id="MLNWDrxME0n3U3aaN721Fn">
   <h1 data-page-node-id="TOUJo00LOrjTfpFX33fsB4"><i class="ri-book-open-line"></i> 雅思词汇 · 影子跟读</h1>
   <div class="ctrl" data-page-node-id="6Vok8WIlpZESqXUJ6vE8I2">
-    <label data-page-node-id="VgJoBOhKkB3qddidTP2MvM">全文</label>
-    <button class="btn active" id="btnZh" data-page-node-id="o4X2OII9lEh56RBxPz6Lri"><i class="ri-eye-line"></i> 隐藏全文</button>
-    <label>词义</label>
-    <button class="btn active" id="btnGloss"><i class="ri-eye-line"></i> 隐藏词义</button>
+    <button class="btn active" id="btnZh" title="显示/隐藏全文中文翻译" data-page-node-id="o4X2OII9lEh56RBxPz6Lri"><i class="ri-eye-line"></i> 隐藏全文</button>
+    <button class="btn active" id="btnGloss" title="显示/隐藏行内单词词义"><i class="ri-eye-line"></i> 隐藏词义</button>
   </div>
   <div class="ctrl" data-page-node-id="clAZz26EfFpKEVMgUEDlLI">
-    <label data-page-node-id="8iYww7NDc1p1OIEwzKFz7l">发音</label>
     <button class="btn active" id="btnAccent" onclick="toggleAccent()" title="点击切换英式/美式" data-page-node-id="OqMVvleWPEma65np24CIdA">🇬🇧 英式</button>
-    <select class="voice-sel" id="voiceSel" title="选择语音（云端/神经网络/Google/本机）"></select>
+    <select class="voice-sel" id="voiceSel" title="选择朗读音色（云端/Edge/本机）"></select>
     
     
   </div>
