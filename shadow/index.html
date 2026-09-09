@@ -101,13 +101,14 @@
   .w.known + .gl { color: #b07c24; opacity: .7; }
   body.hide-gl .gl { display: none; }
   /* ============ 底部播放条（对齐参考项目 audiobar） ============ */
-  .audiobar { position: fixed; left: 50%; transform: translateX(-50%);
+  .audiobar { position: fixed; left: 10px; right: 10px; transform: none;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 120;
-    display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; justify-content: center;
+    display: flex; flex-direction: column; align-items: stretch; gap: 2px;
     background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(170%);
     backdrop-filter: blur(22px) saturate(170%);
-    border: 1px solid rgba(255,255,255,.65); border-radius: 999px;
-    padding: 8px 16px; box-shadow: var(--shadow-lg); max-width: calc(100vw - 24px); }
+    border: 1px solid rgba(255,255,255,.65); border-radius: 20px;
+    padding: 6px 14px 8px; box-shadow: var(--shadow-lg); }
+  .ab-row { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; justify-content: center; }
   .audiobar .btn { min-height: 34px; position: relative; white-space: nowrap; }
   .audiobar .btn::after { content: ""; position: absolute; inset: -6px -2px; } /* 纵向 hit-slop：触达 40px 不撑大视觉 */
   .audiobar .btn + .btn { margin-left: 6px; } /* hit-slop 横向延伸的补偿，防止盖住相邻按钮 */
@@ -131,10 +132,7 @@
     display: none; box-shadow: var(--shadow); }
   #anchors .adot:hover .atip { display: block; }
   /* 底部音乐式进度条（每句一阻尼）：桌面端收进播放条右侧，固定宽单行 */
-  #seekWrap { position: absolute; left: 14px; right: 14px; bottom: calc(100% + 8px);
-    padding: 3px 14px 5px; background: var(--glass);
-    -webkit-backdrop-filter: blur(22px) saturate(170%); backdrop-filter: blur(22px) saturate(170%);
-    border: 1px solid rgba(255,255,255,.65); border-radius: 999px; box-shadow: var(--shadow); }
+  #seekWrap { position: relative; padding: 0 2px; }
   #seekTip { bottom: calc(100% + 2px); }
   .audiobar .seg { align-self: center; flex: none; }
   #seekTip { position: absolute; left: 0; bottom: 100%; transform: translateX(-50%);
@@ -268,9 +266,9 @@
       border-radius: 18px; padding: 14px 14px 12px; }
     .pop .pw { font-size: 20px; }
     /* 播放条：单行图标化，不再两行大方块 */
-    .audiobar { left: 10px; right: 10px; transform: none; gap: 5px; flex-wrap: nowrap;
-      padding: 7px 10px; border-radius: 999px; justify-content: space-between;
+    .audiobar { gap: 2px; padding: 6px 10px 7px; border-radius: 18px;
       bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
+    .ab-row { gap: 5px; justify-content: space-between; }
     .audiobar .btn { font-size: 12px; padding: 6px 9px; min-height: 34px; min-width: 0; flex: none; }
     .audiobar .btn.play { font-size: 13px; padding: 6px 16px; flex: none; }
     .audiobar .btn::after { display: none; }
@@ -279,7 +277,7 @@
     .audiobar .seg { display: none; }
     .ab-sep { display: none; }
     .audiobar .btn + .btn { margin-left: 0; } /* 移动端 hit-slop 已关，还原间距 */
-    #seekWrap { left: 8px; right: 8px; bottom: calc(100% + 6px); padding: 3px 12px 5px; }
+    #seekWrap { padding: 0 2px; }
     #seekTrack { height: 26px; }
     #seekRail, #seekFill { top: 11px; }
     #seekTicks .tick { top: 9px; }
@@ -331,6 +329,13 @@
 </div>
 
 <div class="audiobar">
+  <div id="seekWrap">
+    <div id="seekTip"></div>
+    <div id="seekTrack" title="拖动跳转句子（每句一格）">
+      <div id="seekRail"></div><div id="seekFill"></div><div id="seekTicks"></div><div id="seekKnob"></div>
+    </div>
+  </div>
+  <div class="ab-row">
   <button class="btn" onclick="step(-1)" data-page-node-id="pa6tUuO8W9TWF1ZbpJP7m7"><i class="ri-arrow-left-s-line"></i> 上一句</button>
   <button class="btn play" id="btnPlay" onclick="togglePlay()" data-page-node-id="uV7tSS9BAoNLRfxY9cYutw"><i class="ri-play-fill"></i> 朗读</button>
   <button class="btn" onclick="step(1)" data-page-node-id="cloZ32G8EuzFNR8CVLw1W1"><i class="ri-arrow-right-s-line"></i> 下一句</button>
@@ -341,11 +346,6 @@
   <button class="btn" data-rate="1.25" onclick="setRate(1.25)" data-page-node-id="uK88uwYm4JZ7pChbUAmo20"><i class="ri-arrow-expand-s-line"></i> 1.25x</button>
   <button class="btn" data-rate="1.5" onclick="setRate(1.5)" data-page-node-id="Ekz6YRmBCmrz7T9zItKoai"><i class="ri-arrow-expand-s-line"></i> 1.5x</button>
   <div class="seg" id="segLbl" data-page-node-id="GOTpB4eiD2ZqNQ1CUm9HER">—</div>
-  <div id="seekWrap">
-    <div id="seekTip"></div>
-    <div id="seekTrack" title="拖动跳转句子（每句一格）">
-      <div id="seekRail"></div><div id="seekFill"></div><div id="seekTicks"></div><div id="seekKnob"></div>
-    </div>
   </div>
 </div>
 
