@@ -156,6 +156,21 @@
   /* 进度线：播放器内部的装饰线（默认极细，hover/触摸才展开），与下方内容留间距 */
   #seekWrap { position: relative; width: 100%; height: 11px; margin: 0 0 3px; padding: 0; z-index: 6; }
   .audiobar .seg { align-self: center; flex: none; }
+  #segLbl { cursor: pointer; }
+  .jpop { position: fixed; left: 50%; transform: translateX(-50%); z-index: 220;
+    bottom: calc(110px + env(safe-area-inset-bottom, 0px)); width: min(340px, calc(100vw - 32px));
+    background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
+    backdrop-filter: blur(22px) saturate(170%); border: 1px solid rgba(255,255,255,.7);
+    border-radius: 18px; box-shadow: var(--shadow-lg); padding: 16px; display: none; }
+  .jpop .ct { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .jpop .cs { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+  .jpop select, .jpop input { width: 100%; border: 1px solid var(--border); border-radius: 10px;
+    padding: 8px 12px; font-size: 14px; outline: none; margin-bottom: 8px; font-family: inherit;
+    background: #fff; color: var(--text); }
+  .jpop select:focus, .jpop input:focus { border-color: var(--accent-bright); }
+  .jpop .row { display: flex; gap: 8px; }
+  .jpop .row input { flex: 1; margin-bottom: 0; min-width: 0; }
+  .jpop .row .btn.play { flex: none; }
   #seekTip { position: absolute; left: 0; bottom: calc(100% + 8px); transform: translateX(-50%);
     max-width: 92%; background: var(--glass-strong); border: 1px solid var(--border);
     border-radius: 8px; padding: 4px 10px; font-size: 12px; font-family: var(--serif);
@@ -408,10 +423,19 @@
       <button data-mrate="1.5" onclick="pickRate(1.5)">1.5x</button>
     </div>
   </div>
-  <div class="seg" id="segLbl" data-page-node-id="GOTpB4eiD2ZqNQ1CUm9HER">—</div>
+  <div class="seg" id="segLbl" onclick="toggleJumpPop()" title="点击快速跳转到某章某句" data-page-node-id="GOTpB4eiD2ZqNQ1CUm9HER">—</div>
   </div>
 </div>
 
+<div class="jpop" id="jumpPop">
+  <div class="ct"><i class="ri-navigation-line"></i> 快速跳转</div>
+  <div class="cs" id="jumpHint"></div>
+  <select id="jumpCh" onchange="syncJumpHint()"></select>
+  <div class="row">
+    <input id="jumpN" type="number" min="1" value="1" onkeydown="if(event.key==='Enter')jumpGo()">
+    <button class="btn play" onclick="jumpGo()">直达</button>
+  </div>
+</div>
 <nav id="anchors" aria-label="章节锚点"></nav>
 <div id="dbg"></div>
 
@@ -852,6 +876,39 @@ const CLOUD = {
 function toggleCloudPop() {
   const p = document.getElementById('cloudPop');
   p.style.display = p.style.display === 'block' ? 'none' : 'block';
+}
+function segRange(ai) {
+  let s = artOfSent.indexOf(ai); if (s < 0) s = 0;
+  let e = artOfSent.indexOf(ai + 1); if (e < 0) e = sents.length;
+  return [s, e];
+}
+function toggleJumpPop(force) {
+  const p = document.getElementById('jumpPop');
+  const show = force !== undefined ? force : p.style.display !== 'block';
+  if (show) {
+    const curA = (idx >= 0 && artOfSent[idx] !== undefined) ? artOfSent[idx] : 0;
+    document.getElementById('jumpCh').innerHTML = SECTIONS.map((s, i) =>
+      `<option value="${i}"${i === curA ? ' selected' : ''}>${i + 1}. ${esc(s.title)}</option>`).join('');
+    syncJumpHint();
+    p.style.display = 'block';
+    setTimeout(() => { const inp = document.getElementById('jumpN'); inp.value = '1'; inp.focus(); inp.select(); }, 0);
+  } else p.style.display = 'none';
+}
+function syncJumpHint() {
+  const ai = parseInt(document.getElementById('jumpCh').value, 10);
+  const [s, e] = segRange(ai);
+  document.getElementById('jumpHint').textContent = `第${ai + 1}章共 ${e - s} 句（全文第 ${s + 1}–${e} 句）`;
+  document.getElementById('jumpN').max = e - s;
+  document.getElementById('jumpN').placeholder = '句号 1–' + (e - s);
+}
+function jumpGo() {
+  const ai = parseInt(document.getElementById('jumpCh').value, 10);
+  const [s, e] = segRange(ai);
+  let n = parseInt(document.getElementById('jumpN').value, 10);
+  if (isNaN(n)) n = 1;
+  n = Math.max(1, Math.min(e - s, n));
+  toggleJumpPop(false);
+  playFrom(s + n - 1);
 }
 async function cloudLogin() {
   if (cloudLogin._busy) return; cloudLogin._busy = true;
@@ -1322,6 +1379,8 @@ document.addEventListener('click', e => {
   if (!e.target.closest('.pop') && !e.target.closest('aside')) pop.style.display = 'none';
   const _cp = document.getElementById('cloudPop');
   if (_cp && _cp.style.display === 'block' && !e.target.closest('.cpop') && !e.target.closest('#btnCloud') && !e.target.closest('#voiceSel')) _cp.style.display = 'none';
+  const _jp = document.getElementById('jumpPop');
+  if (_jp && _jp.style.display === 'block' && !e.target.closest('.jpop') && !e.target.closest('#segLbl')) _jp.style.display = 'none';
   /* 移动端：点遮罩关词库抽屉 */
   if (e.target.closest('.layout') && e.target === document.querySelector('.layout.panel-open')) {
     togglePanel();
@@ -1437,7 +1496,7 @@ document.addEventListener('keydown', e => {
   if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
   if (e.key === 'ArrowRight') step(1);
   if (e.key === 'ArrowLeft') step(-1);
-  if (e.key === 'Escape') { pop.style.display = 'none'; const cp = document.getElementById('cloudPop'); if (cp) cp.style.display = 'none'; }
+  if (e.key === 'Escape') { pop.style.display = 'none'; const cp = document.getElementById('cloudPop'); if (cp) cp.style.display = 'none'; const jp = document.getElementById('jumpPop'); if (jp) jp.style.display = 'none'; }
 });
 
 render(); renderList(); loadVoices(); bindSeek();
