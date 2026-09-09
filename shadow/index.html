@@ -159,7 +159,7 @@
     display: none; box-shadow: var(--shadow); }
   #anchors .adot:hover .atip { display: block; }
   /* 进度线：播放器内部的装饰线（默认极细，hover/触摸才展开），与下方内容留间距 */
-  #seekWrap { position: relative; width: 100%; height: 11px; margin: 0 0 3px; padding: 0; z-index: 6; }
+  #seekWrap { position: relative; width: auto; height: 11px; margin: 0 18px 3px; padding: 0; z-index: 6; }
   .audiobar .seg { align-self: center; flex: none; }
   #segLbl { cursor: pointer; }
   .jpop { position: fixed; left: 50%; transform: translateX(-50%); z-index: 220;
@@ -185,7 +185,7 @@
   #seekTrack::before { content: ""; position: absolute; left: 0; right: 0; top: -6px; bottom: -16px; }
   /* 默认 1px 极细线，用系统边框色，装饰感强 */
   #seekRail { position: absolute; left: 0; right: 0; top: 0; height: 1px;
-    background: var(--border);
+    background: #b9d4c7;
     border-radius: 1px; transition: height .18s ease, top .18s ease, background .18s ease; }
   #seekFill { position: absolute; left: 0; top: 0; height: 1px; width: 0;
     background: var(--grad);
@@ -196,7 +196,7 @@
   #seekTrack:hover #seekRail, #seekTrack.active #seekRail { background: var(--accent-line); }
   #seekTicks { position: absolute; inset: 0; }
   /* 刻度点默认几乎不可见，hover/拖动时再显示 */
-  #seekTicks .tick { position: absolute; top: 0; width: 3px; height: 3px; opacity: .18;
+  #seekTicks .tick { position: absolute; top: 0; width: 3px; height: 3px; opacity: .55;
     border-radius: 50%; background: rgba(120, 150, 135, .65); border: none; padding: 0;
     cursor: pointer; transform: translateX(-50%);
     transition: transform var(--t-fast), background var(--t-fast), opacity .18s ease,
@@ -212,8 +212,8 @@
     transform: translateX(-50%) scale(1.55); box-shadow: 0 0 6px rgba(201,86,74,.55); }
   /* 触摸设备：刻度点默认即隐显（不打搅 hover 逻辑） */
   @media (pointer: coarse) {
-    #seekTicks .tick { opacity: .28; }
-    #seekTicks .tick.done { opacity: .55; }
+    #seekTicks .tick { opacity: .6; }
+    #seekTicks .tick.done { opacity: .85; }
   }
   #seekKnob { position: absolute; top: -5px; width: 12px; height: 12px; border-radius: 50%;
     background: #fff; border: 2px solid var(--accent-bright); transform: translate(-50%, -50%) scale(.6);
@@ -360,7 +360,7 @@
     #rateCycle { display: inline-block; flex: none; }
     .audiobar .seg { display: block; font-size: 11px; padding: 3px 8px; flex: none; white-space: nowrap; }
     .audiobar .btn + .btn { margin-left: 0; } /* 移动端 hit-slop 已关，还原间距 */
-    #seekWrap { width: 100%; height: 11px; margin: 0 0 3px; }
+    #seekWrap { width: auto; height: 11px; margin: 0 14px 3px; }
     #seekTrack { height: 11px; }
     #seekRail, #seekFill { top: 0; }
     #seekTicks .tick { top: 0; }
