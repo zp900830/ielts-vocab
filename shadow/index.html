@@ -308,8 +308,7 @@
   </div>
   <div class="ctrl" data-page-node-id="clAZz26EfFpKEVMgUEDlLI">
     <label data-page-node-id="8iYww7NDc1p1OIEwzKFz7l">发音</label>
-    <button class="btn active" id="btnUK" onclick="setAccent('en-GB')" data-page-node-id="OqMVvleWPEma65np24CIdA">🇬🇧 英</button>
-    <button class="btn" id="btnUS" onclick="setAccent('en-US')" data-page-node-id="l0SD1b8W7i6lQi8WR7UuZO">🇺🇸 美</button>
+    <button class="btn active" id="btnAccent" onclick="toggleAccent()" title="点击切换英式/美式" data-page-node-id="OqMVvleWPEma65np24CIdA">🇬🇧 英式</button>
     <select class="voice-sel" id="voiceSel" title="选择语音（云端/神经网络/Google/本机）"></select>
     
     
@@ -1165,11 +1164,12 @@ function bestOfAccent(a) {
     || flat.find(v => v.lang.startsWith(a.split('-')[0]))
     || null;
 }
+function toggleAccent() { setAccent(accent === 'en-GB' ? 'en-US' : 'en-GB'); }
 function setAccent(a) {
   accent = a;
   try { localStorage.setItem('ielts-accent', a); } catch(e) {}
-  document.getElementById('btnUK').classList.toggle('active', a==='en-GB');
-  document.getElementById('btnUS').classList.toggle('active', a==='en-US');
+  const ab = document.getElementById('btnAccent');
+  if (ab) { ab.textContent = a === 'en-GB' ? '🇬🇧 英式' : '🇺🇸 美式'; ab.classList.add('active'); }
   loadVoices();
   const best = bestOfAccent(a);
   if (best) {
