@@ -107,10 +107,12 @@
     backdrop-filter: blur(22px) saturate(170%);
     border: 1px solid rgba(255,255,255,.65); border-radius: 999px;
     padding: 8px 16px; box-shadow: var(--shadow-lg); max-width: calc(100vw - 24px); }
-  .audiobar .btn { min-height: 34px; }
+  .audiobar .btn { min-height: 34px; position: relative; }
+  .audiobar .btn::after { content: ""; position: absolute; inset: -6px -2px; } /* 纵向 hit-slop：触达 40px 不撑大视觉 */
   .audiobar .btn.play { font-size: 14px; padding: 7px 20px; }
   .audiobar .ab-sep { width: 1px; height: 22px; background: var(--border); }
   .audiobar .seg { min-width: 0; }
+  #rateCycle { display: none; }
   /* 左侧章节锚点（低调小点） */
   #anchors { position: fixed; left: 8px; top: 50%; transform: translateY(-50%);
     z-index: 110; display: flex; flex-direction: column; gap: 12px; opacity: .55;
@@ -220,10 +222,19 @@
       border-radius: 18px; padding: 14px 14px 12px; }
     .pop .pw { font-size: 20px; }
     .voice-sel { max-width: 128px; font-size: 12px; }
-    .audiobar { gap: 6px; padding: 6px 12px 8px; border-radius: 20px; }
+    .audiobar { left: 12px; right: 12px; transform: none; gap: 4px 6px;
+      padding: 6px 10px; border-radius: 18px; }
+    .audiobar .btn { font-size: 12px; padding: 4px 10px; min-height: 30px; }
     .audiobar .btn.play { font-size: 13px; padding: 5px 14px; }
+    .audiobar .ab-sep { display: none; }
+    .audiobar [data-rate] { display: none; } /* 移动端四个倍速收进轮切 */
+    #rateCycle { display: inline-block; }
     .audiobar .seg { display: none; }
-    #seekWrap { padding-top: 8px; }
+    #seekWrap { padding: 6px 2px 0; }
+    #seekTrack { height: 18px; }
+    #seekRail, #seekFill { top: 7px; }
+    #seekTicks .tick { top: 6px; }
+    #seekKnob { top: 9px; width: 12px; height: 12px; }
   }
 </style>
 </head>
@@ -250,6 +261,7 @@
   <button class="btn" onclick="step(-1)" data-page-node-id="pa6tUuO8W9TWF1ZbpJP7m7">⏮ 上一句</button>
   <button class="btn play" id="btnPlay" onclick="togglePlay()" data-page-node-id="uV7tSS9BAoNLRfxY9cYutw">▶ 朗读</button>
   <button class="btn" onclick="step(1)" data-page-node-id="cloZ32G8EuzFNR8CVLw1W1">下一句 ⏭</button>
+  <button class="btn" id="rateCycle" onclick="cycleRate()" title="切换倍速">倍速 1x</button>
   <span class="ab-sep"></span>
   <button class="btn" data-rate="0.75" onclick="setRate(0.75)" data-page-node-id="sKbj6wBb8nb8v6fEknHrBe">0.75x</button>
   <button class="btn active" data-rate="1" onclick="setRate(1)" data-page-node-id="ZN5SHzrjlgnrhK5gtiPFhX">1x</button>
@@ -514,22 +526,41 @@ function enVoices() {
   return speechSynthesis.getVoices().filter(v => /^en([-_]|$)/i.test(v.lang));
 }
 /* 只留高质量低 AI 感语音：神经网络 Natural/Online 系 + 口碑好的真人采样音色，其余隐藏 */
-function qScore(v) {
+const GENDER_F = /jenny|\baria\b|sonia|sonya|emma|samantha|serena|\bkate\b|moira|tessa|fiona|karen|nancy|\bmia\b|amber|libby|maisie|\bjane\b|zira|allison|ava|susan|martha/i;
+const GENDER_M = /\bguy\b|ryan|brian|christopher|andrew|thomas|steffan|daniel|brandon|david|\bmark\b|eric|fred|george|oliver|arthur|\balex\b/i;
+function genderOf(v) { const n = v.name || ''; return GENDER_F.test(n) ? '女' : GENDER_M.test(n) ? '男' : ''; }
+function isNeuro(v) { return /online \(natural\)|neural/i.test(v.name || ''); }
+function isGoogle(v) { return /^google (uk|us) english/i.test(v.name || ''); }
+function tierOf(v) {
   const n = v.name || '';
-  if (/compact|legacy|whisper|cellular|princess|bells|boing|bubbles|cellos|deranged|trinoids|pipe organ|good news|bad news/i.test(n)) return -10;
-  let s = 0;
-  if (/natural|online|neural/i.test(n)) s += 3;
-  if (/jenny|aria|guy|ryan|emma|brian|christopher|andrew|natasha|sonia|sonya|libby|maisie|thomas|steffan|nancy|davis|brandon|amber|serena|daniel|kate|moira|samantha|jane|eric|david|mark|zira/i.test(n)) s += 2;
-  if (/^Microsoft/i.test(n)) s += 1;
-  if (/^Google (UK|US) English/i.test(n)) s += 1;
-  return s;
+  if (/compact|legacy|whisper|cellular|princess|bells|boing|bubbles|cellos|deranged|trinoids|pipe organ|good news|bad news/i.test(n)) return -1;
+  if (isNeuro(v)) return 3;
+  if (isGoogle(v)) return 2;
+  if (/samantha|daniel|\bkate\b|serena|moira|karen|fiona|tessa|susan|allison|ava|martha/i.test(n)) return 2;
+  return 1;
 }
-function prettyVoice(v) {
-  let n = (v.name || '').replace(/^Microsoft\s+/i, '').replace(/\s*-\s*English\s*\(.*?\)\s*/i, '');
-  const tag = /natural|online|neural/i.test(v.name) ? ' · Natural' : '';
+function voiceLabel(v) {
+  let n = (v.name || '').replace(/^Microsoft\s+/i, '')
+    .replace(/\s*-\s*English\s*\(.*?\)\s*/i, '').replace(/\s*\(Online\)\s*/i, '').trim();
   const flag = /^en-GB/i.test(v.lang) ? '🇬🇧' : /^en-US/i.test(v.lang) ? '🇺🇸' : '';
-  return `${flag} ${n}${tag}`.trim();
+  const g = genderOf(v);
+  const t = tierOf(v) === 3 ? '★★★' : tierOf(v) === 2 ? '★★' : '★';
+  return `${n} ${flag}${g ? ' ' + g : ''} ${t}`.replace(/\s+/g, ' ').trim();
 }
+function balance(list) {
+  const sorted = [...list].sort((a, b) => tierOf(b) - tierOf(a));
+  const out = [];
+  for (const v of sorted) {
+    if (out.length >= 4) break;
+    const g = genderOf(v), a = /^en-GB/i.test(v.lang) ? 'GB' : 'US';
+    if (out.length >= 2 && g && out.filter(x => genderOf(x) === g).length >= 2) continue;
+    if (out.length >= 2 && out.filter(x => (/^en-GB/i.test(x.lang) ? 'GB' : 'US') === a).length >= 3) continue;
+    out.push(v);
+  }
+  return out;
+}
+function goodVoice() { try { return localStorage.getItem('ielts-good-voice') || ''; } catch (e) { return ''; } }
+function rememberGoodVoice(uri) { try { if (uri) localStorage.setItem('ielts-good-voice', uri); } catch (e) {} }
 function loadVoices() {
   const all = enVoices();
   const pool = all.length ? all : (HAS_SPEECH ? speechSynthesis.getVoices() : []);
@@ -538,23 +569,32 @@ function loadVoices() {
     if (sel0) sel0.innerHTML = '<option>当前环境不支持语音朗读</option>';
     return;
   }
-  ['en-GB','en-US'].forEach(tag => {
-    const ranked = pool
-      .filter(v => v.lang === tag || v.lang.startsWith(tag.split('-')[0]))
-      .map(v => ({ v, s: qScore(v) }))
-      .sort((a, b) => b.s - a.s);
-    const good = ranked.filter(x => x.s >= 2).slice(0, 6).map(x => x.v);
-    const fallback = (ranked.slice(0, 3).map(x => x.v));
-    const keep = good.length ? good : fallback;
-    V[tag + ':list'] = keep;
-    V[tag] = keep.find(v => v.voiceURI === selVoiceURI) || keep[0];
-  });
-  // 下拉框：只显示当前口音的优选语音
+  const ok = pool.filter(v => tierOf(v) >= 1);
+  const groups = [
+    { label: '⚡ 神经网络', list: balance(ok.filter(isNeuro)) },
+    { label: 'Google', list: balance(ok.filter(v => !isNeuro(v) && isGoogle(v))) },
+    { label: '本机系统', list: balance(ok.filter(v => !isNeuro(v) && !isGoogle(v) && tierOf(v) >= 2)) },
+  ].filter(g => g.list.length);
+  if (!groups.length) {
+    groups.push({ label: '可用语音', list: pool.slice(0, 4) });
+  }
+  V.groups = groups;
+  const flat = groups.flatMap(g => g.list);
+  const gv = goodVoice();
+  const accentMatch = v => v.lang === accent || v.lang.startsWith(accent.split('-')[0]);
+  V['en-GB'] = flat.find(v => v.voiceURI === (selVoiceURI || gv)) || flat.find(v => v.voiceURI === gv)
+    || flat.filter(v => v.lang === 'en-GB')[0] || null;
+  V['en-US'] = flat.find(v => v.voiceURI === selVoiceURI) || flat.find(v => v.voiceURI === gv)
+    || flat.filter(v => v.lang === 'en-US')[0] || flat.find(accentMatch) || flat[0] || null;
+  if (!V[accent]) V[accent] = flat.find(accentMatch) || flat[0];
+  // 下拉框：三组分组展示（每组≤4）
   const sel = document.getElementById('voiceSel');
   if (!sel) return;
-  const show = V[accent + ':list'] && V[accent + ':list'].length ? V[accent + ':list'] : pool.slice(0, 3);
-  sel.innerHTML = show.map(v => `<option value="${esc(v.voiceURI)}" title="${esc(v.name)} — ${esc(v.lang)}">${esc(prettyVoice(v))}</option>`).join('');
-  let pick = show.find(v => v.voiceURI === selVoiceURI) || V[accent] || show[0];
+  sel.innerHTML = groups.map(g =>
+    `<optgroup label="${g.label}">` + g.list.map(v =>
+      `<option value="${esc(v.voiceURI)}" title="${esc(v.name)} — ${esc(v.lang)}">${esc(voiceLabel(v))}</option>`).join('')
+    + '</optgroup>').join('');
+  let pick = flat.find(v => v.voiceURI === selVoiceURI) || flat.find(v => v.voiceURI === gv) || V[accent] || flat[0];
   if (pick) { sel.value = pick.voiceURI; selVoiceURI = pick.voiceURI; }
   if (!sel.onchange) sel.onchange = () => {
     selVoiceURI = sel.value;
@@ -573,9 +613,10 @@ function resolveVoice() {
   const vs = speechSynthesis.getVoices();
   let v = vs.find(x => x.voiceURI === selVoiceURI) || null;
   if (!v) {
-    const keep = (V[accent + ':list'] || []).map(k =>
-      typeof k === 'string' ? vs.find(x => x.voiceURI === k) : vs.includes(k) ? k : null);
-    v = keep.find(Boolean)
+    const flat = (V.groups || []).flatMap(g => g.list);
+    const live = uri => vs.find(x => x.voiceURI === uri);
+    v = live(selVoiceURI) || live(goodVoice())
+      || flat.map(k => vs.includes(k) ? k : vs.find(x => x.name === k.name && x.lang === k.lang)).find(Boolean)
       || (V[accent] && (vs.includes(V[accent]) ? V[accent]
         : vs.find(x => x.name === V[accent].name && x.lang === V[accent].lang)))
       || vs.find(x => x.lang === accent)
@@ -590,34 +631,44 @@ function resolveVoice() {
   }
   return v;
 }
+let speakToken = 0; // Chrome: cancel() 后立刻 speak() 会被吞掉，延迟一拍；token 防旧调用抢跑
 function speak(text, cb, plain) {
   if (!HAS_SPEECH) { if (cb) cb(); return; }
   text = (text || '').trim();
   if (!text) { if (cb) cb(); return; }
+  const my = ++speakToken;
   try { speechSynthesis.cancel(); } catch (e) { if (cb) cb(); return; }
-  const u = new SpeechSynthesisUtterance(text);
-  u.rate = rate;
-  if (!plain) {
-    const v = resolveVoice();
-    if (v) { u.voice = v; u.lang = v.lang; }
-    else u.lang = accent;
-  } else { u.lang = accent; }
-  if (cb) {
-    u.onend = () => { errStreak = 0; cb(); };
-    u.onerror = ev => {
-      // cancel/interrupted 是主动打断（切句/暂停），绝不能当“播完”推进，否则多链互 cancel 疯转
-      if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) return;
-      if (!plain) { speak(text, cb, true); return; } // 去掉指定音色用默认再试一次
-      errStreak++;
-      if (errStreak >= 3) {
-        errStreak = 0; playing = false; paint();
-        alert('语音播不出来：Edge 请点地址栏左侧“朗读/声音”权限，或在发音下拉里换一个 Natural 语音。');
-        return;
-      }
-      cb();
-    };
-  }
-  try { speechSynthesis.speak(u); } catch (e) { if (cb) cb(); }
+  setTimeout(() => {
+    if (my !== speakToken) return;
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = rate;
+    if (!plain) {
+      const v = resolveVoice();
+      if (v) { u.voice = v; u.lang = v.lang; }
+      else u.lang = accent;
+    } else { u.lang = accent; }
+    const remember = () => { try { if (u.voice) rememberGoodVoice(u.voice.voiceURI); } catch (e) {} errStreak = 0; };
+    if (cb) {
+      u.onstart = remember;
+      u.onend = () => { errStreak = 0; cb(); };
+      u.onerror = ev => {
+        // cancel/interrupted 是主动打断（切句/暂停），绝不能当“播完”推进，否则多链互 cancel 疯转
+        if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) return;
+        if (!plain) { speak(text, cb, true); return; } // 去掉指定音色用默认再试一次
+        errStreak++;
+        if (errStreak >= 3) {
+          errStreak = 0; playing = false; paint();
+          alert('语音播不出来：请检查浏览器声音权限，或在发音下拉里换一个 ★★★ 语音。');
+          return;
+        }
+        cb();
+      };
+    } else {
+      u.onstart = remember;
+      u.onerror = () => {};
+    }
+    try { speechSynthesis.speak(u); } catch (e) { if (cb) cb(); }
+  }, 60);
 }
 function sentText(el) {
   const c = el.cloneNode(true);
@@ -642,12 +693,21 @@ function playFrom(i) {
   speak(sentText(sents[i]), () => { if (playing) playFrom(i + 1); });
 }
 function togglePlay() {
-  if (playing) { playing = false; speechSynthesis.cancel(); paint(); }
+  if (playing) { playing = false; speakToken++; speechSynthesis.cancel(); paint(); }
   else playFrom(idx >= 0 ? idx : 0);
 }
 function step(d) {
-  playing = false; speechSynthesis.cancel();
+  playing = false; speakToken++; speechSynthesis.cancel();
   playFrom(Math.max(0, Math.min(sents.length - 1, (idx < 0 ? 0 : idx) + d)));
+}
+function bestOfAccent(a) {
+  const flat = (V.groups || []).flatMap(g => g.list);
+  if (!flat.length) return null;
+  const gv = goodVoice();
+  return flat.find(v => v.voiceURI === gv && (v.lang === a || v.lang.startsWith(a.split('-')[0])))
+    || flat.filter(v => v.lang === a)[0]
+    || flat.find(v => v.lang.startsWith(a.split('-')[0]))
+    || null;
 }
 function setAccent(a) {
   accent = a;
@@ -655,13 +715,27 @@ function setAccent(a) {
   document.getElementById('btnUK').classList.toggle('active', a==='en-GB');
   document.getElementById('btnUS').classList.toggle('active', a==='en-US');
   loadVoices();
+  const best = bestOfAccent(a);
+  if (best) {
+    selVoiceURI = best.voiceURI;
+    try { localStorage.setItem('ielts-voice', selVoiceURI); } catch(e) {}
+    const sel = document.getElementById('voiceSel');
+    if (sel) sel.value = selVoiceURI;
+  }
   refreshGloss();
   if (cur) speak(cur);
+  else speak(a === 'en-GB' ? 'British accent.' : 'American accent.');
 }
+const RATES = [0.75, 1, 1.25, 1.5];
 function setRate(r) {
   rate = r;
   document.querySelectorAll('[data-rate]').forEach(b =>
     b.classList.toggle('active', parseFloat(b.dataset.rate) === r));
+  const c = document.getElementById('rateCycle');
+  if (c) c.textContent = `倍速 ${r}x`;
+}
+function cycleRate() {
+  setRate(RATES[(RATES.indexOf(rate) + 1) % RATES.length]);
 }
 
 /* ============ 单词弹窗 ============ */
