@@ -1104,18 +1104,18 @@ function syncSeek(i) {
   if (ai !== undefined && ai !== dotsArt) buildSeek(ai);
 }
 function launch(i, my, immediate) {
-  // 发射一句；它结束时的 onend 负责推进 idx 并补下一句，队列里永远多备一句
+  // 高亮跟发射走：本句开始播就标本句；onend 只负责链下一句（之前标在结束时，全程落后一句）
   if (my !== speakToken || !playing) return;
   if (i >= sents.length) { playing = false; idx = -1; paint(); return; }
   if (i < 0 || i <= launchedUpTo) return;
   launchedUpTo = i;
+  idx = i; paint(); syncSeek(i);
   try {
     if (typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on && i + 1 < sents.length)
       CLOUD.prefetch(plainEN(sentRaw(i + 1)), selVoiceURI.slice(6), rate);
   } catch (e) {}
   speak(sentText(sents[i]), () => {
     if (!playing || my !== speakToken) return;
-    idx = i; paint(); syncSeek(i);
     launch(i + 1, my, true);
     launch(i + 2, my, true); // 永远多备一句（去重靠 launchedUpTo）
   }, { immediate }, my);
