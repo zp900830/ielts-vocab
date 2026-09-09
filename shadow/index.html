@@ -102,13 +102,14 @@
   /* ============ 底部播放条（对齐参考项目 audiobar） ============ */
   .audiobar { position: fixed; left: 50%; transform: translateX(-50%);
     bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 120;
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center;
+    display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; justify-content: center;
     background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(170%);
     backdrop-filter: blur(22px) saturate(170%);
     border: 1px solid rgba(255,255,255,.65); border-radius: 999px;
     padding: 8px 16px; box-shadow: var(--shadow-lg); max-width: calc(100vw - 24px); }
-  .audiobar .btn { min-height: 34px; position: relative; }
+  .audiobar .btn { min-height: 34px; position: relative; white-space: nowrap; }
   .audiobar .btn::after { content: ""; position: absolute; inset: -6px -2px; } /* 纵向 hit-slop：触达 40px 不撑大视觉 */
+  .audiobar .btn + .btn { margin-left: 6px; } /* hit-slop 横向延伸的补偿，防止盖住相邻按钮 */
   .audiobar .btn.play { font-size: 14px; padding: 7px 20px; }
   .audiobar .ab-sep { width: 1px; height: 22px; background: var(--border); }
   .audiobar .seg { min-width: 0; }
@@ -128,8 +129,10 @@
     padding: 4px 10px; border-radius: 8px; font-size: 12px; color: var(--text);
     display: none; box-shadow: var(--shadow); }
   #anchors .adot:hover .atip { display: block; }
-  /* 底部音乐式进度条（每句一阻尼） */
-  #seekWrap { position: relative; flex-basis: 100%; padding: 10px 6px 4px; }
+  /* 底部音乐式进度条（每句一阻尼）：桌面端收进播放条右侧，固定宽单行 */
+  #seekWrap { position: relative; flex: 1 1 170px; min-width: 120px; max-width: 260px; align-self: center; padding: 0 6px; }
+  #seekTip { bottom: calc(100% + 2px); }
+  .audiobar .seg { align-self: center; flex: none; }
   #seekTip { position: absolute; left: 0; bottom: 100%; transform: translateX(-50%);
     max-width: 92%; background: var(--glass-strong); border: 1px solid var(--border);
     border-radius: 8px; padding: 4px 10px; font-size: 12px; font-family: var(--serif);
@@ -218,35 +221,71 @@
   .pop .row { display: flex; gap: 8px; }
   .pop .row .btn { flex: 1; }
 
-  /* ============ 移动端（弹窗变底部抽屉） ============ */
+  /* ============ 移动端（借鉴词汇真经：去矩形块感——顶栏精简、播放条单行、词库抽屉化） ============ */
   @media (max-width: 900px) {
-    .topbar { padding: 10px 14px; gap: 8px 10px; }
-    .topbar h1 { width: 100%; margin-right: 0; font-size: 15px; }
-    .ctrl { font-size: 12px; gap: 6px; }
-    .btn { padding: 5px 11px; font-size: 12px; min-height: 30px; }
-    .layout { padding: 16px 14px 170px; }
-    .sec { padding: 14px; border-radius: 14px; }
-    article { font-size: 18px; }
+    /* iOS 不支持 background-attachment:fixed，改固定层绘制（否则背景整块发白） */
+    html { background: none; }
+    body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background-image:
+        linear-gradient(180deg, rgba(93,190,157,.08) 0%, rgba(93,190,157,.03) 60%, rgba(93,190,157,0) 100%),
+        linear-gradient(170deg, #f8fdfa 0%, #ffffff 40%, #ffffff 100%);
+      background-size: 100% 64px, 100% 100%; background-repeat: no-repeat; }
+    /* 顶栏：单行化——隐藏标签文字、词义开关收起、语音选择进下拉 */
+    .topbar { padding: 8px 12px; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .topbar::-webkit-scrollbar { display: none; }
+    .topbar h1 { width: auto; margin-right: 0; font-size: 14px; white-space: nowrap; flex: none; }
+    .ctrl { font-size: 12px; gap: 5px; flex: none; }
+    .ctrl > label { display: none; }
+    #btnGloss { display: none; }          /* 词义开关并入"全文"行内逻辑，移动端默认显示 */
+    .btn { padding: 6px 10px; font-size: 12px; min-height: 30px; white-space: nowrap; flex: none; }
+    .voice-sel { max-width: 150px; font-size: 12px; }
+    #btnVoiceTest { display: none; }      /* 自检入口收进播放条长按场景，顶栏去挤 */
+    #btnCloud { flex: none; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
+    /* 布局：正文全宽，词库改抽屉不占流式空间 */
+    .layout { display: block; padding: 14px 12px calc(120px + env(safe-area-inset-bottom, 0px)); }
+    .sec { padding: 14px; border-radius: 14px; margin-bottom: 14px; }
+    article { font-size: 17.5px; }
     .sec p { line-height: 1.85; }
-    .gl { font-size: 11px; }
-    aside { position: static; max-height: 46vh; }
-    .pop { left: 12px !important; right: 12px; width: auto; bottom: 14px; top: auto !important;
+    .gl { display: none; }                /* 行内词义手机上挤成竖条，收起（点词弹窗里有全义+音标） */
+    body.hide-gl .gl { display: inline; } /* 隐藏词义开关仍可反向展开（兼容原逻辑） */
+    /* 词库：改为底部抽屉（划上即用，不占正文空间） */
+    aside { position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 190;
+      max-height: 62vh; height: auto; border-radius: 18px 18px 0 0; transform: translateY(102%);
+      transition: transform .28s cubic-bezier(.32,.72,.35,1); box-shadow: 0 -8px 30px rgba(30,60,48,.16); }
+    .layout.panel-open aside { transform: translateY(0); }
+    aside .list { max-height: calc(62vh - 110px); -webkit-overflow-scrolling: touch; }
+    .layout::after { content: ""; position: fixed; inset: 0; z-index: 180; background: rgba(30,50,42,.28);
+      opacity: 0; pointer-events: none; transition: opacity var(--t-fast); }
+    .layout.panel-open::after { opacity: 1; pointer-events: auto; }
+    /* 单词弹窗：底部抽屉式浮层，避开播放条 */
+    .pop { left: 12px !important; right: 12px; width: auto; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); top: auto !important;
       border-radius: 18px; padding: 14px 14px 12px; }
     .pop .pw { font-size: 20px; }
-    .voice-sel { max-width: 128px; font-size: 12px; }
-    .audiobar { left: 12px; right: 12px; transform: none; gap: 4px 6px;
-      padding: 6px 10px; border-radius: 18px; }
-    .audiobar .btn { font-size: 12px; padding: 4px 10px; min-height: 30px; }
-    .audiobar .btn.play { font-size: 13px; padding: 5px 14px; }
-    .audiobar .ab-sep { display: none; }
-    .audiobar [data-rate] { display: none; } /* 移动端四个倍速收进轮切 */
-    #rateCycle { display: inline-block; }
+    /* 播放条：单行图标化，不再两行大方块 */
+    .audiobar { left: 10px; right: 10px; transform: none; gap: 5px; flex-wrap: nowrap;
+      padding: 7px 10px; border-radius: 999px; justify-content: space-between;
+      bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
+    .audiobar .btn { font-size: 12px; padding: 6px 9px; min-height: 34px; min-width: 0; flex: none; }
+    .audiobar .btn.play { font-size: 13px; padding: 6px 16px; flex: none; }
+    .audiobar .btn::after { display: none; }
+    .audiobar [data-rate] { display: none; }
+    #rateCycle { display: inline-block; flex: none; }
     .audiobar .seg { display: none; }
-    #seekWrap { padding: 6px 2px 0; }
+    .ab-sep { display: none; }
+    .audiobar .btn.lbl-hide { font-size: 0; padding: 6px 11px; }  /* 图标化：文字隐藏保留 emoji */
+    .audiobar .btn.lbl-hide #rateCycle { font-size: 12px; }
+    .audiobar .btn + .btn { margin-left: 0; } /* 移动端 hit-slop 已关，还原间距 */
+    #seekWrap { flex: 1 1 100%; padding: 6px 2px 0; }
     #seekTrack { height: 18px; }
     #seekRail, #seekFill { top: 7px; }
     #seekTicks .tick { top: 6px; }
     #seekKnob { top: 9px; width: 12px; height: 12px; }
+  }
+  /* 超窄屏（≤360px）：播放条进一步收纳 */
+  @media (max-width: 360px) {
+    .audiobar { gap: 3px; padding: 6px 8px; }
+    .audiobar .btn { padding: 6px 7px; }
+    .voice-sel { max-width: 118px; }
   }
 </style>
 </head>
@@ -796,6 +835,7 @@ function tierOf(v) {
   return 1;
 }
 function voiceLabel(v) {
+  if (v.labelOverride) return v.labelOverride;
   let n = (v.name || '').replace(/^Microsoft\s+/i, '')
     .replace(/\s*-\s*English\s*\(.*?\)\s*/i, '').replace(/\s*\(Online\)\s*/i, '').trim();
   const region = /^en-GB/i.test(v.lang) ? '英式' : /^en-US/i.test(v.lang) ? '美式' : '英语';
@@ -803,14 +843,17 @@ function voiceLabel(v) {
   const t = tierOf(v) === 3 ? '★★★' : tierOf(v) === 2 ? '★★' : '★';
   return `${n} · ${region}${g ? g + '声' : ''} ${t}`.replace(/\s+/g, ' ').trim();
 }
+const isEdgeCloudVoice = v => /online \(natural\)/i.test(v.name || '');
 function balance(list) {
-  const sorted = [...list].sort((a, b) => tierOf(b) - tierOf(a));
+  /* 每组 ≤4：男女各 ≤2，GB/US 各 ≤2（参考词汇真经：英式男女各2 + 美式男女各2 的均衡结构） */
+  const rank = v => tierOf(v) * 100 + (/en-GB/i.test(v.lang) ? 2 : 0);
+  const sorted = [...list].sort((a, b) => rank(b) - rank(a));
   const out = [];
   for (const v of sorted) {
     if (out.length >= 4) break;
     const g = genderOf(v), a = /^en-GB/i.test(v.lang) ? 'GB' : 'US';
-    if (out.length >= 2 && g && out.filter(x => genderOf(x) === g).length >= 2) continue;
-    if (out.length >= 2 && out.filter(x => (/^en-GB/i.test(x.lang) ? 'GB' : 'US') === a).length >= 3) continue;
+    if (g && out.filter(x => genderOf(x) === g).length >= 2) continue;   // 每性别 ≤2
+    if (out.filter(x => (/^en-GB/i.test(x.lang) ? 'GB' : 'US') === a).length >= 2) continue; // 每口音 ≤2
     out.push(v);
   }
   return out;
@@ -826,13 +869,17 @@ function loadVoices() {
     return;
   }
   const ok = pool.filter(v => tierOf(v) >= 1);
+  /* 音色三分类（参考词汇真经）：☁ Azure 云端 → ⚡ Edge 免费 → 🖥 本机，每组 ≤4 */
   const cloudList = CLOUD._on ? CLOUD.VOICES.filter(v =>
-    accent === 'en-GB' ? v.region === '英式' : accent === 'en-US' ? v.region === '美式' : true) : [];
+    accent === 'en-GB' ? v.region === '英式' : accent === 'en-US' ? v.region === '美式' : true)
+    .map(v => ({ cloud: v.id, voiceURI: 'cloud:' + v.id, name: v.id, lang: v.region === '英式' ? 'en-GB' : 'en-US', labelOverride: v.label }))
+    : [];
+  const edgeList = balance(ok.filter(isEdgeCloudVoice));
+  const localList = balance(ok.filter(v => !isEdgeCloudVoice(v)));
   const groups = [
-    ...(cloudList.length ? [{ label: '☁ 云端自然语音', list: cloudList.map(v => ({ cloud: v.id, name: v.label.split(' · ')[0], lang: v.region === '英式' ? 'en-GB' : 'en-US' })), cloud: true }] : []),
-    { label: '⚡ 神经网络', list: balance(ok.filter(isNeuro)) },
-    { label: 'Google（需联网）', list: balance(ok.filter(v => !isNeuro(v) && isGoogle(v))) },
-    { label: '本机系统', list: balance(ok.filter(v => !isNeuro(v) && !isGoogle(v) && tierOf(v) >= 2)) },
+    ...(cloudList.length ? [{ label: '☁ Azure 云端自然语音（登录后可用）', list: cloudList, cloud: true }] : []),
+    ...(edgeList.length ? [{ label: '⚡ Edge 免费自然语音', list: edgeList }] : []),
+    ...(localList.length ? [{ label: '🖥 本机语音', list: localList }] : []),
   ].filter(g => g.list.length);
   if (!groups.length) {
     groups.push({ label: '可用语音', list: pool.slice(0, 4) });
@@ -853,8 +900,18 @@ function loadVoices() {
     `<optgroup label="${g.label}">` + g.list.map(v =>
       `<option value="${esc(v.voiceURI)}" title="${esc(v.name)} — ${esc(v.lang)}">${esc(voiceLabel(v))}</option>`).join('')
     + '</optgroup>').join('');
+  const ghost = selVoiceURI && selVoiceURI !== 'auto' && !flat.some(v => v.voiceURI === selVoiceURI)
+    ? `<option value="${esc(selVoiceURI)}">${isCloudURI(selVoiceURI) ? '上次云音色（未登录）' : '上次音色（暂时不可用）'}</option>` : '';
+  sel.innerHTML = `<option value="auto">🎲 系统默认（不指定音色）</option>` + ghost + sel.innerHTML;
   let pick = flat.find(v => v.voiceURI === selVoiceURI) || flat.find(v => v.voiceURI === gv) || V[accent] || flat[0];
-  if (pick) { sel.value = pick.voiceURI; selVoiceURI = pick.voiceURI; }
+  // 用户已有明确选择则纹丝不动；只有从未选过才落默认
+  if (!selVoiceURI) {
+    if (pick) { sel.value = pick.voiceURI; selVoiceURI = pick.voiceURI; }
+  } else if (flat.some(v => v.voiceURI === selVoiceURI) || selVoiceURI === 'auto' || isCloudURI(selVoiceURI)) {
+    sel.value = selVoiceURI;
+  } else {
+    sel.value = selVoiceURI; // 幽灵选项保持选中态
+  }
   if (!sel.onchange) sel.onchange = () => {
     if (isCloudURI(sel.value) && !(typeof CLOUD !== 'undefined' && CLOUD._on)) {
       toggleCloudPop();
@@ -893,19 +950,14 @@ function resolveVoice(exclude) {
       || vs.find(x => x.lang === accent)
       || vs.find(x => /^en/i.test(x.lang))
       || null;
-    if (v && v.voiceURI === exclude) v = null;
+    if (v && (v.voiceURI === exclude || v.voiceURI === 'auto')) v = null;
     if (!v) {
       v = flat.map(k => vs.includes(k) ? k : vs.find(x => x.name === k.name && x.lang === k.lang))
-        .find(x => x && x.voiceURI !== exclude
+        .find(x => x && x.voiceURI !== exclude && x.voiceURI !== 'auto'
           && (x.lang === accent || x.lang.startsWith(accent.split('-')[0])))
-        || vs.find(x => x.voiceURI !== exclude && /^en/i.test(x.lang)) || null;
+        || vs.find(x => x.voiceURI !== exclude && x.voiceURI !== 'auto' && /^en/i.test(x.lang)) || null;
     }
-    if (v) {
-      selVoiceURI = v.voiceURI;
-      try { localStorage.setItem('ielts-voice', selVoiceURI); } catch (e) {}
-      const sel = document.getElementById('voiceSel');
-      if (sel) sel.value = selVoiceURI;
-    } else if (!exclude) { selVoiceURI = ''; }
+    // 注意：这里只返回最优解，绝不改写 selVoiceURI（用户选择神圣不可侵犯）
   }
   return v;
 }
@@ -938,11 +990,11 @@ function speak(text, cb, opts, tokenIn) {
   }
   const go = () => {
     if (my !== speakToken) return;
-    try { if (speechSynthesis.paused) speechSynthesis.resume(); } catch (e) {}
+    try { if (speechSynthesis.paused) { speechSynthesis.resume(); if (!(speechSynthesis.speaking || speechSynthesis.pending)) { try { speechSynthesis.cancel(); } catch (e) {} } } } catch (e) {}
     const u = new SpeechSynthesisUtterance(text);
     u.rate = rate; u.volume = 1;
-    const v = resolveVoice(exclude || undefined);
-    let triedURI = '';
+    const v = (selVoiceURI === 'auto') ? null : resolveVoice(exclude || undefined);
+    let triedURI = selVoiceURI === 'auto' ? 'auto' : '';
     if (v) { u.voice = v; u.lang = v.lang; triedURI = v.voiceURI; }
     else u.lang = accent;
     let started = false, finished = false, wd = null;
@@ -977,10 +1029,12 @@ function speak(text, cb, opts, tokenIn) {
   };
   if (immediate) { go(); return; } // 链式续播/预取：不 cancel 不延迟，消除句间大间隔
   // Chrome：没在播就别 cancel（空 cancel 会吞掉紧接着的 speak）；真在播才断开，且留 150ms
+  let idle = false;
   try {
     if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
-    else { go(); return; }
+    else idle = true;
   } catch (e) { if (cb) cb(); return; }
+  if (idle) { go(); return; } // 空闲：同步起播（setTimeout 非手势上下文 Chrome 会静默丢弃）
   setTimeout(go, 150);
 }
 async function voiceSelfTest() {
@@ -992,17 +1046,21 @@ async function voiceSelfTest() {
   try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
   playing = false; paint();
   const vs = speechSynthesis.getVoices();
-  const flat = (V.groups || []).flatMap(g => g.list.map(v => ({ v, g: g.label }))).slice(0, 14);
+  const flat = [{ v: { voiceURI: 'auto', name: '系统默认（不指定音色）', lang: accent }, g: '系统默认' },
+    ...(V.groups || []).flatMap(g => g.list.map(v => ({ v, g: g.label })))].slice(0, 15);
   const testOne = vv => new Promise(res => {
     let done = false;
     const to = setTimeout(() => {
       if (!done) { done = true; try { speechSynthesis.cancel(); } catch (e) {} res(false); }
     }, 2500);
     try {
-      const live = vs.find(x => x.voiceURI === vv.voiceURI) || (vs.includes(vv) ? vv : null);
-      if (!live) { clearTimeout(to); res(false); return; }
       const u = new SpeechSynthesisUtterance('Hello');
-      u.voice = live; u.lang = live.lang; u.volume = 1; u.rate = 1;
+      if (vv.voiceURI !== 'auto') {
+        const live = vs.find(x => x.voiceURI === vv.voiceURI) || (vs.includes(vv) ? vv : null);
+        if (!live) { clearTimeout(to); res(false); return; }
+        u.voice = live; u.lang = live.lang;
+      } else { u.lang = accent; }
+      u.volume = 1; u.rate = 1;
       u.onstart = u.onend = () => { if (!done) { done = true; clearTimeout(to); res(true); } };
       u.onerror = ev => {
         if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) return;
@@ -1077,15 +1135,24 @@ function launch(i, my, immediate) {
 function playFrom(i) {
   if (i < 0 || i >= sents.length) { playing = false; idx = -1; paint(); return; }
   speakToken++;
-  try { speechSynthesis.cancel(); } catch (e) {}
+  /* Chrome 130+ 缺陷：cancel() 后紧接的 speak() 被静默吞掉（Edge 宽容，故 Edge 正常 Chrome 无声）。
+     只在真有活动队列时才 cancel，且 cancel 后至少隔 250ms 再起播；
+     空闲时直接手势内同步起播（最可靠路径，参考词汇真经项目 _doSpeakLocal） */
+  let hadQueue = false;
+  try { hadQueue = !!(speechSynthesis.speaking || speechSynthesis.pending || speechSynthesis.paused); } catch (e) {}
+  try { if (hadQueue) speechSynthesis.cancel(); } catch (e) {}
   try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
   idx = i; playing = true; launchedUpTo = i - 1;
   syncSeek(i);
   paint();
   const my = speakToken;
-  launch(i, my, false); // 本句：cancel 后延迟起播（Chrome 吞声 workaround）
-  // 预取必须排在本句之后：本句延迟 60ms，所以 120ms 后再发射下一句进原生队列
-  setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 120);
+  if (hadQueue) {
+    launch(i, my, false); // 有旧队列：cancel 后延迟起播（Chrome 吞声 workaround）
+    setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 250);
+  } else {
+    launch(i, my, true);  // 空闲：手势上下文内同步发射，杜绝 setTimeout 丢失用户激活
+    setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 120);
+  }
 }
 function togglePlay() {
   if (playing) { playing = false; speakToken++; speechSynthesis.cancel(); try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} paint(); }
@@ -1145,6 +1212,10 @@ document.addEventListener('click', e => {
   const t = e.target.closest('.w');
   if (t) { openPop(t); return; }
   if (!e.target.closest('.pop') && !e.target.closest('aside')) pop.style.display = 'none';
+  /* 移动端：点遮罩关词库抽屉 */
+  if (e.target.closest('.layout') && e.target === document.querySelector('.layout.panel-open')) {
+    togglePanel();
+  }
 });
 function openPop(el) {
   const k = el.dataset.w;
@@ -1198,12 +1269,18 @@ document.getElementById('btnGloss').onclick = function() {
   this.classList.toggle('active', !hidden);
 };
 
-/* ============ 词库面板（关闭后文章占满，不留白） ============ */
+/* ============ 词库面板（桌面：侧栏显隐；移动：底部抽屉 + 遮罩） ============ */
 function togglePanel() {
   const layout = document.querySelector('.layout');
-  layout.classList.toggle('no-panel');
-  const hidden = layout.classList.contains('no-panel');
-  document.querySelector('[onclick="togglePanel()"]').textContent = hidden ? '📚 显示词库' : '📚 词库';
+  const mobile = window.matchMedia('(max-width: 900px)').matches;
+  if (mobile) {
+    const open = layout.classList.toggle('panel-open');
+    document.querySelector('[onclick="togglePanel()"]').textContent = open ? '✕ 关闭' : '📚 词库';
+  } else {
+    layout.classList.toggle('no-panel');
+    const hidden = layout.classList.contains('no-panel');
+    document.querySelector('[onclick="togglePanel()"]').textContent = hidden ? '📚 显示词库' : '📚 词库';
+  }
 }
 const escAttr = s => s.replace(/&/g,'&amp;').replace(/'/g, "&#39;").replace(/"/g, '&quot;');
 function renderList() {
@@ -1251,6 +1328,16 @@ document.addEventListener('keydown', e => {
 });
 
 render(); renderList(); loadVoices(); bindSeek();
+function mobileBtnIcons() { // 移动端播放条：上一句/下一句去文字留图标，防挤成大方块
+  const prev = document.querySelector('.audiobar [onclick="step(-1)"]');
+  const next = document.querySelector('.audiobar [onclick="step(1)"]');
+  if (window.matchMedia('(max-width: 900px)').matches) {
+    if (prev) { prev.textContent = '⏮'; prev.classList.add('lbl-hide'); }
+    if (next) { next.textContent = '⏭'; next.classList.add('lbl-hide'); }
+  }
+}
+mobileBtnIcons();
+window.addEventListener('resize', mobileBtnIcons);
 if (typeof CLOUD !== 'undefined') CLOUD.boot();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => loadVoices());
 setTimeout(loadVoices, 500);
