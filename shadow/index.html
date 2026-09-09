@@ -1260,7 +1260,7 @@ function paint() {
     const ai0 = artOfSent[idx];
     if (ai0 !== undefined) {
       const [s0, e0] = segRange(ai0);
-      segEl.textContent = `${ai0 + 1} · ${idx - s0 + 1} / ${e0 - s0}`;
+      segEl.textContent = `第${ai0 + 1}章 ${idx - s0 + 1}/${e0 - s0}`;
       segEl.title = `第${ai0 + 1}章第${idx - s0 + 1}句（全文第${idx + 1}/${sents.length}句），点击快速跳转`;
     } else segEl.textContent = `${idx + 1} / ${sents.length}`;
   }
