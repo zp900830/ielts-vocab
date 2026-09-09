@@ -292,6 +292,10 @@
     .voice-sel { max-width: 118px; }
   }
 </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20color=%22%23000%22%20d=%22M0%200h16v16H0V0zm16%200H0v16h16V0zm-7-5h7v2h-7V2zm0%205h7v2h-7V2zm0%205h7v2h-7V2%22/%3E%3C/svg%22">
 </head>
 <body data-page-node-id="Nvrl1FxZdm5MTp9zsQ7opb">
 
@@ -308,8 +312,8 @@
     <button class="btn active" id="btnUK" onclick="setAccent('en-GB')" data-page-node-id="OqMVvleWPEma65np24CIdA">🇬🇧 英</button>
     <button class="btn" id="btnUS" onclick="setAccent('en-US')" data-page-node-id="l0SD1b8W7i6lQi8WR7UuZO">🇺🇸 美</button>
     <select class="voice-sel" id="voiceSel" title="选择语音（云端/神经网络/Google/本机）"></select>
-    <button class="btn" id="btnVoiceTest" onclick="voiceSelfTest()" title="逐个实测音色能否出声，自动选用能响的">自检</button>
-    <button class="btn" id="btnCompat" onclick="toggleCompat()" title="回到第一版直连播法（无队列无延迟），Chrome无声时试它">兼容</button>
+    
+    
   </div>
   <button class="btn" onclick="togglePanel()" data-page-node-id="afCqMtIZsG8AlBtSemx2C9">📚 词库</button>
   <button class="btn" id="btnCloud" onclick="toggleCloudPop()" title="登录后可用 Azure 云端自然语音">☁️ 未登录</button>
@@ -328,15 +332,15 @@
 </div>
 
 <div class="audiobar">
-  <button class="btn" onclick="step(-1)" data-page-node-id="pa6tUuO8W9TWF1ZbpJP7m7">⏮ 上一句</button>
-  <button class="btn play" id="btnPlay" onclick="togglePlay()" data-page-node-id="uV7tSS9BAoNLRfxY9cYutw">▶ 朗读</button>
-  <button class="btn" onclick="step(1)" data-page-node-id="cloZ32G8EuzFNR8CVLw1W1">下一句 ⏭</button>
-  <button class="btn" id="rateCycle" onclick="cycleRate()" title="切换倍速">倍速 1x</button>
+  <button class="btn" onclick="step(-1)" data-page-node-id="pa6tUuO8W9TWF1ZbpJP7m7"><i class="ri-arrow-left-s-line"></i> 上一句</button>
+  <button class="btn play" id="btnPlay" onclick="togglePlay()" data-page-node-id="uV7tSS9BAoNLRfxY9cYutw"><i class="ri-play-line"></i> 朗读</button>
+  <button class="btn" onclick="step(1)" data-page-node-id="cloZ32G8EuzFNR8CVLw1W1"><i class="ri-arrow-right-s-line"></i> 下一句</button>
+  <button class="btn" id="rateCycle" onclick="cycleRate()" title="切换倍速"><i class="ri-time-s-line"></i> 1x</button>
   <span class="ab-sep"></span>
-  <button class="btn" data-rate="0.75" onclick="setRate(0.75)" data-page-node-id="sKbj6wBb8nb8v6fEknHrBe">0.75x</button>
-  <button class="btn active" data-rate="1" onclick="setRate(1)" data-page-node-id="ZN5SHzrjlgnrhK5gtiPFhX">1x</button>
-  <button class="btn" data-rate="1.25" onclick="setRate(1.25)" data-page-node-id="uK88uwYm4JZ7pChbUAmo20">1.25x</button>
-  <button class="btn" data-rate="1.5" onclick="setRate(1.5)" data-page-node-id="Ekz6YRmBCmrz7T9zItKoai">1.5x</button>
+  <button class="btn" data-rate="0.75" onclick="setRate(0.75)" data-page-node-id="sKbj6wBb8nb8v6fEknHrBe"><i class="ri-arrow-contract-s-line"></i> 0.75x</button>
+  <button class="btn active" data-rate="1" onclick="setRate(1)" data-page-node-id="ZN5SHzrjlgnrhK5gtiPFhX"><i class="ri-check-line"></i> 1x</button>
+  <button class="btn" data-rate="1.25" onclick="setRate(1.25)" data-page-node-id="uK88uwYm4JZ7pChbUAmo20"><i class="ri-arrow-expand-s-line"></i> 1.25x</button>
+  <button class="btn" data-rate="1.5" onclick="setRate(1.5)" data-page-node-id="Ekz6YRmBCmrz7T9zItKoai"><i class="ri-arrow-expand-s-line"></i> 1.5x</button>
   <div class="seg" id="segLbl" data-page-node-id="GOTpB4eiD2ZqNQ1CUm9HER">—</div>
   <div id="seekWrap">
     <div id="seekTip"></div>
@@ -908,7 +912,7 @@ function loadVoices() {
     + '</optgroup>').join('');
   const ghost = selVoiceURI && selVoiceURI !== 'auto' && !flat.some(v => v.voiceURI === selVoiceURI)
     ? `<option value="${esc(selVoiceURI)}">${isCloudURI(selVoiceURI) ? '上次云音色（未登录）' : '上次音色（暂时不可用）'}</option>` : '';
-  sel.innerHTML = `<option value="auto">🎲 系统默认（不指定音色）</option>` + ghost + sel.innerHTML;
+  sel.innerHTML = ghost + sel.innerHTML;
   let pick = flat.find(v => v.voiceURI === selVoiceURI) || flat.find(v => v.voiceURI === gv) || V[accent] || flat[0];
   // 用户已有明确选择则纹丝不动；只有从未选过才落默认
   if (!selVoiceURI) {
@@ -938,7 +942,7 @@ function loadVoices() {
 }
 try { if (HAS_SPEECH && 'onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices; } catch (e) {}
 
-let errStreak = 0, everStarted = false; // everStarted：本会话是否成功出过声（区分引擎挂起 vs 单个坏音色）
+let errStreak = 0, everStarted = false, speechInProgress = false; // speechInProgress：防止多 utterance 叠加
 const ENV_HINT = '若本机音色也无声，请按序查：①系统设置→声音→输出设备（是否被切到离线蓝牙/显示器，音量是否划灰）②Chrome标签页小喇叭是否被静音 ③重启Chrome再试 ④直接用Edge打开本站。';
 function isCloudURI(uri) { return (uri || '').indexOf('cloud:') === 0; }
 function resolveVoice(exclude) {
@@ -1047,6 +1051,7 @@ function speak(text, cb, opts, tokenIn) {
   try { speechSynthesis.cancel(); } catch (e) {}
   const go = () => {
     if (my !== speakToken) return;
+    if (speechInProgress) { try { speechSynthesis.cancel(); } catch (e) {} speechInProgress = false; }
     try { speechSynthesis.cancel(); } catch (e) {}
     try { if (speechSynthesis.paused) { speechSynthesis.resume(); if (!(speechSynthesis.speaking || speechSynthesis.pending)) { try { speechSynthesis.cancel(); } catch (e) {} } } } catch (e) {}
     const u = new SpeechSynthesisUtterance(text);
@@ -1072,11 +1077,12 @@ function speak(text, cb, opts, tokenIn) {
     const remember = () => { everStarted = true; try { if (u.voice) rememberGoodVoice(u.voice.voiceURI); } catch (e) {} errStreak = 0; };
     if (cb) {
       u.onstart = () => { started = true; clearWd(); remember(); dlog('onstart', u.voice ? u.voice.name : '(default)', 'tok=' + my); };
-      u.onend = () => { if (finished) return; finished = true; clearWd(); errStreak = 0; dlog('onend', 'tok=' + my); cb(); };
+      u.onend = () => { if (finished) return; finished = true; clearWd(); errStreak = 0; dlog('onend', 'tok=' + my); cb(); speechInProgress = false; };
       u.onerror = ev => {
         // cancel/interrupted 是主动打断（切句/暂停），绝不能当“播完”推进，否则多链互 cancel 疯转
-        if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) { dlog('onerror-ignored', ev.error); return; }
+        if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) { dlog('onerror-ignored', ev.error); speechInProgress = false; return; }
         dlog('onerror', ev ? ev.error : '?');
+        speechInProgress = false;
         failOnce();
       };
       // 无声看门狗：4 秒既不开始也不结束 = 静默卡死，走失败路径（重试/停下提示），不许无声空转
@@ -1085,7 +1091,8 @@ function speak(text, cb, opts, tokenIn) {
       u.onstart = remember;
       u.onerror = () => {};
     }
-    try { speechSynthesis.speak(u); } catch (e) { if (cb) failOnce(); }
+    speechInProgress = true;
+    try { speechSynthesis.speak(u); } catch (e) { speechInProgress = false; if (cb) failOnce(); }
   };
   if (immediate) { go(); return; } // 链式续播/预取：不 cancel 不延迟，消除句间大间隔
   // Chrome：没在播就别 cancel（空 cancel 会吞掉紧接着的 speak）；真在播才断开，且留 150ms
@@ -1106,8 +1113,7 @@ async function voiceSelfTest() {
   try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
   playing = false; paint();
   const vs = speechSynthesis.getVoices();
-  const flat = [{ v: { voiceURI: 'auto', name: '系统默认（不指定音色）', lang: accent }, g: '系统默认' },
-    ...(V.groups || []).flatMap(g => g.list.map(v => ({ v, g: g.label })))].slice(0, 15);
+  const flat = [...(V.groups || []).flatMap(g => g.list.map(v => ({ v, g: g.label })))].slice(0, 15);
   const testOne = vv => new Promise(res => {
     let done = false;
     const to = setTimeout(() => {
@@ -1399,13 +1405,15 @@ document.addEventListener('keydown', e => {
 });
 
 render(); renderList(); loadVoices(); bindSeek();
-function mobileBtnIcons() { // 移动端播放条：上一句/下一句去文字留图标，防挤成大方块
-  const prev = document.querySelector('.audiobar [onclick="step(-1)"]');
-  const next = document.querySelector('.audiobar [onclick="step(1)"]');
-  if (window.matchMedia('(max-width: 900px)').matches) {
-    if (prev) { prev.textContent = '⏮'; prev.classList.add('lbl-hide'); }
-    if (next) { next.textContent = '⏭'; next.classList.add('lbl-hide'); }
-  }
+function mobileBtnIcons() { // 移动端播放条：确保图标在窄屏下正常显示，不再替换文字
+  const btns = document.querySelectorAll('.audiobar .btn');
+  btns.forEach(btn => {
+    btn.style.minWidth = '0';
+    btn.style.flex = '0 0 auto';
+    // 确保图标可见：保留文字但通过行高控制
+    const icon = btn.querySelector('i');
+    if (icon) { icon.style.fontSize = '14px'; }
+  });
 }
 mobileBtnIcons();
 window.addEventListener('resize', mobileBtnIcons);
