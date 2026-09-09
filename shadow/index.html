@@ -84,8 +84,11 @@
 
   /* ============ 正文（衬线故事体卡片） ============ */
   article { font-size: 19px; }
-  .sec { margin-bottom: 20px; background: var(--glass); border: 1px solid rgba(255,255,255,.65);
-    border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); }
+  .sec { margin-bottom: 20px; padding: 20px 22px;
+    background: linear-gradient(150deg, rgba(255,255,255,.88), rgba(248,252,250,.52) 55%, rgba(224,236,229,.38));
+    -webkit-backdrop-filter: blur(28px) saturate(180%); backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid rgba(255,255,255,.6); border-radius: 20px;
+    box-shadow: 0 8px 28px rgba(30,60,48,.08), inset 0 1px 0 rgba(255,255,255,.9); }
   .sec h2 { display: inline-block; font-size: 14px; color: var(--accent); font-weight: 600;
     letter-spacing: .06em; margin-bottom: 12px; background: var(--accent-soft);
     border-radius: 999px; padding: 4px 14px; }
@@ -268,9 +271,11 @@
 
   /* ============ 侧边词库 ============ */
   aside { position: sticky; top: 84px; align-self: start; max-height: calc(100vh - 100px);
-    display: flex; flex-direction: column; background: var(--glass);
-    border: 1px solid rgba(255,255,255,.65); border-radius: 16px; overflow: hidden;
-    box-shadow: var(--shadow); }
+    display: flex; flex-direction: column;
+    background: linear-gradient(150deg, rgba(255,255,255,.88), rgba(248,252,250,.52) 55%, rgba(224,236,229,.38));
+    -webkit-backdrop-filter: blur(28px) saturate(180%); backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid rgba(255,255,255,.6); border-radius: 20px; overflow: hidden;
+    box-shadow: 0 8px 28px rgba(30,60,48,.08), inset 0 1px 0 rgba(255,255,255,.9); }
   aside .head { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); }
   aside .head .t { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
   aside input { width: 100%; border: 1px solid var(--border); background: #fff;
@@ -329,7 +334,7 @@
     #btnCloud { flex: none; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
     /* 布局：正文全宽，词库改抽屉不占流式空间 */
     .layout { display: block; padding: 14px 12px calc(120px + env(safe-area-inset-bottom, 0px)); }
-    .sec { padding: 14px; border-radius: 14px; margin-bottom: 14px; }
+    .sec { padding: 14px; border-radius: 18px; margin-bottom: 14px; }
     article { font-size: 17.5px; }
     .sec p { line-height: 1.85; }
     /* 词库：改为底部抽屉（划上即用，不占正文空间） */
