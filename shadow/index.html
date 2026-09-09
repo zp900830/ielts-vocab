@@ -220,8 +220,10 @@
     #seekTrack.active #seekKnob { transform: translate(-50%, -50%) scale(1); }
   }
   @media (max-width: 900px) {
-    #anchors { display: flex; position: static; transform: none; flex-direction: row;
-      gap: 8px; overflow-x: auto; opacity: 1; padding: 12px 12px 0; scrollbar-width: none; }
+    #anchors { display: flex; position: sticky; top: 0; z-index: 99; transform: none; flex-direction: row;
+      gap: 8px; overflow-x: auto; opacity: 1; padding: 8px 12px; scrollbar-width: none;
+      background: var(--glass-strong); -webkit-backdrop-filter: blur(18px) saturate(160%);
+      backdrop-filter: blur(18px) saturate(160%); border-bottom: 1px solid var(--border); }
     #anchors::-webkit-scrollbar { display: none; }
     #anchors .adot { width: auto; height: auto; border-radius: 999px; padding: 5px 12px 5px 10px;
       background: var(--glass); border: 1px solid var(--border); display: flex; align-items: center;
@@ -1519,10 +1521,21 @@ function mobileBtnIcons() { // 移动端播放条：确保图标在窄屏下正�
   });
 }
 mobileBtnIcons();
+function stickAnchors() { // 移动端锚点吸顶：top 取顶栏实高，滑到哪跟到哪
+  try {
+    if (!window.matchMedia('(max-width: 900px)').matches) return;
+    const tb = document.querySelector('.topbar');
+    const nav = document.getElementById('anchors');
+    if (tb && nav) nav.style.top = tb.getBoundingClientRect().height + 'px';
+  } catch (e) {}
+}
+stickAnchors();
+window.addEventListener('orientationchange', () => setTimeout(stickAnchors, 300));
+setTimeout(stickAnchors, 600);
 let _rzT = false;
 window.addEventListener('resize', () => {
   if (_rzT) return; _rzT = true;
-  requestAnimationFrame(() => { _rzT = false; mobileBtnIcons(); });
+  requestAnimationFrame(() => { _rzT = false; mobileBtnIcons(); stickAnchors(); });
 });
 if (typeof CLOUD !== 'undefined') CLOUD.boot();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => loadVoices());
