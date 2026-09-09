@@ -177,6 +177,7 @@
     display: none; box-shadow: var(--shadow); white-space: nowrap; overflow: hidden;
     text-overflow: ellipsis; pointer-events: none; z-index: 5; }
   #seekTrack { position: relative; height: 11px; cursor: pointer; touch-action: none; }
+  #seekTrack::before { content: ""; position: absolute; left: 0; right: 0; top: -6px; bottom: -16px; }
   /* 默认 1px 极细线，用系统边框色，装饰感强 */
   #seekRail { position: absolute; left: 0; right: 0; top: 0; height: 1px;
     background: var(--border);
