@@ -381,9 +381,9 @@
   <h1 data-page-node-id="TOUJo00LOrjTfpFX33fsB4"><i class="ri-book-open-line"></i> 雅思词汇 · 影子跟读</h1>
   <div class="ctrl" data-page-node-id="6Vok8WIlpZESqXUJ6vE8I2">
     <label data-page-node-id="VgJoBOhKkB3qddidTP2MvM">全文</label>
-    <button class="btn active" id="btnZh" data-page-node-id="o4X2OII9lEh56RBxPz6Lri"><i class="ri-eye-line"></i> 隐藏</button>
+    <button class="btn active" id="btnZh" data-page-node-id="o4X2OII9lEh56RBxPz6Lri"><i class="ri-eye-line"></i> 隐藏全文</button>
     <label>词义</label>
-    <button class="btn active" id="btnGloss"><i class="ri-eye-line"></i> 隐藏</button>
+    <button class="btn active" id="btnGloss"><i class="ri-eye-line"></i> 隐藏词义</button>
   </div>
   <div class="ctrl" data-page-node-id="clAZz26EfFpKEVMgUEDlLI">
     <label data-page-node-id="8iYww7NDc1p1OIEwzKFz7l">发音</label>
@@ -1449,13 +1449,13 @@ function updKnownBtn() {
 document.getElementById('btnZh').onclick = function() {
   document.body.classList.toggle('hide-zh');
   const hidden = document.body.classList.contains('hide-zh');
-  this.innerHTML = hidden ? '<i class="ri-eye-off-line"></i> 显示' : '<i class="ri-eye-line"></i> 隐藏';
+  this.innerHTML = hidden ? '<i class="ri-eye-off-line"></i> 显示全文' : '<i class="ri-eye-line"></i> 隐藏全文';
   this.classList.toggle('active', !hidden);
 };
 document.getElementById('btnGloss').onclick = function() {
   document.body.classList.toggle('hide-gl');
   const hidden = document.body.classList.contains('hide-gl');
-  this.innerHTML = hidden ? '<i class="ri-eye-off-line"></i> 显示' : '<i class="ri-eye-line"></i> 隐藏';
+  this.innerHTML = hidden ? '<i class="ri-eye-off-line"></i> 显示词义' : '<i class="ri-eye-line"></i> 隐藏词义';
   this.classList.toggle('active', !hidden);
 };
 
