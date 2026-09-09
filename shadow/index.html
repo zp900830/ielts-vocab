@@ -107,7 +107,8 @@
     background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(170%);
     backdrop-filter: blur(22px) saturate(170%);
     border: 1px solid rgba(255,255,255,.65); border-radius: 999px;
-    padding: 8px 16px; box-shadow: var(--shadow-lg); max-width: calc(100vw - 24px); }
+    padding: 8px 16px; box-shadow: var(--shadow-lg); max-width: calc(100vw - 24px); overflow-x: auto; scrollbar-width: none; }
+  .audiobar::-webkit-scrollbar { display: none; }
   .audiobar .btn { min-height: 34px; position: relative; white-space: nowrap; }
   .audiobar .btn::after { content: ""; position: absolute; inset: -6px -2px; } /* 纵向 hit-slop：触达 40px 不撑大视觉 */
   .audiobar .btn + .btn { margin-left: 6px; } /* hit-slop 横向延伸的补偿，防止盖住相邻按钮 */
@@ -275,8 +276,6 @@
     #rateCycle { display: inline-block; flex: none; }
     .audiobar .seg { display: none; }
     .ab-sep { display: none; }
-    .audiobar .btn.lbl-hide { font-size: 0; padding: 6px 11px; }  /* 图标化：文字隐藏保留 emoji */
-    .audiobar .btn.lbl-hide #rateCycle { font-size: 12px; }
     .audiobar .btn + .btn { margin-left: 0; } /* 移动端 hit-slop 已关，还原间距 */
     #seekWrap { flex: 1 1 100%; padding: 6px 2px 0; }
     #seekTrack { height: 18px; }
@@ -299,12 +298,12 @@
 <body data-page-node-id="Nvrl1FxZdm5MTp9zsQ7opb">
 
 <div class="topbar" data-page-node-id="MLNWDrxME0n3U3aaN721Fn">
-  <h1 data-page-node-id="TOUJo00LOrjTfpFX33fsB4">📖 雅思词汇 · 影子跟读</h1>
+  <h1 data-page-node-id="TOUJo00LOrjTfpFX33fsB4"><i class="ri-book-open-line"></i> 雅思词汇 · 影子跟读</h1>
   <div class="ctrl" data-page-node-id="6Vok8WIlpZESqXUJ6vE8I2">
     <label data-page-node-id="VgJoBOhKkB3qddidTP2MvM">全文</label>
-    <button class="btn active" id="btnZh" data-page-node-id="o4X2OII9lEh56RBxPz6Lri">隐藏</button>
+    <button class="btn active" id="btnZh" data-page-node-id="o4X2OII9lEh56RBxPz6Lri"><i class="ri-eye-line"></i> 隐藏</button>
     <label>词义</label>
-    <button class="btn active" id="btnGloss">隐藏</button>
+    <button class="btn active" id="btnGloss"><i class="ri-eye-line"></i> 隐藏</button>
   </div>
   <div class="ctrl" data-page-node-id="clAZz26EfFpKEVMgUEDlLI">
     <label data-page-node-id="8iYww7NDc1p1OIEwzKFz7l">发音</label>
@@ -313,12 +312,12 @@
     
     
   </div>
-  <button class="btn" onclick="togglePanel()" data-page-node-id="afCqMtIZsG8AlBtSemx2C9">📚 词库</button>
-  <button class="btn" id="btnCloud" onclick="toggleCloudPop()" title="登录后可用 Azure 云端自然语音">☁️ 未登录</button>
+  <button class="btn" onclick="togglePanel()" data-page-node-id="afCqMtIZsG8AlBtSemx2C9"><i class="ri-book-line"></i> 词库</button>
+  <button class="btn" id="btnCloud" onclick="toggleCloudPop()" title="登录后可用 Azure 云端自然语音"><i class="ri-cloud-line"></i> 未登录</button>
 </div>
 
 <div class="cpop" id="cloudPop">
-  <div class="ct">☁️ 云端语音登录</div>
+  <div class="ct"><i class="ri-cloud-line"></i> 云端语音登录</div>
   <div class="cs" id="cloudStatus">Azure 云端自然语音需登录（与词汇真经站同一账号，管理员审批后可用）。</div>
   <input id="cloudEmail" type="email" placeholder="邮箱" autocomplete="email">
   <input id="cloudPass" type="password" placeholder="密码" autocomplete="current-password">
@@ -371,8 +370,8 @@
   <div class="pex" id="pex" title="点击朗读例句"></div>
   <div class="pexzh" id="pexzh"></div>
   <div class="row" data-page-node-id="orilzYXcLymYNehspWsDAM">
-    <button class="btn" onclick="speakWord()" data-page-node-id="tTiCYWDvqwkJs0uzXJK5p1">🔊 发音</button>
-    <button class="btn" id="btnKnown" onclick="toggleKnown()" data-page-node-id="ozdndSBwwSeLokBPljAAh2">✓ 标为已会</button>
+    <button class="btn" onclick="speakWord()" data-page-node-id="tTiCYWDvqwkJs0uzXJK5p1"><i class="ri-volume-up-line"></i> 发音</button>
+    <button class="btn" id="btnKnown" onclick="toggleKnown()" data-page-node-id="ozdndSBwwSeLokBPljAAh2"><i class="ri-check-line"></i> 标为已会</button>
   </div>
 </div>
 
@@ -389,6 +388,8 @@ let cur = null; // 当前弹窗词
 
 /* ============ 构建正文 ============ */
 const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const SENT_RAW = [];
+SECTIONS.forEach(s => s.paragraphs.forEach(p => p.forEach(t => SENT_RAW.push(t))));
 function glossPhon(k) {
   const info = (typeof VOCAB !== 'undefined' && VOCAB[k]) || null;
   if (!info) return '';
@@ -443,8 +444,9 @@ function render() {
   document.querySelectorAll('.sec').forEach((sec, ai) => {
     sec.querySelectorAll('.sent').forEach(() => artOfSent.push(ai));
   });
+  _paintIdx = -2; _inTextSet = null;
   buildAnchors();
-  buildDots(0);
+  buildSeek(0);
 }
 
 /* ============ 左侧锚点 + 播放条句子圆点 ============ */
@@ -485,15 +487,10 @@ window.addEventListener('scroll', () => {
   });
 }, { passive: true });
 /* 音乐式进度条：每句一格阻尼，拖动吸附到最近句子 */
-let seekStart = 0, seekEnd = 0, seeking = false;
+let seekStart = 0, seekEnd = 0, seeking = false, _ticks = [];
 function sentRaw(i) {
-  // 从数据层取英文原文（避免读 DOM 受词义污染）
-  let n = 0;
-  for (const s of SECTIONS) for (const p of s.paragraphs) for (const t of p) {
-    if (n === i) return t;
-    n++;
-  }
-  return '';
+  // 查预计算表（O(1)，避免逐句扫描全文）
+  return SENT_RAW[i] || '';
 }
 function buildSeek(ai) {
   dotsArt = ai;
@@ -510,7 +507,8 @@ function buildSeek(ai) {
     html += `<button class="tick" data-i="${i}" style="left:${pct}%" title="${escAttr(plainEN(sentRaw(i)))}"></button>`;
   }
   ticks.innerHTML = html;
-  ticks.querySelectorAll('.tick').forEach(t => {
+  _ticks = [...ticks.querySelectorAll('.tick')];
+  _ticks.forEach(t => {
     t.onclick = e => { e.stopPropagation(); playFrom(parseInt(t.dataset.i, 10)); };
     t.onmouseenter = () => showSeekTip(parseInt(t.dataset.i, 10), parseFloat(t.style.left));
   });
@@ -524,7 +522,7 @@ function paintSeek() {
   const knob = document.getElementById('seekKnob');
   if (fill) fill.style.width = pct + '%';
   if (knob) knob.style.left = pct + '%';
-  document.querySelectorAll('#seekTicks .tick').forEach(t => {
+  _ticks.forEach(t => {
     const i = parseInt(t.dataset.i, 10);
     t.classList.toggle('cur', i === idx);
     t.classList.toggle('done', i < idx);
@@ -547,7 +545,7 @@ let pendingSeek = null;
 function paintSeekPreview(e) {
   const track = document.getElementById('seekTrack');
   const r = track.getBoundingClientRect();
-  const x = (e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX) - r.left;
+  const x = e.clientX - r.left;
   const pct = Math.min(100, Math.max(0, (x / r.width) * 100)) + '%';
   const fill = document.getElementById('seekFill');
   const knob = document.getElementById('seekKnob');
@@ -579,16 +577,13 @@ function bindSeek() {
 function seekToEvent(e) {
   const track = document.getElementById('seekTrack');
   const r = track.getBoundingClientRect();
-  const x = (e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX) - r.left;
+  const x = e.clientX - r.left;
   const ratio = Math.min(1, Math.max(0, x / r.width));
   const n = Math.max(1, seekEnd - seekStart);
   const i = seekStart + Math.round(ratio * (n - 1)); // 阻尼：吸附到最近句子
   showSeekTip(i, ratio * 100);
   return i;
 }
-// 保持旧函数名兼容（playFrom/paint 沿用）
-function buildDots(ai) { buildSeek(ai); }
-function paintDots() { paintSeek(); }
 
 /* ============ 语音（Edge/系统语音全列出） ============ */
 let V = {};
@@ -642,7 +637,7 @@ const CLOUD = {
     const el = document.getElementById('cloudStatus');
     if (el) el.textContent = t;
     const b = document.getElementById('btnCloud');
-    if (b) b.textContent = this._userMail ? '☁️ ' + this._userMail.split('@')[0] : (this._on ? '☁️ 已连接' : '☁️ 未登录');
+    if (b) b.innerHTML = '<i class="ri-cloud-line"></i> ' + (this._userMail ? this._userMail.split('@')[0] : (this._on ? '已连接' : '未登录'));
     const lo = document.getElementById('btnLogout');
     if (lo) lo.style.display = this._userMail ? '' : 'none';
   },
@@ -795,6 +790,8 @@ function toggleCloudPop() {
   p.style.display = p.style.display === 'block' ? 'none' : 'block';
 }
 async function cloudLogin() {
+  if (cloudLogin._busy) return; cloudLogin._busy = true;
+  try {
   const c = CLOUD.client();
   if (!c) { alert('网络不可用，加载不出登录组件。'); return; }
   const em = document.getElementById('cloudEmail').value.trim();
@@ -805,8 +802,11 @@ async function cloudLogin() {
   CLOUD._userMail = em;
   await CLOUD.checkStatus();
   toggleCloudPop();
+  } finally { cloudLogin._busy = false; }
 }
 async function cloudSignup() {
+  if (cloudSignup._busy) return; cloudSignup._busy = true;
+  try {
   const c = CLOUD.client();
   if (!c) { alert('网络不可用，加载不出登录组件。'); return; }
   const em = document.getElementById('cloudEmail').value.trim();
@@ -815,6 +815,7 @@ async function cloudSignup() {
   const { error } = await c.auth.signUp({ email: em, password: pw });
   if (error) { alert('注册失败：' + error.message); return; }
   alert('注册成功，请等待管理员审批后再使用云端语音（审批前可用本地语音）。');
+  } finally { cloudSignup._busy = false; }
 }
 async function cloudLogout() {
   try { await CLOUD.client().auth.signOut(); } catch (e) {}
@@ -869,6 +870,12 @@ function balance(list) {
 function goodVoice() { try { return localStorage.getItem('ielts-good-voice') || ''; } catch (e) { return ''; } }
 function rememberGoodVoice(uri) { try { if (uri) localStorage.setItem('ielts-good-voice', uri); } catch (e) {} }
 function loadVoices() {
+  try {
+    const _sig = (CLOUD._on ? '1' : '0') + '|' + accent + '|' + selVoiceURI + '|'
+      + speechSynthesis.getVoices().map(v => v.voiceURI).join(',');
+    if (loadVoices._sig === _sig && V.groups) return; // 列表无变化不重建（防打断下拉选择）
+    loadVoices._sig = _sig;
+  } catch (e) {}
   const all = enVoices();
   const pool = all.length ? all : (HAS_SPEECH ? speechSynthesis.getVoices() : []);
   const sel0 = document.getElementById('voiceSel');
@@ -908,14 +915,14 @@ function loadVoices() {
     `<optgroup label="${g.label}">` + g.list.map(v =>
       `<option value="${esc(v.voiceURI)}" title="${esc(v.name)} — ${esc(v.lang)}">${esc(voiceLabel(v))}</option>`).join('')
     + '</optgroup>').join('');
-  const ghost = selVoiceURI && selVoiceURI !== 'auto' && !flat.some(v => v.voiceURI === selVoiceURI)
+  const ghost = selVoiceURI && !flat.some(v => v.voiceURI === selVoiceURI)
     ? `<option value="${esc(selVoiceURI)}">${isCloudURI(selVoiceURI) ? '上次云音色（未登录）' : '上次音色（暂时不可用）'}</option>` : '';
   sel.innerHTML = ghost + sel.innerHTML;
   let pick = flat.find(v => v.voiceURI === selVoiceURI) || flat.find(v => v.voiceURI === gv) || V[accent] || flat[0];
   // 用户已有明确选择则纹丝不动；只有从未选过才落默认
   if (!selVoiceURI) {
     if (pick) { sel.value = pick.voiceURI; selVoiceURI = pick.voiceURI; }
-  } else if (flat.some(v => v.voiceURI === selVoiceURI) || selVoiceURI === 'auto' || isCloudURI(selVoiceURI)) {
+  } else if (flat.some(v => v.voiceURI === selVoiceURI) || isCloudURI(selVoiceURI)) {
     sel.value = selVoiceURI;
   } else {
     sel.value = selVoiceURI; // 幽灵选项保持选中态
@@ -929,11 +936,11 @@ function loadVoices() {
     }
     selVoiceURI = sel.value;
     try { localStorage.setItem('ielts-voice', selVoiceURI); } catch(e) {}
-    speak(isCloudURI(selVoiceURI) ? 'Hello! Cloud voice ready.' : 'Hello! Let us learn English together.');
+    speakAside(isCloudURI(selVoiceURI) ? 'Hello! Cloud voice ready.' : 'Hello! Let us learn English together.');
   };
   try { if (typeof CLOUD !== 'undefined' && CLOUD._on) {
     const cb = document.getElementById('btnCloud');
-    if (cb && !CLOUD._userMail) cb.textContent = '☁️ 已连接';
+    if (cb && !CLOUD._userMail) cb.innerHTML = '<i class="ri-cloud-line"></i> 已连接';
   } } catch (e) {}
   const ab = document.getElementById('btnAccent');
   if (ab) { ab.textContent = accent === 'en-GB' ? '🇬🇧 英式' : '🇺🇸 美式'; ab.classList.add('active'); }
@@ -960,12 +967,12 @@ function resolveVoice(exclude) {
       || vs.find(x => x.lang === accent)
       || vs.find(x => /^en/i.test(x.lang))
       || null;
-    if (v && (v.voiceURI === exclude || v.voiceURI === 'auto')) v = null;
+    if (v && v.voiceURI === exclude) v = null;
     if (!v) {
       v = flat.map(k => vs.includes(k) ? k : vs.find(x => x.name === k.name && x.lang === k.lang))
-        .find(x => x && x.voiceURI !== exclude && x.voiceURI !== 'auto'
+        .find(x => x && x.voiceURI !== exclude
           && (x.lang === accent || x.lang.startsWith(accent.split('-')[0])))
-        || vs.find(x => x.voiceURI !== exclude && x.voiceURI !== 'auto' && /^en/i.test(x.lang)) || null;
+        || vs.find(x => x.voiceURI !== exclude && /^en/i.test(x.lang)) || null;
     }
     // 注意：这里只返回最优解，绝不改写 selVoiceURI（用户选择神圣不可侵犯）
   }
@@ -991,7 +998,6 @@ function speak(text, cb, opts, tokenIn) {
   const immediate = !!opts.immediate;
   let plain = !!opts.plain;
   const exclude = opts.exclude || '';
-  if (!HAS_SPEECH) { if (cb) cb(); return; }
   text = (text || '').trim();
   if (!text) { if (cb) cb(); return; }
   const my = (tokenIn !== undefined) ? tokenIn : ++speakToken;
@@ -1009,13 +1015,13 @@ function speak(text, cb, opts, tokenIn) {
     }
     if (!speak._nudge || Date.now() - speak._nudge > 15000) {
       speak._nudge = Date.now();
-      toggleCloudPop();
+      const cp0 = document.getElementById('cloudPop');
+      if (cp0 && cp0.style.display !== 'block') cp0.style.display = 'block';
       alert('☁ 云端语音需先登录（与词汇真经站同一账号）。本次先用本地语音朗读。');
     }
     plain = true;
   }
-  // 确保上一次合成已取消，防止多 utterance 叠加导致双声
-  try { speechSynthesis.cancel(); } catch (e) {}
+  if (!HAS_SPEECH) { if (cb) cb(); return; } // 无本地引擎仍可走上面云端分支
   const go = () => {
     if (my !== speakToken) return;
     if (speechInProgress) { try { speechSynthesis.cancel(); } catch (e) {} speechInProgress = false; }
@@ -1023,8 +1029,8 @@ function speak(text, cb, opts, tokenIn) {
     try { if (speechSynthesis.paused) { speechSynthesis.resume(); if (!(speechSynthesis.speaking || speechSynthesis.pending)) { try { speechSynthesis.cancel(); } catch (e) {} } } } catch (e) {}
     const u = new SpeechSynthesisUtterance(text);
     u.rate = rate; u.volume = 1;
-    const v = (selVoiceURI === 'auto') ? null : resolveVoice(exclude || undefined);
-    let triedURI = selVoiceURI === 'auto' ? 'auto' : '';
+    const v = resolveVoice(exclude || undefined);
+    let triedURI = '';
     if (v) { u.voice = v; u.lang = v.lang; triedURI = v.voiceURI; }
     else u.lang = accent;
     let started = false, finished = false, wd = null;
@@ -1071,6 +1077,17 @@ function speak(text, cb, opts, tokenIn) {
   if (idle) { go(); return; } // 空闲：同步起播（setTimeout 非手势上下文 Chrome 会静默丢弃）
   setTimeout(go, 150);
 }
+function speakAside(text) {
+  // 旁路发音：连播中点词只duck一下，播完自动回到原位续播；token 守卫防连点旧回调抢跑
+  const wasPlaying = playing, resumeIdx = idx, my = speakToken + 1;
+  if (wasPlaying) {
+    playing = false; speakToken++;
+    try { speechSynthesis.cancel(); } catch (e) {}
+    try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
+    paint();
+  }
+  speak(text, () => { if (my !== speakToken) return; if (wasPlaying) playFrom(resumeIdx); });
+}
 let _AC = null;
 function unlockAudio() {
   try {
@@ -1078,24 +1095,34 @@ function unlockAudio() {
     if (_AC && _AC.state === 'suspended') _AC.resume();
   } catch (e) {}
 }
-window.addEventListener('pointerdown', unlockAudio, { passive: true });
-// 首次手势预热：Chrome 语音列表常延迟到达，点 anything 时刷新一次，避免首播时列表为空
-window.addEventListener('pointerdown', function chromeWarm() {
-  window.removeEventListener('pointerdown', chromeWarm);
-  try { speechSynthesis.getVoices(); loadVoices(); } catch (e) {}
-}, { passive: true });
+let _warmed = false;
+function unlockAudioWrap() {
+  unlockAudio();
+  if (!_warmed) { _warmed = true; try { speechSynthesis.getVoices(); loadVoices(); } catch (e) {} }
+}
+window.addEventListener('pointerdown', unlockAudioWrap, { passive: true });
+// 首次手势顺带预热：Chrome 语音列表常延迟到达，避免首播时列表为空
 function sentText(el) {
   const c = el.cloneNode(true);
   c.querySelectorAll('.gl,.sent-zh').forEach(n => n.remove());
   return c.textContent;
 }
 
+let _paintIdx = -2;
 function paint() {
-  sents.forEach((s, i) => s.classList.toggle('playing', i === idx));
-  if (idx >= 0) sents[idx].scrollIntoView({ block: 'center', behavior: 'smooth' });
-  document.getElementById('btnPlay').textContent = playing ? '⏸ 暂停' : '▶ 朗读';
+  if (_paintIdx !== idx) {
+    if (_paintIdx >= 0 && sents[_paintIdx]) sents[_paintIdx].classList.remove('playing');
+    if (idx >= 0 && sents[idx]) sents[idx].classList.add('playing');
+    _paintIdx = idx;
+  }
+  if (idx >= 0 && sents[idx]) {
+    const r = sents[idx].getBoundingClientRect();
+    if (r.top < 0 || r.bottom > innerHeight) sents[idx].scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+  const bp = document.getElementById('btnPlay');
+  if (bp) bp.innerHTML = playing ? '<i class="ri-pause-line"></i> 暂停' : '<i class="ri-play-line"></i> 朗读';
   if (idx >= 0) document.getElementById('segLbl').textContent = `${idx+1} / ${sents.length}`;
-  paintDots();
+  paintSeek();
   if (idx >= 0 && artOfSent[idx] !== undefined) markAnchor(artOfSent[idx]);
 }
 let launchedUpTo = -1; // 本轮已发射到的句子（去重：续播与预取不重复发射）
@@ -1180,8 +1207,8 @@ function setAccent(a) {
   }
   refreshGloss();
   if (playing) playFrom(idx); // 换音色立即在新队列生效
-  else if (cur) speak(cur);
-  else speak(a === 'en-GB' ? 'British accent.' : 'American accent.');
+  else if (cur) speakAside(cur);
+  else speakAside(a === 'en-GB' ? 'British accent.' : 'American accent.');
 }
 const RATES = [0.75, 1, 1.25, 1.5];
 function setRate(r) {
@@ -1189,7 +1216,7 @@ function setRate(r) {
   document.querySelectorAll('[data-rate]').forEach(b =>
     b.classList.toggle('active', parseFloat(b.dataset.rate) === r));
   const c = document.getElementById('rateCycle');
-  if (c) c.textContent = `倍速 ${r}x`;
+  if (c) c.innerHTML = `<i class="ri-time-s-line"></i> ${r}x`;
 }
 function cycleRate() {
   setRate(RATES[(RATES.indexOf(rate) + 1) % RATES.length]);
@@ -1201,6 +1228,8 @@ document.addEventListener('click', e => {
   const t = e.target.closest('.w');
   if (t) { openPop(t); return; }
   if (!e.target.closest('.pop') && !e.target.closest('aside')) pop.style.display = 'none';
+  const _cp = document.getElementById('cloudPop');
+  if (_cp && _cp.style.display === 'block' && !e.target.closest('.cpop') && !e.target.closest('#btnCloud') && !e.target.closest('#voiceSel')) _cp.style.display = 'none';
   /* 移动端：点遮罩关词库抽屉 */
   if (e.target.closest('.layout') && e.target === document.querySelector('.layout.panel-open')) {
     togglePanel();
@@ -1220,7 +1249,7 @@ function openPop(el) {
     pex.style.display = ''; pexzh.style.display = '';
     pex.textContent = '📖 ' + info.ex;
     pexzh.textContent = info.exZh || '';
-    pex.onclick = () => speak(info.ex);
+    pex.onclick = () => speakAside(info.ex);
   } else { pex.style.display = 'none'; pexzh.style.display = 'none'; }
   updKnownBtn();
   const r = el.getBoundingClientRect();
@@ -1230,9 +1259,9 @@ function openPop(el) {
   if (x + pw > scrollX + innerWidth) x = scrollX + innerWidth - pw - 16;
   if (y + ph > scrollY + innerHeight) y = r.top + scrollY - ph - 8;
   pop.style.left = Math.max(8, x) + 'px'; pop.style.top = Math.max(8, y) + 'px';
-  speak(el.dataset.disp);
+  speakAside(el.dataset.disp);
 }
-function speakWord() { if (cur) speak(VOCAB[cur] ? cur : cur); }
+function speakWord() { if (cur) speakAside(cur); }
 function toggleKnown() {
   if (!cur) return;
   known.has(cur) ? known.delete(cur) : known.add(cur);
@@ -1241,20 +1270,20 @@ function toggleKnown() {
   updKnownBtn();
 }
 function updKnownBtn() {
-  document.getElementById('btnKnown').textContent = known.has(cur) ? '↩ 取消已会' : '✓ 标为已会';
+  document.getElementById('btnKnown').innerHTML = known.has(cur) ? '<i class="ri-arrow-go-back-line"></i> 取消已会' : '<i class="ri-check-line"></i> 标为已会';
 }
 
 /* ============ 翻译开关（章译+句译+段译） ============ */
 document.getElementById('btnZh').onclick = function() {
   document.body.classList.toggle('hide-zh');
   const hidden = document.body.classList.contains('hide-zh');
-  this.textContent = hidden ? '显示' : '隐藏';
+  this.innerHTML = hidden ? '<i class="ri-eye-off-line"></i> 显示' : '<i class="ri-eye-line"></i> 隐藏';
   this.classList.toggle('active', !hidden);
 };
 document.getElementById('btnGloss').onclick = function() {
   document.body.classList.toggle('hide-gl');
   const hidden = document.body.classList.contains('hide-gl');
-  this.textContent = hidden ? '显示' : '隐藏';
+  this.innerHTML = hidden ? '<i class="ri-eye-off-line"></i> 显示' : '<i class="ri-eye-line"></i> 隐藏';
   this.classList.toggle('active', !hidden);
 };
 
@@ -1264,18 +1293,20 @@ function togglePanel() {
   const mobile = window.matchMedia('(max-width: 900px)').matches;
   if (mobile) {
     const open = layout.classList.toggle('panel-open');
-    document.querySelector('[onclick="togglePanel()"]').textContent = open ? '✕ 关闭' : '📚 词库';
+    document.querySelector('[onclick="togglePanel()"]').innerHTML = open ? '<i class="ri-close-line"></i> 关闭' : '<i class="ri-book-line"></i> 词库';
   } else {
     layout.classList.toggle('no-panel');
     const hidden = layout.classList.contains('no-panel');
-    document.querySelector('[onclick="togglePanel()"]').textContent = hidden ? '📚 显示词库' : '📚 词库';
+    document.querySelector('[onclick="togglePanel()"]').innerHTML = hidden ? '<i class="ri-book-line"></i> 显示词库' : '<i class="ri-book-line"></i> 词库';
   }
 }
 const escAttr = s => s.replace(/&/g,'&amp;').replace(/'/g, "&#39;").replace(/"/g, '&quot;');
+let _inTextSet = null, _vocabCount = 0;
 function renderList() {
   const q = document.getElementById('q').value.trim().toLowerCase();
   const list = document.getElementById('vlist');
-  const inTextSet = new Set([...document.querySelectorAll('.w')].map(el => el.dataset.w));
+  if (!_inTextSet) _inTextSet = new Set([...document.querySelectorAll('.w')].map(el => el.dataset.w));
+  const inTextSet = _inTextSet;
   let html = '', cnt = 0;
   for (const ch of CHAPTERS) {
     const items = [];
@@ -1295,10 +1326,11 @@ function renderList() {
   list.querySelectorAll('.item').forEach(el => {
     el.onclick = () => jumpWord(el.dataset.k, el.dataset.d);
   });
-  document.getElementById('vcnt').textContent = Object.keys(VOCAB).length + ' 词';
+  if (!_vocabCount && typeof VOCAB !== 'undefined') _vocabCount = Object.keys(VOCAB).length;
+  document.getElementById('vcnt').textContent = _vocabCount + ' 词';
 }
 function jumpWord(k, disp) {
-  speak(disp);
+  speakAside(disp);
   const el = document.querySelector(`.w[data-w="${CSS.escape(k)}"]`);
   if (el) { el.scrollIntoView({ block: 'center', behavior: 'smooth' });
     const sent = el.closest('.sent');
@@ -1313,7 +1345,7 @@ document.addEventListener('keydown', e => {
   if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
   if (e.key === 'ArrowRight') step(1);
   if (e.key === 'ArrowLeft') step(-1);
-  if (e.key === 'Escape') pop.style.display = 'none';
+  if (e.key === 'Escape') { pop.style.display = 'none'; const cp = document.getElementById('cloudPop'); if (cp) cp.style.display = 'none'; }
 });
 
 render(); renderList(); loadVoices(); bindSeek();
@@ -1328,7 +1360,11 @@ function mobileBtnIcons() { // 移动端播放条：确保图标在窄屏下正�
   });
 }
 mobileBtnIcons();
-window.addEventListener('resize', mobileBtnIcons);
+let _rzT = false;
+window.addEventListener('resize', () => {
+  if (_rzT) return; _rzT = true;
+  requestAnimationFrame(() => { _rzT = false; mobileBtnIcons(); });
+});
 if (typeof CLOUD !== 'undefined') CLOUD.boot();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => loadVoices());
 setTimeout(loadVoices, 500);
