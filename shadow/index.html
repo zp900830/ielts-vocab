@@ -243,7 +243,6 @@
     #btnGloss { display: none; }          /* 词义开关并入"全文"行内逻辑，移动端默认显示 */
     .btn { padding: 6px 10px; font-size: 12px; min-height: 30px; white-space: nowrap; flex: none; }
     .voice-sel { max-width: 150px; font-size: 12px; }
-    #btnVoiceTest { display: none; }      /* 自检入口收进播放条长按场景，顶栏去挤 */
     #btnCloud { flex: none; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
     /* 布局：正文全宽，词库改抽屉不占流式空间 */
     .layout { display: block; padding: 14px 12px calc(120px + env(safe-area-inset-bottom, 0px)); }
@@ -988,20 +987,6 @@ function dlog() {
     el.scrollTop = el.scrollHeight;
   } catch (e) {}
 }
-function compatMode() { try { return localStorage.getItem('ielts-compat') === '1'; } catch (e) { return false; } }
-function toggleCompat() {
-  try {
-    const on = compatMode() ? '' : '1';
-    if (on) localStorage.setItem('ielts-compat', '1');
-    else localStorage.removeItem('ielts-compat');
-  } catch (e) {}
-  initCompat();
-  alert(compatMode() ? '已切兼容模式：回到第一版直连播法（点 ▶ 试试）。' : '已退出兼容模式。');
-}
-function initCompat() {
-  const b = document.getElementById('btnCompat');
-  if (b) b.classList.toggle('active', compatMode());
-}
 function speak(text, cb, opts, tokenIn) {
   opts = opts || {};
   const immediate = !!opts.immediate;
@@ -1011,23 +996,6 @@ function speak(text, cb, opts, tokenIn) {
   text = (text || '').trim();
   if (!text) { if (cb) cb(); return; }
   const my = (tokenIn !== undefined) ? tokenIn : ++speakToken;
-  if (compatMode()) {
-    // 第一版播法原样：cancel 直播，不延迟、不排队、不管错（ rapid连点可能重叠，不断链即可 ）
-    dlog('speak[compat]', (text || '').slice(0, 24));
-    try { speechSynthesis.cancel(); } catch (e) {}
-    const u0 = new SpeechSynthesisUtterance((text || '').trim());
-    u0.lang = accent; u0.rate = rate;
-    try {
-      const vs0 = speechSynthesis.getVoices();
-      const pick = (V[accent] && vs0.includes(V[accent])) ? V[accent]
-        : vs0.find(x => x.lang === accent) || null;
-      if (pick) { u0.voice = pick; u0.lang = pick.lang; }
-    } catch (e) {}
-    if (cb) { u0.onend = cb; u0.onerror = () => {}; }
-    u0.onstart = () => dlog('onstart[compat]');
-    try { speechSynthesis.speak(u0); } catch (e) { if (cb) cb(); }
-    return;
-  }
   dlog('speak', 'plain=' + (!!opts && !!opts.plain), 'imm=' + (!!opts && !!opts.immediate),
     'tok=' + my, (text || '').slice(0, 24));
   // ☁ 云端分支（登录后）：走 Audio；失败则排除该云音色降级本地
@@ -1104,60 +1072,6 @@ function speak(text, cb, opts, tokenIn) {
   if (idle) { go(); return; } // 空闲：同步起播（setTimeout 非手势上下文 Chrome 会静默丢弃）
   setTimeout(go, 150);
 }
-async function voiceSelfTest() {
-  if (!HAS_SPEECH) { alert('当前环境不支持语音合成'); return; }
-  const btn = document.getElementById('btnVoiceTest');
-  if (btn) { btn.disabled = true; btn.textContent = '检测中…'; }
-  speakToken++;
-  try { speechSynthesis.cancel(); } catch (e) {}
-  try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
-  playing = false; paint();
-  const vs = speechSynthesis.getVoices();
-  const flat = [...(V.groups || []).flatMap(g => g.list.map(v => ({ v, g: g.label })))].slice(0, 15);
-  const testOne = vv => new Promise(res => {
-    let done = false;
-    const to = setTimeout(() => {
-      if (!done) { done = true; try { speechSynthesis.cancel(); } catch (e) {} res(false); }
-    }, 2500);
-    try {
-      const u = new SpeechSynthesisUtterance('Hello');
-      if (vv.voiceURI !== 'auto') {
-        const live = vs.find(x => x.voiceURI === vv.voiceURI) || (vs.includes(vv) ? vv : null);
-        if (!live) { clearTimeout(to); res(false); return; }
-        u.voice = live; u.lang = live.lang;
-      } else { u.lang = accent; }
-      u.volume = 1; u.rate = 1;
-      u.onstart = u.onend = () => { if (!done) { done = true; clearTimeout(to); res(true); } };
-      u.onerror = ev => {
-        if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) { dlog('onerror-ignored', ev.error); return; }
-        dlog('onerror', ev ? ev.error : '?');
-        if (!done) { done = true; clearTimeout(to); res(false); }
-      };
-      speechSynthesis.cancel();
-      speechSynthesis.speak(u);
-    } catch (e) { clearTimeout(to); res(false); }
-  });
-  const lines = [];
-  let firstOK = null;
-  for (const { v, g } of flat) {
-    const ok = await testOne(v);
-    lines.push((ok ? '✅ ' : '❌ ') + voiceLabel(v) + '〔' + g + '〕');
-    if (ok && !firstOK) firstOK = v;
-  }
-  try { speechSynthesis.cancel(); } catch (e) {}
-  if (firstOK) {
-    selVoiceURI = firstOK.voiceURI;
-    try { localStorage.setItem('ielts-voice', selVoiceURI); } catch (e) {}
-    rememberGoodVoice(selVoiceURI);
-    const sel = document.getElementById('voiceSel');
-    if (sel) sel.value = selVoiceURI;
-    refreshGloss();
-    alert(lines.join('\n') + '\n\n已自动选用首个能出声的音色。');
-  } else {
-    alert(lines.join('\n') + '\n\n全部无声：' + '若本机音色也无声，请按序查：①系统设置→声音→输出设备（是否被切到离线蓝牙/显示器，音量是否划灰）②Chrome标签页小喇叭是否被静音 ③重启Chrome再试 ④直接用Edge打开本站。' + '\n\n另一条路：登录 ☁ 云端语音（走服务器音频，不经过浏览器语音引擎，可绕开此问题）。');
-  }
-  if (btn) { btn.disabled = false; btn.textContent = '自检'; }
-}
 let _AC = null;
 function unlockAudio() {
   try {
@@ -1203,10 +1117,8 @@ function launch(i, my, immediate) {
   speak(sentText(sents[i]), () => {
     if (!playing || my !== speakToken) return;
     idx = i; paint(); syncSeek(i);
-    if (!compatMode()) {
-      launch(i + 1, my, true);
-      launch(i + 2, my, true); // 永远多备一句（去重靠 launchedUpTo）
-    }
+    launch(i + 1, my, true);
+    launch(i + 2, my, true); // 永远多备一句（去重靠 launchedUpTo）
   }, { immediate }, my);
 }
 function playFrom(i) {
@@ -1228,7 +1140,7 @@ function playFrom(i) {
     setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 250);
   } else {
     launch(i, my, true);  // 空闲：手势上下文内同步发射，杜绝 setTimeout 丢失用户激活
-    if (!compatMode()) setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 200);
+    setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 200);
   }
 }
 function togglePlay() {
@@ -1418,7 +1330,6 @@ function mobileBtnIcons() { // 移动端播放条：确保图标在窄屏下正�
 mobileBtnIcons();
 window.addEventListener('resize', mobileBtnIcons);
 if (typeof CLOUD !== 'undefined') CLOUD.boot();
-initCompat();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => loadVoices());
 setTimeout(loadVoices, 500);
 </script>
