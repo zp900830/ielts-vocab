@@ -566,16 +566,58 @@ function loadVoices() {
 }
 try { if (HAS_SPEECH && 'onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices; } catch (e) {}
 
-function speak(text, cb) {
+let errStreak = 0;
+function resolveVoice() {
+  // 每次用最新 voices 列表解析，旧 voice 对象/URI 失效则自动降级
+  if (!HAS_SPEECH) return null;
+  const vs = speechSynthesis.getVoices();
+  let v = vs.find(x => x.voiceURI === selVoiceURI) || null;
+  if (!v) {
+    const keep = (V[accent + ':list'] || []).map(k =>
+      typeof k === 'string' ? vs.find(x => x.voiceURI === k) : vs.includes(k) ? k : null);
+    v = keep.find(Boolean)
+      || (V[accent] && (vs.includes(V[accent]) ? V[accent]
+        : vs.find(x => x.name === V[accent].name && x.lang === V[accent].lang)))
+      || vs.find(x => x.lang === accent)
+      || vs.find(x => /^en/i.test(x.lang))
+      || null;
+    if (v) {
+      selVoiceURI = v.voiceURI;
+      try { localStorage.setItem('ielts-voice', selVoiceURI); } catch (e) {}
+      const sel = document.getElementById('voiceSel');
+      if (sel) sel.value = selVoiceURI;
+    } else { selVoiceURI = ''; }
+  }
+  return v;
+}
+function speak(text, cb, plain) {
   if (!HAS_SPEECH) { if (cb) cb(); return; }
+  text = (text || '').trim();
+  if (!text) { if (cb) cb(); return; }
   try { speechSynthesis.cancel(); } catch (e) { if (cb) cb(); return; }
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = accent; u.rate = rate;
-  const vs = speechSynthesis.getVoices();
-  const chosen = vs.find(v => v.voiceURI === selVoiceURI) || V[accent];
-  if (chosen) { u.voice = chosen; u.lang = chosen.lang; }
-  if (cb) { u.onend = cb; u.onerror = cb; }
-  speechSynthesis.speak(u);
+  u.rate = rate;
+  if (!plain) {
+    const v = resolveVoice();
+    if (v) { u.voice = v; u.lang = v.lang; }
+    else u.lang = accent;
+  } else { u.lang = accent; }
+  if (cb) {
+    u.onend = () => { errStreak = 0; cb(); };
+    u.onerror = ev => {
+      // cancel/interrupted 是主动打断（切句/暂停），绝不能当“播完”推进，否则多链互 cancel 疯转
+      if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) return;
+      if (!plain) { speak(text, cb, true); return; } // 去掉指定音色用默认再试一次
+      errStreak++;
+      if (errStreak >= 3) {
+        errStreak = 0; playing = false; paint();
+        alert('语音播不出来：Edge 请点地址栏左侧“朗读/声音”权限，或在发音下拉里换一个 Natural 语音。');
+        return;
+      }
+      cb();
+    };
+  }
+  try { speechSynthesis.speak(u); } catch (e) { if (cb) cb(); }
 }
 function sentText(el) {
   const c = el.cloneNode(true);
