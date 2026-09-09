@@ -1043,8 +1043,11 @@ function speak(text, cb, opts, tokenIn) {
     }
     plain = true;
   }
+  // 确保上一次合成已取消，防止多 utterance 叠加导致双声
+  try { speechSynthesis.cancel(); } catch (e) {}
   const go = () => {
     if (my !== speakToken) return;
+    try { speechSynthesis.cancel(); } catch (e) {}
     try { if (speechSynthesis.paused) { speechSynthesis.resume(); if (!(speechSynthesis.speaking || speechSynthesis.pending)) { try { speechSynthesis.cancel(); } catch (e) {} } } } catch (e) {}
     const u = new SpeechSynthesisUtterance(text);
     u.rate = rate; u.volume = 1;
