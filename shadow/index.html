@@ -225,16 +225,17 @@
       background: var(--glass-strong); -webkit-backdrop-filter: blur(18px) saturate(160%);
       backdrop-filter: blur(18px) saturate(160%); border-bottom: 1px solid var(--border); }
     #anchors::-webkit-scrollbar { display: none; }
-    #anchors .adot { width: auto; height: auto; border-radius: 999px; padding: 5px 12px 5px 10px;
-      background: var(--glass); border: 1px solid var(--border); display: flex; align-items: center;
-      gap: 6px; flex: none; }
-    #anchors .adot::before { content: ""; width: 8px; height: 8px; border-radius: 50%;
+    #anchors .adot { width: auto; height: auto; border-radius: 999px; padding: 3px 8px 3px 7px;
+      background: transparent; border: none; display: flex; align-items: center;
+      gap: 5px; flex: none; }
+    #anchors .adot::before { content: ""; width: 6px; height: 6px; border-radius: 50%;
       background: #b9d4c7; flex: none; }
     #anchors .adot:hover { background: var(--glass); transform: none; }
-    #anchors .adot.on { background: var(--accent-soft); border-color: var(--accent-bright); transform: none; }
+    #anchors .adot.on { background: var(--accent-soft); transform: none; }
+    #anchors .adot.on .atip { color: var(--accent); font-weight: 700; }
     #anchors .adot.on::before { background: var(--accent); }
     #anchors .adot .atip { display: block; position: static; transform: none; background: none;
-      border: none; box-shadow: none; padding: 0; font-size: 12px; white-space: nowrap; color: var(--text); }
+      border: none; box-shadow: none; padding: 0; font-size: 11px; white-space: nowrap; color: var(--muted); }
   }
   #dbg { position: fixed; left: 8px; bottom: 8px; z-index: 999; width: min(480px, 90vw);
     max-height: 30vh; overflow-y: auto; background: rgba(20,20,20,.92); color: #7dfd9a;
@@ -349,7 +350,7 @@
     .audiobar .btn.play { font-size: 12px; padding: 4px 13px; flex: none; }
     .audiobar .btn::after { display: none; }
     #rateCycle { display: inline-block; flex: none; }
-    .audiobar .seg { display: none; }
+    .audiobar .seg { display: block; font-size: 11px; padding: 3px 8px; flex: none; white-space: nowrap; }
     .audiobar .btn + .btn { margin-left: 0; } /* 移动端 hit-slop 已关，还原间距 */
     #seekWrap { width: 100%; height: 11px; margin: 0 0 3px; }
     #seekTrack { height: 11px; }
