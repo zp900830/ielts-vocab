@@ -935,8 +935,8 @@ function loadVoices() {
     const cb = document.getElementById('btnCloud');
     if (cb && !CLOUD._userMail) cb.textContent = '☁️ 已连接';
   } } catch (e) {}
-  document.getElementById('btnUK').classList.toggle('active', accent==='en-GB');
-  document.getElementById('btnUS').classList.toggle('active', accent==='en-US');
+  const ab = document.getElementById('btnAccent');
+  if (ab) { ab.textContent = accent === 'en-GB' ? '🇬🇧 英式' : '🇺🇸 美式'; ab.classList.add('active'); }
 }
 try { if (HAS_SPEECH && 'onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices; } catch (e) {}
 
