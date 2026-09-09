@@ -102,14 +102,21 @@
     margin-left: 2px; white-space: nowrap; }
   .w.known + .gl { color: #b07c24; opacity: .7; }
   body.hide-gl .gl { display: none; }
-  /* ============ 底部播放条（对齐参考项目 audiobar） ============ */
+  /* ============ 底部播放条（Liquid Glass 风格） ============ */
   .audiobar { position: fixed; left: 10px; right: 10px; transform: none;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 120;
     display: flex; flex-direction: column; align-items: stretch; gap: 2px;
-    background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(170%);
-    backdrop-filter: blur(22px) saturate(170%);
-    border: 1px solid rgba(255,255,255,.7); border-radius: 22px;
-    padding: 4px 16px 10px; box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,.85); }
+    background: linear-gradient(145deg, rgba(255,255,255,.58), rgba(248,252,250,.16) 42%, rgba(214,232,224,.14));
+    -webkit-backdrop-filter: blur(32px) saturate(190%) brightness(1.02);
+    backdrop-filter: blur(32px) saturate(190%) brightness(1.02);
+    border: 1px solid rgba(255,255,255,.62); border-radius: 22px;
+    padding: 8px 12px 5px;
+    box-shadow: 0 24px 64px rgba(17, 36, 28, .22), 0 6px 20px rgba(17, 36, 28, .08),
+      inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.32); }
+  .audiobar::before { content: ""; position: absolute; left: 12px; right: 12px; top: 6px;
+    height: 42%; border-radius: 18px; pointer-events: none; opacity: .9;
+    background: radial-gradient(160px 28px at 16% 0%, rgba(255,255,255,.55), transparent 72%),
+      linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)); }
   #rateCycle { flex: none; }
   .rate-wrap { position: relative; flex: none; }
   .rate-menu { position: absolute; bottom: calc(100% + 10px); left: 50%;
@@ -126,12 +133,11 @@
     padding: 7px 10px; font-size: 13px; color: var(--text); text-align: center; }
   .rate-menu button:hover { background: var(--accent-soft); }
   .rate-menu button.active { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
-  .ab-row { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; justify-content: center; }
-  .audiobar .btn { min-height: 34px; position: relative; white-space: nowrap; }
-  .audiobar .btn::after { content: ""; position: absolute; inset: -6px -2px; } /* 纵向 hit-slop：触达 40px 不撑大视觉 */
-  .audiobar .btn + .btn { margin-left: 6px; } /* hit-slop 横向延伸的补偿，防止盖住相邻按钮 */
-  .audiobar .btn.play { font-size: 14px; padding: 7px 20px; }
-  .audiobar .seg { min-width: 0; }
+  .ab-row { display: flex; align-items: center; gap: 5px; flex-wrap: nowrap; justify-content: center; }
+  .audiobar .btn { min-height: 26px; padding: 4px 11px; font-size: 12px; position: relative; white-space: nowrap; }
+  .audiobar .btn + .btn { margin-left: 4px; }
+  .audiobar .btn.play { font-size: 13px; padding: 4px 15px; }
+  .audiobar .seg { min-width: 0; align-self: center; flex: none; padding: 3px 8px; font-size: 11px; }
   /* 左侧章节锚点（低调小点） */
   #anchors { position: fixed; left: 8px; top: 50%; transform: translateY(-50%);
     z-index: 110; display: flex; flex-direction: column; gap: 12px; opacity: .55;
@@ -147,38 +153,57 @@
     padding: 4px 10px; border-radius: 8px; font-size: 12px; color: var(--text);
     display: none; box-shadow: var(--shadow); }
   #anchors .adot:hover .atip { display: block; }
-  /* 底部音乐式进度条（每句一阻尼）：桌面端收进播放条右侧，固定宽单行 */
-  #seekWrap { position: absolute; top: 0; left: 14px; right: 14px; height: 26px; }
-  #seekTip { bottom: calc(100% + 2px); }
+  /* 进度线：播放器内部的装饰线（默认极细，hover/触摸才展开），与下方内容留间距 */
+  #seekWrap { position: relative; width: 100%; height: 11px; margin: 0 0 6px; padding: 0; z-index: 6; }
   .audiobar .seg { align-self: center; flex: none; }
-  #seekTip { position: absolute; left: 0; bottom: 100%; transform: translateX(-50%);
+  #seekTip { position: absolute; left: 0; bottom: calc(100% + 8px); transform: translateX(-50%);
     max-width: 92%; background: var(--glass-strong); border: 1px solid var(--border);
     border-radius: 8px; padding: 4px 10px; font-size: 12px; font-family: var(--serif);
     display: none; box-shadow: var(--shadow); white-space: nowrap; overflow: hidden;
     text-overflow: ellipsis; pointer-events: none; z-index: 5; }
-  #seekTrack { position: relative; height: 26px; cursor: pointer; touch-action: none; }
+  #seekTrack { position: relative; height: 11px; cursor: pointer; touch-action: none; }
+  /* 默认 1px 极细线，用系统边框色，装饰感强 */
   #seekRail { position: absolute; left: 0; right: 0; top: 5px; height: 1px;
-    background: var(--border); border-radius: 2px;
-    transition: height .18s ease, top .18s ease, background .18s ease; }
+    background: var(--border);
+    border-radius: 1px; transition: height .18s ease, top .18s ease, background .18s ease; }
   #seekFill { position: absolute; left: 0; top: 5px; height: 1px; width: 0;
-    background: var(--grad); border-radius: 2px;
-    transition: height .18s ease, top .18s ease; }
-  #seekTrack:hover #seekRail, #seekTrack.active #seekRail,
-  #seekTrack:hover #seekFill, #seekTrack.active #seekFill { height: 6px; top: 3px; }
+    background: var(--grad);
+    border-radius: 1px; transition: height .18s ease, top .18s ease;
+    }
+  #seekTrack:hover #seekRail, #seekTrack.active #seekRail { height: 3.5px; top: 3.75px; }
+  #seekTrack:hover #seekFill, #seekTrack.active #seekFill { height: 3.5px; top: 3.75px; }
   #seekTrack:hover #seekRail, #seekTrack.active #seekRail { background: var(--accent-line); }
   #seekTicks { position: absolute; inset: 0; }
-  #seekTicks .tick { position: absolute; top: 2px; width: 8px; height: 8px;
-    border-radius: 50%; background: #b9d4c7; border: none; padding: 0; cursor: pointer;
-    transform: translateX(-50%); transition: transform var(--t-fast), background var(--t-fast); }
-  #seekTicks .tick:hover { background: var(--accent-bright); transform: translateX(-50%) scale(1.5); }
-  #seekTicks .tick.done { background: var(--accent); }
-  #seekTicks .tick.cur { background: var(--coral-deep); transform: translateX(-50%) scale(1.7);
-    box-shadow: 0 0 6px rgba(201,86,74,.6); }
-  #seekKnob { position: absolute; top: -1px; width: 14px; height: 14px; border-radius: 50%;
-    background: #fff; border: 3px solid var(--accent-bright); transform: translate(-50%, -50%) scale(.6);
+  /* 刻度点默认几乎不可见，hover/拖动时再显示 */
+  #seekTicks .tick { position: absolute; top: 4px; width: 3px; height: 3px; opacity: .18;
+    border-radius: 50%; background: rgba(120, 150, 135, .65); border: none; padding: 0;
+    cursor: pointer; transform: translateX(-50%);
+    transition: transform var(--t-fast), background var(--t-fast), opacity .18s ease,
+      width .18s ease, height .18s ease, top .18s ease; }
+  #seekTicks .tick.done { background: rgba(46, 139, 106, .5); }
+  #seekTicks .tick.cur { background: var(--coral-deep); }
+  #seekTrack:hover .tick, #seekTrack.active .tick { opacity: 1; top: 2px; width: 8px; height: 8px;
+    background: #b9d4c7; }
+  #seekTrack:hover .tick:hover, #seekTrack.active .tick:hover { background: var(--accent-bright);
+    transform: translateX(-50%) scale(1.45); }
+  #seekTrack:hover .tick.done, #seekTrack.active .tick.done { background: var(--accent); }
+  #seekTrack:hover .tick.cur, #seekTrack.active .tick.cur { background: var(--coral-deep);
+    transform: translateX(-50%) scale(1.55); box-shadow: 0 0 6px rgba(201,86,74,.55); }
+  /* 触摸设备：刻度点默认即隐显（不打搅 hover 逻辑） */
+  @media (pointer: coarse) {
+    #seekTicks .tick { opacity: .28; }
+    #seekTicks .tick.done { opacity: .55; }
+  }
+  #seekKnob { position: absolute; top: 5.5px; width: 12px; height: 12px; border-radius: 50%;
+    background: #fff; border: 2px solid var(--accent-bright); transform: translate(-50%, -50%) scale(.6);
     box-shadow: var(--shadow); pointer-events: none; opacity: 0;
     transition: opacity .18s ease, transform .18s ease; }
   #seekTrack:hover #seekKnob, #seekTrack.active #seekKnob { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  /* 触摸设备：旋钮默认极小微可见 */
+  @media (pointer: coarse) {
+    #seekKnob { opacity: 1; transform: translate(-50%, -50%) scale(.55); }
+    #seekTrack.active #seekKnob { transform: translate(-50%, -50%) scale(1); }
+  }
   @media (max-width: 900px) { #anchors { display: none; } }
   #dbg { position: fixed; left: 8px; bottom: 8px; z-index: 999; width: min(480px, 90vw);
     max-height: 30vh; overflow-y: auto; background: rgba(20,20,20,.92); color: #7dfd9a;
@@ -288,21 +313,24 @@
     .pop { left: 12px !important; right: 12px; width: auto; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); top: auto !important;
       border-radius: 18px; padding: 14px 14px 12px; }
     .pop .pw { font-size: 20px; }
-    /* 播放条：单行图标化，不再两行大方块 */
-    .audiobar { gap: 2px; padding: 4px 10px 7px; border-radius: 18px;
+    /* 播放条：保持 Liquid Glass，内容紧凑；进度线与操作行分隔 */
+    .audiobar { gap: 2px; padding: 7px 8px 5px; border-radius: 20px;
       bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
     .ab-row { gap: 5px; justify-content: space-between; }
-    .audiobar .btn { font-size: 12px; padding: 6px 9px; min-height: 34px; min-width: 0; flex: none; }
-    .audiobar .btn.play { font-size: 13px; padding: 6px 16px; flex: none; }
+    .audiobar .btn { font-size: 12px; padding: 4px 8px; min-height: 26px; min-width: 0; flex: none; }
+    .audiobar .btn.play { font-size: 12px; padding: 4px 13px; flex: none; }
     .audiobar .btn::after { display: none; }
     #rateCycle { display: inline-block; flex: none; }
     .audiobar .seg { display: none; }
     .audiobar .btn + .btn { margin-left: 0; } /* 移动端 hit-slop 已关，还原间距 */
-    #seekWrap { left: 8px; right: 8px; top: 0; }
-    #seekTrack { height: 26px; }
-    #seekRail, #seekFill { top: 5px; height: 1px; }
-    #seekTicks .tick { top: 2px; }
-    #seekKnob { top: -1px; width: 14px; height: 14px; }
+    #seekWrap { width: 100%; height: 11px; margin: 0 0 6px; }
+    #seekTrack { height: 11px; }
+    #seekRail, #seekFill { top: 5px; }
+    #seekTicks .tick { top: 4px; }
+    #seekKnob { top: 5.5px; }
+    #seekTrack:hover #seekRail, #seekTrack.active #seekRail,
+    #seekTrack:hover #seekFill, #seekTrack.active #seekFill { top: 3.75px; }
+    #seekTrack:hover .tick, #seekTrack.active .tick { top: 2px; }
   }
   /* 超窄屏（≤360px）：播放条进一步收纳 */
   @media (max-width: 360px) {
