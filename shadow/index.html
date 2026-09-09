@@ -60,7 +60,9 @@
   .btn.active { background: var(--accent-soft); border-color: var(--accent-bright);
     color: var(--accent); font-weight: 600; }
   .btn.play { border: none; background: var(--grad); color: #fff; font-weight: 600;
-    font-size: 15px; padding: 7px 22px; box-shadow: var(--grad-shadow); }
+    font-size: 15px; padding: 7px 22px; box-shadow: var(--grad-shadow);
+    transition: filter var(--t-fast), transform .12s ease; }
+  .btn.play:active { transform: scale(.95); }
   .btn.play:hover { filter: brightness(1.05); background: var(--grad); }
   .seg { color: var(--muted); font-size: 12px; min-width: 76px; text-align: center;
     background: var(--accent-soft); border-radius: 999px; padding: 4px 10px; font-weight: 600; }
@@ -106,8 +108,8 @@
     display: flex; flex-direction: column; align-items: stretch; gap: 2px;
     background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(170%);
     backdrop-filter: blur(22px) saturate(170%);
-    border: 1px solid rgba(255,255,255,.65); border-radius: 20px;
-    padding: 6px 14px 8px; box-shadow: var(--shadow-lg); }
+    border: 1px solid rgba(255,255,255,.7); border-radius: 22px;
+    padding: 8px 16px 10px; box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,.85); }
   .ab-row { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; justify-content: center; }
   .audiobar .btn { min-height: 34px; position: relative; white-space: nowrap; }
   .audiobar .btn::after { content: ""; position: absolute; inset: -6px -2px; } /* 纵向 hit-slop：触达 40px 不撑大视觉 */
@@ -141,10 +143,15 @@
     display: none; box-shadow: var(--shadow); white-space: nowrap; overflow: hidden;
     text-overflow: ellipsis; pointer-events: none; z-index: 5; }
   #seekTrack { position: relative; height: 26px; cursor: pointer; touch-action: none; }
-  #seekRail { position: absolute; left: 0; right: 0; top: 11px; height: 4px;
-    background: var(--border); border-radius: 2px; }
-  #seekFill { position: absolute; left: 0; top: 11px; height: 4px; width: 0;
-    background: var(--grad); border-radius: 2px; }
+  #seekRail { position: absolute; left: 0; right: 0; top: 11.5px; height: 3px;
+    background: var(--border); border-radius: 2px;
+    transition: height .18s ease, top .18s ease, background .18s ease; }
+  #seekFill { position: absolute; left: 0; top: 11.5px; height: 3px; width: 0;
+    background: var(--grad); border-radius: 2px;
+    transition: height .18s ease, top .18s ease; }
+  #seekTrack:hover #seekRail, #seekTrack.active #seekRail,
+  #seekTrack:hover #seekFill, #seekTrack.active #seekFill { height: 6px; top: 10px; }
+  #seekTrack:hover #seekRail, #seekTrack.active #seekRail { background: var(--accent-line); }
   #seekTicks { position: absolute; inset: 0; }
   #seekTicks .tick { position: absolute; top: 9px; width: 8px; height: 8px;
     border-radius: 50%; background: #b9d4c7; border: none; padding: 0; cursor: pointer;
@@ -154,8 +161,10 @@
   #seekTicks .tick.cur { background: var(--coral-deep); transform: translateX(-50%) scale(1.7);
     box-shadow: 0 0 6px rgba(201,86,74,.6); }
   #seekKnob { position: absolute; top: 13px; width: 14px; height: 14px; border-radius: 50%;
-    background: #fff; border: 3px solid var(--accent-bright); transform: translate(-50%, -50%);
-    box-shadow: var(--shadow); pointer-events: none; }
+    background: #fff; border: 3px solid var(--accent-bright); transform: translate(-50%, -50%) scale(.6);
+    box-shadow: var(--shadow); pointer-events: none; opacity: 0;
+    transition: opacity .18s ease, transform .18s ease; }
+  #seekTrack:hover #seekKnob, #seekTrack.active #seekKnob { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   @media (max-width: 900px) { #anchors { display: none; } }
   #dbg { position: fixed; left: 8px; bottom: 8px; z-index: 999; width: min(480px, 90vw);
     max-height: 30vh; overflow-y: auto; background: rgba(20,20,20,.92); color: #7dfd9a;
@@ -279,7 +288,7 @@
     .audiobar .btn + .btn { margin-left: 0; } /* 移动端 hit-slop 已关，还原间距 */
     #seekWrap { padding: 0 2px; }
     #seekTrack { height: 26px; }
-    #seekRail, #seekFill { top: 11px; }
+    #seekRail, #seekFill { top: 11.5px; height: 3px; }
     #seekTicks .tick { top: 9px; }
     #seekKnob { top: 13px; width: 14px; height: 14px; }
   }
@@ -560,14 +569,14 @@ function bindSeek() {
   track._bound = true;
   const down = e => {
     if (e.target.closest('.tick')) return; // tick 自己处理点击
-    seeking = true; pendingSeek = seekToEvent(e); paintSeekPreview(e);
+    seeking = true; track.classList.add('active'); pendingSeek = seekToEvent(e); paintSeekPreview(e);
   };
   const move = e => {
     if (!seeking) return; e.preventDefault();
     pendingSeek = seekToEvent(e); paintSeekPreview(e);
   };
   const up = () => {
-    if (!seeking) return; seeking = false; hideSeekTip();
+    if (!seeking) return; seeking = false; track.classList.remove('active'); hideSeekTip();
     if (pendingSeek != null) playFrom(pendingSeek);
     pendingSeek = null;
   };
