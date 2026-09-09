@@ -93,12 +93,13 @@
   .sent { border-radius: 6px; padding: 1px 4px; transition: background .2s; cursor: pointer; }
   .sent:hover { background: var(--accent-soft); }
   .sent.playing { background: var(--hl); box-shadow: inset 0 -2px 0 var(--hl-line); }
-  .w { color: var(--coral-deep); font-weight: 700; cursor: pointer;
-    border-bottom: 1.5px solid #f2c9c2; padding: 0 1px; border-radius: 3px; }
+  .w { color: var(--accent); font-weight: 700; cursor: pointer;
+    border-bottom: 1.5px solid var(--hl-line); padding: 0 1px; border-radius: 3px; }
   .w:hover { background: var(--accent-soft); }
-  .w.known { color: var(--accent); border-bottom-color: var(--accent-line); }
-  .gl { font-family: var(--sans); font-size: 12px; font-weight: 400; color: #b07c24;
+  .w.known { color: #8fae9f; border-bottom-color: var(--border); }
+  .gl { font-family: var(--sans); font-size: 12px; font-weight: 400; color: #8f8468;
     margin-left: 2px; white-space: nowrap; }
+  .gl-p { color: #2b9d8f; }
   .w.known + .gl { color: #b07c24; opacity: .7; }
   body.hide-gl .gl { display: none; }
   body.hide-gl .w, body.hide-gl .w.known { color: var(--text); font-weight: 400;
@@ -487,20 +488,30 @@ function glossPhon(k) {
   const p = accent === 'en-GB' ? (info.uk || info.p) : (info.us || info.p);
   return p ? '/' + String(p).replace(/^\//,'').replace(/\/$/,'') + '/' : '';
 }
-function shortGloss(k) {
+function glossParts(k) {
   const info = (typeof VOCAB !== 'undefined' && VOCAB[k]) || null;
-  if (!info || !info.m) return '';
+  if (!info || !info.m) return null;
   const m = info.m.split(/[；;]/)[0].trim().slice(0, 10);
-  const ph = glossPhon(k);
-  return (ph ? ph + ' ' : '') + m;
+  return { ph: glossPhon(k), m };
+}
+function shortGloss(k) {
+  const g = glossParts(k);
+  if (!g) return '';
+  return (g.ph ? g.ph + ' ' : '') + g.m;
+}
+function glossHTML(k) {
+  const g = glossParts(k);
+  if (!g) return '';
+  return (g.ph ? `<span class="gl-p">${esc(g.ph)}</span> ` : '') + esc(g.m);
 }
 function refreshGloss() {
   document.querySelectorAll('.w').forEach(el => {
     const gl = el.nextElementSibling;
     if (gl && gl.classList.contains('gl')) {
-      const g = shortGloss(el.dataset.w);
-      gl.textContent = g;
-      gl.style.display = g ? '' : 'none';
+      const gh = glossHTML(el.dataset.w);
+      if (!gh) { gl.style.display = 'none'; return; }
+      gl.innerHTML = gh;
+      gl.style.display = '';
     }
   });
 }
@@ -508,9 +519,9 @@ function wrapWords(text) {
   return text.replace(/\[\[([^\]:]+):([^\]]+)\]\]/g, (m, key, disp) => {
     const k = key.toLowerCase();
     const cls = known.has(k) ? 'w known' : 'w';
-    const g = shortGloss(k);
+    const gh = glossHTML(k);
     return `<span class="${cls}" data-w="${esc(k)}" data-disp="${esc(disp)}">${esc(disp)}</span>` +
-      (g ? `<span class="gl">${esc(g)}</span>` : '');
+      (gh ? `<span class="gl">${gh}</span>` : '');
   });
 }
 function render() {
