@@ -163,26 +163,26 @@
     text-overflow: ellipsis; pointer-events: none; z-index: 5; }
   #seekTrack { position: relative; height: 11px; cursor: pointer; touch-action: none; }
   /* 默认 1px 极细线，用系统边框色，装饰感强 */
-  #seekRail { position: absolute; left: 0; right: 0; top: 5px; height: 1px;
+  #seekRail { position: absolute; left: 0; right: 0; top: 0; height: 1px;
     background: var(--border);
     border-radius: 1px; transition: height .18s ease, top .18s ease, background .18s ease; }
-  #seekFill { position: absolute; left: 0; top: 5px; height: 1px; width: 0;
+  #seekFill { position: absolute; left: 0; top: 0; height: 1px; width: 0;
     background: var(--grad);
     border-radius: 1px; transition: height .18s ease, top .18s ease;
     }
-  #seekTrack:hover #seekRail, #seekTrack.active #seekRail { height: 3.5px; top: 3.75px; }
-  #seekTrack:hover #seekFill, #seekTrack.active #seekFill { height: 3.5px; top: 3.75px; }
+  #seekTrack:hover #seekRail, #seekTrack.active #seekRail { height: 3.5px; top: 0; }
+  #seekTrack:hover #seekFill, #seekTrack.active #seekFill { height: 3.5px; top: 0; }
   #seekTrack:hover #seekRail, #seekTrack.active #seekRail { background: var(--accent-line); }
   #seekTicks { position: absolute; inset: 0; }
   /* 刻度点默认几乎不可见，hover/拖动时再显示 */
-  #seekTicks .tick { position: absolute; top: 4px; width: 3px; height: 3px; opacity: .18;
+  #seekTicks .tick { position: absolute; top: 0; width: 3px; height: 3px; opacity: .18;
     border-radius: 50%; background: rgba(120, 150, 135, .65); border: none; padding: 0;
     cursor: pointer; transform: translateX(-50%);
     transition: transform var(--t-fast), background var(--t-fast), opacity .18s ease,
       width .18s ease, height .18s ease, top .18s ease; }
   #seekTicks .tick.done { background: rgba(46, 139, 106, .5); }
   #seekTicks .tick.cur { background: var(--coral-deep); }
-  #seekTrack:hover .tick, #seekTrack.active .tick { opacity: 1; top: 2px; width: 8px; height: 8px;
+  #seekTrack:hover .tick, #seekTrack.active .tick { opacity: 1; top: 0; width: 8px; height: 8px;
     background: #b9d4c7; }
   #seekTrack:hover .tick:hover, #seekTrack.active .tick:hover { background: var(--accent-bright);
     transform: translateX(-50%) scale(1.45); }
@@ -194,7 +194,7 @@
     #seekTicks .tick { opacity: .28; }
     #seekTicks .tick.done { opacity: .55; }
   }
-  #seekKnob { position: absolute; top: 5.5px; width: 12px; height: 12px; border-radius: 50%;
+  #seekKnob { position: absolute; top: -5px; width: 12px; height: 12px; border-radius: 50%;
     background: #fff; border: 2px solid var(--accent-bright); transform: translate(-50%, -50%) scale(.6);
     box-shadow: var(--shadow); pointer-events: none; opacity: 0;
     transition: opacity .18s ease, transform .18s ease; }
@@ -325,12 +325,12 @@
     .audiobar .btn + .btn { margin-left: 0; } /* 移动端 hit-slop 已关，还原间距 */
     #seekWrap { width: 100%; height: 11px; margin: 0 0 6px; }
     #seekTrack { height: 11px; }
-    #seekRail, #seekFill { top: 5px; }
-    #seekTicks .tick { top: 4px; }
-    #seekKnob { top: 5.5px; }
+    #seekRail, #seekFill { top: 0; }
+    #seekTicks .tick { top: 0; }
+    #seekKnob { top: -5px; }
     #seekTrack:hover #seekRail, #seekTrack.active #seekRail,
-    #seekTrack:hover #seekFill, #seekTrack.active #seekFill { top: 3.75px; }
-    #seekTrack:hover .tick, #seekTrack.active .tick { top: 2px; }
+    #seekTrack:hover #seekFill, #seekTrack.active #seekFill { top: 0; }
+    #seekTrack:hover .tick, #seekTrack.active .tick { top: 0; }
   }
   /* 超窄屏（≤360px）：播放条进一步收纳 */
   @media (max-width: 360px) {
