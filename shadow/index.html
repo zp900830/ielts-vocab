@@ -542,10 +542,10 @@ function tierOf(v) {
 function voiceLabel(v) {
   let n = (v.name || '').replace(/^Microsoft\s+/i, '')
     .replace(/\s*-\s*English\s*\(.*?\)\s*/i, '').replace(/\s*\(Online\)\s*/i, '').trim();
-  const flag = /^en-GB/i.test(v.lang) ? '🇬🇧' : /^en-US/i.test(v.lang) ? '🇺🇸' : '';
+  const region = /^en-GB/i.test(v.lang) ? '英式' : /^en-US/i.test(v.lang) ? '美式' : '英语';
   const g = genderOf(v);
   const t = tierOf(v) === 3 ? '★★★' : tierOf(v) === 2 ? '★★' : '★';
-  return `${n} ${flag}${g ? ' ' + g : ''} ${t}`.replace(/\s+/g, ' ').trim();
+  return `${n} · ${region}${g ? g + '声' : ''} ${t}`.replace(/\s+/g, ' ').trim();
 }
 function balance(list) {
   const sorted = [...list].sort((a, b) => tierOf(b) - tierOf(a));
@@ -631,14 +631,15 @@ function resolveVoice() {
   }
   return v;
 }
-let speakToken = 0; // Chrome: cancel() 后立刻 speak() 会被吞掉，延迟一拍；token 防旧调用抢跑
-function speak(text, cb, plain) {
+let speakToken = 0; // Chrome: cancel() 后立刻 speak() 会被吞掉，手动起播才延迟；token 防旧调用抢跑
+function speak(text, cb, opts, tokenIn) {
+  opts = opts || {};
+  const plain = !!opts.plain, immediate = !!opts.immediate;
   if (!HAS_SPEECH) { if (cb) cb(); return; }
   text = (text || '').trim();
   if (!text) { if (cb) cb(); return; }
-  const my = ++speakToken;
-  try { speechSynthesis.cancel(); } catch (e) { if (cb) cb(); return; }
-  setTimeout(() => {
+  const my = (tokenIn !== undefined) ? tokenIn : ++speakToken;
+  const go = () => {
     if (my !== speakToken) return;
     const u = new SpeechSynthesisUtterance(text);
     u.rate = rate;
@@ -668,7 +669,10 @@ function speak(text, cb, plain) {
       u.onerror = () => {};
     }
     try { speechSynthesis.speak(u); } catch (e) { if (cb) cb(); }
-  }, 60);
+  };
+  if (immediate) { go(); return; } // 链式续播/预取：不 cancel 不延迟，消除句间大间隔
+  try { speechSynthesis.cancel(); } catch (e) { if (cb) cb(); return; }
+  setTimeout(go, 60);
 }
 function sentText(el) {
   const c = el.cloneNode(true);
@@ -684,20 +688,42 @@ function paint() {
   paintDots();
   if (idx >= 0 && artOfSent[idx] !== undefined) markAnchor(artOfSent[idx]);
 }
+let launchedUpTo = -1; // 本轮已发射到的句子（去重：续播与预取不重复发射）
+function syncSeek(i) {
+  const ai = artOfSent[i];
+  if (ai !== undefined && ai !== dotsArt) buildSeek(ai);
+}
+function launch(i, my, immediate) {
+  // 发射一句；它结束时的 onend 负责推进 idx 并补下一句，队列里永远多备一句
+  if (my !== speakToken || !playing) return;
+  if (i >= sents.length) { playing = false; idx = -1; paint(); return; }
+  if (i < 0 || i <= launchedUpTo) return;
+  launchedUpTo = i;
+  speak(sentText(sents[i]), () => {
+    if (!playing || my !== speakToken) return;
+    idx = i; paint(); syncSeek(i);
+    launch(i + 1, my, true);
+    launch(i + 2, my, true); // 永远多备一句（去重靠 launchedUpTo）
+  }, { immediate }, my);
+}
 function playFrom(i) {
   if (i < 0 || i >= sents.length) { playing = false; idx = -1; paint(); return; }
-  idx = i; playing = true;
-  const ai = artOfSent[i];
-  if (ai !== undefined && ai !== dotsArt) buildDots(ai);
+  speakToken++;
+  try { speechSynthesis.cancel(); } catch (e) {}
+  idx = i; playing = true; launchedUpTo = i - 1;
+  syncSeek(i);
   paint();
-  speak(sentText(sents[i]), () => { if (playing) playFrom(i + 1); });
+  const my = speakToken;
+  launch(i, my, false); // 本句：cancel 后延迟起播（Chrome 吞声 workaround）
+  // 预取必须排在本句之后：本句延迟 60ms，所以 120ms 后再发射下一句进原生队列
+  setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 120);
 }
 function togglePlay() {
   if (playing) { playing = false; speakToken++; speechSynthesis.cancel(); paint(); }
   else playFrom(idx >= 0 ? idx : 0);
 }
 function step(d) {
-  playing = false; speakToken++; speechSynthesis.cancel();
+  playing = false;
   playFrom(Math.max(0, Math.min(sents.length - 1, (idx < 0 ? 0 : idx) + d)));
 }
 function bestOfAccent(a) {
@@ -723,7 +749,8 @@ function setAccent(a) {
     if (sel) sel.value = selVoiceURI;
   }
   refreshGloss();
-  if (cur) speak(cur);
+  if (playing) playFrom(idx); // 换音色立即在新队列生效
+  else if (cur) speak(cur);
   else speak(a === 'en-GB' ? 'British accent.' : 'American accent.');
 }
 const RATES = [0.75, 1, 1.25, 1.5];
