@@ -484,7 +484,7 @@
       <input id="q" placeholder="搜索单词或释义…" oninput="renderList()" data-page-node-id="rkuwpsZpFmOFvdHEl450z5">
     </div>
     <div class="list" id="vlist" data-page-node-id="MJoDP5pd0Qv1ANF5xuk7YA"></div>
-    <div class="cnt" data-page-node-id="uJGR6pKi9kti0lVaTbEhiR">点卡片发音 · ⌖文中定位 · 框内↑↓选词 Enter读</div>
+    <div class="cnt" data-page-node-id="uJGR6pKi9kti0lVaTbEhiR">点卡片跳到该句 · ⌖文中定位 · 框内↑↓选词 Enter读</div>
   </aside>
 </div>
 
@@ -1580,7 +1580,8 @@ function renderList() {
       el.classList.add('sel');
       if (e.target.closest('.loc')) { jumpWord(el.dataset.k, el.dataset.d, true); return; }
       const t = e.target.closest('.ex,.exzh');
-      speakAside(t && el.dataset.ex ? el.dataset.ex : el.dataset.d);
+      if (t && el.dataset.ex) { speakAside(el.dataset.ex); return; }
+      jumpWord(el.dataset.k, el.dataset.d);
     };
   });
   if (!_vocabCount && typeof VOCAB !== 'undefined') _vocabCount = Object.keys(VOCAB).length;
@@ -1607,7 +1608,7 @@ function cardNav(d) {
 }
 function cardSpeakSel() {
   const sel = document.querySelector('#vlist .item.sel') || document.querySelector('#vlist .item');
-  if (sel) { sel.classList.add('sel'); speakAside(sel.dataset.d); }
+  if (sel) { sel.classList.add('sel'); jumpWord(sel.dataset.k, sel.dataset.d); }
 }
 document.addEventListener('keydown', e => {
   if (/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) {
