@@ -821,19 +821,18 @@ const CLOUD = {
     this._au = null;
   },
   play(text, voiceId, rate, my, cb, fallback) {
-    this.stop();
+    this.stop(); // 串行：任何新播放先停旧音频（预取不再经过这里，只走 prefetch）
     let done = false;
-    const timer = setTimeout(() => { // 20s 合成超时则降级本地
-      if (!done) { done = true; this.stop(); fallback(); }
-    }, 20000);
+    const fail = e => { if (done) return; done = true; clearTimeout(timer); this.stop(); fallback(e); };
+    const timer = setTimeout(() => fail(new Error('timeout')), 20000); // 20s 合成超时则降级本地
     this.synth(text, voiceId, rate).then(url => {
       if (done || my !== speakToken) return;
       const au = new Audio(url);
       this._au = au;
       au.onended = () => { if (done) return; done = true; clearTimeout(timer); errStreak = 0; cb(); };
-      au.onerror = () => { if (done) return; done = true; clearTimeout(timer); fallback(); };
-      au.play().catch(() => { if (done) return; done = true; clearTimeout(timer); fallback(); });
-    }).catch(() => { if (done) return; done = true; clearTimeout(timer); fallback(); });
+      au.onerror = () => fail(new Error('audio-error'));
+      au.play().catch(() => fail(new Error('play-rejected')));
+    }).catch(fail);
   },
   prefetch(text, voiceId, rate) {
     try { this.synth(text, voiceId, rate).catch(() => {}); } catch (e) {}
@@ -1061,10 +1060,16 @@ function speak(text, cb, opts, tokenIn) {
   if (!plain && isCloudURI(selVoiceURI)) {
     if (typeof CLOUD !== 'undefined' && CLOUD._on) {
       const cid = selVoiceURI.slice(6);
-      if (!immediate) CLOUD.stop();
       CLOUD.play(text, cid, rate, my,
         () => { if (my !== speakToken) return; errStreak = 0; if (cb) cb(); },
-        () => { speak(text, cb, { plain: true, exclude: selVoiceURI }, my); });
+        err => {
+          dlog('cloud-fallback', err && err.message);
+          if (!CLOUD._fbT || Date.now() - CLOUD._fbT > 30000) {
+            CLOUD._fbT = Date.now();
+            CLOUD.setStatus('云端合成失败，已临时降级本地：' + CLOUD.friendlyErr(err && err.message));
+          }
+          speak(text, cb, { plain: true, exclude: selVoiceURI }, my);
+        });
       return;
     }
     if (!speak._nudge || Date.now() - speak._nudge > 15000) {
@@ -1095,8 +1100,10 @@ function speak(text, cb, opts, tokenIn) {
       errStreak++;
       if (errStreak >= 3) {
         errStreak = 0; playing = false; paint();
-        alert(everStarted ? '语音播不出来：' + ENV_HINT
-          : '本机语音引擎无响应（一次都没出过声）：请在地址栏输 chrome://restart 回车重启 Chrome；或直接登录 ☁ 云端语音绕开它。');
+        alert(isCloudURI(selVoiceURI)
+          ? '☁ 云端合成多次失败且本机也播不出：请检查网络后点 ▶ 重试（配额/审批问题看顶部云状态）。'
+          : (everStarted ? '语音播不出来：' + ENV_HINT
+            : '本机语音引擎无响应（一次都没出过声）：请在地址栏输 chrome://restart 回车重启 Chrome；或直接登录 ☁ 云端语音绕开它。'));
         return;
       }
       cb();
@@ -1198,7 +1205,12 @@ function launch(i, my, immediate) {
   speak(sentText(sents[i]), () => {
     if (!playing || my !== speakToken) return;
     launch(i + 1, my, true);
-    launch(i + 2, my, true); // 永远多备一句（去重靠 launchedUpTo）
+    // i+2 只是备弹：云端只预热缓存（直接播会掐死 i+1），本机才进串行队列
+    if (i + 2 < sents.length) {
+      if (typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on) {
+        try { CLOUD.prefetch(plainEN(sentRaw(i + 2)), selVoiceURI.slice(6), rate); } catch (e) {}
+      } else launch(i + 2, my, true);
+    }
   }, { immediate }, my);
 }
 function playFrom(i) {
@@ -1215,12 +1227,13 @@ function playFrom(i) {
   syncSeek(i);
   paint();
   const my = speakToken;
+  const cloudMode = typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on;
   if (hadQueue) {
     launch(i, my, false); // 有旧队列：cancel 后延迟起播（Chrome 吞声 workaround）
-    setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 250);
+    if (!cloudMode) setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 250);
   } else {
     launch(i, my, true);  // 空闲：手势上下文内同步发射，杜绝 setTimeout 丢失用户激活
-    setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 200);
+    if (!cloudMode) setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 200);
   }
 }
 function togglePlay() {
