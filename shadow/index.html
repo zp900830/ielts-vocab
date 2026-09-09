@@ -154,7 +154,7 @@
     display: none; box-shadow: var(--shadow); }
   #anchors .adot:hover .atip { display: block; }
   /* 进度线：播放器内部的装饰线（默认极细，hover/触摸才展开），与下方内容留间距 */
-  #seekWrap { position: relative; width: 100%; height: 11px; margin: 0 0 6px; padding: 0; z-index: 6; }
+  #seekWrap { position: relative; width: auto; height: 11px; margin: 5px 8px 7px; padding: 0; z-index: 6; }
   .audiobar .seg { align-self: center; flex: none; }
   #seekTip { position: absolute; left: 0; bottom: calc(100% + 8px); transform: translateX(-50%);
     max-width: 92%; background: var(--glass-strong); border: 1px solid var(--border);
@@ -323,7 +323,7 @@
     #rateCycle { display: inline-block; flex: none; }
     .audiobar .seg { display: none; }
     .audiobar .btn + .btn { margin-left: 0; } /* 移动端 hit-slop 已关，还原间距 */
-    #seekWrap { width: 100%; height: 11px; margin: 0 0 6px; }
+    #seekWrap { height: 11px; margin: 4px 6px 6px; }
     #seekTrack { height: 11px; }
     #seekRail, #seekFill { top: 5px; }
     #seekTicks .tick { top: 4px; }
