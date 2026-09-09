@@ -1240,6 +1240,32 @@ function unlockAudioWrap() {
   if (!_warmed) { _warmed = true; try { speechSynthesis.getVoices(); loadVoices(); } catch (e) {} }
 }
 window.addEventListener('pointerdown', unlockAudioWrap, { passive: true });
+// 锁屏/后台续播（云语音 Audio 通道）：锁屏控件 + 防自动锁屏
+let _wl = null;
+async function lockScreen() {
+  try {
+    if (!('wakeLock' in navigator) || _wl || document.hidden) return;
+    _wl = await navigator.wakeLock.request('screen');
+    _wl.addEventListener('release', () => { _wl = null; });
+  } catch (e) { _wl = null; }
+}
+function unlockScreen() { try { if (_wl) { _wl.release(); _wl = null; } } catch (e) { _wl = null; } }
+function mediaMeta(title) {
+  try {
+    if (!('mediaSession' in navigator)) return;
+    if (title) navigator.mediaSession.metadata = new MediaMetadata({ title: title, artist: 'IELTS Shadow', album: '雅思词汇' });
+    navigator.mediaSession.playbackState = (typeof playing !== 'undefined' && playing) ? 'playing' : 'paused';
+  } catch (e) {}
+}
+try {
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.setActionHandler('play', () => { if (!playing) togglePlay(); });
+    navigator.mediaSession.setActionHandler('pause', () => { if (playing) togglePlay(); });
+    navigator.mediaSession.setActionHandler('previoustrack', () => step(-1));
+    navigator.mediaSession.setActionHandler('nexttrack', () => step(1));
+  }
+} catch (e) {}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) lockScreen(); });
 // 首次手势顺带预热：Chrome 语音列表常延迟到达，避免首播时列表为空
 function sentText(el) {
   const c = el.cloneNode(true);
@@ -1274,6 +1300,10 @@ function paint() {
   }
   paintSeek();
   if (idx >= 0 && artOfSent[idx] !== undefined) markAnchor(artOfSent[idx]);
+  try {
+    if ('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
+  } catch (e) {}
+  if (!playing) unlockScreen();
 }
 let launchedUpTo = -1; // 本轮已发射到的句子（去重：续播与预取不重复发射）
 function syncSeek(i) {
@@ -1287,6 +1317,7 @@ function launch(i, my, immediate) {
   if (i < 0 || i <= launchedUpTo) return;
   launchedUpTo = i;
   idx = i; paint(); syncSeek(i);
+  try { mediaMeta(plainEN(sentRaw(i)).slice(0, 80)); } catch (e) {}
   try {
     if (typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on && i + 1 < sents.length)
       CLOUD.prefetch(plainEN(sentRaw(i + 1)), selVoiceURI.slice(6), rate);
@@ -1313,6 +1344,7 @@ function playFrom(i) {
   try { if (hadQueue) speechSynthesis.cancel(); } catch (e) {}
   try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
   idx = i; playing = true; launchedUpTo = i - 1;
+  lockScreen();
   syncSeek(i);
   paint();
   const my = speakToken;
