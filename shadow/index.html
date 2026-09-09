@@ -831,7 +831,7 @@ function loadVoices() {
   const groups = [
     ...(cloudList.length ? [{ label: '☁ 云端自然语音', list: cloudList.map(v => ({ cloud: v.id, name: v.label.split(' · ')[0], lang: v.region === '英式' ? 'en-GB' : 'en-US' })), cloud: true }] : []),
     { label: '⚡ 神经网络', list: balance(ok.filter(isNeuro)) },
-    { label: 'Google', list: balance(ok.filter(v => !isNeuro(v) && isGoogle(v))) },
+    { label: 'Google（需联网）', list: balance(ok.filter(v => !isNeuro(v) && isGoogle(v))) },
     { label: '本机系统', list: balance(ok.filter(v => !isNeuro(v) && !isGoogle(v) && tierOf(v) >= 2)) },
   ].filter(g => g.list.length);
   if (!groups.length) {
@@ -953,7 +953,7 @@ function speak(text, cb, opts, tokenIn) {
       errStreak++;
       if (errStreak >= 3) {
         errStreak = 0; playing = false; paint();
-        alert('语音播不出来：Chrome 请确认①页面有声音权限 ②系统音量 ③发音下拉里换一个 ★★★ 语音；Edge 若正常则优先用 Edge。');
+        alert('语音播不出来：若本机音色也无声，请按序查：①系统设置→声音→输出设备（是否被切到离线蓝牙/显示器，音量是否划灰）②Chrome标签页小喇叭是否被静音 ③重启Chrome再试 ④直接用Edge打开本站。');
         return;
       }
       cb();
@@ -1029,7 +1029,7 @@ async function voiceSelfTest() {
     refreshGloss();
     alert(lines.join('\n') + '\n\n已自动选用首个能出声的音色。');
   } else {
-    alert(lines.join('\n') + '\n\n全部无声：请检查①系统音量/输出设备 ②chrome://settings/content/sound ③换 Edge 打开。');
+    alert(lines.join('\n') + '\n\n全部无声：' + '若本机音色也无声，请按序查：①系统设置→声音→输出设备（是否被切到离线蓝牙/显示器，音量是否划灰）②Chrome标签页小喇叭是否被静音 ③重启Chrome再试 ④直接用Edge打开本站。' + '\n\n另一条路：登录 ☁ 云端语音（走服务器音频，不经过浏览器语音引擎，可绕开此问题）。');
   }
   if (btn) { btn.disabled = false; btn.textContent = '自检'; }
 }
