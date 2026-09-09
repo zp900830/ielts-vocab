@@ -110,7 +110,7 @@
     -webkit-backdrop-filter: blur(32px) saturate(190%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(190%) brightness(1.02);
     border: 1px solid rgba(255,255,255,.62); border-radius: 22px;
-    padding: 0 12px 5px;
+    padding: 0 12px 12px;
     box-shadow: 0 24px 64px rgba(17, 36, 28, .22), 0 6px 20px rgba(17, 36, 28, .08),
       inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.32); }
   .audiobar::before { content: ""; position: absolute; left: 12px; right: 12px; top: 6px;
@@ -314,7 +314,7 @@
       border-radius: 18px; padding: 14px 14px 12px; }
     .pop .pw { font-size: 20px; }
     /* 播放条：保持 Liquid Glass，内容紧凑；进度线与操作行分隔 */
-    .audiobar { gap: 2px; padding: 0 8px 5px; border-radius: 20px;
+    .audiobar { gap: 2px; padding: 0 8px 12px; border-radius: 20px;
       bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
     .ab-row { gap: 5px; justify-content: space-between; }
     .audiobar .btn { font-size: 12px; padding: 4px 8px; min-height: 26px; min-width: 0; flex: none; }
@@ -334,7 +334,7 @@
   }
   /* 超窄屏（≤360px）：播放条进一步收纳 */
   @media (max-width: 360px) {
-    .audiobar { gap: 3px; padding: 0 8px 6px; }
+    .audiobar { gap: 3px; padding: 0 8px 12px; }
     .audiobar .btn { padding: 6px 7px; }
     .voice-sel { max-width: 118px; }
   }
