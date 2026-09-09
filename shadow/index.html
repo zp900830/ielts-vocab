@@ -213,7 +213,8 @@
   #seekKnob { position: absolute; top: -5px; width: 12px; height: 12px; border-radius: 50%;
     background: #fff; border: 2px solid var(--accent-bright); transform: translate(-50%, -50%) scale(.6);
     box-shadow: var(--shadow); pointer-events: none; opacity: 0;
-    transition: opacity .18s ease, transform .18s ease; }
+    transition: opacity .18s ease, transform .18s ease, width .18s ease, height .18s ease; }
+  #seekTrack.active #seekKnob { width: 22px; height: 22px; }
   #seekTrack:hover #seekKnob, #seekTrack.active #seekKnob { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   /* 触摸设备：旋钮默认极小微可见 */
   @media (pointer: coarse) {
@@ -625,8 +626,16 @@ function showSeekTip(i, pct) {
   const tip = document.getElementById('seekTip');
   if (!tip) return;
   tip.textContent = plainEN(sentRaw(i));
-  tip.style.left = pct + '%';
   tip.style.display = 'block';
+  tip.style.transform = 'none';
+  tip.style.left = '0px';
+  tip.style.width = 'auto';
+  const track = document.getElementById('seekTrack');
+  const tw = track ? track.getBoundingClientRect().width : 300;
+  const w = Math.min(tip.scrollWidth || tw, tw);
+  const x = Math.min(Math.max(pct / 100 * tw, w / 2), tw - w / 2);
+  tip.style.width = w + 'px';
+  tip.style.left = Math.max(0, x - w / 2) + 'px';
   clearTimeout(showSeekTip._t);
   showSeekTip._t = setTimeout(() => tip.style.display = 'none', 2200);
 }
