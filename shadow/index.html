@@ -937,7 +937,8 @@ function loadVoices() {
 }
 try { if (HAS_SPEECH && 'onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices; } catch (e) {}
 
-let errStreak = 0;
+let errStreak = 0, everStarted = false; // everStarted：本会话是否成功出过声（区分引擎挂起 vs 单个坏音色）
+const ENV_HINT = '若本机音色也无声，请按序查：①系统设置→声音→输出设备（是否被切到离线蓝牙/显示器，音量是否划灰）②Chrome标签页小喇叭是否被静音 ③重启Chrome再试 ④直接用Edge打开本站。';
 function isCloudURI(uri) { return (uri || '').indexOf('cloud:') === 0; }
 function resolveVoice(exclude) {
   dlog('resolve', 'want=' + selVoiceURI, 'exclude=' + (exclude || '-'));
@@ -1058,12 +1059,13 @@ function speak(text, cb, opts, tokenIn) {
       errStreak++;
       if (errStreak >= 3) {
         errStreak = 0; playing = false; paint();
-        alert('语音播不出来：若本机音色也无声，请按序查：①系统设置→声音→输出设备（是否被切到离线蓝牙/显示器，音量是否划灰）②Chrome标签页小喇叭是否被静音 ③重启Chrome再试 ④直接用Edge打开本站。');
+        alert(everStarted ? '语音播不出来：' + ENV_HINT
+          : '本机语音引擎无响应（一次都没出过声）：请在地址栏输 chrome://restart 回车重启 Chrome；或直接登录 ☁ 云端语音绕开它。');
         return;
       }
       cb();
     };
-    const remember = () => { try { if (u.voice) rememberGoodVoice(u.voice.voiceURI); } catch (e) {} errStreak = 0; };
+    const remember = () => { everStarted = true; try { if (u.voice) rememberGoodVoice(u.voice.voiceURI); } catch (e) {} errStreak = 0; };
     if (cb) {
       u.onstart = () => { started = true; clearWd(); remember(); dlog('onstart', u.voice ? u.voice.name : '(default)', 'tok=' + my); };
       u.onend = () => { if (finished) return; finished = true; clearWd(); errStreak = 0; dlog('onend', 'tok=' + my); cb(); };
