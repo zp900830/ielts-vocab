@@ -641,39 +641,57 @@ function speak(text, cb, opts, tokenIn) {
   const my = (tokenIn !== undefined) ? tokenIn : ++speakToken;
   const go = () => {
     if (my !== speakToken) return;
+    try { if (speechSynthesis.paused) speechSynthesis.resume(); } catch (e) {}
     const u = new SpeechSynthesisUtterance(text);
-    u.rate = rate;
+    u.rate = rate; u.volume = 1;
     if (!plain) {
       const v = resolveVoice();
       if (v) { u.voice = v; u.lang = v.lang; }
       else u.lang = accent;
     } else { u.lang = accent; }
+    let started = false, finished = false, wd = null;
+    const clearWd = () => { if (wd) { clearTimeout(wd); wd = null; } };
+    const failOnce = () => {
+      if (finished) return; finished = true; clearWd();
+      if (!plain) { speak(text, cb, { plain: true }, my); return; }
+      errStreak++;
+      if (errStreak >= 3) {
+        errStreak = 0; playing = false; paint();
+        alert('语音播不出来：Chrome 请确认①页面有声音权限 ②系统音量 ③发音下拉里换一个 ★★★ 语音；Edge 若正常则优先用 Edge。');
+        return;
+      }
+      cb();
+    };
     const remember = () => { try { if (u.voice) rememberGoodVoice(u.voice.voiceURI); } catch (e) {} errStreak = 0; };
     if (cb) {
-      u.onstart = remember;
-      u.onend = () => { errStreak = 0; cb(); };
+      u.onstart = () => { started = true; clearWd(); remember(); };
+      u.onend = () => { if (finished) return; finished = true; clearWd(); errStreak = 0; cb(); };
       u.onerror = ev => {
         // cancel/interrupted 是主动打断（切句/暂停），绝不能当“播完”推进，否则多链互 cancel 疯转
         if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) return;
-        if (!plain) { speak(text, cb, true); return; } // 去掉指定音色用默认再试一次
-        errStreak++;
-        if (errStreak >= 3) {
-          errStreak = 0; playing = false; paint();
-          alert('语音播不出来：请检查浏览器声音权限，或在发音下拉里换一个 ★★★ 语音。');
-          return;
-        }
-        cb();
+        failOnce();
       };
+      // 无声看门狗：4 秒既不开始也不结束 = 静默卡死，走失败路径（重试/停下提示），不许无声空转
+      wd = setTimeout(() => { if (!started && !finished) failOnce(); }, 4000);
     } else {
       u.onstart = remember;
       u.onerror = () => {};
     }
-    try { speechSynthesis.speak(u); } catch (e) { if (cb) cb(); }
+    try { speechSynthesis.speak(u); } catch (e) { if (cb) failOnce(); }
   };
   if (immediate) { go(); return; } // 链式续播/预取：不 cancel 不延迟，消除句间大间隔
-  try { speechSynthesis.cancel(); } catch (e) { if (cb) cb(); return; }
-  setTimeout(go, 60);
+  // Chrome：没在播就别 cancel（空 cancel 会吞掉紧接着的 speak）；真在播才断开，且留 150ms
+  try {
+    if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+    else { go(); return; }
+  } catch (e) { if (cb) cb(); return; }
+  setTimeout(go, 150);
 }
+// 首次手势预热：Chrome 语音列表常延迟到达，点 anything 时刷新一次，避免首播时列表为空
+window.addEventListener('pointerdown', function chromeWarm() {
+  window.removeEventListener('pointerdown', chromeWarm);
+  try { speechSynthesis.getVoices(); loadVoices(); } catch (e) {}
+}, { passive: true });
 function sentText(el) {
   const c = el.cloneNode(true);
   c.querySelectorAll('.gl,.sent-zh').forEach(n => n.remove());
