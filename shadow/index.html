@@ -672,6 +672,15 @@ function paintSeek() {
   });
 }
 function showSeekTip(i, pct) {
+  // rAF 节流：pointermove 高频触发，布局测量收敛到每帧一次
+  showSeekTip._a = [i, pct];
+  if (showSeekTip._raf) return;
+  showSeekTip._raf = requestAnimationFrame(() => {
+    showSeekTip._raf = null;
+    _showSeekTip(showSeekTip._a[0], showSeekTip._a[1]);
+  });
+}
+function _showSeekTip(i, pct) {
   const tip = document.getElementById('seekTip');
   if (!tip) return;
   tip.textContent = plainEN(sentRaw(i));
@@ -741,6 +750,12 @@ let V = {};
 let selVoiceURI = localStorage.getItem('ielts-voice') || '';
 try { accent = localStorage.getItem('ielts-accent') || 'en-GB'; } catch(e) {}
 const HAS_SPEECH = ('speechSynthesis' in window);
+// iOS：speak() 必须在手势上下文内同步调用（setTimeout 出手势即被系统静默丢弃，
+// 拖进度条松手无声的主因）；且 iOS 无 Chrome 的 cancel-吞声 bug，可同步直发
+const NEED_GESTURE = (() => { try {
+  const ua = navigator.userAgent || '';
+  return /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+} catch (e) { return false; } })();
 function enVoices() {
   if (!HAS_SPEECH) return [];
   return speechSynthesis.getVoices().filter(v => /^en([-_]|$)/i.test(v.lang));
@@ -1247,6 +1262,16 @@ function speak(text, cb, opts, tokenIn) {
     const failOnce = () => {
       if (finished) return; finished = true; clearWd(); speechInProgress = false;
       if (!plain) { speak(text, cb, { plain: true, exclude: triedURI }, my); return; } // 换掉坏音色重试
+      if (!everStarted && NEED_GESTURE) {
+        let busy = false;
+        try { busy = !!(speechSynthesis.speaking || speechSynthesis.pending); } catch (e) {}
+        if (!busy) {
+          // iOS 手势外起播被系统吞掉：不链式空转（会堆死 utterance），直接停下给指引
+          errStreak = 0; playing = false; paint(); savePos();
+          alert('本次朗读没能出声：iOS 要求点 ▶／点句子手势内起播（拖进度条后要点一下句子）；锁屏持续播请用 ☁ 云端音色。');
+          return;
+        }
+      }
       errStreak++;
       if (errStreak >= 3) {
         errStreak = 0; playing = false; paint();
@@ -1291,7 +1316,7 @@ function speak(text, cb, opts, tokenIn) {
     if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
     else idle = true;
   } catch (e) { if (cb) cb(); return; }
-  if (idle) { go(); return; } // 空闲：同步起播（setTimeout 非手势上下文 Chrome 会静默丢弃）
+  if (idle || NEED_GESTURE) { go(); return; } // iOS：手势内必须同步起播（上面已 cancel，清队列无重叠之忧）
   setTimeout(go, 150);
 }
 function speakAside(text) {
@@ -1345,7 +1370,28 @@ try {
     navigator.mediaSession.setActionHandler('nexttrack', () => step(1));
   }
 } catch (e) {}
-document.addEventListener('visibilitychange', () => { if (!document.hidden) lockScreen(); });
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) return;
+  lockScreen();
+  // 开屏/回前台续播：锁屏期间本地引擎会被系统掐死，回来发现真空就从当前句续上
+  if (playing) {
+    const my = speakToken, at = idx;
+    setTimeout(() => {
+      if (my !== speakToken || !playing) return;
+      let busy = false;
+      try { busy = !!(speechSynthesis.speaking || speechSynthesis.pending); } catch (e) {}
+      try { busy = busy || !!(CLOUD._au && !CLOUD._au.paused && !CLOUD._au.ended); } catch (e) {}
+      if (!busy) playFrom(at >= 0 ? at : 0);
+    }, 800);
+  }
+});
+// iOS 保活：长句/锁屏易触发引擎自动暂停，每 10s 踢一脚（仅 iOS，避免桌面副作用）
+setInterval(() => {
+  try {
+    if (!playing || !HAS_SPEECH || !NEED_GESTURE) return;
+    if (speechSynthesis.speaking && !speechSynthesis.pending) { speechSynthesis.pause(); speechSynthesis.resume(); }
+  } catch (e) {}
+}, 10000);
 // 首次手势顺带预热：Chrome 语音列表常延迟到达，避免首播时列表为空
 function sentText(el) {
   const c = el.cloneNode(true);
@@ -1361,12 +1407,10 @@ function paint() {
     _paintIdx = idx;
   }
   if (idx >= 0 && sents[idx]) {
-    // 连播时用 auto 瞬时定位：smooth 逐句滚动会和用户手势打架、掉帧
-    if (playing) sents[idx].scrollIntoView({ block: 'center', behavior: 'auto' });
-    else {
-      const r = sents[idx].getBoundingClientRect();
-      if (r.top < 0 || r.bottom > innerHeight) sents[idx].scrollIntoView({ block: 'center', behavior: 'smooth' });
-    }
+    // 只在出视口才滚动：连播每句都 scrollIntoView 又贵又跟手势打架（移动端卡顿主因之一）
+    const r0 = sents[idx].getBoundingClientRect();
+    if (r0.top < 0 || r0.bottom > innerHeight)
+      sents[idx].scrollIntoView({ block: 'center', behavior: playing ? 'auto' : 'smooth' });
   }
   const bp = document.getElementById('btnPlay');
   if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i> 暂停' : '<i class="ri-play-fill"></i> 朗读';
@@ -1436,7 +1480,7 @@ function playFrom(i) {
   const fire3 = () => { launch(i, my, true); launch(i + 1, my, true); launch(i + 2, my, true); };
   if (cloudMode) {
     launch(i, my, true); // 云端单播：只发一句，续播走 onend 单链
-  } else if (hadQueue) {
+  } else if (hadQueue && !NEED_GESTURE) {
     // 有旧队列：cancel 后 250ms 再起播（Chrome 吞声 workaround），起播即连发 3 句
     setTimeout(() => { if (my === speakToken && playing) fire3(); }, 250);
   } else {
