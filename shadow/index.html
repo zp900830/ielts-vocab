@@ -179,6 +179,13 @@
   .jpop .row { display: flex; gap: 8px; }
   .jpop .row input { flex: 1; margin-bottom: 0; min-width: 0; }
   .jpop .row .btn.play { flex: none; }
+  #markList { display: flex; flex-direction: column; gap: 6px; max-height: 38vh; overflow-y: auto; }
+  #markList .mitem { display: flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border); border-radius: 12px; padding: 8px 10px; }
+  #markList .mitem > div:first-child { flex: 1; min-width: 0; }
+  #markList .mt { font-size: 13px; font-weight: 600; }
+  #markList .ms { font-size: 11px; color: var(--muted); }
+  #markList .mitem .btn { flex: none; }
   #seekTip { position: absolute; left: 0; bottom: calc(100% + 8px); transform: translateX(-50%);
     max-width: 92%; background: var(--glass-strong); border: 1px solid var(--border);
     border-radius: 8px; padding: 4px 10px; font-size: 12px; font-family: var(--serif);
@@ -451,6 +458,7 @@
     </div>
   </div>
   <div class="seg" id="segLbl" onclick="toggleJumpPop()" title="点击快速跳转到某章某句" data-page-node-id="GOTpB4eiD2ZqNQ1CUm9HER">—</div>
+  <button class="btn" id="markBtn" onclick="toggleMarkPop()" title="书签：记下当前位置，随时回来">🔖</button>
   </div>
 </div>
 
@@ -462,6 +470,14 @@
     <input id="jumpN" type="number" min="1" value="1" onkeydown="if(event.key==='Enter')jumpGo()">
     <button class="btn play" onclick="jumpGo()">直达</button>
   </div>
+</div>
+<div class="jpop" id="markPop">
+  <div class="ct">🔖 跟读书签</div>
+  <div class="cs">上次进度自动记住，打开即回。也可以手动收藏句子，随时一键直达。</div>
+  <div class="row" style="margin-bottom:8px">
+    <button class="btn play" onclick="addMark()">记下当前位置</button>
+  </div>
+  <div id="markList"></div>
 </div>
 <nav id="anchors" aria-label="章节锚点"></nav>
 <button id="edgeTab" onclick="togglePanel()" title="词库">词库</button>
@@ -1211,10 +1227,13 @@ function speak(text, cb, opts, tokenIn) {
   }
   const go = () => {
     if (my !== speakToken) return;
-    // 只在真有活动队列时才 cancel：空 cancel 会让 Chrome 吞掉紧接的 speak（无声主因之一）
-    try {
-      if (speechSynthesis.speaking || speechSynthesis.pending || speechSynthesis.paused || speechInProgress) speechSynthesis.cancel();
-    } catch (e) {}
+    // 队列模式（连播/预取）绝不 cancel：cancel 会清空引擎排队、制造句间大停顿；
+    // 停播/切句/点读由外层（togglePlay/playFrom/speakAside）统一 cancel
+    if (!immediate) {
+      try {
+        if (speechSynthesis.speaking || speechSynthesis.pending || speechSynthesis.paused || speechInProgress) speechSynthesis.cancel();
+      } catch (e) {}
+    }
     speechInProgress = false;
     try { if (speechSynthesis.paused) { speechSynthesis.resume(); if (!(speechSynthesis.speaking || speechSynthesis.pending)) { try { speechSynthesis.cancel(); } catch (e) {} } } } catch (e) {}
     const u = new SpeechSynthesisUtterance(text);
@@ -1241,7 +1260,12 @@ function speak(text, cb, opts, tokenIn) {
     };
     const remember = () => { everStarted = true; try { if (u.voice) rememberGoodVoice(u.voice.voiceURI); } catch (e) {} errStreak = 0; };
     if (cb) {
-      u.onstart = () => { started = true; clearWd(); remember(); dlog('onstart', u.voice ? u.voice.name : '(default)', 'tok=' + my); };
+      u.onstart = () => { started = true; clearWd(); remember(); dlog('onstart', u.voice ? u.voice.name : '(default)', 'tok=' + my);
+        // 高亮跟开始播走（队列预取时发射≠开播，播到哪亮哪）
+        if (opts.sent !== undefined && my === speakToken && playing) {
+          idx = opts.sent; paint(); syncSeek(opts.sent);
+          try { mediaMeta(plainEN(sentRaw(opts.sent)).slice(0, 80)); } catch (e) {}
+        } };
       u.onend = () => { if (finished) return; finished = true; clearWd(); errStreak = 0; dlog('onend', 'tok=' + my); speechInProgress = false; cb(); };
       u.onerror = ev => {
         // cancel/interrupted 是主动打断（切句/暂停），绝不能当“播完”推进，否则多链互 cancel 疯转
@@ -1274,10 +1298,12 @@ function speakAside(text) {
   // 旁路发音：连播中点词只duck一下，播完自动回到原位续播；token 守卫防连点旧回调抢跑
   const wasPlaying = playing, resumeIdx = idx, my = speakToken + 1;
   if (wasPlaying) {
-    playing = false; speakToken++;
+    playing = false;
     try { speechSynthesis.cancel(); } catch (e) {}
     try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
     paint();
+    // 注意：这里不手动 speakToken++，下面 speak() 内会 ++ 一次使旧链失效；
+    // 若提前 ++ 会导致回调里的 my 对不上、播完回不到原位续播
   }
   speak(text, () => { if (my !== speakToken) return; if (wasPlaying) playFrom(resumeIdx); });
 }
@@ -1366,27 +1392,29 @@ function syncSeek(i) {
   if (ai !== undefined && ai !== dotsArt) buildSeek(ai);
 }
 function launch(i, my, immediate) {
-  // 高亮跟发射走：本句开始播就标本句；onend 只负责链下一句（之前标在结束时，全程落后一句）
+  // 发射 = 进队列，高亮跟 onstart 走：连播时提前 3 句进引擎队列，
+  // 播到哪亮哪，句间只剩引擎换句的自然间隔（不断句感的关键）
   if (my !== speakToken || !playing) return;
-  if (i >= sents.length) { playing = false; idx = -1; paint(); return; }
+  if (i >= sents.length) {
+    playing = false; idx = -1; paint();
+    try { localStorage.setItem('ielts-pos', JSON.stringify({ i: 0, t: Date.now() })); } catch (e) {}
+    return;
+  }
   if (i < 0 || i <= launchedUpTo) return;
   launchedUpTo = i;
-  idx = i; paint(); syncSeek(i);
-  try { mediaMeta(plainEN(sentRaw(i)).slice(0, 80)); } catch (e) {}
   try {
-    if (typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on && i + 1 < sents.length)
-      CLOUD.prefetch(plainEN(sentRaw(i + 1)), selVoiceURI.slice(6), rate);
+    if (typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on) {
+      for (let k = 1; k <= 2 && i + k < sents.length; k++)
+        CLOUD.prefetch(plainEN(sentRaw(i + k)), selVoiceURI.slice(6), rate);
+    }
   } catch (e) {}
   speak(sentText(sents[i]), () => {
     if (!playing || my !== speakToken) return;
+    // 云端单通道：一次只播一句（多发会互相掐），靠预取补延迟；本机才多发排队
+    const cloud = typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on;
     launch(i + 1, my, true);
-    // i+2 只是备弹：云端只预热缓存（直接播会掐死 i+1），本机才进串行队列
-    if (i + 2 < sents.length) {
-      if (typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on) {
-        try { CLOUD.prefetch(plainEN(sentRaw(i + 2)), selVoiceURI.slice(6), rate); } catch (e) {}
-      } else launch(i + 2, my, true);
-    }
-  }, { immediate }, my);
+    if (!cloud) { launch(i + 2, my, true); launch(i + 3, my, true); }
+  }, { immediate: immediate, sent: i }, my);
 }
 function playFrom(i) {
   if (i < 0 || i >= sents.length) { playing = false; idx = -1; paint(); return; }
@@ -1402,18 +1430,21 @@ function playFrom(i) {
   lockScreen();
   syncSeek(i);
   paint();
+  savePos();
   const my = speakToken;
   const cloudMode = typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on;
-  if (hadQueue) {
-    launch(i, my, false); // 有旧队列：cancel 后延迟起播（Chrome 吞声 workaround）
-    if (!cloudMode) setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 250);
+  const fire3 = () => { launch(i, my, true); launch(i + 1, my, true); launch(i + 2, my, true); };
+  if (cloudMode) {
+    launch(i, my, true); // 云端单播：只发一句，续播走 onend 单链
+  } else if (hadQueue) {
+    // 有旧队列：cancel 后 250ms 再起播（Chrome 吞声 workaround），起播即连发 3 句
+    setTimeout(() => { if (my === speakToken && playing) fire3(); }, 250);
   } else {
-    launch(i, my, true);  // 空闲：手势上下文内同步发射，杜绝 setTimeout 丢失用户激活
-    if (!cloudMode) setTimeout(() => { if (my === speakToken && playing) launch(i + 1, my, true); }, 200);
+    fire3(); // 空闲：手势上下文内同步连发，杜绝 setTimeout 丢失用户激活
   }
 }
 function togglePlay() {
-  if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} paint(); }
+  if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} paint(); savePos(); }
   else playFrom(idx >= 0 ? idx : 0);
 }
 function step(d) {
@@ -1486,6 +1517,8 @@ document.addEventListener('click', e => {
   if (_cp && _cp.style.display === 'block' && !e.target.closest('.cpop') && !e.target.closest('#btnCloud') && !e.target.closest('#voiceSel')) _cp.style.display = 'none';
   const _jp = document.getElementById('jumpPop');
   if (_jp && _jp.style.display === 'block' && !e.target.closest('.jpop') && !e.target.closest('#segLbl')) _jp.style.display = 'none';
+  const _mp = document.getElementById('markPop');
+  if (_mp && _mp.style.display === 'block' && !e.target.closest('.jpop') && !e.target.closest('#markBtn')) _mp.style.display = 'none';
   /* 移动端：点遮罩关词库抽屉 */
   if (e.target.closest('.layout') && e.target === document.querySelector('.layout.panel-open')) {
     togglePanel();
@@ -1645,10 +1678,62 @@ document.addEventListener('keydown', e => {
   if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
   if (e.key === 'ArrowRight') step(1);
   if (e.key === 'ArrowLeft') step(-1);
-  if (e.key === 'Escape') { pop.style.display = 'none'; const cp = document.getElementById('cloudPop'); if (cp) cp.style.display = 'none'; const jp = document.getElementById('jumpPop'); if (jp) jp.style.display = 'none'; }
+  if (e.key === 'Escape') { pop.style.display = 'none'; const cp = document.getElementById('cloudPop'); if (cp) cp.style.display = 'none'; const jp = document.getElementById('jumpPop'); if (jp) jp.style.display = 'none'; const mp = document.getElementById('markPop'); if (mp) mp.style.display = 'none'; }
 });
 
-render(); renderList(); loadVoices(); bindSeek();
+/* ============ 进度存档 + 手动书签 ============ */
+function savePos() {
+  try { localStorage.setItem('ielts-pos', JSON.stringify({ i: idx, t: Date.now() })); } catch (e) {}
+}
+function loadPos() {
+  try {
+    const o = JSON.parse(localStorage.getItem('ielts-pos') || 'null');
+    if (o && Number.isInteger(o.i) && o.i >= 0 && o.i < sents.length) {
+      idx = o.i; paint(); syncSeek(idx);
+      const el = sents[idx];
+      if (el) setTimeout(() => el.scrollIntoView({ block: 'center' }), 60);
+    }
+  } catch (e) {}
+}
+function getMarks() { try { return JSON.parse(localStorage.getItem('ielts-marks') || '[]'); } catch (e) { return []; } }
+function setMarks(m) { try { localStorage.setItem('ielts-marks', JSON.stringify((m || []).slice(0, 50))); } catch (e) {} }
+function markLabel(i) {
+  const ai = artOfSent[i];
+  if (ai === undefined) return `全文第${i + 1}句`;
+  const [s0, e0] = segRange(ai);
+  return `第${ai + 1}章第${i - s0 + 1}句 · 全文${i + 1}/${sents.length}`;
+}
+function addMark() {
+  const at = idx >= 0 ? idx : 0;
+  const d = new Date();
+  const ts = `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  const m = getMarks().filter(x => x && x.i !== at);
+  m.unshift({ i: at, t: ts });
+  setMarks(m); renderMarks();
+}
+function delMark(i) { setMarks(getMarks().filter(x => x && x.i !== i)); renderMarks(); }
+function renderMarks() {
+  const list = document.getElementById('markList');
+  if (!list) return;
+  const m = getMarks().filter(x => x && Number.isInteger(x.i) && x.i >= 0 && x.i < sents.length);
+  list.innerHTML = m.length ? m.map(x =>
+    `<div class="mitem"><div><div class="mt">${esc(markLabel(x.i))}</div><div class="ms">${esc(x.t || '')}</div></div>` +
+    `<button class="btn play" onclick="jumpMark(${x.i})">直达</button>` +
+    `<button class="btn" onclick="delMark(${x.i})">删</button></div>`).join('')
+    : '<div style="font-size:12px;color:var(--muted)">还没有书签，先点“记下当前位置”。</div>';
+}
+function jumpMark(i) { toggleMarkPop(false); playFrom(Math.max(0, Math.min(sents.length - 1, i))); }
+function toggleMarkPop(force) {
+  const p = document.getElementById('markPop');
+  if (!p) return;
+  const show = force !== undefined ? force : p.style.display !== 'block';
+  if (show) { renderMarks(); p.style.display = 'block'; }
+  else p.style.display = 'none';
+}
+window.addEventListener('pagehide', savePos);
+document.addEventListener('visibilitychange', () => { if (document.hidden) savePos(); });
+
+render(); renderList(); loadVoices(); bindSeek(); loadPos();
 function mobileBtnIcons() { // 移动端播放条：确保图标在窄屏下正常显示，不再替换文字
   const btns = document.querySelectorAll('.audiobar .btn');
   btns.forEach(btn => {
