@@ -50,7 +50,10 @@
     background: var(--grad); -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent; }
   .ctrl { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-  button, select { font-family: inherit; cursor: pointer; }
+  button, select { font-family: inherit; cursor: pointer; touch-action: manipulation; }
+  .sent, .w, .btn, .tick, .adot, #edgeTab { -webkit-tap-highlight-color: transparent; }
+  /* 长章节视口外跳过渲染：低端安卓滚动/点读卡顿的主因之一（估计高度防滚动条乱跳） */
+  .sec { content-visibility: auto; contain-intrinsic-size: auto 1500px; }
   .btn { border: 1px solid var(--accent-line); background: #fff; border-radius: 999px;
     padding: 7px 14px; font-size: 13px; font-weight: 500; color: var(--accent);
     transition: background var(--t-fast), border-color var(--t-fast), filter var(--t-fast);
@@ -1407,9 +1410,11 @@ function paint() {
     _paintIdx = idx;
   }
   if (idx >= 0 && sents[idx]) {
-    // 只在出视口才滚动：连播每句都 scrollIntoView 又贵又跟手势打架（移动端卡顿主因之一）
+    // 播放句保持在屏幕中部三分之一带内：出带才回中（每句都滚又贵又跟手势打架，
+    // 完全不滚又不居中，取中间——移动端卡顿与居中的折中）
     const r0 = sents[idx].getBoundingClientRect();
-    if (r0.top < 0 || r0.bottom > innerHeight)
+    const bandTop = innerHeight * 0.33, bandBot = innerHeight * 0.67;
+    if (r0.top < bandTop || r0.bottom > bandBot)
       sents[idx].scrollIntoView({ block: 'center', behavior: playing ? 'auto' : 'smooth' });
   }
   const bp = document.getElementById('btnPlay');
@@ -1454,10 +1459,20 @@ function launch(i, my, immediate) {
   } catch (e) {}
   speak(sentText(sents[i]), () => {
     if (!playing || my !== speakToken) return;
+    if (i + 1 >= sents.length) {
+      // 末句播完才算播完：预取的 launch(len) 会提前触发结束分支，
+      // 把最后几句连高亮带按钮状态一起掐掉（播到底部就停的根因）
+      playing = false; idx = -1; paint();
+      try { localStorage.setItem('ielts-pos', JSON.stringify({ i: 0, t: Date.now() })); } catch (e) {}
+      return;
+    }
     // 云端单通道：一次只播一句（多发会互相掐），靠预取补延迟；本机才多发排队
     const cloud = typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on;
     launch(i + 1, my, true);
-    if (!cloud) { launch(i + 2, my, true); launch(i + 3, my, true); }
+    if (!cloud) {
+      if (i + 2 < sents.length) launch(i + 2, my, true);
+      if (i + 3 < sents.length) launch(i + 3, my, true);
+    }
   }, { immediate: immediate, sent: i }, my);
 }
 function playFrom(i) {
