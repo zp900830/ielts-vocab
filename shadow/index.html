@@ -157,7 +157,7 @@
     border: 1px solid rgba(255,255,255,.65); border-right: none; border-radius: 12px 0 0 12px;
     padding: 14px 7px; cursor: pointer; box-shadow: var(--shadow); }
   #edgeTab:hover { background: var(--accent-soft); }
-  @media (min-width: 901px) {
+  @media (min-width: 701px) {
     body.panel-open #edgeTab { display: none; }
   }
   /* 注：词库入口只保留 #edgeTab（桌面/移动共用），删除重复的 #libTab 防叠放 */
@@ -229,7 +229,7 @@
     #seekKnob { opacity: 1; transform: translate(-50%, -50%) scale(.55); }
     #seekTrack.active #seekKnob { transform: translate(-50%, -50%) scale(1); }
   }
-  @media (max-width: 900px) {
+  @media (max-width: 700px) {
     #anchors { display: flex; position: sticky; top: 0; z-index: 99; transform: none; flex-direction: row;
       gap: 8px; overflow-x: auto; opacity: 1; padding: 8px 12px; scrollbar-width: none;
       background: var(--glass-strong); -webkit-backdrop-filter: blur(18px) saturate(160%);
@@ -280,7 +280,7 @@
     -webkit-backdrop-filter: blur(28px) saturate(180%); backdrop-filter: blur(28px) saturate(180%);
     border: 1px solid rgba(255,255,255,.6); border-radius: 20px; overflow: hidden;
     box-shadow: 0 8px 28px rgba(30,60,48,.08), inset 0 1px 0 rgba(255,255,255,.9); }
-  @media (min-width: 901px) {
+  @media (min-width: 701px) {
     body.panel-open aside { transform: none; visibility: visible; }
   }
   aside .head { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); }
@@ -335,7 +335,7 @@
   .pop .row .btn { flex: 1; }
 
   /* ============ 移动端（借鉴词汇真经：去矩形块感——顶栏精简、播放条单行、词库抽屉化） ============ */
-  @media (max-width: 900px) {
+  @media (max-width: 700px) {
     /* iOS 不支持 background-attachment:fixed，改固定层绘制（否则背景整块发白） */
     html { background: none; }
     body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -1547,7 +1547,7 @@ document.getElementById('btnGloss').onclick = function() {
 /* ============ 词库面板（桌面：侧栏显隐；移动：底部抽屉 + 遮罩） ============ */
 function togglePanel() {
   const layout = document.querySelector('.layout');
-  const mobile = window.matchMedia('(max-width: 900px)').matches;
+  const mobile = window.matchMedia('(max-width: 700px)').matches;
   if (mobile) {
     layout.classList.toggle('panel-open');
   } else {
@@ -1662,7 +1662,7 @@ function mobileBtnIcons() { // 移动端播放条：确保图标在窄屏下正�
 mobileBtnIcons();
 function stickAnchors() { // 移动端锚点吸顶：top 取顶栏实高，滑到哪跟到哪
   try {
-    if (!window.matchMedia('(max-width: 900px)').matches) return;
+    if (!window.matchMedia('(max-width: 700px)').matches) return;
     const tb = document.querySelector('.topbar');
     const nav = document.getElementById('anchors');
     if (tb && nav) nav.style.top = tb.getBoundingClientRect().height + 'px';
