@@ -563,7 +563,7 @@
       </div>
       <div class="ab-row">
         <button class="btn" onclick="step(-1)"><i class="ri-arrow-left-s-line"></i> 上一句</button>
-        <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i> 朗读</button>
+        <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i> 播放</button>
         <button class="btn" onclick="step(1)"><i class="ri-arrow-right-s-line"></i> 下一句</button>
         <button class="btn" id="btnLoop" onclick="toggleLoop()" title="单句循环：反复听同一句直到熟练"><i class="ri-repeat-line"></i></button>
         <div class="rate-wrap" id="rateWrap">
@@ -1581,19 +1581,19 @@
     function paint() {
     if (_paintIdx !== idx) {
     if (_paintIdx >= 0 && sents[_paintIdx]) sents[_paintIdx].classList.remove('playing');
-    if (idx >= 0 && sents[idx]) sents[idx].classList.add('playing');
     _paintIdx = idx;
     }
+    // 始终确保当前句有高亮（即使 idx 未变，循环模式下也需要刷新）
     if (idx >= 0 && sents[idx]) {
-    // 播放句保持在屏幕中部三分之一带内：出带才回中（每句都滚又贵又跟手势打架，
-    // 完全不滚又不居中，取中间——移动端卡顿与居中的折中）
+    if (!sents[idx].classList.contains('playing')) sents[idx].classList.add('playing');
+    // 播放句保持在屏幕中部三分之一带内：出带才回中
     const r0 = sents[idx].getBoundingClientRect();
     const bandTop = innerHeight * 0.33, bandBot = innerHeight * 0.67;
     if (r0.top < bandTop || r0.bottom > bandBot)
     sents[idx].scrollIntoView({ block: 'center', behavior: playing ? 'auto' : 'smooth' });
     }
     const bp = document.getElementById('btnPlay');
-    if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i> 暂停' : '<i class="ri-play-fill"></i> 朗读';
+    if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i> 暂停' : '<i class="ri-play-fill"></i> 播放';
     const segEl = document.getElementById('segLbl');
     if (idx >= 0 && segEl) {
     const ai0 = artOfSent[idx];
@@ -1634,8 +1634,9 @@
     } catch (e) {}
     speak(sentText(sents[i]), () => {
     if (!playing || my !== speakToken) return;
-    // 单句循环模式：重播当前句
+    // 单句循环模式：重播当前句（重置 launchedUpTo 允许重复发射同一句）
     if (loopMode) {
+    launchedUpTo = i - 1;
     launch(i, my, true);
     return;
     }
