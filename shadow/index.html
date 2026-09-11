@@ -2274,40 +2274,33 @@
     window.addEventListener('pagehide', savePos);
     document.addEventListener('visibilitychange', () => { if (document.hidden) savePos(); });
 
-    /* 沉浸阅读：展开后无操作5s自动收回，同时导航透明度降低 */
-    let expandTimer = null;
-    const EXPAND_TIMEOUT = 5000; // 5秒
+    /* 用户无操作5s自动收回播放条+导航透明度降低 */
+    let idleTimer = null;
+    const IDLE_TIMEOUT = 5000; // 5秒
     function expandAudiobar() {
       const ab = document.getElementById('audiobar');
       if (!ab) return;
-      ab.classList.toggle('expanded');
-      if (ab.classList.contains('expanded')) {
-        // 展开时启动定时器，移除低透明度
-        startExpandTimer();
-        document.body.classList.remove('fade-nav');
-      } else {
-        // 手动收回时清除定时器
-        clearExpandTimer();
-      }
+      ab.classList.add('expanded');
+      document.body.classList.remove('fade-nav');
+      startIdleTimer();
     }
-    function startExpandTimer() {
-      clearExpandTimer();
-      expandTimer = setTimeout(() => {
+    function startIdleTimer() {
+      clearIdleTimer();
+      idleTimer = setTimeout(() => {
         const ab = document.getElementById('audiobar');
         if (ab) ab.classList.remove('expanded');
-        // 5秒后导航透明度降低
         document.body.classList.add('fade-nav');
-      }, EXPAND_TIMEOUT);
+      }, IDLE_TIMEOUT);
     }
-    function clearExpandTimer() {
-      if (expandTimer) { clearTimeout(expandTimer); expandTimer = null; }
+    function clearIdleTimer() {
+      if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
     }
-    // 用户交互恢复导航透明度
+    // 用户交互重置定时器+恢复透明度+展开播放条
     ['mousedown', 'mousemove', 'touchstart', 'keydown'].forEach(evt => {
       document.addEventListener(evt, () => {
         document.body.classList.remove('fade-nav');
         const ab = document.getElementById('audiobar');
-        if (ab && ab.classList.contains('expanded')) startExpandTimer();
+        if (ab && ab.classList.contains('expanded')) startIdleTimer();
       }, { passive: true });
     });
     (function() {
