@@ -481,6 +481,8 @@
   body.scrolled .topbar-right { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
   body.scrolled .topbar .ctrl { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
   body.scrolled .topbar-right > .btn { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
+  /* 自由播放超过5s后导航透明度降低 */
+  body.fade-nav .topbar { opacity: .55; }
   /* mini 播放条：收缩为居中小胶囊（仅 上一句/播放/下一句），宽度跟随内容平滑收拢 */
   body.scrolled .audiobar { padding: 4px 10px; gap: 4px; border-radius: 999px;
     width: fit-content; max-width: calc(100vw - 48px);
@@ -2271,11 +2273,44 @@
     window.addEventListener('pagehide', savePos);
     document.addEventListener('visibilitychange', () => { if (document.hidden) savePos(); });
 
-    /* 沉浸阅读：滚动时顶栏和播放条收缩；恢复交由 hover（桌面）/展开按钮（移动端）触发 */
+    /* 沉浸阅读：展开后无操作5s自动收回，同时导航透明度降低 */
+    let expandTimer = null;
+    const EXPAND_TIMEOUT = 5000; // 5秒
     function expandAudiobar() {
-    const ab = document.getElementById('audiobar');
-    if (ab) ab.classList.toggle('expanded');
+      const ab = document.getElementById('audiobar');
+      if (!ab) return;
+      ab.classList.toggle('expanded');
+      if (ab.classList.contains('expanded')) {
+        // 展开时启动定时器，移除低透明度
+        startExpandTimer();
+        document.body.classList.remove('fade-nav');
+      } else {
+        // 手动收回时清除定时器
+        clearExpandTimer();
+      }
     }
+    function startExpandTimer() {
+      clearExpandTimer();
+      expandTimer = setTimeout(() => {
+        const ab = document.getElementById('audiobar');
+        if (ab) ab.classList.remove('expanded');
+        // 5秒后导航透明度降低
+        document.body.classList.add('fade-nav');
+      }, EXPAND_TIMEOUT);
+    }
+    function clearExpandTimer() {
+      if (expandTimer) { clearTimeout(expandTimer); expandTimer = null; }
+    }
+    // 用户交互重置定时器，恢复导航透明度
+    ['mousedown', 'mousemove', 'touchstart', 'keydown'].forEach(evt => {
+      document.addEventListener(evt, () => {
+        const ab = document.getElementById('audiobar');
+        if (ab && ab.classList.contains('expanded')) {
+          startExpandTimer();
+          document.body.classList.remove('fade-nav');
+        }
+      }, { passive: true });
+    });
     (function() {
     let scrollTicking = false;
     window.addEventListener('scroll', () => {
@@ -2285,7 +2320,7 @@
     const scrolled = window.scrollY > 60;
     document.body.classList.toggle('scrolled', scrolled);
     // 回到顶部时清除展开状态（mini模式不再适用）
-    if (!scrolled) { const ab = document.getElementById('audiobar'); if (ab) ab.classList.remove('expanded'); }
+    if (!scrolled) { const ab = document.getElementById('audiobar'); if (ab) ab.classList.remove('expanded'); clearExpandTimer(); }
     scrollTicking = false;
     });
     }, { passive: true });
