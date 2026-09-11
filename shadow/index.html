@@ -113,7 +113,7 @@
   select { -webkit-appearance: none; -moz-appearance: none; appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%236b665a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat; background-position: right 10px center; padding-right: 32px; }
-  .sent, .w, .btn, .tick, .adot, #edgeTab { -webkit-tap-highlight-color: transparent; }
+  .sent, .w, .btn, .tick, #edgeTab { -webkit-tap-highlight-color: transparent; }
   /* 长章节视口外跳过渲染：低端安卓滚动/点读卡顿的主因之一（估计高度防滚动条乱跳） */
   .sec { content-visibility: auto; contain-intrinsic-size: auto 1500px; contain: layout style paint; }
   .btn { border: 1px solid var(--accent-line); background: #fff; border-radius: 999px;
@@ -244,21 +244,6 @@
   .audiobar .btn + .btn { margin-left: 4px; }
   .audiobar .btn.play { font-size: 13px; padding: 4px 15px; }
   .audiobar .seg { min-width: 0; align-self: center; flex: none; padding: 3px 8px; font-size: 11px; }
-  /* 左侧章节锚点（低调小点） */
-  #anchors { position: fixed; left: 8px; top: 50%; transform: translateY(-50%);
-    z-index: 110; display: flex; flex-direction: column; gap: 12px; opacity: .55;
-    transition: opacity var(--t-fast); }
-  #anchors:hover { opacity: 1; }
-  #anchors .adot { width: 6px; height: 6px; border-radius: 50%; background: #b9d4c7;
-    border: none; cursor: pointer; position: relative; padding: 0;
-    transition: transform var(--t-fast), background var(--t-fast); }
-  #anchors .adot:hover { background: var(--accent-bright); transform: scale(1.4); }
-  #anchors .adot.on { background: var(--accent); transform: scale(1.4); }
-  #anchors .atip { position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
-    white-space: nowrap; background: var(--glass-strong); border: 1px solid var(--border);
-    padding: 4px 10px; border-radius: 8px; font-size: 12px; color: var(--text);
-    display: none; box-shadow: var(--shadow); }
-  #anchors .adot:hover .atip { display: block; }
   #edgeTab { position: fixed; right: 0; top: 130px; z-index: 110;
     writing-mode: vertical-rl; letter-spacing: 3px; font-size: 12px; font-weight: 600;
     color: var(--accent); background: var(--glass-strong);
@@ -360,24 +345,6 @@
     #seekTicks .tick.cur { width: 8px; height: 8px; background: var(--coral-deep); }
     #seekKnob { opacity: 1; width: 18px; height: 18px; transform: translate(-50%, -50%) scale(1); }
     #seekTrack.active #seekKnob { width: 24px; height: 24px; }
-    }
-  @media (max-width: 700px) {
-    /* 导航锚点：移动端与桌面端一致，左侧圆点 */
-    #anchors { display: flex; position: fixed; left: 8px; top: 50%; transform: translateY(-50%);
-      z-index: 110; flex-direction: column; gap: 12px; opacity: .55;
-      background: none; -webkit-backdrop-filter: none; backdrop-filter: none;
-      border: none; padding: 0; overflow: visible; }
-    #anchors .adot { width: 6px; height: 6px; border-radius: 50%; background: #b9d4c7;
-      border: none; cursor: pointer; position: relative; padding: 0;
-      display: block; }
-    #anchors .adot::before { display: none; }
-    #anchors .adot:hover { background: var(--accent-bright); transform: scale(1.4); }
-    #anchors .adot.on { background: var(--accent); transform: scale(1.4); }
-    #anchors .adot .atip { position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
-      white-space: nowrap; background: var(--glass-strong); border: 1px solid var(--border);
-      padding: 4px 10px; border-radius: 8px; font-size: 12px; color: var(--text);
-      display: none; box-shadow: var(--shadow); }
-    #anchors .adot:hover .atip, #anchors .adot.on .atip { display: block; }
     }
   #dbg { position: fixed; left: 8px; bottom: 8px; z-index: 999; width: min(480px, 90vw);
     max-height: 30vh; overflow-y: auto; background: rgba(20,20,20,.92); color: #7dfd9a;
@@ -728,7 +695,6 @@
       </div>
       <div id="markList"></div>
     </div>
-    <nav id="anchors" aria-label="章节锚点"></nav>
     <button id="edgeTab" onclick="togglePanel()" title="词库">词库</button>
     <div id="dbg"></div>
     <button id="backToPlay" class="back-to-play" onclick="scrollToPlaying()" style="display:none"><i class="ri-arrow-up-line"></i> 回到播放位置</button>
@@ -850,46 +816,13 @@
     sec.querySelectorAll('.sent').forEach(() => artOfSent.push(ai));
     });
     _paintIdx = -2; _inTextSet = null;
-    buildAnchors();
     buildSeek(0);
     }
 
-    /* ============ 左侧锚点 + 播放条句子圆点 ============ */
+    /* ============ 播放条句子圆点 ============ */
     let artOfSent = [], dotsArt = -1;
     const plainEN = t => t.replace(/\[\[[^\]:]+:([^\]]+)\]\]/g, '$1');
-    function buildAnchors() {
-    const nav = document.getElementById('anchors');
-    nav.innerHTML = SECTIONS.map((s, i) =>
-    `<button class="adot${i === 0 ? ' on' : ''}" data-a="${i}" title="${esc(s.title)}"><span class="atip">${i + 1}. ${esc(s.title)}</span></button>`).join('');
-    nav.querySelectorAll('.adot').forEach(d => {
-    d.onclick = () => jumpArticle(parseInt(d.dataset.a, 10));
-    });
-    }
-    function jumpArticle(ai) {
-    const sec = document.querySelectorAll('.sec')[ai];
-    if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    buildSeek(ai); markAnchor(ai);
-    }
-    function markAnchor(ai) {
-    document.querySelectorAll('#anchors .adot').forEach(d =>
-    d.classList.toggle('on', parseInt(d.dataset.a, 10) === ai));
-    }
-    function secStartY(ai) {
-    const sec = document.querySelectorAll('.sec')[ai];
-    return sec ? sec.getBoundingClientRect().top + scrollY : 0;
-    }
-    let spyTick = false;
     window.addEventListener('scroll', () => {
-    if (spyTick) return; spyTick = true;
-    requestAnimationFrame(() => {
-    spyTick = false;
-    const secs = document.querySelectorAll('.sec');
-    let cur = 0;
-    secs.forEach((sec, i) => {
-    if (sec.getBoundingClientRect().top < innerHeight * 0.35) cur = i;
-    });
-    markAnchor(cur);
-    });
     // 检测用户手动滚动（播放中且非程序触发的滚动）
     if (playing && !_programmaticScroll) {
     _userScrolled = true;
@@ -1832,7 +1765,6 @@
     }
     }
     paintSeek();
-    if (idx >= 0 && artOfSent[idx] !== undefined) markAnchor(artOfSent[idx]);
     try {
     if ('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
     } catch (e) {}
