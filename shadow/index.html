@@ -534,11 +534,11 @@
   body.scrolled .audiobar.expanded .ab-expand { display: none; }
   /* 鼠标移入mini态的导航/播放条时平滑恢复初始状态（仅限支持悬停的设备，避免移动端点按误触） */
   @media (hover: hover) {
-  body.scrolled .topbar:hover { padding: 10px 24px; gap: 8px 14px;
+  body.scrolled .topbar:hover, body.fade-nav.scrolled .topbar:hover { padding: 10px 24px; gap: 8px 14px;
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     box-shadow: 0 24px 64px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.04);
-    border-bottom-color: rgba(255,255,255,.5); }
+    border-bottom-color: rgba(255,255,255,.5); opacity: 1; }
   body.scrolled .topbar:hover::before { opacity: 1; }
   body.scrolled .topbar:hover h1 { font-size: 17px; opacity: 1; }
   body.scrolled .topbar:hover .topbar-right { max-width: 1400px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
