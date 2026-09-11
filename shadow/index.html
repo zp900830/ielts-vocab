@@ -204,8 +204,6 @@
   .ab-title:hover { background: var(--accent); color: #fff; }
   .jump-btn { display: none; }
   .ab-seek { flex: 1; min-width: 0; }
-  .ab-time { font-size: 11px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums;
-    transition: font-size .4s ease; }
   .ab-btn { font-size: 11px; padding: 4px 8px; min-height: 28px;
     transition: font-size .4s ease, padding .4s ease, min-height .4s ease; }
   #btnAB { font-weight: 700; letter-spacing: -0.5px; }
@@ -600,7 +598,6 @@
     .ab-seek { flex: 1; min-width: 0; width: 100%; }
     .ab-title { font-size: 10px; padding: 3px 8px; min-width: 60px; }
     .jump-btn { display: inline-flex; }
-    .ab-time { font-size: 10px; }
     .ab-btn { font-size: 10px; padding: 3px 6px; min-height: 26px; }
     .loop-menu { min-width: 80px; }
     .loop-menu button { font-size: 12px; padding: 6px 8px; }
@@ -636,7 +633,6 @@
     .audiobar { gap: 3px; padding: 6px 8px; left: 4px; right: 4px; }
     .audiobar .btn { padding: 4px 6px; font-size: 10px; min-height: 28px; }
     .audiobar .btn.play { padding: 4px 10px; font-size: 11px; }
-    .ab-time { font-size: 9px; }
     }
     </style>
 
@@ -698,7 +694,6 @@
             <button data-mrate="1.5" onclick="pickRate(1.5)">1.5x</button>
           </div>
         </div>
-        <div class="ab-title" id="abTitle" onclick="toggleJumpPop()" title="点击快速跳转到某章某句">—</div>
         <button class="btn ab-btn" id="markBtn" onclick="toggleMarkPop()" title="书签：记下当前位置，随时回来">🔖</button>
         <button class="btn ab-btn jump-btn" onclick="toggleJumpPop()" title="快速跳转"><i class="ri-navigation-line"></i></button>
       </div>
@@ -711,7 +706,7 @@
             </div>
           </div>
         </div>
-        <div class="ab-time" id="timeDisplay">0:00 / 0:00</div>
+        <div class="ab-title" id="abTitle" onclick="toggleJumpPop()" title="点击快速跳转到某章某句">—</div>
       </div>
       <button class="btn ab-expand" id="abExpand" onclick="expandAudiobar()" title="展开播放条"><i class="ri-arrow-up-double-line"></i></button>
     </div>
@@ -1836,8 +1831,6 @@
     titleEl.textContent = `${idx + 1} / ${sents.length}`;
     }
     }
-    // 更新时间显示
-    updateTimeDisplay();
     paintSeek();
     if (idx >= 0 && artOfSent[idx] !== undefined) markAnchor(artOfSent[idx]);
     try {
@@ -1994,17 +1987,6 @@
     }
     }
     
-    // 时间显示更新
-    function updateTimeDisplay() {
-    const el = document.getElementById('timeDisplay');
-    if (!el) return;
-    if (idx < 0 || !sents.length) { el.textContent = '0:00 / 0:00'; return; }
-    const curM = Math.floor(idx * 3 / 60); // 估算每句约3秒
-    const curS = Math.floor(idx * 3 % 60);
-    const totalM = Math.floor(sents.length * 3 / 60);
-    const totalS = Math.floor(sents.length * 3 % 60);
-    el.textContent = `${curM}:${String(curS).padStart(2,'0')} / ${totalM}:${String(totalS).padStart(2,'0')}`;
-    }
     function step(d) {
     playing = false;
     playFrom(Math.max(0, Math.min(sents.length - 1, (idx < 0 ? 0 : idx) + d)));
