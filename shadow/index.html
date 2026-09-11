@@ -161,38 +161,32 @@
   .ab-btn { font-size: 11px; padding: 4px 8px; min-height: 28px; }
   #btnAB { font-weight: 700; letter-spacing: -0.5px; }
   #btnAB.ab-active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .loop-wrap { position: relative; flex: none; }
+  /* 单句重复 / 倍速：同一套下拉菜单交互（桌面悬浮+点击，移动点击） */
+  .loop-wrap, .rate-wrap { position: relative; flex: none; }
   #btnLoop { position: relative; }
   #btnLoop #loopCount { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 9px; font-weight: 700; pointer-events: none; }
-  .loop-menu { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(4px);
-    min-width: 92px; background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
-    backdrop-filter: blur(22px) saturate(170%); border: 1px solid rgba(255,255,255,.7);
-    border-radius: 14px; box-shadow: var(--shadow-lg); padding: 6px;
-    display: flex; flex-direction: column; gap: 2px;
-    opacity: 0; visibility: hidden; pointer-events: none;
-    transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index: 10; }
-  .loop-wrap:hover .loop-menu, .loop-wrap.open .loop-menu { opacity: 1; visibility: visible;
-    pointer-events: auto; transform: translateX(-50%) translateY(0); }
-  .loop-menu button { border: none; background: transparent; border-radius: 10px;
-    padding: 7px 10px; font-size: 13px; color: var(--text); text-align: center; cursor: pointer; }
-  .loop-menu button:hover { background: var(--accent-soft); }
-  .loop-menu button.active { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
-  #rateCycle { flex: none; }
-  .rate-wrap { position: relative; flex: none; }
-  .rate-menu { position: absolute; bottom: calc(100% + 10px); left: 50%;
+  .loop-menu, .rate-menu { position: absolute; bottom: calc(100% + 8px); left: 50%;
     transform: translateX(-50%) translateY(4px); min-width: 92px;
     background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
     backdrop-filter: blur(22px) saturate(170%); border: 1px solid rgba(255,255,255,.7);
     border-radius: 14px; box-shadow: var(--shadow-lg); padding: 6px;
     display: flex; flex-direction: column; gap: 2px;
     opacity: 0; visibility: hidden; pointer-events: none;
-    transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index: 5; }
-  .rate-wrap:hover .rate-menu, .rate-wrap.open .rate-menu { opacity: 1; visibility: visible;
+    transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index: 12; }
+  /* 透明桥：盖住菜单与按钮之间的空隙，鼠标穿过时 hover 不断链（悬浮能选的关键） */
+  .loop-menu::after, .rate-menu::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 10px; }
+  /* 点击打开（桌面/移动通用） */
+  .loop-wrap.open .loop-menu, .rate-wrap.open .rate-menu { opacity: 1; visibility: visible;
     pointer-events: auto; transform: translateX(-50%) translateY(0); }
-  .rate-menu button { border: none; background: transparent; border-radius: 10px;
-    padding: 7px 10px; font-size: 13px; color: var(--text); text-align: center; }
-  .rate-menu button:hover { background: var(--accent-soft); }
-  .rate-menu button.active { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+  /* 桌面悬浮展开（触屏设备禁用，避免 iOS 点击后菜单粘住不关） */
+  @media (hover: hover) and (pointer: fine) {
+    .loop-wrap:hover .loop-menu, .rate-wrap:hover .rate-menu { opacity: 1; visibility: visible;
+      pointer-events: auto; transform: translateX(-50%) translateY(0); }
+  }
+  .loop-menu button, .rate-menu button { border: none; background: transparent; border-radius: 10px;
+    padding: 7px 10px; font-size: 13px; color: var(--text); text-align: center; cursor: pointer; }
+  .loop-menu button:hover, .rate-menu button:hover { background: var(--accent-soft); }
+  .loop-menu button.active, .rate-menu button.active { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
   .ab-row { display: flex; align-items: center; gap: 5px; flex-wrap: nowrap; justify-content: center; }
   .audiobar .btn { min-height: 26px; padding: 4px 11px; font-size: 12px; position: relative; white-space: nowrap; }
   .audiobar .btn + .btn { margin-left: 4px; }
@@ -566,10 +560,11 @@
         <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i> 播放</button>
         <button class="btn" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
-          <button class="btn" id="btnLoop" onclick="toggleLoop()" title="单句循环（悬停选择次数）"><i class="ri-repeat-line"></i><span id="loopCount">3</span></button>
+          <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="单句循环：选择每句重复次数"><i class="ri-repeat-line"></i><span id="loopCount" style="display:none">3</span></button>
           <div class="loop-menu" id="loopMenu">
+            <button data-count="0" onclick="setLoopCount(0)">关</button>
             <button data-count="1" onclick="setLoopCount(1)">1遍</button>
-            <button data-count="3" class="active" onclick="setLoopCount(3)">3遍</button>
+            <button data-count="3" onclick="setLoopCount(3)">3遍</button>
             <button data-count="5" onclick="setLoopCount(5)">5遍</button>
           </div>
         </div>
@@ -1774,27 +1769,32 @@
     else playFrom(idx >= 0 ? idx : 0);
     }
     let loopMode = false;
-    let loopCount = 3; // 默认重复3遍，0表示无限
+    let loopCount = 3; // 每句重复遍数
     let loopCurrent = 0;
-    function toggleLoop() {
-    loopMode = !loopMode;
+    function toggleLoopMenu(e) {
+    if (e) e.stopPropagation();
+    const w = document.getElementById('loopWrap');
+    if (!w) return;
+    const open = w.classList.toggle('open');
+    if (open) setTimeout(() => document.addEventListener('pointerdown', function h(ev) {
+    if (!ev.target.closest('#loopWrap')) { w.classList.remove('open'); document.removeEventListener('pointerdown', h); }
+    }), 0);
+    }
+    function setLoopCount(count) {
+    loopMode = count > 0;
+    if (count > 0) loopCount = count;
     loopCurrent = 0;
     const btn = document.getElementById('btnLoop');
     if (btn) btn.classList.toggle('loop-active', loopMode);
-    dlog('loop', loopMode ? 'on' : 'off');
-    }
-    function setLoopCount(count) {
-    loopCount = count;
-    loopCurrent = 0;
     const wrap = document.getElementById('loopWrap');
     if (wrap) {
-    wrap.querySelectorAll('.loop-menu button').forEach(b => {
-    b.classList.toggle('active', parseInt(b.dataset.count) === count);
-    });
+    wrap.querySelectorAll('.loop-menu button').forEach(b =>
+    b.classList.toggle('active', parseInt(b.dataset.count, 10) === (loopMode ? loopCount : 0)));
+    wrap.classList.remove('open');
     }
     const countEl = document.getElementById('loopCount');
-    if (countEl) countEl.textContent = count;
-    dlog('loop-count', count + '遍');
+    if (countEl) { countEl.textContent = loopCount; countEl.style.display = loopMode ? '' : 'none'; }
+    dlog('loop', loopMode ? `on x${loopCount}` : 'off');
     }
     
     // A-B段落循环复读
@@ -1906,7 +1906,7 @@
     const _cp = document.getElementById('cloudPop');
     if (_cp && _cp.style.display === 'block' && !e.target.closest('.cpop') && !e.target.closest('#btnCloud') && !e.target.closest('#voiceSel')) _cp.style.display = 'none';
     const _jp = document.getElementById('jumpPop');
-    if (_jp && _jp.style.display === 'block' && !e.target.closest('.jpop') && !e.target.closest('#segLbl')) _jp.style.display = 'none';
+    if (_jp && _jp.style.display === 'block' && !e.target.closest('.jpop') && !e.target.closest('#abTitle') && !e.target.closest('.jump-btn')) _jp.style.display = 'none';
     const _mp = document.getElementById('markPop');
     if (_mp && _mp.style.display === 'block' && !e.target.closest('.jpop') && !e.target.closest('#markBtn')) _mp.style.display = 'none';
     /* 移动端：点遮罩关词库抽屉 */
@@ -2134,7 +2134,7 @@
     if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
     if (e.key === 'ArrowRight') step(1);
     if (e.key === 'ArrowLeft') step(-1);
-    if (e.key === 'Escape') { pop.style.display = 'none'; const cp = document.getElementById('cloudPop'); if (cp) cp.style.display = 'none'; const jp = document.getElementById('jumpPop'); if (jp) jp.style.display = 'none'; const mp = document.getElementById('markPop'); if (mp) mp.style.display = 'none'; }
+    if (e.key === 'Escape') { pop.style.display = 'none'; const cp = document.getElementById('cloudPop'); if (cp) cp.style.display = 'none'; const jp = document.getElementById('jumpPop'); if (jp) jp.style.display = 'none'; const mp = document.getElementById('markPop'); if (mp) mp.style.display = 'none'; document.getElementById('loopWrap')?.classList.remove('open'); document.getElementById('rateWrap')?.classList.remove('open'); }
     });
 
     /* ============ 进度存档 + 手动书签 ============ */
