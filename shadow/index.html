@@ -1579,18 +1579,15 @@
 
     let _paintIdx = -2;
     function paint() {
+    // 高亮：切换 playing class
     if (_paintIdx !== idx) {
     if (_paintIdx >= 0 && sents[_paintIdx]) sents[_paintIdx].classList.remove('playing');
     _paintIdx = idx;
     }
-    // 始终确保当前句有高亮（即使 idx 未变，循环模式下也需要刷新）
     if (idx >= 0 && sents[idx]) {
     if (!sents[idx].classList.contains('playing')) sents[idx].classList.add('playing');
-    // 播放句保持在屏幕中部三分之一带内：出带才回中
-    const r0 = sents[idx].getBoundingClientRect();
-    const bandTop = innerHeight * 0.33, bandBot = innerHeight * 0.67;
-    if (r0.top < bandTop || r0.bottom > bandBot)
-    sents[idx].scrollIntoView({ block: 'center', behavior: playing ? 'auto' : 'smooth' });
+    // 始终滚动到页面垂直居中
+    sents[idx].scrollIntoView({ block: 'center', behavior: 'auto' });
     }
     const bp = document.getElementById('btnPlay');
     if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i> 暂停' : '<i class="ri-play-fill"></i> 播放';
