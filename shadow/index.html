@@ -158,6 +158,17 @@
   .ab-btn { font-size: 11px; padding: 4px 8px; min-height: 28px; }
   #btnAB { font-weight: 700; letter-spacing: -0.5px; }
   #btnAB.ab-active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .loop-wrap { position: relative; flex: none; }
+  .loop-menu { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%) translateY(4px);
+    min-width: 80px; background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
+    backdrop-filter: blur(22px) saturate(170%); border: 1px solid rgba(255,255,255,.7);
+    border-radius: 12px; box-shadow: var(--shadow-lg); padding: 6px; display: none; z-index: 10; }
+  .loop-menu.show { display: block; }
+  .loop-menu .loop-label { font-size: 10px; color: var(--muted); padding: 2px 8px; margin-bottom: 4px; }
+  .loop-menu button { display: block; width: 100%; text-align: left; padding: 6px 10px; font-size: 12px;
+    background: transparent; border: none; border-radius: 8px; cursor: pointer; color: var(--text); }
+  .loop-menu button:hover { background: var(--accent-soft); }
+  .loop-menu button.active { background: var(--accent); color: #fff; }
   #rateCycle { flex: none; }
   .rate-wrap { position: relative; flex: none; }
   .rate-menu { position: absolute; bottom: calc(100% + 10px); left: 50%;
@@ -462,6 +473,8 @@
     .ab-title { font-size: 10px; }
     .ab-time { font-size: 10px; }
     .ab-btn { font-size: 10px; padding: 3px 6px; min-height: 26px; }
+    .loop-menu { min-width: 70px; }
+    .loop-menu button { font-size: 11px; padding: 5px 8px; }
     .ab-row { gap: 3px; justify-content: center; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
     .ab-row::-webkit-scrollbar { display: none; }
     .audiobar .btn { font-size: 11px; padding: 5px 7px; min-height: 32px; min-width: 0; flex: none; white-space: nowrap; }
@@ -550,7 +563,16 @@
         <button class="btn" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line"></i></button>
         <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i></button>
         <button class="btn" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line"></i></button>
-        <button class="btn" id="btnLoop" onclick="toggleLoop()" title="单句循环"><i class="ri-repeat-line"></i></button>
+        <div class="loop-wrap" id="loopWrap">
+          <button class="btn" id="btnLoop" onclick="toggleLoop()" title="单句循环"><i class="ri-repeat-line"></i></button>
+          <div class="loop-menu" id="loopMenu">
+            <div class="loop-label">重复次数</div>
+            <button data-count="2" onclick="setLoopCount(2)">2遍</button>
+            <button data-count="3" class="active" onclick="setLoopCount(3)">3遍</button>
+            <button data-count="5" onclick="setLoopCount(5)">5遍</button>
+            <button data-count="0" onclick="setLoopCount(0)">无限</button>
+          </div>
+        </div>
         <div class="ab-title" id="abTitle" title="当前章节">—</div>
       </div>
       <div class="ab-row ab-bottom">
@@ -1704,9 +1726,18 @@
     if (!playing || my !== speakToken) return;
     // 单句循环模式：重播当前句（重置 launchedUpTo 允许重复发射同一句）
     if (loopMode) {
+    loopCurrent++;
+    if (loopCount === 0 || loopCurrent < loopCount) {
+    // 继续重复
     launchedUpTo = i - 1;
     launch(i, my, true);
     return;
+    } else {
+    // 达到重复次数，播放下一句
+    loopCurrent = 0;
+    }
+    } else {
+    loopCurrent = 0;
     }
     // A-B段落循环模式：到达B点后跳回A点
     if (abMode === 2 && abStart >= 0 && abEnd >= 0 && i >= abEnd) {
@@ -1762,11 +1793,55 @@
     else playFrom(idx >= 0 ? idx : 0);
     }
     let loopMode = false;
+    let loopCount = 3; // 默认重复3遍，0表示无限
+    let loopCurrent = 0;
     function toggleLoop() {
     loopMode = !loopMode;
+    loopCurrent = 0;
     const btn = document.getElementById('btnLoop');
     if (btn) btn.classList.toggle('loop-active', loopMode);
     dlog('loop', loopMode ? 'on' : 'off');
+    }
+    function setLoopCount(count) {
+    loopCount = count;
+    const menu = document.getElementById('loopMenu');
+    if (menu) {
+    menu.querySelectorAll('button').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.count) === count);
+    });
+    menu.classList.remove('show');
+    }
+    dlog('loop-count', count === 0 ? '无限' : count + '遍');
+    }
+    // 长按循环按钮显示菜单
+    document.addEventListener('click', (e) => {
+    const menu = document.getElementById('loopMenu');
+    const wrap = document.getElementById('loopWrap');
+    if (!menu || !wrap) return;
+    if (wrap.contains(e.target)) {
+    if (e.target.id === 'btnLoop') {
+    // 短按切换循环模式
+    toggleLoop();
+    } else if (e.target.closest('.loop-menu button')) {
+    // 选择重复次数
+    return; // 由onclick处理
+    }
+    } else {
+    menu.classList.remove('show');
+    }
+    });
+    // 长按显示菜单
+    let loopLongPress = null;
+    const btnLoopEl = document.getElementById('btnLoop');
+    if (btnLoopEl) {
+    btnLoopEl.addEventListener('mousedown', () => { loopLongPress = setTimeout(() => {
+    document.getElementById('loopMenu')?.classList.toggle('show');
+    }, 500); });
+    btnLoopEl.addEventListener('mouseup', () => clearTimeout(loopLongPress));
+    btnLoopEl.addEventListener('touchstart', () => { loopLongPress = setTimeout(() => {
+    document.getElementById('loopMenu')?.classList.toggle('show');
+    }, 500); }, { passive: true });
+    btnLoopEl.addEventListener('touchend', () => clearTimeout(loopLongPress));
     }
     
     // A-B段落循环复读
