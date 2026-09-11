@@ -878,7 +878,12 @@
     };
     const up = () => {
     if (!seeking) return; seeking = false; track.classList.remove('active'); hideSeekTip();
-    if (pendingSeek != null) playFrom(pendingSeek);
+    if (pendingSeek != null) {
+    // 保存拖动后的位置
+    idx = pendingSeek;
+    savePos();
+    playFrom(pendingSeek);
+    }
     pendingSeek = null;
     };
     track.addEventListener('pointerdown', down);
