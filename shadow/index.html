@@ -251,11 +251,14 @@
   #markList .mt { font-size: 13px; font-weight: 600; }
   #markList .ms { font-size: 11px; color: var(--muted); }
   #markList .mitem .btn { flex: none; }
-  #seekTip { position: absolute; left: 0; bottom: calc(100% + 8px); transform: translateX(-50%);
-    max-width: 92%; background: var(--glass-strong); border: 1px solid var(--border);
-    border-radius: 8px; padding: 4px 10px; font-size: 12px; font-family: var(--serif);
-    display: none; box-shadow: var(--shadow); white-space: nowrap; overflow: hidden;
-    text-overflow: ellipsis; pointer-events: none; z-index: 5; }
+  #seekTip { position: absolute; left: 0; bottom: calc(100% + 12px); transform: translateX(-50%);
+    max-width: min(320px, 85vw); background: linear-gradient(145deg, rgba(255,255,255,.75), rgba(248,252,250,.45));
+    -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255,255,255,.7);
+    border-radius: 14px; padding: 10px 14px; font-size: 13px; font-family: var(--serif);
+    display: none; box-shadow: 0 8px 24px rgba(17,36,28,.15), inset 0 1px 0 rgba(255,255,255,.8);
+    pointer-events: none; z-index: 5; line-height: 1.5; }
+  #seekTip .tip-idx { font-size: 11px; color: var(--accent); font-weight: 700; margin-bottom: 4px; font-family: var(--sans); }
   #seekTrack { position: relative; height: 11px; cursor: pointer; touch-action: none; flex: 1; min-width: 0; display: flex; align-items: center; }
   #seekTrack::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; bottom: -20px; }
   /* 默认 1px 极细线，用系统边框色，装饰感强 */
@@ -821,19 +824,21 @@
     function _showSeekTip(i, pct) {
     const tip = document.getElementById('seekTip');
     if (!tip) return;
-    tip.textContent = plainEN(sentRaw(i));
+    const ai = artOfSent[i];
+    const idxText = ai !== undefined ? `第${ai + 1}章 第${i - artOfSent.indexOf(ai) + 1}句` : `第${i + 1}句`;
+    tip.innerHTML = `<div class="tip-idx">${idxText}</div><div>${plainEN(sentRaw(i))}</div>`;
     tip.style.display = 'block';
     tip.style.transform = 'none';
     tip.style.left = '0px';
     tip.style.width = 'auto';
     const track = document.getElementById('seekTrack');
     const tw = track ? track.getBoundingClientRect().width : 300;
-    const w = Math.min(tip.scrollWidth || tw, tw);
+    const w = Math.min(tip.scrollWidth || tw, tw * 0.85);
     const x = Math.min(Math.max(pct / 100 * tw, w / 2), tw - w / 2);
     tip.style.width = w + 'px';
     tip.style.left = Math.max(0, x - w / 2) + 'px';
     clearTimeout(showSeekTip._t);
-    showSeekTip._t = setTimeout(() => tip.style.display = 'none', 2200);
+    showSeekTip._t = setTimeout(() => tip.style.display = 'none', 3000);
     }
     function hideSeekTip() {
     const tip = document.getElementById('seekTip');
@@ -877,6 +882,12 @@
     window.addEventListener('pointermove', move, { passive: false });
     window.addEventListener('pointerup', up);
     track.addEventListener('mouseleave', () => { if (!seeking) hideSeekTip(); });
+    // 鼠标悬浮显示气泡
+    track.addEventListener('mousemove', (e) => {
+    if (seeking) return;
+    const i = seekToEvent(e);
+    if (i >= 0) showSeekTip(i, seekToEvent._pct);
+    });
     }
     function seekToEvent(e) {
     const track = document.getElementById('seekTrack');
@@ -886,6 +897,7 @@
     const ratio = Math.min(1, Math.max(0, x / r.width));
     const n = Math.max(1, seekEnd - seekStart);
     const i = seekStart + Math.round(ratio * (n - 1)); // 阻尼：吸附到最近句子
+    seekToEvent._pct = ratio * 100;
     showSeekTip(i, ratio * 100);
     return i;
     }
