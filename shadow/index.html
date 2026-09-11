@@ -137,22 +137,21 @@
   /* ============ 底部播放条（Liquid Glass 风格） ============ */
   .audiobar { position: fixed; left: 10px; right: 10px; transform: none;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 120;
-    display: flex; flex-direction: column; align-items: stretch; gap: 4px;
+    display: flex; align-items: center; gap: 12px;
     background: linear-gradient(145deg, rgba(255,255,255,.58), rgba(248,252,250,.16) 42%, rgba(214,232,224,.14));
     -webkit-backdrop-filter: blur(32px) saturate(190%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(190%) brightness(1.02);
     border: 1px solid rgba(255,255,255,.62); border-radius: 22px;
-    padding: 8px 12px 10px;
+    padding: 10px 16px;
     box-shadow: 0 24px 64px rgba(17, 36, 28, .22), 0 6px 20px rgba(17, 36, 28, .08),
     inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.32); }
   .audiobar::before { content: ""; position: absolute; left: 12px; right: 12px; top: 6px;
     height: 42%; border-radius: 18px; pointer-events: none; opacity: .9;
     background: radial-gradient(160px 28px at 16% 0%, rgba(255,255,255,.55), transparent 72%),
     linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)); }
-  .ab-row { display: flex; align-items: center; gap: 6px; }
-  .ab-top { justify-content: flex-start; }
-  .ab-bottom { justify-content: space-between; }
-  .ab-title { flex: 1; min-width: 0; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 4px; }
+  .ab-left { display: flex; align-items: center; gap: 6px; flex: none; }
+  .ab-right { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+  .ab-title { flex: none; font-size: 11px; color: var(--muted); white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
   .ab-seek { flex: 1; min-width: 0; }
   .ab-time { font-size: 11px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
   .ab-btn { font-size: 11px; padding: 4px 8px; min-height: 28px; }
@@ -465,49 +464,35 @@
       border-radius: 18px; padding: 14px 14px 12px; max-height: calc(100vh - 120px); overflow-y: auto; }
     .pop .pw { font-size: 20px; }
     .cpop { left: 12px; right: 12px; width: auto; top: 52px; }
-    /* 播放条：保持 Liquid Glass，内容紧凑；进度线与操作行分隔 */
-    .audiobar { gap: 3px; padding: 6px 8px 8px; border-radius: 18px;
+    /* 播放条：移动端两行布局 - 进度条上，按钮下 */
+    .audiobar { flex-direction: column; gap: 4px; padding: 8px 10px; border-radius: 18px;
       bottom: calc(8px + env(safe-area-inset-bottom, 0px));
       left: 6px; right: 6px; }
-    .ab-row { gap: 4px; }
-    .ab-title { font-size: 10px; }
+    .ab-left { order: 2; flex-wrap: wrap; justify-content: center; gap: 4px; }
+    .ab-right { order: 1; gap: 8px; }
+    .ab-title { display: none; }
     .ab-time { font-size: 10px; }
     .ab-btn { font-size: 10px; padding: 3px 6px; min-height: 26px; }
     .loop-menu { min-width: 70px; }
     .loop-menu button { font-size: 11px; padding: 5px 8px; }
-    .ab-row { gap: 3px; justify-content: center; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
-    .ab-row::-webkit-scrollbar { display: none; }
-    .audiobar .btn { font-size: 11px; padding: 5px 7px; min-height: 32px; min-width: 0; flex: none; white-space: nowrap; }
-    .audiobar [onclick="step(-1)"], .audiobar [onclick="step(1)"] { font-size: 0; padding: 5px 8px; }
-    .audiobar .btn.play { font-size: 12px; padding: 5px 12px; flex: none; }
+    .audiobar .btn { font-size: 11px; padding: 5px 8px; min-height: 30px; min-width: 0; flex: none; white-space: nowrap; }
+    .audiobar .btn.play { font-size: 12px; padding: 5px 12px; }
     .audiobar .btn::after { display: none; }
-    #rateCycle { display: inline-block; flex: none; }
-    .audiobar .seg { display: block; font-size: 10px; padding: 3px 6px; flex: none; white-space: nowrap; }
-    .audiobar .btn + .btn { margin-left: 0; }
-    .rate-menu { bottom: calc(100% + 6px); min-width: 80px; }
-    #btnLoop { padding: 5px 8px; }
-    #markBtn { font-size: 14px; padding: 5px 6px; }
-    #seekWrap { width: auto; height: 22px; margin: 0 14px 3px; }
-    .time-hint { font-size: 9px; }
-    #seekTrack { height: 22px; }
-    #seekRail, #seekFill { top: 9px; }
-    #seekTicks .tick { top: 9px; }
-    #seekKnob { top: 4px; }
+    #seekWrap { width: auto; height: 20px; margin: 0; }
+    #seekTrack { height: 20px; }
+    #seekRail, #seekFill { top: 8px; }
+    #seekTicks .tick { top: 8px; }
+    #seekKnob { top: 3px; }
     #seekTrack:hover #seekRail, #seekTrack.active #seekRail,
-    #seekTrack:hover #seekFill, #seekTrack.active #seekFill { top: 9px; }
-    #seekTrack:hover .tick, #seekTrack.active .tick { top: 9px; }
+    #seekTrack:hover #seekFill, #seekTrack.active #seekFill { top: 8px; }
+    #seekTrack:hover .tick, #seekTrack.active .tick { top: 8px; }
     }
   /* 超窄屏（≤360px）：播放条进一步收纳 */
   @media (max-width: 360px) {
-    .audiobar { gap: 2px; padding: 0 4px 8px; left: 4px; right: 4px; }
-    .audiobar .btn { padding: 4px 5px; font-size: 10px; min-height: 28px; }
-    .audiobar [onclick="step(-1)"], .audiobar [onclick="step(1)"] { padding: 4px 6px; }
+    .audiobar { gap: 3px; padding: 6px 8px; left: 4px; right: 4px; }
+    .audiobar .btn { padding: 4px 6px; font-size: 10px; min-height: 28px; }
     .audiobar .btn.play { padding: 4px 10px; font-size: 11px; }
-    .audiobar .seg { font-size: 9px; padding: 2px 4px; }
-    .time-hint { font-size: 8px; }
-    #btnLoop { padding: 4px 6px; }
-    #markBtn { font-size: 12px; padding: 4px 5px; }
-    .voice-sel { max-width: 118px; }
+    .ab-time { font-size: 9px; }
     }
     </style>
 
@@ -559,10 +544,10 @@
     </div>
 
     <div class="audiobar">
-      <div class="ab-row ab-top">
-        <button class="btn" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line"></i></button>
-        <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i></button>
-        <button class="btn" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line"></i></button>
+      <div class="ab-left">
+        <button class="btn" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line"></i> 上一句</button>
+        <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i> 播放</button>
+        <button class="btn" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
           <button class="btn" id="btnLoop" onclick="toggleLoop()" title="单句循环"><i class="ri-repeat-line"></i></button>
           <div class="loop-menu" id="loopMenu">
@@ -573,18 +558,6 @@
             <button data-count="0" onclick="setLoopCount(0)">无限</button>
           </div>
         </div>
-        <div class="ab-title" id="abTitle" title="当前章节">—</div>
-      </div>
-      <div class="ab-row ab-bottom">
-        <div class="ab-seek">
-          <div id="seekWrap">
-            <div id="seekTip"></div>
-            <div id="seekTrack" title="拖动跳转句子（每句一格）">
-              <div id="seekRail"></div><div id="seekFill"></div><div id="seekTicks"></div><div id="seekKnob"></div>
-            </div>
-          </div>
-        </div>
-        <div class="ab-time" id="timeDisplay">0:00 / 0:00</div>
         <button class="btn ab-btn" id="btnAB" onclick="toggleAB()" title="A-B段落循环复读">AB</button>
         <div class="rate-wrap" id="rateWrap">
           <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速">1x</button>
@@ -595,6 +568,18 @@
             <button data-mrate="1.5" onclick="pickRate(1.5)">1.5x</button>
           </div>
         </div>
+        <div class="ab-title" id="abTitle" title="当前章节">—</div>
+      </div>
+      <div class="ab-right">
+        <div class="ab-seek">
+          <div id="seekWrap">
+            <div id="seekTip"></div>
+            <div id="seekTrack" title="拖动跳转句子（每句一格）">
+              <div id="seekRail"></div><div id="seekFill"></div><div id="seekTicks"></div><div id="seekKnob"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ab-time" id="timeDisplay">0:00 / 0:00</div>
       </div>
     </div>
 
