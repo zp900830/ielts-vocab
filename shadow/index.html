@@ -492,7 +492,7 @@
     backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
   body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute; }
   body.scrolled .audiobar .ab-left { gap: 0; }
-  body.scrolled .audiobar .ab-left > .btn:not([onclick="step(-1)"]):not([onclick="step(1)"]):not(.play) { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden; }
+  body.scrolled .audiobar .ab-left > .btn:not(.ab-step):not(.play) { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden; }
   body.scrolled .audiobar .loop-wrap,
   body.scrolled .audiobar .rate-wrap,
   body.scrolled .audiobar .ab-title { max-width: 0; min-width: 0; margin: 0; padding: 0; border: 0; opacity: 0; pointer-events: none; overflow: hidden; }
@@ -524,7 +524,7 @@
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02); }
   body.scrolled .audiobar.expanded .ab-right { position: static; max-width: 1400px; max-height: 60px; opacity: 1; pointer-events: auto; overflow: visible; }
   body.scrolled .audiobar.expanded .ab-left { gap: 6px; }
-  body.scrolled .audiobar.expanded .ab-left > .btn:not([onclick="step(-1)"]):not([onclick="step(1)"]):not(.play) { max-width: 80px; opacity: 1; pointer-events: auto; padding: 7px 14px; overflow: visible; }
+  body.scrolled .audiobar.expanded .ab-left > .btn:not(.ab-step):not(.play) { max-width: 80px; opacity: 1; pointer-events: auto; padding: 7px 14px; overflow: visible; }
   body.scrolled .audiobar.expanded .loop-wrap,
   body.scrolled .audiobar.expanded .rate-wrap { max-width: 90px; opacity: 1; pointer-events: auto; overflow: visible; }
   body.scrolled .audiobar.expanded .ab-title { max-width: 200px; min-width: 76px; margin: 0; padding: 4px 10px; opacity: 1; pointer-events: auto; overflow: visible; }
@@ -676,9 +676,9 @@
 
     <div class="audiobar" id="audiobar">
       <div class="ab-left">
-        <button class="btn" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line"></i> 上一句</button>
+        <button class="btn ab-step" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line"></i> 上一句</button>
         <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i> 播放</button>
-        <button class="btn" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line"></i> 下一句</button>
+        <button class="btn ab-step" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
           <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="单句循环：选择每句重复次数"><i class="ri-repeat-line"></i><span id="loopCount">3</span></button>
           <div class="loop-menu" id="loopMenu">
@@ -1772,6 +1772,9 @@
     let _userScrolled = false;
     let _scrollTimer = null;
     let _programmaticScroll = false;
+    // 缓存常用DOM引用（避免paint()每帧查询）
+    const _domCache = {};
+    function _getDom(id) { return _domCache[id] || (_domCache[id] = document.getElementById(id)); }
     
     function paint() {
     // 高亮：切换 playing class
@@ -1785,11 +1788,11 @@
     if (!_userScrolled) {
     _programmaticScroll = true;
     sents[idx].scrollIntoView({ block: 'center', behavior: 'auto' });
-    _programmaticScroll = false;
+    setTimeout(() => { _programmaticScroll = false; }, 200);
     }
     }
     // 显示/隐藏"回到播放位置"按钮
-    const backBtn = document.getElementById('backToPlay');
+    const backBtn = _getDom('backToPlay');
     if (backBtn) {
     if (playing && _userScrolled && idx >= 0 && sents[idx]) {
     // 检查当前播放句是否在视口中
@@ -1800,10 +1803,10 @@
     backBtn.style.display = 'none';
     }
     }
-    const bp = document.getElementById('btnPlay');
+    const bp = _getDom('btnPlay');
     if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i> 暂停' : '<i class="ri-play-fill"></i> 播放';
     // 更新章节标题
-    const titleEl = document.getElementById('abTitle');
+    const titleEl = _getDom('abTitle');
     if (titleEl && idx >= 0) {
     const ai0 = artOfSent[idx];
     if (ai0 !== undefined) {
@@ -2312,7 +2315,7 @@
     const scrolled = window.scrollY > 60;
     document.body.classList.toggle('scrolled', scrolled);
     // 回到顶部时清除展开状态（mini模式不再适用）
-    if (!scrolled) { const ab = document.getElementById('audiobar'); if (ab) ab.classList.remove('expanded'); clearExpandTimer(); }
+    if (!scrolled) { const ab = document.getElementById('audiobar'); if (ab) ab.classList.remove('expanded'); clearIdleTimer(); }
     scrollTicking = false;
     });
     }, { passive: true });
