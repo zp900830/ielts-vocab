@@ -950,20 +950,55 @@ const CLOUD = {
     return p;
   },
   stop() {
+    _cloudIntentionalPause = true; // 标记主动暂停
     try { if (this._au) { this._au.onended = null; this._au.onerror = null; this._au.pause(); } } catch (e) {}
     this._au = null;
+    setTimeout(() => { _cloudIntentionalPause = false; }, 100); // 短暂延迟后重置
   },
   play(text, voiceId, rate, my, cb, fallback) {
     this.stop(); // 串行：任何新播放先停旧音频（预取不再经过这里，只走 prefetch）
     let done = false;
-    const fail = e => { if (done) return; done = true; clearTimeout(timer); this.stop(); fallback(e); };
-    const timer = setTimeout(() => fail(new Error('timeout')), 20000); // 20s 合成超时则降级本地
+    let pausedAt = 0; // 记录暂停时间
+    const fail = e => { if (done) return; done = true; clearTimeout(timer); clearInterval(monitor); this.stop(); fallback(e); };
+    const timer = setTimeout(() => fail(new Error('timeout')), 30000); // 30s 合成超时（延长到30s，给网络慢的情况更多时间）
+
+    // 监控音频状态：检测暂停和卡住
+    const monitor = setInterval(() => {
+      if (done || my !== speakToken) { clearInterval(monitor); return; }
+      if (!this._au) return;
+
+      // 检测音频被暂停（可能是浏览器自动暂停）
+      if (this._au.paused && !this._au.ended) {
+        if (!pausedAt) {
+          pausedAt = Date.now();
+          dlog('cloud-audio-paused', 'detected pause at', pausedAt);
+        } else if (Date.now() - pausedAt > 3000) {
+          // 暂停超过3秒，尝试恢复
+          dlog('cloud-audio-resume-attempt', 'paused for', Date.now() - pausedAt, 'ms');
+          this._au.play().catch(() => {});
+          // 如果恢复失败（再等2秒还是暂停），则降级
+          if (Date.now() - pausedAt > 5000) {
+            dlog('cloud-audio-paused-too-long', 'falling back');
+            fail(new Error('audio-paused'));
+          }
+        }
+      } else {
+        pausedAt = 0; // 重置暂停时间
+      }
+    }, 1000);
+
     this.synth(text, voiceId, rate).then(url => {
-      if (done || my !== speakToken) { clearTimeout(timer); return; }
+      if (done || my !== speakToken) { clearTimeout(timer); clearInterval(monitor); return; }
       const au = new Audio(url);
       this._au = au;
-      au.onended = () => { if (done) return; done = true; clearTimeout(timer); errStreak = 0; cb(); };
+      au.onended = () => { if (done) return; done = true; clearTimeout(timer); clearInterval(monitor); errStreak = 0; cb(); };
       au.onerror = () => fail(new Error('audio-error'));
+      au.onpause = () => {
+        // 监听暂停事件
+        if (!done && !au.ended && playing) {
+          dlog('cloud-audio-onpause', 'audio paused unexpectedly');
+        }
+      };
       au.play().catch(() => fail(new Error('play-rejected')));
     }).catch(fail);
   },
@@ -1167,6 +1202,7 @@ function loadVoices() {
 try { if (HAS_SPEECH && 'onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices; } catch (e) {}
 
 let errStreak = 0, everStarted = false, speechInProgress = false; // speechInProgress：防止多 utterance 叠加
+let _cloudIntentionalPause = false; // 标记是否主动暂停云端音频
 const ENV_HINT = '若本机音色也无声，请按序查：①系统设置→声音→输出设备（是否被切到离线蓝牙/显示器，音量是否划灰）②Chrome标签页小喇叭是否被静音 ③重启Chrome再试 ④直接用Edge打开本站。';
 function isCloudURI(uri) { return (uri || '').indexOf('cloud:') === 0; }
 function resolveVoice(exclude) {
@@ -1391,18 +1427,40 @@ document.addEventListener('visibilitychange', () => {
       if (my !== speakToken || !playing) return;
       let busy = false;
       try { busy = !!(speechSynthesis.speaking || speechSynthesis.pending); } catch (e) {}
-      try { busy = busy || !!(CLOUD._au && !CLOUD._au.paused && !CLOUD._au.ended); } catch (e) {}
+      try {
+        // 云端音频：如果正在播放或暂停但未结束，都视为"忙碌"（暂停会由keepalive恢复）
+        if (CLOUD._au) {
+          busy = busy || !CLOUD._au.ended;
+          // 如果云端音频暂停了，尝试恢复而不是重启
+          if (CLOUD._au.paused && !CLOUD._au.ended) {
+            dlog('visibility-resume-cloud', 'resuming paused cloud audio');
+            CLOUD._au.play().catch(() => {});
+            return; // 不要触发playFrom
+          }
+        }
+      } catch (e) {}
       if (!busy) playFrom(at >= 0 ? at : 0);
     }, 800);
   }
 });
-// iOS 保活：长句/锁屏易触发引擎自动暂停，每 10s 踢一脚（仅 iOS，避免桌面副作用）
+// iOS 保活：长句/锁屏易触发引擎自动暂停，每 5s 踢一脚
 setInterval(() => {
   try {
-    if (!playing || !HAS_SPEECH || !NEED_GESTURE) return;
-    if (speechSynthesis.speaking && !speechSynthesis.pending) { speechSynthesis.pause(); speechSynthesis.resume(); }
+    if (!playing) return;
+    // 云端 Audio 保活：检测暂停状态并恢复
+    if (CLOUD._au && !CLOUD._au.paused && !CLOUD._au.ended) {
+      // 正在播放，无需干预
+    } else if (CLOUD._au && CLOUD._au.paused && !CLOUD._au.ended && playing && !_cloudIntentionalPause) {
+      // 云端音频被暂停但未结束且非主动暂停，尝试恢复
+      dlog('cloud-audio-resume', 'paused=true, attempting resume');
+      CLOUD._au.play().catch(() => {});
+    }
+    // 本地 speechSynthesis 保活（仅 iOS）
+    if (HAS_SPEECH && NEED_GESTURE) {
+      if (speechSynthesis.speaking && !speechSynthesis.pending) { speechSynthesis.pause(); speechSynthesis.resume(); }
+    }
   } catch (e) {}
-}, 10000);
+}, 5000); // 改为每5秒检测一次，更及时
 // 首次手势顺带预热：Chrome 语音列表常延迟到达，避免首播时列表为空
 function sentText(el) {
   const c = el.cloneNode(true);
