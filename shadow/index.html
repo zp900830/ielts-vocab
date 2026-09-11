@@ -1265,7 +1265,8 @@
     }
     selVoiceURI = sel.value;
     try { localStorage.setItem('ielts-voice', selVoiceURI); } catch(e) {}
-    speakAside(isCloudURI(selVoiceURI) ? 'Hello! Cloud voice ready.' : 'Hello! Let us learn English together.');
+    // 播放中切换语音：静默保存，下一句自动生效，不打断播放链
+    if (!playing) speakAside(isCloudURI(selVoiceURI) ? 'Hello! Cloud voice ready.' : 'Hello! Let us learn English together.');
     };
     try { if (typeof CLOUD !== 'undefined' && CLOUD._on) {
     const cb = document.getElementById('btnCloud');
