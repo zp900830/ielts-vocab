@@ -45,14 +45,14 @@
   body.dark .pop { background: rgba(36,42,38,.96); border-color: #2e3631; }
   body.dark .jpop { background: rgba(36,42,38,.96); border-color: #2e3631; }
   body.dark .cpop { background: rgba(36,42,38,.96); border-color: #2e3631; }
-  body.dark .stats-pop { background: rgba(36,42,38,.96); border-color: #2e3631; }
-  body.dark .stat-card { background: rgba(16,180,135,.1); }
   body.dark .sent:hover { background: rgba(16,180,135,.1); }
   body.dark .sent.playing { background: linear-gradient(transparent 62%, rgba(43,212,164,.2) 62%); }
   body.dark input, body.dark select { background: #1a1f1c; border-color: #2e3631; color: #e0e8e3; }
   body.dark .para-zh { background: rgba(36,42,38,.8); border-color: #2e3631; }
-  body.dark .rate-menu { background: rgba(36,42,38,.96); border-color: #2e3631; }
-  body.dark .rate-menu button:hover { background: rgba(16,180,135,.15); }
+  body.dark .rate-menu,
+  body.dark .loop-menu { background: rgba(36,42,38,.96); border-color: #2e3631; }
+  body.dark .rate-menu button:hover,
+  body.dark .loop-menu button:hover { background: rgba(16,180,135,.15); }
   body.dark .pop .pex { background: rgba(36,42,38,.8); }
   body.dark #markList .mitem { border-color: #2e3631; }
   body.dark ::selection { background: rgba(43,212,164,.3); }
@@ -99,11 +99,11 @@
     transition: filter var(--t-fast), transform .12s ease; }
   .btn.play:active { transform: scale(.95); }
   .btn.play:hover { filter: brightness(1.05); background: var(--grad); }
-  .btn.loop-active { background: var(--coral); color: #fff; border-color: var(--coral-deep); }
+  .btn.loop-active { background: var(--accent-soft); border-color: var(--accent-bright); color: var(--accent); font-weight: 600; }
   .seg { color: var(--muted); font-size: 12px; min-width: 76px; text-align: center;
     background: var(--accent-soft); border-radius: 999px; padding: 4px 10px; font-weight: 600; }
 
-  .layout { max-width: 860px; margin: 0 auto; display: block; padding: 24px 18px 130px; }
+  .layout { max-width: 1120px; margin: 0 auto; display: block; padding: 24px 18px 130px; }
   .sent-zh { display: block; font-family: var(--sans); font-size: 14px; color: var(--muted);
     line-height: 1.6; margin: 0 0 6px 2px; }
   .para-zh { font-size: 13px; color: var(--ink2); background: rgba(255,255,255,.92);
@@ -340,26 +340,6 @@
   .cpop input:focus { border-color: var(--accent-bright); }
   .cpop .row { display: flex; gap: 8px; }
   .cpop .row .btn { flex: 1; }
-  /* 学习统计面板 */
-  .stats-pop { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 210;
-    width: min(380px, calc(100vw - 32px)); background: var(--glass-strong);
-    -webkit-backdrop-filter: blur(22px) saturate(170%); backdrop-filter: blur(22px) saturate(170%);
-    border: 1px solid rgba(255,255,255,.65); border-radius: 18px; box-shadow: var(--shadow-lg);
-    padding: 20px; display: none; }
-  .stats-pop .ct { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
-  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-  .stat-card { background: var(--accent-soft); border-radius: 12px; padding: 12px; text-align: center; }
-  .stat-card .num { font-size: 28px; font-weight: 700; color: var(--accent); font-family: var(--serif); }
-  .stat-card .label { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .stats-bar { display: flex; gap: 4px; margin-top: 8px; }
-  .stats-bar .day { flex: 1; height: 24px; border-radius: 4px; background: var(--border); position: relative; }
-  .stats-bar .day.active { background: var(--accent-soft); }
-  .stats-bar .day.today { background: var(--accent); }
-  .stats-bar .day::after { content: attr(data-label); position: absolute; bottom: -16px; left: 50%;
-    transform: translateX(-50%); font-size: 9px; color: var(--muted); white-space: nowrap; }
-  @media (max-width: 700px) {
-    .stats-pop { left: 16px; right: 16px; width: auto; transform: translateY(-50%); }
-    }
   .zh { display: block; font-family: var(--sans); font-size: 13px; color: var(--muted);
     line-height: 1.5; margin: 2px 0 12px; }
   body.hide-zh .zh { display: none; }
@@ -525,23 +505,10 @@
 
 
       </div>
-      <button class="btn" id="btnStats" onclick="toggleStats()" title="学习统计"><i class="ri-bar-chart-line"></i></button>
       <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式"><i class="ri-moon-line"></i></button>
       <button class="btn" id="btnCloud" onclick="toggleCloudPop()" title="登录后可用 Azure 云端自然语音"><i class="ri-cloud-line"></i> 未登录</button>
     </div>
 
-    <div class="stats-pop" id="statsPop">
-      <div class="ct"><i class="ri-bar-chart-line"></i> 学习统计<button class="x" onclick="toggleStats()" style="float:right;border:none;background:none;font-size:15px;cursor:pointer">✕</button></div>
-      <div class="stats-grid">
-        <div class="stat-card"><div class="num" id="statToday">0</div><div class="label">今日学习（分钟）</div></div>
-        <div class="stat-card"><div class="num" id="statStreak">0</div><div class="label">连续天数</div></div>
-        <div class="stat-card"><div class="num" id="statWords">0</div><div class="label">词库单词数</div></div>
-        <div class="stat-card"><div class="num" id="statSents">0</div><div class="label">已读句子</div></div>
-      </div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:4px">最近 7 天</div>
-      <div class="stats-bar" id="statsBar"></div>
-      <div style="height:20px"></div>
-    </div>
     <div class="cpop" id="cloudPop">
       <div class="ct"><i class="ri-cloud-line"></i> 云端语音登录</div>
       <div class="cs" id="cloudStatus">Azure 云端自然语音需登录（与词汇真经站同一账号，管理员审批后可用）。</div>
@@ -560,7 +527,7 @@
         <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i> 播放</button>
         <button class="btn" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
-          <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="单句循环：选择每句重复次数"><i class="ri-repeat-line"></i><span id="loopCount" style="display:none">3</span></button>
+          <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="单句循环：选择每句重复次数"><i class="ri-repeat-line"></i><span id="loopCount">3</span></button>
           <div class="loop-menu" id="loopMenu">
             <button data-count="0" onclick="setLoopCount(0)">关</button>
             <button data-count="1" onclick="setLoopCount(1)">1遍</button>
@@ -1793,7 +1760,7 @@
     wrap.classList.remove('open');
     }
     const countEl = document.getElementById('loopCount');
-    if (countEl) { countEl.textContent = loopCount; countEl.style.display = loopMode ? '' : 'none'; }
+    if (countEl) countEl.textContent = loopCount;
     dlog('loop', loopMode ? `on x${loopCount}` : 'off');
     }
     
@@ -1959,67 +1926,6 @@
     this.classList.toggle('active', !hidden);
     };
 
-    /* 学习统计 */
-    function getStats() {
-    try { return JSON.parse(localStorage.getItem('ielts-stats') || '{}'); } catch (e) { return {}; }
-    }
-    function saveStats(data) {
-    try { localStorage.setItem('ielts-stats', JSON.stringify(data)); } catch (e) {}
-    }
-    function trackStudy() {
-    const today = new Date().toISOString().slice(0, 10);
-    const stats = getStats();
-    if (!stats.days) stats.days = {};
-    if (!stats.days[today]) stats.days[today] = { mins: 0, sents: 0 };
-    stats.days[today].mins = Math.round((stats.days[today].mins || 0) + 1/6);
-    stats.days[today].sents = (stats.days[today].sents || 0) + 1;
-    saveStats(stats);
-    }
-    // 每分钟记录一次学习时间
-    setInterval(() => { if (playing) trackStudy(); }, 10000);
-    function calcStreak() {
-    const stats = getStats();
-    if (!stats.days) return 0;
-    let streak = 0;
-    const today = new Date();
-    for (let i = 0; i < 365; i++) {
-    const d = new Date(today);
-    d.setDate(d.getDate() - i);
-    const key = d.toISOString().slice(0, 10);
-    if (stats.days[key] && stats.days[key].mins > 0) streak++;
-    else break;
-    }
-    return streak;
-    }
-    function toggleStats() {
-    const p = document.getElementById('statsPop');
-    if (!p) return;
-    const show = p.style.display !== 'block';
-    p.style.display = show ? 'block' : 'none';
-    if (show) {
-    const stats = getStats();
-    const today = new Date().toISOString().slice(0, 10);
-    const todayData = (stats.days || {})[today] || { mins: 0, sents: 0 };
-    document.getElementById('statToday').textContent = Math.round(todayData.mins || 0);
-    document.getElementById('statStreak').textContent = calcStreak();
-    document.getElementById('statWords').textContent = Object.keys(VOCAB || {}).length;
-    document.getElementById('statSents').textContent = Object.values(stats.days || {}).reduce((s, d) => s + (d.sents || 0), 0);
-    // 7天柱状图
-    const bar = document.getElementById('statsBar');
-    const days = ['日', '一', '二', '三', '四', '五', '六'];
-    let html = '';
-    for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    const key = d.toISOString().slice(0, 10);
-    const mins = ((stats.days || {})[key] || {}).mins || 0;
-    const isToday = i === 0;
-    const active = mins > 0;
-    html += `<div class="day${active ? ' active' : ''}${isToday ? ' today' : ''}" data-label="${days[d.getDay()]}"></div>`;
-    }
-    bar.innerHTML = html;
-    }
-    }
     /* 夜间模式 */
     function toggleDark() {
     document.body.classList.toggle('dark');
