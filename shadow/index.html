@@ -83,7 +83,7 @@
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     border-bottom: 1px solid rgba(255,255,255,.5);
-    padding: 10px 16px 10px 24px; display: flex; flex-wrap: wrap; gap: 8px 14px;
+    padding: 10px 24px; display: flex; flex-wrap: wrap; gap: 8px 14px;
     align-items: center;
     transition: padding var(--t-morph) var(--ease-smooth), gap var(--t-morph) var(--ease-smooth),
       width var(--t-morph) var(--ease-smooth), max-width var(--t-morph) var(--ease-smooth),
@@ -99,6 +99,9 @@
     background: var(--grad); -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
     transition: font-size var(--t-morph) var(--ease-smooth), opacity .3s ease; }
+  .topbar-right { display: flex; align-items: center; gap: 8px; margin-left: auto;
+    transition: opacity .3s ease, max-width var(--t-morph) var(--ease-smooth),
+      max-height var(--t-morph) var(--ease-smooth); }
   .ctrl { display: flex; align-items: center; gap: 8px; font-size: 13px;
     transition: opacity .3s ease, max-width var(--t-morph) var(--ease-smooth),
       max-height var(--t-morph) var(--ease-smooth); }
@@ -469,14 +472,15 @@
   .pop .row .btn { flex: 1; }
 
   /* ============ 沉浸阅读模式：滚动时顶栏和播放条收缩（max-width/opacity 形变，全部可平滑过渡） ============ */
-  body.scrolled .topbar { padding: 3px 16px; gap: 4px;
-    flex-wrap: nowrap; overflow: hidden; width: fit-content; max-width: calc(100vw - 32px); margin: 0 auto;
+  body.scrolled .topbar { padding: 2px 16px; gap: 4px;
+    flex-wrap: nowrap; overflow: hidden;
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02); -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     box-shadow: 0 24px 64px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.04); }
   body.scrolled .topbar::before { opacity: 1; }
-  body.scrolled .topbar h1 { font-size: 14px; margin-right: 0; }
+  body.scrolled .topbar h1 { font-size: 12px; margin-right: 0; }
+  body.scrolled .topbar-right { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
   body.scrolled .topbar .ctrl { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
-  body.scrolled .topbar > .btn { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
+  body.scrolled .topbar-right > .btn { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
   /* mini 播放条：收缩为居中小胶囊（仅 上一句/播放/下一句），宽度跟随内容平滑收拢 */
   body.scrolled .audiobar { padding: 4px 10px; gap: 4px; border-radius: 999px;
     width: fit-content; max-width: calc(100vw - 48px);
@@ -496,19 +500,22 @@
   .ab-expand { display: none; }
   body.scrolled .audiobar .ab-expand {
     display: flex; align-items: center; justify-content: center;
-    position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
-    margin-bottom: 4px; margin-left: 0;
-    min-height: 20px; padding: 2px 8px; font-size: 0; border: none;
-    background: transparent; color: rgba(0,0,0,.2); cursor: pointer;
-    border-radius: 999px 999px 0 0; opacity: .5;
+    position: absolute; right: 0; top: 50%; transform: translate(100%, -50%);
+    margin-left: 6px;
+    width: 24px; height: 24px; padding: 0; border: none; font-size: 0;
+    background: rgba(255,255,255,.6); color: var(--accent); cursor: pointer;
+    border-radius: 50%; opacity: .5;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    transition: opacity .2s, transform .2s, background .2s;
   }
-  body.scrolled .audiobar .ab-expand i { font-size: 12px; }
-  body.scrolled .audiobar .ab-expand:active { opacity: .8; }
+  body.scrolled .audiobar .ab-expand i { font-size: 14px; line-height: 1; }
+  body.scrolled .audiobar .ab-expand:hover { opacity: .9; background: rgba(255,255,255,.85); transform: translate(100%, -50%) scale(1.1); }
+  body.scrolled .audiobar .ab-expand:active { opacity: 1; transform: translate(100%, -50%) scale(.9); }
   /* 展开状态：覆盖 mini 态样式 */
   body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius: 22px;
     width: auto; max-width: none; margin: 0;
     left: 24px; right: 24px; transform: none;
-    flex-direction: column;
     border-color: rgba(255,255,255,.65);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02); }
@@ -524,16 +531,17 @@
   body.scrolled .audiobar.expanded .ab-expand { display: none; }
   /* 鼠标移入mini态的导航/播放条时平滑恢复初始状态（仅限支持悬停的设备，避免移动端点按误触） */
   @media (hover: hover) {
-  body.scrolled .topbar:hover { padding: 10px 16px 10px 24px; gap: 8px 14px;
+  body.scrolled .topbar:hover { padding: 10px 24px; gap: 8px 14px;
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     box-shadow: 0 24px 64px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.04);
     border-bottom-color: rgba(255,255,255,.5); }
   body.scrolled .topbar:hover::before { opacity: 1; }
   body.scrolled .topbar:hover h1 { font-size: 17px; opacity: 1; }
-  body.scrolled .topbar:hover .ctrl:nth-child(3) { max-width: 360px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
-  body.scrolled .topbar:hover > .btn:not(#btnDark) { max-width: 260px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
-  body.scrolled .topbar:hover > #btnDark { font-size: 13px; padding: 7px 14px; min-height: 34px; }
+  body.scrolled .topbar:hover .topbar-right { max-width: 1400px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
+  body.scrolled .topbar:hover .ctrl { max-width: 360px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
+  body.scrolled .topbar:hover .topbar-right > .btn { max-width: 260px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
+  body.scrolled .topbar:hover .topbar-right > #btnDark { font-size: 13px; padding: 7px 14px; min-height: 34px; }
   body.dark.scrolled .topbar, body.dark.scrolled .topbar:hover { border-bottom-color: #33302b; }
   body.scrolled .topbar:hover .ctrl .btn { font-size: 13px; padding: 7px 14px; min-height: 34px; }
   }
@@ -553,7 +561,8 @@
       -webkit-mask-image: linear-gradient(to right, #000 92%, transparent 100%);
       mask-image: linear-gradient(to right, #000 92%, transparent 100%); }
     .topbar::-webkit-scrollbar { display: none; }
-    .topbar h1 { width: auto; margin-right: 0; font-size: 14px; white-space: nowrap; flex: none; }
+    .topbar h1 { width: auto; margin-right: auto; font-size: 14px; white-space: nowrap; flex: none; }
+    .topbar-right { gap: 6px; flex: none; }
     .ctrl { font-size: 12px; gap: 5px; flex: none; }
     .btn { padding: 6px 10px; font-size: 12px; min-height: 30px; white-space: nowrap; flex: none; }
     .voice-sel { max-width: 150px; font-size: 12px; touch-action: manipulation; }
@@ -636,18 +645,18 @@
 
     <div class="topbar">
       <h1><i class="ri-book-open-line"></i> 雅思词汇 · 影子跟读</h1>
-      <div class="ctrl">
-        <button class="btn active" id="btnZh" title="显示/隐藏全文中文翻译"><i class="ri-eye-line"></i> 隐藏全文</button>
-        <button class="btn active" id="btnGloss" title="显示/隐藏行内单词词义"><i class="ri-eye-line"></i> 隐藏词义</button>
+      <div class="topbar-right">
+        <div class="ctrl">
+          <button class="btn active" id="btnZh" title="显示/隐藏全文中文翻译"><i class="ri-eye-line"></i> 隐藏全文</button>
+          <button class="btn active" id="btnGloss" title="显示/隐藏行内单词词义"><i class="ri-eye-line"></i> 隐藏词义</button>
+        </div>
+        <div class="ctrl">
+          <button class="btn active" id="btnAccent" onclick="toggleAccent()" title="点击切换英式/美式">🇬🇧 英式</button>
+          <select class="voice-sel" id="voiceSel" title="选择朗读音色（云端/Edge/本机）"></select>
+        </div>
+        <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式"><i class="ri-moon-line"></i></button>
+        <button class="btn" id="btnCloud" onclick="toggleCloudPop()" title="登录后可用 Azure 云端自然语音"><i class="ri-cloud-line"></i> 未登录</button>
       </div>
-      <div class="ctrl">
-        <button class="btn active" id="btnAccent" onclick="toggleAccent()" title="点击切换英式/美式">🇬🇧 英式</button>
-        <select class="voice-sel" id="voiceSel" title="选择朗读音色（云端/Edge/本机）"></select>
-
-
-      </div>
-      <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式"><i class="ri-moon-line"></i></button>
-      <button class="btn" id="btnCloud" onclick="toggleCloudPop()" title="登录后可用 Azure 云端自然语音"><i class="ri-cloud-line"></i> 未登录</button>
     </div>
 
     <div class="cpop" id="cloudPop">
@@ -701,7 +710,7 @@
         </div>
         <div class="ab-time" id="timeDisplay">0:00 / 0:00</div>
       </div>
-      <button class="btn ab-expand" id="abExpand" onclick="expandAudiobar()" title="展开播放条"><i class="ri-arrow-up-s-line"></i></button>
+      <button class="btn ab-expand" id="abExpand" onclick="expandAudiobar()" title="展开播放条"><i class="ri-arrow-up-double-line"></i></button>
     </div>
 
     <div class="jpop" id="jumpPop">
@@ -2275,8 +2284,8 @@
     requestAnimationFrame(() => {
     const scrolled = window.scrollY > 60;
     document.body.classList.toggle('scrolled', scrolled);
-    // 滚动时自动收回展开的播放条
-    if (scrolled) { const ab = document.getElementById('audiobar'); if (ab) ab.classList.remove('expanded'); }
+    // 回到顶部时清除展开状态（mini模式不再适用）
+    if (!scrolled) { const ab = document.getElementById('audiobar'); if (ab) ab.classList.remove('expanded'); }
     scrollTicking = false;
     });
     }, { passive: true });
