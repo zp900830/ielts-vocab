@@ -467,13 +467,14 @@
   /* ============ 沉浸阅读模式：滚动时顶栏和播放条收缩（max-width/opacity 形变，全部可平滑过渡） ============ */
   body.scrolled .topbar { padding: 3px 16px; gap: 4px;
     flex-wrap: nowrap; overflow: hidden;
-    backdrop-filter: none; -webkit-backdrop-filter: none;
-    box-shadow: none; border-bottom-color: transparent; }
-  body.scrolled .topbar::before { opacity: 0; }
-  body.scrolled .topbar h1 { font-size: 12px; margin-right: auto; }
+    backdrop-filter: blur(32px) saturate(180%) brightness(1.02); -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
+    box-shadow: 0 24px 64px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.04); }
+  body.scrolled .topbar::before { opacity: 1; }
+  body.scrolled .topbar h1 { font-size: 14px; margin-right: auto; }
   body.scrolled .topbar .ctrl:nth-child(3) { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
+  body.scrolled .topbar .ctrl:nth-child(2) { margin-left: auto; }
   body.scrolled .topbar > .btn:not(#btnDark) { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
-  body.scrolled .topbar > #btnDark { font-size: 12px; padding: 3px 8px; min-height: 26px; margin-left: auto; }
+  body.scrolled .topbar > #btnDark { font-size: 12px; padding: 3px 8px; min-height: 26px; }
   body.scrolled .topbar .ctrl .btn { font-size: 11px; padding: 3px 8px; min-height: 24px; }
   /* mini 播放条：收缩为居中小胶囊（仅 上一句/播放/下一句），宽度跟随内容平滑收拢 */
   body.scrolled .audiobar { padding: 4px 10px; gap: 4px; border-radius: 999px;
@@ -481,14 +482,14 @@
     left: auto; right: auto;
     backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
     overflow: hidden; }
-  body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; }
-  body.scrolled .audiobar .ab-left { gap: 3px; }
+  body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute; }
+  body.scrolled .audiobar .ab-left { gap: 0; }
   body.scrolled .audiobar .ab-left > .btn:not([onclick="step(-1)"]):not([onclick="step(1)"]):not(.play) { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden; }
   body.scrolled .audiobar .loop-wrap,
   body.scrolled .audiobar .rate-wrap,
-  body.scrolled .audiobar .ab-title { max-width: 0; opacity: 0; pointer-events: none; overflow: hidden; }
-  body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px; min-height: 28px; }
-  body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
+  body.scrolled .audiobar .ab-title { max-width: 0; min-width: 0; margin: 0; padding: 0; border: 0; opacity: 0; pointer-events: none; overflow: hidden; }
+  body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 10px; min-height: 28px; }
+  body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 14px; }
   body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
   /* 鼠标移入mini态的导航/播放条时平滑恢复初始状态（仅限支持悬停的设备，避免移动端点按误触） */
   @media (hover: hover) {
@@ -514,7 +515,7 @@
   body.scrolled .audiobar:hover .ab-left > .btn:not([onclick="step(-1)"]):not([onclick="step(1)"]):not(.play) { max-width: 80px; opacity: 1; pointer-events: auto; padding: 7px 14px; overflow: visible; }
   body.scrolled .audiobar:hover .loop-wrap,
   body.scrolled .audiobar:hover .rate-wrap { max-width: 90px; opacity: 1; pointer-events: auto; overflow: visible; }
-  body.scrolled .audiobar:hover .ab-title { max-width: 200px; opacity: 1; pointer-events: auto; overflow: visible; }
+  body.scrolled .audiobar:hover .ab-title { max-width: 200px; min-width: 76px; margin: 0; padding: 4px 10px; opacity: 1; pointer-events: auto; overflow: visible; }
   body.scrolled .audiobar:hover .ab-left > .btn { font-size: 13px; padding: 7px 14px; min-height: 34px; }
   body.scrolled .audiobar:hover .ab-left > .btn.play { font-size: 15px; padding: 7px 22px; }
   body.scrolled .audiobar:hover .ab-left > .btn i { font-size: inherit; line-height: inherit; }
