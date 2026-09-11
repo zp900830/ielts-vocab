@@ -153,6 +153,7 @@
   .ab-right { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
   .ab-title { flex: none; font-size: 11px; color: var(--muted); white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
   .ab-title:hover { background: var(--accent-soft); }
+  .jump-btn { display: none; }
   .ab-seek { flex: 1; min-width: 0; }
   .ab-time { font-size: 11px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
   .ab-btn { font-size: 11px; padding: 4px 8px; min-height: 28px; }
@@ -164,8 +165,11 @@
   .loop-menu { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%) translateY(4px);
     min-width: 80px; background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
     backdrop-filter: blur(22px) saturate(170%); border: 1px solid rgba(255,255,255,.7);
-    border-radius: 12px; box-shadow: var(--shadow-lg); padding: 6px; display: none; z-index: 10; }
-  .loop-menu.show { display: block; }
+    border-radius: 12px; box-shadow: var(--shadow-lg); padding: 6px;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index: 10; }
+  .loop-wrap:hover .loop-menu, .loop-wrap.open .loop-menu { opacity: 1; visibility: visible;
+    pointer-events: auto; transform: translateX(-50%) translateY(0); }
   .loop-menu .loop-label { font-size: 10px; color: var(--muted); padding: 2px 8px; margin-bottom: 4px; }
   .loop-menu button { display: block; width: 100%; text-align: left; padding: 6px 10px; font-size: 12px;
     background: transparent; border: none; border-radius: 8px; cursor: pointer; color: var(--text); }
@@ -251,14 +255,17 @@
   #markList .mt { font-size: 13px; font-weight: 600; }
   #markList .ms { font-size: 11px; color: var(--muted); }
   #markList .mitem .btn { flex: none; }
-  #seekTip { position: absolute; left: 0; bottom: calc(100% + 12px); transform: translateX(-50%);
-    max-width: min(320px, 85vw); background: linear-gradient(145deg, rgba(255,255,255,.75), rgba(248,252,250,.45));
-    -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid rgba(255,255,255,.7);
-    border-radius: 14px; padding: 10px 14px; font-size: 13px; font-family: var(--serif);
-    display: none; box-shadow: 0 8px 24px rgba(17,36,28,.15), inset 0 1px 0 rgba(255,255,255,.8);
-    pointer-events: none; z-index: 5; line-height: 1.5; }
-  #seekTip .tip-idx { font-size: 11px; color: var(--accent); font-weight: 700; margin-bottom: 4px; font-family: var(--sans); }
+  #seekTip { position: absolute; left: 0; bottom: calc(100% + 14px); transform: translateX(-50%);
+    max-width: min(380px, 90vw); background: rgba(255,255,255,.92);
+    -webkit-backdrop-filter: blur(32px) saturate(200%); backdrop-filter: blur(32px) saturate(200%);
+    border: 1px solid rgba(255,255,255,.85);
+    border-radius: 16px; padding: 14px 18px; font-size: 14px; font-family: var(--serif);
+    display: none; box-shadow: 0 12px 32px rgba(17,36,28,.18), 0 4px 12px rgba(17,36,28,.08), inset 0 1px 0 rgba(255,255,255,.95);
+    pointer-events: none; z-index: 5; line-height: 1.6; }
+  #seekTip .tip-idx { font-size: 12px; color: var(--accent); font-weight: 700; margin-bottom: 6px; font-family: var(--sans); letter-spacing: .3px; }
+  #seekTip::before { content: ""; position: absolute; left: 12px; right: 12px; top: 6px;
+    height: 40%; border-radius: 12px; pointer-events: none; opacity: .8;
+    background: radial-gradient(120px 20px at 20% 0%, rgba(255,255,255,.6), transparent 70%); }
   #seekTrack { position: relative; height: 11px; cursor: pointer; touch-action: none; flex: 1; min-width: 0; display: flex; align-items: center; }
   #seekTrack::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; bottom: -20px; }
   /* 默认 1px 极细线，用系统边框色，装饰感强 */
@@ -477,6 +484,7 @@
     .ab-left { order: 2; flex-wrap: wrap; justify-content: center; gap: 4px; }
     .ab-right { order: 1; gap: 8px; }
     .ab-title { display: none; }
+    .jump-btn { display: inline-flex; }
     .ab-time { font-size: 10px; }
     .ab-btn { font-size: 10px; padding: 3px 6px; min-height: 26px; }
     .loop-menu { min-width: 70px; }
@@ -556,7 +564,7 @@
         <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i> 播放</button>
         <button class="btn" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
-          <button class="btn" id="btnLoop" onclick="toggleLoop()" oncontextmenu="showLoopMenu(event)" title="单句循环（长按选择次数）"><i class="ri-repeat-line"></i><span id="loopCount">3</span></button>
+          <button class="btn" id="btnLoop" onclick="toggleLoop()" title="单句循环（悬停选择次数）"><i class="ri-repeat-line"></i><span id="loopCount">3</span></button>
           <div class="loop-menu" id="loopMenu">
             <div class="loop-label">重复次数</div>
             <button data-count="1" onclick="setLoopCount(1)">1遍</button>
@@ -575,6 +583,7 @@
           </div>
         </div>
         <div class="ab-title" id="abTitle" onclick="toggleJumpPop()" title="点击快速跳转到某章某句">—</div>
+        <button class="btn ab-btn jump-btn" onclick="toggleJumpPop()" title="快速跳转"><i class="ri-navigation-line"></i></button>
       </div>
       <div class="ab-right">
         <div class="ab-seek">
@@ -1773,42 +1782,18 @@
     if (btn) btn.classList.toggle('loop-active', loopMode);
     dlog('loop', loopMode ? 'on' : 'off');
     }
-    function showLoopMenu(e) {
-    e.preventDefault();
-    const menu = document.getElementById('loopMenu');
-    if (menu) menu.classList.toggle('show');
-    }
     function setLoopCount(count) {
     loopCount = count;
     loopCurrent = 0;
-    const menu = document.getElementById('loopMenu');
-    if (menu) {
-    menu.querySelectorAll('button').forEach(b => {
+    const wrap = document.getElementById('loopWrap');
+    if (wrap) {
+    wrap.querySelectorAll('.loop-menu button').forEach(b => {
     b.classList.toggle('active', parseInt(b.dataset.count) === count);
     });
-    menu.classList.remove('show');
     }
     const countEl = document.getElementById('loopCount');
     if (countEl) countEl.textContent = count;
     dlog('loop-count', count + '遍');
-    }
-    // 点击其他地方关闭菜单
-    document.addEventListener('click', (e) => {
-    const menu = document.getElementById('loopMenu');
-    const wrap = document.getElementById('loopWrap');
-    if (!menu || !wrap) return;
-    if (!wrap.contains(e.target)) {
-    menu.classList.remove('show');
-    }
-    });
-    // 长按显示菜单
-    let loopLongPress = null;
-    const btnLoopEl = document.getElementById('btnLoop');
-    if (btnLoopEl) {
-    btnLoopEl.addEventListener('touchstart', () => { loopLongPress = setTimeout(() => {
-    document.getElementById('loopMenu')?.classList.toggle('show');
-    }, 500); }, { passive: true });
-    btnLoopEl.addEventListener('touchend', () => clearTimeout(loopLongPress));
     }
     
     // A-B段落循环复读
