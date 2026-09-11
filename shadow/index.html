@@ -2302,14 +2302,12 @@
     function clearExpandTimer() {
       if (expandTimer) { clearTimeout(expandTimer); expandTimer = null; }
     }
-    // 用户交互重置定时器，恢复导航透明度
+    // 用户交互恢复导航透明度
     ['mousedown', 'mousemove', 'touchstart', 'keydown'].forEach(evt => {
       document.addEventListener(evt, () => {
+        document.body.classList.remove('fade-nav');
         const ab = document.getElementById('audiobar');
-        if (ab && ab.classList.contains('expanded')) {
-          startExpandTimer();
-          document.body.classList.remove('fade-nav');
-        }
+        if (ab && ab.classList.contains('expanded')) startExpandTimer();
       }, { passive: true });
     });
     (function() {
