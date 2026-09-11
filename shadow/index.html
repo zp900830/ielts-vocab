@@ -192,12 +192,20 @@
     border: 1px solid rgba(255,255,255,.65); border-right: none; border-radius: 12px 0 0 12px;
     padding: 14px 7px; cursor: pointer; box-shadow: var(--shadow); }
   #edgeTab:hover { background: var(--accent-soft); }
+  .back-to-play { position: fixed; right: 16px; bottom: calc(130px + env(safe-area-inset-bottom, 0px)); z-index: 115;
+    background: var(--glass-strong); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid rgba(255,255,255,.65); border-radius: 999px; padding: 8px 14px;
+    font-size: 12px; font-weight: 600; color: var(--accent); cursor: pointer;
+    box-shadow: var(--shadow); display: flex; align-items: center; gap: 4px;
+    transition: opacity .2s, transform .2s; }
+  .back-to-play:hover { background: var(--accent-soft); }
   @media (min-width: 701px) {
     body.panel-open #edgeTab { display: none; }
     }
   /* 注：词库入口只保留 #edgeTab（桌面/移动共用），删除重复的 #libTab 防叠放 */
   /* 进度线：播放器内部的装饰线（默认极细，hover/触摸才展开），与下方内容留间距 */
-  #seekWrap { position: relative; width: auto; height: 11px; margin: 0 18px 3px; padding: 0; z-index: 6; }
+  #seekWrap { position: relative; width: auto; height: 11px; margin: 0 18px 3px; padding: 0; z-index: 6; display: flex; align-items: center; gap: 8px; }
+  .time-hint { font-size: 10px; color: var(--muted); opacity: 0.6; white-space: nowrap; flex-shrink: 0; }
   .audiobar .seg { align-self: center; flex: none; }
   #segLbl { cursor: pointer; }
   .jpop { position: fixed; left: 50%; transform: translateX(-50%); z-index: 220;
@@ -226,7 +234,7 @@
     border-radius: 8px; padding: 4px 10px; font-size: 12px; font-family: var(--serif);
     display: none; box-shadow: var(--shadow); white-space: nowrap; overflow: hidden;
     text-overflow: ellipsis; pointer-events: none; z-index: 5; }
-  #seekTrack { position: relative; height: 11px; cursor: pointer; touch-action: none; }
+  #seekTrack { position: relative; height: 11px; cursor: pointer; touch-action: none; flex: 1; min-width: 0; }
   #seekTrack::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; bottom: -20px; }
   /* 默认 1px 极细线，用系统边框色，装饰感强 */
   #seekRail { position: absolute; left: 0; right: 0; top: 0; height: 1px;
@@ -427,6 +435,7 @@
       transition: transform .28s cubic-bezier(.32,.72,.35,1); box-shadow: 0 -8px 30px rgba(30,60,48,.16); }
     .layout.panel-open aside { transform: translateY(0); }
     .layout.panel-open #edgeTab { opacity: 0; pointer-events: none; }
+    .back-to-play { right: 12px; bottom: calc(100px + env(safe-area-inset-bottom, 0px)); font-size: 11px; padding: 6px 12px; }
     aside .list { max-height: calc(62vh - 110px); -webkit-overflow-scrolling: touch; }
     .layout::after { content: ""; position: fixed; inset: 0; z-index: 180; background: rgba(30,50,42,.28);
       opacity: 0; pointer-events: none; transition: opacity var(--t-fast); }
@@ -453,6 +462,7 @@
     #btnLoop { padding: 5px 8px; }
     #markBtn { font-size: 14px; padding: 5px 6px; }
     #seekWrap { width: auto; height: 22px; margin: 0 14px 3px; }
+    .time-hint { font-size: 9px; }
     #seekTrack { height: 22px; }
     #seekRail, #seekFill { top: 9px; }
     #seekTicks .tick { top: 9px; }
@@ -468,6 +478,7 @@
     .audiobar [onclick="step(-1)"], .audiobar [onclick="step(1)"] { padding: 4px 6px; }
     .audiobar .btn.play { padding: 4px 10px; font-size: 11px; }
     .audiobar .seg { font-size: 9px; padding: 2px 4px; }
+    .time-hint { font-size: 8px; }
     #btnLoop { padding: 4px 6px; }
     #markBtn { font-size: 12px; padding: 4px 5px; }
     .voice-sel { max-width: 118px; }
@@ -527,10 +538,11 @@
         <div id="seekTrack" title="拖动跳转句子（每句一格）">
           <div id="seekRail"></div><div id="seekFill"></div><div id="seekTicks"></div><div id="seekKnob"></div>
         </div>
+        <div class="time-hint" id="timeLbl" title="当前章节预计播放时长">—</div>
       </div>
       <div class="ab-row">
-        <button class="btn" onclick="step(-1)"><i class="ri-arrow-left-s-line"></i> 上一句</button>
         <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i> 播放</button>
+        <button class="btn" onclick="step(-1)"><i class="ri-arrow-left-s-line"></i> 上一句</button>
         <button class="btn" onclick="step(1)"><i class="ri-arrow-right-s-line"></i> 下一句</button>
         <button class="btn" id="btnLoop" onclick="toggleLoop()" title="单句循环：反复听同一句直到熟练"><i class="ri-repeat-line"></i></button>
         <div class="rate-wrap" id="rateWrap">
@@ -543,7 +555,6 @@
           </div>
         </div>
         <div class="seg" id="segLbl" onclick="toggleJumpPop()" title="点击快速跳转到某章某句">—</div>
-        <div class="seg" id="timeLbl" title="当前章节预计播放时长">—</div>
         <button class="btn" id="markBtn" onclick="toggleMarkPop()" title="书签：记下当前位置，随时回来">🔖</button>
       </div>
     </div>
@@ -568,6 +579,7 @@
     <nav id="anchors" aria-label="章节锚点"></nav>
     <button id="edgeTab" onclick="togglePanel()" title="词库">词库</button>
     <div id="dbg"></div>
+    <button id="backToPlay" class="back-to-play" onclick="scrollToPlaying()" style="display:none"><i class="ri-arrow-up-line"></i> 回到播放位置</button>
 
     <div class="layout">
       <article id="art"></article>
@@ -712,7 +724,23 @@
     });
     markAnchor(cur);
     });
+    // 检测用户手动滚动（播放中且非程序触发的滚动）
+    if (playing) {
+    _userScrolled = true;
+    clearTimeout(_scrollTimer);
+    _scrollTimer = setTimeout(() => { _userScrolled = false; }, 3000);
+    paint();
+    }
     }, { passive: true });
+    
+    // 点击"回到播放位置"按钮
+    function scrollToPlaying() {
+    _userScrolled = false;
+    if (idx >= 0 && sents[idx]) {
+    sents[idx].scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+    paint();
+    }
     /* 音乐式进度条：每句一格阻尼，拖动吸附到最近句子 */
     let seekStart = 0, seekEnd = 0, seeking = false, _ticks = [];
     function sentRaw(i) {
@@ -1550,6 +1578,9 @@
     }
 
     let _paintIdx = -2;
+    let _userScrolled = false;
+    let _scrollTimer = null;
+    
     function paint() {
     // 高亮：切换 playing class
     if (_paintIdx !== idx) {
@@ -1558,8 +1589,19 @@
     }
     if (idx >= 0 && sents[idx]) {
     if (!sents[idx].classList.contains('playing')) sents[idx].classList.add('playing');
-    // 始终滚动到页面垂直居中
+    // 如果用户没有手动滚动，自动滚动到当前句
+    if (!_userScrolled) {
     sents[idx].scrollIntoView({ block: 'center', behavior: 'auto' });
+    }
+    }
+    // 显示/隐藏"回到播放位置"按钮
+    const backBtn = document.getElementById('backToPlay');
+    if (backBtn) {
+    if (playing && _userScrolled) {
+    backBtn.style.display = 'flex';
+    } else {
+    backBtn.style.display = 'none';
+    }
     }
     const bp = document.getElementById('btnPlay');
     if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i> 暂停' : '<i class="ri-play-fill"></i> 播放';
@@ -1680,7 +1722,7 @@
     }
     }
     function togglePlay() {
-    if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} paint(); savePos(); }
+    if (playing) { playing = false; _userScrolled = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} paint(); savePos(); }
     else playFrom(idx >= 0 ? idx : 0);
     }
     let loopMode = false;
