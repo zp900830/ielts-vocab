@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google" content="notranslate">
-    <title>雅思词汇 影子跟读</title>
+    <title>雅思词汇影子跟读 · IELTS Vocabulary Shadowing</title>
     <style>
   /* ============ 设计令牌（对齐 雅思词汇真经项目：薄荷绿 + 衬线故事体 + 毛玻璃） ============ */
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -349,6 +349,9 @@
     width: 12px; height: 12px; transform: translateY(-50%);
     background: var(--grad); border-radius: 50%; box-shadow: var(--grad-shadow); }
   .sec .sub:first-of-type { margin-top: 6px; }
+  /* 中英双语标题：英文副标灰色小字 */
+  .t-en { font-family: var(--sans); font-size: 12px; font-weight: 400;
+    color: var(--muted); letter-spacing: .02em; margin-left: 8px; white-space: normal; }
 
   /* ============ 侧边词库 ============ */
   aside { position: fixed; right: 14px; top: 74px; bottom: 18px; width: 340px; max-width: calc(100vw - 28px); z-index: 115;
@@ -494,7 +497,7 @@
   <body>
 
     <div class="topbar">
-      <h1><i class="ri-book-open-line"></i> 雅思词汇 · 影子跟读</h1>
+      <h1><i class="ri-book-open-line"></i> 雅思词汇 · 影子跟读 <span class="t-en">IELTS Vocabulary Shadowing</span></h1>
       <div class="ctrl">
         <button class="btn active" id="btnZh" title="显示/隐藏全文中文翻译"><i class="ri-eye-line"></i> 隐藏全文</button>
         <button class="btn active" id="btnGloss" title="显示/隐藏行内单词词义"><i class="ri-eye-line"></i> 隐藏词义</button>
@@ -587,7 +590,7 @@
       <article id="art"></article>
       <aside id="panel">
         <div class="head">
-          <div class="t">📚词库<button class="x" onclick="togglePanel()" title="收起">✕</button></div>
+           <div class="t">📚词库 <span class="t-en">Word Bank</span><button class="x" onclick="togglePanel()" title="收起">✕</button></div>
           <input id="q" placeholder="搜索单词或释义…" oninput="queueRenderList()">
         </div>
         <div class="list" id="vlist"></div>
@@ -663,12 +666,27 @@
     (gh ? `<span class="gl">${gh}</span>` : '');
     });
     }
+    /* 标题中英双语映射（只做展示层拼接，不动 SECTIONS/VOCAB/CHAPTERS 数据） */
+    const TIT_EN = {
+      '地球与生命': 'Earth & Life', '校园与文化': 'Campus & Culture', '衣食住行': 'Daily Life',
+      '社会与规则': 'Society & Rules', '历史与发明': 'History & Inventions', '身体与时间': 'Body & Time',
+      '第一卷·远行——从课堂到山海极地': 'Vol. 1 · The Journey — From Classroom to Mountains, Seas & Polar Lands',
+      '第二卷·归来——风暴过后是家园': 'Vol. 2 · Homecoming — Home After the Storm',
+      '第三卷·星空菜园——白天种菜夜晚观星': 'Vol. 3 · Starry Garden — Farming by Day, Stargazing by Night',
+      '第四卷·动物救助站——周末义工': 'Vol. 4 · Animal Shelter — Weekend Volunteers',
+      '上篇·新生学期': 'Part 1 · A New Semester', '下篇·文化娱乐周': 'Part 2 · Culture & Entertainment Week',
+      '上篇·旧物改造店': 'Part 1 · The Upcycling Shop',
+      '上篇·跨国列车': 'Part 1 · The Transnational Train', '下篇·街角小店': 'Part 2 · The Corner Shop',
+      '上篇·纪念馆': 'Part 1 · The Memorial Hall', '下篇·发明比赛': 'Part 2 · The Invention Contest',
+      '上篇·备考的一天': 'Part 1 · A Day of Exam Prep', '下篇·奶奶的健康年': "Part 2 · Grandma's Healthy Year",
+    };
+    const titEN = t => TIT_EN[t] ? `<span class="t-en">${esc(TIT_EN[t])}</span>` : '';
     function render() {
     const art = document.getElementById('art');
     art.innerHTML = SECTIONS.map((s, si) => `
-    <div class="sec"><h2>${si+1}. ${esc(s.title)}</h2>
+    <div class="sec"><h2>${si+1}. ${esc(s.title)}${titEN(s.title)}</h2>
       ${s.zh ? `<div class="zh">${esc(s.zh)}</div>` : ''}
-      ${s.paragraphs.map((p, pi) => `${s.subheads && s.subheads[pi] ? `<div class="sub">${esc(s.subheads[pi])}</div>` : ''}<p>${p.map((t, ti) => {
+      ${s.paragraphs.map((p, pi) => `${s.subheads && s.subheads[pi] ? `<div class="sub">${esc(s.subheads[pi])}${titEN(s.subheads[pi])}</div>` : ''}<p>${p.map((t, ti) => {
         const zh = s.sentZh && s.sentZh[pi] && s.sentZh[pi][ti]
         ? `<span class="sent-zh">${esc(s.sentZh[pi][ti])}</span>` : '';
         return `<span class="sent">${wrapWords(t)}</span>${zh}`;
@@ -695,7 +713,7 @@
     function buildAnchors() {
     const nav = document.getElementById('anchors');
     nav.innerHTML = SECTIONS.map((s, i) =>
-    `<button class="adot${i === 0 ? ' on' : ''}" data-a="${i}" title="${esc(s.title)}"><span class="atip">${i + 1}. ${esc(s.title)}</span></button>`).join('');
+    `<button class="adot${i === 0 ? ' on' : ''}" data-a="${i}" title="${esc(s.title)}"><span class="atip">${i + 1}. ${esc(s.title)}${titEN(s.title)}</span></button>`).join('');
     nav.querySelectorAll('.adot').forEach(d => {
     d.onclick = () => jumpArticle(parseInt(d.dataset.a, 10));
     });
@@ -1139,7 +1157,7 @@
     if (show) {
     const curA = (idx >= 0 && artOfSent[idx] !== undefined) ? artOfSent[idx] : 0;
     document.getElementById('jumpCh').innerHTML = SECTIONS.map((s, i) =>
-    `<option value="${i}"${i === curA ? ' selected' : ''}>${i + 1}. ${esc(s.title)}</option>`).join('');
+    `<option value="${i}"${i === curA ? ' selected' : ''}>${i + 1}. ${esc(s.title)}${TIT_EN[s.title] ? ' ' + esc(TIT_EN[s.title]) : ''}</option>`).join('');
     syncJumpHint();
     p.style.display = 'block';
     setTimeout(() => { const inp = document.getElementById('jumpN'); inp.value = '1'; inp.focus(); inp.select(); }, 0);
