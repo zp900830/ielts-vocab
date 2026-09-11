@@ -543,6 +543,7 @@
           </div>
         </div>
         <div class="seg" id="segLbl" onclick="toggleJumpPop()" title="点击快速跳转到某章某句">—</div>
+        <div class="seg" id="timeLbl" title="当前章节预计播放时长">—</div>
         <button class="btn" id="markBtn" onclick="toggleMarkPop()" title="书签：记下当前位置，随时回来">🔖</button>
       </div>
     </div>
@@ -1562,13 +1563,40 @@
     const bp = document.getElementById('btnPlay');
     if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i> 暂停' : '<i class="ri-play-fill"></i> 播放';
     const segEl = document.getElementById('segLbl');
+    const timeEl = document.getElementById('timeLbl');
     if (idx >= 0 && segEl) {
     const ai0 = artOfSent[idx];
     if (ai0 !== undefined) {
     const [s0, e0] = segRange(ai0);
     segEl.textContent = `第${ai0 + 1}章 ${idx - s0 + 1}/${e0 - s0}`;
     segEl.title = `第${ai0 + 1}章第${idx - s0 + 1}句（全文第${idx + 1}/${sents.length}句），点击快速跳转`;
-    } else segEl.textContent = `${idx + 1} / ${sents.length}`;
+    // 计算当前章节剩余播放时长
+    if (timeEl) {
+    let words = 0;
+    for (let j = idx; j < e0; j++) {
+    const txt = sentText(sents[j]);
+    words += txt.split(/\s+/).filter(Boolean).length;
+    }
+    const mins = words / (150 * rate);
+    const m = Math.floor(mins);
+    const s = Math.round((mins - m) * 60);
+    timeEl.textContent = m > 0 ? `≈${m}:${String(s).padStart(2, '0')}` : `≈${s}s`;
+    timeEl.title = `本章剩余约${m}分${s}秒（${rate}x 语速）`;
+    }
+    } else {
+    segEl.textContent = `${idx + 1} / ${sents.length}`;
+    if (timeEl) {
+    let words = 0;
+    for (let j = idx; j < sents.length; j++) {
+    const txt = sentText(sents[j]);
+    words += txt.split(/\s+/).filter(Boolean).length;
+    }
+    const mins = words / (150 * rate);
+    const m = Math.floor(mins);
+    const s = Math.round((mins - m) * 60);
+    timeEl.textContent = m > 0 ? `≈${m}:${String(s).padStart(2, '0')}` : `≈${s}s`;
+    }
+    }
     }
     paintSeek();
     if (idx >= 0 && artOfSent[idx] !== undefined) markAnchor(artOfSent[idx]);
@@ -1718,6 +1746,7 @@
     b.classList.toggle('active', parseFloat(b.dataset.mrate) === r));
     const c = document.getElementById('rateCycle');
     if (c) c.innerHTML = `<i class="ri-time-s-line"></i> ${r}x`;
+    if (idx >= 0) paint(); // 刷新时长估算
     }
 
 
