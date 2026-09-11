@@ -1241,7 +1241,14 @@
     },
     stop() {
     _cloudIntentionalPause = true; // 标记主动暂停
-    try { if (this._au) { this._au.onended = null; this._au.onerror = null; this._au.pause(); } } catch (e) {}
+    try {
+    if (this._au) {
+    this._au.onended = null; this._au.onerror = null; this._au.pause();
+    // revoke blob URL 防止内存泄漏
+    if (this._au.src && this._au.src.startsWith('blob:')) { try { URL.revokeObjectURL(this._au.src); } catch(e){} }
+    this._au.src = '';
+    }
+    } catch (e) {}
     this._au = null;
     setTimeout(() => { _cloudIntentionalPause = false; }, 100); // 短暂延迟后重置
     },
@@ -1585,8 +1592,8 @@
     }
     const go = () => {
     if (my !== speakToken) return;
-    // 队列模式（连播/预取）绝不 cancel：cancel 会清空引擎排队、制造句间大停顿；
-    // 停播/切句/点读由外层（togglePlay/playFrom/speakAside）统一 cancel
+    // immediate=true 为队列模式（连播/预取），不 cancel 以避免句间大停顿
+    // immediate=false 为单播模式（切句/点读），需 cancel 清空引擎
     if (!immediate) {
     try {
     if (speechSynthesis.speaking || speechSynthesis.pending || speechSynthesis.paused || speechInProgress) speechSynthesis.cancel();
@@ -1606,14 +1613,20 @@
     if (finished) return; finished = true; clearWd(); speechInProgress = false;
     if (!plain) { speak(text, cb, { plain: true, exclude: triedURI }, my); return; } // 换掉坏音色重试
     if (!everStarted && NEED_GESTURE) {
+    // iOS: cancel后speaking可能仍返回true（已知bug），延迟检查
     let busy = false;
+    try { speechSynthesis.cancel(); } catch(e) {}
+    setTimeout(() => {
     try { busy = !!(speechSynthesis.speaking || speechSynthesis.pending); } catch (e) {}
     if (!busy) {
-    // iOS 手势外起播被系统吞掉：不链式空转（会堆死 utterance），直接停下给指引
     errStreak = 0; playing = false; paint(); savePos();
     alert('本次朗读没能出声：iOS 要求点 ▶／点句子手势内起播（拖进度条后要点一下句子）；锁屏持续播请用 ☁ 云端音色。');
     return;
     }
+    errStreak++;
+    if (errStreak >= 3) { errStreak = 0; playing = false; paint(); }
+    }, 200);
+    return;
     }
     errStreak++;
     if (errStreak >= 3) {
@@ -1763,9 +1776,16 @@
     }, 5000); // 改为每5秒检测一次，更及时
     // 首次手势顺带预热：Chrome 语音列表常延迟到达，避免首播时列表为空
     function sentText(el) {
-    const c = el.cloneNode(true);
-    c.querySelectorAll('.gl,.sent-zh').forEach(n => n.remove());
-    return c.textContent;
+    // 避免 clone 开销：直接遍历子节点收集文本
+    let t = '';
+    const walk = (n) => {
+    if (n.nodeType === 3) { t += n.textContent; return; }
+    if (n.nodeType !== 1) return;
+    if (n.classList && (n.classList.contains('gl') || n.classList.contains('sent-zh'))) return;
+    for (let c = n.firstChild; c; c = c.nextSibling) walk(c);
+    };
+    walk(el);
+    return t;
     }
 
     let _paintIdx = -2;
