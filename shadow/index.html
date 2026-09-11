@@ -434,7 +434,7 @@
     .voice-sel { max-width: 150px; font-size: 12px; touch-action: manipulation; }
     #btnCloud { flex: none; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
     /* 布局：正文全宽，词库改抽屉不占流式空间 */
-    .layout { display: block; padding: 14px 12px calc(120px + env(safe-area-inset-bottom, 0px)); }
+    .layout { display: block; padding: 14px 12px calc(130px + env(safe-area-inset-bottom, 0px)); }
     .sec { padding: 4px 2px; margin-bottom: 20px; }
     article { font-size: 17.5px; }
     .sec p { line-height: 1.85; text-align: left; }
@@ -449,22 +449,26 @@
       opacity: 0; pointer-events: none; transition: opacity var(--t-fast); }
     .layout.panel-open::after { opacity: 1; pointer-events: auto; }
     /* 单词弹窗：底部抽屉式浮层，避开播放条 */
-    .pop { left: 12px !important; right: 12px; width: auto; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); top: auto !important;
-      border-radius: 18px; padding: 14px 14px 12px; }
+    .pop { left: 12px !important; right: 12px; width: auto; bottom: calc(90px + env(safe-area-inset-bottom, 0px)); top: auto !important;
+      border-radius: 18px; padding: 14px 14px 12px; max-height: calc(100vh - 120px); overflow-y: auto; }
     .pop .pw { font-size: 20px; }
     .cpop { left: 12px; right: 12px; width: auto; top: 52px; }
     /* 播放条：保持 Liquid Glass，内容紧凑；进度线与操作行分隔 */
-    .audiobar { gap: 2px; padding: 0 8px 10px; border-radius: 20px;
-      bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
-    .ab-row { gap: 5px; justify-content: space-between; }
-    .audiobar .btn { font-size: 12px; padding: 6px 10px; min-height: 34px; min-width: 0; flex: none; }
-    .audiobar [onclick="step(-1)"], .audiobar [onclick="step(1)"] { font-size: 0; padding: 4px 10px; }
-    .audiobar .btn.play { font-size: 12px; padding: 4px 13px; flex: none; }
+    .audiobar { gap: 2px; padding: 0 6px 10px; border-radius: 20px;
+      bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+      left: 6px; right: 6px; }
+    .ab-row { gap: 3px; justify-content: center; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .ab-row::-webkit-scrollbar { display: none; }
+    .audiobar .btn { font-size: 11px; padding: 5px 7px; min-height: 32px; min-width: 0; flex: none; white-space: nowrap; }
+    .audiobar [onclick="step(-1)"], .audiobar [onclick="step(1)"] { font-size: 0; padding: 5px 8px; }
+    .audiobar .btn.play { font-size: 12px; padding: 5px 12px; flex: none; }
     .audiobar .btn::after { display: none; }
     #rateCycle { display: inline-block; flex: none; }
-    .audiobar .seg { display: block; font-size: 11px; padding: 3px 8px; flex: none; white-space: nowrap; }
-    .audiobar .btn + .btn { margin-left: 0; } /* 移动端 hit-slop 已关，还原间距 */
+    .audiobar .seg { display: block; font-size: 10px; padding: 3px 6px; flex: none; white-space: nowrap; }
+    .audiobar .btn + .btn { margin-left: 0; }
     .rate-menu { bottom: calc(100% + 6px); min-width: 80px; }
+    #btnLoop, #btnRec { padding: 5px 8px; }
+    #markBtn { font-size: 14px; padding: 5px 6px; }
     #seekWrap { width: auto; height: 22px; margin: 0 14px 3px; }
     #seekTrack { height: 22px; }
     #seekRail, #seekFill { top: 9px; }
@@ -476,8 +480,13 @@
   }
   /* 超窄屏（≤360px）：播放条进一步收纳 */
   @media (max-width: 360px) {
-    .audiobar { gap: 3px; padding: 0 8px 10px; }
-    .audiobar .btn { padding: 6px 7px; }
+    .audiobar { gap: 2px; padding: 0 4px 8px; left: 4px; right: 4px; }
+    .audiobar .btn { padding: 4px 5px; font-size: 10px; min-height: 28px; }
+    .audiobar [onclick="step(-1)"], .audiobar [onclick="step(1)"] { padding: 4px 6px; }
+    .audiobar .btn.play { padding: 4px 10px; font-size: 11px; }
+    .audiobar .seg { font-size: 9px; padding: 2px 4px; }
+    #btnLoop, #btnRec { padding: 4px 6px; }
+    #markBtn { font-size: 12px; padding: 4px 5px; }
     .voice-sel { max-width: 118px; }
   }
 </style>
