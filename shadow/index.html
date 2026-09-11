@@ -1626,8 +1626,11 @@
     // 显示/隐藏"回到播放位置"按钮
     const backBtn = document.getElementById('backToPlay');
     if (backBtn) {
-    if (playing && _userScrolled) {
-    backBtn.style.display = 'flex';
+    if (playing && _userScrolled && idx >= 0 && sents[idx]) {
+    // 检查当前播放句是否在视口中
+    const rect = sents[idx].getBoundingClientRect();
+    const inView = rect.top >= 0 && rect.bottom <= window.innerHeight;
+    backBtn.style.display = inView ? 'none' : 'flex';
     } else {
     backBtn.style.display = 'none';
     }
