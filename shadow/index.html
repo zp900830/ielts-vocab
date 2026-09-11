@@ -481,8 +481,9 @@
   body.scrolled .topbar-right { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
   body.scrolled .topbar .ctrl { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
   body.scrolled .topbar-right > .btn { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
-  /* 自由播放超过5s后导航透明度降低 */
+  /* 自由播放超过5s后导航透明度降低（logo除外） */
   body.fade-nav .topbar { opacity: .55; }
+  body.fade-nav .topbar h1 { opacity: 1; }
   /* mini 播放条：收缩为居中小胶囊（仅 上一句/播放/下一句），宽度跟随内容平滑收拢 */
   body.scrolled .audiobar { padding: 4px 10px; gap: 4px; border-radius: 999px;
     width: fit-content; max-width: calc(100vw - 48px);
