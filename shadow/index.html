@@ -224,7 +224,7 @@
     }
   /* 注：词库入口只保留 #edgeTab（桌面/移动共用），删除重复的 #libTab 防叠放 */
   /* 进度线：播放器内部的装饰线（默认极细，hover/触摸才展开），与下方内容留间距 */
-  #seekWrap { position: relative; width: auto; height: 11px; margin: 0 18px 3px; padding: 0; z-index: 6; display: flex; align-items: center; gap: 8px; }
+  #seekWrap { position: relative; width: auto; height: 11px; margin: 0; padding: 0; z-index: 6; display: flex; align-items: center; gap: 8px; }
   .time-hint { font-size: 10px; color: var(--muted); opacity: 0.6; white-space: nowrap; flex-shrink: 0; }
   .audiobar .seg { align-self: center; flex: none; }
   #segLbl { cursor: pointer; }
@@ -254,41 +254,41 @@
     border-radius: 8px; padding: 4px 10px; font-size: 12px; font-family: var(--serif);
     display: none; box-shadow: var(--shadow); white-space: nowrap; overflow: hidden;
     text-overflow: ellipsis; pointer-events: none; z-index: 5; }
-  #seekTrack { position: relative; height: 11px; cursor: pointer; touch-action: none; flex: 1; min-width: 0; }
+  #seekTrack { position: relative; height: 11px; cursor: pointer; touch-action: none; flex: 1; min-width: 0; display: flex; align-items: center; }
   #seekTrack::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; bottom: -20px; }
   /* 默认 1px 极细线，用系统边框色，装饰感强 */
-  #seekRail { position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  #seekRail { position: absolute; left: 0; right: 0; top: 50%; height: 1px; transform: translateY(-50%);
     background: #b9d4c7;
     border-radius: 1px; transition: height .18s ease, top .18s ease, background .18s ease; }
-  #seekFill { position: absolute; left: 0; top: 0; height: 1px; width: 0;
+  #seekFill { position: absolute; left: 0; top: 50%; height: 1px; width: 0; transform: translateY(-50%);
     background: var(--grad);
     border-radius: 1px; transition: height .18s ease, top .18s ease;
     }
-  #seekTrack:hover #seekRail, #seekTrack.active #seekRail { height: 3.5px; top: 0; }
-  #seekTrack:hover #seekFill, #seekTrack.active #seekFill { height: 3.5px; top: 0; }
+  #seekTrack:hover #seekRail, #seekTrack.active #seekRail { height: 3.5px; top: 50%; transform: translateY(-50%); }
+  #seekTrack:hover #seekFill, #seekTrack.active #seekFill { height: 3.5px; top: 50%; transform: translateY(-50%); }
   #seekTrack:hover #seekRail, #seekTrack.active #seekRail { background: var(--accent-line); }
   #seekTicks { position: absolute; inset: 0; display: none; }
   /* 刻度点默认几乎不可见，hover/拖动时再显示 */
-  #seekTicks .tick { position: absolute; top: 0; width: 3px; height: 3px; opacity: .55;
+  #seekTicks .tick { position: absolute; top: 50%; width: 3px; height: 3px; opacity: .55;
     border-radius: 50%; background: rgba(120, 150, 135, .65); border: none; padding: 0;
-    cursor: pointer; transform: translateX(-50%);
+    cursor: pointer; transform: translate(-50%, -50%);
     transition: transform var(--t-fast), background var(--t-fast), opacity .18s ease,
     width .18s ease, height .18s ease, top .18s ease; }
   #seekTicks .tick.done { background: rgba(46, 139, 106, .5); }
   #seekTicks .tick.cur { background: var(--coral-deep); }
-  #seekTrack:hover .tick, #seekTrack.active .tick { opacity: 1; top: 0; width: 8px; height: 8px;
-    background: #b9d4c7; }
+  #seekTrack:hover .tick, #seekTrack.active .tick { opacity: 1; top: 50%; width: 8px; height: 8px;
+    background: #b9d4c7; transform: translate(-50%, -50%); }
   #seekTrack:hover .tick:hover, #seekTrack.active .tick:hover { background: var(--accent-bright);
-    transform: translateX(-50%) scale(1.45); }
+    transform: translate(-50%, -50%) scale(1.45); }
   #seekTrack:hover .tick.done, #seekTrack.active .tick.done { background: var(--accent); }
   #seekTrack:hover .tick.cur, #seekTrack.active .tick.cur { background: var(--coral-deep);
-    transform: translateX(-50%) scale(1.55); box-shadow: 0 0 6px rgba(201,86,74,.55); }
+    transform: translate(-50%, -50%) scale(1.55); box-shadow: 0 0 6px rgba(201,86,74,.55); }
   /* 触摸设备：刻度点默认即隐显（不打搅 hover 逻辑） */
   @media (pointer: coarse) {
     #seekTicks .tick { opacity: .6; }
     #seekTicks .tick.done { opacity: .85; }
     }
-  #seekKnob { position: absolute; top: -5px; width: 12px; height: 12px; border-radius: 50%;
+  #seekKnob { position: absolute; top: 50%; width: 12px; height: 12px; border-radius: 50%;
     background: #fff; border: 2px solid var(--accent-bright); transform: translate(-50%, -50%) scale(.6);
     box-shadow: var(--shadow); pointer-events: none; opacity: 0;
     transition: opacity .18s ease, transform .18s ease, width .18s ease, height .18s ease; }
@@ -1636,7 +1636,7 @@
     }
     }
     const bp = document.getElementById('btnPlay');
-    if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i>' : '<i class="ri-play-fill"></i>';
+    if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i> 暂停' : '<i class="ri-play-fill"></i> 播放';
     // 更新章节标题
     const titleEl = document.getElementById('abTitle');
     if (titleEl && idx >= 0) {
