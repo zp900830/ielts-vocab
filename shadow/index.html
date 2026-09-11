@@ -137,18 +137,27 @@
   /* ============ 底部播放条（Liquid Glass 风格） ============ */
   .audiobar { position: fixed; left: 10px; right: 10px; transform: none;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 120;
-    display: flex; flex-direction: column; align-items: stretch; gap: 2px;
+    display: flex; flex-direction: column; align-items: stretch; gap: 4px;
     background: linear-gradient(145deg, rgba(255,255,255,.58), rgba(248,252,250,.16) 42%, rgba(214,232,224,.14));
     -webkit-backdrop-filter: blur(32px) saturate(190%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(190%) brightness(1.02);
     border: 1px solid rgba(255,255,255,.62); border-radius: 22px;
-    padding: 0 12px 10px;
+    padding: 8px 12px 10px;
     box-shadow: 0 24px 64px rgba(17, 36, 28, .22), 0 6px 20px rgba(17, 36, 28, .08),
     inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.32); }
   .audiobar::before { content: ""; position: absolute; left: 12px; right: 12px; top: 6px;
     height: 42%; border-radius: 18px; pointer-events: none; opacity: .9;
     background: radial-gradient(160px 28px at 16% 0%, rgba(255,255,255,.55), transparent 72%),
     linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)); }
+  .ab-row { display: flex; align-items: center; gap: 6px; }
+  .ab-top { justify-content: flex-start; }
+  .ab-bottom { justify-content: space-between; }
+  .ab-title { flex: 1; min-width: 0; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 4px; }
+  .ab-seek { flex: 1; min-width: 0; }
+  .ab-time { font-size: 11px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .ab-btn { font-size: 11px; padding: 4px 8px; min-height: 28px; }
+  #btnAB { font-weight: 700; letter-spacing: -0.5px; }
+  #btnAB.ab-active { background: var(--accent); color: #fff; border-color: var(--accent); }
   #rateCycle { flex: none; }
   .rate-wrap { position: relative; flex: none; }
   .rate-menu { position: absolute; bottom: calc(100% + 10px); left: 50%;
@@ -446,9 +455,13 @@
     .pop .pw { font-size: 20px; }
     .cpop { left: 12px; right: 12px; width: auto; top: 52px; }
     /* 播放条：保持 Liquid Glass，内容紧凑；进度线与操作行分隔 */
-    .audiobar { gap: 2px; padding: 0 6px 10px; border-radius: 20px;
-      bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    .audiobar { gap: 3px; padding: 6px 8px 8px; border-radius: 18px;
+      bottom: calc(8px + env(safe-area-inset-bottom, 0px));
       left: 6px; right: 6px; }
+    .ab-row { gap: 4px; }
+    .ab-title { font-size: 10px; }
+    .ab-time { font-size: 10px; }
+    .ab-btn { font-size: 10px; padding: 3px 6px; min-height: 26px; }
     .ab-row { gap: 3px; justify-content: center; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
     .ab-row::-webkit-scrollbar { display: none; }
     .audiobar .btn { font-size: 11px; padding: 5px 7px; min-height: 32px; min-width: 0; flex: none; white-space: nowrap; }
@@ -533,20 +546,26 @@
     </div>
 
     <div class="audiobar">
-      <div id="seekWrap">
-        <div id="seekTip"></div>
-        <div id="seekTrack" title="拖动跳转句子（每句一格）">
-          <div id="seekRail"></div><div id="seekFill"></div><div id="seekTicks"></div><div id="seekKnob"></div>
-        </div>
-        <div class="time-hint" id="timeLbl" title="当前章节预计播放时长">—</div>
+      <div class="ab-row ab-top">
+        <button class="btn" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line"></i></button>
+        <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i></button>
+        <button class="btn" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line"></i></button>
+        <button class="btn" id="btnLoop" onclick="toggleLoop()" title="单句循环"><i class="ri-repeat-line"></i></button>
+        <div class="ab-title" id="abTitle" title="当前章节">—</div>
       </div>
-      <div class="ab-row">
-        <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i> 播放</button>
-        <button class="btn" onclick="step(-1)"><i class="ri-arrow-left-s-line"></i> 上一句</button>
-        <button class="btn" onclick="step(1)"><i class="ri-arrow-right-s-line"></i> 下一句</button>
-        <button class="btn" id="btnLoop" onclick="toggleLoop()" title="单句循环：反复听同一句直到熟练"><i class="ri-repeat-line"></i></button>
+      <div class="ab-row ab-bottom">
+        <div class="ab-seek">
+          <div id="seekWrap">
+            <div id="seekTip"></div>
+            <div id="seekTrack" title="拖动跳转句子（每句一格）">
+              <div id="seekRail"></div><div id="seekFill"></div><div id="seekTicks"></div><div id="seekKnob"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ab-time" id="timeDisplay">0:00 / 0:00</div>
+        <button class="btn ab-btn" id="btnAB" onclick="toggleAB()" title="A-B段落循环复读">AB</button>
         <div class="rate-wrap" id="rateWrap">
-          <button class="btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速"><i class="ri-time-s-line"></i> 1x</button>
+          <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速">1x</button>
           <div class="rate-menu">
             <button data-mrate="0.75" onclick="pickRate(0.75)">0.75x</button>
             <button data-mrate="1" class="active" onclick="pickRate(1)">1x</button>
@@ -554,8 +573,6 @@
             <button data-mrate="1.5" onclick="pickRate(1.5)">1.5x</button>
           </div>
         </div>
-        <div class="seg" id="segLbl" onclick="toggleJumpPop()" title="点击快速跳转到某章某句">—</div>
-        <button class="btn" id="markBtn" onclick="toggleMarkPop()" title="书签：记下当前位置，随时回来">🔖</button>
       </div>
     </div>
 
@@ -1604,7 +1621,20 @@
     }
     }
     const bp = document.getElementById('btnPlay');
-    if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i> 暂停' : '<i class="ri-play-fill"></i> 播放';
+    if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i>' : '<i class="ri-play-fill"></i>';
+    // 更新章节标题
+    const titleEl = document.getElementById('abTitle');
+    if (titleEl && idx >= 0) {
+    const ai0 = artOfSent[idx];
+    if (ai0 !== undefined) {
+    const [s0, e0] = segRange(ai0);
+    titleEl.textContent = `第${ai0 + 1}章 ${idx - s0 + 1}/${e0 - s0}`;
+    } else {
+    titleEl.textContent = `${idx + 1} / ${sents.length}`;
+    }
+    }
+    // 更新时间显示
+    updateTimeDisplay();
     const segEl = document.getElementById('segLbl');
     const timeEl = document.getElementById('timeLbl');
     if (idx >= 0 && segEl) {
@@ -1678,6 +1708,12 @@
     launch(i, my, true);
     return;
     }
+    // A-B段落循环模式：到达B点后跳回A点
+    if (abMode === 2 && abStart >= 0 && abEnd >= 0 && i >= abEnd) {
+    launchedUpTo = abStart - 1;
+    launch(abStart, my, true);
+    return;
+    }
     if (i + 1 >= sents.length) {
     // 末句播完才算播完：预取的 launch(len) 会提前触发结束分支，
     // 把最后几句连高亮带按钮状态一起掐掉（播到底部就停的根因）
@@ -1731,6 +1767,46 @@
     const btn = document.getElementById('btnLoop');
     if (btn) btn.classList.toggle('loop-active', loopMode);
     dlog('loop', loopMode ? 'on' : 'off');
+    }
+    
+    // A-B段落循环复读
+    let abMode = 0; // 0=关闭, 1=设置A点, 2=设置B点并循环
+    let abStart = -1, abEnd = -1;
+    function toggleAB() {
+    const btn = document.getElementById('btnAB');
+    if (abMode === 0) {
+    // 开始设置A点
+    abMode = 1;
+    abStart = idx >= 0 ? idx : 0;
+    abEnd = -1;
+    if (btn) { btn.textContent = 'A-'; btn.classList.add('ab-active'); }
+    } else if (abMode === 1) {
+    // 设置B点并开始循环
+    abMode = 2;
+    abEnd = idx >= 0 ? idx : sents.length - 1;
+    if (abEnd <= abStart) abEnd = Math.min(abStart + 1, sents.length - 1);
+    if (btn) { btn.textContent = 'AB'; btn.classList.add('ab-active'); }
+    dlog('ab-loop', `A=${abStart} B=${abEnd}`);
+    } else {
+    // 关闭A-B循环
+    abMode = 0;
+    abStart = -1;
+    abEnd = -1;
+    if (btn) { btn.textContent = 'AB'; btn.classList.remove('ab-active'); }
+    dlog('ab-loop', 'off');
+    }
+    }
+    
+    // 时间显示更新
+    function updateTimeDisplay() {
+    const el = document.getElementById('timeDisplay');
+    if (!el) return;
+    if (idx < 0 || !sents.length) { el.textContent = '0:00 / 0:00'; return; }
+    const curM = Math.floor(idx * 3 / 60); // 估算每句约3秒
+    const curS = Math.floor(idx * 3 % 60);
+    const totalM = Math.floor(sents.length * 3 / 60);
+    const totalS = Math.floor(sents.length * 3 % 60);
+    el.textContent = `${curM}:${String(curS).padStart(2,'0')} / ${totalM}:${String(totalS).padStart(2,'0')}`;
     }
     function step(d) {
     playing = false;
