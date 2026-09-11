@@ -162,19 +162,19 @@
   .loop-wrap { position: relative; flex: none; }
   #btnLoop { position: relative; }
   #btnLoop #loopCount { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 9px; font-weight: 700; pointer-events: none; }
-  .loop-menu { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%) translateY(4px);
-    min-width: 80px; background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
+  .loop-menu { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(4px);
+    min-width: 92px; background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
     backdrop-filter: blur(22px) saturate(170%); border: 1px solid rgba(255,255,255,.7);
-    border-radius: 12px; box-shadow: var(--shadow-lg); padding: 6px;
+    border-radius: 14px; box-shadow: var(--shadow-lg); padding: 6px;
+    display: flex; flex-direction: column; gap: 2px;
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index: 10; }
   .loop-wrap:hover .loop-menu, .loop-wrap.open .loop-menu { opacity: 1; visibility: visible;
     pointer-events: auto; transform: translateX(-50%) translateY(0); }
-  .loop-menu .loop-label { font-size: 10px; color: var(--muted); padding: 2px 8px; margin-bottom: 4px; }
-  .loop-menu button { display: block; width: 100%; text-align: left; padding: 6px 10px; font-size: 12px;
-    background: transparent; border: none; border-radius: 8px; cursor: pointer; color: var(--text); }
+  .loop-menu button { border: none; background: transparent; border-radius: 10px;
+    padding: 7px 10px; font-size: 13px; color: var(--text); text-align: center; cursor: pointer; }
   .loop-menu button:hover { background: var(--accent-soft); }
-  .loop-menu button.active { background: var(--accent); color: #fff; }
+  .loop-menu button.active { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
   #rateCycle { flex: none; }
   .rate-wrap { position: relative; flex: none; }
   .rate-menu { position: absolute; bottom: calc(100% + 10px); left: 50%;
@@ -487,8 +487,8 @@
     .jump-btn { display: inline-flex; }
     .ab-time { font-size: 10px; }
     .ab-btn { font-size: 10px; padding: 3px 6px; min-height: 26px; }
-    .loop-menu { min-width: 70px; }
-    .loop-menu button { font-size: 11px; padding: 5px 8px; }
+    .loop-menu { min-width: 80px; }
+    .loop-menu button { font-size: 12px; padding: 6px 8px; }
     .audiobar .btn { font-size: 11px; padding: 5px 8px; min-height: 30px; min-width: 0; flex: none; white-space: nowrap; }
     .audiobar .btn.play { font-size: 12px; padding: 5px 12px; }
     .audiobar .btn::after { display: none; }
@@ -566,7 +566,6 @@
         <div class="loop-wrap" id="loopWrap">
           <button class="btn" id="btnLoop" onclick="toggleLoop()" title="单句循环（悬停选择次数）"><i class="ri-repeat-line"></i><span id="loopCount">3</span></button>
           <div class="loop-menu" id="loopMenu">
-            <div class="loop-label">重复次数</div>
             <button data-count="1" onclick="setLoopCount(1)">1遍</button>
             <button data-count="3" class="active" onclick="setLoopCount(3)">3遍</button>
             <button data-count="5" onclick="setLoopCount(5)">5遍</button>
