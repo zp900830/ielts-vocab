@@ -83,9 +83,10 @@
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     border-bottom: 1px solid rgba(255,255,255,.5);
-    padding: 10px 24px; display: flex; flex-wrap: wrap; gap: 8px 14px;
+    padding: 10px 16px 10px 24px; display: flex; flex-wrap: wrap; gap: 8px 14px;
     align-items: center;
     transition: padding var(--t-morph) var(--ease-smooth), gap var(--t-morph) var(--ease-smooth),
+      width var(--t-morph) var(--ease-smooth), max-width var(--t-morph) var(--ease-smooth),
       backdrop-filter .45s ease, -webkit-backdrop-filter .45s ease,
       box-shadow .45s ease, border-color .45s ease;
     box-shadow: 0 24px 64px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.04); }
@@ -160,7 +161,7 @@
   body.hide-gl .w { color: var(--text); font-weight: 400;
     border-bottom: none; cursor: pointer; }
   /* ============ 底部播放条（Liquid Glass 风格） ============ */
-  .audiobar { position: fixed; left: 10px; right: 10px; transform: none;
+  .audiobar { position: fixed; left: 24px; right: 24px; transform: none;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 120;
     display: flex; align-items: center; gap: 12px;
     background: linear-gradient(145deg, rgba(255,255,255,.65), rgba(255,255,255,.25) 42%, rgba(255,255,255,.15));
@@ -172,6 +173,9 @@
     inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.35);
     transition: padding var(--t-morph) var(--ease-smooth), gap var(--t-morph) var(--ease-smooth),
       border-radius var(--t-morph) var(--ease-smooth),
+      width var(--t-morph) var(--ease-smooth), max-width var(--t-morph) var(--ease-smooth),
+      left var(--t-morph) var(--ease-smooth), right var(--t-morph) var(--ease-smooth),
+      transform var(--t-morph) var(--ease-smooth),
       backdrop-filter .45s ease, -webkit-backdrop-filter .45s ease,
       box-shadow .45s ease, border-color .45s ease; }
   .audiobar::before { content: ""; position: absolute; left: 12px; right: 12px; top: 6px;
@@ -357,22 +361,22 @@
     #seekTrack.active #seekKnob { width: 24px; height: 24px; }
     }
   @media (max-width: 700px) {
-    #anchors { display: flex; position: sticky; top: 0; z-index: 99; transform: none; flex-direction: row;
-      gap: 8px; overflow-x: auto; opacity: 1; padding: 8px 12px; scrollbar-width: none;
-      background: var(--glass-strong); -webkit-backdrop-filter: blur(18px) saturate(160%);
-      backdrop-filter: blur(18px) saturate(160%); border-bottom: 1px solid var(--border); }
-    #anchors::-webkit-scrollbar { display: none; }
-    #anchors .adot { width: auto; height: auto; border-radius: 999px; padding: 3px 8px 3px 7px;
-      background: transparent; border: none; display: flex; align-items: center;
-      gap: 5px; flex: none; }
-    #anchors .adot::before { content: ""; width: 6px; height: 6px; border-radius: 50%;
-      background: #b9d4c7; flex: none; }
-    #anchors .adot:hover { background: var(--glass); transform: none; }
-    #anchors .adot.on { background: var(--accent-soft); transform: none; }
-    #anchors .adot.on .atip { color: var(--accent); font-weight: 700; }
-    #anchors .adot.on::before { background: var(--accent); }
-    #anchors .adot .atip { display: block; position: static; transform: none; background: none;
-      border: none; box-shadow: none; padding: 0; font-size: 11px; white-space: nowrap; color: var(--muted); }
+    /* 导航锚点：移动端与桌面端一致，左侧圆点 */
+    #anchors { display: flex; position: fixed; left: 8px; top: 50%; transform: translateY(-50%);
+      z-index: 110; flex-direction: column; gap: 12px; opacity: .55;
+      background: none; -webkit-backdrop-filter: none; backdrop-filter: none;
+      border: none; padding: 0; overflow: visible; }
+    #anchors .adot { width: 6px; height: 6px; border-radius: 50%; background: #b9d4c7;
+      border: none; cursor: pointer; position: relative; padding: 0;
+      display: block; }
+    #anchors .adot::before { display: none; }
+    #anchors .adot:hover { background: var(--accent-bright); transform: scale(1.4); }
+    #anchors .adot.on { background: var(--accent); transform: scale(1.4); }
+    #anchors .adot .atip { position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      white-space: nowrap; background: var(--glass-strong); border: 1px solid var(--border);
+      padding: 4px 10px; border-radius: 8px; font-size: 12px; color: var(--text);
+      display: none; box-shadow: var(--shadow); }
+    #anchors .adot:hover .atip, #anchors .adot.on .atip { display: block; }
     }
   #dbg { position: fixed; left: 8px; bottom: 8px; z-index: 999; width: min(480px, 90vw);
     max-height: 30vh; overflow-y: auto; background: rgba(20,20,20,.92); color: #7dfd9a;
@@ -466,22 +470,19 @@
 
   /* ============ 沉浸阅读模式：滚动时顶栏和播放条收缩（max-width/opacity 形变，全部可平滑过渡） ============ */
   body.scrolled .topbar { padding: 3px 16px; gap: 4px;
-    flex-wrap: nowrap; overflow: hidden;
+    flex-wrap: nowrap; overflow: hidden; width: fit-content; max-width: calc(100vw - 32px); margin: 0 auto;
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02); -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     box-shadow: 0 24px 64px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.04); }
   body.scrolled .topbar::before { opacity: 1; }
-  body.scrolled .topbar h1 { font-size: 14px; margin-right: auto; }
-  body.scrolled .topbar .ctrl:nth-child(3) { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
-  body.scrolled .topbar .ctrl:nth-child(2) { margin-left: auto; }
-  body.scrolled .topbar > .btn:not(#btnDark) { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
-  body.scrolled .topbar > #btnDark { font-size: 12px; padding: 3px 8px; min-height: 26px; }
-  body.scrolled .topbar .ctrl .btn { font-size: 11px; padding: 3px 8px; min-height: 24px; }
+  body.scrolled .topbar h1 { font-size: 14px; margin-right: 0; }
+  body.scrolled .topbar .ctrl { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
+  body.scrolled .topbar > .btn { max-width: 0; max-height: 0; opacity: 0; overflow: hidden; pointer-events: none; flex: 0 0 auto; }
   /* mini 播放条：收缩为居中小胶囊（仅 上一句/播放/下一句），宽度跟随内容平滑收拢 */
   body.scrolled .audiobar { padding: 4px 10px; gap: 4px; border-radius: 999px;
-    width: fit-content; max-width: calc(100vw - 20px); margin: 0 auto;
-    left: auto; right: auto;
-    backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
-    overflow: hidden; }
+    width: fit-content; max-width: calc(100vw - 48px);
+    left: 50%; right: auto; transform: translateX(-50%);
+    border-color: rgba(255,255,255,.4);
+    backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
   body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute; }
   body.scrolled .audiobar .ab-left { gap: 0; }
   body.scrolled .audiobar .ab-left > .btn:not([onclick="step(-1)"]):not([onclick="step(1)"]):not(.play) { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden; }
@@ -491,9 +492,39 @@
   body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 10px; min-height: 28px; }
   body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 14px; }
   body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
+  /* 展开按钮：mini 态显示在胶囊上方 */
+  .ab-expand { display: none; }
+  body.scrolled .audiobar .ab-expand {
+    display: flex; align-items: center; justify-content: center;
+    position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+    margin-bottom: 4px; margin-left: 0;
+    min-height: 20px; padding: 2px 8px; font-size: 0; border: none;
+    background: transparent; color: rgba(0,0,0,.2); cursor: pointer;
+    border-radius: 999px 999px 0 0; opacity: .5;
+  }
+  body.scrolled .audiobar .ab-expand i { font-size: 12px; }
+  body.scrolled .audiobar .ab-expand:active { opacity: .8; }
+  /* 展开状态：覆盖 mini 态样式 */
+  body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius: 22px;
+    width: auto; max-width: none; margin: 0;
+    left: 24px; right: 24px; transform: none;
+    flex-direction: column;
+    border-color: rgba(255,255,255,.65);
+    backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
+    -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02); }
+  body.scrolled .audiobar.expanded .ab-right { position: static; max-width: 1400px; max-height: 60px; opacity: 1; pointer-events: auto; overflow: visible; }
+  body.scrolled .audiobar.expanded .ab-left { gap: 6px; }
+  body.scrolled .audiobar.expanded .ab-left > .btn:not([onclick="step(-1)"]):not([onclick="step(1)"]):not(.play) { max-width: 80px; opacity: 1; pointer-events: auto; padding: 7px 14px; overflow: visible; }
+  body.scrolled .audiobar.expanded .loop-wrap,
+  body.scrolled .audiobar.expanded .rate-wrap { max-width: 90px; opacity: 1; pointer-events: auto; overflow: visible; }
+  body.scrolled .audiobar.expanded .ab-title { max-width: 200px; min-width: 76px; margin: 0; padding: 4px 10px; opacity: 1; pointer-events: auto; overflow: visible; }
+  body.scrolled .audiobar.expanded .ab-left > .btn { font-size: 13px; padding: 7px 14px; min-height: 34px; }
+  body.scrolled .audiobar.expanded .ab-left > .btn.play { font-size: 15px; padding: 7px 22px; }
+  body.scrolled .audiobar.expanded .ab-left > .btn i { font-size: inherit; line-height: inherit; }
+  body.scrolled .audiobar.expanded .ab-expand { display: none; }
   /* 鼠标移入mini态的导航/播放条时平滑恢复初始状态（仅限支持悬停的设备，避免移动端点按误触） */
   @media (hover: hover) {
-  body.scrolled .topbar:hover { padding: 10px 24px; gap: 8px 14px;
+  body.scrolled .topbar:hover { padding: 10px 16px 10px 24px; gap: 8px 14px;
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     box-shadow: 0 24px 64px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.04);
@@ -505,20 +536,6 @@
   body.scrolled .topbar:hover > #btnDark { font-size: 13px; padding: 7px 14px; min-height: 34px; }
   body.dark.scrolled .topbar, body.dark.scrolled .topbar:hover { border-bottom-color: #33302b; }
   body.scrolled .topbar:hover .ctrl .btn { font-size: 13px; padding: 7px 14px; min-height: 34px; }
-  body.scrolled .audiobar:hover { padding: 10px 16px; gap: 12px; border-radius: 22px;
-    width: auto; max-width: none; margin: 0;
-    left: 10px; right: 10px;
-    backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
-    -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02); }
-  body.scrolled .audiobar:hover .ab-right { max-width: 1400px; max-height: 60px; opacity: 1; pointer-events: auto; overflow: visible; }
-  body.scrolled .audiobar:hover .ab-left { gap: 6px; }
-  body.scrolled .audiobar:hover .ab-left > .btn:not([onclick="step(-1)"]):not([onclick="step(1)"]):not(.play) { max-width: 80px; opacity: 1; pointer-events: auto; padding: 7px 14px; overflow: visible; }
-  body.scrolled .audiobar:hover .loop-wrap,
-  body.scrolled .audiobar:hover .rate-wrap { max-width: 90px; opacity: 1; pointer-events: auto; overflow: visible; }
-  body.scrolled .audiobar:hover .ab-title { max-width: 200px; min-width: 76px; margin: 0; padding: 4px 10px; opacity: 1; pointer-events: auto; overflow: visible; }
-  body.scrolled .audiobar:hover .ab-left > .btn { font-size: 13px; padding: 7px 14px; min-height: 34px; }
-  body.scrolled .audiobar:hover .ab-left > .btn.play { font-size: 15px; padding: 7px 22px; }
-  body.scrolled .audiobar:hover .ab-left > .btn i { font-size: inherit; line-height: inherit; }
   }
 
   /* ============ 移动端（借鉴词汇真经：去矩形块感——顶栏精简、播放条单行、词库抽屉化） ============ */
@@ -541,8 +558,8 @@
     .btn { padding: 6px 10px; font-size: 12px; min-height: 30px; white-space: nowrap; flex: none; }
     .voice-sel { max-width: 150px; font-size: 12px; touch-action: manipulation; }
     #btnCloud { flex: none; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
-    /* 布局：正文全宽，词库改抽屉不占流式空间 */
-    .layout { display: block; padding: 14px 12px calc(130px + env(safe-area-inset-bottom, 0px)); }
+    /* 布局：左侧预留章节圆点空间 */
+    .layout { display: block; padding: 14px 12px 14px 28px; padding-bottom: calc(130px + env(safe-area-inset-bottom, 0px)); }
     .sec { padding: 4px 2px; margin-bottom: 20px; }
     article { font-size: 17.5px; }
     .sec p { line-height: 1.85; text-align: left; }
@@ -565,7 +582,7 @@
     /* 播放条：移动端两行布局 - 进度条上，按钮下 */
     .audiobar { flex-direction: column; gap: 4px; padding: 8px 10px; border-radius: 18px;
       bottom: calc(8px + env(safe-area-inset-bottom, 0px));
-      left: 6px; right: 6px; }
+      left: 12px; right: 12px; }
     .ab-left { order: 2; flex-wrap: wrap; justify-content: center; gap: 4px; }
     .ab-right { order: 1; gap: 8px; width: 100%; }
     .ab-seek { flex: 1; min-width: 0; width: 100%; }
@@ -578,12 +595,16 @@
     .audiobar .btn { font-size: 11px; padding: 5px 8px; min-height: 30px; min-width: 0; flex: none; white-space: nowrap; }
     .audiobar .btn.play { font-size: 12px; padding: 5px 12px; }
     .audiobar .btn::after { display: none; }
-    /* 移动端沉浸模式：进度行整体收起（max-height 形变），单行迷你条无空行 */
-    body.scrolled .audiobar { padding: 3px 8px; gap: 0; }
-    body.scrolled .audiobar .ab-right { max-height: 0; }
-    body.scrolled .audiobar .ab-left > .btn[onclick="step(-1)"],
-    body.scrolled .audiobar .ab-left > .btn[onclick="step(1)"] { font-size: 0; padding: 4px 6px; min-height: 24px; }
-    body.scrolled .audiobar .ab-btn { padding: 2px 4px; min-height: 20px; }
+    /* 移动端沉浸模式：与桌面端一致，三按钮居中胶囊 */
+    body.scrolled .audiobar { padding: 4px 10px; gap: 4px; border-radius: 999px;
+      width: fit-content; max-width: calc(100vw - 24px);
+      left: 50%; right: auto; transform: translateX(-50%);
+      flex-direction: row; }
+    body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; position: absolute; }
+    body.scrolled .audiobar .ab-left { order: 0; flex-wrap: nowrap; gap: 0; }
+    body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px; }
+    body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
+    body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
     #seekWrap { width: 100%; height: 22px; margin: 0; position: relative; }
     #seekTrack { height: 22px; width: 100%; }
     #seekRail, #seekFill { top: 50%; transform: translateY(-50%); height: 4px; }
@@ -641,7 +662,7 @@
       </div>
     </div>
 
-    <div class="audiobar">
+    <div class="audiobar" id="audiobar">
       <div class="ab-left">
         <button class="btn" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line"></i> 上一句</button>
         <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i> 播放</button>
@@ -680,6 +701,7 @@
         </div>
         <div class="ab-time" id="timeDisplay">0:00 / 0:00</div>
       </div>
+      <button class="btn ab-expand" id="abExpand" onclick="expandAudiobar()" title="展开播放条"><i class="ri-arrow-up-s-line"></i></button>
     </div>
 
     <div class="jpop" id="jumpPop">
@@ -862,7 +884,7 @@
     markAnchor(cur);
     });
     // 检测用户手动滚动（播放中且非程序触发的滚动）
-    if (playing) {
+    if (playing && !_programmaticScroll) {
     _userScrolled = true;
     clearTimeout(_scrollTimer);
     _scrollTimer = setTimeout(() => { _userScrolled = false; }, 3000);
@@ -873,10 +895,12 @@
     // 点击"回到播放位置"按钮
     function scrollToPlaying() {
     _userScrolled = false;
+    _programmaticScroll = true;
     if (idx >= 0 && sents[idx]) {
     sents[idx].scrollIntoView({ block: 'center', behavior: 'smooth' });
     }
     paint();
+    setTimeout(() => { _programmaticScroll = false; }, 1000);
     }
     /* 音乐式进度条：每句一格阻尼，拖动吸附到最近句子 */
     let seekStart = 0, seekEnd = 0, seeking = false, _ticks = [];
@@ -1597,7 +1621,11 @@
     if (opts.sent !== undefined && my === speakToken && playing) {
     idx = opts.sent; paint(); syncSeek(opts.sent);
     try { mediaMeta(plainEN(sentRaw(opts.sent)).slice(0, 80)); } catch (e) {}
-    } };
+    }
+    // 第二层看门狗：onstart 后 onend 不触发（Chrome/Safari 已知卡死 bug）
+    const endTimeout = Math.max(8000, text.length * 60);
+    wd = setTimeout(() => { dlog('end-watchdog-fire', 'tok=' + my); if (!finished) failOnce(); }, endTimeout);
+    };
     u.onend = () => { if (finished) return; finished = true; clearWd(); errStreak = 0; dlog('onend', 'tok=' + my); speechInProgress = false; cb(); };
     u.onerror = ev => {
     // cancel/interrupted 是主动打断（切句/暂停），绝不能当“播完”推进，否则多链互 cancel 疯转
@@ -1731,6 +1759,7 @@
     let _paintIdx = -2;
     let _userScrolled = false;
     let _scrollTimer = null;
+    let _programmaticScroll = false;
     
     function paint() {
     // 高亮：切换 playing class
@@ -1742,7 +1771,9 @@
     if (!sents[idx].classList.contains('playing')) sents[idx].classList.add('playing');
     // 如果用户没有手动滚动，自动滚动到当前句
     if (!_userScrolled) {
+    _programmaticScroll = true;
     sents[idx].scrollIntoView({ block: 'center', behavior: 'auto' });
+    _programmaticScroll = false;
     }
     }
     // 显示/隐藏"回到播放位置"按钮
@@ -2231,15 +2262,21 @@
     window.addEventListener('pagehide', savePos);
     document.addEventListener('visibilitychange', () => { if (document.hidden) savePos(); });
 
-    /* 沉浸阅读：滚动时顶栏和播放条收缩；恢复交由 hover（桌面）/回到顶部触发。
-       不用定时器自动恢复——展开引起的布局位移会再触发 scroll 事件，造成收缩↔展开死循环闪烁 */
+    /* 沉浸阅读：滚动时顶栏和播放条收缩；恢复交由 hover（桌面）/展开按钮（移动端）触发 */
+    function expandAudiobar() {
+    const ab = document.getElementById('audiobar');
+    if (ab) ab.classList.toggle('expanded');
+    }
     (function() {
     let scrollTicking = false;
     window.addEventListener('scroll', () => {
     if (scrollTicking) return;
     scrollTicking = true;
     requestAnimationFrame(() => {
-    document.body.classList.toggle('scrolled', window.scrollY > 60);
+    const scrolled = window.scrollY > 60;
+    document.body.classList.toggle('scrolled', scrolled);
+    // 滚动时自动收回展开的播放条
+    if (scrolled) { const ab = document.getElementById('audiobar'); if (ab) ab.classList.remove('expanded'); }
     scrollTicking = false;
     });
     }, { passive: true });
@@ -2278,21 +2315,11 @@
     });
     }
     mobileBtnIcons();
-    function stickAnchors() { // 移动端锚点吸顶：top 取顶栏实高，滑到哪跟到哪
-    try {
-    if (!window.matchMedia('(max-width: 700px)').matches) return;
-    const tb = document.querySelector('.topbar');
-    const nav = document.getElementById('anchors');
-    if (tb && nav) nav.style.top = tb.getBoundingClientRect().height + 'px';
-    } catch (e) {}
-    }
-    stickAnchors();
-    window.addEventListener('orientationchange', () => setTimeout(stickAnchors, 300));
-    setTimeout(stickAnchors, 600);
+    window.addEventListener('orientationchange', () => setTimeout(mobileBtnIcons, 300));
     let _rzT = false;
     window.addEventListener('resize', () => {
     if (_rzT) return; _rzT = true;
-    requestAnimationFrame(() => { _rzT = false; mobileBtnIcons(); stickAnchors(); });
+    requestAnimationFrame(() => { _rzT = false; mobileBtnIcons(); });
     });
     if (typeof CLOUD !== 'undefined') CLOUD.boot();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => loadVoices());
