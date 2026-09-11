@@ -151,7 +151,8 @@
     linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)); }
   .ab-left { display: flex; align-items: center; gap: 6px; flex: none; }
   .ab-right { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-  .ab-title { flex: none; font-size: 11px; color: var(--muted); white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
+  .ab-title { flex: none; font-size: 11px; color: var(--muted); white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
+  .ab-title:hover { background: var(--accent-soft); }
   .ab-seek { flex: 1; min-width: 0; }
   .ab-time { font-size: 11px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
   .ab-btn { font-size: 11px; padding: 4px 8px; min-height: 28px; }
@@ -568,7 +569,7 @@
             <button data-mrate="1.5" onclick="pickRate(1.5)">1.5x</button>
           </div>
         </div>
-        <div class="ab-title" id="abTitle" title="当前章节">—</div>
+        <div class="ab-title" id="abTitle" onclick="toggleJumpPop()" title="点击快速跳转到某章某句">—</div>
       </div>
       <div class="ab-right">
         <div class="ab-seek">
@@ -697,7 +698,6 @@
       }).join(' ')}</p>${s.paraZh && s.paraZh[pi] ? `<div class="para-zh">💡 ${esc(s.paraZh[pi])}</div>` : ''}`).join('')}
     </div>`).join('');
     sents = [...document.querySelectorAll('.sent')];
-    document.getElementById('segLbl').textContent = `${sents.length} 句`;
     // 点击句子（非单词）直接从该句朗读
     sents.forEach((el, i) => {
     el.onclick = e => { if (!e.target.closest('.w')) playFrom(i); };
@@ -1650,42 +1650,6 @@
     }
     // 更新时间显示
     updateTimeDisplay();
-    const segEl = document.getElementById('segLbl');
-    const timeEl = document.getElementById('timeLbl');
-    if (idx >= 0 && segEl) {
-    const ai0 = artOfSent[idx];
-    if (ai0 !== undefined) {
-    const [s0, e0] = segRange(ai0);
-    segEl.textContent = `第${ai0 + 1}章 ${idx - s0 + 1}/${e0 - s0}`;
-    segEl.title = `第${ai0 + 1}章第${idx - s0 + 1}句（全文第${idx + 1}/${sents.length}句），点击快速跳转`;
-    // 计算当前章节剩余播放时长
-    if (timeEl) {
-    let words = 0;
-    for (let j = idx; j < e0; j++) {
-    const txt = sentText(sents[j]);
-    words += txt.split(/\s+/).filter(Boolean).length;
-    }
-    const mins = words / (150 * rate);
-    const m = Math.floor(mins);
-    const s = Math.round((mins - m) * 60);
-    timeEl.textContent = m > 0 ? `≈${m}:${String(s).padStart(2, '0')}` : `≈${s}s`;
-    timeEl.title = `本章剩余约${m}分${s}秒（${rate}x 语速）`;
-    }
-    } else {
-    segEl.textContent = `${idx + 1} / ${sents.length}`;
-    if (timeEl) {
-    let words = 0;
-    for (let j = idx; j < sents.length; j++) {
-    const txt = sentText(sents[j]);
-    words += txt.split(/\s+/).filter(Boolean).length;
-    }
-    const mins = words / (150 * rate);
-    const m = Math.floor(mins);
-    const s = Math.round((mins - m) * 60);
-    timeEl.textContent = m > 0 ? `≈${m}:${String(s).padStart(2, '0')}` : `≈${s}s`;
-    }
-    }
-    }
     paintSeek();
     if (idx >= 0 && artOfSent[idx] !== undefined) markAnchor(artOfSent[idx]);
     try {
