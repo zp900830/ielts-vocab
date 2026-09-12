@@ -265,9 +265,7 @@
   /* 注：词库入口只保留 #edgeTab（桌面/移动共用），删除重复的 #libTab 防叠放 */
   /* 进度线：播放器内部的装饰线（默认极细，hover/触摸才展开），与下方内容留间距 */
   #seekWrap { position: relative; width: auto; height: 11px; margin: 0; padding: 0; z-index: 6; display: flex; align-items: center; gap: 8px; }
-  .time-hint { font-size: 10px; color: var(--muted); opacity: 0.6; white-space: nowrap; flex-shrink: 0; }
   .audiobar .seg { align-self: center; flex: none; }
-  #segLbl { cursor: pointer; }
   .jpop { position: fixed; left: 50%; transform: translateX(-50%); z-index: 220;
     bottom: calc(110px + env(safe-area-inset-bottom, 0px)); width: min(340px, calc(100vw - 32px));
     background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
@@ -750,11 +748,6 @@
     const m = info.m.split(/[；;]/)[0].trim().slice(0, 10);
     return { ph: glossPhon(k), m };
     }
-    function shortGloss(k) {
-    const g = glossParts(k);
-    if (!g) return '';
-    return (g.ph ? g.ph + ' ' : '') + g.m;
-    }
     function glossHTML(k) {
     const g = glossParts(k);
     if (!g) return '';
@@ -899,7 +892,7 @@
     if (!tip) return;
     const ai = artOfSent[i];
     const idxText = ai !== undefined ? `第${ai + 1}章 第${i - artOfSent.indexOf(ai) + 1}句` : `第${i + 1}句`;
-    tip.innerHTML = `<div class="tip-idx">${idxText}</div><div>${plainEN(sentRaw(i))}</div>`;
+    tip.innerHTML = `<div class="tip-idx">${idxText}</div><div>${esc(plainEN(sentRaw(i)))}</div>`;
     tip.style.display = 'block';
     tip.style.transform = 'none';
     tip.style.left = '0px';
@@ -921,6 +914,7 @@
     function paintSeekPreview(e) {
     const track = document.getElementById('seekTrack');
     const r = track.getBoundingClientRect();
+    if (!r.width) return;
     const cx = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
     const x = cx - r.left;
     const pct = Math.min(100, Math.max(0, (x / r.width) * 100)) + '%';
@@ -965,6 +959,7 @@
     function seekToEvent(e) {
     const track = document.getElementById('seekTrack');
     const r = track.getBoundingClientRect();
+    if (!r.width) return idx >= 0 ? idx : 0; // 播放条折叠时轨道宽为0：x/0=NaN 会一路崩到 sentText，直接回当前句
     const cx = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
     const x = cx - r.left;
     const ratio = Math.min(1, Math.max(0, x / r.width));
@@ -1173,8 +1168,8 @@
     try {
     if (this._au) {
     this._au.onended = null; this._au.onerror = null; this._au.pause();
-    // revoke blob URL 防止内存泄漏
-    if (this._au.src && this._au.src.startsWith('blob:')) { try { URL.revokeObjectURL(this._au.src); } catch(e){} }
+    // 注意：禁止在此 revoke blob URL——它同时躺在 this.cache 里，
+    // revoke 会毒化缓存导致下次命中失效 URL 而播错；淘汰时 _cacheSet 会负责 revoke
     this._au.src = '';
     }
     } catch (e) {}
@@ -1833,7 +1828,7 @@
     }, { immediate: immediate, sent: i }, my);
     }
     function playFrom(i) {
-    if (i < 0 || i >= sents.length) { playing = false; idx = -1; paint(); return; }
+    if (!Number.isFinite(i) || i < 0 || i >= sents.length) { playing = false; idx = -1; paint(); return; }
     speakToken++;
     /* Chrome 130+ 缺陷：cancel() 后紧接的 speak() 被静默吞掉（Edge 宽容，故 Edge 正常 Chrome 无声）。
     只在真有活动队列时才 cancel，且 cancel 后至少隔 250ms 再起播；
