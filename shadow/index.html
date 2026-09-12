@@ -190,7 +190,8 @@
     background: radial-gradient(160px 28px at 16% 0%, rgba(255,255,255,.55), transparent 72%),
     linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)); }
   .ab-left { display: flex; align-items: center; gap: 6px; flex: none;
-    transition: gap var(--t-morph) var(--ease-smooth); }
+    flex-wrap: wrap; justify-content: center;
+    transition: gap var(--t-morph) var(--ease-smooth); } /* 防御：窄屏/字体放大时换行，正常宽度下无视觉变化 */
   .ab-right { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;
     transition: gap var(--t-morph) var(--ease-smooth),
       max-width var(--t-morph) var(--ease-smooth), max-height var(--t-morph) var(--ease-smooth),
@@ -468,22 +469,26 @@
   body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 10px; min-height: 28px; }
   body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 14px; }
   body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
-  /* 展开按钮：mini 态显示在胶囊上方 */
-  .ab-expand { display: none; }
-  body.scrolled .audiobar .ab-expand {
+  /* 展开/收起按钮：悬浮在播放条上方右侧；mini 胶囊只显示展开，完整条只显示收起（互斥） */
+  .ab-expand, .ab-collapse { display: none; }
+  /* 展开/收起按钮：同一套低调小胶囊片，条正上方居中（仅箭头方向相反）；mini 只显示展开，完整条只显示收起 */
+  body.scrolled .audiobar:not(.expanded) .ab-expand,
+  .audiobar.force-mini .ab-expand,
+  body.scrolled .audiobar.expanded .ab-collapse,
+  body:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse {
     display: flex; align-items: center; justify-content: center;
-    position: absolute; right: 0; top: 50%; transform: translate(100%, -50%);
-    margin-left: 6px;
-    width: 24px; height: 24px; padding: 0; border: none; font-size: 0;
-    background: rgba(255,255,255,.6); color: var(--accent); cursor: pointer;
-    border-radius: 50%; opacity: .5;
+    position: absolute; left: 50%; right: auto; top: auto; bottom: calc(100% + 6px); transform: translateX(-50%);
+    width: 34px; height: 20px; min-height: 0; padding: 0; border: none; font-size: 0;
+    background: rgba(255,255,255,.55); color: var(--accent); cursor: pointer;
+    border-radius: 999px; opacity: .55; z-index: 5;
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 1px 4px rgba(0,0,0,.08);
     transition: opacity .2s, transform .2s, background .2s;
   }
-  body.scrolled .audiobar .ab-expand i { font-size: 14px; line-height: 1; }
-  body.scrolled .audiobar .ab-expand:hover { opacity: .9; background: rgba(255,255,255,.85); transform: translate(100%, -50%) scale(1.1); }
-  body.scrolled .audiobar .ab-expand:active { opacity: 1; transform: translate(100%, -50%) scale(.9); }
+  .audiobar .btn.ab-expand, .audiobar .btn.ab-collapse { margin: 0; } /* 悬浮按钮不受 .btn + .btn 的 4px 流式间距影响，保证正上方居中 */
+  .audiobar .ab-expand i, .audiobar .ab-collapse i { font-size: 13px; line-height: 1; }
+  .audiobar .ab-expand:hover, .audiobar .ab-collapse:hover { opacity: .95; background: rgba(255,255,255,.9); transform: translateX(-50%) scale(1.08); }
+  .audiobar .ab-expand:active, .audiobar .ab-collapse:active { opacity: 1; transform: translateX(-50%) scale(.94); }
   /* 展开状态：覆盖 mini 态样式 */
   body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius: 22px;
     width: auto; max-width: none; margin: 0;
@@ -501,6 +506,21 @@
   body.scrolled .audiobar.expanded .ab-left > .btn.play { font-size: 15px; padding: 7px 22px; }
   body.scrolled .audiobar.expanded .ab-left > .btn i { font-size: inherit; line-height: inherit; }
   body.scrolled .audiobar.expanded .ab-expand { display: none; }
+  /* 强制 mini：不受滚动位置影响的手动收起态（与 body.scrolled mini 同一样式） */
+  .audiobar.force-mini { padding: 4px 10px; gap: 4px; border-radius: 999px;
+    width: fit-content; max-width: calc(100vw - 48px);
+    left: 50%; right: auto; transform: translateX(-50%);
+    border-color: rgba(255,255,255,.4); flex-direction: row;
+    backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
+  .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute; }
+  .audiobar.force-mini .ab-left { gap: 0; }
+  .audiobar.force-mini .ab-left > .btn:not(.ab-step):not(.play) { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden; }
+  .audiobar.force-mini .loop-wrap,
+  .audiobar.force-mini .rate-wrap,
+  .audiobar.force-mini .ab-title { max-width: 0; min-width: 0; margin: 0; padding: 0; border: 0; opacity: 0; pointer-events: none; overflow: hidden; }
+  .audiobar.force-mini .ab-left > .btn { font-size: 0; padding: 4px 10px; min-height: 28px; }
+  .audiobar.force-mini .ab-left > .btn.play { font-size: 11px; padding: 4px 14px; }
+  .audiobar.force-mini .ab-left > .btn i { font-size: 16px; line-height: 1; }
   /* 鼠标移入mini态的导航/播放条时平滑恢复初始状态（仅限支持悬停的设备，避免移动端点按误触） */
   @media (hover: hover) {
   body.scrolled .topbar:hover, body.fade-nav.scrolled .topbar:hover { padding: 10px 24px; gap: 8px 14px;
@@ -517,6 +537,20 @@
   body.dark.scrolled .topbar, body.dark.scrolled .topbar:hover { border-bottom-color: #33302b; }
   body.scrolled .topbar:hover .ctrl .btn { font-size: 13px; padding: 7px 14px; min-height: 34px; }
   }
+  /* 反方向滚动露出完整顶栏：复用 hover 恢复的同一套声明（hover 媒体查询之外，触屏也生效） */
+  body.scrolled.show-nav .topbar, body.fade-nav.scrolled.show-nav .topbar { padding: 10px 24px; gap: 8px 14px;
+    -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
+    backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
+    box-shadow: 0 24px 64px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.04);
+    border-bottom-color: rgba(255,255,255,.5); opacity: 1; }
+  body.scrolled.show-nav .topbar::before { opacity: 1; }
+  body.scrolled.show-nav .topbar h1 { font-size: 17px; opacity: 1; }
+  body.scrolled.show-nav .topbar-right { max-width: 1400px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
+  body.scrolled.show-nav .topbar .ctrl { max-width: 360px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
+  body.scrolled.show-nav .topbar-right > .btn { max-width: 260px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
+  body.scrolled.show-nav .topbar-right > #btnDark { font-size: 13px; padding: 7px 14px; min-height: 34px; }
+  body.dark.scrolled.show-nav .topbar { border-bottom-color: #33302b; }
+  body.scrolled.show-nav .topbar .ctrl .btn { font-size: 13px; padding: 7px 14px; min-height: 34px; }
 
   /* ============ 移动端（借鉴词汇真经：去矩形块感——顶栏精简、播放条单行、词库抽屉化） ============ */
   @media (max-width: 700px) {
@@ -585,6 +619,13 @@
     body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px; }
     body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
     body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
+    /* 移动端强制 mini：与沉浸胶囊同一样式 */
+    .audiobar.force-mini { max-width: calc(100vw - 24px); flex-direction: row; }
+    .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; position: absolute; }
+    .audiobar.force-mini .ab-left { order: 0; flex-wrap: nowrap; gap: 0; }
+    .audiobar.force-mini .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px; }
+    .audiobar.force-mini .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
+    .audiobar.force-mini .ab-left > .btn i { font-size: 16px; line-height: 1; }
     #seekWrap { width: 100%; height: 22px; margin: 0; position: relative; }
     #seekTrack { height: 22px; width: 100%; }
     #seekRail, #seekFill { top: 50%; transform: translateY(-50%); height: 4px; }
@@ -652,7 +693,7 @@
           <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="单句循环：选择每句重复次数"><i class="ri-repeat-line"></i><span id="loopCount">3</span></button>
           <div class="loop-menu" id="loopMenu">
             <button data-count="0" onclick="setLoopCount(0)">关</button>
-            <button data-count="1" onclick="setLoopCount(1)">1遍</button>
+            <button data-count="2" onclick="setLoopCount(2)">2遍</button>
             <button data-count="3" onclick="setLoopCount(3)">3遍</button>
             <button data-count="5" onclick="setLoopCount(5)">5遍</button>
           </div>
@@ -681,7 +722,8 @@
         </div>
         <div class="ab-title" id="abTitle" onclick="toggleJumpPop()" title="点击快速跳转到某章某句">—</div>
       </div>
-      <button class="btn ab-expand" id="abExpand" onclick="expandAudiobar()" title="展开播放条"><i class="ri-arrow-up-double-line"></i></button>
+      <button class="btn ab-expand" id="abExpand" onclick="expandAudiobar()" title="展开播放条"><i class="ri-arrow-up-s-line"></i></button>
+      <button class="btn ab-collapse" id="abCollapse" onclick="collapseAudiobar()" title="收起播放条"><i class="ri-arrow-down-s-line"></i></button>
     </footer>
 
     <div class="jpop" id="jumpPop">
@@ -1011,7 +1053,23 @@
     _q: [], _busy: false, _au: null,
     client() {
     if (!window.supabase) return null;
-    if (!this._client) this._client = window.supabase.createClient(this.URL, this.KEY);
+    if (!this._client) {
+    this._client = window.supabase.createClient(this.URL, this.KEY);
+    // 登录态监听：token 静默刷新/过期/他端退出后自动恢复或清理 UI，
+    // 否则刷新页拿到过期 token 失败一次就永远显示未登录
+    try {
+    this._client.auth.onAuthStateChange((ev, sess) => {
+    if (ev === 'SIGNED_IN' || ev === 'TOKEN_REFRESHED' || ev === 'USER_UPDATED') {
+    this._userMail = (sess && sess.user && sess.user.email) || this._userMail;
+    this.checkStatus();
+    } else if (ev === 'SIGNED_OUT' || ev === 'USER_DELETED') {
+    this._on = false; this._userMail = '';
+    this.setStatus('已退出登录，云端音色不可用。');
+    try { loadVoices(); } catch (e) {}
+    }
+    });
+    } catch (e) {}
+    }
     return this._client;
     },
     friendlyErr(m) {
@@ -1047,6 +1105,7 @@
     const s = await this.session();
     this._userMail = (s && s.user && s.user.email) || '';
     if (!s) { this._on = false; this.setStatus('Azure 云端自然语音需登录（与词汇真经站同一账号，管理员审批后可用）。'); return; }
+    this.setStatus('正在连接云端语音…');
     await this.checkStatus();
     },
     async checkStatus() {
@@ -1065,11 +1124,32 @@
     } finally { clearTimeout(to); }
     const d = await r.json().catch(() => ({}));
     this._on = r.ok && !!d.configured;
+    this._rc = 0; // 成功一次就清零重试计数
     this.setStatus(this._on ? ('已连接：' + (this._userMail || '云端语音可用') + '，下拉可选用 ☁ 云端音色。')
     : '服务端未配置或账号无权限：' + this.friendlyErr(d.error || r.status));
     loadVoices();
     return this._on;
-    } catch (e) { this._on = false; return false; }
+    } catch (e) {
+    this._on = false;
+    // 弱网/超时导致的状态查询失败：有 session 就不是“未登录”，给提示并有限重试
+    try {
+    const s = await this.session();
+    if (s) {
+    this.setStatus('网络不稳定，云端状态确认中…（稍后自动重试）');
+    this._rc = (this._rc || 0) + 1;
+    if (this._rc <= 3) {
+    clearTimeout(this._rt);
+    this._rt = setTimeout(() => { try { this.checkStatus(); } catch (err) {} }, 8000);
+    } else {
+    this.setStatus('云端连接失败，请检查网络后重新进入（登录态仍在，无需重新登录）。');
+    }
+    } else {
+    this.setStatus('Azure 云端自然语音需登录（与词汇真经站同一账号，管理员审批后可用）。');
+    }
+    } catch (err) {}
+    try { loadVoices(); } catch (err) {}
+    return false;
+    }
     },
     _enqueue(fn) {
     return new Promise((res, rej) => { this._q.push({ fn, res, rej }); this._drain(); });
@@ -1798,8 +1878,9 @@
     } catch (e) {}
     speak(sentText(sents[i]), () => {
     if (!playing || my !== speakToken) return;
-    // 单句循环模式：重播当前句（重置 launchedUpTo 允许重复发射同一句）
-    if (loopMode) {
+    // 单句循环模式：只有锚定句的 completion 才计数+重播（重置 launchedUpTo 允许重复发射同一句）；
+    // 预取兄弟句/旧链残留 speak 的 completion 直接落到正常推进（launchedUpTo 去重，自然无害）
+    if (loopMode && i === loopSent) {
     loopCurrent++;
     if (loopCount === 0 || loopCurrent < loopCount) {
     // 继续重复
@@ -1807,11 +1888,13 @@
     launch(i, my, true);
     return;
     } else {
-    // 达到重复次数，播放下一句
+    // 达到重复次数，锚移到下一句后播放下一句（循环逐句接力）
     loopCurrent = 0;
+    loopSent = i + 1;
     }
-    } else {
+    } else if (!loopMode) {
     loopCurrent = 0;
+    loopSent = -1;
     }
     // A-B段落循环模式：到达B点后跳回A点
     if (abMode === 2 && abStart >= 0 && abEnd >= 0 && i >= abEnd) {
@@ -1826,10 +1909,11 @@
     try { localStorage.setItem('ielts-pos', JSON.stringify({ i: 0, t: Date.now() })); } catch (e) {}
     return;
     }
-    // 云端单通道：一次只播一句（多发会互相掐），靠预取补延迟；本机才多发排队
+    // 云端单通道：一次只播一句（多发会互相掐），靠预取补延迟；本机才多发排队；
+    // 循环模式不预取兄弟句（否则兄弟句 completion 会消费 loopCurrent、打乱单句计数）
     const cloud = typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on;
     launch(i + 1, my, true);
-    if (!cloud) {
+    if (!cloud && !loopMode) {
     if (i + 2 < sents.length) launch(i + 2, my, true);
     if (i + 3 < sents.length) launch(i + 3, my, true);
     }
@@ -1852,7 +1936,9 @@
     savePos();
     const my = speakToken;
     const cloudMode = typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on;
-    const fire3 = () => { launch(i, my, true); launch(i + 1, my, true); launch(i + 2, my, true); };
+    if (loopMode) loopSent = i; // 起播/切句/跳转时把循环锚定到目标句
+    // 循环模式只发锚定句：兄弟句连发会进引擎队列抢播、且它们的 completion 会消费 loopCurrent
+    const fire3 = () => { launch(i, my, true); if (!loopMode) { launch(i + 1, my, true); launch(i + 2, my, true); } };
     if (cloudMode) {
     launch(i, my, true); // 云端单播：只发一句，续播走 onend 单链
     } else if (hadQueue && !NEED_GESTURE) {
@@ -1869,6 +1955,7 @@
     let loopMode = false;
     let loopCount = 3; // 每句重复遍数
     let loopCurrent = 0;
+    let loopSent = -1; // 循环锚定句：只有该句的 completion 才计入 loopCurrent（预取兄弟句/重试不许消费计数）
     function toggleLoopMenu(e) {
     if (e) e.stopPropagation();
     const w = document.getElementById('loopWrap');
@@ -1882,6 +1969,7 @@
     loopMode = count > 0;
     if (count > 0) loopCount = count;
     loopCurrent = 0;
+    loopSent = (loopMode && typeof idx !== 'undefined' && idx >= 0) ? idx : -1; // 菜单中途开关循环：锚到当前句；关闭则解锚
     const btn = document.getElementById('btnLoop');
     if (btn) btn.classList.toggle('loop-active', loopMode);
     const wrap = document.getElementById('loopWrap');
@@ -1891,7 +1979,7 @@
     wrap.classList.remove('open');
     }
     const countEl = document.getElementById('loopCount');
-    if (countEl) { countEl.textContent = loopMode ? loopCount : ''; countEl.style.display = loopMode ? '' : 'none'; }
+    if (countEl) { countEl.textContent = loopMode ? loopCount : ''; countEl.style.display = loopMode ? 'inline' : 'none'; } // inline 才能覆盖 CSS 的 display:none，'' 只会清空内联样式导致徽标永不显示
     dlog('loop', loopMode ? `on x${loopCount}` : 'off');
     }
     
@@ -2223,9 +2311,19 @@
     function expandAudiobar() {
       const ab = document.getElementById('audiobar');
       if (!ab) return;
+      ab.classList.remove('force-mini');
       ab.classList.add('expanded');
       document.body.classList.remove('fade-nav');
       startIdleTimer();
+    }
+    function collapseAudiobar() {
+      // 手动收起：完整条→mini 胶囊（不受滚动位置影响）；5s idle 与回顶逻辑保持原样
+      const ab = document.getElementById('audiobar');
+      if (!ab) return;
+      ab.classList.remove('expanded');
+      ab.classList.add('force-mini');
+      document.body.classList.add('fade-nav');
+      clearIdleTimer();
     }
     function startIdleTimer() {
       clearIdleTimer();
@@ -2248,12 +2346,25 @@
     });
     (function() {
     let scrollTicking = false;
+    let lastY = window.scrollY || 0;
+    let navMuteUntil = 0; // show-nav 切换会改变顶栏高度→滚动锚定补偿→反向位移；静默窗内不评估方向，否则自激振荡
     window.addEventListener('scroll', () => {
     if (scrollTicking) return;
     scrollTicking = true;
     requestAnimationFrame(() => {
-    const scrolled = window.scrollY > 60;
+    const y = window.scrollY;
+    const scrolled = y > 60;
     document.body.classList.toggle('scrolled', scrolled);
+    // 反方向（上滑）露出完整顶栏：mini 顶栏在移动端无法操作；下滑/回顶恢复 mini（只动顶栏，播放条规则不变）
+    if (Date.now() < navMuteUntil) { lastY = y; }
+    else if (scrolled && y < lastY - 4) {
+    if (!document.body.classList.contains('show-nav')) { document.body.classList.add('show-nav'); navMuteUntil = Date.now() + 550; }
+    lastY = y;
+    }
+    else if (y > lastY + 4 || !scrolled) {
+    if (document.body.classList.contains('show-nav')) { document.body.classList.remove('show-nav'); navMuteUntil = Date.now() + 550; }
+    lastY = y;
+    }
     // 回到顶部时清除展开状态（mini模式不再适用）
     if (!scrolled) { const ab = document.getElementById('audiobar'); if (ab) ab.classList.remove('expanded'); clearIdleTimer(); }
     scrollTicking = false;
@@ -2301,6 +2412,10 @@
     requestAnimationFrame(() => { _rzT = false; mobileBtnIcons(); });
     });
     if (typeof CLOUD !== 'undefined') CLOUD.boot();
+    // 断网恢复后自动重连云端（移动端网络抖动常见）
+    window.addEventListener('online', () => {
+    try { if (typeof CLOUD !== 'undefined' && CLOUD._userMail && !CLOUD._on) CLOUD.checkStatus(); } catch (e) {}
+    });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => loadVoices());
     setTimeout(loadVoices, 500);
   </script>
