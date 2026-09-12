@@ -39,9 +39,9 @@ test.describe('Single-sentence loop repeats then advances', () => {
     async ({ page }) => {
       await test.step('Step 1: Enable loop and play', async () => {
         await page.locator('#btnLoop').click();
-        await page.getByRole('button', { name: '3遍' }).click();
+        await page.getByRole('button', { name: '5遍' }).click();
         await expect(page.locator('#btnLoop')).toHaveClass(/loop-active/);
-        await expect(page.locator('#loopCount')).toHaveText('3');
+        await expect(page.locator('#loopCount')).toHaveText('5');
         await page.evaluate(() => {
           (window as unknown as { playFrom: (i: number) => void }).playFrom(10);
         });
@@ -51,8 +51,8 @@ test.describe('Single-sentence loop repeats then advances', () => {
       });
 
       await test.step('Step 2: Sentence repeats', async () => {
-        // Atomic conjunction: repetition must be OBSERVED at sentence 10
-        // (two separate reads race with the advance to 11)
+        // Atomic conjunction with count 5 (wider observation window than 3):
+        // repetition must be OBSERVED pinned at sentence 10
         await expect
           .poll(
             async () =>

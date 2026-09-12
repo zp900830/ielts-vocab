@@ -18,18 +18,18 @@ Navigate to `{E2E_BASE_URL}/index.html`.
 ## Test Steps
 
 ### 1. Enable loop and play
-Set loop count to 3 and start playback from sentence 10.
-**Verify:** Loop button shows the active state and count `3`.
+Set loop count to 5 and start playback from sentence 10.
+**Verify:** Loop button shows the active state and count `5`.
 
 ### 2. Sentence repeats
-Wait for two utterance cycles.
-**Verify:** The highlight stays on sentence 10 while the repeat counter advances past 0.
+Poll (up to the retry-aware timeout) for the atomic state: repeat counter above 0 while the highlight is still on sentence 10. Count 5 widens the observation window versus count 3.
+**Verify:** The conjunction holds at least once (repetition observed in place).
 
-### 3. Switch loop off
-Set loop count to 0.
-**Verify:** Loop button loses the active state.
+### 3. Loop completes and switch off
+Wait until the highlight advances past sentence 10, then set loop count to 0.
+**Verify:** Advancement happens and the loop button loses the active state.
 
-**Pass condition:** Loop repeats the same sentence with counter advancing; switching off clears the active state.
+**Pass condition:** Repetition is observed pinned at sentence 10, the chain eventually advances, and switching off clears the active state.
 
 ## After Hook
 
