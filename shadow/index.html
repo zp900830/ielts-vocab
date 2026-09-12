@@ -1535,6 +1535,7 @@
     const clearWd = () => { if (wd) { clearTimeout(wd); wd = null; } };
     const failOnce = () => {
     if (finished) return; finished = true; clearWd(); speechInProgress = false;
+    if (my !== speakToken) return; // 陈旧链的看门狗：暂停/切句后不再记错、不重试、不报警（否则暂停中也会弹无声alert）
     if (!plain) { speak(text, cb, { plain: true, exclude: triedURI }, my); return; } // 换掉坏音色重试
     if (!everStarted && NEED_GESTURE) {
     // iOS: cancel后speaking可能仍返回true（已知bug），延迟检查
