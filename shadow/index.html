@@ -26,6 +26,7 @@
     --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     --t: .25s ease; --t-fast: .15s ease;
     --ease-smooth: cubic-bezier(.32,.72,.24,1); --t-morph: .45s;
+    --ease-bar: cubic-bezier(.32,.9,.28,1); --t-bar: .32s; /* 播放条 morph 专用：更快起手、柔着陆 */
     }
   /* 夜间模式 */
   body.dark {
@@ -196,37 +197,34 @@
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     border: 1px solid rgba(255,255,255,.65); border-radius: 22px;
-    padding: 10px 16px;
+    padding: 10px 16px; max-width: calc(100vw - 48px); /* 定死＝当前实际宽，morph 只走 max-width＋内部，定位属性不进 transition（混单位插值就是那下水平抖动的来源） */
     box-shadow: 0 24px 64px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.04),
     inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.35);
-    transition: padding var(--t-morph) var(--ease-smooth), gap var(--t-morph) var(--ease-smooth),
-      border-radius var(--t-morph) var(--ease-smooth),
-      width var(--t-morph) var(--ease-smooth), max-width var(--t-morph) var(--ease-smooth),
-      left var(--t-morph) var(--ease-smooth), right var(--t-morph) var(--ease-smooth),
-      transform var(--t-morph) var(--ease-smooth),
-      backdrop-filter .45s ease, -webkit-backdrop-filter .45s ease,
-      box-shadow .45s ease, border-color .45s ease; }
+    transition: padding var(--t-bar) var(--ease-bar), gap var(--t-bar) var(--ease-bar),
+      border-radius var(--t-bar) var(--ease-bar), max-width var(--t-bar) var(--ease-bar),
+      backdrop-filter .32s ease, -webkit-backdrop-filter .32s ease,
+      box-shadow .32s ease, border-color .32s ease; }
   .audiobar::before { content: ""; position: absolute; left: 12px; right: 12px; top: 6px;
     height: 42%; border-radius: 18px; pointer-events: none; opacity: .9;
     background: radial-gradient(160px 28px at 16% 0%, rgba(255,255,255,.55), transparent 72%),
     linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)); }
   .ab-left { display: flex; align-items: center; gap: 6px; flex: none;
     flex-wrap: wrap; justify-content: center;
-    transition: gap var(--t-morph) var(--ease-smooth); } /* 防御：窄屏/字体放大时换行，正常宽度下无视觉变化 */
+    transition: gap var(--t-bar) var(--ease-bar); } /* 防御：窄屏/字体放大时换行，正常宽度下无视觉变化 */
   .ab-right { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;
-    transition: gap var(--t-morph) var(--ease-smooth),
-      max-width var(--t-morph) var(--ease-smooth), max-height var(--t-morph) var(--ease-smooth),
-      opacity .3s ease; }
+    transition: gap var(--t-bar) var(--ease-bar),
+      max-width var(--t-bar) var(--ease-bar), max-height var(--t-bar) var(--ease-bar),
+      opacity .25s ease; }
   .audiobar .ab-left > .btn { transition: background var(--t-fast), border-color var(--t-fast),
     filter var(--t-fast), transform .12s ease,
-    font-size var(--t-morph) var(--ease-smooth), padding var(--t-morph) var(--ease-smooth),
-    min-height var(--t-morph) var(--ease-smooth), max-width var(--t-morph) var(--ease-smooth),
-    opacity .3s ease; }
-  .audiobar .ab-left > .btn i { transition: font-size var(--t-morph) var(--ease-smooth); }
+    font-size var(--t-bar) var(--ease-bar), padding var(--t-bar) var(--ease-bar),
+    min-height var(--t-bar) var(--ease-bar), max-width var(--t-bar) var(--ease-bar),
+    opacity .25s ease; }
+  .audiobar .ab-left > .btn i { transition: font-size var(--t-bar) var(--ease-bar); }
   .ab-title { flex: none; font-size: 11px; color: var(--muted); white-space: nowrap; min-width: 76px; text-align: center;
     background: var(--accent-soft); border-radius: 999px; padding: 4px 10px; font-weight: 600;
-    cursor: pointer; transition: font-size var(--t-morph) var(--ease-smooth), padding var(--t-morph) var(--ease-smooth),
-      max-width var(--t-morph) var(--ease-smooth), opacity .3s ease; }
+    cursor: pointer; transition: font-size var(--t-bar) var(--ease-bar), padding var(--t-bar) var(--ease-bar),
+      max-width var(--t-bar) var(--ease-bar), opacity .25s ease; }
   .ab-title:hover { background: var(--accent); color: #fff; }
   .jump-btn { display: none; }
   .ab-seek { flex: 1; min-width: 0; }
@@ -475,14 +473,14 @@
   /* 自由播放超过5s后导航透明度降低（logo除外） */
   body.fade-nav .topbar { opacity: .55; }
   body.fade-nav .topbar h1 { opacity: 1; }
-  /* mini 播放条：收缩为居中小胶囊（仅 上一句/播放/下一句），宽度跟随内容平滑收拢 */
+  /* mini 播放条：收缩为居中小胶囊（仅 上一句/播放/下一句）；宽定死、只 morph max-width（fit-content↔定宽不可插值，会跳变），中心点全程不动 */
   body.scrolled .audiobar { padding: 4px 10px; gap: 4px; border-radius: 999px;
-    width: fit-content; max-width: calc(100vw - 48px);
+    width: calc(100vw - 48px); max-width: 200px;
     left: 50%; right: auto; transform: translateX(-50%);
     border-color: rgba(255,255,255,.4);
     backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
   body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute; }
-  body.scrolled .audiobar .ab-left { gap: 0; }
+  body.scrolled .audiobar .ab-left { gap: 0; flex: 1; justify-content: center; } /* 条定宽后内容居中，胶囊不偏 */
   body.scrolled .audiobar .ab-left > .btn:not(.ab-step):not(.play) { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden; }
   body.scrolled .audiobar .loop-wrap,
   body.scrolled .audiobar .rate-wrap,
@@ -518,10 +516,10 @@
   .audiobar.force-mini .ab-expand:active,
   body.scrolled .audiobar.expanded .ab-collapse:active,
   body:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse:active { opacity: 1; transform: translateX(-50%) scale(.94); }
-  /* 展开状态：覆盖 mini 态样式 */
+  /* 展开状态：覆盖 mini 态样式（与 mini 同一定位＋定宽，像素与原来 left/right:24 完全一致，只 morph max-width） */
   body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius: 22px;
-    width: auto; max-width: none; margin: 0;
-    left: 24px; right: 24px; transform: none;
+    width: calc(100vw - 48px); max-width: calc(100vw - 48px); margin: 0;
+    left: 50%; right: auto; transform: translateX(-50%);
     border-color: rgba(255,255,255,.65);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02); }
@@ -537,12 +535,12 @@
   body.scrolled .audiobar.expanded .ab-expand { display: none; }
   /* 强制 mini：不受滚动位置影响的手动收起态（与 body.scrolled mini 同一样式） */
   .audiobar.force-mini { padding: 4px 10px; gap: 4px; border-radius: 999px;
-    width: fit-content; max-width: calc(100vw - 48px);
+    width: calc(100vw - 48px); max-width: 200px;
     left: 50%; right: auto; transform: translateX(-50%);
     border-color: rgba(255,255,255,.4); flex-direction: row;
     backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
   .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute; }
-  .audiobar.force-mini .ab-left { gap: 0; }
+  .audiobar.force-mini .ab-left { gap: 0; flex: 1; justify-content: center; }
   .audiobar.force-mini .ab-left > .btn:not(.ab-step):not(.play) { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden; }
   .audiobar.force-mini .loop-wrap,
   .audiobar.force-mini .rate-wrap,
@@ -595,8 +593,8 @@
     .topbar { padding: 8px 12px; gap: 6px; flex-wrap: nowrap; overflow: visible; }
     .topbar h1 { flex: 1 1 auto; min-width: 0; margin-right: auto; font-size: 14px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    #btnMenu { display: inline-flex; flex: none; min-width: 40px; min-height: 40px; justify-content: center; align-items: center; }
-    #btnMenu .burger { display: block; width: 16px; height: 12px; flex: none;
+    #btnMenu { display: inline-flex; flex: none; min-width: 32px; min-height: 32px; padding: 6px 8px; justify-content: center; align-items: center; }
+    #btnMenu .burger { display: block; width: 13px; height: 10px; flex: none;
       border-top: 2px solid currentColor; border-bottom: 2px solid currentColor;
       background: linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat; }
     .only-mobile { display: inline; }
@@ -667,7 +665,7 @@
     /* 播放条：移动端两行布局 - 进度条上，按钮下 */
     .audiobar { flex-direction: column; gap: 4px; padding: 8px 10px; border-radius: 18px;
       bottom: calc(8px + env(safe-area-inset-bottom, 0px));
-      left: 12px; right: 12px; }
+      left: 12px; right: 12px; max-width: calc(100vw - 24px); }
     .ab-left { order: 2; flex-wrap: wrap; justify-content: center; gap: 4px; }
     .ab-right { order: 1; gap: 8px; width: 100%; }
     .ab-seek { flex: 1; min-width: 0; width: 100%; }
@@ -679,24 +677,26 @@
     .audiobar .btn { font-size: 11px; padding: 5px 8px; min-height: 30px; min-width: 0; flex: none; white-space: nowrap; }
     .audiobar .btn.play { font-size: 12px; padding: 5px 12px; }
     .audiobar .btn::after { display: none; }
-    /* 移动端沉浸模式：与桌面端一致，三按钮居中胶囊 */
+    /* 移动端沉浸模式：与桌面端一致，三按钮居中胶囊（定宽＋max-width morph，中心不动） */
     body.scrolled .audiobar { padding: 4px 10px; gap: 4px; border-radius: 999px;
-      width: fit-content; max-width: calc(100vw - 24px);
+      width: calc(100vw - 24px); max-width: 200px;
       left: 50%; right: auto; transform: translateX(-50%);
       flex-direction: row; }
     body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; position: absolute; }
-    body.scrolled .audiobar .ab-left { order: 0; flex-wrap: nowrap; gap: 0; }
+    body.scrolled .audiobar .ab-left { order: 0; flex-wrap: nowrap; gap: 0; flex: 1; justify-content: center; }
     body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px; }
     body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
     body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
-    /* 移动端展开态：回到纵向（进度上、按钮下），否则继承 mini 的横向行＋flex:none 整行溢出 */
-    body.scrolled .audiobar.expanded { flex-direction: column; left: 12px; right: 12px; }
+    /* 移动端展开态：回到纵向（进度上、按钮下），否则继承 mini 的横向行＋flex:none 整行溢出；
+       与 mini 同一定位（left:50%＋translateX(-50%)，宽按 100vw-24 定死＝原来 left/right:12 的像素），只 morph 宽度——中心点不动，消掉 37px 级别的水平抖动 */
+    body.scrolled .audiobar.expanded { flex-direction: column; left: 50%; right: auto; transform: translateX(-50%);
+      width: calc(100vw - 24px); max-width: calc(100vw - 24px); }
     body.scrolled .audiobar.expanded .ab-right { order: 1; width: 100%; }
     body.scrolled .audiobar.expanded .ab-left { order: 2; width: 100%; }
     /* 移动端强制 mini：与沉浸胶囊同一样式 */
-    .audiobar.force-mini { max-width: calc(100vw - 24px); flex-direction: row; }
+    .audiobar.force-mini { width: calc(100vw - 24px); max-width: 200px; flex-direction: row; }
     .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; position: absolute; }
-    .audiobar.force-mini .ab-left { order: 0; flex-wrap: nowrap; gap: 0; }
+    .audiobar.force-mini .ab-left { order: 0; flex-wrap: nowrap; gap: 0; flex: 1; justify-content: center; }
     .audiobar.force-mini .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px; }
     .audiobar.force-mini .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
     .audiobar.force-mini .ab-left > .btn i { font-size: 16px; line-height: 1; }
@@ -716,7 +716,7 @@
     }
   /* 超窄屏（≤360px）：播放条进一步收纳 */
   @media (max-width: 360px) {
-    .audiobar { gap: 3px; padding: 6px 8px; left: 4px; right: 4px; }
+    .audiobar { gap: 3px; padding: 6px 8px; left: 4px; right: 4px; max-width: calc(100vw - 8px); }
     .audiobar .btn { padding: 4px 6px; font-size: 10px; min-height: 28px; }
     .audiobar .btn.play { padding: 4px 10px; font-size: 11px; }
     }
