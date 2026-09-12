@@ -2150,6 +2150,8 @@
     else if (e.key === 'Enter') { e.preventDefault(); cardSpeakSel(); }
     else if (e.key === 'Escape') e.target.blur();
     }
+    // 输入框内按 Esc 也要能关弹窗（跳转弹窗打开时焦点在句号输入框里，否则 Esc 永远关不掉）
+    if (e.key === 'Escape') { e.target.blur(); pop.style.display = 'none'; const cp = document.getElementById('cloudPop'); if (cp) cp.style.display = 'none'; toggleJumpPop(false); toggleMarkPop(false); }
     return;
     }
     if (e.code === 'Space' && e.target.tagName === 'BUTTON') return; // 按钮聚焦时走原生空格点击，避免双重触发
