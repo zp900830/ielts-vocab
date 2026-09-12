@@ -81,7 +81,8 @@
   body.dark.scrolled .audiobar.expanded .ab-collapse,
   body.dark:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse { background: rgba(30,28,25,.6); }
   body.dark.scrolled .audiobar .ab-expand:hover, body.dark .audiobar.force-mini .ab-expand:hover,
-  body.dark .audiobar .ab-collapse:hover { background: rgba(16,180,135,.2); }
+  body.dark .audiobar .ab-collapse:hover { background: var(--accent); color: #fff;
+    box-shadow: 0 4px 14px rgba(16,180,135,.5); }
   body.dark #seekRail { background: #3a453f; }
   html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth;
     background-color: #faf8f4;
@@ -124,6 +125,8 @@
   .topbar-right { display: flex; align-items: center; gap: 8px; margin-left: auto;
     transition: opacity .3s ease, max-width var(--t-morph) var(--ease-smooth),
       max-height var(--t-morph) var(--ease-smooth); }
+  #btnMenu { display: none; } /* 仅移动端显示的汉堡菜单按钮 */
+  .only-mobile { display: none; } /* 仅移动端显示的行内标签 */
   .ctrl { display: flex; align-items: center; gap: 8px; font-size: 13px;
     transition: opacity .3s ease, max-width var(--t-morph) var(--ease-smooth),
       max-height var(--t-morph) var(--ease-smooth); }
@@ -501,12 +504,20 @@
     border-radius: 999px; opacity: .55; z-index: 5;
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 1px 4px rgba(0,0,0,.08);
-    transition: opacity .2s, transform .2s, background .2s;
+    transition: opacity .2s, transform .2s, background .2s, box-shadow .2s, color .2s;
   }
   .audiobar .btn.ab-expand, .audiobar .btn.ab-collapse { margin: 0; } /* 悬浮按钮不受 .btn + .btn 的 4px 流式间距影响，保证正上方居中 */
   .audiobar .ab-expand i, .audiobar .ab-collapse i { font-size: 13px; line-height: 1; }
-  .audiobar .ab-expand:hover, .audiobar .ab-collapse:hover { opacity: .95; background: rgba(255,255,255,.9); transform: translateX(-50%) scale(1.08); }
-  .audiobar .ab-expand:active, .audiobar .ab-collapse:active { opacity: 1; transform: translateX(-50%) scale(.94); }
+  /* hover/active 与显示规则同选择器＋伪类，保证优先级盖得过 display 规则（旧的低优先级 hover 缩放其实从没生效过） */
+  body.scrolled .audiobar:not(.expanded) .ab-expand:hover,
+  .audiobar.force-mini .ab-expand:hover,
+  body.scrolled .audiobar.expanded .ab-collapse:hover,
+  body:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse:hover { opacity: 1; background: var(--accent); color: #fff;
+    transform: translateX(-50%) scale(1.18); box-shadow: 0 4px 14px rgba(12,156,116,.45); }
+  body.scrolled .audiobar:not(.expanded) .ab-expand:active,
+  .audiobar.force-mini .ab-expand:active,
+  body.scrolled .audiobar.expanded .ab-collapse:active,
+  body:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse:active { opacity: 1; transform: translateX(-50%) scale(.94); }
   /* 展开状态：覆盖 mini 态样式 */
   body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius: 22px;
     width: auto; max-width: none; margin: 0;
@@ -580,25 +591,54 @@
       background-image:
       radial-gradient(ellipse 80% 50% at 50% 0%, rgba(210,225,218,.25) 0%, transparent 70%),
       linear-gradient(180deg, #faf8f4 0%, #f7f4ef 100%); }
-    /* 顶栏：多行收纳——全部按钮直接可见可点，不依赖横滑（横滑在真机上不可达） */
-    .topbar { padding: 8px 12px; gap: 6px; flex-wrap: wrap; overflow-x: visible; scrollbar-width: none;
-      -webkit-mask-image: none; mask-image: none; }
-    .topbar::-webkit-scrollbar { display: none; }
-    .topbar h1 { width: auto; margin-right: auto; font-size: 14px; white-space: nowrap; flex: none; }
-    .topbar-right { gap: 6px; flex: none; flex-wrap: wrap; row-gap: 6px;
-      max-width: 100%; overflow: visible; }
-    .topbar .ctrl { flex-wrap: wrap; row-gap: 6px; }
-    .cpop { top: 108px; } /* 顶栏换行后整体变高，登录弹窗下移避让 */
-    /* scrolled 态：移动端仍用 wrap 布局，按钮始终可见可点（不依赖横滑） */
-    body.scrolled .topbar { flex-wrap: wrap; overflow: visible; }
-    body.scrolled .topbar-right { max-width: 100%; max-height: none; opacity: 1; overflow: visible; pointer-events: auto; }
-    body.scrolled .topbar .ctrl { max-width: 100%; max-height: none; opacity: 1; overflow: visible; pointer-events: auto; }
-    body.scrolled .topbar-right > .btn { max-width: none; max-height: none; opacity: 1; overflow: visible; pointer-events: auto; }
-    /* show-nav 态：移动端也限制宽度，按钮自动换行 */
-    body.scrolled.show-nav .topbar { padding: 8px 12px; gap: 6px; flex-wrap: wrap; overflow: visible; }
-    body.scrolled.show-nav .topbar h1 { font-size: 14px; }
-    body.scrolled.show-nav .topbar-right { max-width: 100%; max-height: none; }
-    body.scrolled.show-nav .topbar-right > .btn { max-width: none; }
+    /* 顶栏：单行＋汉堡菜单（把阅读区还给正文） */
+    .topbar { padding: 8px 12px; gap: 6px; flex-wrap: nowrap; overflow: visible; }
+    .topbar h1 { flex: 1 1 auto; min-width: 0; margin-right: auto; font-size: 14px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #btnMenu { display: inline-flex; flex: none; min-width: 40px; min-height: 40px; justify-content: center; align-items: center; }
+    #btnMenu .burger { display: block; width: 16px; height: 12px; flex: none;
+      border-top: 2px solid currentColor; border-bottom: 2px solid currentColor;
+      background: linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat; }
+    .only-mobile { display: inline; }
+    /* 面板内按移动端规范：整行左对齐、44px 触区、组内双列 */
+    .topbar-right { gap: 10px; width: min(280px, calc(100vw - 24px)); }
+    .topbar-right .btn { min-height: 44px; font-size: 14px; justify-content: flex-start; }
+    .topbar-right > .btn { width: 100%; }
+    .topbar-right > #btnCloud { max-width: none; } /* 盖掉旧单行顶栏的 110px 限宽，菜单里整行 */
+    .topbar-right .ctrl { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .topbar-right .voice-ctrl { display: flex; flex-direction: column; align-items: stretch; gap: 8px; } /* 口音＋音色上下叠（不用 grid：原生 select 在 grid 轨道里个别版本会算错行高顶到下一行） */
+    .topbar-right .voice-sel { width: 100%; max-width: none; height: 44px; min-height: 0; line-height: 28px; overflow: hidden;
+      -webkit-appearance: none; appearance: none; /* 去原生外观：真机按系统 metrics 绘制会超出 CSS 盒压住下一行，自绘箭头后完全按盒子排 */
+      padding-right: 34px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%238a938e' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; }
+    body.dark .topbar-right .voice-sel { background-color: #252220;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%238a938e' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; }
+    /* loop/倍速小菜单：选项行按 44px 触区 */
+    .loop-menu, .rate-menu { min-width: 120px; }
+    .loop-menu button, .rate-menu button { min-height: 44px; padding: 12px 16px; font-size: 15px; }
+    /* .topbar-right 改为下拉面板；显隐唯一由 body.menu-open 控制，节点不搬迁、绑定不受影响 */
+    .topbar-right { position: fixed; top: 54px; right: 12px; z-index: 160; margin-left: 0; flex: none;
+      width: min(300px, calc(100vw - 24px));
+      flex-direction: column; align-items: stretch; gap: 8px; padding: 12px;
+      background: var(--glass-strong); border: 1px solid var(--border); border-radius: 14px;
+      -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px);
+      box-shadow: 0 16px 48px rgba(0,0,0,.14);
+      opacity: 0; visibility: hidden; transform: translateY(-8px); pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease, visibility .2s; }
+    body.menu-open .topbar-right { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+    .topbar-right .ctrl { flex-wrap: wrap; row-gap: 6px; }
+    /* 压过 scrolled / show-nav / hover 的压缩与显隐：移动端一律走菜单开关 */
+    body.scrolled .topbar, body.scrolled.show-nav .topbar { padding: 8px 12px; gap: 6px; flex-wrap: nowrap; overflow: visible; }
+    body.scrolled .topbar h1, body.scrolled.show-nav .topbar h1 { font-size: 14px; }
+    body.scrolled .topbar-right, body.scrolled.show-nav .topbar-right,
+    body.scrolled .topbar:hover .topbar-right { max-width: none; max-height: none; overflow: visible;
+      opacity: 0; visibility: hidden; transform: translateY(-8px); pointer-events: none; }
+    body.scrolled.menu-open .topbar-right, body.scrolled.show-nav.menu-open .topbar-right,
+    body.scrolled.menu-open .topbar:hover .topbar-right { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+    body.scrolled .topbar .ctrl, body.scrolled.show-nav .topbar .ctrl { max-width: none; max-height: none; opacity: 1; overflow: visible; pointer-events: auto; }
+    body.scrolled .topbar-right > .btn, body.scrolled.show-nav .topbar-right > .btn { max-width: none; max-height: none; opacity: 1; overflow: visible; pointer-events: auto; }
     .ctrl { font-size: 12px; gap: 5px; flex: none; }
     .btn { padding: 6px 10px; font-size: 12px; min-height: 30px; white-space: nowrap; flex: none; }
     .voice-sel { max-width: 150px; font-size: 16px; touch-action: manipulation; }
@@ -697,13 +737,14 @@
           <button class="btn active" id="btnZh" title="显示/隐藏全文中文翻译"><i class="ri-eye-line"></i> 隐藏全文</button>
           <button class="btn active" id="btnGloss" title="显示/隐藏行内单词词义"><i class="ri-eye-line"></i> 隐藏词义</button>
         </div>
-        <div class="ctrl">
+        <div class="ctrl voice-ctrl">
           <button class="btn active" id="btnAccent" onclick="toggleAccent()" title="点击切换英式/美式">🇬🇧 英式</button>
           <select class="voice-sel" id="voiceSel" title="选择朗读音色（云端/Edge/本机）" aria-label="选择朗读音色"></select>
         </div>
-        <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式"><i class="ri-moon-line"></i></button>
+        <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式"><i class="ri-moon-line"></i><span class="only-mobile"> 夜间模式</span></button>
         <button class="btn" id="btnCloud" onclick="toggleCloudPop()" title="登录后可用 Azure 云端自然语音"><i class="ri-cloud-line"></i> 未登录</button>
       </div>
+      <button class="btn" id="btnMenu" onclick="toggleMenu()" title="菜单" aria-label="打开菜单"><span class="burger" aria-hidden="true"></span></button>
     </header>
 
     <div class="cpop" id="cloudPop">
@@ -1352,6 +1393,7 @@
     const p = document.getElementById('cloudPop');
     p.style.display = p.style.display === 'block' ? 'none' : 'block';
     }
+    function toggleMenu() { document.body.classList.toggle('menu-open'); }
     function segRange(ai) {
     let s = artOfSent.indexOf(ai); if (s < 0) s = 0;
     let e = artOfSent.indexOf(ai + 1); if (e < 0) e = sents.length;
@@ -2118,6 +2160,7 @@
     if (_jp && _jp.style.display === 'block' && !e.target.closest('.jpop') && !e.target.closest('#abTitle') && !e.target.closest('.jump-btn')) _jp.style.display = 'none';
     const _mp = document.getElementById('markPop');
     if (_mp && _mp.style.display === 'block' && !e.target.closest('.jpop') && !e.target.closest('#markBtn')) _mp.style.display = 'none';
+    if (document.body.classList.contains('menu-open') && !e.target.closest('.topbar-right') && !e.target.closest('#btnMenu')) document.body.classList.remove('menu-open');
     /* 移动端：点遮罩关词库抽屉 */
     if (window.matchMedia('(max-width: 700px)').matches && document.querySelector('.layout.panel-open')) {
     const asideEl = document.getElementById('panel');
@@ -2174,7 +2217,7 @@
     const isDark = document.body.classList.contains('dark');
     try { localStorage.setItem('ielts-dark', isDark ? '1' : '0'); } catch (e) {}
     const btn = document.getElementById('btnDark');
-    if (btn) btn.innerHTML = isDark ? '<i class="ri-sun-line"></i>' : '<i class="ri-moon-line"></i>';
+    if (btn) btn.innerHTML = (isDark ? '<i class="ri-sun-line"></i>' : '<i class="ri-moon-line"></i>') + '<span class="only-mobile"> 夜间模式</span>';
     }
     // 初始化夜间模式
     try { if (localStorage.getItem('ielts-dark') === '1') { document.body.classList.add('dark'); } } catch (e) {}
@@ -2277,14 +2320,14 @@
     else if (e.key === 'Escape') e.target.blur();
     }
     // 输入框内按 Esc 也要能关弹窗（跳转弹窗打开时焦点在句号输入框里，否则 Esc 永远关不掉）
-    if (e.key === 'Escape') { e.target.blur(); pop.style.display = 'none'; const cp = document.getElementById('cloudPop'); if (cp) cp.style.display = 'none'; toggleJumpPop(false); toggleMarkPop(false); }
+    if (e.key === 'Escape') { e.target.blur(); pop.style.display = 'none'; const cp = document.getElementById('cloudPop'); if (cp) cp.style.display = 'none'; toggleJumpPop(false); toggleMarkPop(false); document.body.classList.remove('menu-open'); }
     return;
     }
     if (e.code === 'Space' && e.target.tagName === 'BUTTON') return; // 按钮聚焦时走原生空格点击，避免双重触发
     if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
     if (e.key === 'ArrowRight') step(1);
     if (e.key === 'ArrowLeft') step(-1);
-    if (e.key === 'Escape') { pop.style.display = 'none'; const cp = document.getElementById('cloudPop'); if (cp) cp.style.display = 'none'; const jp = document.getElementById('jumpPop'); if (jp) jp.style.display = 'none'; const mp = document.getElementById('markPop'); if (mp) mp.style.display = 'none'; document.getElementById('loopWrap')?.classList.remove('open'); document.getElementById('rateWrap')?.classList.remove('open'); }
+    if (e.key === 'Escape') { pop.style.display = 'none'; const cp = document.getElementById('cloudPop'); if (cp) cp.style.display = 'none'; const jp = document.getElementById('jumpPop'); if (jp) jp.style.display = 'none'; const mp = document.getElementById('markPop'); if (mp) mp.style.display = 'none'; document.getElementById('loopWrap')?.classList.remove('open'); document.getElementById('rateWrap')?.classList.remove('open'); document.body.classList.remove('menu-open'); }
     });
 
     /* ============ 进度存档 + 手动书签 ============ */
