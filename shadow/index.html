@@ -3,12 +3,15 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#faf8f4">
     <meta name="google" content="notranslate">
     <title>雅思词汇影子跟读 · IELTS Vocabulary Shadowing</title>
     <style>
   /* ============ 设计令牌（对齐 雅思词汇真经项目：薄荷绿 + 衬线故事体 + 毛玻璃） ============ */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
+    color-scheme: light dark;
     --bg: #faf8f4; --card: #fff; --text: #2b3028; --muted: #7a7568; --ink2: #6b665a;
     --accent: #0c9c74; --accent-bright: #10b487; --accent-soft: #e0f5ec;
     --accent-line: #bfe6d6; --hl: #c9f2e2; --hl-line: #8fd8bd;
@@ -141,7 +144,7 @@
     margin: 8px 0 14px; line-height: 1.65; }
   body.hide-zh .sent-zh, body.hide-zh .para-zh { display: none; }
   .voice-sel { border: 1px solid var(--border); background-color: #fff; color: var(--text);
-    border-radius: 10px; font-size: 13px; padding: 7px 10px; max-width: 220px; min-height: 34px;
+    border-radius: 10px; font-size: 16px; padding: 7px 10px; max-width: 220px; min-height: 34px;
     transition: border-color var(--t-fast); }
   .voice-sel:hover { border-color: var(--accent-bright); }
 
@@ -274,7 +277,7 @@
   .jpop .ct { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
   .jpop .cs { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
   .jpop select, .jpop input { width: 100%; border: 1px solid var(--border); border-radius: 10px;
-    padding: 8px 12px; font-size: 14px; outline: none; margin-bottom: 8px; font-family: inherit;
+    padding: 8px 12px; font-size: 16px; outline: none; margin-bottom: 8px; font-family: inherit;
     background-color: #fff; color: var(--text); }
   .jpop select:focus, .jpop input:focus { border-color: var(--accent-bright); }
   .jpop .row { display: flex; gap: 8px; }
@@ -356,7 +359,7 @@
   .cpop .ct { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
   .cpop .cs { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
   .cpop input { width: 100%; border: 1px solid var(--border); border-radius: 10px;
-    padding: 8px 12px; font-size: 14px; outline: none; margin-bottom: 8px; font-family: inherit; }
+    padding: 8px 12px; font-size: 16px; outline: none; margin-bottom: 8px; font-family: inherit; }
   .cpop input:focus { border-color: var(--accent-bright); }
   .cpop .row { display: flex; gap: 8px; }
   .cpop .row .btn { flex: 1; }
@@ -390,7 +393,7 @@
     font-size: 15px; cursor: pointer; padding: 2px 8px; border-radius: 8px; }
   aside .head .t .x:hover { background: var(--accent-soft); color: var(--accent); }
   aside input { width: 100%; border: 1px solid var(--border); background: #fff;
-    border-radius: 10px; padding: 8px 12px; font-size: 14px; outline: none; min-height: 40px;
+    border-radius: 10px; padding: 8px 12px; font-size: 16px; outline: none; min-height: 40px;
     transition: border-color var(--t-fast); }
   aside input:focus { border-color: var(--accent-bright); }
   aside .list { overflow-y: auto; flex: 1; }
@@ -516,7 +519,7 @@
   /* ============ 移动端（借鉴词汇真经：去矩形块感——顶栏精简、播放条单行、词库抽屉化） ============ */
   @media (max-width: 700px) {
     /* iOS 不支持 background-attachment:fixed，改固定层绘制（否则背景整块发白） */
-    html { background: none; }
+    html { background: none; background-color: #faf8f4; }
     body { overscroll-behavior-y: contain; }
     body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
       background-color: #faf8f4;
@@ -532,7 +535,7 @@
     .topbar-right { gap: 6px; flex: none; }
     .ctrl { font-size: 12px; gap: 5px; flex: none; }
     .btn { padding: 6px 10px; font-size: 12px; min-height: 30px; white-space: nowrap; flex: none; }
-    .voice-sel { max-width: 150px; font-size: 12px; touch-action: manipulation; }
+    .voice-sel { max-width: 150px; font-size: 16px; touch-action: manipulation; }
     #btnCloud { flex: none; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
     /* 布局：左侧预留章节圆点空间 */
     .layout { display: block; padding: 14px 12px 14px 28px; padding-bottom: calc(130px + env(safe-area-inset-bottom, 0px)); }
