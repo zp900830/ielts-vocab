@@ -200,10 +200,10 @@
     padding: 10px 16px; max-width: calc(100vw - 48px); /* 定死＝当前实际宽，morph 只走 max-width＋内部，定位属性不进 transition（混单位插值就是那下水平抖动的来源） */
     box-shadow: 0 24px 64px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.04),
     inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.35);
-    transition: padding var(--t-bar) var(--ease-bar), gap var(--t-bar) var(--ease-bar),
-      border-radius var(--t-bar) var(--ease-bar), max-width var(--t-bar) var(--ease-bar),
-      backdrop-filter .32s ease, -webkit-backdrop-filter .32s ease,
-      box-shadow .32s ease, border-color .32s ease; }
+    transition: padding var(--t-bar) var(--ease-bar) .05s, gap var(--t-bar) var(--ease-bar) .05s,
+      border-radius var(--t-bar) var(--ease-bar) .05s, max-width var(--t-bar) var(--ease-bar) .05s,
+      backdrop-filter .32s ease .05s, -webkit-backdrop-filter .32s ease .05s,
+      box-shadow .32s ease .05s, border-color .32s ease .05s; } /* forward: 内容先淡出，.05s 后条形开始 morph */
   .audiobar::before { content: ""; position: absolute; left: 12px; right: 12px; top: 6px;
     height: 42%; border-radius: 18px; pointer-events: none; opacity: .9;
     background: radial-gradient(160px 28px at 16% 0%, rgba(255,255,255,.55), transparent 72%),
@@ -214,17 +214,17 @@
   .ab-right { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;
     transition: gap var(--t-bar) var(--ease-bar),
       max-width var(--t-bar) var(--ease-bar), max-height var(--t-bar) var(--ease-bar),
-      opacity .25s ease; }
+      opacity .2s ease-in .12s; } /* reverse: bar 展开后内容延迟淡入 */
   .audiobar .ab-left > .btn { transition: background var(--t-fast), border-color var(--t-fast),
     filter var(--t-fast), transform .12s ease,
-    font-size var(--t-bar) var(--ease-bar), padding var(--t-bar) var(--ease-bar),
-    min-height var(--t-bar) var(--ease-bar), max-width var(--t-bar) var(--ease-bar),
-    opacity .25s ease; }
+    font-size .2s ease-in .12s, padding .2s ease-in .12s,
+    min-height .2s ease-in .12s, max-width .2s ease-in .12s,
+    opacity .2s ease-in .12s; } /* reverse: bar 展开后按钮延迟淡入 */
   .audiobar .ab-left > .btn i { transition: font-size var(--t-bar) var(--ease-bar); }
   .ab-title { flex: none; font-size: 11px; color: var(--muted); white-space: nowrap; min-width: 76px; text-align: center;
     background: var(--accent-soft); border-radius: 999px; padding: 4px 10px; font-weight: 600;
-    cursor: pointer; transition: font-size var(--t-bar) var(--ease-bar), padding var(--t-bar) var(--ease-bar),
-      max-width var(--t-bar) var(--ease-bar), opacity .25s ease; }
+    cursor: pointer; transition: font-size .2s ease-in .12s, padding .2s ease-in .12s,
+      max-width .2s ease-in .12s, opacity .2s ease-in .12s; } /* reverse: bar 展开后标题延迟淡入 */
   .ab-title:hover { background: var(--accent); color: #fff; }
   .jump-btn { display: none; }
   .ab-seek { flex: 1; min-width: 0; }
@@ -479,13 +479,18 @@
     left: 50%; right: auto; transform: translateX(-50%);
     border-color: rgba(255,255,255,.4);
     backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
-  body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute; }
+  body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute;
+    transition: opacity .05s ease-out, /* forward: 进度条极速淡出 */
+      max-width var(--t-bar) var(--ease-bar) .05s, max-height var(--t-bar) var(--ease-bar) .05s; }
   body.scrolled .audiobar .ab-left { gap: 0; flex: 1; justify-content: center; } /* 条定宽后内容居中，胶囊不偏 */
-  body.scrolled .audiobar .ab-left > .btn:not(.ab-step):not(.play) { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden; }
+  body.scrolled .audiobar .ab-left > .btn:not(.ab-step):not(.play) { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden;
+    transition: opacity .05s ease-out; } /* forward: 非核心按钮极速淡出 */
   body.scrolled .audiobar .loop-wrap,
   body.scrolled .audiobar .rate-wrap,
-  body.scrolled .audiobar .ab-title { max-width: 0; min-width: 0; margin: 0; padding: 0; border: 0; opacity: 0; pointer-events: none; overflow: hidden; }
-  body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 10px; min-height: 28px; }
+  body.scrolled .audiobar .ab-title { max-width: 0; min-width: 0; margin: 0; padding: 0; border: 0; opacity: 0; pointer-events: none; overflow: hidden;
+    transition: opacity .05s ease-out; } /* forward: 标题/倍速极速淡出 */
+  body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 10px; min-height: 28px;
+    transition: font-size .05s ease-out, padding var(--t-bar) var(--ease-bar) .05s, min-height var(--t-bar) var(--ease-bar) .05s; }
   body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 14px; }
   body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
   /* 展开/收起按钮：悬浮在播放条上方右侧；mini 胶囊只显示展开，完整条只显示收起（互斥） */
@@ -539,13 +544,17 @@
     left: 50%; right: auto; transform: translateX(-50%);
     border-color: rgba(255,255,255,.4); flex-direction: row;
     backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
-  .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute; }
+  .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute;
+    transition: opacity .05s ease-out; }
   .audiobar.force-mini .ab-left { gap: 0; flex: 1; justify-content: center; }
-  .audiobar.force-mini .ab-left > .btn:not(.ab-step):not(.play) { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden; }
+  .audiobar.force-mini .ab-left > .btn:not(.ab-step):not(.play) { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden;
+    transition: opacity .05s ease-out; }
   .audiobar.force-mini .loop-wrap,
   .audiobar.force-mini .rate-wrap,
-  .audiobar.force-mini .ab-title { max-width: 0; min-width: 0; margin: 0; padding: 0; border: 0; opacity: 0; pointer-events: none; overflow: hidden; }
-  .audiobar.force-mini .ab-left > .btn { font-size: 0; padding: 4px 10px; min-height: 28px; }
+  .audiobar.force-mini .ab-title { max-width: 0; min-width: 0; margin: 0; padding: 0; border: 0; opacity: 0; pointer-events: none; overflow: hidden;
+    transition: opacity .05s ease-out; }
+  .audiobar.force-mini .ab-left > .btn { font-size: 0; padding: 4px 10px; min-height: 28px;
+    transition: font-size .05s ease-out; }
   .audiobar.force-mini .ab-left > .btn.play { font-size: 11px; padding: 4px 14px; }
   .audiobar.force-mini .ab-left > .btn i { font-size: 16px; line-height: 1; }
   /* 鼠标移入mini态的导航/播放条时平滑恢复初始状态（仅限支持悬停的设备，避免移动端点按误触） */
@@ -687,9 +696,11 @@
       width: calc(100vw - 24px); max-width: 200px;
       left: 50%; right: auto; transform: translateX(-50%);
       flex-direction: row; }
-    body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; position: absolute; }
+    body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; position: absolute;
+      transition: opacity .05s ease-out; }
     body.scrolled .audiobar .ab-left { order: 0; flex-wrap: nowrap; gap: 0; flex: 1; justify-content: center; }
-    body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px; }
+    body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px;
+      transition: font-size .05s ease-out; }
     body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
     body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
     /* 移动端展开态：回到纵向（进度上、按钮下），否则继承 mini 的横向行＋flex:none 整行溢出；
@@ -700,9 +711,11 @@
     body.scrolled .audiobar.expanded .ab-left { order: 2; width: 100%; }
     /* 移动端强制 mini：与沉浸胶囊同一样式 */
     .audiobar.force-mini { width: calc(100vw - 24px); max-width: 200px; flex-direction: row; }
-    .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; position: absolute; }
+    .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; position: absolute;
+      transition: opacity .05s ease-out; }
     .audiobar.force-mini .ab-left { order: 0; flex-wrap: nowrap; gap: 0; flex: 1; justify-content: center; }
-    .audiobar.force-mini .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px; }
+    .audiobar.force-mini .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px;
+      transition: font-size .05s ease-out; }
     .audiobar.force-mini .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
     .audiobar.force-mini .ab-left > .btn i { font-size: 16px; line-height: 1; }
     #seekWrap { width: 100%; height: 22px; margin: 0; position: relative; }
