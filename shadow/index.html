@@ -349,6 +349,8 @@
   #markList .mbtns .go { flex: 1; }
   #markList .mbtns .ab { flex: none; width: 40px; }
   #markList .mbtns .del { flex: none; padding: 6px 12px; }
+  /* 书签行 A/B 状态：该条是当前循环起/终点时点亮 */
+  #markList .mbtns .btn.ab.ab-on { background: var(--accent); color: #fff; border-color: var(--accent); }
   #seekTip { position: absolute; left: 0; bottom: calc(100% + 14px); transform: translateX(-50%);
     max-width: min(380px, 90vw); background: rgba(255,255,255,.92);
     -webkit-backdrop-filter: blur(32px) saturate(200%); backdrop-filter: blur(32px) saturate(200%);
@@ -2168,6 +2170,8 @@
     }
     document.body.classList.toggle('ab-picking', abMode === 1 || abMode === 2);
     document.body.classList.toggle('ab-loop', abMode === 3);
+    // 书签弹窗开着时同步行内 A/B 点亮态
+    try { const mp = document.getElementById('markPop'); if (mp && mp.style.display === 'block') renderMarks(); } catch (e) {}
     }
     function paintAB() {
     if (!Array.isArray(sents) || !sents.length) return;
@@ -2583,12 +2587,14 @@
     const list = document.getElementById('markList');
     if (!list) return;
     const m = getMarks().filter(x => x && Number.isInteger(x.i) && x.i >= 0 && x.i < sents.length);
-    list.innerHTML = m.length ? m.map(x =>
-    `<div class="mitem"><div class="mmain"><div class="mt">${esc(markLabel(x.i))}</div><div class="ms">${esc(markSub(x.i, x.t))}</div></div>` +
+    list.innerHTML = m.length ? m.map(x => {
+    const aOn = (abMode === 2 || abMode === 3) && x.i === abStart;
+    const bOn = abMode === 3 && x.i === abEnd;
+    return `<div class="mitem"><div class="mmain"><div class="mt">${esc(markLabel(x.i))}</div><div class="ms">${esc(markSub(x.i, x.t))}</div></div>` +
       `<div class="mbtns"><button class="btn play go" onclick="jumpMark(${x.i})">直达</button>` +
-      `<button class="btn ab" onclick="abMarkPick(${x.i},'A')" title="设为A-B起点">A</button>` +
-      `<button class="btn ab" onclick="abMarkPick(${x.i},'B')" title="设为A-B终点">B</button>` +
-    `<button class="btn del" onclick="delMark(${x.i})">删</button></div></div>`).join('')
+      `<button class="btn ab${aOn ? ' ab-on' : ''}" onclick="abMarkPick(${x.i},'A')" title="设为A-B起点">A</button>` +
+      `<button class="btn ab${bOn ? ' ab-on' : ''}" onclick="abMarkPick(${x.i},'B')" title="设为A-B终点">B</button>` +
+    `<button class="btn del" onclick="delMark(${x.i})">删</button></div></div>`; }).join('')
     : '<div style="font-size:12px;color:var(--muted)">还没有书签，先点“记下当前位置”。</div>';
     }
     function jumpMark(i) { toggleMarkPop(false); if (abMode === 3) abCancel(true); playFrom(Math.max(0, Math.min(sents.length - 1, i))); }
