@@ -534,9 +534,11 @@
   body.scrolled .audiobar.expanded .loop-wrap,
   body.scrolled .audiobar.expanded .rate-wrap { max-width: 90px; opacity: 1; pointer-events: auto; overflow: visible; }
   body.scrolled .audiobar.expanded .ab-title { max-width: 200px; min-width: 76px; margin: 0; padding: 4px 10px; opacity: 1; pointer-events: auto; overflow: visible; }
-  body.scrolled .audiobar.expanded .ab-left > .btn { font-size: 13px; padding: 7px 14px; min-height: 34px; }
-  body.scrolled .audiobar.expanded .ab-left > .btn.play { font-size: 15px; padding: 7px 22px; }
-  body.scrolled .audiobar.expanded .ab-left > .btn i { font-size: inherit; line-height: inherit; }
+    body.scrolled .audiobar.expanded .ab-left > .btn { font-size: 13px; padding: 7px 14px; min-height: 34px;
+      transition: font-size .25s ease-out, padding .25s ease-out, min-height .25s ease-out,
+        max-width .25s ease-out, opacity .25s ease-out; }
+    body.scrolled .audiobar.expanded .ab-left > .btn.play { font-size: 15px; padding: 7px 22px; }
+    body.scrolled .audiobar.expanded .ab-left > .btn i { font-size: inherit; line-height: inherit; }
   body.scrolled .audiobar.expanded .ab-expand { display: none; }
   /* 强制 mini：不受滚动位置影响的手动收起态（与 body.scrolled mini 同一样式） */
   .audiobar.force-mini { padding: 4px 10px; gap: 4px; border-radius: 999px;
@@ -663,12 +665,18 @@
     /* 词库：改为底部抽屉（划上即用，不占正文空间） */
     aside { position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 190;
       width: auto; max-height: 62vh; height: auto; border-radius: 18px 18px 0 0; transform: translateY(102%);
-      transition: transform .28s cubic-bezier(.32,.72,.35,1), visibility .28s; box-shadow: 0 -8px 30px rgba(30,60,48,.16); }
+      transition: transform .28s cubic-bezier(.32,.72,.35,1), visibility .28s;
+      background: rgba(255,255,255,.96); backdrop-filter: none; -webkit-backdrop-filter: none;
+      box-shadow: 0 -4px 24px rgba(30,60,48,.18); border: 1px solid rgba(255,255,255,.8); }
+    body.dark aside { background: rgba(28,26,23,.96); border-color: rgba(255,255,255,.08); }
+    aside::before { content: ""; display: block; width: 36px; height: 4px; border-radius: 2px;
+      background: rgba(0,0,0,.15); margin: 8px auto 0; flex: none; }
+    body.dark aside::before { background: rgba(255,255,255,.25); }
     .layout.panel-open aside { transform: translateY(0); visibility: visible; }
     .layout.panel-open #edgeTab { opacity: 0; pointer-events: none; }
     .back-to-play { right: 12px; bottom: calc(100px + env(safe-area-inset-bottom, 0px)); font-size: 11px; padding: 6px 12px; }
     aside .list { max-height: calc(62vh - 110px); -webkit-overflow-scrolling: touch; }
-    .layout::after { content: ""; position: fixed; inset: 0; z-index: 180; background: rgba(30,50,42,.28);
+    .layout::after { content: ""; position: fixed; inset: 0; z-index: 180; background: rgba(0,0,0,.35);
       opacity: 0; pointer-events: none; transition: opacity var(--t-fast); }
     .layout.panel-open::after { opacity: 1; pointer-events: auto; }
     /* 单词弹窗：底部抽屉式浮层，避开播放条 */
@@ -697,18 +705,19 @@
       left: 50%; right: auto; transform: translateX(-50%);
       flex-direction: row; }
     body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; position: absolute;
-      transition: opacity .05s ease-out; }
+      transition: opacity .05s ease-out, max-width .25s ease-out, max-height .25s ease-out, width .25s ease-out; }
     body.scrolled .audiobar .ab-left { order: 0; flex-wrap: nowrap; gap: 0; flex: 1; justify-content: center; }
     body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px;
-      transition: font-size .05s ease-out; }
+      transition: font-size .05s ease-out, padding .25s ease-out, min-height .25s ease-out,
+        max-width .25s ease-out, opacity .25s ease-out; }
     body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
     body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
     /* 移动端展开态：回到纵向（进度上、按钮下），否则继承 mini 的横向行＋flex:none 整行溢出；
        与 mini 同一定位（left:50%＋translateX(-50%)，宽按 100vw-24 定死＝原来 left/right:12 的像素），只 morph 宽度——中心点不动，消掉 37px 级别的水平抖动 */
     body.scrolled .audiobar.expanded { flex-direction: column; left: 50%; right: auto; transform: translateX(-50%);
       width: calc(100vw - 24px); max-width: calc(100vw - 24px); }
-    body.scrolled .audiobar.expanded .ab-right { order: 1; width: 100%; }
-    body.scrolled .audiobar.expanded .ab-left { order: 2; width: 100%; }
+    body.scrolled .audiobar.expanded .ab-right { order: 1; width: 100%; transition: width .25s ease-out, opacity .25s ease-out; }
+    body.scrolled .audiobar.expanded .ab-left { order: 2; width: 100%; transition: width .25s ease-out; }
     /* 移动端强制 mini：与沉浸胶囊同一样式 */
     .audiobar.force-mini { width: calc(100vw - 24px); max-width: 200px; flex-direction: row; }
     .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; position: absolute;
@@ -1195,6 +1204,12 @@
     if (lo) lo.style.display = this._userMail ? '' : 'none';
     },
     async boot() {
+    /* Supabase CDN 用 defer 加载，DOMContentLoaded 时可能还没到；
+       轮询等待最多 3s，确保 session 能从 localStorage 恢复 */
+    for (let i = 0; i < 15; i++) {
+    if (window.supabase) break;
+    await new Promise(r => setTimeout(r, 200));
+    }
     const s = await this.session();
     this._userMail = (s && s.user && s.user.email) || '';
     if (!s) { this._on = false; this.setStatus('Azure 云端自然语音需登录（与词汇真经站同一账号，管理员审批后可用）。'); return; }
