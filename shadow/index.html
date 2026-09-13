@@ -128,6 +128,8 @@
       max-height var(--t-morph) var(--ease-smooth); }
   #btnMenu { display: none; } /* 仅移动端显示的汉堡菜单按钮 */
   .only-mobile { display: none; } /* 仅移动端显示的行内标签 */
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .sr-only-focusable:focus { position: static; width: auto; height: auto; padding: 8px 16px; margin: 0; overflow: visible; clip: auto; white-space: normal; background: var(--accent); color: #fff; z-index: 9999; }
   .ctrl { display: flex; align-items: center; gap: 8px; font-size: 13px;
     transition: opacity .3s ease, max-width var(--t-morph) var(--ease-smooth),
       max-height var(--t-morph) var(--ease-smooth); }
@@ -805,28 +807,30 @@
   </head>
   <body>
 
-    <header class="topbar">
-      <h1><i class="ri-book-open-line"></i> 雅思词汇 · 影子跟读</h1>
-      <div class="topbar-right">
+    <a href="#art" class="sr-only sr-only-focusable">跳到正文</a>
+
+    <header class="topbar" role="banner">
+      <h1><i class="ri-book-open-line" aria-hidden="true"></i> 雅思词汇 · 影子跟读</h1>
+      <nav class="topbar-right" aria-label="工具栏">
         <div class="ctrl">
-          <button class="btn active" id="btnZh" title="显示/隐藏全文中文翻译"><i class="ri-eye-line"></i> 隐藏全文</button>
-          <button class="btn active" id="btnGloss" title="显示/隐藏行内单词词义"><i class="ri-eye-line"></i> 隐藏词义</button>
+          <button class="btn active" id="btnZh" title="显示/隐藏全文中文翻译"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏全文</button>
+          <button class="btn active" id="btnGloss" title="显示/隐藏行内单词词义"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏词义</button>
         </div>
         <div class="ctrl voice-ctrl">
           <button class="btn active" id="btnAccent" onclick="toggleAccent()" title="点击切换英式/美式">🇬🇧 英式</button>
           <select class="voice-sel" id="voiceSel" title="选择朗读音色（云端/Edge/本机）" aria-label="选择朗读音色"></select>
         </div>
-        <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式"><i class="ri-moon-line"></i><span class="only-mobile"> 夜间模式</span></button>
-        <button class="btn" id="btnCloud" onclick="toggleCloudPop()" title="登录后可用 Azure 云端自然语音"><i class="ri-cloud-line"></i> 未登录</button>
-      </div>
+        <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式"><i class="ri-moon-line" aria-hidden="true"></i><span class="only-mobile"> 夜间模式</span></button>
+        <button class="btn" id="btnCloud" onclick="toggleCloudPop()" title="登录后可用 Azure 云端自然语音"><i class="ri-cloud-line" aria-hidden="true"></i> 未登录</button>
+      </nav>
       <button class="btn" id="btnMenu" onclick="toggleMenu()" title="菜单" aria-label="打开菜单"><span class="burger" aria-hidden="true"></span></button>
     </header>
 
     <div class="cpop" id="cloudPop">
-      <div class="ct"><i class="ri-cloud-line"></i> 云端语音登录</div>
+      <div class="ct"><i class="ri-cloud-line" aria-hidden="true"></i> 云端语音登录</div>
       <div class="cs" id="cloudStatus">Azure 云端自然语音需登录（与词汇真经站同一账号，管理员审批后可用）。</div>
-      <input id="cloudEmail" type="email" placeholder="邮箱" autocomplete="email">
-      <input id="cloudPass" type="password" placeholder="密码" autocomplete="current-password">
+      <input id="cloudEmail" type="email" placeholder="邮箱" autocomplete="email" aria-label="邮箱">
+      <input id="cloudPass" type="password" placeholder="密码" autocomplete="current-password" aria-label="密码">
       <div class="row">
         <button class="btn" onclick="cloudLogin()">登录</button>
         <button class="btn" onclick="cloudSignup()">注册</button>
@@ -834,14 +838,14 @@
       </div>
     </div>
 
-    <div id="abToast"></div>
-    <footer class="audiobar" id="audiobar">
-      <div class="ab-left">
-        <button class="btn ab-step" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line"></i> 上一句</button>
-        <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill"></i> 播放</button>
-        <button class="btn ab-step" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line"></i> 下一句</button>
+    <div id="abToast" role="status" aria-live="polite"></div>
+    <footer class="audiobar" id="audiobar" role="contentinfo">
+      <nav class="ab-left" aria-label="播放控制">
+        <button class="btn ab-step" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i> 上一句</button>
+        <button class="btn play" id="btnPlay" onclick="togglePlay()"><i class="ri-play-fill" aria-hidden="true"></i> 播放</button>
+        <button class="btn ab-step" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line" aria-hidden="true"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
-          <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="单句循环：选择每句重复次数"><i class="ri-repeat-line"></i><span id="loopCount">3</span></button>
+          <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="单句循环：选择每句重复次数"><i class="ri-repeat-line" aria-hidden="true"></i><span id="loopCount">3</span></button>
           <div class="loop-menu" id="loopMenu">
             <button data-count="0" onclick="setLoopCount(0)">关</button>
             <button data-count="2" onclick="setLoopCount(2)">2遍</button>
@@ -859,9 +863,9 @@
             <button data-mrate="1.5" onclick="pickRate(1.5)">1.5x</button>
           </div>
         </div>
-        <button class="btn ab-btn" id="markBtn" onclick="toggleMarkPop()" title="书签：记下当前位置，随时回来">🔖</button>
-        <button class="btn ab-btn jump-btn" onclick="toggleJumpPop()" title="快速跳转"><i class="ri-navigation-line"></i></button>
-      </div>
+        <button class="btn ab-btn" id="markBtn" onclick="toggleMarkPop()" title="书签：记下当前位置，随时回来" aria-label="书签">🔖</button>
+        <button class="btn ab-btn jump-btn" onclick="toggleJumpPop()" title="快速跳转" aria-label="快速跳转"><i class="ri-navigation-line" aria-hidden="true"></i></button>
+      </nav>
       <div class="ab-right">
         <div class="ab-seek">
           <div id="seekWrap">
@@ -873,17 +877,17 @@
         </div>
         <div class="ab-title" id="abTitle" onclick="toggleJumpPop()" title="点击快速跳转到某章某句">—</div>
       </div>
-      <button class="btn ab-expand" id="abExpand" onclick="expandAudiobar()" title="展开播放条"><i class="ri-arrow-up-s-line"></i></button>
-      <button class="btn ab-collapse" id="abCollapse" onclick="collapseAudiobar()" title="收起播放条"><i class="ri-arrow-down-s-line"></i></button>
+      <button class="btn ab-expand" id="abExpand" onclick="expandAudiobar()" title="展开播放条" aria-label="展开控制栏"><i class="ri-arrow-up-s-line" aria-hidden="true"></i></button>
+      <button class="btn ab-collapse" id="abCollapse" onclick="collapseAudiobar()" title="收起播放条" aria-label="收起控制栏"><i class="ri-arrow-down-s-line" aria-hidden="true"></i></button>
     </footer>
-    <button id="abCancelFloat" onclick="abCancel()" title="取消A-B循环">✕ 取消AB循环</button>
+    <button id="abCancelFloat" onclick="abCancel()" title="取消A-B循环" aria-label="取消AB循环">✕ 取消AB循环</button>
 
     <div class="jpop" id="jumpPop">
-      <div class="ct"><i class="ri-navigation-line"></i> 快速跳转</div>
+      <div class="ct"><i class="ri-navigation-line" aria-hidden="true"></i> 快速跳转</div>
       <div class="cs" id="jumpHint"></div>
-      <select id="jumpCh" onchange="syncJumpHint()"></select>
+      <select id="jumpCh" onchange="syncJumpHint()" aria-label="选择章节"></select>
       <div class="row">
-        <input id="jumpN" type="number" min="1" value="1" onkeydown="if(event.key==='Enter')jumpGo()">
+        <input id="jumpN" type="number" min="1" value="1" onkeydown="if(event.key==='Enter')jumpGo()" aria-label="跳转句号">
         <button class="btn play" onclick="jumpGo()">直达</button>
       </div>
     </div>
@@ -897,14 +901,14 @@
     </div>
     <button id="edgeTab" onclick="togglePanel()" title="词库">词库</button>
     <div id="dbg"></div>
-    <button id="backToPlay" class="back-to-play" onclick="scrollToPlaying()" style="display:none"><i class="ri-arrow-up-line"></i> 回到播放位置</button>
+    <button id="backToPlay" class="back-to-play" onclick="scrollToPlaying()" style="display:none" aria-label="回到播放位置"><i class="ri-arrow-up-line" aria-hidden="true"></i> 回到播放位置</button>
 
     <div class="layout">
       <main id="main"><article id="art"></article></main>
       <aside id="panel">
         <div class="head">
            <div class="t">📚词库 <span class="t-en">Word Bank</span><button class="x" onclick="togglePanel()" title="收起">✕</button></div>
-          <input id="q" placeholder="搜索单词或释义…" oninput="queueRenderList()">
+          <input id="q" placeholder="搜索单词或释义…" oninput="queueRenderList()" aria-label="搜索单词或释义">
         </div>
         <div class="list" id="vlist"></div>
         <div class="cnt">共<span id="vcnt"></span> · 点卡片跳到该句 · ⌖文中定位</div>
@@ -919,7 +923,7 @@
       <div class="pex" id="pex" title="点击朗读例句"></div>
       <div class="pexzh" id="pexzh"></div>
       <div class="row">
-        <button class="btn" onclick="speakWord()"><i class="ri-volume-up-line"></i> 发音</button>
+        <button class="btn" onclick="speakWord()" aria-label="发音"><i class="ri-volume-up-line" aria-hidden="true"></i> 发音</button>
       </div>
     </div>
 
@@ -970,8 +974,8 @@
     const k = key.toLowerCase();
     const cls = 'w';
     const gh = glossHTML(k);
-    return `<span class="${cls}" data-w="${esc(k)}" data-disp="${esc(disp)}">${esc(disp)}</span>` +
-    (gh ? `<span class="gl">${gh}</span>` : '');
+    return `<span class="${cls}" data-w="${esc(k)}" data-disp="${esc(disp)}" tabindex="0" role="button">${esc(disp)}</span>` +
+    (gh ? `<span class="gl" aria-hidden="true">${gh}</span>` : '');
     });
     }
     /* 标题中英双语映射（只做展示层拼接，不动 SECTIONS/VOCAB/CHAPTERS 数据） */
@@ -997,7 +1001,7 @@
       ${s.paragraphs.map((p, pi) => `${s.subheads && s.subheads[pi] ? `<div class="sub">${esc(s.subheads[pi])}${titEN(s.subheads[pi])}</div>` : ''}<p>${p.map((t, ti) => {
         const zh = s.sentZh && s.sentZh[pi] && s.sentZh[pi][ti]
         ? `<span class="sent-zh">${esc(s.sentZh[pi][ti])}</span>` : '';
-        return `<span class="sent">${wrapWords(t)}</span>${zh}`;
+        return `<span class="sent" tabindex="0" role="button">${wrapWords(t)}</span>${zh}`;
       }).join(' ')}</p>${s.paraZh && s.paraZh[pi] ? `<div class="para-zh">💡 ${esc(s.paraZh[pi])}</div>` : ''}`).join('')}
     </div>`).join('');
     sents = [...document.querySelectorAll('.sent')];
@@ -1005,6 +1009,11 @@
     // 待选态点中单词也算选中整句（移动端手指大，单词占满句子；此处 stopPropagation 阻止单词弹窗）
     sents.forEach((el, i) => {
     el.onclick = e => { if (abMode === 1 || abMode === 2) { if (abTap(i)) { try { e.stopPropagation(); } catch (err) {} return; } } if (e.target.closest('.w')) return; if (abMode === 3) abCancel(true); playFrom(i); };
+    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } };
+    });
+    // 单词键盘支持：Enter/Space 打开弹窗
+    document.querySelectorAll('.w').forEach(el => {
+    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPop(el); } };
     });
     // 句→文章映射
     artOfSent = [];
@@ -1251,7 +1260,7 @@
     const b = document.getElementById('btnCloud');
     if (b) {
     const label = this._userMail ? this._userMail.split('@')[0] : (this._on ? '已连接' : '未登录');
-    b.innerHTML = '<i class="ri-cloud-line"></i> ';
+    b.innerHTML = '<i class="ri-cloud-line" aria-hidden="true"></i> ';
     b.appendChild(document.createTextNode(label)); // 邮箱走文本节点，防 HTML 注入
     }
     const lo = document.getElementById('btnLogout');
@@ -1668,7 +1677,7 @@
     };
     try { if (typeof CLOUD !== 'undefined' && CLOUD._on) {
     const cb = document.getElementById('btnCloud');
-    if (cb && !CLOUD._userMail) cb.innerHTML = '<i class="ri-cloud-line"></i> 已连接';
+    if (cb && !CLOUD._userMail) cb.innerHTML = '<i class="ri-cloud-line" aria-hidden="true"></i> 已连接';
     } } catch (e) {}
     const ab = document.getElementById('btnAccent');
     if (ab) { ab.textContent = accent === 'en-GB' ? '🇬🇧 英式' : '🇺🇸 美式'; ab.classList.add('active'); }
@@ -2001,7 +2010,7 @@
     }
     }
     const bp = _getDom('btnPlay');
-    if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill"></i> 暂停' : '<i class="ri-play-fill"></i> 播放';
+    if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill" aria-hidden="true"></i> 暂停' : '<i class="ri-play-fill" aria-hidden="true"></i> 播放';
     // 更新章节标题
     const titleEl = _getDom('abTitle');
     if (titleEl && idx >= 0) {
@@ -2288,7 +2297,7 @@
     document.querySelectorAll('.rate-menu [data-mrate]').forEach(b =>
     b.classList.toggle('active', parseFloat(b.dataset.mrate) === r));
     const c = document.getElementById('rateCycle');
-    if (c) c.innerHTML = `<i class="ri-time-s-line"></i> ${r}x`;
+    if (c) c.innerHTML = `<i class="ri-time-s-line" aria-hidden="true"></i> ${r}x`;
     if (idx >= 0) paint(); // 刷新时长估算
     }
 
@@ -2353,13 +2362,13 @@
     document.getElementById('btnZh').onclick = function() {
     document.body.classList.toggle('hide-zh');
     const hidden = document.body.classList.contains('hide-zh');
-    this.innerHTML = hidden ? '<i class="ri-eye-off-line"></i> 显示全文' : '<i class="ri-eye-line"></i> 隐藏全文';
+    this.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示全文' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏全文';
     this.classList.toggle('active', !hidden);
     };
     document.getElementById('btnGloss').onclick = function() {
     document.body.classList.toggle('hide-gl');
     const hidden = document.body.classList.contains('hide-gl');
-    this.innerHTML = hidden ? '<i class="ri-eye-off-line"></i> 显示词义' : '<i class="ri-eye-line"></i> 隐藏词义';
+    this.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示词义' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏词义';
     this.classList.toggle('active', !hidden);
     };
 
@@ -2369,7 +2378,7 @@
     const isDark = document.body.classList.contains('dark');
     try { localStorage.setItem('ielts-dark', isDark ? '1' : '0'); } catch (e) {}
     const btn = document.getElementById('btnDark');
-    if (btn) btn.innerHTML = (isDark ? '<i class="ri-sun-line"></i>' : '<i class="ri-moon-line"></i>') + '<span class="only-mobile"> 夜间模式</span>';
+    if (btn) btn.innerHTML = (isDark ? '<i class="ri-sun-line" aria-hidden="true"></i>' : '<i class="ri-moon-line" aria-hidden="true"></i>') + '<span class="only-mobile"> 夜间模式</span>';
     }
     // 初始化夜间模式
     try { if (localStorage.getItem('ielts-dark') === '1') { document.body.classList.add('dark'); } } catch (e) {}
@@ -2417,8 +2426,8 @@
     const inText = inTextSet.has(k) ? '' : ' 📖';
     const uk = info.uk || info.p || '', us = info.us || '';
     const ph = [uk && `英 /${esc(uk.replace(/^\//, '').replace(/\/$/, ''))}/`, us && `美 /${esc(us.replace(/^\//, '').replace(/\/$/, ''))}/`].filter(Boolean).join(' ');
-    items.push(`<div class="item" data-k="${escAttr(k)}" data-d="${escAttr(w)}" data-ex="${escAttr(info.ex || '')}">
-      <div class="wtop"><b>${esc(w)}${inText}</b>${ph ? `<span class="ph">${ph} <button class="spk" title="发音">🔊</button></span>` : ''}<button class="loc" title="文中定位">⌖</button></div>
+    items.push(`<div class="item" data-k="${escAttr(k)}" data-d="${escAttr(w)}" data-ex="${escAttr(info.ex || '')}" tabindex="0" role="button">
+      <div class="wtop"><b>${esc(w)}${inText}</b>${ph ? `<span class="ph">${ph} <button class="spk" title="发音" aria-label="发音">🔊</button></span>` : ''}<button class="loc" title="文中定位" aria-label="文中定位">⌖</button></div>
       <div class="mn">${esc(info.m).replace(/\n/g, '<br>')}</div>
     ${info.ex ? `<div class="ex">${esc(info.ex)}</div><div class="exzh">${esc(info.exZh || '')}</div>` : ''}</div>`);
     }
@@ -2436,6 +2445,7 @@
     if (t && el.dataset.ex) { speakAside(el.dataset.ex); return; }
     jumpWord(el.dataset.k, el.dataset.d);
     };
+    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } };
     });
     if (!_vocabCount && typeof VOCAB !== 'undefined') _vocabCount = Object.keys(VOCAB).length;
     document.getElementById('vcnt').textContent = cnt + ' / ' + _vocabCount + '词';
