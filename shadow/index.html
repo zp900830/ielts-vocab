@@ -2295,21 +2295,28 @@
 
     /* ============ 单词弹窗 ============ */
     const pop = document.getElementById('pop');
+    // 点击判定走 composedPath：行内按钮（如书签删/A/B）会同步重建 innerHTML，
+    // 冒泡到 document 时 e.target 已脱离文档，closest 全灭导致弹窗被误关
+    const _inPath = (e, sel) => { try {
+    if (e.target && e.target.closest && e.target.closest(sel)) return true;
+    const p = e.composedPath && e.composedPath();
+    if (p) for (const el of p) { if (el && el.matches && el.matches(sel)) return true; }
+    } catch (err) {} return false; };
     document.addEventListener('click', e => {
-    const t = e.target.closest('.w');
+    const t = _inPath(e, '.w') ? e.target.closest('.w') : null;
     if (t) { openPop(t); return; }
-    if (!e.target.closest('.pop') && !e.target.closest('aside')) pop.style.display = 'none';
+    if (!_inPath(e, '.pop') && !_inPath(e, 'aside')) pop.style.display = 'none';
     const _cp = document.getElementById('cloudPop');
-    if (_cp && _cp.style.display === 'block' && !e.target.closest('.cpop') && !e.target.closest('#btnCloud') && !e.target.closest('#voiceSel')) _cp.style.display = 'none';
+    if (_cp && _cp.style.display === 'block' && !_inPath(e, '.cpop') && !_inPath(e, '#btnCloud') && !_inPath(e, '#voiceSel')) _cp.style.display = 'none';
     const _jp = document.getElementById('jumpPop');
-    if (_jp && _jp.style.display === 'block' && !e.target.closest('.jpop') && !e.target.closest('#abTitle') && !e.target.closest('.jump-btn')) _jp.style.display = 'none';
+    if (_jp && _jp.style.display === 'block' && !_inPath(e, '.jpop') && !_inPath(e, '#abTitle') && !_inPath(e, '.jump-btn')) _jp.style.display = 'none';
     const _mp = document.getElementById('markPop');
-    if (_mp && _mp.style.display === 'block' && !e.target.closest('.jpop') && !e.target.closest('#markBtn')) _mp.style.display = 'none';
-    if (document.body.classList.contains('menu-open') && !e.target.closest('.topbar-right') && !e.target.closest('#btnMenu')) document.body.classList.remove('menu-open');
+    if (_mp && _mp.style.display === 'block' && !_inPath(e, '.jpop') && !_inPath(e, '#markBtn')) _mp.style.display = 'none';
+    if (document.body.classList.contains('menu-open') && !_inPath(e, '.topbar-right') && !_inPath(e, '#btnMenu')) document.body.classList.remove('menu-open');
     /* 移动端：点遮罩关词库抽屉 */
     if (window.matchMedia('(max-width: 700px)').matches && document.querySelector('.layout.panel-open')) {
     const asideEl = document.getElementById('panel');
-    if (asideEl && !asideEl.contains(e.target) && !e.target.closest('#edgeTab')) {
+    if (asideEl && !_inPath(e, '#panel') && !_inPath(e, '#edgeTab')) {
     togglePanel();
     }
     }
