@@ -232,6 +232,27 @@
     transition: font-size .4s ease, padding .4s ease, min-height .4s ease; }
   #btnAB { font-weight: 700; letter-spacing: -0.5px; }
   #btnAB.ab-active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  #btnAB.ab-arm { border: 1px dashed var(--accent); color: var(--accent); background: var(--accent-soft);
+    animation: abArmPulse 1.2s ease-in-out infinite; }
+  @keyframes abArmPulse { 50% { opacity: .55; } }
+  /* A-B正文点选：待选态句子给十字光标＋虚线描边；A/B 起终点挂角标；循环区间铺底纹 */
+  body.ab-picking .sent { cursor: copy; }
+  body.ab-picking .sent:hover { outline: 2px dashed var(--accent); outline-offset: 2px; border-radius: 6px; }
+  .sent.ab-a, .sent.ab-b { position: relative; }
+  .sent.ab-a::after, .sent.ab-b::after { position: absolute; top: -9px; left: -4px; z-index: 3;
+    font-size: 10px; font-weight: 800; line-height: 1; padding: 2px 6px; border-radius: 999px;
+    color: #fff; pointer-events: none; font-family: var(--sans); }
+  .sent.ab-a::after { content: 'A'; background: var(--accent); box-shadow: 0 1px 5px rgba(12,156,116,.5); }
+  .sent.ab-b::after { content: 'B'; background: var(--coral-deep); box-shadow: 0 1px 5px rgba(201,86,74,.5); }
+  .sent.ab-in { background: linear-gradient(transparent 55%, rgba(12,156,116,.14) 55%); border-radius: 3px; }
+  /* A-B 提示条：播放条上方居中小 pill，2.4s 自动消失 */
+  #abToast { position: fixed; left: 50%; transform: translateX(-50%) translateY(8px);
+    bottom: calc(86px + env(safe-area-inset-bottom, 0px)); z-index: 130;
+    max-width: min(480px, calc(100vw - 32px)); padding: 8px 16px; border-radius: 999px;
+    background: rgba(22,32,28,.88); color: #fff; font-size: 13px; font-weight: 600; text-align: center;
+    opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  #abToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   /* 单句重复 / 倍速：同一套下拉菜单交互（桌面悬浮+点击，移动点击） */
   .loop-wrap, .rate-wrap { position: relative; flex: none;
     transition: max-width var(--t-morph) var(--ease-smooth), opacity .3s ease; }
@@ -795,6 +816,7 @@
       </div>
     </div>
 
+    <div id="abToast"></div>
     <footer class="audiobar" id="audiobar">
       <div class="ab-left">
         <button class="btn ab-step" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line"></i> 上一句</button>
@@ -809,7 +831,7 @@
             <button data-count="5" onclick="setLoopCount(5)">5遍</button>
           </div>
         </div>
-        <button class="btn ab-btn" id="btnAB" onclick="toggleAB()" title="A-B段落循环复读">AB</button>
+        <button class="btn ab-btn" id="btnAB" onclick="toggleAB()" title="A-B复读：点我，再点正文句子设起点A，接着点正文句子设终点B，即开始循环">AB</button>
         <div class="rate-wrap" id="rateWrap">
           <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速">1x</button>
           <div class="rate-menu">
@@ -960,9 +982,9 @@
       }).join(' ')}</p>${s.paraZh && s.paraZh[pi] ? `<div class="para-zh">💡 ${esc(s.paraZh[pi])}</div>` : ''}`).join('')}
     </div>`).join('');
     sents = [...document.querySelectorAll('.sent')];
-    // 点击句子（非单词）直接从该句朗读
+    // 点击句子（非单词）直接从该句朗读；A-B 待选态则收为 A/B 标记
     sents.forEach((el, i) => {
-    el.onclick = e => { if (!e.target.closest('.w')) playFrom(i); };
+    el.onclick = e => { if (e.target.closest('.w')) return; if (abTap(i)) return; if (abMode === 3) abCancel(true); playFrom(i); };
     });
     // 句→文章映射
     artOfSent = [];
@@ -971,6 +993,7 @@
     });
     _paintIdx = -2; _inTextSet = null;
     buildSeek(0);
+    paintAB(); // 正文重建后恢复 A/B 标记
     }
 
     /* ============ 播放条句子圆点 ============ */
@@ -1019,7 +1042,7 @@
     ticks.innerHTML = html;
     _ticks = [...ticks.querySelectorAll('.tick')];
     _ticks.forEach(t => {
-    t.onclick = e => { e.stopPropagation(); playFrom(parseInt(t.dataset.i, 10)); };
+    t.onclick = e => { e.stopPropagation(); if (abMode === 3) abCancel(true); playFrom(parseInt(t.dataset.i, 10)); };
     t.onmouseenter = () => showSeekTip(parseInt(t.dataset.i, 10), parseFloat(t.style.left));
     });
     paintSeek();
@@ -1101,6 +1124,7 @@
     // 保存拖动后的位置
     idx = pendingSeek;
     savePos();
+    if (abMode === 3) abCancel(true);
     playFrom(pendingSeek);
     }
     pendingSeek = null;
@@ -1467,6 +1491,7 @@
     if (isNaN(n)) n = 1;
     n = Math.max(1, Math.min(e - s, n));
     toggleJumpPop(false);
+    if (abMode === 3) abCancel(true);
     playFrom(s + n - 1);
     }
     async function cloudLogin() {
@@ -2015,7 +2040,7 @@
     loopSent = -1;
     }
     // A-B段落循环模式：到达B点后跳回A点
-    if (abMode === 2 && abStart >= 0 && abEnd >= 0 && i >= abEnd) {
+    if (abMode === 3 && abStart >= 0 && abEnd >= 0 && i >= abEnd) {
     launchedUpTo = abStart - 1;
     launch(abStart, my, true);
     return;
@@ -2031,7 +2056,7 @@
     // 循环模式不预取兄弟句（否则兄弟句 completion 会消费 loopCurrent、打乱单句计数）
     const cloud = typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on;
     launch(i + 1, my, true);
-    if (!cloud && !loopMode) {
+    if (!cloud && !loopMode && abMode !== 3) {
     if (i + 2 < sents.length) launch(i + 2, my, true);
     if (i + 3 < sents.length) launch(i + 3, my, true);
     }
@@ -2056,7 +2081,8 @@
     const cloudMode = typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on;
     if (loopMode) loopSent = i; // 起播/切句/跳转时把循环锚定到目标句
     // 循环模式只发锚定句：兄弟句连发会进引擎队列抢播、且它们的 completion 会消费 loopCurrent
-    const fire3 = () => { launch(i, my, true); if (!loopMode) { launch(i + 1, my, true); launch(i + 2, my, true); } };
+    // A-B循环同样只发单句链：预取会把 B+1、B+2 提前入队，回绕后它们插在 A 前面导致每轮多播两句
+    const fire3 = () => { launch(i, my, true); if (!loopMode && abMode !== 3) { launch(i + 1, my, true); launch(i + 2, my, true); } };
     if (cloudMode) {
     launch(i, my, true); // 云端单播：只发一句，续播走 onend 单链
     } else if (hadQueue && !NEED_GESTURE) {
@@ -2101,36 +2127,83 @@
     dlog('loop', loopMode ? `on x${loopCount}` : 'off');
     }
     
-    // A-B段落循环复读
-    let abMode = 0; // 0=关闭, 1=设置A点, 2=设置B点并循环
+    // A-B复读：正文点选起点/终点（0=关闭，1=待选A，2=待选B，3=循环中）
+    let abMode = 0;
     let abStart = -1, abEnd = -1;
-    function toggleAB() {
+    let _abToastT = null;
+    function showAbToast(msg) {
+    const t = document.getElementById('abToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(_abToastT);
+    _abToastT = setTimeout(() => t.classList.remove('show'), 2400);
+    }
+    function abUI() {
     const btn = document.getElementById('btnAB');
-    if (abMode === 0) {
-    // 开始设置A点
-    abMode = 1;
-    abStart = idx >= 0 ? idx : 0;
-    abEnd = -1;
-    if (btn) { btn.textContent = 'A-'; btn.classList.add('ab-active'); }
-    } else if (abMode === 1) {
-    // 设置B点并开始循环
-    abMode = 2;
-    abEnd = idx >= 0 ? idx : sents.length - 1;
-    if (abEnd <= abStart) abEnd = Math.min(abStart + 1, sents.length - 1);
-    if (btn) { btn.textContent = 'AB'; btn.classList.add('ab-active'); }
-    dlog('ab-loop', `A=${abStart} B=${abEnd}`);
-    } else {
-    // 关闭A-B循环
-    abMode = 0;
-    abStart = -1;
-    abEnd = -1;
-    if (btn) { btn.textContent = 'AB'; btn.classList.remove('ab-active'); }
+    if (btn) {
+    btn.classList.toggle('ab-active', abMode === 3);
+    btn.classList.toggle('ab-arm', abMode === 1 || abMode === 2);
+    btn.textContent = abMode === 1 ? 'A·起点' : abMode === 2 ? 'B·终点' : 'AB';
+    }
+    document.body.classList.toggle('ab-picking', abMode === 1 || abMode === 2);
+    }
+    function paintAB() {
+    if (!Array.isArray(sents) || !sents.length) return;
+    sents.forEach(el => el.classList.remove('ab-a', 'ab-b', 'ab-in'));
+    if (abMode === 2 && abStart >= 0 && sents[abStart]) sents[abStart].classList.add('ab-a');
+    if (abMode === 3 && abStart >= 0 && abEnd >= 0) {
+    const a = Math.min(abStart, abEnd), b = Math.max(abStart, abEnd);
+    if (sents[a]) sents[a].classList.add('ab-a');
+    if (sents[b]) sents[b].classList.add('ab-b');
+    for (let k = a; k <= b && k < sents.length; k++) { if (sents[k]) sents[k].classList.add('ab-in'); }
+    }
+    }
+    function abCancel(silent) {
+    if (abMode === 0) return;
+    abMode = 0; abStart = -1; abEnd = -1;
+    abUI(); paintAB();
+    if (!silent) showAbToast('A-B循环已取消');
     dlog('ab-loop', 'off');
+    }
+    // 正文点中句子：待选态则收为 A/B（返回 true 表示已消费，不再朗读跳转）
+    function abTap(i) {
+    if (abMode === 1) {
+    abStart = i; abEnd = -1; abMode = 2;
+    abUI(); paintAB();
+    showAbToast(`起点 A：第${i + 1}句 → 再点一个句子设终点 B`);
+    dlog('ab-loop', `A=${i}`);
+    return true;
+    }
+    if (abMode === 2) {
+    let a = abStart, b = i;
+    if (b < a) { const t = a; a = b; b = t; } // 点反了自动纠正
+    abStart = a; abEnd = b; abMode = 3;
+    abUI(); paintAB();
+    const n = b - a + 1;
+    showAbToast(n === 1 ? `单句循环：第${a + 1}句（点 AB 取消）` : `A-B循环：第${a + 1}~${b + 1}句，共${n}句（点 AB 取消）`);
+    dlog('ab-loop', `A=${a} B=${b}`);
+    playFrom(a);
+    return true;
+    }
+    return false;
+    }
+    function toggleAB() {
+    if (abMode === 0) {
+    // 进入待选：保持当前播放，下一步点正文定 A
+    abMode = 1; abStart = -1; abEnd = -1;
+    abUI(); paintAB();
+    showAbToast('点正文中的句子 → 设为起点 A（再点 AB 取消）');
+    dlog('ab-loop', 'arm A');
+    } else {
+    // 待选中或循环中：再点 AB 即取消
+    abCancel();
     }
     }
     
     function step(d) {
     playing = false;
+    if (abMode === 3) abCancel(true);
     playFrom(Math.max(0, Math.min(sents.length - 1, (idx < 0 ? 0 : idx) + d)));
     }
     function bestOfAccent(a) {
@@ -2331,6 +2404,7 @@
     document.getElementById('vcnt').textContent = cnt + ' / ' + _vocabCount + '词';
     }
     function jumpWord(k, disp, silent) {
+    if (abMode === 3) abCancel(true);
     if (!silent) speakAside(disp);
     const el = document.querySelector(`.w[data-w="${CSS.escape(k)}"]`);
     if (el) { el.scrollIntoView({ block: 'center', behavior: 'smooth' });
