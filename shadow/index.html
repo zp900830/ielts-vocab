@@ -714,11 +714,19 @@
     body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
     body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
     /* 移动端展开态：回到纵向（进度上、按钮下），否则继承 mini 的横向行＋flex:none 整行溢出；
-       与 mini 同一定位（left:50%＋translateX(-50%)，宽按 100vw-24 定死＝原来 left/right:12 的像素），只 morph 宽度——中心点不动，消掉 37px 级别的水平抖动 */
+       与 mini 同一定位（left:50%＋translateX(-50%)，宽按 100vw-24 定死＝原来 left/right:12 的像素），只 morph 宽度——中心点不动，消掉 37px 级别的水平抖动；
+       展开动画：容器无延迟 .22s 起手（覆盖 base 的 .05s 延迟），内容 .06s 后淡入追着出现；blur 与 mini 一致，省掉移动 GPU 昂贵的 blur morph */
     body.scrolled .audiobar.expanded { flex-direction: column; left: 50%; right: auto; transform: translateX(-50%);
-      width: calc(100vw - 24px); max-width: calc(100vw - 24px); }
-    body.scrolled .audiobar.expanded .ab-right { order: 1; width: 100%; transition: width .25s ease-out, opacity .25s ease-out; }
-    body.scrolled .audiobar.expanded .ab-left { order: 2; width: 100%; transition: width .25s ease-out; }
+      width: calc(100vw - 24px); max-width: calc(100vw - 24px);
+      backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
+      transition: padding .22s var(--ease-bar), gap .22s var(--ease-bar),
+        border-radius .22s var(--ease-bar), max-width .22s var(--ease-bar); }
+    body.scrolled .audiobar.expanded .ab-right { order: 1; width: 100%;
+      transition: max-width .22s var(--ease-bar), max-height .22s var(--ease-bar), opacity .16s ease-out .06s; }
+    body.scrolled .audiobar.expanded .ab-left { order: 2; width: 100%; transition: gap .22s var(--ease-bar); }
+    body.scrolled .audiobar.expanded .ab-left > .btn { font-size: 13px; padding: 7px 14px; min-height: 34px;
+      transition: font-size .16s ease-out .06s, padding .16s ease-out .06s,
+        min-height .16s ease-out .06s, opacity .14s ease-out .06s; }
     /* 移动端强制 mini：与沉浸胶囊同一样式 */
     .audiobar.force-mini { width: calc(100vw - 24px); max-width: 200px; flex-direction: row; }
     .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; position: absolute;
