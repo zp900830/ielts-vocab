@@ -1215,6 +1215,7 @@
     if (ev === 'SIGNED_IN' || ev === 'TOKEN_REFRESHED' || ev === 'USER_UPDATED') {
     this._userMail = (sess && sess.user && sess.user.email) || this._userMail;
     this.checkStatus();
+    if (ev === 'SIGNED_IN') { try { cloudPullMarks(); } catch (e) {} } // 登录即拉书签，多端合并
     } else if (ev === 'SIGNED_OUT' || ev === 'USER_DELETED') {
     this._on = false; this._userMail = '';
     this.setStatus('已退出登录，云端音色不可用。');
@@ -1266,6 +1267,7 @@
     if (!s) { this._on = false; this.setStatus('Azure 云端自然语音需登录（与词汇真经站同一账号，管理员审批后可用）。'); return; }
     this.setStatus('正在连接云端语音…');
     await this.checkStatus();
+    try { cloudPullMarks(); } catch (e) {} // 启动即拉书签（有 session 才生效，无表/断网静默跳过）
     },
     async checkStatus() {
     try {
@@ -2486,6 +2488,54 @@
     }
     function getMarks() { try { return JSON.parse(localStorage.getItem('ielts-marks') || '[]'); } catch (e) { return []; } }
     function setMarks(m) { try { localStorage.setItem('ielts-marks', JSON.stringify((m || []).slice(0, 50))); } catch (e) {} }
+    /* ============ 书签云同步（同账号多端一致） ============
+       本地 localStorage 永远可用；登录后 pull 合并、改动后 debounce push。
+       全部 try/catch：表没建/断网/RLS 拒绝都不许影响本地书签。合并按句号去重，u(epoch) 大的赢。 */
+    let _markPushT = null, _markSyncing = false;
+    function queueMarkPush() {
+    clearTimeout(_markPushT);
+    _markPushT = setTimeout(() => { try { cloudPushMarks(); } catch (e) {} }, 2000);
+    }
+    async function cloudPushMarks() {
+    if (_markSyncing) return;
+    try {
+    const c = (typeof CLOUD !== 'undefined') ? CLOUD.client() : null;
+    if (!c) return;
+    const { data: { session } } = await c.auth.getSession();
+    if (!session) return;
+    const marks = getMarks().filter(x => x && Number.isInteger(x.i)).map(x => ({ i: x.i, t: x.t || '', u: x.u || 0 }));
+    let pos = {};
+    try { pos = JSON.parse(localStorage.getItem('ielts-pos') || '{}') || {}; } catch (e) { pos = {}; }
+    const { error } = await c.from('user_data').upsert(
+    { user_id: session.user.id, marks, pos, updated_at: new Date().toISOString() },
+    { onConflict: 'user_id' });
+    if (error) dlog('mark-push-fail', error.message || error);
+    } catch (e) { try { dlog('mark-push-fail', (e && e.message) || e); } catch (err) {} }
+    }
+    async function cloudPullMarks() {
+    try {
+    const c = (typeof CLOUD !== 'undefined') ? CLOUD.client() : null;
+    if (!c) return;
+    const { data: { session } } = await c.auth.getSession();
+    if (!session) return;
+    const { data, error } = await c.from('user_data').select('marks').eq('user_id', session.user.id).maybeSingle();
+    if (error || !data || !Array.isArray(data.marks)) return;
+    _markSyncing = true;
+    try {
+    const byI = new Map();
+    getMarks().forEach(x => { if (x && Number.isInteger(x.i)) byI.set(x.i, { i: x.i, t: x.t || '', u: x.u || 0 }); });
+    data.marks.forEach(x => {
+    if (!x || !Number.isInteger(x.i)) return;
+    const cur = byI.get(x.i);
+    if (!cur || (x.u || 0) >= (cur.u || 0)) byI.set(x.i, { i: x.i, t: x.t || '', u: x.u || 0 });
+    });
+    const merged = [...byI.values()].sort((a, b) => (b.u || 0) - (a.u || 0)).slice(0, 50);
+    setMarks(merged); renderMarks();
+    } finally { _markSyncing = false; }
+    // 拉下来可能有新货，顺手推一份回云端对齐（防 A 端只拉不推导致 B 端永远看不到 A 的旧书签）
+    try { queueMarkPush(); } catch (e) {}
+    } catch (e) { try { dlog('mark-pull-fail', (e && e.message) || e); } catch (err) {} }
+    }
     function markLabel(i) {
     const ai = artOfSent[i];
     if (ai === undefined) return `全文第${i + 1}句`;
@@ -2500,10 +2550,10 @@
     const d = new Date();
     const ts = `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
     const m = getMarks().filter(x => x && x.i !== at);
-    m.unshift({ i: at, t: ts });
-    setMarks(m); renderMarks();
+    m.unshift({ i: at, t: ts, u: Date.now() });
+    setMarks(m); renderMarks(); queueMarkPush();
     }
-    function delMark(i) { setMarks(getMarks().filter(x => x && x.i !== i)); renderMarks(); }
+    function delMark(i) { setMarks(getMarks().filter(x => x && x.i !== i)); renderMarks(); queueMarkPush(); }
     // 书签设为 A-B 点：免滚动找句。A：待选/闲置时直定A并进入选B，循环中改A并跳到新A；
     // B：待选B时落定启动，循环中改B，闲置/待选A时提示先选A
     function abMarkPick(i, which) {
