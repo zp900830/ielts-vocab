@@ -663,8 +663,9 @@
     article { font-size: 17.5px; }
     .sec p { line-height: 1.85; text-align: left; }
     /* 词库：改为底部抽屉（划上即用，不占正文空间） */
-    aside { position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 190;
-      width: auto; max-height: 62vh; height: auto; border-radius: 18px 18px 0 0; transform: translateY(102%);
+    aside { position: fixed; left: 0 !important; right: 0 !important; bottom: 0; top: auto; z-index: 190;
+      width: 100vw !important; max-width: 100vw !important; height: auto; max-height: 62vh;
+      border-radius: 18px 18px 0 0; transform: translateY(102%);
       transition: transform .28s cubic-bezier(.32,.72,.35,1), visibility .28s;
       background: rgba(255,255,255,.96); backdrop-filter: none; -webkit-backdrop-filter: none;
       box-shadow: 0 -4px 24px rgba(30,60,48,.18); border: 1px solid rgba(255,255,255,.8); }
