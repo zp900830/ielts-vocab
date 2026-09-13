@@ -593,8 +593,8 @@
     .topbar { padding: 8px 12px; gap: 6px; flex-wrap: nowrap; overflow: visible; }
     .topbar h1 { flex: 1 1 auto; min-width: 0; margin-right: auto; font-size: 14px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    #btnMenu { display: inline-flex; flex: none; min-width: 32px; min-height: 32px; padding: 6px 8px; justify-content: center; align-items: center; }
-    #btnMenu .burger { display: block; width: 13px; height: 10px; flex: none;
+    #btnMenu { display: inline-flex; flex: none; min-width: 24px; min-height: 24px; padding: 4px 4px; justify-content: center; align-items: center; }
+    #btnMenu .burger { display: block; width: 11px; height: 8px; flex: none;
       border-top: 2px solid currentColor; border-bottom: 2px solid currentColor;
       background: linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat; }
     .only-mobile { display: inline; }
@@ -653,7 +653,7 @@
     .sec p { line-height: 1.85; text-align: left; }
     /* 词库：改为底部抽屉（划上即用，不占正文空间） */
     aside { position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 190;
-      max-height: 62vh; height: auto; border-radius: 18px 18px 0 0; transform: translateY(102%);
+      width: auto; max-height: 62vh; height: auto; border-radius: 18px 18px 0 0; transform: translateY(102%);
       transition: transform .28s cubic-bezier(.32,.72,.35,1), visibility .28s; box-shadow: 0 -8px 30px rgba(30,60,48,.16); }
     .layout.panel-open aside { transform: translateY(0); visibility: visible; }
     .layout.panel-open #edgeTab { opacity: 0; pointer-events: none; }
