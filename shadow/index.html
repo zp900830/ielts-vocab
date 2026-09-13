@@ -230,7 +230,7 @@
   .ab-seek { flex: 1; min-width: 0; }
   .ab-btn { font-size: 11px; padding: 4px 8px; min-height: 28px;
     transition: font-size .4s ease, padding .4s ease, min-height .4s ease; }
-  #btnAB { font-weight: 700; letter-spacing: -0.5px; }
+  #btnAB { font-weight: 700; letter-spacing: -0.5px; min-width: 4.2em; text-align: center; } /* 二字标签(AB/设A/设B)定宽锁死，不随状态撑宽，与左右按钮同尺寸 */
   #btnAB.ab-active { background: var(--accent); color: #fff; border-color: var(--accent); }
   #btnAB.ab-arm { border: 1px dashed var(--accent); color: var(--accent); background: var(--accent-soft);
     animation: abArmPulse 1.2s ease-in-out infinite; }
@@ -244,7 +244,8 @@
     color: #fff; pointer-events: none; font-family: var(--sans); }
   .sent.ab-a::after { content: 'A'; background: var(--accent); box-shadow: 0 1px 5px rgba(12,156,116,.5); }
   .sent.ab-b::after { content: 'B'; background: var(--coral-deep); box-shadow: 0 1px 5px rgba(201,86,74,.5); }
-  .sent.ab-in { background: linear-gradient(transparent 55%, rgba(12,156,116,.14) 55%); border-radius: 3px; }
+  .sent.ab-in { background: rgba(12,156,116,.07); border-radius: 4px; } /* 循环区间整块浅底 */
+  .sent.ab-in.playing { background: linear-gradient(rgba(12,156,116,.07), rgba(12,156,116,.07)), linear-gradient(transparent 62%, var(--hl) 62%); } /* 区间内正播句：浅底＋高亮线叠加 */
   /* A-B 提示条：播放条上方居中小 pill，2.4s 自动消失 */
   #abToast { position: fixed; left: 50%; transform: translateX(-50%) translateY(8px);
     bottom: calc(86px + env(safe-area-inset-bottom, 0px)); z-index: 130;
@@ -253,6 +254,15 @@
     opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
   #abToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  /* 取消AB循环悬浮钮：条右上方弱存在感小 pill，循环中才出现 */
+  #abCancelFloat { display: none; position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 5;
+    padding: 3px 10px; font-size: 11px; font-weight: 600; white-space: nowrap;
+    background: rgba(255,255,255,.55); color: var(--muted); border: none; border-radius: 999px;
+    opacity: .5; cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 1px 4px rgba(0,0,0,.08); transition: opacity .2s, color .2s; }
+  #abCancelFloat:hover { opacity: 1; color: var(--coral-deep); }
+  body.ab-loop #abCancelFloat { display: block; }
+  body.dark #abCancelFloat { background: rgba(30,28,25,.6); }
   /* 单句重复 / 倍速：同一套下拉菜单交互（桌面悬浮+点击，移动点击） */
   .loop-wrap, .rate-wrap { position: relative; flex: none;
     transition: max-width var(--t-morph) var(--ease-smooth), opacity .3s ease; }
@@ -857,6 +867,7 @@
       </div>
       <button class="btn ab-expand" id="abExpand" onclick="expandAudiobar()" title="展开播放条"><i class="ri-arrow-up-s-line"></i></button>
       <button class="btn ab-collapse" id="abCollapse" onclick="collapseAudiobar()" title="收起播放条"><i class="ri-arrow-down-s-line"></i></button>
+      <button id="abCancelFloat" onclick="abCancel()" title="取消A-B循环">✕ 取消AB循环</button>
     </footer>
 
     <div class="jpop" id="jumpPop">
@@ -2144,9 +2155,10 @@
     if (btn) {
     btn.classList.toggle('ab-active', abMode === 3);
     btn.classList.toggle('ab-arm', abMode === 1 || abMode === 2);
-    btn.textContent = abMode === 1 ? 'A·起点' : abMode === 2 ? 'B·终点' : 'AB';
+    btn.textContent = abMode === 1 ? '设A' : abMode === 2 ? '设B' : 'AB';
     }
     document.body.classList.toggle('ab-picking', abMode === 1 || abMode === 2);
+    document.body.classList.toggle('ab-loop', abMode === 3);
     }
     function paintAB() {
     if (!Array.isArray(sents) || !sents.length) return;
@@ -2181,7 +2193,7 @@
     abStart = a; abEnd = b; abMode = 3;
     abUI(); paintAB();
     const n = b - a + 1;
-    showAbToast(n === 1 ? `单句循环：第${a + 1}句（点 AB 取消）` : `A-B循环：第${a + 1}~${b + 1}句，共${n}句（点 AB 取消）`);
+    showAbToast(n === 1 ? `单句循环：第${a + 1}句（点 AB 按钮 / ✕ 取消）` : `A-B循环：第${a + 1}~${b + 1}句，共${n}句（点 AB 按钮 / ✕ 取消）`);
     dlog('ab-loop', `A=${a} B=${b}`);
     playFrom(a);
     return true;
@@ -2193,17 +2205,22 @@
     // 进入待选：保持当前播放，下一步点正文定 A
     abMode = 1; abStart = -1; abEnd = -1;
     abUI(); paintAB();
-    showAbToast('点正文中的句子 → 设为起点 A（再点 AB 取消）');
+    showAbToast('点正文中的句子 → 设为起点 A（再点 AB 按钮取消）');
     dlog('ab-loop', 'arm A');
     } else {
-    // 待选中或循环中：再点 AB 即取消
+    // 待选中或循环中：再点 AB 即取消（循环中也可用条右上方 ✕ 取消）
     abCancel();
     }
     }
     
     function step(d) {
     playing = false;
-    if (abMode === 3) abCancel(true);
+    if (abMode === 3 && abStart >= 0 && abEnd >= 0) {
+    // 循环内上下句： clamp 到区间并回绕（末句下一句→首句，首句上一句→末句），不出循环
+    const a = Math.min(abStart, abEnd), b = Math.max(abStart, abEnd), n = b - a + 1;
+    playFrom(a + ((((idx - a + d) % n) + n) % n));
+    return;
+    }
     playFrom(Math.max(0, Math.min(sents.length - 1, (idx < 0 ? 0 : idx) + d)));
     }
     function bestOfAccent(a) {
@@ -2477,6 +2494,31 @@
     setMarks(m); renderMarks();
     }
     function delMark(i) { setMarks(getMarks().filter(x => x && x.i !== i)); renderMarks(); }
+    // 书签设为 A-B 点：免滚动找句。A：待选/闲置时直定A并进入选B，循环中改A并跳到新A；
+    // B：待选B时落定启动，循环中改B，闲置/待选A时提示先选A
+    function abMarkPick(i, which) {
+    i = Math.max(0, Math.min(sents.length - 1, i));
+    if (which === 'A') {
+    if (abMode === 3) {
+    abStart = i; if (abEnd < abStart) abEnd = abStart;
+    abUI(); paintAB();
+    showAbToast(`起点已改到第${i + 1}句`);
+    playFrom(abStart);
+    } else {
+    abStart = i; abEnd = -1; abMode = 2;
+    abUI(); paintAB();
+    showAbToast(`起点 A：第${i + 1}句 → 再选终点 B（书签点 B，或点正文句子）`);
+    dlog('ab-loop', `A=${i} via mark`);
+    }
+    } else {
+    if (abMode === 2) { abTap(i); }
+    else if (abMode === 3) {
+    abEnd = i; if (abEnd < abStart) abStart = abEnd;
+    abUI(); paintAB();
+    showAbToast(`终点已改到第${i + 1}句`);
+    } else showAbToast('请先点书签的 A 选起点');
+    }
+    }
     function renderMarks() {
     const list = document.getElementById('markList');
     if (!list) return;
@@ -2484,10 +2526,12 @@
     list.innerHTML = m.length ? m.map(x =>
     `<div class="mitem"><div><div class="mt">${esc(markLabel(x.i))}</div><div class="ms">${esc(x.t || '')}</div></div>` +
       `<button class="btn play" onclick="jumpMark(${x.i})">直达</button>` +
+      `<button class="btn" onclick="abMarkPick(${x.i},'A')" title="设为A-B起点">A</button>` +
+      `<button class="btn" onclick="abMarkPick(${x.i},'B')" title="设为A-B终点">B</button>` +
     `<button class="btn" onclick="delMark(${x.i})">删</button></div>`).join('')
     : '<div style="font-size:12px;color:var(--muted)">还没有书签，先点“记下当前位置”。</div>';
     }
-    function jumpMark(i) { toggleMarkPop(false); playFrom(Math.max(0, Math.min(sents.length - 1, i))); }
+    function jumpMark(i) { toggleMarkPop(false); if (abMode === 3) abCancel(true); playFrom(Math.max(0, Math.min(sents.length - 1, i))); }
     function toggleMarkPop(force) {
     const p = document.getElementById('markPop');
     if (!p) return;
