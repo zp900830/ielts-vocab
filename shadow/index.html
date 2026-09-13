@@ -529,7 +529,7 @@
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02); }
   body.scrolled .audiobar.expanded .ab-right { position: static; max-width: 1400px; max-height: 60px; opacity: 1; pointer-events: auto; overflow: visible; }
-  body.scrolled .audiobar.expanded .ab-left { gap: 6px; flex-wrap: wrap; justify-content: center; } /* 展开态按钮回多行收纳（否则继承 mini 的 nowrap 整行溢出） */
+  body.scrolled .audiobar.expanded .ab-left { gap: 6px; flex: none; flex-wrap: wrap; justify-content: center; } /* 展开态按钮回多行收纳（否则继承 mini 的 nowrap 整行溢出）；flex:none 复位 mini 的 flex:1，否则左右各半、进度条被挤短 */
   body.scrolled .audiobar.expanded .ab-left > .btn:not(.ab-step):not(.play) { max-width: 80px; opacity: 1; pointer-events: auto; padding: 7px 14px; overflow: visible; }
   body.scrolled .audiobar.expanded .loop-wrap,
   body.scrolled .audiobar.expanded .rate-wrap { max-width: 90px; opacity: 1; pointer-events: auto; overflow: visible; }
@@ -723,7 +723,7 @@
         border-radius .22s var(--ease-bar), max-width .22s var(--ease-bar); }
     body.scrolled .audiobar.expanded .ab-right { order: 1; width: 100%;
       transition: max-width .22s var(--ease-bar), max-height .22s var(--ease-bar), opacity .16s ease-out .06s; }
-    body.scrolled .audiobar.expanded .ab-left { order: 2; width: 100%; transition: gap .22s var(--ease-bar); }
+    body.scrolled .audiobar.expanded .ab-left { order: 2; width: 100%; flex: none; transition: gap .22s var(--ease-bar); }
     body.scrolled .audiobar.expanded .ab-left > .btn { font-size: 13px; padding: 7px 14px; min-height: 34px;
       transition: font-size .16s ease-out .06s, padding .16s ease-out .06s,
         min-height .16s ease-out .06s, opacity .14s ease-out .06s; }
