@@ -628,8 +628,13 @@
     body.menu-open .topbar-right { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
     .topbar-right .ctrl { flex-wrap: wrap; row-gap: 6px; }
     /* 压过 scrolled / show-nav / hover 的压缩与显隐：移动端一律走菜单开关 */
-    body.scrolled .topbar, body.scrolled.show-nav .topbar { padding: 8px 12px; gap: 6px; flex-wrap: nowrap; overflow: visible; }
-    body.scrolled .topbar h1, body.scrolled.show-nav .topbar h1 { font-size: 14px; }
+    body.scrolled .topbar { padding: 4px 12px; gap: 4px; flex-wrap: nowrap; overflow: visible;
+      -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
+      backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
+      box-shadow: 0 24px 64px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.04); }
+    body.scrolled .topbar h1 { font-size: 12px; }
+    body.scrolled.show-nav .topbar, body.fade-nav.scrolled.show-nav .topbar { padding: 8px 12px; gap: 6px; flex-wrap: nowrap; overflow: visible; }
+    body.scrolled.show-nav .topbar h1 { font-size: 14px; }
     body.scrolled .topbar-right, body.scrolled.show-nav .topbar-right,
     body.scrolled .topbar:hover .topbar-right { max-width: none; max-height: none; overflow: visible;
       opacity: 0; visibility: hidden; transform: translateY(-8px); pointer-events: none; }
