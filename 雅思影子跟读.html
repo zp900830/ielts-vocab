@@ -1798,11 +1798,16 @@
     let _cloudIntentionalPause = false; // 标记是否主动暂停云端音频
     const ENV_HINT = '若本机音色也无声，请按序查：①系统设置→声音→输出设备（是否被切到离线蓝牙/显示器，音量是否划灰）②Chrome标签页小喇叭是否被静音 ③重启Chrome再试 ④直接用Edge打开本站。';
     function isCloudURI(uri) { return (uri || '').indexOf('cloud:') === 0; }
+    let _rvCache = null, _rvKey = ''; // 音色解析缓存：点词/连播每句都走 resolveVoice，缓存省去反复 getVoices+匹配
     function resolveVoice(exclude) {
     dlog('resolve', 'want=' + selVoiceURI, 'exclude=' + (exclude || '-'));
     // 每次用最新 voices 列表解析，旧 voice 对象/URI 失效则自动降级；exclude 跳过已知坏音色
     if (!HAS_SPEECH) return null;
-    const vs = speechSynthesis.getVoices();
+    let vs;
+    try { vs = speechSynthesis.getVoices(); } catch (e) { return _rvCache; }
+    const key = selVoiceURI + '|' + (exclude || '') + '|' + accent + '|' + vs.map(v => v.voiceURI).join(',');
+    if (_rvCache && _rvKey === key) return _rvCache;
+    _rvKey = key;
     const wantURI = (selVoiceURI === exclude) ? '' : selVoiceURI;
     let v = vs.find(x => x.voiceURI === wantURI) || null;
     if (!v) {
@@ -1824,6 +1829,7 @@
     }
     // 注意：这里只返回最优解，绝不改写 selVoiceURI（用户选择神圣不可侵犯）
     }
+    _rvCache = v;
     return v;
     }
     let speakToken = 0; // Chrome: cancel() 后立刻 speak() 会被吞掉，手动起播才延迟；token 防旧调用抢跑
@@ -1943,8 +1949,10 @@
     idx = opts.sent; paint(); syncSeek(opts.sent);
     try { mediaMeta(plainEN(sentRaw(opts.sent)).slice(0, 80)); } catch (e) {}
     }
-    // 第二层看门狗：onstart 后 onend 不触发（Chrome/Safari 已知卡死 bug）
-    const endTimeout = Math.max(8000, text.length * 60);
+    // 第二层看门狗：onstart 后 onend 不触发（Chrome/Safari 已知卡死 bug）。
+    // 时长上限必须随倍速缩放：慢速(0.75x)时朗读慢 33%，旧的 8s/60ms每字会在句子仍正常朗读时
+    // 误判超时→cancel 重播，就是"放着放着就停"的根因。按 ~100ms/字 ÷ 倍速估算并留足余量。
+    const endTimeout = Math.max(12000, Math.ceil(text.length * 100 / (rate || 1)));
     wd = setTimeout(() => { dlog('end-watchdog-fire', 'tok=' + my); if (!finished) failOnce(); }, endTimeout);
     };
     u.onend = () => { if (finished) return; finished = true; clearWd(); errStreak = 0; dlog('onend', 'tok=' + my); speechInProgress = false; cb(); };
@@ -1956,8 +1964,8 @@
     failOnce();
     };
     // 无声看门狗：既不开始也不结束 = 静默卡死，走失败路径（重试/停下提示），不许无声空转；
-    // 首句放宽到 6 秒（Chrome 首次加载语音常延迟，避免误判重试造成叠音）
-    wd = setTimeout(() => { dlog('watchdog-fire', 'started=' + started); if (!started && !finished) failOnce(); }, everStarted ? 4000 : 6000);
+    // 首句放宽到 8 秒（Chrome 首次加载语音/冷启动常延迟数秒，过早误判会 cancel 后重播造成叠音）
+    wd = setTimeout(() => { dlog('watchdog-fire', 'started=' + started); if (!started && !finished) failOnce(); }, everStarted ? 6000 : 8000);
     } else {
     u.onstart = remember;
     u.onerror = () => {};

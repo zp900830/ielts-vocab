@@ -204,6 +204,7 @@
   .audiobar { position: fixed; left: 24px; right: 24px; transform: none;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 120;
     display: flex; align-items: center; gap: 12px;
+    will-change: max-width, padding, gap, border-radius;
     background: linear-gradient(145deg, rgba(255,255,255,.65), rgba(255,255,255,.25) 42%, rgba(255,255,255,.15));
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
@@ -551,16 +552,17 @@
   body.scrolled .audiobar.expanded .ab-collapse,
   body:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse {
     display: flex; align-items: center; justify-content: center;
-    position: absolute; left: 50%; right: auto; top: auto; bottom: calc(100% + 6px); transform: translateX(-50%);
-    width: 34px; height: 20px; min-height: 0; padding: 0; border: none; font-size: 0;
-    background: rgba(255,255,255,.55); color: var(--accent); cursor: pointer;
-    border-radius: 999px; opacity: .55; z-index: 5;
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 1px 4px rgba(0,0,0,.08);
-    transition: opacity .2s, transform .2s, background .2s, box-shadow .2s, color .2s;
+    position: absolute; left: 50%; right: auto; top: auto; bottom: calc(100% + 7px); transform: translateX(-50%);
+    width: 38px; height: 22px; min-height: 0; padding: 0; border: none; font-size: 0;
+    background: rgba(255,255,255,.7); color: var(--accent); cursor: pointer;
+    border-radius: 999px; opacity: .72; z-index: 5;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(0,0,0,.12);
+    will-change: transform, opacity;
+    transition: opacity .2s, transform .25s var(--ease-bar), background .2s, box-shadow .2s, color .2s;
   }
   .audiobar .btn.ab-expand, .audiobar .btn.ab-collapse { margin: 0; } /* 悬浮按钮不受 .btn + .btn 的 4px 流式间距影响，保证正上方居中 */
-  .audiobar .ab-expand i, .audiobar .ab-collapse i { font-size: 13px; line-height: 1; }
+  .audiobar .ab-expand i, .audiobar .ab-collapse i { font-size: 15px; line-height: 1; }
   /* hover/active 与显示规则同选择器＋伪类，保证优先级盖得过 display 规则（旧的低优先级 hover 缩放其实从没生效过） */
   body.scrolled .audiobar:not(.expanded) .ab-expand:hover,
   .audiobar.force-mini .ab-expand:hover,
@@ -571,13 +573,16 @@
   .audiobar.force-mini .ab-expand:active,
   body.scrolled .audiobar.expanded .ab-collapse:active,
   body:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse:active { opacity: 1; transform: translateX(-50%) scale(.94); }
+  /* 展开「回弹」：mini→完整条时，条身从 .97 缩放到 1 再微回弹，抵消 max-width 布局 morph 的生硬感 */
+  @keyframes abExpandPop { 0% { transform: translateX(-50%) scale(.97); } 55% { transform: translateX(-50%) scale(1.006); } 100% { transform: translateX(-50%) scale(1); } }
   /* 展开状态：覆盖 mini 态样式（与 mini 同一定位＋定宽，像素与原来 left/right:24 完全一致，只 morph max-width） */
   body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius: 22px;
     width: calc(100vw - 48px); max-width: calc(100vw - 48px); margin: 0;
     left: 50%; right: auto; transform: translateX(-50%);
     border-color: rgba(255,255,255,.65);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
-    -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02); }
+    -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
+    animation: abExpandPop .34s var(--ease-bar); }
   body.scrolled .audiobar.expanded .ab-right { position: static; max-width: 1400px; max-height: 60px; opacity: 1; pointer-events: auto; overflow: visible; }
   body.scrolled .audiobar.expanded .ab-left { gap: 6px; flex: none; flex-wrap: wrap; justify-content: center; } /* 展开态按钮回多行收纳（否则继承 mini 的 nowrap 整行溢出）；flex:none 复位 mini 的 flex:1，否则左右各半、进度条被挤短 */
   body.scrolled .audiobar.expanded .ab-left > .btn:not(.ab-step):not(.play) { max-width: 80px; opacity: 1; pointer-events: auto; padding: 7px 14px; overflow: visible; }
@@ -770,7 +775,8 @@
       width: calc(100vw - 24px); max-width: calc(100vw - 24px);
       backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
       transition: padding .22s var(--ease-bar), gap .22s var(--ease-bar),
-        border-radius .22s var(--ease-bar), max-width .22s var(--ease-bar); }
+        border-radius .22s var(--ease-bar), max-width .22s var(--ease-bar);
+      animation: abExpandPop .3s var(--ease-bar); }
     body.scrolled .audiobar.expanded .ab-right { order: 1; width: 100%;
       transition: max-width .22s var(--ease-bar), max-height .22s var(--ease-bar), opacity .16s ease-out .06s; }
     body.scrolled .audiobar.expanded .ab-left { order: 2; width: 100%; flex: none; transition: gap .22s var(--ease-bar); }
@@ -2050,11 +2056,16 @@
     let _cloudIntentionalPause = false; // 标记是否主动暂停云端音频
     const ENV_HINT = '若本机音色也无声，请按序查：①系统设置→声音→输出设备（是否被切到离线蓝牙/显示器，音量是否划灰）②Chrome标签页小喇叭是否被静音 ③重启Chrome再试 ④直接用Edge打开本站。';
     function isCloudURI(uri) { return (uri || '').indexOf('cloud:') === 0; }
+    let _rvCache = null, _rvKey = ''; // 音色解析缓存：点词/连播每句都走 resolveVoice，缓存省去反复 getVoices+匹配
     function resolveVoice(exclude) {
     dlog('resolve', 'want=' + selVoiceURI, 'exclude=' + (exclude || '-'));
     // 每次用最新 voices 列表解析，旧 voice 对象/URI 失效则自动降级；exclude 跳过已知坏音色
     if (!HAS_SPEECH) return null;
-    const vs = speechSynthesis.getVoices();
+    let vs;
+    try { vs = speechSynthesis.getVoices(); } catch (e) { return _rvCache; }
+    const key = selVoiceURI + '|' + (exclude || '') + '|' + accent + '|' + vs.map(v => v.voiceURI).join(',');
+    if (_rvCache && _rvKey === key) return _rvCache;
+    _rvKey = key;
     const wantURI = (selVoiceURI === exclude) ? '' : selVoiceURI;
     let v = vs.find(x => x.voiceURI === wantURI) || null;
     if (!v) {
@@ -2076,6 +2087,7 @@
     }
     // 注意：这里只返回最优解，绝不改写 selVoiceURI（用户选择神圣不可侵犯）
     }
+    _rvCache = v;
     return v;
     }
     let speakToken = 0; // Chrome: cancel() 后立刻 speak() 会被吞掉，手动起播才延迟；token 防旧调用抢跑
@@ -2195,8 +2207,10 @@
     idx = opts.sent; paint(); syncSeek(opts.sent);
     try { mediaMeta(plainEN(sentRaw(opts.sent)).slice(0, 80)); } catch (e) {}
     }
-    // 第二层看门狗：onstart 后 onend 不触发（Chrome/Safari 已知卡死 bug）
-    const endTimeout = Math.max(8000, text.length * 60);
+    // 第二层看门狗：onstart 后 onend 不触发（Chrome/Safari 已知卡死 bug）。
+    // 时长上限必须随倍速缩放：慢速(0.75x)时朗读慢 33%，旧的 8s/60ms每字会在句子仍正常朗读时
+    // 误判超时→cancel 重播，就是"放着放着就停"的根因。按 ~100ms/字 ÷ 倍速估算并留足余量。
+    const endTimeout = Math.max(12000, Math.ceil(text.length * 100 / (rate || 1)));
     wd = setTimeout(() => { dlog('end-watchdog-fire', 'tok=' + my); if (!finished) failOnce(); }, endTimeout);
     };
     u.onend = () => { if (finished) return; finished = true; clearWd(); errStreak = 0; dlog('onend', 'tok=' + my); speechInProgress = false; cb(); };
@@ -2208,8 +2222,8 @@
     failOnce();
     };
     // 无声看门狗：既不开始也不结束 = 静默卡死，走失败路径（重试/停下提示），不许无声空转；
-    // 首句放宽到 6 秒（Chrome 首次加载语音常延迟，避免误判重试造成叠音）
-    wd = setTimeout(() => { dlog('watchdog-fire', 'started=' + started); if (!started && !finished) failOnce(); }, everStarted ? 4000 : 6000);
+    // 首句放宽到 8 秒（Chrome 首次加载语音/冷启动常延迟数秒，过早误判会 cancel 后重播造成叠音）
+    wd = setTimeout(() => { dlog('watchdog-fire', 'started=' + started); if (!started && !finished) failOnce(); }, everStarted ? 6000 : 8000);
     } else {
     u.onstart = remember;
     u.onerror = () => {};
