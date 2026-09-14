@@ -19,7 +19,7 @@
 
 - 全量 `sentZh`（SECTIONS=6 章，共 **1809 句**，0 缺失）+ 全部 **3219 词条** `m` + `paraZh` 308 段仅浏览（明显误译记入报告由用户定夺）。
 - **真相源只有 `shadow/index.html` 内联数据**。`data/vocab.json`（3254 条，跨章重复，去重后 3219）已有 **312 条 m 不一致且多为 json 侧丢首义**（如 avalanche 丢"雪崩"、mop 丢"拖把"）——**同步方向为 shadow → json，不可反向回灌**。
-- `雅思影子跟读.html` 为 legacy 副本（释义已漂移 673 条）：**本期冻结，不动**（同步或废弃的处置，子项目 B 时再定）。
+- `雅思影子跟读.html` 为 legacy 副本（同布局：SECTIONS/VOCAB/CHAPTERS + sentZh/paraZh/glossParts，释义已漂移 673 条）：**本期同步**——shadow 定稿后脚本按 key/序号对齐合并（VOCAB m、sentZh、glossParts 改动照搬）；默认 shadow 为准，legacy 侧多出的义项内容列入 diff 报告由用户定夺（已知 legacy 个别条目释义更完整，不可盲覆盖）。合并后单独一份 diff 验收。
 
 ## 3. 硬规则（含降级与前置清洗）
 
@@ -42,6 +42,7 @@
 1. 脚本抽取：英文句 + 现句译对齐表；全部词条 `m` 表；含多义标注词句表（1502）；
 2. R0 清洗 → 独立 diff，用户验收；
 3. R1/R2/R3 批量改 → 按章分批 diff，用户逐条校验（英文原句 / 原译 / 新译）后合入；
+3b. 定稿后同步 `data/vocab.json`（312 条）与 legacy 副本（673 条漂移 + sentZh/glossParts 对齐合并），各单独一份 diff 验收；
 4. 门禁：抽出内联 `<script>` 做 `node --check`（`node --check` 不接受 `.html`，此前写法无效）+ 全量 **18 个 test()** 通过后提交。
 
 ## 6. 非目标
