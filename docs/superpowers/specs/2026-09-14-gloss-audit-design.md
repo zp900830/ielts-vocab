@@ -43,7 +43,7 @@
 2. R0 清洗 → 独立 diff，用户验收；
 3. R1/R2/R3 批量改 → 按章分批 diff，用户逐条校验（英文原句 / 原译 / 新译）后合入；
 3b. 定稿后同步 `data/vocab.json`（312 条）与 legacy 副本（673 条漂移 + sentZh/glossParts 对齐合并），各单独一份 diff 验收；
-4. 门禁：抽出内联 `<script>` 做 `node --check`（`node --check` 不接受 `.html`，此前写法无效）+ 全量 **18 个 test()** 通过后提交。
+4. 门禁：抽出内联 `<script>` 做 `node --check`（`node --check` 不接受 `.html`，此前写法无效）+ 全量 **17 个 test()（17 文件各 1 个；inline-gloss Step 5 为既有测试内新增 step）** 通过后提交。
 
 ## 6. 非目标
 

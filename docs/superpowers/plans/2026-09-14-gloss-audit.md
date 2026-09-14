@@ -4,7 +4,7 @@
 
 **Goal:** 按 R0–R3 修完影子跟读全部句译与词条释义，并同步两处下游，全量测试通过。
 
-**Architecture:** 脚本抽取对齐表 → 人审定规则 → 脚本批量改（Python 精确字符串替换，不碰代码行）→ 每批独立 diff 报告由用户逐条签字 → 门禁（node --check + 18 tests）。
+**Architecture:** 脚本抽取对齐表 → 人审定规则 → 脚本批量改（Python 精确字符串替换，不碰代码行）→ 每批独立 diff 报告由用户逐条签字 → 门禁（node --check + 17 tests）。
 
 **Tech Stack:** Python 3（数据抽取/合并）、Node（语法校验）、Playwright（E2E）。
 
@@ -16,7 +16,7 @@
 - 本期内禁止重跑 `build_ielts.py`（其注入正则命中数据块，且产出无 sentZh/paraZh）。
 - 不碰例句、例句译文、音标；`paraZh` 仅浏览。
 - 每个数据改动必须出现在某份 diff 报告里并经用户签字后合入。
-- 提交门禁：抽出内联 script 的 `node --check` + 18 个 test() 全过。
+- 提交门禁：抽出内联 script 的 `node --check` + 17 个 test() 全过。
 
 ---
 
@@ -466,7 +466,7 @@ git commit -m "sync(gloss): 下游回写（vocab.json+legacy，shadow为准，�
 
 ---
 
-### Task 8: 门禁（语法 + 18 tests）与收尾
+### Task 8: 门禁（语法 + 17 tests）与收尾
 
 **Files:** 无新文件（只跑命令）
 
@@ -491,7 +491,7 @@ open('/tmp/inline-check.js','w',encoding='utf-8').write(raw[i+8:j])" && node --c
 npm test -- --reporter=list --timeout=30000
 ```
 
-预期：`18 passed`（17 文件 Harris 注：mobile-expand 修后计入；progress-sync 计入；inline-gloss 含新 Step 5）。
+预期：`17 passed`（17 文件各 1 个；mobile-expand 修后计入；progress-sync 计入；inline-gloss 含新 Step 5——Step 5 为既有测试内新增 step，非独立 test）。
 
 - [ ] **Step 3: 最终确认 diff 总览并收尾提交**
 
