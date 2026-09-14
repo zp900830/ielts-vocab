@@ -4,8 +4,10 @@
 import json, glob, os, re
 from openpyxl import load_workbook
 
+# NOTE：SRC/OUT 为本机绝对路径（machine-local），值保持原样，仅文档说明，不改逻辑。
 SRC = "/Users/zhoupeng/Downloads/雅思词汇真经(Excel版待背）"
 # FROZEN 2026-09-14：子项目A进行中，禁止重跑（注入正则会冲掉 shadow 内联 sentZh/paraZh 人工成果）
+# FROZEN-override：文件头旧注"幂等: 重跑安全"已失效——重跑会销毁 sentZh/paraZh 人工成果，以本冻结注释为准。
 OUT = "/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目/雅思影子跟读.html"
 
 ZH = {
