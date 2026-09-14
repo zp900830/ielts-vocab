@@ -90,6 +90,31 @@ test.describe('Inline gloss displays truncated Chinese meaning', () => {
         expect(pmText).toBeTruthy();
         expect(pmText!.length).toBeGreaterThan(0);
       });
+
+      await test.step('Step 5: Gloss has two senses and no trailing separator', async () => {
+        const bad = await page.evaluate(() => {
+          const gls = [...document.querySelectorAll('.gl')];
+          let twoSense = 0;
+          const problems = [];
+          for (const gl of gls) {
+            const glP = gl.querySelector('.gl-p');
+            let meaningText = '';
+            let node = glP && glP.nextSibling ? glP.nextSibling : gl.firstChild;
+            while (node) { meaningText += node.textContent || ''; node = node.nextSibling; }
+            meaningText = meaningText.trim();
+            if (!meaningText) continue;
+            if (/[；;]$/.test(meaningText)) problems.push('trailing-sep: ' + meaningText);
+            if (/[；;]/.test(meaningText) && !/[；;]\s*$/.test(meaningText)) {
+              const parts = meaningText.split(/[；;]/).map((s) => s.trim()).filter(Boolean);
+              if (parts.length >= 2) twoSense += 1;
+              else problems.push('empty-sense: ' + meaningText);
+            }
+          }
+          return { twoSense, problems: problems.slice(0, 5) };
+        });
+        expect(bad.problems).toEqual([]);
+        expect(bad.twoSense).toBeGreaterThan(0);
+      });
     },
   );
 

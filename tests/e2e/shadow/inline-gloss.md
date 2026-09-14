@@ -32,6 +32,10 @@ Get the gloss text content.
 Click the `.w` element.
 **Verify:** `#pop` popup becomes visible. `#pw` shows the word. `#pm` shows full Chinese meaning (not truncated).
 
+### 5. Gloss has two senses and no trailing separator
+Scan all `.gl` inline glosses (meaning text after the `.gl-p` phonetic span).
+**Verify:** ① at least one gloss contains two senses joined by `；`/`;` (twoSense > 0); ② no gloss ends with a trailing separator (`；`/`;`); ③ no gloss has an empty sense (no `empty-sense` problems).
+
 **Pass condition:** Inline gloss shows truncated Chinese for HAND words, and clicking opens full popup.
 
 ## After Hook

@@ -950,7 +950,9 @@
     function glossParts(k) {
     const info = (typeof VOCAB !== 'undefined' && VOCAB[k]) || null;
     if (!info || !info.m) return null;
-    const m = info.m.split(/[；;]/)[0].trim().slice(0, 12);
+    const parts = String(info.m).split(/[；;]/).map(s => s.trim()).filter(Boolean);
+    const two = parts.slice(0, 2).join('；');
+    const m = (two.length <= 12 ? two : parts[0]).slice(0, 12);
     return { ph: glossPhon(k), m };
     }
     function glossHTML(k) {
