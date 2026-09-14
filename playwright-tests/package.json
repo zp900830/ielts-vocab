@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
+    "pretest": "node scripts/ensure-server.cjs",
     "test": "playwright test"
   },
   "devDependencies": {

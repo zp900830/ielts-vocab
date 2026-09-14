@@ -1,5 +1,5 @@
 // Compiled from: tests/e2e/shadow/mobile-expand.md
-// Compiled at: 2026-09-13
+// Compiled at: 2026-09-14
 // Source is authoritative — do not edit; re-compile from markdown if broken.
 
 import { test, expect } from '../../fixtures';
@@ -27,14 +27,14 @@ test.describe('Mobile expand animation', () => {
       expect(innerW).toBeLessThanOrEqual(700);
     });
 
-    await test.step('Setup 2: Ensure collapsed state', async () => {
-      await page.evaluate(() => {
-        document.querySelector('.audiobar')?.classList.remove('expanded');
+    await test.step('Setup 2: Scroll into mini state', async () => {
+      // Fresh load is neither body.scrolled nor force-mini: both expand/collapse
+      // buttons are display:none and the click would wait out the test timeout.
+      await page.evaluate(() => window.scrollTo(0, 600));
+      await page.waitForFunction(() => document.body.classList.contains('scrolled'), null, {
+        timeout: currentTimeout(),
       });
-      const hasExpanded = await page.evaluate(() =>
-        document.querySelector('.audiobar')?.classList.contains('expanded'),
-      );
-      expect(hasExpanded).toBe(false);
+      await expect(page.locator('.ab-expand')).toBeVisible();
     });
   });
 
@@ -60,11 +60,12 @@ test.describe('Mobile expand animation', () => {
       });
 
       await test.step('Step 3: AB button not stretched', async () => {
-        const flex = await page.evaluate(() => {
+        // flex:none computes to "0 0 auto"; assert the meaningful part (no grow).
+        const grow = await page.evaluate(() => {
           const btn = document.getElementById('btnAB');
-          return btn ? getComputedStyle(btn).flex : '';
+          return btn ? getComputedStyle(btn).flexGrow : '';
         });
-        expect(flex).toBe('none');
+        expect(grow).toBe('0');
       });
 
       await test.step('Step 4: Click collapse button', async () => {

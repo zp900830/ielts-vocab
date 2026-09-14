@@ -16,24 +16,24 @@ Navigate to `{E2E_BASE_URL}/index.html`.
 Set viewport to 375×812 (iPhone-like).
 **Verify:** `window.innerWidth <= 700`.
 
-### Setup 2. Ensure collapsed state
-Force audiobar to collapsed state by removing `expanded` class.
-**Verify:** `.audiobar` does not have `expanded` class.
+### Setup 2. Scroll into mini state
+Fresh load is neither `body.scrolled` nor `force-mini`, so both expand/collapse buttons are `display:none`. Scroll down 600px and wait for `body.scrolled` (audiobar collapses to mini capsule, expand button appears).
+**Verify:** `document.body` has `scrolled` class and `.ab-expand` is visible.
 
 ## Test Steps
 
-### 1. Click to expand
-Click the audiobar (not on any button inside it).
-**Verify:** `.audiobar` gains `expanded` class. Max-width transitions from mini value to full width.
+### 1. Click expand button
+Click `.ab-expand`.
+**Verify:** `.audiobar` gains `expanded` class.
 
 ### 2. Blur locks at 16px
 **Verify:** Computed `backdrop-filter` on `.audiobar.expanded` contains `blur(16px)`.
 
 ### 3. AB button not stretched
-**Verify:** `#btnAB` in expanded state has `flex: none` (computed style). Width is fixed, not stretching to fill container.
+**Verify:** `#btnAB` in expanded state has computed `flex-grow: 0` (does not stretch to fill container; fixed width via `min-width: 4.2em`).
 
-### 4. Click outside to collapse
-Click outside the audiobar (e.g., on the article text).
+### 4. Click collapse button
+Click `.ab-collapse` and wait 500ms.
 **Verify:** `.audiobar` loses `expanded` class. Returns to mini state.
 
 **Pass condition:** Mobile expand animation fires transitions, blur locks correctly, and layout doesn't stretch control buttons.
