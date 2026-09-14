@@ -40,7 +40,23 @@ test.describe('Word popup shows phonetics, meaning and example', () => {
         await expect(page.locator('#pm')).toHaveText('n. 大气；气氛；氛围');
       });
 
-      await test.step('Step 2: Dismiss the popup', async () => {
+      await test.step('Step 2: Popup stays visible after scrolling down', async () => {
+        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight * 0.6));
+        const word = page.locator('.w').nth(50);
+        const wordText = await word.textContent();
+        await word.click();
+        await expect(page.locator('#pop')).toBeVisible();
+        await expect(page.locator('#pw')).toHaveText(wordText || '');
+        const box = await page.locator('#pop').boundingBox();
+        const vp = await page.viewportSize();
+        expect(box).not.toBeNull();
+        if (box && vp) {
+          expect(box.y + box.height).toBeLessThanOrEqual(vp.height + 1);
+          expect(box.x + box.width).toBeLessThanOrEqual(vp.width + 1);
+        }
+      });
+
+      await test.step('Step 3: Dismiss the popup', async () => {
         await page.keyboard.press('Escape');
         await expect(page.locator('#pop')).toBeHidden();
       });
