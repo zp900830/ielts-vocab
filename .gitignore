@@ -6,3 +6,4 @@ playwright-tests/playwright-report/
 playwright-tests/blob-report/
 *.log
 .DS_Store
+tools/gloss-audit/out/

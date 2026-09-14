@@ -5,7 +5,7 @@ import json
 import re
 import pathlib
 
-WT = pathlib.Path('/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目/.worktrees/audit-a')
+WT = pathlib.Path(__file__).resolve().parents[2]
 diff = json.loads((WT / 'tools' / 'gloss-audit' / 'out' / 'sync-diff.json').read_text(encoding='utf-8'))
 
 

@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """从22个Excel读词+例句, 全部词条的例句按章拼成长文, 生成最终HTML. 幂等: 重跑安全."""
-import json, glob, os, re
+import json, glob, os, re, sys
 from openpyxl import load_workbook
+
+if os.environ.get('IELTS_ALLOW_REBUILD') != '1':
+    sys.exit('FROZEN 2026-09-14: rebuild wipes sentZh/paraZh人工成果 — set IELTS_ALLOW_REBUILD=1 to override')
 
 # NOTE：SRC/OUT 为本机绝对路径（machine-local），值保持原样，仅文档说明，不改逻辑。
 SRC = "/Users/zhoupeng/Downloads/雅思词汇真经(Excel版待背）"
