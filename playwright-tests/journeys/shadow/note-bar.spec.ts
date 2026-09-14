@@ -71,9 +71,17 @@ test.describe('Note bar under sentences with analysis-worthy words', () => {
         expect(check.ok).toBe(true);
       });
 
-      await test.step('Step 3: Card word opens popup', async () => {
+      await test.step('Step 3: Card word is plain text, not clickable', async () => {
         const bar = page.locator('.notebar', { hasText: 'swear at sb' });
-        await bar.locator('.w').click();
+        expect(await bar.locator('.w').count()).toBe(0);
+        await expect(page.locator('#pop')).toBeHidden();
+        await bar.locator('.nb-w').click();
+        await expect(page.locator('#pop')).toBeHidden();
+      });
+
+      await test.step('Step 4: Sentence word still opens popup', async () => {
+        const sentWord = page.locator('.sent .w[data-w="swear"]').first();
+        await sentWord.click();
         await expect(page.locator('#pop')).toBeVisible();
         expect(await page.locator('#pw').textContent()).toBeTruthy();
       });

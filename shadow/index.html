@@ -171,7 +171,7 @@
     border-radius: 10px; padding: 8px 12px; margin: 6px 0 8px; line-height: 1.65;
     background: rgba(12,156,116,.05); font-size: 13px; }
   .notebar .nb-t { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 8px; }
-  .notebar .nb-t .w { font-weight: 700; font-family: var(--serif); font-size: 15px; color: #0d9d74; }
+  .notebar .nb-t .nb-w { font-weight: 700; font-family: var(--serif); font-size: 15px; color: #0d9d74; cursor: text; }
   .notebar .nb-ph { font-size: 12px; color: var(--muted); font-family: var(--serif); }
   .notebar .nb-m { color: var(--ink2); }
   .notebar .nb-n { display: block; color: var(--ink2); margin-top: 2px; }
@@ -1331,7 +1331,7 @@
     });
     }
     function noteBar(t) {
-    // 句下辨析卡：凡句中出现有 note 字段的词，句下插一张紧凑卡（无🔖无按钮，发音走单词弹窗）
+    // 句下辨析卡：凡句中出现有 note 字段的词，句下插一张紧凑卡（纯展示：词不可点；查词点正文单词走单词弹窗）
     const seen = new Set(); let html = '';
     const re = /\[\[([^\]:]+):([^\]]+)\]\]/g; let m;
     while ((m = re.exec(t))) {
@@ -1340,7 +1340,7 @@
     const info = (typeof VOCAB !== 'undefined' && VOCAB[k]) || null;
     if (!info || !info.note) continue;
     const ph = glossPhon(k);
-    html += `<span class="notebar"><span class="nb-t"><span class="w" data-w="${esc(k)}" data-disp="${esc(k)}" tabindex="0" role="button">${esc(k)}</span>${ph ? `<span class="nb-ph">${esc(ph)}</span>` : ''}<span class="nb-m">${esc(info.m)}</span></span><span class="nb-n">💡 辨析：${esc(info.note)}</span></span>`;
+    html += `<span class="notebar"><span class="nb-t"><span class="nb-w">${esc(k)}</span>${ph ? `<span class="nb-ph">${esc(ph)}</span>` : ''}<span class="nb-m">${esc(info.m)}</span></span><span class="nb-n">💡 辨析：${esc(info.note)}</span></span>`;
     }
     return html;
     }
