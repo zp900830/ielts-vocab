@@ -95,6 +95,6 @@ legacy 与 shadow 另有 4 处 sentZh pre-existing 差异（主拷贝即存在�
 ## 签字
 
 - Controller 代理签字（per ledger ruling：SDD 连续执行，终审在合并前）：
-  上述 782 + 748 + 13 + glossParts 回写以 shadow 定稿为准，41 条用户定夺区保持不变，4 处范围外 sentZh 差异留待后续任务。
+  上述 782 + 748 + 13 + glossParts 回写以 shadow 定稿为准，41 条用户定夺区保持不变，4 处范围外 sentZh 差异本次未动，留待后续任务跟进。
 - 本报告为 committed diff 报告：数据变更见提交 5b1d76d（in-diff 可审），签字见本次提交。
 - 未派发 subagent；未动主 checkout；未 push。
