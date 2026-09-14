@@ -2496,6 +2496,7 @@
     /* ============ 进度存档 + 手动书签 ============ */
     function savePos() {
     try { localStorage.setItem('ielts-pos', JSON.stringify({ i: idx, t: Date.now() })); } catch (e) {}
+    try { queueMarkPush(); } catch (e) {} // 进度与书签同一次 debounce 推云，多端同步最新播放位置
     }
     function loadPos() {
     try {
@@ -2509,9 +2510,10 @@
     }
     function getMarks() { try { return JSON.parse(localStorage.getItem('ielts-marks') || '[]'); } catch (e) { return []; } }
     function setMarks(m) { try { localStorage.setItem('ielts-marks', JSON.stringify((m || []).slice(0, 50))); } catch (e) {} }
-    /* ============ 书签云同步（同账号多端一致） ============
+    /* ============ 书签+进度云同步（同账号多端一致） ============
        本地 localStorage 永远可用；登录后 pull 合并、改动后 debounce push。
-       全部 try/catch：表没建/断网/RLS 拒绝都不许影响本地书签。合并按句号去重，u(epoch) 大的赢。 */
+       全部 try/catch：表没建/断网/RLS 拒绝都不许影响本地书签和进度。
+       书签合并按句号去重，u(epoch) 大的赢；进度按 t(epoch) 比，云端新才覆盖本地。 */
     let _markPushT = null, _markSyncing = false;
     function queueMarkPush() {
     clearTimeout(_markPushT);
@@ -2539,8 +2541,9 @@
     if (!c) return;
     const { data: { session } } = await c.auth.getSession();
     if (!session) return;
-    const { data, error } = await c.from('user_data').select('marks').eq('user_id', session.user.id).maybeSingle();
-    if (error || !data || !Array.isArray(data.marks)) return;
+    const { data, error } = await c.from('user_data').select('marks,pos,updated_at').eq('user_id', session.user.id).maybeSingle();
+    if (error || !data) return;
+    if (Array.isArray(data.marks)) {
     _markSyncing = true;
     try {
     const byI = new Map();
@@ -2553,6 +2556,21 @@
     const merged = [...byI.values()].sort((a, b) => (b.u || 0) - (a.u || 0)).slice(0, 50);
     setMarks(merged); renderMarks();
     } finally { _markSyncing = false; }
+    }
+    // 进度同步：云端 pos 更新才覆盖本地（播放中不抢，避免把正在听的拽走；停播后本地 savePos 时间戳更新，下次 push 自然赢回）
+    try {
+    const cp = data.pos;
+    if (cp && Number.isInteger(cp.i) && cp.i >= 0 && typeof sents !== 'undefined' && sents.length && cp.i < sents.length && !playing) {
+    let lp = null;
+    try { lp = JSON.parse(localStorage.getItem('ielts-pos') || 'null'); } catch (e) {}
+    if (!lp || !Number.isInteger(lp.i) || (cp.t || 0) > (lp.t || 0)) {
+    try { localStorage.setItem('ielts-pos', JSON.stringify({ i: cp.i, t: cp.t || Date.now() })); } catch (e) {}
+    idx = cp.i; paint(); syncSeek(idx);
+    const el = sents[idx];
+    if (el) setTimeout(() => el.scrollIntoView({ block: 'center' }), 60);
+    }
+    }
+    } catch (e) {}
     // 拉下来可能有新货，顺手推一份回云端对齐（防 A 端只拉不推导致 B 端永远看不到 A 的旧书签）
     try { queueMarkPush(); } catch (e) {}
     } catch (e) { try { dlog('mark-pull-fail', (e && e.message) || e); } catch (err) {} }
