@@ -16404,260 +16404,377 @@
       ]
     }
   ],
-  "atmosphere": {
-    "note": "同义词：occasion, weather, condition, setting, surrounding"
+  "altitude": {
+    "note": "同义词：height, high"
+  },
+  "disaster": {
+    "note": "同义词：calamity, catastrophe"
+  },
+  "calamity": {
+    "note": "同义词：catastrophe, disaster"
   },
   "endanger": {
-    "note": "同义词：peril, hazard, jeopardise, danger, jeopardize"
+    "note": "同义词：crisis, danger, enemy, foe, hostile"
   },
   "jeopardise": {
-    "note": "同义词：peril, hazard, endanger, danger, jeopardize"
+    "note": "同义词：crisis, danger, endanger, enemy, foe"
+  },
+  "drought": {
+    "note": "同义词：dry"
+  },
+  "landscape": {
+    "note": "同义词：prospect, scene, scenery, scenic, view"
+  },
+  "equator": {
+    "note": "同义词：geography, hot, tropical"
   },
   "upgrade": {
-    "note": "同义词：growth, promote, increase, boost, soar"
-  },
-  "erode": {
-    "note": "同义词：ruin, crash, wreck, impair, damage"
+    "note": "同义词：additional, boom, boost, extra, foster"
   },
   "marine": {
-    "note": "同义词：ocean, water, sea"
+    "note": "同义词：ocean, sea, water"
   },
   "navigation": {
-    "note": "同义词：direction, situate, orientation, positioning"
-  },
-  "weather": {
-    "note": "同义词：occasion, condition, setting, atmosphere, surrounding"
+    "note": "同义词：direction, orientation, positioning, situate"
   },
   "damp": {
-    "note": "同义词：span, wet, even, humid, trace"
+    "note": "同义词：humid, humidity, moisture, wet"
   },
   "humid": {
-    "note": "同义词：span, wet, even, damp, trace"
+    "note": "同义词：damp, humidity, moisture, wet"
   },
   "freeze": {
-    "note": "同义词：indulge, comply, criticise, critic, condemn"
+    "note": "同义词：cold"
   },
-  "forecast": {
-    "note": "同义词：stake, predict, guess, wager, bet"
+  "peak": {
+    "note": "同义词：summit, top"
+  },
+  "range": {
+    "note": "同义词：scope"
   },
   "overlook": {
-    "note": "同义词：overseas, disregard, aware, conscious, miss"
+    "note": "同义词：ignore, neglect, notice, sight, underestimate"
   },
   "abnormal": {
-    "note": "同义词：rare, unusual, remarkable, unexpected, unique"
-  },
-  "rural": {
-    "note": "同义词：outskirts, suburb, village, suburban, countryside"
+    "note": "同义词：exceptional, extraordinary, extreme, rare, remarkable"
   },
   "suburb": {
-    "note": "同义词：outskirts, village, suburban, countryside, rural"
+    "note": "同义词：countryside, outskirts, remote, rustic, suburban"
   },
   "outskirts": {
-    "note": "同义词：suburb, village, suburban, countryside, rural"
+    "note": "同义词：countryside, remote, rustic, suburb, suburban"
   },
   "remote": {
-    "note": "同义词：outskirts, suburb, village, suburban, countryside"
+    "note": "同义词：countryside, outskirts, rustic, suburb, suburban"
   },
-  "magnificent": {
-    "note": "同义词：spectacular, striking, impressive, dramatic"
+  "toxic": {
+    "note": "同义词：drug, poison"
   },
   "dramatic": {
-    "note": "同义词：spectacular, magnificent, striking, impressive"
+    "note": "同义词：impressive, striking, surprising, touching, unexpected"
   },
   "intensive": {
-    "note": "同义词：strong, strengthen, intense, reinforce"
-  },
-  "condition": {
-    "note": "同义词：occasion, weather, setting, atmosphere, surrounding"
-  },
-  "situation": {
-    "note": "同义词：occasion, weather, condition, setting, atmosphere"
+    "note": "同义词：intense, strong"
   },
   "nature": {
-    "note": "同义词：inherent, dna, innate, instinct, intrinsic"
+    "note": "同义词：built-in, dna, gene, heredity, inborn"
+  },
+  "artificial": {
+    "note": "同义词：automated, automatically, automation, autonomy, independent"
+  },
+  "synthetic": {
+    "note": "同义词：artificial, automated, automatically, automation, autonomy"
+  },
+  "element": {
+    "note": "同义词：assemble, component, compose, fragment, part"
+  },
+  "factor": {
+    "note": "同义词：characteristic, feature, property, trait"
   },
   "handle": {
-    "note": "同义词：manipulate, regulate, govern, manage, steer"
+    "note": "同义词：address, confront, conquer, defeat, disposal"
   },
   "portable": {
-    "note": "同义词：upper, higher, workable, leading, better"
+    "note": "同义词：available, conveyable, feasible, practical, realistic"
   },
   "hurdle": {
-    "note": "同义词：shortcoming, problem, trouble, disadvantage, drawback"
+    "note": "同义词：adversity, barrier, burden, challenge, challenging"
+  },
+  "available": {
+    "note": "同义词：conveyable, feasible, portable, practical, realistic"
   },
   "durable": {
-    "note": "同义词：duration, chronic, lasting, time, period"
+    "note": "同义词：chronic, duration, lasting, period, time"
   },
-  "figure": {
-    "note": "同义词：statistics, data, information, number, quantity"
-  },
-  "core": {
-    "note": "同义词：inherent, fundamental, innate, intrinsic, essence"
+  "provision": {
+    "note": "同义词：complement, supplement"
   },
   "supplement": {
-    "note": "同义词：add, extra, additional, complement"
+    "note": "同义词：complement, provision"
+  },
+  "construct": {
+    "note": "同义词：build, building, constructing, construction, framework"
   },
   "establish": {
-    "note": "同义词：start up, build, set up, create, initiate"
+    "note": "同义词：build, create, found, initiate"
+  },
+  "stability": {
+    "note": "同义词：accordance, coherence, conform, corresponding, persistent"
+  },
+  "site": {
+    "note": "同义词：location, place, spot, where"
+  },
+  "settle": {
+    "note": "同义词：address, confront, conquer, defeat, disposal"
+  },
+  "skyscraper": {
+    "note": "同义词：city, domestic, family, habitat, home"
+  },
+  "shelter": {
+    "note": "同义词：shade"
   },
   "complex": {
-    "note": "同义词：tough, complicated, hard, harsh, difficult"
+    "note": "同义词：challenging, complexity, complicated, comprehensive, demanding"
   },
-  "peripheral": {
-    "note": "同义词：minor, unimportant, trivial"
+  "urban": {
+    "note": "同义词：city, domestic, family, habitat, home"
   },
-  "vicinity": {
-    "note": "同义词：community, public, communal, citizen, nearby"
+  "fix": {
+    "note": "同义词：address, confront, conquer, defeat, disposal"
   },
   "modify": {
-    "note": "同义词：change, adjustment, revise, shift, adjust"
+    "note": "同义词：adapt, adjust, adjustment, alter, amend"
   },
   "assemble": {
-    "note": "同义词：accumulate, congregate, gather, collect"
+    "note": "同义词：component, compose, element, fragment, part"
   },
-  "layout": {
-    "note": "同义词：arrangement, pattern, format, structure"
+  "outside": {
+    "note": "同义词：exterior, external"
   },
-  "voyage": {
-    "note": "同义词：distract, delivery, journey, commute, transport"
+  "exterior": {
+    "note": "同义词：external, outside"
   },
-  "flight": {
-    "note": "同义词：distract, delivery, journey, commute, transport"
+  "external": {
+    "note": "同义词：exterior, outside"
+  },
+  "inner": {
+    "note": "同义词：inside, interior, internal"
+  },
+  "interior": {
+    "note": "同义词：inner, inside, internal"
+  },
+  "internal": {
+    "note": "同义词：inner, inside, interior"
+  },
+  "traffic": {
+    "note": "同义词：car, motor, vehicle"
   },
   "curb": {
-    "note": "同义词：suppress, restrict, confine, constraint, restraint"
+    "note": "同义词：confine, constrain, constraint, hold, limit"
   },
-  "wreck": {
-    "note": "同义词：ruin, crash, erode, impair, damage"
+  "vehicle": {
+    "note": "同义词：car, motor, traffic"
   },
-  "crash": {
-    "note": "同义词：ruin, erode, wreck, impair, damage"
+  "motor": {
+    "note": "同义词：car, traffic, vehicle"
   },
   "vanish": {
-    "note": "同义词：eradicate, decrease, disappear, eliminate, mitigate"
+    "note": "同义词：decrease, diminish, disappear, eliminate, eradicate"
   },
   "disappear": {
-    "note": "同义词：eradicate, decrease, vanish, eliminate, mitigate"
+    "note": "同义词：decrease, diminish, eliminate, eradicate, gone"
   },
-  "hazard": {
-    "note": "同义词：peril, jeopardise, endanger, danger, jeopardize"
+  "delay": {
+    "note": "同义词：lag, late, postpone"
   },
-  "arrive": {
-    "note": "同义词：accomplish, achieve, reach, attain"
+  "postpone": {
+    "note": "同义词：delay, lag, late"
   },
   "burden": {
-    "note": "同义词：shortcoming, problem, trouble, disadvantage, drawback"
-  },
-  "transfer": {
-    "note": "同义词：distract, delivery, journey, commute, transport"
+    "note": "同义词：adversity, barrier, challenge, challenging, defect"
   },
   "transmit": {
-    "note": "同义词：distract, delivery, oral, commute, journey"
-  },
-  "transit": {
-    "note": "同义词：distract, delivery, journey, commute, transport"
-  },
-  "deliver": {
-    "note": "同义词：distract, delivery, journey, commute, transport"
+    "note": "同义词：communication, convey, narrate, oral, speak"
   },
   "convey": {
-    "note": "同义词：distract, delivery, oral, commute, journey"
+    "note": "同义词：communication, narrate, oral, speak, talk"
   },
   "swift": {
-    "note": "同义词：rapid, straightaway, quick, sudden, breakneck"
+    "note": "同义词：accelerate, breakneck, immediately, prompt, quick"
+  },
+  "authority": {
+    "note": "同义词：council, government, ministry, official"
+  },
+  "conservative": {
+    "note": "同义词：classic, classical, conservation, convention, earlier"
   },
   "municipal": {
-    "note": "同义词：community, public, communal, citizen, nearby"
+    "note": "同义词：city, domestic, family, habitat, home"
+  },
+  "dominate": {
+    "note": "同义词：control, governance, hold, influence, lead"
   },
   "affect": {
     "note": "同义词：disturb, effect, impact, influence"
   },
   "organisation": {
-    "note": "同义词：entity, commercial, company, trading, enterprise"
+    "note": "同义词：business, commercial, company, corporate, corporation"
   },
-  "community": {
-    "note": "同义词：public, communal, citizen, nearby, people"
+  "association": {
+    "note": "同义词：institute"
   },
   "institution": {
-    "note": "同义词：literacy, academic, education, school"
+    "note": "同义词：academic, education, literacy"
   },
   "unique": {
-    "note": "同义词：rare, unusual, remarkable, abnormal, unexpected"
+    "note": "同义词：abnormal, exceptional, extraordinary, extreme, rare"
   },
   "worldwide": {
-    "note": "同义词：overseas, overlook, aware, conscious, discover"
+    "note": "同义词：earth, international, overseas, world"
   },
   "overseas": {
-    "note": "同义词：overlook, aware, conscious, discover, ignore"
+    "note": "同义词：earth, international, world, worldwide"
   },
-  "civil": {
-    "note": "同义词：public, citizen, civic, municipal"
+  "reign": {
+    "note": "同义词：control, dominate, governance, hold, influence"
   },
-  "population": {
-    "note": "同义词：census, demographic"
-  },
-  "demographic": {
-    "note": "同义词：census, population"
-  },
-  "citizen": {
-    "note": "同义词：community, public, communal, nearby, people"
-  },
-  "resident": {
-    "note": "同义词：community, public, communal, citizen, nearby"
+  "liberty": {
+    "note": "同义词：free, freedom, liberal"
   },
   "preference": {
-    "note": "同义词：first, leading, primary, supreme, supremacy"
+    "note": "同义词：priority, supremacy"
+  },
+  "harmony": {
+    "note": "同义词：cooperation, cooperative, coordinate, coordination, interaction"
+  },
+  "prospect": {
+    "note": "同义词：landscape, scene, scenery, scenic, view"
+  },
+  "perspective": {
+    "note": "perspective=视角/透视；in perspective=正确看待"
+  },
+  "viewpoint": {
+    "note": "viewpoint=个人观点；standpoint=立场；perspective=视角"
+  },
+  "standpoint": {
+    "note": "standpoint=立场，比viewpoint更正式；firm standpoint=坚定立场"
+  },
+  "outlook": {
+    "note": "outlook=展望/前景；life outlook=人生观"
+  },
+  "guideline": {
+    "note": "同义词：act, contract, instruction, norm, policy"
+  },
+  "proposal": {
+    "note": "同义词：initiative, issue, plan, program, project"
+  },
+  "hint": {
+    "note": "同义词：clarity, clear, clue, cue, evidence"
+  },
+  "declare": {
+    "note": "declare=正式宣布；declare+物品=申报（过海关）"
+  },
+  "affirm": {
+    "note": "affirm=断言、肯定（语气正式）"
+  },
+  "claim": {
+    "note": "claim=声称（不一定是真的）；claim sth=认领、索取"
+  },
+  "proclaim": {
+    "note": "proclaim=公开宣告（官方口吻）"
+  },
+  "state": {
+    "note": "state作名词=国家/状态；作动词=陈述。heads of state=国家元首"
+  },
+  "announce": {
+    "note": "announce=宣布消息；announce+人=通知到"
   },
   "aid": {
-    "note": "同义词：help, support, assistance"
+    "note": "同义词：assistance, help, support"
   },
   "encourage": {
-    "note": "同义词：inspire, drive, enhance, improve, promote"
+    "note": "同义词：activate, advance, boost, develop, drive"
+  },
+  "implement": {
+    "note": "同义词：execute, fulfill"
+  },
+  "monitor": {
+    "note": "同义词：surveillance"
   },
   "admit": {
-    "note": "同义词：ensure, perceive, verify, certify, acknowledge"
+    "note": "同义词：acknowl, appreciate, ascertain, comprehend, identify"
+  },
+  "financial": {
+    "note": "同义词：benefit, budget, compensate, compensation, costly"
+  },
+  "fund": {
+    "note": "同义词：benefit, budget, compensate, compensation, costly"
+  },
+  "donate": {
+    "note": "同义词：contribute, contribution, dedicate"
   },
   "commercial": {
-    "note": "同义词：entity, company, trading, enterprise, organisation"
+    "note": "同义词：business, company, corporate, corporation, deal"
+  },
+  "retail": {
+    "note": "同义词：business, commercial, company, corporate, corporation"
+  },
+  "exchange": {
+    "note": "同义词：interchange, share"
   },
   "levy": {
-    "note": "同义词：ethical, exhausted, toll, military, hunger"
+    "note": "同义词：charge, toll"
   },
   "duty": {
-    "note": "同义词：liable, accountability, responsibility, accountable, liability"
+    "note": "同义词：obligation, responsibility"
   },
   "consume": {
-    "note": "同义词：reproduce, eat, feed, breed, cultivate"
+    "note": "同义词：eat, feed, prey"
+  },
+  "depression": {
+    "note": "同义词：frustration"
+  },
+  "crisis": {
+    "note": "同义词：danger, endanger, enemy, foe, hostile"
   },
   "security": {
-    "note": "同义词：poverty, safety, investment, injury"
+    "note": "同义词：safety"
   },
   "decrease": {
-    "note": "同义词：decline, fall, loss, eradicate, alleviate"
+    "note": "同义词：alleviate, cut, decline, deduction, diminish"
   },
   "decline": {
-    "note": "同义词：fall, loss, decrease, alleviate, cut"
+    "note": "同义词：alleviate, cut, decrease, deduction, diminish"
   },
   "diminish": {
-    "note": "同义词：decline, fall, loss, eradicate, decrease"
+    "note": "同义词：alleviate, cut, decline, decrease, deduction"
   },
   "reduce": {
-    "note": "同义词：decline, fall, loss, decrease, alleviate"
+    "note": "同义词：alleviate, cut, decline, decrease, deduction"
   },
   "increase": {
-    "note": "同义词：growth, promote, boost, soar, extra"
+    "note": "同义词：additional, boom, boost, extra, foster"
   },
   "growth": {
-    "note": "同义词：promote, increase, boost, soar, extra"
+    "note": "同义词：additional, boom, boost, extra, foster"
+  },
+  "expand": {
+    "note": "同义词：broad, expansion, extend, prolong, wide"
+  },
+  "sufficient": {
+    "note": "同义词：abundance, adequate, enough, sufficiency"
+  },
+  "adequate": {
+    "note": "同义词：abundance, enough, sufficiency, sufficient"
   },
   "company": {
-    "note": "同义词：entity, commercial, trading, enterprise, organisation"
+    "note": "同义词：business, commercial, corporate, corporation, deal"
   },
   "enterprise": {
-    "note": "同义词：entity, commercial, company, trading, organisation"
+    "note": "同义词：business, commercial, company, corporate, corporation"
   },
   "entity": {
-    "note": "同义词：commercial, company, trading, enterprise, organisation"
+    "note": "同义词：business, commercial, company, corporate, corporation"
   },
   "product": {
     "note": "同义词：commodity, goods"
@@ -16666,442 +16783,706 @@
     "note": "同义词：commodity, product"
   },
   "guarantee": {
-    "note": "同义词：ensure, perceive, admit, verify, certify"
+    "note": "同义词：assurance, assure, bone, death, ensure"
   },
   "reliable": {
-    "note": "同义词：faith, reliance, liable, trust, credible"
+    "note": "同义词：belief, believe, confidence, credible, faith"
+  },
+  "sale": {
+    "note": "同义词：business, commercial, company, corporate, corporation"
+  },
+  "deal": {
+    "note": "同义词：business, commercial, company, corporate, corporation"
+  },
+  "transaction": {
+    "note": "同义词：business, commercial, company, corporate, corporation"
+  },
+  "export": {
+    "note": "同义词：bring, import, introduce, smuggle"
+  },
+  "import": {
+    "note": "同义词：bring, export, introduce, smuggle"
+  },
+  "estate": {
+    "note": "同义词：property, real estate"
   },
   "valuable": {
-    "note": "同义词：wholesome, positive, advantage, beneficial, useful"
+    "note": "同义词：advance, advantage, beneficial, benefit, effective"
+  },
+  "incentive": {
+    "note": "同义词：activate, advance, boost, develop, drive"
   },
   "accelerate": {
-    "note": "同义词：rapid, straightaway, quick, swift, sudden"
+    "note": "同义词：breakneck, immediately, prompt, quick, rapid"
   },
   "prompt": {
-    "note": "同义词：inspire, encourage, stimulate, advance, initiate"
+    "note": "同义词：accelerate, activate, advance, boost, breakneck"
+  },
+  "income": {
+    "note": "同义词：benefit, budget, compensate, compensation, costly"
   },
   "profession": {
-    "note": "同义词：career, job, vocation, occupation, work"
+    "note": "同义词：job, occupation, vocation, work"
   },
   "occupation": {
-    "note": "同义词：career, job, profession, vocation, work"
+    "note": "同义词：job, profession, vocation, work"
   },
   "vocation": {
-    "note": "同义词：career, job, profession, occupation, work"
+    "note": "同义词：job, occupation, profession, work"
+  },
+  "labour": {
+    "note": "同义词：employee, staff, worker, workforce"
+  },
+  "workforce": {
+    "note": "同义词：employee, labour, staff, worker"
+  },
+  "discharge": {
+    "note": "同义词：exude, release, secrete"
   },
   "loss": {
-    "note": "同义词：decline, fall, decrease, alleviate, cut"
+    "note": "同义词：alleviate, cut, decline, decrease, deduction"
   },
   "opportunity": {
-    "note": "同义词：possibility, likelihood, chance, probability"
+    "note": "同义词：chance, choice, likelihood, option, possibility"
   },
   "chance": {
-    "note": "同义词：possibility, likelihood, opportunity, probability"
+    "note": "同义词：choice, likelihood, opportunity, option, possibility"
+  },
+  "solve": {
+    "note": "同义词：address, confront, conquer, defeat, disposal"
   },
   "manage": {
-    "note": "同义词：manipulate, regulate, govern, steer, control"
+    "note": "同义词：control, dominate, governance, hold, influence"
   },
   "regulate": {
-    "note": "同义词：manipulate, govern, manage, steer, control"
+    "note": "同义词：control, dominate, governance, hold, influence"
+  },
+  "coordinate": {
+    "note": "同义词：cooperation, cooperative, coordination, harmony, interaction"
   },
   "legal": {
-    "note": "同义词：lawful, legitimate, valid, licit"
+    "note": "同义词：act, judicial, law, lawyer, legislation"
+  },
+  "regulation": {
+    "note": "同义词：act, contract, guideline, instruction, norm"
+  },
+  "norm": {
+    "note": "同义词：act, contract, guideline, instruction, policy"
   },
   "criteria": {
-    "note": "同义词：ordinary, normal, typical, average, shared"
+    "note": "同义词：average, common, general, mainly, majority"
   },
   "standard": {
-    "note": "同义词：ordinary, normal, typical, criteria, average"
+    "note": "同义词：average, common, criteria, general, mainly"
+  },
+  "permit": {
+    "note": "同义词：licence, permission"
   },
   "enforce": {
-    "note": "同义词：force, coerce, compel, oblige"
+    "note": "同义词：dynamic, energy, force, power, push"
+  },
+  "reject": {
+    "note": "同义词：deny, exclude, reluctant, unwilling"
   },
   "constraint": {
-    "note": "同义词：suppress, restrict, confine, restraint, hold"
+    "note": "同义词：confine, constrain, curb, hold, limit"
+  },
+  "official": {
+    "note": "同义词：authority, council, government, ministry"
   },
   "obligation": {
-    "note": "同义词：duty, liable, accountability, responsibility, accountable"
-  },
-  "supreme": {
-    "note": "同义词：first, leading, primary, supremacy, preference"
-  },
-  "prejudice": {
-    "note": "同义词：moisture, biased, night, bias"
-  },
-  "discrimination": {
-    "note": "同义词：variable, separate, improvement, variance, development"
+    "note": "同义词：duty, responsibility"
   },
   "condemn": {
-    "note": "同义词：indulge, comply, criticise, critic, freeze"
+    "note": "同义词：critic, critical, criticise, criticism"
   },
   "boycott": {
-    "note": "同义词：quit, prevent, escape, cease, halt"
+    "note": "同义词：avoid, cease, counter, deter, discourage"
   },
-  "reasonable": {
-    "note": "同义词：sound, rational, logical, valid, sensible"
+  "investigate": {
+    "note": "同义词：analyse, analysis, analytical, diagnose, discover"
+  },
+  "witness": {
+    "note": "同义词：notice, overlook, sight, view"
   },
   "confine": {
-    "note": "同义词：suppress, restrict, constraint, restraint, hold"
+    "note": "同义词：constrain, constraint, curb, hold, limit"
   },
   "restrict": {
-    "note": "同义词：suppress, confine, constraint, restraint, hold"
+    "note": "同义词：accumulate, concentrate, concentration, confine, constrain"
+  },
+  "crime": {
+    "note": "同义词：conviction, criminal"
+  },
+  "conform": {
+    "note": "同义词：accordance, coherence, corresponding, persistent, stability"
   },
   "obey": {
-    "note": "同义词：indulge, comply, criticise, critic, condemn"
+    "note": "同义词：comply"
   },
   "succumb": {
-    "note": "同义词：pleasant, tropical, yield, amusement, submit"
+    "note": "同义词：submit, yield"
+  },
+  "clue": {
+    "note": "同义词：clarity, clear, cue, evidence, hint"
   },
   "procedure": {
-    "note": "同义词：approach, strategy, process, technique, method"
-  },
-  "consequence": {
-    "note": "同义词：outcome, effect, impact, result"
+    "note": "同义词：approach, exercise, mechanism, method, phase"
   },
   "demand": {
-    "note": "同义词：ask for, require, call for, necessary, need"
+    "note": "同义词：necessary, need, require, want"
   },
   "require": {
-    "note": "同义词：ask for, call for, necessary, demand, need"
+    "note": "同义词：demand, necessary, need, want"
   },
-  "struggle": {
-    "note": "同义词：endeavour, effort, attempt, try, strive"
+  "conflict": {
+    "note": "同义词：compete, interference, intervention"
+  },
+  "target": {
+    "note": "同义词：aim, goal, intention, objective, purpose"
+  },
+  "prepare": {
+    "note": "同义词：clean, preparation, purify, rehearsal, rehearse"
+  },
+  "famine": {
+    "note": "同义词：hunger"
+  },
+  "threat": {
+    "note": "同义词：crisis, danger, endanger, enemy, foe"
   },
   "offend": {
-    "note": "同义词：hostile, offensive, foe, insult, enemy"
+    "note": "同义词：crisis, danger, endanger, enemy, foe"
+  },
+  "aggressive": {
+    "note": "同义词：aggression, attack, fierce, violate, violent"
+  },
+  "violate": {
+    "note": "同义词：aggression, aggressive, attack, fierce, violent"
+  },
+  "attack": {
+    "note": "同义词：aggression, aggressive, fierce, violate, violent"
   },
   "challenge": {
-    "note": "同义词：shortcoming, problem, trouble, disadvantage, drawback"
+    "note": "同义词：adversity, barrier, burden, challenging, defect"
   },
   "halt": {
-    "note": "同义词：quit, prevent, boycott, escape, cease"
+    "note": "同义词：avoid, boycott, cease, counter, deter"
   },
   "cease": {
-    "note": "同义词：quit, prevent, boycott, escape, halt"
+    "note": "同义词：avoid, boycott, counter, deter, discourage"
   },
   "oppose": {
-    "note": "同义词：quit, prevent, boycott, escape, cease"
+    "note": "同义词：avoid, boycott, cease, counter, deter"
+  },
+  "counter": {
+    "note": "同义词：avoid, boycott, cease, deter, discourage"
   },
   "deter": {
-    "note": "同义词：quit, prevent, boycott, escape, cease"
+    "note": "同义词：avoid, boycott, cease, counter, discourage"
   },
   "prevent": {
-    "note": "同义词：quit, boycott, escape, cease, halt"
+    "note": "同义词：avoid, boycott, cease, counter, deter"
+  },
+  "evidence": {
+    "note": "同义词：clarity, clear, clue, cue, hint"
+  },
+  "proof": {
+    "note": "同义词：clarity, clear, clue, cue, evidence"
   },
   "tension": {
-    "note": "同义词：stress, nervous, anxiety, upset"
-  },
-  "occasion": {
-    "note": "同义词：weather, condition, setting, atmosphere, surrounding"
+    "note": "同义词：anxiety, nervous, stress, upset"
   },
   "limit": {
-    "note": "同义词：suppress, restrict, confine, constraint, restraint"
+    "note": "同义词：confine, constrain, constraint, curb, hold"
+  },
+  "compete": {
+    "note": "同义词：conflict, interference, intervention"
   },
   "enemy": {
-    "note": "同义词：hostile, offend, offensive, foe, insult"
+    "note": "同义词：crisis, danger, endanger, foe, hostile"
   },
-  "strategy": {
-    "note": "同义词：approach, process, technique, method, procedure"
-  },
-  "compel": {
-    "note": "同义词：enforce, force, coerce, oblige"
-  },
-  "oblige": {
-    "note": "同义词：enforce, force, coerce, compel"
+  "order": {
+    "note": "order=命令/订购；in order=按顺序；in order to=为了"
   },
   "force": {
-    "note": "同义词：enforce, coerce, compel, oblige"
+    "note": "同义词：dynamic, energy, enforce, power, push"
   },
   "reinforce": {
-    "note": "同义词：intensive, strong, strengthen, intense"
-  },
-  "impair": {
-    "note": "同义词：ruin, crash, erode, wreck, damage"
+    "note": "同义词：combination, combine, cumulative, entire, hybrid"
   },
   "mitigate": {
-    "note": "同义词：eradicate, decrease, vanish, disappear, eliminate"
+    "note": "同义词：decrease, diminish, disappear, eliminate, eradicate"
   },
-  "sacrifice": {
-    "note": "同义词：discard, abandon, derelict, forsake"
+  "matter": {
+    "note": "同义词：chemical, compound, substance"
   },
-  "proceed": {
-    "note": "同义词：distract, delivery, journey, commute, transport"
+  "fierce": {
+    "note": "同义词：aggression, aggressive, attack, violate, violent"
+  },
+  "execute": {
+    "note": "同义词：fulfill, implement"
+  },
+  "progress": {
+    "note": "同义词：approach, exercise, mechanism, method, phase"
   },
   "military": {
-    "note": "同义词：ethical, exhausted, toll, hunger, levy"
+    "note": "同义词：army"
+  },
+  "poison": {
+    "note": "同义词：drug, toxic"
   },
   "risk": {
-    "note": "同义词：peril, hazard, jeopardise, endanger, danger"
+    "note": "同义词：crisis, danger, endanger, enemy, foe"
   },
-  "peril": {
-    "note": "同义词：hazard, jeopardise, endanger, danger, jeopardize"
-  },
-  "damage": {
-    "note": "同义词：ruin, crash, erode, wreck, impair"
+  "catastrophe": {
+    "note": "同义词：calamity, disaster"
   },
   "disturb": {
-    "note": "同义词：effect, impact, influence, affect"
+    "note": "同义词：affect, effect, impact, influence"
   },
   "interrupt": {
-    "note": "同义词：quit, prevent, boycott, escape, cease"
+    "note": "同义词：avoid, boycott, cease, counter, deter"
   },
   "shrink": {
-    "note": "同义词：decline, fall, loss, decrease, alleviate"
+    "note": "同义词：alleviate, cut, decline, decrease, deduction"
   },
   "withstand": {
-    "note": "同义词：suffer, face, undergo, bear, tolerate"
+    "note": "同义词：attain, bear, detain, face, hold"
   },
   "escape": {
-    "note": "同义词：quit, prevent, boycott, cease, halt"
+    "note": "同义词：avoid, boycott, cease, counter, deter"
   },
   "quit": {
-    "note": "同义词：prevent, boycott, escape, cease, halt"
+    "note": "同义词：avoid, boycott, cease, counter, deter"
   },
   "abandon": {
-    "note": "同义词：discard, quit, prevent, boycott, escape"
+    "note": "同义词：derelict, discard, forsake"
   },
   "discard": {
-    "note": "同义词：abandon, derelict, sacrifice, forsake"
+    "note": "同义词：abandon, derelict, forsake"
+  },
+  "defeat": {
+    "note": "同义词：address, confront, conquer, disposal, dispose"
+  },
+  "conquer": {
+    "note": "同义词：address, confront, defeat, disposal, dispose"
   },
   "contribute": {
-    "note": "同义词：submit, dedicate, present, hand in"
+    "note": "同义词：contribution, dedicate, donate"
+  },
+  "obstacle": {
+    "note": "同义词：adversity, avoid, barrier, boycott, burden"
   },
   "general": {
-    "note": "同义词：ordinary, normal, typical, criteria, average"
+    "note": "同义词：average, common, criteria, mainly, majority"
   },
-  "miss": {
-    "note": "同义词：disregard, overlook, ignore, neglect"
+  "gender": {
+    "note": "同义词：sex"
   },
-  "neighbourhood": {
-    "note": "同义词：community, public, communal, citizen, nearby"
+  "spouse": {
+    "note": "同义词：couple, courtship, double, mate, twice"
+  },
+  "infant": {
+    "note": "同义词：baby, child, childhood, juvenile, kid"
+  },
+  "juvenile": {
+    "note": "同义词：baby, child, childhood, infant, kid"
+  },
+  "relative": {
+    "note": "同义词：associate, attach, connect, connection, correlation"
+  },
+  "customer": {
+    "note": "同义词：consumer, user"
+  },
+  "boss": {
+    "note": "同义词：director, employer, entrepreneur, leader, manager"
+  },
+  "mate": {
+    "note": "同义词：couple, courtship, double, spouse, twice"
+  },
+  "apprentice": {
+    "note": "同义词：apprenticeship, intern, practitioner"
+  },
+  "director": {
+    "note": "同义词：boss, employer, entrepreneur, leader, manager"
+  },
+  "council": {
+    "note": "同义词：authority, government, ministry, official"
   },
   "specialist": {
-    "note": "同义词：lecturer, professor, teacher, investigator, faculty"
+    "note": "同义词：expert, faculty, investigator, lecturer, professor"
   },
-  "variation": {
-    "note": "同义词：variable, separate, improvement, variance, development"
-  },
-  "diversity": {
-    "note": "同义词：variable, separate, improvement, variance, development"
+  "solicitor": {
+    "note": "同义词：act, judicial, law, lawyer, legal"
   },
   "reproduce": {
-    "note": "同义词：eat, feed, breed, cultivate, grow"
+    "note": "同义词：breed, cultivate, environment, foster, grow"
   },
   "cultivate": {
-    "note": "同义词：reproduce, eat, feed, breed, grow"
+    "note": "同义词：breed, environment, foster, grow, nurture"
   },
   "yield": {
-    "note": "同义词：pleasant, succumb, tropical, amusement, submit"
+    "note": "同义词：submit, succumb"
+  },
+  "mould": {
+    "note": "同义词：form, mode, model, module"
+  },
+  "scent": {
+    "note": "同义词：aroma, odour, olfaction, smell"
+  },
+  "field": {
+    "note": "field=田地/领域；take the field=上场比赛"
   },
   "root": {
-    "note": "同义词：foundation, preliminary, ground, fundamental, underlying"
+    "note": "同义词：base, basic, basis, essential, fundamental"
+  },
+  "release": {
+    "note": "同义词：discharge, exude, secrete"
+  },
+  "exceed": {
+    "note": "同义词：excel, overtake, surpass, transcend"
+  },
+  "mechanism": {
+    "note": "同义词：approach, exercise, method, phase, practice"
+  },
+  "preserve": {
+    "note": "同义词：attain, bear, detain, face, hold"
   },
   "conservation": {
-    "note": "同义词：economical, thrift, conserve, save"
-  },
-  "ruin": {
-    "note": "同义词：crash, erode, wreck, impair, damage"
+    "note": "同义词：classic, classical, conservative, convention, earlier"
   },
   "pattern": {
-    "note": "同义词：arrangement, format, structure, layout"
-  },
-  "outcome": {
-    "note": "同义词：effect, impact, consequence, result"
+    "note": "同义词：chart, drawing, formation, graph, image"
   },
   "impact": {
-    "note": "同义词：disturb, outcome, effect, influence, consequence"
+    "note": "同义词：affect, disturb, effect, influence"
+  },
+  "effective": {
+    "note": "同义词：advance, advantage, beneficial, benefit, helpful"
+  },
+  "considerable": {
+    "note": "同义词：countless, many, mass, multiple, numerous"
+  },
+  "massive": {
+    "note": "同义词：big, enormous, large, tremendous, utmost"
   },
   "minimal": {
-    "note": "同义词：small, tiny, little, less, minimum"
+    "note": "同义词：absence, deficiency, lacking, less, limited"
+  },
+  "react": {
+    "note": "同义词：reaction, respond, response"
+  },
+  "reflect": {
+    "note": "同义词：associate, attach, connect, connection, correlation"
   },
   "bear": {
-    "note": "同义词：suffer, face, undergo, withstand, tolerate"
+    "note": "同义词：attain, detain, face, hold, keep"
   },
   "revive": {
-    "note": "同义词：restore, recovery, renaissance, entertainment, recreation"
+    "note": "同义词：recovery, renaissance, restore"
   },
-  "manipulate": {
-    "note": "同义词：regulate, govern, manage, steer, control"
+  "survive": {
+    "note": "同义词：attain, bear, detain, face, hold"
+  },
+  "explain": {
+    "note": "同义词：as, because, cause, derive, explanation"
+  },
+  "curse": {
+    "note": "curse=诅咒（恨你），比swear更重；be cursed with=深受…之苦"
+  },
+  "swear": {
+    "note": "swear at sb=咒骂；swear to do=发誓。简单记：swear at=骂人，swear to=发誓"
+  },
+  "catch": {
+    "note": "catch a cold=感冒；didn't catch that=没听清"
+  },
+  "overtake": {
+    "note": "同义词：exceed, excel, surpass, transcend"
+  },
+  "combine": {
+    "note": "同义词：combination, cumulative, entire, hybrid, integral"
+  },
+  "integrate": {
+    "note": "同义词：combination, combine, cumulative, entire, hybrid"
   },
   "steer": {
-    "note": "同义词：manipulate, regulate, govern, manage, control"
+    "note": "同义词：control, dominate, governance, hold, influence"
   },
-  "bet": {
-    "note": "同义词：stake, predict, guess, wager, forecast"
-  },
-  "stake": {
-    "note": "同义词：predict, guess, wager, forecast, bet"
-  },
-  "gamble": {
-    "note": "同义词：stake, predict, guess, wager, forecast"
+  "involve": {
+    "note": "同义词：associate, join, participate"
   },
   "upset": {
-    "note": "同义词：tension, stress, nervous, anxiety"
+    "note": "同义词：anxiety, nervous, stress, tension"
   },
   "neglect": {
-    "note": "同义词：overseas, disregard, overlook, aware, conscious"
-  },
-  "disregard": {
-    "note": "同义词：overlook, miss, ignore, neglect"
+    "note": "同义词：ignore, overlook, underestimate"
   },
   "bias": {
-    "note": "同义词：moisture, biased, night, prejudice"
+    "note": "同义词：biased"
+  },
+  "smuggle": {
+    "note": "同义词：bring, export, import, introduce"
   },
   "impede": {
-    "note": "同义词：quit, prevent, boycott, escape, cease"
+    "note": "同义词：avoid, boycott, cease, counter, deter"
   },
   "induce": {
-    "note": "同义词：pose, lead to, cause, trigger, result in"
+    "note": "同义词：cause, pose"
+  },
+  "designate": {
+    "note": "同义词：allocate, appoint, assign, distribute, spread"
+  },
+  "assign": {
+    "note": "同义词：allocate, appoint, designate, distribute, spread"
+  },
+  "distribute": {
+    "note": "同义词：allocate, appoint, assign, designate, spread"
+  },
+  "conceal": {
+    "note": "同义词：ambiguous, contingent, hide, obscure, uncertain"
+  },
+  "exclude": {
+    "note": "同义词：deny, reject, reluctant, unwilling"
+  },
+  "assure": {
+    "note": "同义词：assurance, bone, death, ensure, guarantee"
   },
   "undertake": {
-    "note": "同义词：invoke, begin, trigger, start, commence"
+    "note": "同义词：commence, invoke, start, trigger"
   },
   "invoke": {
-    "note": "同义词：undertake, begin, trigger, start, commence"
+    "note": "同义词：commence, start, trigger, undertake"
   },
   "attempt": {
-    "note": "同义词：endeavour, struggle, effort, try, strive"
-  },
-  "strive": {
-    "note": "同义词：endeavour, struggle, effort, attempt, try"
+    "note": "同义词：test, try"
   },
   "commence": {
-    "note": "同义词：invoke, undertake, begin, trigger, start"
+    "note": "同义词：invoke, start, trigger, undertake"
+  },
+  "exploit": {
+    "note": "同义词：usage, use"
+  },
+  "explore": {
+    "note": "同义词：analyse, analysis, analytical, diagnose, discover"
+  },
+  "tackle": {
+    "note": "同义词：address, confront, conquer, defeat, disposal"
+  },
+  "dispose": {
+    "note": "同义词：address, confront, conquer, defeat, disposal"
   },
   "restore": {
-    "note": "同义词：revive, recovery, renaissance, entertainment, recreation"
+    "note": "同义词：recovery, renaissance, revive"
+  },
+  "offset": {
+    "note": "同义词：benefit, budget, compensate, compensation, costly"
+  },
+  "obtain": {
+    "note": "同义词：gain, get"
+  },
+  "offer": {
+    "note": "同义词：confer, grant"
+  },
+  "exaggerate": {
+    "note": "同义词：overstate"
+  },
+  "prolong": {
+    "note": "同义词：broad, expand, expansion, extend, wide"
   },
   "raise": {
-    "note": "同义词：growth, promote, increase, boost, soar"
-  },
-  "contain": {
-    "note": "同义词：comprise, include, consist of, compose, constitute"
+    "note": "同义词：additional, boom, boost, extra, foster"
   },
   "cause": {
-    "note": "同义词：pose, lead to, foundation, induce, basis"
+    "note": "同义词：as, because, derive, explain, explanation"
+  },
+  "purpose": {
+    "note": "同义词：aim, goal, intention, objective, target"
+  },
+  "objective": {
+    "note": "同义词：aim, goal, intention, purpose, target"
   },
   "trigger": {
-    "note": "同义词：invoke, pose, lead to, result in, induce"
+    "note": "同义词：commence, invoke, start, undertake"
   },
   "verify": {
-    "note": "同义词：ensure, perceive, admit, certify, acknowledge"
-  },
-  "deserve": {
-    "note": "同义词：worth, merit"
+    "note": "同义词：authenticate, certify, confirm, identify, test"
   },
   "drop": {
-    "note": "同义词：decline, fall, loss, decrease, alleviate"
+    "note": "同义词：alleviate, cut, decline, decrease, deduction"
   },
-  "repeat": {
-    "note": "同义词：duplicate, mimic, replicate, imitate, copy"
+  "participate": {
+    "note": "同义词：associate, involve, join"
   },
-  "distinguish": {
-    "note": "同义词：variable, separate, improvement, variance, development"
+  "replace": {
+    "note": "同义词：alternative, displacement, substitution, supersede"
   },
-  "differentiate": {
-    "note": "同义词：variable, separate, improvement, variance, development"
+  "attitude": {
+    "note": "同义词：opinion, perspective"
   },
-  "manner": {
-    "note": "同义词：way, fashion, mode, style, approach"
+  "trait": {
+    "note": "同义词：characteristic, factor, feature, property"
+  },
+  "feature": {
+    "note": "同义词：characteristic, factor, property, trait"
+  },
+  "bone": {
+    "note": "同义词：assurance, assure, death, ensure, guarantee"
+  },
+  "skeleton": {
+    "note": "同义词：assurance, assure, bone, death, ensure"
+  },
+  "brain": {
+    "note": "同义词：cognitive, gifted, intelligence, intelligent, mental"
+  },
+  "mind": {
+    "note": "同义词：brain, cognitive, gifted, intelligence, intelligent"
+  },
+  "physical": {
+    "note": "同义词：body, limb, organ"
+  },
+  "mental": {
+    "note": "同义词：brain, cognitive, gifted, intelligence, intelligent"
+  },
+  "limb": {
+    "note": "同义词：body, organ, physical"
   },
   "first": {
-    "note": "同义词：leading, original, initial, principal, paramount"
+    "note": "同义词：firstly, initial, leading, major, origin"
   },
-  "symptom": {
-    "note": "同义词：disease, sickness, well-being, medical, health"
+  "organ": {
+    "note": "同义词：body, limb, physical"
   },
-  "disease": {
-    "note": "同义词：sickness, well-being, medical, health, ailment"
+  "immune": {
+    "note": "同义词：immunity, resistance"
   },
-  "illness": {
-    "note": "同义词：disease, sickness, well-being, medical, health"
+  "visual": {
+    "note": "同义词：image, see, visible"
   },
-  "injury": {
-    "note": "同义词：poverty, safety, security, investment"
+  "visible": {
+    "note": "同义词：image, see, visual"
+  },
+  "patient": {
+    "note": "同义词：attain, bear, detain, face, hold"
+  },
+  "death": {
+    "note": "同义词：assurance, assure, bone, ensure, guarantee"
   },
   "fatigue": {
-    "note": "同义词：ethical, exhausted, toll, military, hunger"
-  },
-  "unconscious": {
-    "note": "同义词：unaware, oblivious, ignorant"
+    "note": "同义词：exhausted"
   },
   "chronic": {
-    "note": "同义词：duration, lasting, time, durable, period"
+    "note": "同义词：durable, duration, lasting, period, time"
+  },
+  "therapy": {
+    "note": "同义词：cure, drug, medication, medicine, remedy"
+  },
+  "cure": {
+    "note": "同义词：drug, medication, medicine, remedy, therapy"
+  },
+  "medicine": {
+    "note": "同义词：cure, drug, medication, remedy, therapy"
+  },
+  "remedy": {
+    "note": "同义词：cure, drug, medication, medicine, therapy"
+  },
+  "drug": {
+    "note": "同义词：cure, medication, medicine, poison, remedy"
   },
   "recovery": {
-    "note": "同义词：revive, restore, renaissance, entertainment, recreation"
+    "note": "同义词：renaissance, restore, revive"
+  },
+  "relief": {
+    "note": "同义词：alleviate, cut, decline, decrease, deduction"
   },
   "alleviate": {
-    "note": "同义词：decline, fall, loss, decrease, cut"
+    "note": "同义词：cut, decline, decrease, deduction, diminish"
   },
   "normal": {
-    "note": "同义词：ordinary, typical, criteria, average, shared"
+    "note": "同义词：average, common, criteria, general, mainly"
   },
   "common": {
-    "note": "同义词：ordinary, normal, typical, criteria, average"
+    "note": "同义词：average, criteria, general, mainly, majority"
   },
   "usual": {
-    "note": "同义词：ordinary, normal, typical, criteria, average"
+    "note": "同义词：average, common, criteria, general, mainly"
+  },
+  "pessimistic": {
+    "note": "同义词：inactive, passive"
   },
   "positive": {
-    "note": "同义词：valuable, wholesome, advantage, beneficial, useful"
+    "note": "同义词：advance, advantage, beneficial, benefit, effective"
   },
-  "enthusiastic": {
-    "note": "同义词：ardent, keen, fervent, passionate, eager"
+  "passive": {
+    "note": "同义词：inactive, pessimistic"
   },
-  "keen": {
-    "note": "同义词：ardent, enthusiastic, fervent, passionate, eager"
+  "surprising": {
+    "note": "同义词：dramatic, impressive, striking, touching, unexpected"
   },
-  "rational": {
-    "note": "同义词：sound, reasonable, logical, valid, sensible"
+  "liberal": {
+    "note": "同义词：free, freedom, liberty"
+  },
+  "freedom": {
+    "note": "同义词：free, liberal, liberty"
   },
   "confidence": {
-    "note": "同义词：reliable, faith, reliance, liable, trust"
+    "note": "同义词：belief, believe, credible, faith, hidden"
   },
   "remarkable": {
-    "note": "同义词：essential, extraordinary, unusual, vital, major"
-  },
-  "grateful": {
-    "note": "同义词：appreciate, thankful, gratitude"
-  },
-  "gratitude": {
-    "note": "同义词：grateful, appreciate, thankful"
-  },
-  "eager": {
-    "note": "同义词：ardent, enthusiastic, keen, fervent, passionate"
-  },
-  "sound": {
-    "note": "同义词：reasonable, rational, logical, valid, sensible"
+    "note": "同义词：abnormal, chief, crucial, essential, exceptional"
   },
   "tough": {
-    "note": "同义词：complicated, complex, hard, harsh, difficult"
+    "note": "同义词：challenging, complex, complexity, complicated, comprehensive"
+  },
+  "delicate": {
+    "note": "同义词：subtle"
   },
   "liable": {
-    "note": "同义词：reliable, faith, reliance, duty, trust"
+    "note": "同义词：belief, believe, confidence, credible, faith"
+  },
+  "trustworthy": {
+    "note": "同义词：belief, believe, confidence, credible, faith"
+  },
+  "resemble": {
+    "note": "同义词：like, similar"
   },
   "similar": {
-    "note": "同义词：same, alike, analogous, equivalent, identical"
+    "note": "同义词：like, resemble"
+  },
+  "familiar": {
+    "note": "同义词：famous, notoriety, well-known"
+  },
+  "implicit": {
+    "note": "同义词：implication, imply"
+  },
+  "discourage": {
+    "note": "同义词：avoid, boycott, cease, counter, deter"
+  },
+  "irritate": {
+    "note": "同义词：activate, advance, boost, develop, drive"
+  },
+  "troublesome": {
+    "note": "同义词：adversity, barrier, burden, challenge, challenging"
   },
   "hostile": {
-    "note": "同义词：offend, offensive, foe, insult, enemy"
+    "note": "同义词：crisis, danger, endanger, enemy, foe"
+  },
+  "mean": {
+    "note": "mean人=刻薄/吝啬；mean事=意味着；mean temperature=平均气温"
   },
   "anxiety": {
-    "note": "同义词：tension, stress, nervous, upset"
+    "note": "同义词：nervous, stress, tension, upset"
   },
-  "insult": {
-    "note": "同义词：hostile, offend, offensive, foe, enemy"
+  "fear": {
+    "note": "同义词：afraid, horror"
   },
   "doubt": {
-    "note": "同义词：deliver, transfer, limited, proceed, finite"
+    "note": "同义词：skepticism"
   },
-  "ignorant": {
-    "note": "同义词：unaware, oblivious, unconscious"
+  "unwilling": {
+    "note": "同义词：deny, exclude, reject, reluctant"
   },
-  "endure": {
-    "note": "同义词：suffer, face, undergo, bear, withstand"
-  },
-  "oblivious": {
-    "note": "同义词：unaware, ignorant, unconscious"
+  "reluctant": {
+    "note": "同义词：deny, exclude, reject, unwilling"
   },
   "annual": {
     "note": "同义词：yearly"
@@ -17109,322 +17490,568 @@
   "yearly": {
     "note": "同义词：annual"
   },
-  "present": {
-    "note": "同义词：submit, dedicate, contribute, hand in"
-  },
   "night": {
-    "note": "同义词：moisture, biased, prejudice, bias"
+    "note": "同义词：nocturnal"
+  },
+  "immediately": {
+    "note": "同义词：accelerate, breakneck, prompt, quick, rapid"
   },
   "duration": {
-    "note": "同义词：chronic, lasting, time, durable, period"
+    "note": "同义词：chronic, durable, lasting, period, time"
   },
   "mammal": {
-    "note": "同义词：species, animal, creature"
+    "note": "同义词：animal, creature, species, wildlife"
   },
   "creature": {
-    "note": "同义词：species, animal, mammal"
+    "note": "同义词：animal, mammal, species, wildlife"
+  },
+  "wildlife": {
+    "note": "同义词：animal, creature, mammal, species"
   },
   "species": {
-    "note": "同义词：animal, creature, mammal"
+    "note": "同义词：animal, creature, mammal, wildlife"
+  },
+  "derive": {
+    "note": "同义词：as, because, cause, explain, explanation"
   },
   "feed": {
-    "note": "同义词：reproduce, eat, breed, cultivate, grow"
+    "note": "同义词：consume, eat, prey"
   },
   "breed": {
-    "note": "同义词：reproduce, eat, feed, cultivate, grow"
+    "note": "同义词：cultivate, environment, foster, grow, nurture"
+  },
+  "courtship": {
+    "note": "同义词：couple, double, mate, spouse, twice"
+  },
+  "habitat": {
+    "note": "同义词：city, domestic, family, home, house"
+  },
+  "stable": {
+    "note": "同义词：accordance, coherence, conform, corresponding, persistent"
+  },
+  "barrier": {
+    "note": "同义词：adversity, burden, challenge, challenging, defect"
   },
   "gene": {
-    "note": "同义词：inherent, dna, innate, instinct, intrinsic"
+    "note": "同义词：built-in, dna, heredity, inborn, inherent"
+  },
+  "germ": {
+    "note": "同义词：bacteria, fungi, microbe, virus"
+  },
+  "bacteria": {
+    "note": "同义词：fungi, germ, microbe, virus"
+  },
+  "virus": {
+    "note": "同义词：bacteria, fungi, germ, microbe"
+  },
+  "microbe": {
+    "note": "同义词：bacteria, fungi, germ, virus"
+  },
+  "secrete": {
+    "note": "同义词：discharge, exude, release"
   },
   "instinct": {
-    "note": "同义词：inherent, dna, innate, intrinsic, built-in"
+    "note": "同义词：built-in, dna, gene, heredity, inborn"
+  },
+  "potential": {
+    "note": "同义词：chance, choice, likelihood, opportunity, option"
+  },
+  "intelligence": {
+    "note": "同义词：brain, cognitive, gifted, intelligent, mental"
+  },
+  "nocturnal": {
+    "note": "同义词：night"
   },
   "track": {
-    "note": "同义词：span, wet, even, damp, humid"
+    "note": "同义词：trace"
   },
   "trace": {
-    "note": "同义词：span, wet, even, damp, humid"
+    "note": "同义词：track"
   },
   "prey": {
-    "note": "同义词：reproduce, eat, feed, breed, cultivate"
+    "note": "同义词：consume, eat, feed"
+  },
+  "predator": {
+    "note": "同义词：crisis, danger, endanger, enemy, foe"
   },
   "undergo": {
-    "note": "同义词：suffer, face, bear, withstand, tolerate"
+    "note": "同义词：attain, bear, detain, face, hold"
   },
   "suffer": {
-    "note": "同义词：face, undergo, bear, withstand, tolerate"
+    "note": "同义词：attain, bear, detain, face, hold"
   },
-  "expedition": {
-    "note": "同义词：distract, delivery, journey, commute, transport"
+  "module": {
+    "note": "同义词：form, mode, model, mould"
   },
   "substance": {
-    "note": "同义词：classic, classical, traditional, compound, conventional"
+    "note": "同义词：chemical, compound, matter"
   },
   "compound": {
-    "note": "同义词：classic, classical, traditional, conventional, convention"
+    "note": "同义词：chemical, matter, substance"
   },
-  "dimension": {
-    "note": "同义词：bulk, size, mass, volume, capacity"
+  "formation": {
+    "note": "同义词：chart, drawing, graph, image, mark"
+  },
+  "signal": {
+    "note": "同义词：chart, drawing, formation, graph, image"
+  },
+  "fragment": {
+    "note": "同义词：assemble, component, compose, element, part"
+  },
+  "overwhelming": {
+    "note": "同义词：dominant, major, overbearing, predominant"
   },
   "education": {
-    "note": "同义词：literacy, institution, academic, school"
+    "note": "同义词：academic, institution, literacy"
   },
   "primary": {
-    "note": "同义词：first, leading, original, initial, principal"
+    "note": "同义词：first, firstly, initial, leading, major"
+  },
+  "institute": {
+    "note": "同义词：association"
   },
   "expertise": {
-    "note": "同义词：competence, skill, ability, faculty, capability"
+    "note": "同义词：ability, capability, capable, capacity, competence"
   },
   "controversial": {
-    "note": "同义词：paradox, inconsistent, incompatible, contradictory, disputable"
+    "note": "同义词：constant, disputable"
   },
   "puzzle": {
-    "note": "同义词：pleasant, succumb, tropical, yield, amusement"
+    "note": "同义词：confuse"
+  },
+  "obscure": {
+    "note": "同义词：ambiguous, conceal, contingent, hide, uncertain"
   },
   "enhance": {
-    "note": "同义词：inspire, drive, improve, promote, boost"
+    "note": "同义词：activate, advance, boost, develop, drive"
   },
   "inspire": {
-    "note": "同义词：drive, enhance, improve, promote, boost"
+    "note": "同义词：activate, advance, boost, develop, drive"
   },
   "motivate": {
-    "note": "同义词：inspire, drive, enhance, improve, promote"
+    "note": "同义词：activate, advance, boost, develop, drive"
   },
   "stimulate": {
-    "note": "同义词：inspire, drive, enhance, improve, promote"
+    "note": "同义词：activate, advance, boost, develop, drive"
   },
   "indulge": {
-    "note": "同义词：comply, criticise, critic, condemn, freeze"
+    "note": "同义词：spoil"
   },
   "spoil": {
-    "note": "同义词：ruin, crash, erode, wreck, impair"
+    "note": "同义词：indulge"
+  },
+  "intelligent": {
+    "note": "同义词：brain, cognitive, gifted, intelligence, mental"
+  },
+  "smart": {
+    "note": "同义词：brain, cognitive, gifted, intelligence, intelligent"
+  },
+  "capable": {
+    "note": "同义词：ability, capability, capacity, competence, expertise"
   },
   "approach": {
-    "note": "同义词：way, fashion, mode, style, strategy"
+    "note": "同义词：exercise, mechanism, method, phase, practice"
+  },
+  "scheme": {
+    "note": "同义词：initiative, issue, plan, program, project"
   },
   "principal": {
-    "note": "同义词：original, first, leading, initial, paramount"
+    "note": "同义词：first, firstly, initial, leading, major"
   },
   "faculty": {
-    "note": "同义词：investigator, expert, scholar, talent, gift"
+    "note": "同义词：ability, capability, capable, capacity, competence"
   },
   "professor": {
-    "note": "同义词：lecturer, teacher, investigator, faculty, specialist"
+    "note": "同义词：expert, faculty, investigator, lecturer, researcher"
   },
   "scholar": {
-    "note": "同义词：lecturer, professor, teacher, investigator, faculty"
+    "note": "同义词：expert, faculty, investigator, lecturer, professor"
   },
   "scientist": {
-    "note": "同义词：lecturer, professor, teacher, investigator, faculty"
+    "note": "同义词：expert, faculty, investigator, lecturer, professor"
   },
   "lecturer": {
-    "note": "同义词：professor, teacher, investigator, faculty, specialist"
+    "note": "同义词：expert, faculty, investigator, professor, researcher"
   },
   "certify": {
-    "note": "同义词：ensure, perceive, admit, verify, acknowledge"
+    "note": "同义词：authenticate, confirm, identify, test, verify"
   },
   "orientation": {
-    "note": "同义词：direction, navigation, situate, positioning"
+    "note": "同义词：direction, navigation, positioning, situate"
+  },
+  "laboratory": {
+    "note": "同义词：analyse, analysis, analytical, diagnose, discover"
+  },
+  "experiment": {
+    "note": "同义词：analyse, analysis, analytical, diagnose, discover"
   },
   "data": {
-    "note": "同义词：statistics, information, figure, number, quantity"
+    "note": "同义词：information"
   },
   "quantity": {
-    "note": "同义词：some, statistics, various, multiple, data"
+    "note": "同义词：considerable, countless, many, mass, multiple"
   },
-  "quality": {
-    "note": "同义词：gifted, talented"
+  "literature": {
+    "note": "同义词：context, language, linguistic, literacy, term"
+  },
+  "record": {
+    "note": "同义词：document, log"
+  },
+  "category": {
+    "note": "同义词：type"
+  },
+  "context": {
+    "note": "同义词：language, linguistic, literacy, literature, term"
   },
   "volume": {
-    "note": "同义词：bulk, size, accuracy, mass, violent"
+    "note": "同义词：capacity"
   },
   "major": {
-    "note": "同义词：vital, crucial, remarkable, significant, chief"
+    "note": "同义词：dominant, first, firstly, initial, leading"
   },
   "minor": {
-    "note": "同义词：small, tiny, unimportant, little, minimal"
+    "note": "同义词：absence, deficiency, lacking, less, limited"
   },
-  "statistics": {
-    "note": "同义词：data, information, figure, number, quantity"
+  "agriculture": {
+    "note": "同义词：farm, farming"
   },
-  "identical": {
-    "note": "同义词：same, alike, analogous, equivalent, similar"
+  "geography": {
+    "note": "同义词：equator, hot, tropical"
   },
-  "variable": {
-    "note": "同义词：separate, improvement, variance, development, variation"
+  "plus": {
+    "note": "同义词：also, and, besides, both, moreover"
+  },
+  "sum": {
+    "note": "同义词：benefit, budget, compensate, compensation, costly"
+  },
+  "odd": {
+    "note": "同义词：strange, suspicious"
   },
   "multiple": {
-    "note": "同义词：some, various, countless, mass, many"
+    "note": "同义词：considerable, countless, many, mass, numerous"
+  },
+  "approximately": {
+    "note": "同义词：about, around"
+  },
+  "round": {
+    "note": "round≈around；round the corner=拐过街角"
+  },
+  "proportion": {
+    "note": "同义词：assemble, component, compose, element, fragment"
   },
   "rate": {
-    "note": "同义词：rapid, straightaway, quick, swift, sudden"
-  },
-  "rust": {
-    "note": "同义词：ruin, crash, erode, wreck, impair"
+    "note": "同义词：accelerate, breakneck, grade, immediately, measure"
   },
   "inherent": {
-    "note": "同义词：essence, core, fundamental, dna, innate"
+    "note": "同义词：built-in, dna, gene, heredity, inborn"
+  },
+  "component": {
+    "note": "同义词：assemble, compose, element, fragment, part"
   },
   "compose": {
-    "note": "同义词：comprise, include, consist of, contain, constitute"
-  },
-  "theory": {
-    "note": "同义词：notion, concept, assumption, idea, hypothesis"
+    "note": "同义词：assemble, component, element, fragment, part"
   },
   "practical": {
-    "note": "同义词：upper, higher, workable, leading, better"
+    "note": "同义词：available, conveyable, feasible, portable, realistic"
   },
   "discipline": {
-    "note": "同义词：domain, area, region, field"
+    "note": "同义词：area, domain, field, region"
   },
   "curriculum": {
-    "note": "同义词：form, course, syllabus, lecture"
+    "note": "同义词：course, lecture, syllabus"
   },
   "syllabus": {
-    "note": "同义词：form, curriculum, course, lecture"
+    "note": "同义词：course, curriculum, lecture"
   },
   "rudimentary": {
-    "note": "同义词：preliminary, ground, fundamental, underlying, essential"
+    "note": "同义词：base, basic, basis, essential, fundamental"
   },
   "revise": {
-    "note": "同义词：change, adjustment, modify, shift, adjust"
+    "note": "同义词：adapt, adjust, adjustment, alter, amend"
+  },
+  "test": {
+    "note": "同义词：analyse, analysis, analytical, attempt, authenticate"
+  },
+  "plagiarise": {
+    "note": "同义词：copy, duplicate, imitate, mimic, replicate"
+  },
+  "opinion": {
+    "note": "同义词：attitude, perspective"
+  },
+  "introduce": {
+    "note": "同义词：bring, export, import, smuggle"
+  },
+  "cite": {
+    "note": "同义词：comment, extract, quotation"
+  },
+  "extract": {
+    "note": "同义词：cite, comment, quotation"
+  },
+  "assume": {
+    "note": "同义词：assumption, hypothesis"
   },
   "hypothesis": {
-    "note": "同义词：theory, notion, concept, assumption, idea"
+    "note": "同义词：assume, assumption"
   },
   "predict": {
-    "note": "同义词：guess, conjecture, expect, bet, illustrate"
+    "note": "同义词：anticipate, conjecture, expect, prophecy"
   },
   "perceive": {
-    "note": "同义词：ensure, admit, verify, certify, acknowledge"
+    "note": "同义词：acknowl, admit, appreciate, ascertain, comprehend"
+  },
+  "detect": {
+    "note": "同义词：find, look, search, sought"
   },
   "conscious": {
-    "note": "同义词：overseas, overlook, aware, discover, ignore"
+    "note": "同义词：aware, awarene, discover, know, realise"
   },
-  "represent": {
-    "note": "同义词：signify, symbolize, embody, symbol, denote"
+  "imply": {
+    "note": "同义词：implication, implicit"
   },
-  "differ": {
-    "note": "同义词：variable, separate, improvement, variance, development"
+  "comprehend": {
+    "note": "同义词：acknowl, admit, appreciate, ascertain, identify"
+  },
+  "diagnose": {
+    "note": "同义词：analyse, analysis, analytical, discover, enquiry"
+  },
+  "contrast": {
+    "note": "同义词：compare"
+  },
+  "instance": {
+    "note": "同义词：including"
+  },
+  "confirm": {
+    "note": "同义词：authenticate, certify, identify, test, verify"
+  },
+  "demonstrate": {
+    "note": "同义词：disclose, display, elaborate, expose, exposure"
   },
   "illustrate": {
-    "note": "同义词：predict, reveal, show, anticipate, expect"
+    "note": "同义词：demonstrate, disclose, display, elaborate, expose"
   },
-  "accomplish": {
-    "note": "同义词：achieve, arrive, reach, attain"
+  "manifest": {
+    "note": "同义词：demonstrate, disclose, display, elaborate, expose"
+  },
+  "resolve": {
+    "note": "同义词：address, confront, conquer, defeat, disposal"
+  },
+  "research": {
+    "note": "同义词：analyse, analysis, analytical, diagnose, discover"
   },
   "attain": {
-    "note": "同义词：accomplish, achieve, arrive, reach"
+    "note": "同义词：bear, detain, face, hold, keep"
+  },
+  "queue": {
+    "note": "同义词：array, order, sequence"
+  },
+  "grant": {
+    "note": "同义词：confer, offer"
   },
   "praise": {
     "note": "同义词：commend, credit"
   },
   "appreciate": {
-    "note": "同义词：grateful, thankful, gratitude"
+    "note": "同义词：acknowl, admit, ascertain, comprehend, identify"
+  },
+  "underestimate": {
+    "note": "同义词：ignore, neglect, overlook"
   },
   "advance": {
-    "note": "同义词：inspire, drive, enhance, improve, promote"
+    "note": "同义词：activate, advantage, beneficial, benefit, boost"
   },
   "invent": {
-    "note": "同义词：making, form, design, make, erect"
+    "note": "同义词：coin, create, devise, erect, form"
   },
   "disclose": {
-    "note": "同义词：predict, reveal, show, anticipate, expect"
+    "note": "同义词：demonstrate, display, elaborate, expose, exposure"
   },
   "reveal": {
-    "note": "同义词：predict, show, anticipate, expect, illustrate"
+    "note": "同义词：demonstrate, disclose, display, elaborate, expose"
   },
   "uncover": {
-    "note": "同义词：predict, reveal, show, anticipate, expect"
+    "note": "同义词：demonstrate, disclose, display, elaborate, expose"
   },
   "expose": {
-    "note": "同义词：predict, reveal, show, anticipate, expect"
+    "note": "同义词：demonstrate, disclose, display, elaborate, exposure"
   },
   "domain": {
-    "note": "同义词：discipline, area, region, field"
+    "note": "同义词：area, discipline, field, region"
   },
-  "foundation": {
-    "note": "同义词：source, root, cause, basis, origin"
+  "specialise": {
+    "note": "同义词：accumulate, concentrate, concentration, emphasis, focus"
+  },
+  "concentrate": {
+    "note": "同义词：accumulate, concentration, emphasis, focus, gather"
+  },
+  "usage": {
+    "note": "同义词：exploit, use"
+  },
+  "measure": {
+    "note": "同义词：assess, assessment, calculate, evaluation, grade"
+  },
+  "calculate": {
+    "note": "同义词：assess, assessment, evaluation, measure"
+  },
+  "estimate": {
+    "note": "同义词：may, probably"
+  },
+  "assess": {
+    "note": "同义词：assessment, calculate, evaluation, measure"
   },
   "accumulate": {
-    "note": "同义词：congregate, assemble, gather, collect"
+    "note": "同义词：concentrate, concentration, emphasis, focus, gather"
+  },
+  "attach": {
+    "note": "同义词：associate, connect, connection, correlation, join"
+  },
+  "purify": {
+    "note": "同义词：clean, preparation, prepare, rehearsal, rehearse"
   },
   "mode": {
-    "note": "同义词：way, fashion, style, approach, manner"
+    "note": "同义词：form, model, module, mould"
+  },
+  "framework": {
+    "note": "同义词：build, building, construct, constructing, construction"
   },
   "phase": {
-    "note": "同义词：emotion, face, feeling, mood, sense"
+    "note": "同义词：approach, exercise, mechanism, method, practice"
   },
   "facilitate": {
-    "note": "同义词：simplicity, straightforward, easy, convenient"
+    "note": "同义词：convenient, easy, straightforward"
   },
   "alter": {
-    "note": "同义词：change, adjustment, modify, revise, shift"
+    "note": "同义词：adapt, adjust, adjustment, amend, change"
   },
   "shift": {
-    "note": "同义词：change, adjustment, modify, revise, adjust"
+    "note": "同义词：adapt, adjust, adjustment, alter, amend"
+  },
+  "adapt": {
+    "note": "同义词：adaption, adjust, adjustment, alter, amend"
   },
   "adjust": {
-    "note": "同义词：change, adjustment, modify, revise, shift"
+    "note": "同义词：adapt, adjustment, alter, amend, change"
+  },
+  "accurate": {
+    "note": "同义词：accuracy, correct, exact, precise"
+  },
+  "precise": {
+    "note": "同义词：accuracy, accurate, correct, exact"
+  },
+  "correct": {
+    "note": "同义词：accuracy, accurate, exact, precise"
+  },
+  "mistake": {
+    "note": "同义词：inaccurate, incorrect, wrong"
   },
   "renaissance": {
-    "note": "同义词：revive, restore, recovery, entertainment, recreation"
+    "note": "同义词：recovery, restore, revive"
+  },
+  "tradition": {
+    "note": "同义词：classic, classical, conservation, conservative, convention"
   },
   "convention": {
-    "note": "同义词：classic, classical, traditional, compound, conventional"
+    "note": "同义词：classic, classical, conservation, conservative, earlier"
   },
   "ethical": {
-    "note": "同义词：exhausted, toll, military, hunger, levy"
+    "note": "同义词：moral"
   },
   "moral": {
-    "note": "同义词：ethical, exhausted, toll, military, hunger"
+    "note": "同义词：ethical"
+  },
+  "local": {
+    "note": "同义词：city, domestic, family, habitat, home"
+  },
+  "inherit": {
+    "note": "同义词：built-in, dna, gene, heredity, inborn"
+  },
+  "religion": {
+    "note": "同义词：religious, sacred"
+  },
+  "sacred": {
+    "note": "同义词：religion, religious"
+  },
+  "adversity": {
+    "note": "同义词：barrier, burden, challenge, challenging, defect"
   },
   "oral": {
-    "note": "同义词：narrate, verbal, talk, transmission, communication"
+    "note": "同义词：communication, convey, narrate, speak, talk"
   },
   "verbal": {
-    "note": "同义词：narrate, talk, transmission, communication, speak"
+    "note": "同义词：communication, convey, narrate, oral, speak"
+  },
+  "consistent": {
+    "note": "同义词：compatible"
   },
   "complicated": {
-    "note": "同义词：tough, complex, hard, harsh, difficult"
+    "note": "同义词：challenging, complex, complexity, comprehensive, demanding"
+  },
+  "interpret": {
+    "note": "同义词：acknowl, admit, appreciate, ascertain, comprehend"
   },
   "narrate": {
-    "note": "同义词：verbal, talk, transmission, communication, speak"
+    "note": "同义词：communication, convey, oral, speak, talk"
   },
   "critic": {
-    "note": "同义词：indulge, comply, criticise, condemn, freeze"
+    "note": "同义词：condemn, critical, criticise, criticism"
   },
   "anticipate": {
-    "note": "同义词：predict, reveal, show, prophecy, conjecture"
+    "note": "同义词：conjecture, expect, predict, prophecy"
   },
   "expect": {
-    "note": "同义词：predict, reveal, show, anticipate, prophecy"
+    "note": "同义词：anticipate, conjecture, predict, prophecy"
   },
   "recreation": {
-    "note": "同义词：revive, restore, recovery, renaissance, entertainment"
+    "note": "同义词：amusement, entertainment, pleasant, relaxed"
+  },
+  "program": {
+    "note": "同义词：initiative, issue, plan, project, proposal"
+  },
+  "rehearsal": {
+    "note": "同义词：clean, preparation, prepare, purify, rehearse"
   },
   "imitate": {
-    "note": "同义词：repeat, duplicate, mimic, replicate, copy"
+    "note": "同义词：copy, duplicate, mimic, plagiarise, replicate"
   },
   "mimic": {
-    "note": "同义词：emulate, repeat, simulate, duplicate, replicate"
+    "note": "同义词：copy, duplicate, imitate, plagiarise, replicate"
   },
-  "simulate": {
-    "note": "同义词：emulate, replicate, mimic, copy"
-  },
-  "collect": {
-    "note": "同义词：accumulate, congregate, assemble, gather"
+  "scene": {
+    "note": "同义词：landscape, prospect, scenery, scenic, view"
   },
   "select": {
-    "note": "同义词：option, choice"
+    "note": "同义词：choice, option"
+  },
+  "photograph": {
+    "note": "同义词：chart, drawing, formation, graph, image"
+  },
+  "painting": {
+    "note": "同义词：chart, drawing, formation, graph, image"
+  },
+  "draw": {
+    "note": "draw the curtains=拉窗帘；draw attention=吸引注意"
   },
   "classical": {
-    "note": "同义词：classic, traditional, compound, conventional, convention"
+    "note": "同义词：classic, conservation, conservative, convention, earlier"
   },
-  "mobile": {
-    "note": "同义词：distract, delivery, journey, commute, transport"
+  "rock": {
+    "note": "rock=岩石；rock music=摇滚；rock the boat=动摇局面"
   },
-  "trip": {
-    "note": "同义词：distract, delivery, journey, commute, transport"
+  "famous": {
+    "note": "同义词：familiar, notoriety, well-known"
+  },
+  "exercise": {
+    "note": "同义词：approach, mechanism, method, phase, practice"
+  },
+  "goal": {
+    "note": "同义词：aim, intention, objective, purpose, target"
+  },
+  "pitch": {
+    "note": "pitch=音高；football pitch=球场；pitch a tent=扎营"
+  },
+  "stride": {
+    "note": "同义词：approach, exercise, mechanism, method, phase"
+  },
+  "lag": {
+    "note": "同义词：delay, late, postpone"
   }
 }
