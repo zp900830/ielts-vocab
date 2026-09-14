@@ -1,5 +1,6 @@
 node_modules/
 .worktrees/
+.superpowers/
 playwright-tests/test-results/
 playwright-tests/playwright-report/
 playwright-tests/blob-report/
