@@ -556,7 +556,7 @@
   body.fade-nav .topbar { opacity: .55; }
   body.fade-nav .topbar h1 { opacity: 1; }
   /* mini 播放条：收缩为居中小胶囊（仅 上一句/播放/下一句）；宽定死、只 morph max-width（fit-content↔定宽不可插值，会跳变），中心点全程不动 */
-  body.scrolled .audiobar { padding: 4px 6px; gap: 4px; border-radius: 999px;
+  body.scrolled .audiobar { padding: 4px; gap: 4px; border-radius: 999px;
     width: calc(100vw - 48px); max-width: 420px;
     left: 50%; right: auto; transform: translateX(-50%);
     border-color: rgba(255,255,255,.4);
@@ -564,7 +564,7 @@
   body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute;
     transition: opacity .05s ease-out, /* forward: 进度条极速淡出 */
       max-width var(--t-bar) var(--ease-bar) .05s, max-height var(--t-bar) var(--ease-bar) .05s; }
-  body.scrolled .audiobar .ab-left { gap: 0; flex: 1; justify-content: center; } /* 条定宽后内容居中，胶囊不偏 */
+  body.scrolled .audiobar .ab-left { gap: 6px; flex: 1; justify-content: center; } /* 条定宽后内容居中，胶囊不偏 */
   body.scrolled .audiobar .ab-left > .btn#abLoopBtn,
   body.scrolled .audiobar .ab-left > .btn.jump-btn { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden;
     transition: opacity .05s ease-out; } /* forward: 非核心按钮极速淡出 */
@@ -629,14 +629,14 @@
     body.scrolled .audiobar.expanded .ab-left > .btn i { font-size: inherit; line-height: inherit; }
   body.scrolled .audiobar.expanded .ab-expand { display: none; }
   /* 强制 mini：不受滚动位置影响的手动收起态（与 body.scrolled mini 同一样式） */
-  .audiobar.force-mini { padding: 4px 6px; gap: 4px; border-radius: 999px;
+  .audiobar.force-mini { padding: 4px; gap: 4px; border-radius: 999px;
     width: calc(100vw - 48px); max-width: 420px;
     left: 50%; right: auto; transform: translateX(-50%);
     border-color: rgba(255,255,255,.4); flex-direction: row;
     backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
   .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute;
     transition: opacity .05s ease-out; }
-  .audiobar.force-mini .ab-left { gap: 0; flex: 1; justify-content: center; }
+  .audiobar.force-mini .ab-left { gap: 6px; flex: 1; justify-content: center; }
   .audiobar.force-mini .ab-left > .btn#abLoopBtn,
   .audiobar.force-mini .ab-left > .btn.jump-btn { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden;
     transition: opacity .05s ease-out; }
@@ -797,13 +797,13 @@
     .audiobar .btn.play { font-size: 12px; padding: 5px 12px; }
     .audiobar .btn::after { display: none; }
     /* 移动端沉浸模式：与桌面端一致，三按钮居中胶囊（定宽＋max-width morph，中心不动） */
-    body.scrolled .audiobar { padding: 4px 6px; gap: 4px; border-radius: 999px;
+    body.scrolled .audiobar { padding: 4px; gap: 4px; border-radius: 999px;
       width: calc(100vw - 24px); max-width: 360px;
       left: 50%; right: auto; transform: translateX(-50%);
       flex-direction: row; }
     body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; position: absolute;
       transition: opacity .05s ease-out, max-width .25s ease-out, max-height .25s ease-out, width .25s ease-out; }
-    body.scrolled .audiobar .ab-left { order: 0; flex-wrap: nowrap; gap: 0; flex: 1; justify-content: center; }
+    body.scrolled .audiobar .ab-left { order: 0; flex-wrap: nowrap; gap: 6px; flex: 1; justify-content: center; }
     body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px;
       transition: font-size .05s ease-out, padding .25s ease-out, min-height .25s ease-out,
         max-width .25s ease-out, opacity .25s ease-out; }
@@ -833,7 +833,7 @@
     .audiobar.force-mini { width: calc(100vw - 24px); max-width: 360px; flex-direction: row; }
     .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; position: absolute;
       transition: opacity .05s ease-out; }
-    .audiobar.force-mini .ab-left { order: 0; flex-wrap: nowrap; gap: 0; flex: 1; justify-content: center; }
+    .audiobar.force-mini .ab-left { order: 0; flex-wrap: nowrap; gap: 6px; flex: 1; justify-content: center; }
     .audiobar.force-mini .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px;
       transition: font-size .05s ease-out; }
     .audiobar.force-mini .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
