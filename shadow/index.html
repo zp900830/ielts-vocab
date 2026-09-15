@@ -2304,7 +2304,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     launchedUpTo = i;
     try {
     if (typeof CLOUD !== 'undefined' && isCloudURI(selVoiceURI) && CLOUD._on) {
-    for (let k = 1; k <= 2 && i + k < sents.length; k++)
+    // 预取缓冲拉大到 8 句：锁屏/熄屏后后台网络与定时器被系统节流，
+    // 只有已缓存的音频能无缝续播；8 句 ≈ 40~80s 缓冲，满足「口袋影子跟读」连续播放
+    for (let k = 1; k <= 8 && i + k < sents.length; k++)
     CLOUD.prefetch(plainEN(sentRaw(i + k)), selVoiceURI.slice(6), rate);
     }
     } catch (e) {}
