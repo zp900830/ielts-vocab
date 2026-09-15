@@ -61,7 +61,7 @@
   body.dark input, body.dark select { background-color: #1c1a17; border-color: #33302b; color: #e2ddd5; }
   body.dark select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23908a7e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat; background-position: right 10px center; }
-  body.dark .para-zh { background: rgba(30,28,25,.6); border-color: #33302b; }
+  body.dark .para-zh { background: linear-gradient(90deg, rgba(217,164,65,.1), rgba(217,164,65,0)); border-left-color: var(--note); color: var(--muted); }
   body.dark .rate-menu,
   body.dark .loop-menu { background: rgba(30,28,25,.97); border-color: #33302b; }
   body.dark .rate-menu button:hover,
@@ -184,19 +184,25 @@
   .layout { max-width: 1120px; margin: 0 auto; display: block; padding: 24px 18px 130px; }
   .sent-zh { display: block; font-family: var(--sans); font-size: 14px; color: var(--muted);
     line-height: 1.6; margin: 0 0 6px 2px; }
-  .para-zh { font-size: 13px; color: var(--ink2); background: rgba(255,245,230,.4);
-    border: 1px solid var(--border); border-radius: 12px; padding: 9px 12px;
-    margin: 8px 0 14px; line-height: 1.65; }
+  /* 段落小注：段意小结/辅助理解，被动信息 → 暖沙色低调注释，不抢正文与学习卡 */
+  .para-zh { font-size: 12.5px; color: var(--muted);
+    background: linear-gradient(90deg, rgba(192,138,46,.09), rgba(192,138,46,0));
+    border-left: 3px solid var(--note); border-radius: 0 8px 8px 0;
+    padding: 6px 12px; margin: 10px 0 14px; line-height: 1.7; }
   body.hide-zh .sent-zh, body.hide-zh .para-zh { display: none; }
-  .notebar { display: block; border: 1px solid var(--note-line); border-left: 2px solid var(--note);
-    border-radius: 8px; padding: 4px 8px; margin: 6px 0; line-height: 1.45;
-    background: var(--note-soft); font-size: 12.5px; }
-  .notebar .nb-t { display: inline-flex; align-items: baseline; flex-wrap: wrap; gap: 2px 6px; }
-  .notebar .nb-t .nb-w { font-weight: 700; font-family: var(--serif); font-size: 13.5px; color: var(--ink2); cursor: text; min-width: 0; }
+  /* 单词辨析卡：主动学习（同义词/词伙/辨析）→ 绿主色、单词突出、标签化，与段落小注区分 */
+  .notebar { display: block; border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    border-radius: 10px; padding: 7px 12px; margin: 6px 0 8px; line-height: 1.55;
+    background: rgba(12,156,116,.055); font-size: 12.5px; }
+  .notebar .nb-t { display: inline-flex; align-items: baseline; flex-wrap: wrap; gap: 2px 8px; }
+  .notebar .nb-t .nb-w { font-weight: 700; font-family: var(--serif); font-size: 15px; color: var(--accent); cursor: text; min-width: 0; }
   .notebar .nb-ph { font-size: 11.5px; color: var(--muted); font-family: var(--serif); }
-  .notebar .nb-m { color: var(--ink2); }
+  .notebar .nb-m { color: var(--text); }
   .notebar .nb-n { display: inline; color: var(--ink2); margin-left: 6px; }
-  body.dark .notebar { background: var(--note-soft); border-color: var(--note-line); border-left-color: var(--note); }
+  .notebar .nb-label { display: inline-block; font-size: 10.5px; font-weight: 700; color: var(--accent);
+    background: var(--accent-soft); border-radius: 5px; padding: 0 6px; margin-right: 5px; line-height: 1.6; vertical-align: 1px; }
+  body.dark .notebar { background: rgba(16,180,135,.08); border-color: #33302b; border-left-color: var(--accent); }
+  body.dark .notebar .nb-label { color: var(--accent-bright); }
   .notebar.compare { display: block; width: 100%; margin: 6px 0; }
   .notebar.compare .nb-ct { display: block; font-weight: 700; margin-bottom: 4px; color: var(--text); }
   .notebar.compare .nb-table { width: 100%; border-collapse: collapse; margin: 4px 0; font-size: 12px; line-height: 1.5; }
@@ -1110,7 +1116,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     function renderCompareNote(note) {
     const words = (note.items || []).map(it => it.w).filter(Boolean);
-    let html = `<span class="notebar compare"><span class="nb-t">${words.map(w => `<span class="nb-w">${esc(w)}</span>`).join(' ')}</span><span class="nb-n">💡 ${esc(note.summary ? '辨析：' + note.summary.replace(/^辨析：/, '') : (note.title || ''))}</span>`;
+    let html = `<span class="notebar compare"><span class="nb-t">${words.map(w => `<span class="nb-w">${esc(w)}</span>`).join(' ')}</span><span class="nb-n"><span class="nb-label">辨析</span>${esc(note.summary ? note.summary.replace(/^辨析：/, '') : (note.title || ''))}</span>`;
     if (note.items && note.items.length) {
       html += `<table class="nb-table">`;
       for (const it of note.items) {
@@ -1152,10 +1158,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     for (const g in groups) html += renderCompareNote(groups[g].note);
     for (const { k, info } of singles) {
     const ph = glossPhon(k);
-    // 标题标签按内容类型自适应：手写辨析补「辨析：」；已有「同义词：/词伙：」前缀的不再叠加，避免「辨析：同义词：」双标签叠冒号
+    // 标题标签按内容类型自适应：同义词/词伙 从 note 前缀抽取；手写辨析归为「辨析」。标签用 nb-label 小胶囊包裹，不再叠「辨析：同义词：」双冒号
     const noteText = typeof info.note === 'string' ? info.note : (info.note.title || '');
-    const lbl = /^(同义词|词伙)/.test(noteText) ? '' : '辨析：';
-    html += `<span class="notebar"><span class="nb-t"><span class="nb-w">${esc(k)}</span>${ph ? `<span class="nb-ph">${esc(ph)}</span>` : ''}<span class="nb-m">${esc(info.m)}</span></span><span class="nb-n">💡 ${lbl}${esc(noteText)}</span></span>`;
+    let label = '辨析', rest = noteText;
+    const lm = noteText.match(/^(同义词|词伙)(：)/);
+    if (lm) { label = lm[1]; rest = noteText.slice(lm[0].length); }
+    html += `<span class="notebar"><span class="nb-t"><span class="nb-w">${esc(k)}</span>${ph ? `<span class="nb-ph">${esc(ph)}</span>` : ''}<span class="nb-m">${esc(info.m)}</span></span><span class="nb-n"><span class="nb-label">${label}</span>${esc(rest)}</span></span>`;
     }
     return html;
     }
