@@ -130,6 +130,7 @@
   .topbar h1 { font-size: 17px; font-weight: 700; margin-right: 0;
     background: var(--grad); -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
+    white-space: nowrap; flex: none; /* 窄宽度时 logo 不折行、也不被压缩溢出 */
     transition: font-size var(--t-morph) var(--ease-smooth), opacity .3s ease; }
   /* 章节筛选：logo 右侧的胶囊下拉 */
   .chapter-ctrl { flex: none; display: flex; align-items: center; }

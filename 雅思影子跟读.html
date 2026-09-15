@@ -102,6 +102,7 @@
   .topbar h1 { font-size: 17px; font-weight: 700; margin-right: auto;
     background: var(--grad); -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
+    white-space: nowrap; flex: none; /* 窄宽度时 logo 不折行、也不被压缩溢出 */
     transition: font-size var(--t-morph) var(--ease-smooth), opacity .3s ease; }
   .topbar-right { display: flex; align-items: center; gap: 8px; margin-left: auto;
     transition: opacity .3s ease, max-width var(--t-morph) var(--ease-smooth),
