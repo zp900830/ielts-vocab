@@ -1368,8 +1368,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     /* ============ Azure 云端语音（与 admin 后台同一服务，需登录） ============ */
     const _CFG = (typeof window !== 'undefined' && window.IELTS_CONFIG) || {};
     const CLOUD = {
-    URL: _CFG.SUPABASE_URL || '',
-    KEY: _CFG.SUPABASE_KEY || '',
+    URL: _CFG.SUPABASE_URL || 'https://nhqevdkjqzgnyjbijwso.supabase.co',
+    KEY: _CFG.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ocWV2ZGtqcXpnbnlqYmlqd3NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NDQ2MDYsImV4cCI6MjEwMzIyMDYwNn0.WXX79gPNdvV_q37jvwTcACHPGZAvi3bw7CeFpw0QKpE',
     configured() { return !!(this.URL && this.KEY); },
     VOICES: [
     { id: 'en-GB-SoniaNeural', label: 'Sonia · 英式女声 ★★★', region: '英式' },

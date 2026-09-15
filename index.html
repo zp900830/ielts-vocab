@@ -1271,7 +1271,9 @@ function resumeLastRead(){   // 上次会话停在阅读页 → 打开后自动�
    学习数据存 learning_data 表（RLS 行级安全：各账号只能读写自己的行，待审批用户无云端权限）。 */
 const _CFG=(typeof window!=='undefined'&&window.IELTS_CONFIG)||{};
 const SB={
-  DEF_URL:_CFG.SUPABASE_URL||'', DEF_KEY:_CFG.SUPABASE_KEY||'',   /* 从 config.js 读取；构建时注入 */
+  DEF_URL:_CFG.SUPABASE_URL||'https://nhqevdkjqzgnyjbijwso.supabase.co',
+  DEF_KEY:_CFG.SUPABASE_KEY||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ocWV2ZGtqcXpnbnlqYmlqd3NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NDQ2MDYsImV4cCI6MjEwMzIyMDYwNn0.WXX79gPNdvV_q37jvwTcACHPGZAvi3bw7CeFpw0QKpE',
+  /* 优先从 config.js（构建注入）读取，回退到原项目内置配置 */
   _c:null, _sdkP:null, _pushT:null, _pushing:false, user:null, lastSync:0, _errShown:false,
   role:null,   /* null=未登录/未知 / pending=待审批 / user / admin */
   /* 按需加载 Supabase SDK（约 130KB）：未配置/未使用的设备零加载开销 */
