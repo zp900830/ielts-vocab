@@ -173,8 +173,8 @@
     border: 1px solid var(--border); border-radius: 12px; padding: 9px 12px;
     margin: 8px 0 14px; line-height: 1.65; }
   body.hide-zh .sent-zh, body.hide-zh .para-zh { display: none; }
-  .notebar { display: inline-block; vertical-align: top; border: 1px solid var(--border); border-left: 2px solid var(--accent);
-    border-radius: 8px; padding: 4px 8px; margin: 3px 6px 3px 0; line-height: 1.45;
+  .notebar { display: block; border: 1px solid var(--border); border-left: 2px solid var(--accent);
+    border-radius: 8px; padding: 4px 8px; margin: 6px 0; line-height: 1.45;
     background: rgba(12,156,116,.04); font-size: 12.5px; }
   .notebar .nb-t { display: inline-flex; align-items: baseline; flex-wrap: wrap; gap: 2px 6px; }
   .notebar .nb-t .nb-w { font-weight: 700; font-family: var(--serif); font-size: 13.5px; color: var(--ink2); cursor: text; min-width: 0; }
@@ -280,7 +280,7 @@
   .sent.ab-in { border-radius: 4px; position: relative; z-index: 1; }
   .sent.ab-in.playing { background: linear-gradient(transparent 62%, var(--hl) 62%); }
   /* AB 循环区域：用绝对定位的框把区间内句子圈起来 */
-  .ab-region { position: absolute; left: 0; top: 0; z-index: 0;
+  .ab-region { position: absolute; left: 0; top: 0; z-index: 10;
     border: 2px solid var(--accent); border-radius: 10px;
     background: rgba(12,156,116,.06); pointer-events: none;
     transition: all .25s ease; }
@@ -1370,6 +1370,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     const CLOUD = {
     URL: _CFG.SUPABASE_URL || '',
     KEY: _CFG.SUPABASE_KEY || '',
+    configured() { return !!(this.URL && this.KEY); },
     VOICES: [
     { id: 'en-GB-SoniaNeural', label: 'Sonia · 英式女声 ★★★', region: '英式' },
     { id: 'en-GB-LibbyNeural', label: 'Libby · 英式女声 ★★★', region: '英式' },
@@ -1428,7 +1429,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (el) el.textContent = t;
     const b = document.getElementById('btnCloud');
     if (b) {
-    const label = this._userMail ? this._userMail.split('@')[0] : (this._on ? '已连接' : '未登录');
+    let label;
+    if (!this.configured()) label = '未配置';
+    else if (this._userMail) label = this._userMail.split('@')[0];
+    else if (this._on) label = '已连接';
+    else label = '未登录';
     b.innerHTML = '<i class="ri-cloud-line" aria-hidden="true"></i> ';
     b.appendChild(document.createTextNode(label)); // 邮箱走文本节点，防 HTML 注入
     }
@@ -1436,6 +1441,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (lo) lo.style.display = this._userMail ? '' : 'none';
     },
     async boot() {
+    if (!this.configured()) {
+      this._on = false;
+      this.setStatus('云端语音未配置：管理员尚未在部署后台设置 Supabase。');
+      return;
+    }
     /* Supabase CDN 用 defer 加载，DOMContentLoaded 时可能还没到；
        轮询等待最多 3s，确保 session 能从 localStorage 恢复 */
     for (let i = 0; i < 15; i++) {
@@ -1777,8 +1787,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     async function cloudLogin() {
     if (cloudLogin._busy) return; cloudLogin._busy = true;
     try {
+    if (!CLOUD.configured()) { alert('云端语音未配置：管理员尚未设置 Supabase。'); return; }
     const c = CLOUD.client();
-    if (!c) { alert('网络不可用，加载不出登录组件。'); return; }
+    if (!c) { alert('网络不可用，登录组件加载失败，请刷新重试。'); return; }
     const em = document.getElementById('cloudEmail').value.trim();
     const pw = document.getElementById('cloudPass').value;
     if (!em || !pw) { alert('请填写邮箱和密码'); return; }
@@ -1792,8 +1803,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     async function cloudSignup() {
     if (cloudSignup._busy) return; cloudSignup._busy = true;
     try {
+    if (!CLOUD.configured()) { alert('云端语音未配置：管理员尚未设置 Supabase。'); return; }
     const c = CLOUD.client();
-    if (!c) { alert('网络不可用，加载不出登录组件。'); return; }
+    if (!c) { alert('网络不可用，登录组件加载失败，请刷新重试。'); return; }
     const em = document.getElementById('cloudEmail').value.trim();
     const pw = document.getElementById('cloudPass').value;
     if (!em || !pw) { alert('请填写邮箱和密码'); return; }
@@ -2473,7 +2485,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (!Array.isArray(sents) || !sents.length) return;
     sents.forEach(el => el.classList.remove('ab-a', 'ab-b', 'ab-in'));
     const region = document.getElementById('abRegion');
-    if (region) region.style.display = 'none';
+    if (region) { region.style.display = 'none'; region.setAttribute('aria-hidden', 'true'); }
     if (abMode === 2 && abStart >= 0 && sents[abStart]) sents[abStart].classList.add('ab-a');
     if (abMode === 3 && abStart >= 0 && abEnd >= 0) {
     const a = Math.min(abStart, abEnd), b = Math.max(abStart, abEnd);
@@ -2505,6 +2517,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     region.style.width = (maxRight - minLeft + pad * 2) + 'px';
     region.style.height = (bottom - top + pad * 2) + 'px';
     region.style.display = 'block';
+    region.setAttribute('aria-hidden', 'false');
     }
     function abCancel(silent) {
     if (abMode === 0) return;

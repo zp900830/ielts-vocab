@@ -1,6 +1,10 @@
 # Netlify / static-host deployment headers
 # Enables gzip/brotli (handled by Netlify by default) and sets sensible cache headers.
 
+[build]
+  command = "python3 scripts/inject_config.py --shadow && python3 scripts/normalize_vocab.py --apply"
+  publish = "."
+
 [[headers]]
   for = "*.html"
   [headers.values]
