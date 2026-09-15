@@ -63,10 +63,10 @@ def main() -> int:
     if not key:
         missing.append("SUPABASE_KEY (or SUPABASE_ANON_KEY)")
     if missing:
-        print("ERROR: Missing required environment variables:", ", ".join(missing), file=sys.stderr)
-        print("Example:", file=sys.stderr)
-        print("  SUPABASE_URL=https://... SUPABASE_KEY=... python3 scripts/inject_config.py", file=sys.stderr)
-        return 1
+        print("WARN: Missing environment variables:", ", ".join(missing), file=sys.stderr)
+        print("      Writing empty config.js. Cloud sync will be disabled until variables are set.", file=sys.stderr)
+        if args.check:
+            return 1
 
     if args.check:
         print("OK: Supabase credentials are present.")

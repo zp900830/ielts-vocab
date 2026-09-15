@@ -209,8 +209,10 @@ body.reading{padding-top:0;}
 .topbar-in{width:100%; max-width:860px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
 body[data-view="me"] #topbar{display:none;}
 .chsel{display:flex; align-items:center; gap:6px; color:var(--iel-ink2); font-size:13px; min-width:0;}
+/* 顶栏右侧操作组：语音切换 + 暗色模式 */
+.topbar-actions{display:flex; align-items:center; gap:8px; margin-left:auto;}
 /* 顶栏英音/美音切换胶囊 */
-.accent-btn{flex:none; margin-left:auto; border:1px solid var(--iel-accent-line); background:#fff; color:var(--iel-accent-deep); border-radius:999px; padding:6px 13px; font-size:12.5px; font-weight:600; white-space:nowrap; cursor:pointer; position:relative; transition:background var(--iel-t-fast), border-color var(--iel-t-fast);}
+.accent-btn{flex:none; border:1px solid var(--iel-accent-line); background:#fff; color:var(--iel-accent-deep); border-radius:999px; padding:6px 13px; font-size:12.5px; font-weight:600; white-space:nowrap; cursor:pointer; position:relative; transition:background var(--iel-t-fast), border-color var(--iel-t-fast);}
 .accent-btn::after{content:""; position:absolute; inset:-5px 0; border-radius:999px;}   /* 纵向 hit-slop：有效触达 40px 不撑大视觉 */
 .accent-btn:hover{background:var(--iel-accent-soft); border-color:var(--iel-accent);}
 .chsel select{max-width:190px; box-shadow:var(--iel-shadow);}
@@ -1008,8 +1010,10 @@ body.reading #lsFab{display:none;}
 <nav id="topbar">
   <div class="topbar-in">
     <div class="chsel"><label class="sel-label" for="chapterSel">章节</label><select id="chapterSel" aria-label="选择章节"></select></div>
-    <button class="accent-btn" id="accentBtn" title="全局默认发音口音：点击切换 英式/美式（影响单词卡点击、音标显示与朗读）" aria-label="切换英式美式发音">🇬🇧 英音</button>
-    <button class="accent-btn" id="darkBtn" onclick="toggleDark()" title="切换深色/浅色模式" aria-label="切换深色模式">🌙</button>
+    <div class="topbar-actions">
+      <button class="accent-btn" id="accentBtn" title="全局默认发音口音：点击切换 英式/美式（影响单词卡点击、音标显示与朗读）" aria-label="切换英式美式发音">🇬🇧 英音</button>
+      <button class="accent-btn" id="darkBtn" onclick="toggleDark()" title="切换深色/浅色模式" aria-label="切换深色模式">🌙</button>
+    </div>
   </div>
 </nav>
 <main id="app"><div id="boot" class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-txt">正在加载学习数据…<span class="boot-spin"></span></div><div class="boot-sub">首次加载约 1 秒，之后有缓存秒开</div></div></main>
