@@ -16404,23 +16404,35 @@
       ]
     }
   ],
+  "atmosphere": {
+    "note": "词伙：lively atmosphere"
+  },
+  "horizon": {
+    "note": "词伙：broaden horizons, broaden career horizons"
+  },
   "altitude": {
     "note": "同义词：height, high"
   },
   "disaster": {
-    "note": "同义词：calamity, catastrophe"
+    "note": "同义词：calamity, catastrophe；词伙：biological disaster"
   },
   "calamity": {
     "note": "同义词：catastrophe, disaster"
   },
   "endanger": {
-    "note": "同义词：crisis, danger, enemy, foe, hostile"
+    "note": "同义词：crisis, danger, enemy, foe, hostile；词伙：endangered species"
   },
   "jeopardise": {
     "note": "同义词：crisis, danger, endanger, enemy, foe"
   },
+  "greenhouse": {
+    "note": "词伙：greenhouse gas emissions, release greenhouse gases"
+  },
+  "erupt": {
+    "note": "词伙：conflicts erupt"
+  },
   "drought": {
-    "note": "同义词：dry"
+    "note": "同义词：dry；词伙：resistant to droughts"
   },
   "landscape": {
     "note": "同义词：prospect, scene, scenery, scenic, view"
@@ -16429,13 +16441,25 @@
     "note": "同义词：geography, hot, tropical"
   },
   "upgrade": {
-    "note": "同义词：additional, boom, boost, extra, foster"
+    "note": "同义词：additional, boom, boost, extra, foster；词伙：upgrade road infrastructure, upgrade manufacturing practices"
+  },
+  "erode": {
+    "note": "词伙：erode cultural diversity, erode national identities, erode the sense of community"
   },
   "marine": {
-    "note": "同义词：ocean, sea, water"
+    "note": "同义词：ocean, sea, water；词伙：disrupt marine ecosystems"
   },
   "navigation": {
     "note": "同义词：direction, orientation, positioning, situate"
+  },
+  "stream": {
+    "note": "词伙：streaming services, streaming platforms, diversify streams of income"
+  },
+  "steep": {
+    "note": "词伙：steep discounts"
+  },
+  "weather": {
+    "note": "词伙：weather conditions, extreme weather conditions"
   },
   "damp": {
     "note": "同义词：humid, humidity, moisture, wet"
@@ -16446,8 +16470,14 @@
   "freeze": {
     "note": "同义词：cold"
   },
+  "temperature": {
+    "note": "词伙：cabin temperature"
+  },
   "peak": {
     "note": "同义词：summit, top"
+  },
+  "mount": {
+    "note": "词伙：cope with mounting pressure"
   },
   "range": {
     "note": "同义词：scope"
@@ -16455,44 +16485,89 @@
   "overlook": {
     "note": "同义词：ignore, neglect, notice, sight, underestimate"
   },
+  "inappropriate": {
+    "note": "词伙：inappropriate language, inappropriate parenting styles"
+  },
   "abnormal": {
     "note": "同义词：exceptional, extraordinary, extreme, rare, remarkable"
+  },
+  "rural": {
+    "note": "词伙：rural areas, rural infrastructure, depopulate rural areas"
   },
   "suburb": {
     "note": "同义词：countryside, outskirts, remote, rustic, suburban"
   },
   "outskirts": {
-    "note": "同义词：countryside, remote, rustic, suburb, suburban"
+    "note": "同义词：countryside, remote, rustic, suburb, suburban；词伙：on the outskirts of the city"
   },
   "remote": {
-    "note": "同义词：countryside, outskirts, rustic, suburb, suburban"
+    "note": "同义词：countryside, outskirts, rustic, suburb, suburban；词伙：remote work"
   },
   "toxic": {
     "note": "同义词：drug, poison"
   },
+  "pollution": {
+    "note": "词伙：air pollution"
+  },
+  "contaminate": {
+    "note": "词伙：contaminate food, contaminate water, contaminate water sources"
+  },
+  "fringe": {
+    "note": "词伙：fringe benefits"
+  },
   "dramatic": {
     "note": "同义词：impressive, striking, surprising, touching, unexpected"
   },
+  "solar": {
+    "note": "词伙：solar power, solar panels"
+  },
+  "drain": {
+    "note": "词伙：drain financial resources"
+  },
   "intensive": {
-    "note": "同义词：intense, strong"
+    "note": "同义词：intense, strong；词伙：intensive farming practices, intensive language learning"
+  },
+  "condition": {
+    "note": "词伙：work conditions, in good condition, living conditions"
+  },
+  "situation": {
+    "note": "词伙：real-life situations, stressful situations, connect course materials to real-life situations"
   },
   "nature": {
-    "note": "同义词：built-in, dna, gene, heredity, inborn"
+    "note": "同义词：built-in, dna, gene, heredity, inborn；词伙：playful nature, addictive nature"
+  },
+  "natural": {
+    "note": "词伙：natural habitats, natural endowment, natural predators"
   },
   "artificial": {
-    "note": "同义词：automated, automatically, automation, autonomy, independent"
+    "note": "同义词：automated, automatically, automation, autonomy, independent；词伙：artificial intelligence, artificial intelligence technology"
   },
   "synthetic": {
     "note": "同义词：artificial, automated, automatically, automation, autonomy"
+  },
+  "gas": {
+    "note": "词伙：natural gas exploration, greenhouse gas emissions, release greenhouse gases"
+  },
+  "outfit": {
+    "note": "词伙：stylish outfits"
+  },
+  "landfill": {
+    "note": "词伙：end up in landfills"
+  },
+  "tap": {
+    "note": "词伙：tap into talents, fully tap into talents"
   },
   "element": {
     "note": "同义词：assemble, component, compose, fragment, part"
   },
   "factor": {
-    "note": "同义词：characteristic, feature, property, trait"
+    "note": "同义词：characteristic, feature, property, trait；词伙：innate factors, social factors, economic factors"
   },
   "handle": {
-    "note": "同义词：address, confront, conquer, defeat, disposal"
+    "note": "同义词：address, confront, conquer, defeat, disposal；词伙：handle physically demanding work, handle complex real-life communication scenarios"
+  },
+  "phone": {
+    "note": "词伙：phone scams, use phones responsibly"
   },
   "portable": {
     "note": "同义词：available, conveyable, feasible, practical, realistic"
@@ -16500,29 +16575,104 @@
   "hurdle": {
     "note": "同义词：adversity, barrier, burden, challenge, challenging"
   },
+  "ladder": {
+    "note": "词伙：climb the corporate ladder"
+  },
+  "plastic": {
+    "note": "词伙：plastic bags, plastic surgeries, one-time plastic bags"
+  },
+  "fuel": {
+    "note": "词伙：fossil fuels, burn fossil fuels, impose fuel taxes"
+  },
+  "inferior": {
+    "note": "词伙：feel inferior to"
+  },
+  "fake": {
+    "note": "词伙：fake news, create fake profiles"
+  },
   "available": {
     "note": "同义词：conveyable, feasible, portable, practical, realistic"
   },
   "durable": {
     "note": "同义词：chronic, duration, lasting, period, time"
   },
+  "luxury": {
+    "note": "词伙：luxury goods, luxury items"
+  },
+  "extravagant": {
+    "note": "词伙：extravagant lifestyles, extravagant ways of living, pursue an extravagant life"
+  },
+  "adorn": {
+    "note": "词伙：adorn with works of art"
+  },
+  "decent": {
+    "note": "词伙：decent quality of life"
+  },
+  "appearance": {
+    "note": "词伙：physical appearance, meet appearance requirements"
+  },
+  "clothe": {
+    "note": "词伙：protective clothing, wear casual clothing"
+  },
+  "overall": {
+    "note": "词伙：their overall development, enhance overall well-being"
+  },
+  "tailor": {
+    "note": "词伙：tailor punishments, tailored materials, tailored to personal needs"
+  },
+  "chain": {
+    "note": "词伙：fast food chains"
+  },
+  "figure": {
+    "note": "词伙：public figures, historical figures, commemorate historical figures"
+  },
+  "cater": {
+    "note": "词伙：cater to the needs, cater to preferences, cater to learning styles"
+  },
   "provision": {
     "note": "同义词：complement, supplement"
   },
+  "edible": {
+    "note": "词伙：edible food"
+  },
+  "cuisine": {
+    "note": "词伙：traditional cuisines"
+  },
+  "core": {
+    "note": "词伙：core values, core subjects"
+  },
+  "crop": {
+    "note": "词伙：growing crops, high-yield crops, improve crop yields"
+  },
+  "jam": {
+    "note": "词伙：severe traffic jams"
+  },
+  "salt": {
+    "note": "词伙：high in salt, salt content, high sugar and salt content"
+  },
+  "ingredient": {
+    "note": "词伙：fresh ingredients"
+  },
   "supplement": {
-    "note": "同义词：complement, provision"
+    "note": "同义词：complement, provision；词伙：dietary supplements"
   },
   "construct": {
     "note": "同义词：build, building, constructing, construction, framework"
   },
   "establish": {
-    "note": "同义词：build, create, found, initiate"
+    "note": "同义词：build, create, found, initiate；词伙：establish trust, established experts, establish partnerships"
   },
   "stability": {
-    "note": "同义词：accordance, coherence, conform, corresponding, persistent"
+    "note": "同义词：accordance, coherence, conform, corresponding, persistent；词伙：energy stability, financial stability"
   },
   "site": {
-    "note": "同义词：location, place, spot, where"
+    "note": "同义词：location, place, spot, where；词伙：restoration of historical sites"
+  },
+  "landmark": {
+    "note": "词伙：landmark buildings"
+  },
+  "locate": {
+    "note": "词伙：locate important concepts"
   },
   "settle": {
     "note": "同义词：address, confront, conquer, defeat, disposal"
@@ -16530,53 +16680,89 @@
   "skyscraper": {
     "note": "同义词：city, domestic, family, habitat, home"
   },
+  "cabin": {
+    "note": "词伙：cabin temperature"
+  },
   "shelter": {
     "note": "同义词：shade"
   },
+  "block": {
+    "note": "词伙：block out distractions"
+  },
+  "ceiling": {
+    "note": "词伙：break the glass ceiling"
+  },
+  "mall": {
+    "note": "词伙：shopping malls"
+  },
   "complex": {
-    "note": "同义词：challenging, complexity, complicated, comprehensive, demanding"
+    "note": "同义词：challenging, complexity, complicated, comprehensive, demanding；词伙：handle complex real-life communication scenarios"
   },
   "urban": {
-    "note": "同义词：city, domestic, family, habitat, home"
+    "note": "同义词：city, domestic, family, habitat, home；词伙：urban areas, urban expansion"
+  },
+  "vicinity": {
+    "note": "词伙：beyond immediate vicinity"
+  },
+  "suspension": {
+    "note": "词伙：suspension of driving licences"
+  },
+  "infrastructure": {
+    "note": "词伙：rural infrastructure, healthcare infrastructure, upgrade road infrastructure"
   },
   "fix": {
-    "note": "同义词：address, confront, conquer, defeat, disposal"
+    "note": "同义词：address, confront, conquer, defeat, disposal；词伙：fix bugs"
   },
   "modify": {
     "note": "同义词：adapt, adjust, adjustment, alter, amend"
   },
+  "drill": {
+    "note": "词伙：oil drilling"
+  },
   "assemble": {
-    "note": "同义词：component, compose, element, fragment, part"
+    "note": "同义词：component, compose, element, fragment, part；词伙：assemble components on-site"
+  },
+  "entrance": {
+    "note": "词伙：pay the entrance fees"
   },
   "outside": {
-    "note": "同义词：exterior, external"
+    "note": "同义词：exterior, external；词伙：outside the home"
   },
   "exterior": {
-    "note": "同义词：external, outside"
+    "note": "同义词：external, outside；词伙：impressive exterior design"
   },
   "external": {
-    "note": "同义词：exterior, outside"
+    "note": "同义词：exterior, outside；词伙：external events, external factors, external pressures"
   },
   "inner": {
-    "note": "同义词：inside, interior, internal"
+    "note": "同义词：inside, interior, internal；词伙：inner beauty"
   },
   "interior": {
-    "note": "同义词：inner, inside, internal"
+    "note": "同义词：inner, inside, internal；词伙：interior space"
   },
   "internal": {
     "note": "同义词：inner, inside, interior"
   },
+  "attraction": {
+    "note": "词伙：cultural attractions"
+  },
   "traffic": {
-    "note": "同义词：car, motor, vehicle"
+    "note": "同义词：car, motor, vehicle；词伙：heavy traffic, attract traffic, traffic accidents"
+  },
+  "flight": {
+    "note": "词伙：flight delay, flight attendants, boarded the flight"
+  },
+  "lane": {
+    "note": "词伙：pedestrian lanes, designated bike lanes, dedicated biking lanes"
   },
   "curb": {
     "note": "同义词：confine, constrain, constraint, hold, limit"
   },
   "vehicle": {
-    "note": "同义词：car, motor, traffic"
+    "note": "同义词：car, motor, traffic；词伙：solar-powered vehicles, traditional petrol-powered vehicles"
   },
   "motor": {
-    "note": "同义词：car, traffic, vehicle"
+    "note": "同义词：car, traffic, vehicle；词伙：improve motor skills"
   },
   "vanish": {
     "note": "同义词：decrease, diminish, disappear, eliminate, eradicate"
@@ -16584,32 +16770,86 @@
   "disappear": {
     "note": "同义词：decrease, diminish, eliminate, eradicate, gone"
   },
+  "harbour": {
+    "note": "词伙：harbour resentment"
+  },
+  "turbine": {
+    "note": "词伙：wind turbines"
+  },
+  "embark": {
+    "note": "词伙：embark on awareness campaigns"
+  },
+  "channel": {
+    "note": "词伙：channel energy, secure distribution channels"
+  },
+  "arrive": {
+    "note": "词伙：arrive late for meetings"
+  },
+  "destination": {
+    "note": "词伙：reach final destinations"
+  },
   "delay": {
-    "note": "同义词：lag, late, postpone"
+    "note": "同义词：lag, late, postpone；词伙：flight delay, delay marriage, prone to delays"
   },
   "postpone": {
-    "note": "同义词：delay, lag, late"
+    "note": "同义词：delay, lag, late；词伙：postpone parenthood, postpone retirement"
+  },
+  "package": {
+    "note": "词伙：packaged goods, software packages"
   },
   "burden": {
-    "note": "同义词：adversity, barrier, challenge, challenging, defect"
+    "note": "同义词：adversity, barrier, challenge, challenging, defect；词伙：tax burdens, financial burdens, reduce the burden"
+  },
+  "transfer": {
+    "note": "词伙：make multiple transfers"
   },
   "transmit": {
     "note": "同义词：communication, convey, narrate, oral, speak"
   },
+  "transit": {
+    "note": "词伙：transit stops, during long transit"
+  },
+  "deliver": {
+    "note": "词伙：deliver content, deliver better work performance"
+  },
   "convey": {
-    "note": "同义词：communication, narrate, oral, speak, talk"
+    "note": "同义词：communication, narrate, oral, speak, talk；词伙：convey messages, convey perceptions"
   },
   "swift": {
     "note": "同义词：accelerate, breakneck, immediately, prompt, quick"
   },
+  "regime": {
+    "note": "词伙：oppressive regimes"
+  },
   "authority": {
     "note": "同义词：council, government, ministry, official"
   },
+  "political": {
+    "note": "词伙：political stances, political scandals, political pressures"
+  },
+  "reform": {
+    "note": "词伙：reform behaviour, implement reforms"
+  },
   "conservative": {
-    "note": "同义词：classic, classical, conservation, convention, earlier"
+    "note": "同义词：classic, classical, conservation, convention, earlier；词伙：conservative attitudes"
   },
   "municipal": {
     "note": "同义词：city, domestic, family, habitat, home"
+  },
+  "meeting": {
+    "note": "词伙：attend meetings, personal meetings, in-person meetings"
+  },
+  "service": {
+    "note": "词伙：social services, community service, military services"
+  },
+  "office": {
+    "note": "词伙：physical office space"
+  },
+  "department": {
+    "note": "词伙：police departments, the labour department"
+  },
+  "harness": {
+    "note": "词伙：harness the talents, harness personal talents"
   },
   "dominate": {
     "note": "同义词：control, governance, hold, influence, lead"
@@ -16618,22 +16858,43 @@
     "note": "同义词：disturb, effect, impact, influence"
   },
   "organisation": {
-    "note": "同义词：business, commercial, company, corporate, corporation"
+    "note": "同义词：business, commercial, company, corporate, corporation；词伙：news organisations, charitable organisations, commercial organisations"
   },
   "association": {
     "note": "同义词：institute"
   },
+  "community": {
+    "note": "词伙：community life, community crime, community orders"
+  },
   "institution": {
-    "note": "同义词：academic, education, literacy"
+    "note": "同义词：academic, education, literacy；词伙：financial institutions, vocational institutions, educational institutions"
+  },
+  "unite": {
+    "note": "词伙：unite people"
   },
   "unique": {
-    "note": "同义词：abnormal, exceptional, extraordinary, extreme, rare"
+    "note": "同义词：abnormal, exceptional, extraordinary, extreme, rare；词伙：unique experience, lose unique character"
+  },
+  "nation": {
+    "note": "词伙：aid-dependent nations, less developed nations"
+  },
+  "global": {
+    "note": "词伙：global brands, global warming, disseminate globally"
   },
   "worldwide": {
     "note": "同义词：earth, international, overseas, world"
   },
+  "foreign": {
+    "note": "词伙：foreign aid, foreign investment"
+  },
   "overseas": {
-    "note": "同义词：earth, international, world, worldwide"
+    "note": "同义词：earth, international, world, worldwide；词伙：travel overseas, source from overseas"
+  },
+  "abroad": {
+    "note": "词伙：study abroad"
+  },
+  "civil": {
+    "note": "词伙：civil wars, civil service positions"
   },
   "reign": {
     "note": "同义词：control, dominate, governance, hold, influence"
@@ -16641,14 +16902,35 @@
   "liberty": {
     "note": "同义词：free, freedom, liberal"
   },
+  "independence": {
+    "note": "词伙：financial independence, strive for independence, achieve financial independence"
+  },
+  "population": {
+    "note": "词伙：ageing population, population ageing, population growth"
+  },
+  "demographic": {
+    "note": "词伙：changing demographics"
+  },
+  "citizen": {
+    "note": "词伙：law-abiding citizens"
+  },
   "preference": {
-    "note": "同义词：priority, supremacy"
+    "note": "同义词：priority, supremacy；词伙：dietary preferences, cater to preferences"
+  },
+  "ambition": {
+    "note": "词伙：career ambitions, pursue ambitions, pursue personal ambitions"
+  },
+  "welfare": {
+    "note": "词伙：animal welfare, respect animal welfare, social welfare systems"
   },
   "harmony": {
-    "note": "同义词：cooperation, cooperative, coordinate, coordination, interaction"
+    "note": "同义词：cooperation, cooperative, coordinate, coordination, interaction；词伙：live in harmony with locals"
+  },
+  "succeed": {
+    "note": "词伙：determination to succeed"
   },
   "prospect": {
-    "note": "同义词：landscape, scene, scenery, scenic, view"
+    "note": "同义词：landscape, scene, scenery, scenic, view；词伙：job prospects, promotion prospects, employment prospects"
   },
   "perspective": {
     "note": "perspective=视角/透视；in perspective=正确看待"
@@ -16690,13 +16972,13 @@
     "note": "announce=宣布消息；announce+人=通知到"
   },
   "aid": {
-    "note": "同义词：assistance, help, support"
+    "note": "同义词：assistance, help, support；词伙：foreign aid, receive aid, visual aids"
   },
   "encourage": {
-    "note": "同义词：activate, advance, boost, develop, drive"
+    "note": "同义词：activate, advance, boost, develop, drive；词伙：encourage behavioural change, encourage public consumption, encourage technological advancements"
   },
   "implement": {
-    "note": "同义词：execute, fulfill"
+    "note": "同义词：execute, fulfill；词伙：implement laws, implement rules, implement changes"
   },
   "monitor": {
     "note": "同义词：surveillance"
@@ -16705,61 +16987,100 @@
     "note": "同义词：acknowl, appreciate, ascertain, comprehend, identify"
   },
   "financial": {
-    "note": "同义词：benefit, budget, compensate, compensation, costly"
+    "note": "同义词：benefit, budget, compensate, compensation, costly；词伙：financial aid, financial means, financial risks"
   },
   "fund": {
-    "note": "同义词：benefit, budget, compensate, compensation, costly"
+    "note": "同义词：benefit, budget, compensate, compensation, costly；词伙：allocate funding, government funding, offset funding shortfalls"
   },
   "donate": {
-    "note": "同义词：contribute, contribution, dedicate"
+    "note": "同义词：contribute, contribution, dedicate；词伙：donate to worthy causes"
   },
   "commercial": {
-    "note": "同义词：business, company, corporate, corporation, deal"
+    "note": "同义词：business, company, corporate, corporation, deal；词伙：commercial pressures, commercial organisations, explore commercial potential"
+  },
+  "advertise": {
+    "note": "词伙：regulate advertising, advertising campaigns, the advertising industry"
+  },
+  "purchase": {
+    "note": "词伙：purchasing power, make frequent purchases, make the same purchases"
   },
   "retail": {
     "note": "同义词：business, commercial, company, corporate, corporation"
   },
+  "discount": {
+    "note": "词伙：steep discounts"
+  },
+  "promotion": {
+    "note": "词伙：promotion prospects"
+  },
   "exchange": {
-    "note": "同义词：interchange, share"
+    "note": "同义词：interchange, share；词伙：exchange information"
   },
   "levy": {
     "note": "同义词：charge, toll"
   },
   "duty": {
-    "note": "同义词：obligation, responsibility"
+    "note": "同义词：obligation, responsibility；词伙：child-rearing duties"
+  },
+  "impose": {
+    "note": "词伙：impose taxes on, impose carbon tax, impose discipline"
   },
   "consume": {
-    "note": "同义词：eat, feed, prey"
+    "note": "同义词：eat, feed, prey；词伙：consume time"
+  },
+  "revenue": {
+    "note": "词伙：generate revenue, generate more revenue, generate tourism revenue"
+  },
+  "recession": {
+    "note": "词伙：economic recession"
   },
   "depression": {
     "note": "同义词：frustration"
   },
   "crisis": {
-    "note": "同义词：danger, endanger, enemy, foe, hostile"
+    "note": "同义词：danger, endanger, enemy, foe, hostile；词伙：financial crisis"
   },
   "security": {
-    "note": "同义词：safety"
+    "note": "同义词：safety；词伙：food security, energy security, improve job security"
+  },
+  "bond": {
+    "note": "词伙：foster bonding, improve bonding, strengthen bonds"
+  },
+  "debt": {
+    "note": "词伙：reduce debt, build up debt"
+  },
+  "deficit": {
+    "note": "词伙：housing deficit"
   },
   "decrease": {
-    "note": "同义词：alleviate, cut, decline, deduction, diminish"
+    "note": "同义词：alleviate, cut, decline, deduction, diminish；词伙：decrease life satisfaction"
   },
   "decline": {
-    "note": "同义词：alleviate, cut, decrease, deduction, diminish"
+    "note": "同义词：alleviate, cut, decrease, deduction, diminish；词伙：mental decline, cognitive decline"
   },
   "diminish": {
-    "note": "同义词：alleviate, cut, decline, decrease, deduction"
+    "note": "同义词：alleviate, cut, decline, decrease, deduction；词伙：diminish motivation"
   },
   "reduce": {
-    "note": "同义词：alleviate, cut, decline, decrease, deduction"
+    "note": "同义词：alleviate, cut, decline, decrease, deduction；词伙：reduce debt, reduce waste, reduce boredom"
   },
   "increase": {
-    "note": "同义词：additional, boom, boost, extra, foster"
+    "note": "同义词：additional, boom, boost, extra, foster；词伙：increase sales, increase its cost, increase tensions"
   },
   "growth": {
-    "note": "同义词：additional, boom, boost, extra, foster"
+    "note": "同义词：additional, boom, boost, extra, foster；词伙：social growth, economic growth, population growth"
   },
   "expand": {
-    "note": "同义词：broad, expansion, extend, prolong, wide"
+    "note": "同义词：broad, expansion, extend, prolong, wide；词伙：expand readership, expand the talent pool, expanding middle class"
+  },
+  "influx": {
+    "note": "词伙：influx of tourists"
+  },
+  "affluent": {
+    "note": "词伙：affluent communities"
+  },
+  "enrich": {
+    "note": "词伙：enrich their lives, enrich cultural life"
   },
   "sufficient": {
     "note": "同义词：abundance, adequate, enough, sufficiency"
@@ -16771,28 +17092,40 @@
     "note": "同义词：business, commercial, corporate, corporation, deal"
   },
   "enterprise": {
-    "note": "同义词：business, commercial, company, corporate, corporation"
+    "note": "同义词：business, commercial, company, corporate, corporation；词伙：multinational enterprises"
   },
   "entity": {
     "note": "同义词：business, commercial, company, corporate, corporation"
   },
+  "invest": {
+    "note": "词伙：investing time in relationships"
+  },
+  "input": {
+    "note": "词伙：voice input"
+  },
   "product": {
-    "note": "同义词：commodity, goods"
+    "note": "同义词：commodity, goods；词伙：animal products, launch products, organic products"
   },
   "goods": {
-    "note": "同义词：commodity, product"
+    "note": "同义词：commodity, product；词伙：luxury goods, consumer goods, material goods"
   },
   "guarantee": {
     "note": "同义词：assurance, assure, bone, death, ensure"
   },
   "reliable": {
-    "note": "同义词：belief, believe, confidence, credible, faith"
+    "note": "同义词：belief, believe, confidence, credible, faith；词伙：reliable sources, reliable sources of information"
+  },
+  "attend": {
+    "note": "词伙：attend concerts, attend meetings, attend formal events"
   },
   "sale": {
-    "note": "同义词：business, commercial, company, corporate, corporation"
+    "note": "同义词：business, commercial, company, corporate, corporation；词伙：increase sales"
+  },
+  "auction": {
+    "note": "词伙：art auctions"
   },
   "deal": {
-    "note": "同义词：business, commercial, company, corporate, corporation"
+    "note": "同义词：business, commercial, company, corporate, corporation；词伙：deal with unfamiliar diseases"
   },
   "transaction": {
     "note": "同义词：business, commercial, company, corporate, corporation"
@@ -16803,14 +17136,29 @@
   "import": {
     "note": "同义词：bring, export, introduce, smuggle"
   },
+  "interest": {
+    "note": "词伙：interest rates, suit interests, explore interests"
+  },
+  "account": {
+    "note": "词伙：historical accounts, accounting processes, accounting programmes"
+  },
+  "deposit": {
+    "note": "词伙：deposit money, deposit pocket money"
+  },
   "estate": {
     "note": "同义词：property, real estate"
   },
+  "legacy": {
+    "note": "词伙：appreciate cultural legacy"
+  },
+  "worthy": {
+    "note": "词伙：donate to worthy causes, contribute to worthy causes"
+  },
   "valuable": {
-    "note": "同义词：advance, advantage, beneficial, benefit, effective"
+    "note": "同义词：advance, advantage, beneficial, benefit, effective；词伙：display valuable objects, provide valuable insights"
   },
   "incentive": {
-    "note": "同义词：activate, advance, boost, develop, drive"
+    "note": "同义词：activate, advance, boost, develop, drive；词伙：provide incentives, financial incentives, create economic incentives"
   },
   "accelerate": {
     "note": "同义词：breakneck, immediately, prompt, quick, rapid"
@@ -16818,11 +17166,20 @@
   "prompt": {
     "note": "同义词：accelerate, activate, advance, boost, breakneck"
   },
+  "salary": {
+    "note": "词伙：competitive salaries, earn entry-level salaries"
+  },
   "income": {
-    "note": "同义词：benefit, budget, compensate, compensation, costly"
+    "note": "同义词：benefit, budget, compensate, compensation, costly；词伙：meagre income, generate income, disposable income"
+  },
+  "subsidy": {
+    "note": "词伙：provide subsidies, receive subsidies"
+  },
+  "earn": {
+    "note": "词伙：earn money, earn more money, earn quick cash"
   },
   "profession": {
-    "note": "同义词：job, occupation, vocation, work"
+    "note": "同义词：job, occupation, vocation, work；词伙：pursue professions"
   },
   "occupation": {
     "note": "同义词：job, profession, vocation, work"
@@ -16831,55 +17188,70 @@
     "note": "同义词：job, occupation, profession, work"
   },
   "labour": {
-    "note": "同义词：employee, staff, worker, workforce"
+    "note": "同义词：employee, staff, worker, workforce；词伙：human labour, manual labour, physical labour"
   },
   "workforce": {
-    "note": "同义词：employee, labour, staff, worker"
+    "note": "同义词：employee, labour, staff, worker；词伙：enter the workforce, workforce diversity, stay in the workforce"
+  },
+  "interview": {
+    "note": "词伙：interview eyewitnesses"
   },
   "discharge": {
     "note": "同义词：exude, release, secrete"
   },
   "loss": {
-    "note": "同义词：alleviate, cut, decline, decrease, deduction"
+    "note": "同义词：alleviate, cut, decline, decrease, deduction；词伙：habitat loss, loss of privacy, financial losses"
   },
   "opportunity": {
-    "note": "同义词：chance, choice, likelihood, option, possibility"
+    "note": "同义词：chance, choice, likelihood, option, possibility；词伙：job opportunities, academic opportunities, economic opportunities"
   },
   "chance": {
     "note": "同义词：choice, likelihood, opportunity, option, possibility"
   },
+  "choose": {
+    "note": "词伙：choose subjects"
+  },
   "solve": {
     "note": "同义词：address, confront, conquer, defeat, disposal"
   },
+  "sustainable": {
+    "note": "词伙：in sustainable ways, sustainable practices, financially sustainable"
+  },
   "manage": {
-    "note": "同义词：control, dominate, governance, hold, influence"
+    "note": "同义词：control, dominate, governance, hold, influence；词伙：manage emotions, manage finances, manage multiple tasks"
   },
   "regulate": {
-    "note": "同义词：control, dominate, governance, hold, influence"
+    "note": "同义词：control, dominate, governance, hold, influence；词伙：regulate behaviour, regulate industries, regulate advertising"
   },
   "coordinate": {
     "note": "同义词：cooperation, cooperative, coordination, harmony, interaction"
   },
   "legal": {
-    "note": "同义词：act, judicial, law, lawyer, legislation"
+    "note": "同义词：act, judicial, law, lawyer, legislation；词伙：legal repercussions, legal codes of conduct"
   },
   "regulation": {
-    "note": "同义词：act, contract, guideline, instruction, norm"
+    "note": "同义词：act, contract, guideline, instruction, norm；词伙：impose regulations, stay updated on traffic regulations"
   },
   "norm": {
-    "note": "同义词：act, contract, guideline, instruction, policy"
+    "note": "同义词：act, contract, guideline, instruction, policy；词伙：social norms, become the norm, conform to norms"
   },
   "criteria": {
     "note": "同义词：average, common, general, mainly, majority"
   },
   "standard": {
-    "note": "同义词：average, common, criteria, general, mainly"
+    "note": "同义词：average, common, criteria, general, mainly；词伙：standards of education, the standard of beauty, rigid standards of beauty"
   },
   "permit": {
     "note": "同义词：licence, permission"
   },
+  "admission": {
+    "note": "词伙：admission fees, charge admission fees, impose high admission fees"
+  },
+  "perform": {
+    "note": "词伙：perform live, perform under pressure, perform intellectualjobs"
+  },
   "enforce": {
-    "note": "同义词：dynamic, energy, force, power, push"
+    "note": "同义词：dynamic, energy, force, power, push；词伙：enforce stricter penalties"
   },
   "reject": {
     "note": "同义词：deny, exclude, reluctant, unwilling"
@@ -16888,16 +17260,25 @@
     "note": "同义词：confine, constrain, curb, hold, limit"
   },
   "official": {
-    "note": "同义词：authority, council, government, ministry"
+    "note": "同义词：authority, council, government, ministry；词伙：corrupt government officials, high-ranking government officials"
   },
   "obligation": {
-    "note": "同义词：duty, responsibility"
+    "note": "同义词：duty, responsibility；词伙：family obligations, fulfill obligations, meet financial obligations"
+  },
+  "discrimination": {
+    "note": "词伙：face discrimination, age-related discrimination, gender-based discrimination"
   },
   "condemn": {
     "note": "同义词：critic, critical, criticise, criticism"
   },
   "boycott": {
-    "note": "同义词：avoid, cease, counter, deter, discourage"
+    "note": "同义词：avoid, cease, counter, deter, discourage；词伙：boycott sports events"
+  },
+  "appeal": {
+    "note": "词伙：universal appeal, visually appealing, enhance visual appeal"
+  },
+  "controversy": {
+    "note": "词伙：raise controversies"
   },
   "investigate": {
     "note": "同义词：analyse, analysis, analytical, diagnose, discover"
@@ -16905,47 +17286,131 @@
   "witness": {
     "note": "同义词：notice, overlook, sight, view"
   },
+  "trial": {
+    "note": "词伙：criminal trials, trial and error, broadcast criminal trials"
+  },
+  "sentence": {
+    "note": "词伙：life sentences, sentence structures, error-free sentences"
+  },
+  "jail": {
+    "note": "词伙：send them to jail"
+  },
+  "prison": {
+    "note": "词伙：an oversized prison"
+  },
   "confine": {
     "note": "同义词：constrain, constraint, curb, hold, limit"
   },
   "restrict": {
-    "note": "同义词：accumulate, concentrate, concentration, confine, constrain"
+    "note": "同义词：accumulate, concentrate, concentration, confine, constrain；词伙：restrict violent imagery, restrict work or study hours, restricted career progression"
+  },
+  "commit": {
+    "note": "词伙：commit crime, commit crimes, commit illegal acts"
   },
   "crime": {
-    "note": "同义词：conviction, criminal"
+    "note": "同义词：conviction, criminal；词伙：crime rates, youth crime, combat crime"
+  },
+  "fraud": {
+    "note": "词伙：online fraud"
+  },
+  "trick": {
+    "note": "词伙：use psychological tricks"
   },
   "conform": {
-    "note": "同义词：accordance, coherence, corresponding, persistent, stability"
+    "note": "同义词：accordance, coherence, corresponding, persistent, stability；词伙：conform to norms, conform to peer behaviour"
   },
   "obey": {
-    "note": "同义词：comply"
+    "note": "同义词：comply；词伙：obey rules"
   },
   "succumb": {
     "note": "同义词：submit, yield"
   },
+  "penalty": {
+    "note": "词伙：harsh penalties, the death penalty, face harsh penalties"
+  },
+  "fine": {
+    "note": "词伙：heavy fines"
+  },
+  "ownership": {
+    "note": "词伙：car ownership, rightful ownership"
+  },
+  "accredit": {
+    "note": "词伙：an accredited holder"
+  },
   "clue": {
     "note": "同义词：clarity, clear, cue, evidence, hint"
   },
+  "access": {
+    "note": "词伙：quick access, access to education, easier access to credit"
+  },
+  "anonymous": {
+    "note": "词伙：anonymous collectors"
+  },
+  "false": {
+    "note": "词伙：false claims, false information"
+  },
   "procedure": {
-    "note": "同义词：approach, exercise, mechanism, method, phase"
+    "note": "同义词：approach, exercise, mechanism, method, phase；词伙：undergo rigorous evaluation procedures"
+  },
+  "consequence": {
+    "note": "词伙：face serious consequences, far-reaching consequences, environmental consequences"
   },
   "demand": {
-    "note": "同义词：necessary, need, require, want"
+    "note": "同义词：necessary, need, require, want；词伙：in demand, mental demands, constant demand"
+  },
+  "request": {
+    "note": "词伙：ignored my request"
   },
   "require": {
-    "note": "同义词：demand, necessary, need, want"
+    "note": "同义词：demand, necessary, need, want；词伙：require significant funding"
+  },
+  "violence": {
+    "note": "词伙：media violence, acts of violence, exposure to media violence"
   },
   "conflict": {
-    "note": "同义词：compete, interference, intervention"
+    "note": "同义词：compete, interference, intervention；词伙：conflicts erupt, resolve conflicts, conflict resolution"
+  },
+  "campaign": {
+    "note": "词伙：air campaigns, advertising campaigns, launch awareness campaigns"
+  },
+  "struggle": {
+    "note": "词伙：struggling students"
+  },
+  "explosion": {
+    "note": "词伙：population explosion"
+  },
+  "spark": {
+    "note": "词伙：spark anger"
   },
   "target": {
-    "note": "同义词：aim, goal, intention, objective, purpose"
+    "note": "同义词：aim, goal, intention, objective, purpose；词伙：attain targets, achieve targets, attain shared targets"
+  },
+  "mission": {
+    "note": "词伙：combat missions"
   },
   "prepare": {
-    "note": "同义词：clean, preparation, purify, rehearsal, rehearse"
+    "note": "同义词：clean, preparation, purify, rehearsal, rehearse；词伙：prepare news reports"
+  },
+  "provide": {
+    "note": "词伙：provide subsidies, provide incentives, provide entertainment"
+  },
+  "deploy": {
+    "note": "词伙：deploy more police officers"
+  },
+  "beat": {
+    "note": "词伙：beat opponents"
   },
   "famine": {
     "note": "同义词：hunger"
+  },
+  "deprive": {
+    "note": "词伙：deprived communities"
+  },
+  "seize": {
+    "note": "词伙：seize job opportunities"
+  },
+  "pursue": {
+    "note": "词伙：pursue careers, pursue hobbies, pursue stardom"
   },
   "threat": {
     "note": "同义词：crisis, danger, endanger, enemy, foe"
@@ -16954,16 +17419,16 @@
     "note": "同义词：crisis, danger, endanger, enemy, foe"
   },
   "aggressive": {
-    "note": "同义词：aggression, attack, fierce, violate, violent"
+    "note": "同义词：aggression, attack, fierce, violate, violent；词伙：aggressive driving, reduce aggressive behaviour"
   },
   "violate": {
-    "note": "同义词：aggression, aggressive, attack, fierce, violent"
+    "note": "同义词：aggression, aggressive, attack, fierce, violent；词伙：violate rules"
   },
   "attack": {
     "note": "同义词：aggression, aggressive, fierce, violate, violent"
   },
   "challenge": {
-    "note": "同义词：adversity, barrier, burden, challenging, defect"
+    "note": "同义词：adversity, barrier, burden, challenging, defect；词伙：face challenges, create challenges, technological challenges"
   },
   "halt": {
     "note": "同义词：avoid, boycott, cease, counter, deter"
@@ -16972,7 +17437,7 @@
     "note": "同义词：avoid, boycott, counter, deter, discourage"
   },
   "oppose": {
-    "note": "同义词：avoid, boycott, cease, counter, deter"
+    "note": "同义词：avoid, boycott, cease, counter, deter；词伙：defeat opposing teams"
   },
   "counter": {
     "note": "同义词：avoid, boycott, cease, deter, discourage"
@@ -16980,23 +17445,35 @@
   "deter": {
     "note": "同义词：avoid, boycott, cease, counter, discourage"
   },
+  "prohibit": {
+    "note": "词伙：prohibit extreme sport, prohibit animal exploitation"
+  },
   "prevent": {
-    "note": "同义词：avoid, boycott, cease, counter, deter"
+    "note": "同义词：avoid, boycott, cease, counter, deter；词伙：prevent crime, prevent decay, prevent disease"
   },
   "evidence": {
-    "note": "同义词：clarity, clear, clue, cue, hint"
+    "note": "同义词：clarity, clear, clue, cue, hint；词伙：factual evidence, compelling evidence"
   },
   "proof": {
     "note": "同义词：clarity, clear, clue, cue, evidence"
   },
   "tension": {
-    "note": "同义词：anxiety, nervous, stress, upset"
+    "note": "同义词：anxiety, nervous, stress, upset；词伙：ease tensions, cause tensions, increase tensions"
+  },
+  "scenario": {
+    "note": "词伙：handle complex real-life communication scenarios"
   },
   "limit": {
-    "note": "同义词：confine, constrain, constraint, curb, hold"
+    "note": "同义词：confine, constrain, constraint, curb, hold；词伙：limit work hours, limited presence, limit the ability"
+  },
+  "boundary": {
+    "note": "词伙：set boundaries, push boundaries, boundaries of behaviour"
   },
   "compete": {
-    "note": "同义词：conflict, interference, intervention"
+    "note": "同义词：conflict, interference, intervention；词伙：compete for, competing demands on time"
+  },
+  "competitor": {
+    "note": "词伙：in the face of numerous competitors"
   },
   "enemy": {
     "note": "同义词：crisis, danger, endanger, foe, hostile"
@@ -17008,34 +17485,64 @@
     "note": "同义词：dynamic, energy, enforce, power, push"
   },
   "reinforce": {
-    "note": "同义词：combination, combine, cumulative, entire, hybrid"
+    "note": "同义词：combination, combine, cumulative, entire, hybrid；词伙：reinforce good behaviour, reinforce mistaken beliefs"
   },
   "mitigate": {
-    "note": "同义词：decrease, diminish, disappear, eliminate, eradicate"
+    "note": "同义词：decrease, diminish, disappear, eliminate, eradicate；词伙：mitigate educational inequality, mitigate the environmental damage"
+  },
+  "comfort": {
+    "note": "词伙：in the comfort of home, from the comfort of home, move out of the comfort zone"
+  },
+  "event": {
+    "note": "词伙：news event, social events, external events"
   },
   "matter": {
-    "note": "同义词：chemical, compound, substance"
+    "note": "同义词：chemical, compound, substance；词伙：what matters in life"
+  },
+  "reckless": {
+    "note": "词伙：reckless driving"
   },
   "fierce": {
     "note": "同义词：aggression, aggressive, attack, violate, violent"
   },
+  "punishment": {
+    "note": "词伙：light punishment, impose punishment, severe punishment"
+  },
   "execute": {
     "note": "同义词：fulfill, implement"
   },
+  "sacrifice": {
+    "note": "词伙：make sacrifices, sacrifice health, sacrifice family life"
+  },
   "progress": {
-    "note": "同义词：approach, exercise, mechanism, method, phase"
+    "note": "同义词：approach, exercise, mechanism, method, phase；词伙：impede progress, social progress, drive societal progress"
   },
   "military": {
-    "note": "同义词：army"
+    "note": "同义词：army；词伙：military services"
+  },
+  "nuclear": {
+    "note": "词伙：nuclear power plants"
   },
   "poison": {
-    "note": "同义词：drug, toxic"
+    "note": "同义词：drug, toxic；词伙：risk of food poisoning"
+  },
+  "devastate": {
+    "note": "词伙：devastate the rural economy"
   },
   "risk": {
-    "note": "同义词：crisis, danger, endanger, enemy, foe"
+    "note": "同义词：crisis, danger, endanger, enemy, foe；词伙：take risks, evaluate risks, financial risks"
   },
   "catastrophe": {
     "note": "同义词：calamity, disaster"
+  },
+  "damage": {
+    "note": "词伙：at risk of damage, damage the scenery, environmental damage"
+  },
+  "harmful": {
+    "note": "词伙：harmful content, harmful effects, harmful to health"
+  },
+  "mislead": {
+    "note": "词伙：misleading advertisements, disseminate misleading information"
   },
   "disturb": {
     "note": "同义词：affect, effect, impact, influence"
@@ -17049,35 +17556,53 @@
   "withstand": {
     "note": "同义词：attain, bear, detain, face, hold"
   },
+  "compromise": {
+    "note": "词伙：compromise sovereignty, compromise artistic freedom"
+  },
   "escape": {
-    "note": "同义词：avoid, boycott, cease, counter, deter"
+    "note": "同义词：avoid, boycott, cease, counter, deter；词伙：escape justice, an escape from reality, an escape from the real world"
   },
   "quit": {
     "note": "同义词：avoid, boycott, cease, counter, deter"
   },
   "abandon": {
-    "note": "同义词：derelict, discard, forsake"
+    "note": "同义词：derelict, discard, forsake；词伙：abandon careers"
   },
   "discard": {
-    "note": "同义词：abandon, derelict, forsake"
+    "note": "同义词：abandon, derelict, forsake；词伙：discard items, discard imperfect produce"
   },
   "defeat": {
-    "note": "同义词：address, confront, conquer, disposal, dispose"
+    "note": "同义词：address, confront, conquer, disposal, dispose；词伙：defeat opposing teams"
+  },
+  "victory": {
+    "note": "词伙：achieve victory"
   },
   "conquer": {
     "note": "同义词：address, confront, defeat, disposal, dispose"
   },
+  "medal": {
+    "note": "词伙：win medals"
+  },
   "contribute": {
-    "note": "同义词：contribution, dedicate, donate"
+    "note": "同义词：contribution, dedicate, donate；词伙：contribute insights, contribute to society, contribute to worthy causes"
+  },
+  "devote": {
+    "note": "词伙：devote time and energy"
+  },
+  "patrol": {
+    "note": "词伙：patrol communities, patrol high-risk communities"
   },
   "obstacle": {
-    "note": "同义词：adversity, avoid, barrier, boycott, burden"
+    "note": "同义词：adversity, avoid, barrier, boycott, burden；词伙：present obstacles to social progress"
   },
   "general": {
-    "note": "同义词：average, common, criteria, mainly, majority"
+    "note": "同义词：average, common, criteria, mainly, majority；词伙：the general public, the general population"
+  },
+  "generation": {
+    "note": "词伙：waste generation, future generations, previous generations"
   },
   "gender": {
-    "note": "同义词：sex"
+    "note": "同义词：sex；词伙：gender roles, gender equality, gender imbalance"
   },
   "spouse": {
     "note": "同义词：couple, courtship, double, mate, twice"
@@ -17086,19 +17611,49 @@
     "note": "同义词：baby, child, childhood, juvenile, kid"
   },
   "juvenile": {
-    "note": "同义词：baby, child, childhood, infant, kid"
+    "note": "同义词：baby, child, childhood, infant, kid；词伙：juvenile delinquents, juvenile delinquencies"
+  },
+  "youth": {
+    "note": "词伙：youth crime"
   },
   "relative": {
     "note": "同义词：associate, attach, connect, connection, correlation"
   },
+  "household": {
+    "note": "词伙：household equipment, dual-income households, help with household chores"
+  },
+  "chore": {
+    "note": "词伙：help with household chores"
+  },
+  "host": {
+    "note": "词伙：host seminars, the host country, host sports events"
+  },
   "customer": {
     "note": "同义词：consumer, user"
+  },
+  "encounter": {
+    "note": "词伙：encounter distractions, encounter the broader world"
+  },
+  "engagement": {
+    "note": "词伙：promote engagement"
+  },
+  "single": {
+    "note": "词伙：remain single"
+  },
+  "sole": {
+    "note": "词伙：sole breadwinners"
+  },
+  "individual": {
+    "note": "词伙：well-rounded individuals, those individuals in need, college-educated individuals"
   },
   "boss": {
     "note": "同义词：director, employer, entrepreneur, leader, manager"
   },
   "mate": {
     "note": "同义词：couple, courtship, double, spouse, twice"
+  },
+  "colleague": {
+    "note": "词伙：supportive colleagues"
   },
   "apprentice": {
     "note": "同义词：apprenticeship, intern, practitioner"
@@ -17110,34 +17665,58 @@
     "note": "同义词：authority, government, ministry, official"
   },
   "specialist": {
-    "note": "同义词：expert, faculty, investigator, lecturer, professor"
+    "note": "同义词：expert, faculty, investigator, lecturer, professor；词伙：specialist knowledge"
   },
   "solicitor": {
     "note": "同义词：act, judicial, law, lawyer, legal"
   },
+  "nurse": {
+    "note": "词伙：in nursing homes"
+  },
+  "ecosystem": {
+    "note": "词伙：disrupt marine ecosystems"
+  },
+  "diversity": {
+    "note": "词伙：cultural diversity, workforce diversity, reduce food diversity"
+  },
   "reproduce": {
     "note": "同义词：breed, cultivate, environment, foster, grow"
+  },
+  "evolve": {
+    "note": "词伙：rapidly evolving stories"
   },
   "cultivate": {
     "note": "同义词：breed, environment, foster, grow, nurture"
   },
   "yield": {
-    "note": "同义词：submit, succumb"
+    "note": "同义词：submit, succumb；词伙：improve crop yields, yield regular returns, yield economic benefits"
   },
   "mould": {
-    "note": "同义词：form, mode, model, module"
+    "note": "同义词：form, mode, model, module；词伙：breaks the mould"
   },
   "scent": {
     "note": "同义词：aroma, odour, olfaction, smell"
+  },
+  "fruit": {
+    "note": "词伙：perishable fruit"
+  },
+  "decay": {
+    "note": "词伙：prevent decay"
   },
   "field": {
     "note": "field=田地/领域；take the field=上场比赛"
   },
   "root": {
-    "note": "同义词：base, basic, basis, essential, fundamental"
+    "note": "同义词：base, basic, basis, essential, fundamental；词伙：root causes, connect with cultural roots"
   },
   "release": {
-    "note": "同义词：discharge, exude, secrete"
+    "note": "同义词：discharge, exude, secrete；词伙：release greenhouse gases, release negative emotions"
+  },
+  "emission": {
+    "note": "词伙：car emissions, carbon emissions, greenhouse gas emissions"
+  },
+  "absorb": {
+    "note": "词伙：absorb carbon, absorb information"
   },
   "exceed": {
     "note": "同义词：excel, overtake, surpass, transcend"
@@ -17145,20 +17724,44 @@
   "mechanism": {
     "note": "同义词：approach, exercise, method, phase, practice"
   },
+  "protect": {
+    "note": "词伙：worth protecting"
+  },
   "preserve": {
-    "note": "同义词：attain, bear, detain, face, hold"
+    "note": "同义词：attain, bear, detain, face, hold；词伙：preserve food, preserve animals, preserve wildife"
   },
   "conservation": {
-    "note": "同义词：classic, classical, conservative, convention, earlier"
+    "note": "同义词：classic, classical, conservative, convention, earlier；词伙：conservation efforts, wildlife conservation"
+  },
+  "destruction": {
+    "note": "词伙：environmental destruction, reverse habitat destruction"
+  },
+  "demolish": {
+    "note": "词伙：demolish historical buildings"
+  },
+  "infringe": {
+    "note": "词伙：infringe on privacy rights, infringe on personal freedom and autonomy"
+  },
+  "extinction": {
+    "note": "词伙：at risk of extinction"
   },
   "pattern": {
-    "note": "同义词：chart, drawing, formation, graph, image"
+    "note": "同义词：chart, drawing, formation, graph, image；词伙：dietary patterns, discern patterns, behaviour patterns"
+  },
+  "outcome": {
+    "note": "词伙：learning outcomes, exaggerate positive outcomes, achieve expected learning outcomes"
   },
   "impact": {
-    "note": "同义词：affect, disturb, effect, influence"
+    "note": "同义词：affect, disturb, effect, influence；词伙：visual impact, health impacts, profound impacts"
+  },
+  "productive": {
+    "note": "词伙：productive workers, productive activities"
   },
   "effective": {
-    "note": "同义词：advance, advantage, beneficial, benefit, helpful"
+    "note": "同义词：advance, advantage, beneficial, benefit, helpful；词伙：foster effective communication skills"
+  },
+  "efficient": {
+    "note": "词伙：efficient use"
   },
   "considerable": {
     "note": "同义词：countless, many, mass, multiple, numerous"
@@ -17178,14 +17781,32 @@
   "bear": {
     "note": "同义词：attain, detain, face, hold, keep"
   },
+  "adopt": {
+    "note": "词伙：adopt the lifestyle, adopt healthy habits, adopt ways of living"
+  },
+  "intake": {
+    "note": "词伙：nutritional intake"
+  },
   "revive": {
-    "note": "同义词：recovery, renaissance, restore"
+    "note": "同义词：recovery, renaissance, restore；词伙：revive rural economies"
   },
   "survive": {
-    "note": "同义词：attain, bear, detain, face, hold"
+    "note": "同义词：attain, bear, detain, face, hold；词伙：survive competition"
+  },
+  "gaze": {
+    "note": "词伙：gaze at screens"
+  },
+  "peer": {
+    "note": "词伙：copy peers, peer pressure, peer pressures"
+  },
+  "assert": {
+    "note": "词伙：assert decision-making abilities"
   },
   "explain": {
     "note": "同义词：as, because, cause, derive, explanation"
+  },
+  "argument": {
+    "note": "词伙：engage in frequent arguments"
   },
   "curse": {
     "note": "curse=诅咒（恨你），比swear更重；be cursed with=深受…之苦"
@@ -17205,8 +17826,14 @@
   "integrate": {
     "note": "同义词：combination, combine, cumulative, entire, hybrid"
   },
+  "manipulate": {
+    "note": "词伙：manipulate genes, manipulate emotions, manipulate public opinions"
+  },
   "steer": {
     "note": "同义词：control, dominate, governance, hold, influence"
+  },
+  "attract": {
+    "note": "词伙：attract traffic, attract young talent"
   },
   "involve": {
     "note": "同义词：associate, join, participate"
@@ -17215,22 +17842,22 @@
     "note": "同义词：anxiety, nervous, stress, tension"
   },
   "neglect": {
-    "note": "同义词：ignore, overlook, underestimate"
+    "note": "同义词：ignore, overlook, underestimate；词伙：sense of neglect, neglect social connections"
   },
   "bias": {
-    "note": "同义词：biased"
+    "note": "同义词：biased；词伙：cultural biases, identify biases, personal biases"
   },
   "smuggle": {
     "note": "同义词：bring, export, import, introduce"
   },
   "impede": {
-    "note": "同义词：avoid, boycott, cease, counter, deter"
+    "note": "同义词：avoid, boycott, cease, counter, deter；词伙：impede progress"
   },
   "induce": {
     "note": "同义词：cause, pose"
   },
   "designate": {
-    "note": "同义词：allocate, appoint, assign, distribute, spread"
+    "note": "同义词：allocate, appoint, assign, distribute, spread；词伙：designated bike lanes"
   },
   "assign": {
     "note": "同义词：allocate, appoint, designate, distribute, spread"
@@ -17242,7 +17869,10 @@
     "note": "同义词：ambiguous, contingent, hide, obscure, uncertain"
   },
   "exclude": {
-    "note": "同义词：deny, reject, reluctant, unwilling"
+    "note": "同义词：deny, reject, reluctant, unwilling；词伙：feel excluded"
+  },
+  "reverse": {
+    "note": "词伙：reverse global warming, reverse habitat destruction, reverse the loss of biodiversity"
   },
   "assure": {
     "note": "同义词：assurance, bone, death, ensure, guarantee"
@@ -17256,74 +17886,137 @@
   "attempt": {
     "note": "同义词：test, try"
   },
+  "strive": {
+    "note": "词伙：strive for perfection, strive for independence"
+  },
+  "fulfil": {
+    "note": "词伙：fulfil social responsibilities, fulfil environmental responsibilities"
+  },
+  "sort": {
+    "note": "词伙：sort waste"
+  },
+  "launch": {
+    "note": "词伙：launch products, launch awareness campaigns"
+  },
   "commence": {
     "note": "同义词：invoke, start, trigger, undertake"
   },
   "exploit": {
-    "note": "同义词：usage, use"
+    "note": "同义词：usage, use；词伙：exploit resources"
   },
   "explore": {
-    "note": "同义词：analyse, analysis, analytical, diagnose, discover"
+    "note": "同义词：analyse, analysis, analytical, diagnose, discover；词伙：explore talents, explore passions, explore interests"
   },
   "tackle": {
     "note": "同义词：address, confront, conquer, defeat, disposal"
   },
+  "cope": {
+    "note": "词伙：cope with mounting pressure"
+  },
   "dispose": {
     "note": "同义词：address, confront, conquer, defeat, disposal"
+  },
+  "conduct": {
+    "note": "词伙：conduct workshops, legal codes of conduct, conduct public awareness campaigns"
+  },
+  "rescue": {
+    "note": "词伙：rescue teams"
+  },
+  "recover": {
+    "note": "词伙：recover cells, recover from childbirth"
   },
   "restore": {
     "note": "同义词：recovery, renaissance, revive"
   },
   "offset": {
-    "note": "同义词：benefit, budget, compensate, compensation, costly"
+    "note": "同义词：benefit, budget, compensate, compensation, costly；词伙：offset funding shortfalls"
+  },
+  "replenish": {
+    "note": "词伙：be replenished naturally"
   },
   "obtain": {
-    "note": "同义词：gain, get"
+    "note": "同义词：gain, get；词伙：obtain high grades, obtain prestigious qualifications"
+  },
+  "supply": {
+    "note": "词伙：food supply"
   },
   "offer": {
-    "note": "同义词：confer, grant"
+    "note": "同义词：confer, grant；词伙：offer high pay, offer useful feedback, offer oral encouragement"
+  },
+  "amplify": {
+    "note": "词伙：amplify suffering"
   },
   "exaggerate": {
-    "note": "同义词：overstate"
+    "note": "同义词：overstate；词伙：exaggerate positive outcomes"
   },
   "prolong": {
-    "note": "同义词：broad, expand, expansion, extend, wide"
+    "note": "同义词：broad, expand, expansion, extend, wide；词伙：prolonged unemployment"
+  },
+  "uphold": {
+    "note": "词伙：uphold practices, uphold ethical principles, uphold traditional values"
+  },
+  "update": {
+    "note": "词伙：news updates, stay updated on traffic regulations"
   },
   "raise": {
-    "note": "同义词：additional, boom, boost, extra, foster"
+    "note": "同义词：additional, boom, boost, extra, foster；词伙：raise children, raise awareness, raise the fuel tax"
   },
   "cause": {
-    "note": "同义词：as, because, derive, explain, explanation"
+    "note": "同义词：as, because, derive, explain, explanation；词伙：root causes, cause tensions, cause severe injuries"
   },
   "purpose": {
     "note": "同义词：aim, goal, intention, objective, target"
   },
   "objective": {
-    "note": "同义词：aim, goal, intention, purpose, target"
+    "note": "同义词：aim, goal, intention, purpose, target；词伙：set objectives, attain objectives, career objectives"
   },
   "trigger": {
     "note": "同义词：commence, invoke, start, undertake"
   },
+  "seek": {
+    "note": "词伙：seek advice, seek freedom, seek support"
+  },
   "verify": {
     "note": "同义词：authenticate, certify, confirm, identify, test"
+  },
+  "impart": {
+    "note": "词伙：impart knowledge to, impart practical skills, impart timeless lessons"
   },
   "drop": {
     "note": "同义词：alleviate, cut, decline, decrease, deduction"
   },
   "participate": {
-    "note": "同义词：associate, involve, join"
+    "note": "同义词：associate, involve, join；词伙：participate in sport, participate in sports, participate fully in the workforce"
+  },
+  "attribute": {
+    "note": "词伙：innate attributes, emulate positive attributes"
+  },
+  "repeat": {
+    "note": "词伙：repeat offenders, repeated offenders, histor repeats itself"
   },
   "replace": {
     "note": "同义词：alternative, displacement, substitution, supersede"
   },
+  "distinguish": {
+    "note": "词伙：distinguish between fact and opinion, distinguish between facts and opinions, distinguish between reality and fantasy"
+  },
+  "differentiate": {
+    "note": "词伙：differentiate between factual information and opinions"
+  },
   "attitude": {
-    "note": "同义词：opinion, perspective"
+    "note": "同义词：opinion, perspective；词伙：societal attitudes, conservative attitudes, attitudes towards education"
+  },
+  "personality": {
+    "note": "词伙：personality traits"
   },
   "trait": {
-    "note": "同义词：characteristic, factor, feature, property"
+    "note": "同义词：characteristic, factor, feature, property；词伙：personality traits"
+  },
+  "virtue": {
+    "note": "词伙：traditional virtues, instill values and virtues"
   },
   "feature": {
-    "note": "同义词：characteristic, factor, property, trait"
+    "note": "同义词：characteristic, factor, property, trait；词伙：up-to-date features, interactive features, automatic translation features"
   },
   "bone": {
     "note": "同义词：assurance, assure, death, ensure, guarantee"
@@ -17332,16 +18025,22 @@
     "note": "同义词：assurance, assure, bone, death, ensure"
   },
   "brain": {
-    "note": "同义词：cognitive, gifted, intelligence, intelligent, mental"
+    "note": "同义词：cognitive, gifted, intelligence, intelligent, mental；词伙：enhance brain function, increase brain activity"
   },
   "mind": {
-    "note": "同义词：brain, cognitive, gifted, intelligence, intelligent"
+    "note": "同义词：brain, cognitive, gifted, intelligence, intelligent；词伙：broaden students' minds"
   },
   "physical": {
-    "note": "同义词：body, limb, organ"
+    "note": "同义词：body, limb, organ；词伙：physical book, physical items, physical media"
   },
   "mental": {
-    "note": "同义词：brain, cognitive, gifted, intelligence, intelligent"
+    "note": "同义词：brain, cognitive, gifted, intelligence, intelligent；词伙：mental health, mental decline, mental demands"
+  },
+  "space": {
+    "note": "词伙：open spaces, outer space, green spaces"
+  },
+  "tongue": {
+    "note": "词伙：mother tongue"
   },
   "limb": {
     "note": "同义词：body, organ, physical"
@@ -17352,41 +18051,68 @@
   "organ": {
     "note": "同义词：body, limb, physical"
   },
+  "chamber": {
+    "note": "词伙：echo chambers"
+  },
   "immune": {
     "note": "同义词：immunity, resistance"
   },
+  "stimulus": {
+    "note": "词伙：economic stimulus measures"
+  },
   "visual": {
-    "note": "同义词：image, see, visible"
+    "note": "同义词：image, see, visible；词伙：visual aids, visual impact, visual stimuli"
   },
   "visible": {
     "note": "同义词：image, see, visual"
   },
+  "disease": {
+    "note": "词伙：heart disease, deadly diseases, prevent disease"
+  },
   "patient": {
     "note": "同义词：attain, bear, detain, face, hold"
   },
+  "injury": {
+    "note": "词伙：prevent injuries, cause severe injuries"
+  },
   "death": {
-    "note": "同义词：assurance, assure, bone, ensure, guarantee"
+    "note": "同义词：assurance, assure, bone, ensure, guarantee；词伙：the death penalty, prevent unnecessary deaths"
   },
   "fatigue": {
     "note": "同义词：exhausted"
   },
+  "weaken": {
+    "note": "词伙：weaken personal bonds"
+  },
   "chronic": {
-    "note": "同义词：durable, duration, lasting, period, time"
+    "note": "同义词：durable, duration, lasting, period, time；词伙：suffer from chronic conditions"
+  },
+  "suffering": {
+    "note": "词伙：amplify suffering"
   },
   "therapy": {
     "note": "同义词：cure, drug, medication, medicine, remedy"
   },
+  "operation": {
+    "note": "词伙：support operations, business operations, expand their operations"
+  },
   "cure": {
     "note": "同义词：drug, medication, medicine, remedy, therapy"
   },
+  "precaution": {
+    "note": "词伙：take precautions"
+  },
   "medicine": {
-    "note": "同义词：cure, drug, medication, remedy, therapy"
+    "note": "同义词：cure, drug, medication, remedy, therapy；词伙：basic medicine"
   },
   "remedy": {
     "note": "同义词：cure, drug, medication, medicine, therapy"
   },
   "drug": {
-    "note": "同义词：cure, medication, medicine, poison, remedy"
+    "note": "同义词：cure, medication, medicine, poison, remedy；词伙：drug use, use drugs, drug abuse"
+  },
+  "pill": {
+    "note": "词伙：weight loss pills"
   },
   "recovery": {
     "note": "同义词：renaissance, restore, revive"
@@ -17395,7 +18121,13 @@
     "note": "同义词：alleviate, cut, decline, decrease, deduction"
   },
   "alleviate": {
-    "note": "同义词：cut, decline, decrease, deduction, diminish"
+    "note": "同义词：cut, decline, decrease, deduction, diminish；词伙：alleviate boredom, alleviate health problems"
+  },
+  "ease": {
+    "note": "词伙：ease tensions"
+  },
+  "relax": {
+    "note": "词伙：no time to relax"
   },
   "normal": {
     "note": "同义词：average, common, criteria, general, mainly"
@@ -17410,10 +18142,16 @@
     "note": "同义词：inactive, passive"
   },
   "positive": {
-    "note": "同义词：advance, advantage, beneficial, benefit, effective"
+    "note": "同义词：advance, advantage, beneficial, benefit, effective；词伙：positive role models, positive male role models, act as positive role models"
+  },
+  "negative": {
+    "note": "词伙：negative events, negative perceptions, negative peer pressure"
   },
   "passive": {
-    "note": "同义词：inactive, pessimistic"
+    "note": "同义词：inactive, pessimistic；词伙：passive viewers"
+  },
+  "lively": {
+    "note": "词伙：lively atmosphere"
   },
   "surprising": {
     "note": "同义词：dramatic, impressive, striking, touching, unexpected"
@@ -17421,14 +18159,26 @@
   "liberal": {
     "note": "同义词：free, freedom, liberty"
   },
+  "gentle": {
+    "note": "词伙：gentle exercise"
+  },
+  "rational": {
+    "note": "词伙：engage in rational enquiry"
+  },
   "freedom": {
-    "note": "同义词：free, liberal, liberty"
+    "note": "同义词：free, liberal, liberty；词伙：lose freedom, seek freedom, compromise artistic freedom"
   },
   "confidence": {
-    "note": "同义词：belief, believe, credible, faith, hidden"
+    "note": "同义词：belief, believe, credible, faith, hidden；词伙：lose confidence, boost confidence"
   },
   "remarkable": {
-    "note": "同义词：abnormal, chief, crucial, essential, exceptional"
+    "note": "同义词：abnormal, chief, crucial, essential, exceptional；词伙：exhibit remarkable plasticity"
+  },
+  "gratitude": {
+    "note": "词伙：express gratitude"
+  },
+  "sound": {
+    "note": "词伙：mimic new sounds, sound financial planning"
   },
   "tough": {
     "note": "同义词：challenging, complex, complexity, complicated, comprehensive"
@@ -17442,6 +18192,18 @@
   "trustworthy": {
     "note": "同义词：belief, believe, confidence, credible, faith"
   },
+  "rigorous": {
+    "note": "词伙：undergo rigorous scrutiny, undergo rigorous training, undergo rigorous evaluation procedures"
+  },
+  "strict": {
+    "note": "词伙：strict rules, strict censorship, imposing overly strict rules"
+  },
+  "severe": {
+    "note": "词伙：severe punishment, severe traffic jams, cause severe injuries"
+  },
+  "mutual": {
+    "note": "词伙：mutual trust, develop mutual trust"
+  },
   "resemble": {
     "note": "同义词：like, similar"
   },
@@ -17451,14 +18213,29 @@
   "familiar": {
     "note": "同义词：famous, notoriety, well-known"
   },
+  "private": {
+    "note": "词伙：private donors, in private lives, private education"
+  },
   "implicit": {
     "note": "同义词：implication, imply"
+  },
+  "distress": {
+    "note": "词伙：emotional distress"
   },
   "discourage": {
     "note": "同义词：avoid, boycott, cease, counter, deter"
   },
+  "anger": {
+    "note": "词伙：vent anger, spark anger"
+  },
+  "rage": {
+    "note": "词伙：road rage"
+  },
   "irritate": {
     "note": "同义词：activate, advance, boost, develop, drive"
+  },
+  "hate": {
+    "note": "词伙：hate speech"
   },
   "troublesome": {
     "note": "同义词：adversity, barrier, burden, challenge, challenging"
@@ -17469,11 +18246,14 @@
   "mean": {
     "note": "mean人=刻薄/吝啬；mean事=意味着；mean temperature=平均气温"
   },
+  "excessive": {
+    "note": "词伙：excessive gaming, excessive drinking, excessive shopping"
+  },
   "anxiety": {
-    "note": "同义词：nervous, stress, tension, upset"
+    "note": "同义词：nervous, stress, tension, upset；词伙：experience social anxiety"
   },
   "fear": {
-    "note": "同义词：afraid, horror"
+    "note": "同义词：afraid, horror；词伙：foster fear, instill fear"
   },
   "doubt": {
     "note": "同义词：skepticism"
@@ -17484,17 +18264,47 @@
   "reluctant": {
     "note": "同义词：deny, exclude, reject, unwilling"
   },
+  "repent": {
+    "note": "词伙：repent for crimes"
+  },
+  "tolerance": {
+    "note": "词伙：develop cultural competence and tolerance"
+  },
+  "rigid": {
+    "note": "词伙：rigid standards of beauty"
+  },
+  "stereotype": {
+    "note": "词伙：gender stereotypes, cultural stereotypes, gender-related stereotypes"
+  },
   "annual": {
     "note": "同义词：yearly"
   },
   "yearly": {
     "note": "同义词：annual"
   },
+  "era": {
+    "note": "词伙：in the era of globalisation"
+  },
+  "present": {
+    "note": "词伙：physically present, present obstacles to social progress"
+  },
+  "contemporary": {
+    "note": "词伙：contemporary society, address contemporary challenges"
+  },
   "night": {
     "note": "同义词：nocturnal"
   },
   "immediately": {
     "note": "同义词：accelerate, breakneck, prompt, quick, rapid"
+  },
+  "instant": {
+    "note": "词伙：instant messaging, facilitate instant communication"
+  },
+  "opening": {
+    "note": "词伙：extravagant opening ceremonies"
+  },
+  "ongoing": {
+    "note": "词伙：ongoing training, sustain ongoing investment, ongoing financial investment"
   },
   "duration": {
     "note": "同义词：chronic, durable, lasting, period, time"
@@ -17503,37 +18313,64 @@
     "note": "同义词：animal, creature, species, wildlife"
   },
   "creature": {
-    "note": "同义词：animal, mammal, species, wildlife"
+    "note": "同义词：animal, mammal, species, wildlife；词伙：living creatures"
   },
   "wildlife": {
-    "note": "同义词：animal, creature, mammal, species"
+    "note": "同义词：animal, creature, mammal, species；词伙：harm wildlife, disrupt wildlife, wildlife conservation"
   },
   "species": {
-    "note": "同义词：animal, creature, mammal, wildlife"
+    "note": "同义词：animal, creature, mammal, wildlife；词伙：extinct species, invasive species, endangered species"
+  },
+  "flock": {
+    "note": "词伙：flock to cities"
   },
   "derive": {
-    "note": "同义词：as, because, cause, explain, explanation"
+    "note": "同义词：as, because, cause, explain, explanation；词伙：derive enjoyment"
   },
   "feed": {
     "note": "同义词：consume, eat, prey"
   },
   "breed": {
-    "note": "同义词：cultivate, environment, foster, grow, nurture"
+    "note": "同义词：cultivate, environment, foster, grow, nurture；词伙：breed mistrust, captive breeding projects"
   },
   "courtship": {
     "note": "同义词：couple, double, mate, spouse, twice"
   },
+  "mature": {
+    "note": "词伙：emotionally mature"
+  },
+  "fin": {
+    "note": "词伙：heavy fines"
+  },
+  "pest": {
+    "note": "词伙：resistant to pests"
+  },
+  "ivory": {
+    "note": "词伙：in an ivory tower setting"
+  },
+  "rat": {
+    "note": "词伙：crime rates, interest rates, low birth rates"
+  },
+  "behaviour": {
+    "note": "词伙：human behaviour, shape behaviour, change behaviour"
+  },
   "habitat": {
-    "note": "同义词：city, domestic, family, home, house"
+    "note": "同义词：city, domestic, family, home, house；词伙：habitat loss, natural habitats, reverse habitat destruction"
+  },
+  "cell": {
+    "note": "词伙：recover cells"
   },
   "stable": {
     "note": "同义词：accordance, coherence, conform, corresponding, persistent"
   },
   "barrier": {
-    "note": "同义词：adversity, burden, challenge, challenging, defect"
+    "note": "同义词：adversity, burden, challenge, challenging, defect；词伙：language barriers, break down barriers, geographical barriers"
+  },
+  "epidemic": {
+    "note": "词伙：epidemic outbreaks"
   },
   "gene": {
-    "note": "同义词：built-in, dna, heredity, inborn, inherent"
+    "note": "同义词：built-in, dna, heredity, inborn, inherent；词伙：manipulate genes"
   },
   "germ": {
     "note": "同义词：bacteria, fungi, microbe, virus"
@@ -17542,7 +18379,7 @@
     "note": "同义词：fungi, germ, microbe, virus"
   },
   "virus": {
-    "note": "同义词：bacteria, fungi, germ, microbe"
+    "note": "同义词：bacteria, fungi, germ, microbe；词伙：spread of viruses"
   },
   "microbe": {
     "note": "同义词：bacteria, fungi, germ, virus"
@@ -17554,16 +18391,22 @@
     "note": "同义词：built-in, dna, gene, heredity, inborn"
   },
   "potential": {
-    "note": "同义词：chance, choice, likelihood, opportunity, option"
+    "note": "同义词：chance, choice, likelihood, opportunity, option；词伙：potential needs, earning potential, potential criminals"
   },
   "intelligence": {
-    "note": "同义词：brain, cognitive, gifted, intelligent, mental"
+    "note": "同义词：brain, cognitive, gifted, intelligent, mental；词伙：boost intelligence, improve intelligence, artificial intelligence"
+  },
+  "sensitive": {
+    "note": "词伙：sensitive topics"
+  },
+  "flexible": {
+    "note": "词伙：flexible work hours"
   },
   "nocturnal": {
     "note": "同义词：night"
   },
   "track": {
-    "note": "同义词：trace"
+    "note": "同义词：trace；词伙：track down criminals, keep track of expenses"
   },
   "trace": {
     "note": "同义词：track"
@@ -17572,16 +18415,28 @@
     "note": "同义词：consume, eat, feed"
   },
   "predator": {
-    "note": "同义词：crisis, danger, endanger, enemy, foe"
+    "note": "同义词：crisis, danger, endanger, enemy, foe；词伙：natural predators"
+  },
+  "captive": {
+    "note": "词伙：captive breeding projects"
   },
   "undergo": {
-    "note": "同义词：attain, bear, detain, face, hold"
+    "note": "同义词：attain, bear, detain, face, hold；词伙：undergo rigorous scrutiny, undergo rigorous training, undergo rigorous evaluation procedures"
   },
   "suffer": {
-    "note": "同义词：attain, bear, detain, face, hold"
+    "note": "同义词：attain, bear, detain, face, hold；词伙：amplify suffering, suffer from chronic conditions"
   },
   "module": {
     "note": "同义词：form, mode, model, mould"
+  },
+  "pressure": {
+    "note": "词伙：peer pressure, peer pressures, economic pressure"
+  },
+  "vent": {
+    "note": "词伙：vent anger"
+  },
+  "exploration": {
+    "note": "词伙：natural gas exploration"
   },
   "substance": {
     "note": "同义词：chemical, compound, matter"
@@ -17589,29 +18444,44 @@
   "compound": {
     "note": "同义词：chemical, matter, substance"
   },
+  "fossil": {
+    "note": "词伙：fossil fuels, burn fossil fuels"
+  },
   "formation": {
-    "note": "同义词：chart, drawing, graph, image, mark"
+    "note": "同义词：chart, drawing, graph, image, mark；词伙：delayed family formation"
   },
   "signal": {
     "note": "同义词：chart, drawing, formation, graph, image"
+  },
+  "distinct": {
+    "note": "词伙：locally distinct crops"
   },
   "fragment": {
     "note": "同义词：assemble, component, compose, element, part"
   },
   "overwhelming": {
-    "note": "同义词：dominant, major, overbearing, predominant"
+    "note": "同义词：dominant, major, overbearing, predominant；词伙：an overwhelming workload"
   },
   "education": {
-    "note": "同义词：academic, institution, literacy"
+    "note": "同义词：academic, institution, literacy；词伙：formal education, private education, quality education"
   },
   "primary": {
-    "note": "同义词：first, firstly, initial, leading, major"
+    "note": "同义词：first, firstly, initial, leading, major；词伙：primary focus, primary interests, primary caregivers"
   },
   "institute": {
     "note": "同义词：association"
   },
+  "acquire": {
+    "note": "词伙：acquire skills, acquire an accent, acquire knowledge"
+  },
   "expertise": {
-    "note": "同义词：ability, capability, capable, capacity, competence"
+    "note": "同义词：ability, capability, capable, capacity, competence；词伙：build expertise, develop expertise, scientific expertise"
+  },
+  "illiteracy": {
+    "note": "词伙：eradicate illiteracy"
+  },
+  "affair": {
+    "note": "词伙：international affairs, engage in extramarital affairs"
   },
   "controversial": {
     "note": "同义词：constant, disputable"
@@ -17622,17 +18492,20 @@
   "obscure": {
     "note": "同义词：ambiguous, conceal, contingent, hide, uncertain"
   },
+  "cram": {
+    "note": "词伙：cram for exams"
+  },
   "enhance": {
-    "note": "同义词：activate, advance, boost, develop, drive"
+    "note": "同义词：activate, advance, boost, develop, drive；词伙：enhance ability, enhance resilience, enhance productivity"
   },
   "inspire": {
-    "note": "同义词：activate, advance, boost, develop, drive"
+    "note": "同义词：activate, advance, boost, develop, drive；词伙：inspire change, inspire innovation, inspire copycat behaviour"
   },
   "motivate": {
-    "note": "同义词：activate, advance, boost, develop, drive"
+    "note": "同义词：activate, advance, boost, develop, drive；词伙：stay motivated"
   },
   "stimulate": {
-    "note": "同义词：activate, advance, boost, develop, drive"
+    "note": "同义词：activate, advance, boost, develop, drive；词伙：stimulate thoughts, visually stimulating, stimulate consumption"
   },
   "indulge": {
     "note": "同义词：spoil"
@@ -17646,14 +18519,20 @@
   "smart": {
     "note": "同义词：brain, cognitive, gifted, intelligence, intelligent"
   },
+  "wisdom": {
+    "note": "词伙：accumulate wisdom, pass on their wisdom"
+  },
   "capable": {
-    "note": "同义词：ability, capability, capacity, competence, expertise"
+    "note": "同义词：ability, capability, capacity, competence, expertise；词伙：mentally capable, physically capable"
+  },
+  "diligent": {
+    "note": "词伙：study diligently"
   },
   "approach": {
-    "note": "同义词：exercise, mechanism, method, phase, practice"
+    "note": "同义词：exercise, mechanism, method, phase, practice；词伙：uniform approach, holistic approach, approach the expiration date"
   },
   "scheme": {
-    "note": "同义词：initiative, issue, plan, program, project"
+    "note": "同义词：initiative, issue, plan, program, project；词伙：phishing schemes"
   },
   "principal": {
     "note": "同义词：first, firstly, initial, leading, major"
@@ -17670,47 +18549,92 @@
   "scientist": {
     "note": "同义词：expert, faculty, investigator, lecturer, professor"
   },
+  "tutor": {
+    "note": "词伙：one-on-one tutoring"
+  },
   "lecturer": {
-    "note": "同义词：expert, faculty, investigator, professor, researcher"
+    "note": "同义词：expert, faculty, investigator, professor, researcher；词伙：renowned lecturers"
   },
   "certify": {
     "note": "同义词：authenticate, confirm, identify, test, verify"
   },
+  "graduate": {
+    "note": "词伙：well-rounded graduates"
+  },
+  "ceremony": {
+    "note": "词伙：traditional ceremonies, extravagant opening ceremonies"
+  },
   "orientation": {
     "note": "同义词：direction, navigation, positioning, situate"
+  },
+  "platform": {
+    "note": "词伙：online platforms, streaming platforms, social media platforms"
   },
   "laboratory": {
     "note": "同义词：analyse, analysis, analytical, diagnose, discover"
   },
   "experiment": {
-    "note": "同义词：analyse, analysis, analytical, diagnose, discover"
+    "note": "同义词：analyse, analysis, analytical, diagnose, discover；词伙：do experiments, hands-on experiments"
   },
   "data": {
-    "note": "同义词：information"
+    "note": "同义词：information；词伙：analyse data, collect consumer data"
   },
   "quantity": {
     "note": "同义词：considerable, countless, many, mass, multiple"
   },
+  "quality": {
+    "note": "词伙：quality food, build qualities, develop qualities"
+  },
+  "library": {
+    "note": "词伙：close libraries, attend library seminars"
+  },
   "literature": {
     "note": "同义词：context, language, linguistic, literacy, term"
   },
+  "article": {
+    "note": "词伙：news articles"
+  },
+  "story": {
+    "note": "词伙：rapidly evolving stories"
+  },
   "record": {
-    "note": "同义词：document, log"
+    "note": "同义词：document, log；词伙：criminal record"
+  },
+  "profile": {
+    "note": "词伙：create fake profiles, diversify energy profiles"
+  },
+  "manual": {
+    "note": "词伙：read manuals, manual labour"
   },
   "category": {
     "note": "同义词：type"
   },
+  "content": {
+    "note": "词伙：salt content, sugar content, video content"
+  },
   "context": {
-    "note": "同义词：language, linguistic, literacy, literature, term"
+    "note": "同义词：language, linguistic, literacy, literature, term；词伙：real-life contexts"
   },
   "volume": {
     "note": "同义词：capacity"
+  },
+  "subject": {
+    "note": "词伙：core subjects, choose subjects, be subject to bias"
   },
   "major": {
     "note": "同义词：dominant, first, firstly, initial, leading"
   },
   "minor": {
     "note": "同义词：absence, deficiency, lacking, less, limited"
+  },
+  "marketing": {
+    "note": "词伙：marketing techniques"
+  },
+  "accounting": {
+    "note": "词伙：accounting processes, accounting programmes, accounting competencies"
+  },
+  "statistics": {
+    "note": "词伙：backed up by statistics"
   },
   "agriculture": {
     "note": "同义词：farm, farming"
@@ -17725,10 +18649,10 @@
     "note": "同义词：benefit, budget, compensate, compensation, costly"
   },
   "odd": {
-    "note": "同义词：strange, suspicious"
+    "note": "同义词：strange, suspicious；词伙：raise the odds of success"
   },
   "multiple": {
-    "note": "同义词：considerable, countless, many, mass, numerous"
+    "note": "同义词：considerable, countless, many, mass, numerous；词伙：manage multiple tasks, make multiple transfers"
   },
   "approximately": {
     "note": "同义词：about, around"
@@ -17740,31 +18664,49 @@
     "note": "同义词：assemble, component, compose, element, fragment"
   },
   "rate": {
-    "note": "同义词：accelerate, breakneck, grade, immediately, measure"
+    "note": "同义词：accelerate, breakneck, grade, immediately, measure；词伙：crime rates, interest rates, low birth rates"
+  },
+  "scale": {
+    "note": "词伙：achieve economies of scale"
+  },
+  "density": {
+    "note": "词伙：population density"
   },
   "inherent": {
-    "note": "同义词：built-in, dna, gene, heredity, inborn"
+    "note": "同义词：built-in, dna, gene, heredity, inborn；词伙：inherently different"
   },
   "component": {
-    "note": "同义词：assemble, compose, element, fragment, part"
+    "note": "同义词：assemble, compose, element, fragment, part；词伙：pre-fabricate components, assemble components on-site"
   },
   "compose": {
     "note": "同义词：assemble, component, element, fragment, part"
   },
+  "theory": {
+    "note": "词伙：illustrate abstract theories"
+  },
   "practical": {
-    "note": "同义词：available, conveyable, feasible, portable, realistic"
+    "note": "同义词：available, conveyable, feasible, portable, realistic；词伙：practical value, practical skills, practical aspects"
   },
   "discipline": {
-    "note": "同义词：area, domain, field, region"
+    "note": "同义词：area, domain, field, region；词伙：foster discipline, impose discipline, explore various disciplines"
   },
   "curriculum": {
-    "note": "同义词：course, lecture, syllabus"
+    "note": "同义词：course, lecture, syllabus；词伙：broaden the curriculum, comprehensive curriculum"
+  },
+  "seminar": {
+    "note": "词伙：host seminars, attend library seminars"
   },
   "syllabus": {
     "note": "同义词：course, curriculum, lecture"
   },
   "rudimentary": {
     "note": "同义词：base, basic, basis, essential, fundamental"
+  },
+  "profound": {
+    "note": "词伙：profound impacts"
+  },
+  "assignment": {
+    "note": "词伙：complete assignments"
   },
   "revise": {
     "note": "同义词：adapt, adjust, adjustment, alter, amend"
@@ -17775,17 +18717,23 @@
   "plagiarise": {
     "note": "同义词：copy, duplicate, imitate, mimic, replicate"
   },
+  "print": {
+    "note": "词伙：print books, print media, print materials"
+  },
   "opinion": {
-    "note": "同义词：attitude, perspective"
+    "note": "同义词：attitude, perspective；词伙：value opinions, express opinions, manipulate public opinions"
   },
   "introduce": {
-    "note": "同义词：bring, export, import, smuggle"
+    "note": "同义词：bring, export, import, smuggle；词伙：introduce innovative business ideas"
   },
   "cite": {
     "note": "同义词：comment, extract, quotation"
   },
   "extract": {
     "note": "同义词：cite, comment, quotation"
+  },
+  "abstract": {
+    "note": "词伙：illustrate abstract theories"
   },
   "assume": {
     "note": "同义词：assumption, hypothesis"
@@ -17802,20 +18750,29 @@
   "detect": {
     "note": "同义词：find, look, search, sought"
   },
+  "discern": {
+    "note": "词伙：discern patterns, discerning readers"
+  },
   "conscious": {
-    "note": "同义词：aware, awarene, discover, know, realise"
+    "note": "同义词：aware, awarene, discover, know, realise；词伙：environmentally conscious"
   },
   "imply": {
     "note": "同义词：implication, implicit"
   },
+  "represent": {
+    "note": "词伙：represent the local culture, accurately represent the real world"
+  },
   "comprehend": {
-    "note": "同义词：acknowl, admit, appreciate, ascertain, identify"
+    "note": "同义词：acknowl, admit, appreciate, ascertain, identify；词伙：comprehend content, easier to comprehend"
   },
   "diagnose": {
     "note": "同义词：analyse, analysis, analytical, discover, enquiry"
   },
   "contrast": {
-    "note": "同义词：compare"
+    "note": "同义词：compare；词伙：contrasting norms"
+  },
+  "diverse": {
+    "note": "词伙：bring diverse viewpoints, diverse sources of funding, diverse architectural styles"
   },
   "instance": {
     "note": "同义词：including"
@@ -17827,19 +18784,19 @@
     "note": "同义词：disclose, display, elaborate, expose, exposure"
   },
   "illustrate": {
-    "note": "同义词：demonstrate, disclose, display, elaborate, expose"
+    "note": "同义词：demonstrate, disclose, display, elaborate, expose；词伙：illustrate abstract theories"
   },
   "manifest": {
     "note": "同义词：demonstrate, disclose, display, elaborate, expose"
   },
   "resolve": {
-    "note": "同义词：address, confront, conquer, defeat, disposal"
+    "note": "同义词：address, confront, conquer, defeat, disposal；词伙：resolve conficts, resolve conflicts"
   },
   "research": {
-    "note": "同义词：analyse, analysis, analytical, diagnose, discover"
+    "note": "同义词：analyse, analysis, analytical, diagnose, discover；词伙：space research, research skills, in-depth research"
   },
   "attain": {
-    "note": "同义词：bear, detain, face, hold, keep"
+    "note": "同义词：bear, detain, face, hold, keep；词伙：attain targets, attain objectives, attain shared targets"
   },
   "queue": {
     "note": "同义词：array, order, sequence"
@@ -17851,13 +18808,22 @@
     "note": "同义词：commend, credit"
   },
   "appreciate": {
-    "note": "同义词：acknowl, admit, ascertain, comprehend, identify"
+    "note": "同义词：acknowl, admit, ascertain, comprehend, identify；词伙：appreciate cultural legacy"
+  },
+  "feedback": {
+    "note": "词伙：offer useful feedback"
   },
   "underestimate": {
-    "note": "同义词：ignore, neglect, overlook"
+    "note": "同义词：ignore, neglect, overlook；词伙：underestimate difficulties"
+  },
+  "reward": {
+    "note": "词伙：random rewards, financial rewards, reward achievements"
+  },
+  "fee": {
+    "note": "词伙：parking fees, admission fees, charge admission fees"
   },
   "advance": {
-    "note": "同义词：activate, advantage, beneficial, benefit, boost"
+    "note": "同义词：activate, advantage, beneficial, benefit, boost；词伙：advanced courses, medical advances, advance in the workforce"
   },
   "invent": {
     "note": "同义词：coin, create, devise, erect, form"
@@ -17866,28 +18832,49 @@
     "note": "同义词：demonstrate, display, elaborate, expose, exposure"
   },
   "reveal": {
-    "note": "同义词：demonstrate, disclose, display, elaborate, expose"
+    "note": "同义词：demonstrate, disclose, display, elaborate, expose；词伙：reveal facts"
   },
   "uncover": {
     "note": "同义词：demonstrate, disclose, display, elaborate, expose"
   },
   "expose": {
-    "note": "同义词：demonstrate, disclose, display, elaborate, exposure"
+    "note": "同义词：demonstrate, disclose, display, elaborate, exposure；词伙：be exposed to distractions, be exposed to violent images, be exposed to domestic violence"
   },
   "domain": {
     "note": "同义词：area, discipline, field, region"
   },
   "specialise": {
-    "note": "同义词：accumulate, concentrate, concentration, emphasis, focus"
+    "note": "同义词：accumulate, concentrate, concentration, emphasis, focus；词伙：specialised jobs, specialised skills, specialised expertise"
   },
   "concentrate": {
     "note": "同义词：accumulate, concentration, emphasis, focus, gather"
   },
+  "utilise": {
+    "note": "词伙：utilise skills and abilities"
+  },
   "usage": {
-    "note": "同义词：exploit, use"
+    "note": "同义词：exploit, use；词伙：extensive car usage"
+  },
+  "device": {
+    "note": "词伙：digital devices, electronic devices"
+  },
+  "appliance": {
+    "note": "词伙：electrical appliances, energy-efficient appliances"
+  },
+  "facility": {
+    "note": "词伙：proper facilities, sports facilities, medical facilities"
+  },
+  "equipment": {
+    "note": "词伙：fitness equipment, household equipment"
+  },
+  "instrument": {
+    "note": "词伙：play an instrument, musical instruments"
+  },
+  "tool": {
+    "note": "词伙：online tools, digital tools, communication tools"
   },
   "measure": {
-    "note": "同义词：assess, assessment, calculate, evaluation, grade"
+    "note": "同义词：assess, assessment, calculate, evaluation, grade；词伙：implement measures, cost control measures, public security measures"
   },
   "calculate": {
     "note": "同义词：assess, assessment, evaluation, measure"
@@ -17898,26 +18885,56 @@
   "assess": {
     "note": "同义词：assessment, calculate, evaluation, measure"
   },
+  "evaluate": {
+    "note": "词伙：evaluate risks"
+  },
   "accumulate": {
-    "note": "同义词：concentrate, concentration, emphasis, focus, gather"
+    "note": "同义词：concentrate, concentration, emphasis, focus, gather；词伙：accumulate wisdom, accumulate resources"
   },
   "attach": {
     "note": "同义词：associate, connect, connection, correlation, join"
+  },
+  "echo": {
+    "note": "词伙：echo chambers"
+  },
+  "network": {
+    "note": "词伙：public transport networks, social networking websites"
+  },
+  "vision": {
+    "note": "词伙：poor vision, bring creative visions to life"
+  },
+  "fantasy": {
+    "note": "词伙：distinguish between reality and fantasy"
+  },
+  "ventilation": {
+    "note": "词伙：poor ventilation"
+  },
+  "refine": {
+    "note": "词伙：refined taste"
   },
   "purify": {
     "note": "同义词：clean, preparation, prepare, rehearsal, rehearse"
   },
   "mode": {
-    "note": "同义词：form, model, module, mould"
+    "note": "同义词：form, model, module, mould；词伙：silent mode"
   },
   "framework": {
     "note": "同义词：build, building, construct, constructing, construction"
   },
+  "aspect": {
+    "note": "词伙：practical aspects, other aspects of life"
+  },
   "phase": {
     "note": "同义词：approach, exercise, mechanism, method, practice"
   },
+  "operate": {
+    "note": "词伙：operating hours, reduce operating costs"
+  },
   "facilitate": {
-    "note": "同义词：convenient, easy, straightforward"
+    "note": "同义词：convenient, easy, straightforward；词伙：facilitate connections, facilitate development, facilitate instant communication"
+  },
+  "transform": {
+    "note": "词伙：transform skylines"
   },
   "alter": {
     "note": "同义词：adapt, adjust, adjustment, amend, change"
@@ -17926,64 +18943,103 @@
     "note": "同义词：adapt, adjust, adjustment, alter, amend"
   },
   "adapt": {
-    "note": "同义词：adaption, adjust, adjustment, alter, amend"
+    "note": "同义词：adaption, adjust, adjustment, alter, amend；词伙：adapt to change, adapt to local customs, adapt to the local culture"
   },
   "adjust": {
-    "note": "同义词：adapt, adjustment, alter, amend, change"
+    "note": "同义词：adapt, adjustment, alter, amend, change；词伙：adjust the font size, adjust to different climates"
   },
   "accurate": {
-    "note": "同义词：accuracy, correct, exact, precise"
+    "note": "同义词：accuracy, correct, exact, precise；词伙：accurately represent the real world"
   },
   "precise": {
     "note": "同义词：accuracy, accurate, correct, exact"
   },
   "correct": {
-    "note": "同义词：accuracy, accurate, exact, precise"
+    "note": "同义词：accuracy, accurate, exact, precise；词伙：correct misbehaviour, correct misconceptions, correct wording mistakes"
+  },
+  "error": {
+    "note": "词伙：human errors, trial and error"
   },
   "mistake": {
-    "note": "同义词：inaccurate, incorrect, wrong"
+    "note": "同义词：inaccurate, incorrect, wrong；词伙：avoid hasty mistakes, correct wording mistakes, learn from past mistakes"
+  },
+  "circumstance": {
+    "note": "词伙：changing circumstances, financial circumstances, adapt to changing circumstances"
+  },
+  "civilisation": {
+    "note": "词伙：human civilisation"
   },
   "renaissance": {
     "note": "同义词：recovery, restore, revive"
   },
   "tradition": {
-    "note": "同义词：classic, classical, conservation, conservative, convention"
+    "note": "同义词：classic, classical, conservation, conservative, convention；词伙：follow traditions, musical traditions, building traditions"
   },
   "convention": {
     "note": "同义词：classic, classical, conservation, conservative, earlier"
   },
   "ethical": {
-    "note": "同义词：moral"
+    "note": "同义词：moral；词伙：uphold ethical principles"
   },
   "moral": {
-    "note": "同义词：ethical"
+    "note": "同义词：ethical；词伙：moral support, moral responsibility"
   },
   "local": {
-    "note": "同义词：city, domestic, family, habitat, home"
+    "note": "同义词：city, domestic, family, habitat, home；词伙：adapt to local customs, locally distinct crops, adapt to the local culture"
+  },
+  "humanitarian": {
+    "note": "词伙：humanitarian aid"
+  },
+  "heritage": {
+    "note": "词伙：cultural heritage, architectural heritage, preserve cultural heritage"
   },
   "inherit": {
-    "note": "同义词：built-in, dna, gene, heredity, inborn"
+    "note": "同义词：built-in, dna, gene, heredity, inborn；词伙：inherited wealth"
   },
   "religion": {
     "note": "同义词：religious, sacred"
   },
+  "etiquette": {
+    "note": "词伙：follow etiquette"
+  },
   "sacred": {
     "note": "同义词：religion, religious"
+  },
+  "celebrity": {
+    "note": "词伙：celebrity culture, celebrity gossips, celebrity endorsement"
+  },
+  "status": {
+    "note": "词伙：symbolise status, symbols of status, markers for status"
+  },
+  "accident": {
+    "note": "词伙：traffic accidents, workplace accidents, reduce traffic accidents"
+  },
+  "prosperity": {
+    "note": "词伙：economic prosperity, symbols of prosperity, achieve economic prosperity"
+  },
+  "setback": {
+    "note": "词伙：face setbacks, experience setbacks"
   },
   "adversity": {
     "note": "同义词：barrier, burden, challenge, challenging, defect"
   },
   "oral": {
-    "note": "同义词：communication, convey, narrate, speak, talk"
+    "note": "同义词：communication, convey, narrate, speak, talk；词伙：offer oral encouragement"
   },
   "verbal": {
-    "note": "同义词：communication, convey, narrate, oral, speak"
+    "note": "同义词：communication, convey, narrate, oral, speak；词伙：verbal abuse"
+  },
+  "expression": {
+    "note": "词伙：artistic expressions"
   },
   "consistent": {
-    "note": "同义词：compatible"
+    "note": "同义词：compatible；词伙：consistent wind patterns"
   },
   "complicated": {
     "note": "同义词：challenging, complex, complexity, comprehensive, demanding"
+  },
+  "version": {
+    "note": "词伙：become the best version of themselves"
   },
   "interpret": {
     "note": "同义词：acknowl, admit, appreciate, ascertain, comprehend"
@@ -17991,32 +19047,74 @@
   "narrate": {
     "note": "同义词：communication, convey, oral, speak, talk"
   },
+  "discussion": {
+    "note": "词伙：group discussion, discussion groups, engage in discussions"
+  },
   "critic": {
     "note": "同义词：condemn, critical, criticise, criticism"
+  },
+  "disseminate": {
+    "note": "词伙：disseminate globally, disseminate misleading information"
   },
   "anticipate": {
     "note": "同义词：conjecture, expect, predict, prophecy"
   },
   "expect": {
-    "note": "同义词：anticipate, conjecture, predict, prophecy"
+    "note": "同义词：anticipate, conjecture, predict, prophecy；词伙：follow expected behaviour, achieve expected learning outcomes"
   },
   "recreation": {
     "note": "同义词：amusement, entertainment, pleasant, relaxed"
   },
+  "gossip": {
+    "note": "词伙：celebrity gossips"
+  },
+  "festival": {
+    "note": "词伙：celebrate festivals"
+  },
   "program": {
-    "note": "同义词：initiative, issue, plan, project, proposal"
+    "note": "同义词：initiative, issue, plan, project, proposal；词伙：video chat programs, video-chatting programs"
   },
   "rehearsal": {
     "note": "同义词：clean, preparation, prepare, purify, rehearse"
   },
   "imitate": {
-    "note": "同义词：copy, duplicate, mimic, plagiarise, replicate"
+    "note": "同义词：copy, duplicate, mimic, plagiarise, replicate；词伙：imitate unlawful behaviour"
   },
   "mimic": {
-    "note": "同义词：copy, duplicate, imitate, plagiarise, replicate"
+    "note": "同义词：copy, duplicate, imitate, plagiarise, replicate；词伙：mimic new sounds"
+  },
+  "concert": {
+    "note": "词伙：attend concerts, the concert hall"
+  },
+  "opera": {
+    "note": "词伙：go to the opera"
+  },
+  "film": {
+    "note": "词伙：documentary films"
+  },
+  "movie": {
+    "note": "词伙：engaging movies"
+  },
+  "role": {
+    "note": "词伙：role play, role models, gender roles"
   },
   "scene": {
     "note": "同义词：landscape, prospect, scenery, scenic, view"
+  },
+  "stage": {
+    "note": "词伙：developmental stage"
+  },
+  "gallery": {
+    "note": "词伙：art galleries, visit art galleries"
+  },
+  "exhibition": {
+    "note": "词伙：organise exhibitions"
+  },
+  "aesthetic": {
+    "note": "词伙：aesthetic value"
+  },
+  "collect": {
+    "note": "词伙：collect information, collect consumer data"
   },
   "select": {
     "note": "同义词：choice, option"
@@ -18030,28 +19128,70 @@
   "draw": {
     "note": "draw the curtains=拉窗帘；draw attention=吸引注意"
   },
+  "musical": {
+    "note": "词伙：musical traditions, musically talented, musical instruments"
+  },
   "classical": {
     "note": "同义词：classic, conservation, conservative, convention, earlier"
   },
   "rock": {
     "note": "rock=岩石；rock music=摇滚；rock the boat=动摇局面"
   },
+  "solo": {
+    "note": "词伙：solo activities"
+  },
+  "tune": {
+    "note": "词伙：sing along to tunes"
+  },
+  "competition": {
+    "note": "词伙：fair competition, stifle competition, promote competition"
+  },
+  "athlete": {
+    "note": "词伙：professional athletes"
+  },
   "famous": {
     "note": "同义词：familiar, notoriety, well-known"
   },
+  "training": {
+    "note": "词伙：staff training, skills training, ongoing training"
+  },
   "exercise": {
-    "note": "同义词：approach, mechanism, method, phase, practice"
+    "note": "同义词：approach, mechanism, method, phase, practice；词伙：gentle exercise, intense exercise, exercise judgment"
+  },
+  "outdoor": {
+    "note": "词伙：outdoor activities"
+  },
+  "strain": {
+    "note": "词伙：strain public resources, minimise the mental strain, strain on medical facilities"
   },
   "goal": {
-    "note": "同义词：aim, intention, objective, purpose, target"
+    "note": "同义词：aim, intention, objective, purpose, target；词伙：non-work goals, pursue career goals, pursue goals and interests"
   },
   "pitch": {
     "note": "pitch=音高；football pitch=球场；pitch a tent=扎营"
+  },
+  "throw": {
+    "note": "词伙：throw away, throw parties"
+  },
+  "dive": {
+    "note": "词伙：dive deep into"
+  },
+  "hunt": {
+    "note": "词伙：mass hunting"
+  },
+  "pedestrian": {
+    "note": "词伙：pedestrian lanes"
+  },
+  "pace": {
+    "note": "词伙：pace of life, fast pace of life, keep up with the pace"
   },
   "stride": {
     "note": "同义词：approach, exercise, mechanism, method, phase"
   },
   "lag": {
     "note": "同义词：delay, late, postpone"
+  },
+  "climb": {
+    "note": "词伙：climb the corporate ladder"
   }
 }
