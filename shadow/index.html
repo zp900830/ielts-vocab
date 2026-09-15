@@ -2596,6 +2596,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     }
     // AB 按钮长按 → 打开已保存循环列表；单击 → 设AB循环（原有行为）
+    // 首次点击提示长按功能
     (function() {
     const btn = document.getElementById('btnAB');
     if (!btn) return;
@@ -2607,7 +2608,16 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }, { passive: true });
     btn.addEventListener('pointerup', () => {
       clearTimeout(timer); timer = null;
-      if (!held) toggleAB();
+      if (!held) {
+        toggleAB();
+        // 首次点击后提示长按功能
+        try {
+          if (!localStorage.getItem('ielts-ab-hint')) {
+            localStorage.setItem('ielts-ab-hint', '1');
+            setTimeout(() => showAbToast('💡 长按AB按钮可查看已保存循环'), 600);
+          }
+        } catch (e) {}
+      }
     });
     btn.addEventListener('pointerleave', () => { clearTimeout(timer); timer = null; });
     })();
