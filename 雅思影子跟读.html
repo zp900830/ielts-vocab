@@ -178,7 +178,7 @@
   /* ============ 底部播放条（Liquid Glass 风格） ============ */
   .audiobar { position: fixed; left: 24px; right: 24px; transform: none;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 120;
-    display: flex; align-items: center; gap: 12px;
+    display: flex; flex-direction: column; align-items: stretch; gap: 8px;
     background: linear-gradient(145deg, rgba(255,255,255,.65), rgba(255,255,255,.25) 42%, rgba(255,255,255,.15));
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
@@ -198,11 +198,13 @@
     background: radial-gradient(160px 28px at 16% 0%, rgba(255,255,255,.55), transparent 72%),
     linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)); }
   .ab-left { display: flex; align-items: center; gap: 6px; flex: none;
-    transition: gap var(--t-morph) var(--ease-smooth); }
-  .ab-right { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;
+    order: 2; width: 100%; flex-wrap: wrap; justify-content: center;
+    transition: gap var(--t-morph) var(--ease-smooth); } /* 默认完整条：控制按钮在下排 */
+  .ab-right { display: flex; align-items: center; gap: 10px; flex: none; min-width: 0;
+    order: 1; width: 100%;
     transition: gap var(--t-morph) var(--ease-smooth),
       max-width var(--t-morph) var(--ease-smooth), max-height var(--t-morph) var(--ease-smooth),
-      opacity .3s ease; }
+      opacity .3s ease; } /* 默认完整条：进度条+快速跳转在上排 */
   .audiobar .ab-left > .btn { transition: background var(--t-fast), border-color var(--t-fast),
     filter var(--t-fast), transform .12s ease,
     font-size var(--t-morph) var(--ease-smooth), padding var(--t-morph) var(--ease-smooth),
@@ -461,21 +463,21 @@
   /* 自由播放超过5s后导航透明度降低（logo除外） */
   body.fade-nav .topbar { opacity: .55; }
   body.fade-nav .topbar h1 { opacity: 1; }
-  /* mini 播放条：收缩为居中小胶囊（仅 上一句/播放/下一句），宽度跟随内容平滑收拢 */
-  body.scrolled .audiobar { padding: 4px 10px; gap: 4px; border-radius: 999px;
+  /* mini 播放条：收缩为居中小胶囊，展示全部控制按钮（播放/上一句/下一句/单句循环/AB/倍速/书签），仅隐去进度条与快速跳转 */
+  body.scrolled .audiobar { padding: 4px 8px; gap: 4px; border-radius: 999px;
     width: fit-content; max-width: calc(100vw - 48px);
     left: 50%; right: auto; transform: translateX(-50%);
+    flex-direction: row; align-items: center;
     border-color: rgba(255,255,255,.4);
     backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
   body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute; }
-  body.scrolled .audiobar .ab-left { gap: 0; }
-  body.scrolled .audiobar .ab-left > .btn:not(.ab-step):not(.play) { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden; }
-  body.scrolled .audiobar .loop-wrap,
-  body.scrolled .audiobar .rate-wrap,
-  body.scrolled .audiobar .ab-title { max-width: 0; min-width: 0; margin: 0; padding: 0; border: 0; opacity: 0; pointer-events: none; overflow: hidden; }
-  body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 10px; min-height: 28px; }
-  body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 14px; }
+  body.scrolled .audiobar .ab-left { gap: 3px; flex-wrap: nowrap; }
+  body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 7px; min-height: 28px;
+    max-width: none; opacity: 1; pointer-events: auto; overflow: visible; }
+  body.scrolled .audiobar .ab-left > .btn.play { font-size: 0; padding: 4px 7px; }
   body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
+  body.scrolled .audiobar .loop-wrap,
+  body.scrolled .audiobar .rate-wrap { max-width: none; min-width: 0; margin: 0; opacity: 1; pointer-events: auto; overflow: visible; }
   /* 展开按钮：mini 态显示在胶囊上方 */
   .ab-expand { display: none; }
   body.scrolled .audiobar .ab-expand {
