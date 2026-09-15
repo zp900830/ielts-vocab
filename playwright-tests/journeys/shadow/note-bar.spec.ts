@@ -75,7 +75,7 @@ test.describe('Note bar under sentences with analysis-worthy words', () => {
         const bar = page.locator('.notebar', { hasText: 'swear at sb' });
         expect(await bar.locator('.w').count()).toBe(0);
         await expect(page.locator('#pop')).toBeHidden();
-        await bar.locator('.nb-w').click();
+        await bar.locator('.nb-w').first().click();
         await expect(page.locator('#pop')).toBeHidden();
       });
 

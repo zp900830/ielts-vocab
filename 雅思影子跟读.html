@@ -1948,9 +1948,10 @@
     return speechSynthesis.getVoices().filter(v => /^en([-_]|$)/i.test(v.lang));
     }
     /* ============ Azure 云端语音（与 admin 后台同一服务，需登录） ============ */
+    // 生产部署时请通过 scripts/inject_config.py 注入真实凭证，或手动替换下方占位符
     const CLOUD = {
-    URL: 'https://nhqevdkjqzgnyjbijwso.supabase.co',
-    KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ocWV2ZGtqcXpnbnlqYmlqd3NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NDQ2MDYsImV4cCI6MjEwMzIyMDYwNn0.WXX79gPNdvV_q37jvwTcACHPGZAvi3bw7CeFpw0QKpE',
+    URL: 'https://your-project.supabase.co',
+    KEY: 'your-anon-key',
     VOICES: [
     { id: 'en-GB-SoniaNeural', label: 'Sonia · 英式女声 ★★★', region: '英式' },
     { id: 'en-GB-LibbyNeural', label: 'Libby · 英式女声 ★★★', region: '英式' },

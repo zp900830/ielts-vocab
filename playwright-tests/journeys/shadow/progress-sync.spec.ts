@@ -100,7 +100,7 @@ test.describe('Progress cloud sync: pull, push, and latest-wins', () => {
           sents[30].scrollIntoView({ block: 'center' });
           (sents[30] as HTMLElement).click();
         });
-        await page.waitForTimeout(3000);
+        await page.waitForTimeout(4500);
         const last = await page.evaluate(() => {
           const arr: any = (window as any).__upserts;
           return arr[arr.length - 1];

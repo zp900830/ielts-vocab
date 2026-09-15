@@ -6,7 +6,7 @@ export default defineConfig({
   retries: 0,
   use: {
     baseURL: process.env.E2E_BASE_URL || 'http://localhost:8931',
-    channel: 'chrome',
+    channel: 'chromium',
     headless: true,
   },
   webServer: process.env.E2E_NO_SERVER ? undefined : {

@@ -6,9 +6,12 @@
     "pretest": "node scripts/ensure-server.cjs",
     "test": "playwright test"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "devDependencies": {
-    "@playwright/test": "^1.55.0",
-    "@types/node": "^22.20.2",
-    "typescript": "^5.6.0"
+    "@playwright/test": "1.63.0",
+    "@types/node": "22.20.2",
+    "typescript": "5.9.3"
   }
 }

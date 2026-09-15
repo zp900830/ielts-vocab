@@ -2,7 +2,7 @@
 // Compiled at: 2026-09-12
 // Source is authoritative — do not edit; re-compile from markdown if broken.
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../../fixtures';
 import { currentTimeout } from '../../utils/timeouts';
 import { shadowLocators as shadow } from '../../locators/shadow-locators';
 

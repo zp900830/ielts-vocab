@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e8eef6">
 <title>管理后台 · 雅思词汇真经</title>
 <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/element-plus@2/dist/index.css">
 <style>
@@ -18,6 +20,7 @@ body{
   color:var(--ink); background:linear-gradient(160deg,var(--bg1),var(--bg2) 60%,#eef1f4);
   -webkit-font-smoothing:antialiased;
 }
+input,select,textarea{font-size:16px}
 #app{min-height:100%;display:flex;flex-direction:column}
 /* ---------- 玻璃卡片 ---------- */
 .glass{
@@ -43,6 +46,7 @@ body{
 .nav-item{
   display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;cursor:pointer;
   font-size:13.5px;color:var(--ink);border:1px solid transparent;transition:all .18s ease;user-select:none;
+  background:transparent;width:100%;text-align:left;font-family:inherit;
 }
 .nav-item:hover{background:rgba(255,255,255,.5)}
 .nav-item.on{
@@ -52,6 +56,7 @@ body{
 .nav-item svg{width:17px;height:17px;flex-shrink:0;opacity:.75}
 .side .foot{margin-top:auto;padding:10px 12px;border-top:1px solid var(--hair)}
 .side .foot .em{font-size:12px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dark-toggle{position:fixed;bottom:14px;right:14px;z-index:50;width:38px;height:38px;border-radius:50%;border:1px solid var(--stroke);background:var(--glass);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.12);font-size:18px}
 .main{flex:1;padding:14px;min-width:0}
 .page{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
 .page h2{font-size:21px;font-weight:700;letter-spacing:-.2px}
@@ -67,7 +72,7 @@ body{
 .card .full{width:100%}
 /* ---------- 表格 ---------- */
 .el-table{--el-table-header-bg-color:transparent;--el-table-tr-bg-color:transparent;background:transparent}
-.el-table :deep(.el-table__inner-wrapper::before){display:none}
+.el-table .el-table__inner-wrapper::before{display:none}
 .mono{font-variant-numeric:tabular-nums}
 /* ---------- 登录页 ---------- */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
@@ -81,6 +86,26 @@ body{
 .el-message-box{border-radius:16px!important;border:1px solid var(--stroke)!important}
 .tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .tools .grow{flex:1}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.sr-only-focusable:focus{position:static;width:auto;height:auto;padding:10px 18px;margin:0;overflow:visible;clip:auto;white-space:normal;background:var(--accent);color:#fff;z-index:100;border-radius:12px}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .nav-item,.el-button{transition:none!important}
+}
+html.dark,body.dark{background:#0d1117}
+body.dark{
+  --glass:rgba(28,31,38,.72); --glass2:rgba(28,31,38,.48);
+  --stroke:rgba(255,255,255,.10); --hair:rgba(255,255,255,.08);
+  --ink:#e8eaed; --ink2:#9aa0a6; --accent:#4dabf7; --bg1:#0d1117; --bg2:#161b22;
+  color:var(--ink);
+}
+body.dark .glass{box-shadow:0 1px 0 rgba(255,255,255,.08) inset, 0 8px 28px rgba(0,0,0,.28)}
+body.dark .nav-item:hover{background:rgba(255,255,255,.08)}
+body.dark .nav-item.on{background:rgba(255,255,255,.12);box-shadow:0 1px 0 rgba(255,255,255,.1) inset, 0 3px 10px rgba(0,0,0,.18)}
+body.dark .metric .k,body.dark .metric .hint,body.dark .brand small,body.dark .page .sub,body.dark .login p{color:var(--ink2)}
+body.dark .el-table{--el-table-header-bg-color:transparent;--el-table-tr-bg-color:transparent;background:transparent}
+body.dark .el-table th.el-table__cell,body.dark .el-table td.el-table__cell{color:#d1d5db}
+body.dark .err{color:#ff6b6b}
 @media (max-width:760px){
   .shell{flex-direction:column}
   .side{width:auto;margin:14px 14px 0;height:auto;position:static;flex-direction:row;align-items:center;padding:8px;overflow-x:auto}
@@ -91,6 +116,7 @@ body{
 </style>
 </head>
 <body>
+<a href="#app" class="sr-only sr-only-focusable">跳到主内容</a>
 <div id="app">
 
 <!-- ============ 登录 ============ -->
@@ -110,9 +136,9 @@ body{
 <div v-else class="shell">
   <aside class="glass side">
     <div class="brand"><div class="logo">雅</div><div><b>词汇真经</b><small>Admin Console</small></div></div>
-    <div class="nav-item" v-for="m in menus" :key="m.k" :class="{on:view===m.k}" @click="go(m.k)">
+    <button type="button" class="nav-item" v-for="m in menus" :key="m.k" :class="{on:view===m.k}" @click="go(m.k)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path :d="m.d"/></svg>{{m.t}}
-    </div>
+    </button>
     <div class="foot">
       <div class="em" :title="user.email">{{user.email}}</div>
       <el-button size="small" text type="danger" style="margin-top:6px;padding:0" @click="logout">退出登录</el-button>
@@ -148,7 +174,7 @@ body{
           <div class="grow"></div>
           <el-button :loading="loading" @click="loadUsers" round>刷新</el-button>
         </div>
-        <el-table :data="filteredUsers" style="width:100%;margin-top:12px" v-loading="loading">
+        <el-table :data="filteredUsers" style="width:100%;margin-top:12px" v-loading="loading" empty-text="暂无账号">
           <el-table-column label="邮箱" min-width="200"><template #default="{row}"><b style="font-weight:600">{{row.email}}</b><el-tag v-if="row.role==='pending'" size="small" type="warning" style="margin-left:6px">待审批</el-tag><el-tag v-else-if="row.role==='admin'" size="small" type="warning" style="margin-left:6px">管理员</el-tag></template></el-table-column>
           <el-table-column label="状态" width="80"><template #default="{row}"><el-tag :type="row.banned?'danger':'success'" size="small" effect="plain">{{row.banned?'禁用':'正常'}}</el-tag></template></el-table-column>
           <el-table-column label="注册时间" width="110"><template #default="{row}"><span class="mono">{{fmtDate(row.created_at)}}</span></template></el-table-column>
@@ -191,7 +217,7 @@ body{
           <el-button round @click="loadData" :disabled="!dUser" :loading="loading">刷新</el-button>
         </div>
       </div>
-      <template v-if="dUser && dInfo">
+      <template v-if="dUser && dInfo && !dInfo.error">
         <div class="metrics">
           <div class="glass metric"><div class="k">当前词汇量</div><div class="v">{{dInfo.current?dInfo.current.brief.words:0}}</div><div class="hint">{{dInfo.current?ago(dInfo.current.updated_at):'无数据'}}</div></div>
           <div class="glass metric"><div class="k">已读故事</div><div class="v">{{dInfo.current?dInfo.current.brief.readCount:0}}</div><div class="hint">听力 {{dInfo.current?dInfo.current.brief.listenedCount:0}} · 生词 {{dInfo.current?dInfo.current.brief.favCount:0}}</div></div>
@@ -204,7 +230,7 @@ body{
             <el-button round size="small" @click="dCmd('rollback')">撤销最近恢复</el-button>
             <el-button round size="small" type="danger" plain @click="dCmd('clear')">清空该用户数据</el-button>
           </div>
-          <el-table :data="dInfo.snapshots" style="width:100%">
+          <el-table :data="dInfo.snapshots" style="width:100%" empty-text="暂无快照">
             <el-table-column label="时间" width="160"><template #default="{row}"><span class="mono">{{fmtTime(row.created_at)}}</span></template></el-table-column>
             <el-table-column label="类型" width="100"><template #default="{row}"><el-tag size="small" :type="row.reason==='manual'?'primary':'info'" effect="plain">{{row.reason==='manual'?'手动备份':'恢复前存档'}}</el-tag></template></el-table-column>
             <el-table-column label="内容摘要" min-width="200"><template #default="{row}"><span class="mono">词汇 {{row.brief.words}} · 阅读 {{row.brief.readCount}} · 生词 {{row.brief.favCount}}</span></template></el-table-column>
@@ -218,6 +244,10 @@ body{
         </div>
       </template>
       <div v-else-if="dUser&&!dInfo" class="glass card sub" style="text-align:center;padding:40px" v-loading="loading">加载中…</div>
+      <div v-else-if="dUser&&dInfo.error" class="glass card" style="text-align:center;padding:40px">
+        <div style="color:#d93026;margin-bottom:12px">{{dInfo.error}}</div>
+        <el-button round :loading="loading" @click="loadData">重试</el-button>
+      </div>
     </div>
 
     <!-- ===== 批量操作 ===== -->
@@ -272,7 +302,7 @@ body{
       <div><h2>审计日志</h2><div class="sub">最近 200 条管理操作记录</div></div>
       <div class="glass card">
         <el-button round :loading="loading" @click="loadAudit" style="margin-bottom:12px">刷新</el-button>
-        <el-table :data="logs" style="width:100%">
+        <el-table :data="logs" style="width:100%" empty-text="暂无日志">
           <el-table-column label="时间" width="160"><template #default="{row}"><span class="mono">{{fmtTime(row.created_at)}}</span></template></el-table-column>
           <el-table-column label="管理员" min-width="170"><template #default="{row}">{{row.admin_email}}</template></el-table-column>
           <el-table-column label="操作" width="130"><template #default="{row}"><el-tag size="small" :type="tagOf(row.action)" effect="plain">{{actionName(row.action)}}</el-tag></template></el-table-column>
@@ -284,15 +314,28 @@ body{
   </main>
 </div>
 </div>
+<button class="dark-toggle" id="darkToggle" title="切换深色/浅色模式" aria-label="切换深色模式">🌙</button>
 
-<script src="https://fastly.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
-<script src="https://fastly.jsdelivr.net/npm/element-plus@2/dist/index.full.min.js"></script>
-<script src="https://fastly.jsdelivr.net/npm/element-plus@2/dist/locale/zh-cn.min.js"></script>
-<script src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-<script src="https://fastly.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../config.js" defer></script>
+<script src="https://fastly.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js" defer></script>
+<script src="https://fastly.jsdelivr.net/npm/element-plus@2/dist/index.full.min.js" defer></script>
+<script src="https://fastly.jsdelivr.net/npm/element-plus@2/dist/locale/zh-cn.min.js" defer></script>
+<script src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js" defer></script>
+<script src="https://fastly.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script>
-const {createApp,reactive,ref,computed,nextTick,onMounted}=Vue;
+document.addEventListener("DOMContentLoaded",()=>{
+const {createApp,reactive,ref,computed,nextTick,onMounted,onUnmounted}=Vue;
 const EP=ElementPlus, ElMsg=EP.ElMessage, ElBox=EP.ElMessageBox;
+
+(function(){
+  const apply=(d)=>{
+    document.body.classList.toggle("dark",d); document.documentElement.classList.toggle("dark",d);
+    const m=document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute("content",d?"#0d1117":"#e8eef6");
+    const b=document.getElementById("darkToggle"); if(b) b.textContent=d?"☀️":"🌙";
+  };
+  let d=false; try{ d=localStorage.getItem("ielts-admin-dark")==="1"; }catch(e){} apply(d);
+  const b=document.getElementById("darkToggle"); if(b) b.addEventListener("click",()=>{ d=!d; try{localStorage.setItem("ielts-admin-dark",d?"1":"0");}catch(e){} apply(d); });
+})();
 
 const ICONS={
   dash:"M3 12h7V3H3v9zm11 9h7v-9h-7v9zM3 21h7v-6H3v6zM14 3v6h7V3h-7z",
@@ -307,7 +350,8 @@ const ACTION_NAMES={approve:"通过审批",disable:"禁用账号",enable:"启用
 createApp({
   setup(){
     /* ---------- 会话（项目配置构建时内置，与主站一致） ---------- */
-    const SB_URL="https://nhqevdkjqzgnyjbijwso.supabase.co", SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ocWV2ZGtqcXpnbnlqYmlqd3NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NDQ2MDYsImV4cCI6MjEwMzIyMDYwNn0.WXX79gPNdvV_q37jvwTcACHPGZAvi3bw7CeFpw0QKpE";
+    const _CFG=(typeof window!=='undefined'&&window.IELTS_CONFIG)||{};
+    const SB_URL=_CFG.SUPABASE_URL||'', SB_KEY=_CFG.SUPABASE_KEY||'';
     const form=reactive({email:"",password:""});
     const loading=ref(false), loginErr=ref(""), user=ref(null), view=ref("dash");
     let sb=null;
@@ -317,8 +361,12 @@ createApp({
       {k:"data",t:"数据恢复",d:ICONS.data},{k:"bulk",t:"批量操作",d:ICONS.bulk},
       {k:"settings",t:"语音设置",d:ICONS.settings},{k:"audit",t:"审计日志",d:ICONS.audit},
     ];
-    const go=async k=>{view.value=k; await nextTick();
+    const go=async k=>{
+      if(!menus.some(m=>m.k===k)) return;
+      view.value=k; history.replaceState(null,"","#"+k);
+      await nextTick();
       if(k==="dash"&&st.value.totals) drawCharts();
+      else disposeCharts();
       if(k==="users"&&!users.value.length) loadUsers();
       if(k==="data"&&!users.value.length) loadUsers();
       if(k==="settings") loadTts();
@@ -327,6 +375,7 @@ createApp({
 
     const login=async()=>{
       loading.value=true; loginErr.value="";
+      if(!SB_URL||!SB_KEY){ loginErr.value="缺少 Supabase 配置，请确认 config.js 已正确配置"; loading.value=false; return; }
       try{
         sb=window.supabase.createClient(SB_URL,SB_KEY);
         const {data,error}=await sb.auth.signInWithPassword({email:form.email.trim(),password:form.password});
@@ -362,7 +411,7 @@ createApp({
     const trendChart=ref(null),levelChart=ref(null),storyChart=ref(null);
     let charts={};
     const drawCharts=()=>{
-      if(!window.echarts||!st.value.totals.users&&st.value.totals.users!==0) return;
+      if(!window.echarts||(!st.value.totals.users&&st.value.totals.users!==0)) return;
       const mk=(el,fn)=>{ if(!el)return; (charts[el]||(charts[el]=echarts.init(el))).clear(); fn(charts[el]); };
       mk(trendChart.value,c=>c.setOption({
         grid:{left:36,right:12,top:14,bottom:24},
@@ -389,6 +438,7 @@ createApp({
           data:st.value.learning.topStories.map(s=>s.count).reverse()}],
       }));
     };
+    const disposeCharts=()=>{ Object.values(charts).forEach(c=>{ try{ c.dispose(); }catch(e){} }); charts={}; };
 
     /* ---------- 账号管理 ---------- */
     const users=ref([]), uQuery=ref(""), uRole=ref(""), uState=ref("");
@@ -414,7 +464,8 @@ createApp({
       if(cmd==="data"){ dUser.value=row.id; return go("data"); }
       const needConfirm={disable:["禁用账号","该用户将无法登录，确定禁用？"],
         delete:["删除账号","将永久删除该账号及其全部学习数据，不可恢复！","error"],
-        promote:["提升管理员","该用户将获得全部管理权限，确定？"]};
+        promote:["提升管理员","该用户将获得全部管理权限，确定？"],
+        demote:["降为普通用户","将撤销该用户的管理权限，确定？"]};
       if(needConfirm[cmd]&&!await conf(...needConfirm[cmd])) return;
       loading.value=true;
       const r=await api("admin-users",{body:{action:cmd,user_id:row.id}});
@@ -429,8 +480,9 @@ createApp({
       if(!dUser.value) return;
       loading.value=true; dInfo.value=null;
       const r=await api("admin-data?user_id="+dUser.value);
-      if(r.ok) dInfo.value=r.body; else ElMsg.error(r.body.error||"加载失败");
       loading.value=false;
+      if(r.ok) dInfo.value=r.body;
+      else { dInfo.value={error:r.body.error||"加载失败"}; ElMsg.error(dInfo.value.error); }
     };
     const dCmd=async(action,sid)=>{
       const map={
@@ -460,8 +512,10 @@ createApp({
       if(!r.ok){ const b=await r.json().catch(()=>({})); return ElMsg.error(b.error||"导出失败"); }
       const blob=await r.blob();
       const a=document.createElement("a");
-      a.href=URL.createObjectURL(blob); a.download="site-data-export.json"; a.click();
-      URL.revokeObjectURL(a.href); ElMsg.success("已导出全站数据");
+      const url=URL.createObjectURL(blob);
+      a.href=url; a.download="site-data-export.json"; a.click();
+      setTimeout(()=>URL.revokeObjectURL(url),2000);
+      ElMsg.success("已导出全站数据");
     };
     const cleanupHistory=async()=>{
       loading.value=true;
@@ -486,7 +540,7 @@ createApp({
       const r=await api("admin-settings");
       if(r.ok){
         ttsConfigured.value=!!r.body.configured;
-        tts.key=""; tts.region=r.body.region||"";
+        tts.region=r.body.region||"";
         ttsStatus.value=r.body.configured
           ?"已配置（区域 "+r.body.region+"，密钥尾号 …"+r.body.keyTail+"）。全站已审批用户可在音色下拉选择 ☁ 云端语音。"
           :"未配置：填写密钥与区域后保存，全站用户即可使用云端自然语音。";
@@ -494,13 +548,20 @@ createApp({
     };
     const saveTts=async()=>{
       const k=tts.key.trim(), rg=(tts.region||"").trim().toLowerCase();
-      if(k&&k.length<32) return ElMsg.error("密钥长度不对，请完整复制「密钥和终结点」页的密钥 1");
-      if(!k&&!ttsConfigured.value) return ElMsg.error("请填写密钥");
-      if(k&&!rg) return ElMsg.error("请选择区域");
+      const body={action:"save_tts"};
+      if(k){
+        if(k.length<32) return ElMsg.error("密钥长度不对，请完整复制「密钥和终结点」页的密钥 1");
+        if(!rg) return ElMsg.error("请选择区域");
+        body.key=k; body.region=rg;
+      } else {
+        if(!ttsConfigured.value) return ElMsg.error("请填写密钥");
+        if(!rg) return ElMsg.error("请选择区域");
+        body.region=rg;   // 仅改区域，保留服务端原密钥
+      }
       loading.value=true;
-      const r=await api("admin-settings",{body:{action:"save_tts",key:k,region:rg}});
+      const r=await api("admin-settings",{body});
       loading.value=false;
-      if(r.ok){ ElMsg.success(r.body.message||"已保存"); loadTts(); }
+      if(r.ok){ ElMsg.success(r.body.message||"已保存"); tts.key=""; loadTts(); }
       else ElMsg.error(r.body.error||"保存失败");
     };
 
@@ -526,11 +587,14 @@ createApp({
     /* ---------- 启动：恢复会话 ---------- */
     onMounted(async()=>{
       try{
+        const hash=(location.hash||"").slice(1);
+        if(menus.some(m=>m.k===hash)) view.value=hash;
         sb=window.supabase.createClient(SB_URL,SB_KEY);
         const {data:{session}}=await sb.auth.getSession();
         if(!session) return;
         const r=await api("admin-stats");
-        if(r.ok){ user.value=session.user; st.value=await r.json(); await nextTick(); drawCharts(); loadUsers(); }
+        onUnmounted(disposeCharts);
+        if(r.ok){ user.value=session.user; st.value=await r.json(); await nextTick(); drawCharts(); loadUsers(); go(view.value); }
       }catch(e){}
     });
 
@@ -541,6 +605,7 @@ createApp({
       logs,loadAudit,tagOf,actionName,fmtDate,fmtTime,ago};
   },
 }).use(EP,{locale:window.ElementPlusLocaleZhCn}).mount("#app");
+});
 </script>
 </body>
 </html>

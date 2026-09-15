@@ -4,6 +4,23 @@ node_modules/
 playwright-tests/test-results/
 playwright-tests/playwright-report/
 playwright-tests/blob-report/
+__pycache__/
+.pytest_cache/
+test-results/
 *.log
 .DS_Store
+.env
+.env.local
+.env.*.local
+*.tmp
+*.backup-*
+.idea/
+.vscode/
+.workbuddy/
+.playwright-mcp/
+coverage/
+dist/
+build/
 tools/gloss-audit/out/
+# 本地敏感配置（Supabase URL/key），生产/部署时请注入
+config.js

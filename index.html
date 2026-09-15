@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f8fdfa">
 <title>雅思词汇真经 · 情境阅读训练</title>
 <style>
 /* ============================================================
@@ -62,6 +64,65 @@ button{font-family:inherit; cursor:pointer;}
 select,input{font-family:inherit;}
 :focus-visible{outline:2px solid var(--iel-accent); outline-offset:2px;}
 ::selection{background:var(--iel-accent-soft);}
+/* 仅屏幕阅读器可见 */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.sr-only-focusable:focus{position:static;width:auto;height:auto;padding:10px 18px;margin:0;overflow:visible;clip:auto;white-space:normal;background:var(--iel-accent);color:#fff;z-index:100;border-radius:var(--iel-radius-sm);}
+/* 深色模式：覆盖 token 与关键背景 */
+html.dark, body.dark{background-color:#1c1a17;}
+body.dark{
+  --iel-ink:#e2ddd5; --iel-ink2:#a39b8e; --iel-ink3:#b8b0a3; --iel-mute:#90887d; --iel-ink-faint:#5c5650;
+  --iel-line:#33302b; --iel-line2:#2a2723;
+  --iel-accent-soft:rgba(16,180,135,.15); --iel-accent-line:#2a6650;
+  --iel-gold-bg:#3d3020; --iel-coral-bg:#3d2723; --iel-warn-bg:#3d2a1c;
+  --iel-ok-line:#2a6650; --iel-ok-bg:rgba(16,180,135,.12); --iel-bad-line:#5a3028; --iel-bad-bg:rgba(224,90,70,.12);
+  --iel-tint:#1c1a17; --iel-tint-hover:#252220;
+  --iel-chip:#252220; --iel-chip-hover:#2f2c28;
+  --iel-accent-hover:rgba(16,180,135,.12);
+  --iel-track:#3a453f;
+  --iel-mark:rgba(43,212,164,.2); --iel-mark-line:#2a6650;
+  --iel-glass:rgba(30,28,25,.94); --iel-glass-strong:rgba(30,28,25,.97); --iel-glass-line:rgba(255,255,255,.08);
+  --iel-shadow:0 2px 12px rgba(0,0,0,.25); --iel-shadow-lg:0 12px 40px rgba(0,0,0,.35);
+}
+body.dark html{background-image:
+  linear-gradient(180deg, rgba(16,180,135,.06) 0%, rgba(16,180,135,.02) 60%, rgba(16,180,135,0) 100%),
+  linear-gradient(170deg,#1c1a17 0%,#161412 40%,#161412 100%);}
+body.dark #topbar{background:rgba(28,26,23,.72); border-bottom-color:#33302b;}
+body.dark #topbar::before{background:linear-gradient(180deg,rgba(30,28,25,.92),rgba(30,28,25,.78));}
+body.dark #sidenav{background:#1c1a17; border-right-color:#33302b;}
+body.dark .card{background:#252220; border-color:#33302b;}
+body.dark #wpop{background:#252220; border-color:#33302b;}
+body.dark #scrim{background:rgba(0,0,0,.45);}
+body.dark .guide{background:var(--iel-tint); border-color:#33302b;}
+body.dark .boot{background:#1c1a17;}
+body.dark .sn-logo{color:#e2ddd5;}
+body.dark .sn-nav button{color:#a39b8e;}
+body.dark .sn-nav button.on{color:#e2ddd5; background:rgba(16,180,135,.12);}
+body.dark .wq-list .w:hover{background:#252220;}
+body.dark .quiz-opt{border-color:#33302b; background:#252220;}
+body.dark .quiz-opt:hover{border-color:var(--iel-accent); background:#2a2723;}
+body.dark .quiz-opt.sel{border-color:var(--iel-accent); background:rgba(16,180,135,.12);}
+body.dark .accent-btn{background:#252220; border-color:#33302b; color:#e2ddd5;}
+body.dark .accent-btn:hover{background:#2f2c28;}
+body.dark .chsel select, body.dark .abar-sel{background:#1c1a17; border-color:#33302b; color:#e2ddd5;}
+body.dark .wq-search{background:#1c1a17; border-color:#33302b; color:#e2ddd5;}
+body.dark #chapterSel{background:#1c1a17; border-color:#33302b; color:#e2ddd5;}
+body.dark .btn-pill{background:#252220; border-color:#33302b; color:#e2ddd5;}
+body.dark .btn-pill:hover{background:#2f2c28;}
+body.dark .stat-item{background:#252220; border-color:#33302b;}
+body.dark .trend-bar{background:#33302b;}
+body.dark .diff-item{background:#252220; border-color:#33302b;}
+body.dark .rec-ch{background:#252220; border-color:#33302b;}
+body.dark .perf-item{background:#252220; border-color:#33302b;}
+body.dark .backup-zone button, body.dark .danger-zone button{background:#252220; border-color:#33302b; color:#e2ddd5;}
+body.dark .error-section{background:#3d2723; border-color:#5a3028;}
+body.dark .error-item{border-bottom-color:#33302b;}
+body.dark .toast{background:rgba(30,28,25,.96); border-color:#33302b; color:#e2ddd5;}
+body.dark .empty{background:#252220; border-color:#33302b;}
+body.dark .mastery-bar{background:#3a453f;}
+body.dark .mastery-fill{box-shadow:0 0 8px rgba(16,180,135,.4);}
+body.dark .word-card{background:#252220; border-color:#33302b;}
+body.dark .word-card .m{color:#b8b0a3;}
+body.dark .acc-form input{background:#1c1a17; border-color:#33302b; color:#e2ddd5;}
 /* 系统偏好减少动效时：关闭平滑滚动与所有动画/过渡 */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
@@ -925,11 +986,15 @@ body.reading #lsFab{display:none;}
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="雅思随身听">
-<link rel="manifest" href='data:application/manifest+json,{"name":"雅思词汇情境训练","short_name":"雅思随身听","display":"standalone","background_color":"#f8fdfa","theme_color":"#f8fdfa","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2310b487'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23fff' font-family='serif'%3EW%3C/text%3E%3C/svg%3E","sizes":"any","type":"image/svg+xml","purpose":"any"}]}'>
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIumbheaAneivjeaxh+aDheWig+iuree7gyIsICJzaG9ydF9uYW1lIjogIumbheaAnemaj+i6q+WQrCIsICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjhmZGZhIiwgInRoZW1lX2NvbG9yIjogIiNmOGZkZmEiLCAiaWNvbnMiOiBbeyJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJyUzRSUzQ3JlY3Qgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnIHJ4PScyMicgZmlsbD0nJTIzMTBiNDg3Jy8lM0UlM0N0ZXh0IHg9JzUwJyB5PSc2OCcgZm9udC1zaXplPSc1MicgdGV4dC1hbmNob3I9J21pZGRsZScgZmlsbD0nJTIzZmZmJyBmb250LWZhbWlseT0nc2VyaWYnJTNFVyUzQy90ZXh0JTNFJTNDL3N2ZyUzRSIsICJzaXplcyI6ICJhbnkiLCAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIn1dfQ==">
 <link rel="preload" href="https://fastly.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css">
+<!-- 本地/部署敏感配置：config.js 被 .gitignore 排除，不存在时云同步功能静默禁用 -->
+<script src="config.js"></script>
 </head>
 <body>
+<a href="#app" class="sr-only sr-only-focusable">跳到主内容</a>
+<h1 class="sr-only">雅思词汇真经 · 情境阅读训练</h1>
 <aside id="sidenav">
   <div class="sn-logo"><span class="sn-mark"><i class="ri-book-open-fill" aria-hidden="true"></i></span><span class="sn-name">雅思词汇情境训练</span></div>
   <nav class="sn-nav" id="snNav">
@@ -942,15 +1007,16 @@ body.reading #lsFab{display:none;}
 <div id="shell">
 <nav id="topbar">
   <div class="topbar-in">
-    <div class="chsel"><span class="sel-label">章节</span><select id="chapterSel"></select></div>
-    <button class="accent-btn" id="accentBtn" title="全局默认发音口音：点击切换 英式/美式（影响单词卡点击、音标显示与朗读）">🇬🇧 英音</button>
+    <div class="chsel"><label class="sel-label" for="chapterSel">章节</label><select id="chapterSel" aria-label="选择章节"></select></div>
+    <button class="accent-btn" id="accentBtn" title="全局默认发音口音：点击切换 英式/美式（影响单词卡点击、音标显示与朗读）" aria-label="切换英式美式发音">🇬🇧 英音</button>
+    <button class="accent-btn" id="darkBtn" onclick="toggleDark()" title="切换深色/浅色模式" aria-label="切换深色模式">🌙</button>
   </div>
 </nav>
 <main id="app"><div id="boot" class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-txt">正在加载学习数据…<span class="boot-spin"></span></div><div class="boot-sub">首次加载约 1 秒，之后有缓存秒开</div></div></main>
 </div>
 <div id="scrim"></div>
-<div id="wpop"></div>
-<div id="toast"></div>
+<div id="wpop" role="dialog" aria-modal="true" aria-label="单词详情" tabindex="-1"></div>
+<div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script>
 /* 加载完整性自检 + 自动重试（须在主脚本之前注册）：CDN/弱网间歇性断流时 HTML 可能被截断
@@ -1157,7 +1223,12 @@ function loadS(){ S=freshS(); try{ const raw=localStorage.getItem(userKey()); if
 loadS();
 function save(){
   S._m=Date.now();   // 本地修改时间戳：云同步冲突时新者胜
-  try{ localStorage.setItem(userKey(), JSON.stringify(S)); }catch(e){}
+  try{ localStorage.setItem(userKey(), JSON.stringify(S)); }
+  catch(e){
+    if(e && (e.name==='QuotaExceededError' || e.name==='NS_ERROR_DOM_QUOTA_REACHED')){
+      toast("本地存储已满，学习进度无法保存，请清理浏览器数据后刷新");
+    }
+  }
   SB.schedulePush();
 }
 
@@ -1194,8 +1265,9 @@ function resumeLastRead(){   // 上次会话停在阅读页 → 打开后自动�
    邮箱注册 / 登录，注册后需管理员审批（通过前数据仅存本机）。
    项目地址与 anon 公开密钥由构建脚本内置进页面（anon 为公开密钥，安全由 RLS 保证）。
    学习数据存 learning_data 表（RLS 行级安全：各账号只能读写自己的行，待审批用户无云端权限）。 */
+const _CFG=(typeof window!=='undefined'&&window.IELTS_CONFIG)||{};
 const SB={
-  DEF_URL:"https://nhqevdkjqzgnyjbijwso.supabase.co", DEF_KEY:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ocWV2ZGtqcXpnbnlqYmlqd3NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NDQ2MDYsImV4cCI6MjEwMzIyMDYwNn0.WXX79gPNdvV_q37jvwTcACHPGZAvi3bw7CeFpw0QKpE",   /* 构建时替换为内置项目配置 */
+  DEF_URL:_CFG.SUPABASE_URL||'', DEF_KEY:_CFG.SUPABASE_KEY||'',   /* 从 config.js 读取；构建时注入 */
   _c:null, _sdkP:null, _pushT:null, _pushing:false, user:null, lastSync:0, _errShown:false,
   role:null,   /* null=未登录/未知 / pending=待审批 / user / admin */
   /* 按需加载 Supabase SDK（约 130KB）：未配置/未使用的设备零加载开销 */
@@ -1211,8 +1283,10 @@ const SB={
     });
     return this._sdkP;
   },
+  _cfgOk(){ return !!(this.DEF_URL && this.DEF_KEY); },
   async client(){
     if(this._c) return this._c;
+    if(!this._cfgOk()) throw new Error("Supabase 未配置：请确认 config.js 已正确配置");
     const sdk=await this.sdk();
     this._c=sdk.createClient(this.DEF_URL, this.DEF_KEY);
     return this._c;
@@ -1238,10 +1312,27 @@ const SB={
   setUser(u){
     const email=u?(u.email||""):"";
     if(email===CUR_USER) return;
+    const prev=CUR_USER;
     CUR_USER=email||null;
     this.user=u||null;
     this.role=null;
     CLOUD_TTS._on=false;   // 云端语音可用性跟随账号变化，登录成功后由 afterLogin 重新探测
+    // 从游客首次切换到新账号：把游客数据合并进账号 key，避免“注册带入当前数据”丢失
+    if(email && !prev){
+      try{
+        const guestRaw=localStorage.getItem(LS_KEY);
+        if(guestRaw){
+          const guest=JSON.parse(guestRaw);
+          const accRaw=localStorage.getItem(userKey());
+          const acc=accRaw?JSON.parse(accRaw):freshS();
+          // 以更新时间较新者为主合并；无时间戳时账号数据优先
+          const merged=(guest._m||0)>(acc._m||0)
+            ?Object.assign(freshS(),acc,guest)
+            :Object.assign(freshS(),guest,acc);
+          localStorage.setItem(userKey(),JSON.stringify(merged));
+        }
+      }catch(e){}
+    }
     loadS();
     try{
       audio.rate=S.rate||0.85;
@@ -1331,6 +1422,7 @@ const SB={
     this._pushT=setTimeout(()=>this.push(),4000);
   },
   async signUp(email,pw){
+    if(!this._cfgOk()) throw new Error("云同步未配置");
     const c=await this.client();
     const {data,error}=await c.auth.signUp({email,password:pw});
     if(error) throw error;
@@ -1338,6 +1430,7 @@ const SB={
     return false;   // false = 平台开启了邮箱确认，需点确认链接
   },
   async signIn(email,pw){
+    if(!this._cfgOk()) throw new Error("云同步未配置");
     const c=await this.client();
     const {error}=await c.auth.signInWithPassword({email,password:pw});
     if(error) throw error;
@@ -2193,6 +2286,22 @@ function speakWordLocal(w,want){
   speechSynthesis.cancel(); speechSynthesis.speak(u);
 }
 let POP_WORD=null, POP_SURFACE=null;
+/* 深色模式 */
+function updateDarkUI(isDark){
+  document.body.classList.toggle("dark", isDark);
+  document.documentElement.classList.toggle("dark", isDark);
+  const meta=document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute("content", isDark?"#1c1a17":"#f8fdfa");
+  const db=document.getElementById("darkBtn");
+  if(db) db.textContent=isDark?"☀️":"🌙";
+}
+function toggleDark(){
+  const isDark=!document.body.classList.contains("dark");
+  try{ localStorage.setItem("ielts-dark", isDark?"1":"0"); }catch(e){}
+  updateDarkUI(isDark);
+}
+try{ updateDarkUI(localStorage.getItem("ielts-dark")==="1"); }catch(e){ updateDarkUI(false); }
+
 function setAccent(acc){
   S.accent=acc; save();
   const ab=document.getElementById("accentBtn");
@@ -2453,7 +2562,14 @@ const audio={
     if(this.cloudVoiceId){
       if(this.playing) return;
       if(this.paused){
-        if(this._cloudAu&&this._cloudSrc){ this._cloudAu.play().catch(()=>{}); this.playing=true; this.paused=false; this._updateBar(); return; }
+        if(this._cloudAu&&this._cloudSrc){
+          this.playing=true; this.paused=false; this._updateBar();
+          this._cloudAu.play().catch(()=>{
+            // 缓存的 blob URL 失效或被浏览器清理，重新合成当前句
+            this._cloudSrc=""; this._cloudSpeak(this.sens[this.idx]);
+          });
+          return;
+        }
         this.gen++; this.paused=false; if(!this.ready()) this.prepare(); this._next(); return;   // 合成中途暂停的恢复：作废旧请求，重发当前句
       }
       if(!this.ok()&&!CLOUD_TTS.available()){
@@ -3939,6 +4055,7 @@ function resetAll(){
   if(!confirm("确定要清空全部学习数据吗？\n包括：掌握度统计、测验记录、生词本收藏。\n此操作不可恢复。")) return;
   if(!confirm("再次确认：真的要重置吗？\n（重置后所有单词回到“未测”状态，生词本清空）")) return;
   S=Object.assign(freshS(), {chapter:S.chapter, accent:S.accent, trMode:S.trMode, voiceName:S.voiceName, rate:S.rate, favHide:S.favHide});
+  try{ localStorage.removeItem(POS_KEY); }catch(e){}
   save(); toast("学习数据已重置");
   updateFavBadge();
   if(VIEW==="me") renderMe(); else if(VIEW==="stats") renderStats(); else if(VIEW==="fav"&&!REVIEW) renderFav();
@@ -3984,8 +4101,12 @@ function importBackup(e){
 /* ================= 键盘快捷键 ================= */
 document.addEventListener("keydown",e=>{
   if(e.isComposing||e.altKey||e.metaKey||e.ctrlKey) return;
+  if(e.key==="Escape"){ const wp=document.getElementById("wpop"); if(wp&&wp.classList.contains("show")){ closePop(); return; } }
   const tag=(e.target.tagName||"").toLowerCase();
+  const role=(e.target.getAttribute&&e.target.getAttribute("role"))||"";
   if(tag==="input"||tag==="select"||tag==="textarea") return;
+  // 空格在按钮/链接上走原生行为，不要同时触发播放
+  if(e.code==="Space"&&(tag==="button"||tag==="a"||role==="button"||role==="link")) return;
   if(REVIEW){
     if(e.code==="Space"){ e.preventDefault(); if(!REVIEW.revealed) revealReview(); }
     else if(REVIEW.revealed&&e.key==="ArrowRight"){ e.preventDefault(); gradeReview(true); }
@@ -4222,36 +4343,37 @@ const OfflineSupport={
     if(!("serviceWorker" in navigator)) return;
     try{
       /* 动态生成 Service Worker 脚本并注册 */
+      const scopePath=location.pathname.replace(/\/[^/]*$/,'/')||'/';
       const swCode=`
-const CACHE_NAME="ielts-vocab-v${DATA_VER||1}";
-const STATIC_ASSETS=["/"];
-self.addEventListener("install",e=>{
-  e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(STATIC_ASSETS)));
-  self.skipWaiting();
-});
-self.addEventListener("activate",e=>{
-  e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))));
-  self.clients.claim();
-});
-self.addEventListener("fetch",e=>{
-  if(e.request.method!=="GET") return;
-  e.respondWith(
-    caches.match(e.request).then(r=>{
-      const fetchPromise=fetch(e.request).then(res=>{
-        if(res&&res.status===200){
-          const clone=res.clone();
-          caches.open(CACHE_NAME).then(c=>c.put(e.request,clone));
-        }
-        return res;
-      }).catch(()=>r);
-      return r||fetchPromise;
-    })
-  );
-});
-`;
+ const CACHE_NAME="ielts-vocab-v${DATA_VER}";
+ const STATIC_ASSETS=[${JSON.stringify(scopePath)}];
+ self.addEventListener("install",e=>{
+   e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(STATIC_ASSETS)));
+   self.skipWaiting();
+ });
+ self.addEventListener("activate",e=>{
+   e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))));
+   self.clients.claim();
+ });
+ self.addEventListener("fetch",e=>{
+   if(e.request.method!=="GET") return;
+   e.respondWith(
+     caches.match(e.request).then(r=>{
+       const fetchPromise=fetch(e.request).then(res=>{
+         if(res&&res.status===200){
+           const clone=res.clone();
+           caches.open(CACHE_NAME).then(c=>c.put(e.request,clone));
+         }
+         return res;
+       }).catch(()=>r);
+       return r||fetchPromise;
+     })
+   );
+ });
+ `;
       const blob=new Blob([swCode],{type:"application/javascript"});
       const swUrl=URL.createObjectURL(blob);
-      const reg=await navigator.serviceWorker.register(swUrl,{scope:"/"});
+      const reg=await navigator.serviceWorker.register(swUrl,{scope:scopePath});
       this._registered=true;
       console.log("[IEL] Service Worker registered",reg.scope);
     }catch(e){

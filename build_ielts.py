@@ -1,17 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""从22个Excel读词+例句, 全部词条的例句按章拼成长文, 生成最终HTML. 幂等: 重跑安全."""
-import json, glob, os, re, sys
+"""从22个Excel读词+例句, 全部词条的例句按章拼成长文, 生成/更新目标 HTML.
+支持命令行参数与环境变量覆盖路径；写入前自动备份原文件并使用原子写入。
+"""
+import argparse, json, glob, os, re, shutil, sys, tempfile
+from datetime import datetime
 from openpyxl import load_workbook
 
 if os.environ.get('IELTS_ALLOW_REBUILD') != '1':
     sys.exit('FROZEN 2026-09-14: rebuild wipes sentZh/paraZh人工成果 — set IELTS_ALLOW_REBUILD=1 to override')
 
-# NOTE：SRC/OUT 为本机绝对路径（machine-local），值保持原样，仅文档说明，不改逻辑。
-SRC = "/Users/zhoupeng/Downloads/雅思词汇真经(Excel版待背）"
-# FROZEN 2026-09-14：子项目A进行中，禁止重跑（注入正则会冲掉 shadow 内联 sentZh/paraZh 人工成果）
-# FROZEN-override：文件头旧注"幂等: 重跑安全"已失效——重跑会销毁 sentZh/paraZh 人工成果，以本冻结注释为准。
-OUT = "/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目/雅思影子跟读.html"
+# 默认值仅作为示例/后备；实际路径优先由 --src / --out 或 IELTS_SRC / IELTS_OUT 指定。
+DEFAULT_SRC = os.environ.get('IELTS_SRC', '/Users/zhoupeng/Downloads/雅思词汇真经(Excel版待背）')
+DEFAULT_OUT = os.environ.get('IELTS_OUT', '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目/雅思影子跟读.html')
+
+parser = argparse.ArgumentParser(description='Build / update IELTS shadowing HTML from Excel sources.')
+parser.add_argument('--src', default=DEFAULT_SRC, help='Directory containing chapter Excel files')
+parser.add_argument('--out', '--target', dest='out', default=DEFAULT_OUT, help='Target HTML file to update')
+parser.add_argument('--no-backup', action='store_true', help='Skip backup of existing target')
+args = parser.parse_args()
+
+SRC = args.src
+OUT = args.out
 
 ZH = {
 "1 自然地理": "Leo 学地质学，走进荒野：山峰、冰川、海岸、沙漠、火山与气象。",
@@ -145,8 +155,19 @@ if pat.search(html):
     html = pat.sub(lambda m: new_block, html, count=1)
 else:
     raise SystemExit("未找到注入点")
-with open(OUT, "w", encoding="utf-8") as f:
+
+# 备份 + 原子写入
+if os.path.exists(OUT) and not args.no_backup:
+    ts = datetime.now().strftime('%Y%m%d-%H%M%S')
+    backup = OUT + f".backup-{ts}.html"
+    shutil.copy2(OUT, backup)
+    print(f"已备份: {backup}")
+
+tmp = OUT + ".tmp"
+with open(tmp, "w", encoding="utf-8") as f:
     f.write(html)
+os.replace(tmp, OUT)
+print(f"已更新: {OUT}")
 
 total_marks = sum(len(s["words"]) for s in sections_js)
 n_sents = sum(len(x) for s in sections_js for x in s["paragraphs"])
