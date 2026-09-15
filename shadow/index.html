@@ -257,6 +257,10 @@
   .ab-left { display: flex; align-items: center; gap: 6px; flex: none;
     order: 2; width: 100%; flex-wrap: wrap; justify-content: center;
     transition: gap var(--t-bar) var(--ease-bar); } /* 默认完整条：控制按钮在下排 */
+  /* 下排：播放/暂停、上一句、下一句、单句循环、AB循环、倍速、跟读书签（+🔁AB循环列表）。
+     快速跳转已在上排 ab-title（点击即可跳转），故下排不再重复放 jump-btn；
+     🔁 abLoopBtn 是「AB循环列表」唯一入口，默认态保留（保证功能可达），仅在 mini 态隐藏 */
+  .ab-left > .jump-btn { display: none; }
   .ab-right { display: flex; align-items: center; gap: 10px; flex: none; min-width: 0;
     order: 1; width: 100%;
     transition: gap var(--t-bar) var(--ease-bar),
@@ -579,8 +583,10 @@
     transition: opacity .05s ease-out, /* forward: 进度条极速淡出 */
       max-width var(--t-bar) var(--ease-bar) .05s, max-height var(--t-bar) var(--ease-bar) .05s; }
   body.scrolled .audiobar .ab-left { gap: 3px; flex: 1; justify-content: center; flex-wrap: nowrap; } /* mini 胶囊：控制按钮横向一行居中 */
-  /* mini 态展示全部控制按钮：播放/暂停、上一句、下一句、单句循环、AB循环、倍速、跟读书签；仅隐藏快速跳转（默认态已在上排） */
-  body.scrolled .audiobar .ab-left > .jump-btn { display: none; }
+  /* mini 态展示 7 个控制按钮：播放/暂停、上一句、下一句、单句循环、AB循环、倍速、跟读书签；
+     隐藏快速跳转（默认态已在上排）与 🔁 AB循环列表（abLoopBtn，属次要入口） */
+  body.scrolled .audiobar .ab-left > .jump-btn,
+  body.scrolled .audiobar .ab-left > #abLoopBtn { display: none; }
   body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 7px; min-height: 28px;
     max-width: none; opacity: 1; pointer-events: auto; overflow: visible;
     transition: font-size .05s ease-out, padding var(--t-bar) var(--ease-bar) .05s, min-height var(--t-bar) var(--ease-bar) .05s; }
