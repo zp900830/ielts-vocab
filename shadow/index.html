@@ -554,7 +554,7 @@
   body.fade-nav .topbar { opacity: .55; }
   body.fade-nav .topbar h1 { opacity: 1; }
   /* mini 播放条：收缩为居中小胶囊（仅 上一句/播放/下一句）；宽定死、只 morph max-width（fit-content↔定宽不可插值，会跳变），中心点全程不动 */
-  body.scrolled .audiobar { padding: 4px 10px; gap: 4px; border-radius: 999px;
+  body.scrolled .audiobar { padding: 4px 6px; gap: 4px; border-radius: 999px;
     width: calc(100vw - 48px); max-width: 420px;
     left: 50%; right: auto; transform: translateX(-50%);
     border-color: rgba(255,255,255,.4);
@@ -627,7 +627,7 @@
     body.scrolled .audiobar.expanded .ab-left > .btn i { font-size: inherit; line-height: inherit; }
   body.scrolled .audiobar.expanded .ab-expand { display: none; }
   /* 强制 mini：不受滚动位置影响的手动收起态（与 body.scrolled mini 同一样式） */
-  .audiobar.force-mini { padding: 4px 10px; gap: 4px; border-radius: 999px;
+  .audiobar.force-mini { padding: 4px 6px; gap: 4px; border-radius: 999px;
     width: calc(100vw - 48px); max-width: 420px;
     left: 50%; right: auto; transform: translateX(-50%);
     border-color: rgba(255,255,255,.4); flex-direction: row;
@@ -795,7 +795,7 @@
     .audiobar .btn.play { font-size: 12px; padding: 5px 12px; }
     .audiobar .btn::after { display: none; }
     /* 移动端沉浸模式：与桌面端一致，三按钮居中胶囊（定宽＋max-width morph，中心不动） */
-    body.scrolled .audiobar { padding: 4px 10px; gap: 4px; border-radius: 999px;
+    body.scrolled .audiobar { padding: 4px 6px; gap: 4px; border-radius: 999px;
       width: calc(100vw - 24px); max-width: 360px;
       left: 50%; right: auto; transform: translateX(-50%);
       flex-direction: row; }
