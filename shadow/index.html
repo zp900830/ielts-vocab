@@ -637,6 +637,7 @@
     border-color: rgba(255,255,255,.65);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
+    will-change: max-width, padding, gap, border-radius, transform;
     animation: abExpandPop .34s var(--ease-bar); }
   body.scrolled .audiobar.expanded .ab-right { position: static; max-width: 1400px; max-height: 60px; opacity: 1; pointer-events: auto; overflow: visible; }
   body.scrolled .audiobar.expanded .ab-left { gap: 6px; flex: none; flex-wrap: wrap; justify-content: center; } /* 展开态按钮回多行收纳（否则继承 mini 的 nowrap 整行溢出）；flex:none 复位 mini 的 flex:1，否则左右各半、进度条被挤短 */
@@ -775,7 +776,7 @@
     .chapter-sel { max-width: 42vw; font-size: 12px; padding: 4px 12px; padding-right: 26px; }
     #btnCloud { flex: none; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
     /* 布局：左侧预留章节圆点空间 */
-    .layout { display: block; padding: 14px 12px 14px 28px; padding-bottom: calc(130px + env(safe-area-inset-bottom, 0px)); }
+    .layout { display: block; padding: 14px 16px; padding-bottom: calc(130px + env(safe-area-inset-bottom, 0px)); }
     .sec { padding: 4px 2px; margin-bottom: 20px; }
     article { font-size: 17.5px; }
     .sec .para { line-height: 1.85; text-align: left; }
@@ -840,9 +841,11 @@
     body.scrolled .audiobar.expanded { flex-direction: column; left: 50%; right: auto; transform: translateX(-50%);
       width: calc(100vw - 24px); max-width: calc(100vw - 24px);
       backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
-      transition: padding .22s var(--ease-bar), gap .22s var(--ease-bar),
-        border-radius .22s var(--ease-bar), max-width .22s var(--ease-bar);
-      animation: abExpandPop .3s var(--ease-bar); }
+      will-change: max-width, padding, gap, border-radius, transform;
+      transition: padding .25s var(--ease-bar), gap .25s var(--ease-bar),
+        border-radius .25s var(--ease-bar), max-width .25s var(--ease-bar),
+        backdrop-filter .25s ease, -webkit-backdrop-filter .25s ease;
+      animation: abExpandPop .34s var(--ease-bar); }
     body.scrolled .audiobar.expanded .ab-right { order: 1; width: 100%;
       transition: max-width .22s var(--ease-bar), max-height .22s var(--ease-bar), opacity .16s ease-out .06s; }
     body.scrolled .audiobar.expanded .ab-left { order: 2; width: 100%; flex: none; transition: gap .22s var(--ease-bar); }
@@ -865,8 +868,8 @@
     #seekTicks .tick { top: 50%; transform: translate(-50%, -50%); width: 5px; height: 5px; opacity: .6; }
     #seekTicks .tick.done { opacity: .85; background: var(--accent); }
     #seekTicks .tick.cur { width: 8px; height: 8px; background: var(--coral-deep); }
-    #seekKnob { top: 50%; transform: translate(-50%, -50%); opacity: 1; width: 18px; height: 18px; }
-    #seekTrack.active #seekKnob { width: 24px; height: 24px; transform: translate(-50%, -50%); }
+    #seekKnob { top: 50%; transform: translate(-50%, -50%); opacity: 1; width: 22px; height: 22px; }
+    #seekTrack.active #seekKnob { width: 28px; height: 28px; transform: translate(-50%, -50%); }
     #seekTrack:hover #seekRail, #seekTrack.active #seekRail,
     #seekTrack:hover #seekFill, #seekTrack.active #seekFill { top: 50%; transform: translateY(-50%); }
     #seekTrack:hover .tick, #seekTrack.active .tick { top: 50%; transform: translate(-50%, -50%); }
