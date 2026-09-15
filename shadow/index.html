@@ -587,7 +587,7 @@
       max-width var(--t-bar) var(--ease-bar) .05s, max-height var(--t-bar) var(--ease-bar) .05s; }
   body.scrolled .audiobar .ab-left { gap: 3px; flex: 1; justify-content: center; flex-wrap: nowrap; } /* mini 胶囊：控制按钮横向一行居中 */
   /* mini 态展示 7 个控制按钮：播放/暂停、上一句、下一句、单句循环、AB循环、倍速、跟读书签；
-     隐藏快速跳转（默认态已在上排）与 🔁 AB循环列表（abLoopBtn，属次要入口） */
+     隐藏快速跳转（默认态已在上排）；abLoopBtn 已合并到 btnAB（长按打开列表），不再需要独立按钮 */
   body.scrolled .audiobar .ab-left > .jump-btn,
   body.scrolled .audiobar .ab-left > #abLoopBtn { display: none; }
   body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 7px; min-height: 28px;
@@ -942,8 +942,7 @@
             <button data-count="5" onclick="setLoopCount(5)">5遍</button>
           </div>
         </div>
-        <button class="btn ab-btn" id="btnAB" onclick="toggleAB()" title="A-B复读：点我，再点句子任意位置（含单词）设起点A，接着设终点B，即开始循环" aria-label="设置 A-B 复读区间">AB</button>
-        <button class="btn ab-btn" id="abLoopBtn" onclick="toggleABPop()" title="AB 循环列表" aria-label="AB 循环列表">🔁</button>
+        <button class="btn ab-btn" id="btnAB" title="A-B复读：单击设循环/长按打开已保存循环" aria-label="设置 A-B 复读区间">AB</button>
         <div class="rate-wrap" id="rateWrap">
           <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速" aria-label="朗读倍速">1x</button>
           <div class="rate-menu">
@@ -2596,6 +2595,22 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     abCancel();
     }
     }
+    // AB 按钮长按 → 打开已保存循环列表；单击 → 设AB循环（原有行为）
+    (function() {
+    const btn = document.getElementById('btnAB');
+    if (!btn) return;
+    let timer = null, held = false;
+    const HOLD = 500;
+    btn.addEventListener('pointerdown', e => {
+      held = false;
+      timer = setTimeout(() => { held = true; timer = null; toggleABPop(); }, HOLD);
+    }, { passive: true });
+    btn.addEventListener('pointerup', () => {
+      clearTimeout(timer); timer = null;
+      if (!held) toggleAB();
+    });
+    btn.addEventListener('pointerleave', () => { clearTimeout(timer); timer = null; });
+    })();
     function getABLoops() { try { return JSON.parse(localStorage.getItem('ielts-ab-loops') || '[]'); } catch (e) { return []; } }
     function setABLoops(loops) { safeStore('ielts-ab-loops', JSON.stringify(loops || [])); }
     function loopName(a, b) { return `${markLabel(a)} — ${markLabel(b)}`; }
@@ -2777,7 +2792,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     const _mp = document.getElementById('markPop');
     if (_mp && _mp.style.display === 'block' && !_inPath(e, '.jpop') && !_inPath(e, '#markBtn')) closeModal(_mp);
     const _abp = document.getElementById('abPop');
-    if (_abp && _abp.style.display === 'block' && !_inPath(e, '.jpop') && !_inPath(e, '#abLoopBtn')) closeModal(_abp);
+    if (_abp && _abp.style.display === 'block' && !_inPath(e, '.jpop') && !_inPath(e, '#btnAB')) closeModal(_abp);
     if (document.body.classList.contains('menu-open') && !_inPath(e, '.topbar-right') && !_inPath(e, '#btnMenu')) document.body.classList.remove('menu-open');
     /* 移动端：点遮罩关词库抽屉 */
     if (window.matchMedia('(max-width: 700px)').matches && document.querySelector('.layout.panel-open')) {
