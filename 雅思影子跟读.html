@@ -498,6 +498,7 @@
   body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius: 22px;
     width: auto; max-width: none; margin: 0;
     left: 24px; right: 24px; transform: none;
+    flex-direction: column; align-items: stretch; /* 显式 column：否则继承 mini 的 row，两个 width:100% 子项横向溢出把按钮挤出屏幕 */
     border-color: rgba(255,255,255,.65);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02); }
