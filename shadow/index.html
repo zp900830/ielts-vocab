@@ -181,18 +181,32 @@
   .seg { color: var(--muted); font-size: 12px; min-width: 76px; text-align: center;
     background: var(--accent-soft); border-radius: 999px; padding: 4px 10px; font-weight: 600; }
 
+  /* ============ 数据加载动效（与雅思词汇真经项目一致） ============ */
+  .boot { min-height: 60vh; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 10px; padding: 40px 20px; text-align: center; }
+  .boot-logo { font-size: 44px; filter: grayscale(.1); }
+  .boot-txt { font-size: 15px; color: var(--ink2); display: flex; align-items: center; gap: 8px; }
+  .boot-sub { font-size: 12.5px; color: var(--muted); }
+  .boot-spin { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent);
+    border-radius: 50%; animation: bootspin .8s linear infinite; }
+  @keyframes bootspin { to { transform: rotate(360deg); } }
+  .boot-err { font-size: 14px; color: var(--coral); line-height: 1.8; }
+  .boot-err button { margin-top: 10px; padding: 8px 22px; border: 1px solid var(--border); background: #fff;
+    color: var(--accent); border-radius: 999px; font-size: 13.5px; font-family: inherit; cursor: pointer; }
+  .boot-err button:hover { background: var(--accent-soft); }
+
   .layout { max-width: 1120px; margin: 0 auto; display: block; padding: 24px 18px 130px; }
   .sent-zh { display: block; font-family: var(--sans); font-size: 14px; color: var(--muted);
-    line-height: 1.6; margin: 0 0 6px 2px; }
+    line-height: 1.6; margin: 0 0 6px; }
   /* 段落小注：段意小结/辅助理解，被动信息 → 淡暖沙底色注释，不抢正文 */
   .para-zh { font-size: 12.5px; color: var(--muted);
     background: rgba(192,138,46,.06);
     border: none; border-radius: 8px;
-    padding: 6px 12px; margin: 10px 0 14px; line-height: 1.7; }
+    padding: 6px 0; margin: 10px 0 14px; line-height: 1.7; } /* 无左右内边距：文本与底色均与正文左对齐 */
   body.hide-zh .sent-zh, body.hide-zh .para-zh { display: none; }
   /* 单词辨析卡：弱化版本，不抢正文注意力 */
   .notebar { display: block; border: 1px solid rgba(0,0,0,.08);
-    border-radius: 10px; padding: 7px 12px; margin: 6px 0 8px; line-height: 1.55;
+    border-radius: 10px; padding: 7px 0; margin: 6px 0 8px; line-height: 1.55; /* 无左右内边距：文本与边框均与正文左对齐 */
     background: rgba(0,0,0,.02); font-size: 12.5px; }
   .notebar .nb-t { display: inline-flex; align-items: baseline; flex-wrap: wrap; gap: 2px 8px; }
   .notebar .nb-t .nb-w { font-weight: 700; font-family: var(--serif); font-size: 14px; color: var(--muted); cursor: text; min-width: 0; }
@@ -339,8 +353,10 @@
     display: flex; flex-direction: column; gap: 2px;
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index: 12; }
-  /* 透明桥：盖住菜单与按钮之间的空隙，鼠标穿过时 hover 不断链（悬浮能选的关键） */
-  .loop-menu::after, .rate-menu::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 10px; }
+  /* 透明桥：盖住菜单与按钮之间的空隙，鼠标穿过时 hover 不断链。
+     必须是真实元素（命中测试不响应宿主盒外的伪元素）且放在无 overflow 的 wrap 里
+     （.ab-menu 有 overflow-y:auto 会裁剪盒外子元素），定位到 wrap 顶边上方 12px */
+  .menu-bridge { position: absolute; left: 0; right: 0; top: 0; height: 12px; transform: translateY(-12px); }
   /* 点击打开（桌面/移动通用） */
   .loop-wrap.open .loop-menu, .rate-wrap.open .rate-menu { opacity: 1; visibility: visible;
     pointer-events: auto; transform: translateX(-50%) translateY(0); }
@@ -359,7 +375,7 @@
     display: flex; flex-direction: column; gap: 2px;
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index: 12; max-height: 50vh; overflow-y: auto; }
-  .ab-menu::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 10px; }
+  .ab-menu::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 10px; } /* 已由 .menu-bridge 真实桥替代，保留无副作用 */
   .ab-wrap.open .ab-menu { opacity: 1; visibility: visible;
     pointer-events: auto; transform: translateX(-50%) translateY(0); }
   @media (hover: hover) and (pointer: fine) {
@@ -472,7 +488,7 @@
     height: 40%; border-radius: 12px; pointer-events: none; opacity: .8;
     background: radial-gradient(120px 20px at 20% 0%, rgba(255,255,255,.6), transparent 70%); }
   #seekTrack { position: relative; height: 11px; cursor: pointer; touch-action: none; flex: 1; min-width: 0; display: flex; align-items: center; }
-  #seekTrack::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; bottom: -20px; }
+  #seekTrack::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; bottom: -6px; } /* 下探不越过菜单底边：-20px 会盖住下排 AB/书签菜单与按钮间的透明桥，hover 断链致菜单秒关 */
   /* 默认 1px 极细线，用系统边框色，装饰感强 */
   #seekRail { position: absolute; left: 0; right: 0; top: 50%; height: 1px; transform: translateY(-50%);
     background: #b9d4c7;
@@ -537,11 +553,11 @@
     line-height: 1.5; margin: 2px 0 12px; }
   body.hide-zh .zh { display: none; }
   .sec .sub { font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--text);
-    margin: 18px 0 8px; padding-left: 12px; }
+    margin: 18px 0 8px; }
   .sec .sub:first-of-type { margin-top: 6px; }
   /* 中英双语标题：英文副标灰色小字 */
   .t-en { font-family: var(--sans); font-size: 12px; font-weight: 400;
-    color: #57534e; letter-spacing: .02em; margin-left: 8px; white-space: normal; }
+    color: #57534e; letter-spacing: .02em; white-space: normal; } /* 中英文间距由 titEN 前置空格提供，换行后两行英文均顶格对齐 */
 
   /* ============ 侧边词库 ============ */
   aside { position: fixed; right: 14px; top: 74px; bottom: 18px; width: 340px; max-width: calc(100vw - 28px); z-index: 115;
@@ -959,6 +975,7 @@
         </div>
         <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式" aria-label="切换夜间模式"><i class="ri-moon-line" aria-hidden="true"></i><span class="only-mobile"> 夜间模式</span></button>
         <div class="cloud-wrap" id="cloudWrap">
+          <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn" id="btnCloud" onclick="toggleCloudWrap(event)" title="登录后可用 Azure 云端自然语音" aria-label="云端语音登录状态"><i class="ri-cloud-line" aria-hidden="true"></i> 未登录</button>
           <div class="cloud-menu" id="cloudPop">
             <div class="ct"><i class="ri-cloud-line" aria-hidden="true"></i> 云端语音登录</div>
@@ -987,6 +1004,7 @@
         <button class="btn play" id="btnPlay" onclick="togglePlay()" aria-label="播放或暂停"><i class="ri-play-fill" aria-hidden="true"></i> 播放</button>
         <button class="btn ab-step" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line" aria-hidden="true"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
+          <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="单句循环：选择每句重复次数" aria-label="单句循环次数"><i class="ri-repeat-line" aria-hidden="true"></i><span id="loopCount">3</span></button>
           <div class="loop-menu" id="loopMenu">
             <button data-count="0" onclick="setLoopCount(0)">关</button>
@@ -996,6 +1014,7 @@
           </div>
         </div>
         <div class="ab-wrap" id="abWrap">
+          <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn ab-btn" id="btnAB" onclick="toggleABWrap(event)" title="AB循环" aria-label="设置 A-B 复读区间"><i class="ri-arrow-left-right-line" aria-hidden="true"></i><span class="ab-label">AB</span></button>
           <div class="ab-menu">
             <button class="btn play" onclick="toggleAB(); abWrap.classList.remove('open')" id="abSetBtn">设置AB循环</button>
@@ -1006,6 +1025,7 @@
           </div>
         </div>
         <div class="rate-wrap" id="rateWrap">
+          <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速" aria-label="朗读倍速">1x</button>
           <div class="rate-menu">
             <button data-mrate="0.75" onclick="pickRate(0.75)">0.75x</button>
@@ -1015,6 +1035,7 @@
           </div>
         </div>
         <div class="ab-wrap" id="markWrap">
+          <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn ab-btn" id="markBtn" onclick="toggleMarkWrap(event)" title="书签" aria-label="书签"><i class="ri-bookmark-line" aria-hidden="true"></i></button>
           <div class="ab-menu">
             <button class="btn play" onclick="addMark()">记下当前位置</button>
@@ -1086,7 +1107,7 @@
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
-        if (art) art.innerHTML = '<div class="loading" style="padding:40px;text-align:center;color:var(--muted)">正在加载学习数据…</div>';
+        if (art) art.innerHTML = '<div class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-txt">正在加载学习数据…<span class="boot-spin"></span></div><div class="boot-sub">正在获取文章与词汇数据</div></div>';
         try {
           const [s, v, c] = await Promise.all([
             fetch('data/sections.json').then(r => { if (!r.ok) throw new Error('sections ' + r.status); return r.json(); }),
@@ -1099,7 +1120,7 @@
           dataReady = true;
         } catch (err) {
           console.error('数据加载失败', err);
-          if (art) art.innerHTML = '<div class="loading" style="padding:40px;text-align:center;color:var(--coral)">数据加载失败，请刷新页面重试</div>';
+          if (art) art.innerHTML = '<div class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-err">数据加载失败，请检查网络后重试<button onclick="location.reload()">重新加载</button></div></div>';
           throw err;
         }
       }
@@ -1229,7 +1250,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       '上篇·旧物改造店': 'Part 1 · The Upcycling Shop',
       '上篇·跨国列车': 'Part 1 · The Transnational Train', '下篇·街角小店': 'Part 2 · The Corner Shop',
       '上篇·纪念馆': 'Part 1 · The Memorial Hall', '下篇·发明比赛': 'Part 2 · The Invention Contest',
-      '上篇·备考的一天': 'Part 1 · A Day of Exam Prep', '下篇·奶奶的健康年': "Part 2 · Grandma's Healthy Year",};    const titEN = t => TIT_EN[t] ? `<span class="t-en">${esc(TIT_EN[t])}</span>` : '';
+      '上篇·备考的一天': 'Part 1 · A Day of Exam Prep', '下篇·奶奶的健康年': "Part 2 · Grandma's Healthy Year",};    const titEN = t => TIT_EN[t] ? ` <span class="t-en">${esc(TIT_EN[t])}</span>` : '';
     function chapterSentCount(si) {
       if (!SECTIONS[si]) return 0;
       return SECTIONS[si].paragraphs.reduce((n, p) => n + p.length, 0);
