@@ -587,6 +587,9 @@
     transition: opacity .05s ease-out, /* forward: 进度条极速淡出 */
       max-width var(--t-bar) var(--ease-bar) .05s, max-height var(--t-bar) var(--ease-bar) .05s; }
   body.scrolled .audiobar .ab-left { gap: 3px; flex: 1; justify-content: center; flex-wrap: nowrap; } /* mini 胶囊：控制按钮横向一行居中 */
+  /* mini 态：在「单句循环」前加一条细分隔线，把播放控制（上一句/播放/下一句）和选项（循环/AB/倍速/书签）视觉分开 */
+  body.scrolled .audiobar .loop-wrap::before { content: ""; width: 1px; height: 18px; background: rgba(0,0,0,.13); margin-right: 2px; flex-shrink: 0; }
+  body.dark.scrolled .audiobar .loop-wrap::before { background: rgba(255,255,255,.13); }
   /* mini 态展示 7 个控制按钮：播放/暂停、上一句、下一句、单句循环、AB循环、倍速、跟读书签；
      隐藏快速跳转（默认态已在上排）；abLoopBtn 已合并到 btnAB（长按打开列表），不再需要独立按钮 */
   body.scrolled .audiobar .ab-left > .jump-btn,
@@ -661,6 +664,8 @@
   .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute;
     transition: opacity .05s ease-out; }
   .audiobar.force-mini .ab-left { gap: 3px; flex: 1; justify-content: center; flex-wrap: nowrap; }
+  .audiobar.force-mini .loop-wrap::before { content: ""; width: 1px; height: 18px; background: rgba(0,0,0,.13); margin-right: 2px; flex-shrink: 0; }
+  body.dark .audiobar.force-mini .loop-wrap::before { background: rgba(255,255,255,.13); }
   /* force-mini 展示全部控制按钮（与 body.scrolled 自然 mini 一致），仅隐藏快速跳转 */
   .audiobar.force-mini .ab-left > .jump-btn { display: none; }
   .audiobar.force-mini .ab-left > .btn { font-size: 0; padding: 4px 7px; min-height: 28px;
