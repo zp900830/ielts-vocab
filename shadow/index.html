@@ -231,10 +231,13 @@
   .notebar.compare .nb-summary { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); color: var(--accent); font-weight: 600; font-size: 12px; }
   body.dark .notebar.compare .nb-table td, body.dark .notebar.compare .nb-table th { border-color: #33302b; }
   body.dark .notebar.compare .nb-table th, body.dark .notebar.compare .nb-tl { background: rgba(16,180,135,.1); }
-  .voice-sel { border: 1px solid var(--border); background-color: #fff; color: var(--text);
-    border-radius: 10px; font-size: 16px; padding: 7px 10px; max-width: 220px; min-height: 34px;
-    transition: border-color var(--t-fast); }
-  .voice-sel:hover { border-color: var(--accent-bright); }
+  /* 音色下拉：与顶栏其余按钮一致的 pill 胶囊样式（13px 字＋999px 圆角；移动端面板内仍用 16px/44px 大触区） */
+  .voice-sel { border: 1px solid var(--accent-line); background-color: #fff; color: var(--accent);
+    border-radius: 999px; font-size: 13px; font-weight: 500; padding: 7px 14px; padding-right: 32px;
+    max-width: 220px; min-height: 34px; cursor: pointer;
+    transition: background var(--t-fast), border-color var(--t-fast); }
+  .voice-sel:hover { background: var(--accent-soft); border-color: var(--accent-bright); }
+  .voice-sel:focus { border-color: var(--accent-bright); outline: none; }
 
   /* ============ 正文（衬线故事体卡片） ============ */
   article { font-size: 18.5px; position: relative; }
