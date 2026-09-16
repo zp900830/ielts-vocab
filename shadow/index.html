@@ -979,7 +979,7 @@
       </div>
       <nav class="topbar-right" aria-label="工具栏">
         <div class="ctrl">
-          <button class="btn active" id="btnZh" title="显示/隐藏全文中文翻译" aria-label="显示或隐藏全文中文翻译"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏全文</button>
+          <button class="btn active" id="btnZh" title="显示/隐藏中文翻译" aria-label="显示或隐藏中文翻译"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏翻译</button>
           <button class="btn active" id="btnGloss" title="显示/隐藏行内单词词义" aria-label="显示或隐藏行内单词词义"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏词义</button>
         </div>
         <div class="ctrl voice-ctrl">
@@ -2973,7 +2973,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     function updateZhBtn() {
     const hidden = document.body.classList.contains('hide-zh');
     const btn = document.getElementById('btnZh');
-    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示全文' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏全文'; btn.classList.toggle('active', !hidden); }
+    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示翻译' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏翻译'; btn.classList.toggle('active', !hidden); }
     }
     function updateGlossBtn() {
     const hidden = document.body.classList.contains('hide-gl');

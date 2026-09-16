@@ -668,7 +668,7 @@
       <h1><i class="ri-book-open-line"></i> 雅思词汇 · 影子跟读</h1>
       <div class="topbar-right">
         <div class="ctrl">
-          <button class="btn active" id="btnZh" title="显示/隐藏全文中文翻译"><i class="ri-eye-line"></i> 隐藏全文</button>
+          <button class="btn active" id="btnZh" title="显示/隐藏中文翻译"><i class="ri-eye-line"></i> 隐藏翻译</button>
           <button class="btn active" id="btnGloss" title="显示/隐藏行内单词词义"><i class="ri-eye-line"></i> 隐藏词义</button>
         </div>
         <div class="ctrl">
@@ -3061,7 +3061,7 @@
     document.getElementById('btnZh').onclick = function() {
     document.body.classList.toggle('hide-zh');
     const hidden = document.body.classList.contains('hide-zh');
-    this.innerHTML = hidden ? '<i class="ri-eye-off-line"></i> 显示全文' : '<i class="ri-eye-line"></i> 隐藏全文';
+    this.innerHTML = hidden ? '<i class="ri-eye-off-line"></i> 显示翻译' : '<i class="ri-eye-line"></i> 隐藏翻译';
     this.classList.toggle('active', !hidden);
     };
     document.getElementById('btnGloss').onclick = function() {
