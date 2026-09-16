@@ -459,8 +459,14 @@
   .ab-loop-item:first-of-type { border-top: 0; }
   .ab-loop-item .ab-loop-name { flex: 1; min-width: 0; color: var(--text); }
   .ab-loop-item .ab-loop-range { font-size: 11px; color: var(--muted); }
-  .ab-loop-item .ab-loop-btns { display: flex; gap: 4px; flex: none; }
+  .ab-loop-item .ab-loop-btns { display: flex; gap: 4px; flex: none; align-self: center; }
   .ab-loop-item .btn { padding: 4px 8px; font-size: 12px; min-height: 28px; }
+  /* AB 循环列表：中文任意处可断行，菜单会被内容撑到 min-width 导致挤成一团；
+     给列表定最小宽 + 名称单行省略，范围与按钮永不换行 */
+  #abLoopList { min-width: 230px; }
+  .ab-loop-item .ab-loop-name { overflow: hidden; }
+  .ab-loop-item .ab-loop-title { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+  .ab-loop-item .ab-loop-range { white-space: nowrap; }
     background-color: #fff; color: var(--text); }
   .jpop select:focus, .jpop input:focus { border-color: var(--accent-bright); }
   .jpop .row { display: flex; gap: 8px; }
@@ -1021,9 +1027,6 @@
           <button class="btn ab-btn" id="btnAB" onclick="toggleABWrap(event)" title="AB循环" aria-label="设置 A-B 复读区间"><i class="ri-arrow-left-right-line" aria-hidden="true"></i><span class="ab-label">AB</span></button>
           <div class="ab-menu">
             <button class="btn play" onclick="toggleAB(); abWrap.classList.remove('open')" id="abSetBtn">设置AB循环</button>
-            <div class="row" id="abSaveRow" style="display:none; margin:6px 0 0">
-              <button class="btn play" onclick="saveABLoop()">保存当前循环</button>
-            </div>
             <div id="abLoopList" style="margin-top:6px"></div>
           </div>
         </div>
@@ -2721,7 +2724,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     function getABLoops() { try { return JSON.parse(localStorage.getItem('ielts-ab-loops') || '[]'); } catch (e) { return []; } }
     function setABLoops(loops) { safeStore('ielts-ab-loops', JSON.stringify(loops || [])); }
-    function loopName(a, b) { return `${markLabel(a)} — ${markLabel(b)}`; }
+    function loopName(a, b) {
+    const ai = artOfSent[a], bi = artOfSent[b];
+    if (ai !== undefined && ai === bi) {   // 同一章内： compact 形式，避免与下方范围行重复啰嗦
+    const [s0] = segRange(ai);
+    return `第${ai + 1}章 · 第${a - s0 + 1}–${b - s0 + 1}句`;
+    }
+    return `${markLabel(a)} — ${markLabel(b)}`;
+    }
     function saveABLoop() {
     if (abMode !== 3 || abStart < 0 || abEnd < 0) return;
     const a = Math.min(abStart, abEnd), b = Math.max(abStart, abEnd);
@@ -2743,10 +2753,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       const localA = (currentChapter >= 0) ? x.start - chapterSentStart : x.start;
       const localB = (currentChapter >= 0) ? x.end - chapterSentStart : x.end;
       const a = Math.min(localA, localB), b = Math.max(localA, localB);
-      return `<div class="ab-loop-item"><div class="ab-loop-name">${esc(x.name || loopName(x.start, x.end))}<div class="ab-loop-range">第 ${a + 1}–${b + 1} 句</div></div><div class="ab-loop-btns"><button class="btn play" onclick="recallABLoop(${x.start}, ${x.end})">加载</button><button class="btn del" onclick="deleteABLoop(${x.start}, ${x.end})">删</button></div></div>`;
+      return `<div class="ab-loop-item"><div class="ab-loop-name"><span class="ab-loop-title">${esc(x.name || loopName(x.start, x.end))}</span><div class="ab-loop-range">第 ${a + 1}–${b + 1} 句</div></div><div class="ab-loop-btns"><button class="btn play" onclick="recallABLoop(${x.start}, ${x.end})">加载</button><button class="btn del" onclick="deleteABLoop(${x.start}, ${x.end})">删</button></div></div>`;
     }).join('') : '<div style="font-size:12px;color:var(--muted)">还没有保存的 AB 循环。</div>';
-    const saveRow = document.getElementById('abSaveRow');
-    if (saveRow) saveRow.style.display = (abMode === 3) ? 'flex' : 'none';
     }
     function recallABLoop(ga, gb) {
     toggleABPop(false);
