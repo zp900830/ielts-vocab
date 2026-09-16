@@ -13,8 +13,9 @@ declare const abMode: number;
 declare const abStart: number;
 declare const abEnd: number;
 declare const abCancel: (silent?: boolean) => void;
-declare const toggleAB: () => void;
-declare const abTap: (i: number) => boolean;
+  declare const toggleAB: () => void;
+  declare const toggleABWrap: (e?: Event) => void;
+  declare const abTap: (i: number) => boolean;
 declare const sents: HTMLElement[];
 declare const idx: number;
 
@@ -47,7 +48,7 @@ test.describe('A-B loop: arm, select, loop, and cancel', () => {
     { tag: ['@regression', '@positive', '@shadow'] },
     async ({ page }) => {
       await test.step('Step 1: Arm A-B loop', async () => {
-        await page.click('button:has-text("AB")');
+        await page.evaluate(() => { toggleAB(); });
         expect(await page.evaluate(() => abMode)).toBe(1);
         await expect(page.locator('button:has-text("设A")')).toBeVisible();
       });

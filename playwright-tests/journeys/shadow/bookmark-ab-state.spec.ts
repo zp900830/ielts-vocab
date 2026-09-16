@@ -63,7 +63,7 @@ test.describe('Bookmark popup A-B button state', () => {
     async ({ page }) => {
       await test.step('Step 1: Open bookmark popup', async () => {
         await page.evaluate(() => toggleMarkPop(true));
-        await expect(page.locator('#markPop')).toBeVisible();
+        await expect(page.locator('#markWrap')).toHaveClass(/open/);
         await expect(page.locator('#markList .mitem')).toHaveCount(3);
       });
 

@@ -349,6 +349,26 @@
     .loop-wrap:hover .loop-menu, .rate-wrap:hover .rate-menu { opacity: 1; visibility: visible;
       pointer-events: auto; transform: translateX(-50%) translateY(0); }
   }
+  /* AB循环 + 书签：沿用 loop-menu/rate-menu 同一套悬浮打开 + 点击切换 */
+  .ab-wrap { position: relative; flex: none; }
+  .ab-menu { position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%) translateY(4px); min-width: 140px; max-width: 260px;
+    background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
+    backdrop-filter: blur(22px) saturate(170%); border: 1px solid rgba(255,255,255,.7);
+    border-radius: 14px; box-shadow: var(--shadow-lg); padding: 6px;
+    display: flex; flex-direction: column; gap: 2px;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index: 12; max-height: 50vh; overflow-y: auto; }
+  .ab-menu::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 10px; }
+  .ab-wrap.open .ab-menu { opacity: 1; visibility: visible;
+    pointer-events: auto; transform: translateX(-50%) translateY(0); }
+  @media (hover: hover) and (pointer: fine) {
+    .ab-wrap:hover .ab-menu { opacity: 1; visibility: visible;
+      pointer-events: auto; transform: translateX(-50%) translateY(0); }
+  }
+  .ab-menu button { border: none; background: transparent; border-radius: 10px;
+    padding: 7px 10px; font-size: 13px; color: var(--text); text-align: center; cursor: pointer; }
+  .ab-menu button:hover { background: var(--accent-soft); }
   .loop-menu button, .rate-menu button { border: none; background: transparent; border-radius: 10px;
     padding: 7px 10px; font-size: 13px; color: var(--text); text-align: center; cursor: pointer; }
   .loop-menu button:hover, .rate-menu button:hover { background: var(--accent-soft); }
@@ -948,7 +968,16 @@
             <button data-count="5" onclick="setLoopCount(5)">5遍</button>
           </div>
         </div>
-        <button class="btn ab-btn" id="btnAB" title="A-B复读：单击设循环/长按打开已保存循环" aria-label="设置 A-B 复读区间"><i class="ri-arrow-left-right-line" aria-hidden="true"></i><span class="ab-label">AB</span></button>
+        <div class="ab-wrap" id="abWrap">
+          <button class="btn ab-btn" id="btnAB" onclick="toggleABWrap(event)" title="AB循环" aria-label="设置 A-B 复读区间"><i class="ri-arrow-left-right-line" aria-hidden="true"></i><span class="ab-label">AB</span></button>
+          <div class="ab-menu">
+            <button class="btn play" onclick="toggleAB(); abWrap.classList.remove('open')" id="abSetBtn">设置AB循环</button>
+            <div class="row" id="abSaveRow" style="display:none; margin:6px 0 0">
+              <button class="btn play" onclick="saveABLoop()">保存当前循环</button>
+            </div>
+            <div id="abLoopList" style="margin-top:6px"></div>
+          </div>
+        </div>
         <div class="rate-wrap" id="rateWrap">
           <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速" aria-label="朗读倍速">1x</button>
           <div class="rate-menu">
@@ -958,7 +987,13 @@
             <button data-mrate="1.5" onclick="pickRate(1.5)">1.5x</button>
           </div>
         </div>
-        <button class="btn ab-btn" id="markBtn" onclick="toggleMarkPop()" title="书签：记下当前位置，随时回来" aria-label="书签"><i class="ri-bookmark-line" aria-hidden="true"></i></button>
+        <div class="ab-wrap" id="markWrap">
+          <button class="btn ab-btn" id="markBtn" onclick="toggleMarkWrap(event)" title="书签" aria-label="书签"><i class="ri-bookmark-line" aria-hidden="true"></i></button>
+          <div class="ab-menu">
+            <button class="btn play" onclick="addMark()">记下当前位置</button>
+            <div id="markList" style="margin-top:6px"></div>
+          </div>
+        </div>
         <button class="btn ab-btn jump-btn" onclick="toggleJumpPop()" title="快速跳转" aria-label="快速跳转"><i class="ri-navigation-line" aria-hidden="true"></i></button>
       </nav>
       <div class="ab-right">
@@ -983,22 +1018,6 @@
         <input id="jumpN" type="number" min="1" value="1" onkeydown="if(event.key==='Enter')jumpGo()" aria-label="跳转句号">
         <button class="btn play" onclick="jumpGo()">直达</button>
       </div>
-    </div>
-    <div class="jpop" id="markPop" role="dialog" aria-modal="true" aria-label="跟读书签" tabindex="-1">
-      <div class="ct">🔖 跟读书签</div>
-      <div class="cs">上次进度自动记住，打开即回。也可以手动收藏句子，随时一键直达。</div>
-      <div class="row" style="margin-bottom:8px">
-        <button class="btn play" onclick="addMark()">记下当前位置</button>
-      </div>
-      <div id="markList"></div>
-    </div>
-    <div class="jpop" id="abPop" role="dialog" aria-modal="true" aria-label="AB 循环" tabindex="-1">
-      <div class="ct">🔁 AB 循环</div>
-      <div class="cs" id="abPopHint">保存常用的句子区间，随时回来反复跟读。</div>
-      <div class="row" id="abSaveRow" style="margin-bottom:8px; display:none">
-        <button class="btn play" onclick="saveABLoop()">保存当前循环</button>
-      </div>
-      <div id="abLoopList"></div>
     </div>
     <button id="edgeTab" onclick="togglePanel()" title="词库" aria-label="打开词库面板">词库</button>
     <div id="dbg"></div>
@@ -2519,8 +2538,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     document.body.classList.toggle('ab-picking', abMode === 1 || abMode === 2);
     document.body.classList.toggle('ab-loop', abMode === 3);
     // 书签弹窗/AB 弹窗开着时同步状态
-    try { const mp = document.getElementById('markPop'); if (mp && mp.style.display === 'block') renderMarks(); } catch (e) {}
-    try { const ap = document.getElementById('abPop'); if (ap && ap.style.display === 'block') renderABLoops(); } catch (e) {}
+    try { const mp = document.getElementById('markWrap'); if (mp && mp.classList.contains('open')) renderMarks(); } catch (e) {}
+    try { const ap = document.getElementById('abWrap'); if (ap && ap.classList.contains('open')) renderABLoops(); } catch (e) {}
     }
     function paintAB() {
     if (!Array.isArray(sents) || !sents.length) return;
@@ -2582,9 +2601,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     abStart = a; abEnd = b; abMode = 3;
     abUI(); paintAB();
     const n = b - a + 1;
-    showAbToast(n === 1 ? `单句循环：第${a + 1}句（点 AB 按钮 / ✕ 取消）` : `A-B循环：第${a + 1}~${b + 1}句，共${n}句（点 AB 按钮 / ✕ 取消）`);
+    showAbToast(n === 1 ? `单句循环：第${a + 1}句` : `A-B循环：第${a + 1}~${b + 1}句，共${n}句`);
     dlog('ab-loop', `A=${a} B=${b}`);
     playFrom(a);
+    // 选择完成 → 自动保存循环结果
+    saveABLoop();
     return true;
     }
     return false;
@@ -2601,32 +2622,44 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     abCancel();
     }
     }
-    // AB 按钮长按 → 打开已保存循环列表；单击 → 设AB循环（原有行为）
-    // 首次点击提示长按功能
-    (function() {
-    const btn = document.getElementById('btnAB');
-    if (!btn) return;
-    let timer = null, held = false;
-    const HOLD = 500;
-    btn.addEventListener('pointerdown', e => {
-      held = false;
-      timer = setTimeout(() => { held = true; timer = null; toggleABPop(); }, HOLD);
-    }, { passive: true });
-    btn.addEventListener('pointerup', () => {
-      clearTimeout(timer); timer = null;
-      if (!held) {
-        toggleAB();
-        // 首次点击后提示长按功能
-        try {
-          if (!localStorage.getItem('ielts-ab-hint')) {
-            localStorage.setItem('ielts-ab-hint', '1');
-            setTimeout(() => showAbToast('💡 长按AB按钮可查看已保存循环'), 600);
-          }
-        } catch (e) {}
-      }
-    });
-    btn.addEventListener('pointerleave', () => { clearTimeout(timer); timer = null; });
-    })();
+    // AB wrap 点击切换（与 loop-wrap/rate-wrap 同模式：桌面 hover + 移动端 click）
+    function toggleABWrap(e) {
+    if (e) e.stopPropagation();
+    const w = document.getElementById('abWrap');
+    if (!w) return;
+    const open = w.classList.toggle('open');
+    renderABLoops();
+    if (open) setTimeout(() => document.addEventListener('pointerdown', function h(ev) {
+      if (!ev.target.closest('#abWrap')) { w.classList.remove('open'); document.removeEventListener('pointerdown', h); }
+    }), 0);
+    }
+    function toggleMarkWrap(e) {
+    if (e) e.stopPropagation();
+    const w = document.getElementById('markWrap');
+    if (!w) return;
+    const open = w.classList.toggle('open');
+    renderMarks();
+    if (open) setTimeout(() => document.addEventListener('pointerdown', function h(ev) {
+      if (!ev.target.closest('#markWrap')) { w.classList.remove('open'); document.removeEventListener('pointerdown', h); }
+    }), 0);
+    }
+    // 旧 toggleABPop/toggleMarkPop 兼容：重定向到新的 wrap toggle
+    function toggleABPop(force) {
+    const w = document.getElementById('abWrap');
+    if (!w) return;
+    if (force === false) { w.classList.remove('open'); return; }
+    if (force === true || !w.classList.contains('open')) {
+      w.classList.add('open'); renderABLoops();
+    } else { w.classList.remove('open'); }
+    }
+    function toggleMarkPop(force) {
+    const w = document.getElementById('markWrap');
+    if (!w) return;
+    if (force === false) { w.classList.remove('open'); return; }
+    if (force === true || !w.classList.contains('open')) {
+      w.classList.add('open'); renderMarks();
+    } else { w.classList.remove('open'); }
+    }
     function getABLoops() { try { return JSON.parse(localStorage.getItem('ielts-ab-loops') || '[]'); } catch (e) { return []; } }
     function setABLoops(loops) { safeStore('ielts-ab-loops', JSON.stringify(loops || [])); }
     function loopName(a, b) { return `${markLabel(a)} — ${markLabel(b)}`; }
@@ -2653,8 +2686,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       const a = Math.min(localA, localB), b = Math.max(localA, localB);
       return `<div class="ab-loop-item"><div class="ab-loop-name">${esc(x.name || loopName(x.start, x.end))}<div class="ab-loop-range">第 ${a + 1}–${b + 1} 句</div></div><div class="ab-loop-btns"><button class="btn play" onclick="recallABLoop(${x.start}, ${x.end})">加载</button><button class="btn del" onclick="deleteABLoop(${x.start}, ${x.end})">删</button></div></div>`;
     }).join('') : '<div style="font-size:12px;color:var(--muted)">还没有保存的 AB 循环。</div>';
-    const hint = document.getElementById('abPopHint');
-    if (hint) hint.textContent = loops.length ? `共 ${loops.length} 个已保存区间` : '保存常用的句子区间，随时回来反复跟读。';
     const saveRow = document.getElementById('abSaveRow');
     if (saveRow) saveRow.style.display = (abMode === 3) ? 'flex' : 'none';
     }
@@ -2673,13 +2704,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     function deleteABLoop(ga, gb) {
     const loops = getABLoops().filter(x => !(x && x.start === ga && x.end === gb));
     setABLoops(loops); renderABLoops();
-    }
-    function toggleABPop(force) {
-    const p = document.getElementById('abPop');
-    if (!p) return;
-    const show = force !== undefined ? force : p.style.display !== 'block';
-    if (show) { renderABLoops(); openModal(p); }
-    else closeModal(p);
     }
 
     function step(d) {
@@ -2780,8 +2804,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     function openModal(el) {
     if (!el) return;
     // 关闭其它弹窗，保持互斥
-    ['#pop','#jumpPop','#markPop','#cloudPop','#abPop'].forEach(s => {
+    ['#pop','#jumpPop','#cloudPop'].forEach(s => {
       const o = document.querySelector(s); if (o && o !== el && o.style.display === 'block') closeModal(o);
+    });
+    ['#abWrap','.mark-wrap.open','#rateWrap.open','#loopWrap.open'].forEach(s => {
+      const o = document.querySelector(s); if (o && o !== el) o.classList.remove('open');
     });
     _modalReturnFocus = document.activeElement;
     if (_modalTrapCleanup) { _modalTrapCleanup(); _modalTrapCleanup = null; }
@@ -2805,10 +2832,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (_cp && _cp.style.display === 'block' && !_inPath(e, '.cpop') && !_inPath(e, '#btnCloud') && !_inPath(e, '#voiceSel')) closeModal(_cp);
     const _jp = document.getElementById('jumpPop');
     if (_jp && _jp.style.display === 'block' && !_inPath(e, '.jpop') && !_inPath(e, '#abTitle') && !_inPath(e, '.jump-btn')) closeModal(_jp);
-    const _mp = document.getElementById('markPop');
-    if (_mp && _mp.style.display === 'block' && !_inPath(e, '.jpop') && !_inPath(e, '#markBtn')) closeModal(_mp);
-    const _abp = document.getElementById('abPop');
-    if (_abp && _abp.style.display === 'block' && !_inPath(e, '.jpop') && !_inPath(e, '#btnAB')) closeModal(_abp);
+    const _mp = document.getElementById('markWrap');
+    if (_mp && _mp.classList.contains('open') && !_inPath(e, '#markWrap')) _mp.classList.remove('open');
+    const _abp = document.getElementById('abWrap');
+    if (_abp && _abp.classList.contains('open') && !_inPath(e, '#abWrap')) _abp.classList.remove('open');
     if (document.body.classList.contains('menu-open') && !_inPath(e, '.topbar-right') && !_inPath(e, '#btnMenu')) document.body.classList.remove('menu-open');
     /* 移动端：点遮罩关词库抽屉 */
     if (window.matchMedia('(max-width: 700px)').matches && document.querySelector('.layout.panel-open')) {
@@ -2992,7 +3019,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     else if (e.key === 'Escape') e.target.blur();
     }
     // 输入框内按 Esc 也要能关弹窗（跳转弹窗打开时焦点在句号输入框里，否则 Esc 永远关不掉）
-    if (e.key === 'Escape') { e.target.blur(); closeModal(pop); const cp = document.getElementById('cloudPop'); if (cp) closeModal(cp); const jp = document.getElementById('jumpPop'); if (jp) closeModal(jp); const mp = document.getElementById('markPop'); if (mp) closeModal(mp); const abp = document.getElementById('abPop'); if (abp) closeModal(abp); document.body.classList.remove('menu-open'); }
+    if (e.key === 'Escape') { e.target.blur(); closeModal(pop); const cp = document.getElementById('cloudPop'); if (cp) closeModal(cp); const jp = document.getElementById('jumpPop'); if (jp) closeModal(jp); document.getElementById('markWrap')?.classList.remove('open'); document.getElementById('abWrap')?.classList.remove('open'); document.body.classList.remove('menu-open'); }
     return;
     }
     if (e.code === 'Space' && e.target.tagName === 'BUTTON') return; // 按钮聚焦时走原生空格点击，避免双重触发
@@ -3001,7 +3028,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
     if (e.key === 'ArrowRight') step(1);
     if (e.key === 'ArrowLeft') step(-1);
-    if (e.key === 'Escape') { closeModal(pop); const cp = document.getElementById('cloudPop'); if (cp) closeModal(cp); const jp = document.getElementById('jumpPop'); if (jp) closeModal(jp); const mp = document.getElementById('markPop'); if (mp) closeModal(mp); const abp = document.getElementById('abPop'); if (abp) closeModal(abp); document.getElementById('loopWrap')?.classList.remove('open'); document.getElementById('rateWrap')?.classList.remove('open'); document.body.classList.remove('menu-open'); }
+    if (e.key === 'Escape') { closeModal(pop); const cp = document.getElementById('cloudPop'); if (cp) closeModal(cp); const jp = document.getElementById('jumpPop'); if (jp) closeModal(jp); document.getElementById('markWrap')?.classList.remove('open'); document.getElementById('abWrap')?.classList.remove('open'); document.getElementById('loopWrap')?.classList.remove('open'); document.getElementById('rateWrap')?.classList.remove('open'); document.body.classList.remove('menu-open'); }
     });
 
     /* ============ 进度存档 + 手动书签 ============ */
@@ -3203,13 +3230,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     : '<div style="font-size:12px;color:var(--muted)">还没有书签，先点“记下当前位置”。</div>';
     }
     function jumpMark(i) { toggleMarkPop(false); if (abMode === 3) abCancel(true); playFrom(Math.max(0, Math.min(sents.length - 1, i))); }
-    function toggleMarkPop(force) {
-    const p = document.getElementById('markPop');
-    if (!p) return;
-    const show = force !== undefined ? force : p.style.display !== 'block';
-    if (show) { renderMarks(); openModal(p); }
-    else closeModal(p);
-    }
     window.addEventListener('pagehide', savePos);
     document.addEventListener('visibilitychange', () => { if (document.hidden) savePos(); });
 
