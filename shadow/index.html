@@ -476,17 +476,17 @@
   .jpop .row { display: flex; gap: 8px; }
   .jpop .row input { flex: 1; margin-bottom: 0; min-width: 0; }
   .jpop .row .btn.play { flex: none; }
-  #markList { display: flex; flex-direction: column; gap: 6px; max-height: 38vh; overflow-y: auto; }
+  #markList { display: flex; flex-direction: column; gap: 6px; max-height: 38vh; overflow-y: auto;
+    min-width: 230px; } /* 撑开菜单：否则中文随意断行把菜单挤到最小宽，按钮全缩成一团 */
   #markList .mitem { display: flex; flex-direction: column; gap: 8px;
     border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
   #markList .mmain { min-width: 0; }
   #markList .mt { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   #markList .ms { font-size: 11px; color: var(--muted); margin-top: 2px; }
   #markList .mbtns { display: flex; gap: 6px; }
-  #markList .mbtns .btn { padding: 6px 0; min-height: 34px; font-size: 12px; }
-  #markList .mbtns .go { flex: 1; }
-  #markList .mbtns .ab { flex: none; width: 40px; }
-  #markList .mbtns .del { flex: none; padding: 6px 12px; }
+  /* 书签行四个按钮统一样式：同行按比例排布，直达加宽主按钮，A/B/删等宽 */
+  #markList .mbtns .btn { flex: 1; padding: 6px 4px; min-height: 34px; font-size: 12px; }
+  #markList .mbtns .go { flex: 2; }
   /* 书签行 A/B 状态：该条是当前循环起/终点时点亮 */
   #markList .mbtns .btn.ab.ab-on { background: var(--accent); color: #fff; border-color: var(--accent); }
   #seekTip { position: absolute; left: 0; bottom: calc(100% + 14px); transform: translateX(-50%);
@@ -1513,6 +1513,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     this._client.auth.onAuthStateChange((ev, sess) => {
     if (ev === 'SIGNED_IN' || ev === 'TOKEN_REFRESHED' || ev === 'USER_UPDATED') {
     this._userMail = (sess && sess.user && sess.user.email) || this._userMail;
+    this.setStatus('正在连接云端语音…'); // 先立即刷新菜单（登录表单→退出按钮），别等网络查询
     this.checkStatus();
     if (ev === 'SIGNED_IN') { try { cloudPullMarks(); } catch (e) {} } // 登录即拉书签，多端合并
     } else if (ev === 'SIGNED_OUT' || ev === 'USER_DELETED') {
@@ -1583,7 +1584,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     async checkStatus() {
     try {
     const s = await this.session();
-    if (!s) { this._on = false; return false; }
+    if (!s) { this._on = false; this.setStatus('Azure 云端自然语音需登录（与词汇真经站同一账号，管理员审批后可用）。'); return false; }
     const ctl = new AbortController();
     const to = setTimeout(() => ctl.abort(), 12000); // 状态查询 12s 超时，弱网不许无限挂起
     let r;
@@ -1922,6 +1923,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     const { error } = await c.auth.signInWithPassword({ email: em, password: pw });
     if (error) { alert('登录失败：' + error.message); return; }
     CLOUD._userMail = em;
+    CLOUD.setStatus('正在连接云端语音…'); // 先立即刷新菜单，别等网络查询（慢网下最长 12s+）
     await CLOUD.checkStatus();
     toggleCloudWrap();
     } finally { cloudLogin._busy = false; }
