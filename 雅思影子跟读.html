@@ -159,10 +159,13 @@
     background: rgba(0,0,0,.04); border-radius: 5px; padding: 0 6px; margin-right: 5px; line-height: 1.6; vertical-align: 1px; }
   body.dark .notebar { background: rgba(255,255,255,.03); border-color: rgba(255,255,255,.06); }
   body.dark .notebar .nb-label { color: var(--muted); }
-  .voice-sel { border: 1px solid var(--border); background-color: #fff; color: var(--text);
-    border-radius: 10px; font-size: 16px; padding: 7px 10px; max-width: 220px; min-height: 34px;
-    transition: border-color var(--t-fast); }
-  .voice-sel:hover { border-color: var(--accent-bright); }
+  /* 音色下拉：与顶栏其余按钮一致的 pill 胶囊样式（13px 字＋999px 圆角；移动端面板内仍用 16px/44px 大触区） */
+  .voice-sel { border: 1px solid var(--accent-line); background-color: #fff; color: var(--accent);
+    border-radius: 999px; font-size: 13px; font-weight: 500; padding: 7px 14px; padding-right: 32px;
+    max-width: 220px; min-height: 34px; cursor: pointer;
+    transition: background var(--t-fast), border-color var(--t-fast); }
+  .voice-sel:hover { background: var(--accent-soft); border-color: var(--accent-bright); }
+  .voice-sel:focus { border-color: var(--accent-bright); outline: none; }
 
   /* ============ 正文（衬线故事体卡片） ============ */
   article { font-size: 18.5px; }
