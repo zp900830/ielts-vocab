@@ -339,8 +339,10 @@
     display: flex; flex-direction: column; gap: 2px;
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index: 12; }
-  /* 透明桥：盖住菜单与按钮之间的空隙，鼠标穿过时 hover 不断链（悬浮能选的关键） */
-  .loop-menu::after, .rate-menu::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 10px; }
+  /* 透明桥：盖住菜单与按钮之间的空隙，鼠标穿过时 hover 不断链。
+     必须是真实元素（命中测试不响应宿主盒外的伪元素）且放在无 overflow 的 wrap 里
+     （.ab-menu 有 overflow-y:auto 会裁剪盒外子元素），定位到 wrap 顶边上方 12px */
+  .menu-bridge { position: absolute; left: 0; right: 0; top: 0; height: 12px; transform: translateY(-12px); }
   /* 点击打开（桌面/移动通用） */
   .loop-wrap.open .loop-menu, .rate-wrap.open .rate-menu { opacity: 1; visibility: visible;
     pointer-events: auto; transform: translateX(-50%) translateY(0); }
@@ -359,7 +361,7 @@
     display: flex; flex-direction: column; gap: 2px;
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index: 12; max-height: 50vh; overflow-y: auto; }
-  .ab-menu::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 10px; }
+  .ab-menu::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 10px; } /* 已由 .menu-bridge 真实桥替代，保留无副作用 */
   .ab-wrap.open .ab-menu { opacity: 1; visibility: visible;
     pointer-events: auto; transform: translateX(-50%) translateY(0); }
   @media (hover: hover) and (pointer: fine) {
@@ -472,7 +474,7 @@
     height: 40%; border-radius: 12px; pointer-events: none; opacity: .8;
     background: radial-gradient(120px 20px at 20% 0%, rgba(255,255,255,.6), transparent 70%); }
   #seekTrack { position: relative; height: 11px; cursor: pointer; touch-action: none; flex: 1; min-width: 0; display: flex; align-items: center; }
-  #seekTrack::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; bottom: -20px; }
+  #seekTrack::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; bottom: -6px; } /* 下探不越过菜单底边：-20px 会盖住下排 AB/书签菜单与按钮间的透明桥，hover 断链致菜单秒关 */
   /* 默认 1px 极细线，用系统边框色，装饰感强 */
   #seekRail { position: absolute; left: 0; right: 0; top: 50%; height: 1px; transform: translateY(-50%);
     background: #b9d4c7;
@@ -959,6 +961,7 @@
         </div>
         <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式" aria-label="切换夜间模式"><i class="ri-moon-line" aria-hidden="true"></i><span class="only-mobile"> 夜间模式</span></button>
         <div class="cloud-wrap" id="cloudWrap">
+          <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn" id="btnCloud" onclick="toggleCloudWrap(event)" title="登录后可用 Azure 云端自然语音" aria-label="云端语音登录状态"><i class="ri-cloud-line" aria-hidden="true"></i> 未登录</button>
           <div class="cloud-menu" id="cloudPop">
             <div class="ct"><i class="ri-cloud-line" aria-hidden="true"></i> 云端语音登录</div>
@@ -987,6 +990,7 @@
         <button class="btn play" id="btnPlay" onclick="togglePlay()" aria-label="播放或暂停"><i class="ri-play-fill" aria-hidden="true"></i> 播放</button>
         <button class="btn ab-step" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line" aria-hidden="true"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
+          <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="单句循环：选择每句重复次数" aria-label="单句循环次数"><i class="ri-repeat-line" aria-hidden="true"></i><span id="loopCount">3</span></button>
           <div class="loop-menu" id="loopMenu">
             <button data-count="0" onclick="setLoopCount(0)">关</button>
@@ -996,6 +1000,7 @@
           </div>
         </div>
         <div class="ab-wrap" id="abWrap">
+          <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn ab-btn" id="btnAB" onclick="toggleABWrap(event)" title="AB循环" aria-label="设置 A-B 复读区间"><i class="ri-arrow-left-right-line" aria-hidden="true"></i><span class="ab-label">AB</span></button>
           <div class="ab-menu">
             <button class="btn play" onclick="toggleAB(); abWrap.classList.remove('open')" id="abSetBtn">设置AB循环</button>
@@ -1006,6 +1011,7 @@
           </div>
         </div>
         <div class="rate-wrap" id="rateWrap">
+          <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速" aria-label="朗读倍速">1x</button>
           <div class="rate-menu">
             <button data-mrate="0.75" onclick="pickRate(0.75)">0.75x</button>
@@ -1015,6 +1021,7 @@
           </div>
         </div>
         <div class="ab-wrap" id="markWrap">
+          <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn ab-btn" id="markBtn" onclick="toggleMarkWrap(event)" title="书签" aria-label="书签"><i class="ri-bookmark-line" aria-hidden="true"></i></button>
           <div class="ab-menu">
             <button class="btn play" onclick="addMark()">记下当前位置</button>
