@@ -685,7 +685,7 @@
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     will-change: max-width, padding, gap, border-radius, transform;
     animation: abExpandPop .34s var(--ease-bar); }
-  body.scrolled .audiobar.expanded .ab-right { position: static; max-width: 1400px; max-height: 60px; opacity: 1; pointer-events: auto; overflow: visible; }
+  body.scrolled .audiobar.expanded .ab-right { position: static; max-width: calc(100vw - 80px); max-height: 60px; opacity: 1; pointer-events: auto; overflow: visible; } /* 80=bar左右偏移24×2+内边距16×2，随视口等宽撑满（原1400px定宽在宽屏右侧留白） */
   body.scrolled .audiobar.expanded .ab-left { gap: 6px; flex: none; flex-wrap: wrap; justify-content: center; } /* 展开态按钮回多行收纳（否则继承 mini 的 nowrap 整行溢出）；flex:none 复位 mini 的 flex:1，否则左右各半、进度条被挤短 */
   body.scrolled .audiobar.expanded .ab-left > .btn:not(.ab-step):not(.play) { max-width: 80px; opacity: 1; pointer-events: auto; padding: 7px 14px; overflow: visible; }
   body.scrolled .audiobar.expanded .loop-wrap,
