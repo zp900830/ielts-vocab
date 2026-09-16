@@ -183,16 +183,16 @@
 
   .layout { max-width: 1120px; margin: 0 auto; display: block; padding: 24px 18px 130px; }
   .sent-zh { display: block; font-family: var(--sans); font-size: 14px; color: var(--muted);
-    line-height: 1.6; margin: 0 0 6px 2px; }
+    line-height: 1.6; margin: 0 0 6px; }
   /* 段落小注：段意小结/辅助理解，被动信息 → 淡暖沙底色注释，不抢正文 */
   .para-zh { font-size: 12.5px; color: var(--muted);
     background: rgba(192,138,46,.06);
     border: none; border-radius: 8px;
-    padding: 6px 12px; margin: 10px 0 14px; line-height: 1.7; }
+    padding: 6px 0; margin: 10px 0 14px; line-height: 1.7; } /* 无左右内边距：文本与底色均与正文左对齐 */
   body.hide-zh .sent-zh, body.hide-zh .para-zh { display: none; }
   /* 单词辨析卡：弱化版本，不抢正文注意力 */
   .notebar { display: block; border: 1px solid rgba(0,0,0,.08);
-    border-radius: 10px; padding: 7px 12px; margin: 6px 0 8px; line-height: 1.55;
+    border-radius: 10px; padding: 7px 0; margin: 6px 0 8px; line-height: 1.55; /* 无左右内边距：文本与边框均与正文左对齐 */
     background: rgba(0,0,0,.02); font-size: 12.5px; }
   .notebar .nb-t { display: inline-flex; align-items: baseline; flex-wrap: wrap; gap: 2px 8px; }
   .notebar .nb-t .nb-w { font-weight: 700; font-family: var(--serif); font-size: 14px; color: var(--muted); cursor: text; min-width: 0; }
@@ -539,11 +539,11 @@
     line-height: 1.5; margin: 2px 0 12px; }
   body.hide-zh .zh { display: none; }
   .sec .sub { font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--text);
-    margin: 18px 0 8px; padding-left: 12px; }
+    margin: 18px 0 8px; }
   .sec .sub:first-of-type { margin-top: 6px; }
   /* 中英双语标题：英文副标灰色小字 */
   .t-en { font-family: var(--sans); font-size: 12px; font-weight: 400;
-    color: #57534e; letter-spacing: .02em; margin-left: 8px; white-space: normal; }
+    color: #57534e; letter-spacing: .02em; white-space: normal; } /* 中英文间距由 titEN 前置空格提供，换行后两行英文均顶格对齐 */
 
   /* ============ 侧边词库 ============ */
   aside { position: fixed; right: 14px; top: 74px; bottom: 18px; width: 340px; max-width: calc(100vw - 28px); z-index: 115;
@@ -1236,7 +1236,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       '上篇·旧物改造店': 'Part 1 · The Upcycling Shop',
       '上篇·跨国列车': 'Part 1 · The Transnational Train', '下篇·街角小店': 'Part 2 · The Corner Shop',
       '上篇·纪念馆': 'Part 1 · The Memorial Hall', '下篇·发明比赛': 'Part 2 · The Invention Contest',
-      '上篇·备考的一天': 'Part 1 · A Day of Exam Prep', '下篇·奶奶的健康年': "Part 2 · Grandma's Healthy Year",};    const titEN = t => TIT_EN[t] ? `<span class="t-en">${esc(TIT_EN[t])}</span>` : '';
+      '上篇·备考的一天': 'Part 1 · A Day of Exam Prep', '下篇·奶奶的健康年': "Part 2 · Grandma's Healthy Year",};    const titEN = t => TIT_EN[t] ? ` <span class="t-en">${esc(TIT_EN[t])}</span>` : '';
     function chapterSentCount(si) {
       if (!SECTIONS[si]) return 0;
       return SECTIONS[si].paragraphs.reduce((n, p) => n + p.length, 0);
