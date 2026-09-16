@@ -2618,10 +2618,27 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     }
     function updateABRegion(a, b) {
-    const region = document.getElementById('abRegion');
-    if (!region || !sents[a]) return;
     const art = document.getElementById('art');
     if (!art) return;
+    // render() 会重写 #art innerHTML，静态的 #abRegion（含 ✕ 取消按钮）首次加载后就没了；
+    // 这里找不到就重建，保证循环框 + ✕ 按钮永远可用
+    let region = document.getElementById('abRegion');
+    if (!region) {
+    region = document.createElement('div');
+    region.id = 'abRegion';
+    region.className = 'ab-region';
+    region.style.display = 'none';
+    region.setAttribute('aria-hidden', 'true');
+    const x = document.createElement('button');
+    x.className = 'ab-cancel';
+    x.textContent = '×';
+    x.title = '取消循环';
+    x.setAttribute('aria-label', '取消循环');
+    x.onclick = () => abCancel();
+    region.appendChild(x);
+    art.appendChild(region);
+    }
+    if (!sents[a]) return;
     const artR = art.getBoundingClientRect();
     let minLeft = Infinity, maxRight = -Infinity, top = Infinity, bottom = -Infinity;
     for (let k = a; k <= b && k < sents.length; k++) {
@@ -2746,6 +2763,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     function renderABLoops() {
     const list = document.getElementById('abLoopList');
     if (!list) return;
+    // 菜单打开时同步主按钮文案：有循环/待选中显示"取消"，一眼就知道怎么退出
+    const setBtn = document.getElementById('abSetBtn');
+    if (setBtn) setBtn.textContent = abMode === 0 ? '设置AB循环' : '取消AB循环';
     const maxI = sents.length ? ((currentChapter >= 0) ? chapterSentStart + sents.length - 1 : sents.length - 1) : -1;
     const minI = (currentChapter >= 0) ? chapterSentStart : 0;
     const loops = getABLoops().filter(x => x && Number.isInteger(x.start) && Number.isInteger(x.end) && x.start >= minI && x.end <= maxI);
