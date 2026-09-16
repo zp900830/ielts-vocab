@@ -675,7 +675,7 @@
             <button data-count="5" onclick="setLoopCount(5)">5遍</button>
           </div>
         </div>
-        <button class="btn ab-btn" id="btnAB" onclick="toggleAB()" title="A-B段落循环复读"><i class="ri-arrow-left-right-line" aria-hidden="true"></i> AB</button>
+        <button class="btn ab-btn" id="btnAB" onclick="toggleAB()" title="A-B段落循环复读"><i class="ri-arrow-left-right-line" aria-hidden="true"></i><span class="ab-label">AB</span></button>
         <div class="rate-wrap" id="rateWrap">
           <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速">1x</button>
           <div class="rate-menu">
@@ -2883,20 +2883,20 @@
     abMode = 1;
     abStart = idx >= 0 ? idx : 0;
     abEnd = -1;
-    if (btn) { btn.textContent = 'A-'; btn.classList.add('ab-active'); }
+    if (btn) { btn.querySelector('.ab-label').textContent = 'A-'; btn.classList.add('ab-active'); }
     } else if (abMode === 1) {
     // 设置B点并开始循环
     abMode = 2;
     abEnd = idx >= 0 ? idx : sents.length - 1;
     if (abEnd <= abStart) abEnd = Math.min(abStart + 1, sents.length - 1);
-    if (btn) { btn.textContent = 'AB'; btn.classList.add('ab-active'); }
+    if (btn) { btn.querySelector('.ab-label').textContent = 'AB'; btn.classList.add('ab-active'); }
     dlog('ab-loop', `A=${abStart} B=${abEnd}`);
     } else {
     // 关闭A-B循环
     abMode = 0;
     abStart = -1;
     abEnd = -1;
-    if (btn) { btn.textContent = 'AB'; btn.classList.remove('ab-active'); }
+    if (btn) { btn.querySelector('.ab-label').textContent = 'AB'; btn.classList.remove('ab-active'); }
     dlog('ab-loop', 'off');
     }
     }

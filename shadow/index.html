@@ -948,7 +948,7 @@
             <button data-count="5" onclick="setLoopCount(5)">5遍</button>
           </div>
         </div>
-        <button class="btn ab-btn" id="btnAB" title="A-B复读：单击设循环/长按打开已保存循环" aria-label="设置 A-B 复读区间"><i class="ri-arrow-left-right-line" aria-hidden="true"></i> AB</button>
+        <button class="btn ab-btn" id="btnAB" title="A-B复读：单击设循环/长按打开已保存循环" aria-label="设置 A-B 复读区间"><i class="ri-arrow-left-right-line" aria-hidden="true"></i><span class="ab-label">AB</span></button>
         <div class="rate-wrap" id="rateWrap">
           <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速" aria-label="朗读倍速">1x</button>
           <div class="rate-menu">
@@ -2514,7 +2514,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (btn) {
     btn.classList.toggle('ab-active', abMode === 3);
     btn.classList.toggle('ab-arm', abMode === 1 || abMode === 2);
-    btn.textContent = abMode === 1 ? '设A' : abMode === 2 ? '设B' : 'AB';
+    btn.querySelector('.ab-label').textContent = abMode === 1 ? '设A' : abMode === 2 ? '设B' : 'AB';
     }
     document.body.classList.toggle('ab-picking', abMode === 1 || abMode === 2);
     document.body.classList.toggle('ab-loop', abMode === 3);
