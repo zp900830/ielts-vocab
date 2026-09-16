@@ -202,11 +202,11 @@
   .para-zh { font-size: 12.5px; color: var(--muted);
     background: rgba(192,138,46,.06);
     border: none; border-radius: 8px;
-    padding: 6px 0; margin: 10px 0 14px; line-height: 1.7; } /* 无左右内边距：文本与底色均与正文左对齐 */
+    padding: 6px 12px; margin: 10px 0 14px; line-height: 1.7; } /* 卡片保留左右内边距：文本不贴边 */
   body.hide-zh .sent-zh, body.hide-zh .para-zh { display: none; }
   /* 单词辨析卡：弱化版本，不抢正文注意力 */
   .notebar { display: block; border: 1px solid rgba(0,0,0,.08);
-    border-radius: 10px; padding: 7px 0; margin: 6px 0 8px; line-height: 1.55; /* 无左右内边距：文本与边框均与正文左对齐 */
+    border-radius: 10px; padding: 7px 12px; margin: 6px 0 8px; line-height: 1.55; /* 卡片保留左右内边距：文本不贴边 */
     background: rgba(0,0,0,.02); font-size: 12.5px; }
   .notebar .nb-t { display: inline-flex; align-items: baseline; flex-wrap: wrap; gap: 2px 8px; }
   .notebar .nb-t .nb-w { font-weight: 700; font-family: var(--serif); font-size: 14px; color: var(--muted); cursor: text; min-width: 0; }
