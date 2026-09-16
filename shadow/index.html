@@ -134,16 +134,16 @@
     transition: font-size var(--t-morph) var(--ease-smooth), opacity .3s ease; }
   /* 章节筛选：logo 右侧的胶囊下拉 */
   .chapter-ctrl { flex: none; display: flex; align-items: center; }
-  .chapter-sel { border: 1px solid var(--accent-line); background-color: var(--accent-soft); color: var(--accent);
-    border-radius: 999px; font-size: 13px; font-weight: 600; padding: 5px 14px;
+  .chapter-sel { border: 1px solid var(--border); background-color: transparent; color: var(--text);
+    border-radius: 999px; font-size: 13px; font-weight: 500; padding: 5px 14px;
     min-height: 0; max-width: none; cursor: pointer; white-space: nowrap;
     -webkit-appearance: none; appearance: none; padding-right: 30px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%230c9c74' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%236b665a' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat; background-position: right 12px center;
     transition: border-color var(--t-fast), background-color var(--t-fast); }
-  .chapter-sel:hover { border-color: var(--accent); background-color: rgba(16,180,135,.14); }
-  body.dark .chapter-sel { background-color: rgba(16,180,135,.12); border-color: rgba(16,180,135,.22); color: #2bd4a4;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%232bd4a4' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+  .chapter-sel:hover { border-color: var(--accent-line); background-color: var(--accent-soft); }
+  body.dark .chapter-sel { background-color: transparent; border-color: rgba(255,255,255,.08); color: var(--text);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23908a7e' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
   .topbar-right { display: flex; align-items: center; gap: 8px; margin-left: auto;
     transition: opacity .3s ease, max-width var(--t-morph) var(--ease-smooth),
       max-height var(--t-morph) var(--ease-smooth); }
