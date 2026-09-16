@@ -369,6 +369,28 @@
   .ab-menu button { border: none; background: transparent; border-radius: 10px;
     padding: 7px 10px; font-size: 13px; color: var(--text); text-align: center; cursor: pointer; }
   .ab-menu button:hover { background: var(--accent-soft); }
+  .cloud-wrap { position: relative; }
+  .cloud-menu { position: absolute; bottom: calc(100% + 10px); right: 0; min-width: 220px;
+    background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
+    backdrop-filter: blur(22px) saturate(170%); border: 1px solid rgba(255,255,255,.7);
+    border-radius: 14px; box-shadow: var(--shadow-lg); padding: 10px;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index: 220;
+    transform: translateY(4px); }
+  .cloud-menu::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 10px; }
+  .cloud-wrap.open .cloud-menu { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
+  @media (hover: hover) and (pointer: fine) {
+    .cloud-wrap:hover .cloud-menu { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
+  }
+  .cloud-menu .ct { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .cloud-menu .cs { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+  .cloud-menu input { width: 100%; border: 1px solid var(--border); border-radius: 10px;
+    padding: 7px 12px; font-size: 14px; outline: none; margin-bottom: 8px;
+    background-color: #fff; color: var(--text); box-sizing: border-box; }
+  .cloud-menu input:focus { border-color: var(--accent-bright); }
+  .cloud-menu .row { display: flex; gap: 8px; }
+  .cloud-menu .row .btn { flex: 1; }
+  body.dark .cloud-menu input { background-color: #1c1a17; border-color: #33302b; color: #e2ddd5; }
   .loop-menu button, .rate-menu button { border: none; background: transparent; border-radius: 10px;
     padding: 7px 10px; font-size: 13px; color: var(--text); text-align: center; cursor: pointer; }
   .loop-menu button:hover, .rate-menu button:hover { background: var(--accent-soft); }
@@ -936,22 +958,24 @@
           <select class="voice-sel" id="voiceSel" title="选择朗读音色（云端/Edge/本机）" aria-label="选择朗读音色"></select>
         </div>
         <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式" aria-label="切换夜间模式"><i class="ri-moon-line" aria-hidden="true"></i><span class="only-mobile"> 夜间模式</span></button>
-        <button class="btn" id="btnCloud" onclick="toggleCloudPop()" title="登录后可用 Azure 云端自然语音" aria-label="云端语音登录状态"><i class="ri-cloud-line" aria-hidden="true"></i> 未登录</button>
-      </nav>
-      <button class="btn" id="btnMenu" onclick="toggleMenu()" title="菜单" aria-label="打开菜单"><span class="burger" aria-hidden="true"></span></button>
-    </header>
-
-    <div class="cpop" id="cloudPop" role="dialog" aria-modal="true" aria-label="云端语音登录" tabindex="-1">
-      <div class="ct"><i class="ri-cloud-line" aria-hidden="true"></i> 云端语音登录</div>
-      <div class="cs" id="cloudStatus">Azure 云端自然语音需登录（与词汇真经站同一账号，管理员审批后可用）。</div>
-      <input id="cloudEmail" type="email" placeholder="邮箱" autocomplete="email" aria-label="邮箱">
-      <input id="cloudPass" type="password" placeholder="密码" autocomplete="current-password" aria-label="密码">
-      <div class="row">
-        <button class="btn" onclick="cloudLogin()">登录</button>
-        <button class="btn" onclick="cloudSignup()">注册</button>
-        <button class="btn" id="btnLogout" onclick="cloudLogout()" style="display:none">退出</button>
-      </div>
-    </div>
+        <div class="cloud-wrap" id="cloudWrap">
+          <button class="btn" id="btnCloud" onclick="toggleCloudWrap(event)" title="登录后可用 Azure 云端自然语音" aria-label="云端语音登录状态"><i class="ri-cloud-line" aria-hidden="true"></i> 未登录</button>
+          <div class="cloud-menu" id="cloudPop">
+            <div class="ct"><i class="ri-cloud-line" aria-hidden="true"></i> 云端语音登录</div>
+            <div class="cs" id="cloudStatus">Azure 云端自然语音需登录（与词汇真经站同一账号，管理员审批后可用）。</div>
+            <div id="cloudLoginForm">
+              <input id="cloudEmail" type="email" placeholder="邮箱" autocomplete="email" aria-label="邮箱">
+              <input id="cloudPass" type="password" placeholder="密码" autocomplete="current-password" aria-label="密码">
+              <div class="row">
+                <button class="btn" onclick="cloudLogin()">登录</button>
+                <button class="btn" onclick="cloudSignup()">注册</button>
+              </div>
+            </div>
+            <div class="row" id="cloudLogoutRow" style="display:none">
+              <button class="btn" id="btnLogout" onclick="cloudLogout()">退出登录</button>
+            </div>
+          </div>
+        </div>
 
     <div id="abToast" role="status" aria-live="polite" aria-atomic="true"></div>
     <footer class="audiobar" id="audiobar" role="contentinfo">
@@ -1495,22 +1519,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     else if (this._on) label = '已连接';
     else label = '未登录';
     b.innerHTML = '<i class="ri-cloud-line" aria-hidden="true"></i> ';
-    b.appendChild(document.createTextNode(label)); // 邮箱走文本节点，防 HTML 注入
+    b.appendChild(document.createTextNode(label));
     }
     const logged = !!this._userMail;
-    const lo = document.getElementById('btnLogout');
+    const lf = document.getElementById('cloudLoginForm');
+    const lo = document.getElementById('cloudLogoutRow');
+    if (lf) lf.style.display = logged ? 'none' : '';
     if (lo) lo.style.display = logged ? '' : 'none';
-    const em = document.getElementById('cloudEmail');
-    const pw = document.getElementById('cloudPass');
-    if (em) em.style.display = logged ? 'none' : '';
-    if (pw) pw.style.display = logged ? 'none' : '';
-    const rows = document.querySelectorAll('#cloudPop .row');
-    rows.forEach(r => {
-      const hasLogin = r.querySelector('[onclick*="cloudLogin"], [onclick*="cloudSignup"]');
-      const hasLogout = r.querySelector('#btnLogout');
-      if (hasLogin) r.style.display = logged ? 'none' : '';
-      if (hasLogout) r.style.display = logged ? '' : 'none';
-    });
     },
     async boot() {
     if (!this.configured()) {
@@ -1786,9 +1801,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     try { this.synth(text, voiceId, rate).catch(() => {}); } catch (e) {}
     },
     };
-    function toggleCloudPop() {
-    const p = document.getElementById('cloudPop');
-    if (p.style.display === 'block') closeModal(p); else openModal(p);
+    function toggleCloudWrap(e) {
+    if (e) e.stopPropagation();
+    const w = document.getElementById('cloudWrap');
+    if (!w) return;
+    const open = w.classList.toggle('open');
+    if (open) setTimeout(() => document.addEventListener('pointerdown', function h(ev) {
+      if (!ev.target.closest('#cloudWrap')) { w.classList.remove('open'); document.removeEventListener('pointerdown', h); }
+    }), 0);
     }
     function toggleMenu() { document.body.classList.toggle('menu-open'); }
     function populateChapterSelect() {
@@ -1869,7 +1889,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (error) { alert('登录失败：' + error.message); return; }
     CLOUD._userMail = em;
     await CLOUD.checkStatus();
-    toggleCloudPop();
+    toggleCloudWrap();
     } finally { cloudLogin._busy = false; }
     }
     async function cloudSignup() {
@@ -1895,7 +1915,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     try { localStorage.setItem('ielts-voice', ''); } catch (e) {}
     loadVoices();
     }
-    toggleCloudPop();
+    toggleCloudWrap();
     }
 
     /* 语音三分类：神经网络 Natural/Online 系 + 口碑好的真人采样音色，其余隐藏 */
@@ -1998,7 +2018,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     if (!sel.onchange) sel.onchange = () => {
     if (isCloudURI(sel.value) && !(typeof CLOUD !== 'undefined' && CLOUD._on)) {
-    toggleCloudPop();
+    toggleCloudWrap();
     alert('☁ 云端语音需先登录（与词汇真经站同一账号）。');
     if (V[accent]) sel.value = V[accent].voiceURI || '';
     return;
@@ -2103,7 +2123,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     if (!speak._nudge || Date.now() - speak._nudge > 15000) {
     speak._nudge = Date.now();
-    const cp0 = document.getElementById('cloudPop');
+    const cp0 = document.getElementById('cloudWrap');
     if (cp0 && cp0.style.display !== 'block') cp0.style.display = 'block';
     alert('☁ 云端语音需先登录（与词汇真经站同一账号）。本次先用本地语音朗读。');
     }
@@ -2816,10 +2836,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     function openModal(el) {
     if (!el) return;
     // 关闭其它弹窗，保持互斥
-    ['#pop','#jumpPop','#cloudPop'].forEach(s => {
+    ['#pop','#jumpPop'].forEach(s => {
       const o = document.querySelector(s); if (o && o !== el && o.style.display === 'block') closeModal(o);
     });
-    ['#abWrap','.mark-wrap.open','#rateWrap.open','#loopWrap.open'].forEach(s => {
+    ['#abWrap','.mark-wrap.open','.cloud-wrap.open','#rateWrap.open','#loopWrap.open'].forEach(s => {
       const o = document.querySelector(s); if (o && o !== el) o.classList.remove('open');
     });
     _modalReturnFocus = document.activeElement;
@@ -2840,7 +2860,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     const t = _inPath(e, '.w') ? e.target.closest('.w') : null;
     if (t) { openPop(t); return; }
     if (!_inPath(e, '.pop') && !_inPath(e, 'aside')) closeModal(pop);
-    const _cp = document.getElementById('cloudPop');
+    const _cp = document.getElementById('cloudWrap');
     if (_cp && _cp.style.display === 'block' && !_inPath(e, '.cpop') && !_inPath(e, '#btnCloud') && !_inPath(e, '#voiceSel')) closeModal(_cp);
     const _jp = document.getElementById('jumpPop');
     if (_jp && _jp.style.display === 'block' && !_inPath(e, '.jpop') && !_inPath(e, '#abTitle') && !_inPath(e, '.jump-btn')) closeModal(_jp);
@@ -3031,7 +3051,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     else if (e.key === 'Escape') e.target.blur();
     }
     // 输入框内按 Esc 也要能关弹窗（跳转弹窗打开时焦点在句号输入框里，否则 Esc 永远关不掉）
-    if (e.key === 'Escape') { e.target.blur(); closeModal(pop); const cp = document.getElementById('cloudPop'); if (cp) closeModal(cp); const jp = document.getElementById('jumpPop'); if (jp) closeModal(jp); document.getElementById('markWrap')?.classList.remove('open'); document.getElementById('abWrap')?.classList.remove('open'); document.body.classList.remove('menu-open'); }
+    if (e.key === 'Escape') { e.target.blur(); closeModal(pop); document.getElementById('cloudWrap')?.classList.remove('open'); const jp = document.getElementById('jumpPop'); if (jp) closeModal(jp); document.getElementById('markWrap')?.classList.remove('open'); document.getElementById('abWrap')?.classList.remove('open'); document.body.classList.remove('menu-open'); }
     return;
     }
     if (e.code === 'Space' && e.target.tagName === 'BUTTON') return; // 按钮聚焦时走原生空格点击，避免双重触发
@@ -3040,7 +3060,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
     if (e.key === 'ArrowRight') step(1);
     if (e.key === 'ArrowLeft') step(-1);
-    if (e.key === 'Escape') { closeModal(pop); const cp = document.getElementById('cloudPop'); if (cp) closeModal(cp); const jp = document.getElementById('jumpPop'); if (jp) closeModal(jp); document.getElementById('markWrap')?.classList.remove('open'); document.getElementById('abWrap')?.classList.remove('open'); document.getElementById('loopWrap')?.classList.remove('open'); document.getElementById('rateWrap')?.classList.remove('open'); document.body.classList.remove('menu-open'); }
+    if (e.key === 'Escape') { closeModal(pop); document.getElementById('cloudWrap')?.classList.remove('open'); const jp = document.getElementById('jumpPop'); if (jp) closeModal(jp); document.getElementById('markWrap')?.classList.remove('open'); document.getElementById('abWrap')?.classList.remove('open'); document.getElementById('loopWrap')?.classList.remove('open'); document.getElementById('rateWrap')?.classList.remove('open'); document.body.classList.remove('menu-open'); }
     });
 
     /* ============ 进度存档 + 手动书签 ============ */
