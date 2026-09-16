@@ -286,7 +286,7 @@
   .ab-title:hover { background: var(--accent); color: #fff; }
   .jump-btn { display: none; }
   .ab-seek { flex: 1; min-width: 0; }
-  .ab-btn { font-size: 11px; padding: 4px 8px; min-height: 28px;
+  .ab-btn { font-size: 12px; padding: 4px 10px; min-height: 30px;
     transition: font-size .4s ease, padding .4s ease, min-height .4s ease; }
   #btnAB { font-weight: 700; letter-spacing: -0.5px; min-width: 4.2em; text-align: center; } /* 二字标签(AB/设A/设B)定宽锁死，不随状态撑宽，与左右按钮同尺寸 */
   #btnAB.ab-active { background: var(--accent); color: #fff; border-color: var(--accent); }
@@ -354,10 +354,11 @@
   .loop-menu button:hover, .rate-menu button:hover { background: var(--accent-soft); }
   .loop-menu button.active, .rate-menu button.active { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
   .ab-row { display: flex; align-items: center; gap: 5px; flex-wrap: nowrap; justify-content: center; }
-  .audiobar .btn { min-height: 26px; padding: 4px 11px; font-size: 12px; position: relative; white-space: nowrap;
+  .audiobar .btn { min-height: 30px; padding: 4px 10px; font-size: 12px; position: relative; white-space: nowrap;
     transition: font-size .4s ease, padding .4s ease, min-height .4s ease; }
   .audiobar .btn + .btn { margin-left: 4px; }
-  .audiobar .btn.play { font-size: 13px; padding: 4px 15px; }
+  .audiobar .btn i { font-size: 16px; line-height: 1; }
+  .audiobar .btn.play { font-size: 13px; padding: 4px 14px; }
   .audiobar .seg { min-width: 0; align-self: center; flex: none; padding: 3px 8px; font-size: 11px; }
   /* 进度刻度隐形扩大点击区（视觉仍是小点，触击达标；相邻重叠时后渲染的优先，不影响拖动吸附） */
   #seekTicks .tick::before { content: ""; position: absolute; inset: -10px; }
@@ -649,7 +650,7 @@
       transition: font-size .25s ease-out, padding .25s ease-out, min-height .25s ease-out,
         max-width .25s ease-out, opacity .25s ease-out; }
     body.scrolled .audiobar.expanded .ab-left > .btn.play { font-size: 15px; padding: 7px 22px; }
-    body.scrolled .audiobar.expanded .ab-left > .btn i { font-size: inherit; line-height: inherit; }
+    body.scrolled .audiobar.expanded .ab-left > .btn i { font-size: 16px; line-height: 1; }
   body.scrolled .audiobar.expanded .ab-expand { display: none; }
   /* 强制 mini：不受滚动位置影响的手动收起态（与 body.scrolled mini 同一样式） */
   .audiobar.force-mini { padding: 4px 10px; gap: 4px; border-radius: 999px;
@@ -952,7 +953,7 @@
             <button data-mrate="1.5" onclick="pickRate(1.5)">1.5x</button>
           </div>
         </div>
-        <button class="btn ab-btn" id="markBtn" onclick="toggleMarkPop()" title="书签：记下当前位置，随时回来" aria-label="书签">🔖</button>
+        <button class="btn ab-btn" id="markBtn" onclick="toggleMarkPop()" title="书签：记下当前位置，随时回来" aria-label="书签"><i class="ri-bookmark-line" aria-hidden="true"></i></button>
         <button class="btn ab-btn jump-btn" onclick="toggleJumpPop()" title="快速跳转" aria-label="快速跳转"><i class="ri-navigation-line" aria-hidden="true"></i></button>
       </nav>
       <div class="ab-right">
