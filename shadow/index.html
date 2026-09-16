@@ -1501,7 +1501,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     ],
     DEFAULT: 'en-GB-SoniaNeural',
     _on: false, _client: null, cache: new Map(), _pend: new Map(),
-    _q: [], _busy: false, _au: null, _auEl: null, _auUrl: null, _abortCtl: null,
+    _q: [], _busy: false, _au: null, _auEl: null, _auUrl: null, _playCtl: null, _gen: 0,
     client() {
     if (!window.supabase) return null;
     if (!this.URL || !this.KEY) return null;
@@ -1623,11 +1623,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     return false;
     }
     },
-    _enqueue(fn) {
-    return new Promise((res, rej) => { this._q.push({ fn, res, rej }); this._drain(); });
+    _enqueue(fn, ctl) {
+    return new Promise((res, rej) => { this._q.push({ fn, ctl, res, rej }); this._drain(); });
     },
     _drain() {
     if (this._busy || !this._q.length) return;
+    const head = this._q[0];
+    // 已被取消的排队任务直接丢弃，不占网络槽位（连点切句时旧预取不能堵住新句子）
+    if (head.ctl && head.ctl.signal.aborted) { this._q.shift(); head.rej(new Error('stale')); this._drain(); return; }
     this._busy = true;
     const job = this._q.shift();
     Promise.resolve().then(job.fn).then(job.res, job.rej).finally(() => {
@@ -1709,16 +1712,18 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (!b || !b.size) throw new Error('no audio');
     return b;
     },
-    async synth(text, voiceId, rate) {
+    async synth(text, voiceId, rate, isPlay) {
     const key = 'r2|' + voiceId + '|' + Number(rate).toFixed(2) + '|' + text;
     if (this.cache.has(key)) return this.cache.get(key);
     if (this._pend.has(key)) return this._pend.get(key);
+    // 各自独立 AbortController：创建即绑定，排队等待时也能被取消；
+    // 只有正式播放才登记为 _playCtl，预取不许覆盖（否则 stop 会取消错对象）
+    const ctl = new AbortController();
+    if (isPlay) this._playCtl = ctl;
     const p = (async () => {
     const hit = await this._idbGet(key);
     if (hit) { const u = URL.createObjectURL(hit); this._cacheSet(key, u); return u; }
-    // 本句合成独立 AbortController：切句/暂停/20s 超时可取消，避免请求挂起
-    const ctl = new AbortController();
-    this._abortCtl = ctl;
+    // 本句合成 20s 超时可取消，避免请求挂起
     const to = setTimeout(() => { try { ctl.abort(); } catch (e) {} }, 20000);
     try {
     const blob = await this._enqueue(async () => {
@@ -1737,7 +1742,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     return u;
     } finally {
     clearTimeout(to);
-    if (this._abortCtl === ctl) this._abortCtl = null;
+    if (this._playCtl === ctl) this._playCtl = null;
     }
     })();
     this._pend.set(key, p);
@@ -1768,8 +1773,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     } catch (e) {}
     },
     stop() {
+    this._gen = (this._gen || 0) + 1; // 新一代：过期 play 的 fail 不许再碰共享状态
     _cloudIntentionalPause = true; // 标记主动暂停
-    try { if (this._abortCtl) { this._abortCtl.abort(); this._abortCtl = null; } } catch (e) {}
+    try { if (this._playCtl) { this._playCtl.abort(); this._playCtl = null; } } catch (e) {}
+    // 清掉排队中的旧预取/旧合成：连点切句时它们不能堵住新句子（执行中的那个由 signal 中断）；
+    // 注意必须逐个 reject，否则 _enqueue 的 promise 永远不 settle，连带 _pend 缓存住死 promise
+    try { for (const job of this._q) { try { if (job.ctl) job.ctl.abort(); } catch (e) {} try { job.rej(new Error('stale')); } catch (e) {} } } catch (e) {}
+    try { this._q.length = 0; } catch (e) {}
     try {
     if (this._au) {
     this._au.onended = null; this._au.onerror = null; this._au.onpause = null; this._au.pause();
@@ -1783,12 +1793,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     setTimeout(() => { _cloudIntentionalPause = false; }, 100); // 短暂延迟后重置
     },
     play(text, voiceId, rate, my, cb, fallback) {
-    this.stop(); // 串行：任何新播放先停旧音频（预取不再经过这里，只走 prefetch）
+    this.stop(); // 串行：任何新播放先停旧音频并清空旧队列（预取不再经过这里，只走 prefetch）
+    const g = this._gen; // 本次播放的代际：过期回调不许 stop 掉新播放
     const au = this._ensureAudio();
     this._au = au;
     let done = false;
     let pausedAt = 0; // 记录暂停时间
-    const fail = e => { if (done) return; done = true; clearTimeout(timer); clearInterval(monitor); this.stop(); fallback(e); };
+    const fail = e => { if (done) return; done = true; clearTimeout(timer); clearInterval(monitor); if (g === this._gen) this.stop(); fallback(e); };
     const timer = setTimeout(() => fail(new Error('timeout')), 30000); // 30s 合成超时（延长到30s，给网络慢的情况更多时间）
 
     // 监控音频状态：检测暂停和卡住
@@ -1816,7 +1827,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     }, 1000);
 
-    this.synth(text, voiceId, rate).then(url => {
+    this.synth(text, voiceId, rate, true).then(url => {
     if (done || my !== speakToken) { clearTimeout(timer); clearInterval(monitor); return; }
     au.src = url;
     this._auUrl = url; // 标记当前播放的 blob URL，防止缓存回收时掐断
