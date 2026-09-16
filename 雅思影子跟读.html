@@ -2009,8 +2009,20 @@
     b.innerHTML = '<i class="ri-cloud-line"></i> ';
     b.appendChild(document.createTextNode(label)); // 邮箱走文本节点，防 HTML 注入
     }
+    const logged = !!this._userMail;
     const lo = document.getElementById('btnLogout');
-    if (lo) lo.style.display = this._userMail ? '' : 'none';
+    if (lo) lo.style.display = logged ? '' : 'none';
+    const em = document.getElementById('cloudEmail');
+    const pw = document.getElementById('cloudPass');
+    if (em) em.style.display = logged ? 'none' : '';
+    if (pw) pw.style.display = logged ? 'none' : '';
+    const rows = document.querySelectorAll('#cloudPop .row');
+    rows.forEach(r => {
+      const hasLogin = r.querySelector('[onclick*="cloudLogin"], [onclick*="cloudSignup"]');
+      const hasLogout = r.querySelector('#btnLogout');
+      if (hasLogin) r.style.display = logged ? 'none' : '';
+      if (hasLogout) r.style.display = logged ? '' : 'none';
+    });
     },
     async boot() {
     const s = await this.session();
