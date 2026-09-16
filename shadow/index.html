@@ -660,17 +660,16 @@
     backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
   .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; opacity: 0; pointer-events: none; overflow: hidden; position: absolute;
     transition: opacity .05s ease-out; }
-  .audiobar.force-mini .ab-left { gap: 0; flex: 1; justify-content: center; }
-  .audiobar.force-mini .ab-left > .btn:not(.ab-step):not(.play) { max-width: 0; opacity: 0; pointer-events: none; padding: 0; overflow: hidden;
-    transition: opacity .05s ease-out; }
-  .audiobar.force-mini .loop-wrap,
-  .audiobar.force-mini .rate-wrap,
-  .audiobar.force-mini .ab-title { max-width: 0; min-width: 0; margin: 0; padding: 0; border: 0; opacity: 0; pointer-events: none; overflow: hidden;
-    transition: opacity .05s ease-out; }
-  .audiobar.force-mini .ab-left > .btn { font-size: 0; padding: 4px 10px; min-height: 28px;
-    transition: font-size .05s ease-out; }
-  .audiobar.force-mini .ab-left > .btn.play { font-size: 11px; padding: 4px 14px; }
+  .audiobar.force-mini .ab-left { gap: 3px; flex: 1; justify-content: center; flex-wrap: nowrap; }
+  /* force-mini 展示全部控制按钮（与 body.scrolled 自然 mini 一致），仅隐藏快速跳转 */
+  .audiobar.force-mini .ab-left > .jump-btn { display: none; }
+  .audiobar.force-mini .ab-left > .btn { font-size: 0; padding: 4px 7px; min-height: 28px;
+    max-width: none; opacity: 1; pointer-events: auto; overflow: visible;
+    transition: font-size .05s ease-out, padding var(--t-bar) var(--ease-bar) .05s, min-height var(--t-bar) var(--ease-bar) .05s; }
+  .audiobar.force-mini .ab-left > .btn.play { font-size: 0; padding: 4px 7px; }
   .audiobar.force-mini .ab-left > .btn i { font-size: 16px; line-height: 1; }
+  .audiobar.force-mini .loop-wrap,
+  .audiobar.force-mini .rate-wrap { max-width: none; min-width: 0; margin: 0; opacity: 1; pointer-events: auto; overflow: visible; }
   /* 鼠标移入mini态的导航/播放条时平滑恢复初始状态（仅限支持悬停的设备，避免移动端点按误触） */
   @media (hover: hover) {
   body.scrolled .topbar:hover, body.fade-nav.scrolled .topbar:hover { padding: 10px 24px; gap: 8px 14px;
@@ -853,14 +852,15 @@
     body.scrolled .audiobar.expanded .ab-left > .btn { font-size: 13px; padding: 7px 14px; min-height: 34px;
       transition: font-size .16s ease-out .06s, padding .16s ease-out .06s,
         min-height .16s ease-out .06s, opacity .14s ease-out .06s; }
-    /* 移动端强制 mini：与沉浸胶囊同一样式 */
-    .audiobar.force-mini { width: calc(100vw - 24px); max-width: 200px; flex-direction: row; }
+    /* 移动端强制 mini：与自然 mini 同一样式，展示全部控制按钮 */
+    .audiobar.force-mini { width: calc(100vw - 24px); max-width: 340px; flex-direction: row; }
     .audiobar.force-mini .ab-right { max-width: 0; max-height: 0; position: absolute;
       transition: opacity .05s ease-out; }
-    .audiobar.force-mini .ab-left { order: 0; flex-wrap: nowrap; gap: 0; flex: 1; justify-content: center; }
-    .audiobar.force-mini .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px;
+    .audiobar.force-mini .ab-left { order: 0; flex-wrap: nowrap; gap: 3px; flex: 1; justify-content: center; }
+    .audiobar.force-mini .ab-left > .jump-btn { display: none; }
+    .audiobar.force-mini .ab-left > .btn { font-size: 0; padding: 4px 6px; min-height: 28px;
       transition: font-size .05s ease-out; }
-    .audiobar.force-mini .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
+    .audiobar.force-mini .ab-left > .btn.play { font-size: 0; padding: 4px 6px; }
     .audiobar.force-mini .ab-left > .btn i { font-size: 16px; line-height: 1; }
     #seekWrap { width: 100%; height: 36px; margin: 0; position: relative; touch-action: none; }
     #seekTrack { height: 36px; width: 100%; touch-action: none; }
