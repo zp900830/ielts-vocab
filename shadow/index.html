@@ -386,14 +386,17 @@
     padding: 7px 10px; font-size: 13px; color: var(--text); text-align: center; cursor: pointer; }
   .ab-menu button:hover { background: var(--accent-soft); }
   .cloud-wrap { position: relative; }
-  .cloud-menu { position: absolute; bottom: calc(100% + 10px); right: 0; min-width: 220px;
+  /* 顶栏在视口顶部，下拉菜单必须向下展开（播放条菜单向上弹的写法会把菜单渲染到视口之外，导致登录按钮不可见、不可点） */
+  .cloud-menu { position: absolute; top: calc(100% + 10px); right: 0; min-width: 220px;
     background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
     backdrop-filter: blur(22px) saturate(170%); border: 1px solid rgba(255,255,255,.7);
     border-radius: 14px; box-shadow: var(--shadow-lg); padding: 10px;
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity .18s ease, transform .18s ease, visibility .18s; z-index: 220;
-    transform: translateY(4px); }
-  .cloud-menu::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 10px; }
+    transform: translateY(-4px); }
+  .cloud-menu::before { content: ""; position: absolute; bottom: 100%; left: 0; right: 0; height: 10px; }
+  /* hover 桥改到按钮下方，盖住按钮与菜单之间的空隙（播放条菜单的桥在上方，不适用顶栏） */
+  #cloudWrap .menu-bridge { top: auto; bottom: 0; transform: translateY(12px); }
   .cloud-wrap.open .cloud-menu { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
   @media (hover: hover) and (pointer: fine) {
     .cloud-wrap:hover .cloud-menu { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
