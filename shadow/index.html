@@ -1186,6 +1186,9 @@
           const sel = document.getElementById('chapSel');
           if (sel) sel.value = String(currentChapter);
           render(); renderList(); bindSeek(); loadPos(); applyPrefs();
+          // 渲染完成后补拉一次云进度：boot() 的拉取可能跑在渲染前（sents 为空时云进度被跳过），
+          // 新浏览器本地为空就永远停在 0。pull 内部按时间戳比对，无 session 时直接返回，无副作用
+          try { cloudPullMarks(); } catch (e) {}
         }).catch(e => { try { dlog('init-fail', e && e.message); } catch (err) {} });
       }
 let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
