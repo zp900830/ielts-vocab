@@ -1,0 +1,8 @@
+# 雅思背单词项目 · 正式版本
+VERSION=1.0.0
+TAG=v1.0
+RELEASE_DATE=2026-09-17
+# v1.0 内容：影子跟读登录菜单修复、AB循环（自动保存/取消/列表排版）、
+# 云端队列切句修复、卡片内边距、隐藏词义联动、翻译按钮改名、移动端三修。
+# 验证：playwright 20 passed，validate_data.py PASSED。
+# 回滚：git checkout v1.0
