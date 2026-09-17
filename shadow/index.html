@@ -670,6 +670,15 @@
     transition: font-size .05s ease-out, padding var(--t-bar) var(--ease-bar) .05s, min-height var(--t-bar) var(--ease-bar) .05s; }
   body.scrolled .audiobar .ab-left > .btn.play { font-size: 0; padding: 4px 7px; }
   body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
+  /* 桌面 mini：四个小按钮同步压成图标 pill；AB 文字与定宽去掉，倍速保留 1x 数字 */
+  body.scrolled .audiobar .ab-left .loop-wrap > .btn,
+  body.scrolled .audiobar .ab-left .ab-wrap > .btn,
+  body.scrolled .audiobar .ab-left .rate-wrap > .btn { font-size: 0; padding: 4px 7px; min-height: 28px; }
+  body.scrolled .audiobar .ab-left .loop-wrap > .btn i,
+  body.scrolled .audiobar .ab-left .ab-wrap > .btn i { font-size: 16px; line-height: 1; }
+  body.scrolled .audiobar #btnAB { min-width: 0; }
+  body.scrolled .audiobar #btnAB .ab-label { display: none; }
+  body.scrolled .audiobar #rateCycle { font-size: 10px; }
   body.scrolled .audiobar .loop-wrap,
   body.scrolled .audiobar .rate-wrap { max-width: none; min-width: 0; margin: 0; opacity: 1; pointer-events: auto; overflow: visible; }
   /* 展开/收起按钮：悬浮在播放条上方右侧；mini 胶囊只显示展开，完整条只显示收起（互斥） */
@@ -888,7 +897,7 @@
     .ab-seek { flex: 1; min-width: 0; width: 100%; }
     .ab-title { font-size: 10px; padding: 3px 8px; min-width: 60px; }
     .jump-btn { display: inline-flex; }
-    .ab-btn { font-size: 10px; padding: 3px 6px; min-height: 26px; }
+    .ab-btn { font-size: 11px; padding: 5px 8px; min-height: 30px; } /* 与 .audiobar .btn 同高同字：四个小按钮不再矮一截 */
     .loop-menu { min-width: 80px; }
     .loop-menu button { font-size: 12px; padding: 6px 8px; }
     .audiobar .btn { font-size: 11px; padding: 5px 8px; min-height: 30px; min-width: 0; flex: none; white-space: nowrap; }
@@ -904,13 +913,29 @@
     body.scrolled .audiobar .ab-left > .btn { padding: 4px 6px; }
     body.scrolled .audiobar .ab-left > .btn.play { font-size: 0; padding: 4px 6px; }
     body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; position: absolute;
-      transition: opacity .05s ease-out, max-width .25s ease-out, max-height .25s ease-out, width .25s ease-out; }
+      transition: opacity .18s ease, max-width .25s ease-out, max-height .25s ease-out, width .25s ease-out; }
+    /* 收起（expanded→mini）与展开对称：容器无延迟同步 morph，内容跟着淡出，不许瞬间消失 */
+    body.scrolled .audiobar:not(.expanded) { transition: padding .25s var(--ease-bar), gap .25s var(--ease-bar),
+      border-radius .25s var(--ease-bar), max-width .25s var(--ease-bar); }
+    body.scrolled .audiobar:not(.expanded) .ab-right { transition: opacity .18s ease,
+      max-width .25s var(--ease-bar), max-height .25s var(--ease-bar), width .25s var(--ease-bar); }
+    body.scrolled .audiobar:not(.expanded) .ab-left > .btn { transition: font-size .18s ease, padding .25s var(--ease-bar),
+      min-height .25s var(--ease-bar), max-width .25s var(--ease-bar), opacity .18s ease; }
     body.scrolled .audiobar .ab-left { order: 0; flex-wrap: nowrap; gap: 0; flex: 1; justify-content: center; }
     body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px;
-      transition: font-size .05s ease-out, padding .25s ease-out, min-height .25s ease-out,
-        max-width .25s ease-out, opacity .25s ease-out; }
+      transition: font-size .18s ease, padding .25s ease-out, min-height .25s ease-out,
+        max-width .25s ease-out, opacity .18s ease-out; }
     body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
-    body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
+  body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
+    /* mini 胶囊里四个小按钮同步压成图标 pill：字号/高度与主按钮一致；AB 文字与定宽去掉，倍速保留 1x 数字 */
+    body.scrolled .audiobar .ab-left .loop-wrap > .btn,
+    body.scrolled .audiobar .ab-left .ab-wrap > .btn,
+    body.scrolled .audiobar .ab-left .rate-wrap > .btn { font-size: 0; padding: 4px 8px; min-height: 28px; }
+    body.scrolled .audiobar .ab-left .loop-wrap > .btn i,
+    body.scrolled .audiobar .ab-left .ab-wrap > .btn i { font-size: 16px; line-height: 1; }
+    body.scrolled .audiobar #btnAB { min-width: 0; }
+    body.scrolled .audiobar #btnAB .ab-label { display: none; }
+    body.scrolled .audiobar #rateCycle { font-size: 10px; }
     /* 移动端展开态：回到纵向（进度上、按钮下），否则继承 mini 的横向行＋flex:none 整行溢出；
        与 mini 同一定位（left:50%＋translateX(-50%)，宽按 100vw-24 定死＝原来 left/right:12 的像素），只 morph 宽度——中心点不动，消掉 37px 级别的水平抖动；
        展开动画：容器无延迟 .22s 起手（覆盖 base 的 .05s 延迟），内容 .06s 后淡入追着出现；blur 与 mini 一致，省掉移动 GPU 昂贵的 blur morph */
@@ -1118,11 +1143,24 @@
         if (dataReady) return;
         const art = document.getElementById('art');
         if (art) art.innerHTML = '<div class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-txt">正在加载学习数据…<span class="boot-spin"></span></div><div class="boot-sub">正在获取文章与词汇数据</div></div>';
+        // 移动端弱网/Edge 压缩代理下偶发单次失败：每个文件最多试 3 次（间隔递增），单个挂掉能定位到文件名
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+        async function get(url, label) {
+        let lastErr = null;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+        const r = await fetch(url);
+        if (!r.ok) throw new Error(label + ' HTTP ' + r.status);
+        return await r.json();
+        } catch (e) { lastErr = e; if (attempt < 3) await sleep(800 * attempt); }
+        }
+        throw lastErr;
+        }
         try {
           const [s, v, c] = await Promise.all([
-            fetch('data/sections.json').then(r => { if (!r.ok) throw new Error('sections ' + r.status); return r.json(); }),
-            fetch('data/vocab.json').then(r => { if (!r.ok) throw new Error('vocab ' + r.status); return r.json(); }),
-            fetch('data/chapters.json').then(r => { if (!r.ok) throw new Error('chapters ' + r.status); return r.json(); })
+            get('data/sections.json', '文章数据'),
+            get('data/vocab.json', '词汇数据'),
+            get('data/chapters.json', '章节数据')
           ]);
           SECTIONS = s; VOCAB = v; CHAPTERS = c;
           SENT_RAW.length = 0;
@@ -1130,7 +1168,8 @@
           dataReady = true;
         } catch (err) {
           console.error('数据加载失败', err);
-          if (art) art.innerHTML = '<div class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-err">数据加载失败，请检查网络后重试<button onclick="location.reload()">重新加载</button></div></div>';
+          const detail = esc((err && err.message) || '网络异常');
+          if (art) art.innerHTML = '<div class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-err">数据加载失败（' + detail + '），请检查网络后重试<button onclick="location.reload()">重新加载</button></div></div>';
           throw err;
         }
       }
