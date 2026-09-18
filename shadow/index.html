@@ -3644,7 +3644,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       let taskPos = 0;       // 当前在 todayQueue 中的位置
       let sessionStart = 0;  // 本次任务模式开始时间
       let sessionReps = 0;   // 本次会话跟读次数
-      let avgNew = 25, avgReview = 8; // 每句平均耗时（秒），动态校准
+      let avgNew = 25, avgReview = 8; // 每句平均耗时（秒，1× 基准），按实测校准并持久化
+      // 展示/估算用的秒数 = 1× 基准 ÷ 当前倍速：调到 1.5× 时每天耗时随之缩短
+      function secNew() { return avgNew / (rate || 1); }
+      function secReview() { return avgReview / (rate || 1); }
       let _panelOpen = false;
       let _cycleJustCompleted = 0; // 刚完成的循环数（用于庆祝提示）
 
@@ -3657,6 +3660,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         // 迁移老数据：补齐循环字段
         if (typeof prog.cycleCount !== 'number') prog.cycleCount = 0;
         if (!prog.cycleSeen || typeof prog.cycleSeen !== 'object') prog.cycleSeen = {};
+        if (!prog.pace || typeof prog.pace !== 'object') prog.pace = {};
+        // 恢复实测节奏（存的是 1× 基准秒数），没测过就继续用默认值
+        if (typeof prog.pace.new === 'number' && prog.pace.new > 0) avgNew = prog.pace.new;
+        if (typeof prog.pace.review === 'number' && prog.pace.review > 0) avgReview = prog.pace.review;
       }
       function saveProg() { safeStore(LS_PROG, JSON.stringify(prog)); }
 
@@ -3668,7 +3675,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const newPerDay = newPerDayOf(totalDays);
         plan = { startDate: today(), totalDays, dailyMinutes, order: order || 'seq', newPerDay, paused: false };
         savePlan();
-        prog = { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {} };
+        prog = { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {}, pace: (prog && prog.pace) || {} };
         saveProg();
         buildQueue();
         updateBtn();
@@ -3685,6 +3692,23 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (reps >= PHASE_THRESHOLDS.solid) return 'solid';
         if (reps >= PHASE_THRESHOLDS.learning) return 'learning';
         return 'new';
+      }
+
+      // ---- 实测节奏：用相邻两次跟读的间隔估算每句耗时（折算回 1× 基准后落盘） ----
+      let _lastRepAt = 0;
+      function samplePace(type, now) {
+        if (!prog.pace || typeof prog.pace !== 'object') prog.pace = {};
+        const gap = (now - _lastRepAt) / 1000;
+        _lastRepAt = now;
+        // 只采信「连续跟读」的样本：太快是误触/引擎残留，太慢是中途停顿走神
+        if (gap < 2 || gap > 120) return;
+        const base = gap * (rate || 1);   // 实测秒数折算回 1 倍速基准
+        const w = 0.15;                   // 指数平滑，抗单句抖动
+        const round1 = v => Math.round(v * 10) / 10;
+        if (type === 'new') avgNew = round1(avgNew * (1 - w) + base * w);
+        else avgReview = round1(avgReview * (1 - w) + base * w);
+        prog.pace.new = avgNew; prog.pace.review = avgReview;
+        prog.pace.samples = (prog.pace.samples || 0) + 1;
       }
 
       // ---- 记录一次跟读 ----
@@ -3725,6 +3749,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             _cycleJustCompleted = prog.cycleCount;
           }
         }
+        // 实测节奏（放在 saveProg 前，一起落盘）
+        samplePace(s.reps <= PHASE_THRESHOLDS.learning ? 'new' : 'review', now);
         saveProg();
         // 更新 UI
         if (_cycleJustCompleted) {
@@ -3929,7 +3955,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           if (item.type === 'new' && !(s.reps >= PHASE_THRESHOLDS.learning && s.lastRead >= st)) newLeft++;
           else if (item.type === 'review' && !(s.lastRead >= st)) reviewLeft++;
         }
-        const sec = newLeft * avgNew + reviewLeft * avgReview;
+        const sec = newLeft * secNew() + reviewLeft * secReview();
         return { newLeft, reviewLeft, sec };
       }
       function fmtTime(sec) {
@@ -3958,21 +3984,22 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         while (n < a.length - 1 && a[n + 1] <= days) n++;
         return n;
       }
-      // 新句是硬支出（每句 avgNew 秒），剩下的时间才折算成复习（每句 avgReview 秒）；
+      // 新句是硬支出（每句 secNew 秒），剩下的时间才折算成复习（每句 secReview 秒）；
+      // 两者都是「1× 基准 ÷ 当前倍速」，所以调到 1.5× 后同样的每日分钟数能读更多句；
       // 时间容量能支撑的轮数与 SRS 排期允许的轮数取小，再反推每天的复习量与实际所需分钟。
       function planCapacity(days, min, perDayOverride) {
         const total = SENT_RAW.length;
         const perDay = perDayOverride || newPerDayOf(days);
         const budget = min * 60;
-        const newSec = perDay * avgNew;
+        const newSec = perDay * secNew();
         // 若计划期内第一遍都铺不满全部句子，复习就只能覆盖已学的那部分，按平均已学比例打折
         const coverage = Math.min(1, perDay * days / total);
         const learnFrac = (coverage + 1) / 2;
-        const byTime = (perDay + Math.max(0, (budget - newSec) / avgReview) * learnFrac) * days / total;
+        const byTime = (perDay + Math.max(0, (budget - newSec) / secReview()) * learnFrac) * days / total;
         const cycles = Math.max(0, Math.min(byTime, repsBySchedule(days)));
         const repsPerDay = cycles * total / days;
         const reviewPerDay = Math.max(0, Math.floor(repsPerDay - perDay));
-        const needMin = Math.ceil((newSec + reviewPerDay * avgReview) / 60);
+        const needMin = Math.ceil((newSec + reviewPerDay * secReview()) / 60);
         return {
           total, perDay, reviewPerDay, cycles,
           horizon: days,                    // 本次估算使用的天数
@@ -3991,7 +4018,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function planSummary(cap, optMins) {
         let html = `<div class="ps-sum-row big"><span>预计完成</span><b>${fmtCycles(cap.cycles)}</b></div>`
           + `<div class="ps-sum-row"><span>每天新句</span><b>${cap.perDay} 句</b></div>`
-          + `<div class="ps-sum-row"><span>每天大约</span><b>${cap.needMin} 分钟</b></div>`;
+          + `<div class="ps-sum-row"><span>每天大约</span><b>${cap.needMin} 分钟${rate !== 1 ? ` · ${rate}×` : ''}</b></div>`;
         if (cap.tight) {
           const fit = (optMins || []).find(m => m >= cap.newMin);
           html += `<div class="ps-sum-row warn"><span>⚠️ 时间不够</span><b>${fit ? `请选 ${fit} 分钟以上` : '请拉长总天数'}</b></div>`;
@@ -4160,8 +4187,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         } else {
           html += `<div class="tp-day">第 ${di + 1} 天 / 共 ${plan.totalDays} 天 · 预计 ${fmtCycles(cap.cycles)} · 连续 ${prog.streak} 天 <i class="ri-fire-fill" style="color:var(--coral)" aria-hidden="true"></i></div>`;
           html += `<div class="tp-prog"><div class="tp-prog-fill" style="width:${pct}%"></div></div>`;
-          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-sparkling-2-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">新句熟读</div><div class="tp-sub">${est.newLeft} 句待完成</div></div><div class="tp-time">~${fmtTime(est.newLeft * avgNew)}</div></div>`;
-          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-repeat-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">复习简读</div><div class="tp-sub">${est.reviewLeft} 句待完成</div></div><div class="tp-time">~${fmtTime(est.reviewLeft * avgReview)}</div></div>`;
+          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-sparkling-2-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">新句熟读</div><div class="tp-sub">${est.newLeft} 句待完成</div></div><div class="tp-time">~${fmtTime(est.newLeft * secNew())}</div></div>`;
+          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-repeat-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">复习简读</div><div class="tp-sub">${est.reviewLeft} 句待完成</div></div><div class="tp-time">~${fmtTime(est.reviewLeft * secReview())}</div></div>`;
           html += `<div class="tp-row"><div class="tp-icon"><i class="ri-time-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">预计总剩余</div><div class="tp-sub">今日已跟读 ${daily.reps} 句次</div></div><div class="tp-time">${fmtTime(est.sec)}</div></div>`;
         }
 
@@ -4319,17 +4346,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       // 自由模式下读了任务句也计数
       function onSentenceComplete(globalIdx) {
         if (!plan || !prog) return;
-        recordRep(globalIdx);
-        // 动态校准时间估算
-        if (taskMode && sessionStart) {
-          const elapsed = (Date.now() - sessionStart) / 1000;
-          if (sessionReps > 3) {
-            const avg = elapsed / sessionReps;
-            const item = todayQueue[taskPos];
-            if (item && item.type === 'new') avgNew = avgNew * 0.8 + avg * 0.2;
-            else avgReview = avgReview * 0.8 + avg * 0.2;
-          }
-        }
+        recordRep(globalIdx);   // 耗时实测在 recordRep 里统一采样
       }
 
       // ---- 初始化 ----
