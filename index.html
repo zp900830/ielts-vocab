@@ -1221,7 +1221,7 @@ function _resolveWord(w){
    游客数据存 LS_KEY；登录账号后数据存 LS_KEY@邮箱，本机多账号互不干扰。
    配置 Supabase 后支持云端同步：登录拉取云端数据（按修改时间新者胜），保存自动防抖推送。 */
 const LS_KEY="yasiVocabV1";
-function freshS(){ return {stats:{}, fav:{}, quiz:{}, read:{}, listened:{}, listen:null, chapter:1, accent:"GB"}; }
+function freshS(){ return {stats:{}, fav:{}, rv:{}, quiz:{}, read:{}, listened:{}, listen:null, chapter:1, accent:"GB"}; }
 let CUR_USER=null;   // null = 游客；值为账号邮箱（由 Supabase 会话驱动）
 function userKey(){ return CUR_USER? LS_KEY+"@"+CUR_USER : LS_KEY; }
 let S=freshS();
@@ -1630,6 +1630,7 @@ function openStory(id, focusWord, occ, resumeY){
   document.body.dataset.view="reader";
   syncNav();
   S.read[id]=Date.now(); save();
+  if(typeof scheduleStoryWords==="function") scheduleStoryWords(s);   // 读过的故事，目标词进复习队列
   audio.stop();
   if(typeof LISTEN!=="undefined") LISTEN.pause();   // 进阅读页自动暂停随身听，避免双声叠加
   const markedWords=[...new Set((s.text.match(/\{\{([^}|]+)(?:\|[^}]+)?\}\}/g)||[]).map(m=>m.replace(/\{\{([^}|]+).*/,"$1").toLowerCase()))];
@@ -3942,10 +3943,30 @@ function renderMe(){
 
 /* ================= 间隔复习（艾宾浩斯） ================= */
 const RV_INTERVALS=[5,30,720,1440,4320,10080,21600,43200]; /* 分钟：5分/30分/12时/1天/3天/7天/15天/30天 */
+/* ---- 目标词纳入复习队列 ----
+   原先 dueWords() 只遍历 S.fav：不手动点收藏就永远不会被复习，
+   而 3625 个目标词里一半只在一篇故事里出现过一次。现在读过一篇故事，
+   就把它标记的目标词排进 rv 队列（收藏词仍走 fav，互不覆盖）。 */
+const RV_MARK_RE=/\{\{([^}|]+)(?:\|[^}]+)?\}\}/g;
+function storyMarkedWords(s){
+  return [...new Set(((s&&s.text||'').match(RV_MARK_RE)||[]).map(m=>m.replace(/\{\{([^}|]+).*/,'$1').toLowerCase()))];
+}
+const RV_DAILY_CAP=30;   // 单次复习上限：初开时会有几百个词同时到期，不能一次倒出来
+function scheduleStoryWords(s){
+  const now=Date.now(); let added=0;
+  storyMarkedWords(s).forEach(w=>{
+    if(S.fav[w]||S.rv[w]) return;
+    S.rv[w]={due:now, rv:0, src:s.id, t:now}; added++;
+  });
+  if(added) save();
+  return added;
+}
 function favDueTs(f){ return f.due!==undefined? f.due : (f.t||0); }
 function dueWords(){
   const now=Date.now();
-  return Object.entries(S.fav).filter(([w,f])=>favDueTs(f)<=now).sort((a,b)=>favDueTs(a[1])-favDueTs(b[1]));
+  const fav=Object.entries(S.fav).filter(([w,f])=>favDueTs(f)<=now).map(([w,f])=>[w,f]);
+  const rv=Object.entries(S.rv).filter(([w,f])=>favDueTs(f)<=now).map(([w,f])=>[w,f]);
+  return fav.concat(rv).sort((a,b)=>favDueTs(a[1])-favDueTs(b[1]));
 }
 function migrateFav(){
   let m=false;
@@ -3963,14 +3984,16 @@ function updateFavBadge(){
 function startReview(){
   const q=dueWords();
   if(!q.length){ toast("当前没有到期单词"); return; }
-  REVIEW={queue:q.map(x=>x[0]), total:q.length, seen:0, done:0, again:0, revealed:false};
+  const batch=q.slice(0,RV_DAILY_CAP);
+  REVIEW={queue:batch.map(x=>x[0]), total:batch.length, seen:0, done:0, again:0, revealed:false};
+  if(q.length>batch.length) toast(`本轮先复习 ${batch.length} 个，剩余 ${q.length-batch.length} 个稍后再来`);
   renderReview();
 }
 function renderReview(){
   if(REVIEW) REVIEW._grading=false;   // 新卡片渲染完成，重置防重复标记
   const w=REVIEW.queue[0];
   if(w===undefined){ return finishReview(); }
-  const f=S.fav[w]||{};
+  const f=S.fav[w]||S.rv[w]||{};
   const src=storyById(f.src);
   const pct=Math.min(100,Math.round(REVIEW.seen/REVIEW.total*100));
   app.innerHTML=`<h2 class="view-title">间隔复习</h2>
@@ -4005,7 +4028,7 @@ function gradeReview(know){
   if(!REVIEW||!REVIEW.revealed||REVIEW._grading) return;
   REVIEW._grading=true;   // 防重复点击（移动端快速双击会触发两次）
   const w=REVIEW.queue.shift();
-  const f=S.fav[w];
+  const f=S.fav[w]||S.rv[w];
   REVIEW.seen++;
   if(f){
     const now=Date.now();
