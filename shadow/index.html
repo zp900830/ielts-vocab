@@ -3814,13 +3814,17 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (!plan || !prog) { todayQueue = []; return; }
         const now = Date.now();
         const totalSents = SENT_RAW.length;
-        const di = dayIndex();
         const newSentences = [];
         const reviewSentences = [];
 
-        // 确定今天该学哪些新句
+        // 新句窗口按「已开过的句子数」推进，不按日历天数。
+        // 原来 startNew = dayIndex() * newPerDay：断更 N 天后窗口直接前移 N 格，
+        // 那 N 天的句子既不再进新句窗口、也因 reps=0 不会转成复习，被永久跳过。
+        // 现在游标停在原地，欠的句子留在今天的队列里 —— 顺延，不吞内容。
         if (!plan.paused) {
-          const startNew = di * plan.newPerDay;
+          let started = 0;
+          for (let i = 0; i < totalSents; i++) if (sentState(i).reps > 0) started++;
+          const startNew = Math.min(started, totalSents);
           const endNew = Math.min(startNew + plan.newPerDay, totalSents);
           for (let i = startNew; i < endNew; i++) {
             const st = sentState(i);
@@ -4487,6 +4491,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         exportBackup, importBackup,
         get active() { return taskMode; },
         get hasPlan() { return !!plan; },
+        get queue() { return todayQueue; },
+        get progress() { return prog; },
         recordRep, buildQueue, updateMarkers, updateBtn
       };
     })();
