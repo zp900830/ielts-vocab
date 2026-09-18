@@ -1310,6 +1310,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       let CHAPTERS = [];
       let SENT_RAW = [];
       let dataReady = false;
+      /* 数据缓存版本：必须等于 shadow/data/ 三个 JSON 的内容哈希，由 scripts/validate_data.py 校验。
+         不写它，iOS Safari 会按 Last-Modified 启发式缓存 —— 课文改了、词表没改，句序与词表就会错位。
+         改了数据忘了 bump 会直接让门禁 FAIL，而不是静默服务旧数据。 */
+      const SHADOW_DATA_VER = "0afefe7e2d";
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
@@ -1329,9 +1333,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         }
         try {
           const [s, v, c] = await Promise.all([
-            get('data/sections.json', '文章数据'),
-            get('data/vocab.json', '词汇数据'),
-            get('data/chapters.json', '章节数据')
+            get('data/sections.json?v=' + SHADOW_DATA_VER, '文章数据'),
+            get('data/vocab.json?v=' + SHADOW_DATA_VER, '词汇数据'),
+            get('data/chapters.json?v=' + SHADOW_DATA_VER, '章节数据')
           ]);
           SECTIONS = s; VOCAB = v; CHAPTERS = c;
           SENT_RAW.length = 0;
@@ -3040,13 +3044,17 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (setBtn) setBtn.textContent = abMode === 0 ? '设置AB循环' : '取消AB循环';
     const maxI = sents.length ? ((currentChapter >= 0) ? chapterSentStart + sents.length - 1 : sents.length - 1) : -1;
     const minI = (currentChapter >= 0) ? chapterSentStart : 0;
-    const loops = getABLoops().filter(x => x && Number.isInteger(x.start) && Number.isInteger(x.end) && x.start >= minI && x.end <= maxI);
+    const all = getABLoops().filter(x => x && Number.isInteger(x.start) && Number.isInteger(x.end));
+    const loops = all.filter(x => x.start >= minI && x.end <= maxI);
     list.innerHTML = loops.length ? loops.map((x) => {
       const localA = (currentChapter >= 0) ? x.start - chapterSentStart : x.start;
       const localB = (currentChapter >= 0) ? x.end - chapterSentStart : x.end;
       const a = Math.min(localA, localB), b = Math.max(localA, localB);
       return `<div class="ab-loop-item"><div class="ab-loop-name"><span class="ab-loop-title">${esc(x.name || loopName(x.start, x.end))}</span><div class="ab-loop-range">第 ${a + 1}–${b + 1} 句</div></div><div class="ab-loop-btns"><button class="btn play" onclick="recallABLoop(${x.start}, ${x.end})">加载</button><button class="btn del" onclick="deleteABLoop(${x.start}, ${x.end})">删</button></div></div>`;
-    }).join('') : '<div style="font-size:12px;color:var(--muted)">还没有保存的 AB 循环。</div>';
+    }).join('') : (all.length
+      // 原先一律显示"还没有保存的 AB 循环"，切章后用户以为自己存的循环被删了
+      ? `<div style="font-size:12px;color:var(--muted)">当前范围里没有可用的循环：已保存的 ${all.length} 个都在其它章，切到「全部文章」就能看到。</div>`
+      : '<div style="font-size:12px;color:var(--muted)">还没有保存的 AB 循环。</div>');
     }
     function recallABLoop(ga, gb) {
     toggleABPop(false);
@@ -3451,7 +3459,16 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     } catch (e) {}
     }
     function getMarks() { try { return JSON.parse(localStorage.getItem('ielts-marks') || '[]'); } catch (e) { return []; } }
-    function setMarks(m) { safeStore('ielts-marks', JSON.stringify((m || []).slice(0, 50))); }
+    function setMarks(m) {
+    const arr = m || [];
+    const kept = arr.slice(0, 50);
+    safeStore('ielts-marks', JSON.stringify(kept));
+    // 原先超 50 条直接静默丢弃，用户以为存上了。列表按 u 倒序/新条目在首位，
+    // 丢的是最旧的，但仍要说清楚，否则"点了没反应"无从排查。
+    if (arr.length > kept.length) {
+      try { showAbToast(`书签已满 50 条：最旧的 ${arr.length - kept.length} 条被移出（收藏的句子本身不受影响）`); } catch (e) {}
+    }
+    }
     /* ============ 书签+进度云同步（同账号多端一致） ============
        本地 localStorage 永远可用；登录后 pull 合并、改动后 debounce push。
        全部 try/catch：表没建/断网/RLS 拒绝都不许影响本地书签和进度。

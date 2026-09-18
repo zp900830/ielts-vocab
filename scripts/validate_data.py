@@ -10,15 +10,24 @@ ROOT = Path(__file__).resolve().parent.parent
 # DATA_VER，线上会永久命中旧缓存且无任何报错。故把版本号定义为这些文件的内容哈希，
 # 由本脚本校验一致性 —— 忘记 bump 会直接 FAIL，而不是静默服务旧词库。
 DATA_VER_FILES = ['data/book.json', 'data/sup.json', 'data/stories.json', 'data/covers.json']
+# 跟读站同理：它原先完全没有版本戳，改课文后 iOS Safari 会按 Last-Modified 命中旧缓存，
+# 出现 sections.json 是新的、vocab.json 是旧的 → 句序与词表错位。
+SHADOW_VER_FILES = ['shadow/data/sections.json', 'shadow/data/vocab.json', 'shadow/data/chapters.json']
 
-def data_ver():
+def digest(rels):
     h = hashlib.sha256()
-    for rel in DATA_VER_FILES:
+    for rel in rels:
         b = (ROOT / rel).read_bytes()
         h.update(rel.encode('utf-8'))
         h.update(len(b).to_bytes(8, 'big'))
         h.update(b)
     return h.hexdigest()[:10]
+
+def data_ver():
+    return digest(DATA_VER_FILES)
+
+def shadow_data_ver():
+    return digest(SHADOW_VER_FILES)
 
 def load(path):
     with open(path, 'r', encoding='utf-8') as f:
@@ -44,7 +53,15 @@ def main():
         errors.append(f'index.html DATA_VER 已过期：当前 {m.group(1)}，数据文件哈希为 {want}。'
                       f' 请改为 "{want}"，否则线上会永久命中旧缓存。')
 
-    # 1. 每个词都有 p/m
+    # 0b. 跟读站 SHADOW_DATA_VER 必须等于 shadow/data 三文件的内容哈希
+    want_s = shadow_data_ver()
+    sh = (ROOT / 'shadow' / 'index.html').read_text(encoding='utf-8')
+    ms = re.search(r'const SHADOW_DATA_VER\s*=\s*"([0-9a-fA-F]+)"', sh)
+    if not ms:
+        errors.append('shadow/index.html: 找不到 const SHADOW_DATA_VER = "..."，跟读站数据无缓存版本')
+    elif ms.group(1) != want_s:
+        errors.append(f'shadow/index.html SHADOW_DATA_VER 已过期：当前 {ms.group(1)}，'
+                      f' 数据哈希为 {want_s}。请改为 "{want_s}"，否则改课文不会到达手机。')
     missing_pm = [w for w, e in vocab.items() if not e.get('p') or not e.get('m')]
     if missing_pm:
         errors.append(f"{len(missing_pm)} words missing p/m: {missing_pm[:10]}")
@@ -121,6 +138,54 @@ def main():
     orphan = sorted(ch_words - marked)
     if orphan:
         warnings.append(f"{len(orphan)} chapter words never appear in section text: {orphan[:12]}")
+
+    # 10-12. 跟读篇文本规格（见 docs/2026-09-19-跟读篇文本规格排查.md §0）：
+    #        除目标词外均为简单词 —— 词汇难度由 tools/shadow_text_audit.py 判（需外部词表），
+    #        这里只守不依赖外部数据的三条硬约束。
+    mark_full = re.compile(r'\[\[[^\]:]+:[^\]]+\]\]')
+
+    # 10. 标记残缺：[[k:d]] 后紧跟小写字母 = 词尾掉在高亮外，
+    #     渲染成「refine + 行内释义 + d」，读出来是 simplifyd 这类不存在的词。
+    broken = [f"ch{si}-{pi}-{ti}"
+              for si, sec in enumerate(sections)
+              for pi, para in enumerate(sec.get('paragraphs', []))
+              for ti, sent in enumerate(para) if re.search(r'\]\][a-z]', sent)]
+    if broken:
+        errors.append(f"{len(broken)} markers leak an inflection suffix outside [[...]] "
+                      f"(renders as a misspelled word): {broken[:8]}")
+
+    # 11. 逐句中文译文必须存在 —— 跟读时靠它确认听懂，缺一句就是盲读
+    nozh = []
+    for si, sec in enumerate(sections):
+        zh = sec.get('sentZh') or []
+        for pi, para in enumerate(sec.get('paragraphs', [])):
+            row = zh[pi] if pi < len(zh) else []
+            for ti, _sent in enumerate(para):
+                cell = row[ti] if ti < len(row) else ''
+                if not str(cell or '').strip():
+                    nozh.append(f"ch{si}-{pi}-{ti}")
+    if nozh:
+        errors.append(f"{len(nozh)} sentences have no Chinese translation: {nozh[:8]}")
+
+    # 12. 本章声明要教的词，不得以纯文本出现却在本章从不标记（学生点不到、无行内释义）
+    missed = []
+    for si, sec in enumerate(sections):
+        decl = {str(w).lower() for w in sec.get('words', [])}
+        marked_here, plain_here = set(), set()
+        for para in sec.get('paragraphs', []):
+            for sent in para:
+                for m in placeholder_re.finditer(sent):
+                    marked_here.add(m.group(1).lower())
+                bare = mark_full.sub(' ', sent).lower()
+                for w in decl:
+                    if re.search(r'(?<![a-z])' + re.escape(w) + r'(?![a-z])', bare):
+                        plain_here.add(w)
+        bad = sorted(plain_here - marked_here)
+        if bad:
+            missed.append(f"ch{si}: {bad}")
+    if missed:
+        errors.append(f"chapter words taught in plain text but never marked "
+                      f"(untappable, no gloss): {'; '.join(missed)[:400]}")
 
     # 9. 基础统计
     print(f"vocab: {len(vocab)} words")
