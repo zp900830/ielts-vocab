@@ -3144,7 +3144,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     ['#pop','#jumpPop'].forEach(s => {
       const o = document.querySelector(s); if (o && o !== el && o.style.display === 'block') closeModal(o);
     });
-    ['#abWrap','.mark-wrap.open','.cloud-wrap.open','#rateWrap.open','#loopWrap.open'].forEach(s => {
+    ['#abWrap','#markWrap','#cloudWrap.open','#rateWrap.open','#loopWrap.open'].forEach(s => {
       const o = document.querySelector(s); if (o && o !== el) o.classList.remove('open');
     });
     _modalReturnFocus = document.activeElement;
@@ -3160,6 +3160,17 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (_modalTrapCleanup) { _modalTrapCleanup(); _modalTrapCleanup = null; }
     if (_modalReturnFocus && _modalReturnFocus.focus) { try { _modalReturnFocus.focus(); } catch (e) {} }
     _modalReturnFocus = null;
+    }
+    /* 浮层总关闭入口：新增浮层只改这一处，不要再往 Escape 分支里手写清单。
+       今日面板用 .open 类 + #todayScrim 内联样式，不走 openModal，必须在这里一并收。 */
+    const OVERLAY_WRAP_IDS = ['cloudWrap', 'markWrap', 'abWrap', 'loopWrap', 'rateWrap'];
+    function closeAllOverlays() {
+    closeModal(document.getElementById('pop'));
+    closeModal(document.getElementById('jumpPop'));
+    OVERLAY_WRAP_IDS.forEach(id => document.getElementById(id)?.classList.remove('open'));
+    const tp = document.getElementById('todayPanel');
+    if (tp && tp.classList.contains('open')) TASK.closePanel();
+    document.body.classList.remove('menu-open');
     }
     document.addEventListener('click', e => {
     const t = _inPath(e, '.w') ? e.target.closest('.w') : null;
@@ -3356,7 +3367,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     else if (e.key === 'Escape') e.target.blur();
     }
     // 输入框内按 Esc 也要能关弹窗（跳转弹窗打开时焦点在句号输入框里，否则 Esc 永远关不掉）
-    if (e.key === 'Escape') { e.target.blur(); closeModal(pop); document.getElementById('cloudWrap')?.classList.remove('open'); const jp = document.getElementById('jumpPop'); if (jp) closeModal(jp); document.getElementById('markWrap')?.classList.remove('open'); document.getElementById('abWrap')?.classList.remove('open'); document.body.classList.remove('menu-open'); }
+    if (e.key === 'Escape') { e.target.blur(); closeAllOverlays(); }
     return;
     }
     if (e.code === 'Space' && e.target.tagName === 'BUTTON') return; // 按钮聚焦时走原生空格点击，避免双重触发
@@ -3365,7 +3376,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
     if (e.key === 'ArrowRight') step(1);
     if (e.key === 'ArrowLeft') step(-1);
-    if (e.key === 'Escape') { closeModal(pop); document.getElementById('cloudWrap')?.classList.remove('open'); const jp = document.getElementById('jumpPop'); if (jp) closeModal(jp); document.getElementById('markWrap')?.classList.remove('open'); document.getElementById('abWrap')?.classList.remove('open'); document.getElementById('loopWrap')?.classList.remove('open'); document.getElementById('rateWrap')?.classList.remove('open'); document.body.classList.remove('menu-open'); }
+    if (e.key === 'Escape') closeAllOverlays();
     });
 
     /* ============ 进度存档 + 手动书签 ============ */
