@@ -24,3 +24,5 @@ build/
 tools/gloss-audit/out/
 # 本地敏感配置（Supabase URL/key），生产/部署时请注入
 config.js
+# 旧版 PRD 本地备份，不入库
+docs/PRD-v1.0.md.bak
