@@ -4108,7 +4108,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             const s = sentState(item.i);
             return s.reps >= PHASE_THRESHOLDS.learning && s.lastRead >= startOfToday();
           }).length;
-          subEl.textContent = `剩余 ~${fmtTime(est.sec)} · 第 ${prog.cycleCount || 0} 轮 · 已读 ${readCount}/${total}`;
+          subEl.textContent = `剩余 ~${fmtTime(est.sec)} · 已完成 ${prog.cycleCount || 0} 轮 · 已读 ${readCount}/${total}`;
           document.getElementById('tbAgain').style.display = '';
           document.getElementById('tbNext').innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句';
           document.getElementById('tbNext').onclick = next;
@@ -4256,14 +4256,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           html += `<div class="tp-prog"><div class="tp-prog-fill" style="width:${pct}%"></div></div>`;
           
           // 循环次数 + 已读/未读统计 + 仅未读开关
-          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-repeat-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">当前循环</div><div class="tp-sub">${fmtCycles(cap.cycles)}</div></div><div class="tp-time"><span class="tp-badge task-new">第 ${cap.cycles} 轮</span></div></div>`;
+          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-repeat-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">当前循环</div><div class="tp-sub">计划 ${fmtCycles(cap.cycles)}</div></div><div class="tp-time"><span class="tp-badge task-new">已完成 ${prog.cycleCount || 0} 轮</span></div></div>`;
           html += `<div class="tp-row"><div class="tp-icon"><i class="ri-checkbox-circle-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">已读 / 未读</div><div class="tp-sub">${readCount} / ${unreadCount} 句</div></div><div class="tp-time"></div></div>`;
           html += `<div class="tp-row"><div class="tp-icon"><i class="ri-filter-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">仅未读句子</div><div class="tp-sub">
             <label class="tp-switch"><input type="checkbox" id="onlyUnread"${prog.onlyUnread ? ' checked' : ''} onchange="TASK.toggleOnlyUnread(this.checked)"><span class="tp-slider-thumb"></span></label>
           </div></div><div class="tp-time"></div></div>`;
           
           // 新句/复习时间预估（简化显示）
-          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-time-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">预计剩余</div><div class="tp-sub">约 ${fmtTime(est.sec)} · 已跟读 ${daily.reps} 句次</div></div><div class="tp-time">${fmtTime(est.sec)}</div></div>`;
+          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-time-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">预计剩余</div><div class="tp-sub">新句 ${est.newLeft} · 复习 ${est.reviewLeft} 句 · 已跟读 ${daily.reps} 句次</div></div><div class="tp-time">${fmtTime(est.sec)}</div></div>`;
         }
 
         html += `<div class="tp-actions">`;
