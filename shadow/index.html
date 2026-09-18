@@ -2112,7 +2112,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     CLOUD._userMail = em;
     CLOUD.setStatus('正在连接云端语音…'); // 先立即刷新菜单，别等网络查询（慢网下最长 12s+）
     await CLOUD.checkStatus();
-    toggleCloudWrap();
     } finally { cloudLogin._busy = false; }
     }
     async function cloudSignup() {
@@ -2130,7 +2129,19 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     } finally { cloudSignup._busy = false; }
     }
     async function cloudLogout() {
-    try { await CLOUD.client().auth.signOut(); } catch (e) {}
+    console.log('[CLOUD] cloudLogout called');
+    let signedOut = false;
+    const cleanup = CLOUD.client().auth.onAuthStateChange((ev, sess) => {
+        console.log('[CLOUD] Auth state change:', ev, sess ? sess.user?.email : 'no session');
+        if (ev === 'SIGNED_OUT') {
+            signedOut = true;
+        }
+    });
+    console.log('[CLOUD] Calling signOut...');
+    try { await CLOUD.client().auth.signOut(); console.log('[CLOUD] signOut resolved'); } catch (e) { console.log('[CLOUD] SignOut error:', e); }
+    console.log('[CLOUD] SignOut completed, waiting for SIGNED_OUT event...');
+    for (let i = 0; i < 50 && !signedOut; i++) { await new Promise(r => setTimeout(r, 50)); }
+    console.log('[CLOUD] Signed out event fired:', signedOut, 'clearing state...');
     CLOUD._on = false; CLOUD._userMail = '';
     CLOUD.setStatus('已退出登录，云端音色不可用。');
     if ((selVoiceURI || '').indexOf('cloud:') === 0) {
@@ -2138,6 +2149,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     try { localStorage.setItem('ielts-voice', ''); } catch (e) {}
     loadVoices();
     }
+    cleanup.data.subscription.unsubscribe();
     toggleCloudWrap();
     }
 
