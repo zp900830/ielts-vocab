@@ -983,6 +983,116 @@
     .audiobar .btn { padding: 4px 6px; font-size: 10px; min-height: 28px; }
     .audiobar .btn.play { padding: 4px 10px; font-size: 11px; }
     }
+
+  /* ============ 每日学习任务 ============ */
+  :root { --task-new: #10b487; --task-review: #5b9bd5; --task-done: #b3bdb7; --task-bg: rgba(16,180,135,.06); }
+  body.dark { --task-new: #34d399; --task-review: #7cb8f0; --task-done: #5c5650; --task-bg: rgba(52,211,153,.06); }
+  /* 正文句子任务标记 */
+  .sent.task-new { border-left: 3px solid var(--task-new); padding-left: 8px; margin-left: -11px; background: var(--task-bg); border-radius: 4px; }
+  .sent.task-review { border-left: 3px solid var(--task-review); padding-left: 8px; margin-left: -11px; border-radius: 4px; }
+  .sent.task-done { border-left: 3px solid var(--task-done); padding-left: 8px; margin-left: -11px; opacity: .6; border-radius: 4px; }
+  .sent.task-current { box-shadow: 0 0 0 2px var(--task-new), 0 2px 12px rgba(16,180,135,.18); border-radius: 6px; }
+  .task-badge { display: inline-block; font-size: 10px; margin-right: 3px; vertical-align: middle; }
+  /* 顶栏今日按钮 */
+  #btnToday { position: relative; }
+  #btnToday .today-dot { position: absolute; top: 4px; right: 4px; width: 7px; height: 7px; border-radius: 50%; background: var(--task-new); display: none; }
+  #btnToday.has-task .today-dot { display: block; }
+  /* 今日任务面板 */
+  .today-panel { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(.95); width: min(380px, calc(100vw - 32px));
+    max-height: 80vh; overflow-y: auto; z-index: 600; padding: 20px; border-radius: 18px;
+    background: var(--glass-strong, rgba(255,255,255,.97)); -webkit-backdrop-filter: var(--blur, blur(22px)) saturate(170%); backdrop-filter: var(--blur, blur(22px)) saturate(170%);
+    border: 1px solid var(--glass-line, rgba(255,255,255,.65)); box-shadow: var(--shadow-lg, 0 12px 40px rgba(30,60,48,.14));
+    opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease; }
+  .today-panel.open { opacity: 1; pointer-events: auto; transform: translate(-50%,-50%) scale(1); }
+  body.dark .today-panel { background: rgba(30,28,25,.97); border-color: #33302b; }
+  .tp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .tp-head h3 { font-size: 16px; font-weight: 700; }
+  .tp-close { border: none; background: transparent; font-size: 20px; cursor: pointer; color: var(--muted); padding: 4px 8px; border-radius: 8px; }
+  .tp-close:hover { background: rgba(0,0,0,.06); }
+  .tp-day { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .tp-prog { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 16px; }
+  .tp-prog-fill { height: 100%; background: linear-gradient(90deg, var(--task-new), #2bd4a4); border-radius: 3px; transition: width .3s ease; }
+  .tp-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .tp-row:last-child { border-bottom: none; }
+  .tp-icon { font-size: 18px; flex: none; width: 28px; text-align: center; }
+  .tp-info { flex: 1; min-width: 0; }
+  .tp-label { font-size: 13px; font-weight: 600; }
+  .tp-sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .tp-time { font-size: 13px; font-weight: 600; color: var(--task-new); white-space: nowrap; }
+  .tp-actions { display: flex; gap: 8px; margin-top: 16px; }
+  .tp-actions .btn { flex: 1; justify-content: center; min-height: 40px; font-size: 13px; }
+  .tp-actions .btn.primary { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: #fff; border: none; font-weight: 600; box-shadow: 0 3px 10px rgba(16,180,135,.25); }
+  .tp-stats { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--border); }
+  .tp-stats h4 { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .tp-cycle { display: flex; align-items: center; gap: 14px; padding: 12px 14px; background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: 12px; }
+  .tp-cycle-num { flex: none; display: flex; align-items: baseline; gap: 3px; color: var(--accent); }
+  .tp-cycle-num .big { font-size: 34px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .tp-cycle-num .unit { font-size: 14px; font-weight: 600; }
+  .tp-cycle-info { flex: 1; min-width: 0; }
+  .tp-cycle-label { font-size: 12px; color: var(--text); font-weight: 600; }
+  .tp-stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .tp-stat { text-align: center; padding: 8px 4px; background: var(--card); border-radius: 8px; }
+  .tp-stat .v { font-size: 18px; font-weight: 700; color: var(--accent); }
+  .tp-stat .k { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+  .tp-week { display: flex; gap: 4px; align-items: flex-end; height: 48px; margin-top: 10px; }
+  .tp-week-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+  .tp-week-fill { width: 100%; background: linear-gradient(180deg, var(--task-new), #0fae7e); border-radius: 3px 3px 0 0; min-height: 2px; transition: height .3s; }
+  .tp-week-label { font-size: 9px; color: var(--muted); margin-top: 3px; }
+  /* 任务模式底部操作栏 */
+  .task-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; padding: 7px 16px calc(7px + env(safe-area-inset-bottom, 0px));
+    display: none; align-items: center; gap: 10px;
+    background: var(--glass-strong, rgba(255,255,255,.97)); -webkit-backdrop-filter: var(--blur, blur(22px)) saturate(170%); backdrop-filter: var(--blur, blur(22px)) saturate(170%);
+    border-top: 1px solid var(--glass-line, rgba(255,255,255,.65)); box-shadow: 0 -4px 20px rgba(0,0,0,.08); }
+  .task-bar.show { display: flex; }
+  body.dark .task-bar { background: rgba(30,28,25,.97); border-top-color: #33302b; }
+  .task-bar .tb-info { flex: 1; min-width: 0; }
+  .task-bar .tb-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .task-bar .tb-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .task-bar .tb-btns { display: flex; gap: 6px; flex: none; }
+  .task-bar .tb-btn { border: none; border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: filter .15s; }
+  .task-bar .tb-btn.again { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+  .task-bar .tb-btn.next { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: #fff; box-shadow: 0 2px 8px rgba(16,180,135,.3); }
+  .task-bar .tb-btn:active { filter: brightness(.92); }
+  body.dark .task-bar .tb-btn.again { background: #252220; color: #e2ddd5; border-color: #33302b; }
+  /* 任务模式时 audiobar 上移避让 */
+  body.task-mode .audiobar { bottom: calc(var(--task-bar-h, 62px) + 8px + env(safe-area-inset-bottom, 0px)); }
+  body.task-mode .back-to-play { bottom: calc(var(--task-bar-h, 62px) + 98px + env(safe-area-inset-bottom, 0px)); }
+  /* 计划设置弹窗 */
+  .plan-setup { text-align: center; }
+  .plan-setup h3 { font-size: 17px; margin-bottom: 6px; }
+  .plan-setup .ps-sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+  .ps-group { margin-bottom: 16px; text-align: left; }
+  .ps-group label { font-size: 12px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px; }
+  .ps-opts { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ps-opt { border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer; background: transparent; transition: all .15s; }
+  .ps-opt:hover { border-color: var(--task-new); color: var(--task-new); }
+  .ps-opt.sel { background: var(--task-new); color: #fff; border-color: var(--task-new); }
+  .ps-est { font-size: 12px; color: var(--muted); margin: 12px 0; padding: 10px; background: var(--card); border-radius: 10px; text-align: center; }
+  .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 12px rgba(16,180,135,.3); }
+  .ps-start:active { filter: brightness(.92); }
+  /* 调整计划 */
+  .ps-adjust { display: flex; gap: 6px; margin-top: 12px; }
+  .ps-adjust .btn { flex: 1; justify-content: center; font-size: 12px; min-height: 36px; }
+  /* 完成庆祝 */
+  .tp-done { text-align: center; padding: 20px 0; }
+  .tp-done .emoji { font-size: 40px; margin-bottom: 10px; }
+  .tp-done h3 { font-size: 17px; margin-bottom: 6px; }
+  .tp-done p { font-size: 13px; color: var(--muted); }
+  /* 暗色模式补充覆盖 */
+  body.dark .tp-close:hover { background: rgba(255,255,255,.08); }
+  body.dark .ps-opt { color: var(--text); }
+  body.dark .ps-opt.sel { color: #fff; }
+  body.dark .today-panel .tp-head h3, body.dark .today-panel .plan-setup h3, body.dark .today-panel .tp-done h3 { color: var(--text); }
+  body.dark .today-panel .tp-label { color: var(--text); }
+  body.dark .task-bar .tb-title { color: var(--text); }
+  body.dark .sent.task-new { background: rgba(52,211,153,.07); }
+  body.dark .sent.task-done { opacity: .5; }
+  @media (max-width: 700px) {
+    .today-panel { width: calc(100vw - 24px); padding: 16px; border-radius: 16px; max-height: 75vh; }
+    .tp-stat-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .task-bar { padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)); }
+    .task-bar .tb-btn { padding: 8px 14px; font-size: 12px; }
+  }
     </style>
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -1002,6 +1112,7 @@
           <option value="-1">📚 全部文章</option>
         </select>
       </div>
+      <button class="btn" id="btnToday" onclick="TASK.togglePanel()" title="今日学习任务" aria-label="今日学习任务"><i class="ri-calendar-check-line" aria-hidden="true"></i><span class="only-mobile"> 今日</span><span class="today-dot"></span></button>
       <nav class="topbar-right" aria-label="工具栏">
         <div class="ctrl">
           <button class="btn active" id="btnZh" title="显示/隐藏中文翻译" aria-label="显示或隐藏中文翻译"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏翻译</button>
@@ -1106,6 +1217,18 @@
     <div id="dbg"></div>
     <button id="backToPlay" class="back-to-play" onclick="scrollToPlaying()" style="display:none" aria-label="回到播放位置"><i class="ri-arrow-up-line" aria-hidden="true"></i> 回到播放位置</button>
 
+    <!-- 每日学习任务面板 -->
+    <div class="today-panel" id="todayPanel" role="dialog" aria-modal="true" aria-label="今日学习任务" tabindex="-1"></div>
+    <div id="todayScrim" style="position:fixed;inset:0;z-index:590;background:rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .2s" onclick="TASK.closePanel()"></div>
+    <!-- 任务模式底部操作栏 -->
+    <div class="task-bar" id="taskBar">
+      <div class="tb-info"><div class="tb-title" id="tbTitle">—</div><div class="tb-sub" id="tbSub"></div></div>
+      <div class="tb-btns">
+        <button class="tb-btn again" id="tbAgain" onclick="TASK.again()"><i class="ri-repeat-line" aria-hidden="true"></i> 再来</button>
+        <button class="tb-btn next" id="tbNext" onclick="TASK.next()"><i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句</button>
+      </div>
+    </div>
+
     <div class="layout">
       <main id="main"><article id="art"><div id="abRegion" class="ab-region" style="display:none" aria-hidden="true"><button class="ab-cancel" onclick="abCancel()" title="取消循环" aria-label="取消循环">×</button></div></article></main>
       <aside id="panel">
@@ -1186,6 +1309,8 @@
           const sel = document.getElementById('chapSel');
           if (sel) sel.value = String(currentChapter);
           render(); renderList(); bindSeek(); loadPos(); applyPrefs();
+          // 初始化每日学习任务系统
+          try { TASK.init(); TASK.updateMarkers(); } catch (e) {}
           // 渲染完成后补拉一次云进度：boot() 的拉取可能跑在渲染前（sents 为空时云进度被跳过），
           // 新浏览器本地为空就永远停在 0。pull 内部按时间戳比对，无 session 时直接返回，无副作用
           try { cloudPullMarks(); } catch (e) {}
@@ -1328,6 +1453,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     </div>`;
     }).join('');
     sents = [...document.querySelectorAll('.sent')];
+    // 章节切换/重渲染后刷新任务标记
+    try { TASK.updateMarkers(); } catch (e) {}
     // 点击句子（非单词）直接从该句朗读；A-B 待选态则收为 A/B 标记
     // 待选态点中单词也算选中整句（移动端手指大，单词占满句子；此处 stopPropagation 阻止单词弹窗）
     sents.forEach((el, i) => {
@@ -2505,6 +2632,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     } catch (e) {}
     speak(sentText(sents[i]), () => {
     if (!playing || my !== speakToken) return;
+    // 自由模式下播完一句也计入任务 reps（任务模式由手动按钮计数，不重复）
+    try { if (!TASK.active && TASK.hasPlan) { const gi = (currentChapter < 0) ? i : chapterSentStart + i; TASK.onSentenceComplete(gi); } } catch (e) {}
     // 单句循环模式：只有锚定句的 completion 才计数+重播（重置 launchedUpTo 允许重复发射同一句）；
     // 预取兄弟句/旧链残留 speak 的 completion 直接落到正常推进（launchedUpTo 去重，自然无害）
     if (loopMode && i === loopSent) {
@@ -3479,6 +3608,648 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (dy > 60 && Math.abs(dx) < dy * 0.6) togglePanel();
     }, { passive: true });
     })();
+    /* ============ 每日学习任务引擎 ============ */
+    const TASK = (function () {
+      // SRS 间隔表（天数）：第 N 遍完成后到第 N+1 遍的间隔
+      const INTERVALS = [0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 5, 5, 5, 7, 7, 7, 7, 7, 14];
+      const PHASE_THRESHOLDS = { learning: 3, solid: 10, mastered: 20 };
+      const LS_PLAN = 'ielts-task-plan';
+      const LS_PROG = 'ielts-task-progress';
+
+      let plan = null;       // { startDate, totalDays, dailyMinutes, order, newPerDay, paused }
+      let prog = null;       // { sentences: {idx: {reps, phase, nextDue, lastRead}}, daily: {}, streak }
+      let todayQueue = [];   // 今日任务句索引数组（按章分组排序）
+      let taskMode = false;  // 是否处于任务模式
+      let taskPos = 0;       // 当前在 todayQueue 中的位置
+      let sessionStart = 0;  // 本次任务模式开始时间
+      let sessionReps = 0;   // 本次会话跟读次数
+      let avgNew = 25, avgReview = 8; // 每句平均耗时（秒），动态校准
+      let _panelOpen = false;
+      let _cycleJustCompleted = 0; // 刚完成的循环数（用于庆祝提示）
+
+      // ---- 存储 ----
+      function loadPlan() { try { plan = JSON.parse(localStorage.getItem(LS_PLAN) || 'null'); } catch (e) { plan = null; } }
+      function savePlan() { safeStore(LS_PLAN, JSON.stringify(plan)); }
+      function loadProg() {
+        try { prog = JSON.parse(localStorage.getItem(LS_PROG) || 'null'); } catch (e) { prog = null; }
+        if (!prog) prog = { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {} };
+        // 迁移老数据：补齐循环字段
+        if (typeof prog.cycleCount !== 'number') prog.cycleCount = 0;
+        if (!prog.cycleSeen || typeof prog.cycleSeen !== 'object') prog.cycleSeen = {};
+      }
+      function saveProg() { safeStore(LS_PROG, JSON.stringify(prog)); }
+
+      function today() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+      function dayIndex() { if (!plan) return 0; const s = new Date(plan.startDate + 'T00:00:00'); const n = new Date(today() + 'T00:00:00'); return Math.max(0, Math.round((n - s) / 864e5)); }
+
+      // ---- 计划生成 ----
+      function createPlan(totalDays, dailyMinutes, order) {
+        const totalSents = SENT_RAW.length;
+        const newPerDay = Math.ceil(totalSents / totalDays);
+        plan = { startDate: today(), totalDays, dailyMinutes, order: order || 'seq', newPerDay, paused: false };
+        savePlan();
+        prog = { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {} };
+        saveProg();
+        buildQueue();
+        updateBtn();
+      }
+
+      // ---- 句子阶段 ----
+      function sentState(i) {
+        const s = prog.sentences[i];
+        if (!s) return { reps: 0, phase: 'new', nextDue: 0 };
+        return s;
+      }
+      function phaseOf(reps) {
+        if (reps >= PHASE_THRESHOLDS.mastered) return 'mastered';
+        if (reps >= PHASE_THRESHOLDS.solid) return 'solid';
+        if (reps >= PHASE_THRESHOLDS.learning) return 'learning';
+        return 'new';
+      }
+
+      // ---- 记录一次跟读 ----
+      function recordRep(globalIdx) {
+        if (!prog || !plan) return;
+        const now = Date.now();
+        let s = prog.sentences[globalIdx];
+        if (!s) { s = { reps: 0, phase: 'new', nextDue: 0, lastRead: 0 }; prog.sentences[globalIdx] = s; }
+        s.reps++;
+        s.lastRead = now;
+        s.phase = phaseOf(s.reps);
+        // 计算下次到期
+        const intIdx = Math.min(s.reps, INTERVALS.length - 1);
+        // 注意：间隔表前几档是 0（当日重复），必须用 ?? 而不是 ||，否则 0 会被误当成 14 天
+        const daysLater = INTERVALS[intIdx] ?? 14;
+        s.nextDue = now + daysLater * 864e5;
+        // 每日记录
+        const d = today();
+        if (!prog.daily[d]) prog.daily[d] = { newDone: 0, reviewDone: 0, totalSec: 0, reps: 0 };
+        prog.daily[d].reps++;
+        if (s.reps <= PHASE_THRESHOLDS.learning) prog.daily[d].newDone++;
+        else prog.daily[d].reviewDone++;
+        // 连续天数
+        if (prog.lastDay !== d) {
+          const yesterday = new Date(Date.now() - 864e5);
+          const yd = yesterday.getFullYear() + '-' + String(yesterday.getMonth() + 1).padStart(2, '0') + '-' + String(yesterday.getDate()).padStart(2, '0');
+          prog.streak = (prog.lastDay === yd) ? prog.streak + 1 : 1;
+          prog.lastDay = d;
+        }
+        // 循环计数：本轮内每句至少跟读过一次 = 完成 1 次循环
+        if (!prog.cycleSeen) prog.cycleSeen = {};
+        const isNewInCycle = !prog.cycleSeen[globalIdx];
+        if (isNewInCycle) {
+          prog.cycleSeen[globalIdx] = now;
+          if (Object.keys(prog.cycleSeen).length >= SENT_RAW.length) {
+            prog.cycleCount = (prog.cycleCount || 0) + 1;
+            prog.cycleSeen = {};
+            _cycleJustCompleted = prog.cycleCount;
+          }
+        }
+        saveProg();
+        // 更新 UI
+        if (_cycleJustCompleted) {
+          showAbToast(`恭喜完成第 ${_cycleJustCompleted} 轮循环！全部 ${SENT_RAW.length} 句已通读一遍`);
+          _cycleJustCompleted = 0;
+          const p = document.getElementById('todayPanel');
+          if (p && _panelOpen) renderToday(p);
+        }
+        if (taskMode) updateTaskBar();
+        updateMarkers();
+      }
+
+      // ---- 构建今日队列 ----
+      function buildQueue() {
+        if (!plan || !prog) { todayQueue = []; return; }
+        const now = Date.now();
+        const totalSents = SENT_RAW.length;
+        const di = dayIndex();
+        const newSentences = [];
+        const reviewSentences = [];
+
+        // 确定今天该学哪些新句
+        if (!plan.paused) {
+          const startNew = di * plan.newPerDay;
+          const endNew = Math.min(startNew + plan.newPerDay, totalSents);
+          for (let i = startNew; i < endNew; i++) {
+            const st = sentState(i);
+            if (st.reps < PHASE_THRESHOLDS.learning) newSentences.push(i);
+          }
+        }
+
+        // 到期复习句
+        for (let i = 0; i < totalSents; i++) {
+          const st = sentState(i);
+          if (st.reps > 0 && st.reps < PHASE_THRESHOLDS.mastered && st.nextDue <= now) {
+            if (!newSentences.includes(i)) reviewSentences.push(i);
+          }
+        }
+        // mastered 抽查（每 14 天到期）
+        for (let i = 0; i < totalSents; i++) {
+          const st = sentState(i);
+          if (st.phase === 'mastered' && st.nextDue <= now) {
+            if (!reviewSentences.includes(i)) reviewSentences.push(i);
+          }
+        }
+
+        // 按章节分组排序
+        const sortByChapter = (arr) => arr.sort((a, b) => {
+          const ca = artOfSentGlobal(a), cb = artOfSentGlobal(b);
+          return ca !== cb ? ca - cb : a - b;
+        });
+        sortByChapter(newSentences);
+        sortByChapter(reviewSentences);
+
+        // 标记类型
+        todayQueue = [
+          ...newSentences.map(i => ({ i, type: 'new' })),
+          ...reviewSentences.map(i => ({ i, type: 'review' }))
+        ];
+
+        // 过滤已完成的（今天已经读过的）
+        const d = today();
+        todayQueue = todayQueue.filter(item => {
+          const st = sentState(item.i);
+          // 新句：今天 reps 达到 learning 阈值就算完成
+          if (item.type === 'new') return st.reps < PHASE_THRESHOLDS.learning || st.lastRead > startOfToday();
+          // 复习句：今天读过一次就算完成
+          return !(st.lastRead >= startOfToday() && st.reps > 0);
+        });
+      }
+
+      function startOfToday() { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); }
+
+      // 全局句索引→章索引（不依赖当前 render 的 chapter 过滤）
+      function artOfSentGlobal(globalIdx) {
+        let count = 0;
+        for (let si = 0; si < SECTIONS.length; si++) {
+          const n = SECTIONS[si].paragraphs.reduce((a, p) => a + p.length, 0);
+          if (globalIdx < count + n) return si;
+          count += n;
+        }
+        return SECTIONS.length - 1;
+      }
+
+      // 全局句索引→当前渲染的本地索引
+      function globalToLocal(globalIdx) {
+        if (currentChapter < 0) return globalIdx;
+        const start = computeChapterStart(currentChapter);
+        const local = globalIdx - start;
+        const count = chapterSentCount(currentChapter);
+        return (local >= 0 && local < count) ? local : -1;
+      }
+      function localToGlobal(localIdx) {
+        if (currentChapter < 0) return localIdx;
+        return chapterSentStart + localIdx;
+      }
+
+      // ---- 任务模式 ----
+      function enterTaskMode() {
+        if (!plan) return;
+        buildQueue();
+        if (!todayQueue.length) { showAbToast('今日任务已完成'); return; }
+        taskMode = true;
+        sessionStart = Date.now();
+        sessionReps = 0;
+        document.body.classList.add('task-mode');
+        document.getElementById('taskBar').classList.add('show');
+        syncTaskBarHeight();
+        closePanel();
+        // 跳到第一个未完成句
+        goToNextTask(false);
+      }
+      function exitTaskMode() {
+        taskMode = false;
+        document.body.classList.remove('task-mode');
+        document.getElementById('taskBar').classList.remove('show');
+        sents.forEach(el => el.classList.remove('task-current'));
+        updateMarkers();
+      }
+
+      function goToNextTask(autoPlay) {
+        // 找队列中下一个未完成的
+        let found = -1;
+        for (let qi = 0; qi < todayQueue.length; qi++) {
+          const item = todayQueue[qi];
+          const st = sentState(item.i);
+          const doneToday = st.lastRead >= startOfToday();
+          if (item.type === 'new' && st.reps >= PHASE_THRESHOLDS.learning && doneToday) continue;
+          if (item.type === 'review' && doneToday) continue;
+          found = qi;
+          break;
+        }
+        if (found < 0) {
+          // 全部完成
+          showAbToast('今日任务全部完成！');
+          updateTaskBar(true);
+          return;
+        }
+        taskPos = found;
+        const globalIdx = todayQueue[found].i;
+        const localIdx = globalToLocal(globalIdx);
+        if (localIdx >= 0 && localIdx < sents.length) {
+          // 当前章节内可见
+          sents.forEach(el => el.classList.remove('task-current'));
+          if (sents[localIdx]) sents[localIdx].classList.add('task-current');
+          if (autoPlay !== false) playFrom(localIdx);
+          else { idx = localIdx; paint(); sents[localIdx].scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+        } else {
+          // 需要切换章节
+          const ch = artOfSentGlobal(globalIdx);
+          if (ch !== currentChapter) {
+            const sel = document.getElementById('chapSel');
+            if (sel) { sel.value = String(ch); onChapterChange(String(ch)); }
+            // 切换后延迟定位
+            setTimeout(() => {
+              const newLocal = globalToLocal(globalIdx);
+              if (newLocal >= 0 && sents[newLocal]) {
+                sents.forEach(el => el.classList.remove('task-current'));
+                sents[newLocal].classList.add('task-current');
+                if (autoPlay !== false) playFrom(newLocal);
+                else { idx = newLocal; paint(); sents[newLocal].scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+              }
+            }, 300);
+          }
+        }
+        updateTaskBar();
+        updateMarkers();
+      }
+
+      function again() {
+        // 重播当前句
+        if (!taskMode || taskPos >= todayQueue.length) return;
+        const globalIdx = todayQueue[taskPos].i;
+        const localIdx = globalToLocal(globalIdx);
+        if (localIdx >= 0) {
+          recordRep(globalIdx);
+          sessionReps++;
+          playFrom(localIdx);
+          updateTaskBar();
+        }
+      }
+      function next() {
+        // 记录当前句完成，跳下一个
+        if (!taskMode || taskPos >= todayQueue.length) return;
+        const globalIdx = todayQueue[taskPos].i;
+        recordRep(globalIdx);
+        sessionReps++;
+        // 停止当前播放
+        playing = false; speakToken++;
+        try { speechSynthesis.cancel(); } catch (e) {}
+        try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
+        paint();
+        goToNextTask(true);
+      }
+
+      // ---- 时间估算 ----
+      function estimateRemaining() {
+        let newLeft = 0, reviewLeft = 0;
+        const st = startOfToday();
+        for (const item of todayQueue) {
+          const s = sentState(item.i);
+          if (item.type === 'new' && !(s.reps >= PHASE_THRESHOLDS.learning && s.lastRead >= st)) newLeft++;
+          else if (item.type === 'review' && !(s.lastRead >= st)) reviewLeft++;
+        }
+        const sec = newLeft * avgNew + reviewLeft * avgReview;
+        return { newLeft, reviewLeft, sec };
+      }
+      function fmtTime(sec) {
+        if (sec < 60) return Math.round(sec) + '秒';
+        const m = Math.floor(sec / 60), s = Math.round(sec % 60);
+        return s > 0 ? `${m}分${s}秒` : `${m}分钟`;
+      }
+
+      // ---- UI 更新 ----
+      function syncTaskBarHeight() {
+        const bar = document.getElementById('taskBar');
+        if (bar && taskMode) document.documentElement.style.setProperty('--task-bar-h', bar.offsetHeight + 'px');
+      }
+      function updateTaskBar(allDone) {
+        const bar = document.getElementById('taskBar');
+        if (!bar) return;
+        const titleEl = document.getElementById('tbTitle');
+        const subEl = document.getElementById('tbSub');
+        const est = estimateRemaining();
+        const total = todayQueue.length;
+        const done = total - est.newLeft - est.reviewLeft;
+        if (allDone || (est.newLeft === 0 && est.reviewLeft === 0)) {
+          titleEl.innerHTML = '<i class="ri-trophy-line" aria-hidden="true"></i> 今日任务完成';
+          subEl.textContent = `共跟读 ${done} 句 · 用时 ${fmtTime((Date.now() - sessionStart) / 1000)}`;
+          document.getElementById('tbAgain').style.display = 'none';
+          document.getElementById('tbNext').textContent = '退出任务';
+          document.getElementById('tbNext').onclick = exitTaskMode;
+        } else {
+          const cur = todayQueue[taskPos];
+          const typeIcon = cur && cur.type === 'new' ? '<i class="ri-sparkling-2-line" aria-hidden="true"></i> 新句' : '<i class="ri-repeat-line" aria-hidden="true"></i> 复习';
+          titleEl.innerHTML = `${typeIcon} · ${done}/${total}`;
+          const cyc = prog.cycleCount || 0;
+          const cycSeen = Object.keys(prog.cycleSeen || {}).length;
+          subEl.textContent = `剩余 ~${fmtTime(est.sec)} · 本次 ${sessionReps} 遍 · 第 ${cyc + 1} 轮 ${cycSeen}/${SENT_RAW.length}`;
+          document.getElementById('tbAgain').style.display = '';
+          document.getElementById('tbNext').innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句';
+          document.getElementById('tbNext').onclick = next;
+        }
+        // 播放条标题也更新
+        const abT = document.getElementById('abTitle');
+        if (abT && taskMode) {
+          abT.textContent = `今日 ${done}/${total} · 剩余~${fmtTime(est.sec)}`;
+        }
+      }
+
+      function updateMarkers() {
+        if (!plan || !prog) return;
+        const st = startOfToday();
+        // 构建今日任务集合（全局索引）
+        const taskSet = new Map(); // globalIdx -> 'new'|'review'|'done'
+        if (todayQueue.length) {
+          for (const item of todayQueue) {
+            const s = sentState(item.i);
+            const doneToday = s.lastRead >= st;
+            if (item.type === 'new' && s.reps >= PHASE_THRESHOLDS.learning && doneToday) taskSet.set(item.i, 'done');
+            else if (item.type === 'review' && doneToday) taskSet.set(item.i, 'done');
+            else taskSet.set(item.i, item.type);
+          }
+        }
+        // 应用到 DOM
+        sents.forEach((el, localIdx) => {
+          const gIdx = localToGlobal(localIdx);
+          el.classList.remove('task-new', 'task-review', 'task-done');
+          const type = taskSet.get(gIdx);
+          if (type === 'new') el.classList.add('task-new');
+          else if (type === 'review') el.classList.add('task-review');
+          else if (type === 'done') el.classList.add('task-done');
+        });
+        updateBtn();
+      }
+
+      function updateBtn() {
+        const btn = document.getElementById('btnToday');
+        if (!btn) return;
+        const hasPlan = !!plan;
+        const est = hasPlan ? estimateRemaining() : { newLeft: 0, reviewLeft: 0 };
+        btn.classList.toggle('has-task', hasPlan && (est.newLeft > 0 || est.reviewLeft > 0));
+      }
+
+      // ---- 面板 ----
+      function togglePanel() {
+        if (_panelOpen) closePanel();
+        else openPanel();
+      }
+      function openPanel() {
+        const p = document.getElementById('todayPanel');
+        const scrim = document.getElementById('todayScrim');
+        if (!p) return;
+        if (!plan) { renderSetup(p); }
+        else { renderToday(p); }
+        p.classList.add('open');
+        scrim.style.opacity = '1'; scrim.style.pointerEvents = 'auto';
+        _panelOpen = true;
+        p.focus();
+      }
+      function closePanel() {
+        const p = document.getElementById('todayPanel');
+        const scrim = document.getElementById('todayScrim');
+        if (p) p.classList.remove('open');
+        if (scrim) { scrim.style.opacity = '0'; scrim.style.pointerEvents = 'none'; }
+        _panelOpen = false;
+      }
+
+      function renderSetup(p) {
+        let selDays = 60, selMin = 60, selOrder = 'seq';
+        const est = () => Math.ceil(SENT_RAW.length / selDays);
+        p.innerHTML = `<div class="plan-setup">
+          <h3>制定学习计划</h3>
+          <p class="ps-sub">共 ${SENT_RAW.length} 句 · ${Object.keys(VOCAB).length} 词</p>
+          <div class="ps-group"><label>总天数</label><div class="ps-opts" id="psDays">
+            ${[30, 45, 60, 90].map(d => `<button class="ps-opt${d === 60 ? ' sel' : ''}" data-v="${d}">${d}天</button>`).join('')}
+          </div></div>
+          <div class="ps-group"><label>每日时间</label><div class="ps-opts" id="psMin">
+            ${[30, 45, 60, 90].map(m => `<button class="ps-opt${m === 60 ? ' sel' : ''}" data-v="${m}">${m}分钟</button>`).join('')}
+          </div></div>
+          <div class="ps-group"><label>顺序</label><div class="ps-opts" id="psOrder">
+            <button class="ps-opt sel" data-v="seq">按篇章顺序</button><button class="ps-opt" data-v="rand">随机</button>
+          </div></div>
+          <div class="ps-est" id="psEst">预计每天 ~${est()} 句新句 + 复习</div>
+          <button class="ps-start" id="psStart">开始计划</button>
+        </div>`;
+        // 选项交互
+        p.querySelectorAll('.ps-opts').forEach(group => {
+          group.addEventListener('click', e => {
+            const btn = e.target.closest('.ps-opt');
+            if (!btn) return;
+            group.querySelectorAll('.ps-opt').forEach(b => b.classList.remove('sel'));
+            btn.classList.add('sel');
+            const v = btn.dataset.v;
+            if (group.id === 'psDays') selDays = parseInt(v);
+            else if (group.id === 'psMin') selMin = parseInt(v);
+            else selOrder = v;
+            document.getElementById('psEst').textContent = `预计每天 ~${est()} 句新句 + 复习`;
+          });
+        });
+        document.getElementById('psStart').onclick = () => {
+          createPlan(selDays, selMin, selOrder);
+          showAbToast(`计划已创建：${selDays} 天，每天 ~${est()} 句新句`);
+          renderToday(p);
+        };
+      }
+
+      function renderToday(p) {
+        buildQueue();
+        const est = estimateRemaining();
+        const di = dayIndex();
+        const total = todayQueue.length;
+        const done = total - est.newLeft - est.reviewLeft;
+        const pct = total > 0 ? Math.round(done / total * 100) : 100;
+        const allDone = est.newLeft === 0 && est.reviewLeft === 0;
+        const daily = prog.daily[today()] || { reps: 0, totalSec: 0 };
+        const elapsed = taskMode && sessionStart ? (Date.now() - sessionStart) / 1000 : 0;
+
+        let html = `<div class="tp-head"><h3>今日任务</h3><button class="tp-close" onclick="TASK.closePanel()">✕</button></div>`;
+
+        if (allDone && total > 0) {
+          html += `<div class="tp-done"><div class="emoji"><i class="ri-trophy-line" aria-hidden="true"></i></div><h3>今日任务完成</h3><p>共跟读 ${daily.reps} 句次 · 连续 ${prog.streak} 天</p></div>`;
+        } else if (allDone && total === 0) {
+          html += `<div class="tp-done"><div class="emoji"><i class="ri-checkbox-circle-line" aria-hidden="true"></i></div><h3>暂无到期任务</h3><p>明天的复习句将自动排入</p></div>`;
+        } else {
+          html += `<div class="tp-day">第 ${di + 1} 天 / 共 ${plan.totalDays} 天 · 连续 ${prog.streak} 天 <i class="ri-fire-fill" style="color:var(--coral)" aria-hidden="true"></i></div>`;
+          html += `<div class="tp-prog"><div class="tp-prog-fill" style="width:${pct}%"></div></div>`;
+          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-sparkling-2-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">新句熟读</div><div class="tp-sub">${est.newLeft} 句待完成</div></div><div class="tp-time">~${fmtTime(est.newLeft * avgNew)}</div></div>`;
+          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-repeat-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">复习简读</div><div class="tp-sub">${est.reviewLeft} 句待完成</div></div><div class="tp-time">~${fmtTime(est.reviewLeft * avgReview)}</div></div>`;
+          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-time-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">预计总剩余</div><div class="tp-sub">今日已跟读 ${daily.reps} 句次</div></div><div class="tp-time">${fmtTime(est.sec)}</div></div>`;
+        }
+
+        html += `<div class="tp-actions">`;
+        if (!allDone) html += `<button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始跟读'}</button>`;
+        if (taskMode) html += `<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>`;
+        html += `</div>`;
+
+        // 调整计划
+        html += `<div class="ps-adjust"><button class="btn" onclick="TASK.adjustPlan()">调整计划</button><button class="btn" onclick="TASK.pauseNew()">${plan.paused ? '恢复新句' : '暂停新句'}</button></div>`;
+
+        // 统计
+        html += renderStatsSection();
+        p.innerHTML = html;
+      }
+
+      function renderStatsSection() {
+        const counts = { new: 0, learning: 0, solid: 0, mastered: 0 };
+        for (let i = 0; i < SENT_RAW.length; i++) {
+          const ph = sentState(i).phase;
+          counts[ph] = (counts[ph] || 0) + 1;
+        }
+        const totalReps = Object.values(prog.daily).reduce((a, d) => a + (d.reps || 0), 0);
+        // 词汇覆盖
+        const wordsCovered = new Set();
+        for (const gi in prog.sentences) {
+          if (prog.sentences[gi].reps > 0) {
+            const raw = SENT_RAW[parseInt(gi)] || '';
+            const re = /\[\[([^\]:]+):/g; let m;
+            while ((m = re.exec(raw))) wordsCovered.add(m[1].toLowerCase());
+          }
+        }
+        // 循环（一轮 = 全部句子通读一遍）
+        const cycleCount = prog.cycleCount || 0;
+        const cycleSeenCount = Object.keys(prog.cycleSeen || {}).length;
+        const total = SENT_RAW.length;
+        const cyclePct = Math.round(cycleSeenCount / total * 100);
+        let html = `<div class="tp-stats"><h4>学习统计</h4>`;
+        html += `<div class="tp-cycle">
+          <div class="tp-cycle-num"><span class="big">${cycleCount}</span><span class="unit">轮</span></div>
+          <div class="tp-cycle-info">
+            <div class="tp-cycle-label">已完成循环 · 本轮 ${cycleSeenCount}/${total}（${cyclePct}%）</div>
+            <div class="tp-prog" style="margin:6px 0 0"><div class="tp-prog-fill" style="width:${cyclePct}%"></div></div>
+          </div>
+        </div>`;
+        html += `<div class="tp-stat-grid" style="margin-top:10px">
+          <div class="tp-stat"><div class="v">${prog.streak}</div><div class="k">连续天数</div></div>
+          <div class="tp-stat"><div class="v">${totalReps}</div><div class="k">累计句次</div></div>
+          <div class="tp-stat"><div class="v">${wordsCovered.size}</div><div class="k">覆盖词汇</div></div>
+        </div>`;
+        html += `<div class="tp-stat-grid" style="margin-top:8px">
+          <div class="tp-stat"><div class="v" style="color:var(--task-new)">${counts.learning}</div><div class="k">学习中</div></div>
+          <div class="tp-stat"><div class="v" style="color:var(--task-review)">${counts.solid}</div><div class="k">巩固中</div></div>
+          <div class="tp-stat"><div class="v" style="color:var(--task-done)">${counts.mastered}</div><div class="k">已掌握</div></div>
+        </div>`;
+        // 本周柱状图
+        const days = [];
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date(Date.now() - i * 864e5);
+          const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+          days.push({ label: ['日', '一', '二', '三', '四', '五', '六'][d.getDay()], reps: (prog.daily[key] || {}).reps || 0 });
+        }
+        const maxRep = Math.max(1, ...days.map(d => d.reps));
+        html += `<div class="tp-week">${days.map(d => `<div class="tp-week-bar"><div class="tp-week-fill" style="height:${Math.round(d.reps / maxRep * 100)}%"></div><div class="tp-week-label">${d.label}</div></div>`).join('')}</div>`;
+        html += `</div>`;
+        return html;
+      }
+
+      function adjustPlan() {
+        const p = document.getElementById('todayPanel');
+        if (!p || !plan) return;
+        const remaining = SENT_RAW.length - Object.keys(prog.sentences).filter(k => prog.sentences[k].reps >= PHASE_THRESHOLDS.learning).length;
+        p.innerHTML = `<div class="plan-setup">
+          <h3>调整学习计划</h3>
+          <p class="ps-sub">剩余 ${remaining} 句未学完</p>
+          <div class="ps-group"><label>每日时间</label><div class="ps-opts" id="adjMin">
+            ${[30, 45, 60, 90].map(m => `<button class="ps-opt${m === plan.dailyMinutes ? ' sel' : ''}" data-v="${m}">${m}分钟</button>`).join('')}
+          </div></div>
+          <div class="ps-group"><label>新句速度</label><div class="ps-opts" id="adjSpeed">
+            <button class="ps-opt${!plan.paused ? ' sel' : ''}" data-v="normal">正常（${plan.newPerDay}句/天）</button>
+            <button class="ps-opt" data-v="slow">放慢（${Math.max(10, Math.floor(plan.newPerDay / 2))}句/天）</button>
+            <button class="ps-opt" data-v="fast">加快（${Math.ceil(plan.newPerDay * 1.5)}句/天）</button>
+            <button class="ps-opt${plan.paused ? ' sel' : ''}" data-v="pause">暂停新句</button>
+          </div></div>
+          <div class="ps-adjust"><button class="btn primary" id="adjSave" style="flex:1;justify-content:center">保存调整</button><button class="btn" onclick="TASK.openPanel()" style="flex:none">返回</button></div>
+          <div class="ps-adjust" style="margin-top:8px"><button class="btn" id="adjReset" style="flex:1;justify-content:center;color:var(--coral-deep);border-color:var(--coral)">重置计划（清空进度）</button></div>
+        </div>`;
+        let adjMin = plan.dailyMinutes, adjSpeed = plan.paused ? 'pause' : 'normal';
+        p.querySelectorAll('#adjMin .ps-opt').forEach(b => b.onclick = () => {
+          p.querySelectorAll('#adjMin .ps-opt').forEach(x => x.classList.remove('sel'));
+          b.classList.add('sel'); adjMin = parseInt(b.dataset.v);
+        });
+        p.querySelectorAll('#adjSpeed .ps-opt').forEach(b => b.onclick = () => {
+          p.querySelectorAll('#adjSpeed .ps-opt').forEach(x => x.classList.remove('sel'));
+          b.classList.add('sel'); adjSpeed = b.dataset.v;
+        });
+        document.getElementById('adjSave').onclick = () => {
+          plan.dailyMinutes = adjMin;
+          plan.paused = adjSpeed === 'pause';
+          if (adjSpeed === 'slow') plan.newPerDay = Math.max(10, Math.floor(plan.newPerDay / 2));
+          else if (adjSpeed === 'fast') plan.newPerDay = Math.ceil(plan.newPerDay * 1.5);
+          savePlan(); buildQueue(); updateBtn();
+          showAbToast('计划已调整');
+          renderToday(p);
+        };
+        document.getElementById('adjReset').onclick = () => { resetPlan(); };
+      }
+      function pauseNew() {
+        if (!plan) return;
+        plan.paused = !plan.paused;
+        savePlan(); buildQueue(); updateBtn();
+        showAbToast(plan.paused ? '已暂停新句，只复习' : '已恢复新句推进');
+        const p = document.getElementById('todayPanel');
+        if (p && _panelOpen) renderToday(p);
+      }
+      function resetPlan() {
+        if (!confirm('重置将清空当前计划与全部跟读进度（连续天数、统计一并清零），回到初始设置。确定继续吗？')) return;
+        try { localStorage.removeItem(LS_PLAN); localStorage.removeItem(LS_PROG); } catch (e) {}
+        plan = null;
+        prog = { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {} };
+        todayQueue = [];
+        taskMode = false; taskPos = 0; sessionStart = 0; sessionReps = 0;
+        document.body.classList.remove('task-mode');
+        const bar = document.getElementById('taskBar');
+        if (bar) bar.classList.remove('show');
+        sents.forEach(el => el.classList.remove('task-new', 'task-review', 'task-done', 'task-current'));
+        updateBtn();
+        showAbToast('计划已重置');
+        const p = document.getElementById('todayPanel');
+        if (p && _panelOpen) renderSetup(p);
+      }
+
+      // ---- 与播放链路集成 ----
+      // 自由模式下读了任务句也计数
+      function onSentenceComplete(globalIdx) {
+        if (!plan || !prog) return;
+        recordRep(globalIdx);
+        // 动态校准时间估算
+        if (taskMode && sessionStart) {
+          const elapsed = (Date.now() - sessionStart) / 1000;
+          if (sessionReps > 3) {
+            const avg = elapsed / sessionReps;
+            const item = todayQueue[taskPos];
+            if (item && item.type === 'new') avgNew = avgNew * 0.8 + avg * 0.2;
+            else avgReview = avgReview * 0.8 + avg * 0.2;
+          }
+        }
+      }
+
+      // ---- 初始化 ----
+      function init() {
+        loadPlan(); loadProg();
+        if (plan) {
+          buildQueue();
+          updateBtn();
+          // 断更处理：如果超过 2 天没学，自动平摊
+          const lastDay = prog.lastDay;
+          if (lastDay) {
+            const gap = Math.round((startOfToday() - new Date(lastDay + 'T00:00:00').getTime()) / 864e5);
+            if (gap > 2) {
+              showAbToast(`欢迎回来！已自动调整计划（${gap} 天未练）`);
+            }
+          }
+        }
+      }
+
+      // ---- 公开 API ----
+      return {
+        init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode,
+        again, next, adjustPlan, pauseNew, resetPlan, onSentenceComplete,
+        get active() { return taskMode; },
+        get hasPlan() { return !!plan; },
+        recordRep, buildQueue, updateMarkers, updateBtn
+      };
+    })();
+
     initApp(); loadVoices();
     function mobileBtnIcons() { // 移动端播放条：确保图标在窄屏下正常显示，不再替换文字
     const btns = document.querySelectorAll('.audiobar .btn');
