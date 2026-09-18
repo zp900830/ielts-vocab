@@ -1064,16 +1064,17 @@
   .ps-group { margin-bottom: 16px; text-align: left; }
   .ps-group label { font-size: 12px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px; }
   .ps-opts { display: flex; gap: 6px; flex-wrap: wrap; }
-  .ps-opt { border: 1px solid var(--border); border-radius: 999px; padding: 6px 13px; font-size: 13px; cursor: pointer; background: transparent; transition: all .15s; display: flex; flex-direction: column; align-items: center; gap: 1px; line-height: 1.25; }
-  .ps-opt b { font-weight: 600; }
-  .ps-opt em { font-style: normal; font-size: 10px; opacity: .7; white-space: nowrap; }
+  .ps-opt { border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer; background: transparent; transition: all .15s; }
   .ps-opt:hover { border-color: var(--task-new); color: var(--task-new); }
   .ps-opt.sel { background: var(--task-new); color: #fff; border-color: var(--task-new); }
-  .ps-opt.sel em { opacity: .88; }
-  .ps-est { font-size: 11.5px; color: var(--muted); margin: 12px 0; padding: 10px; background: var(--card); border-radius: 10px; text-align: center; line-height: 1.6; }
-  .ps-est .pe-main { font-size: 13px; font-weight: 700; color: var(--text); }
-  .ps-est .pe-sub { margin-top: 2px; }
-  .ps-est.warn { background: rgba(230,120,90,.13); color: var(--coral-deep, #c0492f); }
+  /* 计划小结：标签—数值结构化，轮数只在这里出现一次并放大 */
+  .ps-sum { margin: 14px 0 12px; padding: 2px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .ps-sum-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 12px; color: var(--muted); }
+  .ps-sum-row + .ps-sum-row { border-top: 1px solid var(--border); }
+  .ps-sum-row b { font-size: 14px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+  .ps-sum-row.big b { font-size: 24px; color: var(--task-new); }
+  .ps-sum-row.warn, .ps-sum-row.warn b { color: var(--coral-deep, #c0492f); }
+  .ps-sum-row.warn b { font-size: 12.5px; }
   .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 12px rgba(16,180,135,.3); }
   .ps-start:active { filter: brightness(.92); }
   /* 调整计划 */
@@ -1088,7 +1089,7 @@
   body.dark .tp-close:hover { background: rgba(255,255,255,.08); }
   body.dark .ps-opt { color: var(--text); }
   body.dark .ps-opt.sel { color: #fff; }
-  body.dark .ps-est.warn { background: rgba(224,122,95,.16); color: #f0a08c; }
+  body.dark .ps-sum-row.warn, body.dark .ps-sum-row.warn b { color: #f0a08c; }
   body.dark .today-panel .tp-head h3, body.dark .today-panel .plan-setup h3, body.dark .today-panel .tp-done h3 { color: var(--text); }
   body.dark .today-panel .tp-label { color: var(--text); }
   body.dark .task-bar .tb-title { color: var(--text); }
@@ -3985,11 +3986,16 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (!isFinite(c) || c <= 0) return '0轮';
         return (c >= 10 ? String(Math.round(c)) : (Math.round(c * 10) / 10).toFixed(1)) + '轮';
       }
-      // 预估行副文案：说明每天实际要花多少分钟，以及瓶颈在时间还是排期
-      function planEstSub(cap) {
-        if (cap.cycles >= PHASE_THRESHOLDS.mastered) return `读满 ${PHASE_THRESHOLDS.mastered} 遍即全部毕业 · 约 ${cap.needMin} 分钟/天（新句 ${cap.newMin} 分钟）`;
-        if (cap.srsLimited) return `约 ${cap.needMin} 分钟/天（新句 ${cap.newMin} 分钟），时间有富余 · 排期上限 ${cap.schedMax}轮`;
-        return `约 ${cap.needMin} 分钟/天（新句 ${cap.newMin} 分钟）· 想读更多遍需加每日时间或拉长总天数`;
+      // 计划小结：结构化「标签—数值」，轮数只在这里放大显示一次
+      function planSummary(cap, optMins) {
+        let html = `<div class="ps-sum-row big"><span>预计完成</span><b>${fmtCycles(cap.cycles)}</b></div>`
+          + `<div class="ps-sum-row"><span>每天新句</span><b>${cap.perDay} 句</b></div>`
+          + `<div class="ps-sum-row"><span>每天大约</span><b>${cap.needMin} 分钟</b></div>`;
+        if (cap.tight) {
+          const fit = (optMins || []).find(m => m >= cap.newMin);
+          html += `<div class="ps-sum-row warn"><span>⚠️ 时间不够</span><b>${fit ? `请选 ${fit} 分钟以上` : '请拉长总天数'}</b></div>`;
+        }
+        return html;
       }
 
       // ---- UI 更新 ----
@@ -4088,43 +4094,26 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
 
       function renderSetup(p) {
-        let selDays = 60, selMin = 60, selOrder = 'seq';
-        const DAYS = [30, 45, 60, 90], MINS = [30, 45, 60, 90];
+        let selDays = 30, selMin = 60, selOrder = 'seq';
+        const DAYS = [5, 7, 15, 30, 45, 60], MINS = [30, 45, 60, 90];
         p.innerHTML = `<div class="plan-setup">
           <h3>制定学习计划</h3>
           <p class="ps-sub">共 ${SENT_RAW.length} 句 · ${Object.keys(VOCAB).length} 词 · 1 轮 = 全部句子通读一遍</p>
           <div class="ps-group"><label>总天数</label><div class="ps-opts" id="psDays">
-            ${DAYS.map(d => `<button class="ps-opt${d === selDays ? ' sel' : ''}" data-v="${d}"><b>${d}天</b><em></em></button>`).join('')}
+            ${DAYS.map(d => `<button class="ps-opt${d === selDays ? ' sel' : ''}" data-v="${d}">${d}天</button>`).join('')}
           </div></div>
           <div class="ps-group"><label>每日时间</label><div class="ps-opts" id="psMin">
-            ${MINS.map(m => `<button class="ps-opt${m === selMin ? ' sel' : ''}" data-v="${m}"><b>${m}分钟</b><em></em></button>`).join('')}
+            ${MINS.map(m => `<button class="ps-opt${m === selMin ? ' sel' : ''}" data-v="${m}">${m}分钟</button>`).join('')}
           </div></div>
           <div class="ps-group"><label>顺序</label><div class="ps-opts" id="psOrder">
-            <button class="ps-opt sel" data-v="seq"><b>按篇章顺序</b></button><button class="ps-opt" data-v="rand"><b>随机</b></button>
+            <button class="ps-opt sel" data-v="seq">按篇章顺序</button><button class="ps-opt" data-v="rand">随机</button>
           </div></div>
-          <div class="ps-est" id="psEst"></div>
+          <div class="ps-sum" id="psSum"></div>
           <button class="ps-start" id="psStart">开始计划</button>
         </div>`;
-        // 两个维度互相决定轮数，所以任一项变化都要把两组小字和预估行一起刷新
-        const fillOpts = (gid, vals, cyclesOf) => {
-          const g = document.getElementById(gid);
-          if (!g) return;
-          g.querySelectorAll('.ps-opt').forEach((btn, k) => {
-            const em = btn.querySelector('em');
-            if (em) em.textContent = '≈' + fmtCycles(cyclesOf(vals[k]));
-          });
-        };
         const refresh = () => {
-          fillOpts('psDays', DAYS, d => planCapacity(d, selMin).cycles);
-          fillOpts('psMin', MINS, m => planCapacity(selDays, m).cycles);
-          const cap = planCapacity(selDays, selMin);
-          const el = document.getElementById('psEst');
-          if (!el) return;
-          el.classList.toggle('warn', cap.tight);
-          el.innerHTML = `<div class="pe-main">平均每天 ~${cap.perDay} 句新句 + ~${cap.reviewPerDay} 句复习 · ${selDays} 天预计 ${fmtCycles(cap.cycles)}</div>`
-            + `<div class="pe-sub">${cap.tight
-              ? `⚠️ ${selMin} 分钟装不下 ${cap.perDay} 句新句（仅新句约需 ${cap.newMin} 分钟），请加大每日时间或拉长总天数`
-              : planEstSub(cap)}</div>`;
+          const el = document.getElementById('psSum');
+          if (el) el.innerHTML = planSummary(planCapacity(selDays, selMin), MINS);
         };
         refresh();
         // 选项交互
@@ -4248,52 +4237,37 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           : sp === 'fast' ? Math.ceil(plan.newPerDay * 1.5)
           : sp === 'pause' ? 0 : plan.newPerDay;
         const SPD = ['normal', 'slow', 'fast', 'pause'];
+        const MINS = [30, 45, 60, 90];
+        let adjMin = plan.dailyMinutes, adjSpeed = plan.paused ? 'pause' : 'normal';
+        const leftDays = () => Math.max(1, plan.totalDays - dayIndex());
         p.innerHTML = `<div class="plan-setup">
           <h3>调整学习计划</h3>
-          <p class="ps-sub">剩余 ${remaining} 句未学完 · 1 轮 = 全部句子通读一遍</p>
+          <p class="ps-sub">剩余 ${remaining} 句未学完 · 还剩 ${leftDays()} 天 · 1 轮 = 全部句子通读一遍</p>
           <div class="ps-group"><label>每日时间</label><div class="ps-opts" id="adjMin">
-            ${[30, 45, 60, 90].map(m => `<button class="ps-opt${m === plan.dailyMinutes ? ' sel' : ''}" data-v="${m}"><b>${m}分钟</b><em></em></button>`).join('')}
+            ${MINS.map(m => `<button class="ps-opt${m === plan.dailyMinutes ? ' sel' : ''}" data-v="${m}">${m}分钟</button>`).join('')}
           </div></div>
           <div class="ps-group"><label>新句速度</label><div class="ps-opts" id="adjSpeed">
-            <button class="ps-opt${!plan.paused ? ' sel' : ''}" data-v="normal"><b>正常</b><em></em></button>
-            <button class="ps-opt" data-v="slow"><b>放慢</b><em></em></button>
-            <button class="ps-opt" data-v="fast"><b>加快</b><em></em></button>
-            <button class="ps-opt${plan.paused ? ' sel' : ''}" data-v="pause"><b>暂停新句</b><em>只复习</em></button>
+            ${SPD.map(sp => `<button class="ps-opt${(sp === 'pause') === !!plan.paused ? ' sel' : ''}" data-v="${sp}">${
+              sp === 'normal' ? `正常 ${perDayOfSpeed('normal')} 句/天`
+              : sp === 'slow' ? `放慢 ${perDayOfSpeed('slow')} 句/天`
+              : sp === 'fast' ? `加快 ${perDayOfSpeed('fast')} 句/天`
+              : '暂停新句'}</button>`).join('')}
           </div></div>
-          <div class="ps-est" id="adjEst"></div>
+          <div class="ps-sum" id="adjSum"></div>
           <div class="ps-adjust"><button class="btn primary" id="adjSave" style="flex:1;justify-content:center">保存调整</button><button class="btn" onclick="TASK.openPanel()" style="flex:none">返回</button></div>
           <div class="ps-adjust" style="margin-top:8px"><button class="btn" id="adjReset" style="flex:1;justify-content:center;color:var(--coral-deep);border-color:var(--coral)">重置计划（清空进度）</button></div>
         </div>`;
-        let adjMin = plan.dailyMinutes, adjSpeed = plan.paused ? 'pause' : 'normal';
-        const leftDays = () => Math.max(1, plan.totalDays - dayIndex());
-        const cyclesFor = (perDay, min) => perDay <= 0 ? null : planCapacity(leftDays(), min, perDay).cycles;
         const refresh = () => {
-          const minBtns = document.querySelectorAll('#adjMin .ps-opt');
-          minBtns.forEach((b, k) => {
-            const em = b.querySelector('em');
-            const c = cyclesFor(perDayOfSpeed(adjSpeed), [30, 45, 60, 90][k]);
-            if (em) em.textContent = c == null ? '只复习' : '≈' + fmtCycles(c);
-          });
-          const spdBtns = document.querySelectorAll('#adjSpeed .ps-opt');
-          spdBtns.forEach((b, k) => {
-            const em = b.querySelector('em');
-            const sp = SPD[k];
-            const perDay = perDayOfSpeed(sp);
-            if (sp === 'pause') { if (em) em.textContent = '只复习'; return; }
-            const c = cyclesFor(perDay, adjMin);
-            if (em) em.textContent = `${perDay}句/天 ≈` + fmtCycles(c);
-          });
-          const el = document.getElementById('adjEst');
+          const el = document.getElementById('adjSum');
           if (!el) return;
           const perDay = perDayOfSpeed(adjSpeed);
-          const cap = planCapacity(leftDays(), adjMin, perDay);
-          el.classList.toggle('warn', cap.tight);
-          el.innerHTML = perDay <= 0
-            ? `<div class="pe-main">只复习已学句 · 不再排新句</div><div class="pe-sub">恢复新句后按剩余 ${leftDays()} 天继续推进</div>`
-            : `<div class="pe-main">平均每天 ~${perDay} 句新句 + ~${cap.reviewPerDay} 句复习 · 剩余 ${leftDays()} 天预计 ${fmtCycles(cap.cycles)}</div>`
-              + `<div class="pe-sub">${cap.tight
-                ? `⚠️ ${adjMin} 分钟装不下 ${perDay} 句新句（仅新句约需 ${cap.newMin} 分钟），请加大每日时间或放慢新句速度`
-                : planEstSub(cap)}</div>`;
+          if (perDay <= 0) {
+            el.innerHTML = `<div class="ps-sum-row big"><span>预计完成</span><b>—</b></div>`
+              + `<div class="ps-sum-row"><span>每天新句</span><b>0 句（只复习）</b></div>`
+              + `<div class="ps-sum-row"><span>剩余天数</span><b>${leftDays()} 天</b></div>`;
+            return;
+          }
+          el.innerHTML = planSummary(planCapacity(leftDays(), adjMin, perDay), MINS);
         };
         refresh();
         p.querySelectorAll('#adjMin .ps-opt').forEach(b => b.onclick = () => {
