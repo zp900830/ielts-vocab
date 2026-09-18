@@ -170,6 +170,7 @@
     transition: background var(--t-fast), border-color var(--t-fast), filter var(--t-fast);
     min-height: 34px; white-space: nowrap; }
   .btn:hover { background: var(--accent-soft); border-color: var(--accent-bright); }
+  a.btn { text-decoration: none; }
   .btn.active { background: var(--accent-soft); border-color: var(--accent-bright);
     color: var(--accent); font-weight: 600; }
   .btn.play { border: none; background: var(--grad); color: #fff; font-weight: 600;
@@ -1148,6 +1149,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
           <option value="-1">📚 全部文章</option>
         </select>
       </div>
+      <a class="btn app-link" href="../index.html" title="去情境阅读训练（读故事、做测验、背词复习）" aria-label="切换到情境阅读训练"><i class="ri-book-open-line" aria-hidden="true"></i><span class="only-mobile"> 阅读训练</span></a>
       <button class="btn" id="btnToday" onclick="TASK.togglePanel()" title="今日学习任务" aria-label="今日学习任务"><i class="ri-calendar-check-line" aria-hidden="true"></i><span class="only-mobile"> 今日</span><span class="today-dot"></span></button>
       <nav class="topbar-right" aria-label="工具栏">
         <div class="ctrl">
