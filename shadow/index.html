@@ -2460,14 +2460,15 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     };
     u.onend = () => { if (finished) return; finished = true; clearWd(); errStreak = 0; dlog('onend', 'tok=' + my); speechInProgress = false; cb(); };
     u.onerror = ev => {
-    // cancel/interrupted 是主动打断（切句/暂停），绝不能当“播完”推进，否则多链互 cancel 疯转
-    if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) { dlog('onerror-ignored', ev.error); speechInProgress = false; return; }
+    // cancel/interrupted 是主动打断（切句/暂停），绝不能当“播完”推进，否则多链互 cancel 疯转；
+    // 且必须就地 finished + 清掉看门狗：被丢弃的排队句若留着定时器，几秒后会误判卡死并 cancel 掉新链正在播的句子
+    if (ev && (ev.error === 'canceled' || ev.error === 'interrupted')) { dlog('onerror-ignored', ev.error); finished = true; clearWd(); speechInProgress = false; return; }
     dlog('onerror', ev ? ev.error : '?');
     speechInProgress = false;
     failOnce();
     };
     // 无声看门狗：既不开始也不结束 = 静默卡死，走失败路径（重试/停下提示），不许无声空转；
-    // 首句放宽到 8 秒（Chrome 首次加载语音/冷启动常延迟数秒，过早误判会 cancel 后重播造成叠音）
+    // 首句放宽到 8 秒（Chrome 首次加载语音/冷启动常延迟数秒，过早误判会 cancel 后重播造成叠音）。
     wd = setTimeout(() => { dlog('watchdog-fire', 'started=' + started); if (!started && !finished) failOnce(); }, everStarted ? 6000 : 8000);
     } else {
     u.onstart = remember;
@@ -2758,8 +2759,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (cloudMode) {
     launch(i, my, true); // 云端单播：只发一句，续播走 onend 单链
     } else if (hadQueue && !NEED_GESTURE) {
-    // 有旧队列：cancel 后 250ms 再起播（Chrome 吞声 workaround），起播即连发 3 句
-    setTimeout(() => { if (my === speakToken && playing) fire3(); }, 250);
+    // 有旧队列：cancel 后 250ms 再起播（Chrome 吞声 workaround）。
+    // 只发起目标句，不再连发 3 句：刚 cancel 过的引擎会把紧随其后的多条 utterance 整批吞掉
+    // （实测三条 speak 无一 onstart）；即便没被吞，后面两句也要等十几秒才轮到开播，
+    // 必然被无声看门狗误判卡死 → 重试再 cancel 掉正在播的句子并跳句，
+    // 表现就是「点上一句闪一下下一句、然后回不去」。预取交给本句 onend 后的正常续播链补齐。
+    setTimeout(() => { if (my === speakToken && playing) launch(i, my, true); }, 250);
     } else {
     fire3(); // 空闲：手势上下文内同步连发，杜绝 setTimeout 丢失用户激活
     }
