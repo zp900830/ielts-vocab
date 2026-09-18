@@ -1061,6 +1061,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-week-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
   .tp-week-fill { width: 100%; background: linear-gradient(180deg, var(--task-new), #0fae7e); border-radius: 3px 3px 0 0; min-height: 2px; transition: height .3s; }
   .tp-week-label { font-size: 9px; color: var(--muted); margin-top: 3px; }
+  /* 开关样式 */
+  .tp-switch { position: relative; display: inline-flex; align-items: center; }
+  .tp-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .tp-slider-thumb { position: relative; width: 40px; height: 22px; background: var(--border); border-radius: 11px; transition: background .2s, box-shadow .2s; box-shadow: inset 0 0 0 1px rgba(0,0,0,.05); }
+  .tp-slider-thumb::before { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,.15); transition: transform .2s cubic-bezier(.34,1.56,.64,1); }
+  .tp-switch input:checked + .tp-slider-thumb { background: var(--task-new); box-shadow: 0 0 0 2px var(--task-new); }
+  .tp-switch input:checked + .tp-slider-thumb::before { transform: translateX(18px); }
+  .tp-switch input:focus-visible + .tp-slider-thumb { outline: 2px solid var(--task-new); outline-offset: 2px; }
   /* 任务模式底部操作栏 */
   .task-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; padding: 7px 16px calc(7px + env(safe-area-inset-bottom, 0px));
     display: none; align-items: center; gap: 10px;
@@ -1090,6 +1098,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .ps-opt { border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer; background: transparent; transition: all .15s; }
   .ps-opt:hover { border-color: var(--task-new); color: var(--task-new); }
   .ps-opt.sel { background: var(--task-new); color: #fff; border-color: var(--task-new); }
+  .ps-slider { width: 100%; accent-color: var(--task-new); }
+  .ps-slider-value { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 13px; color: var(--muted); }
+  .ps-slider-value #psDaysVal { font-weight: 700; color: var(--task-new); font-variant-numeric: tabular-nums; }
   /* 计划小结：标签—数值结构化，轮数只在这里出现一次并放大 */
   .ps-sum { margin: 14px 0 12px; padding: 2px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
   .ps-sum-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 12px; color: var(--muted); }
@@ -3701,7 +3712,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       // ---- 计划生成 ----
       function createPlan(totalDays, dailyMinutes, order) {
         const newPerDay = newPerDayOf(totalDays);
-        plan = { startDate: today(), totalDays, dailyMinutes, order: order || 'seq', newPerDay, paused: false };
+        plan = { startDate: today(), totalDays, dailyMinutes, order: order || 'seq', newPerDay, paused: false, onlyUnread: false };
         savePlan();
         prog = { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {}, pace: (prog && prog.pace) || {} };
         saveProg();
@@ -4151,12 +4162,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
 
       function renderSetup(p) {
         let selDays = 30, selMin = 60, selOrder = 'seq';
-        const DAYS = [5, 7, 15, 30, 45, 60], MINS = [30, 45, 60, 90];
+        const MINS = [30, 45, 60, 90];
         p.innerHTML = `<div class="plan-setup">
           <h3>制定学习计划</h3>
           <p class="ps-sub">共 ${SENT_RAW.length} 句 · ${Object.keys(VOCAB).length} 词 · 1 轮 = 全部句子通读一遍</p>
-          <div class="ps-group"><label>总天数</label><div class="ps-opts" id="psDays">
-            ${DAYS.map(d => `<button class="ps-opt${d === selDays ? ' sel' : ''}" data-v="${d}">${d}天</button>`).join('')}
+          <div class="ps-group"><label>总天数</label>
+            <input type="range" id="psDays" min="1" max="902" value="${selDays}" class="ps-slider">
+            <div class="ps-slider-value"><span id="psDaysVal">${selDays}</span> 天</div>
           </div></div>
           <div class="ps-group"><label>每日时间</label><div class="ps-opts" id="psMin">
             ${MINS.map(m => `<button class="ps-opt${m === selMin ? ' sel' : ''}" data-v="${m}">${m}分钟</button>`).join('')}
@@ -4172,7 +4184,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           if (el) el.innerHTML = planSummary(planCapacity(selDays, selMin), MINS);
         };
         refresh();
-        // 选项交互
+        document.getElementById('psDays').addEventListener('input', e => {
+          selDays = parseInt(e.target.value);
+          document.getElementById('psDaysVal').textContent = selDays;
+          refresh();
+        });
         p.querySelectorAll('.ps-opts').forEach(group => {
           group.addEventListener('click', e => {
             const btn = e.target.closest('.ps-opt');
@@ -4180,8 +4196,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             group.querySelectorAll('.ps-opt').forEach(b => b.classList.remove('sel'));
             btn.classList.add('sel');
             const v = btn.dataset.v;
-            if (group.id === 'psDays') selDays = parseInt(v);
-            else if (group.id === 'psMin') selMin = parseInt(v);
+            if (group.id === 'psMin') selMin = parseInt(v);
             else selOrder = v;
             refresh();
           });
@@ -4205,6 +4220,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const allDone = est.newLeft === 0 && est.reviewLeft === 0;
         const daily = prog.daily[today()] || { reps: 0, totalSec: 0 };
         const elapsed = taskMode && sessionStart ? (Date.now() - sessionStart) / 1000 : 0;
+        // 统计已读/未读句子
+        const readCount = todayQueue.filter(item => {
+          const s = sentState(item.i);
+          return s.reps >= PHASE_THRESHOLDS.learning && s.lastRead >= startOfToday();
+        }).length;
+        const unreadCount = todayQueue.length - readCount;
 
         let html = `<div class="tp-head"><h3>今日任务</h3><button class="tp-close" onclick="TASK.closePanel()">✕</button></div>`;
 
@@ -4215,9 +4236,16 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         } else {
           html += `<div class="tp-day">第 ${di + 1} 天 / 共 ${plan.totalDays} 天 · 预计 ${fmtCycles(cap.cycles)} · 连续 ${prog.streak} 天 <i class="ri-fire-fill" style="color:var(--coral)" aria-hidden="true"></i></div>`;
           html += `<div class="tp-prog"><div class="tp-prog-fill" style="width:${pct}%"></div></div>`;
-          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-sparkling-2-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">新句熟读</div><div class="tp-sub">${est.newLeft} 句待完成</div></div><div class="tp-time">~${fmtTime(est.newLeft * secNew())}</div></div>`;
-          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-repeat-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">复习简读</div><div class="tp-sub">${est.reviewLeft} 句待完成</div></div><div class="tp-time">~${fmtTime(est.reviewLeft * secReview())}</div></div>`;
-          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-time-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">预计总剩余</div><div class="tp-sub">今日已跟读 ${daily.reps} 句次</div></div><div class="tp-time">${fmtTime(est.sec)}</div></div>`;
+          
+          // 循环次数 + 已读/未读统计 + 仅未读开关
+          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-repeat-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">当前循环</div><div class="tp-sub">${fmtCycles(cap.cycles)}</div></div><div class="tp-time"><span class="tp-badge task-new">第 ${cap.cycles} 轮</span></div></div>`;
+          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-checkbox-circle-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">已读 / 未读</div><div class="tp-sub">${readCount} / ${unreadCount} 句</div></div><div class="tp-time"></div></div>`;
+          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-filter-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">仅未读句子</div><div class="tp-sub">
+            <label class="tp-switch"><input type="checkbox" id="onlyUnread"${prog.onlyUnread ? ' checked' : ''} onchange="TASK.toggleOnlyUnread(this.checked)"><span class="tp-slider-thumb"></span></label>
+          </div></div><div class="tp-time"></div></div>`;
+          
+          // 新句/复习时间预估（简化显示）
+          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-time-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">预计剩余</div><div class="tp-sub">约 ${fmtTime(est.sec)} · 已跟读 ${daily.reps} 句次</div></div><div class="tp-time">${fmtTime(est.sec)}</div></div>`;
         }
 
         html += `<div class="tp-actions">`;
@@ -4297,7 +4325,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         let adjMin = plan.dailyMinutes, adjSpeed = plan.paused ? 'pause' : 'normal';
         const leftDays = () => Math.max(1, plan.totalDays - dayIndex());
         p.innerHTML = `<div class="plan-setup">
-          <h3>调整学习计划</h3>
+          <div class="tp-head"><h3>调整学习计划</h3><button class="tp-close" onclick="TASK.openPanel()">✕</button></div>
           <p class="ps-sub">剩余 ${remaining} 句未学完 · 还剩 ${leftDays()} 天 · 1 轮 = 全部句子通读一遍</p>
           <div class="ps-group"><label>每日时间</label><div class="ps-opts" id="adjMin">
             ${MINS.map(m => `<button class="ps-opt${m === plan.dailyMinutes ? ' sel' : ''}" data-v="${m}">${m}分钟</button>`).join('')}
@@ -4310,7 +4338,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
               : '暂停新句'}</button>`).join('')}
           </div></div>
           <div class="ps-sum" id="adjSum"></div>
-          <div class="ps-adjust"><button class="btn primary" id="adjSave" style="flex:1;justify-content:center">保存调整</button><button class="btn" onclick="TASK.openPanel()" style="flex:none">返回</button></div>
+          <div class="ps-adjust"><button class="btn primary" id="adjSave" style="flex:1;justify-content:center">保存调整</button></div>
           <div class="ps-adjust" style="margin-top:8px"><button class="btn" id="adjReset" style="flex:1;justify-content:center;color:var(--coral-deep);border-color:var(--coral)">重置计划（清空进度）</button></div>
         </div>`;
         const refresh = () => {
@@ -4350,6 +4378,15 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         plan.paused = !plan.paused;
         savePlan(); buildQueue(); updateBtn();
         showAbToast(plan.paused ? '已暂停新句，只复习' : '已恢复新句推进');
+        const p = document.getElementById('todayPanel');
+        if (p && _panelOpen) renderToday(p);
+      }
+      function toggleOnlyUnread(v) {
+        if (!prog) return;
+        prog.onlyUnread = !!v;
+        saveProg();
+        buildQueue();
+        updateBtn();
         const p = document.getElementById('todayPanel');
         if (p && _panelOpen) renderToday(p);
       }
