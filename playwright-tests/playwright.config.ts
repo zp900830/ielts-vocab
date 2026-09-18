@@ -10,7 +10,7 @@ export default defineConfig({
     headless: true,
   },
   webServer: process.env.E2E_NO_SERVER ? undefined : {
-    command: 'python3 -m http.server 8931 --directory ../shadow',
+    command: 'python3 -m http.server 8931 --bind 127.0.0.1 --directory ../shadow',
     port: 8931,
     reuseExistingServer: true,
   },
