@@ -1,0 +1,12 @@
+# publish = "." 会把仓库根整个当站点发布，内部资料因此可被公开下载。
+# 这里把非运行时路径统一指到 404（Netlify 的重写在查文件前生效，能真正挡住）。
+# 更彻底的做法是构建时产出干净的输出目录，见 docs/2026-09-18-产品整改清单.md §7。
+
+/docs/*                /404.html  404
+/docs                  /404.html  404
+/scripts/*             /404.html  404
+/tools/*               /404.html  404
+/tests/*               /404.html  404
+/playwright-tests/*    /404.html  404
+/雅思影子跟读.html            /404.html  404
+/雅思影子跟读.release-candidate-20260909.html  /404.html  404

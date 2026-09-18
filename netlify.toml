@@ -2,7 +2,10 @@
 # Enables gzip/brotli (handled by Netlify by default) and sets sensible cache headers.
 
 [build]
-  command = "python3 scripts/inject_config.py --shadow && python3 scripts/normalize_vocab.py --apply"
+  # normalize_vocab.py --apply 已从构建中移除：它无条件加载 data/vocab-map.json
+  # （仓库里不存在），按原命令构建必然 FileNotFoundError；而且它会在每次部署时
+  # 改写内容数据。数据变更改为显式跑脚本 + validate_data.py 把关。
+  command = "python3 scripts/inject_config.py --shadow && python3 scripts/validate_data.py"
   publish = "."
 
 [[headers]]
@@ -11,9 +14,27 @@
     Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
-  for = "data/*"
+  # 原写法 "data/*" 缺前导斜杠，且覆盖不到 shadow/data/；跟读站又没有版本戳，
+  # iOS Safari 会走 Last-Modified 启发式缓存 → sections.json 新、vocab.json 旧。
+  for = "/data/*"
   [headers.values]
     Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/shadow/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  # config.js 由构建注入；原来命中下面 *.js 的一年 immutable，换 key 对老用户无效
+  for = "/config.js"
+  [headers.values]
+    Cache-Control = "no-store, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/shadow/config.js"
+  [headers.values]
+    Cache-Control = "no-store, max-age=0, must-revalidate"
 
 [[headers]]
   for = "*.css"

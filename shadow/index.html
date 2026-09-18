@@ -1153,8 +1153,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       <button class="btn" id="btnToday" onclick="TASK.togglePanel()" title="今日学习任务" aria-label="今日学习任务"><i class="ri-calendar-check-line" aria-hidden="true"></i><span class="only-mobile"> 今日</span><span class="today-dot"></span></button>
       <nav class="topbar-right" aria-label="工具栏">
         <div class="ctrl">
-          <button class="btn active" id="btnZh" title="显示/隐藏中文翻译" aria-label="显示或隐藏中文翻译"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏翻译</button>
-          <button class="btn active" id="btnGloss" title="显示/隐藏行内单词词义" aria-label="显示或隐藏行内单词词义"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏词义</button>
+          <button class="btn active" id="btnZh" title="显示/隐藏每句下方的中文全句翻译" aria-label="显示或隐藏中文全句翻译"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏全句译文</button>
+          <button class="btn active" id="btnGloss" title="显示/隐藏英文句内行间的单词词义与音标" aria-label="显示或隐藏行内单词词义"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏行内词义</button>
         </div>
         <div class="ctrl voice-ctrl">
           <button class="btn active" id="btnAccent" onclick="toggleAccent()" title="点击切换英式/美式" aria-label="切换英式美式发音">🇬🇧 英式</button>
@@ -3224,12 +3224,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     function updateZhBtn() {
     const hidden = document.body.classList.contains('hide-zh');
     const btn = document.getElementById('btnZh');
-    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示翻译' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏翻译'; btn.classList.toggle('active', !hidden); }
+    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示全句译文' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏全句译文'; btn.classList.toggle('active', !hidden); }
     }
     function updateGlossBtn() {
     const hidden = document.body.classList.contains('hide-gl');
     const btn = document.getElementById('btnGloss');
-    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示词义' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏词义'; btn.classList.toggle('active', !hidden); }
+    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示行内词义' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏行内词义'; btn.classList.toggle('active', !hidden); }
     }
     document.getElementById('btnZh').onclick = function() {
     document.body.classList.toggle('hide-zh');
@@ -3259,7 +3259,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     updateDarkUI(isDark);
     }
     // 初始化夜间模式
-    try { updateDarkUI(localStorage.getItem('ielts-dark') === '1'); } catch (e) { updateDarkUI(false); }
+    try { const _dk = localStorage.getItem('ielts-dark'); updateDarkUI(_dk === null ? matchMedia('(prefers-color-scheme: dark)').matches : _dk === '1'); } catch (e) { updateDarkUI(false); }
 
     /* ============ 词库面板（桌面：侧栏显隐；移动：底部抽屉 + 遮罩） ============ */
     function togglePanel() {
@@ -3368,8 +3368,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     // 句子/单词聚焦时由它们自己的 keydown 处理（朗读/查词），不要同时触发全局播放
     if (e.code === 'Space' && e.target.closest && e.target.closest('.sent, .w')) return;
     if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
-    if (e.key === 'ArrowRight') step(1);
-    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
     if (e.key === 'Escape') closeAllOverlays();
     });
 

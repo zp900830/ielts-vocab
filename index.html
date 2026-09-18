@@ -2309,7 +2309,7 @@ function toggleDark(){
   try{ localStorage.setItem("ielts-dark", isDark?"1":"0"); }catch(e){}
   updateDarkUI(isDark);
 }
-try{ updateDarkUI(localStorage.getItem("ielts-dark")==="1"); }catch(e){ updateDarkUI(false); }
+try{ const _dk=localStorage.getItem("ielts-dark"); updateDarkUI(_dk===null? matchMedia("(prefers-color-scheme: dark)").matches : _dk==="1"); }catch(e){ updateDarkUI(false); }
 
 function setAccent(acc){
   S.accent=acc; save();
