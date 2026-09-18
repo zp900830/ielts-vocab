@@ -337,7 +337,8 @@ body.reading main{padding-top:64px;}
 .story-en{padding-left:26px;}
 .story-en p{font-family:var(--iel-font-serif); font-size:18.5px; line-height:2.05; margin-bottom:22px; text-align:justify;}
 .tw{color:var(--iel-tw); font-weight:600; border-bottom:2px solid rgba(13,157,116,.35); cursor:pointer; border-radius:2px; padding:0 1px;}
-.tw:hover{background:rgba(13,157,116,.1);}
+.tw:hover,.ow:hover{background:rgba(13,157,116,.1);}
+.tw:focus-visible,.ow:focus-visible{outline:2px solid var(--iel-accent);outline-offset:2px;background:rgba(13,157,116,.12);}
 .tw.flash,.ow.flash{animation:flash 1.6s ease-out 2;}
 @keyframes flash{0%,60%{background:#ffe9a8; box-shadow:0 0 0 3px #ffe9a8;}100%{background:transparent;}}
 .ow{cursor:pointer; border-radius:2px;}
@@ -1941,7 +1942,7 @@ function renderInner(t){
       const nxt=parts[i+1]||"";
       const suf=nxt.match(/^[a-z]+/);
       if(suf){ surface+=suf[0]; parts[i+1]=nxt.slice(suf[0].length); }
-      html+=`<span class="tw" data-l="${esc(m[1].toLowerCase())}">${esc(surface)}</span>`;
+      html+=`<span class="tw" tabindex="0" role="button" data-l="${esc(m[1].toLowerCase())}">${esc(surface)}</span>`;
     } else html+=wrapPlain(part);
   }
   return html;
@@ -1950,7 +1951,7 @@ function wrapPlain(t){
   let out=""; const re=/[A-Za-zÀ-ÖØ-öø-ÿ][A-Za-zÀ-ÖØ-öø-ÿ'’-]*/g; let last=0, m;
   while((m=re.exec(t))){
     out+=esc(t.slice(last,m.index));
-    out+=`<span class="ow" data-w="${esc(m[0].toLowerCase())}">${esc(m[0])}</span>`;
+    out+=`<span class="ow" tabindex="0" role="button" data-w="${esc(m[0].toLowerCase())}">${esc(m[0])}</span>`;
     last=m.index+m[0].length;
   }
   out+=esc(t.slice(last));
@@ -2036,6 +2037,15 @@ function setTrMode(on){
     toast("已隐藏句尾「译」按钮");
   }
 }
+
+/* 键盘查词：.tw/.ow 现在可聚焦，Enter / 空格走同一条委托逻辑打开词卡 */
+app.addEventListener("keydown",e=>{
+  if(e.key!=="Enter"&&e.code!=="Space") return;
+  const el=e.target.closest&&e.target.closest(".tw,.ow");
+  if(!el) return;
+  e.preventDefault();
+  el.click();
+});
 
 /* 词点击（事件委托）：词弹窗 / 朗读此句 / “译”按钮切换译文 */
 app.addEventListener("click",e=>{

@@ -4473,12 +4473,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (plan) {
           buildQueue();
           updateBtn();
-          // 断更处理：如果超过 2 天没学，自动平摊
+          // 断更提示：新句窗口已改为按进度游标推进（见 buildQueue），欠下的句子
+          // 不会因日历前移而被跳过，所以这里只如实说明现状，不再声称"已调整计划"。
           const lastDay = prog.lastDay;
           if (lastDay) {
             const gap = Math.round((startOfToday() - new Date(lastDay + 'T00:00:00').getTime()) / 864e5);
             if (gap > 2) {
-              showAbToast(`欢迎回来！已自动调整计划（${gap} 天未练）`);
+              showAbToast(`欢迎回来！${gap} 天没练，欠下的句子仍在队列里，按原进度继续`);
             }
           }
         }
