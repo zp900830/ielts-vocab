@@ -1088,6 +1088,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 任务模式时 audiobar 上移避让 */
   body.task-mode .audiobar { bottom: calc(var(--task-bar-h, 62px) + 8px + env(safe-area-inset-bottom, 0px)); }
   body.task-mode .back-to-play { bottom: calc(var(--task-bar-h, 62px) + 98px + env(safe-area-inset-bottom, 0px)); }
+  /* 任务模式下隐藏播放条的上一句/下一句按钮（任务栏已有对应控制） */
+  body.task-mode .audiobar .ab-step { display: none; }
   /* 计划设置弹窗 */
   .plan-setup { text-align: center; }
   .plan-setup h3 { font-size: 17px; margin-bottom: 6px; }
@@ -4090,15 +4092,20 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           titleEl.innerHTML = `${typeIcon} · ${done}/${total}`;
           const cyc = prog.cycleCount || 0;
           const cycSeen = Object.keys(prog.cycleSeen || {}).length;
-          subEl.textContent = `剩余 ~${fmtTime(est.sec)} · 本次 ${sessionReps} 遍 · 第 ${cyc + 1} 轮 ${cycSeen}/${SENT_RAW.length}`;
+          // 简化显示：剩余时间 + 当前轮次进度 + 已读/未读
+          const readCount = todayQueue.filter(item => {
+            const s = sentState(item.i);
+            return s.reps >= PHASE_THRESHOLDS.learning && s.lastRead >= startOfToday();
+          }).length;
+          subEl.textContent = `剩余 ~${fmtTime(est.sec)} · 第 ${prog.cycleCount || 0} 轮 · 已读 ${readCount}/${total}`;
           document.getElementById('tbAgain').style.display = '';
           document.getElementById('tbNext').innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句';
           document.getElementById('tbNext').onclick = next;
         }
-        // 播放条标题也更新
+        // 播放条标题：只显示核心进度
         const abT = document.getElementById('abTitle');
         if (abT && taskMode) {
-          abT.textContent = `今日 ${done}/${total} · 剩余~${fmtTime(est.sec)}`;
+          abT.textContent = `今日 ${done}/${total} · 剩余 ~${fmtTime(est.sec)}`;
         }
       }
 
