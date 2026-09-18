@@ -1459,10 +1459,10 @@ const LEVEL_COLORS=["#d9534f","#e08b3a","#4a90d9","#3fa66a"];
 function mastery(w){
   const st=S.stats[w]; if(!st) return null;
   const a=st.c+st.w;
-  if(!a){ if(st.l>0) return {score:Math.max(0,35-st.l*7), tested:false}; return null; }
+  if(!a){ if(st.l>0) return {score:35, tested:false}; return null; }
   const acc=st.c/a;
   const conf=Math.min(25,(a-1)*12);           // 多次测验提升置信度
-  let score=acc*60+conf+Math.max(0,15-st.l*3); // 点查越多越减分
+  let score=acc*60+conf;                      // 查词次数不参与计分：查释义是核心动作，不该是惩罚项
   return {score:Math.round(Math.max(0,Math.min(100,score))), tested:true, acc};
 }
 function levelIdx(score){ return score>=85?3:score>=65?2:score>=40?1:0; }
@@ -3614,12 +3614,16 @@ function submitQuiz(){
   if(QUIZ.submitted) return;
   const s=CUR_STORY; QUIZ.submitted=true;
   let right=0;
+  // 只有首答写入掌握度：重做时 st.w 继续累加会把一次答错永久拖在分母里，
+  // 逼出「不敢重做」或「乱选刷对」两种非学习行为。重做仍显示对错，只是不再计分。
+  const prev=S.quiz[s.id];
+  const firstTry=!prev||!prev.attempts;
   document.querySelectorAll("#qList input").forEach(r=>r.disabled=true);
   QUIZ.qs.forEach((q,i)=>{
     const ok=QUIZ.answers[i]===q.ans;
     if(ok) right++;
     const st=statOf(q.w.toLowerCase());
-    if(ok){ st.c++; st.lr=Date.now(); } else { st.w++; st.lw=Date.now(); }
+    if(firstTry){ if(ok){ st.c++; st.lr=Date.now(); } else { st.w++; st.lw=Date.now(); } }
     const item=document.getElementById(`qi${i}`);
     item.classList.add(ok?"ok":"bad");
     document.getElementById(`qo${i}_${q.ans}`).classList.add("right");
