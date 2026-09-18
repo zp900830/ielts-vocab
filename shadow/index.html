@@ -710,11 +710,27 @@
   .audiobar.force-mini .ab-expand:active,
   body.scrolled .audiobar.expanded .ab-collapse:active,
   body:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse:active { opacity: 1; transform: translateX(-50%) scale(.94); }
-  /* 展开「回弹」：mini→完整条时，条身从 .97 缩放到 1 再微回弹，抵消 max-width 布局 morph 的生硬感 */
-  @keyframes abExpandPop { 0% { transform: translateX(-50%) scale(.97); } 55% { transform: translateX(-50%) scale(1.006); } 100% { transform: translateX(-50%) scale(1); } }
+  /* 展开「回弹」：mini→完整条时，条身从 .95 缩放到 1 再微回弹，抵消 max-width 布局 morph 的生硬感 */
+  @keyframes abExpandPop { 
+    0% { transform: translateX(-50%) scale(.95); } 
+    50% { transform: translateX(-50%) scale(1.015); } 
+    70% { transform: translateX(-50%) scale(.995); } 
+    100% { transform: translateX(-50%) scale(1); } 
+  }
+  /* 内容从中心缩放展开的关键帧 */
+  @keyframes abContentPop {
+    0% { transform: scale(.8); opacity: 0; }
+    60% { transform: scale(1.02); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  /* 收起时内容从中心收缩的关键帧 */
+  @keyframes abContentCollapse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(.85); opacity: 0; }
+  }
   /* 展开状态：覆盖 mini 态样式（与 mini 同一定位＋定宽，像素与原来 left/right:24 完全一致，只 morph max-width）；
      必须显式 column：否则继承 mini 的 row，两个 width:100% 子项会横向溢出把按钮挤出屏幕 */
-  body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius: 22px;
+body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius: 22px;
     width: calc(100vw - 48px); max-width: calc(100vw - 48px); margin: 0;
     left: 50%; right: auto; transform: translateX(-50%);
     flex-direction: column; align-items: stretch;
@@ -723,17 +739,20 @@
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     will-change: max-width, padding, gap, border-radius, transform;
     animation: abExpandPop .34s var(--ease-bar); }
-  body.scrolled .audiobar.expanded .ab-right { position: static; max-width: calc(100vw - 80px); max-height: 60px; opacity: 1; pointer-events: auto; overflow: visible; } /* 80=bar左右偏移24×2+内边距16×2，随视口等宽撑满（原1400px定宽在宽屏右侧留白） */
-  body.scrolled .audiobar.expanded .ab-left { gap: 6px; flex: none; flex-wrap: wrap; justify-content: center; } /* 展开态按钮回多行收纳（否则继承 mini 的 nowrap 整行溢出）；flex:none 复位 mini 的 flex:1，否则左右各半、进度条被挤短 */
+  body.scrolled .audiobar.expanded .ab-right { position: static; max-width: calc(100vw - 80px); max-height: 60px; opacity: 1; pointer-events: auto; overflow: visible;
+    animation: abContentPop .3s var(--ease-bar) .1s both; } /* 80=bar左右偏移24×2+内边距16×2，随视口等宽撑满（原1400px定宽在宽屏右侧留白） */
+  body.scrolled .audiobar.expanded .ab-left { gap: 6px; flex: none; flex-wrap: wrap; justify-content: center;
+    animation: abContentPop .3s var(--ease-bar) .12s both; } /* 展开态按钮回多行收纳（否则继承 mini 的 nowrap 整行溢出）；flex:none 复位 mini 的 flex:1，否则左右各半、进度条被挤短 */
   body.scrolled .audiobar.expanded .ab-left > .btn:not(.ab-step):not(.play) { max-width: 80px; opacity: 1; pointer-events: auto; padding: 7px 14px; overflow: visible; }
   body.scrolled .audiobar.expanded .loop-wrap,
   body.scrolled .audiobar.expanded .rate-wrap { max-width: 90px; opacity: 1; pointer-events: auto; overflow: visible; }
-  body.scrolled .audiobar.expanded .ab-title { max-width: 200px; min-width: 76px; margin: 0; padding: 4px 10px; opacity: 1; pointer-events: auto; overflow: visible; }
+  body.scrolled .audiobar.expanded .ab-title { max-width: 200px; min-width: 76px; margin: 0; padding: 4px 10px; opacity: 1; pointer-events: auto; overflow: visible;
+    animation: abContentPop .3s var(--ease-bar) .14s both; }
     body.scrolled .audiobar.expanded .ab-left > .btn { font-size: 13px; padding: 7px 14px; min-height: 34px;
       transition: font-size .25s ease-out, padding .25s ease-out, min-height .25s ease-out,
         max-width .25s ease-out, opacity .25s ease-out; }
-    body.scrolled .audiobar.expanded .ab-left > .btn.play { font-size: 15px; padding: 7px 22px; }
-    body.scrolled .audiobar.expanded .ab-left > .btn i { font-size: 16px; line-height: 1; }
+  body.scrolled .audiobar.expanded .ab-left > .btn.play { font-size: 15px; padding: 7px 22px; }
+  body.scrolled .audiobar.expanded .ab-left > .btn i { font-size: 16px; line-height: 1; }
   body.scrolled .audiobar.expanded .ab-expand { display: none; }
   /* 强制 mini：不受滚动位置影响的手动收起态（与 body.scrolled mini 同一样式） */
   .audiobar.force-mini { padding: 4px 10px; gap: 4px; border-radius: 999px;
@@ -914,13 +933,20 @@
     body.scrolled .audiobar .ab-left > .btn.play { font-size: 0; padding: 4px 6px; }
     body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; position: absolute;
       transition: opacity .18s ease, max-width .25s ease-out, max-height .25s ease-out, width .25s ease-out; }
-    /* 收起（expanded→mini）与展开对称：容器无延迟同步 morph，内容跟着淡出，不许瞬间消失 */
+    /* 收起（expanded→mini）与展开对称：容器无延迟同步 morph，内容从中心收缩消失 */
     body.scrolled .audiobar:not(.expanded) { transition: padding .25s var(--ease-bar), gap .25s var(--ease-bar),
       border-radius .25s var(--ease-bar), max-width .25s var(--ease-bar); }
-    body.scrolled .audiobar:not(.expanded) .ab-right { transition: opacity .18s ease,
-      max-width .25s var(--ease-bar), max-height .25s var(--ease-bar), width .25s var(--ease-bar); }
-    body.scrolled .audiobar:not(.expanded) .ab-left > .btn { transition: font-size .18s ease, padding .25s var(--ease-bar),
-      min-height .25s var(--ease-bar), max-width .25s var(--ease-bar), opacity .18s ease; }
+    body.scrolled .audiobar:not(.expanded) .ab-right { 
+      animation: abContentCollapse .2s var(--ease-bar) forwards; 
+      opacity: 0; max-width: 0; max-height: 0; width: 0; pointer-events: none; }
+    body.scrolled .audiobar:not(.expanded) .ab-left > .btn { 
+      animation: abContentCollapse .2s var(--ease-bar) forwards;
+      opacity: 0; font-size: 0; max-width: 0; min-height: 28px; }
+    body.scrolled .audiobar:not(.expanded) .ab-title,
+    body.scrolled .audiobar:not(.expanded) .loop-wrap,
+    body.scrolled .audiobar:not(.expanded) .rate-wrap { 
+      animation: abContentCollapse .2s var(--ease-bar) forwards;
+      opacity: 0; max-width: 0; }
     body.scrolled .audiobar .ab-left { order: 0; flex-wrap: nowrap; gap: 0; flex: 1; justify-content: center; }
     body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px;
       transition: font-size .18s ease, padding .25s ease-out, min-height .25s ease-out,
@@ -936,21 +962,18 @@
     body.scrolled .audiobar #btnAB { min-width: 0; }
     body.scrolled .audiobar #btnAB .ab-label { display: none; }
     body.scrolled .audiobar #rateCycle { font-size: 10px; }
-    /* 移动端展开态：回到纵向（进度上、按钮下），否则继承 mini 的横向行＋flex:none 整行溢出；
+/* 移动端展开态：回到纵向（进度上、按钮下），否则继承 mini 的横向行＋flex:none 整行溢出；
        与 mini 同一定位（left:50%＋translateX(-50%)，宽按 100vw-24 定死＝原来 left/right:12 的像素），只 morph 宽度——中心点不动，消掉 37px 级别的水平抖动；
-       展开动画：容器无延迟 .22s 起手（覆盖 base 的 .05s 延迟），内容 .06s 后淡入追着出现；blur 与 mini 一致，省掉移动 GPU 昂贵的 blur morph */
+       展开动画：容器无延迟 .22s 起手（覆盖 base 的 .05s 延迟），内容 .06s 后从中心缩放淡入；blur 与 mini 一致，省掉移动 GPU 昂贵的 blur morph */
     body.scrolled .audiobar.expanded { flex-direction: column; left: 50%; right: auto; transform: translateX(-50%);
       width: calc(100vw - 24px); max-width: calc(100vw - 24px);
       backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
       will-change: max-width, padding, gap, border-radius, transform;
-      transition: padding .25s var(--ease-bar), gap .25s var(--ease-bar),
-        border-radius .25s var(--ease-bar), max-width .25s var(--ease-bar),
-        backdrop-filter .25s ease, -webkit-backdrop-filter .25s ease;
       animation: abExpandPop .34s var(--ease-bar); }
-    body.scrolled .audiobar.expanded .ab-right { order: 1; width: 100%;
-      transition: max-width .22s var(--ease-bar), max-height .22s var(--ease-bar), opacity .16s ease-out .06s; }
-    body.scrolled .audiobar.expanded .ab-left { order: 2; width: 100%; flex: none; transition: gap .22s var(--ease-bar); }
-    body.scrolled .audiobar.expanded .ab-left > .btn { font-size: 13px; padding: 7px 14px; min-height: 34px;
+  body.scrolled .audiobar.expanded .ab-right { order: 1; width: 100%;
+    animation: abContentPop .3s var(--ease-bar) .08s both; }
+  body.scrolled .audiobar.expanded .ab-left { order: 2; width: 100%; flex: none; transition: gap .22s var(--ease-bar); }
+  body.scrolled .audiobar.expanded .ab-left > .btn { font-size: 13px; padding: 7px 14px; min-height: 34px;
       transition: font-size .16s ease-out .06s, padding .16s ease-out .06s,
         min-height .16s ease-out .06s, opacity .14s ease-out .06s; }
     /* 移动端强制 mini：与自然 mini 同一样式，展示全部控制按钮 */
