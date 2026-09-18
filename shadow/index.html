@@ -1725,13 +1725,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (el) el.textContent = t;
     const b = document.getElementById('btnCloud');
     if (b) {
-    let label;
-    if (!this.configured()) label = '未配置';
-    else if (this._userMail) label = this._userMail.split('@')[0];
-    else if (this._on) label = '已连接';
-    else label = '未登录';
+    let label, title;
+    if (!this.configured()) { label = '未配置'; title = '云端语音未配置：管理员尚未在部署后台设置 Supabase。'; }
+    else if (this._userMail) { label = this._userMail.split('@')[0]; title = this._userMail + ' 已登录，点击可退出'; }
+    else if (this._on) { label = '已连接'; title = '云端语音已连接，下拉可选用 ☁ 云端音色。'; }
+    else { label = '未登录'; title = '登录后可用 Azure 云端自然语音'; }
     b.innerHTML = '<i class="ri-cloud-line" aria-hidden="true"></i> ';
     b.appendChild(document.createTextNode(label));
+    b.title = title;
     }
     const logged = !!this._userMail;
     const lf = document.getElementById('cloudLoginForm');
