@@ -170,6 +170,7 @@
     transition: background var(--t-fast), border-color var(--t-fast), filter var(--t-fast);
     min-height: 34px; white-space: nowrap; }
   .btn:hover { background: var(--accent-soft); border-color: var(--accent-bright); }
+  a.btn { text-decoration: none; }
   .btn.active { background: var(--accent-soft); border-color: var(--accent-bright);
     color: var(--accent); font-weight: 600; }
   .btn.play { border: none; background: var(--grad); color: #fff; font-weight: 600;
@@ -1061,14 +1062,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-week-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
   .tp-week-fill { width: 100%; background: linear-gradient(180deg, var(--task-new), #0fae7e); border-radius: 3px 3px 0 0; min-height: 2px; transition: height .3s; }
   .tp-week-label { font-size: 9px; color: var(--muted); margin-top: 3px; }
-  /* 开关样式 */
-  .tp-switch { position: relative; display: inline-flex; align-items: center; }
-  .tp-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .tp-slider-thumb { position: relative; width: 40px; height: 22px; background: var(--border); border-radius: 11px; transition: background .2s, box-shadow .2s; box-shadow: inset 0 0 0 1px rgba(0,0,0,.05); }
-  .tp-slider-thumb::before { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,.15); transition: transform .2s cubic-bezier(.34,1.56,.64,1); }
-  .tp-switch input:checked + .tp-slider-thumb { background: var(--task-new); box-shadow: 0 0 0 2px var(--task-new); }
-  .tp-switch input:checked + .tp-slider-thumb::before { transform: translateX(18px); }
-  .tp-switch input:focus-visible + .tp-slider-thumb { outline: 2px solid var(--task-new); outline-offset: 2px; }
   /* 任务模式底部操作栏 */
   .task-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; padding: 7px 16px calc(7px + env(safe-area-inset-bottom, 0px));
     display: none; align-items: center; gap: 10px;
@@ -1156,11 +1149,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
           <option value="-1">📚 全部文章</option>
         </select>
       </div>
+      <a class="btn app-link" href="../index.html" title="去情境阅读训练（读故事、做测验、背词复习）" aria-label="切换到情境阅读训练"><i class="ri-book-open-line" aria-hidden="true"></i><span class="only-mobile"> 阅读训练</span></a>
       <button class="btn" id="btnToday" onclick="TASK.togglePanel()" title="今日学习任务" aria-label="今日学习任务"><i class="ri-calendar-check-line" aria-hidden="true"></i><span class="only-mobile"> 今日</span><span class="today-dot"></span></button>
       <nav class="topbar-right" aria-label="工具栏">
         <div class="ctrl">
-          <button class="btn active" id="btnZh" title="显示/隐藏中文翻译" aria-label="显示或隐藏中文翻译"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏翻译</button>
-          <button class="btn active" id="btnGloss" title="显示/隐藏行内单词词义" aria-label="显示或隐藏行内单词词义"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏词义</button>
+          <button class="btn active" id="btnZh" title="显示/隐藏每句下方的中文全句翻译" aria-label="显示或隐藏中文全句翻译"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏全句译文</button>
+          <button class="btn active" id="btnGloss" title="显示/隐藏英文句内行间的单词词义与音标" aria-label="显示或隐藏行内单词词义"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏行内词义</button>
         </div>
         <div class="ctrl voice-ctrl">
           <button class="btn active" id="btnAccent" onclick="toggleAccent()" title="点击切换英式/美式" aria-label="切换英式美式发音">🇬🇧 英式</button>
@@ -3144,7 +3138,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     ['#pop','#jumpPop'].forEach(s => {
       const o = document.querySelector(s); if (o && o !== el && o.style.display === 'block') closeModal(o);
     });
-    ['#abWrap','.mark-wrap.open','.cloud-wrap.open','#rateWrap.open','#loopWrap.open'].forEach(s => {
+    ['#abWrap','#markWrap','#cloudWrap.open','#rateWrap.open','#loopWrap.open'].forEach(s => {
       const o = document.querySelector(s); if (o && o !== el) o.classList.remove('open');
     });
     _modalReturnFocus = document.activeElement;
@@ -3160,6 +3154,17 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (_modalTrapCleanup) { _modalTrapCleanup(); _modalTrapCleanup = null; }
     if (_modalReturnFocus && _modalReturnFocus.focus) { try { _modalReturnFocus.focus(); } catch (e) {} }
     _modalReturnFocus = null;
+    }
+    /* 浮层总关闭入口：新增浮层只改这一处，不要再往 Escape 分支里手写清单。
+       今日面板用 .open 类 + #todayScrim 内联样式，不走 openModal，必须在这里一并收。 */
+    const OVERLAY_WRAP_IDS = ['cloudWrap', 'markWrap', 'abWrap', 'loopWrap', 'rateWrap'];
+    function closeAllOverlays() {
+    closeModal(document.getElementById('pop'));
+    closeModal(document.getElementById('jumpPop'));
+    OVERLAY_WRAP_IDS.forEach(id => document.getElementById(id)?.classList.remove('open'));
+    const tp = document.getElementById('todayPanel');
+    if (tp && tp.classList.contains('open')) TASK.closePanel();
+    document.body.classList.remove('menu-open');
     }
     document.addEventListener('click', e => {
     const t = _inPath(e, '.w') ? e.target.closest('.w') : null;
@@ -3219,12 +3224,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     function updateZhBtn() {
     const hidden = document.body.classList.contains('hide-zh');
     const btn = document.getElementById('btnZh');
-    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示翻译' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏翻译'; btn.classList.toggle('active', !hidden); }
+    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示全句译文' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏全句译文'; btn.classList.toggle('active', !hidden); }
     }
     function updateGlossBtn() {
     const hidden = document.body.classList.contains('hide-gl');
     const btn = document.getElementById('btnGloss');
-    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示词义' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏词义'; btn.classList.toggle('active', !hidden); }
+    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示行内词义' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏行内词义'; btn.classList.toggle('active', !hidden); }
     }
     document.getElementById('btnZh').onclick = function() {
     document.body.classList.toggle('hide-zh');
@@ -3254,7 +3259,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     updateDarkUI(isDark);
     }
     // 初始化夜间模式
-    try { updateDarkUI(localStorage.getItem('ielts-dark') === '1'); } catch (e) { updateDarkUI(false); }
+    try { const _dk = localStorage.getItem('ielts-dark'); updateDarkUI(_dk === null ? matchMedia('(prefers-color-scheme: dark)').matches : _dk === '1'); } catch (e) { updateDarkUI(false); }
 
     /* ============ 词库面板（桌面：侧栏显隐；移动：底部抽屉 + 遮罩） ============ */
     function togglePanel() {
@@ -3356,16 +3361,16 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     else if (e.key === 'Escape') e.target.blur();
     }
     // 输入框内按 Esc 也要能关弹窗（跳转弹窗打开时焦点在句号输入框里，否则 Esc 永远关不掉）
-    if (e.key === 'Escape') { e.target.blur(); closeModal(pop); document.getElementById('cloudWrap')?.classList.remove('open'); const jp = document.getElementById('jumpPop'); if (jp) closeModal(jp); document.getElementById('markWrap')?.classList.remove('open'); document.getElementById('abWrap')?.classList.remove('open'); document.body.classList.remove('menu-open'); }
+    if (e.key === 'Escape') { e.target.blur(); closeAllOverlays(); }
     return;
     }
     if (e.code === 'Space' && e.target.tagName === 'BUTTON') return; // 按钮聚焦时走原生空格点击，避免双重触发
     // 句子/单词聚焦时由它们自己的 keydown 处理（朗读/查词），不要同时触发全局播放
     if (e.code === 'Space' && e.target.closest && e.target.closest('.sent, .w')) return;
     if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
-    if (e.key === 'ArrowRight') step(1);
-    if (e.key === 'ArrowLeft') step(-1);
-    if (e.key === 'Escape') { closeModal(pop); document.getElementById('cloudWrap')?.classList.remove('open'); const jp = document.getElementById('jumpPop'); if (jp) closeModal(jp); document.getElementById('markWrap')?.classList.remove('open'); document.getElementById('abWrap')?.classList.remove('open'); document.getElementById('loopWrap')?.classList.remove('open'); document.getElementById('rateWrap')?.classList.remove('open'); document.body.classList.remove('menu-open'); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+    if (e.key === 'Escape') closeAllOverlays();
     });
 
     /* ============ 进度存档 + 手动书签 ============ */
@@ -3678,7 +3683,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       const LS_PLAN = 'ielts-task-plan';
       const LS_PROG = 'ielts-task-progress';
 
-      let plan = null;       // { startDate, totalDays, dailyMinutes, order, newPerDay, paused }
+      let plan = null;       // { startDate, totalDays, dailyMinutes, newPerDay, paused }
       let prog = null;       // { sentences: {idx: {reps, phase, nextDue, lastRead}}, daily: {}, streak }
       let todayQueue = [];   // 今日任务句索引数组（按章分组排序）
       let taskMode = false;  // 是否处于任务模式
@@ -3712,9 +3717,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function dayIndex() { if (!plan) return 0; const s = new Date(plan.startDate + 'T00:00:00'); const n = new Date(today() + 'T00:00:00'); return Math.max(0, Math.round((n - s) / 864e5)); }
 
       // ---- 计划生成 ----
-      function createPlan(totalDays, dailyMinutes, order) {
+      function createPlan(totalDays, dailyMinutes) {
         const newPerDay = newPerDayOf(totalDays);
-        plan = { startDate: today(), totalDays, dailyMinutes, order: order || 'seq', newPerDay, paused: false, onlyUnread: false };
+        plan = { startDate: today(), totalDays, dailyMinutes, newPerDay, paused: false };
         savePlan();
         prog = { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {}, pace: (prog && prog.pace) || {} };
         saveProg();
@@ -3809,13 +3814,17 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (!plan || !prog) { todayQueue = []; return; }
         const now = Date.now();
         const totalSents = SENT_RAW.length;
-        const di = dayIndex();
         const newSentences = [];
         const reviewSentences = [];
 
-        // 确定今天该学哪些新句
+        // 新句窗口按「已开过的句子数」推进，不按日历天数。
+        // 原来 startNew = dayIndex() * newPerDay：断更 N 天后窗口直接前移 N 格，
+        // 那 N 天的句子既不再进新句窗口、也因 reps=0 不会转成复习，被永久跳过。
+        // 现在游标停在原地，欠的句子留在今天的队列里 —— 顺延，不吞内容。
         if (!plan.paused) {
-          const startNew = di * plan.newPerDay;
+          let started = 0;
+          for (let i = 0; i < totalSents; i++) if (sentState(i).reps > 0) started++;
+          const startNew = Math.min(started, totalSents);
           const endNew = Math.min(startNew + plan.newPerDay, totalSents);
           for (let i = startNew; i < endNew; i++) {
             const st = sentState(i);
@@ -4097,7 +4106,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             const s = sentState(item.i);
             return s.reps >= PHASE_THRESHOLDS.learning && s.lastRead >= startOfToday();
           }).length;
-          subEl.textContent = `剩余 ~${fmtTime(est.sec)} · 第 ${prog.cycleCount || 0} 轮 · 已读 ${readCount}/${total}`;
+          subEl.textContent = `剩余 ~${fmtTime(est.sec)} · 已完成 ${prog.cycleCount || 0} 轮 · 已读 ${readCount}/${total}`;
           document.getElementById('tbAgain').style.display = '';
           document.getElementById('tbNext').innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句';
           document.getElementById('tbNext').onclick = next;
@@ -4168,7 +4177,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
 
       function renderSetup(p) {
-        let selDays = 30, selMin = 60, selOrder = 'seq';
+        let selDays = 30, selMin = 60;
         const MINS = [30, 45, 60, 90];
         p.innerHTML = `<div class="plan-setup">
           <h3>制定学习计划</h3>
@@ -4179,9 +4188,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           </div></div>
           <div class="ps-group"><label>每日时间</label><div class="ps-opts" id="psMin">
             ${MINS.map(m => `<button class="ps-opt${m === selMin ? ' sel' : ''}" data-v="${m}">${m}分钟</button>`).join('')}
-          </div></div>
-          <div class="ps-group"><label>顺序</label><div class="ps-opts" id="psOrder">
-            <button class="ps-opt sel" data-v="seq">按篇章顺序</button><button class="ps-opt" data-v="rand">随机</button>
           </div></div>
           <div class="ps-sum" id="psSum"></div>
           <button class="ps-start" id="psStart">开始计划</button>
@@ -4204,13 +4210,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             btn.classList.add('sel');
             const v = btn.dataset.v;
             if (group.id === 'psMin') selMin = parseInt(v);
-            else selOrder = v;
             refresh();
           });
         });
         document.getElementById('psStart').onclick = () => {
           const cap = planCapacity(selDays, selMin);
-          createPlan(selDays, selMin, selOrder);
+          createPlan(selDays, selMin);
           showAbToast(`计划已创建：${selDays} 天 · 每天 ~${cap.perDay} 句新句 · 预计 ${fmtCycles(cap.cycles)}`);
           renderToday(p);
         };
@@ -4244,15 +4249,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           html += `<div class="tp-day">第 ${di + 1} 天 / 共 ${plan.totalDays} 天 · 预计 ${fmtCycles(cap.cycles)} · 连续 ${prog.streak} 天 <i class="ri-fire-fill" style="color:var(--coral)" aria-hidden="true"></i></div>`;
           html += `<div class="tp-prog"><div class="tp-prog-fill" style="width:${pct}%"></div></div>`;
           
-          // 循环次数 + 已读/未读统计 + 仅未读开关
-          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-repeat-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">当前循环</div><div class="tp-sub">${fmtCycles(cap.cycles)}</div></div><div class="tp-time"><span class="tp-badge task-new">第 ${cap.cycles} 轮</span></div></div>`;
+          // 循环次数 + 已读/未读统计
+          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-repeat-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">当前循环</div><div class="tp-sub">计划 ${fmtCycles(cap.cycles)}</div></div><div class="tp-time"><span class="tp-badge task-new">已完成 ${prog.cycleCount || 0} 轮</span></div></div>`;
           html += `<div class="tp-row"><div class="tp-icon"><i class="ri-checkbox-circle-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">已读 / 未读</div><div class="tp-sub">${readCount} / ${unreadCount} 句</div></div><div class="tp-time"></div></div>`;
-          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-filter-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">仅未读句子</div><div class="tp-sub">
-            <label class="tp-switch"><input type="checkbox" id="onlyUnread"${prog.onlyUnread ? ' checked' : ''} onchange="TASK.toggleOnlyUnread(this.checked)"><span class="tp-slider-thumb"></span></label>
-          </div></div><div class="tp-time"></div></div>`;
           
           // 新句/复习时间预估（简化显示）
-          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-time-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">预计剩余</div><div class="tp-sub">约 ${fmtTime(est.sec)} · 已跟读 ${daily.reps} 句次</div></div><div class="tp-time">${fmtTime(est.sec)}</div></div>`;
+          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-time-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">预计剩余</div><div class="tp-sub">新句 ${est.newLeft} · 复习 ${est.reviewLeft} 句 · 已跟读 ${daily.reps} 句次</div></div><div class="tp-time">${fmtTime(est.sec)}</div></div>`;
         }
 
         html += `<div class="tp-actions">`;
@@ -4262,6 +4264,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
 
         // 调整计划
         html += `<div class="ps-adjust"><button class="btn" onclick="TASK.adjustPlan()">调整计划</button><button class="btn" onclick="TASK.pauseNew()">${plan.paused ? '恢复新句' : '暂停新句'}</button></div>`;
+
+        // 本地备份（进度不出本机，清缓存即归零，这是唯一的兜底）
+        html += `<div class="ps-adjust"><button class="btn" onclick="TASK.exportBackup()">导出进度备份</button><button class="btn" onclick="TASK.importBackup()">导入备份恢复</button></div>`;
+        html += `<input type="file" id="importFile" accept="application/json,.json" style="display:none">`;
 
         // 统计
         html += renderStatsSection();
@@ -4388,14 +4394,54 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const p = document.getElementById('todayPanel');
         if (p && _panelOpen) renderToday(p);
       }
-      function toggleOnlyUnread(v) {
-        if (!prog) return;
-        prog.onlyUnread = !!v;
-        saveProg();
-        buildQueue();
-        updateBtn();
-        const p = document.getElementById('todayPanel');
-        if (p && _panelOpen) renderToday(p);
+      /* ---- 本地备份：计划与进度只存在 localStorage，清缓存或换设备即归零 ---- */
+      const BACKUP_PREFIX = 'ielts-';
+      function collectBackup() {
+        const data = {};
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith(BACKUP_PREFIX)) data[k] = localStorage.getItem(k);
+        }
+        return data;
+      }
+      function exportBackup() {
+        const data = collectBackup();
+        const payload = { app: 'ielts-shadow', backupVer: 1, exportedAt: new Date().toISOString(), data };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        const d = new Date();
+        const stamp = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
+        a.download = `影子跟读备份_${stamp}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+        showAbToast(`已导出 ${Object.keys(data).length} 项本地数据，请妥善保存文件`);
+      }
+      function importBackup() {
+        const f = document.getElementById('importFile');
+        if (!f) return;
+        f.onchange = async () => {
+          const file = f.files && f.files[0];
+          f.value = '';
+          if (!file) return;
+          let o;
+          try { o = JSON.parse(await file.text()); } catch (e) { showAbToast('导入失败：文件不是有效 JSON'); return; }
+          if (!o || o.app !== 'ielts-shadow' || !o.data || typeof o.data !== 'object') {
+            showAbToast('导入失败：这不是影子跟读导出的备份文件'); return;
+          }
+          if (!confirm(`导入将覆盖当前全部跟读数据（计划、进度、书签、播放位）。\n备份导出时间：${o.exportedAt || '未知'}\n确定继续吗？`)) return;
+          const keys = Object.keys(o.data).filter(k => k.startsWith(BACKUP_PREFIX));
+          if (!keys.length) { showAbToast('导入失败：备份里没有可恢复的数据'); return; }
+          try {
+            keys.forEach(k => localStorage.setItem(k, o.data[k]));
+            Object.keys(collectBackup()).forEach(k => { if (!keys.includes(k)) localStorage.removeItem(k); });
+          } catch (e) { showAbToast('导入失败：本地存储写入被拒绝（可能已满）'); return; }
+          showAbToast('导入成功，正在重新加载');
+          setTimeout(() => location.reload(), 400);
+        };
+        f.click();
       }
       function resetPlan() {
         if (!confirm('重置将清空当前计划与全部跟读进度（连续天数、统计一并清零），回到初始设置。确定继续吗？')) return;
@@ -4442,8 +4488,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       return {
         init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode,
         again, next, adjustPlan, pauseNew, resetPlan, onSentenceComplete,
+        exportBackup, importBackup,
         get active() { return taskMode; },
         get hasPlan() { return !!plan; },
+        get queue() { return todayQueue; },
+        get progress() { return prog; },
         recordRep, buildQueue, updateMarkers, updateBtn
       };
     })();

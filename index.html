@@ -213,6 +213,7 @@ body[data-view="me"] #topbar{display:none;}
 .topbar-actions{display:flex; align-items:center; gap:8px; margin-left:auto;}
 /* 顶栏英音/美音切换胶囊 */
 .accent-btn{flex:none; border:1px solid var(--iel-accent-line); background:#fff; color:var(--iel-accent-deep); border-radius:999px; padding:6px 13px; font-size:12.5px; font-weight:600; white-space:nowrap; cursor:pointer; position:relative; transition:background var(--iel-t-fast), border-color var(--iel-t-fast);}
+a.accent-btn{text-decoration:none; display:inline-flex; align-items:center;}
 .accent-btn::after{content:""; position:absolute; inset:-5px 0; border-radius:999px;}   /* 纵向 hit-slop：有效触达 40px 不撑大视觉 */
 .accent-btn:hover{background:var(--iel-accent-soft); border-color:var(--iel-accent);}
 .chsel select{max-width:190px; box-shadow:var(--iel-shadow);}
@@ -1011,6 +1012,7 @@ body.reading #lsFab{display:none;}
   <div class="topbar-in">
     <div class="chsel"><label class="sel-label" for="chapterSel">章节</label><select id="chapterSel" aria-label="选择章节"></select></div>
     <div class="topbar-actions">
+      <a class="accent-btn" id="shadowLink" href="shadow/index.html" title="去影子跟读训练（逐句跟读、AB 循环、每日计划）" aria-label="切换到影子跟读训练">🎧 跟读</a>
       <button class="accent-btn" id="accentBtn" title="全局默认发音口音：点击切换 英式/美式（影响单词卡点击、音标显示与朗读）" aria-label="切换英式美式发音">🇬🇧 英音</button>
       <button class="accent-btn" id="darkBtn" onclick="toggleDark()" title="切换深色/浅色模式" aria-label="切换深色模式">🌙</button>
     </div>
@@ -1051,7 +1053,7 @@ window.addEventListener("load",function(){
    DATA loader 从 data/*.json 拉取，Cache API 按内容版本持久缓存——数据未变时
    二次访问零网络请求。 */
 const DATA_INLINE = false;
-const DATA_VER = "5e1868d8c9";
+const DATA_VER = "1d7a73c372";
 const CHAPTERS = ["1 自然地理","2 植物研究","3 动物保护","4 太空探索","5 学校教育","6 科技发明","7 文化历史","8 语言演化","9 娱乐活动","10 物品材料","11 时尚潮流","12 饮食健康","13 建筑场所","14 交通旅行","15 国家政府","16 社会经济","17 法律法规","18 沙场争锋","19 社会角色","20 行为动作","21 身心健康","22 时间日期"];
 let BOOK = [];     // [chNum, word, phonetic, def, example, example_cn, phUK, phUS]
 let SUP = [];       // [word, phonetic, pos, cn, phUK, phUS]
@@ -1219,7 +1221,7 @@ function _resolveWord(w){
    游客数据存 LS_KEY；登录账号后数据存 LS_KEY@邮箱，本机多账号互不干扰。
    配置 Supabase 后支持云端同步：登录拉取云端数据（按修改时间新者胜），保存自动防抖推送。 */
 const LS_KEY="yasiVocabV1";
-function freshS(){ return {stats:{}, fav:{}, quiz:{}, read:{}, listened:{}, listen:null, chapter:1, accent:"GB"}; }
+function freshS(){ return {stats:{}, fav:{}, rv:{}, quiz:{}, read:{}, listened:{}, listen:null, chapter:1, accent:"GB"}; }
 let CUR_USER=null;   // null = 游客；值为账号邮箱（由 Supabase 会话驱动）
 function userKey(){ return CUR_USER? LS_KEY+"@"+CUR_USER : LS_KEY; }
 let S=freshS();
@@ -1459,10 +1461,10 @@ const LEVEL_COLORS=["#d9534f","#e08b3a","#4a90d9","#3fa66a"];
 function mastery(w){
   const st=S.stats[w]; if(!st) return null;
   const a=st.c+st.w;
-  if(!a){ if(st.l>0) return {score:Math.max(0,35-st.l*7), tested:false}; return null; }
+  if(!a){ if(st.l>0) return {score:35, tested:false}; return null; }
   const acc=st.c/a;
   const conf=Math.min(25,(a-1)*12);           // 多次测验提升置信度
-  let score=acc*60+conf+Math.max(0,15-st.l*3); // 点查越多越减分
+  let score=acc*60+conf;                      // 查词次数不参与计分：查释义是核心动作，不该是惩罚项
   return {score:Math.round(Math.max(0,Math.min(100,score))), tested:true, acc};
 }
 function levelIdx(score){ return score>=85?3:score>=65?2:score>=40?1:0; }
@@ -1628,6 +1630,7 @@ function openStory(id, focusWord, occ, resumeY){
   document.body.dataset.view="reader";
   syncNav();
   S.read[id]=Date.now(); save();
+  if(typeof scheduleStoryWords==="function") scheduleStoryWords(s);   // 读过的故事，目标词进复习队列
   audio.stop();
   if(typeof LISTEN!=="undefined") LISTEN.pause();   // 进阅读页自动暂停随身听，避免双声叠加
   const markedWords=[...new Set((s.text.match(/\{\{([^}|]+)(?:\|[^}]+)?\}\}/g)||[]).map(m=>m.replace(/\{\{([^}|]+).*/,"$1").toLowerCase()))];
@@ -2306,7 +2309,7 @@ function toggleDark(){
   try{ localStorage.setItem("ielts-dark", isDark?"1":"0"); }catch(e){}
   updateDarkUI(isDark);
 }
-try{ updateDarkUI(localStorage.getItem("ielts-dark")==="1"); }catch(e){ updateDarkUI(false); }
+try{ const _dk=localStorage.getItem("ielts-dark"); updateDarkUI(_dk===null? matchMedia("(prefers-color-scheme: dark)").matches : _dk==="1"); }catch(e){ updateDarkUI(false); }
 
 function setAccent(acc){
   S.accent=acc; save();
@@ -3614,12 +3617,16 @@ function submitQuiz(){
   if(QUIZ.submitted) return;
   const s=CUR_STORY; QUIZ.submitted=true;
   let right=0;
+  // 只有首答写入掌握度：重做时 st.w 继续累加会把一次答错永久拖在分母里，
+  // 逼出「不敢重做」或「乱选刷对」两种非学习行为。重做仍显示对错，只是不再计分。
+  const prev=S.quiz[s.id];
+  const firstTry=!prev||!prev.attempts;
   document.querySelectorAll("#qList input").forEach(r=>r.disabled=true);
   QUIZ.qs.forEach((q,i)=>{
     const ok=QUIZ.answers[i]===q.ans;
     if(ok) right++;
     const st=statOf(q.w.toLowerCase());
-    if(ok){ st.c++; st.lr=Date.now(); } else { st.w++; st.lw=Date.now(); }
+    if(firstTry){ if(ok){ st.c++; st.lr=Date.now(); } else { st.w++; st.lw=Date.now(); } }
     const item=document.getElementById(`qi${i}`);
     item.classList.add(ok?"ok":"bad");
     document.getElementById(`qo${i}_${q.ans}`).classList.add("right");
@@ -3936,10 +3943,30 @@ function renderMe(){
 
 /* ================= 间隔复习（艾宾浩斯） ================= */
 const RV_INTERVALS=[5,30,720,1440,4320,10080,21600,43200]; /* 分钟：5分/30分/12时/1天/3天/7天/15天/30天 */
+/* ---- 目标词纳入复习队列 ----
+   原先 dueWords() 只遍历 S.fav：不手动点收藏就永远不会被复习，
+   而 3625 个目标词里一半只在一篇故事里出现过一次。现在读过一篇故事，
+   就把它标记的目标词排进 rv 队列（收藏词仍走 fav，互不覆盖）。 */
+const RV_MARK_RE=/\{\{([^}|]+)(?:\|[^}]+)?\}\}/g;
+function storyMarkedWords(s){
+  return [...new Set(((s&&s.text||'').match(RV_MARK_RE)||[]).map(m=>m.replace(/\{\{([^}|]+).*/,'$1').toLowerCase()))];
+}
+const RV_DAILY_CAP=30;   // 单次复习上限：初开时会有几百个词同时到期，不能一次倒出来
+function scheduleStoryWords(s){
+  const now=Date.now(); let added=0;
+  storyMarkedWords(s).forEach(w=>{
+    if(S.fav[w]||S.rv[w]) return;
+    S.rv[w]={due:now, rv:0, src:s.id, t:now}; added++;
+  });
+  if(added) save();
+  return added;
+}
 function favDueTs(f){ return f.due!==undefined? f.due : (f.t||0); }
 function dueWords(){
   const now=Date.now();
-  return Object.entries(S.fav).filter(([w,f])=>favDueTs(f)<=now).sort((a,b)=>favDueTs(a[1])-favDueTs(b[1]));
+  const fav=Object.entries(S.fav).filter(([w,f])=>favDueTs(f)<=now).map(([w,f])=>[w,f]);
+  const rv=Object.entries(S.rv).filter(([w,f])=>favDueTs(f)<=now).map(([w,f])=>[w,f]);
+  return fav.concat(rv).sort((a,b)=>favDueTs(a[1])-favDueTs(b[1]));
 }
 function migrateFav(){
   let m=false;
@@ -3957,14 +3984,16 @@ function updateFavBadge(){
 function startReview(){
   const q=dueWords();
   if(!q.length){ toast("当前没有到期单词"); return; }
-  REVIEW={queue:q.map(x=>x[0]), total:q.length, seen:0, done:0, again:0, revealed:false};
+  const batch=q.slice(0,RV_DAILY_CAP);
+  REVIEW={queue:batch.map(x=>x[0]), total:batch.length, seen:0, done:0, again:0, revealed:false};
+  if(q.length>batch.length) toast(`本轮先复习 ${batch.length} 个，剩余 ${q.length-batch.length} 个稍后再来`);
   renderReview();
 }
 function renderReview(){
   if(REVIEW) REVIEW._grading=false;   // 新卡片渲染完成，重置防重复标记
   const w=REVIEW.queue[0];
   if(w===undefined){ return finishReview(); }
-  const f=S.fav[w]||{};
+  const f=S.fav[w]||S.rv[w]||{};
   const src=storyById(f.src);
   const pct=Math.min(100,Math.round(REVIEW.seen/REVIEW.total*100));
   app.innerHTML=`<h2 class="view-title">间隔复习</h2>
@@ -3999,7 +4028,7 @@ function gradeReview(know){
   if(!REVIEW||!REVIEW.revealed||REVIEW._grading) return;
   REVIEW._grading=true;   // 防重复点击（移动端快速双击会触发两次）
   const w=REVIEW.queue.shift();
-  const f=S.fav[w];
+  const f=S.fav[w]||S.rv[w];
   REVIEW.seen++;
   if(f){
     const now=Date.now();

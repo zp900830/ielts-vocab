@@ -1,0 +1,61 @@
+name: CI
+
+# AGENTS.md 要求「npm test 必须全绿 + validate_data.py 必须 PASSED」，但此前
+# 仓库里根本没有 CI（.github/workflows 不存在），门禁全靠人自觉。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 数据门禁（含 DATA_VER 是否随数据更新）
+        run: python3 scripts/validate_data.py
+
+      - name: 构建期配置注入自检
+        # 缺环境变量时 inject_config.py 会写空文件并 return 0 —— 这里显式验证
+        # 它不会把仓库搞坏，且不带密钥也能构建（真实值由 Netlify 环境变量注入）。
+        run: python3 scripts/inject_config.py --shadow && test -f config.js
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 安装依赖
+        working-directory: playwright-tests
+        run: npm ci
+
+      - name: 安装浏览器
+        working-directory: playwright-tests
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E
+        working-directory: playwright-tests
+        # 本地默认 retries: 0。播放链测试依赖 speechSynthesis 时序、已知会抖
+        # （见 docs/2026-09-18-产品整改清单.md §13），CI 里给 2 次重试；
+        # 仍失败即为真回归。
+        run: npx playwright test --retries=2
+
+      - name: 失败时留证据
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-tests/playwright-report
+          retention-days: 7
+
+# 启用方法：本文件因推送用的 OAuth token 缺少 workflow 权限而无法放在
+# .github/workflows/ 下。启用二选一：
+#   1) 在 GitHub 上给该凭据加 workflow 权限后：
+#      mkdir -p .github/workflows && git mv scripts/ci.yml.example .github/workflows/ci.yml
+#   2) 或在 GitHub 网页 Actions 界面新建 workflow 文件，粘贴本文件内容。
