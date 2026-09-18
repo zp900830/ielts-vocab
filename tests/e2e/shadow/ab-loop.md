@@ -45,7 +45,15 @@ Set A and B to the same sentence (index 5).
 With loop active, click the AB button.
 **Verify:** `abMode === 0`, `abStart === -1`, `abEnd === -1`. Button text is "AB", no `ab-active` or `ab-arm` classes. All `ab-a`/`ab-b`/`ab-in` classes removed from sentences. Toast says "A-B循环已取消".
 
-**Pass condition:** AB state machine transitions correctly through all states (0→1→2→3), reverse selection normalizes, single-sentence loop works, and cancel resets all state.
+### 7. Tapping a sentence outside the range exits and jumps there
+With loop 10–20 active, dispatch a click on sentence 40 itself (`sents[40].click()`, not on a word inside it).
+**Verify:** `abMode === 0` (the loop exited — previously the tap was silently swallowed and the loop kept running), and playback restarted at or after index 40 (`idx >= 40`, `playing === true`).
+
+### 8. The exit chip is visible while looping and cancels on tap
+Re-arm loop 10–20, then check `#abLive`.
+**Verify:** `#abLive` is displayed with text `A-B 循环中：第 11–21 句 · 点击退出`. Tapping it sets `abMode === 0` and hides the chip (`display: none`).
+
+**Pass condition:** AB state machine transitions correctly through all states (0→1→2→3), reverse selection normalizes, single-sentence loop works, cancel resets all state, an out-of-range tap exits instead of doing nothing, and the persistent exit chip tracks the loop state.
 
 ## After Hook
 

@@ -17,7 +17,9 @@ declare const abCancel: (silent?: boolean) => void;
   declare const toggleABWrap: (e?: Event) => void;
   declare const abTap: (i: number) => boolean;
 declare const sents: HTMLElement[];
-declare const idx: number;
+declare let idx: number;
+declare let playing: boolean;
+declare let speakToken: number;
 
 test.describe('A-B loop: arm, select, loop, and cancel', () => {
   test.skip(
@@ -116,6 +118,41 @@ test.describe('A-B loop: arm, select, loop, and cancel', () => {
           return Array.from(sents).some(el => el.classList.contains('ab-a'));
         });
         expect(anyAbA).toBe(false);
+      });
+
+      await test.step('Step 7: Tap outside the range exits and jumps there', async () => {
+        await page.evaluate(() => { toggleAB(); });
+        await page.evaluate(() => abTap(10));
+        await page.evaluate(() => abTap(20));
+        expect(await page.evaluate(() => abMode)).toBe(3);
+
+        // Click the sentence element itself, not a word inside it: a word target
+        // opens the dictionary and never reaches the A-B branch.
+        const r = await page.evaluate(async () => {
+          const wait = (ms: number) => new Promise(res => setTimeout(res, ms));
+          playing = false; speakToken++;
+          await wait(60);
+          sents[40].click();
+          await wait(80);
+          const seen = { abMode, idx, playing };
+          playing = false; speakToken++;
+          return seen;
+        });
+        expect(r.abMode).toBe(0);
+        expect(r.idx).toBeGreaterThanOrEqual(40);
+        expect(r.playing).toBe(true);
+      });
+
+      await test.step('Step 8: Exit chip tracks the loop and cancels', async () => {
+        await page.evaluate(() => { toggleAB(); });
+        await page.evaluate(() => abTap(10));
+        await page.evaluate(() => abTap(20));
+        const chip = page.locator('#abLive');
+        await expect(chip).toBeVisible();
+        await expect(chip).toHaveText('A-B 循环中：第 11–21 句 · 点击退出');
+        await chip.click();
+        expect(await page.evaluate(() => abMode)).toBe(0);
+        await expect(chip).toBeHidden();
       });
     },
   );

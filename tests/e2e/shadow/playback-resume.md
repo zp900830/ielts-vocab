@@ -24,7 +24,11 @@ Reload.
 ### 2. No autoplay after reload
 **Verify:** Play button text reads 播放 (position restored, playback not started).
 
-**Pass condition:** Reload restores index 50 with the sentence in view and no autoplay.
+### 3. Reaching the end of a chapter keeps the resume point
+Force the end-of-chapter branch: set `idx` to the last sentence and call `launch(sents.length, speakToken, true)`.
+**Verify:** `idx === -1` and `ielts-pos` records the **last** sentence — `i === chapterSentStart + last` when a chapter is selected (`chapterI === last` too), `i === last` in the default 全部文章 view — never `i: 0`. Reloading then restores the reader to the last sentence instead of throwing them back to the beginning.
+
+**Pass condition:** Reload restores index 50 with the sentence in view and no autoplay, and finishing a chapter leaves the resume point on its last sentence rather than resetting to sentence 1.
 
 ## After Hook
 _None — read-only test, no state created._

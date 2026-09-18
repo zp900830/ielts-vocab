@@ -342,6 +342,15 @@
     opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
   #abToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  /* A-B 循环常驻指示：循环开着就一直显示（框角那个 ✕ 一滚出框顶就找不到了），点一下退出。
+     压在 #abToast 上方一档，避免和 2.4s 自动消失的提示条叠在一起。 */
+  #abLive { position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(128px + env(safe-area-inset-bottom, 0px)); z-index: 131;
+    display: none; align-items: center; max-width: calc(100vw - 28px);
+    padding: 7px 14px; border: 0; border-radius: 999px; background: var(--accent);
+    color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(0,0,0,.22); }
+  #abLive.on { display: inline-flex; }
   /* 单句重复 / 倍速：同一套下拉菜单交互（桌面悬浮+点击，移动点击） */
   .loop-wrap, .rate-wrap { position: relative; flex: none;
     transition: max-width var(--t-morph) var(--ease-smooth), opacity .3s ease; }
@@ -1185,6 +1194,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     </header>
 
     <div id="abToast" role="status" aria-live="polite" aria-atomic="true"></div>
+    <button id="abLive" onclick="abCancel()" title="点击退出 A-B 循环" aria-hidden="true"></button>
     <footer class="audiobar" id="audiobar" role="contentinfo">
       <nav class="ab-left" aria-label="播放控制">
         <button class="btn ab-step" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i> 上一句</button>
@@ -1499,6 +1509,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     el.onclick = e => { if (abMode === 1 || abMode === 2) { if (abTap(i)) { try { e.stopPropagation(); } catch (err) {} return; } } if (e.target.closest('.w')) return; if (abMode === 3) {
       const a = Math.min(abStart, abEnd), b = Math.max(abStart, abEnd);
       if (i >= a && i <= b) playFrom(i);
+      // 区间外：静默无反应会被当成"点了没坏"。改为退出循环并跳播该句。
+      else { abCancel(true); playFrom(i); }
       return;
     } playFrom(i); };
     el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } };
@@ -2668,8 +2680,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     // 播到哪亮哪，句间只剩引擎换句的自然间隔（不断句感的关键）
     if (my !== speakToken || !playing) return;
     if (i >= sents.length) {
-    playing = false; idx = -1; paint();
-    try { idx = 0; savePos(); idx = -1; } catch (e) {}
+    playing = false;
+    // 预取越界（playFrom 播末句时会连发 i+1/i+2）也落到这里。原先写 idx=0 再存档，
+    // 等于「播到最后一句 → 进度倒回第 1 句」；改为把续读位留在真正播完的那一句。
+    if (idx >= 0) { try { savePos(); } catch (e) {} }
+    idx = -1; paint();
     return;
     }
     if (i < 0 || i <= launchedUpTo) return;
@@ -2714,8 +2729,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (i + 1 >= sents.length) {
     // 末句播完才算播完：预取的 launch(len) 会提前触发结束分支，
     // 把最后几句连高亮带按钮状态一起掐掉（播到底部就停的根因）
-    playing = false; idx = -1; paint();
-    try { localStorage.setItem('ielts-pos', JSON.stringify({ i: 0, t: Date.now() })); } catch (e) {}
+    playing = false;
+    // 播完本章：把续读位记在末句。原先这里写 {i:0}，一是让用户重开时"回到开头"
+    // 误以为进度丢了，二是整体替换存档会抹掉 savePos 维护的 chapter/chapterI 分章进度。
+    try { savePos(); } catch (e) {}
+    idx = -1; paint();
     return;
     }
     // 云端单通道：一次只播一句（多发会互相掐），靠预取补延迟；本机才多发排队；
@@ -2843,6 +2861,16 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     document.body.classList.toggle('ab-picking', abMode === 1 || abMode === 2);
     document.body.classList.toggle('ab-loop', abMode === 3);
+    const live = document.getElementById('abLive');
+    if (live) {
+      const on = abMode === 3 && abStart >= 0 && abEnd >= 0;
+      live.classList.toggle('on', on);
+      live.setAttribute('aria-hidden', on ? 'false' : 'true');
+      if (on) {
+        const a = Math.min(abStart, abEnd) + 1, b = Math.max(abStart, abEnd) + 1;
+        live.textContent = `A-B 循环中：第 ${a}–${b} 句 · 点击退出`;
+      }
+    }
     // 书签弹窗/AB 弹窗开着时同步状态
     try { const mp = document.getElementById('markWrap'); if (mp && mp.classList.contains('open')) renderMarks(); } catch (e) {}
     try { const ap = document.getElementById('abWrap'); if (ap && ap.classList.contains('open')) renderABLoops(); } catch (e) {}

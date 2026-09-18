@@ -10,8 +10,13 @@ const ENV = process.env.E2E_ENVIRONMENT || 'local';
 
 // App globals (top-level `let` in a classic script: visible in page scope,
 // NOT as window properties — never read them via `window.idx`).
-declare const idx: number;
+declare let idx: number;
 declare const sents: HTMLElement[];
+declare let playing: boolean;
+declare let speakToken: number;
+declare const launch: (i: number, my: number, immediate?: boolean) => void;
+declare const chapterSentStart: number;
+declare const currentChapter: number;
 
 test.describe('Playback resumes from saved position after reload', () => {
   test.skip(
@@ -73,6 +78,33 @@ test.describe('Playback resumes from saved position after reload', () => {
         await expect(shadow.playButton(page)).toHaveText(/播放/, {
           timeout: currentTimeout(),
         });
+      });
+
+      await test.step('Step 3: End of chapter keeps the resume point', async () => {
+        const r = await page.evaluate(async () => {
+          const wait = (ms: number) => new Promise(res => setTimeout(res, ms));
+          playing = false; speakToken++;
+          await wait(60);
+          const last = sents.length - 1;
+          idx = last;
+          playing = true;
+          launch(sents.length, speakToken, true);
+          await wait(60);
+          playing = false; speakToken++;
+          return {
+            last,
+            start: chapterSentStart,
+            chapter: currentChapter,
+            idxAfter: idx,
+            pos: JSON.parse(localStorage.getItem('ielts-pos') || '{}'),
+          };
+        });
+        expect(r.idxAfter).toBe(-1);
+        // 默认视图是「全部文章」（currentChapter < 0），此时 savePos 只写全局句号 i；
+        // 选了章节才会写 chapter/chapterI。两种模式下都不能把续读位倒回 0。
+        expect(r.pos.i).toBe(r.chapter >= 0 ? r.start + r.last : r.last);
+        expect(r.pos.i).toBeGreaterThan(0);
+        if (r.chapter >= 0) expect(r.pos.chapterI).toBe(r.last);
       });
     },
   );
