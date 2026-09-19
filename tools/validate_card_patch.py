@@ -13,7 +13,7 @@
   1 词头必须在 need 清单里，且该词头确实缺这一段的（不许越权改别的词/改已有段）
   2 词必须在本书目标词里（syn），不得是词头自身、不得重复
   3 syn 必须与词头词性有交集 —— 拦 prompt(adj)↔promote(v) 这类形近假同义
-  4 col 必须 2–4 个词、纯小写字母、含词头（或其屈折形）、除词头外每个词都在
+  4 col 必须 2–6 个词、纯小写字母、含词头（或其屈折形）、除词头外每个词都在
     简单词/目标词白名单里（不引入超纲词）、≤3 条
   5 不得复活上一轮逐条裁决判 wrong 的词（这条文档里早就写了，代码一直漏着）
 """
@@ -41,12 +41,17 @@ def pos_set(m):
 
 
 def forms(w):
+    """词头 → 允许出现的词形。
+
+    刻意不无脑加 `d`/`er`：kin→kind、corn→corner 这种拼得出真词的错误匹配，
+    上一轮就是这么把从句窗口里的别的词当成词头搭配喂进词卡的。
+    """
     w = w.lower()
-    f = {w, w + 's', w + 'es', w + 'd', w + 'ed', w + 'ing', w + 'er', w + 'est'}
+    f = {w, w + 's', w + 'es', w + 'ed', w + 'ing', w + 'er', w + 'est'}
     if w.endswith('e'):
-        f |= {w + 'd', w[:-1] + 'ing'}
+        f |= {w + 'd', w + 'r', w + 'st', w[:-1] + 'ing', w[:-1] + 'est'}
     if w.endswith('y') and len(w) > 2:
-        f |= {w[:-1] + 'ies', w[:-1] + 'ed', w[:-1] + 'ing'}
+        f |= {w[:-1] + 'ies', w[:-1] + 'ed', w[:-1] + 'ing', w[:-1] + 'er', w[:-1] + 'est'}
     return f
 
 
@@ -139,10 +144,10 @@ def main():
             if row.get('need_col'):
                 for c in (item.get('col') or []):
                     c = str(c).strip().lower()
-                    if not re.fullmatch(r"[a-z][a-z' -]{1,40}", c):
+                    if not re.fullmatch(r"[a-z][a-z' -]{1,60}", c):
                         rejected.append((h, sid, f'col 含非法字符 {c!r}')); continue
                     ws = c.split()
-                    if not (2 <= len(ws) <= 4):
+                    if not (2 <= len(ws) <= 6):
                         rejected.append((h, sid, f'col 词数越界 {c!r}')); continue
                     if not any(w in hf or any(w in forms(x) for x in h.split()) for w in ws):
                         rejected.append((h, sid, f'col 不含词头 {c!r}')); continue
@@ -157,8 +162,13 @@ def main():
             elif item.get('col'):
                 rejected.append((h, sid, '该词不需要补词伙段，忽略 col'))
             if syn or col:
+                # 同一条搭配的三种截断（fertile soil / deep fertile soil）只算机械可查的冗余，
+                # 但「留哪条」是判断不是事实，所以只打标记，交给门禁 2 定夺，不静默删
+                dup = [[a['c'], b['c']] for i, a in enumerate(col) for b in col[i + 1:]
+                       if a['c'] in b['c'] or b['c'] in a['c']]
                 clean.append({'w': h, 'pkt': row.get('pkt', sid.split('-')[0]),
                               'merge_syn_ext': bool(row.get('need_syn_ext')),
+                              'overlap_col': dup or None,
                               'syn': syn, 'col': col})
 
     json.dump(clean, open(ROOT + '/work/cardgen/clean.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)

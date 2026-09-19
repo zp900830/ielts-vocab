@@ -1,15 +1,15 @@
 [
  {
-  "w": "carnivore",
+  "w": "adjacent",
   "pkt": "ch1",
   "merge_syn_ext": false,
-  "syn": [
+  "syn": [],
+  "col": [
    {
-    "s": "predator",
-    "src": "R"
+    "c": "stand adjacent",
+    "src": "T"
    }
-  ],
-  "col": []
+  ]
  },
  {
   "w": "alga",
@@ -19,6 +19,13873 @@
   "col": [
    {
     "c": "green alga",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "alternate",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "alternate path",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "altitude",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "high altitude",
+    "src": "T"
+   },
+   {
+    "c": "low altitude",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "amphibian",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "amphibian pool",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "anatomy",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bird anatomy",
+    "src": "T"
+   },
+   {
+    "c": "anatomy charts",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "antenna",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thin antenna",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arable",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "arable land",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arctic",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "arctic ice",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arid",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "arid desert",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "aromatic",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "aromatic leaves",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "astronaut",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "astronaut hat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bacteria",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "mouth bacteria",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bark",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "warning bark",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "barren",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "barren plain",
+    "src": "T"
+   },
+   {
+    "c": "vast barren plain",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "beach",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "golden beach",
+    "src": "T"
+   },
+   {
+    "c": "quiet golden beach",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "beast",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tired beast",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bite",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "deep bite",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bloom",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "fresh bloom",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "blossom",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "pink blossom",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "botany",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "botany books",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bough",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stout bough",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "branch",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "crowded branch",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "breeze",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft breeze",
+    "src": "T"
+   },
+   {
+    "c": "cool breezes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bristle",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stiff bristle coat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "brook",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "narrow brook",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bud",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "firm bud",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "buffalo",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "grey buffalo",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bull",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "angry bull",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bunch",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "fresh bunch",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bundle",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "neat bundle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cage",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "locked in cages",
+    "src": "B"
+   }
+  ]
+ },
+ {
+  "w": "calamity",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dreadful calamity",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "calf",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "spotted calf",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "carnivore",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "meat eating carnivore",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cataclysmic",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cataclysmic storm",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "catastrophic",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "catastrophic harm",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cattle",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "milk cattle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cave",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dark cave",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "celestial",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "celestial bodies",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "celsius",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "degrees celsius",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chill",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "evening chill",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chunk",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "loose chunk",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "circuit",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "lamp circuit",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "claw",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sharp little claw",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "clay",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "damp clay",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "collision",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "funny collision",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "comet",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bright comet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "composition",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "basic composition",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "compound",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "strange compound",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "considerable",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "considerable pride",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "continent",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "northern continent",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "counterbalance",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "offset",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "courtship",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "courtship songs",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "crack",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thin crack",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "crater",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "circular crater",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "crawl",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "crawl low",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "creep",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "creep close",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cricket",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "green cricket",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cube",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "food cube",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "curl",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm curl",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "curve",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft curve",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "damp",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "damp clay",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "debris",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sharp debris",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "decompose",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "decompose fast",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "degrade",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "degrade fast",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "delta",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "river delta",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dense",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dense snow",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "desert",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "arid desert",
+    "src": "T"
+   },
+   {
+    "c": "hot dry desert",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "desolate",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "desolate road",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "despair",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "brief despair",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "desperate",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "desperate steps",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "destructive",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "destructive storm",
+    "src": "T"
+   },
+   {
+    "c": "destructive garden pest",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "devour",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quickly devour",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dew",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "morning dew",
+    "src": "T"
+   },
+   {
+    "c": "fresh morning dew",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dimension",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "box dimension",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dioxide",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "carbon dioxide",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "donkey",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "grey donkey",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "downpour",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sudden downpour",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dramatic",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dramatic change",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "drown",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "easily drown",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "eagle",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bald eagle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "eclipse",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "partial eclipse",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ecliptic",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "ecliptic line",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "emerge",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "emerge suddenly",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "evaporate",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quickly evaporate",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "exceed",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "never exceed",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "excrete",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "excrete waste",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "experimental",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "experimental corner",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "falcon",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "grey falcon",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fauna",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "local fauna",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "favourable",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "favourable light",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "feather",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "brown feather",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fertile",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "fertile soil",
+    "src": "T"
+   },
+   {
+    "c": "deep fertile soil",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "field",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "domain",
+    "src": "R"
+   },
+   {
+    "s": "discipline",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "fire",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "fire anyone",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "flash",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bright flash",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "flat",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dry flat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "float",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "gently float",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "flooding",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "caused flooding",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "flora",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tall flora",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fluctuate",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "temperatures fluctuate",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fluid",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thick fluid",
+    "src": "T"
+   },
+   {
+    "c": "secrete thick fluid",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "flyby",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bold flyby",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "forecast",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "radio forecast",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "forestry",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "forestry poster",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fountain",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stone fountain",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fox",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "red fox",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fragment",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "damaged fragment",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "frequency",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "watering frequency",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "frigid",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "frigid winds",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "frog",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "green frog",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "frost",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thin frost",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fume",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "black fume",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fungus",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "fungus spot",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "galaxy",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "vast galaxy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gale",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "strong gale",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gasoline",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clean gasoline",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "genetics",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "genetics rules",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "geology",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "geology outings",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "germ",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hidden germ",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "goose",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "white farm goose",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "grand",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "grand palace",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "granite",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "grey granite",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "grass",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long grass",
+    "src": "T"
+   },
+   {
+    "c": "fresh grass",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gulf",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "calm gulf",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gush",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "gush suddenly",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gust",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sudden gust",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hail",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "loud hail",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hare",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "brown hare",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hawk",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sharp eyed hawk",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hay",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hay cover",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "heating",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "electric heating",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hedge",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "green hedge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "herb",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny herb",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "herbivore",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "grass eating herbivore",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "herd",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "calm herd",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hibernation",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "winter hibernation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hillside",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hillside path",
+    "src": "T"
+   },
+   {
+    "c": "sunny hillside",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hopeless",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "felt hopeless",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "horse",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "brown horse",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "horticulture",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "horticulture guide",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hurricane",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small hurricane",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hybridisation",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "careful hybridisation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hybridise",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "never hybridise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "immense",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "immense calm",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "infringe",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "violate",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "instinct",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "night instinct",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "interbreed",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "families interbreed",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "interesting",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "interesting legend",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "interstellar",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "interstellar space",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "intuitive",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "intuitive guess",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "invisible",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "invisible microbe",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "irregularly",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "water irregularly",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "irreversible",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "irreversible harm",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "jungle",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny jungle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "kangaroo",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "jumping kangaroo",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "keeper",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "chief keeper",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lamb",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "white lamb",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lawn",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny lawn",
+    "src": "T"
+   },
+   {
+    "c": "lawn edge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lightning",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bright lightning",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "liquid",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clear liquid",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lunar",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "lunar light",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "magma",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hot magma",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "magnificent",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "truly magnificent",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mammal",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "baby mammal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mantle",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hot mantle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "marble",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "white marble",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "meadow",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wide meadow",
+    "src": "T"
+   },
+   {
+    "c": "meadow walk",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mechanism",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "defence mechanism",
+    "src": "T"
+   },
+   {
+    "c": "natural defence mechanism",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mediterranean",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm mediterranean",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "metabolism",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "winter metabolism",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "meteorite",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny meteorite",
+    "src": "T"
+   },
+   {
+    "c": "meteorite piece",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "meteorology",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "basic meteorology",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "microbe",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "invisible microbe",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mild",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "surprisingly mild",
+    "src": "T"
+   },
+   {
+    "c": "mild afternoon",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mineral",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "useful mineral",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "minimal",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "minimal noise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mishap",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small mishap",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mist",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "morning mist",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "module",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "new module",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "monsoon",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "summer monsoon",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mountain",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "mountain wind",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mouse",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "brown mouse",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mutation",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "strange mutation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "narrow",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "gender gap narrows",
+    "src": "B"
+   },
+   {
+    "c": "narrow ridge",
+    "src": "T"
+   },
+   {
+    "c": "narrow channels",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "navigation",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "satellite navigation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "night",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "night sky",
+    "src": "T"
+   },
+   {
+    "c": "polar night",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "oasis",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hidden oasis",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "observatory",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "observatory dome",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "optical",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "optical focus",
+    "src": "T"
+   },
+   {
+    "c": "sharp optical focus",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "optimal",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "optimal darkness",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "organism",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "creature",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "originate",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "derive",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "paradise",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "green paradise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "parasite",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "leaf parasite",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "peak",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "snowy peaks",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "petroleum",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "petroleum reserves",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "phenomenon",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "natural phenomenon",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pine",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tall pines",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "plain",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "barren plain",
+    "src": "T"
+   },
+   {
+    "c": "vast barren plain",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "plantation",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tea plantation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "polar",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "polar bear",
+    "src": "T"
+   },
+   {
+    "c": "polar night",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pole",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "north pole",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pour",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "pour hot tea",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "precipitate",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "accelerate",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "prey",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "easy prey",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "probe",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "investigate",
+    "src": "R"
+   },
+   {
+    "s": "explore",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "protect",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "preserve",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "protein",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "high protein",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "quantum",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quantum transition",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "quiet",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet lake",
+    "src": "T"
+   },
+   {
+    "c": "quiet farm",
+    "src": "T"
+   },
+   {
+    "c": "quiet old forest",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rainforest",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wet rainforest",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rear",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "child rearing duties",
+    "src": "B"
+   }
+  ]
+ },
+ {
+  "w": "reed",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tall reed",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "reef",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "coral reef",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "reproduce",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "reproduce quickly",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "reptile",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "reptile enclosure",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ridge",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "parallel ridges",
+    "src": "T"
+   },
+   {
+    "c": "narrow ridge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ripen",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "ripen slowly",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "saddle",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "leather saddle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sample",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "take samples",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sandy",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sandy path",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "scent",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sweet scent",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "seasonal",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "seasonal rains",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "secrete",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "secrete thick fluid",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sediment",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "carries thick sediment",
+    "src": "T"
+   },
+   {
+    "c": "thick sediment",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "shallow",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "shallow pools",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "shore",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "golden shore",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "shower",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quick shower",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "silt",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft silt",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "slope",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sheer slopes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "smog",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thick smog",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "snowy",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "snowy peaks",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "splendid",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "splendid sunrise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spring",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "spring water",
+    "src": "T"
+   },
+   {
+    "c": "warm spring",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sprinkle",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sprinkle sugar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stem",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "derive",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "sting",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bee sting",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stony",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stony path",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stormy",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stormy waves",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "straw",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dry straw",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "subsistence",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "daily subsistence",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sunlight",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "morning sunlight",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sunrise",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "golden sunrise",
+    "src": "T"
+   },
+   {
+    "c": "splendid sunrise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sunset",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "peaceful sunset",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "superficial",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "superficial judgments",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "surroundings",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clean surroundings",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "synthesise",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "synthesise food",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "synthetic",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "synthetic cloth",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "thermal",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thermal coat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "thorn",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sharp thorn",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "throng",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "noisy throng",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "thunder",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "distant thunder",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tide",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "rising tide",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "trunk",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thick trunk",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "turtle",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sea turtle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "uptake",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "slow uptake",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "valley",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "green valley",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vapour",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "white vapour",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vegetation",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "new vegetation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vertical",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "vertical cliff",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vitamin",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "vitamin drops",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wilderness",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "silent wilderness",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wooden",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wooden bridge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "worm",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "rear worms",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "aboriginal",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "aboriginal songs",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "academy",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "arts academy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "accommodation",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "new accommodation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "acid",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "acid taste",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "adversity",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "face adversity",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "alien",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "felt alien",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "alphabet",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "alphabet chart",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "alumni",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "successful alumni",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ambassador",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cultural ambassador",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "amuse",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "amuse friends",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "analogy",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "food analogy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "aptitude",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "natural aptitude",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "artist",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "young artist",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "assistant",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "assistant principal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "assume",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "simply assume",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "audit",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cash audit",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bat",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wooden bat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bend",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bend low",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "blend",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "combine",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "bounce",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bounce lightly",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "brilliant",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "brilliant talk",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "brochure",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "travel brochure",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "calculus",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "basic calculus",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "campus",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "campus life",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "carve",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "carve wood",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cathedral",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cathedral bells",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chapter",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "chapter heading",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chess",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "chess game",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "circus",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "circus show",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cite",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cite sources",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "clever",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "intelligent",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "clever ways",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "complicated",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "seemed complicated",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "compulsory",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "compulsory math",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cone",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "ice cream cone",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "consult",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "consult senior students",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "controversial",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "controversial speeches",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "convention",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "followed every convention",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cruise",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sea cruise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "deduce",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "deduce answers",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "depict",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "illustrate",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "detect",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "detect rising stress",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "diagnose",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quickly diagnose weak points",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dictate",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dictate short sentences",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dictionary",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thick dictionary",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "diplomat",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "retired diplomat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "disagree",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "disagree softly",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "displace",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "replace",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "dissolve",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quietly dissolve",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dorm",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "shared dorm",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "drag",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "drag logs",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "draught",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cold night draught",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "draw",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "draw clouds",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "drift",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "drifted inside",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "eccentric",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "eccentric club leader",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "economics",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "basic economics",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "elective",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "music elective",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "electronics",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "faulty electronics",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "elementary",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "elementary word lists",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "elicit",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "elicit fresh thoughts",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "eminent",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "eminent visitor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "empire",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "great empire",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "encyclopedia",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thick encyclopedia",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "energetic",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "energetic games",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "engrave",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "engrave stones",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "entertain",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "entertain kids",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "epic",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "epic tale",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "equation",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hard equation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "excavate",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "excavate clay",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "exotic",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "exotic fruit",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "extent",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "full extent",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "extract",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "extract key lines",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fahrenheit",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "ninety degrees fahrenheit",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fence",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "garden fence",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fiction",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "science fiction",
+    "src": "T"
+   },
+   {
+    "c": "fiction book",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "file",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "file folder",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "flute",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "silver flute",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "formula",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "math formula",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "forum",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "online forum",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "frame",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "framework",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "goal frame",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "friction",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "conflict",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "geography",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "geography map",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "handout",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "printed handout",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "handwriting",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "neat handwriting",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "heading",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "chapter heading",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "heritage",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "tradition",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "hockey",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hockey sticks",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "holy",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "sacred",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "hypothesis",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "new hypothesis",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "identical",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "identical schedules",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "impetus",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "fresh impetus",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "magazine",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sports magazine",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "magic",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "magic tricks",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "major",
+  "pkt": "ch2",
+  "merge_syn_ext": true,
+  "syn": [
+   {
+    "s": "principal",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "maths",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "maths teacher",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mechanics",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bike mechanics",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "merge",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "combine",
+    "src": "R"
+   },
+   {
+    "s": "integrate",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "midnight",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "near midnight",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mobile",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "portable",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "motive",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "main motive",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "museum",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "art museums",
+    "src": "B"
+   },
+   {
+    "c": "war museums",
+    "src": "B"
+   },
+   {
+    "c": "museum halls",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "noxious",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "toxic",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "nuance",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "subtle nuance",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "observe",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "monitor",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "olympic",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "olympic dream",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "orientation",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "orientation week",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "outstanding",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "remarkable",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "outstanding work",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "overestimate",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "overestimate talent",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "painstaking",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "painstaking care",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "perceive",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "perceive small changes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "picnic",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "picnic sheet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "poetry",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "love poetry",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pottery",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "pottery bowls",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "praise",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "honest praise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "predict",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "predict results",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "presentation",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "group presentation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "presume",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "assume",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "principal",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "assistant principal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pronounce",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "pronounce new words",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "proportion",
+  "pkt": "ch2",
+  "merge_syn_ext": true,
+  "syn": [],
+  "col": [
+   {
+    "c": "large proportion",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "psychology",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "basic psychology",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "publish",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "release",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "pupil",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "school pupil",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "radiate",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "radiate heat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ratio",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "proportion",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "recite",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "recite new terms",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "recruit",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "recruit new members",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "reference",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "reference book",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "register",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "register names",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "reputation",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "good reputation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "riddle",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "puzzle",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "ritual",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "morning ritual",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "roster",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "class roster",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "round",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "receive a well rounded education",
+    "src": "B"
+   }
+  ]
+ },
+ {
+  "w": "scholar",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "visiting scholar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "scrutinise",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "closely scrutinise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sculpture",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stone sculpture",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "secondary",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "minor",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "secondary school",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "selective",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "selective entry test",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sketch",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quick sketch",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "skim",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quickly skim",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "smart",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "looked smart",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "static",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "static noise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "steady",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "stable",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "step",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small step",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stride",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long stride",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sum",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small sum",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "suppose",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "assume",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "tennis",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tennis balls",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tense",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "past tense",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "thesis",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "senior thesis",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "total",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "sum",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "final total",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "volleyball",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "volleyball nets",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "volume",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "music volume",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "well known",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "familiar",
+    "src": "R"
+   },
+   {
+    "s": "famous",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "wit",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quick wit",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "aisle",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "narrow aisle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "alloy",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "light alloy",
+    "src": "T"
+   },
+   {
+    "c": "alloy frame",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "apartment",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "crowded apartment",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "apparatus",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "new apparatus",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "appetiser",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny appetiser",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arch",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "round arch",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "artifact",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clay artifact",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "available",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "still available",
+    "src": "T"
+   },
+   {
+    "c": "available today",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "badge",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "school badge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bake",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bake soft cakes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "balcony",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sunny balcony",
+    "src": "T"
+   },
+   {
+    "c": "balcony doors",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "banquet",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "harvest banquet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bar",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "street bar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "barbecue",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "barbecue stand",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "barrel",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small barrel",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bath",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bath tub",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bead",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "fallen bead",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "beam",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wooden beam",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "beef",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "beef slices",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bell",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "door bell",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "belt",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "school belt",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bench",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wooden bench",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "berry",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wild berry",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "beverage",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hot beverage",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "biscuit",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "square biscuit",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bitter",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bitter skin",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "blanket",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "blue blanket",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "block",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "impede",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "blot",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "paint blot",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bolt",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "silver bolt",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "booth",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "market booth",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bracelet",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "new bracelet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "brandy",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sweet brandy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "brass",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "yellow brass",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "brickwork",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "gray brickwork",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "brim",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hat brim",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bronze",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "green bronze horse",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "broom",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "straw broom",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bucket",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "red bucket",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "buffet",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hotel buffet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bulb",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm bulb",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "butter",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "yellow butter",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cabbage",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cabbage heads",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cabinet",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wooden cabinet",
+    "src": "T"
+   },
+   {
+    "c": "cabinet door",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cable",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "power cable",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cafeteria",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cafeteria lines",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "candle",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "blow out candles",
+    "src": "B"
+   },
+   {
+    "c": "honey candle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "canvas",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "painted canvas",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "carpenter",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "old carpenter",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "carpet",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "rolled carpet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "carrot",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "carrot roots",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cellar",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dark cellar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cement",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "grey cement",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ceramic",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "ceramic bowls",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chef",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "retired chef",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chew",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "chew loudly",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chicken",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "village chicken",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chimney",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stone chimney",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cigarette",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cigarette end",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "clasp",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "silver clasp",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cloak",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "theatre cloak",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "collar",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "shirt collar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "column",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tall column",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "concrete",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "gray concrete",
+    "src": "T"
+   },
+   {
+    "c": "concrete floor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cord",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "white cord",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "corridor",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long corridor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cosmetics",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "costly shop cosmetics",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "costume",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dance costume",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cottage",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small cottage",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cotton",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cotton shirts",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "counterfeit",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "counterfeit coin",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cradle",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny cradle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "crane",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "yellow crane",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "crude",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "crude joints",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "crystal",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "shining crystal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cucumber",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "crisp long cucumber",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "curtain",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "flowered curtain",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cushion",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "seat cushion",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cutlery",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "extra cutlery",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dairy",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dairy food",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dam",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "earth dam",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "debate",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "lively debate",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "detergent",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "mild detergent",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "digest",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "digest well",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dip",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dip greens",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "drunk",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "arrived drunk",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dwelling",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "whole dwelling",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dye",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "brown dye",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "eaves",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wide eaves",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "eggplant",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "purple eggplant",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "elegance",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "simple elegance",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "embroider",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "embroider red flowers",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "expanse",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wide expanse",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "exquisite",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "exquisite touch",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fabric",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "blue fabric",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fade",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "disappear",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "never fade",
+    "src": "T"
+   },
+   {
+    "c": "slowly fades",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fascinate",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "fascinate every child",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fibre",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "plant fibre",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fireplace",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stone fireplace",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "flashlight",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "pocket flashlight",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "flavour",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "fruit flavour",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "flour",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "white flour",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fragile",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quite fragile",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fridge",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small fridge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "furnace",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "brick furnace",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "furnish",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "furnish corners",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fuse",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "safety fuse",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "garlic",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "white garlic",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "garment",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "torn school garment",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gem",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "blue gem",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ginger",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "ginger root",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "glue",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "strong glue",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gourmet",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "little gourmet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gown",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "evening gown",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "grace",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "gentle grace",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "grain",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "pepper grains",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "grape",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "purple grape",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "grid",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "neat grid",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gum",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "mint gum",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hairdressing",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wedding hairdressing",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hamburger",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm hamburger",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "handrail",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wooden handrail",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hook",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "iron hook",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hostel",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "noisy hostel",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hull",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "seed hull",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hut",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "weak hut",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "idol",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "young idol",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ink",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "blue ink",
+    "src": "T"
+   },
+   {
+    "c": "ink marks",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "internal",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "internal corner",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "inward",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "flowed inward",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "iron",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "flat iron",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "jacket",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "biking jacket",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "jade",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "green jade",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "jar",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "glass jar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "jewel",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bright jewel",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "jewellery",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "family jewellery",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "junk",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "junk pile",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ketchup",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "red ketchup",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "kettle",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "black kettle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "kit",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "repair kit",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "kitchen",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "old kitchen",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "knit",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "knit warm caps",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "knob",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "door knob",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lace",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "lace edging",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lantern",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "paper lantern",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "laundry",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "folded laundry",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lavatory",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "back lavatory",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "layer",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thick layer",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "layout",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "table layout",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "leather",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "leather bag",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lever",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wooden lever",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lid",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "jar lid",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "linen",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "table linen",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "liquor",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "fruit liquor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "livestock",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "village livestock",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lobby",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hotel lobby",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lodge",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hunting lodge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lotion",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hand lotion",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lumber",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cut lumber",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "makeup",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft makeup",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mansion",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cold mansion",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mason",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "careful mason",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "masquerade",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "masquerade dance",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mat",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "door mat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mattress",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "torn mattress",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "memorandum",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "short memorandum",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mend",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "fix",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "carefully mend",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "merchandise",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "used merchandise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "metal",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "pure metal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "migrate",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "migrate elsewhere",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mill",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "old mill",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "miniature",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "miniature chair",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mop",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wet mop",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mustard",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "yellow mustard",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mutton",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dark mutton",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "nail",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "old nail",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "necessity",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "winter necessity",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "necklace",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "pearl necklace",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "nylon",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "nylon bag",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "obstruct",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "impede",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "opacity",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cloudy opacity",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ornament",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "gold ornament",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "outward",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "ran outward",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "oven",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clay oven",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "overcoat",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "grey overcoat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pad",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "feather pad",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pamphlet",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "picture pamphlet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pane",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "window pane",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "papaya",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sweet papaya",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "paperback",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "old paperback",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "parlour",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "old parlour",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pasta",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thin long pasta",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "paste",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sticky rice paste",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "patch",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "knee patch",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pea",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "green pea",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pedal",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bike pedal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pepper",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "black pepper",
+    "src": "T"
+   },
+   {
+    "c": "pepper grains",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "perfume",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "natural perfume",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "peripheral",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "almost peripheral",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pie",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "apple pie",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pigment",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "green pigment",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pillar",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stone pillar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pillow",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "yellowed pillow",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pin",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "colored pin",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pipe",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "new pipes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pit",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "date pit",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "placement",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "neat placement",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "plaster",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wall plaster",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "plaza",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small front plaza",
+    "src": "T"
+   },
+   {
+    "c": "front plaza",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "plug",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small plug",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "plum",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dried red plum slices",
+    "src": "T"
+   },
+   {
+    "c": "red plum slices",
+    "src": "T"
+   },
+   {
+    "c": "red plum",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "plumb",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "plumb line",
+    "src": "T"
+   },
+   {
+    "c": "straight plumb line",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pond",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clear pond",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "porcelain",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "white porcelain",
+    "src": "T"
+   },
+   {
+    "c": "white porcelain plates",
+    "src": "T"
+   },
+   {
+    "c": "porcelain plates",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "porch",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wide porch",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pork",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "fresh pork",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "porridge",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thick morning porridge",
+    "src": "T"
+   },
+   {
+    "c": "morning porridge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pot",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "deep iron pot",
+    "src": "T"
+   },
+   {
+    "c": "iron pot",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "prevail",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "always prevail",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pudding",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sweet milk pudding",
+    "src": "T"
+   },
+   {
+    "c": "milk pudding",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "purple",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "deep purple",
+    "src": "T"
+   },
+   {
+    "c": "deep purple shade",
+    "src": "T"
+   },
+   {
+    "c": "purple shade",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "purse",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small buttoned purse",
+    "src": "T"
+   },
+   {
+    "c": "buttoned purse",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "quilt",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wedding quilt",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "radiator",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "rusty iron radiator",
+    "src": "T"
+   },
+   {
+    "c": "iron radiator",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "radish",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small radish",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rag",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "torn cleaning rag",
+    "src": "T"
+   },
+   {
+    "c": "cleaning rag",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "raw",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "raw wood",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "razor",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sharp razor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "reception",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "simple reception",
+    "src": "T"
+   },
+   {
+    "c": "reception corner",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "recipe",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "secret recipe",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "refectory",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "school refectory",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "refreshment",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tea as refreshment",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "refrigerator",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "old refrigerator",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "restaurant",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small restaurant",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rim",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "round chair rim",
+    "src": "T"
+   },
+   {
+    "c": "chair rim",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "robe",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft morning robe",
+    "src": "T"
+   },
+   {
+    "c": "morning robe",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rod",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "new fishing rod",
+    "src": "T"
+   },
+   {
+    "c": "fishing rod",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rubber",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thick rubber",
+    "src": "T"
+   },
+   {
+    "c": "rubber band",
+    "src": "T"
+   },
+   {
+    "c": "thick rubber band",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rug",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small flowered rug",
+    "src": "T"
+   },
+   {
+    "c": "flowered rug",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sauce",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thick tomato sauce",
+    "src": "T"
+   },
+   {
+    "c": "tomato sauce",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "saucer",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small flower saucer",
+    "src": "T"
+   },
+   {
+    "c": "flower saucer",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sausage",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long smoked sausage",
+    "src": "T"
+   },
+   {
+    "c": "smoked sausage",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "saw",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sharp saw",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "scaffold",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tall bamboo scaffold",
+    "src": "T"
+   },
+   {
+    "c": "bamboo scaffold",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "scallion",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long green scallion",
+    "src": "T"
+   },
+   {
+    "c": "green scallion",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "scarf",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft flowered scarf",
+    "src": "T"
+   },
+   {
+    "c": "flowered scarf",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "scissors",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "large silver scissors",
+    "src": "T"
+   },
+   {
+    "c": "silver scissors",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "screw",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "loose screw",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "section",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "damaged section",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "settle",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "settle downstairs",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sewerage",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "street sewerage",
+    "src": "T"
+   },
+   {
+    "c": "sewerage work",
+    "src": "T"
+   },
+   {
+    "c": "street sewerage work",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "shave",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "shave smooth",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "shed",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "leaning shed",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "shelf",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "leaning wall shelf",
+    "src": "T"
+   },
+   {
+    "c": "wall shelf",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "shutter",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "window shutter",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "situated",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quietly situated",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "slender",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "looks slender",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "slight",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "minor",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "slight repair",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "slipper",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "pink soft slipper",
+    "src": "T"
+   },
+   {
+    "c": "soft slipper",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sliver",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thin sliver",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "snack",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quick snack",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "soak",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "soaking dirty cloth",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sock",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm winter sock",
+    "src": "T"
+   },
+   {
+    "c": "winter sock",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sour",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sharp sour taste",
+    "src": "T"
+   },
+   {
+    "c": "sour taste",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "souvenir",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "worn travel souvenir",
+    "src": "T"
+   },
+   {
+    "c": "travel souvenir",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spacious",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "looked spacious",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spaghetti",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long spaghetti",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spice",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "ground red spice powder",
+    "src": "T"
+   },
+   {
+    "c": "red spice powder",
+    "src": "T"
+   },
+   {
+    "c": "spice powder",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sponge",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft sponge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spotlight",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "strong spotlight",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "squeeze",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "squeeze oranges",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stain",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dark food stain",
+    "src": "T"
+   },
+   {
+    "c": "food stain",
+    "src": "T"
+   },
+   {
+    "c": "stained bath tub",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "staple",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small staple",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stationery",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "old stationery",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "steel",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bright steel",
+    "src": "T"
+   },
+   {
+    "c": "steel tools",
+    "src": "T"
+   },
+   {
+    "c": "bright steel tools",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stir",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "gently stir",
+    "src": "T"
+   },
+   {
+    "c": "stir honey",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stitch",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "strong hidden stitch",
+    "src": "T"
+   },
+   {
+    "c": "hidden stitch",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stocking",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thin party stocking",
+    "src": "T"
+   },
+   {
+    "c": "party stocking",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stool",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "painting stool",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "storey",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "upper storey",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stove",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "old stove",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "strand",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "loose wire strand",
+    "src": "T"
+   },
+   {
+    "c": "wire strand",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "strap",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "torn bag strap",
+    "src": "T"
+   },
+   {
+    "c": "bag strap",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stricture",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "every past stricture",
+    "src": "T"
+   },
+   {
+    "c": "past stricture",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "string",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long red string",
+    "src": "T"
+   },
+   {
+    "c": "red string",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stripe",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "painted wall stripe",
+    "src": "T"
+   },
+   {
+    "c": "wall stripe",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "studio",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "noisy photo studio",
+    "src": "T"
+   },
+   {
+    "c": "photo studio",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "supermarket",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "distant supermarket",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "supper",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "family supper",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sweater",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "blue winter sweater",
+    "src": "T"
+   },
+   {
+    "c": "winter sweater",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "takeaway",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "takeaway boxes",
+    "src": "T"
+   },
+   {
+    "c": "street takeaway boxes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tan",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft tan coat",
+    "src": "T"
+   },
+   {
+    "c": "tan coat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "terrace",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stone terrace",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "thirsty",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thirsty workers",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "thread",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "loose threads",
+    "src": "T"
+   },
+   {
+    "c": "thin white thread",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tile",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "loose floor tile",
+    "src": "T"
+   },
+   {
+    "c": "floor tile",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tin",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sealed tin",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tissue",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft tissue",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "toast",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "crisp morning toast",
+    "src": "T"
+   },
+   {
+    "c": "morning toast",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "toilet",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "yellowed toilet",
+    "src": "T"
+   },
+   {
+    "c": "yellowed toilet seat",
+    "src": "T"
+   },
+   {
+    "c": "toilet seat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "towel",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thick white towel",
+    "src": "T"
+   },
+   {
+    "c": "white towel",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tray",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wooden tray",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "trousers",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "grey work trousers",
+    "src": "T"
+   },
+   {
+    "c": "work trousers",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tub",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "low wide tub",
+    "src": "T"
+   },
+   {
+    "c": "wide tub",
+    "src": "T"
+   },
+   {
+    "c": "bath tub",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "turkey",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "brown turkey",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "turnip",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "flat white turnip",
+    "src": "T"
+   },
+   {
+    "c": "white turnip",
+    "src": "T"
+   },
+   {
+    "c": "turnip heads",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "umbrella",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "torn black umbrella",
+    "src": "T"
+   },
+   {
+    "c": "black umbrella",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vacuum",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "loud vacuum",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vanilla",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "pale vanilla",
+    "src": "T"
+   },
+   {
+    "c": "pale vanilla drops",
+    "src": "T"
+   },
+   {
+    "c": "vanilla drops",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vault",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "curved vault",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "veil",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thin shining veil",
+    "src": "T"
+   },
+   {
+    "c": "shining veil",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "velvet",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "red velvet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "venue",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "future venue",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "viaduct",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stone viaduct",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "villa",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "rich villa",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vinegar",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clear rice vinegar",
+    "src": "T"
+   },
+   {
+    "c": "rice vinegar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "void",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "empty void",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wallet",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "worn brown wallet",
+    "src": "T"
+   },
+   {
+    "c": "brown wallet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wardrobe",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small wardrobe",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wasabi",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "green wasabi",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wax",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm wax",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "weld",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "weld chair legs",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wheat",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "pale wheat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "whisky",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "whisky bottle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wool",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft grey wool",
+    "src": "T"
+   },
+   {
+    "c": "grey wool",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "yogurt",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thick white yogurt",
+    "src": "T"
+   },
+   {
+    "c": "white yogurt",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "yummy",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "simply yummy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "aboard",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "everyone aboard",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "adequate",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "barely adequate",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "admit",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "never admit",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bid",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "low bid",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bilateral",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bilateral deal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bound",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "felt bound",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bribe",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dirty bribe",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "broken",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "broken arm",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bureau",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "travel bureau",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "burst",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "burst out laughing",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cart",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wooden cart",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chance",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "little chance",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "checklist",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "travel checklist",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "choose",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "select",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "clarify",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "explain",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "colony",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "ant colony",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "conference",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "conference hall",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "confess",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "admit",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "constraint",
+  "pkt": "ch4",
+  "merge_syn_ext": true,
+  "syn": [],
+  "col": [
+   {
+    "c": "time constraint",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "coupon",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "paper coupon",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "court",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "supreme court",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "criteria",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clear criteria",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "defer",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "postpone",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "deflation",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "price deflation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dismiss",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "never dismiss",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dominate",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "male dominated industries",
+    "src": "B"
+   }
+  ]
+ },
+ {
+  "w": "due",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "money due",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "emergency",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "crisis",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "entity",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "business entity",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ethnic",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "ethnic group",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "failure",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "delivery failure",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fare",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bus fares",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fault",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "mistake",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "federal",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "federal capital",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "freight",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "freight train",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "genuine",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "genuine smile",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "global",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "worldwide",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "gross",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "gross total",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "guard",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "border guard",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hazard",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "risk",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "biggest hazard",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "import",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "imported fruit",
+    "src": "T"
+   },
+   {
+    "c": "import fresh fruit",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "inflation",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "rising inflation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "installment",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "regular installment",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "instruct",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "gently instruct",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "intersection",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "busy intersection",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "judge",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stern judge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "layoff",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sudden layoff",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "league",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "football league",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "levy",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "new levy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "load",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "burden",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "heavy load",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mail",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "mail box",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mediate",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "mediate gently",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mute",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stayed mute",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "negotiation",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long negotiation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "neutral",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stayed neutral",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "oar",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wooden oar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "occupation",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "honest occupation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "outlook",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "prospect",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "bright outlook",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "oversee",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "monitor",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "permit",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "written permit",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "personnel",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "shop personnel",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "perspective",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "opinion",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "fresh perspective",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "poll",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "latest poll",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "port",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "busy port",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "postage",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "extra postage",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "potent",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "potent boost",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "prejudice",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "bias",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "prompt",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "prompt service",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "proud",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "felt proud",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "puppet",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wooden puppet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "quota",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "agreed quota",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rack",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wooden rack",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rail",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "steel rail",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "reconcile",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "reconcile fully",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "redundant",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "became redundant",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "remuneration",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "extra remuneration",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "resign",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "quit",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "respondent",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "survey respondent",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "retire",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "retire early",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "revenue",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "income",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "roman",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "roman roads",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sack",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "flour sack",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sail",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sail away",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sanction",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "impose sanctions on",
+    "src": "B"
+   }
+  ]
+ },
+ {
+  "w": "saving",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "conservation",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "session",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "evening session",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "significance",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "deep significance",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "solve",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "problem solving skills",
+    "src": "B"
+   }
+  ]
+ },
+ {
+  "w": "spare",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "spare chairs",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "speed",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "full speed",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stock",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "remaining stock",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sufficient",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sufficient room",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "suitable",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "suitable hour",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "suitcase",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "heavy suitcase",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "supervise",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "personally supervise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "supreme",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "supreme court",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "trail",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dusty trail",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "trial",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "experiment",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "tyre",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "flat tyre",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "unite",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "combine",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "vocation",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "true vocation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wage",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "daily wage",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "whisper",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "nervous whisper",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wholesale",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wholesale cost",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "accessory",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "spare accessory",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "acquaintance",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "old acquaintance",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "affection",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "true affection",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "assault",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "attack",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "sudden assault",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "attorney",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "solicitor",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "audio",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clear audio",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "beat",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "defeat",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "belong",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sense of belonging",
+    "src": "B"
+   }
+  ]
+ },
+ {
+  "w": "beloved",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "beloved teacher",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "binary",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "binary code",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "blast",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "loud blast",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "breakthrough",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "big breakthrough",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "burrow",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "deep burrow",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bury",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bury pride",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chop",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "chop wood",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "compute",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "compute costs",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "condense",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "steam condense",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "contend",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "compete",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "council",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "town council",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "counsellor",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "school counsellor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cousin",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "distant cousins",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "deputy",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "deputy head",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "disclose",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "disclose plans",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dread",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "fear",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "deep dread",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "embryo",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bean embryo",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "error",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "mistake",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "estimate",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "estimate savings",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "flare",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "red flare",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "framework",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wooden framework",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gear",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "plastic gear",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "generator",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny generator",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gizmo",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny gizmo",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "glow",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft glow",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hammer",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small hammer",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "helmet",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cracked helmet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "honeymoon",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "short honeymoon",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "horrible",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "horrible noise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hydraulic",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hydraulic oil",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "interrupt",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "interrupt games",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "intimate",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "intimate chats",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "invade",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "attack",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "kin",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "relative",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "landing",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "rough landing",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lens",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "curved lens",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "loudspeaker",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "big loudspeaker",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "maiden",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "maiden trial",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "manoeuvre",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clever manoeuvre",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "maritime",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "maritime maps",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "microphone",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cheap microphone",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "miss",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "miss lunch",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "multimedia",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "multimedia screen",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "naval",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "naval routes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "neighbourhood",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "low density neighbourhoods",
+    "src": "B"
+   },
+   {
+    "c": "whole neighbourhood",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "occasion",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "special occasion",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "occur",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "occur daily",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "owe",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "owe thanks",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "patriot",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "true patriot",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pause",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long pause",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "peril",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sudden peril",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pioneer",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "true pioneer",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pitfall",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hidden pitfall",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "polytechnic",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small town polytechnic",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "proceed",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "proceed along",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "proof",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clear proof",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "proponent",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "firm proponent",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pump",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hand pump",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "punch",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "punch holes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "radar",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "toy radar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "raid",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "night raid",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "refine",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "purify",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "refute",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "counter",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "refute lies",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rifle",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "rusty rifle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "savage",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "savage act",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sensor",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small sensor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sewage",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dirty sewage",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "siege",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long siege",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spear",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long spear",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "statue",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tall statue",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "strike",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "attack",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "tape",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sticky tape",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "teenage",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "teenage volunteers",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tenant",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "new tenant",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "terror",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "fear",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "toil",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "hard toil",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "triumph",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet triumph",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "turbulent",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "turbulent days",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "veterinary",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "veterinary doctor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "warn",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "warn kids",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "weapon",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "carry weapons",
+    "src": "B"
+   }
+  ]
+ },
+ {
+  "w": "wireless",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "wireless link",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "withstand",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "withstand cold winds",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "abdomen",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft abdomen",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "accord",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind accord",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "accustom",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "accustom himself",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "allure",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "strong allure",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ankle",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thick ankle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "annoy",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "irritate",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "annoy tired players",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "applaud",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "loudly applaud",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arouse",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "arouse fresh hope",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "artery",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "red artery",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "aspire",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "aspire high",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "assign",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "assign pages",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "astonish",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "astonish tall rivals",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "attempt",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "new attempt",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "augment",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "augment dull texts",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "aural",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "aural test",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "awake",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stays awake",
+    "src": "T"
+   },
+   {
+    "c": "awake till ten",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "backup",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "strong backup",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "beard",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "grey beard",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bet",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bet money",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bewilder",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bewilder new players",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "biorhythm",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sleep biorhythm",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bully",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bully smaller kids",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cheek",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "red cheek",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chest",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "broad chest",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chin",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small chin",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "clone",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clone test",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "condom",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thin condom",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "contain",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "contain worry",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "contempt",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "shows contempt",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "decimation",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "fair decimation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "deed",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind deed",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dental",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dental check",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "deserve",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "truly deserve good bands",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "desire",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "control wild desire",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "despatch",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "despatch messages",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "detriment",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clear detriment",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dispute",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "conflict",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "small dispute",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "disregard",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "neglect",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "enlarge",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "expand",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "enlarge small steps",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "enlighten",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "enlighten young minds",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "erase",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "erase wrong answers",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "excuse",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "fair excuse",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "exert",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "exert effort",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "exhale",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "exhale white air",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "eyelash",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long eyelash",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "eyesight",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "poor eyesight",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "finger",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "shaking finger",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "flatter",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "flatter teachers",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "flee",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "escape",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "forehead",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm forehead",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "forgive",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "forgive late steps",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "glance",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quick glance",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gland",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small gland",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "glare",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sharp glare",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "glimpse",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quick glimpse",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gorge",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "green gorge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "grab",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "grab pens",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "greet",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "greeting guests",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "grip",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "firm grip",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hormone",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small hormone",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "immune",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "immune guard",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "impress",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "impress firm judges",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "induce",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "induce fresh energy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "infection",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "mild infection",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "intestine",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long intestine",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "involve",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "involve every friend",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "irony",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small irony",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "itch",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "inner itch",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "jaw",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stiff jaw",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "joint",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "stiff joint",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lame",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "lame forever",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "limb",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tired limb",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lip",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dry lip",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "loom",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "loom ahead",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lung",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "left lung",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "magnify",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "magnify tiny details",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "massacre",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bloody massacre",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mesmerize",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "mesmerize young fans",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mortify",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "mortify young hearts",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "muffle",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "muffle phone noise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "muscle",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thin muscle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "nap",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "short nap",
+    "src": "T"
+   },
+   {
+    "c": "long naps",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "neck",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "long neck",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "nerve",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thin nerve",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "nightmare",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "short nightmare",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "nourish",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "feed",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "omit",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "exclude",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "organ",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "inner organ",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "overshadow",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cannot overshadow calm thought",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "palm",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm palm",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "panic",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "bring panic",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "plummet",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "let scores plummet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pore",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny pore",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "preach",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "preach patience",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "provoke",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "irritate",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "pulse",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "slow pulse",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "purpose",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clear study purpose",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "quarrel",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "loud quarrel",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "react",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "react fast",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "recall",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "recall morning words",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "recollect",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quietly recollect",
+    "src": "T"
+   },
+   {
+    "c": "recollect evening grammar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "recover",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "restore",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "rectify",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "rectify small grammar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "refuse",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "refuse help",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "regard",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "shows deep regard",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "render",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "render hard lessons",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "restore",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "restore calm focus",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "retell",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "retell stories",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "retrieve",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "retrieve old notes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "retrospect",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "calm retrospect",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rib",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "lower rib",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rotate",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "rotate slowly",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "saturate",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "saturate shoes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "shoulder",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "shaking shoulder",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sideways",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "turns sideways",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sink",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "let hope sink low",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "skeleton",
+  "pkt": "ch6a",
+  "merge_syn_ext": true,
+  "syn": [
+   {
+    "s": "framework",
+    "src": "M"
+   }
+  ],
+  "col": [
+   {
+    "c": "full skeleton",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "skull",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "round skull",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "smuggle",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "smuggle bad feelings",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "specify",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clearly specify",
+    "src": "T"
+   },
+   {
+    "c": "specify time",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spill",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "spill cold water",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stipulate",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clearly stipulate",
+    "src": "T"
+   },
+   {
+    "c": "stipulate daily time",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stomach",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "empty stomach",
+    "src": "T"
+   },
+   {
+    "c": "weak stomach",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "strangle",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "strangle pleasure",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "substitute",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "replace",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "supply",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "provision",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "surmount",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "surmount final test",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sway",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sway gently",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "symptom",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small symptom",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tempt",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "tempt players",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "terrify",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "terrify young players",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "thigh",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thick thigh",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "throat",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "red throat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "thumb",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small thumb",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "toe",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "little toe",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "trench",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "muddy trench",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "trigger",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "trigger worry",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "undertake",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "undertake extra listening",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "verify",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "verify answers",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vibrate",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "vibrate softly",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "visible",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "clearly visible",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vow",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "solemn vow",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "waist",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thin waist",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "worship",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "worship high scores",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wrist",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "thin wrist",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "yawn",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "big yawn",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "acute",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "acute cough",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "adverse",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "adverse wind",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "allergy",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "food allergy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "annual",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "annual fair",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arthritis",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "mild arthritis",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bruise",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "dark bruise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cure",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "cure diseases",
+    "src": "B"
+   }
+  ]
+ },
+ {
+  "w": "delight",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet delight",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "demise",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "death",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "dizzy",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "feel dizzy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dose",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "small dose",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dysfunction",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sleep dysfunction",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "earnest",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "earnest face",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "endure",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "bear",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "nasty",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "nasty words",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "negative",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "pessimistic",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "overnight",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "rain fell overnight",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pain",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "sharp pain",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "penicillin",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "penicillin shot",
     "src": "T"
    }
   ]
