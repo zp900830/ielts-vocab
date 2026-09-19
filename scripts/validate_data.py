@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """数据校验：确保词汇、章节、故事占位符之间的一致性。"""
-import json, re, sys, hashlib
+import json, collections, re, sys, hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -28,6 +28,37 @@ def data_ver():
 
 def shadow_data_ver():
     return digest(SHADOW_VER_FILES)
+
+
+def template_clusters(paragraphs, thresh=0.55, min_size=3):
+    """词集相似度成簇：同一骨架只换目标词的模板句会聚成一簇。
+    纯 stdlib，不依赖外部词表，所以可以放进门禁。"""
+    items = []
+    for para in paragraphs:
+        for sent in para:
+            en = re.sub(r'\[\[([^\]:]+):[^\]]+\]\]', r'\1', sent)
+            items.append(set(re.findall(r'[a-z]+', en.lower())))
+    buckets = collections.defaultdict(list)
+    for i, ws in enumerate(items):
+        srt = sorted(ws)
+        if len(srt) >= 3:
+            buckets[tuple(srt[:3])].append(i)
+    out, used = [], set()
+    for idxs in buckets.values():
+        if len(idxs) < min_size:
+            continue
+        for i in idxs:
+            if i in used or len(items[i]) < 6:
+                continue
+            g, used = [i], used | {i}
+            for j in idxs:
+                if j in used or len(items[j]) < 6:
+                    continue
+                if len(items[i] & items[j]) / len(items[i] | items[j]) >= thresh:
+                    g.append(j); used.add(j)
+            if len(g) >= min_size:
+                out.append(g)
+    return out
 
 def load(path):
     with open(path, 'r', encoding='utf-8') as f:
@@ -139,6 +170,8 @@ def main():
     if orphan:
         warnings.append(f"{len(orphan)} chapter words never appear in section text: {orphan[:12]}")
 
+    total_sents = sum(len(p) for sec in sections for p in sec.get('paragraphs', []))
+
     # 10-12. 跟读篇文本规格（见 docs/2026-09-19-跟读篇文本规格排查.md §0）：
     #        除目标词外均为简单词 —— 词汇难度由 tools/shadow_text_audit.py 判（需外部词表），
     #        这里只守不依赖外部数据的三条硬约束。
@@ -186,6 +219,12 @@ def main():
     if missed:
         errors.append(f"chapter words taught in plain text but never marked "
                       f"(untappable, no gloss): {'; '.join(missed)[:400]}")
+
+    # 13. 模板句覆盖率：同一骨架只换目标词的句子成簇，说明课文是套模板生成的。
+    #     2026-09-19 实测 ch3 曾达 28.4%（110 句），已全部重写归零；此检查防止内容生成再次退回模板。
+    tmpl = sum(len(g) for sec in sections for g in template_clusters(sec.get('paragraphs', [])))
+    if tmpl / max(1, total_sents) > 0.02:
+        warnings.append(f"{tmpl}/{total_sents} 句疑似模板克隆（同一骨架换词），占 {tmpl/total_sents*100:.1f}%")
 
     # 9. 基础统计
     print(f"vocab: {len(vocab)} words")
