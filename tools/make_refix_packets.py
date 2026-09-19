@@ -26,6 +26,11 @@ MARK = re.compile(r'\[\[([^\]:]+):([^\]]+)\]\]')
 
 def main():
     per = int(sys.argv[1]) if len(sys.argv) > 1 else 130
+    tag = sys.argv[2] if len(sys.argv) > 2 else 'a'
+    # 第一轮代理是分批交回的，捞回也分批跑：第三批用 --only 只挑新到的那几片
+    only = set()
+    if '--only' in sys.argv:
+        only = set(sys.argv[sys.argv.index('--only') + 1].split(','))
     V = json.load(open(ROOT + '/shadow/data/vocab.json', encoding='utf-8'))
     D = json.load(open(ROOT + '/shadow/data/sections.json', encoding='utf-8'))
     sentences = [(MARK.sub(lambda m: m.group(2), en),
@@ -35,11 +40,12 @@ def main():
     empty, partial = [], []
     for nf in sorted(glob.glob(ROOT + '/work/cardgen/need/*.json')):
         sid = nf.split('/')[-1][:-5]
-        if sid.startswith('_'):
+        if sid.startswith('_') or (only and sid not in only):
             continue
         gf = f'{ROOT}/work/cardgen/got/{sid}.json'
-        got = {str(x.get('w', '')).lower(): x for x in json.load(open(gf, encoding='utf-8'))} \
-            if os.path.exists(gf) else {}
+        if not os.path.exists(gf):
+            continue            # 这片还没交回，不能按「全空」算，否则会把整片误当捞回对象
+        got = {str(x.get('w', '')).lower(): x for x in json.load(open(gf, encoding='utf-8'))}
         for r in json.load(open(nf, encoding='utf-8')):
             w = r['w']
             g = got.get(w) or {}
@@ -54,12 +60,13 @@ def main():
                    'ctx': [locate(c, sentences)[0] for c in miss_col[:2]]}
             (empty if not (gave_syn or gave_col) else partial).append(row)
     out = empty + partial
-    p = ROOT + '/work/cardgen/refix'
-    for f in glob.glob(p + '/*'):
-        os.remove(f)
+    p = f'{ROOT}/work/cardgen/refix'
     os.makedirs(p, exist_ok=True)
+    # 只清自己这一批的包：第一轮代理是分批交回的，捞回也要分批跑，不能互相抹掉
+    for f in glob.glob(f'{p}/rf{tag}*'):
+        os.remove(f)
     for i in range(0, len(out), per):
-        sid = f'rf{i // per + 1:02d}'
+        sid = f'rf{tag}{i // per + 1:02d}'
         chunk = out[i:i + per]
         with open(f'{p}/{sid}.txt', 'w', encoding='utf-8') as fh:
             for r in chunk:
