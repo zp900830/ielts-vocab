@@ -1,0 +1,2340 @@
+[
+ {
+  "w": "patient",
+  "disp": "patient",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 病人；adj. 有耐心的"
+ },
+ {
+  "w": "dysfunction",
+  "disp": "dysfunction",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 机能障碍"
+ },
+ {
+  "w": "diabetes",
+  "disp": "diabetes",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 糖尿病"
+ },
+ {
+  "w": "obesity",
+  "disp": "obesity",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 肥胖；肥胖症"
+ },
+ {
+  "w": "overweight",
+  "disp": "overweight",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 超重的"
+ },
+ {
+  "w": "hypertension",
+  "disp": "hypertension",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 高血压；过度紧张"
+ },
+ {
+  "w": "paralyse",
+  "disp": "paralyse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使瘫痪；使无效"
+ },
+ {
+  "w": "dizzy",
+  "disp": "dizzy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 头晕目眩的；头昏眼花的"
+ },
+ {
+  "w": "insane",
+  "disp": "insane",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 疯狂的；精神失常的；精神错乱的"
+ },
+ {
+  "w": "insomnia",
+  "disp": "insomnia",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 失眠（症）"
+ },
+ {
+  "w": "steal",
+  "disp": "steal",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 偷"
+ },
+ {
+  "w": "allergy",
+  "disp": "allergy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 过敏症"
+ },
+ {
+  "w": "heart attack",
+  "disp": "heart attack",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 心脏病发作"
+ },
+ {
+  "w": "trace",
+  "disp": "trace",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 痕迹；微量；v. 追踪"
+ },
+ {
+  "w": "cancer",
+  "disp": "cancer",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 癌；癌症"
+ },
+ {
+  "w": "arthritis",
+  "disp": "arthritis",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 关节炎"
+ },
+ {
+  "w": "saw",
+  "disp": "saw",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 锯；v. 看"
+ },
+ {
+  "w": "stroke",
+  "disp": "stroke",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 中风；划水动作；一击"
+ },
+ {
+  "w": "pimple",
+  "disp": "pimple",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 皮肤上的红色小疱"
+ },
+ {
+  "w": "plague",
+  "disp": "plague",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 瘟疫；v. 困扰"
+ },
+ {
+  "w": "flu",
+  "disp": "flu",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 流感；流行性感冒"
+ },
+ {
+  "w": "fever",
+  "disp": "fever",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 发烧"
+ },
+ {
+  "w": "headache",
+  "disp": "headache",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 头痛；令人头痛的人（或事物）"
+ },
+ {
+  "w": "swell",
+  "disp": "swell",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 膨胀"
+ },
+ {
+  "w": "choke",
+  "disp": "choke",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 窒息；阻塞"
+ },
+ {
+  "w": "slip",
+  "disp": "slip",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 失足；v. 溜走"
+ },
+ {
+  "w": "injure",
+  "disp": "injure",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 伤害；损害"
+ },
+ {
+  "w": "injury",
+  "disp": "injury",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 损伤；伤害"
+ },
+ {
+  "w": "hurt",
+  "disp": "hurt",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 受伤"
+ },
+ {
+  "w": "bleed",
+  "disp": "bleed",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 流血；放血"
+ },
+ {
+  "w": "bruise",
+  "disp": "bruise",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 瘀伤；v. 擦伤"
+ },
+ {
+  "w": "scar",
+  "disp": "scar",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 伤疤；精神创伤"
+ },
+ {
+  "w": "wound",
+  "disp": "wound",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 伤口；创伤；v. 过去式与过去分词词形"
+ },
+ {
+  "w": "trauma",
+  "disp": "trauma",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 身体上的伤"
+ },
+ {
+  "w": "lump",
+  "disp": "lump",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 块；肿块；隆起"
+ },
+ {
+  "w": "pain",
+  "disp": "pain",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 疼痛；痛苦；苦恼"
+ },
+ {
+  "w": "mortal",
+  "disp": "mortal",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 致命的；终有一死的；n. 凡人"
+ },
+ {
+  "w": "dread",
+  "disp": "dread",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 恐惧；v. 害怕"
+ },
+ {
+  "w": "demise",
+  "disp": "demise",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 死亡；逝世；消亡"
+ },
+ {
+  "w": "doom",
+  "disp": "doom",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 厄运；v. 注定"
+ },
+ {
+  "w": "fatal",
+  "disp": "fatal",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 致命的；灾难性的"
+ },
+ {
+  "w": "crash",
+  "disp": "crash",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 坠毁；v. 碰撞；崩溃"
+ },
+ {
+  "w": "lethal",
+  "disp": "lethal",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 致命的；可致死的"
+ },
+ {
+  "w": "corpus",
+  "disp": "corpus",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 语料库"
+ },
+ {
+  "w": "overwork",
+  "disp": "overwork",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 过度劳累；v. 工作过度"
+ },
+ {
+  "w": "tire",
+  "disp": "tire",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使疲倦；使厌烦"
+ },
+ {
+  "w": "exhaust",
+  "disp": "exhaust",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 耗尽；使筋疲力尽；n. 废气"
+ },
+ {
+  "w": "fatigue",
+  "disp": "fatigue",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 疲乏；劳累"
+ },
+ {
+  "w": "faint",
+  "disp": "faints",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 昏倒；昏厥；adj. 微弱的"
+ },
+ {
+  "w": "feeble",
+  "disp": "feeble",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 虚弱的；衰弱的；无力的"
+ },
+ {
+  "w": "weary",
+  "disp": "weary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 疲倦的；厌烦的"
+ },
+ {
+  "w": "weaken",
+  "disp": "weaken",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 削弱；变弱"
+ },
+ {
+  "w": "uncomfortable",
+  "disp": "uncomfortable",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 使人不舒服的；不自在的"
+ },
+ {
+  "w": "unconscious",
+  "disp": "unconscious",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 无意识的；无知觉的"
+ },
+ {
+  "w": "acute",
+  "disp": "acute",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 急性的；严重的；敏锐的"
+ },
+ {
+  "w": "sore",
+  "disp": "sore",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 疼痛的"
+ },
+ {
+  "w": "sorrow",
+  "disp": "sorrow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 悲痛；伤心"
+ },
+ {
+  "w": "suffering",
+  "disp": "suffering",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 痛苦；v. 遭受"
+ },
+ {
+  "w": "lament",
+  "disp": "lament",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 悲叹；哀悼；惋惜"
+ },
+ {
+  "w": "therapy",
+  "disp": "therapy",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 治疗；疗法"
+ },
+ {
+  "w": "health care",
+  "disp": "health care",
+  "need_syn": true,
+  "need_col": true,
+  "m": "phrase. 卫生保健；健康护理"
+ },
+ {
+  "w": "sanitary",
+  "disp": "sanitary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 清洁的；卫生的"
+ },
+ {
+  "w": "curative",
+  "disp": "curative",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 医疗的；治疗的"
+ },
+ {
+  "w": "hygiene",
+  "disp": "hygiene",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 卫生；卫生学"
+ },
+ {
+  "w": "physician",
+  "disp": "physician",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 医生；内科医生"
+ },
+ {
+  "w": "surgeon",
+  "disp": "surgeon",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 外科医生"
+ },
+ {
+  "w": "operation",
+  "disp": "operation",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 手术；运行；操作"
+ },
+ {
+  "w": "cure",
+  "disp": "cure",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 治愈；n. 疗法"
+ },
+ {
+  "w": "heal",
+  "disp": "heal",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 复原；治愈"
+ },
+ {
+  "w": "prescription",
+  "disp": "prescription",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 处方；药方"
+ },
+ {
+  "w": "transplant",
+  "disp": "transplant",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 移植；v. 移栽；移植"
+ },
+ {
+  "w": "injection",
+  "disp": "injection",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 注入"
+ },
+ {
+  "w": "precaution",
+  "disp": "precaution",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 预防；预防措施"
+ },
+ {
+  "w": "vaccinate",
+  "disp": "vaccinate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 接种疫苗；预防接种"
+ },
+ {
+  "w": "quarantine",
+  "disp": "quarantine",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 隔离检疫期"
+ },
+ {
+  "w": "segregate",
+  "disp": "segregate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. （使）分开；分离；隔离"
+ },
+ {
+  "w": "isolate",
+  "disp": "isolate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使隔离；分离出"
+ },
+ {
+  "w": "pharmacy",
+  "disp": "pharmacy",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 药房；药剂学"
+ },
+ {
+  "w": "remedy",
+  "disp": "remedy",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 疗法；纠正办法"
+ },
+ {
+  "w": "shelf",
+  "disp": "shelf",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 架子"
+ },
+ {
+  "w": "pill",
+  "disp": "pill",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 药丸；药片"
+ },
+ {
+  "w": "antibiotic",
+  "disp": "antibiotic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 抗菌素；抗生素"
+ },
+ {
+  "w": "acupuncture",
+  "disp": "acupuncture",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 针刺疗法"
+ },
+ {
+  "w": "penicillin",
+  "disp": "penicillin",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 青霉素"
+ },
+ {
+  "w": "morphine",
+  "disp": "morphine",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 吗啡"
+ },
+ {
+  "w": "dose",
+  "disp": "dose",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 剂量；一剂"
+ },
+ {
+  "w": "recovery",
+  "disp": "recovery",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 恢复；复苏"
+ },
+ {
+  "w": "refresh",
+  "disp": "refresh",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使恢复精力；使复原；使变新"
+ },
+ {
+  "w": "relief",
+  "disp": "relief",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 宽慰；解脱；救济"
+ },
+ {
+  "w": "relieve",
+  "disp": "relieve",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 减轻；缓解"
+ },
+ {
+  "w": "dusk",
+  "disp": "dusk",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 黄昏"
+ },
+ {
+  "w": "ease",
+  "disp": "ease",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 缓解；n. 轻松"
+ },
+ {
+  "w": "relax",
+  "disp": "relax",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 放松"
+ },
+ {
+  "w": "normal",
+  "disp": "normal",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 正常的；一般的"
+ },
+ {
+  "w": "common",
+  "disp": "common",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 常见的；普通的；共有的"
+ },
+ {
+  "w": "usual",
+  "disp": "usual",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 通常的；寻常的；惯常的"
+ },
+ {
+  "w": "optimistic",
+  "disp": "optimistic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 乐观的"
+ },
+ {
+  "w": "pessimistic",
+  "disp": "pessimistic",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 悲观的"
+ },
+ {
+  "w": "negative",
+  "disp": "negative",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 负面的；消极的；否定的"
+ },
+ {
+  "w": "enthusiastic",
+  "disp": "enthusiastic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 充满热情的；热心的"
+ },
+ {
+  "w": "indifferent",
+  "disp": "indifferent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 不感兴趣的；不关心的"
+ },
+ {
+  "w": "apathetic",
+  "disp": "apathetic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 缺乏兴趣的；漠不关心的"
+ },
+ {
+  "w": "negligible",
+  "disp": "negligible",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 可以忽略的"
+ },
+ {
+  "w": "delight",
+  "disp": "delight",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 高兴"
+ },
+ {
+  "w": "merry",
+  "disp": "merry",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 欢乐的"
+ },
+ {
+  "w": "laughter",
+  "disp": "laughter",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 笑声；笑"
+ },
+ {
+  "w": "joy",
+  "disp": "joy",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 喜悦；快乐"
+ },
+ {
+  "w": "rejoice",
+  "disp": "rejoice",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 欢喜；高兴；喜悦"
+ },
+ {
+  "w": "thrill",
+  "disp": "thrill",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 兴奋"
+ },
+ {
+  "w": "agreeable",
+  "disp": "agreeable",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 愉悦的"
+ },
+ {
+  "w": "exhilarate",
+  "disp": "exhilarate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使高兴；使振奋"
+ },
+ {
+  "w": "satisfactory",
+  "disp": "satisfactory",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 令人满意的"
+ },
+ {
+  "w": "desirable",
+  "disp": "desirable",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 称心如意的；值得拥有的；令人渴望的"
+ },
+ {
+  "w": "keen",
+  "disp": "keen",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 渴望的；热心的；敏锐的"
+ },
+ {
+  "w": "zeal",
+  "disp": "zeal",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 热情；热忱"
+ },
+ {
+  "w": "lively",
+  "disp": "lively",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 充满生机的；活泼的"
+ },
+ {
+  "w": "lovely",
+  "disp": "lovely",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 可爱的；美丽的"
+ },
+ {
+  "w": "fond",
+  "disp": "fond",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 喜爱的；喜欢的"
+ },
+ {
+  "w": "favour",
+  "disp": "favour",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 喜爱；v. 偏爱；有利于"
+ },
+ {
+  "w": "surprising",
+  "disp": "surprising",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 令人吃惊的；出人意料的；v. 现在分词词形"
+ },
+ {
+  "w": "startle",
+  "disp": "startle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. （使）惊动；（使）惊愕；（使）吃惊"
+ },
+ {
+  "w": "astound",
+  "disp": "astound",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使震惊；使大惊"
+ },
+ {
+  "w": "hectic",
+  "disp": "hectic",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 紧张忙碌的"
+ },
+ {
+  "w": "routine",
+  "disp": "routine",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 常规；adj. 例行公事的"
+ },
+ {
+  "w": "liberal",
+  "disp": "liberal",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 开明的；自由主义的；n. 自由党党员"
+ },
+ {
+  "w": "generous",
+  "disp": "generous",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 慷慨的；大方的"
+ },
+ {
+  "w": "humble",
+  "disp": "humble",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 谦逊的；虚心的；卑微的"
+ },
+ {
+  "w": "modest",
+  "disp": "modest",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 不多的；适度的；谦虚的"
+ },
+ {
+  "w": "humorous",
+  "disp": "humorous",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 幽默的"
+ },
+ {
+  "w": "polite",
+  "disp": "polite",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 有礼貌的"
+ },
+ {
+  "w": "frank",
+  "disp": "frank",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 坦率的"
+ },
+ {
+  "w": "mysterious",
+  "disp": "mysterious",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 神秘的"
+ },
+ {
+  "w": "curious",
+  "disp": "curious",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 好奇的"
+ },
+ {
+  "w": "daring",
+  "disp": "daring",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 大胆的；勇敢的；v. 现在分词词形"
+ },
+ {
+  "w": "manly",
+  "disp": "manly",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 有男子气概的；阳刚的"
+ },
+ {
+  "w": "direct",
+  "disp": "direct",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 直接的；v. 指导；指示"
+ },
+ {
+  "w": "earnest",
+  "disp": "earnest",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 认真的"
+ },
+ {
+  "w": "honesty",
+  "disp": "honesty",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 诚实；正直；老实"
+ },
+ {
+  "w": "proud",
+  "disp": "proud",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 自豪的"
+ },
+ {
+  "w": "rational",
+  "disp": "rational",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 合理的；理性的"
+ },
+ {
+  "w": "host",
+  "disp": "host",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 主持人；主人；v. 主持"
+ },
+ {
+  "w": "hospitable",
+  "disp": "hospitable",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 宜人的；好客的"
+ },
+ {
+  "w": "seriously",
+  "disp": "seriously",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adv. 认真地；严重地"
+ },
+ {
+  "w": "romantic",
+  "disp": "romantic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 浪漫的"
+ },
+ {
+  "w": "considerate",
+  "disp": "considerate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 考虑周到的；体贴的"
+ },
+ {
+  "w": "thoughtful",
+  "disp": "thoughtful",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 体贴的；深思的"
+ },
+ {
+  "w": "sympathetic",
+  "disp": "sympathetic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 同情的"
+ },
+ {
+  "w": "mercy",
+  "disp": "mercy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 仁慈；怜悯"
+ },
+ {
+  "w": "admire",
+  "disp": "admire",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 钦佩"
+ },
+ {
+  "w": "sketch",
+  "disp": "sketch",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 草图；概述；v. 速写"
+ },
+ {
+  "w": "grateful",
+  "disp": "grateful",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 感激的"
+ },
+ {
+  "w": "gratitude",
+  "disp": "gratitude",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 感激之情；感谢"
+ },
+ {
+  "w": "eager",
+  "disp": "eager",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 渴望的；热切的"
+ },
+ {
+  "w": "sound",
+  "disp": "sound",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 健全的；n. 声音；v. 听起来"
+ },
+ {
+  "w": "picturesque",
+  "disp": "picturesque",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 如画的"
+ },
+ {
+  "w": "promising",
+  "disp": "promising",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 有希望的；有前途的；v. 承诺"
+ },
+ {
+  "w": "prominent",
+  "disp": "prominent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 突出的；杰出的；显著的"
+ },
+ {
+  "w": "mountain",
+  "disp": "mountain",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 山；大量"
+ },
+ {
+  "w": "awesome",
+  "disp": "awesome",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 棒极了；令人敬畏的；令人畏惧的"
+ },
+ {
+  "w": "arduous",
+  "disp": "arduous",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 艰巨的；费力的"
+ },
+ {
+  "w": "tough",
+  "disp": "tough",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 艰苦的；强硬的；严厉的"
+ },
+ {
+  "w": "robust",
+  "disp": "robust",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 强健的；强壮的；结实的"
+ },
+ {
+  "w": "sturdy",
+  "disp": "sturdy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 坚固的"
+ },
+ {
+  "w": "steadfast",
+  "disp": "steadfast",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 坚定的；不动摇的"
+ },
+ {
+  "w": "tender",
+  "disp": "tender",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 嫩的"
+ },
+ {
+  "w": "temperate",
+  "disp": "temperate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 温和的"
+ },
+ {
+  "w": "paper",
+  "disp": "paper",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 论文；纸；报纸"
+ },
+ {
+  "w": "delicate",
+  "disp": "delicate",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 精致的；微妙的；易碎的"
+ },
+ {
+  "w": "mundane",
+  "disp": "mundane",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 平凡的"
+ },
+ {
+  "w": "naive",
+  "disp": "naive",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 天真的"
+ },
+ {
+  "w": "childish",
+  "disp": "childish",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 孩子气的；幼稚的"
+ },
+ {
+  "w": "sincere",
+  "disp": "sincere",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 真诚的；诚挚的"
+ },
+ {
+  "w": "liable",
+  "disp": "liable",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 有…倾向的；有（法律）责任的"
+ },
+ {
+  "w": "trustworthy",
+  "disp": "trustworthy",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 可信赖的；可靠的"
+ },
+ {
+  "w": "enterprising",
+  "disp": "enterprising",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 有进取心的；有魄力的"
+ },
+ {
+  "w": "sane",
+  "disp": "sane",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 心智健全的；头脑清醒的；明智的"
+ },
+ {
+  "w": "strenuous",
+  "disp": "strenuous",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 艰苦的"
+ },
+ {
+  "w": "rigorous",
+  "disp": "rigorous",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 缜密的；严格的"
+ },
+ {
+  "w": "strict",
+  "disp": "strict",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 严格的；严厉的"
+ },
+ {
+  "w": "severe",
+  "disp": "severe",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 严重的；严厉的；非常困难的"
+ },
+ {
+  "w": "mutual",
+  "disp": "mutual",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 相互的"
+ },
+ {
+  "w": "resemble",
+  "disp": "resemble",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 相似；类似"
+ },
+ {
+  "w": "similar",
+  "disp": "similar",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 类似的；相像的"
+ },
+ {
+  "w": "familiar",
+  "disp": "familiar",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 熟悉的"
+ },
+ {
+  "w": "naked",
+  "disp": "naked",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 裸体的；裸露的"
+ },
+ {
+  "w": "bare",
+  "disp": "bare",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 赤裸的；光秃秃的"
+ },
+ {
+  "w": "private",
+  "disp": "private",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 私人的"
+ },
+ {
+  "w": "intuition",
+  "disp": "intuition",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 直觉"
+ },
+ {
+  "w": "spontaneous",
+  "disp": "spontaneous",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 自发的；自然产生的"
+ },
+ {
+  "w": "praise",
+  "disp": "praise",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 赞美；赞扬"
+ },
+ {
+  "w": "implicit",
+  "disp": "implicit",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 含蓄的；暗示的"
+ },
+ {
+  "w": "illusion",
+  "disp": "illusion",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 错觉；幻觉"
+ },
+ {
+  "w": "imaginary",
+  "disp": "imaginary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 想象中的"
+ },
+ {
+  "w": "fancy",
+  "disp": "fancy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 花哨的；昂贵的；v. 想要"
+ },
+ {
+  "w": "fate",
+  "disp": "fate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 命运；宿命"
+ },
+ {
+  "w": "fortune",
+  "disp": "fortune",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 运气；财产"
+ },
+ {
+  "w": "agony",
+  "disp": "agony",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 极度痛苦"
+ },
+ {
+  "w": "grief",
+  "disp": "grief",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 悲痛；忧伤"
+ },
+ {
+  "w": "grieve",
+  "disp": "grieve",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 悲痛；使伤心"
+ },
+ {
+  "w": "miserable",
+  "disp": "miserable",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 悲惨的"
+ },
+ {
+  "w": "distress",
+  "disp": "distress",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 痛苦；忧虑；危难"
+ },
+ {
+  "w": "sadness",
+  "disp": "sadness",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 悲伤；悲哀"
+ },
+ {
+  "w": "gloomy",
+  "disp": "gloomy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 黑暗的；忧郁的"
+ },
+ {
+  "w": "disappoint",
+  "disp": "disappoint",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使失望"
+ },
+ {
+  "w": "discourage",
+  "disp": "discourage",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 阻止；劝阻"
+ },
+ {
+  "w": "wretched",
+  "disp": "wretched",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 悲惨的；恶劣的"
+ },
+ {
+  "w": "frustrating",
+  "disp": "frustrating",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 令人沮丧的；令人泄气的；v. 现在分词词形"
+ },
+ {
+  "w": "miss",
+  "disp": "miss",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 错过；想念；n. 小姐"
+ },
+ {
+  "w": "mourn",
+  "disp": "mourn",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 悼念；哀痛"
+ },
+ {
+  "w": "furious",
+  "disp": "furious",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 狂怒的；暴怒的；激烈的"
+ },
+ {
+  "w": "frown",
+  "disp": "frown",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 皱眉；n. 蹙额"
+ },
+ {
+  "w": "rage",
+  "disp": "rage",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 盛怒；风靡一时"
+ },
+ {
+  "w": "irritate",
+  "disp": "irritate",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 激怒；使急躁；使疼痛"
+ },
+ {
+  "w": "hate",
+  "disp": "hate",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 讨厌；憎恨"
+ },
+ {
+  "w": "hatred",
+  "disp": "hatred",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 憎恨；仇恨"
+ },
+ {
+  "w": "nuisance",
+  "disp": "nuisance",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 讨厌的事"
+ },
+ {
+  "w": "bitter",
+  "disp": "bitter",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 有苦味的；痛苦的；刺痛的"
+ },
+ {
+  "w": "disgust",
+  "disp": "disgust",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 厌恶；反感"
+ },
+ {
+  "w": "vex",
+  "disp": "vex",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使恼火；使烦恼"
+ },
+ {
+  "w": "harass",
+  "disp": "harass",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 骚扰；烦扰；屡次侵扰"
+ },
+ {
+  "w": "bother",
+  "disp": "bother",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 麻烦；打扰；烦扰"
+ },
+ {
+  "w": "troublesome",
+  "disp": "troublesome",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 令人烦恼的；讨厌的"
+ },
+ {
+  "w": "awful",
+  "disp": "awful",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 糟糕的；adv. 非常"
+ },
+ {
+  "w": "unpleasant",
+  "disp": "unpleasant",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 令人不快的"
+ },
+ {
+  "w": "adverse",
+  "disp": "adverse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 不利的；有害的"
+ },
+ {
+  "w": "indignant",
+  "disp": "indignant",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 愤慨的；义愤的"
+ },
+ {
+  "w": "radical",
+  "disp": "radical",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 激进的；彻底的；根本的"
+ },
+ {
+  "w": "list",
+  "disp": "list",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 表；名单；v. 列出"
+ },
+ {
+  "w": "mad",
+  "disp": "mad",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 发疯的；疯狂的"
+ },
+ {
+  "w": "crazy",
+  "disp": "crazy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 疯狂的；狂热的"
+ },
+ {
+  "w": "wicked",
+  "disp": "wicked",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 邪恶的"
+ },
+ {
+  "w": "vicious",
+  "disp": "vicious",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 恶毒的；邪恶的"
+ },
+ {
+  "w": "vulgar",
+  "disp": "vulgar",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 庸俗的；粗俗的"
+ },
+ {
+  "w": "mean",
+  "disp": "mean",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 刻薄的；吝啬的；v. 意思"
+ },
+ {
+  "w": "ego",
+  "disp": "ego",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 自我；自负；自尊心"
+ },
+ {
+  "w": "selfish",
+  "disp": "selfish",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 自私的"
+ },
+ {
+  "w": "nasty",
+  "disp": "nasty",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 令人不愉快的"
+ },
+ {
+  "w": "rash",
+  "disp": "rash",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 冒失的；轻率的；n. 大量同时出现的事件"
+ },
+ {
+  "w": "dash",
+  "disp": "dash",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 少量"
+ },
+ {
+  "w": "volatile",
+  "disp": "volatile",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 不稳定的；变化无常的；adj. 易挥发的"
+ },
+ {
+  "w": "steep",
+  "disp": "steep",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 陡峭的；急剧升降的"
+ },
+ {
+  "w": "weird",
+  "disp": "Weird",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 怪异的；古怪的"
+ },
+ {
+  "w": "sunrise",
+  "disp": "sunrise",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 日出；黎明"
+ },
+ {
+  "w": "quit",
+  "disp": "quit",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 停止；辞职；离开"
+ },
+ {
+  "w": "excessive",
+  "disp": "excessive",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 过度的；过分的"
+ },
+ {
+  "w": "restless",
+  "disp": "restless",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 坐立不安的"
+ },
+ {
+  "w": "uneasy",
+  "disp": "uneasy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 不安的"
+ },
+ {
+  "w": "timid",
+  "disp": "timid",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 胆小的；羞怯的"
+ },
+ {
+  "w": "fuss",
+  "disp": "fuss",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大惊小怪"
+ },
+ {
+  "w": "insult",
+  "disp": "insult",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 侮辱；n. 辱骂"
+ },
+ {
+  "w": "unkind",
+  "disp": "unkind",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 不和善的；刻薄的"
+ },
+ {
+  "w": "envy",
+  "disp": "envy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 羡慕；妒忌"
+ },
+ {
+  "w": "jealous",
+  "disp": "jealous",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 妒忌的；嫉妒的"
+ },
+ {
+  "w": "doubt",
+  "disp": "doubt",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 疑惑；v. 怀疑"
+ },
+ {
+  "w": "suspicion",
+  "disp": "suspicion",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 怀疑；猜疑"
+ },
+ {
+  "w": "sceptical",
+  "disp": "sceptical",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 怀疑的"
+ },
+ {
+  "w": "audio",
+  "disp": "audio",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 音频的；声音的"
+ },
+ {
+  "w": "unsatisfactory",
+  "disp": "unsatisfactory",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 不够好的；不能令人满意的"
+ },
+ {
+  "w": "bar",
+  "disp": "bar",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 酒吧；条状物；栅栏"
+ },
+ {
+  "w": "unstable",
+  "disp": "unstable",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 不稳定的"
+ },
+ {
+  "w": "unsuitable",
+  "disp": "unsuitable",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 不适宜的；不合适的"
+ },
+ {
+  "w": "unwilling",
+  "disp": "unwilling",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 不愿意的；不情愿的"
+ },
+ {
+  "w": "reluctant",
+  "disp": "reluctant",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 不情愿的"
+ },
+ {
+  "w": "hesitate",
+  "disp": "hesitate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 犹豫；踌躇"
+ },
+ {
+  "w": "guilty",
+  "disp": "guilty",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 内疚的；有罪的"
+ },
+ {
+  "w": "embarrass",
+  "disp": "embarrass",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使窘迫；使尴尬"
+ },
+ {
+  "w": "regret",
+  "disp": "regret",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 遗憾；v. 懊悔"
+ },
+ {
+  "w": "repent",
+  "disp": "repent",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 后悔；忏悔；悔过"
+ },
+ {
+  "w": "ashamed",
+  "disp": "ashamed",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 羞愧的；惭愧的"
+ },
+ {
+  "w": "sigh",
+  "disp": "sigh",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 叹息；n. 叹气"
+ },
+ {
+  "w": "weep",
+  "disp": "weep",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 流泪；n. 哭泣"
+ },
+ {
+  "w": "tolerance",
+  "disp": "tolerance",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 宽容；忍耐力"
+ },
+ {
+  "w": "ignorant",
+  "disp": "ignorant",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 无知的；缺乏知识的"
+ },
+ {
+  "w": "endure",
+  "disp": "endure",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 忍受"
+ },
+ {
+  "w": "sly",
+  "disp": "sly",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 诡诈的；诡秘的；心照不宣的"
+ },
+ {
+  "w": "cunning",
+  "disp": "cunning",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 狡猾的；巧妙的；n. 狡猾"
+ },
+ {
+  "w": "arbitrary",
+  "disp": "arbitrary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 任意的"
+ },
+ {
+  "w": "ridiculous",
+  "disp": "ridiculous",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 荒谬的；可笑的"
+ },
+ {
+  "w": "stupid",
+  "disp": "stupid",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 愚蠢的；笨的"
+ },
+ {
+  "w": "awkward",
+  "disp": "awkward",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 别扭的；笨拙的；尴尬的"
+ },
+ {
+  "w": "clumsy",
+  "disp": "clumsy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 笨拙的；不灵巧的"
+ },
+ {
+  "w": "careless",
+  "disp": "careless",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 粗心的"
+ },
+ {
+  "w": "oblivious",
+  "disp": "oblivious",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 没注意到的；未觉察的；忘却的"
+ },
+ {
+  "w": "naughty",
+  "disp": "naughty",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 顽皮的；淘气的"
+ },
+ {
+  "w": "greedy",
+  "disp": "greedy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 贪婪的"
+ },
+ {
+  "w": "obtrusive",
+  "disp": "obtrusive",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 显眼的；刺眼的"
+ },
+ {
+  "w": "slothful",
+  "disp": "slothful",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 怠惰的；懒散的"
+ },
+ {
+  "w": "sluggish",
+  "disp": "sluggish",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 缓慢的"
+ },
+ {
+  "w": "impulse",
+  "disp": "impulse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 冲动"
+ },
+ {
+  "w": "draw",
+  "disp": "draw",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 画；拉；吸引"
+ },
+ {
+  "w": "rigid",
+  "disp": "rigid",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 刻板的；坚硬的；严格的"
+ },
+ {
+  "w": "timetable",
+  "disp": "timetable",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 时间表；时刻表；课程表"
+ },
+ {
+  "w": "stubborn",
+  "disp": "stubborn",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 顽固的；固执的"
+ },
+ {
+  "w": "stereotype",
+  "disp": "stereotype",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 刻板印象；v. 把…模式化"
+ },
+ {
+  "w": "monthly",
+  "disp": "monthly",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 每月的；n. 月刊；adv. 每月一次"
+ },
+ {
+  "w": "quarterly",
+  "disp": "quarterly",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 季度的；adv. 每季一次"
+ },
+ {
+  "w": "annual",
+  "disp": "annual",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 一年一次的；每年的"
+ },
+ {
+  "w": "yearly",
+  "disp": "yearly",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 每年的；adv. 每年地"
+ },
+ {
+  "w": "anniversary",
+  "disp": "anniversary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 周年纪念日"
+ },
+ {
+  "w": "era",
+  "disp": "era",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 时代；纪元"
+ },
+ {
+  "w": "medieval",
+  "disp": "medieval",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 中世纪的；中古的"
+ },
+ {
+  "w": "millennium",
+  "disp": "millennium",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 一千年；千禧年"
+ },
+ {
+  "w": "million",
+  "disp": "million",
+  "need_syn": true,
+  "need_col": true,
+  "m": "num. 一百万；n. 百万；百万个"
+ },
+ {
+  "w": "billion",
+  "disp": "billion",
+  "need_syn": true,
+  "need_col": true,
+  "m": "num. 十亿"
+ },
+ {
+  "w": "dozen",
+  "disp": "dozen",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 十二个；一打"
+ },
+ {
+  "w": "midday",
+  "disp": "midday",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 中午；正午"
+ },
+ {
+  "w": "midnight",
+  "disp": "midnight",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 午夜；子夜"
+ },
+ {
+  "w": "overnight",
+  "disp": "overnight",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adv. 在夜里；突然；adj. 整晚的"
+ },
+ {
+  "w": "tin",
+  "disp": "tin",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 锡；罐头"
+ },
+ {
+  "w": "up-to-date",
+  "disp": "up-to-date",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 最新的；最近的；新式的"
+ },
+ {
+  "w": "immediately",
+  "disp": "immediately",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adv. 立即；马上"
+ },
+ {
+  "w": "instant",
+  "disp": "instant",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 瞬间；adj. 即时的"
+ },
+ {
+  "w": "prior",
+  "disp": "prior",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 在前的"
+ },
+ {
+  "w": "former",
+  "disp": "former",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 以前的；前者的"
+ },
+ {
+  "w": "preceding",
+  "disp": "preceding",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 在前的"
+ },
+ {
+  "w": "precedent",
+  "disp": "precedent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 先例"
+ },
+ {
+  "w": "foremost",
+  "disp": "foremost",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 最重要的；adv. 首要地"
+ },
+ {
+  "w": "opening",
+  "disp": "opening",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 开始；空缺职位；adj. 开始的"
+ },
+ {
+  "w": "initially",
+  "disp": "Initially",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adv. 最初"
+ },
+ {
+  "w": "intermediate",
+  "disp": "intermediate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 中间的；居中的"
+ },
+ {
+  "w": "midst",
+  "disp": "midst",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 中间"
+ },
+ {
+  "w": "meantime",
+  "disp": "meantime",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 与此同时"
+ },
+ {
+  "w": "meanwhile",
+  "disp": "Meanwhile",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adv. 与此同时"
+ },
+ {
+  "w": "guitar",
+  "disp": "guitar",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 吉他"
+ },
+ {
+  "w": "simultaneous",
+  "disp": "simultaneous",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 同时的"
+ },
+ {
+  "w": "ongoing",
+  "disp": "ongoing",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 正在进行的"
+ },
+ {
+  "w": "everlasting",
+  "disp": "everlasting",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 永久的；永恒的；经久不变的"
+ },
+ {
+  "w": "permanent",
+  "disp": "permanent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 永久的；持久的"
+ },
+ {
+  "w": "punctual",
+  "disp": "punctual",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 准时的"
+ },
+ {
+  "w": "duration",
+  "disp": "duration",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 持续时间；期间"
+ },
+ {
+  "w": "consecutive",
+  "disp": "consecutive",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 连续的；连贯的"
+ },
+ {
+  "w": "periodically",
+  "disp": "periodically",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adv. 周期性地；定期地"
+ },
+ {
+  "w": "imminent",
+  "disp": "imminent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 即将发生的；临近的"
+ },
+ {
+  "w": "incidentally",
+  "disp": "Incidentally",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adv. 顺便地"
+ }
+]

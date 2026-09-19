@@ -1,0 +1,565 @@
+[
+ {
+  "head": "advise",
+  "verdict": "replace",
+  "corrected": [
+   "propose"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "alter",
+  "verdict": "replace",
+  "corrected": [
+   "adapt",
+   "adjust",
+   "amend",
+   "change",
+   "shift"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "apartment",
+  "verdict": "replace",
+  "corrected": [
+   "flat"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "assess",
+  "verdict": "replace",
+  "corrected": [
+   "calculate",
+   "measure",
+   "evaluate"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "avenue",
+  "verdict": "replace",
+  "corrected": [
+   "lane"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "balcony",
+  "verdict": "replace",
+  "corrected": [
+   "terrace",
+   "platform",
+   "gallery"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "bone",
+  "verdict": "replace",
+  "corrected": [
+   "skeleton"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "competition",
+  "verdict": "replace",
+  "corrected": [
+   "contest"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "component",
+  "verdict": "replace",
+  "corrected": [
+   "element",
+   "part",
+   "proportion"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "constraint",
+  "verdict": "replace",
+  "corrected": [
+   "curb",
+   "limit",
+   "restrict"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "contaminate",
+  "verdict": "replace",
+  "corrected": [
+   "pollution"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "contemporary",
+  "verdict": "replace",
+  "corrected": [
+   "present"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "contest",
+  "verdict": "replace",
+  "corrected": [
+   "competition"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "decline",
+  "verdict": "replace",
+  "corrected": [
+   "decrease",
+   "diminish",
+   "reduce",
+   "deprive"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "decrease",
+  "verdict": "replace",
+  "corrected": [
+   "cut",
+   "decline",
+   "diminish",
+   "reduce",
+   "deprive"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "department",
+  "verdict": "replace",
+  "corrected": [
+   "faculty"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "deprive",
+  "verdict": "replace",
+  "corrected": [
+   "reduce",
+   "decrease",
+   "decline"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "evaluate",
+  "verdict": "replace",
+  "corrected": [
+   "assess"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "experiment",
+  "verdict": "replace",
+  "corrected": [
+   "trial",
+   "test",
+   "experimental"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "experimental",
+  "verdict": "replace",
+  "corrected": [
+   "experiment"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "flat",
+  "verdict": "replace",
+  "corrected": [
+   "apartment"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "gallery",
+  "verdict": "replace",
+  "corrected": [
+   "terrace",
+   "balcony",
+   "platform"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "halt",
+  "verdict": "replace",
+  "corrected": [
+   "cease",
+   "stop",
+   "suspend",
+   "quit"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "happiness",
+  "verdict": "replace",
+  "corrected": [
+   "well-being"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "incentive",
+  "verdict": "replace",
+  "corrected": [
+   "drive",
+   "motivation",
+   "stimulus",
+   "stimulate"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "increase",
+  "verdict": "replace",
+  "corrected": [
+   "boom",
+   "boost",
+   "raise"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "inhabitant",
+  "verdict": "replace",
+  "corrected": [
+   "resident"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "inspire",
+  "verdict": "replace",
+  "corrected": [
+   "boost",
+   "drive",
+   "motivate"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "investigate",
+  "verdict": "replace",
+  "corrected": [
+   "examine",
+   "probe",
+   "look into",
+   "research",
+   "survey"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "irritate",
+  "verdict": "replace",
+  "corrected": [
+   "annoy",
+   "provoke",
+   "vex",
+   "motivate"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "lane",
+  "verdict": "replace",
+  "corrected": [
+   "avenue"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "major",
+  "verdict": "replace",
+  "corrected": [
+   "dominant",
+   "first",
+   "leading",
+   "primary"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "motivate",
+  "verdict": "replace",
+  "corrected": [
+   "activate",
+   "advance",
+   "boost",
+   "develop",
+   "drive"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "natural",
+  "verdict": "replace",
+  "corrected": [
+   "normal"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "normal",
+  "verdict": "replace",
+  "corrected": [
+   "average",
+   "common",
+   "general",
+   "natural"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "platform",
+  "verdict": "replace",
+  "corrected": [
+   "terrace",
+   "balcony",
+   "gallery"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "pollution",
+  "verdict": "replace",
+  "corrected": [
+   "contaminate"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "present",
+  "verdict": "replace",
+  "corrected": [
+   "contemporary"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "pressure",
+  "verdict": "replace",
+  "corrected": [
+   "strain"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "propose",
+  "verdict": "replace",
+  "corrected": [
+   "advise"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "quit",
+  "verdict": "replace",
+  "corrected": [
+   "cease",
+   "resign",
+   "withdraw",
+   "halt"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "quote",
+  "verdict": "replace",
+  "corrected": [
+   "cite"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "raise",
+  "verdict": "replace",
+  "corrected": [
+   "boost",
+   "foster",
+   "increase"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "reduce",
+  "verdict": "replace",
+  "corrected": [
+   "alleviate",
+   "cut",
+   "decline",
+   "decrease",
+   "deprive"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "refreshment",
+  "verdict": "replace",
+  "corrected": [
+   "snack"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "request",
+  "verdict": "replace",
+  "corrected": [
+   "require"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "require",
+  "verdict": "replace",
+  "corrected": [
+   "demand",
+   "need",
+   "want",
+   "request"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "research",
+  "verdict": "replace",
+  "corrected": [
+   "analyse",
+   "analysis",
+   "investigate",
+   "survey"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "resident",
+  "verdict": "replace",
+  "corrected": [
+   "inhabitant"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "restrict",
+  "verdict": "replace",
+  "corrected": [
+   "confine",
+   "constrain",
+   "constraint"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "sale",
+  "verdict": "replace",
+  "corrected": [
+   "auction",
+   "discount",
+   "retail"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "skeleton",
+  "verdict": "replace",
+  "corrected": [
+   "frame",
+   "outline",
+   "bones",
+   "framework"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "snack",
+  "verdict": "replace",
+  "corrected": [
+   "refreshment"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "stage",
+  "verdict": "replace",
+  "corrected": [
+   "step"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "step",
+  "verdict": "replace",
+  "corrected": [
+   "stage"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "stimulate",
+  "verdict": "replace",
+  "corrected": [
+   "activate",
+   "advance",
+   "boost",
+   "develop",
+   "drive"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "strain",
+  "verdict": "replace",
+  "corrected": [
+   "pressure"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "survey",
+  "verdict": "replace",
+  "corrected": [
+   "investigate",
+   "research"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "terrace",
+  "verdict": "replace",
+  "corrected": [
+   "balcony",
+   "platform",
+   "gallery"
+  ],
+  "wrong": []
+ },
+ {
+  "head": "well-being",
+  "verdict": "replace",
+  "corrected": [
+   "happiness"
+  ],
+  "wrong": []
+ }
+]

@@ -26,3 +26,5 @@ tools/gloss-audit/out/
 config.js
 # 旧版 PRD 本地备份，不入库
 docs/PRD-v1.0.md.bak
+# 子代理临时脚本，不作运行依赖
+work/cardgen/*.py

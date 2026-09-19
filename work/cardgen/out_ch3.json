@@ -1,0 +1,2014 @@
+[
+ {
+  "w": "stuff",
+  "syn": [],
+  "col": [
+   "all my old stuff",
+   "clean up your stuff"
+  ]
+ },
+ {
+  "w": "merchandise",
+  "syn": [
+   "goods"
+  ],
+  "col": [
+   "used merchandise",
+   "sell cheap merchandise"
+  ]
+ },
+ {
+  "w": "souvenir",
+  "syn": [],
+  "col": [
+   "buy a souvenir",
+   "a travel souvenir"
+  ]
+ },
+ {
+  "w": "clay",
+  "syn": [],
+  "col": [
+   "a clay oven",
+   "a clay pot"
+  ]
+ },
+ {
+  "w": "artifact",
+  "syn": [],
+  "col": [
+   "a clay artifact",
+   "a famous artifact"
+  ]
+ },
+ {
+  "w": "raw",
+  "syn": [],
+  "col": [
+   "raw wood",
+   "raw material"
+  ]
+ },
+ {
+  "w": "crude",
+  "syn": [
+   "rough"
+  ],
+  "col": [
+   "crude oil",
+   "crude tools"
+  ]
+ },
+ {
+  "w": "gentle",
+  "syn": [
+   "mild"
+  ],
+  "col": []
+ },
+ {
+  "w": "step",
+  "syn": [],
+  "col": [
+   "the next step",
+   "step by step"
+  ]
+ },
+ {
+  "w": "necessity",
+  "syn": [],
+  "col": [
+   "a winter necessity",
+   "a basic necessity"
+  ]
+ },
+ {
+  "w": "festival",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "outfit",
+  "syn": [
+   "costume"
+  ],
+  "col": []
+ },
+ {
+  "w": "kit",
+  "syn": [],
+  "col": [
+   "a repair kit"
+  ]
+ },
+ {
+  "w": "utensil",
+  "syn": [
+   "tool"
+  ],
+  "col": [
+   "a kitchen utensil",
+   "a cooking utensil"
+  ]
+ },
+ {
+  "w": "rubbish",
+  "syn": [
+   "junk"
+  ],
+  "col": []
+ },
+ {
+  "w": "reuse",
+  "syn": [],
+  "col": [
+   "reuse old clothes",
+   "reuse the water"
+  ]
+ },
+ {
+  "w": "junk",
+  "syn": [
+   "rubbish"
+  ],
+  "col": [
+   "a junk pile",
+   "junk food"
+  ]
+ },
+ {
+  "w": "landfill",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "sewerage",
+  "syn": [
+   "drainage",
+   "sewage"
+  ],
+  "col": [
+   "the sewerage system",
+   "sewerage work"
+  ]
+ },
+ {
+  "w": "dust",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "mild",
+  "syn": [
+   "gentle"
+  ],
+  "col": [
+   "mild soap",
+   "a mild smell"
+  ]
+ },
+ {
+  "w": "detergent",
+  "syn": [],
+  "col": [
+   "liquid detergent",
+   "washing detergent"
+  ]
+ },
+ {
+  "w": "lotion",
+  "syn": [],
+  "col": [
+   "hand lotion",
+   "body lotion"
+  ]
+ },
+ {
+  "w": "tub",
+  "syn": [
+   "pail",
+   "bucket"
+  ],
+  "col": [
+   "fill a tub with water",
+   "a low wide tub"
+  ]
+ },
+ {
+  "w": "pull",
+  "syn": [
+   "draw"
+  ],
+  "col": [
+   "pull the door open",
+   "pull the heavy box"
+  ]
+ },
+ {
+  "w": "plug",
+  "syn": [],
+  "col": [
+   "pull out the plug",
+   "a power plug"
+  ]
+ },
+ {
+  "w": "tap",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "frame",
+  "syn": [
+   "framework"
+  ],
+  "col": [
+   "a picture frame",
+   "the window frame"
+  ]
+ },
+ {
+  "w": "pipe",
+  "syn": [
+   "tube"
+  ],
+  "col": [
+   "a water pipe",
+   "a gas pipe"
+  ]
+ },
+ {
+  "w": "hollow",
+  "syn": [],
+  "col": [
+   "a hollow tree",
+   "a hollow wall"
+  ]
+ },
+ {
+  "w": "tube",
+  "syn": [
+   "pipe"
+  ],
+  "col": []
+ },
+ {
+  "w": "mop",
+  "syn": [],
+  "col": [
+   "mop the floor",
+   "a wet mop"
+  ]
+ },
+ {
+  "w": "straw",
+  "syn": [],
+  "col": [
+   "a straw hat",
+   "drinking straw"
+  ]
+ },
+ {
+  "w": "broom",
+  "syn": [],
+  "col": [
+   "an old broom",
+   "sweep with a broom"
+  ]
+ },
+ {
+  "w": "mattress",
+  "syn": [],
+  "col": [
+   "a soft mattress",
+   "an old mattress"
+  ]
+ },
+ {
+  "w": "carpet",
+  "syn": [
+   "rug"
+  ],
+  "col": [
+   "a thick carpet",
+   "clean the carpet"
+  ]
+ },
+ {
+  "w": "rug",
+  "syn": [
+   "carpet"
+  ],
+  "col": [
+   "a small rug",
+   "a thick rug"
+  ]
+ },
+ {
+  "w": "mat",
+  "syn": [
+   "rug"
+  ],
+  "col": [
+   "a door mat"
+  ]
+ },
+ {
+  "w": "flat",
+  "syn": [],
+  "col": [
+   "a flat iron",
+   "a flat surface"
+  ]
+ },
+ {
+  "w": "cushion",
+  "syn": [
+   "pad"
+  ],
+  "col": [
+   "a seat cushion",
+   "a soft cushion"
+  ]
+ },
+ {
+  "w": "feather",
+  "syn": [],
+  "col": [
+   "a feather pillow",
+   "a soft feather"
+  ]
+ },
+ {
+  "w": "pad",
+  "syn": [
+   "cushion"
+  ],
+  "col": [
+   "a soft pad",
+   "a seat pad"
+  ]
+ },
+ {
+  "w": "blanket",
+  "syn": [],
+  "col": [
+   "a warm blanket",
+   "a thick blanket"
+  ]
+ },
+ {
+  "w": "quilt",
+  "syn": [],
+  "col": [
+   "a warm quilt",
+   "the old quilt"
+  ]
+ },
+ {
+  "w": "pillow",
+  "syn": [],
+  "col": [
+   "a soft pillow",
+   "on the pillow"
+  ]
+ },
+ {
+  "w": "sponge",
+  "syn": [],
+  "col": [
+   "a soft sponge",
+   "clean with a sponge"
+  ]
+ },
+ {
+  "w": "towel",
+  "syn": [],
+  "col": [
+   "a white towel",
+   "dry your hands with a towel"
+  ]
+ },
+ {
+  "w": "staple",
+  "syn": [],
+  "col": [
+   "a small staple",
+   "fasten with a staple"
+  ]
+ },
+ {
+  "w": "nail",
+  "syn": [],
+  "col": [
+   "an old nail",
+   "pull out the nail"
+  ]
+ },
+ {
+  "w": "razor",
+  "syn": [
+   "blade"
+  ],
+  "col": [
+   "a sharp razor",
+   "an electric razor"
+  ]
+ },
+ {
+  "w": "rough",
+  "syn": [],
+  "col": [
+   "a rough surface",
+   "rough wood"
+  ]
+ },
+ {
+  "w": "shave",
+  "syn": [
+   "scrape"
+  ],
+  "col": [
+   "shave the edges",
+   "shave off the paint"
+  ]
+ },
+ {
+  "w": "smooth",
+  "syn": [],
+  "col": [
+   "a smooth surface",
+   "smooth skin"
+  ]
+ },
+ {
+  "w": "fuse",
+  "syn": [],
+  "col": [
+   "a safety fuse",
+   "change the fuse"
+  ]
+ },
+ {
+  "w": "cable",
+  "syn": [
+   "cord"
+  ],
+  "col": [
+   "a power cable",
+   "lay the cable"
+  ]
+ },
+ {
+  "w": "cord",
+  "syn": [
+   "cable",
+   "string"
+  ],
+  "col": [
+   "a power cord",
+   "tie it with a cord"
+  ]
+ },
+ {
+  "w": "strand",
+  "syn": [],
+  "col": [
+   "a wire strand",
+   "one loose strand"
+  ]
+ },
+ {
+  "w": "candle",
+  "syn": [],
+  "col": [
+   "light a candle",
+   "a burning candle"
+  ]
+ },
+ {
+  "w": "wax",
+  "syn": [],
+  "col": [
+   "wax the floor",
+   "polish with wax"
+  ]
+ },
+ {
+  "w": "paperback",
+  "syn": [],
+  "col": [
+   "a paperback book",
+   "an old paperback"
+  ]
+ },
+ {
+  "w": "pamphlet",
+  "syn": [
+   "brochure"
+  ],
+  "col": [
+   "a picture pamphlet",
+   "give out a pamphlet"
+  ]
+ },
+ {
+  "w": "tissue",
+  "syn": [],
+  "col": [
+   "a piece of tissue",
+   "soft tissue paper"
+  ]
+ },
+ {
+  "w": "xerox",
+  "syn": [],
+  "col": [
+   "xerox the form",
+   "xerox a document"
+  ]
+ },
+ {
+  "w": "memorandum",
+  "syn": [],
+  "col": [
+   "a short memorandum",
+   "send a memorandum"
+  ]
+ },
+ {
+  "w": "stationery",
+  "syn": [],
+  "col": [
+   "a drawer of old stationery",
+   "a stationery shop"
+  ]
+ },
+ {
+  "w": "glue",
+  "syn": [],
+  "col": [
+   "a tube of glue",
+   "stick it with glue"
+  ]
+ },
+ {
+  "w": "ink",
+  "syn": [],
+  "col": [
+   "blue ink",
+   "a bottle of ink"
+  ]
+ },
+ {
+  "w": "rubber",
+  "syn": [],
+  "col": [
+   "a thick rubber band",
+   "rubber gloves"
+  ]
+ },
+ {
+  "w": "band",
+  "syn": [
+   "strap"
+  ],
+  "col": []
+ },
+ {
+  "w": "scissors",
+  "syn": [],
+  "col": [
+   "a pair of scissors",
+   "cut with scissors"
+  ]
+ },
+ {
+  "w": "shear",
+  "syn": [],
+  "col": [
+   "shear the sheep",
+   "shear the cloth"
+  ]
+ },
+ {
+  "w": "round",
+  "syn": [],
+  "col": [
+   "a round table",
+   "a round face"
+  ]
+ },
+ {
+  "w": "rim",
+  "syn": [],
+  "col": [
+   "the rim of the wheel",
+   "a gold rim"
+  ]
+ },
+ {
+  "w": "element",
+  "syn": [],
+  "col": [
+   "a key element",
+   "the main element"
+  ]
+ },
+ {
+  "w": "section",
+  "syn": [],
+  "col": [
+   "the damaged section",
+   "a new section"
+  ]
+ },
+ {
+  "w": "badge",
+  "syn": [],
+  "col": [
+   "a school badge",
+   "wear a badge"
+  ]
+ },
+ {
+  "w": "bolt",
+  "syn": [
+   "screw"
+  ],
+  "col": [
+   "a tiny bolt",
+   "tighten the bolt"
+  ]
+ },
+ {
+  "w": "knob",
+  "syn": [],
+  "col": [
+   "a door knob",
+   "turn the knob"
+  ]
+ },
+ {
+  "w": "shutter",
+  "syn": [],
+  "col": [
+   "a window shutter",
+   "close the shutter"
+  ]
+ },
+ {
+  "w": "curtain",
+  "syn": [],
+  "col": [
+   "a long curtain",
+   "hang the curtain"
+  ]
+ },
+ {
+  "w": "pane",
+  "syn": [],
+  "col": [
+   "a window pane",
+   "the cracked window pane"
+  ]
+ },
+ {
+  "w": "opacity",
+  "syn": [],
+  "col": [
+   "the opacity of the glass"
+  ]
+ },
+ {
+  "w": "jar",
+  "syn": [
+   "can"
+  ],
+  "col": [
+   "a glass jar",
+   "a jar of honey"
+  ]
+ },
+ {
+  "w": "barrel",
+  "syn": [
+   "tub"
+  ],
+  "col": [
+   "a small barrel",
+   "a barrel of oil"
+  ]
+ },
+ {
+  "w": "bucket",
+  "syn": [
+   "pail"
+  ],
+  "col": [
+   "a bucket of water",
+   "a red bucket"
+  ]
+ },
+ {
+  "w": "pail",
+  "syn": [
+   "bucket"
+  ],
+  "col": [
+   "a small pail",
+   "a pail of water"
+  ]
+ },
+ {
+  "w": "phone",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "bell",
+  "syn": [],
+  "col": [
+   "a door bell",
+   "ring the bell"
+  ]
+ },
+ {
+  "w": "spotlight",
+  "syn": [],
+  "col": [
+   "in the spotlight",
+   "a strong spotlight"
+  ]
+ },
+ {
+  "w": "paper",
+  "syn": [],
+  "col": [
+   "a paper bag",
+   "a piece of paper"
+  ]
+ },
+ {
+  "w": "lantern",
+  "syn": [],
+  "col": [
+   "a paper lantern",
+   "hang a lantern"
+  ]
+ },
+ {
+  "w": "bulb",
+  "syn": [],
+  "col": [
+   "a light bulb",
+   "change the bulb"
+  ]
+ },
+ {
+  "w": "flashlight",
+  "syn": [],
+  "col": [
+   "a pocket flashlight",
+   "turn on the flashlight"
+  ]
+ },
+ {
+  "w": "refrigerator",
+  "syn": [
+   "fridge"
+  ],
+  "col": [
+   "a new refrigerator",
+   "clean the refrigerator"
+  ]
+ },
+ {
+  "w": "fridge",
+  "syn": [
+   "refrigerator"
+  ],
+  "col": [
+   "the small fridge",
+   "in the fridge"
+  ]
+ },
+ {
+  "w": "vacuum",
+  "syn": [],
+  "col": [
+   "a vacuum cleaner",
+   "clean with a vacuum"
+  ]
+ },
+ {
+  "w": "hurdle",
+  "syn": [],
+  "col": [
+   "a high hurdle",
+   "clear the hurdle"
+  ]
+ },
+ {
+  "w": "fence",
+  "syn": [
+   "barrier"
+  ],
+  "col": [
+   "a garden fence",
+   "climb the fence"
+  ]
+ },
+ {
+  "w": "pedal",
+  "syn": [],
+  "col": [
+   "a bike pedal",
+   "press the pedal"
+  ]
+ },
+ {
+  "w": "shelf",
+  "syn": [
+   "rack"
+  ],
+  "col": [
+   "a wall shelf",
+   "on the shelf"
+  ]
+ },
+ {
+  "w": "climb",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "ladder",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "painting",
+  "syn": [],
+  "col": [
+   "an oil painting",
+   "a beautiful painting"
+  ]
+ },
+ {
+  "w": "stool",
+  "syn": [],
+  "col": [
+   "a small stool",
+   "sit on a stool"
+  ]
+ },
+ {
+  "w": "umbrella",
+  "syn": [],
+  "col": [
+   "a black umbrella",
+   "open an umbrella"
+  ]
+ },
+ {
+  "w": "raincoat",
+  "syn": [],
+  "col": [
+   "wear a raincoat",
+   "a long raincoat"
+  ]
+ },
+ {
+  "w": "drip",
+  "syn": [
+   "drop"
+  ],
+  "col": [
+   "a slow drip",
+   "drip slowly"
+  ]
+ },
+ {
+  "w": "dredge",
+  "syn": [],
+  "col": [
+   "dredge the mud",
+   "dredge the old well"
+  ]
+ },
+ {
+  "w": "pour",
+  "syn": [
+   "dump"
+  ],
+  "col": [
+   "pour it into a can",
+   "pour the soup"
+  ]
+ },
+ {
+  "w": "can",
+  "syn": [
+   "tin",
+   "jar"
+  ],
+  "col": [
+   "open a can",
+   "a can of food"
+  ]
+ },
+ {
+  "w": "mill",
+  "syn": [],
+  "col": [
+   "the old mill",
+   "a flour mill"
+  ]
+ },
+ {
+  "w": "forge",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "alloy",
+  "syn": [],
+  "col": [
+   "a strong alloy",
+   "an alloy wheel"
+  ]
+ },
+ {
+  "w": "metal",
+  "syn": [],
+  "col": [
+   "a piece of metal",
+   "pure metal"
+  ]
+ },
+ {
+  "w": "iron",
+  "syn": [],
+  "col": [
+   "an iron pot",
+   "a flat iron"
+  ]
+ },
+ {
+  "w": "brass",
+  "syn": [],
+  "col": [
+   "a brass ring",
+   "a brass band"
+  ]
+ },
+ {
+  "w": "bronze",
+  "syn": [],
+  "col": [
+   "a bronze medal",
+   "a small bronze bowl"
+  ]
+ },
+ {
+  "w": "horse",
+  "syn": [],
+  "col": [
+   "ride a horse",
+   "a brown horse"
+  ]
+ },
+ {
+  "w": "cement",
+  "syn": [],
+  "col": [
+   "a bag of cement",
+   "mix the cement"
+  ]
+ },
+ {
+  "w": "lime",
+  "syn": [],
+  "col": [
+   "white lime",
+   "a bag of lime"
+  ]
+ },
+ {
+  "w": "plaster",
+  "syn": [],
+  "col": [
+   "the wall plaster",
+   "plaster the wall"
+  ]
+ },
+ {
+  "w": "leather",
+  "syn": [],
+  "col": [
+   "a leather bag",
+   "a leather chair"
+  ]
+ },
+ {
+  "w": "plastic",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "fibre",
+  "syn": [],
+  "col": [
+   "a plant fibre",
+   "natural fibre"
+  ]
+ },
+ {
+  "w": "fabric",
+  "syn": [
+   "textile"
+  ],
+  "col": [
+   "a soft fabric",
+   "a piece of fabric"
+  ]
+ },
+ {
+  "w": "knit",
+  "syn": [
+   "weave"
+  ],
+  "col": [
+   "knit a warm cap",
+   "knit by hand"
+  ]
+ },
+ {
+  "w": "weave",
+  "syn": [
+   "knit"
+  ],
+  "col": [
+   "weave a basket",
+   "weave the seat"
+  ]
+ },
+ {
+  "w": "canvas",
+  "syn": [],
+  "col": [
+   "a canvas bag",
+   "a canvas tent"
+  ]
+ },
+ {
+  "w": "linen",
+  "syn": [
+   "fabric"
+  ],
+  "col": [
+   "table linen",
+   "a linen shirt"
+  ]
+ },
+ {
+  "w": "cotton",
+  "syn": [],
+  "col": [
+   "a cotton shirt",
+   "soft cotton"
+  ]
+ },
+ {
+  "w": "nylon",
+  "syn": [],
+  "col": [
+   "a nylon bag",
+   "a nylon rope"
+  ]
+ },
+ {
+  "w": "lumber",
+  "syn": [
+   "timber"
+  ],
+  "col": [
+   "a pile of lumber",
+   "cut the lumber"
+  ]
+ },
+ {
+  "w": "wooden",
+  "syn": [],
+  "col": [
+   "a wooden box",
+   "a wooden floor"
+  ]
+ },
+ {
+  "w": "pit",
+  "syn": [
+   "core"
+  ],
+  "col": [
+   "a date pit",
+   "the pit of a peach"
+  ]
+ },
+ {
+  "w": "steady",
+  "syn": [
+   "stable"
+  ],
+  "col": []
+ },
+ {
+  "w": "fuel",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "lubricate",
+  "syn": [],
+  "col": [
+   "lubricate the hinge"
+  ]
+ },
+ {
+  "w": "crystal",
+  "syn": [],
+  "col": [
+   "a crystal glass",
+   "crystal clear"
+  ]
+ },
+ {
+  "w": "inferior",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "counterfeit",
+  "syn": [
+   "fake"
+  ],
+  "col": [
+   "counterfeit money",
+   "a counterfeit coin"
+  ]
+ },
+ {
+  "w": "fake",
+  "syn": [
+   "counterfeit"
+  ],
+  "col": []
+ },
+ {
+  "w": "fragile",
+  "syn": [
+   "delicate"
+  ],
+  "col": [
+   "a fragile shell",
+   "fragile glass"
+  ]
+ },
+ {
+  "w": "miniature",
+  "syn": [],
+  "col": [
+   "a miniature model",
+   "a miniature chair"
+  ]
+ },
+ {
+  "w": "available",
+  "syn": [],
+  "col": [
+   "still available",
+   "available for sale"
+  ]
+ },
+ {
+  "w": "durable",
+  "syn": [],
+  "col": [
+   "a durable material",
+   "make it durable"
+  ]
+ },
+ {
+  "w": "popularity",
+  "syn": [],
+  "col": [
+   "win popularity",
+   "enjoy great popularity"
+  ]
+ },
+ {
+  "w": "vogue",
+  "syn": [],
+  "col": [
+   "in vogue",
+   "the latest vogue"
+  ]
+ },
+ {
+  "w": "prevail",
+  "syn": [],
+  "col": [
+   "the prevailing style",
+   "will always prevail"
+  ]
+ },
+ {
+  "w": "idol",
+  "syn": [],
+  "col": [
+   "a young idol",
+   "my childhood idol"
+  ]
+ },
+ {
+  "w": "plain",
+  "syn": [],
+  "col": [
+   "plain dress",
+   "a plain look"
+  ]
+ },
+ {
+  "w": "luxury",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "extravagant",
+  "syn": [
+   "excessive"
+  ],
+  "col": []
+ },
+ {
+  "w": "jewellery",
+  "syn": [],
+  "col": [
+   "family jewellery",
+   "a piece of jewellery"
+  ]
+ },
+ {
+  "w": "jewel",
+  "syn": [
+   "gem"
+  ],
+  "col": [
+   "a tiny jewel",
+   "a jewel box"
+  ]
+ },
+ {
+  "w": "gem",
+  "syn": [
+   "jewel"
+  ],
+  "col": [
+   "a blue gem",
+   "shine like a gem"
+  ]
+ },
+ {
+  "w": "jade",
+  "syn": [],
+  "col": [
+   "a jade ring",
+   "green jade"
+  ]
+ },
+ {
+  "w": "adorn",
+  "syn": [
+   "decorate",
+   "embellish"
+  ],
+  "col": []
+ },
+ {
+  "w": "ornament",
+  "syn": [],
+  "col": [
+   "a small ornament",
+   "a gold ornament"
+  ]
+ },
+ {
+  "w": "embellish",
+  "syn": [
+   "decorate",
+   "adorn"
+  ],
+  "col": [
+   "embellish the dress",
+   "embellish with gold"
+  ]
+ },
+ {
+  "w": "embroider",
+  "syn": [],
+  "col": [
+   "embroider a dress",
+   "embroider red flowers"
+  ]
+ },
+ {
+  "w": "hairdressing",
+  "syn": [],
+  "col": [
+   "wedding hairdressing",
+   "learn hairdressing"
+  ]
+ },
+ {
+  "w": "pigment",
+  "syn": [
+   "dye"
+  ],
+  "col": [
+   "a natural pigment",
+   "green pigment"
+  ]
+ },
+ {
+  "w": "dye",
+  "syn": [
+   "pigment"
+  ],
+  "col": [
+   "a brown dye",
+   "dye the cloth"
+  ]
+ },
+ {
+  "w": "spring",
+  "syn": [],
+  "col": [
+   "in spring",
+   "a spring day"
+  ]
+ },
+ {
+  "w": "masquerade",
+  "syn": [],
+  "col": [
+   "a masquerade dance",
+   "attend a masquerade"
+  ]
+ },
+ {
+  "w": "veil",
+  "syn": [],
+  "col": [
+   "a thin veil",
+   "wear a veil"
+  ]
+ },
+ {
+  "w": "costume",
+  "syn": [
+   "outfit"
+  ],
+  "col": [
+   "a dance costume",
+   "an old costume"
+  ]
+ },
+ {
+  "w": "fascinate",
+  "syn": [
+   "attract",
+   "mesmerize"
+  ],
+  "col": [
+   "fascinate every child",
+   "be fascinated by it"
+  ]
+ },
+ {
+  "w": "decent",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "exquisite",
+  "syn": [
+   "delicate"
+  ],
+  "col": [
+   "an exquisite touch",
+   "exquisite work"
+  ]
+ },
+ {
+  "w": "grace",
+  "syn": [
+   "elegance"
+  ],
+  "col": [
+   "walk with grace",
+   "full of grace"
+  ]
+ },
+ {
+  "w": "quiet",
+  "syn": [],
+  "col": [
+   "a quiet street",
+   "stay quiet"
+  ]
+ },
+ {
+  "w": "elegance",
+  "syn": [
+   "grace"
+  ],
+  "col": [
+   "with elegance",
+   "her natural elegance"
+  ]
+ },
+ {
+  "w": "appearance",
+  "syn": [
+   "exterior"
+  ],
+  "col": []
+ },
+ {
+  "w": "cosmetics",
+  "syn": [
+   "makeup"
+  ],
+  "col": [
+   "wear cosmetics",
+   "a cosmetics shop"
+  ]
+ },
+ {
+  "w": "makeup",
+  "syn": [
+   "cosmetics"
+  ],
+  "col": [
+   "wear makeup",
+   "put on light makeup"
+  ]
+ },
+ {
+  "w": "charming",
+  "syn": [],
+  "col": [
+   "look charming",
+   "a charming smile"
+  ]
+ },
+ {
+  "w": "clothe",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "garment",
+  "syn": [],
+  "col": [
+   "a warm garment",
+   "a torn garment"
+  ]
+ },
+ {
+  "w": "laundry",
+  "syn": [],
+  "col": [
+   "do the laundry",
+   "fold the laundry"
+  ]
+ },
+ {
+  "w": "wardrobe",
+  "syn": [],
+  "col": [
+   "a small wardrobe",
+   "in the wardrobe"
+  ]
+ },
+ {
+  "w": "overall",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "overcoat",
+  "syn": [],
+  "col": [
+   "a long overcoat",
+   "wear a warm overcoat"
+  ]
+ },
+ {
+  "w": "robe",
+  "syn": [],
+  "col": [
+   "a morning robe",
+   "a soft robe"
+  ]
+ },
+ {
+  "w": "gown",
+  "syn": [],
+  "col": [
+   "an evening gown",
+   "a long gown"
+  ]
+ },
+ {
+  "w": "sweater",
+  "syn": [],
+  "col": [
+   "a blue sweater",
+   "a warm sweater"
+  ]
+ },
+ {
+  "w": "jacket",
+  "syn": [],
+  "col": [
+   "a leather jacket",
+   "wear a jacket"
+  ]
+ },
+ {
+  "w": "trousers",
+  "syn": [],
+  "col": [
+   "a pair of trousers",
+   "wear grey trousers"
+  ]
+ },
+ {
+  "w": "clasp",
+  "syn": [],
+  "col": [
+   "a small clasp",
+   "a gold clasp"
+  ]
+ },
+ {
+  "w": "brim",
+  "syn": [],
+  "col": [
+   "the brim of a hat",
+   "a wide brim"
+  ]
+ },
+ {
+  "w": "scarf",
+  "syn": [],
+  "col": [
+   "a soft scarf",
+   "wear a scarf"
+  ]
+ },
+ {
+  "w": "handkerchief",
+  "syn": [],
+  "col": [
+   "a clean handkerchief",
+   "a cotton handkerchief"
+  ]
+ },
+ {
+  "w": "purse",
+  "syn": [
+   "wallet"
+  ],
+  "col": [
+   "a small purse",
+   "her leather purse"
+  ]
+ },
+ {
+  "w": "wallet",
+  "syn": [
+   "purse"
+  ],
+  "col": [
+   "a brown wallet",
+   "in my wallet"
+  ]
+ },
+ {
+  "w": "vest",
+  "syn": [],
+  "col": [
+   "a warm vest",
+   "wear a vest"
+  ]
+ },
+ {
+  "w": "wrap",
+  "syn": [
+   "package"
+  ],
+  "col": [
+   "wrap the gift",
+   "wrap it in paper"
+  ]
+ },
+ {
+  "w": "cloak",
+  "syn": [],
+  "col": [
+   "a dark cloak",
+   "wear a cloak"
+  ]
+ },
+ {
+  "w": "collar",
+  "syn": [],
+  "col": [
+   "a white collar",
+   "open the collar"
+  ]
+ },
+ {
+  "w": "sleeve",
+  "syn": [],
+  "col": [
+   "a long sleeve",
+   "roll up your sleeves"
+  ]
+ },
+ {
+  "w": "sock",
+  "syn": [],
+  "col": [
+   "a pair of socks",
+   "a warm sock"
+  ]
+ },
+ {
+  "w": "stocking",
+  "syn": [],
+  "col": [
+   "a thin stocking",
+   "a pair of stockings"
+  ]
+ },
+ {
+  "w": "slipper",
+  "syn": [],
+  "col": [
+   "a soft slipper",
+   "wear slippers"
+  ]
+ },
+ {
+  "w": "lace",
+  "syn": [],
+  "col": [
+   "a lace dress",
+   "white lace"
+  ]
+ },
+ {
+  "w": "tailor",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "sew",
+  "syn": [
+   "stitch"
+  ],
+  "col": [
+   "sew the hem",
+   "sew by hand"
+  ]
+ },
+ {
+  "w": "spin",
+  "syn": [
+   "twist"
+  ],
+  "col": [
+   "spin the yarn",
+   "spin the wool"
+  ]
+ },
+ {
+  "w": "stitch",
+  "syn": [],
+  "col": [
+   "a strong stitch",
+   "sew one stitch"
+  ]
+ },
+ {
+  "w": "needle",
+  "syn": [],
+  "col": [
+   "a sharp needle",
+   "thread a needle"
+  ]
+ },
+ {
+  "w": "pin",
+  "syn": [],
+  "col": [
+   "a safety pin",
+   "a small pin"
+  ]
+ },
+ {
+  "w": "string",
+  "syn": [
+   "thread",
+   "cord"
+  ],
+  "col": [
+   "a piece of string",
+   "tie it with a string"
+  ]
+ },
+ {
+  "w": "thread",
+  "syn": [
+   "string"
+  ],
+  "col": [
+   "a thin thread",
+   "sew with thread"
+  ]
+ },
+ {
+  "w": "strap",
+  "syn": [
+   "belt",
+   "band"
+  ],
+  "col": [
+   "a bag strap",
+   "a shoulder strap"
+  ]
+ },
+ {
+  "w": "stripe",
+  "syn": [],
+  "col": [
+   "a painted wall stripe",
+   "a red stripe"
+  ]
+ },
+ {
+  "w": "ribbon",
+  "syn": [],
+  "col": [
+   "a pink ribbon",
+   "tie a ribbon"
+  ]
+ },
+ {
+  "w": "belt",
+  "syn": [
+   "strap"
+  ],
+  "col": [
+   "a leather belt",
+   "wear a belt"
+  ]
+ },
+ {
+  "w": "chain",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "bracelet",
+  "syn": [],
+  "col": [
+   "a gold bracelet",
+   "wear a bracelet"
+  ]
+ },
+ {
+  "w": "necklace",
+  "syn": [],
+  "col": [
+   "a pearl necklace",
+   "wear a necklace"
+  ]
+ },
+ {
+  "w": "bead",
+  "syn": [],
+  "col": [
+   "a tiny bead",
+   "a bead necklace"
+  ]
+ },
+ {
+  "w": "textile",
+  "syn": [
+   "fabric"
+  ],
+  "col": [
+   "a textile shop",
+   "the textile industry"
+  ]
+ },
+ {
+  "w": "velvet",
+  "syn": [],
+  "col": [
+   "red velvet",
+   "a velvet dress"
+  ]
+ },
+ {
+  "w": "wool",
+  "syn": [],
+  "col": [
+   "soft wool",
+   "a wool coat"
+  ]
+ },
+ {
+  "w": "patch",
+  "syn": [],
+  "col": [
+   "a small patch",
+   "sew a patch"
+  ]
+ },
+ {
+  "w": "rag",
+  "syn": [],
+  "col": [
+   "a cleaning rag",
+   "wipe it with a rag"
+  ]
+ },
+ {
+  "w": "shabby",
+  "syn": [],
+  "col": [
+   "look shabby",
+   "a shabby old house"
+  ]
+ },
+ {
+  "w": "tight",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "purple",
+  "syn": [],
+  "col": [
+   "deep purple",
+   "purple flowers"
+  ]
+ },
+ {
+  "w": "tan",
+  "syn": [],
+  "col": [
+   "a tan coat",
+   "tan skin"
+  ]
+ },
+ {
+  "w": "fade",
+  "syn": [
+   "disappear"
+  ],
+  "col": [
+   "fade slowly",
+   "fade in the sun"
+  ]
+ },
+ {
+  "w": "stain",
+  "syn": [
+   "blot"
+  ],
+  "col": [
+   "a food stain",
+   "remove the stain"
+  ]
+ },
+ {
+  "w": "blot",
+  "syn": [
+   "stain"
+  ],
+  "col": [
+   "an ink blot",
+   "a dark blot"
+  ]
+ },
+ {
+  "w": "figure",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "slender",
+  "syn": [],
+  "col": [
+   "look slender",
+   "a slender figure"
+  ]
+ },
+ {
+  "w": "dusk",
+  "syn": [],
+  "col": [
+   "at dusk",
+   "before dusk"
+  ]
+ },
+ {
+  "w": "slight",
+  "syn": [
+   "mild"
+  ],
+  "col": [
+   "a slight problem",
+   "a slight difference"
+  ]
+ },
+ {
+  "w": "erection",
+  "syn": [],
+  "col": [
+   "the erection of a new hall",
+   "the erection of a building"
+  ]
+ },
+ {
+  "w": "stricture",
+  "syn": [
+   "reproach",
+   "constraint"
+  ],
+  "col": []
+ },
+ {
+  "w": "construct",
+  "syn": [],
+  "col": [
+   "construct a new building",
+   "construct a road"
+  ]
+ },
+ {
+  "w": "obstruct",
+  "syn": [
+   "impede",
+   "block"
+  ],
+  "col": [
+   "obstruct the way",
+   "obstruct the door"
+  ]
+ },
+ {
+  "w": "ruin",
+  "syn": [
+   "damage",
+   "spoil"
+  ],
+  "col": [
+   "ruin the dinner",
+   "fall into ruin"
+  ]
+ },
+ {
+  "w": "concrete",
+  "syn": [],
+  "col": [
+   "a concrete floor",
+   "pour the concrete"
+  ]
+ },
+ {
+  "w": "steel",
+  "syn": [],
+  "col": [
+   "a steel tool",
+   "a steel wire"
+  ]
+ }
+]
