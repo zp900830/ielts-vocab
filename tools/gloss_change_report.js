@@ -14,7 +14,7 @@ function loadNew() {
   const j = src.indexOf('function refreshGloss');
   if (i < 0 || j < 0 || j <= i) throw new Error('marker not found');
   const block = src.slice(i, j);
-  return new Function('VOCAB', 'accent', 'esc', block + '\nreturn { glossParts, glossHTML, guessPos };')(VOCAB, accent, esc);
+  return new Function('VOCAB', 'accent', 'esc', 'SECTIONS', block + '\nreturn { glossParts, glossHTML, guessPos, verbLex };')(VOCAB, accent, esc, SECTIONS);
 }
 function oldGloss(k) {
   const info = VOCAB[k] || null;

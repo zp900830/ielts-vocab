@@ -96,6 +96,24 @@ test.describe('Inline gloss picks the sense that fits the sentence', () => {
         expect(got).toMatch(/每月的/);
         expect(got).not.toMatch(/每月一次/);
       });
+
+      await test.step('Step 6: modal can/might yield to the noun use', async () => {
+        const r = await page.evaluate(() => {
+          const g = (window as unknown as { glossHTML: (a: string, b: string, c: string, d: string) => string });
+          return {
+            modalCan: g.glossHTML('can', 'can', 'one carrier ', ' pass a cold'),
+            modalMight: g.glossHTML('might', 'might', 'kinds of people ', ' live in harmony'),
+            nounMight: g.glossHTML('might', 'might', 'True ', ' lies not in cruel force'),
+            nounCan: g.glossHTML('can', 'can', 'to a rusty enamel ', '.'),
+          };
+        });
+        expect(r.modalCan).toMatch(/能/);
+        expect(r.modalCan).not.toMatch(/金属罐/);
+        expect(r.modalMight).toMatch(/可能/);
+        expect(r.nounMight).toMatch(/力量/);
+        expect(r.nounMight).not.toMatch(/可能/);
+        expect(r.nounCan).toMatch(/金属罐/);
+      });
     },
   );
 });

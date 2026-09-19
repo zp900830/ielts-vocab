@@ -30,4 +30,10 @@
 「sharing **monthly** drawings」里的 monthly 修饰 drawings，是形容词而不是副词。
 **Verify:** monthly 的小字含「每月的」，不是「每月一次」。
 
-**Pass condition:** 五条全过，且相对旧渲染被改写的处数 ≤ 60（这条规则必须保守，宁可不换也别换错）。
+### 6. 情态动词 can / might 不再顶掉名词用法
+「one carrier **can** pass a cold」「kinds of people **might** live」是情态动词；
+「True **might** lies not in cruel force」「a rusty enamel **can**」是名词。
+判据来自课文自己统计出的「裸动词表」，第三人称单数（lies）会被剔掉。
+**Verify:** 前两句显示「能」「可能」，后两句仍显示「力量」「金属罐」。
+
+**Pass condition:** 六条全过，且相对旧渲染被改写的处数 ≤ 120（这条规则必须保守，宁可不换也别换错）。
