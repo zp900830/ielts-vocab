@@ -193,7 +193,8 @@ def main():
                     if c not in ccol and trim_match(c, list(ccol)) is None:
                         # 同上：词伙只许从候选里挑（允许掐头去尾），候选全是资料/课文里真出现过的
                         rejected.append((h, sid, f'col 不在候选里（自由作答）{c!r}')); continue
-                    src = ccol.get(c) or ccol.get(trim_match(c, list(ccol)), 'T')
+                    # 出处照命中的那条候选记（掐头去尾不改变它来自书里还是课文里）
+                    src = ccol.get(c) or ccol[trim_match(c, list(ccol))]
                     if not any(w in hf or any(w in forms(x) for x in h.split()) for w in ws):
                         rejected.append((h, sid, f'col 不含词头 {c!r}')); continue
                     badw = [w for w in ws if w not in hf and w not in simple and w not in allowed]
@@ -201,7 +202,7 @@ def main():
                         rejected.append((h, sid, f'col 引入超纲词 {c!r} → {badw}')); continue
                     if c in [x['c'] for x in col]:
                         continue
-                    col.append({'c': c, 'src': ccol.get(c, 'F')})
+                    col.append({'c': c, 'src': src})
                     if len(col) >= CAP_COL:
                         break
             elif item.get('col'):

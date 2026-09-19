@@ -1,0 +1,4190 @@
+[
+ {
+  "w": "bristle",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "bristle coat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "carnivore",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "predator",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "chill",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "freeze",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "hopeless",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "pessimistic",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "induction",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "orientation",
+    "src": "M"
+   }
+  ],
+  "col": [
+   {
+    "c": "safety induction",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mite",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "parasite",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "optical",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "visual",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "organism",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny organism",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "parasite",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "mite",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "probe",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small probe",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "radioactive",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "radioactive meter",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rear",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "feed",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "reservoir",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "stone reservoir",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "seal",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sealed boxes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "seed",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "saved seed",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "signal",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "wind signal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "solid",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "stable",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "spacecraft",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "model spacecraft",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spaceship",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "toy spaceship",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spade",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small spade",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "specimen",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "leaf specimen",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spectrum",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "light spectrum",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stable",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "stable doors",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "surroundings",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "habitat",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "telescope",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small telescope",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "terrain",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "geography",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "tulip",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tulip row",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "victim",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "helpless victim",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "abbreviation",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "short abbreviation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "adverb",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "short adverb",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "algebra",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "algebra tasks",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "anecdote",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm anecdote",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "animation",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "bright animation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "anthropologist",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "wise anthropologist",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "antique",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "antique cup",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arithmetic",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "silent arithmetic",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "artwork",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "painting",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "author",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind author",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bachelor",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "young bachelor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ballet",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "new ballet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "battery",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "strong battery",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bible",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old bible",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bibliography",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "reading bibliography",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "biography",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "photo biography",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bishop",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "young bishop",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "brainstorm",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "lively brainstorm",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "camp",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small camp",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "candidate",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "class candidate",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "canteen",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "street canteen",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cello",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "deep cello",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "champion",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "young champion",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chronology",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "chronology charts",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "church",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "white church",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "comedy",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "comedy jokes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "commentary",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "friendly commentary",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "commentator",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "young commentator",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "communicate",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "convey",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "conjunction",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small conjunction",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "consensus",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm consensus",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "contradiction",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "harsh contradiction",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "correspondent",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind correspondent",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "craftsman",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "wise craftsman",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "critic",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "fair critic",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cycling",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "cycling pleasure",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dean",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "busy dean",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "diagonal",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "black diagonal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "diagram",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "study diagram",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "diary",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small diary",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "disc",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "black disc",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dissertation",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "long dissertation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dissolve",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "dissolve away",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dot",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "lucky dot",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "drama",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "funny drama",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "drum",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small drum",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "editor",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tired editor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "eloquence",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft eloquence",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "examination",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "big examination",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fahrenheit",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "degrees fahrenheit",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "feast",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sweet feast",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fellowship",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "club fellowship",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fresher",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "college fresher",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "friction",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "psychological friction",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "golf",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "golf walks",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "guardian",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "strong guardian",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "guitar",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "long guitar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gym",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small gym",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hallowed",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "hallowed wall",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "handout",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "worksheet",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "harmonica",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny harmonica",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "headmaster",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind headmaster",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hollow",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "hollow hall",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "homesick",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "homesick kid",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ideology",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "new ideology",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "idiom",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "new idiom",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "imperial",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "imperial gold",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "incident",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sad incident",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "instance",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "clear instance",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "instil",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "instil good habits",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "inventory",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "shop inventory",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "junior",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "juvenile",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "logic",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "logic task",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "logistics",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "city logistics",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "matriculation",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "matriculation forms",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "melody",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft melody",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mercury",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "mercury light",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "motivate",
+  "pkt": "ch2",
+  "merge_syn_ext": true,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "inspire",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "movement",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "slow movement",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "nobility",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old nobility",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "novice",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "nervous novice",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "opt",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "select",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "pace",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "stride",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "paper",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "model paper",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pastime",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "recreation",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "puzzle",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "semantic puzzles",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rhythm",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quick rhythm",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rudimentary",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "rudimentary maths",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "simulate",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "simulate rain sounds",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sphere",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "foam sphere",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stretch",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "stretch arms",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tale",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "family tale",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "temple",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "temple yard",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "theory",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "hypothesis",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "training",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "education",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "transparent",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "transparent covers",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tribe",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "distant tribe",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "trumpet",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "gold trumpet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "typist",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "fast typist",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vigorous",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "vigorous cheers",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wander",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "wander past",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wedge",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "thin wedge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "yoga",
+  "pkt": "ch2",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "morning yoga",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chicken",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "fat village chicken",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cucumber",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "long cucumber",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "knob",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "round door knob",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "makeup",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "light soft makeup",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "masquerade",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "spring masquerade",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "refreshment",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "as refreshment",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "trainer",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "red trainer",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vegetarian",
+  "pkt": "ch3",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "vegetarian aunt",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "abortion",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "painful abortion",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "accuse",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "accuse anyone",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "administration",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "new administration",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "agent",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "friendly agent",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "agreement",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "paper agreement",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ambulance",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "white ambulance",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "anchor",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "heavy anchor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arabian",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "arabian seller",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arena",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old arena",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arrest",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "arrest anyone",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "asylum",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "city asylum",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "avenue",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "wide avenue",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "banner",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "red banner",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "benchmark",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "cold benchmark",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "brake",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "new brake",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bureau",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "travel bureau",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "canal",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old canal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "captain",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind captain",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cargo",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "winter cargo",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "carriage",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old carriage",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "charter",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "shop charter",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "clan",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "mountain clan",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "clerk",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "young clerk",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "clue",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "paper clue",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "consortium",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "consortium dam",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "copper",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old copper",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "copyright",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "simple copyright",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "crash",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "loud crash",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "currency",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "different currency",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "deceive",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "deceive old friends",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "deck",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "windy deck",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "depression",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet depression",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "discharge",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "discharge nothing",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ditch",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "deep ditch",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dock",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old dock",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "emergency",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "train emergency",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "envelope",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old envelope",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "equity",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "rough equity",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "estate",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old estate",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "european",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "european trains",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "export",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "export problems",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fault",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sad faults",
+    "src": "T"
+   },
+   {
+    "c": "small fault",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fury",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old fury",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "garage",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "dark garage",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "governance",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "fairer governance",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "greek",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "greek story",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "grocery",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "little grocery",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "guarantee",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "strong guarantee",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "guest",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tired guests",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "headquarters",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "big headquarters",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "helicopter",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "red helicopter",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hierarchy",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old hierarchy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "honk",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "long honk",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "impose",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "enforce",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "increment",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny increment",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "independence",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "liberty",
+    "src": "R"
+   },
+   {
+    "s": "freedom",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "indian",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "indian temple",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "jewish",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "jewish festival",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "latin",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "latin word",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "legislate",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "legislate harsh orders",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "liner",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "big liner",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "locomotive",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small locomotive",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lorry",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "big lorry",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lull",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet lull",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "materialism",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "empty materialism",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "meltdown",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet meltdown",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "memorial",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old memorial",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "merchant",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "corner merchant",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "minister",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old minister",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "monitor",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "monitor every train",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "municipal",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "municipal inn",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "murmur",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft murmur",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "notoriety",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sudden notoriety",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "oversee",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "oversee morning arrivals",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "parcel",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "brown parcel",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "parliament",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "famous parliament",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "passage",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "mountain passage",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "passenger",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tired passenger",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "payroll",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "paper payroll",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "persuade",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "induce",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "protocol",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "delivery protocol",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "safari",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "safari trail",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "steal",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "steal coins",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "succession",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "peaceful succession",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "superiority",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "virtue",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "surveillance",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "surveillance cameras",
+    "src": "B"
+   }
+  ]
+ },
+ {
+  "w": "voucher",
+  "pkt": "ch4",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "paper voucher",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "alarm",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "warn",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "betray",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "betray friends",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bomb",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "bomb bridges",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "commander",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "retired commander",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "commuter",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tired commuter",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "conquer",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "conquer fright",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "contest",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "shooting contest",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "counter",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "counter fright",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "deter",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "deter young men",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "enemy",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old enemy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "equip",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "equip kids",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "evil",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "evil thought",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "foe",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "enemy",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "old foe",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "forbid",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "forbid guns",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gauge",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "estimate",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "kin",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "close kin",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "replica",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "exact replica",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "strategy",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "tactic",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "tactic",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "strategy",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "warn",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "alarm",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "youngster",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "youth",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "youth",
+  "pkt": "ch5",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "youngster",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "ailment",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "mild ailment",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arrange",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "prepare",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "awake",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "conscious",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "stays awake till ten",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "deserve",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "deserve good bands",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "distribute",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "distribute clean worksheet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ebola",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "stop ebola",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "immunity",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": [
+   [
+    "build stronger immunity",
+    "stronger immunity"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "build stronger immunity",
+    "src": "T"
+   },
+   {
+    "c": "stronger immunity",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "manner",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "mode",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "overshadow",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "overshadow calm thought",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "recover",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "revive",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "regard",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "deep regard",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sink",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sink low",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stimulus",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "incentive",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "syndrome",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "strange syndrome",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vaccination",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quick vaccination",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "worksheet",
+  "pkt": "ch6a",
+  "merge_syn_ext": false,
+  "overlap_col": [
+   [
+    "clean worksheet",
+    "distribute clean worksheet"
+   ]
+  ],
+  "syn": [
+   {
+    "s": "handout",
+    "src": "M"
+   }
+  ],
+  "col": [
+   {
+    "c": "clean worksheet",
+    "src": "T"
+   },
+   {
+    "c": "distribute clean worksheet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "acupuncture",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft acupuncture",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "agony",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "leg agony",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "apathetic",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "apathetic answers",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ashamed",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "truly ashamed",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "crazy",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "crazy games",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "direct",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [
+   {
+    "s": "steer",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "doubt",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old doubt",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fate",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "blamed fate",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fuss",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "made little fuss",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "heal",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "slow healing",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hurt",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "hurt herself",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ignorant",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "ignorant view",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "intuition",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quick intuition",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lovely",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "lovely teacher",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "manly",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "manly courage",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mercy",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "showed real mercy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mortal",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "mortal life",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "patient",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "calm patient",
+    "src": "T"
+   },
+   {
+    "c": "weak patients",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "physician",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind physician",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "polite",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "polite way",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "reluctant",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "once reluctant",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "remedy",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "evening remedy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "resemble",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "resemble real trees",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "romantic",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": [
+   [
+    "romantic dreams",
+    "pursued romantic dreams"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "romantic dreams",
+    "src": "T"
+   },
+   {
+    "c": "pursued romantic dreams",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sadness",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old sadness",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sane",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "kept sane hours",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sanitary",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sanitary habits",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "similar",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "similar lines",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sincere",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sincere smile",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "slothful",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "slothful afternoons",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sluggish",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sluggish morning",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sly",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sly cat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spontaneous",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "spontaneous soft song",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "strenuous",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "avoiding strenuous late tasks",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "surgeon",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "young surgeon",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "surprising",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "surprising lift",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "suspicion",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "dark suspicion",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "therapy",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "morning therapy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "thrill",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft thrill",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "timid",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "once timid",
+    "src": "T"
+   },
+   {
+    "c": "timid boy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tire",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tired head",
+    "src": "T"
+   },
+   {
+    "c": "tired heart",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tough",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tough set",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "trustworthy",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "trustworthy study friend",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "unkind",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "unkind chant",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "unpleasant",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "unpleasant medicine",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "unsatisfactory",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "unsatisfactory bar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "unwilling",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "never unwilling",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "usual",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "usual walk",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vicious",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "vicious way",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vulgar",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "vulgar shouts",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "weep",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "weep alone",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "yearly",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "yearly check",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "zeal",
+  "pkt": "ch6b",
+  "merge_syn_ext": false,
+  "overlap_col": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "fresh zeal",
+    "src": "T"
+   }
+  ]
+ }
+]

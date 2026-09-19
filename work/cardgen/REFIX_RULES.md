@@ -9,7 +9,7 @@
 
 ## 输入格式
 
-`work/cardgen/refix/rfaNN.txt`，一个词头两行到四行：
+`work/cardgen/refix/rfaNN.txt`，一个词头一行，下面可能再附一到两行原句：
 
 ```
 词头|卡上释义|syn[没交回的候选]|col[没交回的候选]
