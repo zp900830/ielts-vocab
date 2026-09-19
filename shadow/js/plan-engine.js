@@ -365,10 +365,65 @@
              prompt: o.sentZh || '', opts: shuffled, answer: answer };
   }
 
+  /* ---------- 老进度迁移：句子记的功搬到词上 ----------
+     折扣是刻意的：一句读 6 遍 ≠ 句里每个词有效接触 6 次；不打折会让一批词被凭空判毕业。
+     迁移期没有任何检索凭据，所以最高只能到「已见面」—— recognized 以上一律重新考。 */
+  function migrate(oldPlan, oldProg, now, wordsOf) {
+    const at = now || Date.now();
+    const plan = (oldPlan && typeof oldPlan === 'object') ? oldPlan : {};
+    const prog = (oldProg && typeof oldProg === 'object') ? oldProg : {};
+    const events = [];
+    const report = { contacts: 0, words: 0, cappedWords: 0, minutes: 0, droppedCycle: 0 };
+    const list = typeof wordsOf === 'function' ? wordsOf : function () { return []; };
+    const sents = (prog.sentences && typeof prog.sentences === 'object') ? prog.sentences : {};
+
+    Object.keys(sents).forEach(function (sk) {
+      const i = parseInt(sk, 10);
+      if (!Number.isInteger(i) || i < 0) return;
+      const rec = (sents[sk] && typeof sents[sk] === 'object') ? sents[sk] : {};
+      const raw = Math.max(0, Number(rec.reps) || 0);
+      const reps = Math.min(3, Math.floor(raw / 2));   // 封顶 3：见到 ≠ 认得，剩下的靠重考
+      if (!reps) return;
+      const words = list(i);
+      // 「被压回来」按词计数：老口径已经算巩固/掌握，或读得多到会被误判毕业的
+      if (raw >= 6 || rec.phase === 'solid' || rec.phase === 'mastered') report.cappedWords += words.length;
+      const last = Number(rec.lastRead) || Number(rec.nextDue) || at;
+      for (let n = 0; n < reps; n++) {
+        const ts = Math.max(0, last - (reps - 1 - n) * DAY_MS);
+        const day = dayKey(ts, 4);
+        for (let j = 0; j < words.length; j++) { events.push(mkContact(words[j], i, ts, day)); report.contacts++; }
+      }
+    });
+    const touched = {};
+    for (let n = 0; n < events.length; n++) touched[events[n].w] = 1;
+    report.words = Object.keys(touched).length;
+    report.droppedCycle = Math.max(0, Number(prog.cycleCount) || 0);
+    const minutes = Math.max(5, Math.min(180, Math.round(Number(plan.dailyMinutes) || 15)));
+    report.minutes = minutes;
+
+    const startDate = /^\d{4}-\d{2}-\d{2}$/.test(String(plan.startDate || '')) ? plan.startDate : dayKey(at, 4);
+    const planNew = { todayMinutes: minutes, boundaryHour: 4, startDate: startDate,
+                      endDate: null, pausedNew: !!plan.paused };
+    const state = replay(events, { boundaryHour: 4, wordsOf: list, plan: planNew });
+    state.plan = planNew;
+    state.migratedAt = at;
+    state.legacy = {
+      streak: Math.max(0, Number(prog.streak) || 0), cycleCount: report.droppedCycle,
+      lastDay: String(prog.lastDay || ''), pace: (prog.pace && typeof prog.pace === 'object') ? prog.pace : null,
+    };
+    // 老 daily 的历史只留「那天到过、到过多少句次」，不冒充新口径的句数
+    const daily = (prog.daily && typeof prog.daily === 'object') ? prog.daily : {};
+    Object.keys(daily).forEach(function (d) {
+      const src = daily[d] || {};
+      if (Number(src.reps) > 0) state.daily[d] = Object.assign({ legacyReps: Number(src.reps) }, state.daily[d] || {});
+    });
+    return { events: events, state: state, report: report };
+  }
+
   window.ShadowPlan = {
     DAY_MS, WORD_INTERVALS, GRADUATED_INTERVALS, STAGES, MASTER_REPS, LEECH_ERR,
     dayKey, dayDiff, wordInterval, emptyState,
     eventId, mkContact, mkQuiz, mkPromote, newWord, stageOf, replay, wordState,
-    assemble, recallQuiz, meaningQuiz, judgeRecall, editDistance, parseSenses, hash32,
+    assemble, recallQuiz, meaningQuiz, judgeRecall, editDistance, parseSenses, hash32, migrate,
   };
 })();
