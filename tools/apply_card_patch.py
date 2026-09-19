@@ -91,7 +91,10 @@ def main():
     path = ROOT + '/shadow/data/vocab.json'
     src = open(path, encoding='utf-8').read()
     V = json.loads(src)
+    # 候选表建表时把连字符折成了空格（well-known → well known），这里按同一口径回认词头，
+    # 否则这批卡的审核结论会被当成「词表里没有」整条丢掉
     key_of = {k.lower(): k for k in V}
+    key_of.update({k.lower().replace('-', ' '): k for k in V})
     clean, dropped = apply_review(json.load(open(args.patch, encoding='utf-8')), args.review)
 
     touched = {'同义词': 0, '词伙': 0}
