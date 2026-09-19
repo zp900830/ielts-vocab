@@ -21,6 +21,7 @@
     0
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    114,
    118,
@@ -48,6 +49,7 @@
     8
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    55,
    56,
@@ -70,6 +72,7 @@
     2
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    11
   ]
@@ -88,6 +91,7 @@
     8
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    43,
    44
@@ -107,6 +111,7 @@
     12
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    66,
    67
@@ -126,9 +131,50 @@
     13
    ]
   ],
+  "all_synonyms": true,
   "sents": [
    72,
    73
+  ]
+ },
+ {
+  "words": [
+   "outskirts",
+   "suburb"
+  ],
+  "senses": [
+   "郊区"
+  ],
+  "paras": [
+   [
+    0,
+    18
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   105,
+   106
+  ]
+ },
+ {
+  "words": [
+   "contaminate",
+   "pollution"
+  ],
+  "senses": [
+   "污染"
+  ],
+  "paras": [
+   [
+    0,
+    19
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   109,
+   110
   ]
  },
  {
@@ -145,6 +191,7 @@
     20
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    115,
    116
@@ -164,6 +211,7 @@
     22
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    128,
    129
@@ -183,6 +231,7 @@
     25
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    145,
    147
@@ -202,6 +251,7 @@
     26
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    153,
    154
@@ -221,6 +271,7 @@
     27
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    157,
    158
@@ -240,6 +291,7 @@
     28
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    162,
    163
@@ -259,6 +311,7 @@
     29
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    169,
    170
@@ -278,6 +331,7 @@
     30
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    175
   ]
@@ -296,6 +350,7 @@
     31
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    182
   ]
@@ -314,6 +369,7 @@
     33
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    197
   ]
@@ -332,6 +388,7 @@
     38
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    225,
    226
@@ -351,6 +408,7 @@
     40
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    235
   ]
@@ -369,6 +427,7 @@
     47
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    275
   ]
@@ -387,6 +446,7 @@
     47
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    273,
    274
@@ -406,8 +466,29 @@
     55
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    323
+  ]
+ },
+ {
+  "words": [
+   "trace",
+   "track"
+  ],
+  "senses": [
+   "追踪"
+  ],
+  "paras": [
+   [
+    0,
+    56
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   330,
+   331
   ]
  },
  {
@@ -424,27 +505,9 @@
     2
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    351
-  ]
- },
- {
-  "words": [
-   "clever",
-   "smart"
-  ],
-  "senses": [
-   "聪明"
-  ],
-  "paras": [
-   [
-    1,
-    2
-   ]
-  ],
-  "sents": [
-   354,
-   355
   ]
  },
  {
@@ -461,6 +524,7 @@
     3
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    359,
    361
@@ -480,6 +544,7 @@
     4
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    365
   ]
@@ -498,6 +563,7 @@
     4
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    367,
    368
@@ -517,6 +583,7 @@
     7
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    383
   ]
@@ -535,6 +602,7 @@
     8
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    388,
    389
@@ -554,6 +622,7 @@
     8
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    390,
    391
@@ -573,6 +642,7 @@
     13
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    417,
    418
@@ -592,6 +662,7 @@
     15
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    429,
    430
@@ -611,6 +682,7 @@
     18
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    452
   ]
@@ -629,6 +701,7 @@
     20
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    464,
    465
@@ -648,8 +721,29 @@
     21
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    468
+  ]
+ },
+ {
+  "words": [
+   "cite",
+   "quote"
+  ],
+  "senses": [
+   "引用"
+  ],
+  "paras": [
+   [
+    1,
+    21
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   468,
+   469
   ]
  },
  {
@@ -666,6 +760,7 @@
     21
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    470,
    471
@@ -685,6 +780,7 @@
     22
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    476
   ]
@@ -703,6 +799,7 @@
     22
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    473,
    474
@@ -722,6 +819,7 @@
     23
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    482,
    483
@@ -741,9 +839,29 @@
     25
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    493,
    494
+  ]
+ },
+ {
+  "words": [
+   "ethical",
+   "moral"
+  ],
+  "senses": [
+   "道德"
+  ],
+  "paras": [
+   [
+    1,
+    27
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   507
   ]
  },
  {
@@ -760,9 +878,30 @@
     28
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    510,
    511
+  ]
+ },
+ {
+  "words": [
+   "holy",
+   "sacred"
+  ],
+  "senses": [
+   "神圣"
+  ],
+  "paras": [
+   [
+    1,
+    29
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   518,
+   519
   ]
  },
  {
@@ -779,6 +918,7 @@
     30
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    525,
    526
@@ -799,8 +939,29 @@
     32
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    535
+  ]
+ },
+ {
+  "words": [
+   "oral",
+   "verbal"
+  ],
+  "senses": [
+   "口头"
+  ],
+  "paras": [
+   [
+    1,
+    33
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   543,
+   544
   ]
  },
  {
@@ -817,6 +978,7 @@
     36
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    558,
    560
@@ -836,6 +998,7 @@
     36
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    559,
    560
@@ -855,8 +1018,29 @@
     38
    ]
   ],
+  "all_synonyms": true,
   "sents": [
    574
+  ]
+ },
+ {
+  "words": [
+   "pastime",
+   "recreation"
+  ],
+  "senses": [
+   "消遣"
+  ],
+  "paras": [
+   [
+    1,
+    39
+   ]
+  ],
+  "all_synonyms": false,
+  "sents": [
+   575,
+   576
   ]
  },
  {
@@ -873,8 +1057,28 @@
     39
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    579
+  ]
+ },
+ {
+  "words": [
+   "imitate",
+   "mimic"
+  ],
+  "senses": [
+   "模仿"
+  ],
+  "paras": [
+   [
+    1,
+    40
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   581
   ]
  },
  {
@@ -891,6 +1095,7 @@
     40
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    581,
    582
@@ -910,6 +1115,7 @@
     41
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    588
   ]
@@ -928,6 +1134,7 @@
     41
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    589,
    590
@@ -947,6 +1154,7 @@
     42
    ]
   ],
+  "all_synonyms": true,
   "sents": [
    594,
    595
@@ -966,6 +1174,7 @@
     42
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    598
   ]
@@ -984,6 +1193,7 @@
     45
    ]
   ],
+  "all_synonyms": true,
   "sents": [
    615,
    616
@@ -1003,6 +1213,7 @@
     45
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    611
   ]
@@ -1021,6 +1232,7 @@
     2
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    664
   ]
@@ -1039,6 +1251,7 @@
     6
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    690,
    691
@@ -1058,6 +1271,7 @@
     11
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    717
   ]
@@ -1076,6 +1290,7 @@
     12
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    723,
    728
@@ -1095,6 +1310,7 @@
     12
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    725
   ]
@@ -1113,6 +1329,7 @@
     12
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    726,
    727
@@ -1132,6 +1349,7 @@
     14
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    735,
    736
@@ -1151,6 +1369,7 @@
     15
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    745,
    746
@@ -1170,6 +1389,7 @@
     18
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    757,
    758
@@ -1189,6 +1409,7 @@
     19
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    763,
    765
@@ -1208,6 +1429,7 @@
     20
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    769,
    770
@@ -1227,6 +1449,7 @@
     20
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    769,
    771
@@ -1246,6 +1469,7 @@
     22
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    783,
    785
@@ -1265,6 +1489,7 @@
     23
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    789
   ]
@@ -1283,6 +1508,7 @@
     26
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    801,
    802
@@ -1302,6 +1528,7 @@
     31
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    831
   ]
@@ -1320,6 +1547,7 @@
     34
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    852,
    853
@@ -1339,6 +1567,7 @@
     39
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    878,
    879
@@ -1358,6 +1587,7 @@
     39
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    877
   ]
@@ -1376,6 +1606,7 @@
     4
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    908,
    909
@@ -1395,6 +1626,7 @@
     6
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    921,
    922
@@ -1415,6 +1647,7 @@
     11
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    951,
    952,
@@ -1435,6 +1668,7 @@
     14
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    971,
    972
@@ -1455,6 +1689,7 @@
     16
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    980,
    982
@@ -1474,6 +1709,7 @@
     18
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    991,
    993
@@ -1493,6 +1729,7 @@
     19
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1001,
    1002
@@ -1512,6 +1749,7 @@
     27
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1045,
    1046
@@ -1531,6 +1769,7 @@
     29
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1061,
    1062
@@ -1550,6 +1789,7 @@
     32
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1075,
    1076
@@ -1569,6 +1809,7 @@
     32
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1077,
    1078
@@ -1588,6 +1829,7 @@
     33
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1081,
    1082
@@ -1607,6 +1849,7 @@
     36
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1102,
    1103
@@ -1626,28 +1869,10 @@
     38
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1111,
    1114
-  ]
- },
- {
-  "words": [
-   "affirm",
-   "declare"
-  ],
-  "senses": [
-   "断言"
-  ],
-  "paras": [
-   [
-    3,
-    38
-   ]
-  ],
-  "sents": [
-   1111,
-   1112
   ]
  },
  {
@@ -1664,9 +1889,30 @@
     38
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1111,
    1116
+  ]
+ },
+ {
+  "words": [
+   "affirm",
+   "declare"
+  ],
+  "senses": [
+   "断言"
+  ],
+  "paras": [
+   [
+    3,
+    38
+   ]
+  ],
+  "all_synonyms": false,
+  "sents": [
+   1111,
+   1112
   ]
  },
  {
@@ -1685,6 +1931,7 @@
     39
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1118,
    1119
@@ -1704,6 +1951,7 @@
     44
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1145,
    1146
@@ -1723,6 +1971,7 @@
     45
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1153
   ]
@@ -1741,9 +1990,30 @@
     47
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1165,
    1166
+  ]
+ },
+ {
+  "words": [
+   "decrease",
+   "reduce"
+  ],
+  "senses": [
+   "降低"
+  ],
+  "paras": [
+   [
+    3,
+    47
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   1163,
+   1165
   ]
  },
  {
@@ -1760,9 +2030,30 @@
     47
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1165,
    1166
+  ]
+ },
+ {
+  "words": [
+   "adequate",
+   "sufficient"
+  ],
+  "senses": [
+   "足够"
+  ],
+  "paras": [
+   [
+    3,
+    48
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   1169,
+   1170
   ]
  },
  {
@@ -1779,6 +2070,7 @@
     48
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1170,
    1171
@@ -1798,9 +2090,30 @@
     49
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1176,
    1177
+  ]
+ },
+ {
+  "words": [
+   "deal",
+   "transaction"
+  ],
+  "senses": [
+   "交易"
+  ],
+  "paras": [
+   [
+    3,
+    50
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   1182,
+   1183
   ]
  },
  {
@@ -1817,6 +2130,7 @@
     53
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1203
   ]
@@ -1835,8 +2149,29 @@
     55
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1214
+  ]
+ },
+ {
+  "words": [
+   "chance",
+   "opportunity"
+  ],
+  "senses": [
+   "机会"
+  ],
+  "paras": [
+   [
+    3,
+    55
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   1211,
+   1212
   ]
  },
  {
@@ -1853,8 +2188,29 @@
     56
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1216
+  ]
+ },
+ {
+  "words": [
+   "norm",
+   "standard"
+  ],
+  "senses": [
+   "标准"
+  ],
+  "paras": [
+   [
+    3,
+    56
+   ]
+  ],
+  "all_synonyms": false,
+  "sents": [
+   1220,
+   1221
   ]
  },
  {
@@ -1871,6 +2227,7 @@
     57
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1225,
    1227
@@ -1890,6 +2247,7 @@
     58
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1231,
    1232
@@ -1909,6 +2267,7 @@
     59
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1243,
    1244
@@ -1928,6 +2287,7 @@
     60
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1250,
    1251
@@ -1947,6 +2307,7 @@
     60
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1251
   ]
@@ -1965,6 +2326,7 @@
     61
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1252
   ]
@@ -1983,27 +2345,10 @@
     61
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1254,
    1255
-  ]
- },
- {
-  "words": [
-   "demand",
-   "request"
-  ],
-  "senses": [
-   "要求"
-  ],
-  "paras": [
-   [
-    3,
-    64
-   ]
-  ],
-  "sents": [
-   1274
   ]
  },
  {
@@ -2020,6 +2365,7 @@
     0
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1280,
    1282
@@ -2039,6 +2385,7 @@
     3
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1298,
    1299
@@ -2058,6 +2405,7 @@
     4
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1301
   ]
@@ -2076,6 +2424,7 @@
     5
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1307,
    1309
@@ -2087,6 +2436,7 @@
    "attack"
   ],
   "senses": [
+   "攻击",
    "袭击"
   ],
   "paras": [
@@ -2095,6 +2445,7 @@
     5
    ]
   ],
+  "all_synonyms": true,
   "sents": [
    1309,
    1310
@@ -2114,8 +2465,29 @@
     6
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1317
+  ]
+ },
+ {
+  "words": [
+   "evidence",
+   "proof"
+  ],
+  "senses": [
+   "证据"
+  ],
+  "paras": [
+   [
+    4,
+    7
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   1322,
+   1323
   ]
  },
  {
@@ -2132,6 +2504,7 @@
     7
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1323,
    1325
@@ -2151,6 +2524,7 @@
     7
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1324,
    1325
@@ -2170,6 +2544,7 @@
     8
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1331
   ]
@@ -2188,9 +2563,49 @@
     8
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1327,
    1328
+  ]
+ },
+ {
+  "words": [
+   "enemy",
+   "foe"
+  ],
+  "senses": [
+   "敌人"
+  ],
+  "paras": [
+   [
+    4,
+    9
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   1332,
+   1333
+  ]
+ },
+ {
+  "words": [
+   "strategy",
+   "tactic"
+  ],
+  "senses": [
+   "策略"
+  ],
+  "paras": [
+   [
+    4,
+    9
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   1334
   ]
  },
  {
@@ -2207,6 +2622,7 @@
     10
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1343
   ]
@@ -2225,6 +2641,7 @@
     12
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1350,
    1351
@@ -2244,6 +2661,7 @@
     14
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1363,
    1364
@@ -2263,27 +2681,9 @@
     15
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1373
-  ]
- },
- {
-  "words": [
-   "reveal",
-   "uncover"
-  ],
-  "senses": [
-   "揭露"
-  ],
-  "paras": [
-   [
-    4,
-    18
-   ]
-  ],
-  "sents": [
-   1388,
-   1389
   ]
  },
  {
@@ -2300,6 +2700,7 @@
     19
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1390
   ]
@@ -2318,6 +2719,7 @@
     19
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1394,
    1395
@@ -2337,6 +2739,7 @@
     20
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1396
   ]
@@ -2355,6 +2758,7 @@
     20
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1397,
    1400
@@ -2374,6 +2778,7 @@
     20
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1398,
    1399
@@ -2393,6 +2798,7 @@
     20
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1399,
    1400
@@ -2412,6 +2818,7 @@
     26
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1432,
    1433
@@ -2431,9 +2838,30 @@
     28
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1444,
    1446
+  ]
+ },
+ {
+  "words": [
+   "kin",
+   "relative"
+  ],
+  "senses": [
+   "亲戚"
+  ],
+  "paras": [
+   [
+    4,
+    28
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   1447,
+   1448
   ]
  },
  {
@@ -2450,6 +2878,7 @@
     29
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1452,
    1453
@@ -2469,6 +2898,7 @@
     30
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1458,
    1459
@@ -2488,6 +2918,7 @@
     31
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1464,
    1466
@@ -2507,6 +2938,7 @@
     33
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1478
   ]
@@ -2525,6 +2957,7 @@
     1
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1498,
    1499
@@ -2544,6 +2977,7 @@
     1
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1502
   ]
@@ -2562,6 +2996,7 @@
     2
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1509
   ]
@@ -2580,6 +3015,7 @@
     3
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1512,
    1513
@@ -2599,6 +3035,7 @@
     6
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1529,
    1530
@@ -2618,6 +3055,7 @@
     6
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1531,
    1532
@@ -2637,9 +3075,30 @@
     9
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1550,
    1551
+  ]
+ },
+ {
+  "words": [
+   "assign",
+   "distribute"
+  ],
+  "senses": [
+   "分配"
+  ],
+  "paras": [
+   [
+    5,
+    10
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   1552,
+   1553
   ]
  },
  {
@@ -2656,6 +3115,7 @@
     10
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1554,
    1557
@@ -2675,6 +3135,7 @@
     13
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1571,
    1572
@@ -2694,6 +3155,7 @@
     14
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1577,
    1578
@@ -2713,6 +3175,7 @@
     15
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1583
   ]
@@ -2731,6 +3194,7 @@
     15
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1585,
    1586
@@ -2750,6 +3214,7 @@
     19
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1609
   ]
@@ -2768,6 +3233,7 @@
     19
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1610
   ]
@@ -2786,6 +3252,7 @@
     22
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1625,
    1626
@@ -2805,6 +3272,7 @@
     27
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1656
   ]
@@ -2823,6 +3291,7 @@
     27
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1659,
    1660
@@ -2842,8 +3311,29 @@
     29
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1671
+  ]
+ },
+ {
+  "words": [
+   "death",
+   "demise"
+  ],
+  "senses": [
+   "死亡"
+  ],
+  "paras": [
+   [
+    5,
+    30
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   1676,
+   1677
   ]
  },
  {
@@ -2860,6 +3350,7 @@
     32
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1687,
    1689
@@ -2879,9 +3370,30 @@
     32
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1688,
    1689
+  ]
+ },
+ {
+  "words": [
+   "cure",
+   "heal"
+  ],
+  "senses": [
+   "治愈"
+  ],
+  "paras": [
+   [
+    5,
+    33
+   ]
+  ],
+  "all_synonyms": false,
+  "sents": [
+   1691,
+   1692
   ]
  },
  {
@@ -2898,6 +3410,7 @@
     35
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1703
   ]
@@ -2916,6 +3429,7 @@
     36
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1711,
    1713
@@ -2935,6 +3449,7 @@
     36
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1711,
    1713
@@ -2954,6 +3469,7 @@
     36
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1713
   ]
@@ -2972,6 +3488,7 @@
     37
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1718,
    1719
@@ -2991,6 +3508,7 @@
     40
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1732,
    1733
@@ -3010,6 +3528,7 @@
     42
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1748
   ]
@@ -3028,9 +3547,29 @@
     42
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1748,
    1749
+  ]
+ },
+ {
+  "words": [
+   "resemble",
+   "similar"
+  ],
+  "senses": [
+   "类似"
+  ],
+  "paras": [
+   [
+    5,
+    43
+   ]
+  ],
+  "all_synonyms": false,
+  "sents": [
+   1750
   ]
  },
  {
@@ -3047,6 +3586,7 @@
     44
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1757,
    1758
@@ -3066,6 +3606,7 @@
     44
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1758,
    1761
@@ -3085,6 +3626,7 @@
     45
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1765,
    1766
@@ -3104,6 +3646,7 @@
     46
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1772,
    1773
@@ -3123,6 +3666,7 @@
     46
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1768
   ]
@@ -3141,8 +3685,28 @@
     48
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1783
+  ]
+ },
+ {
+  "words": [
+   "reluctant",
+   "unwilling"
+  ],
+  "senses": [
+   "不情愿"
+  ],
+  "paras": [
+   [
+    5,
+    49
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   1787
   ]
  },
  {
@@ -3159,6 +3723,7 @@
     50
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1796
   ]
@@ -3177,6 +3742,7 @@
     53
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1822,
    1823
@@ -3196,6 +3762,7 @@
     54
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1825,
    1826
@@ -3215,6 +3782,7 @@
     54
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1826,
    1827
@@ -3234,6 +3802,7 @@
     54
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1828,
    1829
@@ -3254,6 +3823,7 @@
     42
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    246,
    247
@@ -3274,9 +3844,31 @@
     2
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    351,
    352
+  ]
+ },
+ {
+  "words": [
+   "clever",
+   "intelligent",
+   "smart"
+  ],
+  "senses": [
+   "聪明"
+  ],
+  "paras": [
+   [
+    1,
+    2
+   ]
+  ],
+  "all_synonyms": false,
+  "sents": [
+   354,
+   355
   ]
  },
  {
@@ -3294,6 +3886,7 @@
     22
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    473,
    478
@@ -3314,6 +3907,7 @@
     25
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    492,
    493
@@ -3334,6 +3928,7 @@
     39
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    576,
    577
@@ -3354,6 +3949,7 @@
     49
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    636,
    637,
@@ -3375,6 +3971,7 @@
     11
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    718,
    719
@@ -3395,9 +3992,73 @@
     34
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    852,
    853
+  ]
+ },
+ {
+  "words": [
+   "exterior",
+   "external",
+   "outside"
+  ],
+  "senses": [
+   "外部"
+  ],
+  "paras": [
+   [
+    2,
+    39
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   878,
+   879
+  ]
+ },
+ {
+  "words": [
+   "inner",
+   "interior",
+   "internal"
+  ],
+  "senses": [
+   "内部"
+  ],
+  "paras": [
+   [
+    2,
+    39
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   880,
+   881
+  ]
+ },
+ {
+  "words": [
+   "occupation",
+   "profession",
+   "vocation"
+  ],
+  "senses": [
+   "职业"
+  ],
+  "paras": [
+   [
+    3,
+    53
+   ]
+  ],
+  "all_synonyms": true,
+  "sents": [
+   1200,
+   1201
   ]
  },
  {
@@ -3415,6 +4076,7 @@
     54
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1206,
    1207
@@ -3435,6 +4097,7 @@
     56
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1218,
    1219
@@ -3455,9 +4118,52 @@
     62
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1259,
    1260
+  ]
+ },
+ {
+  "words": [
+   "demand",
+   "request",
+   "require"
+  ],
+  "senses": [
+   "要求"
+  ],
+  "paras": [
+   [
+    3,
+    64
+   ]
+  ],
+  "all_synonyms": false,
+  "sents": [
+   1274,
+   1275
+  ]
+ },
+ {
+  "words": [
+   "expose",
+   "reveal",
+   "uncover"
+  ],
+  "senses": [
+   "揭露"
+  ],
+  "paras": [
+   [
+    4,
+    18
+   ]
+  ],
+  "all_synonyms": false,
+  "sents": [
+   1388,
+   1389
   ]
  },
  {
@@ -3475,6 +4181,7 @@
     20
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1398,
    1399
@@ -3495,9 +4202,53 @@
     25
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1426,
    1428
+  ]
+ },
+ {
+  "words": [
+   "desire",
+   "itch",
+   "yearn"
+  ],
+  "senses": [
+   "渴望"
+  ],
+  "paras": [
+   [
+    5,
+    11
+   ]
+  ],
+  "all_synonyms": false,
+  "sents": [
+   1560,
+   1561,
+   1562
+  ]
+ },
+ {
+  "words": [
+   "cope",
+   "dispose",
+   "tackle"
+  ],
+  "senses": [
+   "处理"
+  ],
+  "paras": [
+   [
+    5,
+    12
+   ]
+  ],
+  "all_synonyms": false,
+  "sents": [
+   1567,
+   1568
   ]
  },
  {
@@ -3515,6 +4266,7 @@
     14
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1576,
    1577,
@@ -3536,6 +4288,7 @@
     30
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1676,
    1678
@@ -3556,6 +4309,7 @@
     35
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1703,
    1704
@@ -3576,6 +4330,7 @@
     48
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1784,
    1785
@@ -3597,6 +4352,7 @@
     22
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    473,
    474
@@ -3618,6 +4374,7 @@
     47
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1162,
    1163,
@@ -3641,6 +4398,7 @@
     1
    ]
   ],
+  "all_synonyms": false,
   "sents": [
    1500,
    1501

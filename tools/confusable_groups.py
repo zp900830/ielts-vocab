@@ -119,17 +119,40 @@ def main():
     groups = [sorted(g) for g in comp.values() if len(g) >= 2]
     groups.sort(key=lambda g: (-len(g), g[0]))
 
-    # 传递闭包会把只沾一个义项的词链成几十个大团（噪声），所以另出一个更硬的视图：
-    # 「义项桶」= 同一个中文义项下直接互见的 2~6 个词，组内两两都满足口径，不做链式合并。
-    buckets = {}
+    # 组内必须**两两都过黑名单**（团 / clique），不能靠共享义项做并集 ——
+    # 并集会让 damp↔humid 这种互为同义词的对子顺着第三条边混进组里，正是要禁的那类。
+    adj = collections.defaultdict(set)
+    for (a, b) in conf:
+        adj[a] |= {b}
+        adj[b] |= {a}
+
+    def cliques(nodes):
+        """Bron–Kerbosch：只回极大团（组内两两都是易混边）。节点 ≤12，不加速也够快"""
+        out = []
+
+        def bk(r, pc, x):
+            if not pc and not x:
+                if len(r) >= 2:
+                    out.append(frozenset(r))
+                return
+            for v in sorted(pc, key=lambda w: -len(adj[w] & pc)):
+                bk(r | {v}, pc & adj[v], x & adj[v])
+                pc = pc - {v}
+                x = x | {v}
+        bk(set(), set(nodes), set())
+        return out
+
+    usable, big_sense = {}, 0
     for x, ws in by_sense.items():
         g = {a for a in ws if a in key_of}
-        for a in g:
-            for b in g:
-                if a < b and (a, b) in conf:
-                    buckets.setdefault(x, set()).update((a, b))
-    usable = {x: sorted(g) for x, g in buckets.items() if 2 <= len(g) <= 6}
-    in_bucket = {w for g in usable.values() for w in g}
+        if len(g) > 12:
+            big_sense += 1
+            continue                      # 一个义项挂十几个词，多半是通用释义，不作为组来源
+        cs = [c for c in cliques(g) if 2 <= len(c) <= 6]
+        if cs:
+            usable[x] = [sorted(c) for c in cs]
+    in_bucket = {w for gs in usable.values() for c in gs for w in c}
+    n_bucket_edges = sum(len(g) for g in usable.values())
     # 辨析组的成员不限于 3245 张卡：fog / haze / smoke 这种简单词没卡但更该辨析。
     # 统计课文里词形出现 ≥2 次、却没有卡的词，就是「要加可点标记的简单词」池子。
     simple = collections.Counter()
@@ -170,24 +193,40 @@ def main():
     for gi, ws in enumerate(marked):
         para_words[para_of[gi]].update(ws)
     for gi, ws in enumerate(marked):
-        for x, bucket in usable.items():
-            hit = ws & set(bucket)
-            if len(hit) >= 2:
-                co_sent.setdefault(gi, []).append((x, tuple(sorted(hit))))
-                co_groups[(x, tuple(sorted(hit)))] += 1
+        for x, cs in usable.items():
+            for c in cs:
+                hit = ws & set(c)
+                if len(hit) >= 2:
+                    co_sent.setdefault(gi, []).append((x, tuple(sorted(hit))))
+                    co_groups[(x, tuple(sorted(hit)))] += 1
     # 互为同义词的对子在课文里也常共现，但它按新口径不进辨析清单，只统计「选项黑名单要挡掉多少」
     syn_co = {tuple(sorted((p, q))) for p, q in syn_pairs
               if p in set().union(*marked) and q in set().union(*marked)}
     syn_co_para = {k for k, ws in para_words.items() if any(p in ws and q in ws for p, q in syn_pairs)}
-    para_hit = sum(1 for k, ws in para_words.items()
-                   if any(len(ws & set(b)) >= 2 for b in usable.values()))
+    def para_hits(ws):
+        return [tuple(sorted(ws & set(c))) for x, cs in usable.items() for c in cs
+                if len(ws & set(c)) >= 2]
+    para_hit = sum(1 for ws in para_words.values() if para_hits(ws))
     # 共现主要发生在**段**一级（作者把近义词铺在一整段里），所以段级才是辨析组的工作清单
     co_groups_para = collections.Counter()
     for k, ws in para_words.items():
-        for x, bucket in usable.items():
-            hit = ws & set(bucket)
-            if len(hit) >= 2:
-                co_groups_para[(x, tuple(sorted(hit)))] += 1
+        for x, cs in usable.items():
+            for c in cs:
+                hit = ws & set(c)
+                if len(hit) >= 2:
+                    co_groups_para[(x, tuple(sorted(hit)))] += 1
+    # 辨析表的分组单位是「同一段 + 同一个中文义项」，**不排除互为同义词的**：
+    # damp 与 humid 在同一段里挨着，这恰恰是他最想被一句话讲清的一对。
+    # L1 同义词黑名单只在**出题**时用（填哪个都对 → 不能互为选项），别拿它砍辨析。
+    cmp_groups = {}                                    # 词集 → {出现的段落, 共享义项}
+    for pk, ws in para_words.items():
+        for x, g in by_sense.items():
+            hit = tuple(sorted(ws & g & set(key_of)))
+            if 2 <= len(hit) <= 6:
+                e = cmp_groups.setdefault(hit, {'paras': set(), 'senses': set()})
+                e['paras'].add(pk)
+                e['senses'].add(x)
+    cmp_words = {w for g in cmp_groups for w in g}
     para_words_covered = {w for (_, g) in co_groups_para for w in g}
     worklist = sorted({g for (_, g) in co_groups_para})
     # 组内目标词数 = 2 时只有两选一，出不了合格的四选一 → 该组只作辨析，题目走回忆题
@@ -215,10 +254,10 @@ def main():
     print(f'  ├ 两侧都有词伙 {both_col} 对 · 同章出现 {same_chap} 对')
     print(f'辨析组（连通分量 ≥2） {len(groups)} 组，覆盖 {len(covered)} 个词头 = {len(covered)/len(V)*100:.1f}% 的卡')
     print(f'  └ 链式合并会把只沾一个义项的词连成大团，最大 {max(len(g) for g in groups) if groups else 0} 词，仅作上界参考')
-    print(f'义项桶（同义项直接互见 2~6 词，一期可做的组） {len(usable)} 个，覆盖 {len(in_bucket)} 个词头 = {len(in_bucket)/len(V)*100:.1f}%')
-    top = sorted(usable.items(), key=lambda kv: -len(kv[1]))[:12]
-    for x, g in top:
-        print(f'    {x}: {" ".join(g)}')
+    print(f'义项团（组内两两都过黑名单）：{len(usable)} 个义项产出 {n_bucket_edges} 组，覆盖 {len(in_bucket)} 个词头 = {len(in_bucket)/len(V)*100:.1f}%（跳过超大义项 {big_sense} 个）')
+    top = sorted(usable.items(), key=lambda kv: -len(kv[1]))[:10]
+    for x, gs in top:
+        print(f'    {x}: ' + ' / '.join(' '.join(g) for g in gs[:4]))
     print(f'课文中出现 ≥2 次但没有卡的简单词（辨析组要收、且要么加可点标记要么只做纯文本选项） {len(nocard)} 个')
     print(f'  高频示例: ' + ' '.join(f'{t}×{c}' for t, c in sorted(nocard.items(), key=lambda kv: -kv[1])[:16]))
     print(f'── 共现口径（辨析卡的真正来源：作者故意把近义词写在一起）──')
@@ -231,8 +270,12 @@ def main():
           f'覆盖 {len(para_words_covered)} 个词头 = {len(para_words_covered)/len(V)*100:.1f}%')
     print(f'  规模分布 {dict(sorted(collections.Counter(len(g) for g in worklist).items()))}'
           f' · 只有 2 个目标词的组 {len(tiny)} 组（够辨析，不够出四选一 → 走回忆题）')
-    print(f'  互为同义词且同段共现的对子 {len(syn_co)} 对（不进辨析清单，但要在出题时挡掉），'
-          f'涉及 {len(syn_co_para)} 个段落')
+    only_syn = sum(1 for g in cmp_groups if all(y in syn[x] for x in g for y in g if x != y))
+    print(f'  ── 辨析表清单（段内同义项成组，含互为同义词的对子）{len(cmp_groups)} 组，其中整组互为同义词 {only_syn} 组，'
+          f'覆盖 {len(cmp_words)} 个词头 = {len(cmp_words)/len(V)*100:.1f}%，落在 {len({p for e in cmp_groups.values() for p in e["paras"]})} 个段落上')
+    print(f'     规模分布 {dict(sorted(collections.Counter(len(g) for g in cmp_groups).items()))}')
+    print(f'  ── 出题选项池（极大团，已挡同义词）{n_bucket_edges} 组 / 段级共现 {len(worklist)} 组 —— 辨析可以讲同义对，选项不行')
+    print(f'  互为同义词且同段共现的对子 {len(syn_co)} 对（只作选项黑名单），涉及 {len(syn_co_para)} 个段落')
     for (x, g), c in co_groups_para.most_common(14):
         print(f'    ×{c} [{x}] {" ".join(g)}')
     print(f'两语境（卡上有例句且课文里有标记） {two_ctx}/{len(V)}')
@@ -243,19 +286,22 @@ def main():
             para_sents[pk].append(gi)
         loc = collections.defaultdict(lambda: {'paras': set(), 'senses': set()})
         for pk, ws in para_words.items():
-            for x, bucket in usable.items():
-                hit = tuple(sorted(ws & set(bucket)))
-                if len(hit) >= 2:
-                    loc[hit]['paras'].add(pk)
-                    loc[hit]['senses'].add(x)
+            for x, cs in usable.items():
+                for c in cs:
+                    hit = tuple(sorted(ws & set(c)))
+                    if len(hit) >= 2:
+                        loc[hit]['paras'].add(pk)
+                        loc[hit]['senses'].add(x)
         json.dump({'groups': groups, 'pairs': sorted(conf), 'eg_missing': eg_missing},
                   open(args.json, 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
         out = []
-        for g, v in sorted(loc.items(), key=lambda kv: (-len(kv[1]['paras']), len(kv[0]))):
+        for g, v in sorted(cmp_groups.items(), key=lambda kv: (-len(kv[1]['paras']), len(kv[0]))):
             sents_in = sorted({gi for pk in v['paras'] for gi in para_sents[pk]
                                if marked[gi] & set(g)})
+            both_syn = all(y in syn[x] for x in g for y in g if x != y) if len(g) > 1 else False
             out.append({'words': list(g), 'senses': sorted(v['senses']),
-                        'paras': [list(pk) for pk in sorted(v['paras'])], 'sents': sents_in})
+                        'paras': [list(pk) for pk in sorted(v['paras'])],
+                        'all_synonyms': both_syn, 'sents': sents_in})
         json.dump(out, open('work/compare_groups_worklist.json', 'w', encoding='utf-8'),
                   ensure_ascii=False, indent=1)
         print(f'工作清单已写 work/compare_groups_worklist.json（{len(out)} 组，带段落与句号定位）')
