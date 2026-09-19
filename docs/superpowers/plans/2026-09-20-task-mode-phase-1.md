@@ -79,7 +79,7 @@
 - Consumes: 无（这是第一个任务）
 - Produces：全局 `ShadowPlan`，本任务交付
   - `ShadowPlan.DAY_MS: number`
-  - `ShadowPlan.WORD_INTERVALS: number[]`（21 项）
+  - `ShadowPlan.WORD_INTERVALS: number[]`（20 项，毕业后的 14/30 另表）
   - `ShadowPlan.STAGES: ['fresh','seen','recognized','owned','graduated']`
   - `ShadowPlan.dayKey(ts: number, boundaryHour: number): string` → `'YYYY-MM-DD'`
   - `ShadowPlan.dayDiff(a: string, b: string): number` → 两个 dayKey 之间的天数（b−a，按日历日）
@@ -120,7 +120,7 @@ test.describe('plan engine · day boundary', () => {
     }));
     expect(shape.hasDay).toBe(true);
     expect(shape.dayMs).toBe(86400000);
-    expect(shape.intervals).toBe(21);
+    expect(shape.intervals).toBe(20);   // 原表 21 档，末档 14 已挪进 GRADUATED_INTERVALS
     expect(shape.stages).toBe('fresh>seen>recognized>owned>graduated');
   });
 
