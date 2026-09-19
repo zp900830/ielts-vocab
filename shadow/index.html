@@ -1090,8 +1090,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 任务模式时 audiobar 上移避让 */
   body.task-mode .audiobar { bottom: calc(var(--task-bar-h, 62px) + 8px + env(safe-area-inset-bottom, 0px)); }
   body.task-mode .back-to-play { bottom: calc(var(--task-bar-h, 62px) + 98px + env(safe-area-inset-bottom, 0px)); }
-  /* 任务模式下隐藏播放条的上一句/下一句按钮（任务栏已有对应控制） */
-  body.task-mode .audiobar .ab-step { display: none; }
+  /* 任务模式下上一句/下一句保持原位可见：模式切换不该作废肌肉记忆（PRD §10.1） */
   /* 计划设置弹窗 */
   .plan-setup { text-align: center; }
   .plan-setup h3 { font-size: 17px; margin-bottom: 6px; }
@@ -4332,22 +4331,18 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           const cur = todayQueue[taskPos];
           const typeIcon = cur && cur.type === 'new' ? '<i class="ri-sparkling-2-line" aria-hidden="true"></i> 新句' : '<i class="ri-repeat-line" aria-hidden="true"></i> 复习';
           titleEl.innerHTML = `${typeIcon} · ${done}/${total}`;
-          const cyc = prog.cycleCount || 0;
-          const cycSeen = Object.keys(prog.cycleSeen || {}).length;
-          // 简化显示：剩余时间 + 当前轮次进度 + 已读/未读
-          const readCount = todayQueue.filter(item => {
-            const s = sentState(item.i);
-            return s.reps >= PHASE_THRESHOLDS.learning && s.lastRead >= startOfToday();
-          }).length;
-          subEl.textContent = `剩余 ~${fmtTime(est.sec)} · 已完成 ${prog.cycleCount || 0} 轮 · 已读 ${readCount}/${total}`;
+          // 副标题只报「还剩多久」。「已读 x/y」是同一个进度的第二套算法，
+          // 两处口径在边界上会打架，所以删掉：今日进度归标题那一个数字说（PRD §10.1）
+          subEl.textContent = `剩余 ~${fmtTime(est.sec)} · 已完成 ${prog.cycleCount || 0} 轮`;
           document.getElementById('tbAgain').style.display = '';
           document.getElementById('tbNext').innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句';
           document.getElementById('tbNext').onclick = next;
         }
-        // 播放条标题：只显示核心进度
+        // 播放条标题只报「读到第几句」；今日进度归任务栏说，一处一次（PRD §10.1）
         const abT = document.getElementById('abTitle');
         if (abT && taskMode) {
-          abT.textContent = `今日 ${done}/${total} · 剩余 ~${fmtTime(est.sec)}`;
+          const cur2 = todayQueue[taskPos];
+          abT.textContent = cur2 ? `第 ${cur2.i + 1} / ${SENT_RAW.length} 句` : '今日任务';
         }
       }
 
