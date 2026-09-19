@@ -19,9 +19,12 @@ import sys
 ROOT = '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目'
 sys.path.insert(0, ROOT + '/tools')
 from validate_card_patch import trim_match  # noqa: E402
-from make_review_packets import locate  # noqa: E402
+from make_review_packets import locate, strip_to_key  # noqa: E402
 
 MARK = re.compile(r'\[\[([^\]:]+):([^\]]+)\]\]')
+
+
+bare_s = lambda s: MARK.sub(lambda m: m.group(2), s)
 
 
 def main():
@@ -33,7 +36,7 @@ def main():
         only = set(sys.argv[sys.argv.index('--only') + 1].split(','))
     V = json.load(open(ROOT + '/shadow/data/vocab.json', encoding='utf-8'))
     D = json.load(open(ROOT + '/shadow/data/sections.json', encoding='utf-8'))
-    sentences = [(MARK.sub(lambda m: m.group(2), en),
+    sentences = [(bare_s(en), strip_to_key(en),
                   (D[ci]['sentZh'][si][k] if k < len(D[ci]['sentZh'][si]) else ''))
                  for ci, c in enumerate(D) for si, p in enumerate(c['paragraphs'])
                  for k, en in enumerate(p)]

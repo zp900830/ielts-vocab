@@ -32,19 +32,27 @@ def bare(s):
     return MARK.sub(lambda m: m.group(2), s)
 
 
+def strip_to_key(s):
+    """[[ox:oxen]] → ox（取冒号左边的词头）。
+
+    候选就是从这种形态切的：课文显示 "strong brown oxen"，但窗口里是词头 ox。
+    匹配必须用这个形态，展示必须用真正的可见句子 —— 否则这些词伙在专判包里
+    一律"定位不到原句"，代理只能对着切片瞎判。
+    """
+    return MARK.sub(lambda m: m.group(1), s)
+
+
 def locate(chunk, heads):
     """在课文里找包含这条搭配的整句，返回 (英文原句, 中文译文)。
 
     必须整词匹配：'old foe' 不该被 'copper fold' 这种连排命中。
     候选是课文小写化之后切的，原句里却是 Arctic ice —— 所以只把被搜索的句子转小写。
-    词与词之间允许原文的逗号/句号：窗口是从标点后重新拼的，'heavy sleepy ox'
-    在原句里其实是 "heavy, sleepy ox"，按单空格匹配就永远定位不到，
-    代理只能对着切片瞎判 —— 而这恰恰是该看标点的形状。
+    词与词之间允许原文的逗号/句号：窗口可能跨标点拼起来，按单空格匹配就找不到句子。
     """
     pat = re.compile(r'(?<![a-z])' + re.escape(chunk).replace(r'\ ', r'[,. ]+') + r'(?![a-z])')
-    for en, zh in heads:
-        if pat.search(en.lower()):
-            return en, zh
+    for vis, key, zh in heads:
+        if pat.search(key.lower()):
+            return vis, zh
     return None, None
 
 
@@ -52,7 +60,8 @@ def main():
     clean = json.load(open(ROOT + '/work/cardgen/clean.json', encoding='utf-8'))
     V = json.load(open(ROOT + '/shadow/data/vocab.json', encoding='utf-8'))
     D = json.load(open(ROOT + '/shadow/data/sections.json', encoding='utf-8'))
-    sentences = [(bare(en), (D[ci]['sentZh'][si][k] if k < len(D[ci]['sentZh'][si]) else ''))
+    sentences = [(bare(en), strip_to_key(en),
+                  (D[ci]['sentZh'][si][k] if k < len(D[ci]['sentZh'][si]) else ''))
                  for ci, c in enumerate(D) for si, p in enumerate(c['paragraphs'])
                  for k, en in enumerate(p)]
     vk = {k.lower(): v for k, v in V.items()}
