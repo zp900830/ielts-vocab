@@ -1383,24 +1383,97 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     const p = accent === 'en-GB' ? (info.uk || info.p) : (info.us || info.p);
     return p ? '/' + String(p).replace(/^\//,'').replace(/\/$/,'') + '/' : '';
     }
-    function glossParts(k) {
+    /* 行内小字原本是「按词」显示第一条义项的，于是同一个词在书里既当名词又当动词时，
+       必有一半的句子看到错的意思（stable=稳定的 却显示 n. 马厩）。这里改成按这句话选义项：
+       先猜这个词在这句里的词性，猜中了才换；猜不中就沿用第一条 —— 换的前提是词条里
+       确实有该词性的义项，所以猜错不会显示更糟的内容。 */
+    function sensePosTag(seg) {
+    const m = String(seg).match(/^\s*(n|v|vt|vi|a|adj|ad|adv|prep|conj|pron|num)\./);
+    if (!m) return null;
+    return {'n':'noun','vt':'noun','vi':'noun','v':'verb','a':'adj','adj':'adj','ad':'adv','adv':'adv',
+            'prep':'prep','conj':'conj','pron':'noun','num':'adj'}[m[1]] || null;
+    }
+    function senseTags(parts) {
+    let cur = null;
+    return parts.map(p => { const t = sensePosTag(p) || cur; cur = t; return t; });
+    }
+    const PREDICT = { noun: /^(the|a|an|each|every|my|his|her|its|our|their|some|any|no|many|few|both)$/,
+                      verb: /^(will|would|can|could|should|must|may|might|shall|did|does|do|have|has|had|am|is|are|was|were|be|been)$/,
+                      // to 单独一档：它既是不定式标记也是介词（attribute to steady effort 里是介词）
+                      to: /^to$/ };
+    const FUNC = /^(of|in|on|at|for|with|from|by|as|and|but|or|that|which|who|whose|where|when|because|if|so|while|though|not|very|too|also|then|there|here|it|them|they|you|i|he|she|we|us|him|his|hers|than|when|because|who|which|whose|as|into|upon|per|via|like|unlike|toward|towards|except|plus|minus|during|among|between|through|across|around|about|against|without|within|beyond)$/;
+    // 以 -ly 结尾但其实是形容词的一族（monthly drawings / yearly check-up），按副词切会切错
+    const LY_ADJ = /^(monthly|weekly|daily|yearly|quarterly|biweekly|bimonthly|hourly|overnight|friendly|lovely|lonely|early|silly|ugly|costly|deadly|lively)$/;
+    // FUNC/isFunc 必须同层作用域：FUNC 原先只声明在 guessPos 里，isFunc 取不到会让整页渲染抛错
+    function isFunc(w) { return FUNC.test(w) || PREDICT.noun.test(w); }
+    function guessPos(disp, left, right) {
+    // 左右窗口分开传：曾经只给右半边，prev 恒为空，把 sting/heating/liquid 全判错了
+    const prev = ((left || '').match(/([a-z'’-]+)[^a-z'’-]*$/i) || ['', ''])[1].toLowerCase();
+    const next = ((right || '').match(/^[^a-z'’-]*([a-z'’-]+)/i) || ['', ''])[1].toLowerCase();
+    const d = String(disp || '').toLowerCase();
+    if (/ly$/.test(d) && d.length > 5 && !LY_ADJ.test(d)) return 'adv';
+    const LINK = /^(stood|looked|sounded|seemed|grew|became|remained|kept|felt|appeared|smelled|tasted|turned|proved|looks|sounds|seems|grows|becomes|remains|keeps|feels|appears)$/;
+    if (PREDICT.verb.test(prev)) return 'verb';
+    // to 后面跟冠词/代词 → 它在带宾语，是不定式（to trace the leak）；
+    // to 后面跟实义名词 → 它是介词（attribute to steady effort），别硬判动词
+    if (PREDICT.to.test(prev)) return next && !isFunc(next) ? null : 'verb';
+    if (LINK.test(prev)) return 'adj';
+    // 限定词后面紧跟实词 → 这个词是前置定语（a remote farm / the swift birds），不要按名词切；
+    // 只有后面是介词/连词/句末，才说明它就是名词中心语（the leak that… / our transfer to…）
+    if (PREDICT.noun.test(prev)) return (!next || isFunc(next) || PREDICT.verb.test(next)) ? 'noun' : null;
+    return null;
+    }
+    function glossParts(k, disp, left, right) {
     const info = (typeof VOCAB !== 'undefined' && VOCAB[k]) || null;
     if (!info || !info.m) return null;
     const parts = String(info.m).split(/[；;]/).map(s => s.trim()).filter(Boolean);
-    const two = parts.slice(0, 2).join('；');
-    const m = (two.length <= 12 ? two : parts[0]).slice(0, 12);
+    if (!parts.length) return null;
+    let pick = 0;
+    // 「现在分词词形 / 复数词形」这类是占位义项，没有信息量，别把它端给学生
+    const junk = /词形|现在分词|过去式|过去分词/;
+    const usable = parts.map((p, i) => i).filter(i => !junk.test(parts[i]));
+    if (parts.length > 1 && usable.length && (left !== undefined || right !== undefined)) {
+      const want = guessPos(disp, left, right);
+      if (want) {
+        const tags = senseTags(parts);
+        const j = tags.findIndex((t, i) => t === want && !junk.test(parts[i]));
+        if (j > 0) pick = j;                // j===0 是默认；-1 表示词条里没这个词性，沿用第一条
+      }
+    }
+    if (junk.test(parts[pick]) && usable.length) pick = usable[0];
+    const nxt = parts[pick + 1] && !junk.test(parts[pick + 1]) ? parts[pick + 1] : '';
+    const two = nxt ? parts[pick] + '；' + nxt : parts[pick];
+    const m = (two.length <= 12 ? two : parts[pick]).slice(0, 12);
     return { ph: glossPhon(k), m };
     }
-    function glossHTML(k) {
-    const g = glossParts(k);
+    function glossHTML(k, disp, left, right) {
+    const g = glossParts(k, disp, left, right);
     if (!g) return '';
     return (g.ph ? `<span class="gl-p">${esc(g.ph)}</span> ` : '') + esc(g.m);
+    }
+    function elContext(el) {
+    // 从已渲染的句子里重建「不含小字」的上下文：兄弟节点里的 .gl 是释义，不能混进来
+    const box = el.closest('.sent') || el.parentNode;
+    if (!box) return '';
+    let out = '';
+    for (const n of box.childNodes) {
+      if (n === el) break;
+      if (n.nodeType === 1) { if (n.classList.contains('gl')) continue; out += n.textContent; }
+      else out += n.textContent;
+    }
+    let tail = '';
+    for (let n = el.nextSibling; n; n = n.nextSibling) {
+      if (n.nodeType === 1) { if (n.classList.contains('gl')) continue; tail += n.textContent; }
+      else tail += n.textContent;
+    }
+    return [out, tail];
     }
     function refreshGloss() {
     document.querySelectorAll('.w').forEach(el => {
     const gl = el.nextElementSibling;
     if (gl && gl.classList.contains('gl')) {
-    const gh = glossHTML(el.dataset.w);
+    const cxe = elContext(el);
+    const gh = glossHTML(el.dataset.w, el.dataset.disp, cxe[0], cxe[1]);
     if (!gh) { gl.style.display = 'none'; return; }
     gl.innerHTML = gh;
     gl.style.display = '';
@@ -1408,10 +1481,15 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     });
     }
     function wrapWords(text) {
-    return text.replace(/\[\[([^\]:]+):([^\]]+)\]\]/g, (m, key, disp) => {
+    const plain = text.replace(/\[\[([^\]:]+):([^\]]+)\]\]/g, '$2');
+    let walk = 0;
+    return text.replace(/\[\[([^\]:]+):([^\]]+)\]\]/g, (m, key, disp, off) => {
     const k = key.toLowerCase();
     const cls = 'w';
-    const gh = glossHTML(k);
+    // 上下文取这句的裸文本（去掉所有标记），从当前词往后看即可
+    const at = plain.toLowerCase().indexOf(disp.toLowerCase(), walk);
+    if (at >= 0) walk = at + disp.length;
+    const gh = glossHTML(k, disp, at >= 0 ? plain.slice(0, at) : '', at >= 0 ? plain.slice(at + disp.length) : plain);
     return `<span class="${cls}" data-w="${esc(k)}" data-disp="${esc(disp)}" tabindex="0" role="button" aria-label="查看单词 ${esc(disp)}">${esc(disp)}</span>` +
     (gh ? `<span class="gl" aria-hidden="true">${gh}</span>` : '');
     });
