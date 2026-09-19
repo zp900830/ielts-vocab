@@ -1,38 +1,261 @@
-[{"w":"subgroup","syn":[],"col":[]},
- {"w":"substance","syn":[],"col":[]},
- {"w":"suburb","syn":[],"col":[]},
- {"w":"surroundings","syn":["habitat"],"col":[]},
- {"w":"swamp","syn":[],"col":[]},
- {"w":"swan","syn":[],"col":[]},
- {"w":"swarm","syn":[],"col":[]},
- {"w":"tail","syn":[],"col":[]},
- {"w":"telescope","syn":[],"col":["small telescope"]},
- {"w":"terrain","syn":["geography"],"col":[]},
- {"w":"terrestrial","syn":[],"col":[]},
- {"w":"thermodynamic","syn":[],"col":[]},
- {"w":"timber","syn":[],"col":[]},
- {"w":"tornado","syn":[],"col":[]},
- {"w":"torrent","syn":[],"col":[]},
- {"w":"tortoise","syn":[],"col":[]},
- {"w":"tremble","syn":[],"col":[]},
- {"w":"tropics","syn":[],"col":[]},
- {"w":"tulip","syn":[],"col":["tulip row"]},
- {"w":"typhoon","syn":[],"col":[]},
- {"w":"ubiquitous","syn":[],"col":[]},
- {"w":"ultraviolet","syn":[],"col":[]},
- {"w":"undermine","syn":[],"col":[]},
- {"w":"universe","syn":[],"col":[]},
- {"w":"variation","syn":[],"col":[]},
- {"w":"vase","syn":[],"col":[]},
- {"w":"vertebrate","syn":[],"col":[]},
- {"w":"victim","syn":[],"col":["helpless victim"]},
- {"w":"violet","syn":[],"col":[]},
- {"w":"volcano","syn":[],"col":[]},
- {"w":"vulnerable","syn":[],"col":[]},
- {"w":"waterfall","syn":[],"col":[]},
- {"w":"weed","syn":[],"col":[]},
- {"w":"whale","syn":[],"col":[]},
- {"w":"wing","syn":[],"col":[]},
- {"w":"wolf","syn":[],"col":[]},
- {"w":"zebra","syn":[],"col":[]},
- {"w":"zoologist","syn":[],"col":[]}]
+[
+ {
+  "w": "subgroup",
+  "syn": [],
+  "col": [
+   "separate subgroup"
+  ]
+ },
+ {
+  "w": "substance",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "suburb",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "surroundings",
+  "syn": [
+   "habitat"
+  ],
+  "col": []
+ },
+ {
+  "w": "swamp",
+  "syn": [],
+  "col": [
+   "warm swamp"
+  ]
+ },
+ {
+  "w": "swan",
+  "syn": [],
+  "col": [
+   "white calm swan",
+   "calm swan"
+  ]
+ },
+ {
+  "w": "swarm",
+  "syn": [],
+  "col": [
+   "busy swarm"
+  ]
+ },
+ {
+  "w": "tail",
+  "syn": [],
+  "col": [
+   "bright tail"
+  ]
+ },
+ {
+  "w": "telescope",
+  "syn": [],
+  "col": [
+   "small telescope"
+  ]
+ },
+ {
+  "w": "terrain",
+  "syn": [
+   "geography"
+  ],
+  "col": []
+ },
+ {
+  "w": "terrestrial",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "thermodynamic",
+  "syn": [],
+  "col": [
+   "thermodynamic report"
+  ]
+ },
+ {
+  "w": "timber",
+  "syn": [],
+  "col": [
+   "old timber"
+  ]
+ },
+ {
+  "w": "tornado",
+  "syn": [],
+  "col": [
+   "spinning tornado"
+  ]
+ },
+ {
+  "w": "torrent",
+  "syn": [],
+  "col": [
+   "brown torrent"
+  ]
+ },
+ {
+  "w": "tortoise",
+  "syn": [],
+  "col": [
+   "heavy sleepy tortoise",
+   "sleepy tortoise"
+  ]
+ },
+ {
+  "w": "tremble",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "tropics",
+  "syn": [],
+  "col": [
+   "distant tropics"
+  ]
+ },
+ {
+  "w": "tulip",
+  "syn": [],
+  "col": [
+   "tulip row"
+  ]
+ },
+ {
+  "w": "typhoon",
+  "syn": [],
+  "col": [
+   "coastal typhoon"
+  ]
+ },
+ {
+  "w": "ubiquitous",
+  "syn": [],
+  "col": [
+   "seem ubiquitous",
+   "ubiquitous near water"
+  ]
+ },
+ {
+  "w": "ultraviolet",
+  "syn": [],
+  "col": [
+   "harsh ultraviolet"
+  ]
+ },
+ {
+  "w": "undermine",
+  "syn": [],
+  "col": [
+   "undermine shared beds"
+  ]
+ },
+ {
+  "w": "universe",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "variation",
+  "syn": [],
+  "col": [
+   "pleasant variation"
+  ]
+ },
+ {
+  "w": "vase",
+  "syn": [],
+  "col": [
+   "blue vase"
+  ]
+ },
+ {
+  "w": "vertebrate",
+  "syn": [],
+  "col": [
+   "strong vertebrate"
+  ]
+ },
+ {
+  "w": "victim",
+  "syn": [],
+  "col": [
+   "helpless victim"
+  ]
+ },
+ {
+  "w": "violet",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "volcano",
+  "syn": [],
+  "col": [
+   "old volcano"
+  ]
+ },
+ {
+  "w": "vulnerable",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "waterfall",
+  "syn": [],
+  "col": [
+   "noisy distant waterfall",
+   "distant waterfall"
+  ]
+ },
+ {
+  "w": "weed",
+  "syn": [],
+  "col": [
+   "spreading weed"
+  ]
+ },
+ {
+  "w": "whale",
+  "syn": [],
+  "col": [
+   "distant huge whale",
+   "huge whale"
+  ]
+ },
+ {
+  "w": "wing",
+  "syn": [],
+  "col": [
+   "weak little wing",
+   "little wing"
+  ]
+ },
+ {
+  "w": "wolf",
+  "syn": [],
+  "col": [
+   "far lonely wolf",
+   "lonely wolf"
+  ]
+ },
+ {
+  "w": "zebra",
+  "syn": [],
+  "col": [
+   "calm zebra"
+  ]
+ },
+ {
+  "w": "zoologist",
+  "syn": [],
+  "col": [
+   "kind zoologist"
+  ]
+ }
+]

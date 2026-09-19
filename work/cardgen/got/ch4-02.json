@@ -1,81 +1,537 @@
 [
-{"w":"pedicab","syn":[],"col":[]},
-{"w":"persuade","syn":["induce"],"col":[]},
-{"w":"petition","syn":[],"col":[]},
-{"w":"pilot","syn":[],"col":[]},
-{"w":"plea","syn":[],"col":[]},
-{"w":"possess","syn":[],"col":[]},
-{"w":"prejudice","syn":[],"col":[]},
-{"w":"premier","syn":[],"col":[]},
-{"w":"pretend","syn":[],"col":[]},
-{"w":"privilege","syn":[],"col":[]},
-{"w":"promise","syn":[],"col":[]},
-{"w":"proposal","syn":[],"col":[]},
-{"w":"protocol","syn":[],"col":["delivery protocol"]},
-{"w":"raft","syn":[],"col":[]},
-{"w":"railroad","syn":[],"col":[]},
-{"w":"railway","syn":[],"col":[]},
-{"w":"reasonable","syn":[],"col":[]},
-{"w":"receipt","syn":[],"col":[]},
-{"w":"recommend","syn":[],"col":[]},
-{"w":"redundant","syn":[],"col":[]},
-{"w":"refuge","syn":[],"col":[]},
-{"w":"refund","syn":[],"col":[]},
-{"w":"reimburse","syn":[],"col":[]},
-{"w":"reject","syn":[],"col":[]},
-{"w":"resident","syn":[],"col":[]},
-{"w":"restrain","syn":[],"col":[]},
-{"w":"resume","syn":[],"col":[]},
-{"w":"retail","syn":[],"col":[]},
-{"w":"revolution","syn":[],"col":[]},
-{"w":"route","syn":[],"col":[]},
-{"w":"routine","syn":[],"col":[]},
-{"w":"russian","syn":[],"col":[]},
-{"w":"safari","syn":[],"col":["safari trail"]},
-{"w":"sailor","syn":[],"col":[]},
-{"w":"seaman","syn":[],"col":[]},
-{"w":"shilling","syn":[],"col":[]},
-{"w":"signpost","syn":[],"col":[]},
-{"w":"sin","syn":[],"col":[]},
-{"w":"slogan","syn":[],"col":[]},
-{"w":"slum","syn":[],"col":[]},
-{"w":"soviet","syn":[],"col":[]},
-{"w":"spanish","syn":[],"col":[]},
-{"w":"stamp","syn":[],"col":[]},
-{"w":"standpoint","syn":[],"col":[]},
-{"w":"statesman","syn":[],"col":[]},
-{"w":"steal","syn":[],"col":["steal coins"]},
-{"w":"stern","syn":[],"col":[]},
-{"w":"stigma","syn":[],"col":[]},
-{"w":"stock","syn":[],"col":[]},
-{"w":"submerge","syn":[],"col":[]},
-{"w":"succession","syn":[],"col":["peaceful succession"]},
-{"w":"superiority","syn":["virtue"],"col":[]},
-{"w":"surveillance","syn":[],"col":["surveillance cameras"]},
-{"w":"swap","syn":[],"col":[]},
-{"w":"swift","syn":[],"col":[]},
-{"w":"swiss","syn":[],"col":[]},
-{"w":"throne","syn":[],"col":[]},
-{"w":"tractor","syn":[],"col":[]},
-{"w":"transaction","syn":[],"col":[]},
-{"w":"transfer","syn":[],"col":[]},
-{"w":"transmit","syn":[],"col":[]},
-{"w":"treaty","syn":[],"col":[]},
-{"w":"truck","syn":[],"col":[]},
-{"w":"tunnel","syn":[],"col":[]},
-{"w":"turnover","syn":[],"col":[]},
-{"w":"undertaking","syn":[],"col":[]},
-{"w":"union","syn":[],"col":[]},
-{"w":"van","syn":[],"col":[]},
-{"w":"vessel","syn":[],"col":[]},
-{"w":"vice","syn":[],"col":[]},
-{"w":"viewpoint","syn":[],"col":[]},
-{"w":"vote","syn":[],"col":[]},
-{"w":"voucher","syn":[],"col":["paper voucher"]},
-{"w":"wagon","syn":[],"col":[]},
-{"w":"wheel","syn":[],"col":[]},
-{"w":"witness","syn":[],"col":[]},
-{"w":"workaholic","syn":[],"col":[]},
-{"w":"worldwide","syn":[],"col":[]},
-{"w":"wreath","syn":[],"col":[]}
+ {
+  "w": "pedicab",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "persuade",
+  "syn": [
+   "induce"
+  ],
+  "col": []
+ },
+ {
+  "w": "petition",
+  "syn": [],
+  "col": [
+   "shared petition"
+  ]
+ },
+ {
+  "w": "pilot",
+  "syn": [],
+  "col": [
+   "brave pilot"
+  ]
+ },
+ {
+  "w": "plea",
+  "syn": [],
+  "col": [
+   "tired plea"
+  ]
+ },
+ {
+  "w": "possess",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "prejudice",
+  "syn": [],
+  "col": [
+   "old prejudice"
+  ]
+ },
+ {
+  "w": "premier",
+  "syn": [],
+  "col": [
+   "premier himself"
+  ]
+ },
+ {
+  "w": "pretend",
+  "syn": [],
+  "col": [
+   "pretend cheer"
+  ]
+ },
+ {
+  "w": "privilege",
+  "syn": [],
+  "col": [
+   "quiet privilege"
+  ]
+ },
+ {
+  "w": "promise",
+  "syn": [],
+  "col": [
+   "fair promise",
+   "promised daily practice"
+  ]
+ },
+ {
+  "w": "proposal",
+  "syn": [],
+  "col": [
+   "simple proposal"
+  ]
+ },
+ {
+  "w": "protocol",
+  "syn": [],
+  "col": [
+   "delivery protocol"
+  ]
+ },
+ {
+  "w": "raft",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "railroad",
+  "syn": [],
+  "col": [
+   "whole railroad"
+  ]
+ },
+ {
+  "w": "railway",
+  "syn": [],
+  "col": [
+   "new railway"
+  ]
+ },
+ {
+  "w": "reasonable",
+  "syn": [],
+  "col": [
+   "reasonable new delivery"
+  ]
+ },
+ {
+  "w": "receipt",
+  "syn": [],
+  "col": [
+   "every receipt"
+  ]
+ },
+ {
+  "w": "recommend",
+  "syn": [],
+  "col": [
+   "recommend honest youths"
+  ]
+ },
+ {
+  "w": "redundant",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "refuge",
+  "syn": [],
+  "col": [
+   "quiet refuge"
+  ]
+ },
+ {
+  "w": "refund",
+  "syn": [],
+  "col": [
+   "small refund"
+  ]
+ },
+ {
+  "w": "reimburse",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "reject",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "resident",
+  "syn": [],
+  "col": [
+   "resident cats"
+  ]
+ },
+ {
+  "w": "restrain",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "resume",
+  "syn": [],
+  "col": [
+   "resume slowly"
+  ]
+ },
+ {
+  "w": "retail",
+  "syn": [],
+  "col": [
+   "small retail"
+  ]
+ },
+ {
+  "w": "revolution",
+  "syn": [],
+  "col": [
+   "old revolution"
+  ]
+ },
+ {
+  "w": "route",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "routine",
+  "syn": [],
+  "col": [
+   "calm routine"
+  ]
+ },
+ {
+  "w": "russian",
+  "syn": [],
+  "col": [
+   "old russian song"
+  ]
+ },
+ {
+  "w": "safari",
+  "syn": [],
+  "col": [
+   "safari trail",
+   "quiet safari trail",
+   "quiet safari"
+  ]
+ },
+ {
+  "w": "sailor",
+  "syn": [],
+  "col": [
+   "old sailor",
+   "tired sailor"
+  ]
+ },
+ {
+  "w": "seaman",
+  "syn": [],
+  "col": [
+   "tired seaman"
+  ]
+ },
+ {
+  "w": "shilling",
+  "syn": [],
+  "col": [
+   "every shilling"
+  ]
+ },
+ {
+  "w": "signpost",
+  "syn": [],
+  "col": [
+   "white signpost"
+  ]
+ },
+ {
+  "w": "sin",
+  "syn": [],
+  "col": [
+   "darker sin"
+  ]
+ },
+ {
+  "w": "slogan",
+  "syn": [],
+  "col": [
+   "warm slogan"
+  ]
+ },
+ {
+  "w": "slum",
+  "syn": [],
+  "col": [
+   "old slum school",
+   "old slum"
+  ]
+ },
+ {
+  "w": "soviet",
+  "syn": [],
+  "col": [
+   "old soviet film",
+   "soviet film"
+  ]
+ },
+ {
+  "w": "spanish",
+  "syn": [],
+  "col": [
+   "spanish train"
+  ]
+ },
+ {
+  "w": "stamp",
+  "syn": [],
+  "col": [
+   "small stamp"
+  ]
+ },
+ {
+  "w": "standpoint",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "statesman",
+  "syn": [],
+  "col": [
+   "old statesman"
+  ]
+ },
+ {
+  "w": "steal",
+  "syn": [],
+  "col": [
+   "steal coins"
+  ]
+ },
+ {
+  "w": "stern",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "stigma",
+  "syn": [],
+  "col": [
+   "old stigma"
+  ]
+ },
+ {
+  "w": "stock",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "submerge",
+  "syn": [],
+  "col": [
+   "slowly submerge"
+  ]
+ },
+ {
+  "w": "succession",
+  "syn": [],
+  "col": [
+   "peaceful succession"
+  ]
+ },
+ {
+  "w": "superiority",
+  "syn": [
+   "virtue"
+  ],
+  "col": []
+ },
+ {
+  "w": "surveillance",
+  "syn": [],
+  "col": [
+   "surveillance cameras",
+   "surveillance camera",
+   "new surveillance camera"
+  ]
+ },
+ {
+  "w": "swap",
+  "syn": [],
+  "col": [
+   "sometimes swap"
+  ]
+ },
+ {
+  "w": "swift",
+  "syn": [],
+  "col": [
+   "swift birds"
+  ]
+ },
+ {
+  "w": "swiss",
+  "syn": [],
+  "col": [
+   "swiss trains"
+  ]
+ },
+ {
+  "w": "throne",
+  "syn": [],
+  "col": [
+   "empty throne"
+  ]
+ },
+ {
+  "w": "tractor",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "transaction",
+  "syn": [],
+  "col": [
+   "every transaction"
+  ]
+ },
+ {
+  "w": "transfer",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "transmit",
+  "syn": [],
+  "col": [
+   "transmit home"
+  ]
+ },
+ {
+  "w": "treaty",
+  "syn": [],
+  "col": [
+   "old treaty"
+  ]
+ },
+ {
+  "w": "truck",
+  "syn": [],
+  "col": [
+   "late truck",
+   "little truck"
+  ]
+ },
+ {
+  "w": "tunnel",
+  "syn": [],
+  "col": [
+   "long tunnel"
+  ]
+ },
+ {
+  "w": "turnover",
+  "syn": [],
+  "col": [
+   "regular turnover"
+  ]
+ },
+ {
+  "w": "undertaking",
+  "syn": [],
+  "col": [
+   "lifetime undertaking"
+  ]
+ },
+ {
+  "w": "union",
+  "syn": [],
+  "col": [
+   "union flag"
+  ]
+ },
+ {
+  "w": "van",
+  "syn": [],
+  "col": [
+   "quiet van"
+  ]
+ },
+ {
+  "w": "vessel",
+  "syn": [],
+  "col": [
+   "slow vessel"
+  ]
+ },
+ {
+  "w": "vice",
+  "syn": [],
+  "col": [
+   "hidden vice"
+  ]
+ },
+ {
+  "w": "viewpoint",
+  "syn": [],
+  "col": [
+   "whole viewpoint"
+  ]
+ },
+ {
+  "w": "vote",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "voucher",
+  "syn": [],
+  "col": [
+   "paper voucher"
+  ]
+ },
+ {
+  "w": "wagon",
+  "syn": [],
+  "col": [
+   "old wagon"
+  ]
+ },
+ {
+  "w": "wheel",
+  "syn": [],
+  "col": [
+   "broken wheel"
+  ]
+ },
+ {
+  "w": "witness",
+  "syn": [],
+  "col": [
+   "ask every witness",
+   "every witness"
+  ]
+ },
+ {
+  "w": "workaholic",
+  "syn": [],
+  "col": [
+   "gentle workaholic"
+  ]
+ },
+ {
+  "w": "worldwide",
+  "syn": [],
+  "col": [
+   "worldwide news"
+  ]
+ },
+ {
+  "w": "wreath",
+  "syn": [],
+  "col": [
+   "round wreath"
+  ]
+ }
 ]

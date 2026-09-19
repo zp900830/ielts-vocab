@@ -1,66 +1,420 @@
 [
-{"w":"nephew","syn":[],"col":[]},
-{"w":"oblige","syn":[],"col":[]},
-{"w":"offend","syn":[],"col":[]},
-{"w":"optics","syn":[],"col":[]},
-{"w":"order","syn":[],"col":[]},
-{"w":"orphan","syn":[],"col":[]},
-{"w":"partner","syn":[],"col":[]},
-{"w":"patent","syn":[],"col":[]},
-{"w":"phase","syn":[],"col":[]},
-{"w":"pinpoint","syn":[],"col":[]},
-{"w":"pistol","syn":[],"col":[]},
-{"w":"plight","syn":[],"col":[]},
-{"w":"prophet","syn":[],"col":[]},
-{"w":"protest","syn":[],"col":[]},
-{"w":"prototype","syn":[],"col":[]},
-{"w":"provide","syn":[],"col":[]},
-{"w":"realm","syn":[],"col":[]},
-{"w":"rebel","syn":[],"col":[]},
-{"w":"relative","syn":[],"col":[]},
-{"w":"replica","syn":[],"col":["exact replica"]},
-{"w":"reproach","syn":[],"col":[]},
-{"w":"resist","syn":[],"col":[]},
-{"w":"respective","syn":[],"col":[]},
-{"w":"retreat","syn":[],"col":[]},
-{"w":"revolt","syn":[],"col":[]},
-{"w":"rival","syn":[],"col":[]},
-{"w":"safeguard","syn":[],"col":[]},
-{"w":"scout","syn":[],"col":[]},
-{"w":"shield","syn":[],"col":[]},
-{"w":"shrink","syn":[],"col":[]},
-{"w":"sibling","syn":[],"col":[]},
-{"w":"simplify","syn":[],"col":[]},
-{"w":"slave","syn":[],"col":[]},
-{"w":"soldier","syn":[],"col":[]},
-{"w":"solicitor","syn":[],"col":[]},
-{"w":"spy","syn":[],"col":[]},
-{"w":"stab","syn":[],"col":[]},
-{"w":"stranger","syn":[],"col":[]},
-{"w":"strategy","syn":["tactic"],"col":[]},
-{"w":"strike","syn":[],"col":[]},
-{"w":"subordinate","syn":[],"col":[]},
-{"w":"supervisor","syn":[],"col":[]},
-{"w":"surname","syn":[],"col":[]},
-{"w":"surrender","syn":[],"col":[]},
-{"w":"tablet","syn":[],"col":[]},
-{"w":"tactic","syn":["strategy"],"col":[]},
-{"w":"tank","syn":[],"col":[]},
-{"w":"terror","syn":[],"col":[]},
-{"w":"tester","syn":[],"col":[]},
-{"w":"tomb","syn":[],"col":[]},
-{"w":"traitor","syn":[],"col":[]},
-{"w":"treason","syn":[],"col":[]},
-{"w":"trespass","syn":[],"col":[]},
-{"w":"troop","syn":[],"col":[]},
-{"w":"turmoil","syn":[],"col":[]},
-{"w":"turn","syn":[],"col":[]},
-{"w":"twinkle","syn":[],"col":[]},
-{"w":"umpire","syn":[],"col":[]},
-{"w":"uncover","syn":[],"col":[]},
-{"w":"warn","syn":["alarm"],"col":[]},
-{"w":"widow","syn":[],"col":[]},
-{"w":"withdraw","syn":[],"col":[]},
-{"w":"youngster","syn":["youth"],"col":[]},
-{"w":"youth","syn":["youngster"],"col":[]}
+ {
+  "w": "nephew",
+  "syn": [],
+  "col": [
+   "little nephew"
+  ]
+ },
+ {
+  "w": "oblige",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "offend",
+  "syn": [],
+  "col": [
+   "offend calm folks"
+  ]
+ },
+ {
+  "w": "optics",
+  "syn": [],
+  "col": [
+   "optics basics"
+  ]
+ },
+ {
+  "w": "order",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "orphan",
+  "syn": [],
+  "col": [
+   "small orphan"
+  ]
+ },
+ {
+  "w": "partner",
+  "syn": [],
+  "col": [
+   "as partner"
+  ]
+ },
+ {
+  "w": "patent",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "phase",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "pinpoint",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "pistol",
+  "syn": [],
+  "col": [
+   "worn pistol"
+  ]
+ },
+ {
+  "w": "plight",
+  "syn": [],
+  "col": [
+   "lasting plight"
+  ]
+ },
+ {
+  "w": "prophet",
+  "syn": [],
+  "col": [
+   "loud prophet"
+  ]
+ },
+ {
+  "w": "protest",
+  "syn": [],
+  "col": [
+   "calm protest"
+  ]
+ },
+ {
+  "w": "prototype",
+  "syn": [],
+  "col": [
+   "third prototype"
+  ]
+ },
+ {
+  "w": "provide",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "realm",
+  "syn": [],
+  "col": [
+   "blue realm"
+  ]
+ },
+ {
+  "w": "rebel",
+  "syn": [],
+  "col": [
+   "young rebel"
+  ]
+ },
+ {
+  "w": "relative",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "replica",
+  "syn": [],
+  "col": [
+   "exact replica"
+  ]
+ },
+ {
+  "w": "reproach",
+  "syn": [],
+  "col": [
+   "soft reproach"
+  ]
+ },
+ {
+  "w": "resist",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "respective",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "retreat",
+  "syn": [],
+  "col": [
+   "never retreat"
+  ]
+ },
+ {
+  "w": "revolt",
+  "syn": [],
+  "col": [
+   "revolt softly"
+  ]
+ },
+ {
+  "w": "rival",
+  "syn": [],
+  "col": [
+   "rival pride"
+  ]
+ },
+ {
+  "w": "safeguard",
+  "syn": [],
+  "col": [
+   "safeguard seeds"
+  ]
+ },
+ {
+  "w": "scout",
+  "syn": [],
+  "col": [
+   "young scout"
+  ]
+ },
+ {
+  "w": "shield",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "shrink",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "sibling",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "simplify",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "slave",
+  "syn": [],
+  "col": [
+   "tired slave"
+  ]
+ },
+ {
+  "w": "soldier",
+  "syn": [],
+  "col": [
+   "tired soldier"
+  ]
+ },
+ {
+  "w": "solicitor",
+  "syn": [],
+  "col": [
+   "fair solicitor"
+  ]
+ },
+ {
+  "w": "spy",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "stab",
+  "syn": [],
+  "col": [
+   "stab friends",
+   "never stab friends"
+  ]
+ },
+ {
+  "w": "stranger",
+  "syn": [],
+  "col": [
+   "kind stranger"
+  ]
+ },
+ {
+  "w": "strategy",
+  "syn": [
+   "tactic"
+  ],
+  "col": [
+   "good strategy"
+  ]
+ },
+ {
+  "w": "strike",
+  "syn": [],
+  "col": [
+   "loud strike"
+  ]
+ },
+ {
+  "w": "subordinate",
+  "syn": [],
+  "col": [
+   "slow subordinate"
+  ]
+ },
+ {
+  "w": "supervisor",
+  "syn": [],
+  "col": [
+   "kind supervisor"
+  ]
+ },
+ {
+  "w": "surname",
+  "syn": [],
+  "col": [
+   "surname list",
+   "shared surname",
+   "shared surname list"
+  ]
+ },
+ {
+  "w": "surrender",
+  "syn": [],
+  "col": [
+   "surrender knives"
+  ]
+ },
+ {
+  "w": "tablet",
+  "syn": [],
+  "col": [
+   "grey tablet"
+  ]
+ },
+ {
+  "w": "tactic",
+  "syn": [
+   "strategy"
+  ],
+  "col": [
+   "wiser tactic"
+  ]
+ },
+ {
+  "w": "tank",
+  "syn": [],
+  "col": [
+   "ruined tank"
+  ]
+ },
+ {
+  "w": "terror",
+  "syn": [],
+  "col": [
+   "idle terror"
+  ]
+ },
+ {
+  "w": "tester",
+  "syn": [],
+  "col": [
+   "shy tester"
+  ]
+ },
+ {
+  "w": "tomb",
+  "syn": [],
+  "col": [
+   "plain tomb"
+  ]
+ },
+ {
+  "w": "traitor",
+  "syn": [],
+  "col": [
+   "hired traitor"
+  ]
+ },
+ {
+  "w": "treason",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "trespass",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "troop",
+  "syn": [],
+  "col": [
+   "tired troop"
+  ]
+ },
+ {
+  "w": "turmoil",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "turn",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "twinkle",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "umpire",
+  "syn": [],
+  "col": [
+   "calm umpire"
+  ]
+ },
+ {
+  "w": "uncover",
+  "syn": [],
+  "col": [
+   "uncover bright ideas"
+  ]
+ },
+ {
+  "w": "warn",
+  "syn": [
+   "alarm"
+  ],
+  "col": []
+ },
+ {
+  "w": "widow",
+  "syn": [],
+  "col": [
+   "lonely widows",
+   "old widow"
+  ]
+ },
+ {
+  "w": "withdraw",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "youngster",
+  "syn": [
+   "youth"
+  ],
+  "col": [
+   "shared bread"
+  ]
+ },
+ {
+  "w": "youth",
+  "syn": [
+   "youngster"
+  ],
+  "col": []
+ }
 ]

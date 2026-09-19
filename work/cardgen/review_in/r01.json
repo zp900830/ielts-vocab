@@ -1,0 +1,2467 @@
+[
+ {
+  "w": "ash",
+  "m": "n. 灰",
+  "ex": "The fire left ash on the ground.",
+  "exZh": "火在地面上留下了灰烬。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "found ash",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "botanist",
+  "m": "n. 植物学家",
+  "ex": "The botanist studies plants in the forest.",
+  "exZh": "这位植物学家在森林里研究植物。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "cheerful botanist",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bristle",
+  "m": "n. 刚毛；v. 大为恼怒",
+  "ex": "The brush has stiff bristles for cleaning pots.",
+  "exZh": "这把刷子有坚硬的刚毛，用来清洗锅具。",
+  "overlap": [
+   [
+    "bristle coat",
+    "stiff bristle coat"
+   ],
+   [
+    "stiff bristle",
+    "stiff bristle coat"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "bristle coat",
+    "src": "T"
+   },
+   {
+    "c": "stiff bristle",
+    "src": "T"
+   },
+   {
+    "c": "stiff bristle coat",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "brute",
+  "m": "adj. 粗暴的",
+  "ex": "He gave a brute answer to the question.",
+  "exZh": "他对这个问题给出了粗暴的回答。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "rough brute",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "carnivore",
+  "m": "n. 食肉动物",
+  "ex": "Lions are carnivores that eat meat.",
+  "exZh": "狮子是吃肉的食肉动物。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "predator",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "cattle",
+  "m": "n. 牛；牛（复数名词）",
+  "ex": "The farmer feeds his cattle every morning.",
+  "exZh": "农夫每天早上喂他的牛。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet milk cattle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chill",
+  "m": "n. 寒意；v. 变冷；使冰冷",
+  "ex": "The chill of the morning made me wear a jacket.",
+  "exZh": "早晨的寒冷让我穿上了夹克。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "freeze",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "counterbalance",
+  "m": "v. 抵消；n. 平衡力",
+  "ex": "The weight acts as a counterbalance to the arm.",
+  "exZh": "这个重量作为手臂的平衡物。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "counterbalance harsh light",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "crow",
+  "m": "n. 乌鸦",
+  "ex": "A crow sat on the tree branch.",
+  "exZh": "一只乌鸦坐在树枝上。",
+  "overlap": [
+   [
+    "black noisy crow",
+    "noisy crow"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "black noisy crow",
+    "src": "T"
+   },
+   {
+    "c": "noisy crow",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "descendant",
+  "m": "n. 后裔；子孙；后代",
+  "ex": "He is a descendant of the first king.",
+  "exZh": "他是第一位国王的后裔。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "happy descendant",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dirt",
+  "m": "n. 污垢；泥土",
+  "ex": "He washed his hands to remove the dirt.",
+  "exZh": "他洗手以去除污垢。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "wipes dirt",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ecologist",
+  "m": "n. 生态学家；生态学者",
+  "ex": "The ecologist studied birds in the forest.",
+  "exZh": "这位生态学家研究了森林里的鸟类。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "friendly ecologist",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "elusive",
+  "m": "adj. 难以捉摸的；难得一见的",
+  "ex": "The fox is elusive and comes only at night.",
+  "exZh": "狐狸行踪诡秘，只在夜里出来。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "stayed elusive",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "enzyme",
+  "m": "n. 酶",
+  "ex": "The enzyme helps break down food in the stomach.",
+  "exZh": "这种酶帮助分解胃里的食物。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "busy enzyme",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "expedition",
+  "m": "n. 探险；远征",
+  "ex": "The team went on an expedition to the mountains.",
+  "exZh": "这支队伍去山上探险了。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "real expedition",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hopeless",
+  "m": "adj. 绝望的",
+  "ex": "He felt hopeless after losing his job.",
+  "exZh": "他失业后感到毫无希望。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "pessimistic",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "induction",
+  "m": "n. 入职培训；引导",
+  "ex": "Staff had to stay calm and defensive around a nervous animal, and each newcomer must undergo a safety induction.",
+  "exZh": "员工在容易紧张的动物旁边必须保持冷静并注意安全，每个新来的还得先接受一次安全培训。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "orientation",
+    "src": "M"
+   }
+  ],
+  "col": [
+   {
+    "c": "safety induction",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "magnet",
+  "m": "n. 磁体；磁铁",
+  "ex": "The magnet picks up the iron nail.",
+  "exZh": "磁铁吸起了铁钉。",
+  "overlap": [
+   [
+    "little red magnet",
+    "red magnet"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "little red magnet",
+    "src": "T"
+   },
+   {
+    "c": "red magnet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mite",
+  "m": "n. 螨；螨虫",
+  "ex": "Dust mites live in warm house dust.",
+  "exZh": "尘螨生活在温暖的室内灰尘里。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "parasite",
+    "src": "M"
+   }
+  ],
+  "col": [
+   {
+    "c": "tiny mite",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "nest",
+  "m": "n. 窝；鸟巢；v. 筑巢",
+  "ex": "The bird built a nest in the tree.",
+  "exZh": "鸟在树上筑了一个窝。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "ruin nests",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "offspring",
+  "m": "n. 后代；子女；幼苗",
+  "ex": "The dogs had three offspring last spring.",
+  "exZh": "这些狗去年春天生了三只幼崽。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny offspring",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "olive",
+  "m": "n. 橄榄",
+  "ex": "She eats olive every day with bread.",
+  "exZh": "她每天和面包一起吃橄榄。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "young olive",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "optical",
+  "m": "adj. 光学的",
+  "ex": "He uses optical lenses to see small objects.",
+  "exZh": "他使用光学镜片来看小物体。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "visual",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "organism",
+  "m": "n. 生物体；有机体；有机组织",
+  "ex": "A bacterium is a simple organism.",
+  "exZh": "细菌是一种简单的生物体。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny organism",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "owl",
+  "m": "n. 猫头鹰",
+  "ex": "The owl sleeps in the tree during the day.",
+  "exZh": "猫头鹰白天在树上睡觉。",
+  "overlap": [
+   [
+    "sleepy brown owl",
+    "brown owl"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "sleepy brown owl",
+    "src": "T"
+   },
+   {
+    "c": "brown owl",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ox",
+  "m": "n. 公牛；（阉割的）公牛",
+  "ex": "The farmer walks his ox to the field.",
+  "exZh": "农夫牵着他的牛去田里。",
+  "overlap": [
+   [
+    "strong brown ox",
+    "brown ox"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "strong brown ox",
+    "src": "T"
+   },
+   {
+    "c": "brown ox",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "oxygen",
+  "m": "n. 氧气",
+  "ex": "Plants release oxygen into the air.",
+  "exZh": "植物向空气中释放氧气。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "holds oxygen",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "parasite",
+  "m": "n. 寄生虫；寄生生物；依赖他人过活者",
+  "ex": "The parasite lives inside the host's body.",
+  "exZh": "这种寄生虫生活在宿主的体内。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "mite",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "particle",
+  "m": "n. 微粒；粒子",
+  "ex": "Dust particles float in the air.",
+  "exZh": "灰尘微粒漂浮在空气中。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny particle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "paw",
+  "m": "n. 爪子；脚爪",
+  "ex": "The cat licked its paw.",
+  "exZh": "猫舔它的爪子。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft paw",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "peninsula",
+  "m": "n. 半岛",
+  "ex": "The peninsula is surrounded by water on three sides.",
+  "exZh": "这个半岛三面环水。",
+  "overlap": [
+   [
+    "windy southern peninsula",
+    "southern peninsula"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "windy southern peninsula",
+    "src": "T"
+   },
+   {
+    "c": "southern peninsula",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "perennial",
+  "m": "n. 多年生植物；adj. 多年生的；反复出现的",
+  "ex": "These perennial flowers bloom every year.",
+  "exZh": "这些多年生的花每年都会开花。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old perennial",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "perish",
+  "m": "v. 死",
+  "ex": "The flowers will perish if you don't water them.",
+  "exZh": "如果你不给花浇水，它们会死。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "perish fast",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "petrol",
+  "m": "n. 汽油",
+  "ex": "He buys petrol every Friday.",
+  "exZh": "他每周五买汽油。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "costly petrol",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pigeon",
+  "m": "n. 鸽子",
+  "ex": "The pigeon sits on the window sill.",
+  "exZh": "鸽子坐在窗台上。",
+  "overlap": [
+   [
+    "grey mild pigeon",
+    "mild pigeon"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "grey mild pigeon",
+    "src": "T"
+   },
+   {
+    "c": "mild pigeon",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "plateau",
+  "m": "n. 高原",
+  "ex": "The sheep graze on a high plateau.",
+  "exZh": "羊群在高高原上吃草。",
+  "overlap": [
+   [
+    "high windy plateau",
+    "windy plateau"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "high windy plateau",
+    "src": "T"
+   },
+   {
+    "c": "windy plateau",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "plume",
+  "m": "n. 大羽毛；羽饰",
+  "ex": "A plume of smoke rose from the chimney.",
+  "exZh": "一股烟从烟囱里升起。",
+  "overlap": [
+   [
+    "loose grey plume",
+    "grey plume"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "loose grey plume",
+    "src": "T"
+   },
+   {
+    "c": "grey plume",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pollen",
+  "m": "n. 花粉",
+  "ex": "Bees collect pollen from flowers.",
+  "exZh": "蜜蜂从花朵中采集花粉。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "yellow pollen",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "probe",
+  "m": "n. 探测器；v. 探查",
+  "ex": "The probe sent back photos from Mars.",
+  "exZh": "探测器从火星传回了照片。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small probe",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "proliferate",
+  "m": "v. 繁殖",
+  "ex": "Rabbits proliferate quickly in the wild.",
+  "exZh": "兔子在野外繁殖得很快。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "proliferate fast",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "propulsion",
+  "m": "n. 推进",
+  "ex": "The rocket uses chemical propulsion to fly into space.",
+  "exZh": "火箭使用化学推进力飞入太空。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "simple propulsion",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "puff",
+  "m": "v. 喘息",
+  "ex": "He puffed after running up the stairs.",
+  "exZh": "他跑上楼梯后喘着气。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "puff fast",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "radioactive",
+  "m": "adj. 放射性的",
+  "ex": "The radioactive material glows in the dark.",
+  "exZh": "这种放射性物质在黑暗中发光。",
+  "overlap": [
+   [
+    "radioactive meter",
+    "old radioactive meter"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "radioactive meter",
+    "src": "T"
+   },
+   {
+    "c": "old radioactive meter",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rake",
+  "m": "n. 耙子；v. 搜索",
+  "ex": "He uses a rake to collect leaves.",
+  "exZh": "他用耙子收集树叶。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "light rake",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "range",
+  "m": "n. 山脉；一系列；v. （在某范围内）变化",
+  "ex": "The store offers a range of colors.",
+  "exZh": "这家商店提供一系列颜色。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "nearby range",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rear",
+  "m": "v. 饲养；n. 后部",
+  "ex": "The rear of the car was damaged in the accident.",
+  "exZh": "汽车的后部在事故中受损了。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "feed",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "reclaim",
+  "m": "v. 收回；开垦",
+  "ex": "He wants to reclaim his lost wallet.",
+  "exZh": "他想要要求归还他丢失的钱包。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "reclaim old boxes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "refraction",
+  "m": "n. 折光；折射",
+  "ex": "The refraction of light makes the straw look bent in water.",
+  "exZh": "光的折光使水中的吸管看起来弯曲了。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "refraction curve",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "reservoir",
+  "m": "n. 水库；蓄水池",
+  "ex": "The reservoir provides water for the nearby town.",
+  "exZh": "这个水库为附近的城镇提供水源。",
+  "overlap": [
+   [
+    "stone reservoir",
+    "old stone reservoir"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "stone reservoir",
+    "src": "T"
+   },
+   {
+    "c": "old stone reservoir",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "roar",
+  "m": "n. 咆哮；v. 吼叫",
+  "ex": "The lion let out a loud roar.",
+  "exZh": "狮子发出了一声响亮的咆哮。",
+  "overlap": [
+   [
+    "low sleepy roar",
+    "sleepy roar"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "low sleepy roar",
+    "src": "T"
+   },
+   {
+    "c": "sleepy roar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rough",
+  "m": "adj. 粗糙的；粗略的",
+  "ex": "The wood surface is rough.",
+  "exZh": "木头表面很粗糙。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "stayed rough",
+    "src": "T"
+   },
+   {
+    "c": "rough brute",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "seal",
+  "m": "n. 海豹；v. 密封；封上",
+  "ex": "He sealed the envelope with glue.",
+  "exZh": "他用胶水把信封封上了。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sealed boxes",
+    "src": "T"
+   },
+   {
+    "c": "old tired seal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "seed",
+  "m": "n. 种子；籽；v. 播种",
+  "ex": "The farmer planted the seed in the soil.",
+  "exZh": "农夫把种子种在土里。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "saved seed",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "shepherd",
+  "m": "n. 牧羊人",
+  "ex": "The shepherd walks with his sheep every morning.",
+  "exZh": "牧羊人每天早上都带着他的羊走路。",
+  "overlap": [
+   [
+    "gentle old shepherd",
+    "old shepherd"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "gentle old shepherd",
+    "src": "T"
+   },
+   {
+    "c": "old shepherd",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "signal",
+  "m": "n. 信号；v. 用信号通知",
+  "ex": "The traffic light is a signal to stop.",
+  "exZh": "交通灯是一个停止的信号。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "wind signal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "smooth",
+  "m": "adj. 平滑的；平坦的；v. 使平滑",
+  "ex": "The glass surface is smooth.",
+  "exZh": "玻璃表面是平滑的。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "felt surprisingly smooth",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "solid",
+  "m": "adj. 坚固的；可靠的；n. 固体",
+  "ex": "Ice is a solid form of water.",
+  "exZh": "冰是水的固体形式。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "stable",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "sow",
+  "m": "v. 播种；散布",
+  "ex": "He sows seeds in the garden every spring.",
+  "exZh": "他每年春天都在花园里播种。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sow new rows",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spacecraft",
+  "m": "n. 航天器；宇宙飞船",
+  "ex": "The spacecraft landed safely on Mars.",
+  "exZh": "航天器在火星上安全着陆。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "model spacecraft",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spaceship",
+  "m": "n. 宇宙飞船；太空船",
+  "ex": "The spaceship flew to the moon.",
+  "exZh": "宇宙飞船飞到了月球。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "toy spaceship",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spade",
+  "m": "n. 铁锹",
+  "ex": "He dug a hole with a spade.",
+  "exZh": "他用铁锹挖了一个洞。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small spade",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sparrow",
+  "m": "n. 麻雀",
+  "ex": "A sparrow flew over the garden.",
+  "exZh": "一只麻雀飞过了花园。",
+  "overlap": [
+   [
+    "tiny hungry sparrow",
+    "hungry sparrow"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny hungry sparrow",
+    "src": "T"
+   },
+   {
+    "c": "hungry sparrow",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "specimen",
+  "m": "n. 标本；样品",
+  "ex": "The teacher showed a specimen of a butterfly.",
+  "exZh": "老师展示了一个蝴蝶标本。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "leaf specimen",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spectacle",
+  "m": "n. 奇观",
+  "ex": "The fireworks at night were a beautiful spectacle.",
+  "exZh": "夜晚的烟花是一场美丽的奇观。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "silver spectacle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spectrum",
+  "m": "n. 范围；光谱",
+  "ex": "The colors in the rainbow cover a wide spectrum.",
+  "exZh": "彩虹中的颜色覆盖了广泛的范围。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "light spectrum",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "squash",
+  "m": "n. 南瓜；n. 壁球运动；v. 压碎",
+  "ex": "He plays squash every weekend with his friends.",
+  "exZh": "他每周末和朋友打壁球。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft squash",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "squirrel",
+  "m": "n. 松鼠",
+  "ex": "The squirrel ran up the tree with a nut.",
+  "exZh": "松鼠带着一颗坚果跑上了树。",
+  "overlap": [
+   [
+    "red quick squirrel",
+    "quick squirrel"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "red quick squirrel",
+    "src": "T"
+   },
+   {
+    "c": "quick squirrel",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stable",
+  "m": "n. 马厩；厩房；adj. 稳定的",
+  "ex": "The bridge is stable and safe to cross.",
+  "exZh": "这座桥很稳固，可以安全通过。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "stable doors",
+    "src": "T"
+   },
+   {
+    "c": "stood stable",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stack",
+  "m": "n. 一摞；v. 把…放成整齐的一摞",
+  "ex": "He put the books in a stack on the table.",
+  "exZh": "他把书堆成一摞放在桌子上。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "stack washed pots",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stem",
+  "m": "v. 源于；n. 茎",
+  "ex": "The flower grows on a long green stem.",
+  "exZh": "花长在一根长长的绿色茎上。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "wet stems",
+    "src": "T"
+   },
+   {
+    "c": "young stems",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "subgroup",
+  "m": "n. 子群；小群",
+  "ex": "The set of even numbers is a subgroup of the integers.",
+  "exZh": "偶数的集合是整数的一个子群。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "separate subgroup",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "surroundings",
+  "m": "n. 环境",
+  "ex": "The children are playing in their natural surroundings.",
+  "exZh": "孩子们正在他们的自然环境中玩耍。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "habitat",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "swamp",
+  "m": "n. 沼泽；湿地",
+  "ex": "The swamp is full of tall grass and frogs.",
+  "exZh": "这个沼泽里长满了高草和青蛙。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm swamp",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "swan",
+  "m": "n. 天鹅",
+  "ex": "A white swan swam quietly on the lake.",
+  "exZh": "一只白天鹅静静地在湖上游泳。",
+  "overlap": [
+   [
+    "white calm swan",
+    "calm swan"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "white calm swan",
+    "src": "T"
+   },
+   {
+    "c": "calm swan",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "swarm",
+  "m": "n. 蜂群；v. 云集",
+  "ex": "Bees swarm around the flower.",
+  "exZh": "蜜蜂围绕着花朵成群飞舞。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "busy swarm",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tail",
+  "m": "n. 尾巴",
+  "ex": "The dog wagged its tail happily.",
+  "exZh": "狗开心地摇着尾巴。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "bright tail",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "telescope",
+  "m": "n. 望远镜",
+  "ex": "He looks at the stars through a telescope.",
+  "exZh": "他通过望远镜看星星。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small telescope",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "terrain",
+  "m": "n. 地形；地势；地带",
+  "ex": "The hikers struggled across the rough terrain.",
+  "exZh": "徒步者艰难地穿越了崎岖的地形。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "geography",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "thermodynamic",
+  "m": "adj. 热力学的",
+  "ex": "The engine works on thermodynamic principles.",
+  "exZh": "这个发动机基于热力学原理工作。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "thermodynamic report",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "timber",
+  "m": "n. 木材",
+  "ex": "He bought timber to build a fence.",
+  "exZh": "他买了木材来建篱笆。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old timber",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tornado",
+  "m": "n. 龙卷风；旋风",
+  "ex": "The tornado destroyed the small house.",
+  "exZh": "龙卷风摧毁了那座小房子。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "spinning tornado",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "torrent",
+  "m": "n. 急流；激流；湍流",
+  "ex": "The rain caused a torrent down the mountain.",
+  "exZh": "大雨在山间形成了一股急流。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "brown torrent",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tortoise",
+  "m": "n. 乌龟",
+  "ex": "The tortoise moves slowly across the grass.",
+  "exZh": "乌龟慢慢地在草地上爬行。",
+  "overlap": [
+   [
+    "heavy sleepy tortoise",
+    "sleepy tortoise"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "heavy sleepy tortoise",
+    "src": "T"
+   },
+   {
+    "c": "sleepy tortoise",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tropics",
+  "m": "n. 热带地区；复数词形",
+  "ex": "Many animals live in the tropics.",
+  "exZh": "许多动物生活在热带地区。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "distant tropics",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tulip",
+  "m": "n. 郁金香",
+  "ex": "He bought a red tulip for his mother.",
+  "exZh": "他为母亲买了一朵红色的郁金香。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tulip row",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "typhoon",
+  "m": "n. 台风",
+  "ex": "The typhoon destroyed many houses last week.",
+  "exZh": "上周的台风摧毁了许多房屋。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "coastal typhoon",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ubiquitous",
+  "m": "adj. 无处不在的；普遍存在的",
+  "ex": "Phones are now ubiquitous in our school.",
+  "exZh": "手机在我们学校里已经无处不在。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "seem ubiquitous",
+    "src": "T"
+   },
+   {
+    "c": "ubiquitous near water",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ultraviolet",
+  "m": "n. 紫外线辐射；紫外光",
+  "ex": "The ultraviolet from the sun can hurt your skin.",
+  "exZh": "太阳的紫外线会伤害你的皮肤。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "harsh ultraviolet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "undermine",
+  "m": "v. 逐渐削弱；暗中损害",
+  "ex": "Constant criticism can undermine your confidence.",
+  "exZh": "不断的批评会逐渐削弱你的信心。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "undermine shared beds",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "variation",
+  "m": "n. 变化；变动",
+  "ex": "The weather shows a lot of variation in spring.",
+  "exZh": "春天天气变化很大。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "pleasant variation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vase",
+  "m": "n. 花瓶",
+  "ex": "She put flowers in a vase on the table.",
+  "exZh": "她把花放在桌子上的花瓶里。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "blue vase",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vertebrate",
+  "m": "n. 脊椎动物",
+  "ex": "Fish and birds are vertebrates.",
+  "exZh": "鱼和鸟是脊椎动物。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "strong vertebrate",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "victim",
+  "m": "n. 受害者",
+  "ex": "The victim cried for help.",
+  "exZh": "受害者呼救。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "helpless victim",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "volcano",
+  "m": "n. 火山",
+  "ex": "The volcano erupted last year.",
+  "exZh": "这座火山去年喷发了。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old volcano",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "waterfall",
+  "m": "n. 瀑布",
+  "ex": "The waterfall makes a loud sound.",
+  "exZh": "瀑布发出很大的声音。",
+  "overlap": [
+   [
+    "noisy distant waterfall",
+    "distant waterfall"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "noisy distant waterfall",
+    "src": "T"
+   },
+   {
+    "c": "distant waterfall",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "weed",
+  "m": "n. 杂草；v. 除草",
+  "ex": "The garden is full of weeds.",
+  "exZh": "花园里长满了杂草。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "spreading weed",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "whale",
+  "m": "n. 鲸",
+  "ex": "The whale swims deep in the ocean.",
+  "exZh": "鲸在海洋深处游动。",
+  "overlap": [
+   [
+    "distant huge whale",
+    "huge whale"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "distant huge whale",
+    "src": "T"
+   },
+   {
+    "c": "huge whale",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wing",
+  "m": "n. 翅膀；翼",
+  "ex": "The bird spread its wing to fly.",
+  "exZh": "鸟张开翅膀飞翔。",
+  "overlap": [
+   [
+    "weak little wing",
+    "little wing"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "weak little wing",
+    "src": "T"
+   },
+   {
+    "c": "little wing",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "wolf",
+  "m": "n. 狼",
+  "ex": "The wolf howled at the moon.",
+  "exZh": "狼对着月亮嚎叫。",
+  "overlap": [
+   [
+    "far lonely wolf",
+    "lonely wolf"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "far lonely wolf",
+    "src": "T"
+   },
+   {
+    "c": "lonely wolf",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "zebra",
+  "m": "n. 斑马",
+  "ex": "The zebra runs fast in the grassland.",
+  "exZh": "斑马在草原上跑得很快。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "calm zebra",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "zoologist",
+  "m": "n. 动物学家",
+  "ex": "He is a zoologist who studies animals in the wild.",
+  "exZh": "他是一位研究野外动物的动物学家。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind zoologist",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "abbreviation",
+  "m": "n. 缩写；缩略",
+  "ex": "He used an abbreviation for 'company' in his note.",
+  "exZh": "他在笔记中把“公司”写成了缩写。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "short abbreviation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "adverb",
+  "m": "n. 副词",
+  "ex": "He speaks slowly, using an adverb to describe how he talks.",
+  "exZh": "他说话很慢，用一个副词来描述他说话的方式。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "short adverb",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "algebra",
+  "m": "n. 代数",
+  "ex": "He solves algebra problems every day.",
+  "exZh": "他每天解代数题。",
+  "overlap": [
+   [
+    "algebra tasks",
+    "easy algebra tasks"
+   ],
+   [
+    "easy algebra",
+    "easy algebra tasks"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "algebra tasks",
+    "src": "T"
+   },
+   {
+    "c": "easy algebra",
+    "src": "T"
+   },
+   {
+    "c": "easy algebra tasks",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "anecdote",
+  "m": "n. 趣闻；轶事",
+  "ex": "He told an anecdote about his childhood.",
+  "exZh": "他讲了一个关于他童年的趣事。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm anecdote",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "animation",
+  "m": "n. 动画",
+  "ex": "My son loves watching cartoon animation.",
+  "exZh": "我儿子喜欢看卡通动画。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "bright animation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "announcer",
+  "m": "n. 广播员；报幕员",
+  "ex": "The announcer said the train will arrive soon.",
+  "exZh": "广播员说火车很快就会到达。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "clear announcer",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "anthropologist",
+  "m": "n. 人类学家",
+  "ex": "The anthropologist studies ancient tribes.",
+  "exZh": "这位人类学家研究古代部落。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "wise anthropologist",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "antique",
+  "m": "adj. 古老的；n. 古董",
+  "ex": "He bought an antique chair from the old market.",
+  "exZh": "他从旧市场买了一把古老的椅子。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "antique cup",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "antonym",
+  "m": "n. 反义词",
+  "ex": "The antonym of 'hot' is 'cold'.",
+  "exZh": "“热”的反义词是“冷”。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft antonym",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "archaeology",
+  "m": "n. 考古学",
+  "ex": "He loves archaeology and digs old artifacts.",
+  "exZh": "他热爱考古学，挖掘古代文物。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "loves archaeology",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arithmetic",
+  "m": "n. 算术",
+  "ex": "He does arithmetic every day with his little sister.",
+  "exZh": "他每天和妹妹一起做算术。",
+  "overlap": [
+   [
+    "silent arithmetic",
+    "fast silent arithmetic"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "silent arithmetic",
+    "src": "T"
+   },
+   {
+    "c": "fast silent arithmetic",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "artwork",
+  "m": "n. 艺术作品；艺术品",
+  "ex": "Our teacher chose one artwork for the wall.",
+  "exZh": "我们老师挑了一件作品挂在墙上。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "painting",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "author",
+  "m": "n. 作者",
+  "ex": "He is the author of this book.",
+  "exZh": "他是这本书的作者。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind author",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bachelor",
+  "m": "n. 学士（本科）",
+  "ex": "He earned a bachelor in computer science.",
+  "exZh": "他获得了计算机科学学士学位。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "young bachelor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ballet",
+  "m": "n. 芭蕾舞；芭蕾",
+  "ex": "She practices ballet every afternoon.",
+  "exZh": "她每天下午练习芭蕾舞。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "new ballet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "battery",
+  "m": "n. 电池；一组",
+  "ex": "The remote needs a new battery.",
+  "exZh": "遥控器需要新电池。",
+  "overlap": [
+   [
+    "strong battery",
+    "fresh strong battery"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "strong battery",
+    "src": "T"
+   },
+   {
+    "c": "fresh strong battery",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bible",
+  "m": "n. 《圣经》",
+  "ex": "He reads the bible every morning.",
+  "exZh": "他每天早上读《圣经》。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old bible",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bibliography",
+  "m": "n. 参考书目",
+  "ex": "He added the bibliography at the end of his report.",
+  "exZh": "他在报告末尾添加了参考书目。",
+  "overlap": [
+   [
+    "reading bibliography",
+    "short reading bibliography"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "reading bibliography",
+    "src": "T"
+   },
+   {
+    "c": "short reading bibliography",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "biography",
+  "m": "n. 传记",
+  "ex": "He read a biography of Nelson Mandela.",
+  "exZh": "他读了一本关于纳尔逊·曼德拉的传记。",
+  "overlap": [
+   [
+    "photo biography",
+    "short photo biography"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "photo biography",
+    "src": "T"
+   },
+   {
+    "c": "short photo biography",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bishop",
+  "m": "n. 主教；（国际象棋的）象",
+  "ex": "The bishop moves diagonally across the chessboard.",
+  "exZh": "象在国际象棋棋盘上斜着走。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "young bishop",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "blend",
+  "m": "v. 混合；融合",
+  "ex": "She blends flour and water to make dough.",
+  "exZh": "她把面粉和水混合在一起做面团。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "blend jokes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "brainstorm",
+  "m": "n. 头脑风暴；v. 集思广益",
+  "ex": "We will brainstorm ideas for the project tomorrow.",
+  "exZh": "我们明天将为这个项目集思广益。",
+  "overlap": [
+   [
+    "lively brainstorm",
+    "quick lively brainstorm"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "lively brainstorm",
+    "src": "T"
+   },
+   {
+    "c": "quick lively brainstorm",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "camp",
+  "m": "n. 营地；v. 宿营；露营",
+  "ex": "The children set up a camp near the lake.",
+  "exZh": "孩子们在湖边搭了一个营地。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small camp",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "candidate",
+  "m": "n. 候选人；应试者",
+  "ex": "He is a candidate for the mayor position.",
+  "exZh": "他是市长职位的候选人。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "class candidate",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "canteen",
+  "m": "n. 食堂",
+  "ex": "He buys lunch in the school canteen.",
+  "exZh": "他在学校食堂买午餐。",
+  "overlap": [
+   [
+    "street canteen",
+    "small street canteen"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "street canteen",
+    "src": "T"
+   },
+   {
+    "c": "small street canteen",
+    "src": "T"
+   },
+   {
+    "c": "bright canteen",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "category",
+  "m": "n. 类别",
+  "ex": "This book belongs to the science category.",
+  "exZh": "这本书属于科学类别。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sweet category",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cello",
+  "m": "n. 大提琴",
+  "ex": "He plays the cello every evening.",
+  "exZh": "他每天晚上拉大提琴。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "deep cello",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "champion",
+  "m": "n. 优胜者；冠军",
+  "ex": "He became the champion of the tennis tournament.",
+  "exZh": "他赢得了网球锦标赛的冠军。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "young champion",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "chronology",
+  "m": "n. 年表；年代学；按年代次序的排列",
+  "ex": "He wrote the chronology of ancient Rome.",
+  "exZh": "他写了古罗马的年代顺序。",
+  "overlap": [
+   [
+    "chronology charts",
+    "old chronology charts"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "chronology charts",
+    "src": "T"
+   },
+   {
+    "c": "old chronology charts",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "church",
+  "m": "n. 教堂",
+  "ex": "He goes to church every Sunday.",
+  "exZh": "他每周日去教堂。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "white church",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "comedy",
+  "m": "n. 喜剧",
+  "ex": "He likes to watch comedy on TV.",
+  "exZh": "他喜欢在电视上看喜剧。",
+  "overlap": [
+   [
+    "comedy jokes",
+    "loud comedy jokes"
+   ],
+   [
+    "loud comedy",
+    "loud comedy jokes"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "comedy jokes",
+    "src": "T"
+   },
+   {
+    "c": "loud comedy",
+    "src": "T"
+   },
+   {
+    "c": "loud comedy jokes",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "commentary",
+  "m": "n. 评论；解说词；实况报道",
+  "ex": "The commentator gave live commentary during the soccer match.",
+  "exZh": "解说员在足球比赛期间进行了现场解说。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "friendly commentary",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "commentator",
+  "m": "n. 评论员；解说员",
+  "ex": "The commentator explained the game clearly.",
+  "exZh": "评论员清晰地解释了比赛。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "critic",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "young commentator",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "communicate",
+  "m": "v. 沟通；交流",
+  "ex": "They communicate well with each other.",
+  "exZh": "他们彼此沟通得很好。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "convey",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "communicate warm thoughts",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "complicated",
+  "m": "adj. 复杂的",
+  "ex": "The math problem is complicated.",
+  "exZh": "这个数学问题很复杂。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "seemed complicated",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "conjunction",
+  "m": "n. 连接词；同时发生",
+  "ex": "The rain and the thunder happened in conjunction.",
+  "exZh": "雨和雷声同时发生。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small conjunction",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "consensus",
+  "m": "n. 共识；一致",
+  "ex": "The team reached a consensus on the project plan.",
+  "exZh": "团队就项目计划达成了共识。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm consensus",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "contradiction",
+  "m": "n. 矛盾；不一致；反驳",
+  "ex": "His words are a contradiction.",
+  "exZh": "他的话是矛盾的。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "harsh contradiction",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "correspondent",
+  "m": "n. 通讯记者；通信者",
+  "ex": "The correspondent reported the news from the city.",
+  "exZh": "记者从城市报道了新闻。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind correspondent",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "craftsman",
+  "m": "n. 工匠；手艺人；匠人",
+  "ex": "The craftsman made a wooden chair by hand.",
+  "exZh": "这位工匠手工制作了一把木椅。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "wise craftsman",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "critic",
+  "m": "n. 评论家；批评者",
+  "ex": "The critic praised the new movie.",
+  "exZh": "这位评论家称赞了这部新电影。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "fair critic",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cycling",
+  "m": "n. 骑自行车；v. 骑自行车；现在分词词形",
+  "ex": "Cycling is good for health.",
+  "exZh": "骑自行车对健康有益。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "cycling pleasure",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dean",
+  "m": "n. 学院院长；系主任",
+  "ex": "The dean gave a speech at the graduation ceremony.",
+  "exZh": "院长在毕业典礼上发表了演讲。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "busy dean",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "decipher",
+  "m": "v. 破译；解读",
+  "ex": "He tried to decipher the secret code.",
+  "exZh": "他试图破译那个秘密代码。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "decipher old cards",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "depict",
+  "m": "v. 描绘；描述",
+  "ex": "The painting depicts a quiet village at sunset.",
+  "exZh": "这幅画描绘了一个宁静的村庄在日落时分的景象。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "depict birds",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "diagonal",
+  "m": "n. 对角线；adj. 斜的",
+  "ex": "The square has two diagonal lines.",
+  "exZh": "这个正方形有两条对角线。",
+  "overlap": [
+   [
+    "black diagonal",
+    "bold black diagonal"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "black diagonal",
+    "src": "T"
+   },
+   {
+    "c": "bold black diagonal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "diagram",
+  "m": "n. 图表；图解",
+  "ex": "The teacher drew a diagram to explain the water cycle.",
+  "exZh": "老师画了一个图表来解释水循环。",
+  "overlap": [
+   [
+    "study diagram",
+    "clear study diagram"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "study diagram",
+    "src": "T"
+   },
+   {
+    "c": "clear study diagram",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "diary",
+  "m": "n. 日记",
+  "ex": "He writes in his diary every night.",
+  "exZh": "他每天晚上都写日记。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small diary",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "disc",
+  "m": "n. 圆盘；磁碟；唱片",
+  "ex": "The CD is a type of disc.",
+  "exZh": "光盘是一种圆盘。",
+  "overlap": [
+   [
+    "black disc",
+    "old black disc"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "black disc",
+    "src": "T"
+   },
+   {
+    "c": "old black disc",
+    "src": "T"
+   }
+  ]
+ }
+]

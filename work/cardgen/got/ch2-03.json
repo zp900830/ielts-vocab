@@ -1,44 +1,308 @@
 [
-{"w":"slip","syn":[],"col":[]},
-{"w":"sociology","syn":[],"col":[]},
-{"w":"sophomore","syn":[],"col":[]},
-{"w":"spectator","syn":[],"col":[]},
-{"w":"sphere","syn":[],"col":["foam sphere"]},
-{"w":"spoil","syn":[],"col":[]},
-{"w":"sponsor","syn":[],"col":[]},
-{"w":"spur","syn":[],"col":[]},
-{"w":"stadium","syn":[],"col":[]},
-{"w":"stretch","syn":[],"col":["stretch arms"]},
-{"w":"subtract","syn":[],"col":[]},
-{"w":"suffix","syn":[],"col":[]},
-{"w":"summary","syn":[],"col":[]},
-{"w":"survey","syn":[],"col":[]},
-{"w":"syllable","syn":[],"col":[]},
-{"w":"syllabus","syn":[],"col":[]},
-{"w":"symphony","syn":[],"col":[]},
-{"w":"synonym","syn":[],"col":[]},
-{"w":"tale","syn":[],"col":["family tale"]},
-{"w":"temple","syn":[],"col":["temple yard"]},
-{"w":"theory","syn":["hypothesis"],"col":[]},
-{"w":"thrive","syn":[],"col":[]},
-{"w":"timetable","syn":[],"col":[]},
-{"w":"toss","syn":[],"col":[]},
-{"w":"tournament","syn":[],"col":[]},
-{"w":"tragedy","syn":[],"col":[]},
-{"w":"training","syn":["education"],"col":[]},
-{"w":"transparent","syn":[],"col":["transparent covers"]},
-{"w":"triangle","syn":[],"col":[]},
-{"w":"tribe","syn":[],"col":["distant tribe"]},
-{"w":"trumpet","syn":[],"col":["gold trumpet"]},
-{"w":"typist","syn":[],"col":["fast typist"]},
-{"w":"utterance","syn":[],"col":[]},
-{"w":"vacation","syn":[],"col":[]},
-{"w":"variable","syn":[],"col":[]},
-{"w":"vigorous","syn":[],"col":["vigorous cheers"]},
-{"w":"violin","syn":[],"col":[]},
-{"w":"volt","syn":[],"col":[]},
-{"w":"vowel","syn":[],"col":[]},
-{"w":"wander","syn":[],"col":["wander past"]},
-{"w":"wedge","syn":[],"col":["thin wedge"]},
-{"w":"yoga","syn":[],"col":["morning yoga"]}
+ {
+  "w": "slip",
+  "syn": [],
+  "col": [
+   "small slip"
+  ]
+ },
+ {
+  "w": "sociology",
+  "syn": [],
+  "col": [
+   "easy sociology video",
+   "sociology video"
+  ]
+ },
+ {
+  "w": "sophomore",
+  "syn": [],
+  "col": [
+   "helpful sophomore"
+  ]
+ },
+ {
+  "w": "spectator",
+  "syn": [],
+  "col": [
+   "happy spectator"
+  ]
+ },
+ {
+  "w": "sphere",
+  "syn": [],
+  "col": [
+   "foam sphere",
+   "soft foam sphere"
+  ]
+ },
+ {
+  "w": "spoil",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "sponsor",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "spur",
+  "syn": [],
+  "col": [
+   "useful spur"
+  ]
+ },
+ {
+  "w": "stadium",
+  "syn": [],
+  "col": [
+   "wide sunny stadium",
+   "sunny stadium"
+  ]
+ },
+ {
+  "w": "stretch",
+  "syn": [
+   "prolong"
+  ],
+  "col": [
+   "stretch arms"
+  ]
+ },
+ {
+  "w": "subtract",
+  "syn": [],
+  "col": [
+   "subtract old scores"
+  ]
+ },
+ {
+  "w": "suffix",
+  "syn": [],
+  "col": [
+   "blue suffix"
+  ]
+ },
+ {
+  "w": "summary",
+  "syn": [],
+  "col": [
+   "brief morning summary",
+   "morning summary"
+  ]
+ },
+ {
+  "w": "survey",
+  "syn": [],
+  "col": [
+   "short fun survey",
+   "fun survey"
+  ]
+ },
+ {
+  "w": "syllable",
+  "syn": [],
+  "col": [
+   "new syllable"
+  ]
+ },
+ {
+  "w": "syllabus",
+  "syn": [],
+  "col": [
+   "new spring syllabus",
+   "spring syllabus"
+  ]
+ },
+ {
+  "w": "symphony",
+  "syn": [],
+  "col": [
+   "sweet symphony"
+  ]
+ },
+ {
+  "w": "synonym",
+  "syn": [],
+  "col": [
+   "simple synonym"
+  ]
+ },
+ {
+  "w": "tale",
+  "syn": [],
+  "col": [
+   "family tale",
+   "old family tale",
+   "epic tale"
+  ]
+ },
+ {
+  "w": "temple",
+  "syn": [],
+  "col": [
+   "temple yard",
+   "old temple",
+   "old temple yard"
+  ]
+ },
+ {
+  "w": "theory",
+  "syn": [
+   "hypothesis"
+  ],
+  "col": []
+ },
+ {
+  "w": "thrive",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "timetable",
+  "syn": [],
+  "col": [
+   "clear wall timetable",
+   "wall timetable"
+  ]
+ },
+ {
+  "w": "toss",
+  "syn": [],
+  "col": [
+   "then toss"
+  ]
+ },
+ {
+  "w": "tournament",
+  "syn": [],
+  "col": [
+   "grand tournament"
+  ]
+ },
+ {
+  "w": "tragedy",
+  "syn": [],
+  "col": [
+   "soft tragedy"
+  ]
+ },
+ {
+  "w": "training",
+  "syn": [
+   "education",
+   "exercise"
+  ],
+  "col": []
+ },
+ {
+  "w": "transparent",
+  "syn": [],
+  "col": [
+   "transparent covers",
+   "clean transparent covers"
+  ]
+ },
+ {
+  "w": "triangle",
+  "syn": [],
+  "col": [
+   "small blue triangle",
+   "blue triangle"
+  ]
+ },
+ {
+  "w": "tribe",
+  "syn": [],
+  "col": [
+   "distant tribe"
+  ]
+ },
+ {
+  "w": "trumpet",
+  "syn": [],
+  "col": [
+   "gold trumpet",
+   "bright gold trumpet"
+  ]
+ },
+ {
+  "w": "typist",
+  "syn": [],
+  "col": [
+   "fast typist"
+  ]
+ },
+ {
+  "w": "utterance",
+  "syn": [],
+  "col": [
+   "soft utterance"
+  ]
+ },
+ {
+  "w": "vacation",
+  "syn": [],
+  "col": [
+   "calm sweet vacation",
+   "sweet vacation"
+  ]
+ },
+ {
+  "w": "variable",
+  "syn": [],
+  "col": [
+   "only variable"
+  ]
+ },
+ {
+  "w": "vigorous",
+  "syn": [],
+  "col": [
+   "vigorous cheers"
+  ]
+ },
+ {
+  "w": "violin",
+  "syn": [],
+  "col": [
+   "old brown violin",
+   "brown violin"
+  ]
+ },
+ {
+  "w": "volt",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "vowel",
+  "syn": [],
+  "col": [
+   "bright vowel"
+  ]
+ },
+ {
+  "w": "wander",
+  "syn": [],
+  "col": [
+   "wander past"
+  ]
+ },
+ {
+  "w": "wedge",
+  "syn": [],
+  "col": [
+   "thin wedge"
+  ]
+ },
+ {
+  "w": "yoga",
+  "syn": [],
+  "col": [
+   "morning yoga",
+   "gentle morning yoga"
+  ]
+ }
 ]

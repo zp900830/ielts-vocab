@@ -1,112 +1,744 @@
 [
- {"w":"actress","syn":[],"col":[]},
- {"w":"adolescence","syn":[],"col":[]},
- {"w":"alarm","syn":["warn"],"col":[]},
- {"w":"apprentice","syn":[],"col":[]},
- {"w":"arrow","syn":[],"col":[]},
- {"w":"attack","syn":[],"col":[]},
- {"w":"attorney","syn":[],"col":[]},
- {"w":"auxiliary","syn":[],"col":[]},
- {"w":"axe","syn":[],"col":[]},
- {"w":"barber","syn":[],"col":[]},
- {"w":"battle","syn":[],"col":[]},
- {"w":"beggar","syn":[],"col":[]},
- {"w":"betray","syn":[],"col":["betray friends"]},
- {"w":"blade","syn":[],"col":[]},
- {"w":"blueprint","syn":[],"col":[]},
- {"w":"bomb","syn":[],"col":["bomb bridges"]},
- {"w":"boss","syn":[],"col":[]},
- {"w":"bullet","syn":[],"col":[]},
- {"w":"butcher","syn":[],"col":[]},
- {"w":"byproduct","syn":[],"col":[]},
- {"w":"calculate","syn":[],"col":[]},
- {"w":"camouflage","syn":[],"col":[]},
- {"w":"cannon","syn":[],"col":[]},
- {"w":"cashier","syn":[],"col":[]},
- {"w":"cassette","syn":[],"col":[]},
- {"w":"casualty","syn":[],"col":[]},
- {"w":"cease","syn":[],"col":[]},
- {"w":"chancellor","syn":[],"col":[]},
- {"w":"circumstance","syn":[],"col":[]},
- {"w":"client","syn":[],"col":[]},
- {"w":"comfort","syn":[],"col":[]},
- {"w":"commander","syn":[],"col":["retired commander"]},
- {"w":"committee","syn":[],"col":[]},
- {"w":"commuter","syn":[],"col":["tired commuter"]},
- {"w":"compel","syn":[],"col":[]},
- {"w":"comrade","syn":[],"col":[]},
- {"w":"conquer","syn":[],"col":["conquer fright"]},
- {"w":"conspiracy","syn":[],"col":[]},
- {"w":"consultant","syn":[],"col":[]},
- {"w":"contest","syn":[],"col":["shooting contest"]},
- {"w":"contingency","syn":[],"col":[]},
- {"w":"counter","syn":[],"col":["counter fright"]},
- {"w":"coward","syn":[],"col":[]},
- {"w":"customer","syn":[],"col":[]},
- {"w":"damage","syn":[],"col":[]},
- {"w":"dear","syn":[],"col":[]},
- {"w":"defend","syn":[],"col":[]},
- {"w":"deflect","syn":[],"col":[]},
- {"w":"delegate","syn":[],"col":[]},
- {"w":"dependent","syn":[],"col":[]},
- {"w":"destitute","syn":[],"col":[]},
- {"w":"deter","syn":[],"col":["deter young men"]},
- {"w":"dial","syn":[],"col":[]},
- {"w":"dilemma","syn":[],"col":[]},
- {"w":"director","syn":[],"col":[]},
- {"w":"disturb","syn":[],"col":[]},
- {"w":"divorce","syn":[],"col":[]},
- {"w":"domain","syn":[],"col":[]},
- {"w":"drainage","syn":[],"col":[]},
- {"w":"echo","syn":[],"col":[]},
- {"w":"enemy","syn":[],"col":["old enemy"]},
- {"w":"equip","syn":[],"col":["equip kids"]},
- {"w":"evil","syn":[],"col":["evil thought"]},
- {"w":"execute","syn":[],"col":[]},
- {"w":"famine","syn":[],"col":[]},
- {"w":"filter","syn":[],"col":[]},
- {"w":"fireman","syn":[],"col":[]},
- {"w":"fisherman","syn":[],"col":[]},
- {"w":"flame","syn":[],"col":[]},
- {"w":"flaw","syn":[],"col":[]},
- {"w":"fleet","syn":[],"col":[]},
- {"w":"foe","syn":["enemy"],"col":["old foe"]},
- {"w":"forbid","syn":[],"col":["forbid guns"]},
- {"w":"force","syn":[],"col":[]},
- {"w":"forgo","syn":[],"col":[]},
- {"w":"foul","syn":[],"col":[]},
- {"w":"foundation","syn":[],"col":[]},
- {"w":"frighten","syn":[],"col":[]},
- {"w":"funeral","syn":[],"col":[]},
- {"w":"gang","syn":[],"col":[]},
- {"w":"gardener","syn":[],"col":[]},
- {"w":"gauge","syn":["estimate"],"col":[]},
- {"w":"glitter","syn":[],"col":[]},
- {"w":"grandfather","syn":[],"col":[]},
- {"w":"grave","syn":[],"col":[]},
- {"w":"gunpowder","syn":[],"col":[]},
- {"w":"haircut","syn":[],"col":[]},
- {"w":"happen","syn":[],"col":["keep up to date with what is happening"]},
- {"w":"hell","syn":[],"col":[]},
- {"w":"herald","syn":[],"col":[]},
- {"w":"hero","syn":[],"col":[]},
- {"w":"heroine","syn":[],"col":[]},
- {"w":"honour","syn":[],"col":[]},
- {"w":"hostage","syn":[],"col":[]},
- {"w":"hostess","syn":[],"col":[]},
- {"w":"housewife","syn":[],"col":[]},
- {"w":"humiliate","syn":[],"col":[]},
- {"w":"infant","syn":[],"col":[]},
- {"w":"interfere","syn":[],"col":[]},
- {"w":"kin","syn":[],"col":["close kin"]},
- {"w":"landlady","syn":[],"col":[]},
- {"w":"landlord","syn":[],"col":[]},
- {"w":"laptop","syn":[],"col":[]},
- {"w":"madam","syn":[],"col":[]},
- {"w":"maid","syn":[],"col":[]},
- {"w":"mechanic","syn":[],"col":[]},
- {"w":"microscope","syn":[],"col":[]},
- {"w":"missile","syn":[],"col":[]},
- {"w":"mistress","syn":[],"col":[]},
- {"w":"monument","syn":[],"col":[]}
+ {
+  "w": "actress",
+  "syn": [],
+  "col": [
+   "shy actress"
+  ]
+ },
+ {
+  "w": "adolescence",
+  "syn": [],
+  "col": [
+   "bright adolescence"
+  ]
+ },
+ {
+  "w": "alarm",
+  "syn": [
+   "warn"
+  ],
+  "col": [
+   "sharp alarm"
+  ]
+ },
+ {
+  "w": "apprentice",
+  "syn": [],
+  "col": [
+   "fervent apprentice"
+  ]
+ },
+ {
+  "w": "arrow",
+  "syn": [],
+  "col": [
+   "bent arrow"
+  ]
+ },
+ {
+  "w": "attack",
+  "syn": [],
+  "col": [
+   "attack old peace"
+  ]
+ },
+ {
+  "w": "attorney",
+  "syn": [],
+  "col": [
+   "stern attorney"
+  ]
+ },
+ {
+  "w": "auxiliary",
+  "syn": [],
+  "col": [
+   "auxiliary tube"
+  ]
+ },
+ {
+  "w": "axe",
+  "syn": [],
+  "col": [
+   "old axe"
+  ]
+ },
+ {
+  "w": "barber",
+  "syn": [],
+  "col": [
+   "funny barber"
+  ]
+ },
+ {
+  "w": "battle",
+  "syn": [],
+  "col": [
+   "last battle"
+  ]
+ },
+ {
+  "w": "beggar",
+  "syn": [],
+  "col": [
+   "poor beggar"
+  ]
+ },
+ {
+  "w": "betray",
+  "syn": [],
+  "col": [
+   "betray friends"
+  ]
+ },
+ {
+  "w": "blade",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "blueprint",
+  "syn": [],
+  "col": [
+   "simple blueprint"
+  ]
+ },
+ {
+  "w": "bomb",
+  "syn": [],
+  "col": [
+   "bomb bridges"
+  ]
+ },
+ {
+  "w": "boss",
+  "syn": [],
+  "col": [
+   "stern boss"
+  ]
+ },
+ {
+  "w": "bullet",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "butcher",
+  "syn": [],
+  "col": [
+   "kind butcher"
+  ]
+ },
+ {
+  "w": "byproduct",
+  "syn": [],
+  "col": [
+   "clean byproduct"
+  ]
+ },
+ {
+  "w": "calculate",
+  "syn": [],
+  "col": [
+   "calculate drops"
+  ]
+ },
+ {
+  "w": "camouflage",
+  "syn": [],
+  "col": [
+   "faded camouflage"
+  ]
+ },
+ {
+  "w": "cannon",
+  "syn": [],
+  "col": [
+   "heavy cannon"
+  ]
+ },
+ {
+  "w": "cashier",
+  "syn": [],
+  "col": [
+   "busy cashier"
+  ]
+ },
+ {
+  "w": "cassette",
+  "syn": [],
+  "col": [
+   "old cassette",
+   "cassette box"
+  ]
+ },
+ {
+  "w": "casualty",
+  "syn": [],
+  "col": [
+   "lost casualty"
+  ]
+ },
+ {
+  "w": "cease",
+  "syn": [],
+  "col": [
+   "cease slowly"
+  ]
+ },
+ {
+  "w": "chancellor",
+  "syn": [],
+  "col": [
+   "stern chancellor"
+  ]
+ },
+ {
+  "w": "circumstance",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "client",
+  "syn": [],
+  "col": [
+   "shy client"
+  ]
+ },
+ {
+  "w": "comfort",
+  "syn": [
+   "relief"
+  ],
+  "col": []
+ },
+ {
+  "w": "commander",
+  "syn": [],
+  "col": [
+   "retired commander"
+  ]
+ },
+ {
+  "w": "committee",
+  "syn": [],
+  "col": [
+   "fair committee"
+  ]
+ },
+ {
+  "w": "commuter",
+  "syn": [],
+  "col": [
+   "tired commuter"
+  ]
+ },
+ {
+  "w": "compel",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "comrade",
+  "syn": [],
+  "col": [
+   "brave comrade"
+  ]
+ },
+ {
+  "w": "conquer",
+  "syn": [],
+  "col": [
+   "conquer fright"
+  ]
+ },
+ {
+  "w": "conspiracy",
+  "syn": [],
+  "col": [
+   "cruel conspiracy"
+  ]
+ },
+ {
+  "w": "consultant",
+  "syn": [],
+  "col": [
+   "plant consultant"
+  ]
+ },
+ {
+  "w": "contest",
+  "syn": [],
+  "col": [
+   "shooting contest",
+   "contest rules"
+  ]
+ },
+ {
+  "w": "contingency",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "counter",
+  "syn": [],
+  "col": [
+   "counter fright"
+  ]
+ },
+ {
+  "w": "coward",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "customer",
+  "syn": [],
+  "col": [
+   "shop customer"
+  ]
+ },
+ {
+  "w": "damage",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "dear",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "defend",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "deflect",
+  "syn": [],
+  "col": [
+   "deflect away"
+  ]
+ },
+ {
+  "w": "delegate",
+  "syn": [],
+  "col": [
+   "as delegate"
+  ]
+ },
+ {
+  "w": "dependent",
+  "syn": [],
+  "col": [
+   "still dependent"
+  ]
+ },
+ {
+  "w": "destitute",
+  "syn": [],
+  "col": [
+   "looked destitute"
+  ]
+ },
+ {
+  "w": "deter",
+  "syn": [],
+  "col": [
+   "deter young men"
+  ]
+ },
+ {
+  "w": "dial",
+  "syn": [],
+  "col": [
+   "round dial"
+  ]
+ },
+ {
+  "w": "dilemma",
+  "syn": [],
+  "col": [
+   "hard dilemma"
+  ]
+ },
+ {
+  "w": "director",
+  "syn": [],
+  "col": [
+   "kind director"
+  ]
+ },
+ {
+  "w": "disturb",
+  "syn": [],
+  "col": [
+   "disturb sleepy minds"
+  ]
+ },
+ {
+  "w": "divorce",
+  "syn": [],
+  "col": [
+   "caused divorce"
+  ]
+ },
+ {
+  "w": "domain",
+  "syn": [],
+  "col": [
+   "water domain"
+  ]
+ },
+ {
+  "w": "drainage",
+  "syn": [],
+  "col": [
+   "school drainage"
+  ]
+ },
+ {
+  "w": "echo",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "enemy",
+  "syn": [],
+  "col": [
+   "old enemy"
+  ]
+ },
+ {
+  "w": "equip",
+  "syn": [
+   "prepare"
+  ],
+  "col": [
+   "equip kids"
+  ]
+ },
+ {
+  "w": "evil",
+  "syn": [],
+  "col": [
+   "evil thought"
+  ]
+ },
+ {
+  "w": "execute",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "famine",
+  "syn": [],
+  "col": [
+   "long famine"
+  ]
+ },
+ {
+  "w": "filter",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "fireman",
+  "syn": [],
+  "col": [
+   "tall fireman"
+  ]
+ },
+ {
+  "w": "fisherman",
+  "syn": [],
+  "col": [
+   "old fisherman"
+  ]
+ },
+ {
+  "w": "flame",
+  "syn": [],
+  "col": [
+   "warm flame"
+  ]
+ },
+ {
+  "w": "flaw",
+  "syn": [],
+  "col": [
+   "thin flaw"
+  ]
+ },
+ {
+  "w": "fleet",
+  "syn": [],
+  "col": [
+   "quiet fleet"
+  ]
+ },
+ {
+  "w": "foe",
+  "syn": [
+   "enemy"
+  ],
+  "col": [
+   "old foe"
+  ]
+ },
+ {
+  "w": "forbid",
+  "syn": [],
+  "col": [
+   "forbid guns"
+  ]
+ },
+ {
+  "w": "force",
+  "syn": [],
+  "col": [
+   "cruel force"
+  ]
+ },
+ {
+  "w": "forgo",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "foul",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "foundation",
+  "syn": [],
+  "col": [
+   "small green foundation",
+   "green foundation"
+  ]
+ },
+ {
+  "w": "frighten",
+  "syn": [],
+  "col": [
+   "frighten small dogs"
+  ]
+ },
+ {
+  "w": "funeral",
+  "syn": [],
+  "col": [
+   "silent funeral"
+  ]
+ },
+ {
+  "w": "gang",
+  "syn": [],
+  "col": [
+   "noisy gang"
+  ]
+ },
+ {
+  "w": "gardener",
+  "syn": [],
+  "col": [
+   "cheerful gardener"
+  ]
+ },
+ {
+  "w": "gauge",
+  "syn": [
+   "estimate"
+  ],
+  "col": [
+   "brass gauge"
+  ]
+ },
+ {
+  "w": "glitter",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "grandfather",
+  "syn": [],
+  "col": [
+   "kind old grandfather",
+   "old grandfather"
+  ]
+ },
+ {
+  "w": "grave",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "gunpowder",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "haircut",
+  "syn": [],
+  "col": [
+   "free haircut"
+  ]
+ },
+ {
+  "w": "happen",
+  "syn": [],
+  "col": [
+   "keep up to date with what is happening"
+  ]
+ },
+ {
+  "w": "hell",
+  "syn": [],
+  "col": [
+   "noisy hell"
+  ]
+ },
+ {
+  "w": "herald",
+  "syn": [],
+  "col": [
+   "kind herald"
+  ]
+ },
+ {
+  "w": "hero",
+  "syn": [],
+  "col": [
+   "small hero"
+  ]
+ },
+ {
+  "w": "heroine",
+  "syn": [],
+  "col": [
+   "brave heroine"
+  ]
+ },
+ {
+  "w": "honour",
+  "syn": [],
+  "col": [
+   "high honour"
+  ]
+ },
+ {
+  "w": "hostage",
+  "syn": [],
+  "col": [
+   "held patience hostage"
+  ]
+ },
+ {
+  "w": "hostess",
+  "syn": [],
+  "col": [
+   "smiling hostess"
+  ]
+ },
+ {
+  "w": "housewife",
+  "syn": [],
+  "col": [
+   "busy housewife"
+  ]
+ },
+ {
+  "w": "humiliate",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "infant",
+  "syn": [],
+  "col": [
+   "weak infant"
+  ]
+ },
+ {
+  "w": "interfere",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "kin",
+  "syn": [],
+  "col": [
+   "close kin"
+  ]
+ },
+ {
+  "w": "landlady",
+  "syn": [],
+  "col": [
+   "stern landlady"
+  ]
+ },
+ {
+  "w": "landlord",
+  "syn": [],
+  "col": [
+   "grey haired landlord"
+  ]
+ },
+ {
+  "w": "laptop",
+  "syn": [],
+  "col": [
+   "borrowed laptop"
+  ]
+ },
+ {
+  "w": "madam",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "maid",
+  "syn": [],
+  "col": [
+   "quick maid"
+  ]
+ },
+ {
+  "w": "mechanic",
+  "syn": [],
+  "col": [
+   "kind mechanic"
+  ]
+ },
+ {
+  "w": "microscope",
+  "syn": [],
+  "col": [
+   "school microscope"
+  ]
+ },
+ {
+  "w": "missile",
+  "syn": [],
+  "col": [
+   "small missile"
+  ]
+ },
+ {
+  "w": "mistress",
+  "syn": [],
+  "col": [
+   "kind mistress"
+  ]
+ },
+ {
+  "w": "monument",
+  "syn": [],
+  "col": [
+   "white monument"
+  ]
+ }
 ]

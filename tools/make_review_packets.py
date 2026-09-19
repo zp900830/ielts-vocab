@@ -37,8 +37,11 @@ def locate(chunk, heads):
 
     必须整词匹配：'old foe' 不该被 'copper fold' 这种连排命中。
     候选是课文小写化之后切的，原句里却是 Arctic ice —— 所以只把被搜索的句子转小写。
+    词与词之间允许原文的逗号/句号：窗口是从标点后重新拼的，'heavy sleepy ox'
+    在原句里其实是 "heavy, sleepy ox"，按单空格匹配就永远定位不到，
+    代理只能对着切片瞎判 —— 而这恰恰是该看标点的形状。
     """
-    pat = re.compile(r'(?<![a-z])' + re.escape(chunk).replace(r'\ ', r'\s+') + r'(?![a-z])')
+    pat = re.compile(r'(?<![a-z])' + re.escape(chunk).replace(r'\ ', r'[,. ]+') + r'(?![a-z])')
     for en, zh in heads:
         if pat.search(en.lower()):
             return en, zh

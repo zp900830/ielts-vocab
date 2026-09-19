@@ -1,0 +1,2451 @@
+[
+ {
+  "w": "dissertation",
+  "m": "n. 学位论文",
+  "ex": "He wrote his dissertation on climate change.",
+  "exZh": "他写了一篇关于气候变化的学位论文。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "long dissertation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dissolve",
+  "m": "v. 溶解",
+  "ex": "Sugar dissolves in water.",
+  "exZh": "糖在水中溶解。",
+  "overlap": [
+   [
+    "dissolve away",
+    "quietly dissolve away"
+   ]
+  ],
+  "syn": [
+   {
+    "s": "disappear",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "dissolve away",
+    "src": "T"
+   },
+   {
+    "c": "quietly dissolve away",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dot",
+  "m": "n. 小圆点；点",
+  "ex": "He drew a dot on the paper.",
+  "exZh": "他在纸上画了一个小圆点。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "lucky dot",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "drama",
+  "m": "n. 戏剧；话剧",
+  "ex": "He loves watching drama on TV.",
+  "exZh": "他喜欢在电视上看戏剧。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "funny drama",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "drum",
+  "m": "n. 鼓；v. 敲打",
+  "ex": "He plays the drum in a band.",
+  "exZh": "他在乐队里打鼓。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small drum",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "editor",
+  "m": "n. 编辑（者）",
+  "ex": "The editor corrected the grammar in the article.",
+  "exZh": "编辑纠正了这篇文章的语法。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tired editor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "eloquence",
+  "m": "n. 雄辩；口才",
+  "ex": "His eloquence moved everyone in the room.",
+  "exZh": "他的雄辩打动了房间里每一个人。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft eloquence",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "examination",
+  "m": "n. 考试；检查；审查",
+  "ex": "The doctor did an examination of his arm.",
+  "exZh": "医生对他手臂进行了检查。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "big examination",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fahrenheit",
+  "m": "adj. 华氏温度计的",
+  "ex": "The weather report said it's 90 degrees Fahrenheit today.",
+  "exZh": "天气预报说今天是90华氏度。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "degrees fahrenheit",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "feast",
+  "m": "n. 盛宴；宴会；节日",
+  "ex": "They had a feast on New Year's Day.",
+  "exZh": "他们在元旦举办了一场盛宴。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sweet feast",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fellowship",
+  "m": "n. 情谊；团体；研究生奖学金",
+  "ex": "They formed a fellowship to work on the project together.",
+  "exZh": "他们建立了伙伴关系一起来做这个项目。",
+  "overlap": [
+   [
+    "club fellowship",
+    "warm club fellowship"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "club fellowship",
+    "src": "T"
+   },
+   {
+    "c": "warm club fellowship",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fresher",
+  "m": "n. 大学一年级新生；adj. 新鲜的",
+  "ex": "He is a fresher at Oxford University.",
+  "exZh": "他是牛津大学的一年级新生。",
+  "overlap": [
+   [
+    "college fresher",
+    "confident college fresher"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "college fresher",
+    "src": "T"
+   },
+   {
+    "c": "confident college fresher",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "friction",
+  "m": "n. 摩擦；不和",
+  "ex": "There is friction between the two neighbors over the fence.",
+  "exZh": "两个邻居因为篱笆问题产生了不和。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "psychological friction",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "golf",
+  "m": "n. 高尔夫球",
+  "ex": "He plays golf every weekend.",
+  "exZh": "他每个周末都打高尔夫。",
+  "overlap": [
+   [
+    "golf walks",
+    "long golf walks"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "golf walks",
+    "src": "T"
+   },
+   {
+    "c": "long golf walks",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gravity",
+  "m": "n. 重力；地心吸力",
+  "ex": "The gravity of Earth pulls objects down.",
+  "exZh": "地球的重力把物体往下拉。",
+  "overlap": [
+   [
+    "heavy dull gravity",
+    "dull gravity"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "heavy dull gravity",
+    "src": "T"
+   },
+   {
+    "c": "dull gravity",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "guardian",
+  "m": "n. 保护人；监护人",
+  "ex": "The old man is the guardian of his grandchildren.",
+  "exZh": "这位老人是他的孙子孙女的保护人。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "strong guardian",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "guitar",
+  "m": "n. 吉他",
+  "ex": "He plays the guitar every day.",
+  "exZh": "他每天弹吉他。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "long guitar",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "gym",
+  "m": "n. 健身房；体育馆",
+  "ex": "He goes to the gym every morning.",
+  "exZh": "他每天早上去健身房。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small gym",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hallowed",
+  "m": "adj. 神圣化的；受崇敬的",
+  "ex": "The hallowed ground is where the heroes rest.",
+  "exZh": "那片神圣的土地是英雄们安息的地方。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "hallowed wall",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "handout",
+  "m": "n. 讲义",
+  "ex": "The teacher gave us a handout about photosynthesis.",
+  "exZh": "老师发给我们一份关于光合作用的讲义。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "worksheet",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "harmonica",
+  "m": "n. 口琴",
+  "ex": "He plays the harmonica every evening.",
+  "exZh": "他每天晚上吹口琴。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny harmonica",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "headmaster",
+  "m": "n. 校长",
+  "ex": "The headmaster welcomed the new students.",
+  "exZh": "校长欢迎新生。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind headmaster",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hike",
+  "m": "v. 远足；n. 远足",
+  "ex": "We went on a long hike in the mountains.",
+  "exZh": "我们去山里进行了一次长途远足。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "watched friends hike",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hollow",
+  "m": "adj. 中空的；空洞的",
+  "ex": "The tree has a hollow trunk.",
+  "exZh": "这棵树的树干是中空的。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "hollow hall",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "homesick",
+  "m": "adj. 想家的",
+  "ex": "He felt homesick after moving to a new city.",
+  "exZh": "他搬到新城市后感到想家。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "homesick kid",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ideology",
+  "m": "n. 意识形态；思想体系",
+  "ex": "His ideology is based on equality and justice.",
+  "exZh": "他的意识形态基于平等与正义。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "new ideology",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "idiom",
+  "m": "n. 成语；习语；惯用语",
+  "ex": "He used an idiom to explain his idea.",
+  "exZh": "他用了一个成语来解释他的想法。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "new idiom",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "imperial",
+  "m": "adj. 帝国的；皇帝的",
+  "ex": "The imperial palace was built long ago.",
+  "exZh": "这座帝国宫殿是很久以前建造的。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "imperial gold",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "incident",
+  "m": "n. 事件",
+  "ex": "The accident was a serious incident.",
+  "exZh": "那场事故是一起严重事件。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sad incident",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "instance",
+  "m": "n. 例子；情况",
+  "ex": "This is a good instance of teamwork.",
+  "exZh": "这是一个团队合作的好例子。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "clear instance",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "instil",
+  "m": "v. 逐渐灌输",
+  "ex": "Parents should instil good habits in children.",
+  "exZh": "父母应该逐渐向孩子灌输良好的习惯。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "instil good habits",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "inventory",
+  "m": "n. 清单；存货",
+  "ex": "The store made an inventory of all the products.",
+  "exZh": "商店对所有商品做了一份清单。",
+  "overlap": [
+   [
+    "shop inventory",
+    "small shop inventory"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "shop inventory",
+    "src": "T"
+   },
+   {
+    "c": "small shop inventory",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "jazz",
+  "m": "n. 爵士乐",
+  "ex": "He plays jazz on the piano every night.",
+  "exZh": "他每天晚上用钢琴演奏爵士乐。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sweet jazz",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "journalist",
+  "m": "n. 新闻工作者",
+  "ex": "The journalist wrote a story about the earthquake.",
+  "exZh": "记者写了一篇关于地震的文章。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "young journalist",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "junior",
+  "m": "n. 年幼者；adj. （职位或等级）较低的；年幼的",
+  "ex": "He is a junior employee in the company.",
+  "exZh": "他是公司里职位较低的员工。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "juvenile",
+    "src": "M"
+   }
+  ],
+  "col": [
+   {
+    "c": "shy junior",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "knot",
+  "m": "n. 结；（树） 节",
+  "ex": "He tied a knot in the rope.",
+  "exZh": "他在绳子上打了一个结。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "red knot",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "laboratory",
+  "m": "n. 实验室",
+  "ex": "He works in a laboratory on Fridays.",
+  "exZh": "他在星期五去实验室工作。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "white laboratory",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "leaflet",
+  "m": "n. 传单；单页宣传品",
+  "ex": "He handed out a leaflet about the event.",
+  "exZh": "他分发了一份关于该活动的传单。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "bright leaflet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "logic",
+  "m": "n. 逻辑",
+  "ex": "He uses logic to solve the puzzle.",
+  "exZh": "他用逻辑来解决这个谜题。",
+  "overlap": [
+   [
+    "logic task",
+    "clear logic task"
+   ],
+   [
+    "clear logic",
+    "clear logic task"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "logic task",
+    "src": "T"
+   },
+   {
+    "c": "clear logic",
+    "src": "T"
+   },
+   {
+    "c": "clear logic task",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "logistics",
+  "m": "n. 物流；（军事）后勤学",
+  "ex": "The company improved its logistics to deliver packages faster.",
+  "exZh": "这家公司改进了物流，以更快地配送包裹。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "city logistics",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "logogram",
+  "m": "n. 词符",
+  "ex": "A logogram is a symbol that stands for a word.",
+  "exZh": "表意字是一个代表一个词的符号。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old logogram",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lord",
+  "m": "n. 勋爵；上帝",
+  "ex": "The lord lived in a big castle.",
+  "exZh": "这位勋爵住在一座大城堡里。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind lord",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lyric",
+  "m": "n. 歌词；抒情诗；adj. 抒情的",
+  "ex": "He wrote a lyric about the sunset.",
+  "exZh": "他写了一首关于日落的抒情诗。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "lyric words",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "majesty",
+  "m": "n. 最高权威；王权；威严",
+  "ex": "The king showed his majesty to the crowd.",
+  "exZh": "国王向人群展示了他的威严。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "great majesty",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "marathon",
+  "m": "n. 马拉松赛跑；耐力赛",
+  "ex": "He ran a marathon last Sunday.",
+  "exZh": "他上个星期日跑了一场马拉松赛跑。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "long marathon",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "matriculation",
+  "m": "n. 大学入学许可；录取入学；入学考试",
+  "ex": "He passed the matriculation to enter university.",
+  "exZh": "他通过了入学考试，进入了大学。",
+  "overlap": [
+   [
+    "matriculation forms",
+    "final matriculation forms"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "matriculation forms",
+    "src": "T"
+   },
+   {
+    "c": "final matriculation forms",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "matrix",
+  "m": "n. 矩阵；母体；发源地",
+  "ex": "The matrix gave birth to all living things.",
+  "exZh": "母体孕育了所有生命。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "large matrix",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "medium",
+  "m": "n. 媒介；adj. 中等的",
+  "ex": "TV is a popular medium for advertising.",
+  "exZh": "电视是一种流行的广告媒介。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "clear medium",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "melody",
+  "m": "n. 旋律；曲调",
+  "ex": "The baby smiled at the sweet melody.",
+  "exZh": "宝宝听到了甜美的旋律，笑了。",
+  "overlap": [
+   [
+    "soft melody",
+    "sweet soft melody"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "soft melody",
+    "src": "T"
+   },
+   {
+    "c": "sweet soft melody",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "melt",
+  "m": "v. （使）融化；（使）熔化",
+  "ex": "The ice melts in the sun.",
+  "exZh": "冰在阳光下融化。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "slowly melt",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "mercury",
+  "m": "n. 水银；汞",
+  "ex": "The thermometer contains mercury.",
+  "exZh": "温度计里含有水银。",
+  "overlap": [
+   [
+    "mercury light",
+    "weak mercury light"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "mercury light",
+    "src": "T"
+   },
+   {
+    "c": "weak mercury light",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "messenger",
+  "m": "n. 送信者；通信员",
+  "ex": "He sent a message through a messenger.",
+  "exZh": "他通过信使发送了一条消息。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quick messenger",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "missionary",
+  "m": "n. 传教士",
+  "ex": "The missionary taught children in a small village.",
+  "exZh": "这位传教士在一个小村庄里教孩子们。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "young missionary",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "monk",
+  "m": "n. 僧侣；修道士",
+  "ex": "The monk meditates every morning.",
+  "exZh": "这位僧侣每天早上冥想。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet monk",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "motivate",
+  "m": "v. 激励；激发",
+  "ex": "Good teachers motivate students to learn.",
+  "exZh": "好老师激励学生学习。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "inspire",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "movement",
+  "m": "n. 运动；活动",
+  "ex": "The movement of the sun changes the shadow.",
+  "exZh": "太阳的运动改变了影子。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "slow movement",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "negotiate",
+  "m": "v. 协商；谈判；通过",
+  "ex": "They will negotiate the price with the seller.",
+  "exZh": "他们会与卖家协商价格。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "negotiate plans",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "nobility",
+  "m": "n. 贵族阶级",
+  "ex": "The nobility lived in large castles and owned much land.",
+  "exZh": "贵族住在大城堡里，拥有大量土地。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old nobility",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "nostalgia",
+  "m": "n. 怀旧",
+  "ex": "He felt nostalgia when he saw his old toy.",
+  "exZh": "当他看到自己的旧玩具时，感到怀旧。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft nostalgia",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "noun",
+  "m": "n. 名词",
+  "ex": "Noun is a word for a person, place, or thing.",
+  "exZh": "名词是表示人、地方或事物的词。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "new noun",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "novice",
+  "m": "n. 新手",
+  "ex": "He is a novice at playing the guitar.",
+  "exZh": "他是个吉他新手。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "nervous novice",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "observe",
+  "m": "v. 观察；遵守；注意到",
+  "ex": "The scientist observe the birds every morning.",
+  "exZh": "科学家每天早上观察鸟类。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "observe seniors",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "opt",
+  "m": "v. 选择；决定",
+  "ex": "He opted to stay home instead of going out.",
+  "exZh": "他选择待在家里而不是出去。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "select",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "orchestra",
+  "m": "n. 管弦乐队",
+  "ex": "He plays violin in a local orchestra.",
+  "exZh": "他在一个本地管弦乐队中拉小提琴。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small orchestra",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ounce",
+  "m": "n. 少量；盎司",
+  "ex": "He added an ounce of salt to the soup.",
+  "exZh": "他往汤里加了一点盐。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "last ounce",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pace",
+  "m": "n. 步伐；步速",
+  "ex": "He changed his pace to match the group.",
+  "exZh": "他调整了步伐以跟上队伍。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "stride",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "pagoda",
+  "m": "n. 塔；宝塔",
+  "ex": "The pagoda stands on the hill near the temple.",
+  "exZh": "塔矗立在寺庙附近的山上。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "red pagoda",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "painter",
+  "m": "n. 画家；油漆工",
+  "ex": "The painter draws a beautiful house.",
+  "exZh": "这位画家画了一座美丽的房子。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "calm painter",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "painting",
+  "m": "n. 绘画；油画；v. 刷油漆",
+  "ex": "He loves painting in his free time.",
+  "exZh": "他喜欢在空闲时间绘画。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "bright painting",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "paper",
+  "m": "n. 论文；纸；报纸",
+  "ex": "He wrote his name on the paper.",
+  "exZh": "他在纸上写了名字。",
+  "overlap": [
+   [
+    "model paper",
+    "neat model paper"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "model paper",
+    "src": "T"
+   },
+   {
+    "c": "neat model paper",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "parameter",
+  "m": "n. 参数",
+  "ex": "The teacher changed the parameter to make the test easier.",
+  "exZh": "老师更改了参数，使测试更容易。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "daily parameter",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "paraphrase",
+  "m": "v. 意译；解释；改述",
+  "ex": "He paraphrased the poem in simple words.",
+  "exZh": "他用简单的语言意译了这首诗。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "then paraphrase",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pastime",
+  "m": "n. 消遣",
+  "ex": "Reading books is his favorite pastime.",
+  "exZh": "读书是他最喜欢的消遣。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "recreation",
+    "src": "M"
+   }
+  ],
+  "col": [
+   {
+    "c": "sweet pastime",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "patron",
+  "m": "n. 赞助人；资助人；老主顾",
+  "ex": "The patron gave money to support the art exhibition.",
+  "exZh": "赞助人捐钱支持了这场艺术展览。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "gentle patron",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "phoneme",
+  "m": "n. 音位",
+  "ex": "The word 'cat' has three phonemes.",
+  "exZh": "“猫”这个单词有三个音素。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small phoneme",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "photograph",
+  "m": "v. 拍照；n. 照片；相片",
+  "ex": "He showed me a photograph of his dog.",
+  "exZh": "他给我看了他狗的照片。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "photograph flowers",
+    "src": "T"
+   },
+   {
+    "c": "then photograph",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "phrase",
+  "m": "n. 短语；词组",
+  "ex": "He learned a new phrase in Spanish.",
+  "exZh": "他学了一个新的西班牙语短语。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "short phrase",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "physics",
+  "m": "n. 物理学",
+  "ex": "He likes to study physics in school.",
+  "exZh": "他喜欢在学校学习物理。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "fun physics",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "piano",
+  "m": "n. 钢琴",
+  "ex": "He plays the piano every evening.",
+  "exZh": "他每天晚上弹钢琴。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "black piano",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pictograph",
+  "m": "n. 象形文字；象形图；古代石壁画",
+  "ex": "The ancient people used pictograph to show stories.",
+  "exZh": "古代人用象形图来讲述故事。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old pictograph",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pitch",
+  "m": "v. 投；n. 音高；球场",
+  "ex": "The singer changed the pitch of her voice.",
+  "exZh": "歌手改变了她声音的音高。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "then pitch",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "politics",
+  "m": "n. 政治；政治学",
+  "ex": "He is interested in politics.",
+  "exZh": "他对政治感兴趣。",
+  "overlap": [
+   [
+    "short politics talk",
+    "politics talk"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "short politics talk",
+    "src": "T"
+   },
+   {
+    "c": "politics talk",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pope",
+  "m": "n. （天主教）教皇",
+  "ex": "The pope speaks to millions of people every year.",
+  "exZh": "教皇每年向数百万人讲话。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind pope",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "portrait",
+  "m": "n. 肖像",
+  "ex": "He painted a portrait of his mother.",
+  "exZh": "他画了一幅他母亲的肖像。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "smiling portrait",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "postulate",
+  "m": "n. 假设；v. 假定",
+  "ex": "He postulates that all humans are equal.",
+  "exZh": "他假定所有人都是平等的。",
+  "overlap": [
+   [
+    "quiet simple postulate",
+    "simple postulate"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet simple postulate",
+    "src": "T"
+   },
+   {
+    "c": "simple postulate",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "prefix",
+  "m": "n. 前缀；v. 加前缀",
+  "ex": "He adds a prefix to the word to change its meaning.",
+  "exZh": "他在单词前加上前缀来改变它的意思。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "red prefix",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "preposition",
+  "m": "n. 介词",
+  "ex": "He used 'in' as a preposition in the sentence.",
+  "exZh": "他在句子中用“在”作介词。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "long preposition",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "presume",
+  "m": "v. 假设；假定；设想",
+  "ex": "I presume he will arrive tomorrow.",
+  "exZh": "我假设他明天会到。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "never presume",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "priest",
+  "m": "n. 牧师",
+  "ex": "The priest said a prayer for the sick.",
+  "exZh": "牧师为病人祈祷。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old priest",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "prince",
+  "m": "n. 王子；君主",
+  "ex": "The prince rode a white horse through the castle gate.",
+  "exZh": "王子骑着一匹白马穿过城堡的大门。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "brave prince",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "princess",
+  "m": "n. 公主",
+  "ex": "The princess lived in a big castle.",
+  "exZh": "公主住在一座大城堡里。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "little princess",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "professor",
+  "m": "n. 教授；导师",
+  "ex": "The professor teaches physics at the university.",
+  "exZh": "这位教授在大学教物理。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old professor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "propaganda",
+  "m": "n. 宣传",
+  "ex": "The government used propaganda to influence people's opinions.",
+  "exZh": "政府使用宣传来影响人们的观点。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "loud propaganda",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pull",
+  "m": "v. 拉；拖；拔",
+  "ex": "He pulls the door open.",
+  "exZh": "他拉开了门。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "then pull",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "puzzle",
+  "m": "n. 谜；难题",
+  "ex": "He solved the crossword puzzle quickly.",
+  "exZh": "他很快解开了这个填字谜。",
+  "overlap": [
+   [
+    "semantic puzzles",
+    "clear semantic puzzles"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "semantic puzzles",
+    "src": "T"
+   },
+   {
+    "c": "difficult puzzle",
+    "src": "T"
+   },
+   {
+    "c": "clear semantic puzzles",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "query",
+  "m": "n. 疑问；v. 询问；怀疑",
+  "ex": "He made a query about the bus schedule.",
+  "exZh": "他询问了公交车的时刻表。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "short query",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "questionnaire",
+  "m": "n. 问卷；调查表",
+  "ex": "The teacher gave us a questionnaire about our habits.",
+  "exZh": "老师给了我们一份关于我们习惯的问卷。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "simple questionnaire",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "queue",
+  "m": "n. 长队；v. 排队",
+  "ex": "There is a long queue at the ticket counter.",
+  "exZh": "售票处排着一条长队。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tidy queue",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "quiz",
+  "m": "n. 小测验；知识竞赛",
+  "ex": "The students participated in a history quiz at school.",
+  "exZh": "学生们参加了学校举办的历史知识竞赛。",
+  "overlap": [
+   [
+    "short morning quiz",
+    "morning quiz"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "short morning quiz",
+    "src": "T"
+   },
+   {
+    "c": "morning quiz",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "quote",
+  "m": "n. 引文；报价；v. 引用",
+  "ex": "He quoted Shakespeare in his speech.",
+  "exZh": "他在演讲中引用了莎士比亚的话。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "perfect quote",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "race",
+  "m": "n. 比赛；种族；v. 快速移动",
+  "ex": "He won the race by running fast.",
+  "exZh": "他通过快速奔跑赢得了赛跑。",
+  "overlap": [
+   [
+    "friendly morning race",
+    "morning race"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "friendly morning race",
+    "src": "T"
+   },
+   {
+    "c": "morning race",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "racket",
+  "m": "n. 网球拍；喧闹；非法勾当",
+  "ex": "He bought a new racket for tennis.",
+  "exZh": "他买了一副新的网球拍。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "light racket",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ratio",
+  "m": "n. 比率；比值",
+  "ex": "The ratio of boys to girls is 3 to 2.",
+  "exZh": "男孩与女孩的比例是3比2。",
+  "overlap": [
+   [
+    "simple study ratio",
+    "study ratio"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "simple study ratio",
+    "src": "T"
+   },
+   {
+    "c": "study ratio",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "recreation",
+  "m": "n. 娱乐；消遣；休闲活动",
+  "ex": "Reading books is his favorite recreation.",
+  "exZh": "读书是他最喜欢的消遣。",
+  "overlap": [
+   [
+    "quiet recreation",
+    "bring quiet recreation"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet recreation",
+    "src": "T"
+   },
+   {
+    "c": "bring quiet recreation",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rectangle",
+  "m": "n. 矩形；长方形",
+  "ex": "The box has a rectangle shape.",
+  "exZh": "这个盒子是长方形的。",
+  "overlap": [
+   [
+    "neat red rectangle",
+    "red rectangle"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "neat red rectangle",
+    "src": "T"
+   },
+   {
+    "c": "red rectangle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rehearsal",
+  "m": "n. 排练",
+  "ex": "The actors had a rehearsal before the play.",
+  "exZh": "演出前，演员们进行了一次排练。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quick rehearsal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rhythm",
+  "m": "n. 节奏",
+  "ex": "The rhythm of the music made everyone dance.",
+  "exZh": "音乐的节奏让所有人都跳起了舞。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quick rhythm",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "riddle",
+  "m": "n. 谜语；v. 解谜",
+  "ex": "He told me a riddle and I solved it.",
+  "exZh": "他给我出了一道谜语，我解出来了。",
+  "overlap": [
+   [
+    "funny word riddle",
+    "word riddle"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "funny word riddle",
+    "src": "T"
+   },
+   {
+    "c": "word riddle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "round",
+  "m": "n. 回合；adj. 圆的；prep./adv. 在…周围",
+  "ex": "The children sat round the fire.",
+  "exZh": "孩子们围坐在火堆旁。",
+  "overlap": [
+   [
+    "quick round",
+    "quick round game"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "quick round",
+    "src": "T"
+   },
+   {
+    "c": "quick round game",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rudimentary",
+  "m": "adj. 未充分发展的；初步的；基本的",
+  "ex": "His knowledge of math is rudimentary.",
+  "exZh": "他对数学的了解是初步的。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "rudimentary maths",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rumour",
+  "m": "n. 谣言；v. 谣传",
+  "ex": "There is a rumour that he will quit his job.",
+  "exZh": "有一个传言说他要辞职。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "low rumour",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "rust",
+  "m": "v. 生锈；n. 锈",
+  "ex": "The old bike has rust on its chain.",
+  "exZh": "这辆旧自行车的链条上有锈。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "rust outdoors",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sacred",
+  "m": "adj. 神圣的",
+  "ex": "The temple is a sacred place for believers.",
+  "exZh": "这座寺庙对信徒来说是神圣的地方。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sacred room",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "scene",
+  "m": "n. 场景；现场；景色",
+  "ex": "The scene at the park was peaceful.",
+  "exZh": "公园里的场景很宁静。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "fresh scene",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "scholarship",
+  "m": "n. 奖学金",
+  "ex": "He won a scholarship to study at Harvard.",
+  "exZh": "他获得了一项去哈佛学习的奖学金。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small scholarship",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "scientist",
+  "m": "n. 科学家",
+  "ex": "The scientist studies stars in the night sky.",
+  "exZh": "这位科学家研究夜空中的恒星。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "friendly scientist",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "select",
+  "m": "v. 选择；挑选；adj. 精心挑选的",
+  "ex": "He will select the best candidate for the job.",
+  "exZh": "他将选择最适合这份工作的人。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "select smooth stones",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "simulate",
+  "m": "v. 模拟",
+  "ex": "The game simulates real traffic conditions.",
+  "exZh": "这个游戏模拟了真实的交通状况。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "simulate rain sounds",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "singular",
+  "m": "adj. 单个的；单数的；特异的",
+  "ex": "Each singular student must submit a form.",
+  "exZh": "每个学生都必须提交一份表格。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "singular apple",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "skate",
+  "m": "v. 溜冰",
+  "ex": "He likes to skate on the ice every winter.",
+  "exZh": "他喜欢每年冬天在冰上溜冰。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "skate beside friends",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ski",
+  "m": "v. 滑雪",
+  "ex": "He likes to ski in the mountains during winter.",
+  "exZh": "他喜欢在冬天去山里滑雪。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "ski slowly",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "slip",
+  "m": "n. 失足；v. 溜走",
+  "ex": "She found a slip of paper on the table.",
+  "exZh": "她在桌子上发现了一张纸片。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small slip",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sociology",
+  "m": "n. 社会学",
+  "ex": "He is taking sociology at university.",
+  "exZh": "他在大学里学习社会学。",
+  "overlap": [
+   [
+    "easy sociology video",
+    "sociology video"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "easy sociology video",
+    "src": "T"
+   },
+   {
+    "c": "sociology video",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sophomore",
+  "m": "n. （大学）二年级学生",
+  "ex": "He is a sophomore at Harvard University.",
+  "exZh": "他是哈佛大学的二年级学生。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "helpful sophomore",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spectator",
+  "m": "n. 旁观者",
+  "ex": "The spectator watched the game quietly.",
+  "exZh": "旁观者安静地观看了比赛。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "happy spectator",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sphere",
+  "m": "n. 球体；范围",
+  "ex": "The ball is a perfect sphere.",
+  "exZh": "这个球是一个完美的球体。",
+  "overlap": [
+   [
+    "foam sphere",
+    "soft foam sphere"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "foam sphere",
+    "src": "T"
+   },
+   {
+    "c": "soft foam sphere",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spur",
+  "m": "n. 鞭策；v. 刺激",
+  "ex": "The competition served as a spur to work harder.",
+  "exZh": "竞争成了推动他更努力工作的鞭策。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "useful spur",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stadium",
+  "m": "n. 体育场；运动场",
+  "ex": "The crowd cheered loudly at the stadium.",
+  "exZh": "观众在体育场里大声欢呼。",
+  "overlap": [
+   [
+    "wide sunny stadium",
+    "sunny stadium"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "wide sunny stadium",
+    "src": "T"
+   },
+   {
+    "c": "sunny stadium",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stretch",
+  "m": "v. 伸展；持续；n. 一段",
+  "ex": "He stretches his arms every morning.",
+  "exZh": "他每天早上伸展手臂。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "prolong",
+    "src": "R"
+   }
+  ],
+  "col": [
+   {
+    "c": "stretch arms",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "subtract",
+  "m": "v. 减去",
+  "ex": "Subtract 5 from 10 to get 5.",
+  "exZh": "从10中减去5得到5。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "subtract old scores",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "suffix",
+  "m": "n. 后缀；词尾",
+  "ex": "He added a suffix to the word to change its meaning.",
+  "exZh": "他在单词后添加了一个后缀来改变它的意思。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "blue suffix",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "summary",
+  "m": "n. 总结；摘要",
+  "ex": "He gave a summary of the story at the end.",
+  "exZh": "他在结尾对故事做了总结。",
+  "overlap": [
+   [
+    "brief morning summary",
+    "morning summary"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "brief morning summary",
+    "src": "T"
+   },
+   {
+    "c": "morning summary",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "survey",
+  "m": "n. 调查；v. 勘测",
+  "ex": "The school did a survey about student lunch preferences.",
+  "exZh": "学校做了一项关于学生午餐偏好的调查。",
+  "overlap": [
+   [
+    "short fun survey",
+    "fun survey"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "short fun survey",
+    "src": "T"
+   },
+   {
+    "c": "fun survey",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "syllable",
+  "m": "n. 音节",
+  "ex": "The word 'cat' has one syllable.",
+  "exZh": "“猫”这个单词只有一个音节。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "new syllable",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "syllabus",
+  "m": "n. 教学大纲",
+  "ex": "The teacher gave us the syllabus for the course.",
+  "exZh": "老师给了我们这门课的教学大纲。",
+  "overlap": [
+   [
+    "new spring syllabus",
+    "spring syllabus"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "new spring syllabus",
+    "src": "T"
+   },
+   {
+    "c": "spring syllabus",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "symphony",
+  "m": "n. 交响乐；交响曲",
+  "ex": "He listened to a beautiful symphony last night.",
+  "exZh": "他昨晚听了一首美妙的交响乐。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sweet symphony",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "synonym",
+  "m": "n. 同义词",
+  "ex": "The synonym of 'happy' is 'glad'.",
+  "exZh": "“快乐”的同义词是“高兴”。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "simple synonym",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tale",
+  "m": "n. 故事；叙述；传说",
+  "ex": "He told a tale about a brave knight.",
+  "exZh": "他讲了一个关于勇敢骑士的故事。",
+  "overlap": [
+   [
+    "family tale",
+    "old family tale"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "family tale",
+    "src": "T"
+   },
+   {
+    "c": "old family tale",
+    "src": "T"
+   },
+   {
+    "c": "epic tale",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "temple",
+  "m": "n. 庙宇；太阳穴",
+  "ex": "The ancient temple stands on the hill.",
+  "exZh": "这座古老的庙宇矗立在山上。",
+  "overlap": [
+   [
+    "temple yard",
+    "old temple yard"
+   ],
+   [
+    "old temple",
+    "old temple yard"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "temple yard",
+    "src": "T"
+   },
+   {
+    "c": "old temple",
+    "src": "T"
+   },
+   {
+    "c": "old temple yard",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "theory",
+  "m": "n. 理论；学说",
+  "ex": "The theory of gravity explains why things fall down.",
+  "exZh": "重力理论解释了为什么东西会往下掉。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "hypothesis",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "timetable",
+  "m": "n. 时间表；时刻表；课程表",
+  "ex": "The school publishes a new timetable every term.",
+  "exZh": "学校每学期都会公布新的时间表。",
+  "overlap": [
+   [
+    "clear wall timetable",
+    "wall timetable"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "clear wall timetable",
+    "src": "T"
+   },
+   {
+    "c": "wall timetable",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "toss",
+  "m": "v. （随意地）抛掷；甩",
+  "ex": "He tosses the ball to his friend.",
+  "exZh": "他把球扔给他的朋友。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "then toss",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tournament",
+  "m": "n. 锦标赛；比赛",
+  "ex": "He won the chess tournament last week.",
+  "exZh": "他上周赢得了国际象棋锦标赛。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "grand tournament",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tragedy",
+  "m": "n. 悲剧",
+  "ex": "The play ended in a tragedy when the hero died.",
+  "exZh": "当英雄去世时，这部戏剧以悲剧收场。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft tragedy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "training",
+  "m": "n. 培训；训练；v. 现在分词词形",
+  "ex": "The company provided free training for new employees.",
+  "exZh": "公司为新员工提供了免费培训。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "education",
+    "src": "R"
+   },
+   {
+    "s": "exercise",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "transparent",
+  "m": "adj. 透明的；显然的",
+  "ex": "The glass is transparent.",
+  "exZh": "这玻璃是透明的。",
+  "overlap": [
+   [
+    "transparent covers",
+    "clean transparent covers"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "transparent covers",
+    "src": "T"
+   },
+   {
+    "c": "clean transparent covers",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "triangle",
+  "m": "n. 三角形；三角形物",
+  "ex": "The triangle has three sides.",
+  "exZh": "这个三角形有三条边。",
+  "overlap": [
+   [
+    "small blue triangle",
+    "blue triangle"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "small blue triangle",
+    "src": "T"
+   },
+   {
+    "c": "blue triangle",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "tribe",
+  "m": "n. 部落；部族",
+  "ex": "The tribe lives in the forest and follows old traditions.",
+  "exZh": "这个部落住在森林里，遵循古老的传统。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "distant tribe",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "trumpet",
+  "m": "n. 喇叭；小号",
+  "ex": "He plays the trumpet in the school band.",
+  "exZh": "他在学校乐队里吹喇叭。",
+  "overlap": [
+   [
+    "gold trumpet",
+    "bright gold trumpet"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "gold trumpet",
+    "src": "T"
+   },
+   {
+    "c": "bright gold trumpet",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "typist",
+  "m": "n. 打字员",
+  "ex": "She is a fast typist.",
+  "exZh": "她是一位打字很快的打字员。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "fast typist",
+    "src": "T"
+   }
+  ]
+ }
+]
