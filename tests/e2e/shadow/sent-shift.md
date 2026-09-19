@@ -26,14 +26,16 @@ Navigate to `{E2E_BASE_URL}/index.html`。
 ### 1. 重新加载触发顺移
 Reload 并等待迁移记账写入。
 **Verify:**
-- `ielts-marks`：插入点之前的句号不变、锚点句本身不变、插入点之后的句号 +1；
-- `ielts-ab-loops`：`start`/`end` +1，且被顺移过的那条 `name` 字段被丢弃（否则会显示旧句号）；未被顺移的那条 `name` 保留；
+- `ielts-marks`：每个序号都按「整本顺移账逐条回放」后的结果核对（账本只有一条时等价于 +1；账本有 20+ 条时，一个序号可能被多条累加推走，所以不能再按 +1 写死断言）；
+- 锚点不固定取最后一条账目，而是从后往前找一条「后面还留得出 28 句」的，否则插在全书末尾的账目会让锚点序号越界，用例就在 setup 阶段失去意义；
+- `ielts-ab-loops`：`start`/`end` 按整本回放取值，且被顺移过的那条 `name` 字段被丢弃（否则会显示旧句号）；未被顺移的那条 `name` 保留；
+- `ielts-task-progress`：三个复习键回放后必须仍然互不相同（撞键会静默丢学习记录）；
 - `ielts-task-progress.sentences`：键整体顺移，插入点之后的记录内容（`reps`）原样带过去、旧键不残留；`cycleSeen` 同步顺移；非序号字段（`streak`）不变；
 - `ielts-sent-shift` 已记录该条变更 id。
 
 ### 2. 续读位也跟着顺移
 重置记账、灌入旧序号的 `ielts-pos`，直接调用 `applySentShifts()` 后读回。
-**Verify:** 全局 `i` +1，且同章时章内 `chapterI` 也 +1。
+**Verify:** 全局 `i` 按整本回放取值；章内 `chapterI` 只按「本章的那几条账目」回放取值（前端是 `pos.chapter === s.chapter` 才动章内序号）。
 （续读位单独验：`reload` 会让上一个文档在卸载瞬间触发一次自动存档，那是 `ielts-pos` 自身的既有行为，混进一步会测错对象。）
 
 ### 3. 再加载一次，确认不重复顺移

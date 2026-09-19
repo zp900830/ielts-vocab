@@ -18,13 +18,19 @@ declare const SENT_SHIFTS: {
 }[];
 
 interface Seed {
-  a: number; // before the insertion point — must not move
-  b: number; // the anchor sentence itself — must not move
-  c: number; // after the insertion point — must move by delta
+  a: number; // before the chosen insertion — need not stay put any more
+  b: number; // the anchor sentence itself
+  c: number; // after the anchor insertion
   d: number;
   local: number; // chapter-local index, after localAfter
   delta: number;
   id: string;
+  chapter: number;
+  // Expected post-migration indices, computed by replaying the WHOLE ledger.
+  // With one entry this was `+delta`; with 20+ entries an index can be moved by
+  // several of them, so a single-entry model silently asserts the wrong thing.
+  exp: Record<string, number>;
+  nLedger: number;
 }
 interface Snap {
   marks: { i: number; u: number }[];
@@ -73,8 +79,22 @@ test.describe('Sentence-index shifts follow corpus insertions exactly once', () 
     await test.step('Setup 1: Write learning data using the OLD numbering', async () => {
       const seeded = await page.evaluate(() => {
         if (SENT_SHIFTS.length === 0) return null;
-        const st = SENT_SHIFTS[SENT_SHIFTS.length - 1];
-        const k: Seed = {
+        const total = document.querySelectorAll('.sent').length;
+        // 挑一条「后面还有足够句子」的账目当锚点。以前固定用最后一条，
+        // 而最后一条现在落在全书末尾附近，锚点序号一越界整条用例就没意义了
+        let st = null;
+        for (let i = SENT_SHIFTS.length - 1; i >= 0; i--) {
+          const c = SENT_SHIFTS[i];
+          if (c.after - 20 >= 0 && c.after + 28 < total) { st = c; break; }
+        }
+        if (!st) return 'no-anchor';
+        if (st.after - 20 >= total) return 'out-of-range';
+        // 整本账回放，完全照抄前端 applySentShifts 的语义
+        const rep = (n: number) => SENT_SHIFTS.reduce((v, s) => (v > s.after ? v + s.delta : v), n);
+        const repL = (n: number) =>
+          SENT_SHIFTS.filter((s) => s.chapter === st.chapter).reduce(
+            (v, s) => (v > s.localAfter ? v + s.delta : v), n);
+        const base = {
           a: st.after - 20,
           b: st.after,
           c: st.after + 25,
@@ -82,9 +102,13 @@ test.describe('Sentence-index shifts follow corpus insertions exactly once', () 
           local: st.localAfter + 10,
           delta: st.delta,
           id: st.id,
+          chapter: st.chapter,
+          nLedger: SENT_SHIFTS.length,
         };
-        const total = document.querySelectorAll('.sent').length;
-        if (k.a < 0 || k.d >= total) return 'out-of-range';
+        const k: Seed = {
+          ...base,
+          exp: { a: rep(base.a), b: rep(base.b), c: rep(base.c), d: rep(base.d), local: repL(base.local) },
+        };
         localStorage.setItem(
           'ielts-marks',
           JSON.stringify([
@@ -120,6 +144,7 @@ test.describe('Sentence-index shifts follow corpus insertions exactly once', () 
       });
       expect(seeded).not.toBeNull();
       expect(seeded).not.toBe('out-of-range');
+      expect(seeded).not.toBe('no-anchor');
     });
   });
 
@@ -141,15 +166,24 @@ test.describe('Sentence-index shifts follow corpus insertions exactly once', () 
       });
 
       const k = (await page.evaluate(() => {
-        const st = SENT_SHIFTS[SENT_SHIFTS.length - 1];
+        const total = document.querySelectorAll('.sent').length;
+        let st = null;
+        for (let i = SENT_SHIFTS.length - 1; i >= 0; i--) {
+          const c = SENT_SHIFTS[i];
+          if (c.after - 20 >= 0 && c.after + 28 < total) { st = c; break; }
+        }
+        const rep = (n: number) => SENT_SHIFTS.reduce((v, s) => (v > s.after ? v + s.delta : v), n);
+        const repL = (n: number) =>
+          SENT_SHIFTS.filter((s) => s.chapter === st.chapter).reduce(
+            (v, s) => (v > s.localAfter ? v + s.delta : v), n);
+        const base = {
+          a: st.after - 20, b: st.after, c: st.after + 25, d: st.after + 28,
+          local: st.localAfter + 10, delta: st.delta, id: st.id, chapter: st.chapter,
+          nLedger: SENT_SHIFTS.length,
+        };
         return {
-          a: st.after - 20,
-          b: st.after,
-          c: st.after + 25,
-          d: st.after + 28,
-          local: st.localAfter + 10,
-          delta: st.delta,
-          id: st.id,
+          ...base,
+          exp: { a: rep(base.a), b: rep(base.b), c: rep(base.c), d: rep(base.d), local: repL(base.local) },
         };
       })) as Seed;
 
@@ -163,24 +197,28 @@ test.describe('Sentence-index shifts follow corpus insertions exactly once', () 
 
         const p = await readSnap(page);
         const byU = (u: number) => p.marks.find((m) => m.u === u);
-        expect(byU(1)!.i).toBe(k.a); // 插入点之前：不动
-        expect(byU(2)!.i).toBe(k.b); // 锚点句本身：不动
-        expect(byU(3)!.i).toBe(k.c + k.delta); // 插入点之后：+1
+        // 每个序号都按「整本账回放」的期望值核对，而不是简单 +1
+        expect(byU(1)!.i).toBe(k.exp.a);
+        expect(byU(2)!.i).toBe(k.exp.b);
+        expect(byU(3)!.i).toBe(k.exp.c);
+        expect(k.exp.c).toBeGreaterThan(k.c); // 锚点之后的序号确实被推走了
         const moved = p.loops.find((x) => x.u === 2)!;
         const kept = p.loops.find((x) => x.u === 1)!;
-        expect(moved.start).toBe(k.c + k.delta);
-        expect(moved.end).toBe(k.d + k.delta);
+        expect(moved.start).toBe(k.exp.c);
+        expect(moved.end).toBe(k.exp.d);
         expect(moved.name).toBeUndefined(); // 旧序号写死的小标题要作废，否则会说谎
         expect(kept.start).toBe(5);
         expect(kept.name).toBe('保留标题');
         const s = p.prog.sentences;
-        expect(s[String(k.a)].reps).toBe(1);
-        expect(s[String(k.b)].reps).toBe(2);
-        expect(s[String(k.c + k.delta)].reps).toBe(3); // 复习记录跟着走，不是新建一条
+        expect(s[String(k.exp.a)].reps).toBe(1);
+        expect(s[String(k.exp.b)].reps).toBe(2);
+        expect(s[String(k.exp.c)].reps).toBe(3); // 复习记录跟着走，不是新建一条
         expect(s[String(k.c)]).toBeUndefined(); // 旧键不残留
-        expect(p.prog.cycleSeen[String(k.c + k.delta)]).toBe(7);
+        expect(new Set([String(k.exp.a), String(k.exp.b), String(k.exp.c)]).size).toBe(3); // 不许撞键丢记录
+        expect(p.prog.cycleSeen[String(k.exp.c)]).toBe(7);
         expect(p.prog.streak).toBe(9); // 非序号字段原样保留
         expect(p.done).toContain(k.id);
+        expect(p.done.length).toBe(k.nLedger); // 整本账一次跑完，不漏条
       });
 
       await test.step('Step 2: The resume slot shifts too (global i and chapter-local index)', async () => {
@@ -190,13 +228,13 @@ test.describe('Sentence-index shifts follow corpus insertions exactly once', () 
           localStorage.setItem('ielts-sent-shift', '[]');
           localStorage.setItem(
             'ielts-pos',
-            JSON.stringify({ chapter: 5, chapterI: kk.local, i: kk.c, t: 1 }),
+            JSON.stringify({ chapter: kk.chapter, chapterI: kk.local, i: kk.c, t: 1 }),
           );
           (window as unknown as { applySentShifts: () => void }).applySentShifts();
           return JSON.parse(localStorage.getItem('ielts-pos') || '{}');
         }, k);
-        expect(got.i).toBe(k.c + k.delta);
-        expect(got.chapterI).toBe(k.local + k.delta);
+        expect(got.i).toBe(k.exp.c);
+        expect(got.chapterI).toBe(k.exp.local);
       });
 
       await test.step('Step 3: Reload again and check it does not shift twice', async () => {

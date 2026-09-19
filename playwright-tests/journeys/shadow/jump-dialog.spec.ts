@@ -36,7 +36,12 @@ test.describe('Jump dialog lists chapters and jumps to a sentence', () => {
       await test.step('Step 1: Open the jump dialog', async () => {
         await page.locator('#abTitle').click();
         await expect(page.locator('#jumpCh option')).toHaveCount(6);
-        await expect(page.locator('#jumpHint')).toContainText('第1章共 336 句');
+        // 第一章句数从应用自己的数据里取，别写死：加一句课文就会让这条用例假红
+        const n1 = await page.evaluate(
+          () => SECTIONS[0].paragraphs.reduce((a: number, p: unknown[]) => a + p.length, 0),
+        );
+        expect(n1).toBeGreaterThan(0);
+        await expect(page.locator('#jumpHint')).toContainText(`第1章共 ${n1} 句`);
       });
 
       await test.step('Step 2: Jump to chapter 1 sentence 1', async () => {

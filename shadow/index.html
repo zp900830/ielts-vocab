@@ -1313,7 +1313,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       /* 数据缓存版本：必须等于 shadow/data/ 三个 JSON 的内容哈希，由 scripts/validate_data.py 校验。
          不写它，iOS Safari 会按 Last-Modified 启发式缓存 —— 课文改了、词表没改，句序与词表就会错位。
          改了数据忘了 bump 会直接让门禁 FAIL，而不是静默服务旧数据。 */
-      const SHADOW_DATA_VER = "260bb9cad4";
+      const SHADOW_DATA_VER = "112b43316d";
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
@@ -3522,6 +3522,30 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     const SENT_SHIFTS = [
       // 2026-09-19 拆句：ch5 段23 句3 拆成两句，全书 1809 → 1810 句
       { id: 'ins-1619-0919', after: 1619, delta: 1, chapter: 5, localAfter: 3 },
+      // 2026-09-19 第 3 批：按三份资料补的新目标词，每插一句记一条
+      { id: 'ins-313-new-elusive', after: 313, delta: 1, chapter: 0, localAfter: 6 },
+      { id: 'ins-314-new-mite', after: 314, delta: 1, chapter: 0, localAfter: 6 },
+      { id: 'ins-315-new-ubiquitous', after: 315, delta: 1, chapter: 0, localAfter: 6 },
+      { id: 'ins-452-new-artwork', after: 452, delta: 1, chapter: 1, localAfter: 6 },
+      { id: 'ins-453-new-backpack', after: 453, delta: 1, chapter: 1, localAfter: 6 },
+      { id: 'ins-816-new-refurbish', after: 816, delta: 1, chapter: 2, localAfter: 6 },
+      { id: 'ins-817-new-trainer', after: 817, delta: 1, chapter: 2, localAfter: 6 },
+      { id: 'ins-1233-new-footpath', after: 1233, delta: 1, chapter: 3, localAfter: 6 },
+      { id: 'ins-1234-new-governance', after: 1234, delta: 1, chapter: 3, localAfter: 6 },
+      { id: 'ins-1235-new-notoriety', after: 1235, delta: 1, chapter: 3, localAfter: 6 },
+      { id: 'ins-1236-new-superiority', after: 1236, delta: 1, chapter: 3, localAfter: 6 },
+      { id: 'ins-1237-new-supremacy', after: 1237, delta: 1, chapter: 3, localAfter: 6 },
+      { id: 'ins-1238-new-surveillance', after: 1238, delta: 1, chapter: 3, localAfter: 6 },
+      { id: 'ins-1312-new-replica', after: 1312, delta: 1, chapter: 4, localAfter: 6 },
+      { id: 'ins-1797-new-ailment', after: 1797, delta: 1, chapter: 5, localAfter: 6 },
+      { id: 'ins-1798-new-asthma', after: 1798, delta: 1, chapter: 5, localAfter: 6 },
+      { id: 'ins-1799-new-cholera', after: 1799, delta: 1, chapter: 5, localAfter: 6 },
+      { id: 'ins-1800-new-ebola', after: 1800, delta: 1, chapter: 5, localAfter: 6 },
+      { id: 'ins-1801-new-immunity', after: 1801, delta: 1, chapter: 5, localAfter: 6 },
+      { id: 'ins-1802-new-pandemic', after: 1802, delta: 1, chapter: 5, localAfter: 6 },
+      { id: 'ins-1803-new-syndrome', after: 1803, delta: 1, chapter: 5, localAfter: 6 },
+      { id: 'ins-1804-new-tuberculosis', after: 1804, delta: 1, chapter: 5, localAfter: 6 },
+      { id: 'ins-1805-new-vaccination', after: 1805, delta: 1, chapter: 5, localAfter: 6 },
     ];
     function afterIdx(i, s) { return Number.isInteger(i) && i > s.after; }
     function shiftKeyed(map, s) {
