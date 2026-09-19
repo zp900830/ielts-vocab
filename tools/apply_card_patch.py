@@ -47,17 +47,30 @@ def join_segments(free, segs):
 
 
 def apply_review(clean, review_path):
-    """review JSON: {词头: {"syn": {词: "keep"|"drop"}, "col": {...}}}，没提到的按 keep。"""
+    """review JSON: {词头: {"syn": {词: "keep"|"drop"}, "col": {...}}}。
+
+    没有结论就不落地，而不是按「默认保留」放行 —— 否则审核代理漏判的那部分等于
+    谁都没看过就直接写进了学生的词卡。
+    """
     rv = json.load(open(review_path, encoding='utf-8'))
     dropped = 0
     out = []
     for item in clean:
-        r = rv.get(item['w'], {})
+        r = rv.get(item['w'])
+        if r is None:
+            raise SystemExit(f'门禁 2 未覆盖词头 {item["w"]}，拒绝落地')
         for key in ('syn', 'col'):
             field = 's' if key == 'syn' else 'c'
             marks = r.get(key) or {}
-            kept = [x for x in item[key] if marks.get(x[field], 'keep') != 'drop']
-            dropped += len(item[key]) - len(kept)
+            kept = []
+            for x in item[key]:
+                verdict = marks.get(x[field])
+                if verdict is None:
+                    raise SystemExit(f'门禁 2 未覆盖 {item["w"]}/{key}/{x[field]}，拒绝落地')
+                if str(verdict).lower().startswith('drop'):
+                    dropped += 1
+                else:
+                    kept.append(x)
             item[key] = kept
         if item['syn'] or item['col']:
             out.append(item)

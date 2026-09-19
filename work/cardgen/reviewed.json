@@ -1,0 +1,5996 @@
+{
+ "peak": {
+  "syn": {},
+  "col": {
+   "snowy peaks": "keep"
+  }
+ },
+ "petroleum": {
+  "syn": {},
+  "col": {
+   "petroleum reserves": "keep"
+  }
+ },
+ "phenomenon": {
+  "syn": {},
+  "col": {
+   "natural phenomenon": "keep"
+  }
+ },
+ "pine": {
+  "syn": {},
+  "col": {
+   "tall pines": "keep"
+  }
+ },
+ "plain": {
+  "syn": {},
+  "col": {
+   "barren plain": "drop",
+   "vast barren plain": "keep"
+  }
+ },
+ "plantation": {
+  "syn": {},
+  "col": {
+   "tea plantation": "keep"
+  }
+ },
+ "polar": {
+  "syn": {},
+  "col": {
+   "polar bear": "keep",
+   "polar night": "keep"
+  }
+ },
+ "pole": {
+  "syn": {},
+  "col": {
+   "north pole": "keep"
+  }
+ },
+ "pour": {
+  "syn": {},
+  "col": {
+   "pour hot tea": "keep"
+  }
+ },
+ "precipitate": {
+  "syn": {
+   "accelerate": "keep"
+  },
+  "col": {}
+ },
+ "prey": {
+  "syn": {},
+  "col": {
+   "easy prey": "keep"
+  }
+ },
+ "probe": {
+  "syn": {
+   "investigate": "keep",
+   "explore": "drop"
+  },
+  "col": {}
+ },
+ "protect": {
+  "syn": {
+   "preserve": "keep"
+  },
+  "col": {}
+ },
+ "protein": {
+  "syn": {},
+  "col": {
+   "high protein": "keep"
+  }
+ },
+ "quantum": {
+  "syn": {},
+  "col": {
+   "quantum transition": "keep"
+  }
+ },
+ "quiet": {
+  "syn": {},
+  "col": {
+   "quiet lake": "keep",
+   "quiet farm": "keep",
+   "quiet old forest": "keep"
+  }
+ },
+ "rainforest": {
+  "syn": {},
+  "col": {
+   "wet rainforest": "keep"
+  }
+ },
+ "rear": {
+  "syn": {},
+  "col": {
+   "child rearing duties": "keep"
+  }
+ },
+ "reed": {
+  "syn": {},
+  "col": {
+   "tall reed": "keep"
+  }
+ },
+ "reef": {
+  "syn": {},
+  "col": {
+   "coral reef": "keep"
+  }
+ },
+ "reproduce": {
+  "syn": {},
+  "col": {
+   "reproduce quickly": "keep"
+  }
+ },
+ "reptile": {
+  "syn": {},
+  "col": {
+   "reptile enclosure": "keep"
+  }
+ },
+ "ridge": {
+  "syn": {},
+  "col": {
+   "parallel ridges": "keep",
+   "narrow ridge": "keep"
+  }
+ },
+ "ripen": {
+  "syn": {},
+  "col": {
+   "ripen slowly": "keep"
+  }
+ },
+ "saddle": {
+  "syn": {},
+  "col": {
+   "leather saddle": "keep"
+  }
+ },
+ "sample": {
+  "syn": {},
+  "col": {
+   "take samples": "keep"
+  }
+ },
+ "sandy": {
+  "syn": {},
+  "col": {
+   "sandy path": "keep"
+  }
+ },
+ "scent": {
+  "syn": {},
+  "col": {
+   "sweet scent": "keep"
+  }
+ },
+ "seasonal": {
+  "syn": {},
+  "col": {
+   "seasonal rains": "keep"
+  }
+ },
+ "secrete": {
+  "syn": {},
+  "col": {
+   "secrete thick fluid": "keep"
+  }
+ },
+ "sediment": {
+  "syn": {},
+  "col": {
+   "carries thick sediment": "drop",
+   "thick sediment": "keep"
+  }
+ },
+ "shallow": {
+  "syn": {},
+  "col": {
+   "shallow pools": "keep"
+  }
+ },
+ "shore": {
+  "syn": {},
+  "col": {
+   "golden shore": "keep"
+  }
+ },
+ "shower": {
+  "syn": {},
+  "col": {
+   "quick shower": "keep"
+  }
+ },
+ "silt": {
+  "syn": {},
+  "col": {
+   "soft silt": "keep"
+  }
+ },
+ "slope": {
+  "syn": {},
+  "col": {
+   "sheer slopes": "keep"
+  }
+ },
+ "smog": {
+  "syn": {},
+  "col": {
+   "thick smog": "keep"
+  }
+ },
+ "snowy": {
+  "syn": {},
+  "col": {
+   "snowy peaks": "keep"
+  }
+ },
+ "splendid": {
+  "syn": {},
+  "col": {
+   "splendid sunrise": "keep"
+  }
+ },
+ "spring": {
+  "syn": {},
+  "col": {
+   "spring water": "drop",
+   "warm spring": "keep"
+  }
+ },
+ "sprinkle": {
+  "syn": {},
+  "col": {
+   "sprinkle sugar": "keep"
+  }
+ },
+ "stem": {
+  "syn": {
+   "derive": "keep"
+  },
+  "col": {}
+ },
+ "sting": {
+  "syn": {},
+  "col": {
+   "bee sting": "keep"
+  }
+ },
+ "stony": {
+  "syn": {},
+  "col": {
+   "stony path": "keep"
+  }
+ },
+ "stormy": {
+  "syn": {},
+  "col": {
+   "stormy waves": "keep"
+  }
+ },
+ "straw": {
+  "syn": {},
+  "col": {
+   "dry straw": "keep"
+  }
+ },
+ "subsistence": {
+  "syn": {},
+  "col": {
+   "daily subsistence": "keep"
+  }
+ },
+ "sunlight": {
+  "syn": {},
+  "col": {
+   "morning sunlight": "keep"
+  }
+ },
+ "sunrise": {
+  "syn": {},
+  "col": {
+   "golden sunrise": "keep",
+   "splendid sunrise": "keep"
+  }
+ },
+ "sunset": {
+  "syn": {},
+  "col": {
+   "peaceful sunset": "keep"
+  }
+ },
+ "superficial": {
+  "syn": {},
+  "col": {
+   "superficial judgments": "keep"
+  }
+ },
+ "surroundings": {
+  "syn": {},
+  "col": {
+   "clean surroundings": "keep"
+  }
+ },
+ "synthesise": {
+  "syn": {},
+  "col": {
+   "synthesise food": "keep"
+  }
+ },
+ "synthetic": {
+  "syn": {},
+  "col": {
+   "synthetic cloth": "keep"
+  }
+ },
+ "thermal": {
+  "syn": {},
+  "col": {
+   "thermal coat": "keep"
+  }
+ },
+ "thorn": {
+  "syn": {},
+  "col": {
+   "sharp thorn": "keep"
+  }
+ },
+ "throng": {
+  "syn": {},
+  "col": {
+   "noisy throng": "keep"
+  }
+ },
+ "thunder": {
+  "syn": {},
+  "col": {
+   "distant thunder": "keep"
+  }
+ },
+ "tide": {
+  "syn": {},
+  "col": {
+   "rising tide": "keep"
+  }
+ },
+ "trunk": {
+  "syn": {},
+  "col": {
+   "thick trunk": "keep"
+  }
+ },
+ "turtle": {
+  "syn": {},
+  "col": {
+   "sea turtle": "keep"
+  }
+ },
+ "uptake": {
+  "syn": {},
+  "col": {
+   "slow uptake": "keep"
+  }
+ },
+ "valley": {
+  "syn": {},
+  "col": {
+   "green valley": "keep"
+  }
+ },
+ "vapour": {
+  "syn": {},
+  "col": {
+   "white vapour": "keep"
+  }
+ },
+ "vegetation": {
+  "syn": {},
+  "col": {
+   "new vegetation": "keep"
+  }
+ },
+ "vertical": {
+  "syn": {},
+  "col": {
+   "vertical cliff": "keep"
+  }
+ },
+ "vitamin": {
+  "syn": {},
+  "col": {
+   "vitamin drops": "keep"
+  }
+ },
+ "wilderness": {
+  "syn": {},
+  "col": {
+   "silent wilderness": "keep"
+  }
+ },
+ "wooden": {
+  "syn": {},
+  "col": {
+   "wooden bridge": "keep"
+  }
+ },
+ "worm": {
+  "syn": {},
+  "col": {
+   "rear worms": "keep"
+  }
+ },
+ "aboriginal": {
+  "syn": {},
+  "col": {
+   "aboriginal songs": "keep"
+  }
+ },
+ "academy": {
+  "syn": {},
+  "col": {
+   "arts academy": "keep"
+  }
+ },
+ "accommodation": {
+  "syn": {},
+  "col": {
+   "new accommodation": "keep"
+  }
+ },
+ "acid": {
+  "syn": {},
+  "col": {
+   "acid taste": "keep"
+  }
+ },
+ "adversity": {
+  "syn": {},
+  "col": {
+   "face adversity": "keep"
+  }
+ },
+ "alien": {
+  "syn": {},
+  "col": {
+   "felt alien": "keep"
+  }
+ },
+ "alphabet": {
+  "syn": {},
+  "col": {
+   "alphabet chart": "keep"
+  }
+ },
+ "alumni": {
+  "syn": {},
+  "col": {
+   "successful alumni": "keep"
+  }
+ },
+ "ambassador": {
+  "syn": {},
+  "col": {
+   "cultural ambassador": "keep"
+  }
+ },
+ "amuse": {
+  "syn": {},
+  "col": {
+   "amuse friends": "keep"
+  }
+ },
+ "analogy": {
+  "syn": {},
+  "col": {
+   "food analogy": "keep"
+  }
+ },
+ "aptitude": {
+  "syn": {},
+  "col": {
+   "natural aptitude": "keep"
+  }
+ },
+ "artist": {
+  "syn": {},
+  "col": {
+   "young artist": "keep"
+  }
+ },
+ "assistant": {
+  "syn": {},
+  "col": {
+   "assistant principal": "keep"
+  }
+ },
+ "assume": {
+  "syn": {},
+  "col": {
+   "simply assume": "keep"
+  }
+ },
+ "audit": {
+  "syn": {},
+  "col": {
+   "cash audit": "keep"
+  }
+ },
+ "bat": {
+  "syn": {},
+  "col": {
+   "wooden bat": "keep"
+  }
+ },
+ "bend": {
+  "syn": {},
+  "col": {
+   "bend low": "keep"
+  }
+ },
+ "blend": {
+  "syn": {
+   "combine": "keep"
+  },
+  "col": {}
+ },
+ "bounce": {
+  "syn": {},
+  "col": {
+   "bounce lightly": "keep"
+  }
+ },
+ "brilliant": {
+  "syn": {},
+  "col": {
+   "brilliant talk": "keep"
+  }
+ },
+ "brochure": {
+  "syn": {},
+  "col": {
+   "travel brochure": "keep"
+  }
+ },
+ "calculus": {
+  "syn": {},
+  "col": {
+   "basic calculus": "keep"
+  }
+ },
+ "campus": {
+  "syn": {},
+  "col": {
+   "campus life": "keep"
+  }
+ },
+ "carve": {
+  "syn": {},
+  "col": {
+   "carve wood": "keep"
+  }
+ },
+ "cathedral": {
+  "syn": {},
+  "col": {
+   "cathedral bells": "keep"
+  }
+ },
+ "chapter": {
+  "syn": {},
+  "col": {
+   "chapter heading": "keep"
+  }
+ },
+ "chess": {
+  "syn": {},
+  "col": {
+   "chess game": "keep"
+  }
+ },
+ "circus": {
+  "syn": {},
+  "col": {
+   "circus show": "keep"
+  }
+ },
+ "cite": {
+  "syn": {},
+  "col": {
+   "cite sources": "keep"
+  }
+ },
+ "clever": {
+  "syn": {
+   "intelligent": "keep"
+  },
+  "col": {
+   "clever ways": "keep"
+  }
+ },
+ "complicated": {
+  "syn": {},
+  "col": {
+   "seemed complicated": "keep"
+  }
+ },
+ "compulsory": {
+  "syn": {},
+  "col": {
+   "compulsory math": "keep"
+  }
+ },
+ "cone": {
+  "syn": {},
+  "col": {
+   "ice cream cone": "keep"
+  }
+ },
+ "consult": {
+  "syn": {},
+  "col": {
+   "consult senior students": "keep"
+  }
+ },
+ "controversial": {
+  "syn": {},
+  "col": {
+   "controversial speeches": "keep"
+  }
+ },
+ "convention": {
+  "syn": {},
+  "col": {
+   "followed every convention": "drop"
+  }
+ },
+ "cruise": {
+  "syn": {},
+  "col": {
+   "sea cruise": "keep"
+  }
+ },
+ "deduce": {
+  "syn": {},
+  "col": {
+   "deduce answers": "keep"
+  }
+ },
+ "depict": {
+  "syn": {
+   "illustrate": "drop"
+  },
+  "col": {}
+ },
+ "detect": {
+  "syn": {},
+  "col": {
+   "detect rising stress": "keep"
+  }
+ },
+ "diagnose": {
+  "syn": {},
+  "col": {
+   "quickly diagnose weak points": "keep"
+  }
+ },
+ "dictate": {
+  "syn": {},
+  "col": {
+   "dictate short sentences": "keep"
+  }
+ },
+ "dictionary": {
+  "syn": {},
+  "col": {
+   "thick dictionary": "keep"
+  }
+ },
+ "diplomat": {
+  "syn": {},
+  "col": {
+   "retired diplomat": "keep"
+  }
+ },
+ "disagree": {
+  "syn": {},
+  "col": {
+   "disagree softly": "keep"
+  }
+ },
+ "displace": {
+  "syn": {
+   "replace": "keep"
+  },
+  "col": {}
+ },
+ "dissolve": {
+  "syn": {},
+  "col": {
+   "quietly dissolve": "drop"
+  }
+ },
+ "dorm": {
+  "syn": {},
+  "col": {
+   "shared dorm": "keep"
+  }
+ },
+ "drag": {
+  "syn": {},
+  "col": {
+   "drag logs": "keep"
+  }
+ },
+ "draught": {
+  "syn": {},
+  "col": {
+   "cold night draught": "keep"
+  }
+ },
+ "draw": {
+  "syn": {},
+  "col": {
+   "draw clouds": "keep"
+  }
+ },
+ "drift": {
+  "syn": {},
+  "col": {
+   "drifted inside": "drop"
+  }
+ },
+ "eccentric": {
+  "syn": {},
+  "col": {
+   "eccentric club leader": "keep"
+  }
+ },
+ "economics": {
+  "syn": {},
+  "col": {
+   "basic economics": "keep"
+  }
+ },
+ "elective": {
+  "syn": {},
+  "col": {
+   "music elective": "keep"
+  }
+ },
+ "electronics": {
+  "syn": {},
+  "col": {
+   "faulty electronics": "keep"
+  }
+ },
+ "elementary": {
+  "syn": {},
+  "col": {
+   "elementary word lists": "keep"
+  }
+ },
+ "elicit": {
+  "syn": {},
+  "col": {
+   "elicit fresh thoughts": "keep"
+  }
+ },
+ "eminent": {
+  "syn": {},
+  "col": {
+   "eminent visitor": "keep"
+  }
+ },
+ "empire": {
+  "syn": {},
+  "col": {
+   "great empire": "keep"
+  }
+ },
+ "encyclopedia": {
+  "syn": {},
+  "col": {
+   "thick encyclopedia": "keep"
+  }
+ },
+ "energetic": {
+  "syn": {},
+  "col": {
+   "energetic games": "keep"
+  }
+ },
+ "engrave": {
+  "syn": {},
+  "col": {
+   "engrave stones": "keep"
+  }
+ },
+ "entertain": {
+  "syn": {},
+  "col": {
+   "entertain kids": "keep"
+  }
+ },
+ "epic": {
+  "syn": {},
+  "col": {
+   "epic tale": "keep"
+  }
+ },
+ "equation": {
+  "syn": {},
+  "col": {
+   "hard equation": "keep"
+  }
+ },
+ "excavate": {
+  "syn": {},
+  "col": {
+   "excavate clay": "keep"
+  }
+ },
+ "exotic": {
+  "syn": {},
+  "col": {
+   "exotic fruit": "keep"
+  }
+ },
+ "extent": {
+  "syn": {},
+  "col": {
+   "full extent": "keep"
+  }
+ },
+ "extract": {
+  "syn": {},
+  "col": {
+   "extract key lines": "keep"
+  }
+ },
+ "fahrenheit": {
+  "syn": {},
+  "col": {
+   "ninety degrees fahrenheit": "drop"
+  }
+ },
+ "fence": {
+  "syn": {},
+  "col": {
+   "garden fence": "keep"
+  }
+ },
+ "fiction": {
+  "syn": {},
+  "col": {
+   "science fiction": "keep",
+   "fiction book": "keep"
+  }
+ },
+ "file": {
+  "syn": {},
+  "col": {
+   "file folder": "keep"
+  }
+ },
+ "flute": {
+  "syn": {},
+  "col": {
+   "silver flute": "keep"
+  }
+ },
+ "formula": {
+  "syn": {},
+  "col": {
+   "math formula": "keep"
+  }
+ },
+ "forum": {
+  "syn": {},
+  "col": {
+   "online forum": "keep"
+  }
+ },
+ "frame": {
+  "syn": {
+   "framework": "drop"
+  },
+  "col": {
+   "goal frame": "keep"
+  }
+ },
+ "friction": {
+  "syn": {
+   "conflict": "keep"
+  },
+  "col": {}
+ },
+ "geography": {
+  "syn": {},
+  "col": {
+   "geography map": "keep"
+  }
+ },
+ "handout": {
+  "syn": {},
+  "col": {
+   "printed handout": "keep"
+  }
+ },
+ "handwriting": {
+  "syn": {},
+  "col": {
+   "neat handwriting": "keep"
+  }
+ },
+ "heading": {
+  "syn": {},
+  "col": {
+   "chapter heading": "keep"
+  }
+ },
+ "heritage": {
+  "syn": {
+   "tradition": "keep"
+  },
+  "col": {}
+ },
+ "hockey": {
+  "syn": {},
+  "col": {
+   "hockey sticks": "keep"
+  }
+ },
+ "holy": {
+  "syn": {
+   "sacred": "keep"
+  },
+  "col": {}
+ },
+ "hypothesis": {
+  "syn": {},
+  "col": {
+   "new hypothesis": "keep"
+  }
+ },
+ "identical": {
+  "syn": {},
+  "col": {
+   "identical schedules": "keep"
+  }
+ },
+ "impetus": {
+  "syn": {},
+  "col": {
+   "fresh impetus": "keep"
+  }
+ },
+ "improvise": {
+  "syn": {},
+  "col": {
+   "improvise songs": "keep"
+  }
+ },
+ "index": {
+  "syn": {},
+  "col": {
+   "book index": "keep"
+  }
+ },
+ "inductive": {
+  "syn": {},
+  "col": {
+   "inductive reasoning": "keep"
+  }
+ },
+ "infer": {
+  "syn": {},
+  "col": {
+   "safely infer": "keep"
+  }
+ },
+ "instil": {
+  "syn": {},
+  "col": {
+   "helped instil good habits": "drop"
+  }
+ },
+ "institute": {
+  "syn": {},
+  "col": {
+   "language institute": "keep"
+  }
+ },
+ "intonation": {
+  "syn": {},
+  "col": {
+   "smooth intonation": "keep"
+  }
+ },
+ "jog": {
+  "syn": {},
+  "col": {
+   "jog back": "keep"
+  }
+ },
+ "journal": {
+  "syn": {},
+  "col": {
+   "class journal": "keep"
+  }
+ },
+ "kick": {
+  "syn": {},
+  "col": {
+   "kick softly": "keep"
+  }
+ },
+ "knight": {
+  "syn": {},
+  "col": {
+   "brave knight": "keep"
+  }
+ },
+ "knock": {
+  "syn": {},
+  "col": {
+   "light knock": "keep"
+  }
+ },
+ "lag": {
+  "syn": {},
+  "col": {
+   "lag behind": "keep"
+  }
+ },
+ "leap": {
+  "syn": {},
+  "col": {
+   "leap high": "keep"
+  }
+ },
+ "linger": {
+  "syn": {},
+  "col": {
+   "linger long": "keep"
+  }
+ },
+ "literate": {
+  "syn": {},
+  "col": {
+   "fully literate": "keep"
+  }
+ },
+ "literature": {
+  "syn": {},
+  "col": {
+   "english literature": "keep",
+   "literature class": "keep"
+  }
+ },
+ "magazine": {
+  "syn": {},
+  "col": {
+   "sports magazine": "keep"
+  }
+ },
+ "magic": {
+  "syn": {},
+  "col": {
+   "magic tricks": "keep"
+  }
+ },
+ "major": {
+  "syn": {
+   "principal": "keep"
+  },
+  "col": {}
+ },
+ "maths": {
+  "syn": {},
+  "col": {
+   "maths teacher": "keep"
+  }
+ },
+ "mechanics": {
+  "syn": {},
+  "col": {
+   "bike mechanics": "keep"
+  }
+ },
+ "merge": {
+  "syn": {
+   "combine": "keep",
+   "integrate": "drop"
+  },
+  "col": {}
+ },
+ "midnight": {
+  "syn": {},
+  "col": {
+   "near midnight": "keep"
+  }
+ },
+ "mobile": {
+  "syn": {
+   "portable": "drop"
+  },
+  "col": {}
+ },
+ "motive": {
+  "syn": {},
+  "col": {
+   "main motive": "keep"
+  }
+ },
+ "museum": {
+  "syn": {},
+  "col": {
+   "art museums": "keep",
+   "war museums": "keep",
+   "museum halls": "keep"
+  }
+ },
+ "noxious": {
+  "syn": {
+   "toxic": "keep"
+  },
+  "col": {}
+ },
+ "nuance": {
+  "syn": {},
+  "col": {
+   "subtle nuance": "keep"
+  }
+ },
+ "observe": {
+  "syn": {
+   "monitor": "keep"
+  },
+  "col": {}
+ },
+ "olympic": {
+  "syn": {},
+  "col": {
+   "olympic dream": "keep"
+  }
+ },
+ "orientation": {
+  "syn": {},
+  "col": {
+   "orientation week": "keep"
+  }
+ },
+ "outstanding": {
+  "syn": {
+   "remarkable": "keep"
+  },
+  "col": {
+   "outstanding work": "keep"
+  }
+ },
+ "overestimate": {
+  "syn": {},
+  "col": {
+   "overestimate talent": "keep"
+  }
+ },
+ "painstaking": {
+  "syn": {},
+  "col": {
+   "painstaking care": "keep"
+  }
+ },
+ "perceive": {
+  "syn": {},
+  "col": {
+   "perceive small changes": "keep"
+  }
+ },
+ "picnic": {
+  "syn": {},
+  "col": {
+   "picnic sheet": "keep"
+  }
+ },
+ "poetry": {
+  "syn": {},
+  "col": {
+   "love poetry": "keep"
+  }
+ },
+ "pottery": {
+  "syn": {},
+  "col": {
+   "pottery bowls": "keep"
+  }
+ },
+ "praise": {
+  "syn": {},
+  "col": {
+   "honest praise": "keep"
+  }
+ },
+ "predict": {
+  "syn": {},
+  "col": {
+   "predict results": "keep"
+  }
+ },
+ "presentation": {
+  "syn": {},
+  "col": {
+   "group presentation": "keep"
+  }
+ },
+ "presume": {
+  "syn": {
+   "assume": "keep"
+  },
+  "col": {}
+ },
+ "principal": {
+  "syn": {},
+  "col": {
+   "assistant principal": "keep"
+  }
+ },
+ "pronounce": {
+  "syn": {},
+  "col": {
+   "pronounce new words": "keep"
+  }
+ },
+ "proportion": {
+  "syn": {},
+  "col": {
+   "large proportion": "keep"
+  }
+ },
+ "psychology": {
+  "syn": {},
+  "col": {
+   "basic psychology": "keep"
+  }
+ },
+ "publish": {
+  "syn": {
+   "release": "keep"
+  },
+  "col": {}
+ },
+ "pupil": {
+  "syn": {},
+  "col": {
+   "school pupil": "keep"
+  }
+ },
+ "radiate": {
+  "syn": {},
+  "col": {
+   "radiate heat": "keep"
+  }
+ },
+ "ratio": {
+  "syn": {
+   "proportion": "keep"
+  },
+  "col": {}
+ },
+ "recite": {
+  "syn": {},
+  "col": {
+   "recite new terms": "keep"
+  }
+ },
+ "recruit": {
+  "syn": {},
+  "col": {
+   "recruit new members": "keep"
+  }
+ },
+ "reference": {
+  "syn": {},
+  "col": {
+   "reference book": "keep"
+  }
+ },
+ "register": {
+  "syn": {},
+  "col": {
+   "register names": "keep"
+  }
+ },
+ "reputation": {
+  "syn": {},
+  "col": {
+   "good reputation": "keep"
+  }
+ },
+ "riddle": {
+  "syn": {
+   "puzzle": "drop"
+  },
+  "col": {}
+ },
+ "ritual": {
+  "syn": {},
+  "col": {
+   "morning ritual": "keep"
+  }
+ },
+ "roster": {
+  "syn": {},
+  "col": {
+   "class roster": "keep"
+  }
+ },
+ "round": {
+  "syn": {},
+  "col": {
+   "receive a well rounded education": "drop"
+  }
+ },
+ "scholar": {
+  "syn": {},
+  "col": {
+   "visiting scholar": "keep"
+  }
+ },
+ "scrutinise": {
+  "syn": {},
+  "col": {
+   "closely scrutinise": "keep"
+  }
+ },
+ "sculpture": {
+  "syn": {},
+  "col": {
+   "stone sculpture": "keep"
+  }
+ },
+ "secondary": {
+  "syn": {
+   "minor": "keep"
+  },
+  "col": {
+   "secondary school": "keep"
+  }
+ },
+ "selective": {
+  "syn": {},
+  "col": {
+   "selective entry test": "keep"
+  }
+ },
+ "sketch": {
+  "syn": {},
+  "col": {
+   "quick sketch": "keep"
+  }
+ },
+ "skim": {
+  "syn": {},
+  "col": {
+   "quickly skim": "keep"
+  }
+ },
+ "smart": {
+  "syn": {},
+  "col": {
+   "looked smart": "keep"
+  }
+ },
+ "static": {
+  "syn": {},
+  "col": {
+   "static noise": "keep"
+  }
+ },
+ "steady": {
+  "syn": {
+   "stable": "keep"
+  },
+  "col": {}
+ },
+ "step": {
+  "syn": {},
+  "col": {
+   "small step": "keep"
+  }
+ },
+ "stride": {
+  "syn": {},
+  "col": {
+   "long stride": "keep"
+  }
+ },
+ "sum": {
+  "syn": {},
+  "col": {
+   "small sum": "keep"
+  }
+ },
+ "suppose": {
+  "syn": {
+   "assume": "keep"
+  },
+  "col": {}
+ },
+ "tennis": {
+  "syn": {},
+  "col": {
+   "tennis balls": "keep"
+  }
+ },
+ "tense": {
+  "syn": {},
+  "col": {
+   "past tense": "keep"
+  }
+ },
+ "thesis": {
+  "syn": {},
+  "col": {
+   "senior thesis": "keep"
+  }
+ },
+ "total": {
+  "syn": {
+   "sum": "keep"
+  },
+  "col": {
+   "final total": "keep"
+  }
+ },
+ "volleyball": {
+  "syn": {},
+  "col": {
+   "volleyball nets": "keep"
+  }
+ },
+ "volume": {
+  "syn": {},
+  "col": {
+   "music volume": "keep"
+  }
+ },
+ "well known": {
+  "syn": {
+   "familiar": "drop",
+   "famous": "keep"
+  },
+  "col": {}
+ },
+ "wit": {
+  "syn": {},
+  "col": {
+   "quick wit": "keep"
+  }
+ },
+ "aisle": {
+  "syn": {},
+  "col": {
+   "narrow aisle": "keep"
+  }
+ },
+ "alloy": {
+  "syn": {},
+  "col": {
+   "light alloy": "keep",
+   "alloy frame": "keep"
+  }
+ },
+ "apartment": {
+  "syn": {},
+  "col": {
+   "crowded apartment": "keep"
+  }
+ },
+ "apparatus": {
+  "syn": {},
+  "col": {
+   "new apparatus": "keep"
+  }
+ },
+ "appetiser": {
+  "syn": {},
+  "col": {
+   "tiny appetiser": "keep"
+  }
+ },
+ "arch": {
+  "syn": {},
+  "col": {
+   "round arch": "keep"
+  }
+ },
+ "artifact": {
+  "syn": {},
+  "col": {
+   "clay artifact": "keep"
+  }
+ },
+ "available": {
+  "syn": {},
+  "col": {
+   "still available": "keep",
+   "available today": "drop"
+  }
+ },
+ "badge": {
+  "syn": {},
+  "col": {
+   "school badge": "keep"
+  }
+ },
+ "bake": {
+  "syn": {},
+  "col": {
+   "bake soft cakes": "keep"
+  }
+ },
+ "balcony": {
+  "syn": {},
+  "col": {
+   "sunny balcony": "keep",
+   "balcony doors": "keep"
+  }
+ },
+ "banquet": {
+  "syn": {},
+  "col": {
+   "harvest banquet": "keep"
+  }
+ },
+ "bar": {
+  "syn": {},
+  "col": {
+   "street bar": "keep"
+  }
+ },
+ "barbecue": {
+  "syn": {},
+  "col": {
+   "barbecue stand": "keep"
+  }
+ },
+ "barrel": {
+  "syn": {},
+  "col": {
+   "small barrel": "keep"
+  }
+ },
+ "bath": {
+  "syn": {},
+  "col": {
+   "bath tub": "keep"
+  }
+ },
+ "bead": {
+  "syn": {},
+  "col": {
+   "fallen bead": "keep"
+  }
+ },
+ "beam": {
+  "syn": {},
+  "col": {
+   "wooden beam": "keep"
+  }
+ },
+ "beef": {
+  "syn": {},
+  "col": {
+   "beef slices": "keep"
+  }
+ },
+ "bell": {
+  "syn": {},
+  "col": {
+   "door bell": "keep"
+  }
+ },
+ "belt": {
+  "syn": {},
+  "col": {
+   "school belt": "keep"
+  }
+ },
+ "bench": {
+  "syn": {},
+  "col": {
+   "wooden bench": "keep"
+  }
+ },
+ "berry": {
+  "syn": {},
+  "col": {
+   "wild berry": "keep"
+  }
+ },
+ "beverage": {
+  "syn": {},
+  "col": {
+   "hot beverage": "keep"
+  }
+ },
+ "biscuit": {
+  "syn": {},
+  "col": {
+   "square biscuit": "keep"
+  }
+ },
+ "bitter": {
+  "syn": {},
+  "col": {
+   "bitter skin": "keep"
+  }
+ },
+ "blanket": {
+  "syn": {},
+  "col": {
+   "blue blanket": "keep"
+  }
+ },
+ "block": {
+  "syn": {
+   "impede": "drop"
+  },
+  "col": {}
+ },
+ "blot": {
+  "syn": {},
+  "col": {
+   "paint blot": "keep"
+  }
+ },
+ "bolt": {
+  "syn": {},
+  "col": {
+   "silver bolt": "keep"
+  }
+ },
+ "booth": {
+  "syn": {},
+  "col": {
+   "market booth": "keep"
+  }
+ },
+ "bracelet": {
+  "syn": {},
+  "col": {
+   "new bracelet": "keep"
+  }
+ },
+ "brandy": {
+  "syn": {},
+  "col": {
+   "sweet brandy": "keep"
+  }
+ },
+ "brass": {
+  "syn": {},
+  "col": {
+   "yellow brass": "keep"
+  }
+ },
+ "brickwork": {
+  "syn": {},
+  "col": {
+   "gray brickwork": "keep"
+  }
+ },
+ "brim": {
+  "syn": {},
+  "col": {
+   "hat brim": "keep"
+  }
+ },
+ "bronze": {
+  "syn": {},
+  "col": {
+   "green bronze horse": "keep"
+  }
+ },
+ "broom": {
+  "syn": {},
+  "col": {
+   "straw broom": "keep"
+  }
+ },
+ "bucket": {
+  "syn": {},
+  "col": {
+   "red bucket": "keep"
+  }
+ },
+ "buffet": {
+  "syn": {},
+  "col": {
+   "hotel buffet": "keep"
+  }
+ },
+ "bulb": {
+  "syn": {},
+  "col": {
+   "warm bulb": "keep"
+  }
+ },
+ "butter": {
+  "syn": {},
+  "col": {
+   "yellow butter": "keep"
+  }
+ },
+ "cabbage": {
+  "syn": {},
+  "col": {
+   "cabbage heads": "keep"
+  }
+ },
+ "cabinet": {
+  "syn": {},
+  "col": {
+   "wooden cabinet": "keep",
+   "cabinet door": "keep"
+  }
+ },
+ "cable": {
+  "syn": {},
+  "col": {
+   "power cable": "keep"
+  }
+ },
+ "cafeteria": {
+  "syn": {},
+  "col": {
+   "cafeteria lines": "keep"
+  }
+ },
+ "candle": {
+  "syn": {},
+  "col": {
+   "blow out candles": "keep",
+   "honey candle": "keep"
+  }
+ },
+ "canvas": {
+  "syn": {},
+  "col": {
+   "painted canvas": "keep"
+  }
+ },
+ "carpenter": {
+  "syn": {},
+  "col": {
+   "old carpenter": "keep"
+  }
+ },
+ "carpet": {
+  "syn": {},
+  "col": {
+   "rolled carpet": "keep"
+  }
+ },
+ "carrot": {
+  "syn": {},
+  "col": {
+   "carrot roots": "keep"
+  }
+ },
+ "cellar": {
+  "syn": {},
+  "col": {
+   "dark cellar": "keep"
+  }
+ },
+ "cement": {
+  "syn": {},
+  "col": {
+   "grey cement": "keep"
+  }
+ },
+ "ceramic": {
+  "syn": {},
+  "col": {
+   "ceramic bowls": "keep"
+  }
+ },
+ "chef": {
+  "syn": {},
+  "col": {
+   "retired chef": "keep"
+  }
+ },
+ "chew": {
+  "syn": {},
+  "col": {
+   "chew loudly": "keep"
+  }
+ },
+ "chicken": {
+  "syn": {},
+  "col": {
+   "village chicken": "keep"
+  }
+ },
+ "chimney": {
+  "syn": {},
+  "col": {
+   "stone chimney": "keep"
+  }
+ },
+ "cigarette": {
+  "syn": {},
+  "col": {
+   "cigarette end": "keep"
+  }
+ },
+ "clasp": {
+  "syn": {},
+  "col": {
+   "silver clasp": "keep"
+  }
+ },
+ "cloak": {
+  "syn": {},
+  "col": {
+   "theatre cloak": "keep"
+  }
+ },
+ "collar": {
+  "syn": {},
+  "col": {
+   "shirt collar": "keep"
+  }
+ },
+ "column": {
+  "syn": {},
+  "col": {
+   "tall column": "keep"
+  }
+ },
+ "concrete": {
+  "syn": {},
+  "col": {
+   "gray concrete": "keep",
+   "concrete floor": "keep"
+  }
+ },
+ "cord": {
+  "syn": {},
+  "col": {
+   "white cord": "keep"
+  }
+ },
+ "corridor": {
+  "syn": {},
+  "col": {
+   "long corridor": "keep"
+  }
+ },
+ "cosmetics": {
+  "syn": {},
+  "col": {
+   "costly shop cosmetics": "drop"
+  }
+ },
+ "costume": {
+  "syn": {},
+  "col": {
+   "dance costume": "keep"
+  }
+ },
+ "cottage": {
+  "syn": {},
+  "col": {
+   "small cottage": "keep"
+  }
+ },
+ "cotton": {
+  "syn": {},
+  "col": {
+   "cotton shirts": "keep"
+  }
+ },
+ "counterfeit": {
+  "syn": {},
+  "col": {
+   "counterfeit coin": "keep"
+  }
+ },
+ "cradle": {
+  "syn": {},
+  "col": {
+   "tiny cradle": "keep"
+  }
+ },
+ "crane": {
+  "syn": {},
+  "col": {
+   "yellow crane": "keep"
+  }
+ },
+ "crude": {
+  "syn": {},
+  "col": {
+   "crude joints": "keep"
+  }
+ },
+ "crystal": {
+  "syn": {},
+  "col": {
+   "shining crystal": "keep"
+  }
+ },
+ "cucumber": {
+  "syn": {},
+  "col": {
+   "crisp long cucumber": "drop"
+  }
+ },
+ "curtain": {
+  "syn": {},
+  "col": {
+   "flowered curtain": "keep"
+  }
+ },
+ "cushion": {
+  "syn": {},
+  "col": {
+   "seat cushion": "keep"
+  }
+ },
+ "cutlery": {
+  "syn": {},
+  "col": {
+   "extra cutlery": "keep"
+  }
+ },
+ "dairy": {
+  "syn": {},
+  "col": {
+   "dairy food": "keep"
+  }
+ },
+ "dam": {
+  "syn": {},
+  "col": {
+   "earth dam": "keep"
+  }
+ },
+ "debate": {
+  "syn": {},
+  "col": {
+   "lively debate": "keep"
+  }
+ },
+ "detergent": {
+  "syn": {},
+  "col": {
+   "mild detergent": "keep"
+  }
+ },
+ "digest": {
+  "syn": {},
+  "col": {
+   "digest well": "keep"
+  }
+ },
+ "dip": {
+  "syn": {},
+  "col": {
+   "dip greens": "keep"
+  }
+ },
+ "drunk": {
+  "syn": {},
+  "col": {
+   "arrived drunk": "keep"
+  }
+ },
+ "dwelling": {
+  "syn": {},
+  "col": {
+   "whole dwelling": "keep"
+  }
+ },
+ "dye": {
+  "syn": {},
+  "col": {
+   "brown dye": "keep"
+  }
+ },
+ "eaves": {
+  "syn": {},
+  "col": {
+   "wide eaves": "keep"
+  }
+ },
+ "eggplant": {
+  "syn": {},
+  "col": {
+   "purple eggplant": "keep"
+  }
+ },
+ "elegance": {
+  "syn": {},
+  "col": {
+   "simple elegance": "keep"
+  }
+ },
+ "embroider": {
+  "syn": {},
+  "col": {
+   "embroider red flowers": "keep"
+  }
+ },
+ "expanse": {
+  "syn": {},
+  "col": {
+   "wide expanse": "keep"
+  }
+ },
+ "exquisite": {
+  "syn": {},
+  "col": {
+   "exquisite touch": "keep"
+  }
+ },
+ "fabric": {
+  "syn": {},
+  "col": {
+   "blue fabric": "keep"
+  }
+ },
+ "fade": {
+  "syn": {
+   "disappear": "keep"
+  },
+  "col": {
+   "never fade": "keep",
+   "slowly fades": "keep"
+  }
+ },
+ "fascinate": {
+  "syn": {},
+  "col": {
+   "fascinate every child": "keep"
+  }
+ },
+ "fibre": {
+  "syn": {},
+  "col": {
+   "plant fibre": "keep"
+  }
+ },
+ "fireplace": {
+  "syn": {},
+  "col": {
+   "stone fireplace": "keep"
+  }
+ },
+ "flashlight": {
+  "syn": {},
+  "col": {
+   "pocket flashlight": "keep"
+  }
+ },
+ "flavour": {
+  "syn": {},
+  "col": {
+   "fruit flavour": "keep"
+  }
+ },
+ "flour": {
+  "syn": {},
+  "col": {
+   "white flour": "keep"
+  }
+ },
+ "fragile": {
+  "syn": {},
+  "col": {
+   "quite fragile": "keep"
+  }
+ },
+ "fridge": {
+  "syn": {},
+  "col": {
+   "small fridge": "keep"
+  }
+ },
+ "furnace": {
+  "syn": {},
+  "col": {
+   "brick furnace": "keep"
+  }
+ },
+ "furnish": {
+  "syn": {},
+  "col": {
+   "furnish corners": "drop"
+  }
+ },
+ "fuse": {
+  "syn": {},
+  "col": {
+   "safety fuse": "keep"
+  }
+ },
+ "garlic": {
+  "syn": {},
+  "col": {
+   "white garlic": "keep"
+  }
+ },
+ "garment": {
+  "syn": {},
+  "col": {
+   "torn school garment": "drop"
+  }
+ },
+ "gem": {
+  "syn": {},
+  "col": {
+   "blue gem": "keep"
+  }
+ },
+ "ginger": {
+  "syn": {},
+  "col": {
+   "ginger root": "keep"
+  }
+ },
+ "glue": {
+  "syn": {},
+  "col": {
+   "strong glue": "keep"
+  }
+ },
+ "gourmet": {
+  "syn": {},
+  "col": {
+   "little gourmet": "keep"
+  }
+ },
+ "gown": {
+  "syn": {},
+  "col": {
+   "evening gown": "keep"
+  }
+ },
+ "grace": {
+  "syn": {},
+  "col": {
+   "gentle grace": "keep"
+  }
+ },
+ "grain": {
+  "syn": {},
+  "col": {
+   "pepper grains": "keep"
+  }
+ },
+ "grape": {
+  "syn": {},
+  "col": {
+   "purple grape": "keep"
+  }
+ },
+ "grid": {
+  "syn": {},
+  "col": {
+   "neat grid": "keep"
+  }
+ },
+ "gum": {
+  "syn": {},
+  "col": {
+   "mint gum": "keep"
+  }
+ },
+ "hairdressing": {
+  "syn": {},
+  "col": {
+   "wedding hairdressing": "keep"
+  }
+ },
+ "hamburger": {
+  "syn": {},
+  "col": {
+   "warm hamburger": "keep"
+  }
+ },
+ "handrail": {
+  "syn": {},
+  "col": {
+   "wooden handrail": "keep"
+  }
+ },
+ "hook": {
+  "syn": {},
+  "col": {
+   "iron hook": "keep"
+  }
+ },
+ "hostel": {
+  "syn": {},
+  "col": {
+   "noisy hostel": "keep"
+  }
+ },
+ "hull": {
+  "syn": {},
+  "col": {
+   "seed hull": "keep"
+  }
+ },
+ "hut": {
+  "syn": {},
+  "col": {
+   "weak hut": "keep"
+  }
+ },
+ "idol": {
+  "syn": {},
+  "col": {
+   "young idol": "keep"
+  }
+ },
+ "ink": {
+  "syn": {},
+  "col": {
+   "blue ink": "keep",
+   "ink marks": "drop"
+  }
+ },
+ "internal": {
+  "syn": {},
+  "col": {
+   "internal corner": "keep"
+  }
+ },
+ "inward": {
+  "syn": {},
+  "col": {
+   "flowed inward": "keep"
+  }
+ },
+ "iron": {
+  "syn": {},
+  "col": {
+   "flat iron": "keep"
+  }
+ },
+ "jacket": {
+  "syn": {},
+  "col": {
+   "biking jacket": "keep"
+  }
+ },
+ "jade": {
+  "syn": {},
+  "col": {
+   "green jade": "keep"
+  }
+ },
+ "jar": {
+  "syn": {},
+  "col": {
+   "glass jar": "keep"
+  }
+ },
+ "jewel": {
+  "syn": {},
+  "col": {
+   "bright jewel": "keep"
+  }
+ },
+ "jewellery": {
+  "syn": {},
+  "col": {
+   "family jewellery": "keep"
+  }
+ },
+ "junk": {
+  "syn": {},
+  "col": {
+   "junk pile": "keep"
+  }
+ },
+ "ketchup": {
+  "syn": {},
+  "col": {
+   "red ketchup": "keep"
+  }
+ },
+ "kettle": {
+  "syn": {},
+  "col": {
+   "black kettle": "keep"
+  }
+ },
+ "kit": {
+  "syn": {},
+  "col": {
+   "repair kit": "keep"
+  }
+ },
+ "kitchen": {
+  "syn": {},
+  "col": {
+   "old kitchen": "keep"
+  }
+ },
+ "knit": {
+  "syn": {},
+  "col": {
+   "knit warm caps": "keep"
+  }
+ },
+ "knob": {
+  "syn": {},
+  "col": {
+   "door knob": "drop"
+  }
+ },
+ "lace": {
+  "syn": {},
+  "col": {
+   "lace edging": "keep"
+  }
+ },
+ "lantern": {
+  "syn": {},
+  "col": {
+   "paper lantern": "keep"
+  }
+ },
+ "laundry": {
+  "syn": {},
+  "col": {
+   "folded laundry": "keep"
+  }
+ },
+ "lavatory": {
+  "syn": {},
+  "col": {
+   "back lavatory": "keep"
+  }
+ },
+ "layer": {
+  "syn": {},
+  "col": {
+   "thick layer": "keep"
+  }
+ },
+ "layout": {
+  "syn": {},
+  "col": {
+   "table layout": "keep"
+  }
+ },
+ "leather": {
+  "syn": {},
+  "col": {
+   "leather bag": "keep"
+  }
+ },
+ "lever": {
+  "syn": {},
+  "col": {
+   "wooden lever": "keep"
+  }
+ },
+ "lid": {
+  "syn": {},
+  "col": {
+   "jar lid": "keep"
+  }
+ },
+ "linen": {
+  "syn": {},
+  "col": {
+   "table linen": "keep"
+  }
+ },
+ "liquor": {
+  "syn": {},
+  "col": {
+   "fruit liquor": "keep"
+  }
+ },
+ "livestock": {
+  "syn": {},
+  "col": {
+   "village livestock": "keep"
+  }
+ },
+ "lobby": {
+  "syn": {},
+  "col": {
+   "hotel lobby": "keep"
+  }
+ },
+ "lodge": {
+  "syn": {},
+  "col": {
+   "hunting lodge": "keep"
+  }
+ },
+ "lotion": {
+  "syn": {},
+  "col": {
+   "hand lotion": "keep"
+  }
+ },
+ "lumber": {
+  "syn": {},
+  "col": {
+   "cut lumber": "drop"
+  }
+ },
+ "makeup": {
+  "syn": {},
+  "col": {
+   "soft makeup": "drop"
+  }
+ },
+ "mansion": {
+  "syn": {},
+  "col": {
+   "cold mansion": "keep"
+  }
+ },
+ "mason": {
+  "syn": {},
+  "col": {
+   "careful mason": "keep"
+  }
+ },
+ "masquerade": {
+  "syn": {},
+  "col": {
+   "masquerade dance": "drop"
+  }
+ },
+ "mat": {
+  "syn": {},
+  "col": {
+   "door mat": "keep"
+  }
+ },
+ "mattress": {
+  "syn": {},
+  "col": {
+   "torn mattress": "keep"
+  }
+ },
+ "memorandum": {
+  "syn": {},
+  "col": {
+   "short memorandum": "keep"
+  }
+ },
+ "mend": {
+  "syn": {
+   "fix": "keep"
+  },
+  "col": {
+   "carefully mend": "keep"
+  }
+ },
+ "merchandise": {
+  "syn": {},
+  "col": {
+   "used merchandise": "keep"
+  }
+ },
+ "metal": {
+  "syn": {},
+  "col": {
+   "pure metal": "keep"
+  }
+ },
+ "migrate": {
+  "syn": {},
+  "col": {
+   "migrate elsewhere": "keep"
+  }
+ },
+ "mill": {
+  "syn": {},
+  "col": {
+   "old mill": "keep"
+  }
+ },
+ "miniature": {
+  "syn": {},
+  "col": {
+   "miniature chair": "keep"
+  }
+ },
+ "mop": {
+  "syn": {},
+  "col": {
+   "wet mop": "keep"
+  }
+ },
+ "mustard": {
+  "syn": {},
+  "col": {
+   "yellow mustard": "keep"
+  }
+ },
+ "mutton": {
+  "syn": {},
+  "col": {
+   "dark mutton": "keep"
+  }
+ },
+ "nail": {
+  "syn": {},
+  "col": {
+   "old nail": "keep"
+  }
+ },
+ "necessity": {
+  "syn": {},
+  "col": {
+   "winter necessity": "keep"
+  }
+ },
+ "necklace": {
+  "syn": {},
+  "col": {
+   "pearl necklace": "keep"
+  }
+ },
+ "nylon": {
+  "syn": {},
+  "col": {
+   "nylon bag": "keep"
+  }
+ },
+ "obstruct": {
+  "syn": {
+   "impede": "keep"
+  },
+  "col": {}
+ },
+ "opacity": {
+  "syn": {},
+  "col": {
+   "cloudy opacity": "keep"
+  }
+ },
+ "ornament": {
+  "syn": {},
+  "col": {
+   "gold ornament": "keep"
+  }
+ },
+ "outward": {
+  "syn": {},
+  "col": {
+   "ran outward": "keep"
+  }
+ },
+ "oven": {
+  "syn": {},
+  "col": {
+   "clay oven": "keep"
+  }
+ },
+ "overcoat": {
+  "syn": {},
+  "col": {
+   "grey overcoat": "keep"
+  }
+ },
+ "pad": {
+  "syn": {},
+  "col": {
+   "feather pad": "keep"
+  }
+ },
+ "pamphlet": {
+  "syn": {},
+  "col": {
+   "picture pamphlet": "drop"
+  }
+ },
+ "pane": {
+  "syn": {},
+  "col": {
+   "window pane": "keep"
+  }
+ },
+ "papaya": {
+  "syn": {},
+  "col": {
+   "sweet papaya": "keep"
+  }
+ },
+ "paperback": {
+  "syn": {},
+  "col": {
+   "old paperback": "keep"
+  }
+ },
+ "parlour": {
+  "syn": {},
+  "col": {
+   "old parlour": "keep"
+  }
+ },
+ "pasta": {
+  "syn": {},
+  "col": {
+   "thin long pasta": "keep"
+  }
+ },
+ "paste": {
+  "syn": {},
+  "col": {
+   "sticky rice paste": "keep"
+  }
+ },
+ "patch": {
+  "syn": {},
+  "col": {
+   "knee patch": "keep"
+  }
+ },
+ "pea": {
+  "syn": {},
+  "col": {
+   "green pea": "keep"
+  }
+ },
+ "pedal": {
+  "syn": {},
+  "col": {
+   "bike pedal": "keep"
+  }
+ },
+ "pepper": {
+  "syn": {},
+  "col": {
+   "black pepper": "keep",
+   "pepper grains": "drop"
+  }
+ },
+ "perfume": {
+  "syn": {},
+  "col": {
+   "natural perfume": "keep"
+  }
+ },
+ "peripheral": {
+  "syn": {},
+  "col": {
+   "almost peripheral": "keep"
+  }
+ },
+ "pie": {
+  "syn": {},
+  "col": {
+   "apple pie": "keep"
+  }
+ },
+ "pigment": {
+  "syn": {},
+  "col": {
+   "green pigment": "keep"
+  }
+ },
+ "pillar": {
+  "syn": {},
+  "col": {
+   "stone pillar": "keep"
+  }
+ },
+ "pillow": {
+  "syn": {},
+  "col": {
+   "yellowed pillow": "keep"
+  }
+ },
+ "pin": {
+  "syn": {},
+  "col": {
+   "colored pin": "keep"
+  }
+ },
+ "pipe": {
+  "syn": {},
+  "col": {
+   "new pipes": "keep"
+  }
+ },
+ "pit": {
+  "syn": {},
+  "col": {
+   "date pit": "keep"
+  }
+ },
+ "placement": {
+  "syn": {},
+  "col": {
+   "neat placement": "keep"
+  }
+ },
+ "plaster": {
+  "syn": {},
+  "col": {
+   "wall plaster": "keep"
+  }
+ },
+ "plaza": {
+  "syn": {},
+  "col": {
+   "small front plaza": "drop",
+   "front plaza": "keep"
+  }
+ },
+ "plug": {
+  "syn": {},
+  "col": {
+   "small plug": "keep"
+  }
+ },
+ "plum": {
+  "syn": {},
+  "col": {
+   "dried red plum slices": "drop",
+   "red plum slices": "drop",
+   "red plum": "keep"
+  }
+ },
+ "plumb": {
+  "syn": {},
+  "col": {
+   "plumb line": "keep",
+   "straight plumb line": "drop"
+  }
+ },
+ "pond": {
+  "syn": {},
+  "col": {
+   "clear pond": "keep"
+  }
+ },
+ "porcelain": {
+  "syn": {},
+  "col": {
+   "white porcelain": "keep",
+   "white porcelain plates": "drop",
+   "porcelain plates": "drop"
+  }
+ },
+ "porch": {
+  "syn": {},
+  "col": {
+   "wide porch": "keep"
+  }
+ },
+ "pork": {
+  "syn": {},
+  "col": {
+   "fresh pork": "keep"
+  }
+ },
+ "porridge": {
+  "syn": {},
+  "col": {
+   "thick morning porridge": "drop",
+   "morning porridge": "keep"
+  }
+ },
+ "pot": {
+  "syn": {},
+  "col": {
+   "deep iron pot": "drop",
+   "iron pot": "keep"
+  }
+ },
+ "prevail": {
+  "syn": {},
+  "col": {
+   "always prevail": "keep"
+  }
+ },
+ "pudding": {
+  "syn": {},
+  "col": {
+   "sweet milk pudding": "drop",
+   "milk pudding": "keep"
+  }
+ },
+ "purple": {
+  "syn": {},
+  "col": {
+   "deep purple": "keep",
+   "deep purple shade": "drop",
+   "purple shade": "drop"
+  }
+ },
+ "purse": {
+  "syn": {},
+  "col": {
+   "small buttoned purse": "drop",
+   "buttoned purse": "keep"
+  }
+ },
+ "quilt": {
+  "syn": {},
+  "col": {
+   "wedding quilt": "keep"
+  }
+ },
+ "radiator": {
+  "syn": {},
+  "col": {
+   "rusty iron radiator": "drop",
+   "iron radiator": "keep"
+  }
+ },
+ "radish": {
+  "syn": {},
+  "col": {
+   "small radish": "keep"
+  }
+ },
+ "rag": {
+  "syn": {},
+  "col": {
+   "torn cleaning rag": "drop",
+   "cleaning rag": "keep"
+  }
+ },
+ "raw": {
+  "syn": {},
+  "col": {
+   "raw wood": "keep"
+  }
+ },
+ "razor": {
+  "syn": {},
+  "col": {
+   "sharp razor": "keep"
+  }
+ },
+ "reception": {
+  "syn": {},
+  "col": {
+   "simple reception": "keep",
+   "reception corner": "drop"
+  }
+ },
+ "recipe": {
+  "syn": {},
+  "col": {
+   "secret recipe": "keep"
+  }
+ },
+ "refectory": {
+  "syn": {},
+  "col": {
+   "school refectory": "keep"
+  }
+ },
+ "refreshment": {
+  "syn": {},
+  "col": {
+   "tea as refreshment": "drop"
+  }
+ },
+ "refrigerator": {
+  "syn": {},
+  "col": {
+   "old refrigerator": "keep"
+  }
+ },
+ "restaurant": {
+  "syn": {},
+  "col": {
+   "small restaurant": "keep"
+  }
+ },
+ "rim": {
+  "syn": {},
+  "col": {
+   "round chair rim": "drop",
+   "chair rim": "keep"
+  }
+ },
+ "robe": {
+  "syn": {},
+  "col": {
+   "soft morning robe": "drop",
+   "morning robe": "keep"
+  }
+ },
+ "rod": {
+  "syn": {},
+  "col": {
+   "new fishing rod": "drop",
+   "fishing rod": "keep"
+  }
+ },
+ "rubber": {
+  "syn": {},
+  "col": {
+   "thick rubber": "drop",
+   "rubber band": "keep",
+   "thick rubber band": "drop"
+  }
+ },
+ "rug": {
+  "syn": {},
+  "col": {
+   "small flowered rug": "drop",
+   "flowered rug": "keep"
+  }
+ },
+ "sauce": {
+  "syn": {},
+  "col": {
+   "thick tomato sauce": "drop",
+   "tomato sauce": "keep"
+  }
+ },
+ "saucer": {
+  "syn": {},
+  "col": {
+   "small flower saucer": "drop",
+   "flower saucer": "keep"
+  }
+ },
+ "sausage": {
+  "syn": {},
+  "col": {
+   "long smoked sausage": "drop",
+   "smoked sausage": "keep"
+  }
+ },
+ "saw": {
+  "syn": {},
+  "col": {
+   "sharp saw": "keep"
+  }
+ },
+ "scaffold": {
+  "syn": {},
+  "col": {
+   "tall bamboo scaffold": "drop",
+   "bamboo scaffold": "keep"
+  }
+ },
+ "scallion": {
+  "syn": {},
+  "col": {
+   "long green scallion": "drop",
+   "green scallion": "keep"
+  }
+ },
+ "scarf": {
+  "syn": {},
+  "col": {
+   "soft flowered scarf": "drop",
+   "flowered scarf": "keep"
+  }
+ },
+ "scissors": {
+  "syn": {},
+  "col": {
+   "large silver scissors": "drop",
+   "silver scissors": "keep"
+  }
+ },
+ "screw": {
+  "syn": {},
+  "col": {
+   "loose screw": "keep"
+  }
+ },
+ "section": {
+  "syn": {},
+  "col": {
+   "damaged section": "keep"
+  }
+ },
+ "settle": {
+  "syn": {},
+  "col": {
+   "settle downstairs": "keep"
+  }
+ },
+ "sewerage": {
+  "syn": {},
+  "col": {
+   "street sewerage": "drop",
+   "sewerage work": "keep",
+   "street sewerage work": "drop"
+  }
+ },
+ "shave": {
+  "syn": {},
+  "col": {
+   "shave smooth": "keep"
+  }
+ },
+ "shed": {
+  "syn": {},
+  "col": {
+   "leaning shed": "keep"
+  }
+ },
+ "shelf": {
+  "syn": {},
+  "col": {
+   "leaning wall shelf": "drop",
+   "wall shelf": "keep"
+  }
+ },
+ "shutter": {
+  "syn": {},
+  "col": {
+   "window shutter": "keep"
+  }
+ },
+ "situated": {
+  "syn": {},
+  "col": {
+   "quietly situated": "keep"
+  }
+ },
+ "slender": {
+  "syn": {},
+  "col": {
+   "looks slender": "keep"
+  }
+ },
+ "slight": {
+  "syn": {
+   "minor": "keep"
+  },
+  "col": {
+   "slight repair": "drop"
+  }
+ },
+ "slipper": {
+  "syn": {},
+  "col": {
+   "pink soft slipper": "drop",
+   "soft slipper": "keep"
+  }
+ },
+ "sliver": {
+  "syn": {},
+  "col": {
+   "thin sliver": "keep"
+  }
+ },
+ "snack": {
+  "syn": {},
+  "col": {
+   "quick snack": "keep"
+  }
+ },
+ "soak": {
+  "syn": {},
+  "col": {
+   "soaking dirty cloth": "keep"
+  }
+ },
+ "sock": {
+  "syn": {},
+  "col": {
+   "warm winter sock": "drop",
+   "winter sock": "keep"
+  }
+ },
+ "sour": {
+  "syn": {},
+  "col": {
+   "sharp sour taste": "drop",
+   "sour taste": "keep"
+  }
+ },
+ "souvenir": {
+  "syn": {},
+  "col": {
+   "worn travel souvenir": "drop",
+   "travel souvenir": "keep"
+  }
+ },
+ "spacious": {
+  "syn": {},
+  "col": {
+   "looked spacious": "keep"
+  }
+ },
+ "spaghetti": {
+  "syn": {},
+  "col": {
+   "long spaghetti": "keep"
+  }
+ },
+ "spice": {
+  "syn": {},
+  "col": {
+   "ground red spice powder": "drop",
+   "red spice powder": "drop",
+   "spice powder": "keep"
+  }
+ },
+ "sponge": {
+  "syn": {},
+  "col": {
+   "soft sponge": "keep"
+  }
+ },
+ "spotlight": {
+  "syn": {},
+  "col": {
+   "strong spotlight": "keep"
+  }
+ },
+ "squeeze": {
+  "syn": {},
+  "col": {
+   "squeeze oranges": "drop"
+  }
+ },
+ "stain": {
+  "syn": {},
+  "col": {
+   "dark food stain": "drop",
+   "food stain": "keep",
+   "stained bath tub": "drop"
+  }
+ },
+ "staple": {
+  "syn": {},
+  "col": {
+   "small staple": "keep"
+  }
+ },
+ "stationery": {
+  "syn": {},
+  "col": {
+   "old stationery": "keep"
+  }
+ },
+ "steel": {
+  "syn": {},
+  "col": {
+   "bright steel": "drop",
+   "steel tools": "keep",
+   "bright steel tools": "drop"
+  }
+ },
+ "stir": {
+  "syn": {},
+  "col": {
+   "gently stir": "keep",
+   "stir honey": "keep"
+  }
+ },
+ "stitch": {
+  "syn": {},
+  "col": {
+   "strong hidden stitch": "drop",
+   "hidden stitch": "keep"
+  }
+ },
+ "stocking": {
+  "syn": {},
+  "col": {
+   "thin party stocking": "drop",
+   "party stocking": "keep"
+  }
+ },
+ "stool": {
+  "syn": {},
+  "col": {
+   "painting stool": "drop"
+  }
+ },
+ "storey": {
+  "syn": {},
+  "col": {
+   "upper storey": "keep"
+  }
+ },
+ "stove": {
+  "syn": {},
+  "col": {
+   "old stove": "keep"
+  }
+ },
+ "strand": {
+  "syn": {},
+  "col": {
+   "loose wire strand": "drop",
+   "wire strand": "keep"
+  }
+ },
+ "strap": {
+  "syn": {},
+  "col": {
+   "torn bag strap": "drop",
+   "bag strap": "keep"
+  }
+ },
+ "stricture": {
+  "syn": {},
+  "col": {
+   "every past stricture": "drop",
+   "past stricture": "keep"
+  }
+ },
+ "string": {
+  "syn": {},
+  "col": {
+   "long red string": "drop",
+   "red string": "keep"
+  }
+ },
+ "stripe": {
+  "syn": {},
+  "col": {
+   "painted wall stripe": "drop",
+   "wall stripe": "keep"
+  }
+ },
+ "studio": {
+  "syn": {},
+  "col": {
+   "noisy photo studio": "drop",
+   "photo studio": "keep"
+  }
+ },
+ "supermarket": {
+  "syn": {},
+  "col": {
+   "distant supermarket": "keep"
+  }
+ },
+ "supper": {
+  "syn": {},
+  "col": {
+   "family supper": "keep"
+  }
+ },
+ "sweater": {
+  "syn": {},
+  "col": {
+   "blue winter sweater": "drop",
+   "winter sweater": "keep"
+  }
+ },
+ "takeaway": {
+  "syn": {},
+  "col": {
+   "takeaway boxes": "keep",
+   "street takeaway boxes": "drop"
+  }
+ },
+ "tan": {
+  "syn": {},
+  "col": {
+   "soft tan coat": "drop",
+   "tan coat": "keep"
+  }
+ },
+ "terrace": {
+  "syn": {},
+  "col": {
+   "stone terrace": "keep"
+  }
+ },
+ "thirsty": {
+  "syn": {},
+  "col": {
+   "thirsty workers": "keep"
+  }
+ },
+ "thread": {
+  "syn": {},
+  "col": {
+   "loose threads": "keep",
+   "thin white thread": "keep"
+  }
+ },
+ "tile": {
+  "syn": {},
+  "col": {
+   "loose floor tile": "drop",
+   "floor tile": "keep"
+  }
+ },
+ "tin": {
+  "syn": {},
+  "col": {
+   "sealed tin": "keep"
+  }
+ },
+ "tissue": {
+  "syn": {},
+  "col": {
+   "soft tissue": "keep"
+  }
+ },
+ "toast": {
+  "syn": {},
+  "col": {
+   "crisp morning toast": "drop",
+   "morning toast": "keep"
+  }
+ },
+ "toilet": {
+  "syn": {},
+  "col": {
+   "yellowed toilet": "drop",
+   "yellowed toilet seat": "drop",
+   "toilet seat": "keep"
+  }
+ },
+ "towel": {
+  "syn": {},
+  "col": {
+   "thick white towel": "drop",
+   "white towel": "keep"
+  }
+ },
+ "tray": {
+  "syn": {},
+  "col": {
+   "wooden tray": "keep"
+  }
+ },
+ "trousers": {
+  "syn": {},
+  "col": {
+   "grey work trousers": "drop",
+   "work trousers": "keep"
+  }
+ },
+ "tub": {
+  "syn": {},
+  "col": {
+   "low wide tub": "drop",
+   "wide tub": "keep",
+   "bath tub": "keep"
+  }
+ },
+ "turkey": {
+  "syn": {},
+  "col": {
+   "brown turkey": "keep"
+  }
+ },
+ "turnip": {
+  "syn": {},
+  "col": {
+   "flat white turnip": "drop",
+   "white turnip": "keep",
+   "turnip heads": "keep"
+  }
+ },
+ "umbrella": {
+  "syn": {},
+  "col": {
+   "torn black umbrella": "drop",
+   "black umbrella": "keep"
+  }
+ },
+ "vacuum": {
+  "syn": {},
+  "col": {
+   "loud vacuum": "keep"
+  }
+ },
+ "vanilla": {
+  "syn": {},
+  "col": {
+   "pale vanilla": "drop",
+   "pale vanilla drops": "drop",
+   "vanilla drops": "keep"
+  }
+ },
+ "vault": {
+  "syn": {},
+  "col": {
+   "curved vault": "keep"
+  }
+ },
+ "veil": {
+  "syn": {},
+  "col": {
+   "thin shining veil": "drop",
+   "shining veil": "keep"
+  }
+ },
+ "velvet": {
+  "syn": {},
+  "col": {
+   "red velvet": "keep"
+  }
+ },
+ "venue": {
+  "syn": {},
+  "col": {
+   "future venue": "keep"
+  }
+ },
+ "viaduct": {
+  "syn": {},
+  "col": {
+   "stone viaduct": "keep"
+  }
+ },
+ "villa": {
+  "syn": {},
+  "col": {
+   "rich villa": "drop"
+  }
+ },
+ "vinegar": {
+  "syn": {},
+  "col": {
+   "clear rice vinegar": "drop",
+   "rice vinegar": "keep"
+  }
+ },
+ "void": {
+  "syn": {},
+  "col": {
+   "empty void": "keep"
+  }
+ },
+ "wallet": {
+  "syn": {},
+  "col": {
+   "worn brown wallet": "drop",
+   "brown wallet": "keep"
+  }
+ },
+ "wardrobe": {
+  "syn": {},
+  "col": {
+   "small wardrobe": "keep"
+  }
+ },
+ "wasabi": {
+  "syn": {},
+  "col": {
+   "green wasabi": "keep"
+  }
+ },
+ "wax": {
+  "syn": {},
+  "col": {
+   "warm wax": "keep"
+  }
+ },
+ "weld": {
+  "syn": {},
+  "col": {
+   "weld chair legs": "keep"
+  }
+ },
+ "wheat": {
+  "syn": {},
+  "col": {
+   "pale wheat": "keep"
+  }
+ },
+ "whisky": {
+  "syn": {},
+  "col": {
+   "whisky bottle": "keep"
+  }
+ },
+ "wool": {
+  "syn": {},
+  "col": {
+   "soft grey wool": "drop",
+   "grey wool": "keep"
+  }
+ },
+ "yogurt": {
+  "syn": {},
+  "col": {
+   "thick white yogurt": "drop",
+   "white yogurt": "keep"
+  }
+ },
+ "yummy": {
+  "syn": {},
+  "col": {
+   "simply yummy": "keep"
+  }
+ },
+ "aboard": {
+  "syn": {},
+  "col": {
+   "everyone aboard": "keep"
+  }
+ },
+ "adequate": {
+  "syn": {},
+  "col": {
+   "barely adequate": "keep"
+  }
+ },
+ "admit": {
+  "syn": {},
+  "col": {
+   "never admit": "keep"
+  }
+ },
+ "bid": {
+  "syn": {},
+  "col": {
+   "low bid": "keep"
+  }
+ },
+ "bilateral": {
+  "syn": {},
+  "col": {
+   "bilateral deal": "keep"
+  }
+ },
+ "bound": {
+  "syn": {},
+  "col": {
+   "felt bound": "keep"
+  }
+ },
+ "bribe": {
+  "syn": {},
+  "col": {
+   "dirty bribe": "drop"
+  }
+ },
+ "broken": {
+  "syn": {},
+  "col": {
+   "broken arm": "keep"
+  }
+ },
+ "bureau": {
+  "syn": {},
+  "col": {
+   "travel bureau": "drop"
+  }
+ },
+ "burst": {
+  "syn": {},
+  "col": {
+   "burst out laughing": "keep"
+  }
+ },
+ "cart": {
+  "syn": {},
+  "col": {
+   "wooden cart": "keep"
+  }
+ },
+ "chance": {
+  "syn": {},
+  "col": {
+   "little chance": "keep"
+  }
+ },
+ "checklist": {
+  "syn": {},
+  "col": {
+   "travel checklist": "keep"
+  }
+ },
+ "choose": {
+  "syn": {
+   "select": "keep"
+  },
+  "col": {}
+ },
+ "clarify": {
+  "syn": {
+   "explain": "keep"
+  },
+  "col": {}
+ },
+ "colony": {
+  "syn": {},
+  "col": {
+   "ant colony": "keep"
+  }
+ },
+ "conference": {
+  "syn": {},
+  "col": {
+   "conference hall": "keep"
+  }
+ },
+ "confess": {
+  "syn": {
+   "admit": "keep"
+  },
+  "col": {}
+ },
+ "constraint": {
+  "syn": {},
+  "col": {
+   "time constraint": "keep"
+  }
+ },
+ "coupon": {
+  "syn": {},
+  "col": {
+   "paper coupon": "keep"
+  }
+ },
+ "court": {
+  "syn": {},
+  "col": {
+   "supreme court": "keep"
+  }
+ },
+ "criteria": {
+  "syn": {},
+  "col": {
+   "clear criteria": "keep"
+  }
+ },
+ "defer": {
+  "syn": {
+   "postpone": "keep"
+  },
+  "col": {}
+ },
+ "deflation": {
+  "syn": {},
+  "col": {
+   "price deflation": "keep"
+  }
+ },
+ "dismiss": {
+  "syn": {},
+  "col": {
+   "never dismiss": "drop"
+  }
+ },
+ "dominate": {
+  "syn": {},
+  "col": {
+   "male dominated industries": "keep"
+  }
+ },
+ "due": {
+  "syn": {},
+  "col": {
+   "money due": "keep"
+  }
+ },
+ "emergency": {
+  "syn": {
+   "crisis": "keep"
+  },
+  "col": {}
+ },
+ "entity": {
+  "syn": {},
+  "col": {
+   "business entity": "keep"
+  }
+ },
+ "ethnic": {
+  "syn": {},
+  "col": {
+   "ethnic group": "keep"
+  }
+ },
+ "failure": {
+  "syn": {},
+  "col": {
+   "delivery failure": "keep"
+  }
+ },
+ "fare": {
+  "syn": {},
+  "col": {
+   "bus fares": "keep"
+  }
+ },
+ "fault": {
+  "syn": {
+   "mistake": "keep"
+  },
+  "col": {}
+ },
+ "federal": {
+  "syn": {},
+  "col": {
+   "federal capital": "keep"
+  }
+ },
+ "freight": {
+  "syn": {},
+  "col": {
+   "freight train": "keep"
+  }
+ },
+ "genuine": {
+  "syn": {},
+  "col": {
+   "genuine smile": "keep"
+  }
+ },
+ "global": {
+  "syn": {
+   "worldwide": "keep"
+  },
+  "col": {}
+ },
+ "gross": {
+  "syn": {},
+  "col": {
+   "gross total": "keep"
+  }
+ },
+ "guard": {
+  "syn": {},
+  "col": {
+   "border guard": "keep"
+  }
+ },
+ "hazard": {
+  "syn": {
+   "risk": "drop"
+  },
+  "col": {
+   "biggest hazard": "keep"
+  }
+ },
+ "import": {
+  "syn": {},
+  "col": {
+   "imported fruit": "keep",
+   "import fresh fruit": "keep"
+  }
+ },
+ "inflation": {
+  "syn": {},
+  "col": {
+   "rising inflation": "keep"
+  }
+ },
+ "installment": {
+  "syn": {},
+  "col": {
+   "regular installment": "keep"
+  }
+ },
+ "instruct": {
+  "syn": {},
+  "col": {
+   "gently instruct": "drop"
+  }
+ },
+ "intersection": {
+  "syn": {},
+  "col": {
+   "busy intersection": "keep"
+  }
+ },
+ "judge": {
+  "syn": {},
+  "col": {
+   "stern judge": "keep"
+  }
+ },
+ "layoff": {
+  "syn": {},
+  "col": {
+   "sudden layoff": "keep"
+  }
+ },
+ "league": {
+  "syn": {},
+  "col": {
+   "football league": "keep"
+  }
+ },
+ "levy": {
+  "syn": {},
+  "col": {
+   "new levy": "keep"
+  }
+ },
+ "load": {
+  "syn": {
+   "burden": "keep"
+  },
+  "col": {
+   "heavy load": "keep"
+  }
+ },
+ "mail": {
+  "syn": {},
+  "col": {
+   "mail box": "keep"
+  }
+ },
+ "mediate": {
+  "syn": {},
+  "col": {
+   "mediate gently": "drop"
+  }
+ },
+ "mute": {
+  "syn": {},
+  "col": {
+   "stayed mute": "keep"
+  }
+ },
+ "negotiation": {
+  "syn": {},
+  "col": {
+   "long negotiation": "keep"
+  }
+ },
+ "neutral": {
+  "syn": {},
+  "col": {
+   "stayed neutral": "keep"
+  }
+ },
+ "oar": {
+  "syn": {},
+  "col": {
+   "wooden oar": "keep"
+  }
+ },
+ "occupation": {
+  "syn": {},
+  "col": {
+   "honest occupation": "keep"
+  }
+ },
+ "outlook": {
+  "syn": {
+   "prospect": "keep"
+  },
+  "col": {
+   "bright outlook": "keep"
+  }
+ },
+ "oversee": {
+  "syn": {
+   "monitor": "keep"
+  },
+  "col": {}
+ },
+ "permit": {
+  "syn": {},
+  "col": {
+   "written permit": "keep"
+  }
+ },
+ "personnel": {
+  "syn": {},
+  "col": {
+   "shop personnel": "keep"
+  }
+ },
+ "perspective": {
+  "syn": {
+   "opinion": "keep"
+  },
+  "col": {
+   "fresh perspective": "keep"
+  }
+ },
+ "poll": {
+  "syn": {},
+  "col": {
+   "latest poll": "keep"
+  }
+ },
+ "port": {
+  "syn": {},
+  "col": {
+   "busy port": "keep"
+  }
+ },
+ "postage": {
+  "syn": {},
+  "col": {
+   "extra postage": "keep"
+  }
+ },
+ "potent": {
+  "syn": {},
+  "col": {
+   "potent boost": "keep"
+  }
+ },
+ "prejudice": {
+  "syn": {
+   "bias": "keep"
+  },
+  "col": {}
+ },
+ "prompt": {
+  "syn": {},
+  "col": {
+   "prompt service": "keep"
+  }
+ },
+ "proud": {
+  "syn": {},
+  "col": {
+   "felt proud": "keep"
+  }
+ },
+ "puppet": {
+  "syn": {},
+  "col": {
+   "wooden puppet": "keep"
+  }
+ },
+ "quota": {
+  "syn": {},
+  "col": {
+   "agreed quota": "keep"
+  }
+ },
+ "rack": {
+  "syn": {},
+  "col": {
+   "wooden rack": "keep"
+  }
+ },
+ "rail": {
+  "syn": {},
+  "col": {
+   "steel rail": "keep"
+  }
+ },
+ "reconcile": {
+  "syn": {},
+  "col": {
+   "reconcile fully": "drop"
+  }
+ },
+ "redundant": {
+  "syn": {},
+  "col": {
+   "became redundant": "keep"
+  }
+ },
+ "remuneration": {
+  "syn": {},
+  "col": {
+   "extra remuneration": "keep"
+  }
+ },
+ "resign": {
+  "syn": {
+   "quit": "keep"
+  },
+  "col": {}
+ },
+ "respondent": {
+  "syn": {},
+  "col": {
+   "survey respondent": "keep"
+  }
+ },
+ "retire": {
+  "syn": {},
+  "col": {
+   "retire early": "keep"
+  }
+ },
+ "revenue": {
+  "syn": {
+   "income": "keep"
+  },
+  "col": {}
+ },
+ "roman": {
+  "syn": {},
+  "col": {
+   "roman roads": "keep"
+  }
+ },
+ "sack": {
+  "syn": {},
+  "col": {
+   "flour sack": "keep"
+  }
+ },
+ "sail": {
+  "syn": {},
+  "col": {
+   "sail away": "keep"
+  }
+ },
+ "sanction": {
+  "syn": {},
+  "col": {
+   "impose sanctions on": "keep"
+  }
+ },
+ "saving": {
+  "syn": {
+   "conservation": "drop"
+  },
+  "col": {}
+ },
+ "session": {
+  "syn": {},
+  "col": {
+   "evening session": "keep"
+  }
+ },
+ "significance": {
+  "syn": {},
+  "col": {
+   "deep significance": "keep"
+  }
+ },
+ "solve": {
+  "syn": {},
+  "col": {
+   "problem solving skills": "keep"
+  }
+ },
+ "spare": {
+  "syn": {},
+  "col": {
+   "spare chairs": "keep"
+  }
+ },
+ "speed": {
+  "syn": {},
+  "col": {
+   "full speed": "keep"
+  }
+ },
+ "stock": {
+  "syn": {},
+  "col": {
+   "remaining stock": "keep"
+  }
+ },
+ "sufficient": {
+  "syn": {},
+  "col": {
+   "sufficient room": "keep"
+  }
+ },
+ "suitable": {
+  "syn": {},
+  "col": {
+   "suitable hour": "keep"
+  }
+ },
+ "suitcase": {
+  "syn": {},
+  "col": {
+   "heavy suitcase": "keep"
+  }
+ },
+ "supervise": {
+  "syn": {},
+  "col": {
+   "personally supervise": "keep"
+  }
+ },
+ "supreme": {
+  "syn": {},
+  "col": {
+   "supreme court": "keep"
+  }
+ },
+ "trail": {
+  "syn": {},
+  "col": {
+   "dusty trail": "keep"
+  }
+ },
+ "trial": {
+  "syn": {
+   "experiment": "keep"
+  },
+  "col": {}
+ },
+ "tyre": {
+  "syn": {},
+  "col": {
+   "flat tyre": "keep"
+  }
+ },
+ "unite": {
+  "syn": {
+   "combine": "drop"
+  },
+  "col": {}
+ },
+ "vocation": {
+  "syn": {},
+  "col": {
+   "true vocation": "keep"
+  }
+ },
+ "wage": {
+  "syn": {},
+  "col": {
+   "daily wage": "keep"
+  }
+ },
+ "whisper": {
+  "syn": {},
+  "col": {
+   "nervous whisper": "keep"
+  }
+ },
+ "wholesale": {
+  "syn": {},
+  "col": {
+   "wholesale cost": "keep"
+  }
+ },
+ "accessory": {
+  "syn": {},
+  "col": {
+   "spare accessory": "keep"
+  }
+ },
+ "acquaintance": {
+  "syn": {},
+  "col": {
+   "old acquaintance": "keep"
+  }
+ },
+ "affection": {
+  "syn": {},
+  "col": {
+   "true affection": "keep"
+  }
+ },
+ "assault": {
+  "syn": {
+   "attack": "keep"
+  },
+  "col": {
+   "sudden assault": "keep"
+  }
+ },
+ "attorney": {
+  "syn": {
+   "solicitor": "keep"
+  },
+  "col": {}
+ },
+ "audio": {
+  "syn": {},
+  "col": {
+   "clear audio": "keep"
+  }
+ },
+ "beat": {
+  "syn": {
+   "defeat": "keep"
+  },
+  "col": {}
+ },
+ "belong": {
+  "syn": {},
+  "col": {
+   "sense of belonging": "keep"
+  }
+ },
+ "beloved": {
+  "syn": {},
+  "col": {
+   "beloved teacher": "keep"
+  }
+ },
+ "binary": {
+  "syn": {},
+  "col": {
+   "binary code": "keep"
+  }
+ },
+ "blast": {
+  "syn": {},
+  "col": {
+   "loud blast": "keep"
+  }
+ },
+ "breakthrough": {
+  "syn": {},
+  "col": {
+   "big breakthrough": "keep"
+  }
+ },
+ "burrow": {
+  "syn": {},
+  "col": {
+   "deep burrow": "keep"
+  }
+ },
+ "bury": {
+  "syn": {},
+  "col": {
+   "bury pride": "keep"
+  }
+ },
+ "chop": {
+  "syn": {},
+  "col": {
+   "chop wood": "keep"
+  }
+ },
+ "compute": {
+  "syn": {},
+  "col": {
+   "compute costs": "keep"
+  }
+ },
+ "condense": {
+  "syn": {},
+  "col": {
+   "steam condense": "drop"
+  }
+ },
+ "contend": {
+  "syn": {
+   "compete": "keep"
+  },
+  "col": {}
+ },
+ "council": {
+  "syn": {},
+  "col": {
+   "town council": "keep"
+  }
+ },
+ "counsellor": {
+  "syn": {},
+  "col": {
+   "school counsellor": "keep"
+  }
+ },
+ "cousin": {
+  "syn": {},
+  "col": {
+   "distant cousins": "keep"
+  }
+ },
+ "deputy": {
+  "syn": {},
+  "col": {
+   "deputy head": "keep"
+  }
+ },
+ "disclose": {
+  "syn": {},
+  "col": {
+   "disclose plans": "keep"
+  }
+ },
+ "dread": {
+  "syn": {
+   "fear": "keep"
+  },
+  "col": {
+   "deep dread": "keep"
+  }
+ },
+ "embryo": {
+  "syn": {},
+  "col": {
+   "bean embryo": "keep"
+  }
+ },
+ "error": {
+  "syn": {
+   "mistake": "keep"
+  },
+  "col": {}
+ },
+ "estimate": {
+  "syn": {},
+  "col": {
+   "estimate savings": "keep"
+  }
+ },
+ "flare": {
+  "syn": {},
+  "col": {
+   "red flare": "keep"
+  }
+ },
+ "framework": {
+  "syn": {},
+  "col": {
+   "wooden framework": "keep"
+  }
+ },
+ "gear": {
+  "syn": {},
+  "col": {
+   "plastic gear": "keep"
+  }
+ },
+ "generator": {
+  "syn": {},
+  "col": {
+   "tiny generator": "keep"
+  }
+ },
+ "gizmo": {
+  "syn": {},
+  "col": {
+   "tiny gizmo": "keep"
+  }
+ },
+ "glow": {
+  "syn": {},
+  "col": {
+   "soft glow": "keep"
+  }
+ },
+ "hammer": {
+  "syn": {},
+  "col": {
+   "small hammer": "keep"
+  }
+ },
+ "helmet": {
+  "syn": {},
+  "col": {
+   "cracked helmet": "keep"
+  }
+ },
+ "honeymoon": {
+  "syn": {},
+  "col": {
+   "short honeymoon": "keep"
+  }
+ },
+ "horrible": {
+  "syn": {},
+  "col": {
+   "horrible noise": "keep"
+  }
+ },
+ "hydraulic": {
+  "syn": {},
+  "col": {
+   "hydraulic oil": "keep"
+  }
+ },
+ "interrupt": {
+  "syn": {},
+  "col": {
+   "interrupt games": "keep"
+  }
+ },
+ "intimate": {
+  "syn": {},
+  "col": {
+   "intimate chats": "keep"
+  }
+ },
+ "invade": {
+  "syn": {
+   "attack": "drop"
+  },
+  "col": {}
+ },
+ "kin": {
+  "syn": {
+   "relative": "keep"
+  },
+  "col": {}
+ },
+ "landing": {
+  "syn": {},
+  "col": {
+   "rough landing": "keep"
+  }
+ },
+ "lens": {
+  "syn": {},
+  "col": {
+   "curved lens": "keep"
+  }
+ },
+ "loudspeaker": {
+  "syn": {},
+  "col": {
+   "big loudspeaker": "keep"
+  }
+ },
+ "maiden": {
+  "syn": {},
+  "col": {
+   "maiden trial": "keep"
+  }
+ },
+ "manoeuvre": {
+  "syn": {},
+  "col": {
+   "clever manoeuvre": "keep"
+  }
+ },
+ "maritime": {
+  "syn": {},
+  "col": {
+   "maritime maps": "keep"
+  }
+ },
+ "microphone": {
+  "syn": {},
+  "col": {
+   "cheap microphone": "keep"
+  }
+ },
+ "miss": {
+  "syn": {},
+  "col": {
+   "miss lunch": "keep"
+  }
+ },
+ "multimedia": {
+  "syn": {},
+  "col": {
+   "multimedia screen": "keep"
+  }
+ },
+ "naval": {
+  "syn": {},
+  "col": {
+   "naval routes": "keep"
+  }
+ },
+ "neighbourhood": {
+  "syn": {},
+  "col": {
+   "low density neighbourhoods": "keep",
+   "whole neighbourhood": "keep"
+  }
+ },
+ "occasion": {
+  "syn": {},
+  "col": {
+   "special occasion": "keep"
+  }
+ },
+ "occur": {
+  "syn": {},
+  "col": {
+   "occur daily": "keep"
+  }
+ },
+ "owe": {
+  "syn": {},
+  "col": {
+   "owe thanks": "keep"
+  }
+ },
+ "patriot": {
+  "syn": {},
+  "col": {
+   "true patriot": "keep"
+  }
+ },
+ "pause": {
+  "syn": {},
+  "col": {
+   "long pause": "keep"
+  }
+ },
+ "peril": {
+  "syn": {},
+  "col": {
+   "sudden peril": "keep"
+  }
+ },
+ "pioneer": {
+  "syn": {},
+  "col": {
+   "true pioneer": "keep"
+  }
+ },
+ "pitfall": {
+  "syn": {},
+  "col": {
+   "hidden pitfall": "keep"
+  }
+ },
+ "polytechnic": {
+  "syn": {},
+  "col": {
+   "small town polytechnic": "keep"
+  }
+ },
+ "proceed": {
+  "syn": {},
+  "col": {
+   "proceed along": "keep"
+  }
+ },
+ "proof": {
+  "syn": {},
+  "col": {
+   "clear proof": "keep"
+  }
+ },
+ "proponent": {
+  "syn": {},
+  "col": {
+   "firm proponent": "keep"
+  }
+ },
+ "pump": {
+  "syn": {},
+  "col": {
+   "hand pump": "keep"
+  }
+ },
+ "punch": {
+  "syn": {},
+  "col": {
+   "punch holes": "keep"
+  }
+ },
+ "radar": {
+  "syn": {},
+  "col": {
+   "toy radar": "keep"
+  }
+ },
+ "raid": {
+  "syn": {},
+  "col": {
+   "night raid": "keep"
+  }
+ },
+ "refine": {
+  "syn": {
+   "purify": "keep"
+  },
+  "col": {}
+ },
+ "refute": {
+  "syn": {
+   "counter": "keep"
+  },
+  "col": {
+   "refute lies": "keep"
+  }
+ },
+ "rifle": {
+  "syn": {},
+  "col": {
+   "rusty rifle": "keep"
+  }
+ },
+ "savage": {
+  "syn": {},
+  "col": {
+   "savage act": "keep"
+  }
+ },
+ "sensor": {
+  "syn": {},
+  "col": {
+   "small sensor": "keep"
+  }
+ },
+ "sewage": {
+  "syn": {},
+  "col": {
+   "dirty sewage": "keep"
+  }
+ },
+ "siege": {
+  "syn": {},
+  "col": {
+   "long siege": "keep"
+  }
+ },
+ "spear": {
+  "syn": {},
+  "col": {
+   "long spear": "keep"
+  }
+ },
+ "statue": {
+  "syn": {},
+  "col": {
+   "tall statue": "keep"
+  }
+ },
+ "strike": {
+  "syn": {
+   "attack": "keep"
+  },
+  "col": {}
+ },
+ "tape": {
+  "syn": {},
+  "col": {
+   "sticky tape": "keep"
+  }
+ },
+ "teenage": {
+  "syn": {},
+  "col": {
+   "teenage volunteers": "keep"
+  }
+ },
+ "tenant": {
+  "syn": {},
+  "col": {
+   "new tenant": "keep"
+  }
+ },
+ "terror": {
+  "syn": {
+   "fear": "keep"
+  },
+  "col": {}
+ },
+ "toil": {
+  "syn": {},
+  "col": {
+   "hard toil": "keep"
+  }
+ },
+ "triumph": {
+  "syn": {},
+  "col": {
+   "quiet triumph": "keep"
+  }
+ },
+ "turbulent": {
+  "syn": {},
+  "col": {
+   "turbulent days": "keep"
+  }
+ },
+ "veterinary": {
+  "syn": {},
+  "col": {
+   "veterinary doctor": "keep"
+  }
+ },
+ "warn": {
+  "syn": {},
+  "col": {
+   "warn kids": "keep"
+  }
+ },
+ "weapon": {
+  "syn": {},
+  "col": {
+   "carry weapons": "keep"
+  }
+ },
+ "wireless": {
+  "syn": {},
+  "col": {
+   "wireless link": "keep"
+  }
+ },
+ "withstand": {
+  "syn": {},
+  "col": {
+   "withstand cold winds": "keep"
+  }
+ },
+ "abdomen": {
+  "syn": {},
+  "col": {
+   "soft abdomen": "keep"
+  }
+ },
+ "accord": {
+  "syn": {},
+  "col": {
+   "kind accord": "drop"
+  }
+ },
+ "accustom": {
+  "syn": {},
+  "col": {
+   "accustom himself": "keep"
+  }
+ },
+ "allure": {
+  "syn": {},
+  "col": {
+   "strong allure": "keep"
+  }
+ },
+ "ankle": {
+  "syn": {},
+  "col": {
+   "thick ankle": "keep"
+  }
+ },
+ "annoy": {
+  "syn": {
+   "irritate": "keep"
+  },
+  "col": {
+   "annoy tired players": "drop"
+  }
+ },
+ "applaud": {
+  "syn": {},
+  "col": {
+   "loudly applaud": "keep"
+  }
+ },
+ "arouse": {
+  "syn": {},
+  "col": {
+   "arouse fresh hope": "keep"
+  }
+ },
+ "artery": {
+  "syn": {},
+  "col": {
+   "red artery": "drop"
+  }
+ },
+ "aspire": {
+  "syn": {},
+  "col": {
+   "aspire high": "keep"
+  }
+ },
+ "assign": {
+  "syn": {},
+  "col": {
+   "assign pages": "keep"
+  }
+ },
+ "astonish": {
+  "syn": {},
+  "col": {
+   "astonish tall rivals": "drop"
+  }
+ },
+ "attempt": {
+  "syn": {},
+  "col": {
+   "new attempt": "keep"
+  }
+ },
+ "augment": {
+  "syn": {},
+  "col": {
+   "augment dull texts": "drop"
+  }
+ },
+ "aural": {
+  "syn": {},
+  "col": {
+   "aural test": "keep"
+  }
+ },
+ "awake": {
+  "syn": {},
+  "col": {
+   "stays awake": "keep",
+   "awake till ten": "drop"
+  }
+ },
+ "backup": {
+  "syn": {},
+  "col": {
+   "strong backup": "keep"
+  }
+ },
+ "beard": {
+  "syn": {},
+  "col": {
+   "grey beard": "keep"
+  }
+ },
+ "bet": {
+  "syn": {},
+  "col": {
+   "bet money": "keep"
+  }
+ },
+ "bewilder": {
+  "syn": {},
+  "col": {
+   "bewilder new players": "drop"
+  }
+ },
+ "biorhythm": {
+  "syn": {},
+  "col": {
+   "sleep biorhythm": "keep"
+  }
+ },
+ "bully": {
+  "syn": {},
+  "col": {
+   "bully smaller kids": "keep"
+  }
+ },
+ "cheek": {
+  "syn": {},
+  "col": {
+   "red cheek": "keep"
+  }
+ },
+ "chest": {
+  "syn": {},
+  "col": {
+   "broad chest": "keep"
+  }
+ },
+ "chin": {
+  "syn": {},
+  "col": {
+   "small chin": "keep"
+  }
+ },
+ "clone": {
+  "syn": {},
+  "col": {
+   "clone test": "drop"
+  }
+ },
+ "condom": {
+  "syn": {},
+  "col": {
+   "thin condom": "keep"
+  }
+ },
+ "contain": {
+  "syn": {},
+  "col": {
+   "contain worry": "keep"
+  }
+ },
+ "contempt": {
+  "syn": {},
+  "col": {
+   "shows contempt": "keep"
+  }
+ },
+ "decimation": {
+  "syn": {},
+  "col": {
+   "fair decimation": "drop"
+  }
+ },
+ "deed": {
+  "syn": {},
+  "col": {
+   "kind deed": "keep"
+  }
+ },
+ "dental": {
+  "syn": {},
+  "col": {
+   "dental check": "keep"
+  }
+ },
+ "deserve": {
+  "syn": {},
+  "col": {
+   "truly deserve good bands": "drop"
+  }
+ },
+ "desire": {
+  "syn": {},
+  "col": {
+   "control wild desire": "keep"
+  }
+ },
+ "despatch": {
+  "syn": {},
+  "col": {
+   "despatch messages": "keep"
+  }
+ },
+ "detriment": {
+  "syn": {},
+  "col": {
+   "clear detriment": "keep"
+  }
+ },
+ "dispute": {
+  "syn": {
+   "conflict": "keep"
+  },
+  "col": {
+   "small dispute": "keep"
+  }
+ },
+ "disregard": {
+  "syn": {
+   "neglect": "keep"
+  },
+  "col": {}
+ },
+ "enlarge": {
+  "syn": {
+   "expand": "keep"
+  },
+  "col": {
+   "enlarge small steps": "keep"
+  }
+ },
+ "enlighten": {
+  "syn": {},
+  "col": {
+   "enlighten young minds": "keep"
+  }
+ },
+ "erase": {
+  "syn": {},
+  "col": {
+   "erase wrong answers": "keep"
+  }
+ },
+ "excuse": {
+  "syn": {},
+  "col": {
+   "fair excuse": "keep"
+  }
+ },
+ "exert": {
+  "syn": {},
+  "col": {
+   "exert effort": "keep"
+  }
+ },
+ "exhale": {
+  "syn": {},
+  "col": {
+   "exhale white air": "keep"
+  }
+ },
+ "eyelash": {
+  "syn": {},
+  "col": {
+   "long eyelash": "keep"
+  }
+ },
+ "eyesight": {
+  "syn": {},
+  "col": {
+   "poor eyesight": "keep"
+  }
+ },
+ "finger": {
+  "syn": {},
+  "col": {
+   "shaking finger": "keep"
+  }
+ },
+ "flatter": {
+  "syn": {},
+  "col": {
+   "flatter teachers": "keep"
+  }
+ },
+ "flee": {
+  "syn": {
+   "escape": "keep"
+  },
+  "col": {}
+ },
+ "forehead": {
+  "syn": {},
+  "col": {
+   "warm forehead": "keep"
+  }
+ },
+ "forgive": {
+  "syn": {},
+  "col": {
+   "forgive late steps": "keep"
+  }
+ },
+ "glance": {
+  "syn": {},
+  "col": {
+   "quick glance": "keep"
+  }
+ },
+ "gland": {
+  "syn": {},
+  "col": {
+   "small gland": "keep"
+  }
+ },
+ "glare": {
+  "syn": {},
+  "col": {
+   "sharp glare": "keep"
+  }
+ },
+ "glimpse": {
+  "syn": {},
+  "col": {
+   "quick glimpse": "keep"
+  }
+ },
+ "gorge": {
+  "syn": {},
+  "col": {
+   "green gorge": "keep"
+  }
+ },
+ "grab": {
+  "syn": {},
+  "col": {
+   "grab pens": "keep"
+  }
+ },
+ "greet": {
+  "syn": {},
+  "col": {
+   "greeting guests": "keep"
+  }
+ },
+ "grip": {
+  "syn": {},
+  "col": {
+   "firm grip": "keep"
+  }
+ },
+ "hormone": {
+  "syn": {},
+  "col": {
+   "small hormone": "keep"
+  }
+ },
+ "immune": {
+  "syn": {},
+  "col": {
+   "immune guard": "drop"
+  }
+ },
+ "impress": {
+  "syn": {},
+  "col": {
+   "impress firm judges": "keep"
+  }
+ },
+ "induce": {
+  "syn": {},
+  "col": {
+   "induce fresh energy": "drop"
+  }
+ },
+ "infection": {
+  "syn": {},
+  "col": {
+   "mild infection": "keep"
+  }
+ },
+ "intestine": {
+  "syn": {},
+  "col": {
+   "long intestine": "keep"
+  }
+ },
+ "involve": {
+  "syn": {},
+  "col": {
+   "involve every friend": "keep"
+  }
+ },
+ "irony": {
+  "syn": {},
+  "col": {
+   "small irony": "keep"
+  }
+ },
+ "itch": {
+  "syn": {},
+  "col": {
+   "inner itch": "keep"
+  }
+ },
+ "jaw": {
+  "syn": {},
+  "col": {
+   "stiff jaw": "keep"
+  }
+ },
+ "joint": {
+  "syn": {},
+  "col": {
+   "stiff joint": "keep"
+  }
+ },
+ "lame": {
+  "syn": {},
+  "col": {
+   "lame forever": "keep"
+  }
+ },
+ "limb": {
+  "syn": {},
+  "col": {
+   "tired limb": "keep"
+  }
+ },
+ "lip": {
+  "syn": {},
+  "col": {
+   "dry lip": "keep"
+  }
+ },
+ "loom": {
+  "syn": {},
+  "col": {
+   "loom ahead": "keep"
+  }
+ },
+ "lung": {
+  "syn": {},
+  "col": {
+   "left lung": "keep"
+  }
+ },
+ "magnify": {
+  "syn": {},
+  "col": {
+   "magnify tiny details": "keep"
+  }
+ },
+ "massacre": {
+  "syn": {},
+  "col": {
+   "bloody massacre": "keep"
+  }
+ },
+ "mesmerize": {
+  "syn": {},
+  "col": {
+   "mesmerize young fans": "keep"
+  }
+ },
+ "mortify": {
+  "syn": {},
+  "col": {
+   "mortify young hearts": "keep"
+  }
+ },
+ "muffle": {
+  "syn": {},
+  "col": {
+   "muffle phone noise": "keep"
+  }
+ },
+ "muscle": {
+  "syn": {},
+  "col": {
+   "thin muscle": "keep"
+  }
+ },
+ "nap": {
+  "syn": {},
+  "col": {
+   "short nap": "keep",
+   "long naps": "keep"
+  }
+ },
+ "neck": {
+  "syn": {},
+  "col": {
+   "long neck": "keep"
+  }
+ },
+ "nerve": {
+  "syn": {},
+  "col": {
+   "thin nerve": "keep"
+  }
+ },
+ "nightmare": {
+  "syn": {},
+  "col": {
+   "short nightmare": "keep"
+  }
+ },
+ "nourish": {
+  "syn": {
+   "feed": "keep"
+  },
+  "col": {}
+ },
+ "omit": {
+  "syn": {
+   "exclude": "drop"
+  },
+  "col": {}
+ },
+ "organ": {
+  "syn": {},
+  "col": {
+   "inner organ": "keep"
+  }
+ },
+ "overshadow": {
+  "syn": {},
+  "col": {
+   "cannot overshadow calm thought": "drop"
+  }
+ },
+ "palm": {
+  "syn": {},
+  "col": {
+   "warm palm": "keep"
+  }
+ },
+ "panic": {
+  "syn": {},
+  "col": {
+   "bring panic": "keep"
+  }
+ },
+ "plummet": {
+  "syn": {},
+  "col": {
+   "let scores plummet": "keep"
+  }
+ },
+ "pore": {
+  "syn": {},
+  "col": {
+   "tiny pore": "keep"
+  }
+ },
+ "preach": {
+  "syn": {},
+  "col": {
+   "preach patience": "keep"
+  }
+ },
+ "provoke": {
+  "syn": {
+   "irritate": "keep"
+  },
+  "col": {}
+ },
+ "pulse": {
+  "syn": {},
+  "col": {
+   "slow pulse": "keep"
+  }
+ },
+ "purpose": {
+  "syn": {},
+  "col": {
+   "clear study purpose": "keep"
+  }
+ },
+ "quarrel": {
+  "syn": {},
+  "col": {
+   "loud quarrel": "keep"
+  }
+ },
+ "react": {
+  "syn": {},
+  "col": {
+   "react fast": "keep"
+  }
+ },
+ "recall": {
+  "syn": {},
+  "col": {
+   "recall morning words": "keep"
+  }
+ },
+ "recollect": {
+  "syn": {},
+  "col": {
+   "quietly recollect": "keep",
+   "recollect evening grammar": "keep"
+  }
+ },
+ "recover": {
+  "syn": {
+   "restore": "drop"
+  },
+  "col": {}
+ },
+ "rectify": {
+  "syn": {},
+  "col": {
+   "rectify small grammar": "drop"
+  }
+ },
+ "refuse": {
+  "syn": {},
+  "col": {
+   "refuse help": "keep"
+  }
+ },
+ "regard": {
+  "syn": {},
+  "col": {
+   "shows deep regard": "keep"
+  }
+ },
+ "render": {
+  "syn": {},
+  "col": {
+   "render hard lessons": "drop"
+  }
+ },
+ "restore": {
+  "syn": {},
+  "col": {
+   "restore calm focus": "keep"
+  }
+ },
+ "retell": {
+  "syn": {},
+  "col": {
+   "retell stories": "keep"
+  }
+ },
+ "retrieve": {
+  "syn": {},
+  "col": {
+   "retrieve old notes": "keep"
+  }
+ },
+ "retrospect": {
+  "syn": {},
+  "col": {
+   "calm retrospect": "drop"
+  }
+ },
+ "rib": {
+  "syn": {},
+  "col": {
+   "lower rib": "keep"
+  }
+ },
+ "rotate": {
+  "syn": {},
+  "col": {
+   "rotate slowly": "keep"
+  }
+ },
+ "saturate": {
+  "syn": {},
+  "col": {
+   "saturate shoes": "keep"
+  }
+ },
+ "shoulder": {
+  "syn": {},
+  "col": {
+   "shaking shoulder": "keep"
+  }
+ },
+ "sideways": {
+  "syn": {},
+  "col": {
+   "turns sideways": "keep"
+  }
+ },
+ "sink": {
+  "syn": {},
+  "col": {
+   "let hope sink low": "keep"
+  }
+ },
+ "skeleton": {
+  "syn": {
+   "framework": "keep"
+  },
+  "col": {
+   "full skeleton": "keep"
+  }
+ },
+ "skull": {
+  "syn": {},
+  "col": {
+   "round skull": "keep"
+  }
+ },
+ "smuggle": {
+  "syn": {},
+  "col": {
+   "smuggle bad feelings": "keep"
+  }
+ },
+ "specify": {
+  "syn": {},
+  "col": {
+   "clearly specify": "keep",
+   "specify time": "keep"
+  }
+ },
+ "spill": {
+  "syn": {},
+  "col": {
+   "spill cold water": "keep"
+  }
+ },
+ "stipulate": {
+  "syn": {},
+  "col": {
+   "clearly stipulate": "keep",
+   "stipulate daily time": "drop"
+  }
+ },
+ "stomach": {
+  "syn": {},
+  "col": {
+   "empty stomach": "keep",
+   "weak stomach": "keep"
+  }
+ },
+ "strangle": {
+  "syn": {},
+  "col": {
+   "strangle pleasure": "keep"
+  }
+ },
+ "substitute": {
+  "syn": {
+   "replace": "keep"
+  },
+  "col": {}
+ },
+ "supply": {
+  "syn": {
+   "provision": "keep"
+  },
+  "col": {}
+ },
+ "surmount": {
+  "syn": {},
+  "col": {
+   "surmount final test": "drop"
+  }
+ },
+ "sway": {
+  "syn": {},
+  "col": {
+   "sway gently": "keep"
+  }
+ },
+ "symptom": {
+  "syn": {},
+  "col": {
+   "small symptom": "keep"
+  }
+ },
+ "tempt": {
+  "syn": {},
+  "col": {
+   "tempt players": "keep"
+  }
+ },
+ "terrify": {
+  "syn": {},
+  "col": {
+   "terrify young players": "keep"
+  }
+ },
+ "thigh": {
+  "syn": {},
+  "col": {
+   "thick thigh": "keep"
+  }
+ },
+ "throat": {
+  "syn": {},
+  "col": {
+   "red throat": "keep"
+  }
+ },
+ "thumb": {
+  "syn": {},
+  "col": {
+   "small thumb": "keep"
+  }
+ },
+ "toe": {
+  "syn": {},
+  "col": {
+   "little toe": "keep"
+  }
+ },
+ "trench": {
+  "syn": {},
+  "col": {
+   "muddy trench": "keep"
+  }
+ },
+ "trigger": {
+  "syn": {},
+  "col": {
+   "trigger worry": "keep"
+  }
+ },
+ "undertake": {
+  "syn": {},
+  "col": {
+   "undertake extra listening": "keep"
+  }
+ },
+ "verify": {
+  "syn": {},
+  "col": {
+   "verify answers": "keep"
+  }
+ },
+ "vibrate": {
+  "syn": {},
+  "col": {
+   "vibrate softly": "keep"
+  }
+ },
+ "visible": {
+  "syn": {},
+  "col": {
+   "clearly visible": "keep"
+  }
+ },
+ "vow": {
+  "syn": {},
+  "col": {
+   "solemn vow": "keep"
+  }
+ },
+ "waist": {
+  "syn": {},
+  "col": {
+   "thin waist": "keep"
+  }
+ },
+ "worship": {
+  "syn": {},
+  "col": {
+   "worship high scores": "keep"
+  }
+ },
+ "wrist": {
+  "syn": {},
+  "col": {
+   "thin wrist": "keep"
+  }
+ },
+ "yawn": {
+  "syn": {},
+  "col": {
+   "big yawn": "keep"
+  }
+ },
+ "acute": {
+  "syn": {},
+  "col": {
+   "acute cough": "keep"
+  }
+ },
+ "adverse": {
+  "syn": {},
+  "col": {
+   "adverse wind": "keep"
+  }
+ },
+ "allergy": {
+  "syn": {},
+  "col": {
+   "food allergy": "keep"
+  }
+ },
+ "annual": {
+  "syn": {},
+  "col": {
+   "annual fair": "keep"
+  }
+ },
+ "arthritis": {
+  "syn": {},
+  "col": {
+   "mild arthritis": "keep"
+  }
+ },
+ "bruise": {
+  "syn": {},
+  "col": {
+   "dark bruise": "keep"
+  }
+ },
+ "cure": {
+  "syn": {},
+  "col": {
+   "cure diseases": "keep"
+  }
+ },
+ "delight": {
+  "syn": {},
+  "col": {
+   "quiet delight": "keep"
+  }
+ },
+ "demise": {
+  "syn": {
+   "death": "keep"
+  },
+  "col": {}
+ },
+ "dizzy": {
+  "syn": {},
+  "col": {
+   "feel dizzy": "keep"
+  }
+ },
+ "dose": {
+  "syn": {},
+  "col": {
+   "small dose": "keep"
+  }
+ },
+ "dysfunction": {
+  "syn": {},
+  "col": {
+   "sleep dysfunction": "keep"
+  }
+ },
+ "earnest": {
+  "syn": {},
+  "col": {
+   "earnest face": "keep"
+  }
+ },
+ "endure": {
+  "syn": {
+   "bear": "keep"
+  },
+  "col": {}
+ },
+ "everlasting": {
+  "syn": {},
+  "col": {
+   "everlasting love": "keep"
+  }
+ },
+ "fatal": {
+  "syn": {},
+  "col": {
+   "fatal crash": "keep"
+  }
+ },
+ "fatigue": {
+  "syn": {},
+  "col": {
+   "mild fatigue": "keep"
+  }
+ },
+ "favour": {
+  "syn": {},
+  "col": {
+   "special favour": "keep"
+  }
+ },
+ "fever": {
+  "syn": {},
+  "col": {
+   "mild fever": "keep"
+  }
+ },
+ "flu": {
+  "syn": {},
+  "col": {
+   "mild flu": "keep"
+  }
+ },
+ "former": {
+  "syn": {},
+  "col": {
+   "former patient": "keep"
+  }
+ },
+ "fortune": {
+  "syn": {},
+  "col": {
+   "good fortune": "keep"
+  }
+ },
+ "gloomy": {
+  "syn": {},
+  "col": {
+   "gloomy grey days": "keep"
+  }
+ },
+ "grateful": {
+  "syn": {},
+  "col": {
+   "deeply grateful": "keep"
+  }
+ },
+ "grief": {
+  "syn": {},
+  "col": {
+   "deep grief": "keep"
+  }
+ },
+ "headache": {
+  "syn": {},
+  "col": {
+   "dull headache": "keep"
+  }
+ },
+ "heal": {
+  "syn": {
+   "cure": "drop"
+  },
+  "col": {}
+ },
+ "humorous": {
+  "syn": {},
+  "col": {
+   "humorous tales": "keep"
+  }
+ },
+ "hygiene": {
+  "syn": {},
+  "col": {
+   "daily hygiene": "keep"
+  }
+ },
+ "hypertension": {
+  "syn": {},
+  "col": {
+   "mild hypertension": "keep"
+  }
+ },
+ "impulse": {
+  "syn": {},
+  "col": {
+   "sudden impulse": "keep"
+  }
+ },
+ "insult": {
+  "syn": {
+   "offend": "keep"
+  },
+  "col": {}
+ },
+ "intuition": {
+  "syn": {
+   "instinct": "keep"
+  },
+  "col": {}
+ },
+ "laughter": {
+  "syn": {},
+  "col": {
+   "clear laughter": "keep"
+  }
+ },
+ "lump": {
+  "syn": {},
+  "col": {
+   "hard lump": "keep"
+  }
+ },
+ "mad": {
+  "syn": {},
+  "col": {
+   "mad rush": "keep"
+  }
+ },
+ "millennium": {
+  "syn": {},
+  "col": {
+   "last millennium": "keep"
+  }
+ },
+ "nasty": {
+  "syn": {},
+  "col": {
+   "nasty words": "keep"
+  }
+ },
+ "negative": {
+  "syn": {
+   "pessimistic": "drop"
+  },
+  "col": {}
+ },
+ "overnight": {
+  "syn": {},
+  "col": {
+   "rain fell overnight": "keep"
+  }
+ },
+ "pain": {
+  "syn": {},
+  "col": {
+   "sharp pain": "keep"
+  }
+ },
+ "penicillin": {
+  "syn": {},
+  "col": {
+   "penicillin shot": "keep"
+  }
+ },
+ "preceding": {
+  "syn": {},
+  "col": {
+   "preceding week": "keep"
+  }
+ },
+ "prominent": {
+  "syn": {},
+  "col": {
+   "prominent place": "keep"
+  }
+ },
+ "recovery": {
+  "syn": {},
+  "col": {
+   "slow recovery": "keep"
+  }
+ },
+ "regret": {
+  "syn": {},
+  "col": {
+   "deep regret": "keep"
+  }
+ },
+ "relief": {
+  "syn": {},
+  "col": {
+   "sweet relief": "keep"
+  }
+ },
+ "scar": {
+  "syn": {},
+  "col": {
+   "thin white scar": "keep"
+  }
+ },
+ "seriously": {
+  "syn": {},
+  "col": {
+   "spoke seriously": "keep"
+  }
+ },
+ "sigh": {
+  "syn": {},
+  "col": {
+   "soft sigh": "keep"
+  }
+ },
+ "sore": {
+  "syn": {},
+  "col": {
+   "sore spot": "keep"
+  }
+ },
+ "sturdy": {
+  "syn": {
+   "durable": "keep"
+  },
+  "col": {
+   "sturdy shoes": "keep"
+  }
+ },
+ "tender": {
+  "syn": {},
+  "col": {
+   "tender vegetables": "keep"
+  }
+ },
+ "thoughtful": {
+  "syn": {},
+  "col": {
+   "thoughtful notes": "keep"
+  }
+ },
+ "transplant": {
+  "syn": {},
+  "col": {
+   "skin transplant": "keep"
+  }
+ },
+ "trauma": {
+  "syn": {},
+  "col": {
+   "deep trauma": "keep"
+  }
+ },
+ "uncomfortable": {
+  "syn": {},
+  "col": {
+   "feel uncomfortable": "keep"
+  }
+ },
+ "unconscious": {
+  "syn": {},
+  "col": {
+   "fallen unconscious": "keep"
+  }
+ },
+ "uneasy": {
+  "syn": {},
+  "col": {
+   "felt uneasy": "keep"
+  }
+ },
+ "vex": {
+  "syn": {
+   "irritate": "keep"
+  },
+  "col": {}
+ },
+ "volatile": {
+  "syn": {},
+  "col": {
+   "volatile mood": "keep"
+  }
+ },
+ "weird": {
+  "syn": {},
+  "col": {
+   "weird dreams": "keep"
+  }
+ },
+ "wicked": {
+  "syn": {},
+  "col": {
+   "wicked tricks": "keep"
+  }
+ },
+ "wound": {
+  "syn": {},
+  "col": {
+   "small wound": "keep"
+  }
+ },
+ "wretched": {
+  "syn": {},
+  "col": {
+   "feeling wretched": "keep"
+  }
+ }
+}
