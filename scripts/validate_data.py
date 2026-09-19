@@ -188,7 +188,9 @@ def main():
                       f"(renders as a misspelled word): {broken[:8]}")
 
     # 11. 逐句中文译文必须存在 —— 跟读时靠它确认听懂，缺一句就是盲读
+    #     且必须带标点：2026-09-19 实测第 3 章有 62 句整句一个停顿都没有，读起来像一串关键词。
     nozh = []
+    nopunct = []
     for si, sec in enumerate(sections):
         zh = sec.get('sentZh') or []
         for pi, para in enumerate(sec.get('paragraphs', [])):
@@ -197,8 +199,12 @@ def main():
                 cell = row[ti] if ti < len(row) else ''
                 if not str(cell or '').strip():
                     nozh.append(f"ch{si}-{pi}-{ti}")
+                elif not re.search(r'[，。、；：！？]', str(cell)):
+                    nopunct.append(f"ch{si}-{pi}-{ti}: {str(cell)[:18]}")
     if nozh:
         errors.append(f"{len(nozh)} sentences have no Chinese translation: {nozh[:8]}")
+    if nopunct:
+        errors.append(f"{len(nopunct)} 句中文译文没有任何标点（需补停顿）: {nopunct[:5]}")
 
     # 12. 本章声明要教的词，不得以纯文本出现却在本章从不标记（学生点不到、无行内释义）
     missed = []
