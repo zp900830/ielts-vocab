@@ -1313,7 +1313,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       /* 数据缓存版本：必须等于 shadow/data/ 三个 JSON 的内容哈希，由 scripts/validate_data.py 校验。
          不写它，iOS Safari 会按 Last-Modified 启发式缓存 —— 课文改了、词表没改，句序与词表就会错位。
          改了数据忘了 bump 会直接让门禁 FAIL，而不是静默服务旧数据。 */
-      const SHADOW_DATA_VER = "9a2a01db8c";
+      const SHADOW_DATA_VER = "63ab652f35";
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
@@ -1360,6 +1360,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
           populateChapterSelect();
           const sel = document.getElementById('chapSel');
           if (sel) sel.value = String(currentChapter);
+          // 课文增删过句子时，先把本地存的句子序号顺移到位，再渲染/读进度/起任务
+          try { applySentShifts(); } catch (e) { try { dlog('sent-shift-fail', (e && e.message) || e); } catch (err) {} }
           render(); renderList(); bindSeek(); loadPos(); applyPrefs();
           // 初始化每日学习任务系统
           try { TASK.init(); TASK.updateMarkers(); } catch (e) {}
@@ -3409,6 +3411,63 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (e.key === 'Escape') closeAllOverlays();
     });
 
+    /* ============ 课文句子序号变更 → 本地进度顺移 ============
+       书签 i、续读位 i/chapterI、间隔复习 sentences/cycleSeen、A-B 循环 start-end
+       存的全是句子序号。课文一旦增删句子，这些序号会整体错位（表现为「收藏的那句
+       跳过去成了下一句」），而且不会报错。每条变更按 id 记账、只应用一次，
+       必须与新增/删除的句子在同一次发版里落地，且与 SHADOW_DATA_VER 一起改。 */
+    const SENT_SHIFTS = [
+      // 2026-09-19 拆句：ch5 段23 句3 拆成两句，全书 1809 → 1810 句
+      { id: 'ins-1619-0919', after: 1619, delta: 1, chapter: 5, localAfter: 3 },
+    ];
+    function afterIdx(i, s) { return Number.isInteger(i) && i > s.after; }
+    function shiftKeyed(map, s) {
+    const out = {};
+    Object.keys(map || {}).forEach(k => {
+      const n = Number(k);
+      const nk = (Number.isInteger(n) && n > s.after) ? String(n + s.delta) : k;
+      if (Object.prototype.hasOwnProperty.call(out, nk)) return; // 撞键保留先到者，绝不静默覆盖
+      out[nk] = map[k];
+    });
+    return out;
+    }
+    function applySentShifts() {
+    let done = [];
+    try { done = JSON.parse(localStorage.getItem('ielts-sent-shift') || '[]'); } catch (e) { done = []; }
+    if (!Array.isArray(done)) done = [];
+    const todo = SENT_SHIFTS.filter(s => done.indexOf(s.id) < 0);
+    if (!todo.length) return;
+    const read = k => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
+    const marks = read('ielts-marks'), loops = read('ielts-ab-loops'), pos = read('ielts-pos'), prog = read('ielts-task-progress');
+    const next = { marks, loops, pos, prog };
+    todo.forEach(s => {
+      if (Array.isArray(next.marks)) next.marks.forEach(m => { if (m && afterIdx(m.i, s)) m.i += s.delta; });
+      if (Array.isArray(next.loops)) next.loops.forEach(x => {
+        if (!x) return;
+        // name 是保存时按旧序号写死的小标题，顺移后会说错句号 —— 丢掉让它按新序号重算
+        if (afterIdx(x.start, s) || afterIdx(x.end, s)) {
+          x.start = afterIdx(x.start, s) ? x.start + s.delta : x.start;
+          x.end = afterIdx(x.end, s) ? x.end + s.delta : x.end;
+          delete x.name;
+        }
+      });
+      if (next.pos && typeof next.pos === 'object') {
+        if (afterIdx(next.pos.i, s)) next.pos.i += s.delta;
+        if (next.pos.chapter === s.chapter && Number.isInteger(next.pos.chapterI) && next.pos.chapterI > s.localAfter) next.pos.chapterI += s.delta;
+      }
+      if (next.prog && typeof next.prog === 'object') {
+        if (next.prog.sentences) next.prog.sentences = shiftKeyed(next.prog.sentences, s);
+        if (next.prog.cycleSeen) next.prog.cycleSeen = shiftKeyed(next.prog.cycleSeen, s);
+      }
+    });
+    // 全部算完再落盘：中途抛错就不会留下「改了一半」的序号
+    safeStore('ielts-marks', JSON.stringify(next.marks || []));
+    safeStore('ielts-ab-loops', JSON.stringify(next.loops || []));
+    if (next.pos && typeof next.pos === 'object') safeStore('ielts-pos', JSON.stringify(next.pos));
+    if (next.prog && typeof next.prog === 'object') safeStore('ielts-task-progress', JSON.stringify(next.prog));
+    safeStore('ielts-sent-shift', JSON.stringify(done.concat(todo.map(s => s.id))));
+    }
+
     /* ============ 进度存档 + 手动书签 ============ */
     function readPos() {
     try {
@@ -3618,7 +3677,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     function jumpMark(i) { toggleMarkPop(false); if (abMode === 3) abCancel(true); playFrom(Math.max(0, Math.min(sents.length - 1, i))); }
     window.addEventListener('pagehide', savePos);
-    document.addEventListener('visibilitychange', () => { if (document.hidden) savePos(); });
+    // idx<0 时存档会把「还没定位到任何句子」写掉真实续读位（冷启动即切走标签页就会遇到）
+    document.addEventListener('visibilitychange', () => { if (document.hidden && idx >= 0) savePos(); });
 
     /* 用户无操作5s自动收回播放条+导航透明度降低 */
     let idleTimer = null;

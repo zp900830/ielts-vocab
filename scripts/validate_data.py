@@ -226,6 +226,42 @@ def main():
     if tmpl / max(1, total_sents) > 0.02:
         warnings.append(f"{tmpl}/{total_sents} 句疑似模板克隆（同一骨架换词），占 {tmpl/total_sents*100:.1f}%")
 
+    # 14. 顺移账本必须能解释当前句数。书签/续读位/间隔复习/A-B 循环存的全是全局句号，
+    #     增删句子却没登记 SENT_SHIFTS，用户本地进度会静默错位且无法回滚。
+    SENT_BASELINE = 1809  # 2026-09-19 建立账本时的全书句数
+    k = sh.find('const SENT_SHIFTS = [')
+    if k < 0:
+        errors.append('shadow/index.html 找不到 SENT_SHIFTS 顺移账本；若课文句数有变，必须补记')
+    else:
+        d0, i = k + len('const SENT_SHIFTS = ['), k + len('const SENT_SHIFTS = [')
+        depth = 1
+        while i < len(sh) and depth:
+            if sh[i] == '[':
+                depth += 1
+            elif sh[i] == ']':
+                depth -= 1
+            i += 1
+        block = sh[d0:i - 1]
+        ids = re.findall(r"id:\s*'([^']+)'", block)
+        deltas = re.findall(r'delta:\s*(-?\d+)', block)
+        if len(ids) != len(deltas):
+            errors.append(f'SENT_SHIFTS 有 {len(ids)} 个 id 但 {len(deltas)} 个 delta，账本不完整')
+        elif SENT_BASELINE + sum(int(x) for x in deltas) != total_sents:
+            errors.append(f'课文句数 {total_sents} ≠ 基线 {SENT_BASELINE} + 账本增删 {sum(int(x) for x in deltas)}。'
+                          f' 增删句子必须往 SENT_SHIFTS 追加一条 {{id, after, delta, chapter, localAfter}}，'
+                          f' 否则用户书签与间隔复习记录会整体错位。')
+
+    # 15. 每个段落的英文句数与中文译文句数必须一一对应，否则整段译文串位
+    misalign = []
+    for si, sec in enumerate(sections):
+        zhs = sec.get('sentZh', [])
+        for pi, para in enumerate(sec.get('paragraphs', [])):
+            zh = zhs[pi] if pi < len(zhs) else None
+            if not isinstance(zh, list) or len(zh) != len(para):
+                misalign.append(f'ch{si}段{pi}: 英文 {len(para)} 句 / 中文 {0 if not isinstance(zh, list) else len(zh)} 句')
+    if misalign:
+        errors.append(f'英文句与中文译文不齐（译文会整段串位）: {misalign[:8]}')
+
     # 9. 基础统计
     print(f"vocab: {len(vocab)} words")
     print(f"chapters: {len(chapters)} macro chapters, {len(ch_words)} unique words")

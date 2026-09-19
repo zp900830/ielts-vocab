@@ -20,7 +20,7 @@ the previous sentence was never read.
 
 ### Setup 1. Open the app
 Navigate to `{E2E_BASE_URL}/index.html`.
-**Verify:** The article renders all 1809 sentences.
+**Verify:** The article renders every sentence in <code>data/sections.json</code> (count derived from data, not hardcoded).
 
 ## Test Steps
 

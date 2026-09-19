@@ -27,9 +27,23 @@ test.describe('Play bar previous sentence rewinds one sentence', () => {
     await test.step('Setup 1: Open the app', async () => {
       await page.goto(`${baseURL}/index.html`);
       await expect(page.getByRole('heading', { name: /雅思词汇/ }).first()).toBeVisible();
+      // 句数由数据决定，别写死：改课文时这里会误红，而真正的意图是「渲染没漏句」
       await expect
-        .poll(async () => page.locator('.sent').count(), { timeout: currentTimeout() })
-        .toBe(1809);
+        .poll(
+          async () =>
+            page.evaluate(() => {
+              const want =
+                typeof SECTIONS === 'undefined'
+                  ? -1
+                  : SECTIONS.reduce(
+                      (a, c) => a + c.paragraphs.reduce((x, p) => x + p.length, 0),
+                      0,
+                    );
+              return want > 0 && document.querySelectorAll('.sent').length === want;
+            }),
+          { timeout: currentTimeout() },
+        )
+        .toBe(true);
     });
   });
 
