@@ -1,1317 +1,421 @@
 [
  {
-  "w": "exterminate",
+  "w": "subgroup",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "exterminate local"
+   "separate subgroup",
+   "separate subgroup played",
+   "subgroup played"
   ]
  },
  {
-  "w": "falcon",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "fast grey falcon",
-   "fast grey falcon circled",
-   "grey falcon",
-   "grey falcon circled",
-   "grey falcon circled high",
-   "falcon circled"
-  ]
- },
- {
-  "w": "fauna",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "mapped local fauna",
-   "local fauna"
-  ]
- },
- {
-  "w": "favourable",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "spring gives favourable",
-   "spring gives favourable light",
-   "gives favourable",
-   "gives favourable light",
-   "favourable light"
-  ]
- },
- {
-  "w": "feather",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "tiny brown feather",
-   "brown feather"
-  ]
- },
- {
-  "w": "fertile",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "found deep fertile",
-   "found deep fertile soil",
-   "deep fertile",
-   "deep fertile soil",
-   "deep fertile soil along",
-   "fertile soil"
-  ]
- },
- {
-  "w": "field",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": false,
-  "syn": [
-   "discipline",
-   "domain"
-  ],
-  "col": []
- },
- {
-  "w": "fire",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "fire anyone"
-  ]
- },
- {
-  "w": "flash",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "bright flash"
-  ]
- },
- {
-  "w": "flat",
+  "w": "substance",
   "need_syn": false,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "small dry flat",
-   "dry flat"
+   "substance called",
+   "substance called potting"
   ]
  },
  {
-  "w": "float",
+  "w": "suburb",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "suburb full"
+  ]
+ },
+ {
+  "w": "surroundings",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": false,
+  "syn": [
+   "habitat"
+  ],
+  "col": []
+ },
+ {
+  "w": "swamp",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "leaves gently float",
-   "gently float",
+   "warm swamp",
+   "warm swamp down",
+   "swamp down"
+  ]
+ },
+ {
+  "w": "swan",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "white calm swan",
+   "white calm swan floated",
+   "calm swan",
    "calm swan floated",
    "swan floated"
   ]
  },
  {
-  "w": "flooding",
+  "w": "swarm",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "then caused flooding",
-   "caused flooding"
+   "busy swarm"
   ]
  },
  {
-  "w": "flora",
+  "w": "tail",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "tall flora",
-   "tall flora around",
-   "flora around"
+   "bright tail",
+   "bright tail drew",
+   "tail drew"
   ]
  },
  {
-  "w": "fluctuate",
+  "w": "telescope",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "spring temperatures fluctuate",
-   "temperatures fluctuate"
+   "small telescope"
   ]
  },
  {
-  "w": "fluid",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "fluid spread",
-   "secrete thick fluid",
-   "thick fluid"
-  ]
- },
- {
-  "w": "flyby",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "bold flyby"
-  ]
- },
- {
-  "w": "forecast",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "radio forecast",
-   "radio forecast promises",
-   "radio forecast promises cool",
-   "forecast promises",
-   "forecast promises cool"
-  ]
- },
- {
-  "w": "forestry",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "forestry poster",
-   "forestry poster shows"
-  ]
- },
- {
-  "w": "fountain",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "old stone fountain",
-   "stone fountain"
-  ]
- },
- {
-  "w": "fox",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "quick red fox",
-   "red fox"
-  ]
- },
- {
-  "w": "fragment",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "damaged fragment",
-   "damaged fragment away",
-   "fragment away"
-  ]
- },
- {
-  "w": "frequency",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "watering frequency"
-  ]
- },
- {
-  "w": "frigid",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "faced frigid",
-   "faced frigid winds",
-   "frigid winds"
-  ]
- },
- {
-  "w": "frog",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "little green frog",
-   "little green frog jumped",
-   "green frog",
-   "green frog jumped",
-   "green frog jumped near",
-   "frog jumped"
-  ]
- },
- {
-  "w": "frost",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "frost came",
-   "thin frost",
-   "thin frost covered",
-   "frost covered"
-  ]
- },
- {
-  "w": "fume",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "black fume"
-  ]
- },
- {
-  "w": "functional",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "strong functional"
-  ]
- },
- {
-  "w": "fungus",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "fungus spot"
-  ]
- },
- {
-  "w": "galaxy",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "vast galaxy",
-   "vast galaxy above",
-   "galaxy above"
-  ]
- },
- {
-  "w": "gale",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "strong gale",
-   "strong gale shook",
-   "gale shook"
-  ]
- },
- {
-  "w": "gasoline",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "cheaper clean gasoline",
-   "clean gasoline"
-  ]
- },
- {
-  "w": "genetics",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "organism follows genetics",
-   "organism follows genetics rules",
-   "follows genetics",
-   "follows genetics rules",
-   "genetics rules"
-  ]
- },
- {
-  "w": "geology",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "weekend geology",
-   "weekend geology outings",
-   "geology outings"
-  ]
- },
- {
-  "w": "germ",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "hidden germ",
-   "hidden germ inside",
-   "germ inside"
-  ]
- },
- {
-  "w": "goose",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "white farm goose",
-   "farm goose"
-  ]
- },
- {
-  "w": "grand",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "grand palace",
-   "grand palace built"
-  ]
- },
- {
-  "w": "granite",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "hard grey granite",
-   "grey granite"
-  ]
- },
- {
-  "w": "grass",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "fresh grass",
-   "grass eating",
-   "grass eating herbivore",
-   "long grass"
-  ]
- },
- {
-  "w": "gulf",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "wide calm gulf",
-   "calm gulf"
-  ]
- },
- {
-  "w": "gush",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "spring water gush",
-   "spring water gush suddenly",
-   "water gush",
-   "water gush suddenly",
-   "gush suddenly"
-  ]
- },
- {
-  "w": "gust",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "sudden gust",
-   "sudden gust stole",
-   "gust stole"
-  ]
- },
- {
-  "w": "hail",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "suddenly loud hail",
-   "suddenly loud hail pounded",
-   "loud hail",
-   "loud hail pounded",
-   "hail pounded"
-  ]
- },
- {
-  "w": "hare",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "shy brown hare",
-   "shy brown hare sat",
-   "brown hare",
-   "brown hare sat",
-   "hare sat"
-  ]
- },
- {
-  "w": "hawk",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "sharp eyed hawk",
-   "sharp eyed hawk waited",
-   "eyed hawk",
-   "eyed hawk waited",
-   "hawk waited"
-  ]
- },
- {
-  "w": "hay",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "thin hay",
-   "thin hay cover",
-   "thin hay cover till",
-   "hay cover",
-   "hay cover till"
-  ]
- },
- {
-  "w": "heap",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "heap daily"
-  ]
- },
- {
-  "w": "heating",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "old electric heating",
-   "old electric heating kept",
-   "electric heating",
-   "electric heating kept",
-   "heating kept"
-  ]
- },
- {
-  "w": "hedge",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "low green hedge",
-   "green hedge"
-  ]
- },
- {
-  "w": "herb",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "tiny herb",
-   "tiny herb beside",
-   "herb beside"
-  ]
- },
- {
-  "w": "herbivore",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "grass eating herbivore",
-   "eating herbivore"
-  ]
- },
- {
-  "w": "herd",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "calm herd"
-  ]
- },
- {
-  "w": "hibernation",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "winter hibernation",
-   "winter hibernation ends",
-   "winter hibernation ends slowly",
-   "hibernation ends",
-   "hibernation ends slowly"
-  ]
- },
- {
-  "w": "hillside",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "hillside path",
-   "hillside path laughing",
-   "sunny hillside"
-  ]
- },
- {
-  "w": "hopeless",
+  "w": "terrain",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [
-   "pessimistic"
-  ],
-  "col": [
-   "nothing felt hopeless",
-   "nothing felt hopeless once",
-   "felt hopeless",
-   "felt hopeless once",
-   "hopeless once"
-  ]
- },
- {
-  "w": "horn",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "horn model"
-  ]
- },
- {
-  "w": "horse",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "tall brown horse",
-   "tall brown horse gently",
-   "brown horse",
-   "brown horse gently",
-   "horse gently"
-  ]
- },
- {
-  "w": "horticulture",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "simple horticulture",
-   "simple horticulture guide",
-   "simple horticulture guide together",
-   "horticulture guide",
-   "horticulture guide together"
-  ]
- },
- {
-  "w": "humid",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "humid as",
-   "humid as wet"
-  ]
- },
- {
-  "w": "hurricane",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "small hurricane"
-  ]
- },
- {
-  "w": "hybridisation",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "tried careful hybridisation",
-   "careful hybridisation"
-  ]
- },
- {
-  "w": "hybridise",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "never hybridise",
-   "never hybridise free",
-   "hybridise free"
-  ]
- },
- {
-  "w": "hydrogen",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "hydrogen joined"
-  ]
- },
- {
-  "w": "hydrosphere",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "hydrosphere covers"
-  ]
- },
- {
-  "w": "immense",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "sky gives immense",
-   "sky gives immense calm",
-   "gives immense",
-   "gives immense calm",
-   "immense calm"
-  ]
- },
- {
-  "w": "infringe",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": false,
-  "syn": [
-   "violate"
+   "geography"
   ],
   "col": []
  },
  {
-  "w": "insect",
+  "w": "terrestrial",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "insect near"
+   "terrestrial ones"
   ]
  },
  {
-  "w": "instinct",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "sharp night instinct",
-   "night instinct"
-  ]
- },
- {
-  "w": "interbreed",
+  "w": "thermodynamic",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "close families interbreed",
-   "families interbreed"
+   "thermodynamic report"
   ]
  },
  {
-  "w": "interesting",
+  "w": "timber",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "interesting legend"
+   "old timber"
   ]
  },
  {
-  "w": "interstellar",
+  "w": "tornado",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "interstellar space"
+   "spinning tornado"
   ]
  },
  {
-  "w": "intuitive",
+  "w": "torrent",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "intuitive guess"
+   "brown torrent"
   ]
  },
  {
-  "w": "invisible",
+  "w": "tortoise",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "invisible microbe"
+   "heavy sleepy tortoise",
+   "sleepy tortoise"
   ]
  },
  {
-  "w": "irregularly",
+  "w": "tremble",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "water irregularly"
+   "tremble as"
   ]
  },
  {
-  "w": "irreversible",
+  "w": "tropics",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "studies irreversible",
-   "studies irreversible harm",
-   "irreversible harm"
+   "distant tropics"
   ]
  },
  {
-  "w": "jungle",
+  "w": "tulip",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "tiny jungle"
+   "tulip row"
   ]
  },
  {
-  "w": "kangaroo",
+  "w": "typhoon",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "jumping kangaroo",
-   "jumping kangaroo ate",
-   "jumping kangaroo ate fresh",
-   "kangaroo ate",
-   "kangaroo ate fresh"
+   "coastal typhoon"
   ]
  },
  {
-  "w": "keeper",
+  "w": "ubiquitous",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "kind chief keeper",
-   "kind chief keeper praised",
-   "chief keeper",
-   "chief keeper praised",
-   "keeper praised"
+   "seem ubiquitous",
+   "seem ubiquitous near",
+   "seem ubiquitous near water",
+   "ubiquitous near",
+   "ubiquitous near water"
   ]
  },
  {
-  "w": "lamb",
+  "w": "ultraviolet",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "soft white lamb",
-   "soft white lamb drank",
-   "white lamb",
-   "white lamb drank",
-   "white lamb drank warm",
-   "lamb drank"
+   "blocked harsh ultraviolet",
+   "harsh ultraviolet"
   ]
  },
  {
-  "w": "lawn",
+  "w": "undermine",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "tiny lawn",
-   "tiny lawn edge",
-   "tiny lawn edge near",
-   "lawn edge",
-   "lawn edge near"
+   "undermine shared",
+   "undermine shared beds"
   ]
  },
  {
-  "w": "lightning",
+  "w": "universe",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "suddenly bright lightning",
-   "suddenly bright lightning tore",
-   "bright lightning",
-   "bright lightning tore",
-   "lightning tore"
+   "universe fascinated"
   ]
  },
  {
-  "w": "liquid",
+  "w": "variation",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "poured clear liquid",
-   "poured clear liquid slowly",
-   "clear liquid",
-   "clear liquid slowly",
-   "liquid slowly"
+   "gave pleasant variation",
+   "pleasant variation"
   ]
  },
  {
-  "w": "lunar",
+  "w": "vase",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "pale lunar",
-   "pale lunar light",
-   "lunar light"
+   "blue vase"
   ]
  },
  {
-  "w": "magma",
+  "w": "vertebrate",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "hot magma"
+   "strong vertebrate"
   ]
  },
  {
-  "w": "magnet",
+  "w": "victim",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "little red magnet",
-   "red magnet"
+   "helpless victim"
   ]
  },
  {
-  "w": "magnificent",
+  "w": "violet",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "looked truly magnificent",
-   "looked truly magnificent as",
-   "truly magnificent",
-   "truly magnificent as",
-   "magnificent as"
+   "violet tag",
+   "violet tag marks"
   ]
  },
  {
-  "w": "mammal",
+  "w": "volcano",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "soft baby mammal",
-   "soft baby mammal sleeping",
-   "baby mammal",
-   "baby mammal sleeping",
-   "mammal sleeping"
+   "old volcano",
+   "old volcano above",
+   "volcano above"
   ]
  },
  {
-  "w": "mantle",
+  "w": "vulnerable",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "hot mantle"
+   "vulnerable today"
   ]
  },
  {
-  "w": "marble",
+  "w": "waterfall",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "white marble",
-   "white marble standing",
-   "marble standing"
+   "noisy distant waterfall",
+   "distant waterfall"
   ]
  },
  {
-  "w": "meadow",
+  "w": "weed",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "wide meadow",
-   "wide meadow walk",
-   "wide meadow walk last",
-   "meadow walk",
-   "meadow walk last"
+   "every spreading weed",
+   "every spreading weed early",
+   "spreading weed",
+   "spreading weed early",
+   "weed early"
   ]
  },
  {
-  "w": "mechanism",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "natural defence mechanism",
-   "natural defence mechanism beneath",
-   "defence mechanism",
-   "defence mechanism beneath",
-   "mechanism beneath"
-  ]
- },
- {
-  "w": "mediterranean",
+  "w": "whale",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "warm mediterranean"
+   "distant huge whale",
+   "distant huge whale sang",
+   "huge whale",
+   "huge whale sang",
+   "huge whale sang low",
+   "whale sang"
   ]
  },
  {
-  "w": "metabolism",
+  "w": "wing",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "slow winter metabolism",
-   "slow winter metabolism kept",
-   "winter metabolism",
-   "winter metabolism kept",
-   "metabolism kept"
+   "weak little wing",
+   "little wing"
   ]
  },
  {
-  "w": "meteorite",
+  "w": "wolf",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "tiny meteorite",
-   "tiny meteorite piece",
-   "meteorite piece"
+   "far lonely wolf",
+   "far lonely wolf howl",
+   "lonely wolf",
+   "lonely wolf howl",
+   "wolf howl"
   ]
  },
  {
-  "w": "meteorology",
+  "w": "zebra",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "studied basic meteorology",
-   "basic meteorology"
+   "calm zebra",
+   "calm zebra nearby",
+   "zebra nearby"
   ]
  },
  {
-  "w": "microbe",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "invisible microbe"
-  ]
- },
- {
-  "w": "mild",
+  "w": "zoologist",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "surprisingly mild",
-   "surprisingly mild afternoon",
-   "mild afternoon",
-   "grey mild",
-   "grey mild pigeon",
-   "grey mild pigeon drank"
-  ]
- },
- {
-  "w": "mineral",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "useful mineral"
-  ]
- },
- {
-  "w": "minimal",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "minimal noise"
-  ]
- },
- {
-  "w": "mint",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "mint smells",
-   "mint smells fresh"
-  ]
- },
- {
-  "w": "mishap",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "small mishap"
-  ]
- },
- {
-  "w": "mist",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "morning mist"
-  ]
- },
- {
-  "w": "module",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "new module"
-  ]
- },
- {
-  "w": "molecule",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "every molecule",
-   "every molecule helps",
-   "every molecule helps young",
-   "molecule helps",
-   "molecule helps young"
-  ]
- },
- {
-  "w": "monsoon",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "summer monsoon"
-  ]
- },
- {
-  "w": "mountain",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "strong mountain",
-   "strong mountain wind",
-   "strong mountain wind begins",
-   "mountain wind",
-   "mountain wind begins"
-  ]
- },
- {
-  "w": "mouse",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "tiny brown mouse",
-   "tiny brown mouse hid",
-   "brown mouse",
-   "brown mouse hid",
-   "mouse hid"
-  ]
- },
- {
-  "w": "mutation",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "strange mutation",
-   "strange mutation gave",
-   "strange mutation gave pleasant",
-   "mutation gave",
-   "mutation gave pleasant"
-  ]
- },
- {
-  "w": "narrow",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "gender gap narrows",
-   "narrow brook",
-   "narrow wooden",
-   "narrow wooden bridge",
-   "narrow ridge",
-   "narrow channels"
-  ]
- },
- {
-  "w": "navigation",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "trusted satellite navigation",
-   "trusted satellite navigation even",
-   "satellite navigation",
-   "satellite navigation even",
-   "navigation even"
-  ]
- },
- {
-  "w": "nest",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "ruin nests",
-   "ruin nests along",
-   "nests along",
-   "nest left"
+   "kind zoologist"
   ]
  }
 ]

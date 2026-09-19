@@ -1,448 +1,5 @@
 [
  {
-  "w": "million",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "million small",
-   "million small steps"
-  ]
- },
- {
-  "w": "miserable",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "stay miserable"
-  ]
- },
- {
-  "w": "modest",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "modest notebook"
-  ]
- },
- {
-  "w": "monthly",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "patients sharing monthly",
-   "patients sharing monthly drawings",
-   "sharing monthly",
-   "sharing monthly drawings",
-   "monthly drawings"
-  ]
- },
- {
-  "w": "morphine",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "strong morphine"
-  ]
- },
- {
-  "w": "mortal",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "mortal life",
-   "mortal life feels"
-  ]
- },
- {
-  "w": "mourn",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "mourn lost",
-   "mourn lost goals"
-  ]
- },
- {
-  "w": "mundane",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "bright turning mundane",
-   "bright turning mundane grey",
-   "turning mundane",
-   "turning mundane grey",
-   "turning mundane grey afternoons",
-   "mundane grey"
-  ]
- },
- {
-  "w": "mysterious",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "wall looked mysterious",
-   "looked mysterious"
-  ]
- },
- {
-  "w": "naive",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "questions seemed naive",
-   "seemed naive"
-  ]
- },
- {
-  "w": "naked",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "trees naked"
-  ]
- },
- {
-  "w": "nasty",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "nasty words"
-  ]
- },
- {
-  "w": "negative",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": false,
-  "syn": [
-   "pessimistic"
-  ],
-  "col": []
- },
- {
-  "w": "negligible",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "negligible issue"
-  ]
- },
- {
-  "w": "normal",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "normal again",
-   "normal again now"
-  ]
- },
- {
-  "w": "nuisance",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "small nuisance"
-  ]
- },
- {
-  "w": "oblivious",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "longer oblivious"
-  ]
- },
- {
-  "w": "obtrusive",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "felt obtrusive",
-   "felt obtrusive near",
-   "obtrusive near"
-  ]
- },
- {
-  "w": "overnight",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "rain fell overnight",
-   "fell overnight"
-  ]
- },
- {
-  "w": "pain",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "sharp pain"
-  ]
- },
- {
-  "w": "patient",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "calm patient",
-   "weak patients",
-   "weak patients sharing",
-   "weak patients sharing monthly",
-   "patients sharing",
-   "patients sharing monthly"
-  ]
- },
- {
-  "w": "penicillin",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "penicillin shot"
-  ]
- },
- {
-  "w": "periodically",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "work periodically",
-   "work periodically praising",
-   "work periodically praising growth",
-   "periodically praising",
-   "periodically praising growth"
-  ]
- },
- {
-  "w": "permanent",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "permanent desk"
-  ]
- },
- {
-  "w": "pessimistic",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "feels pessimistic",
-   "feels pessimistic now",
-   "pessimistic now"
-  ]
- },
- {
-  "w": "physician",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "kind physician",
-   "kind physician calls",
-   "physician calls"
-  ]
- },
- {
-  "w": "picturesque",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "picturesque path"
-  ]
- },
- {
-  "w": "pimple",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "small pimple"
-  ]
- },
- {
-  "w": "plague",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "plague walks"
-  ]
- },
- {
-  "w": "polite",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "polite way"
-  ]
- },
- {
-  "w": "precedent",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "fine precedent"
-  ]
- },
- {
-  "w": "preceding",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "preceding week"
-  ]
- },
- {
-  "w": "prescription",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "short prescription",
-   "short prescription lists",
-   "prescription lists"
-  ]
- },
- {
-  "w": "prior",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "prior skill",
-   "prior skill gained"
-  ]
- },
- {
-  "w": "prominent",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "prominent place"
-  ]
- },
- {
-  "w": "punctual",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "window arriving punctual",
-   "arriving punctual"
-  ]
- },
- {
-  "w": "quarantine",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "quarantine grandma"
-  ]
- },
- {
-  "w": "quarterly",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "clinic held quarterly",
-   "clinic held quarterly reading",
-   "held quarterly",
-   "held quarterly reading",
-   "held quarterly reading shows",
-   "quarterly reading"
-  ]
- },
- {
-  "w": "radical",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "radical new",
-   "radical new reading"
-  ]
- },
- {
-  "w": "recovery",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "slow recovery",
-   "slow recovery day",
-   "recovery day"
-  ]
- },
- {
   "w": "refresh",
   "need_syn": true,
   "need_syn_ext": false,
@@ -451,27 +8,6 @@
   "col": [
    "morning walks refresh",
    "walks refresh"
-  ]
- },
- {
-  "w": "regret",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "deep regret"
-  ]
- },
- {
-  "w": "relief",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "bringing sweet relief",
-   "sweet relief"
   ]
  },
  {
@@ -586,17 +122,6 @@
   ]
  },
  {
-  "w": "scar",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "thin white scar",
-   "white scar"
-  ]
- },
- {
   "w": "sceptical",
   "need_syn": true,
   "need_syn_ext": false,
@@ -604,26 +129,6 @@
   "syn": [],
   "col": [
    "felt sceptical"
-  ]
- },
- {
-  "w": "seriously",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "spoke seriously"
-  ]
- },
- {
-  "w": "sigh",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "soft sigh"
   ]
  },
  {
@@ -683,18 +188,6 @@
   ]
  },
  {
-  "w": "sore",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "light sore",
-   "light sore spot",
-   "sore spot"
-  ]
- },
- {
   "w": "spontaneous",
   "need_syn": true,
   "need_syn_ext": false,
@@ -733,16 +226,6 @@
   ]
  },
  {
-  "w": "stroke",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "grandpa stroked"
-  ]
- },
- {
   "w": "stubborn",
   "need_syn": true,
   "need_syn_ext": false,
@@ -762,20 +245,6 @@
   "col": [
    "error looked stupid",
    "looked stupid"
-  ]
- },
- {
-  "w": "sturdy",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "durable"
-  ],
-  "col": [
-   "bought sturdy",
-   "bought sturdy shoes",
-   "sturdy shoes"
   ]
  },
  {
@@ -835,20 +304,6 @@
   ]
  },
  {
-  "w": "tender",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "grandma cooked tender",
-   "grandma cooked tender vegetables",
-   "cooked tender",
-   "cooked tender vegetables",
-   "tender vegetables"
-  ]
- },
- {
   "w": "therapy",
   "need_syn": false,
   "need_syn_ext": false,
@@ -861,18 +316,6 @@
    "long therapy",
    "long therapy walks",
    "long therapy walks passing"
-  ]
- },
- {
-  "w": "thoughtful",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "wrote thoughtful",
-   "wrote thoughtful notes",
-   "thoughtful notes"
   ]
  },
  {
@@ -925,28 +368,6 @@
   ]
  },
  {
-  "w": "transplant",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "skin transplant"
-  ]
- },
- {
-  "w": "trauma",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "deep trauma",
-   "deep trauma inside",
-   "trauma inside"
-  ]
- },
- {
   "w": "troublesome",
   "need_syn": false,
   "need_syn_ext": false,
@@ -966,38 +387,6 @@
   "col": [
    "trustworthy study",
    "trustworthy study friend"
-  ]
- },
- {
-  "w": "uncomfortable",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "seats feel uncomfortable",
-   "feel uncomfortable"
-  ]
- },
- {
-  "w": "unconscious",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "never fallen unconscious",
-   "fallen unconscious"
-  ]
- },
- {
-  "w": "uneasy",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "felt uneasy"
   ]
  },
  {
@@ -1079,12 +468,10 @@
  },
  {
   "w": "vex",
-  "need_syn": true,
+  "need_syn": false,
   "need_syn_ext": false,
   "need_col": true,
-  "syn": [
-   "irritate"
-  ],
+  "syn": [],
   "col": [
    "late buses vex",
    "buses vex"
@@ -1098,16 +485,6 @@
   "syn": [],
   "col": [
    "vicious way"
-  ]
- },
- {
-  "w": "volatile",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "volatile mood"
   ]
  },
  {
@@ -1133,49 +510,6 @@
   "syn": [],
   "col": [
    "weep alone"
-  ]
- },
- {
-  "w": "weird",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "weird dreams",
-   "weird dreams faded"
-  ]
- },
- {
-  "w": "wicked",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "wicked tricks"
-  ]
- },
- {
-  "w": "wound",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "small wound",
-   "small wound softly",
-   "wound softly"
-  ]
- },
- {
-  "w": "wretched",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "feeling wretched"
   ]
  },
  {

@@ -1,112 +1,702 @@
 [
- {"w":"acupuncture","syn":[],"col":[]},
- {"w":"acute","syn":[],"col":["acute cough"]},
- {"w":"adverse","syn":[],"col":["adverse wind"]},
- {"w":"agony","syn":[],"col":[]},
- {"w":"agreeable","syn":[],"col":[]},
- {"w":"allergy","syn":[],"col":["food allergy"]},
- {"w":"anniversary","syn":[],"col":[]},
- {"w":"annual","syn":[],"col":["annual fair"]},
- {"w":"antibiotic","syn":[],"col":[]},
- {"w":"apathetic","syn":[],"col":[]},
- {"w":"arbitrary","syn":[],"col":[]},
- {"w":"arduous","syn":[],"col":[]},
- {"w":"arthritis","syn":[],"col":["mild arthritis"]},
- {"w":"ashamed","syn":[],"col":[]},
- {"w":"awesome","syn":[],"col":[]},
- {"w":"awful","syn":[],"col":[]},
- {"w":"awkward","syn":[],"col":[]},
- {"w":"bare","syn":[],"col":[]},
- {"w":"billion","syn":[],"col":[]},
- {"w":"bleed","syn":[],"col":[]},
- {"w":"bother","syn":[],"col":[]},
- {"w":"bruise","syn":[],"col":["dark bruise"]},
- {"w":"cancer","syn":[],"col":[]},
- {"w":"careless","syn":[],"col":[]},
- {"w":"common","syn":[],"col":[]},
- {"w":"consecutive","syn":[],"col":[]},
- {"w":"crazy","syn":[],"col":[]},
- {"w":"cunning","syn":[],"col":[]},
- {"w":"cure","syn":[],"col":["cure diseases"]},
- {"w":"curious","syn":[],"col":[]},
- {"w":"daring","syn":[],"col":[]},
- {"w":"delicate","syn":[],"col":[]},
- {"w":"delight","syn":[],"col":["quiet delight"]},
- {"w":"demise","syn":["death"],"col":[]},
- {"w":"desirable","syn":[],"col":[]},
- {"w":"diabetes","syn":[],"col":[]},
- {"w":"direct","syn":[],"col":[]},
- {"w":"distress","syn":[],"col":[]},
- {"w":"dizzy","syn":[],"col":["feel dizzy"]},
- {"w":"dose","syn":[],"col":["small dose"]},
- {"w":"doubt","syn":[],"col":[]},
- {"w":"dozen","syn":[],"col":[]},
- {"w":"dysfunction","syn":[],"col":["sleep dysfunction"]},
- {"w":"eager","syn":[],"col":[]},
- {"w":"earnest","syn":[],"col":["earnest face"]},
- {"w":"ease","syn":[],"col":[]},
- {"w":"ego","syn":[],"col":[]},
- {"w":"endure","syn":["bear"],"col":[]},
- {"w":"enterprising","syn":[],"col":[]},
- {"w":"enthusiastic","syn":[],"col":[]},
- {"w":"everlasting","syn":[],"col":["everlasting love"]},
- {"w":"exhaust","syn":[],"col":[]},
- {"w":"faint","syn":[],"col":[]},
- {"w":"familiar","syn":[],"col":[]},
- {"w":"fancy","syn":[],"col":[]},
- {"w":"fatal","syn":[],"col":["fatal crash"]},
- {"w":"fate","syn":[],"col":[]},
- {"w":"fatigue","syn":[],"col":["mild fatigue"]},
- {"w":"favour","syn":[],"col":["special favour"]},
- {"w":"feeble","syn":[],"col":[]},
- {"w":"fever","syn":[],"col":["mild fever"]},
- {"w":"flu","syn":[],"col":["mild flu"]},
- {"w":"fond","syn":[],"col":[]},
- {"w":"foremost","syn":[],"col":[]},
- {"w":"former","syn":[],"col":["former patient"]},
- {"w":"fortune","syn":[],"col":["good fortune"]},
- {"w":"frank","syn":[],"col":[]},
- {"w":"furious","syn":[],"col":[]},
- {"w":"fuss","syn":[],"col":[]},
- {"w":"gloomy","syn":[],"col":["gloomy grey days"]},
- {"w":"grateful","syn":[],"col":["deeply grateful"]},
- {"w":"greedy","syn":[],"col":[]},
- {"w":"grief","syn":[],"col":["deep grief"]},
- {"w":"guilty","syn":[],"col":[]},
- {"w":"harass","syn":[],"col":[]},
- {"w":"headache","syn":[],"col":["dull headache"]},
- {"w":"heal","syn":["cure"],"col":[]},
- {"w":"honesty","syn":[],"col":[]},
- {"w":"humble","syn":[],"col":[]},
- {"w":"humorous","syn":[],"col":["humorous tales"]},
- {"w":"hurt","syn":[],"col":[]},
- {"w":"hygiene","syn":[],"col":["daily hygiene"]},
- {"w":"hypertension","syn":[],"col":["mild hypertension"]},
- {"w":"ignorant","syn":[],"col":[]},
- {"w":"imaginary","syn":[],"col":[]},
- {"w":"imminent","syn":[],"col":[]},
- {"w":"implicit","syn":[],"col":[]},
- {"w":"impulse","syn":[],"col":["sudden impulse"]},
- {"w":"indifferent","syn":[],"col":[]},
- {"w":"indignant","syn":[],"col":[]},
- {"w":"insult","syn":["offend"],"col":[]},
- {"w":"intermediate","syn":[],"col":[]},
- {"w":"intuition","syn":["instinct"],"col":[]},
- {"w":"isolate","syn":[],"col":[]},
- {"w":"jealous","syn":[],"col":[]},
- {"w":"keen","syn":[],"col":[]},
- {"w":"lament","syn":[],"col":[]},
- {"w":"laughter","syn":[],"col":["clear laughter"]},
- {"w":"lethal","syn":[],"col":[]},
- {"w":"liable","syn":[],"col":[]},
- {"w":"liberal","syn":[],"col":[]},
- {"w":"lovely","syn":[],"col":[]},
- {"w":"lump","syn":[],"col":["hard lump"]},
- {"w":"mad","syn":[],"col":["mad rush"]},
- {"w":"manly","syn":[],"col":[]},
- {"w":"mean","syn":[],"col":[]},
- {"w":"medieval","syn":[],"col":[]},
- {"w":"mercy","syn":[],"col":[]},
- {"w":"merry","syn":[],"col":[]},
- {"w":"millennium","syn":[],"col":["last millennium"]}
+ {
+  "w": "acupuncture",
+  "syn": [],
+  "col": [
+   "soft acupuncture"
+  ]
+ },
+ {
+  "w": "agony",
+  "syn": [],
+  "col": [
+   "leg agony",
+   "old leg agony"
+  ]
+ },
+ {
+  "w": "agreeable",
+  "syn": [],
+  "col": [
+   "agreeable calm"
+  ]
+ },
+ {
+  "w": "anniversary",
+  "syn": [],
+  "col": [
+   "glad anniversary"
+  ]
+ },
+ {
+  "w": "antibiotic",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "apathetic",
+  "syn": [],
+  "col": [
+   "apathetic answers",
+   "gave apathetic answers"
+  ]
+ },
+ {
+  "w": "arbitrary",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "arduous",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "ashamed",
+  "syn": [],
+  "col": [
+   "truly ashamed",
+   "feeling truly ashamed"
+  ]
+ },
+ {
+  "w": "awesome",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "awful",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "awkward",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "bare",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "billion",
+  "syn": [],
+  "col": [
+   "billion stars"
+  ]
+ },
+ {
+  "w": "bleed",
+  "syn": [],
+  "col": [
+   "bleed often"
+  ]
+ },
+ {
+  "w": "bother",
+  "syn": [],
+  "col": [
+   "bother old cats"
+  ]
+ },
+ {
+  "w": "cancer",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "careless",
+  "syn": [],
+  "col": [
+   "leaving careless books"
+  ]
+ },
+ {
+  "w": "common",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "consecutive",
+  "syn": [],
+  "col": [
+   "consecutive books"
+  ]
+ },
+ {
+  "w": "crazy",
+  "syn": [],
+  "col": [
+   "crazy games"
+  ]
+ },
+ {
+  "w": "cunning",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "curious",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "daring",
+  "syn": [],
+  "col": [
+   "daring enough"
+  ]
+ },
+ {
+  "w": "delicate",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "demise",
+  "syn": [],
+  "col": [
+   "sad demise"
+  ]
+ },
+ {
+  "w": "desirable",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "diabetes",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "direct",
+  "syn": [
+   "steer",
+   "manage"
+  ],
+  "col": [
+   "clear direct tips",
+   "direct tips"
+  ]
+ },
+ {
+  "w": "distress",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "doubt",
+  "syn": [],
+  "col": [
+   "old doubt"
+  ]
+ },
+ {
+  "w": "dozen",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "eager",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "ease",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "ego",
+  "syn": [],
+  "col": [
+   "growing ego"
+  ]
+ },
+ {
+  "w": "endure",
+  "syn": [],
+  "col": [
+   "endure long therapy"
+  ]
+ },
+ {
+  "w": "enterprising",
+  "syn": [],
+  "col": [
+   "enterprising enough"
+  ]
+ },
+ {
+  "w": "enthusiastic",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "exhaust",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "faint",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "familiar",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "fancy",
+  "syn": [],
+  "col": [
+   "fancy flags"
+  ]
+ },
+ {
+  "w": "fate",
+  "syn": [],
+  "col": [
+   "blamed fate"
+  ]
+ },
+ {
+  "w": "feeble",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "fond",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "foremost",
+  "syn": [],
+  "col": [
+   "foremost lesson"
+  ]
+ },
+ {
+  "w": "frank",
+  "syn": [],
+  "col": [
+   "always frank"
+  ]
+ },
+ {
+  "w": "furious",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "fuss",
+  "syn": [],
+  "col": [
+   "made little fuss",
+   "little fuss"
+  ]
+ },
+ {
+  "w": "greedy",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "guilty",
+  "syn": [],
+  "col": [
+   "feeling guilty"
+  ]
+ },
+ {
+  "w": "harass",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "heal",
+  "syn": [],
+  "col": [
+   "slow healing"
+  ]
+ },
+ {
+  "w": "honesty",
+  "syn": [],
+  "col": [
+   "simple honesty"
+  ]
+ },
+ {
+  "w": "humble",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "hurt",
+  "syn": [],
+  "col": [
+   "hurt herself",
+   "hurt small kids"
+  ]
+ },
+ {
+  "w": "ignorant",
+  "syn": [],
+  "col": [
+   "ignorant view"
+  ]
+ },
+ {
+  "w": "imaginary",
+  "syn": [],
+  "col": [
+   "imaginary green island"
+  ]
+ },
+ {
+  "w": "imminent",
+  "syn": [],
+  "col": [
+   "imminent birthday show"
+  ]
+ },
+ {
+  "w": "implicit",
+  "syn": [],
+  "col": [
+   "implicit push"
+  ]
+ },
+ {
+  "w": "indifferent",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "indignant",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "intermediate",
+  "syn": [],
+  "col": [
+   "intermediate shelf"
+  ]
+ },
+ {
+  "w": "intuition",
+  "syn": [],
+  "col": [
+   "quick intuition"
+  ]
+ },
+ {
+  "w": "isolate",
+  "syn": [],
+  "col": [
+   "never isolate"
+  ]
+ },
+ {
+  "w": "jealous",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "keen",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "lament",
+  "syn": [],
+  "col": [
+   "sad lament"
+  ]
+ },
+ {
+  "w": "lethal",
+  "syn": [],
+  "col": [
+   "lethal smoke"
+  ]
+ },
+ {
+  "w": "liable",
+  "syn": [],
+  "col": [
+   "still liable"
+  ]
+ },
+ {
+  "w": "liberal",
+  "syn": [],
+  "col": [
+   "liberal plan"
+  ]
+ },
+ {
+  "w": "lovely",
+  "syn": [],
+  "col": [
+   "lovely teacher"
+  ]
+ },
+ {
+  "w": "manly",
+  "syn": [],
+  "col": [
+   "manly courage"
+  ]
+ },
+ {
+  "w": "mean",
+  "syn": [],
+  "col": [
+   "mean note"
+  ]
+ },
+ {
+  "w": "medieval",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "mercy",
+  "syn": [],
+  "col": [
+   "showed real mercy"
+  ]
+ },
+ {
+  "w": "merry",
+  "syn": [],
+  "col": [
+   "merry neighbour"
+  ]
+ },
+ {
+  "w": "million",
+  "syn": [],
+  "col": [
+   "million small steps"
+  ]
+ },
+ {
+  "w": "miserable",
+  "syn": [],
+  "col": [
+   "stay miserable"
+  ]
+ },
+ {
+  "w": "modest",
+  "syn": [],
+  "col": [
+   "modest notebook"
+  ]
+ },
+ {
+  "w": "monthly",
+  "syn": [],
+  "col": [
+   "monthly drawings",
+   "sharing monthly drawings"
+  ]
+ },
+ {
+  "w": "morphine",
+  "syn": [],
+  "col": [
+   "strong morphine"
+  ]
+ },
+ {
+  "w": "mortal",
+  "syn": [],
+  "col": [
+   "mortal life"
+  ]
+ },
+ {
+  "w": "mourn",
+  "syn": [],
+  "col": [
+   "mourn lost goals"
+  ]
+ },
+ {
+  "w": "mundane",
+  "syn": [],
+  "col": [
+   "mundane grey afternoons",
+   "turning mundane grey afternoons"
+  ]
+ },
+ {
+  "w": "mysterious",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "naive",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "naked",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "negligible",
+  "syn": [],
+  "col": [
+   "negligible issue"
+  ]
+ },
+ {
+  "w": "normal",
+  "syn": [],
+  "col": [
+   "normal again"
+  ]
+ },
+ {
+  "w": "nuisance",
+  "syn": [],
+  "col": [
+   "small nuisance"
+  ]
+ },
+ {
+  "w": "oblivious",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "obtrusive",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "overnight",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "patient",
+  "syn": [],
+  "col": [
+   "calm patient",
+   "weak patients"
+  ]
+ },
+ {
+  "w": "periodically",
+  "syn": [],
+  "col": [
+   "work periodically"
+  ]
+ },
+ {
+  "w": "permanent",
+  "syn": [],
+  "col": [
+   "permanent desk"
+  ]
+ },
+ {
+  "w": "pessimistic",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "physician",
+  "syn": [],
+  "col": [
+   "kind physician"
+  ]
+ },
+ {
+  "w": "picturesque",
+  "syn": [],
+  "col": [
+   "picturesque path"
+  ]
+ },
+ {
+  "w": "pimple",
+  "syn": [],
+  "col": [
+   "small pimple"
+  ]
+ },
+ {
+  "w": "plague",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "polite",
+  "syn": [],
+  "col": [
+   "polite way"
+  ]
+ },
+ {
+  "w": "precedent",
+  "syn": [],
+  "col": [
+   "fine precedent"
+  ]
+ },
+ {
+  "w": "prescription",
+  "syn": [],
+  "col": [
+   "short prescription"
+  ]
+ },
+ {
+  "w": "prior",
+  "syn": [],
+  "col": [
+   "prior skill"
+  ]
+ },
+ {
+  "w": "punctual",
+  "syn": [],
+  "col": [
+   "arriving punctual"
+  ]
+ },
+ {
+  "w": "quarantine",
+  "syn": [],
+  "col": [
+   "quarantine grandma"
+  ]
+ },
+ {
+  "w": "quarterly",
+  "syn": [],
+  "col": [
+   "quarterly reading shows"
+  ]
+ },
+ {
+  "w": "radical",
+  "syn": [],
+  "col": [
+   "radical new reading"
+  ]
+ }
 ]

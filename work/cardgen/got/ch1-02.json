@@ -1,112 +1,261 @@
 [
-{"w":"exterminate","syn":[],"col":[]},
-{"w":"falcon","syn":[],"col":["grey falcon"]},
-{"w":"fauna","syn":[],"col":["local fauna"]},
-{"w":"favourable","syn":[],"col":["favourable light"]},
-{"w":"feather","syn":[],"col":["brown feather"]},
-{"w":"fertile","syn":[],"col":["fertile soil","deep fertile soil"]},
-{"w":"field","syn":["domain","discipline"],"col":[]},
-{"w":"fire","syn":[],"col":["fire anyone"]},
-{"w":"flash","syn":[],"col":["bright flash"]},
-{"w":"flat","syn":[],"col":["dry flat"]},
-{"w":"float","syn":[],"col":["gently float"]},
-{"w":"flooding","syn":[],"col":["caused flooding"]},
-{"w":"flora","syn":[],"col":["tall flora"]},
-{"w":"fluctuate","syn":[],"col":["temperatures fluctuate"]},
-{"w":"fluid","syn":[],"col":["thick fluid","secrete thick fluid"]},
-{"w":"flyby","syn":[],"col":["bold flyby"]},
-{"w":"forecast","syn":[],"col":["radio forecast"]},
-{"w":"forestry","syn":[],"col":["forestry poster"]},
-{"w":"fountain","syn":[],"col":["stone fountain"]},
-{"w":"fox","syn":[],"col":["red fox"]},
-{"w":"fragment","syn":[],"col":["damaged fragment"]},
-{"w":"frequency","syn":[],"col":["watering frequency"]},
-{"w":"frigid","syn":[],"col":["frigid winds"]},
-{"w":"frog","syn":[],"col":["green frog"]},
-{"w":"frost","syn":[],"col":["thin frost"]},
-{"w":"fume","syn":[],"col":["black fume"]},
-{"w":"functional","syn":[],"col":[]},
-{"w":"fungus","syn":[],"col":["fungus spot"]},
-{"w":"galaxy","syn":[],"col":["vast galaxy"]},
-{"w":"gale","syn":[],"col":["strong gale"]},
-{"w":"gasoline","syn":[],"col":["clean gasoline"]},
-{"w":"genetics","syn":[],"col":["genetics rules"]},
-{"w":"geology","syn":[],"col":["geology outings"]},
-{"w":"germ","syn":[],"col":["hidden germ"]},
-{"w":"goose","syn":[],"col":["white farm goose"]},
-{"w":"grand","syn":[],"col":["grand palace"]},
-{"w":"granite","syn":[],"col":["grey granite"]},
-{"w":"grass","syn":[],"col":["long grass","fresh grass"]},
-{"w":"gulf","syn":[],"col":["calm gulf"]},
-{"w":"gush","syn":[],"col":["gush suddenly"]},
-{"w":"gust","syn":[],"col":["sudden gust"]},
-{"w":"hail","syn":[],"col":["loud hail"]},
-{"w":"hare","syn":[],"col":["brown hare"]},
-{"w":"hawk","syn":[],"col":["sharp eyed hawk"]},
-{"w":"hay","syn":[],"col":["hay cover"]},
-{"w":"heap","syn":[],"col":[]},
-{"w":"heating","syn":[],"col":["electric heating"]},
-{"w":"hedge","syn":[],"col":["green hedge"]},
-{"w":"herb","syn":[],"col":["tiny herb"]},
-{"w":"herbivore","syn":[],"col":["grass eating herbivore"]},
-{"w":"herd","syn":[],"col":["calm herd"]},
-{"w":"hibernation","syn":[],"col":["winter hibernation"]},
-{"w":"hillside","syn":[],"col":["hillside path","sunny hillside"]},
-{"w":"hopeless","syn":[],"col":["felt hopeless"]},
-{"w":"horn","syn":[],"col":[]},
-{"w":"horse","syn":[],"col":["brown horse"]},
-{"w":"horticulture","syn":[],"col":["horticulture guide"]},
-{"w":"humid","syn":[],"col":[]},
-{"w":"hurricane","syn":[],"col":["small hurricane"]},
-{"w":"hybridisation","syn":[],"col":["careful hybridisation"]},
-{"w":"hybridise","syn":[],"col":["never hybridise"]},
-{"w":"hydrogen","syn":[],"col":[]},
-{"w":"hydrosphere","syn":[],"col":[]},
-{"w":"immense","syn":[],"col":["immense calm"]},
-{"w":"infringe","syn":["violate"],"col":[]},
-{"w":"insect","syn":[],"col":[]},
-{"w":"instinct","syn":[],"col":["night instinct"]},
-{"w":"interbreed","syn":[],"col":["families interbreed"]},
-{"w":"interesting","syn":[],"col":["interesting legend"]},
-{"w":"interstellar","syn":[],"col":["interstellar space"]},
-{"w":"intuitive","syn":[],"col":["intuitive guess"]},
-{"w":"invisible","syn":[],"col":["invisible microbe"]},
-{"w":"irregularly","syn":[],"col":["water irregularly"]},
-{"w":"irreversible","syn":[],"col":["irreversible harm"]},
-{"w":"jungle","syn":[],"col":["tiny jungle"]},
-{"w":"kangaroo","syn":[],"col":["jumping kangaroo"]},
-{"w":"keeper","syn":[],"col":["chief keeper"]},
-{"w":"lamb","syn":[],"col":["white lamb"]},
-{"w":"lawn","syn":[],"col":["tiny lawn","lawn edge"]},
-{"w":"lightning","syn":[],"col":["bright lightning"]},
-{"w":"liquid","syn":[],"col":["clear liquid"]},
-{"w":"lunar","syn":[],"col":["lunar light"]},
-{"w":"magma","syn":[],"col":["hot magma"]},
-{"w":"magnet","syn":[],"col":[]},
-{"w":"magnificent","syn":[],"col":["truly magnificent"]},
-{"w":"mammal","syn":[],"col":["baby mammal"]},
-{"w":"mantle","syn":[],"col":["hot mantle"]},
-{"w":"marble","syn":[],"col":["white marble"]},
-{"w":"meadow","syn":[],"col":["wide meadow","meadow walk"]},
-{"w":"mechanism","syn":[],"col":["defence mechanism","natural defence mechanism"]},
-{"w":"mediterranean","syn":[],"col":["warm mediterranean"]},
-{"w":"metabolism","syn":[],"col":["winter metabolism"]},
-{"w":"meteorite","syn":[],"col":["tiny meteorite","meteorite piece"]},
-{"w":"meteorology","syn":[],"col":["basic meteorology"]},
-{"w":"microbe","syn":[],"col":["invisible microbe"]},
-{"w":"mild","syn":[],"col":["surprisingly mild","mild afternoon"]},
-{"w":"mineral","syn":[],"col":["useful mineral"]},
-{"w":"minimal","syn":[],"col":["minimal noise"]},
-{"w":"mint","syn":[],"col":[]},
-{"w":"mishap","syn":[],"col":["small mishap"]},
-{"w":"mist","syn":[],"col":["morning mist"]},
-{"w":"module","syn":[],"col":["new module"]},
-{"w":"molecule","syn":[],"col":[]},
-{"w":"monsoon","syn":[],"col":["summer monsoon"]},
-{"w":"mountain","syn":[],"col":["mountain wind"]},
-{"w":"mouse","syn":[],"col":["brown mouse"]},
-{"w":"mutation","syn":[],"col":["strange mutation"]},
-{"w":"narrow","syn":[],"col":["gender gap narrows","narrow ridge","narrow channels"]},
-{"w":"navigation","syn":[],"col":["satellite navigation"]},
-{"w":"nest","syn":[],"col":[]}
+ {
+  "w": "subgroup",
+  "syn": [],
+  "col": [
+   "separate subgroup"
+  ]
+ },
+ {
+  "w": "substance",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "suburb",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "surroundings",
+  "syn": [
+   "habitat"
+  ],
+  "col": []
+ },
+ {
+  "w": "swamp",
+  "syn": [],
+  "col": [
+   "warm swamp"
+  ]
+ },
+ {
+  "w": "swan",
+  "syn": [],
+  "col": [
+   "white calm swan",
+   "calm swan"
+  ]
+ },
+ {
+  "w": "swarm",
+  "syn": [],
+  "col": [
+   "busy swarm"
+  ]
+ },
+ {
+  "w": "tail",
+  "syn": [],
+  "col": [
+   "bright tail"
+  ]
+ },
+ {
+  "w": "telescope",
+  "syn": [],
+  "col": [
+   "small telescope"
+  ]
+ },
+ {
+  "w": "terrain",
+  "syn": [
+   "geography"
+  ],
+  "col": []
+ },
+ {
+  "w": "terrestrial",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "thermodynamic",
+  "syn": [],
+  "col": [
+   "thermodynamic report"
+  ]
+ },
+ {
+  "w": "timber",
+  "syn": [],
+  "col": [
+   "old timber"
+  ]
+ },
+ {
+  "w": "tornado",
+  "syn": [],
+  "col": [
+   "spinning tornado"
+  ]
+ },
+ {
+  "w": "torrent",
+  "syn": [],
+  "col": [
+   "brown torrent"
+  ]
+ },
+ {
+  "w": "tortoise",
+  "syn": [],
+  "col": [
+   "heavy sleepy tortoise",
+   "sleepy tortoise"
+  ]
+ },
+ {
+  "w": "tremble",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "tropics",
+  "syn": [],
+  "col": [
+   "distant tropics"
+  ]
+ },
+ {
+  "w": "tulip",
+  "syn": [],
+  "col": [
+   "tulip row"
+  ]
+ },
+ {
+  "w": "typhoon",
+  "syn": [],
+  "col": [
+   "coastal typhoon"
+  ]
+ },
+ {
+  "w": "ubiquitous",
+  "syn": [],
+  "col": [
+   "seem ubiquitous",
+   "ubiquitous near water"
+  ]
+ },
+ {
+  "w": "ultraviolet",
+  "syn": [],
+  "col": [
+   "harsh ultraviolet"
+  ]
+ },
+ {
+  "w": "undermine",
+  "syn": [],
+  "col": [
+   "undermine shared beds"
+  ]
+ },
+ {
+  "w": "universe",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "variation",
+  "syn": [],
+  "col": [
+   "pleasant variation"
+  ]
+ },
+ {
+  "w": "vase",
+  "syn": [],
+  "col": [
+   "blue vase"
+  ]
+ },
+ {
+  "w": "vertebrate",
+  "syn": [],
+  "col": [
+   "strong vertebrate"
+  ]
+ },
+ {
+  "w": "victim",
+  "syn": [],
+  "col": [
+   "helpless victim"
+  ]
+ },
+ {
+  "w": "violet",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "volcano",
+  "syn": [],
+  "col": [
+   "old volcano"
+  ]
+ },
+ {
+  "w": "vulnerable",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "waterfall",
+  "syn": [],
+  "col": [
+   "noisy distant waterfall",
+   "distant waterfall"
+  ]
+ },
+ {
+  "w": "weed",
+  "syn": [],
+  "col": [
+   "spreading weed"
+  ]
+ },
+ {
+  "w": "whale",
+  "syn": [],
+  "col": [
+   "distant huge whale",
+   "huge whale"
+  ]
+ },
+ {
+  "w": "wing",
+  "syn": [],
+  "col": [
+   "weak little wing",
+   "little wing"
+  ]
+ },
+ {
+  "w": "wolf",
+  "syn": [],
+  "col": [
+   "far lonely wolf",
+   "lonely wolf"
+  ]
+ },
+ {
+  "w": "zebra",
+  "syn": [],
+  "col": [
+   "calm zebra"
+  ]
+ },
+ {
+  "w": "zoologist",
+  "syn": [],
+  "col": [
+   "kind zoologist"
+  ]
+ }
 ]

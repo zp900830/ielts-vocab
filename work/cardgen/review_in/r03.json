@@ -1,1389 +1,153 @@
 [
  {
-  "w": "picnic",
-  "m": "n. 野餐；v. 去野餐",
-  "ex": "We had a picnic in the park on Sunday.",
-  "exZh": "我们在周日去公园野餐了。",
+  "w": "utterance",
+  "m": "n. 言辞；言语；言论",
+  "ex": "His utterance made everyone silent.",
+  "exZh": "他的话让所有人都沉默了。",
   "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "picnic sheet",
+    "c": "soft utterance",
     "src": "T"
    }
   ]
  },
  {
-  "w": "poetry",
-  "m": "n. 诗歌；诗作",
-  "ex": "He loves reading poetry before bed.",
-  "exZh": "他喜欢在睡前读诗歌。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "love poetry",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "pottery",
-  "m": "n. 陶器；制陶手艺；陶器作坊",
-  "ex": "He makes pottery in his backyard studio.",
-  "exZh": "他在后院的工作室制作陶器。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "pottery bowls",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "praise",
-  "m": "n. 赞美；赞扬",
-  "ex": "His hard work received much praise from the teacher.",
-  "exZh": "他的努力工作得到了老师的许多赞美。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "honest praise",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "predict",
-  "m": "v. 预言；预测",
-  "ex": "The old woman predicts rain tomorrow.",
-  "exZh": "那位老妇人预言明天会下雨。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "predict results",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "presentation",
-  "m": "n. 报告；展示；陈述",
-  "ex": "He gave a presentation about climate change.",
-  "exZh": "他做了一个关于气候变化的报告。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "group presentation",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "presume",
-  "m": "v. 假设；假定；设想",
-  "ex": "I presume he will arrive tomorrow.",
-  "exZh": "我假设他明天会到。",
-  "overlap": null,
-  "syn": [
-   {
-    "s": "assume",
-    "src": "R",
-    "syn_m": "v. 假定；设想；呈现"
-   }
+  "w": "vacation",
+  "m": "n. 假期",
+  "ex": "We went to the beach during our vacation.",
+  "exZh": "我们在假期去了海滩。",
+  "overlap": [
+   [
+    "calm sweet vacation",
+    "sweet vacation"
+   ]
   ],
-  "col": []
- },
- {
-  "w": "principal",
-  "m": "n. 负责人；校长；adj. 主要的",
-  "ex": "The principal reason for his success is hard work.",
-  "exZh": "他成功的主要原因是努力工作。",
-  "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "assistant principal",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "pronounce",
-  "m": "v. 发音；宣告",
-  "ex": "Can you pronounce this word correctly?",
-  "exZh": "你能正确发音这个词吗？",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "pronounce new words",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "proportion",
-  "m": "n. 比例；份额",
-  "ex": "The proportion of students who passed the test was high.",
-  "exZh": "通过考试的学生比例很高。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "large proportion",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "psychology",
-  "m": "n. 心理学；心理",
-  "ex": "He wants to study psychology at university.",
-  "exZh": "他想在大学学习心理学。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "basic psychology",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "publish",
-  "m": "v. 出版；发布",
-  "ex": "He wants to publish a book next year.",
-  "exZh": "他想明年出版一本书。",
-  "overlap": null,
-  "syn": [
-   {
-    "s": "release",
-    "src": "R",
-    "syn_m": "n. 发布；v. 释放"
-   }
-  ],
-  "col": []
- },
- {
-  "w": "pupil",
-  "m": "n. 小学生",
-  "ex": "The pupil writes with a pencil in class.",
-  "exZh": "这个小学生在课堂上用铅笔写字。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "school pupil",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "radiate",
-  "m": "v. 散发；发射（光或热）；辐射",
-  "ex": "The sun radiates heat and light.",
-  "exZh": "太阳散发出热量和光。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "radiate heat",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "ratio",
-  "m": "n. 比率；比值",
-  "ex": "The ratio of boys to girls is 3 to 2.",
-  "exZh": "男孩与女孩的比例是3比2。",
-  "overlap": null,
-  "syn": [
-   {
-    "s": "proportion",
-    "src": "R",
-    "syn_m": "n. 比例；份额"
-   }
-  ],
-  "col": []
- },
- {
-  "w": "recite",
-  "m": "v. 背诵",
-  "ex": "The child recites the poem every morning.",
-  "exZh": "这个孩子每天早上背诵这首诗。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "recite new terms",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "recruit",
-  "m": "v. 招聘",
-  "ex": "The company plans to recruit new staff next month.",
-  "exZh": "这家公司计划下个月招聘新员工。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "recruit new members",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "reference",
-  "m": "n. 参考；提及",
-  "ex": "Please use this book for reference.",
-  "exZh": "请使用这本书作为参考。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "reference book",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "register",
-  "m": "v. 注册；登记；n. 登记簿",
-  "ex": "He will register for the course next week.",
-  "exZh": "他下周会注册这门课程。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "register names",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "reputation",
-  "m": "n. 名声；名誉",
-  "ex": "He has a good reputation for honesty.",
-  "exZh": "他以诚实著称。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "good reputation",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "riddle",
-  "m": "n. 谜语；v. 解谜",
-  "ex": "He told me a riddle and I solved it.",
-  "exZh": "他给我出了一道谜语，我解出来了。",
-  "overlap": null,
-  "syn": [
-   {
-    "s": "puzzle",
-    "src": "R",
-    "syn_m": "n. 谜；难题"
-   }
-  ],
-  "col": []
- },
- {
-  "w": "ritual",
-  "m": "n. （宗教等的）仪式；例行习惯",
-  "ex": "The village holds a ritual every spring to pray for good weather.",
-  "exZh": "这个村庄每年春天都举行一个仪式，祈求好天气。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "morning ritual",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "roster",
-  "m": "n. 花名册；勤务簿",
-  "ex": "The coach checks the roster before every game.",
-  "exZh": "教练在每场比赛前检查名单。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "class roster",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "round",
-  "m": "n. 回合；adj. 圆的；prep./adv. 在…周围",
-  "ex": "The children sat round the fire.",
-  "exZh": "孩子们围坐在火堆旁。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "receive a well rounded education",
-    "src": "B"
-   }
-  ]
- },
- {
-  "w": "scholar",
-  "m": "n. 学者",
-  "ex": "The scholar published a book about ancient history.",
-  "exZh": "这位学者出版了一本关于古代历史的书。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "visiting scholar",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "scrutinise",
-  "m": "v. 详细检查；仔细察看",
-  "ex": "The teacher scrutinises every student's homework.",
-  "exZh": "老师仔细检查每位学生的作业。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "closely scrutinise",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "sculpture",
-  "m": "n. 雕刻（术）；雕塑品；雕刻品",
-  "ex": "He made a beautiful sculpture from clay.",
-  "exZh": "他用黏土做了一件精美的雕刻。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "stone sculpture",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "secondary",
-  "m": "adj. 中学的；次要的",
-  "ex": "He attends a secondary school in the city.",
-  "exZh": "他在城里上一所中学。",
-  "overlap": null,
-  "syn": [
-   {
-    "s": "minor",
-    "src": "R",
-    "syn_m": "n. 辅修课；未成年人；adj. 次要的"
-   }
-  ],
-  "col": [
-   {
-    "c": "secondary school",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "selective",
-  "m": "adj. 选择性的；精挑细选的",
-  "ex": "He is selective about what he eats.",
-  "exZh": "他对吃的东西很挑剔。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "selective entry test",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "sketch",
-  "m": "n. 草图；概述；v. 速写",
-  "ex": "He made a quick sketch of the house.",
-  "exZh": "他快速画出了房子的草图。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "quick sketch",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "skim",
-  "m": "v. 掠过；略读",
-  "ex": "The stone skimmed over the water.",
-  "exZh": "石头掠过水面。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "quickly skim",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "smart",
-  "m": "adj. 衣冠楚楚的；时髦的；聪明的",
-  "ex": "He is a smart student who solves math problems quickly.",
-  "exZh": "他是一个聪明的学生，能快速解决数学问题。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "looked smart",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "static",
-  "m": "adj. 静电的；静止的；不变的",
-  "ex": "The car remained static at the red light.",
-  "exZh": "汽车在红灯前静止不动。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "static noise",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "steady",
-  "m": "adj. 稳定的；v. 使稳住",
-  "ex": "The boat moved in a steady way on the calm sea.",
-  "exZh": "船在平静的海面上平稳地移动。",
-  "overlap": null,
-  "syn": [
-   {
-    "s": "stable",
-    "src": "R",
-    "syn_m": "n. 马厩；厩房；adj. 稳定的"
-   }
-  ],
-  "col": []
- },
- {
-  "w": "step",
-  "m": "n. 步骤；v. 踩",
-  "ex": "He took a small step forward.",
-  "exZh": "他向前迈了一小步。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "small step",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "stride",
-  "m": "n. 大步；v. 跨一大步",
-  "ex": "He takes a long stride when he walks.",
-  "exZh": "他走路时迈着大步。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "long stride",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "sum",
-  "m": "n. 金额；总数；v. 概括",
-  "ex": "The sum of the bill is fifty dollars.",
-  "exZh": "账单的金额是五十美元。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "small sum",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "suppose",
-  "m": "v. 认为；猜想；假设",
-  "ex": "I suppose he is late because of the traffic.",
-  "exZh": "我认为他因为交通堵塞而迟到了。",
-  "overlap": null,
-  "syn": [
-   {
-    "s": "assume",
-    "src": "R",
-    "syn_m": "v. 假定；设想；呈现"
-   }
-  ],
-  "col": []
- },
- {
-  "w": "tennis",
-  "m": "n. 网球",
-  "ex": "He plays tennis every weekend.",
-  "exZh": "他每周末打网球。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "tennis balls",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "tense",
-  "m": "n. 时态；adj. 紧张的；拉紧的",
-  "ex": "He felt tense before the exam.",
-  "exZh": "他在考试前感到紧张。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "past tense",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "thesis",
-  "m": "n. 学位论文",
-  "ex": "His thesis is that exercise improves memory.",
-  "exZh": "他的论点是锻炼能改善记忆力。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "senior thesis",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "total",
-  "m": "n. 总计；adj. 总的；v. 共计",
-  "ex": "The total cost is $50.",
-  "exZh": "总费用是50美元。",
-  "overlap": null,
-  "syn": [
-   {
-    "s": "sum",
-    "src": "R",
-    "syn_m": "n. 金额；总数；v. 概括"
-   }
-  ],
-  "col": [
-   {
-    "c": "final total",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "volleyball",
-  "m": "n. 排球",
-  "ex": "He plays volleyball every Saturday.",
-  "exZh": "他每个星期六打排球。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "volleyball nets",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "volume",
-  "m": "n. 体积；卷；音量",
-  "ex": "The volume of the box is 10 cubic meters.",
-  "exZh": "这个盒子的体积是10立方米。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "music volume",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "well known",
-  "m": "",
-  "ex": "",
-  "exZh": "",
-  "overlap": null,
-  "syn": [
-   {
-    "s": "familiar",
-    "src": "R",
-    "syn_m": "adj. 熟悉的"
-   },
-   {
-    "s": "famous",
-    "src": "R",
-    "syn_m": "adj. 著名的；出名的"
-   }
-  ],
-  "col": []
- },
- {
-  "w": "wit",
-  "m": "n. 机智（的人）",
-  "ex": "He is a man of great wit.",
-  "exZh": "他是个极具机智的人。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "quick wit",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "aisle",
-  "m": "n. 过道；通道；走廊",
-  "ex": "The books are on the shelf beside the aisle.",
-  "exZh": "书在过道旁边的架子上。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "narrow aisle",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "alloy",
-  "m": "n. 合金；v. 把…铸成合金",
-  "ex": "He made a strong alloy from copper and zinc.",
-  "exZh": "他用铜和锌制造了一种坚固的合金。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "light alloy",
+    "c": "calm sweet vacation",
     "src": "T"
    },
    {
-    "c": "alloy frame",
+    "c": "sweet vacation",
     "src": "T"
    }
   ]
  },
  {
-  "w": "apartment",
-  "m": "n. 单元住宅；公寓住宅",
-  "ex": "He lives in a small apartment near the park.",
-  "exZh": "他住在公园附近的一间小公寓里。",
+  "w": "variable",
+  "m": "n. 变量；adj. 可变的；易变的",
+  "ex": "The weather is variable in spring.",
+  "exZh": "春天的天气是多变的。",
   "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "crowded apartment",
+    "c": "only variable",
     "src": "T"
    }
   ]
  },
  {
-  "w": "apparatus",
-  "m": "n. 装置；仪器；器官",
-  "ex": "The lab has a new apparatus for measuring temperature.",
-  "exZh": "实验室有一台新的温度测量装置。",
+  "w": "vigorous",
+  "m": "adj. 精力充沛的；茂盛的",
+  "ex": "He is a vigorous man who runs every morning.",
+  "exZh": "他是一个精力充沛的人，每天早上都跑步。",
   "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "new apparatus",
+    "c": "vigorous cheers",
     "src": "T"
    }
   ]
  },
  {
-  "w": "appetiser",
-  "m": "n. 开胃菜；开胃品",
-  "ex": "He ate an appetiser before dinner.",
-  "exZh": "他在晚餐前吃了一道开胃菜。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "tiny appetiser",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "arch",
-  "m": "n. 拱形；拱门；弧形",
-  "ex": "The bridge has a stone arch.",
-  "exZh": "这座桥有一个石拱。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "round arch",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "artifact",
-  "m": "n. 人工制品；手工艺品；加工品",
-  "ex": "The museum has an ancient artifact.",
-  "exZh": "博物馆里有一件古代文物。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "clay artifact",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "available",
-  "m": "adj. 可获得的；有空的；可用的",
-  "ex": "The books are available in the library.",
-  "exZh": "这些书在图书馆里可以借到。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "still available",
-    "src": "T"
-   },
-   {
-    "c": "available today",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "badge",
-  "m": "n. 徽章",
-  "ex": "He wears a badge on his shirt.",
-  "exZh": "他衬衫上戴着一枚徽章。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "school badge",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "bake",
-  "m": "v. 烤",
-  "ex": "She bakes bread every Sunday.",
-  "exZh": "她每周日都烤面包。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "bake soft cakes",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "balcony",
-  "m": "n. 阳台",
-  "ex": "He drinks coffee on the balcony every morning.",
-  "exZh": "他每天早上都在阳台上喝咖啡。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "sunny balcony",
-    "src": "T"
-   },
-   {
-    "c": "balcony doors",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "banquet",
-  "m": "n. 宴会；盛宴",
-  "ex": "They had a big banquet after the wedding.",
-  "exZh": "婚礼后他们举办了一场盛大的宴会。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "harvest banquet",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "bar",
-  "m": "n. 酒吧；条状物；栅栏",
-  "ex": "He ate a chocolate bar after dinner.",
-  "exZh": "他晚饭后吃了一条巧克力。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "street bar",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "barbecue",
-  "m": "n. 户外烧烤；烤架",
-  "ex": "We had a barbecue in the park last weekend.",
-  "exZh": "上周末我们在公园举行了户外烧烤。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "barbecue stand",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "barrel",
-  "m": "n. 桶；枪管",
-  "ex": "He poured water into a wooden barrel.",
-  "exZh": "他把水倒进一个木桶里。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "small barrel",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "bath",
-  "m": "n. 浴缸；浴室；洗澡",
-  "ex": "The bath is next to the bedroom.",
-  "exZh": "浴室在卧室旁边。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "bath tub",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "bead",
-  "m": "n. 有孔的小珠",
-  "ex": "She threaded a bead onto the string.",
-  "exZh": "她把一颗有孔的小珠穿在绳子上。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "fallen bead",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "beam",
-  "m": "n. 梁；横梁；v. 发射（电波或光）",
-  "ex": "The satellite beams signals to Earth.",
-  "exZh": "卫星向地球发射信号。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "wooden beam",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "beef",
-  "m": "n. 牛肉",
-  "ex": "He eats beef for dinner every Sunday.",
-  "exZh": "他每周日吃牛肉当晚餐。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "beef slices",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "bell",
-  "m": "n. 铃（声）；钟（声）",
-  "ex": "The bell rang at 8 a.m.",
-  "exZh": "铃在早上八点响了。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "door bell",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "belt",
-  "m": "n. 腰带；皮带；n. 传送带",
-  "ex": "The factory uses a belt to move boxes.",
-  "exZh": "工厂使用传送带来运送箱子。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "school belt",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "bench",
-  "m": "n. 长凳",
-  "ex": "He sat on the bench in the park.",
-  "exZh": "他坐在公园的长凳上。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "wooden bench",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "berry",
-  "m": "n. 浆果",
-  "ex": "He picked a red berry from the bush.",
-  "exZh": "他从灌木丛中摘了一颗红色浆果。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "wild berry",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "beverage",
-  "m": "n. 饮料",
-  "ex": "He drinks a cold beverage after work.",
-  "exZh": "他下班后喝一杯冷饮。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "hot beverage",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "biscuit",
-  "m": "n. 饼干",
-  "ex": "He ate a biscuit with tea.",
-  "exZh": "他喝茶时吃了一块饼干。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "square biscuit",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "bitter",
-  "m": "adj. 有苦味的；痛苦的；刺痛的",
-  "ex": "The medicine tastes bitter.",
-  "exZh": "这种药尝起来很苦。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "bitter skin",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "blanket",
-  "m": "n. 毛毯；厚的覆盖物；adj. 包括所有的",
-  "ex": "He wrapped himself in a warm blanket.",
-  "exZh": "他把自己裹在一条温暖的毛毯里。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "blue blanket",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "block",
-  "m": "n. 块；大楼；v. 阻塞",
-  "ex": "The new block is next to the park.",
-  "exZh": "这栋新大楼就在公园旁边。",
-  "overlap": null,
-  "syn": [
-   {
-    "s": "impede",
-    "src": "R",
-    "syn_m": "v. 阻碍；拖延进程"
-   }
+  "w": "violin",
+  "m": "n. 小提琴",
+  "ex": "He plays the violin every evening.",
+  "exZh": "他每天晚上拉小提琴。",
+  "overlap": [
+   [
+    "old brown violin",
+    "brown violin"
+   ]
   ],
-  "col": []
- },
- {
-  "w": "blot",
-  "m": "n. 墨渍；污点",
-  "ex": "The ink blot ruined his homework.",
-  "exZh": "墨水污点弄脏了他的作业。",
-  "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "paint blot",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "bolt",
-  "m": "n. 螺栓",
-  "ex": "The mechanic tightened the bolt with a wrench.",
-  "exZh": "机械师用扳手拧紧了螺栓。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "silver bolt",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "booth",
-  "m": "n. 小亭；隔间",
-  "ex": "He bought a hot dog from a food booth.",
-  "exZh": "他从一个小吃亭买了个热狗。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "market booth",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "bracelet",
-  "m": "n. 手镯",
-  "ex": "She wears a silver bracelet every day.",
-  "exZh": "她每天戴一条银手链。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "new bracelet",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "brandy",
-  "m": "n. 白兰地",
-  "ex": "He drinks brandy after dinner.",
-  "exZh": "他晚饭后喝白兰地。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "sweet brandy",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "brass",
-  "m": "n. 黄铜制品",
-  "ex": "He bought a brass lamp at the market.",
-  "exZh": "他在市场上买了一个黄铜制品台灯。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "yellow brass",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "brickwork",
-  "m": "n. 砖结构",
-  "ex": "He repaired the brickwork with new mortar.",
-  "exZh": "他用新的砂浆修复了砖墙。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "gray brickwork",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "brim",
-  "m": "n. 边缘；v. （装）满",
-  "ex": "The cup is full to the brim.",
-  "exZh": "杯子装得满满的。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "hat brim",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "bronze",
-  "m": "n. 青铜；青铜色",
-  "ex": "The statue is made of bronze.",
-  "exZh": "这座雕像由青铜制成。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "green bronze horse",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "broom",
-  "m": "n. 扫帚",
-  "ex": "She sweeps the floor with a broom.",
-  "exZh": "她用扫帚扫地。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "straw broom",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "bucket",
-  "m": "n. 水桶",
-  "ex": "He filled the bucket with water from the well.",
-  "exZh": "他从井里打了一桶水。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "red bucket",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "buffet",
-  "m": "n. 自助餐",
-  "ex": "We had dinner at a buffet with many dishes to choose from.",
-  "exZh": "我们在自助餐吃了晚饭，有很多菜可以选。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "hotel buffet",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "bulb",
-  "m": "n. 电灯泡",
-  "ex": "The bulb broke when it fell on the floor.",
-  "exZh": "灯泡掉到地上时碎了。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "warm bulb",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "butter",
-  "m": "n. 黄油；奶油",
-  "ex": "She spread butter on her toast.",
-  "exZh": "她在吐司上抹了黄油。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "yellow butter",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "cabbage",
-  "m": "n. 卷心菜",
-  "ex": "He eats cabbage every day for lunch.",
-  "exZh": "他每天午餐都吃卷心菜。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "cabbage heads",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "cabinet",
-  "m": "n. 储藏柜；内阁",
-  "ex": "He kept the dishes in the cabinet.",
-  "exZh": "他把盘子放在储藏柜里。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "wooden cabinet",
+    "c": "old brown violin",
     "src": "T"
    },
    {
-    "c": "cabinet door",
+    "c": "brown violin",
     "src": "T"
    }
   ]
  },
  {
-  "w": "cable",
-  "m": "n. 电缆；钢索",
-  "ex": "The cable connects the computer to the printer.",
-  "exZh": "这条电缆将电脑连接到打印机。",
+  "w": "vowel",
+  "m": "n. 元音",
+  "ex": "The letter 'a' is a vowel.",
+  "exZh": "字母“诶”是一个元音。",
   "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "power cable",
+    "c": "bright vowel",
     "src": "T"
    }
   ]
  },
  {
-  "w": "cafeteria",
-  "m": "n. 自助餐厅；自助食堂",
-  "ex": "We ate lunch in the school cafeteria.",
-  "exZh": "我们在学校自助餐厅吃午饭。",
+  "w": "wander",
+  "m": "v. 徘徊；漫游",
+  "ex": "He likes to wander in the park after dinner.",
+  "exZh": "他喜欢晚饭后在公园里徘徊。",
   "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "cafeteria lines",
+    "c": "wander past",
     "src": "T"
    }
   ]
  },
  {
-  "w": "candle",
-  "m": "n. 蜡烛",
-  "ex": "He lit a candle to see in the dark.",
-  "exZh": "他点燃了一支蜡烛以便在黑暗中看见。",
+  "w": "wedge",
+  "m": "n. 楔子；v. 把…楔住",
+  "ex": "He used a wedge to split the wood.",
+  "exZh": "他用楔子把木头劈开。",
   "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "blow out candles",
-    "src": "B"
+    "c": "thin wedge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "yoga",
+  "m": "n. 瑜伽",
+  "ex": "He does yoga every morning.",
+  "exZh": "他每天早上做瑜伽。",
+  "overlap": [
+   [
+    "morning yoga",
+    "gentle morning yoga"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "morning yoga",
+    "src": "T"
    },
    {
-    "c": "honey candle",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "canvas",
-  "m": "n. 帆布；（帆布）画布",
-  "ex": "He paints on a canvas with oil colors.",
-  "exZh": "他用油画颜料在帆布上作画。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "painted canvas",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "carpenter",
-  "m": "n. 木匠；木工",
-  "ex": "The carpenter made a wooden table.",
-  "exZh": "木匠做了一张木桌子。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "old carpenter",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "carpet",
-  "m": "n. 地毯",
-  "ex": "He walks on the carpet every morning.",
-  "exZh": "他每天早上都走在地毯上。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "rolled carpet",
+    "c": "gentle morning yoga",
     "src": "T"
    }
   ]
@@ -1393,81 +157,20 @@
   "m": "n. 胡萝卜",
   "ex": "He eats a carrot every day.",
   "exZh": "他每天吃一根胡萝卜。",
-  "overlap": null,
+  "overlap": [
+   [
+    "orange carrot",
+    "orange carrot roots"
+   ]
+  ],
   "syn": [],
   "col": [
    {
-    "c": "carrot roots",
+    "c": "orange carrot",
     "src": "T"
-   }
-  ]
- },
- {
-  "w": "cellar",
-  "m": "n. 地窖；地下室",
-  "ex": "He keeps apples in the cellar.",
-  "exZh": "他把苹果存放在地窖里。",
-  "overlap": null,
-  "syn": [],
-  "col": [
+   },
    {
-    "c": "dark cellar",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "cement",
-  "m": "n. 水泥",
-  "ex": "They used cement to build the wall.",
-  "exZh": "他们用水泥建造了这堵墙。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "grey cement",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "ceramic",
-  "m": "adj. 陶质的；n. 陶瓷器",
-  "ex": "He bought a ceramic bowl at the market.",
-  "exZh": "他在市场上买了一个陶瓷碗。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "ceramic bowls",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "chef",
-  "m": "n. 主厨；厨师",
-  "ex": "The chef cooked a delicious dinner for the guests.",
-  "exZh": "主厨为客人做了一顿美味的晚餐。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "retired chef",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "chew",
-  "m": "v. 咀嚼",
-  "ex": "He is chewing gum loudly.",
-  "exZh": "他正在大声地嚼口香糖。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "chew loudly",
+    "c": "orange carrot roots",
     "src": "T"
    }
   ]
@@ -1481,263 +184,7 @@
   "syn": [],
   "col": [
    {
-    "c": "village chicken",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "chimney",
-  "m": "n. 烟囱",
-  "ex": "The smoke came out of the chimney.",
-  "exZh": "烟从烟囱里冒出来。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "stone chimney",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "cigarette",
-  "m": "n. 香烟；纸烟",
-  "ex": "He bought a cigarette at the store.",
-  "exZh": "他在商店买了一支香烟。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "cigarette end",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "clasp",
-  "m": "n. 扣；紧握；v. 抱紧",
-  "ex": "The necklace has a gold clasp.",
-  "exZh": "这条项链有一个金色的钩。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "silver clasp",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "cloak",
-  "m": "n. 斗篷；掩护物；v. 隐瞒",
-  "ex": "He wore a black cloak to hide his face.",
-  "exZh": "他穿着一件黑色斗篷来遮住脸。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "theatre cloak",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "collar",
-  "m": "n. 衣领",
-  "ex": "He fixed his collar before the interview.",
-  "exZh": "他在面试前整理了衣领。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "shirt collar",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "column",
-  "m": "n. 圆柱；列",
-  "ex": "The ancient temple has a tall stone column.",
-  "exZh": "这座古庙有一根高大的石柱。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "tall column",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "concrete",
-  "m": "adj. 混凝土的；n. 混凝土；adj. 具体的",
-  "ex": "The workers poured concrete to build the foundation.",
-  "exZh": "工人们浇筑混凝土来建造地基。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "gray concrete",
-    "src": "T"
-   },
-   {
-    "c": "concrete floor",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "cord",
-  "m": "n. 电线；细绳；绳索",
-  "ex": "He tied the box with a red cord.",
-  "exZh": "他用一根红绳把盒子绑了起来。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "white cord",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "corridor",
-  "m": "n. 走廊",
-  "ex": "The boy walked down the long corridor.",
-  "exZh": "男孩走过了长长的走廊。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "long corridor",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "cosmetics",
-  "m": "n. 化妆品；美容品；复数词形",
-  "ex": "She buys cosmetics at the drugstore.",
-  "exZh": "她在药店买化妆品。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "costly shop cosmetics",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "costume",
-  "m": "n. 服装；衣服",
-  "ex": "He wore a funny costume for the party.",
-  "exZh": "他为派对穿了一套滑稽的服装。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "dance costume",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "cottage",
-  "m": "n. 村舍；小屋",
-  "ex": "They live in a small cottage near the forest.",
-  "exZh": "他们住在森林附近的一座小村舍里。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "small cottage",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "cotton",
-  "m": "n. 棉花；棉；棉布",
-  "ex": "She wore a dress made of cotton.",
-  "exZh": "她穿了一件棉质裙子。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "cotton shirts",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "counterfeit",
-  "m": "adj. 伪造的；假冒的；v. 伪造",
-  "ex": "He tried to counterfeit money.",
-  "exZh": "他试图伪造货币。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "counterfeit coin",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "cradle",
-  "m": "n. 摇篮；n. 吊架；发源地",
-  "ex": "The baby was sleeping in the cradle.",
-  "exZh": "婴儿正在吊架里睡觉。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "tiny cradle",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "crane",
-  "m": "n. 起重机",
-  "ex": "The crane lifted the heavy steel beam.",
-  "exZh": "起重机吊起了沉重的钢梁。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "yellow crane",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "crude",
-  "m": "adj. 简陋的",
-  "ex": "He lived in a crude hut with no electricity.",
-  "exZh": "他住在一个没有电的简陋小屋里。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "crude joints",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "crystal",
-  "m": "n. 水晶；结晶",
-  "ex": "She wears a necklace made of crystal.",
-  "exZh": "她戴一条水晶制成的项链。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "shining crystal",
+    "c": "fat village chicken",
     "src": "T"
    }
   ]
@@ -1751,465 +198,21 @@
   "syn": [],
   "col": [
    {
-    "c": "crisp long cucumber",
+    "c": "long cucumber",
     "src": "T"
    }
   ]
  },
  {
-  "w": "curtain",
-  "m": "n. 帷幕；窗帘",
-  "ex": "She pulled the curtain to block the sunlight.",
-  "exZh": "她拉上帷幕以挡住阳光。",
+  "w": "fry",
+  "m": "v. 油炸；油煎",
+  "ex": "He fries fish in a pan every Sunday.",
+  "exZh": "他每周日用平底锅油炸鱼。",
   "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "flowered curtain",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "cushion",
-  "m": "n. 靠垫；软垫；缓冲物",
-  "ex": "She put a cushion on the chair to make it comfortable.",
-  "exZh": "她在椅子上放了一个靠垫，让它更舒服。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "seat cushion",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "cutlery",
-  "m": "n. 餐具（刀、叉和匙）",
-  "ex": "She placed the cutlery neatly on the table.",
-  "exZh": "她把餐具整齐地放在桌子上。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "extra cutlery",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "dairy",
-  "m": "adj. 牛奶的；乳品的；n. 乳品店",
-  "ex": "She bought dairy products from the local farm.",
-  "exZh": "她从当地农场买了乳制品。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "dairy food",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "dam",
-  "m": "n. 水坝；拦河坝",
-  "ex": "The dam holds back the river water.",
-  "exZh": "水坝拦住了河水。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "earth dam",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "debate",
-  "m": "n. 辩论；v. 讨论",
-  "ex": "The students had a debate about homework.",
-  "exZh": "学生们就作业进行了一场辩论。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "lively debate",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "detergent",
-  "m": "n. 洗涤剂；洗衣粉；去垢剂",
-  "ex": "She uses detergent to wash the clothes.",
-  "exZh": "她用洗涤剂洗衣服。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "mild detergent",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "digest",
-  "m": "v. 消化；领会",
-  "ex": "The stomach digests food into nutrients.",
-  "exZh": "胃将食物消化成营养物质。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "digest well",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "dip",
-  "m": "v. 蘸；n. 下降",
-  "ex": "There was a dip in sales last month.",
-  "exZh": "上个月销售额有所下降。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "dip greens",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "drunk",
-  "m": "adj. 喝醉的；v. 喝；过去分词词形",
-  "ex": "He has drunk all the water.",
-  "exZh": "他喝了所有的水。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "arrived drunk",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "dwelling",
-  "m": "n. 住宅；v. 居住；沉湎于",
-  "ex": "He lives in a small dwelling near the lake.",
-  "exZh": "他住在湖边的一个小住所里。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "whole dwelling",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "dye",
-  "m": "n. 染料；v. 给...染色",
-  "ex": "She bought a natural dye to color her fabric.",
-  "exZh": "她买了一种天然染料来给布料染色。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "brown dye",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "eaves",
-  "m": "n. 屋檐",
-  "ex": "The children sat on the eaves to watch the rain.",
-  "exZh": "孩子们坐在屋檐下看雨。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "wide eaves",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "eggplant",
-  "m": "n. 茄子",
-  "ex": "He bought an eggplant at the market.",
-  "exZh": "他在市场上买了一个茄子。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "purple eggplant",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "elegance",
-  "m": "n. 高雅；典雅；优雅",
-  "ex": "Her dress showed great elegance.",
-  "exZh": "她的裙子展现了极大的优雅。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "simple elegance",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "embroider",
-  "m": "v. 刺绣；绣（花）；加以渲染（或润色）",
-  "ex": "She embroiders flowers on the pillow.",
-  "exZh": "她在枕头上刺绣花朵。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "embroider red flowers",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "expanse",
-  "m": "n. 辽阔；广袤",
-  "ex": "The expanse of the desert stretched far beyond the horizon.",
-  "exZh": "沙漠的辽阔延伸到了地平线之外。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "wide expanse",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "exquisite",
-  "m": "adj. 精美的；细腻的；强烈的",
-  "ex": "She wore an exquisite dress to the party.",
-  "exZh": "她穿了一条精美的裙子去参加派对。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "exquisite touch",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "fabric",
-  "m": "n. 织物；（建筑物的）结构",
-  "ex": "The dress is made of soft fabric.",
-  "exZh": "这条裙子是由柔软的织物制成的。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "blue fabric",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "fade",
-  "m": "v. 逐渐消失；褪色",
-  "ex": "The colors of the painting fade in the sunlight.",
-  "exZh": "这幅画的颜色在阳光下逐渐消失。",
-  "overlap": null,
-  "syn": [
-   {
-    "s": "disappear",
-    "src": "R",
-    "syn_m": "v. 消失；不见"
-   }
-  ],
-  "col": [
-   {
-    "c": "never fade",
-    "src": "T"
-   },
-   {
-    "c": "slowly fades",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "fascinate",
-  "m": "v. 强烈吸引住；使着迷",
-  "ex": "The magic show fascinated the children.",
-  "exZh": "魔术表演深深吸引了孩子们。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "fascinate every child",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "fibre",
-  "m": "n. 纤维",
-  "ex": "He eats fibre to stay healthy.",
-  "exZh": "他吃纤维来保持健康。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "plant fibre",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "fireplace",
-  "m": "n. 壁炉",
-  "ex": "He sits by the fireplace in winter.",
-  "exZh": "冬天他坐在壁炉旁。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "stone fireplace",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "flashlight",
-  "m": "n. 手电筒；闪光灯",
-  "ex": "He uses a flashlight to find his keys in the dark.",
-  "exZh": "他用手电筒在黑暗中找钥匙。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "pocket flashlight",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "flavour",
-  "m": "n. 风味；味道；v. 给…添风味",
-  "ex": "This ice cream has a sweet flavour.",
-  "exZh": "这种冰淇淋有甜美的风味。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "fruit flavour",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "flour",
-  "m": "n. 面粉",
-  "ex": "She adds flour to make bread.",
-  "exZh": "她加面粉来做面包。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "white flour",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "fragile",
-  "m": "adj. 脆弱的；易碎的；不牢固的",
-  "ex": "The glass is fragile and might break easily.",
-  "exZh": "这个玻璃很脆弱，容易碎。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "quite fragile",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "fridge",
-  "m": "n. 冰箱",
-  "ex": "He put the milk in the fridge.",
-  "exZh": "他把牛奶放进冰箱里。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "small fridge",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "furnace",
-  "m": "n. 熔炉",
-  "ex": "The blacksmith heated the metal in the furnace.",
-  "exZh": "铁匠在熔炉里加热金属。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "brick furnace",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "furnish",
-  "m": "v. 布置家具；提供",
-  "ex": "He will furnish the apartment with new furniture.",
-  "exZh": "他将为公寓配备新家具。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "furnish corners",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "fuse",
-  "m": "n. 保险丝；v. 结合",
-  "ex": "The light went out because the fuse blew.",
-  "exZh": "灯灭了，因为保险丝烧断了。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "safety fuse",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "garlic",
-  "m": "n. 大蒜",
-  "ex": "He adds garlic to the soup for flavor.",
-  "exZh": "他往汤里加蒜来提味。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "white garlic",
+    "c": "helped fry",
     "src": "T"
    }
   ]
@@ -2223,473 +226,30 @@
   "syn": [],
   "col": [
    {
-    "c": "torn school garment",
+    "c": "school garment",
     "src": "T"
    }
   ]
  },
  {
-  "w": "gem",
-  "m": "n. 宝石",
-  "ex": "She wore a red gem on her necklace.",
-  "exZh": "她脖子上戴着一颗红宝石。",
-  "overlap": null,
+  "w": "hurdle",
+  "m": "n. 跨栏；障碍；v. 克服",
+  "ex": "He jumped over the hurdle quickly.",
+  "exZh": "他迅速跳过了跨栏。",
+  "overlap": [
+   [
+    "worn delivery hurdle",
+    "delivery hurdle"
+   ]
+  ],
   "syn": [],
   "col": [
    {
-    "c": "blue gem",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "ginger",
-  "m": "n. 生姜",
-  "ex": "He adds ginger to his tea for flavor.",
-  "exZh": "他往茶里加姜来调味。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "ginger root",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "glue",
-  "m": "n. 胶；胶水；v. 粘合",
-  "ex": "He used glue to stick the paper together.",
-  "exZh": "他用胶把纸粘在一起。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "strong glue",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "gourmet",
-  "m": "n. 美食家",
-  "ex": "He eats gourmet food at a fancy restaurant.",
-  "exZh": "他在一家高档餐厅吃精致美食。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "little gourmet",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "gown",
-  "m": "n. 礼服",
-  "ex": "She wore a beautiful gown to the wedding.",
-  "exZh": "她穿了一件漂亮的礼服去参加婚礼。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "evening gown",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "grace",
-  "m": "n. 优雅；恩宠",
-  "ex": "She walked with grace across the stage.",
-  "exZh": "她优雅地走过舞台。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "gentle grace",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "grain",
-  "m": "n. 谷物；颗粒",
-  "ex": "Farmers grow grain like wheat and rice.",
-  "exZh": "农民种植小麦和大米等谷物。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "pepper grains",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "grape",
-  "m": "n. 葡萄",
-  "ex": "He eats a grape every morning.",
-  "exZh": "他每天早上吃一颗葡萄。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "purple grape",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "grid",
-  "m": "n. 网格；方格；n. （电、气）输送网",
-  "ex": "The city improved its power grid to handle more electricity.",
-  "exZh": "这座城市改进了其电力输送网，以承载更多的电力。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "neat grid",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "gum",
-  "m": "n. 口香糖；n. 树胶；牙龈",
-  "ex": "The tree produces a sticky gum.",
-  "exZh": "这棵树分泌出一种粘稠的树胶。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "mint gum",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "hairdressing",
-  "m": "n. 美发",
-  "ex": "He works in hairdressing at a local salon.",
-  "exZh": "他在一家本地美发沙龙从事美发工作。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "wedding hairdressing",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "hamburger",
-  "m": "n. 汉堡包",
-  "ex": "He eats a hamburger for lunch.",
-  "exZh": "他午餐吃一个汉堡包。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "warm hamburger",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "handrail",
-  "m": "n. 扶栏",
-  "ex": "He held the handrail while walking down the stairs.",
-  "exZh": "他下楼梯时扶着扶手。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "wooden handrail",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "hook",
-  "m": "n. 钩；挂钩；v. 钩住",
-  "ex": "The key hung on a metal hook.",
-  "exZh": "钥匙挂在金属钩上。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "iron hook",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "hostel",
-  "m": "n. （校外）学生宿舍；旅社；招待所",
-  "ex": "The students live in a cheap hostel near the university.",
-  "exZh": "学生们住在大学附近的一家便宜的学生宿舍里。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "noisy hostel",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "hull",
-  "m": "n. 籽壳；外壳；n. 船体",
-  "ex": "The hull of the boat was damaged by the rocks.",
-  "exZh": "船的船体被岩石损坏了。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "seed hull",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "hut",
-  "m": "n. 小屋；棚屋；茅屋",
-  "ex": "The children built a hut in the woods.",
-  "exZh": "孩子们在树林里建了一间小屋。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "weak hut",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "idol",
-  "m": "n. 偶像；神像",
-  "ex": "He looks up to his favorite singer as an idol.",
-  "exZh": "他把自己最喜欢的歌手当作偶像。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "young idol",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "ink",
-  "m": "n. 墨水",
-  "ex": "He spilled ink on his shirt.",
-  "exZh": "他把墨水洒在了衬衫上。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "blue ink",
+    "c": "worn delivery hurdle",
     "src": "T"
    },
    {
-    "c": "ink marks",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "internal",
-  "m": "adj. 内部的；国内的",
-  "ex": "The internal parts of the machine need repair.",
-  "exZh": "机器的内部零件需要修理。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "internal corner",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "inward",
-  "m": "adv. 向内地",
-  "ex": "The ship sailed inward toward the harbor.",
-  "exZh": "船向港口内航行。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "flowed inward",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "iron",
-  "m": "n. 铁；铁器；熨斗",
-  "ex": "The bridge is made of iron.",
-  "exZh": "这座桥是用铁建造的。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "flat iron",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "jacket",
-  "m": "n. 夹克衫",
-  "ex": "He put on his jacket before going out.",
-  "exZh": "他出门前穿上了夹克。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "biking jacket",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "jade",
-  "m": "n. 玉；翡翠",
-  "ex": "She wore a necklace made of jade.",
-  "exZh": "她戴着一条玉制的项链。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "green jade",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "jar",
-  "m": "n. 玻璃罐子",
-  "ex": "She stored jam in a glass jar.",
-  "exZh": "她把果酱存放在一个玻璃罐里。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "glass jar",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "jewel",
-  "m": "n. 珠宝；宝石",
-  "ex": "She wore a beautiful jewel on her finger.",
-  "exZh": "她手指上戴着一颗漂亮的珠宝。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "bright jewel",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "jewellery",
-  "m": "n. 珠宝；首饰",
-  "ex": "She wore beautiful jewellery to the party.",
-  "exZh": "她戴了漂亮的珠宝去参加派对。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "family jewellery",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "junk",
-  "m": "n. 废旧杂物；无价值的东西",
-  "ex": "He cleaned up the junk in his garage.",
-  "exZh": "他清理了车库里那些废旧杂物。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "junk pile",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "ketchup",
-  "m": "n. 番茄酱",
-  "ex": "He put ketchup on his fries.",
-  "exZh": "他在薯条上放了番茄酱。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "red ketchup",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "kettle",
-  "m": "n. 水壶",
-  "ex": "She put the kettle on to make tea.",
-  "exZh": "她把水壶放在炉子上烧水泡茶。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "black kettle",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "kit",
-  "m": "n. 成套工具；装备",
-  "ex": "He bought a repair kit for his bike.",
-  "exZh": "他买了一套自行车维修工具。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "repair kit",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "kitchen",
-  "m": "n. 厨房",
-  "ex": "She cooks dinner in the kitchen.",
-  "exZh": "她在厨房里做晚饭。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "old kitchen",
-    "src": "T"
-   }
-  ]
- },
- {
-  "w": "knit",
-  "m": "v. 针织",
-  "ex": "She knit a warm scarf for her brother.",
-  "exZh": "她为她的弟弟织了一条暖和的围巾。",
-  "overlap": null,
-  "syn": [],
-  "col": [
-   {
-    "c": "knit warm caps",
+    "c": "delivery hurdle",
     "src": "T"
    }
   ]
@@ -2703,105 +263,2053 @@
   "syn": [],
   "col": [
    {
-    "c": "door knob",
+    "c": "round door knob",
     "src": "T"
    }
   ]
  },
  {
-  "w": "lace",
-  "m": "n. 花边",
-  "ex": "The dress has a beautiful lace at the bottom.",
-  "exZh": "这条裙子的底部有漂亮的花边。",
+  "w": "lumber",
+  "m": "n. 木材",
+  "ex": "The factory buys lumber to make furniture.",
+  "exZh": "这家工厂购买木材来制造家具。",
   "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "lace edging",
+    "c": "cut lumber",
     "src": "T"
    }
   ]
  },
  {
-  "w": "lantern",
-  "m": "n. 灯笼；提灯",
-  "ex": "The children carried paper lanterns at the festival.",
-  "exZh": "孩子们在节日上提着纸灯笼。",
-  "overlap": null,
+  "w": "makeup",
+  "m": "n. 化妆品；组成",
+  "ex": "The makeup of the team includes students from five countries.",
+  "exZh": "这个团队的组成包括来自五个国家的学生。",
+  "overlap": [
+   [
+    "light soft makeup",
+    "soft makeup"
+   ]
+  ],
   "syn": [],
   "col": [
    {
-    "c": "paper lantern",
+    "c": "light soft makeup",
+    "src": "T"
+   },
+   {
+    "c": "soft makeup",
     "src": "T"
    }
   ]
  },
  {
-  "w": "laundry",
-  "m": "n. 要洗的衣物；洗衣店",
-  "ex": "I put the dirty laundry in the washing machine.",
-  "exZh": "我把脏衣服放进洗衣机里。",
+  "w": "masquerade",
+  "m": "n. 化妆舞会；伪装；v. 冒充",
+  "ex": "We went to a masquerade last night.",
+  "exZh": "我们昨晚去参加了一个化妆舞会。",
   "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "folded laundry",
+    "c": "spring masquerade",
+    "src": "T"
+   },
+   {
+    "c": "masquerade dance",
     "src": "T"
    }
   ]
  },
  {
-  "w": "lavatory",
-  "m": "n. 盥洗室；厕所",
-  "ex": "The lavatory is down the hall.",
-  "exZh": "洗手间在走廊尽头。",
+  "w": "pamphlet",
+  "m": "n. 小册子",
+  "ex": "He handed me a pamphlet about the new park.",
+  "exZh": "他递给我一份关于新公园的小册子。",
   "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "back lavatory",
+    "c": "picture pamphlet",
     "src": "T"
    }
   ]
  },
  {
-  "w": "layer",
-  "m": "n. 层；层次",
-  "ex": "The cake has three layers of chocolate.",
-  "exZh": "这个蛋糕有三层巧克力。",
+  "w": "peel",
+  "m": "v. 去皮；剥落；n. 果皮",
+  "ex": "The apple peel is rich in fiber.",
+  "exZh": "苹果皮富含纤维。",
   "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "thick layer",
+    "c": "helped grandma peel",
     "src": "T"
    }
   ]
  },
  {
-  "w": "layout",
-  "m": "n. 布局；布置",
-  "ex": "The layout of the room makes it feel bigger.",
-  "exZh": "房间的布局让它显得更大。",
+  "w": "refreshment",
+  "m": "n. 茶点和饮料",
+  "ex": "We had a snack and some drinks as refreshment after the meeting.",
+  "exZh": "会议结束后，我们吃了点心和喝了一些饮料作为茶点。",
   "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "table layout",
+    "c": "as refreshment",
     "src": "T"
    }
   ]
  },
  {
-  "w": "leather",
-  "m": "n. 皮革",
-  "ex": "He bought a leather jacket for winter.",
-  "exZh": "他冬天买了一件皮夹克。",
+  "w": "roast",
+  "m": "v. 烤；n. 烤肉",
+  "ex": "We had roast for dinner last night.",
+  "exZh": "昨晚我们吃了烤肉。",
   "overlap": null,
   "syn": [],
   "col": [
    {
-    "c": "leather bag",
+    "c": "watched grandma roast",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "saucer",
+  "m": "n. 茶托；碟子",
+  "ex": "He put the cup on a saucer.",
+  "exZh": "他把杯子放在一个茶托上。",
+  "overlap": [
+   [
+    "small flower saucer",
+    "flower saucer"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "small flower saucer",
+    "src": "T"
+   },
+   {
+    "c": "flower saucer",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stool",
+  "m": "n. 凳子；粪便",
+  "ex": "He sat on a wooden stool.",
+  "exZh": "他坐在一个木凳上。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "painting stool",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "trainer",
+  "m": "n. 运动鞋；教练",
+  "ex": "Wear old trainers for the long walk.",
+  "exZh": "走远路时要穿旧的运动鞋。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "red trainer",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "vegetarian",
+  "m": "adj. 素菜的；n. 素食者",
+  "ex": "He is a vegetarian and doesn't eat meat.",
+  "exZh": "他是一名素食者，不吃肉。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "vegetarian aunt",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "abortion",
+  "m": "n. 流产；堕胎",
+  "ex": "She decided to have an abortion.",
+  "exZh": "她决定进行流产。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "painful abortion",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "accuse",
+  "m": "v. 指控；指责",
+  "ex": "They accused him of stealing the money.",
+  "exZh": "他们指控他偷了钱。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "accuse anyone",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "administration",
+  "m": "n. 行政；管理",
+  "ex": "The administration of the school is very organized.",
+  "exZh": "学校的行政管理非常有条理。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "new administration",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "agent",
+  "m": "n. 代理人；特工；经纪人",
+  "ex": "The real estate agent helped them buy a house.",
+  "exZh": "房地产代理人帮助他们买了一所房子。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "friendly agent",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "agreement",
+  "m": "n. 协议；一致",
+  "ex": "They signed an agreement to share the costs.",
+  "exZh": "他们签署了一份分担费用的协议。",
+  "overlap": [
+   [
+    "paper agreement",
+    "signed paper agreement"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "paper agreement",
+    "src": "T"
+   },
+   {
+    "c": "signed paper agreement",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ambulance",
+  "m": "n. 救护车",
+  "ex": "The ambulance arrived quickly to help the injured man.",
+  "exZh": "救护车迅速到达以帮助受伤的男人。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "white ambulance",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "anchor",
+  "m": "n. 锚",
+  "ex": "The ship dropped its anchor in the harbor.",
+  "exZh": "船在港口放下了锚。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "heavy anchor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arabian",
+  "m": "adj. 阿拉伯（人）的",
+  "ex": "He wore an arabian robe to the party.",
+  "exZh": "他穿着一件阿拉伯长袍去参加派对。",
+  "overlap": [
+   [
+    "arabian seller",
+    "smiling arabian seller"
+   ],
+   [
+    "smiling arabian seller",
+    "smiling arabian"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "arabian seller",
+    "src": "T"
+   },
+   {
+    "c": "smiling arabian seller",
+    "src": "T"
+   },
+   {
+    "c": "smiling arabian",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arena",
+  "m": "n. 竞技场；舞台",
+  "ex": "The boxing match took place in an arena.",
+  "exZh": "拳击比赛在竞技场举行。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old arena",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "arrest",
+  "m": "v. 逮捕；拘留",
+  "ex": "The police arrested the thief last night.",
+  "exZh": "警察昨晚逮捕了那个小偷。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "arrest anyone",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "asylum",
+  "m": "n. 避难所；（政治）庇护",
+  "ex": "The old building now serves as an asylum for the homeless.",
+  "exZh": "这栋旧建筑现在是无家可归者的收容所。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "city asylum",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "avenue",
+  "m": "n. 大街；途径；林荫道",
+  "ex": "There are many shops on this avenue.",
+  "exZh": "这条大街上有许多商店。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "wide avenue",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "banner",
+  "m": "n. 旗帜；横幅",
+  "ex": "He waved a red banner in the parade.",
+  "exZh": "他在游行中挥舞着一面红旗子。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "red banner",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "benchmark",
+  "m": "n. 基准点",
+  "ex": "This test is a benchmark for all students.",
+  "exZh": "这个测试是所有学生的标准。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "cold benchmark",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "brake",
+  "m": "n. 刹车；制动器；v. 刹车",
+  "ex": "He pressed the brake to stop the car.",
+  "exZh": "他踩了刹车来停车。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "new brake",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "bureau",
+  "m": "n. 局；办事处",
+  "ex": "The weather bureau issued a storm warning.",
+  "exZh": "气象局发布了风暴预警。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "travel bureau",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "canal",
+  "m": "n. 运河；沟渠",
+  "ex": "The boat travels through the canal.",
+  "exZh": "船通过运河航行。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old canal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "captain",
+  "m": "n. 船长；队长",
+  "ex": "The captain sailed the ship across the ocean.",
+  "exZh": "船长驾驶船穿越了海洋。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "kind captain",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "cargo",
+  "m": "n. 货物",
+  "ex": "The ship carries a large cargo of rice.",
+  "exZh": "这艘船运载了大量大米货物。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "winter cargo",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "carriage",
+  "m": "n. 四轮马车",
+  "ex": "The king rode in a wooden carriage drawn by four horses.",
+  "exZh": "国王乘坐一辆由四匹马拉的木制四轮马车。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old carriage",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "charter",
+  "m": "n. 宪章",
+  "ex": "The Magna Carta is an old charter of rights.",
+  "exZh": "《大宪章》是一份古老的权力宪章。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "shop charter",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "clan",
+  "m": "n. 氏族；宗族",
+  "ex": "The clan lived in a small village for centuries.",
+  "exZh": "这个氏族几个世纪以来一直住在一个小村庄里。",
+  "overlap": [
+   [
+    "mountain clan",
+    "old mountain clan"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "mountain clan",
+    "src": "T"
+   },
+   {
+    "c": "old mountain clan",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "clerk",
+  "m": "n. 职员；店员",
+  "ex": "The clerk at the store helped me find the book.",
+  "exZh": "商店里的职员帮我找到了那本书。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "young clerk",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "clue",
+  "m": "n. 线索",
+  "ex": "The police found a clue at the crime scene.",
+  "exZh": "警察在犯罪现场找到了一条线索。",
+  "overlap": [
+   [
+    "paper clue",
+    "small paper clue"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "paper clue",
+    "src": "T"
+   },
+   {
+    "c": "small paper clue",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "consortium",
+  "m": "n. 协会；财团",
+  "ex": "The consortium helps small businesses share resources.",
+  "exZh": "这个协会帮助小企业共享资源。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "consortium dam",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "copper",
+  "m": "n. 铜",
+  "ex": "The wire is made of copper.",
+  "exZh": "这根电线是铜制的。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old copper",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "copyright",
+  "m": "n. 版权；著作权",
+  "ex": "He owns the copyright to his novel.",
+  "exZh": "他拥有这部小说的版权。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "simple copyright",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "crash",
+  "m": "n. 坠毁；v. 碰撞；崩溃",
+  "ex": "The car crash happened at the intersection.",
+  "exZh": "汽车碰撞发生在十字路口。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "loud crash",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "currency",
+  "m": "n. 货币；流通",
+  "ex": "The currency in Japan is the yen.",
+  "exZh": "日本的货币是日元。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "different currency",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "deceive",
+  "m": "v. 欺骗；蒙骗",
+  "ex": "He deceived his friend with a lie.",
+  "exZh": "他用一个谎言欺骗了朋友。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "deceive old friends",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "deck",
+  "m": "n. 甲板；舱面",
+  "ex": "The children played on the deck of the ship.",
+  "exZh": "孩子们在船的甲板上玩耍。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "windy deck",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "depression",
+  "m": "n. 抑郁；萧条",
+  "ex": "He felt deep depression after losing his job.",
+  "exZh": "他失业后感到深深的抑郁。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet depression",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "discharge",
+  "m": "v. 处理；放电；n. 排放",
+  "ex": "The battery will discharge if left unused for a long time.",
+  "exZh": "如果长时间不使用，电池会放电。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "discharge nothing",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "ditch",
+  "m": "n. 沟；渠",
+  "ex": "The farmer dug a ditch to water the fields.",
+  "exZh": "农夫挖了一条沟来给田地浇水。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "deep ditch",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "dock",
+  "m": "n. 码头",
+  "ex": "The ship arrived at the dock at sunrise.",
+  "exZh": "船在日出时到达了码头。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old dock",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "emergency",
+  "m": "n. 紧急情况",
+  "ex": "He called an emergency doctor when he felt sick.",
+  "exZh": "当他感到不舒服时，他叫了急诊医生。",
+  "overlap": [
+   [
+    "train emergency",
+    "small train emergency"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "train emergency",
+    "src": "T"
+   },
+   {
+    "c": "small train emergency",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "envelope",
+  "m": "n. 信封；包络；外罩",
+  "ex": "He put the letter in an envelope.",
+  "exZh": "他把信装进了一个信封。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old envelope",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "equity",
+  "m": "n. 公正；股票",
+  "ex": "He bought equity in a tech company.",
+  "exZh": "他购买了一家科技公司的股票。",
+  "overlap": [
+   [
+    "rough equity",
+    "keep rough equity"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "rough equity",
+    "src": "T"
+   },
+   {
+    "c": "keep rough equity",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "estate",
+  "m": "n. 庄园；地产",
+  "ex": "The old estate has large gardens and a beautiful mansion.",
+  "exZh": "这个古老的庄园有大片花园和一座美丽的豪宅。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old estate",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "european",
+  "m": "adj. 欧洲的；n. 欧洲人",
+  "ex": "She bought a European car.",
+  "exZh": "她买了一辆欧洲的汽车。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "european trains",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "explain",
+  "m": "v. 解释；说明；阐明",
+  "ex": "Can you explain this math problem?",
+  "exZh": "你能解释一下这个数学问题吗？",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "then explain",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "export",
+  "m": "v. 出口；n. 输出",
+  "ex": "This country is a big export of wheat.",
+  "exZh": "这个国家是小麦的大输出国。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "export problems",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fault",
+  "m": "n. 故障；缺陷；过错",
+  "ex": "It was his fault that the car crashed.",
+  "exZh": "汽车撞车是他的过错。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sad faults",
+    "src": "T"
+   },
+   {
+    "c": "small fault",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "fury",
+  "m": "n. 狂怒；狂暴；暴怒",
+  "ex": "He shouted with fury when he lost the game.",
+  "exZh": "当他输掉比赛时，他愤怒地大喊。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old fury",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "garage",
+  "m": "n. 车库；汽车修理厂",
+  "ex": "He parked his car in the garage.",
+  "exZh": "他把车停在了车库里。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "dark garage",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "governance",
+  "m": "n. 治理；管理方式",
+  "ex": "The company changed its governance after the loss.",
+  "exZh": "那家公司亏损之后改变了自身的治理方式。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "fairer governance",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "greek",
+  "m": "adj. 希腊的；n. 希腊语",
+  "ex": "He loves eating Greek food.",
+  "exZh": "他喜欢吃的希腊食物。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "greek story",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "grocery",
+  "m": "n. 食品杂货店",
+  "ex": "He buys milk and bread at the grocery.",
+  "exZh": "他在杂货店买牛奶和面包。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "little grocery",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "guarantee",
+  "m": "n. 保证；保证书；v. 确保",
+  "ex": "The store guarantees a refund if you are not happy.",
+  "exZh": "如果你不满意，商店保证退款。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "strong guarantee",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "guest",
+  "m": "n. 客人；宾客",
+  "ex": "The guest arrived at the party early.",
+  "exZh": "客人早早到了派对。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tired guests",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "headquarters",
+  "m": "n. 总部；司令部；指挥部",
+  "ex": "The company's headquarters is in New York.",
+  "exZh": "这家公司的总部在纽约。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "big headquarters",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "helicopter",
+  "m": "n. 直升机",
+  "ex": "The helicopter flew over the city.",
+  "exZh": "直升机飞过了城市。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "red helicopter",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "hierarchy",
+  "m": "n. 层次体系；等级制度",
+  "ex": "The company has a clear hierarchy from manager to worker.",
+  "exZh": "这家公司有一个从经理到员工的明确层次体系。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old hierarchy",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "honk",
+  "m": "n. 汽车喇叭声；v. （使汽车喇叭）鸣响",
+  "ex": "The honk of the geese echoed over the lake.",
+  "exZh": "大雁的叫声在湖面上回荡。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "long honk",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "impose",
+  "m": "v. 强加；强制实施",
+  "ex": "The government imposed a new tax on sugar.",
+  "exZh": "政府对糖征收了一项新税。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "enforce",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "increment",
+  "m": "n. 增加；增量",
+  "ex": "The temperature increases by one increment every hour.",
+  "exZh": "温度每小时增加一个单位。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tiny increment",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "independence",
+  "m": "n. 独立；自主",
+  "ex": "The country gained independence in 1960.",
+  "exZh": "这个国家在1960年获得了独立。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "liberty",
+    "src": "R"
+   },
+   {
+    "s": "freedom",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "indian",
+  "m": "adj. 印度的；n. 印度人",
+  "ex": "She cooked Indian food for dinner.",
+  "exZh": "她为晚餐做了印度菜。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "indian temple",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "jewish",
+  "m": "adj. 犹太人的",
+  "ex": "He eats jewish food on holidays.",
+  "exZh": "他在节日吃犹太人的食物。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "jewish festival",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "latin",
+  "m": "adj. 拉丁语的；拉丁语系国家的；n. 拉丁语",
+  "ex": "He read a latin text in class.",
+  "exZh": "他在课堂上读了一篇拉丁语文本。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "latin word",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "legislate",
+  "m": "v. 制定法律；用立法规定",
+  "ex": "The government will legislate new rules next month.",
+  "exZh": "政府下个月将制定新规则。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "legislate harsh orders",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "liner",
+  "m": "n. 邮轮；客轮；衬里",
+  "ex": "The liner sailed across the ocean with hundreds of passengers.",
+  "exZh": "这艘邮轮载着数百名乘客横渡了海洋。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "big liner",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "locomotive",
+  "m": "n. 机车；火车头",
+  "ex": "The locomotive pulled the train down the track.",
+  "exZh": "机车拉着火车沿着轨道行驶。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small locomotive",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lorry",
+  "m": "n. 卡车；载重汽车",
+  "ex": "The lorry carried boxes to the warehouse.",
+  "exZh": "卡车把箱子运到了仓库。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "big lorry",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "lull",
+  "m": "n. 间歇期；平静期",
+  "ex": "There was a lull in the rain before the storm came back.",
+  "exZh": "暴风雨再次来临前，雨下了一阵间歇。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet lull",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "materialism",
+  "m": "n. 实利主义",
+  "ex": "He cares only about money and things, showing strong materialism.",
+  "exZh": "他只关心金钱和物质，表现出强烈的实利主义。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "empty materialism",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "meltdown",
+  "m": "n. 彻底垮台",
+  "ex": "The company had a meltdown after the scandal.",
+  "exZh": "这家公司在丑闻后彻底垮台了。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet meltdown",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "memorial",
+  "m": "n. 纪念物；纪念碑",
+  "ex": "They placed a memorial at the site of the accident.",
+  "exZh": "他们在事故地点放置了一座纪念物。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old memorial",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "merchant",
+  "m": "n. 商人",
+  "ex": "The merchant sells fresh fruit every morning.",
+  "exZh": "商人每天早上卖新鲜水果。",
+  "overlap": [
+   [
+    "corner merchant",
+    "street corner merchant"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "corner merchant",
+    "src": "T"
+   },
+   {
+    "c": "street corner merchant",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "minister",
+  "m": "n. 部长；大臣",
+  "ex": "The minister signed the new law.",
+  "exZh": "部长签署了新法律。",
+  "overlap": [
+   [
+    "old minister",
+    "kind old minister"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "old minister",
+    "src": "T"
+   },
+   {
+    "c": "kind old minister",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "monitor",
+  "m": "v. 监控",
+  "ex": "The teacher monitors the students' progress each week.",
+  "exZh": "老师每周监控学生的进步。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "monitor every train",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "municipal",
+  "m": "adj. 市政的；市的",
+  "ex": "The municipal library is open every day.",
+  "exZh": "这座市政图书馆每天都开放。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "municipal inn",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "murmur",
+  "m": "n. 低语声；v. 低语",
+  "ex": "I heard a murmur from the next room.",
+  "exZh": "我听到隔壁房间传来低语声。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "soft murmur",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "notoriety",
+  "m": "n. 臭名；声名狼藉",
+  "ex": "The writer gained notoriety after one rude letter.",
+  "exZh": "那位作家因一封无礼的信而恶名远扬。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sudden notoriety",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "oversee",
+  "m": "v. 监督；监视",
+  "ex": "The manager oversees the team's daily work.",
+  "exZh": "经理监督团队的日常工作。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "oversee morning arrivals",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "parcel",
+  "m": "n. 包裹；小包",
+  "ex": "He picked up the parcel from the post office.",
+  "exZh": "他从邮局取了包裹。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "brown parcel",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "parliament",
+  "m": "n. 国会；议会",
+  "ex": "The parliament passed a new law about education.",
+  "exZh": "国会通过了一项关于教育的新法律。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "famous parliament",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "passage",
+  "m": "n. 通道；段落",
+  "ex": "The passage of the train through the tunnel was quick.",
+  "exZh": "火车通过隧道的速度很快。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "mountain passage",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "passenger",
+  "m": "n. 旅客；乘客",
+  "ex": "The passenger got off the bus at the next stop.",
+  "exZh": "这位旅客在下一站下了车。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tired passenger",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "payroll",
+  "m": "n. 职工工资册",
+  "ex": "The company updated the payroll last Friday.",
+  "exZh": "公司上星期五更新了职工工资册。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "paper payroll",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "persuade",
+  "m": "v. 说服",
+  "ex": "He tried to persuade her to stay.",
+  "exZh": "他试图说服她留下。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "induce",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "petition",
+  "m": "n. 请愿书",
+  "ex": "The students handed in a petition to the principal.",
+  "exZh": "学生们向校长递交了一份请愿书。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "shared petition",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pilot",
+  "m": "n. 飞行员；驾驶员",
+  "ex": "The pilot landed the plane safely.",
+  "exZh": "飞行员安全地降落了飞机。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "brave pilot",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "plea",
+  "m": "n. 恳求",
+  "ex": "He made a plea for help.",
+  "exZh": "他恳求帮助。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tired plea",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "prejudice",
+  "m": "n. 偏见；成见",
+  "ex": "He has prejudice against people from other countries.",
+  "exZh": "他对来自其他国家的人有偏见。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old prejudice",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "premier",
+  "m": "adj. 第一的；首要的",
+  "ex": "He is the premier player on the team.",
+  "exZh": "他是队里最优秀的球员。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "premier himself",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "pretend",
+  "m": "v. 假装",
+  "ex": "He pretends to sleep when his mom asks him to clean his room.",
+  "exZh": "当妈妈让他打扫房间时，他假装睡觉。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "pretend cheer",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "privilege",
+  "m": "n. 特权",
+  "ex": "Going first is a privilege, not a right.",
+  "exZh": "优先权是一种特权，而不是权利。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet privilege",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "promise",
+  "m": "n. 许诺；v. 承诺",
+  "ex": "He promised to help me with my homework.",
+  "exZh": "他承诺帮我做作业。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "fair promise",
+    "src": "T"
+   },
+   {
+    "c": "promised daily practice",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "proposal",
+  "m": "n. 提案；建议",
+  "ex": "He made a proposal to improve the school lunch.",
+  "exZh": "他提出了一个改善学校午餐的提案。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "simple proposal",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "protocol",
+  "m": "n. 协议；（外交）议定书",
+  "ex": "The two countries signed a protocol to stop the war.",
+  "exZh": "这两个国家签署了一项停止战争的协议。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "delivery protocol",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "railroad",
+  "m": "n. 铁路",
+  "ex": "The train runs on the railroad.",
+  "exZh": "火车在铁路上行驶。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "whole railroad",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "railway",
+  "m": "n. 铁路",
+  "ex": "The train runs on the railway.",
+  "exZh": "火车在铁轨上行驶。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "new railway",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "reasonable",
+  "m": "adj. 合理的",
+  "ex": "He gave a reasonable answer to the question.",
+  "exZh": "他对这个问题给出了一个合理的回答。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "reasonable new delivery",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "receipt",
+  "m": "n. 收据；收条",
+  "ex": "He kept the receipt for his new shoes.",
+  "exZh": "他保留了新鞋的收据。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "every receipt",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "recommend",
+  "m": "v. 推荐；建议",
+  "ex": "I recommend this book to you.",
+  "exZh": "我向你推荐这本书。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "recommend honest youths",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "refuge",
+  "m": "n. 避难所；庇护",
+  "ex": "The animals found refuge in the forest.",
+  "exZh": "这些动物在森林中找到了避难所。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "quiet refuge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "refund",
+  "m": "n. 退款",
+  "ex": "I asked for a refund after the product broke.",
+  "exZh": "产品坏了之后，我要求退款。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small refund",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "resident",
+  "m": "adj. 居住的；常驻的；n. 常住居民",
+  "ex": "The resident population grew last year.",
+  "exZh": "居住人口去年增加了。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "resident cats",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "resume",
+  "m": "v. （中断后）继续",
+  "ex": "After a short break, he resumed his work.",
+  "exZh": "短暂休息后，他继续工作。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "resume slowly",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "retail",
+  "m": "n. 零售",
+  "ex": "He works in retail at a small store.",
+  "exZh": "他在一家小店从事零售工作。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small retail",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "revolution",
+  "m": "n. 革命",
+  "ex": "The French Revolution changed the government.",
+  "exZh": "法国大革命改变了政府。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old revolution",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "routine",
+  "m": "n. 常规；adj. 例行公事的",
+  "ex": "He follows a morning routine every day.",
+  "exZh": "他每天早上都遵循固定的惯例。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "calm routine",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "russian",
+  "m": "adj. 俄国的；n. 俄语",
+  "ex": "He loves Russian music and food.",
+  "exZh": "他喜欢俄罗斯的音乐和食物。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old russian song",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "safari",
+  "m": "n. （在非洲的）旅行；狩猎旅行",
+  "ex": "We went on a safari in Kenya to see lions and elephants.",
+  "exZh": "我们去肯尼亚旅行，去看狮子和大象。",
+  "overlap": [
+   [
+    "safari trail",
+    "quiet safari trail"
+   ],
+   [
+    "quiet safari trail",
+    "quiet safari"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "safari trail",
+    "src": "T"
+   },
+   {
+    "c": "quiet safari trail",
+    "src": "T"
+   },
+   {
+    "c": "quiet safari",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sailor",
+  "m": "n. 水手；海员",
+  "ex": "The sailor fixed the rope on the boat.",
+  "exZh": "水手修理了船上的绳子。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old sailor",
+    "src": "T"
+   },
+   {
+    "c": "tired sailor",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "seaman",
+  "m": "n. 海员；水兵；水手",
+  "ex": "The seaman sailed the boat across the sea.",
+  "exZh": "水手驾船横渡大海。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "tired seaman",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "shilling",
+  "m": "n. 先令（旧币）",
+  "ex": "He paid five shillings for the bread.",
+  "exZh": "他花了五个先令买面包。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "every shilling",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "signpost",
+  "m": "n. 路标",
+  "ex": "The signpost shows the way to the village.",
+  "exZh": "路标指示了去村庄的路。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "white signpost",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "sin",
+  "m": "n. 罪；罪行",
+  "ex": "He felt guilt for his sin of lying.",
+  "exZh": "他因撒谎的罪行感到内疚。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "darker sin",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "slogan",
+  "m": "n. 口号；标语",
+  "ex": "The company used a short slogan to attract customers.",
+  "exZh": "这家公司用了一个简短的口号来吸引顾客。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "warm slogan",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "slum",
+  "m": "n. 贫民窟；贫民区",
+  "ex": "Many families live in the slum near the city center.",
+  "exZh": "许多家庭住在城市中心附近的贫民窟里。",
+  "overlap": [
+   [
+    "old slum school",
+    "old slum"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "old slum school",
+    "src": "T"
+   },
+   {
+    "c": "old slum",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "soviet",
+  "m": "n. 苏联；adj. 苏联（人）的；苏维埃的",
+  "ex": "The soviet flag flew above the building.",
+  "exZh": "苏联的国旗在大楼上方飘扬。",
+  "overlap": [
+   [
+    "old soviet film",
+    "soviet film"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "old soviet film",
+    "src": "T"
+   },
+   {
+    "c": "soviet film",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "spanish",
+  "m": "n. 西班牙语；adj. 西班牙的；西班牙语的",
+  "ex": "He speaks spanish fluently.",
+  "exZh": "他流利地讲西班牙语。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "spanish train",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stamp",
+  "m": "n. 邮票；印记",
+  "ex": "He put a stamp on the envelope.",
+  "exZh": "他在信封上贴了一张邮票。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "small stamp",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "statesman",
+  "m": "n. 政治家",
+  "ex": "The statesman spoke wisely to calm the nation.",
+  "exZh": "这位政治家明智地讲话以安抚国家。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old statesman",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "steal",
+  "m": "v. 偷",
+  "ex": "He stole a book from the store.",
+  "exZh": "他从商店偷了一本书。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "steal coins",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "stigma",
+  "m": "n. 耻辱；污名",
+  "ex": "He felt the stigma of being unemployed.",
+  "exZh": "他感受到了失业的耻辱。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "old stigma",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "submerge",
+  "m": "v. 潜水；浸没",
+  "ex": "The diver submerges to explore the coral reef.",
+  "exZh": "潜水员潜水去探索珊瑚礁。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "slowly submerge",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "succession",
+  "m": "n. 连续；一连串",
+  "ex": "The succession of rain made the ground wet.",
+  "exZh": "连续的雨水使地面变湿了。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "peaceful succession",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "superiority",
+  "m": "n. 优越感；优势",
+  "ex": "Nobody enjoyed his air of superiority.",
+  "exZh": "没人喜欢他那种优越感。",
+  "overlap": null,
+  "syn": [
+   {
+    "s": "virtue",
+    "src": "M"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "surveillance",
+  "m": "n. 监控；监视",
+  "ex": "The shop uses surveillance cameras at night.",
+  "exZh": "那家小店夜里开着监控摄像头。",
+  "overlap": [
+   [
+    "surveillance cameras",
+    "surveillance camera"
+   ],
+   [
+    "surveillance camera",
+    "new surveillance camera"
+   ]
+  ],
+  "syn": [],
+  "col": [
+   {
+    "c": "surveillance cameras",
+    "src": "B"
+   },
+   {
+    "c": "surveillance camera",
+    "src": "T"
+   },
+   {
+    "c": "new surveillance camera",
+    "src": "T"
+   }
+  ]
+ },
+ {
+  "w": "swap",
+  "m": "v. 交换；n. 交换",
+  "ex": "They swap books every week.",
+  "exZh": "他们每周交换书籍。",
+  "overlap": null,
+  "syn": [],
+  "col": [
+   {
+    "c": "sometimes swap",
     "src": "T"
    }
   ]

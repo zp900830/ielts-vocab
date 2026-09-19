@@ -46,6 +46,32 @@ def join_segments(free, segs):
     return '；'.join(out)
 
 
+def source_corpus():
+    """课文（按词头形态）+ 词伙书原文 —— 落地前的最后一道回查依据。"""
+    D = json.load(open(ROOT + '/shadow/data/sections.json', encoding='utf-8'))
+    mk = re.compile(r'\[\[([^\]:]+):([^\]]+)\]\]')
+    sents = [mk.sub(lambda m: m.group(1), s).lower()
+             for c in D for p in c['paragraphs'] for s in p]
+    try:
+        book = open(ROOT + '/work/ref/gjb_book.txt', encoding='utf-8').read().lower()
+    except OSError:
+        book = ''
+    return sents, book
+
+
+def traceable(chunk, sents, book):
+    """词伙必须能在课文或词伙书里逐字找到 —— 找不到就不落地。
+
+    候选是先建索引再落地的，中间只要课文被改过（换词、补连字符、调整语序），
+    卡片上就会留下一句谁都没说过的英语。规范化把 grey-haired 折成 grey haired
+    就是这么漏进来的，靠审核代理肉眼拦不住，得有机锁。
+    """
+    if chunk in book:
+        return True
+    pat = re.compile(r'(?<![a-z])' + re.escape(chunk).replace(r'\ ', r'[,. ]+') + r'(?![a-z])')
+    return any(pat.search(s) for s in sents)
+
+
 def apply_review(clean, review_path):
     """review JSON: {词头: {"syn": {词: "keep"|"drop"}, "col": {...}}}。
 
@@ -53,7 +79,8 @@ def apply_review(clean, review_path):
     谁都没看过就直接写进了学生的词卡。
     """
     rv = json.load(open(review_path, encoding='utf-8'))
-    dropped = 0
+    sents, book = source_corpus()
+    dropped = untraceable = 0
     out = []
     for item in clean:
         r = rv.get(item['w'])
@@ -69,12 +96,15 @@ def apply_review(clean, review_path):
                     raise SystemExit(f'门禁 2 未覆盖 {item["w"]}/{key}/{x[field]}，拒绝落地')
                 if str(verdict).lower().startswith('drop'):
                     dropped += 1
+                elif key == 'col' and not traceable(x['c'], sents, book):
+                    print(f'  !! 出处回查失败，不落地：{item["w"]} → {x["c"]!r}')
+                    untraceable += 1
                 else:
                     kept.append(x)
             item[key] = kept
         if item['syn'] or item['col']:
             out.append(item)
-    return out, dropped
+    return out, dropped, untraceable
 
 
 def main():
@@ -95,7 +125,7 @@ def main():
     # 否则这批卡的审核结论会被当成「词表里没有」整条丢掉
     key_of = {k.lower(): k for k in V}
     key_of.update({k.lower().replace('-', ' '): k for k in V})
-    clean, dropped = apply_review(json.load(open(args.patch, encoding='utf-8')), args.review)
+    clean, dropped, untraceable = apply_review(json.load(open(args.patch, encoding='utf-8')), args.review)
 
     touched = {'同义词': 0, '词伙': 0}
     added = {'同义词': 0, '词伙': 0}
@@ -120,7 +150,8 @@ def main():
         V[k]['note'] = join_segments(free, segs)
 
     new = json.dumps(V, ensure_ascii=False, separators=(',', ':'))
-    print(f'审核否掉 {dropped} 条；落地新增 同义词 {added["同义词"]} 条、词伙 {added["词伙"]} 条；跳过 {len(skipped)}')
+    print(f'审核否掉 {dropped} 条、出处回查失败 {untraceable} 条；'
+          f'落地新增 同义词 {added["同义词"]} 条、词伙 {added["词伙"]} 条；跳过 {len(skipped)}')
     if args.dry_run:
         print('（dry-run，未写盘）')
         return 0

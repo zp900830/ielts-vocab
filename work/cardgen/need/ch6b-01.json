@@ -14,27 +14,6 @@
   ]
  },
  {
-  "w": "acute",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "acute cough",
-   "acute cough troubles"
-  ]
- },
- {
-  "w": "adverse",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "adverse wind"
-  ]
- },
- {
   "w": "agony",
   "need_syn": true,
   "need_syn_ext": false,
@@ -56,16 +35,6 @@
   ]
  },
  {
-  "w": "allergy",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "food allergy"
-  ]
- },
- {
   "w": "anniversary",
   "need_syn": true,
   "need_syn_ext": false,
@@ -73,18 +42,6 @@
   "syn": [],
   "col": [
    "glad anniversary"
-  ]
- },
- {
-  "w": "annual",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "big annual",
-   "big annual fair",
-   "annual fair"
   ]
  },
  {
@@ -130,16 +87,6 @@
   "col": [
    "arduous last",
    "arduous last winter"
-  ]
- },
- {
-  "w": "arthritis",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "mild arthritis"
   ]
  },
  {
@@ -234,18 +181,6 @@
   ]
  },
  {
-  "w": "bruise",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "dark bruise",
-   "dark bruise faded",
-   "bruise faded"
-  ]
- },
- {
   "w": "cancer",
   "need_syn": true,
   "need_syn_ext": false,
@@ -313,17 +248,6 @@
   ]
  },
  {
-  "w": "cure",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "cure diseases",
-   "prevention is more important than the cure"
-  ]
- },
- {
   "w": "curious",
   "need_syn": true,
   "need_syn_ext": false,
@@ -357,23 +281,11 @@
   ]
  },
  {
-  "w": "delight",
-  "need_syn": true,
+  "w": "demise",
+  "need_syn": false,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
-  "col": [
-   "quiet delight"
-  ]
- },
- {
-  "w": "demise",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "death"
-  ],
   "col": [
    "sad demise"
   ]
@@ -428,28 +340,6 @@
   "col": []
  },
  {
-  "w": "dizzy",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "feel dizzy"
-  ]
- },
- {
-  "w": "dose",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "small dose",
-   "small dose follows",
-   "dose follows"
-  ]
- },
- {
   "w": "doubt",
   "need_syn": false,
   "need_syn_ext": false,
@@ -470,16 +360,6 @@
   ]
  },
  {
-  "w": "dysfunction",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "sleep dysfunction"
-  ]
- },
- {
   "w": "eager",
   "need_syn": true,
   "need_syn_ext": false,
@@ -487,16 +367,6 @@
   "syn": [],
   "col": [
    "felt eager"
-  ]
- },
- {
-  "w": "earnest",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "earnest face"
   ]
  },
  {
@@ -521,14 +391,10 @@
  },
  {
   "w": "endure",
-  "need_syn": true,
+  "need_syn": false,
   "need_syn_ext": false,
   "need_col": true,
-  "syn": [
-   "bear",
-   "survive",
-   "undergo"
-  ],
+  "syn": [],
   "col": [
    "endure long",
    "endure long therapy"
@@ -552,16 +418,6 @@
   "syn": [],
   "col": [
    "stayed enthusiastic"
-  ]
- },
- {
-  "w": "everlasting",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "everlasting love"
   ]
  },
  {
@@ -606,17 +462,6 @@
   ]
  },
  {
-  "w": "fatal",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "fatal crash",
-   "fatal crash touched"
-  ]
- },
- {
   "w": "fate",
   "need_syn": true,
   "need_syn_ext": false,
@@ -625,29 +470,6 @@
   "col": [
    "longer blamed fate",
    "blamed fate"
-  ]
- },
- {
-  "w": "fatigue",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "mild fatigue",
-   "mild fatigue comes",
-   "fatigue comes"
-  ]
- },
- {
-  "w": "favour",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "showed special favour",
-   "special favour"
   ]
  },
  {
@@ -662,32 +484,6 @@
    "felt feeble",
    "felt feeble yesterday",
    "feeble yesterday"
-  ]
- },
- {
-  "w": "fever",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "mild fever",
-   "mild fever fell",
-   "mild fever fell last",
-   "fever fell",
-   "fever fell last"
-  ]
- },
- {
-  "w": "flu",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "mild flu",
-   "mild flu visits",
-   "flu visits"
   ]
  },
  {
@@ -708,28 +504,6 @@
   "syn": [],
   "col": [
    "foremost lesson"
-  ]
- },
- {
-  "w": "former",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "former patient",
-   "former patient draw"
-  ]
- },
- {
-  "w": "fortune",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "thanked good fortune",
-   "good fortune"
   ]
  },
  {
@@ -768,28 +542,6 @@
   ]
  },
  {
-  "w": "gloomy",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "gloomy grey",
-   "gloomy grey days"
-  ]
- },
- {
-  "w": "grateful",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "felt deeply grateful",
-   "deeply grateful"
-  ]
- },
- {
   "w": "greedy",
   "need_syn": true,
   "need_syn_ext": false,
@@ -798,16 +550,6 @@
   "col": [
    "never grew greedy",
    "grew greedy"
-  ]
- },
- {
-  "w": "grief",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "deep grief"
   ]
  },
  {
@@ -835,25 +577,11 @@
   ]
  },
  {
-  "w": "headache",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "dull headache",
-   "dull headache left",
-   "headache left"
-  ]
- },
- {
   "w": "heal",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
-  "syn": [
-   "cure"
-  ],
+  "syn": [],
   "col": [
    "slow healing",
    "slow healing faded",
@@ -882,18 +610,6 @@
   ]
  },
  {
-  "w": "humorous",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "told humorous",
-   "told humorous tales",
-   "humorous tales"
-  ]
- },
- {
   "w": "hurt",
   "need_syn": true,
   "need_syn_ext": false,
@@ -903,34 +619,6 @@
    "hurt herself",
    "hurt small",
    "hurt small kids"
-  ]
- },
- {
-  "w": "hygiene",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "daily hygiene",
-   "daily hygiene keeps",
-   "daily hygiene keeps colds",
-   "hygiene keeps",
-   "hygiene keeps colds"
-  ]
- },
- {
-  "w": "hypertension",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "mild hypertension",
-   "mild hypertension needs",
-   "mild hypertension needs daily",
-   "hypertension needs",
-   "hypertension needs daily"
   ]
  },
  {
@@ -976,16 +664,6 @@
   ]
  },
  {
-  "w": "impulse",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "sudden impulse"
-  ]
- },
- {
   "w": "indifferent",
   "need_syn": true,
   "need_syn_ext": false,
@@ -1007,16 +685,6 @@
   ]
  },
  {
-  "w": "insult",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "offend"
-  ],
-  "col": []
- },
- {
   "w": "intermediate",
   "need_syn": true,
   "need_syn_ext": false,
@@ -1028,12 +696,10 @@
  },
  {
   "w": "intuition",
-  "need_syn": true,
+  "need_syn": false,
   "need_syn_ext": false,
   "need_col": true,
-  "syn": [
-   "instinct"
-  ],
+  "syn": [],
   "col": [
    "quick intuition"
   ]
@@ -1079,18 +745,6 @@
   ]
  },
  {
-  "w": "laughter",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "clear laughter",
-   "clear laughter filled",
-   "laughter filled"
-  ]
- },
- {
   "w": "lethal",
   "need_syn": true,
   "need_syn_ext": false,
@@ -1129,28 +783,6 @@
   "syn": [],
   "col": [
    "lovely teacher"
-  ]
- },
- {
-  "w": "lump",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "hard lump",
-   "hard lump grew",
-   "lump grew"
-  ]
- },
- {
-  "w": "mad",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "mad rush"
   ]
  },
  {
@@ -1207,13 +839,373 @@
   ]
  },
  {
-  "w": "millennium",
+  "w": "million",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "last millennium"
+   "million small",
+   "million small steps"
+  ]
+ },
+ {
+  "w": "miserable",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "stay miserable"
+  ]
+ },
+ {
+  "w": "modest",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "modest notebook"
+  ]
+ },
+ {
+  "w": "monthly",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "patients sharing monthly",
+   "patients sharing monthly drawings",
+   "sharing monthly",
+   "sharing monthly drawings",
+   "monthly drawings"
+  ]
+ },
+ {
+  "w": "morphine",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "strong morphine"
+  ]
+ },
+ {
+  "w": "mortal",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "mortal life",
+   "mortal life feels"
+  ]
+ },
+ {
+  "w": "mourn",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "mourn lost",
+   "mourn lost goals"
+  ]
+ },
+ {
+  "w": "mundane",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "bright turning mundane",
+   "bright turning mundane grey",
+   "turning mundane",
+   "turning mundane grey",
+   "turning mundane grey afternoons",
+   "mundane grey"
+  ]
+ },
+ {
+  "w": "mysterious",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "wall looked mysterious",
+   "looked mysterious"
+  ]
+ },
+ {
+  "w": "naive",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "questions seemed naive",
+   "seemed naive"
+  ]
+ },
+ {
+  "w": "naked",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "trees naked"
+  ]
+ },
+ {
+  "w": "negligible",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "negligible issue"
+  ]
+ },
+ {
+  "w": "normal",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "normal again",
+   "normal again now"
+  ]
+ },
+ {
+  "w": "nuisance",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small nuisance"
+  ]
+ },
+ {
+  "w": "oblivious",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "longer oblivious"
+  ]
+ },
+ {
+  "w": "obtrusive",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "felt obtrusive",
+   "felt obtrusive near",
+   "obtrusive near"
+  ]
+ },
+ {
+  "w": "overnight",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "fell overnight"
+  ]
+ },
+ {
+  "w": "patient",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "calm patient",
+   "weak patients",
+   "weak patients sharing",
+   "weak patients sharing monthly",
+   "patients sharing",
+   "patients sharing monthly"
+  ]
+ },
+ {
+  "w": "periodically",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "work periodically",
+   "work periodically praising",
+   "work periodically praising growth",
+   "periodically praising",
+   "periodically praising growth"
+  ]
+ },
+ {
+  "w": "permanent",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "permanent desk"
+  ]
+ },
+ {
+  "w": "pessimistic",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "feels pessimistic",
+   "feels pessimistic now",
+   "pessimistic now"
+  ]
+ },
+ {
+  "w": "physician",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "kind physician",
+   "kind physician calls",
+   "physician calls"
+  ]
+ },
+ {
+  "w": "picturesque",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "picturesque path"
+  ]
+ },
+ {
+  "w": "pimple",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small pimple"
+  ]
+ },
+ {
+  "w": "plague",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "plague walks"
+  ]
+ },
+ {
+  "w": "polite",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "polite way"
+  ]
+ },
+ {
+  "w": "precedent",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "fine precedent"
+  ]
+ },
+ {
+  "w": "prescription",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "short prescription",
+   "short prescription lists",
+   "prescription lists"
+  ]
+ },
+ {
+  "w": "prior",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "prior skill",
+   "prior skill gained"
+  ]
+ },
+ {
+  "w": "punctual",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "window arriving punctual",
+   "arriving punctual"
+  ]
+ },
+ {
+  "w": "quarantine",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quarantine grandma"
+  ]
+ },
+ {
+  "w": "quarterly",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "clinic held quarterly",
+   "clinic held quarterly reading",
+   "held quarterly",
+   "held quarterly reading",
+   "held quarterly reading shows",
+   "quarterly reading"
+  ]
+ },
+ {
+  "w": "radical",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "radical new",
+   "radical new reading"
   ]
  }
 ]

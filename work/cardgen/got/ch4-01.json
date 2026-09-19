@@ -1,112 +1,723 @@
 [
-{"w":"aboard","syn":[],"col":["everyone aboard"]},
-{"w":"abortion","syn":[],"col":[]},
-{"w":"accuse","syn":[],"col":[]},
-{"w":"adequate","syn":[],"col":["barely adequate"]},
-{"w":"administration","syn":[],"col":[]},
-{"w":"admit","syn":[],"col":["never admit"]},
-{"w":"affirm","syn":[],"col":[]},
-{"w":"agent","syn":[],"col":[]},
-{"w":"agreement","syn":[],"col":[]},
-{"w":"ambulance","syn":[],"col":[]},
-{"w":"anchor","syn":[],"col":[]},
-{"w":"announce","syn":[],"col":[]},
-{"w":"arabian","syn":[],"col":[]},
-{"w":"arena","syn":[],"col":[]},
-{"w":"arrest","syn":[],"col":[]},
-{"w":"assist","syn":[],"col":[]},
-{"w":"asylum","syn":[],"col":[]},
-{"w":"auction","syn":[],"col":[]},
-{"w":"authority","syn":[],"col":[]},
-{"w":"avenue","syn":[],"col":[]},
-{"w":"banner","syn":[],"col":[]},
-{"w":"benchmark","syn":[],"col":[]},
-{"w":"bid","syn":[],"col":["low bid"]},
-{"w":"bilateral","syn":[],"col":["bilateral deal"]},
-{"w":"bound","syn":[],"col":["felt bound"]},
-{"w":"brake","syn":[],"col":[]},
-{"w":"bribe","syn":[],"col":["dirty bribe"]},
-{"w":"britain","syn":[],"col":[]},
-{"w":"broken","syn":[],"col":["broken arm"]},
-{"w":"bureau","syn":[],"col":["travel bureau"]},
-{"w":"bureaucracy","syn":[],"col":[]},
-{"w":"burst","syn":[],"col":["burst out laughing"]},
-{"w":"canal","syn":[],"col":[]},
-{"w":"captain","syn":[],"col":[]},
-{"w":"cargo","syn":[],"col":[]},
-{"w":"carriage","syn":[],"col":[]},
-{"w":"cart","syn":[],"col":["wooden cart"]},
-{"w":"chance","syn":[],"col":["little chance"]},
-{"w":"charter","syn":[],"col":[]},
-{"w":"checklist","syn":[],"col":["travel checklist"]},
-{"w":"choose","syn":["select"],"col":[]},
-{"w":"clan","syn":[],"col":[]},
-{"w":"clarify","syn":["explain"],"col":[]},
-{"w":"clerk","syn":[],"col":[]},
-{"w":"clue","syn":[],"col":[]},
-{"w":"colony","syn":[],"col":["ant colony"]},
-{"w":"conference","syn":[],"col":["conference hall"]},
-{"w":"confess","syn":["admit"],"col":[]},
-{"w":"consortium","syn":[],"col":[]},
-{"w":"constraint","syn":[],"col":["time constraint"]},
-{"w":"copper","syn":[],"col":[]},
-{"w":"copyright","syn":[],"col":[]},
-{"w":"count","syn":[],"col":[]},
-{"w":"coupon","syn":[],"col":["paper coupon"]},
-{"w":"court","syn":[],"col":["supreme court"]},
-{"w":"crash","syn":[],"col":[]},
-{"w":"criteria","syn":[],"col":["clear criteria"]},
-{"w":"crown","syn":[],"col":[]},
-{"w":"currency","syn":[],"col":[]},
-{"w":"deceive","syn":[],"col":[]},
-{"w":"deck","syn":[],"col":[]},
-{"w":"declare","syn":[],"col":[]},
-{"w":"defer","syn":["postpone"],"col":[]},
-{"w":"deficit","syn":[],"col":[]},
-{"w":"deflation","syn":[],"col":["price deflation"]},
-{"w":"depression","syn":[],"col":[]},
-{"w":"discharge","syn":[],"col":[]},
-{"w":"discount","syn":[],"col":[]},
-{"w":"dismiss","syn":[],"col":["never dismiss"]},
-{"w":"ditch","syn":[],"col":[]},
-{"w":"dock","syn":[],"col":[]},
-{"w":"dominate","syn":[],"col":["male dominated industries"]},
-{"w":"downsize","syn":[],"col":[]},
-{"w":"doze","syn":[],"col":[]},
-{"w":"due","syn":[],"col":["money due"]},
-{"w":"dwindle","syn":[],"col":[]},
-{"w":"egalitarian","syn":[],"col":[]},
-{"w":"emergency","syn":["crisis"],"col":[]},
-{"w":"entity","syn":[],"col":["business entity"]},
-{"w":"envelope","syn":[],"col":[]},
-{"w":"equity","syn":[],"col":[]},
-{"w":"estate","syn":[],"col":[]},
-{"w":"ethnic","syn":[],"col":["ethnic group"]},
-{"w":"european","syn":[],"col":[]},
-{"w":"explain","syn":[],"col":[]},
-{"w":"export","syn":[],"col":[]},
-{"w":"failure","syn":[],"col":["delivery failure"]},
-{"w":"fare","syn":[],"col":["bus fares"]},
-{"w":"fault","syn":["mistake"],"col":[]},
-{"w":"federal","syn":[],"col":["federal capital"]},
-{"w":"ferry","syn":[],"col":[]},
-{"w":"freight","syn":[],"col":["freight train"]},
-{"w":"fury","syn":[],"col":[]},
-{"w":"garage","syn":[],"col":[]},
-{"w":"genuine","syn":[],"col":["genuine smile"]},
-{"w":"germany","syn":[],"col":[]},
-{"w":"global","syn":["worldwide"],"col":[]},
-{"w":"greek","syn":[],"col":[]},
-{"w":"grocery","syn":[],"col":[]},
-{"w":"gross","syn":[],"col":["gross total"]},
-{"w":"guarantee","syn":[],"col":[]},
-{"w":"guard","syn":[],"col":["border guard"]},
-{"w":"guest","syn":[],"col":[]},
-{"w":"hazard","syn":["risk"],"col":["biggest hazard"]},
-{"w":"headquarters","syn":[],"col":[]},
-{"w":"helicopter","syn":[],"col":[]},
-{"w":"hierarchy","syn":[],"col":[]},
-{"w":"highway","syn":[],"col":[]},
-{"w":"honk","syn":[],"col":[]},
-{"w":"import","syn":[],"col":["imported fruit","import fresh fruit"]}
+ {
+  "w": "abortion",
+  "syn": [],
+  "col": [
+   "painful abortion"
+  ]
+ },
+ {
+  "w": "accuse",
+  "syn": [],
+  "col": [
+   "accuse anyone"
+  ]
+ },
+ {
+  "w": "administration",
+  "syn": [],
+  "col": [
+   "new administration"
+  ]
+ },
+ {
+  "w": "affirm",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "agent",
+  "syn": [],
+  "col": [
+   "friendly agent"
+  ]
+ },
+ {
+  "w": "agreement",
+  "syn": [],
+  "col": [
+   "paper agreement",
+   "signed paper agreement"
+  ]
+ },
+ {
+  "w": "ambulance",
+  "syn": [],
+  "col": [
+   "white ambulance"
+  ]
+ },
+ {
+  "w": "anchor",
+  "syn": [],
+  "col": [
+   "heavy anchor"
+  ]
+ },
+ {
+  "w": "announce",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "arabian",
+  "syn": [],
+  "col": [
+   "arabian seller",
+   "smiling arabian seller",
+   "smiling arabian"
+  ]
+ },
+ {
+  "w": "arena",
+  "syn": [],
+  "col": [
+   "old arena"
+  ]
+ },
+ {
+  "w": "arrest",
+  "syn": [],
+  "col": [
+   "arrest anyone"
+  ]
+ },
+ {
+  "w": "assist",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "asylum",
+  "syn": [],
+  "col": [
+   "city asylum"
+  ]
+ },
+ {
+  "w": "auction",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "authority",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "avenue",
+  "syn": [],
+  "col": [
+   "wide avenue"
+  ]
+ },
+ {
+  "w": "banner",
+  "syn": [],
+  "col": [
+   "red banner"
+  ]
+ },
+ {
+  "w": "benchmark",
+  "syn": [],
+  "col": [
+   "cold benchmark"
+  ]
+ },
+ {
+  "w": "bound",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "brake",
+  "syn": [],
+  "col": [
+   "new brake"
+  ]
+ },
+ {
+  "w": "britain",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "bureau",
+  "syn": [],
+  "col": [
+   "travel bureau"
+  ]
+ },
+ {
+  "w": "bureaucracy",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "canal",
+  "syn": [],
+  "col": [
+   "old canal"
+  ]
+ },
+ {
+  "w": "captain",
+  "syn": [],
+  "col": [
+   "kind captain"
+  ]
+ },
+ {
+  "w": "cargo",
+  "syn": [],
+  "col": [
+   "winter cargo"
+  ]
+ },
+ {
+  "w": "carriage",
+  "syn": [],
+  "col": [
+   "old carriage"
+  ]
+ },
+ {
+  "w": "charter",
+  "syn": [],
+  "col": [
+   "shop charter"
+  ]
+ },
+ {
+  "w": "clan",
+  "syn": [],
+  "col": [
+   "mountain clan",
+   "old mountain clan"
+  ]
+ },
+ {
+  "w": "clerk",
+  "syn": [],
+  "col": [
+   "young clerk"
+  ]
+ },
+ {
+  "w": "clue",
+  "syn": [],
+  "col": [
+   "paper clue",
+   "small paper clue"
+  ]
+ },
+ {
+  "w": "consortium",
+  "syn": [],
+  "col": [
+   "consortium dam"
+  ]
+ },
+ {
+  "w": "copper",
+  "syn": [],
+  "col": [
+   "old copper"
+  ]
+ },
+ {
+  "w": "copyright",
+  "syn": [],
+  "col": [
+   "simple copyright"
+  ]
+ },
+ {
+  "w": "crash",
+  "syn": [],
+  "col": [
+   "loud crash"
+  ]
+ },
+ {
+  "w": "crown",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "currency",
+  "syn": [],
+  "col": [
+   "different currency"
+  ]
+ },
+ {
+  "w": "deceive",
+  "syn": [],
+  "col": [
+   "deceive old friends"
+  ]
+ },
+ {
+  "w": "deck",
+  "syn": [],
+  "col": [
+   "windy deck"
+  ]
+ },
+ {
+  "w": "declare",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "deficit",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "depression",
+  "syn": [],
+  "col": [
+   "quiet depression"
+  ]
+ },
+ {
+  "w": "discharge",
+  "syn": [],
+  "col": [
+   "discharge nothing"
+  ]
+ },
+ {
+  "w": "discount",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "ditch",
+  "syn": [],
+  "col": [
+   "deep ditch"
+  ]
+ },
+ {
+  "w": "dock",
+  "syn": [],
+  "col": [
+   "old dock"
+  ]
+ },
+ {
+  "w": "downsize",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "doze",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "dwindle",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "egalitarian",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "emergency",
+  "syn": [],
+  "col": [
+   "train emergency",
+   "small train emergency"
+  ]
+ },
+ {
+  "w": "envelope",
+  "syn": [],
+  "col": [
+   "old envelope"
+  ]
+ },
+ {
+  "w": "equity",
+  "syn": [],
+  "col": [
+   "rough equity",
+   "keep rough equity"
+  ]
+ },
+ {
+  "w": "estate",
+  "syn": [],
+  "col": [
+   "old estate"
+  ]
+ },
+ {
+  "w": "european",
+  "syn": [],
+  "col": [
+   "european trains"
+  ]
+ },
+ {
+  "w": "explain",
+  "syn": [],
+  "col": [
+   "then explain"
+  ]
+ },
+ {
+  "w": "export",
+  "syn": [],
+  "col": [
+   "export problems"
+  ]
+ },
+ {
+  "w": "fault",
+  "syn": [],
+  "col": [
+   "sad faults",
+   "small fault"
+  ]
+ },
+ {
+  "w": "ferry",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "footpath",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "fury",
+  "syn": [],
+  "col": [
+   "old fury"
+  ]
+ },
+ {
+  "w": "garage",
+  "syn": [],
+  "col": [
+   "dark garage"
+  ]
+ },
+ {
+  "w": "germany",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "governance",
+  "syn": [],
+  "col": [
+   "fairer governance"
+  ]
+ },
+ {
+  "w": "greek",
+  "syn": [],
+  "col": [
+   "greek story"
+  ]
+ },
+ {
+  "w": "grocery",
+  "syn": [],
+  "col": [
+   "little grocery"
+  ]
+ },
+ {
+  "w": "guarantee",
+  "syn": [],
+  "col": [
+   "strong guarantee"
+  ]
+ },
+ {
+  "w": "guest",
+  "syn": [],
+  "col": [
+   "tired guests"
+  ]
+ },
+ {
+  "w": "headquarters",
+  "syn": [],
+  "col": [
+   "big headquarters"
+  ]
+ },
+ {
+  "w": "helicopter",
+  "syn": [],
+  "col": [
+   "red helicopter"
+  ]
+ },
+ {
+  "w": "hierarchy",
+  "syn": [],
+  "col": [
+   "old hierarchy"
+  ]
+ },
+ {
+  "w": "highway",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "honk",
+  "syn": [],
+  "col": [
+   "long honk"
+  ]
+ },
+ {
+  "w": "impose",
+  "syn": [
+   "enforce"
+  ],
+  "col": []
+ },
+ {
+  "w": "increment",
+  "syn": [],
+  "col": [
+   "tiny increment"
+  ]
+ },
+ {
+  "w": "independence",
+  "syn": [
+   "liberty",
+   "freedom"
+  ],
+  "col": []
+ },
+ {
+  "w": "indian",
+  "syn": [],
+  "col": [
+   "indian temple"
+  ]
+ },
+ {
+  "w": "italian",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "itinerary",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "jet",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "jewish",
+  "syn": [],
+  "col": [
+   "jewish festival"
+  ]
+ },
+ {
+  "w": "latin",
+  "syn": [],
+  "col": [
+   "latin word"
+  ]
+ },
+ {
+  "w": "legislate",
+  "syn": [],
+  "col": [
+   "legislate harsh orders"
+  ]
+ },
+ {
+  "w": "liner",
+  "syn": [],
+  "col": [
+   "big liner"
+  ]
+ },
+ {
+  "w": "locomotive",
+  "syn": [],
+  "col": [
+   "small locomotive"
+  ]
+ },
+ {
+  "w": "lorry",
+  "syn": [],
+  "col": [
+   "big lorry"
+  ]
+ },
+ {
+  "w": "luggage",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "lull",
+  "syn": [],
+  "col": [
+   "quiet lull"
+  ]
+ },
+ {
+  "w": "mandatory",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "materialism",
+  "syn": [],
+  "col": [
+   "empty materialism"
+  ]
+ },
+ {
+  "w": "meltdown",
+  "syn": [],
+  "col": [
+   "quiet meltdown"
+  ]
+ },
+ {
+  "w": "memorial",
+  "syn": [],
+  "col": [
+   "old memorial"
+  ]
+ },
+ {
+  "w": "merchant",
+  "syn": [],
+  "col": [
+   "corner merchant",
+   "street corner merchant"
+  ]
+ },
+ {
+  "w": "might",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "minister",
+  "syn": [],
+  "col": [
+   "old minister",
+   "kind old minister"
+  ]
+ },
+ {
+  "w": "monitor",
+  "syn": [],
+  "col": [
+   "monitor every train"
+  ]
+ },
+ {
+  "w": "municipal",
+  "syn": [],
+  "col": [
+   "municipal inn"
+  ]
+ },
+ {
+  "w": "murder",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "murmur",
+  "syn": [],
+  "col": [
+   "soft murmur"
+  ]
+ },
+ {
+  "w": "mute",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "neutral",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "notoriety",
+  "syn": [],
+  "col": [
+   "sudden notoriety"
+  ]
+ },
+ {
+  "w": "oversee",
+  "syn": [],
+  "col": [
+   "oversee morning arrivals"
+  ]
+ },
+ {
+  "w": "parachute",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "parcel",
+  "syn": [],
+  "col": [
+   "brown parcel"
+  ]
+ },
+ {
+  "w": "parliament",
+  "syn": [],
+  "col": [
+   "famous parliament"
+  ]
+ },
+ {
+  "w": "passage",
+  "syn": [],
+  "col": [
+   "mountain passage"
+  ]
+ },
+ {
+  "w": "passenger",
+  "syn": [],
+  "col": [
+   "tired passenger"
+  ]
+ },
+ {
+  "w": "payroll",
+  "syn": [],
+  "col": [
+   "paper payroll"
+  ]
+ }
 ]

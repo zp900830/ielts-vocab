@@ -1,19 +1,5 @@
 [
  {
-  "w": "aboard",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "called everyone aboard",
-   "called everyone aboard out",
-   "everyone aboard",
-   "everyone aboard out",
-   "aboard out"
-  ]
- },
- {
   "w": "abortion",
   "need_syn": true,
   "need_syn_ext": false,
@@ -34,16 +20,6 @@
   ]
  },
  {
-  "w": "adequate",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "barely adequate"
-  ]
- },
- {
   "w": "administration",
   "need_syn": true,
   "need_syn_ext": false,
@@ -55,16 +31,6 @@
    "new administration father began",
    "administration father",
    "administration father began"
-  ]
- },
- {
-  "w": "admit",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "never admit"
   ]
  },
  {
@@ -209,11 +175,9 @@
  {
   "w": "avenue",
   "need_syn": false,
-  "need_syn_ext": true,
+  "need_syn_ext": false,
   "need_col": true,
-  "syn": [
-   "lane"
-  ],
+  "syn": [],
   "col": [
    "wide avenue"
   ]
@@ -241,35 +205,13 @@
   ]
  },
  {
-  "w": "bid",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "low bid"
-  ]
- },
- {
-  "w": "bilateral",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "bilateral deal",
-   "bilateral deal father"
-  ]
- },
- {
   "w": "bound",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "men felt bound",
-   "felt bound"
+   "men felt bound"
   ]
  },
  {
@@ -280,16 +222,6 @@
   "syn": [],
   "col": [
    "new brake"
-  ]
- },
- {
-  "w": "bribe",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "dirty bribe"
   ]
  },
  {
@@ -304,23 +236,12 @@
   ]
  },
  {
-  "w": "broken",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "broken arm"
-  ]
- },
- {
   "w": "bureau",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "travel bureau",
    "travel bureau take",
    "bureau take"
   ]
@@ -334,21 +255,6 @@
   "col": [
    "bureaucracy father",
    "bureaucracy father waited"
-  ]
- },
- {
-  "w": "burst",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "burst out",
-   "burst out laughing",
-   "neighbors burst",
-   "neighbors burst out",
-   "neighbors burst out laughing",
-   "whole row burst"
   ]
  },
  {
@@ -396,28 +302,6 @@
   ]
  },
  {
-  "w": "cart",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "wooden cart",
-   "wooden cart full",
-   "cart full"
-  ]
- },
- {
-  "w": "chance",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "little chance"
-  ]
- },
- {
   "w": "charter",
   "need_syn": true,
   "need_syn_ext": false,
@@ -426,27 +310,6 @@
   "col": [
    "shop charter"
   ]
- },
- {
-  "w": "checklist",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "little travel checklist",
-   "travel checklist"
-  ]
- },
- {
-  "w": "choose",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": false,
-  "syn": [
-   "select"
-  ],
-  "col": []
  },
  {
   "w": "clan",
@@ -458,16 +321,6 @@
    "old mountain clan",
    "mountain clan"
   ]
- },
- {
-  "w": "clarify",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "explain"
-  ],
-  "col": []
  },
  {
   "w": "clerk",
@@ -498,40 +351,6 @@
   ]
  },
  {
-  "w": "colony",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "ant colony"
-  ]
- },
- {
-  "w": "conference",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "tall conference",
-   "tall conference hall",
-   "tall conference hall father",
-   "conference hall",
-   "conference hall father"
-  ]
- },
- {
-  "w": "confess",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "admit"
-  ],
-  "col": []
- },
- {
   "w": "consortium",
   "need_syn": true,
   "need_syn_ext": false,
@@ -540,19 +359,6 @@
   "col": [
    "consortium dam",
    "consortium dam ahead"
-  ]
- },
- {
-  "w": "constraint",
-  "need_syn": false,
-  "need_syn_ext": true,
-  "need_col": true,
-  "syn": [
-   "limit"
-  ],
-  "col": [
-   "tight time constraint",
-   "time constraint"
   ]
  },
  {
@@ -576,37 +382,6 @@
   ]
  },
  {
-  "w": "count",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "counter fright"
-  ]
- },
- {
-  "w": "coupon",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "brought paper coupon",
-   "paper coupon"
-  ]
- },
- {
-  "w": "court",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "supreme court"
-  ]
- },
- {
   "w": "crash",
   "need_syn": true,
   "need_syn_ext": false,
@@ -614,16 +389,6 @@
   "syn": [],
   "col": [
    "loud crash"
-  ]
- },
- {
-  "w": "criteria",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "clear criteria"
   ]
  },
  {
@@ -678,16 +443,6 @@
   ]
  },
  {
-  "w": "defer",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "postpone"
-  ],
-  "col": []
- },
- {
   "w": "deficit",
   "need_syn": true,
   "need_syn_ext": false,
@@ -696,16 +451,6 @@
    "loss"
   ],
   "col": []
- },
- {
-  "w": "deflation",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "price deflation"
-  ]
  },
  {
   "w": "depression",
@@ -738,16 +483,6 @@
   "col": []
  },
  {
-  "w": "dismiss",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "never dismiss"
-  ]
- },
- {
   "w": "ditch",
   "need_syn": true,
   "need_syn_ext": false,
@@ -765,16 +500,6 @@
   "syn": [],
   "col": [
    "old dock"
-  ]
- },
- {
-  "w": "dominate",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "male dominated industries"
   ]
  },
  {
@@ -799,16 +524,6 @@
    "kids doze",
    "resident cats doze",
    "cats doze"
-  ]
- },
- {
-  "w": "due",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "money due"
   ]
  },
  {
@@ -838,26 +553,13 @@
  },
  {
   "w": "emergency",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "crisis"
-  ],
-  "col": [
-   "small train emergency",
-   "train emergency"
-  ]
- },
- {
-  "w": "entity",
   "need_syn": false,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "small business entity",
-   "business entity"
+   "small train emergency",
+   "train emergency"
   ]
  },
  {
@@ -892,16 +594,6 @@
   ]
  },
  {
-  "w": "ethnic",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "ethnic group"
-  ]
- },
- {
   "w": "european",
   "need_syn": true,
   "need_syn_ext": false,
@@ -932,52 +624,14 @@
   ]
  },
  {
-  "w": "failure",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "delivery failure",
-   "delivery failure felt",
-   "failure felt"
-  ]
- },
- {
-  "w": "fare",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "reimburse bus fares",
-   "reimburse bus fares quickly",
-   "bus fares",
-   "bus fares quickly",
-   "fares quickly"
-  ]
- },
- {
   "w": "fault",
-  "need_syn": true,
+  "need_syn": false,
   "need_syn_ext": false,
   "need_col": true,
-  "syn": [
-   "mistake"
-  ],
+  "syn": [],
   "col": [
    "sad faults",
    "small fault"
-  ]
- },
- {
-  "w": "federal",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "federal capital"
   ]
  },
  {
@@ -991,17 +645,13 @@
   ]
  },
  {
-  "w": "freight",
+  "w": "footpath",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "long freight",
-   "long freight train",
-   "long freight train stood",
-   "freight train",
-   "freight train stood"
+   "footpath clean"
   ]
  },
  {
@@ -1027,17 +677,6 @@
   ]
  },
  {
-  "w": "genuine",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "genuine smile",
-   "genuine smile returned"
-  ]
- },
- {
   "w": "germany",
   "need_syn": true,
   "need_syn_ext": false,
@@ -1048,14 +687,14 @@
   ]
  },
  {
-  "w": "global",
+  "w": "governance",
   "need_syn": true,
   "need_syn_ext": false,
-  "need_col": false,
-  "syn": [
-   "worldwide"
-  ],
-  "col": []
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "fairer governance"
+  ]
  },
  {
   "w": "greek",
@@ -1082,17 +721,6 @@
   ]
  },
  {
-  "w": "gross",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "gross total",
-   "gross total barely"
-  ]
- },
- {
   "w": "guarantee",
   "need_syn": false,
   "need_syn_ext": false,
@@ -1100,21 +728,6 @@
   "syn": [],
   "col": [
    "strong guarantee"
-  ]
- },
- {
-  "w": "guard",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "kind border guard",
-   "kind border guard showed",
-   "border guard",
-   "border guard showed",
-   "guard showed",
-   "guard came"
   ]
  },
  {
@@ -1128,18 +741,6 @@
    "guest tasted",
    "guest tasted clean",
    "every guest"
-  ]
- },
- {
-  "w": "hazard",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "risk"
-  ],
-  "col": [
-   "biggest hazard"
   ]
  },
  {
@@ -1194,15 +795,411 @@
   ]
  },
  {
-  "w": "import",
+  "w": "impose",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": false,
+  "syn": [
+   "enforce"
+  ],
+  "col": []
+ },
+ {
+  "w": "increment",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "every tiny increment",
+   "tiny increment"
+  ]
+ },
+ {
+  "w": "independence",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": false,
+  "syn": [
+   "liberty",
+   "freedom"
+  ],
+  "col": []
+ },
+ {
+  "w": "indian",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "indian temple",
+   "indian temple beside"
+  ]
+ },
+ {
+  "w": "italian",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "father called italian",
+   "called italian"
+  ]
+ },
+ {
+  "w": "itinerary",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "itinerary out",
+   "itinerary out loud"
+  ]
+ },
+ {
+  "w": "jet",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "jet crossed"
+  ]
+ },
+ {
+  "w": "jewish",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "jewish festival"
+  ]
+ },
+ {
+  "w": "latin",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "latin word"
+  ]
+ },
+ {
+  "w": "legislate",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "legislate harsh",
+   "legislate harsh orders"
+  ]
+ },
+ {
+  "w": "liner",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "big liner",
+   "big liner came",
+   "big liner came back",
+   "liner came",
+   "liner came back"
+  ]
+ },
+ {
+  "w": "locomotive",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small locomotive",
+   "small locomotive pulled",
+   "small locomotive pulled six",
+   "locomotive pulled",
+   "locomotive pulled six"
+  ]
+ },
+ {
+  "w": "lorry",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "big lorry",
+   "big lorry father",
+   "big lorry father told",
+   "lorry father",
+   "lorry father told"
+  ]
+ },
+ {
+  "w": "luggage",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "luggage up"
+  ]
+ },
+ {
+  "w": "lull",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quiet lull"
+  ]
+ },
+ {
+  "w": "mandatory",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "morning delivery mandatory",
+   "delivery mandatory"
+  ]
+ },
+ {
+  "w": "materialism",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "empty materialism"
+  ]
+ },
+ {
+  "w": "meltdown",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quiet meltdown",
+   "quiet meltdown behind",
+   "meltdown behind"
+  ]
+ },
+ {
+  "w": "memorial",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old memorial"
+  ]
+ },
+ {
+  "w": "merchant",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "street corner merchant",
+   "street corner merchant facing",
+   "corner merchant",
+   "corner merchant facing",
+   "corner merchant facing serious",
+   "merchant facing"
+  ]
+ },
+ {
+  "w": "might",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "whether strangers might",
+   "whether strangers might ever",
+   "strangers might",
+   "strangers might ever",
+   "strangers might ever unite",
+   "might ever"
+  ]
+ },
+ {
+  "w": "minister",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "kind old minister",
+   "old minister"
+  ]
+ },
+ {
+  "w": "monitor",
   "need_syn": false,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "imported fruit",
-   "import fresh",
-   "import fresh fruit"
+   "border monitor",
+   "border monitor every",
+   "border monitor every train",
+   "monitor every",
+   "monitor every train"
+  ]
+ },
+ {
+  "w": "municipal",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "municipal inn"
+  ]
+ },
+ {
+  "w": "murder",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "murder felt",
+   "murder felt far"
+  ]
+ },
+ {
+  "w": "murmur",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "soft murmur"
+  ]
+ },
+ {
+  "w": "mute",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "uncles stayed mute"
+  ]
+ },
+ {
+  "w": "neutral",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "passive"
+  ],
+  "col": []
+ },
+ {
+  "w": "notoriety",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "corner sudden notoriety",
+   "sudden notoriety"
+  ]
+ },
+ {
+  "w": "oversee",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "oversee morning",
+   "oversee morning arrivals"
+  ]
+ },
+ {
+  "w": "parachute",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "parachute instead"
+  ]
+ },
+ {
+  "w": "parcel",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "brown parcel",
+   "brown parcel off",
+   "parcel off"
+  ]
+ },
+ {
+  "w": "parliament",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "famous parliament",
+   "famous parliament father",
+   "famous parliament father said",
+   "parliament father",
+   "parliament father said"
+  ]
+ },
+ {
+  "w": "passage",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "mountain passage"
+  ]
+ },
+ {
+  "w": "passenger",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "every tired passenger",
+   "tired passenger"
+  ]
+ },
+ {
+  "w": "payroll",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "paper payroll",
+   "paper payroll locked",
+   "payroll locked"
   ]
  }
 ]

@@ -1,198 +1,871 @@
 {
-"coupon": {"syn": {}, "col": {"paper coupon": "keep"}},
-"court": {"syn": {}, "col": {"supreme court": "keep"}},
-"criteria": {"syn": {}, "col": {"clear criteria": "keep"}},
-"defer": {"syn": {"postpone": "keep"}, "col": {}},
-"deflation": {"syn": {}, "col": {"price deflation": "keep"}},
-"dismiss": {"syn": {}, "col": {"never dismiss": "drop", "why": "否定副词拼接"}},
-"dominate": {"syn": {}, "col": {"male dominated industries": "keep"}},
-"due": {"syn": {}, "col": {"money due": "keep"}},
-"emergency": {"syn": {"crisis": "keep"}, "col": {}},
-"entity": {"syn": {}, "col": {"business entity": "keep"}},
-"ethnic": {"syn": {}, "col": {"ethnic group": "keep"}},
-"failure": {"syn": {}, "col": {"delivery failure": "keep"}},
-"fare": {"syn": {}, "col": {"bus fares": "keep"}},
-"fault": {"syn": {"mistake": "keep"}, "col": {}},
-"federal": {"syn": {}, "col": {"federal capital": "keep"}},
-"freight": {"syn": {}, "col": {"freight train": "keep"}},
-"genuine": {"syn": {}, "col": {"genuine smile": "keep"}},
-"global": {"syn": {"worldwide": "keep"}, "col": {}},
-"gross": {"syn": {}, "col": {"gross total": "keep"}},
-"guard": {"syn": {}, "col": {"border guard": "keep"}},
-"hazard": {"syn": {"risk": "drop", "why": "危害源非可能性"}, "col": {"biggest hazard": "keep"}},
-"import": {"syn": {}, "col": {"imported fruit": "keep", "import fresh fruit": "keep"}},
-"inflation": {"syn": {}, "col": {"rising inflation": "keep"}},
-"installment": {"syn": {}, "col": {"regular installment": "keep"}},
-"instruct": {"syn": {}, "col": {"gently instruct": "drop", "why": "临时修饰非搭配"}},
-"intersection": {"syn": {}, "col": {"busy intersection": "keep"}},
-"judge": {"syn": {}, "col": {"stern judge": "keep"}},
-"layoff": {"syn": {}, "col": {"sudden layoff": "keep"}},
-"league": {"syn": {}, "col": {"football league": "keep"}},
-"levy": {"syn": {}, "col": {"new levy": "keep"}},
-"load": {"syn": {"burden": "keep"}, "col": {"heavy load": "keep"}},
-"mail": {"syn": {}, "col": {"mail box": "keep"}},
-"mediate": {"syn": {}, "col": {"mediate gently": "drop", "why": "临时修饰非搭配"}},
-"mute": {"syn": {}, "col": {"stayed mute": "keep"}},
-"negotiation": {"syn": {}, "col": {"long negotiation": "keep"}},
-"neutral": {"syn": {}, "col": {"stayed neutral": "keep"}},
-"oar": {"syn": {}, "col": {"wooden oar": "keep"}},
-"occupation": {"syn": {}, "col": {"honest occupation": "keep"}},
-"outlook": {"syn": {"prospect": "keep"}, "col": {"bright outlook": "keep"}},
-"oversee": {"syn": {"monitor": "keep"}, "col": {}},
-"permit": {"syn": {}, "col": {"written permit": "keep"}},
-"personnel": {"syn": {}, "col": {"shop personnel": "keep"}},
-"perspective": {"syn": {"opinion": "keep"}, "col": {"fresh perspective": "keep"}},
-"poll": {"syn": {}, "col": {"latest poll": "keep"}},
-"port": {"syn": {}, "col": {"busy port": "keep"}},
-"postage": {"syn": {}, "col": {"extra postage": "keep"}},
-"potent": {"syn": {}, "col": {"potent boost": "keep"}},
-"prejudice": {"syn": {"bias": "keep"}, "col": {}},
-"prompt": {"syn": {}, "col": {"prompt service": "keep"}},
-"proud": {"syn": {}, "col": {"felt proud": "keep"}},
-"puppet": {"syn": {}, "col": {"wooden puppet": "keep"}},
-"quota": {"syn": {}, "col": {"agreed quota": "keep"}},
-"rack": {"syn": {}, "col": {"wooden rack": "keep"}},
-"rail": {"syn": {}, "col": {"steel rail": "keep"}},
-"reconcile": {"syn": {}, "col": {"reconcile fully": "drop", "why": "临时修饰非搭配"}},
-"redundant": {"syn": {}, "col": {"became redundant": "keep"}},
-"remuneration": {"syn": {}, "col": {"extra remuneration": "keep"}},
-"resign": {"syn": {"quit": "keep"}, "col": {}},
-"respondent": {"syn": {}, "col": {"survey respondent": "keep"}},
-"retire": {"syn": {}, "col": {"retire early": "keep"}},
-"revenue": {"syn": {"income": "keep"}, "col": {}},
-"roman": {"syn": {}, "col": {"roman roads": "keep"}},
-"sack": {"syn": {}, "col": {"flour sack": "keep"}},
-"sail": {"syn": {}, "col": {"sail away": "keep"}},
-"sanction": {"syn": {}, "col": {"impose sanctions on": "keep"}},
-"saving": {"syn": {"conservation": "drop", "why": "只指资源保护"}, "col": {}},
-"session": {"syn": {}, "col": {"evening session": "keep"}},
-"significance": {"syn": {}, "col": {"deep significance": "keep"}},
-"solve": {"syn": {}, "col": {"problem solving skills": "keep"}},
-"spare": {"syn": {}, "col": {"spare chairs": "keep"}},
-"speed": {"syn": {}, "col": {"full speed": "keep"}},
-"stock": {"syn": {}, "col": {"remaining stock": "keep"}},
-"sufficient": {"syn": {}, "col": {"sufficient room": "keep"}},
-"suitable": {"syn": {}, "col": {"suitable hour": "keep"}},
-"suitcase": {"syn": {}, "col": {"heavy suitcase": "keep"}},
-"supervise": {"syn": {}, "col": {"personally supervise": "keep"}},
-"supreme": {"syn": {}, "col": {"supreme court": "keep"}},
-"trail": {"syn": {}, "col": {"dusty trail": "keep"}},
-"trial": {"syn": {"experiment": "keep"}, "col": {}},
-"tyre": {"syn": {}, "col": {"flat tyre": "keep"}},
-"unite": {"syn": {"combine": "drop", "why": "多指事物合成"}, "col": {}},
-"vocation": {"syn": {}, "col": {"true vocation": "keep"}},
-"wage": {"syn": {}, "col": {"daily wage": "keep"}},
-"whisper": {"syn": {}, "col": {"nervous whisper": "keep"}},
-"wholesale": {"syn": {}, "col": {"wholesale cost": "keep"}},
-"accessory": {"syn": {}, "col": {"spare accessory": "keep"}},
-"acquaintance": {"syn": {}, "col": {"old acquaintance": "keep"}},
-"affection": {"syn": {}, "col": {"true affection": "keep"}},
-"assault": {"syn": {"attack": "keep"}, "col": {"sudden assault": "keep"}},
-"attorney": {"syn": {"solicitor": "keep"}, "col": {}},
-"audio": {"syn": {}, "col": {"clear audio": "keep"}},
-"beat": {"syn": {"defeat": "keep"}, "col": {}},
-"belong": {"syn": {}, "col": {"sense of belonging": "keep"}},
-"beloved": {"syn": {}, "col": {"beloved teacher": "keep"}},
-"binary": {"syn": {}, "col": {"binary code": "keep"}},
-"blast": {"syn": {}, "col": {"loud blast": "keep"}},
-"breakthrough": {"syn": {}, "col": {"big breakthrough": "keep"}},
-"burrow": {"syn": {}, "col": {"deep burrow": "keep"}},
-"bury": {"syn": {}, "col": {"bury pride": "keep"}},
-"chop": {"syn": {}, "col": {"chop wood": "keep"}},
-"compute": {"syn": {}, "col": {"compute costs": "keep"}},
-"condense": {"syn": {}, "col": {"steam condense": "drop", "why": "主谓拼接，非搭配"}},
-"contend": {"syn": {"compete": "keep"}, "col": {}},
-"council": {"syn": {}, "col": {"town council": "keep"}},
-"counsellor": {"syn": {}, "col": {"school counsellor": "keep"}},
-"cousin": {"syn": {}, "col": {"distant cousins": "keep"}},
-"deputy": {"syn": {}, "col": {"deputy head": "keep"}},
-"disclose": {"syn": {}, "col": {"disclose plans": "keep"}},
-"dread": {"syn": {"fear": "keep"}, "col": {"deep dread": "keep"}},
-"embryo": {"syn": {}, "col": {"bean embryo": "keep"}},
-"error": {"syn": {"mistake": "keep"}, "col": {}},
-"estimate": {"syn": {}, "col": {"estimate savings": "keep"}},
-"flare": {"syn": {}, "col": {"red flare": "keep"}},
-"framework": {"syn": {}, "col": {"wooden framework": "keep"}},
-"gear": {"syn": {}, "col": {"plastic gear": "keep"}},
-"generator": {"syn": {}, "col": {"tiny generator": "keep"}},
-"gizmo": {"syn": {}, "col": {"tiny gizmo": "keep"}},
-"glow": {"syn": {}, "col": {"soft glow": "keep"}},
-"hammer": {"syn": {}, "col": {"small hammer": "keep"}},
-"helmet": {"syn": {}, "col": {"cracked helmet": "keep"}},
-"honeymoon": {"syn": {}, "col": {"short honeymoon": "keep"}},
-"horrible": {"syn": {}, "col": {"horrible noise": "keep"}},
-"hydraulic": {"syn": {}, "col": {"hydraulic oil": "keep"}},
-"interrupt": {"syn": {}, "col": {"interrupt games": "keep"}},
-"intimate": {"syn": {}, "col": {"intimate chats": "keep"}},
-"invade": {"syn": {"attack": "drop", "why": "不含武装入侵"}, "col": {}},
-"kin": {"syn": {"relative": "keep"}, "col": {}},
-"landing": {"syn": {}, "col": {"rough landing": "keep"}},
-"lens": {"syn": {}, "col": {"curved lens": "keep"}},
-"loudspeaker": {"syn": {}, "col": {"big loudspeaker": "keep"}},
-"maiden": {"syn": {}, "col": {"maiden trial": "keep"}},
-"manoeuvre": {"syn": {}, "col": {"clever manoeuvre": "keep"}},
-"maritime": {"syn": {}, "col": {"maritime maps": "keep"}},
-"microphone": {"syn": {}, "col": {"cheap microphone": "keep"}},
-"miss": {"syn": {}, "col": {"miss lunch": "keep"}},
-"multimedia": {"syn": {}, "col": {"multimedia screen": "keep"}},
-"naval": {"syn": {}, "col": {"naval routes": "keep"}},
-"neighbourhood": {"syn": {}, "col": {"low density neighbourhoods": "keep", "whole neighbourhood": "keep"}},
-"occasion": {"syn": {}, "col": {"special occasion": "keep"}},
-"occur": {"syn": {}, "col": {"occur daily": "keep"}},
-"owe": {"syn": {}, "col": {"owe thanks": "keep"}},
-"patriot": {"syn": {}, "col": {"true patriot": "keep"}},
-"pause": {"syn": {}, "col": {"long pause": "keep"}},
-"peril": {"syn": {}, "col": {"sudden peril": "keep"}},
-"pioneer": {"syn": {}, "col": {"true pioneer": "keep"}},
-"pitfall": {"syn": {}, "col": {"hidden pitfall": "keep"}},
-"polytechnic": {"syn": {}, "col": {"small town polytechnic": "keep"}},
-"proceed": {"syn": {}, "col": {"proceed along": "keep"}},
-"proof": {"syn": {}, "col": {"clear proof": "keep"}},
-"proponent": {"syn": {}, "col": {"firm proponent": "keep"}},
-"pump": {"syn": {}, "col": {"hand pump": "keep"}},
-"punch": {"syn": {}, "col": {"punch holes": "keep"}},
-"radar": {"syn": {}, "col": {"toy radar": "keep"}},
-"raid": {"syn": {}, "col": {"night raid": "keep"}},
-"refine": {"syn": {"purify": "keep"}, "col": {}},
-"refute": {"syn": {"counter": "keep"}, "col": {"refute lies": "keep"}},
-"rifle": {"syn": {}, "col": {"rusty rifle": "keep"}},
-"savage": {"syn": {}, "col": {"savage act": "keep"}},
-"sensor": {"syn": {}, "col": {"small sensor": "keep"}},
-"sewage": {"syn": {}, "col": {"dirty sewage": "keep"}},
-"siege": {"syn": {}, "col": {"long siege": "keep"}},
-"spear": {"syn": {}, "col": {"long spear": "keep"}},
-"statue": {"syn": {}, "col": {"tall statue": "keep"}},
-"strike": {"syn": {"attack": "keep"}, "col": {}},
-"tape": {"syn": {}, "col": {"sticky tape": "keep"}},
-"teenage": {"syn": {}, "col": {"teenage volunteers": "keep"}},
-"tenant": {"syn": {}, "col": {"new tenant": "keep"}},
-"terror": {"syn": {"fear": "keep"}, "col": {}},
-"toil": {"syn": {}, "col": {"hard toil": "keep"}},
-"triumph": {"syn": {}, "col": {"quiet triumph": "keep"}},
-"turbulent": {"syn": {}, "col": {"turbulent days": "keep"}},
-"veterinary": {"syn": {}, "col": {"veterinary doctor": "keep"}},
-"warn": {"syn": {}, "col": {"warn kids": "keep"}},
-"weapon": {"syn": {}, "col": {"carry weapons": "keep"}},
-"wireless": {"syn": {}, "col": {"wireless link": "keep"}},
-"withstand": {"syn": {}, "col": {"withstand cold winds": "keep"}},
-"abdomen": {"syn": {}, "col": {"soft abdomen": "keep"}},
-"accord": {"syn": {}, "col": {"kind accord": "drop", "why": "跨词界拼接，非搭配"}},
-"accustom": {"syn": {}, "col": {"accustom himself": "keep"}},
-"allure": {"syn": {}, "col": {"strong allure": "keep"}},
-"ankle": {"syn": {}, "col": {"thick ankle": "keep"}},
-"annoy": {"syn": {"irritate": "keep"}, "col": {"annoy tired players": "drop", "why": "窗口拼合碎片"}},
-"applaud": {"syn": {}, "col": {"loudly applaud": "keep"}},
-"arouse": {"syn": {}, "col": {"arouse fresh hope": "keep"}},
-"artery": {"syn": {}, "col": {"red artery": "drop", "why": "形容冗余，非成品搭配"}},
-"aspire": {"syn": {}, "col": {"aspire high": "keep"}},
-"assign": {"syn": {}, "col": {"assign pages": "keep"}},
-"astonish": {"syn": {}, "col": {"astonish tall rivals": "drop", "why": "窗口拼合碎片"}},
-"attempt": {"syn": {}, "col": {"new attempt": "keep"}},
-"augment": {"syn": {}, "col": {"augment dull texts": "drop", "why": "语义不搭，非常见搭配"}},
-"aural": {"syn": {}, "col": {"aural test": "keep"}},
-"awake": {"syn": {}, "col": {"stays awake": "keep", "awake till ten": "drop", "why": "跨到时间状语"}},
-"backup": {"syn": {}, "col": {"strong backup": "keep"}},
-"beard": {"syn": {}, "col": {"grey beard": "keep"}},
-"bet": {"syn": {}, "col": {"bet money": "keep"}},
-"bewilder": {"syn": {}, "col": {"bewilder new players": "drop", "why": "窗口拼合碎片"}}
+ "uncover": {
+  "syn": {},
+  "col": {
+   "uncover bright ideas": "keep"
+  }
+ },
+ "warn": {
+  "syn": {
+   "alarm": "drop"
+  },
+  "col": {}
+ },
+ "widow": {
+  "syn": {},
+  "col": {
+   "lonely widows": "keep",
+   "old widow": "keep"
+  }
+ },
+ "youngster": {
+  "syn": {
+   "youth": "keep"
+  },
+  "col": {}
+ },
+ "youth": {
+  "syn": {
+   "youngster": "keep"
+  },
+  "col": {}
+ },
+ "ailment": {
+  "syn": {},
+  "col": {
+   "mild ailment": "keep"
+  }
+ },
+ "arrange": {
+  "syn": {
+   "prepare": "drop"
+  },
+  "col": {}
+ },
+ "artery": {
+  "syn": {},
+  "col": {
+   "red artery": "keep"
+  }
+ },
+ "awake": {
+  "syn": {
+   "conscious": "drop"
+  },
+  "col": {
+   "stays awake till ten": "keep"
+  }
+ },
+ "bait": {
+  "syn": {},
+  "col": {
+   "only bait": "keep"
+  }
+ },
+ "clone": {
+  "syn": {},
+  "col": {
+   "clone test": "keep"
+  }
+ },
+ "deserve": {
+  "syn": {},
+  "col": {
+   "deserve good bands": "keep"
+  }
+ },
+ "distribute": {
+  "syn": {},
+  "col": {
+   "distribute clean worksheet": "keep"
+  }
+ },
+ "ebola": {
+  "syn": {},
+  "col": {
+   "stop ebola": "keep"
+  }
+ },
+ "hasten": {
+  "syn": {
+   "accelerate": "drop"
+  },
+  "col": {}
+ },
+ "immune": {
+  "syn": {},
+  "col": {
+   "immune guard": "keep"
+  }
+ },
+ "immunity": {
+  "syn": {},
+  "col": {
+   "build stronger immunity": "keep",
+   "stronger immunity": "keep"
+  }
+ },
+ "invoke": {
+  "syn": {},
+  "col": {
+   "often invoke": "keep"
+  }
+ },
+ "kidnap": {
+  "syn": {},
+  "col": {
+   "cannot kidnap": "keep"
+  }
+ },
+ "manner": {
+  "syn": {
+   "mode": "keep"
+  },
+  "col": {}
+ },
+ "overshadow": {
+  "syn": {},
+  "col": {
+   "overshadow calm thought": "keep"
+  }
+ },
+ "recover": {
+  "syn": {
+   "revive": "keep"
+  },
+  "col": {}
+ },
+ "rectify": {
+  "syn": {},
+  "col": {
+   "help rectify": "keep"
+  }
+ },
+ "regard": {
+  "syn": {},
+  "col": {
+   "deep regard": "keep"
+  }
+ },
+ "sink": {
+  "syn": {},
+  "col": {
+   "sink low": "keep"
+  }
+ },
+ "stimulus": {
+  "syn": {
+   "incentive": "keep"
+  },
+  "col": {}
+ },
+ "syndrome": {
+  "syn": {},
+  "col": {
+   "strange syndrome": "keep"
+  }
+ },
+ "vaccination": {
+  "syn": {},
+  "col": {
+   "quick vaccination": "keep"
+  }
+ },
+ "worksheet": {
+  "syn": {
+   "handout": "keep"
+  },
+  "col": {
+   "clean worksheet": "keep",
+   "distribute clean worksheet": "keep"
+  }
+ },
+ "acupuncture": {
+  "syn": {},
+  "col": {
+   "soft acupuncture": "keep"
+  }
+ },
+ "agony": {
+  "syn": {},
+  "col": {
+   "leg agony": "keep",
+   "old leg agony": "keep"
+  }
+ },
+ "agreeable": {
+  "syn": {},
+  "col": {
+   "agreeable calm": "keep"
+  }
+ },
+ "anniversary": {
+  "syn": {},
+  "col": {
+   "glad anniversary": "keep"
+  }
+ },
+ "apathetic": {
+  "syn": {},
+  "col": {
+   "apathetic answers": "keep",
+   "gave apathetic answers": "keep"
+  }
+ },
+ "ashamed": {
+  "syn": {},
+  "col": {
+   "truly ashamed": "keep",
+   "feeling truly ashamed": "keep"
+  }
+ },
+ "billion": {
+  "syn": {},
+  "col": {
+   "billion stars": "keep"
+  }
+ },
+ "bleed": {
+  "syn": {},
+  "col": {
+   "bleed often": "keep"
+  }
+ },
+ "bother": {
+  "syn": {},
+  "col": {
+   "bother old cats": "keep"
+  }
+ },
+ "careless": {
+  "syn": {},
+  "col": {
+   "leaving careless books": "keep"
+  }
+ },
+ "consecutive": {
+  "syn": {},
+  "col": {
+   "consecutive books": "keep"
+  }
+ },
+ "crazy": {
+  "syn": {},
+  "col": {
+   "crazy games": "keep"
+  }
+ },
+ "daring": {
+  "syn": {},
+  "col": {
+   "daring enough": "keep"
+  }
+ },
+ "demise": {
+  "syn": {},
+  "col": {
+   "sad demise": "keep"
+  }
+ },
+ "direct": {
+  "syn": {
+   "steer": "keep",
+   "manage": "keep"
+  },
+  "col": {
+   "clear direct tips": "keep",
+   "direct tips": "keep"
+  }
+ },
+ "doubt": {
+  "syn": {},
+  "col": {
+   "old doubt": "keep"
+  }
+ },
+ "ego": {
+  "syn": {},
+  "col": {
+   "growing ego": "keep"
+  }
+ },
+ "endure": {
+  "syn": {},
+  "col": {
+   "endure long therapy": "keep"
+  }
+ },
+ "enterprising": {
+  "syn": {},
+  "col": {
+   "enterprising enough": "keep"
+  }
+ },
+ "fancy": {
+  "syn": {},
+  "col": {
+   "fancy flags": "keep"
+  }
+ },
+ "fate": {
+  "syn": {},
+  "col": {
+   "blamed fate": "keep"
+  }
+ },
+ "foremost": {
+  "syn": {},
+  "col": {
+   "foremost lesson": "keep"
+  }
+ },
+ "frank": {
+  "syn": {},
+  "col": {
+   "always frank": "keep"
+  }
+ },
+ "fuss": {
+  "syn": {},
+  "col": {
+   "made little fuss": "keep",
+   "little fuss": "keep"
+  }
+ },
+ "guilty": {
+  "syn": {},
+  "col": {
+   "feeling guilty": "keep"
+  }
+ },
+ "heal": {
+  "syn": {},
+  "col": {
+   "slow healing": "keep"
+  }
+ },
+ "honesty": {
+  "syn": {},
+  "col": {
+   "simple honesty": "keep"
+  }
+ },
+ "hurt": {
+  "syn": {},
+  "col": {
+   "hurt herself": "keep",
+   "hurt small kids": "keep"
+  }
+ },
+ "ignorant": {
+  "syn": {},
+  "col": {
+   "ignorant view": "keep"
+  }
+ },
+ "imaginary": {
+  "syn": {},
+  "col": {
+   "imaginary green island": "keep"
+  }
+ },
+ "imminent": {
+  "syn": {},
+  "col": {
+   "imminent birthday show": "keep"
+  }
+ },
+ "implicit": {
+  "syn": {},
+  "col": {
+   "implicit push": "keep"
+  }
+ },
+ "intermediate": {
+  "syn": {},
+  "col": {
+   "intermediate shelf": "keep"
+  }
+ },
+ "intuition": {
+  "syn": {},
+  "col": {
+   "quick intuition": "keep"
+  }
+ },
+ "isolate": {
+  "syn": {},
+  "col": {
+   "never isolate": "keep"
+  }
+ },
+ "lament": {
+  "syn": {},
+  "col": {
+   "sad lament": "keep"
+  }
+ },
+ "lethal": {
+  "syn": {},
+  "col": {
+   "lethal smoke": "keep"
+  }
+ },
+ "liable": {
+  "syn": {},
+  "col": {
+   "still liable": "keep"
+  }
+ },
+ "liberal": {
+  "syn": {},
+  "col": {
+   "liberal plan": "keep"
+  }
+ },
+ "lovely": {
+  "syn": {},
+  "col": {
+   "lovely teacher": "keep"
+  }
+ },
+ "manly": {
+  "syn": {},
+  "col": {
+   "manly courage": "keep"
+  }
+ },
+ "mean": {
+  "syn": {},
+  "col": {
+   "mean note": "keep"
+  }
+ },
+ "mercy": {
+  "syn": {},
+  "col": {
+   "showed real mercy": "keep"
+  }
+ },
+ "merry": {
+  "syn": {},
+  "col": {
+   "merry neighbour": "keep"
+  }
+ },
+ "million": {
+  "syn": {},
+  "col": {
+   "million small steps": "keep"
+  }
+ },
+ "miserable": {
+  "syn": {},
+  "col": {
+   "stay miserable": "keep"
+  }
+ },
+ "modest": {
+  "syn": {},
+  "col": {
+   "modest notebook": "keep"
+  }
+ },
+ "monthly": {
+  "syn": {},
+  "col": {
+   "monthly drawings": "keep",
+   "sharing monthly drawings": "keep"
+  }
+ },
+ "morphine": {
+  "syn": {},
+  "col": {
+   "strong morphine": "keep"
+  }
+ },
+ "mortal": {
+  "syn": {},
+  "col": {
+   "mortal life": "keep"
+  }
+ },
+ "mourn": {
+  "syn": {},
+  "col": {
+   "mourn lost goals": "keep"
+  }
+ },
+ "mundane": {
+  "syn": {},
+  "col": {
+   "mundane grey afternoons": "keep",
+   "turning mundane grey afternoons": "keep"
+  }
+ },
+ "negligible": {
+  "syn": {},
+  "col": {
+   "negligible issue": "keep"
+  }
+ },
+ "normal": {
+  "syn": {},
+  "col": {
+   "normal again": "keep"
+  }
+ },
+ "nuisance": {
+  "syn": {},
+  "col": {
+   "small nuisance": "keep"
+  }
+ },
+ "patient": {
+  "syn": {},
+  "col": {
+   "calm patient": "keep",
+   "weak patients": "keep"
+  }
+ },
+ "periodically": {
+  "syn": {},
+  "col": {
+   "work periodically": "drop"
+  }
+ },
+ "permanent": {
+  "syn": {},
+  "col": {
+   "permanent desk": "keep"
+  }
+ },
+ "physician": {
+  "syn": {},
+  "col": {
+   "kind physician": "keep"
+  }
+ },
+ "picturesque": {
+  "syn": {},
+  "col": {
+   "picturesque path": "keep"
+  }
+ },
+ "pimple": {
+  "syn": {},
+  "col": {
+   "small pimple": "keep"
+  }
+ },
+ "polite": {
+  "syn": {},
+  "col": {
+   "polite way": "keep"
+  }
+ },
+ "precedent": {
+  "syn": {},
+  "col": {
+   "fine precedent": "keep"
+  }
+ },
+ "prescription": {
+  "syn": {},
+  "col": {
+   "short prescription": "keep"
+  }
+ },
+ "prior": {
+  "syn": {},
+  "col": {
+   "prior skill": "keep"
+  }
+ },
+ "punctual": {
+  "syn": {},
+  "col": {
+   "arriving punctual": "keep"
+  }
+ },
+ "quarantine": {
+  "syn": {},
+  "col": {
+   "quarantine grandma": "drop"
+  }
+ },
+ "quarterly": {
+  "syn": {},
+  "col": {
+   "quarterly reading shows": "keep"
+  }
+ },
+ "radical": {
+  "syn": {},
+  "col": {
+   "radical new reading": "keep"
+  }
+ },
+ "reluctant": {
+  "syn": {},
+  "col": {
+   "once reluctant": "keep"
+  }
+ },
+ "remedy": {
+  "syn": {},
+  "col": {
+   "evening remedy": "keep"
+  }
+ },
+ "resemble": {
+  "syn": {},
+  "col": {
+   "resemble real trees": "keep"
+  }
+ },
+ "romantic": {
+  "syn": {},
+  "col": {
+   "romantic dreams": "keep",
+   "pursued romantic dreams": "keep"
+  }
+ },
+ "sadness": {
+  "syn": {},
+  "col": {
+   "old sadness": "keep"
+  }
+ },
+ "sane": {
+  "syn": {},
+  "col": {
+   "kept sane hours": "keep"
+  }
+ },
+ "sanitary": {
+  "syn": {},
+  "col": {
+   "sanitary habits": "keep",
+   "clean sanitary habits": "keep"
+  }
+ },
+ "sceptical": {
+  "syn": {},
+  "col": {
+   "felt sceptical": "keep"
+  }
+ },
+ "similar": {
+  "syn": {},
+  "col": {
+   "similar lines": "keep",
+   "using similar lines": "keep"
+  }
+ },
+ "sincere": {
+  "syn": {},
+  "col": {
+   "sincere smile": "keep"
+  }
+ },
+ "slothful": {
+  "syn": {},
+  "col": {
+   "slothful afternoons": "keep"
+  }
+ },
+ "sluggish": {
+  "syn": {},
+  "col": {
+   "sluggish morning": "keep",
+   "sluggish morning mood": "keep"
+  }
+ },
+ "sly": {
+  "syn": {},
+  "col": {
+   "sly cat": "keep"
+  }
+ },
+ "spontaneous": {
+  "syn": {},
+  "col": {
+   "spontaneous soft song": "keep"
+  }
+ },
+ "steadfast": {
+  "syn": {},
+  "col": {
+   "stayed steadfast": "keep"
+  }
+ },
+ "strenuous": {
+  "syn": {},
+  "col": {
+   "avoiding strenuous late tasks": "keep"
+  }
+ },
+ "stubborn": {
+  "syn": {},
+  "col": {
+   "stayed stubborn": "keep"
+  }
+ },
+ "stupid": {
+  "syn": {},
+  "col": {
+   "looked stupid": "keep"
+  }
+ },
+ "surgeon": {
+  "syn": {},
+  "col": {
+   "young surgeon": "keep"
+  }
+ },
+ "surprising": {
+  "syn": {},
+  "col": {
+   "surprising lift": "keep"
+  }
+ },
+ "suspicion": {
+  "syn": {},
+  "col": {
+   "dark suspicion": "keep"
+  }
+ },
+ "sympathetic": {
+  "syn": {},
+  "col": {
+   "stayed sympathetic": "keep"
+  }
+ },
+ "temperate": {
+  "syn": {},
+  "col": {
+   "keeping meals temperate": "keep"
+  }
+ },
+ "therapy": {
+  "syn": {},
+  "col": {
+   "morning therapy": "keep",
+   "long therapy walks": "keep",
+   "therapy walks": "keep"
+  }
+ },
+ "thrill": {
+  "syn": {},
+  "col": {
+   "soft thrill": "keep"
+  }
+ },
+ "timid": {
+  "syn": {},
+  "col": {
+   "once timid": "keep",
+   "timid boy": "keep"
+  }
+ },
+ "tire": {
+  "syn": {},
+  "col": {
+   "tired head": "keep",
+   "tired heart": "keep",
+   "tired classmates": "keep"
+  }
+ },
+ "tough": {
+  "syn": {},
+  "col": {
+   "tough set": "keep"
+  }
+ },
+ "troublesome": {
+  "syn": {},
+  "col": {
+   "felt troublesome": "keep"
+  }
+ },
+ "trustworthy": {
+  "syn": {},
+  "col": {
+   "trustworthy study friend": "keep"
+  }
+ },
+ "unkind": {
+  "syn": {},
+  "col": {
+   "unkind chant": "keep"
+  }
+ },
+ "unpleasant": {
+  "syn": {},
+  "col": {
+   "unpleasant medicine": "keep",
+   "unpleasant medicine lines": "keep"
+  }
+ },
+ "unsatisfactory": {
+  "syn": {},
+  "col": {
+   "unsatisfactory bar": "keep"
+  }
+ },
+ "unstable": {
+  "syn": {},
+  "col": {
+   "felt unstable": "keep"
+  }
+ },
+ "unsuitable": {
+  "syn": {},
+  "col": {
+   "seemed unsuitable": "keep"
+  }
+ },
+ "unwilling": {
+  "syn": {},
+  "col": {
+   "never unwilling": "keep"
+  }
+ },
+ "usual": {
+  "syn": {},
+  "col": {
+   "usual walk": "keep"
+  }
+ },
+ "vicious": {
+  "syn": {},
+  "col": {
+   "vicious way": "keep"
+  }
+ },
+ "vulgar": {
+  "syn": {},
+  "col": {
+   "vulgar shouts": "keep"
+  }
+ },
+ "weep": {
+  "syn": {},
+  "col": {
+   "weep alone": "keep"
+  }
+ },
+ "yearly": {
+  "syn": {},
+  "col": {
+   "yearly check": "keep"
+  }
+ },
+ "zeal": {
+  "syn": {},
+  "col": {
+   "fresh zeal": "keep"
+  }
+ }
 }

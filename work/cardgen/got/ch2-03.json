@@ -1,112 +1,308 @@
 [
-{"w":"magazine","syn":[],"col":["sports magazine"]},
-{"w":"magic","syn":[],"col":["magic tricks"]},
-{"w":"majesty","syn":[],"col":[]},
-{"w":"major","syn":["principal"],"col":[]},
-{"w":"manifest","syn":[],"col":[]},
-{"w":"marathon","syn":[],"col":[]},
-{"w":"maths","syn":[],"col":["maths teacher"]},
-{"w":"matriculation","syn":[],"col":[]},
-{"w":"matrix","syn":[],"col":[]},
-{"w":"mechanics","syn":[],"col":["bike mechanics"]},
-{"w":"medium","syn":[],"col":[]},
-{"w":"melody","syn":[],"col":[]},
-{"w":"melt","syn":[],"col":[]},
-{"w":"mercury","syn":[],"col":[]},
-{"w":"merge","syn":["combine","integrate"],"col":[]},
-{"w":"messenger","syn":[],"col":[]},
-{"w":"midnight","syn":[],"col":["near midnight"]},
-{"w":"minus","syn":[],"col":[]},
-{"w":"missionary","syn":[],"col":[]},
-{"w":"mobile","syn":["portable"],"col":[]},
-{"w":"monk","syn":[],"col":[]},
-{"w":"motive","syn":[],"col":["main motive"]},
-{"w":"movement","syn":[],"col":[]},
-{"w":"multiply","syn":[],"col":[]},
-{"w":"museum","syn":[],"col":["art museums","war museums","museum halls"]},
-{"w":"negotiate","syn":[],"col":[]},
-{"w":"nobility","syn":[],"col":[]},
-{"w":"nostalgia","syn":[],"col":[]},
-{"w":"notorious","syn":[],"col":[]},
-{"w":"noun","syn":[],"col":[]},
-{"w":"novice","syn":[],"col":[]},
-{"w":"noxious","syn":["toxic"],"col":[]},
-{"w":"nuance","syn":[],"col":["subtle nuance"]},
-{"w":"obscure","syn":[],"col":[]},
-{"w":"observe","syn":["monitor"],"col":[]},
-{"w":"olympic","syn":[],"col":["olympic dream"]},
-{"w":"opt","syn":[],"col":[]},
-{"w":"orchestra","syn":[],"col":[]},
-{"w":"orientation","syn":[],"col":["orientation week"]},
-{"w":"ounce","syn":[],"col":[]},
-{"w":"outstanding","syn":["remarkable"],"col":["outstanding work"]},
-{"w":"overestimate","syn":[],"col":["overestimate talent"]},
-{"w":"pace","syn":[],"col":[]},
-{"w":"pagoda","syn":[],"col":[]},
-{"w":"painstaking","syn":[],"col":["painstaking care"]},
-{"w":"painter","syn":[],"col":[]},
-{"w":"painting","syn":[],"col":[]},
-{"w":"paper","syn":[],"col":[]},
-{"w":"parameter","syn":[],"col":[]},
-{"w":"paraphrase","syn":[],"col":[]},
-{"w":"pastime","syn":[],"col":[]},
-{"w":"patron","syn":[],"col":[]},
-{"w":"perceive","syn":[],"col":["perceive small changes"]},
-{"w":"phoneme","syn":[],"col":[]},
-{"w":"photograph","syn":[],"col":[]},
-{"w":"phrase","syn":[],"col":[]},
-{"w":"physics","syn":[],"col":[]},
-{"w":"piano","syn":[],"col":[]},
-{"w":"picnic","syn":[],"col":["picnic sheet"]},
-{"w":"pictograph","syn":[],"col":[]},
-{"w":"pitch","syn":[],"col":[]},
-{"w":"plunge","syn":[],"col":[]},
-{"w":"plural","syn":[],"col":[]},
-{"w":"plus","syn":[],"col":[]},
-{"w":"poetry","syn":[],"col":["love poetry"]},
-{"w":"politics","syn":[],"col":[]},
-{"w":"pope","syn":[],"col":[]},
-{"w":"portrait","syn":[],"col":[]},
-{"w":"postulate","syn":[],"col":[]},
-{"w":"pottery","syn":[],"col":["pottery bowls"]},
-{"w":"praise","syn":[],"col":["honest praise"]},
-{"w":"predict","syn":[],"col":["predict results"]},
-{"w":"prefix","syn":[],"col":[]},
-{"w":"preposition","syn":[],"col":[]},
-{"w":"presentation","syn":[],"col":["group presentation"]},
-{"w":"presume","syn":["assume"],"col":[]},
-{"w":"priest","syn":[],"col":[]},
-{"w":"prince","syn":[],"col":[]},
-{"w":"princess","syn":[],"col":[]},
-{"w":"principal","syn":[],"col":["assistant principal"]},
-{"w":"professor","syn":[],"col":[]},
-{"w":"pronoun","syn":[],"col":[]},
-{"w":"pronounce","syn":[],"col":["pronounce new words"]},
-{"w":"propaganda","syn":[],"col":[]},
-{"w":"proportion","syn":[],"col":["large proportion"]},
-{"w":"psychology","syn":[],"col":["basic psychology"]},
-{"w":"publish","syn":["release"],"col":[]},
-{"w":"pull","syn":[],"col":[]},
-{"w":"pupil","syn":[],"col":["school pupil"]},
-{"w":"puzzle","syn":[],"col":[]},
-{"w":"quadruple","syn":[],"col":[]},
-{"w":"quantity","syn":[],"col":[]},
-{"w":"query","syn":[],"col":[]},
-{"w":"questionnaire","syn":[],"col":[]},
-{"w":"queue","syn":[],"col":[]},
-{"w":"quiz","syn":[],"col":[]},
-{"w":"quote","syn":[],"col":[]},
-{"w":"race","syn":[],"col":[]},
-{"w":"racket","syn":[],"col":[]},
-{"w":"radiate","syn":[],"col":["radiate heat"]},
-{"w":"ratio","syn":["proportion"],"col":[]},
-{"w":"recite","syn":[],"col":["recite new terms"]},
-{"w":"reckon","syn":[],"col":[]},
-{"w":"recreation","syn":[],"col":[]},
-{"w":"recruit","syn":[],"col":["recruit new members"]},
-{"w":"rectangle","syn":[],"col":[]},
-{"w":"reference","syn":[],"col":["reference book"]},
-{"w":"register","syn":[],"col":["register names"]},
-{"w":"rehearsal","syn":[],"col":[]},
-{"w":"reputation","syn":[],"col":["good reputation"]}
+ {
+  "w": "slip",
+  "syn": [],
+  "col": [
+   "small slip"
+  ]
+ },
+ {
+  "w": "sociology",
+  "syn": [],
+  "col": [
+   "easy sociology video",
+   "sociology video"
+  ]
+ },
+ {
+  "w": "sophomore",
+  "syn": [],
+  "col": [
+   "helpful sophomore"
+  ]
+ },
+ {
+  "w": "spectator",
+  "syn": [],
+  "col": [
+   "happy spectator"
+  ]
+ },
+ {
+  "w": "sphere",
+  "syn": [],
+  "col": [
+   "foam sphere",
+   "soft foam sphere"
+  ]
+ },
+ {
+  "w": "spoil",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "sponsor",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "spur",
+  "syn": [],
+  "col": [
+   "useful spur"
+  ]
+ },
+ {
+  "w": "stadium",
+  "syn": [],
+  "col": [
+   "wide sunny stadium",
+   "sunny stadium"
+  ]
+ },
+ {
+  "w": "stretch",
+  "syn": [
+   "prolong"
+  ],
+  "col": [
+   "stretch arms"
+  ]
+ },
+ {
+  "w": "subtract",
+  "syn": [],
+  "col": [
+   "subtract old scores"
+  ]
+ },
+ {
+  "w": "suffix",
+  "syn": [],
+  "col": [
+   "blue suffix"
+  ]
+ },
+ {
+  "w": "summary",
+  "syn": [],
+  "col": [
+   "brief morning summary",
+   "morning summary"
+  ]
+ },
+ {
+  "w": "survey",
+  "syn": [],
+  "col": [
+   "short fun survey",
+   "fun survey"
+  ]
+ },
+ {
+  "w": "syllable",
+  "syn": [],
+  "col": [
+   "new syllable"
+  ]
+ },
+ {
+  "w": "syllabus",
+  "syn": [],
+  "col": [
+   "new spring syllabus",
+   "spring syllabus"
+  ]
+ },
+ {
+  "w": "symphony",
+  "syn": [],
+  "col": [
+   "sweet symphony"
+  ]
+ },
+ {
+  "w": "synonym",
+  "syn": [],
+  "col": [
+   "simple synonym"
+  ]
+ },
+ {
+  "w": "tale",
+  "syn": [],
+  "col": [
+   "family tale",
+   "old family tale",
+   "epic tale"
+  ]
+ },
+ {
+  "w": "temple",
+  "syn": [],
+  "col": [
+   "temple yard",
+   "old temple",
+   "old temple yard"
+  ]
+ },
+ {
+  "w": "theory",
+  "syn": [
+   "hypothesis"
+  ],
+  "col": []
+ },
+ {
+  "w": "thrive",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "timetable",
+  "syn": [],
+  "col": [
+   "clear wall timetable",
+   "wall timetable"
+  ]
+ },
+ {
+  "w": "toss",
+  "syn": [],
+  "col": [
+   "then toss"
+  ]
+ },
+ {
+  "w": "tournament",
+  "syn": [],
+  "col": [
+   "grand tournament"
+  ]
+ },
+ {
+  "w": "tragedy",
+  "syn": [],
+  "col": [
+   "soft tragedy"
+  ]
+ },
+ {
+  "w": "training",
+  "syn": [
+   "education",
+   "exercise"
+  ],
+  "col": []
+ },
+ {
+  "w": "transparent",
+  "syn": [],
+  "col": [
+   "transparent covers",
+   "clean transparent covers"
+  ]
+ },
+ {
+  "w": "triangle",
+  "syn": [],
+  "col": [
+   "small blue triangle",
+   "blue triangle"
+  ]
+ },
+ {
+  "w": "tribe",
+  "syn": [],
+  "col": [
+   "distant tribe"
+  ]
+ },
+ {
+  "w": "trumpet",
+  "syn": [],
+  "col": [
+   "gold trumpet",
+   "bright gold trumpet"
+  ]
+ },
+ {
+  "w": "typist",
+  "syn": [],
+  "col": [
+   "fast typist"
+  ]
+ },
+ {
+  "w": "utterance",
+  "syn": [],
+  "col": [
+   "soft utterance"
+  ]
+ },
+ {
+  "w": "vacation",
+  "syn": [],
+  "col": [
+   "calm sweet vacation",
+   "sweet vacation"
+  ]
+ },
+ {
+  "w": "variable",
+  "syn": [],
+  "col": [
+   "only variable"
+  ]
+ },
+ {
+  "w": "vigorous",
+  "syn": [],
+  "col": [
+   "vigorous cheers"
+  ]
+ },
+ {
+  "w": "violin",
+  "syn": [],
+  "col": [
+   "old brown violin",
+   "brown violin"
+  ]
+ },
+ {
+  "w": "volt",
+  "syn": [],
+  "col": []
+ },
+ {
+  "w": "vowel",
+  "syn": [],
+  "col": [
+   "bright vowel"
+  ]
+ },
+ {
+  "w": "wander",
+  "syn": [],
+  "col": [
+   "wander past"
+  ]
+ },
+ {
+  "w": "wedge",
+  "syn": [],
+  "col": [
+   "thin wedge"
+  ]
+ },
+ {
+  "w": "yoga",
+  "syn": [],
+  "col": [
+   "morning yoga",
+   "gentle morning yoga"
+  ]
+ }
 ]

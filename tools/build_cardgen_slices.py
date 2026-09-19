@@ -41,7 +41,8 @@ who whom whose which what where when why how and but or nor so yet because since
 after before is are was were be been being am do does did have has had will would can could shall should may might must
 not no yes to too very more most all both each few many much several some any own other another one two three first
 second latter former there here""".split())
-KNOWN_OK = set()          # text_colloc 里填充：目标词 ∪ 简单词，窗口内不许出现陌生词
+KNOWN_OK = set()          #
+TARGET_KEYS = set()       # text_colloc 里填充：目标词 ∪ 简单词，窗口内不许出现陌生词
 BOOK_PAT = re.compile(r'^\s*(?:\d{1,2}[\.、]\s*)?([A-Za-z][A-Za-z\'’/&\- ]{2,44}?)\s+([\u4e00-\u9fa5][\u4e00-\u9fa5，、；。！？()0-9 ]{1,22})\s*$')
 
 
@@ -81,17 +82,55 @@ def load_wrong():
     return out
 
 
-def syn_groups():
+def head_alias(V):
+    """词形 → 词头集合。
+
+    资料里成组常写成复数或第三人称（何琼第 119 条 "bags=backpacks"），
+    按词头字面精确匹配就整组对不上号 —— backpack 因此一个同义词候选都拿不到。
+    """
+    idx = collections.defaultdict(set)
+    for k in V:
+        nk = norm(k)
+        for f in forms(nk, pos_set((V[k] or {}).get('m'))):
+            idx[f].add(nk)
+    return idx
+
+
+def prev_dropped():
+    """上一轮门禁 2 / 专判判过 drop 的 (词头 → 词/词伙)，本轮不再重复送审。
+
+    门禁 1 只挡住了「逐条裁决判 wrong 的同义词」，专判否掉的词伙和门禁 2 否掉的同义词
+    没人管，于是每一轮都会被重新抽出来再问一遍 —— 既浪费代理，也给用户制造重复抽查。
+    """
+    out = collections.defaultdict(lambda: {'syn': set(), 'col': set()})
+    for f in ('work/cardgen/reviewed.json', 'work/cardgen/round2/reviewed.json'):
+        try:
+            rev = json.load(open(ROOT + '/' + f, encoding='utf-8'))
+        except (OSError, ValueError):
+            continue
+        for h, e in rev.items():
+            for key in ('syn', 'col'):
+                for w, verdict in (e.get(key) or {}).items():
+                    if str(verdict).lower().startswith('drop'):
+                        out[h][key].add(w)
+    return out
+
+
+def syn_groups(alias):
     groups = [g for g in CS.load_he() if g['src'] in SYN_SRC]
     gp, _ = CS.load_gp()
     groups += [g for g in gp if g['src'] in SYN_SRC]
     cand = collections.defaultdict(collections.Counter)
     for g in groups:
         uniq = list(dict.fromkeys(norm(x) for x in g['items'] if x))
-        for h in uniq:
-            for o in uniq:
-                if o != h:
-                    cand[h][o] += 1
+        # 每个成员折算成词头；折算不到的（rucksack、have been improved 这类）整条丢掉
+        expand = [sorted(alias[u]) for u in uniq if u in alias]
+        for a in expand:
+            for b in expand:
+                for h in a:
+                    for o in b:
+                        if o != h:
+                            cand[h][o] += 1
     return cand
 
 
@@ -120,10 +159,16 @@ def book_colloc():
               if not l.startswith('#') and l.strip()}
     known = {norm(w) for w in (set(V) | B | simple)}
     # 词形 → 词头：书里写 "to reduce poverty" / "polluted air"，按原形精确匹配会整批漏掉
+    keys = {norm(k) for k in V}
     fidx = collections.defaultdict(set)
     for k in V:
-        for f in forms(norm(k)):
-            fidx[f].add(norm(k))
+        nk = norm(k)
+        # 词形按词性生成：corn 是名词，就不该拼出 corner 去抢课文里的 corner
+        for f in forms(nk, pos_set((V[k] or {}).get('m'))):
+            # 派生形自己就是一个独立词头时不算变形，否则两个词头抢同一个位置
+            if f != nk and f in keys:
+                continue
+            fidx[f].add(nk)
     rows = collections.defaultdict(collections.Counter)
     for ln in open(ROOT + '/work/ref/gjb_book.txt', encoding='utf-8'):
         if ln.startswith('###'):
@@ -151,20 +196,25 @@ def text_colloc(D):
     simple = {l.split('\t')[0].strip().lower() for l in open(ROOT + '/tools/data/simple_word_tags.tsv', encoding='utf-8')
               if not l.startswith('#') and l.strip()}
     V = json.load(open(ROOT + '/shadow/data/vocab.json', encoding='utf-8'))
-    global KNOWN_OK
+    global KNOWN_OK, TARGET_KEYS
     KNOWN_OK = {norm(w) for w in V} | simple
+    TARGET_KEYS = {norm(w) for w in V}
+    POSMAP = {norm(k): pos_set((V[k] or {}).get('m')) for k in V}
     rows = collections.defaultdict(collections.Counter)
     for ch in D:
         fidx = collections.defaultdict(set)
         for h in ch.get('words', []):
-            for f in forms(norm(h)):
-                fidx[f].add(norm(h))
+            nh = norm(h)
+            for f in forms(nh, POSMAP.get(nh)):
+                if f != nh and f in TARGET_KEYS:
+                    continue
+                fidx[f].add(nh)
         for para in ch['paragraphs']:
             for s in para:
                 toks = re.findall(r"[a-z'’]+", section_head(s).lower())
                 for i, t in enumerate(toks):
                     for h in fidx.get(t, ()):
-                        hf = forms(h)
+                        hf = forms(h, POSMAP.get(h))
                         L = i
                         while L - 1 >= 0 and i - L < 2 and ok_edge(toks[L - 1], hf, toks[i - 1:i]):
                             L -= 1
@@ -227,7 +277,17 @@ def main():
     D = json.load(open(ROOT + '/shadow/data/sections.json', encoding='utf-8'))
     allowed = {norm(k) for k in V}
     wrong = load_wrong()
-    mat, rev = syn_groups(), reverse_syn(V)
+    dropped_prev = prev_dropped()
+    def note_of(k):
+        n = (V.get(k) or {}).get('note')
+        return n if isinstance(n, str) else ''
+    ch_of = {}
+    for ci, c in enumerate(D):
+        # 第 6 章在分包时被切成 6a/6b 两块，新词统一并入 6a
+        pkt = f'ch{ci + 1}' if ci < 5 else 'ch6a'
+        for w in c.get('words', []):
+            ch_of.setdefault(norm(w), pkt)
+    mat, rev = syn_groups(head_alias(V)), reverse_syn(V)
     bc, tc = book_colloc(), text_colloc(D)
     pkt_of = {}
     for p in PACKET:
@@ -238,18 +298,18 @@ def main():
             continue
         for r in rows:
             pkt_of.setdefault(norm(r['w']), p)
+    # 旧分包是上一批落地前切的，后来新增的词头不在里面；不按章节补归包，
+    # 它们就永远进不了送审表（这次「补全新词的词伙和同义词」漏的就是这一条）
+    for k in V:
+        pkt_of.setdefault(norm(k), ch_of.get(norm(k), 'ext'))
 
+    # 待办直接按词表现状重算，不再依赖旧分包：旧清单是上一批落地前生成的，
+    # 后来新增的 26 个词卡压根不在里面，照它跑就会永远漏掉新词
     want = {}
-    for p in PACKET:
-        try:
-            rows = json.load(open(f'{ROOT}/work/cardgen/{p}.json', encoding='utf-8'))
-        except OSError:
-            continue
-        for r in rows:
-            h = norm(r['w'])
-            want.setdefault(h, {'pkt': pkt_of.get(h, p), 'syn': False, 'col': False, 'syn_ext': False})
-            want[h]['syn'] |= bool(r.get('need_syn'))
-            want[h]['col'] |= bool(r.get('need_col'))
+    for k in V:
+        h = norm(k)
+        want[h] = {'pkt': pkt_of.get(h, 'ext'), 'syn': '同义词' not in note_of(k),
+                   'col': '词伙' not in note_of(k), 'syn_ext': False}
 
     # 补口径：分包只覆盖了「完全没有同义词段」的词头，漏掉了「有段但缺大半」那一整块
     # （排查报告里的 222 个）。这里按资料组重算一次，标记成 syn_ext 单独走合并式落地。
@@ -279,6 +339,8 @@ def main():
                 for o, c in tbl.get(h, collections.Counter()).most_common(12):
                     if o in seen or o == h or o not in allowed or o in wrong.get(h, set()):
                         continue
+                    if o in dropped_prev.get(h, {}).get('syn', ()):
+                        continue          # 上一轮审核否过的不重复送审
                     opos = pos_set((V.get(o) or {}).get('m'))
                     if hpos and opos and not (hpos & opos):
                         continue          # 词性不相交，机械就能否掉
@@ -293,6 +355,8 @@ def main():
                 for c, n in tbl.get(h, collections.Counter()).most_common(24):
                     if c in seen or c == h or len(c.split()) < 2:
                         continue
+                    if c in dropped_prev.get(h, {}).get('col', ()):
+                        continue          # 上一轮专判/审核否过的词伙不再重复送审
                     seen.add(c)
                     pool.append({'c': c, 'src': src, 'n': n})
                     if len(pool) >= 12:
