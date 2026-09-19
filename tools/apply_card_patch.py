@@ -19,10 +19,18 @@ sys.path.insert(0, ROOT + '/scripts')
 from validate_data import shadow_data_ver  # noqa: E402
 
 SEG = re.compile(r'^(同义词|词伙)：(.*)$')
+NOTE_IS_DICT = object()        # 辨析卡的 note 不是文本，落地器一律不碰
 
 
 def split_segments(note):
-    """'state作名词=…；词伙：a, b' → (['state作名词=…'], {'词伙': ['a','b']})"""
+    """'state作名词=…；词伙：a, b' → (['state作名词=…'], {'词伙': ['a','b']})
+
+    note 是 dict 时是「辨析卡」（前端有专门的 compare 渲染器），不是文本段 ——
+    早先版本会把字典 str() 成 "{'type': 'compare', …}" 再写回数据，一张辨析卡当场毁掉。
+    这里用 NOTE_IS_DICT 标记出来，调用方必须跳过这张卡。
+    """
+    if isinstance(note, dict):
+        return NOTE_IS_DICT, {'同义词': [], '词伙': []}
     segs = {'同义词': [], '词伙': []}
     free = []
     for part in re.split(r'；', str(note or '')):
@@ -136,6 +144,9 @@ def main():
             skipped.append((item['w'], '词表里没有'))
             continue
         free, segs = split_segments(V[k].get('note'))
+        if free is NOTE_IS_DICT:
+            skipped.append((k, '辨析卡（note 是结构化对象），不写文本段'))
+            continue
         for tag, arr, field in (('同义词', item['syn'], 's'), ('词伙', item['col'], 'c')):
             cur = {x.lower() for x in segs[tag]}
             cur |= {k.lower()}
