@@ -37,13 +37,16 @@ test.describe('Vocabulary search filters and counts', () => {
     { tag: ['@regression', '@positive', '@shadow'] },
     async ({ page }) => {
       await test.step('Step 1: Search for a word', async () => {
+        // 总数从页面自己读，别写死：加一张词卡就会让这条用例假红
+        const total = (await page.locator('#vcnt').innerText()).match(/\/\s*(\d+)/)?.[1];
+        expect(total).toBeTruthy();
         await page.getByPlaceholder('搜索单词或释义…').fill('oxygen');
         await expect
           .poll(async () => page.locator('#vlist .item').count(), {
             timeout: currentTimeout(),
           })
           .toBe(1);
-        await expect(page.locator('#vcnt')).toHaveText('1 / 3219词');
+        await expect(page.locator('#vcnt')).toHaveText(`1 / ${total}词`);
       });
 
       await test.step('Step 2: Clear the search', async () => {

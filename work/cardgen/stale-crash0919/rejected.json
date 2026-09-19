@@ -1,0 +1,97 @@
+[
+ {
+  "head": "*",
+  "src": "ch1",
+  "why": "文件不可用：FileNotFoundError"
+ },
+ {
+  "head": "all round",
+  "src": "ch2",
+  "why": "col 不含词头 'all-round talent'"
+ },
+ {
+  "head": "all round",
+  "src": "ch2",
+  "why": "col 不含词头 'an all-round player'"
+ },
+ {
+  "head": "tale",
+  "src": "ch2",
+  "why": "col 引入超纲词 'a fairy tale' → ['fairy']"
+ },
+ {
+  "head": "rubber",
+  "src": "ch3",
+  "why": "col 引入超纲词 'rubber gloves' → ['gloves']"
+ },
+ {
+  "head": "sew",
+  "src": "ch3",
+  "why": "col 引入超纲词 'sew the hem' → ['hem']"
+ },
+ {
+  "head": "*",
+  "src": "ch4",
+  "why": "文件不可用：FileNotFoundError"
+ },
+ {
+  "head": "burst",
+  "src": "ch5",
+  "why": "col 引入超纲词 'burst into flames' → ['flames']"
+ },
+ {
+  "head": "gunpowder",
+  "src": "ch5",
+  "why": "syn 非本书目标词 powder"
+ },
+ {
+  "head": "equip",
+  "src": "ch5",
+  "why": "syn 词性不符 outfit(n vs v)"
+ },
+ {
+  "head": "equip",
+  "src": "ch5",
+  "why": "col 不含词头 'equipped with new tools'"
+ },
+ {
+  "head": "destitute",
+  "src": "ch5",
+  "why": "col 引入超纲词 'destitute and homeless' → ['homeless']"
+ },
+ {
+  "head": "enclose",
+  "src": "ch5",
+  "why": "syn 非本书目标词 include"
+ },
+ {
+  "head": "turmoil",
+  "src": "ch5",
+  "why": "syn 非本书目标词 chaos"
+ },
+ {
+  "head": "scenario",
+  "src": "ch5",
+  "why": "本章该词已有词伙段，忽略新 col"
+ },
+ {
+  "head": "boundary",
+  "src": "ch5",
+  "why": "本章该词已有词伙段，忽略新 col"
+ },
+ {
+  "head": "harvest",
+  "src": "ch5",
+  "why": "本章该词已有词伙段，忽略新 col"
+ },
+ {
+  "head": "*",
+  "src": "ch6a",
+  "why": "文件不可用：FileNotFoundError"
+ },
+ {
+  "head": "*",
+  "src": "ch6b",
+  "why": "文件不可用：FileNotFoundError"
+ }
+]

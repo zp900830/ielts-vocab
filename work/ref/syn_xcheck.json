@@ -1,0 +1,6837 @@
+{
+ "no_card": [
+  "accident",
+  "advertise",
+  "advise",
+  "alarm",
+  "allergy",
+  "apartment",
+  "atmosphere",
+  "avenue",
+  "balcony",
+  "bone",
+  "bury",
+  "cabinet",
+  "catch",
+  "charcoal",
+  "citizen",
+  "client",
+  "community",
+  "competition",
+  "condition",
+  "consult",
+  "contaminate",
+  "contemporary",
+  "contest",
+  "delight",
+  "deliver",
+  "demographic",
+  "dental",
+  "department",
+  "deploy",
+  "deprive",
+  "diabetes",
+  "differ",
+  "differentiate",
+  "discrimination",
+  "disease",
+  "distinguish",
+  "diversity",
+  "eco-friendly",
+  "ecology",
+  "emit",
+  "epidemic",
+  "evaluate",
+  "expedition",
+  "experimental",
+  "ferry",
+  "field",
+  "fish",
+  "flat",
+  "flight",
+  "fringe",
+  "fuel",
+  "gallery",
+  "greenhouse",
+  "happiness",
+  "hazard",
+  "illness",
+  "individual",
+  "infection",
+  "inhabitant",
+  "invalid",
+  "laboratory",
+  "landlord",
+  "lane",
+  "layout",
+  "leaflet",
+  "living room",
+  "mankind",
+  "mean",
+  "midnight",
+  "migrate",
+  "miniature",
+  "mobile",
+  "movement",
+  "natural",
+  "neighbourhood",
+  "notify",
+  "occasion",
+  "organ",
+  "pain",
+  "paper",
+  "parasite",
+  "peripheral",
+  "plague",
+  "platform",
+  "pollutant",
+  "pollution",
+  "population",
+  "present",
+  "pressure",
+  "private",
+  "proceed",
+  "prohibit",
+  "propose",
+  "purchase",
+  "quote",
+  "recollect",
+  "recruit",
+  "refreshment",
+  "register",
+  "request",
+  "resident",
+  "rural",
+  "sacrifice",
+  "situation",
+  "smuggle",
+  "snack",
+  "sponsor",
+  "stage",
+  "statistics",
+  "step",
+  "strain",
+  "supreme",
+  "survey",
+  "sustainable",
+  "symptom",
+  "terrace",
+  "timetable",
+  "transfer",
+  "transit",
+  "trauma",
+  "trip",
+  "variable",
+  "variation",
+  "vegetation",
+  "vicinity",
+  "villa",
+  "virtue",
+  "virus",
+  "voyage",
+  "weather",
+  "well-being",
+  "well-known",
+  "wildlife"
+ ],
+ "partial": [
+  [
+   "convey",
+   31,
+   30
+  ],
+  [
+   "exercise",
+   30,
+   29
+  ],
+  [
+   "transmit",
+   31,
+   28
+  ],
+  [
+   "experiment",
+   22,
+   21
+  ],
+  [
+   "interrupt",
+   21,
+   21
+  ],
+  [
+   "obstacle",
+   21,
+   21
+  ],
+  [
+   "escape",
+   21,
+   21
+  ],
+  [
+   "boycott",
+   21,
+   21
+  ],
+  [
+   "investigate",
+   22,
+   20
+  ],
+  [
+   "research",
+   22,
+   20
+  ],
+  [
+   "decrease",
+   23,
+   20
+  ],
+  [
+   "loss",
+   20,
+   20
+  ],
+  [
+   "quit",
+   21,
+   20
+  ],
+  [
+   "impede",
+   21,
+   20
+  ],
+  [
+   "counter",
+   21,
+   20
+  ],
+  [
+   "diagnose",
+   21,
+   20
+  ],
+  [
+   "municipal",
+   22,
+   19
+  ],
+  [
+   "local",
+   20,
+   19
+  ],
+  [
+   "cease",
+   21,
+   19
+  ],
+  [
+   "halt",
+   21,
+   19
+  ],
+  [
+   "prevent",
+   21,
+   19
+  ],
+  [
+   "deter",
+   21,
+   19
+  ],
+  [
+   "discourage",
+   21,
+   19
+  ],
+  [
+   "oppose",
+   21,
+   19
+  ],
+  [
+   "test",
+   21,
+   19
+  ],
+  [
+   "explore",
+   21,
+   19
+  ],
+  [
+   "diminish",
+   20,
+   17
+  ],
+  [
+   "restrict",
+   18,
+   16
+  ],
+  [
+   "fix",
+   16,
+   16
+  ],
+  [
+   "decline",
+   17,
+   15
+  ],
+  [
+   "minor",
+   15,
+   15
+  ],
+  [
+   "solve",
+   16,
+   15
+  ],
+  [
+   "settle",
+   16,
+   15
+  ],
+  [
+   "manage",
+   16,
+   15
+  ],
+  [
+   "tackle",
+   16,
+   15
+  ],
+  [
+   "resolve",
+   16,
+   15
+  ],
+  [
+   "upgrade",
+   15,
+   14
+  ],
+  [
+   "preserve",
+   14,
+   14
+  ],
+  [
+   "survive",
+   14,
+   14
+  ],
+  [
+   "patient",
+   14,
+   14
+  ],
+  [
+   "defeat",
+   16,
+   14
+  ],
+  [
+   "handle",
+   16,
+   14
+  ],
+  [
+   "conquer",
+   16,
+   14
+  ],
+  [
+   "dispose",
+   16,
+   14
+  ],
+  [
+   "reduce",
+   17,
+   13
+  ],
+  [
+   "increase",
+   15,
+   13
+  ],
+  [
+   "raise",
+   15,
+   13
+  ],
+  [
+   "growth",
+   15,
+   13
+  ],
+  [
+   "undergo",
+   14,
+   13
+  ],
+  [
+   "bear",
+   14,
+   13
+  ],
+  [
+   "major",
+   15,
+   12
+  ],
+  [
+   "advance",
+   12,
+   12
+  ],
+  [
+   "shrink",
+   14,
+   12
+  ],
+  [
+   "alleviate",
+   14,
+   12
+  ],
+  [
+   "withstand",
+   14,
+   12
+  ],
+  [
+   "suffer",
+   14,
+   12
+  ],
+  [
+   "approach",
+   13,
+   11
+  ],
+  [
+   "prompt",
+   12,
+   11
+  ],
+  [
+   "irritate",
+   11,
+   11
+  ],
+  [
+   "drop",
+   14,
+   11
+  ],
+  [
+   "steer",
+   12,
+   11
+  ],
+  [
+   "regulate",
+   12,
+   11
+  ],
+  [
+   "reign",
+   12,
+   11
+  ],
+  [
+   "criteria",
+   12,
+   10
+  ],
+  [
+   "incentive",
+   11,
+   10
+  ],
+  [
+   "remarkable",
+   11,
+   10
+  ],
+  [
+   "general",
+   11,
+   10
+  ],
+  [
+   "standard",
+   11,
+   10
+  ],
+  [
+   "progress",
+   10,
+   10
+  ],
+  [
+   "stride",
+   10,
+   10
+  ],
+  [
+   "phase",
+   10,
+   10
+  ],
+  [
+   "minimal",
+   12,
+   10
+  ],
+  [
+   "mechanism",
+   11,
+   9
+  ],
+  [
+   "inspire",
+   11,
+   9
+  ],
+  [
+   "usual",
+   11,
+   9
+  ],
+  [
+   "plus",
+   13,
+   9
+  ],
+  [
+   "derive",
+   9,
+   9
+  ],
+  [
+   "explain",
+   9,
+   9
+  ],
+  [
+   "dominate",
+   12,
+   9
+  ],
+  [
+   "enhance",
+   11,
+   8
+  ],
+  [
+   "unique",
+   11,
+   8
+  ],
+  [
+   "invent",
+   11,
+   8
+  ],
+  [
+   "reliable",
+   10,
+   8
+  ],
+  [
+   "confidence",
+   10,
+   8
+  ],
+  [
+   "trustworthy",
+   10,
+   8
+  ],
+  [
+   "constraint",
+   10,
+   8
+  ],
+  [
+   "rate",
+   8,
+   8
+  ],
+  [
+   "cause",
+   9,
+   8
+  ],
+  [
+   "intelligence",
+   8,
+   8
+  ],
+  [
+   "juvenile",
+   9,
+   7
+  ],
+  [
+   "sale",
+   7,
+   7
+  ],
+  [
+   "motivate",
+   11,
+   7
+  ],
+  [
+   "framework",
+   9,
+   7
+  ],
+  [
+   "encourage",
+   11,
+   7
+  ],
+  [
+   "stimulate",
+   11,
+   7
+  ],
+  [
+   "vanish",
+   8,
+   7
+  ],
+  [
+   "disappear",
+   8,
+   7
+  ],
+  [
+   "valuable",
+   8,
+   7
+  ],
+  [
+   "effective",
+   7,
+   7
+  ],
+  [
+   "abnormal",
+   11,
+   7
+  ],
+  [
+   "curb",
+   10,
+   7
+  ],
+  [
+   "confine",
+   10,
+   7
+  ],
+  [
+   "verbal",
+   8,
+   7
+  ],
+  [
+   "oral",
+   8,
+   7
+  ],
+  [
+   "immediately",
+   8,
+   7
+  ],
+  [
+   "accelerate",
+   8,
+   7
+  ],
+  [
+   "procedure",
+   10,
+   7
+  ],
+  [
+   "multiple",
+   8,
+   7
+  ],
+  [
+   "mental",
+   8,
+   7
+  ],
+  [
+   "intelligent",
+   8,
+   7
+  ],
+  [
+   "reinforce",
+   7,
+   7
+  ],
+  [
+   "commercial",
+   7,
+   6
+  ],
+  [
+   "retail",
+   7,
+   6
+  ],
+  [
+   "mitigate",
+   8,
+   6
+  ],
+  [
+   "positive",
+   7,
+   6
+  ],
+  [
+   "root",
+   8,
+   6
+  ],
+  [
+   "entity",
+   6,
+   6
+  ],
+  [
+   "company",
+   6,
+   6
+  ],
+  [
+   "transaction",
+   7,
+   6
+  ],
+  [
+   "suburb",
+   7,
+   6
+  ],
+  [
+   "limit",
+   10,
+   6
+  ],
+  [
+   "specialise",
+   8,
+   6
+  ],
+  [
+   "accumulate",
+   8,
+   6
+  ],
+  [
+   "concentrate",
+   8,
+   6
+  ],
+  [
+   "export",
+   6,
+   6
+  ],
+  [
+   "threat",
+   6,
+   6
+  ],
+  [
+   "predator",
+   6,
+   6
+  ],
+  [
+   "offend",
+   6,
+   6
+  ],
+  [
+   "hostile",
+   6,
+   6
+  ],
+  [
+   "solicitor",
+   7,
+   6
+  ],
+  [
+   "cure",
+   7,
+   6
+  ],
+  [
+   "mind",
+   8,
+   6
+  ],
+  [
+   "brain",
+   8,
+   6
+  ],
+  [
+   "smart",
+   8,
+   6
+  ],
+  [
+   "professor",
+   6,
+   6
+  ],
+  [
+   "revise",
+   7,
+   5
+  ],
+  [
+   "faculty",
+   6,
+   5
+  ],
+  [
+   "education",
+   7,
+   5
+  ],
+  [
+   "complex",
+   6,
+   5
+  ],
+  [
+   "complicated",
+   6,
+   5
+  ],
+  [
+   "chronic",
+   5,
+   5
+  ],
+  [
+   "invoke",
+   5,
+   5
+  ],
+  [
+   "enterprise",
+   7,
+   5
+  ],
+  [
+   "organisation",
+   6,
+   5
+  ],
+  [
+   "deal",
+   7,
+   5
+  ],
+  [
+   "skyscraper",
+   5,
+   5
+  ],
+  [
+   "remote",
+   7,
+   5
+  ],
+  [
+   "outskirts",
+   7,
+   5
+  ],
+  [
+   "literature",
+   5,
+   5
+  ],
+  [
+   "narrate",
+   8,
+   5
+  ],
+  [
+   "import",
+   6,
+   5
+  ],
+  [
+   "evidence",
+   7,
+   5
+  ],
+  [
+   "proof",
+   7,
+   5
+  ],
+  [
+   "hint",
+   7,
+   5
+  ],
+  [
+   "enemy",
+   6,
+   5
+  ],
+  [
+   "legal",
+   7,
+   5
+  ],
+  [
+   "guideline",
+   8,
+   5
+  ],
+  [
+   "norm",
+   8,
+   5
+  ],
+  [
+   "scholar",
+   6,
+   5
+  ],
+  [
+   "specialist",
+   6,
+   5
+  ],
+  [
+   "establish",
+   8,
+   4
+  ],
+  [
+   "require",
+   7,
+   4
+  ],
+  [
+   "primary",
+   8,
+   4
+  ],
+  [
+   "shift",
+   6,
+   4
+  ],
+  [
+   "alter",
+   6,
+   4
+  ],
+  [
+   "tough",
+   6,
+   4
+  ],
+  [
+   "considerable",
+   4,
+   4
+  ],
+  [
+   "facilitate",
+   4,
+   4
+  ],
+  [
+   "durable",
+   5,
+   4
+  ],
+  [
+   "modify",
+   6,
+   4
+  ],
+  [
+   "adjust",
+   6,
+   4
+  ],
+  [
+   "habitat",
+   5,
+   4
+  ],
+  [
+   "extract",
+   4,
+   4
+  ],
+  [
+   "institution",
+   4,
+   4
+  ],
+  [
+   "introduce",
+   6,
+   4
+  ],
+  [
+   "clue",
+   7,
+   4
+  ],
+  [
+   "infant",
+   7,
+   4
+  ],
+  [
+   "construct",
+   6,
+   4
+  ],
+  [
+   "crisis",
+   5,
+   4
+  ],
+  [
+   "endanger",
+   5,
+   4
+  ],
+  [
+   "regulation",
+   8,
+   4
+  ],
+  [
+   "conservative",
+   4,
+   4
+  ],
+  [
+   "conservation",
+   4,
+   4
+  ],
+  [
+   "tradition",
+   4,
+   4
+  ],
+  [
+   "drug",
+   7,
+   4
+  ],
+  [
+   "scientist",
+   6,
+   4
+  ],
+  [
+   "recreation",
+   4,
+   3
+  ],
+  [
+   "site",
+   6,
+   3
+  ],
+  [
+   "skeleton",
+   4,
+   3
+  ],
+  [
+   "first",
+   7,
+   3
+  ],
+  [
+   "principal",
+   3,
+   3
+  ],
+  [
+   "duration",
+   5,
+   3
+  ],
+  [
+   "adapt",
+   3,
+   3
+  ],
+  [
+   "undertake",
+   5,
+   3
+  ],
+  [
+   "commence",
+   5,
+   3
+  ],
+  [
+   "urban",
+   5,
+   3
+  ],
+  [
+   "cite",
+   4,
+   3
+  ],
+  [
+   "traffic",
+   4,
+   3
+  ],
+  [
+   "risk",
+   5,
+   3
+  ],
+  [
+   "jeopardise",
+   5,
+   3
+  ],
+  [
+   "demand",
+   6,
+   3
+  ],
+  [
+   "available",
+   3,
+   3
+  ],
+  [
+   "practical",
+   3,
+   3
+  ],
+  [
+   "portable",
+   3,
+   3
+  ],
+  [
+   "normal",
+   3,
+   2
+  ],
+  [
+   "proportion",
+   2,
+   2
+  ],
+  [
+   "boss",
+   4,
+   2
+  ],
+  [
+   "vehicle",
+   3,
+   2
+  ],
+  [
+   "preference",
+   3,
+   2
+  ],
+  [
+   "obligation",
+   4,
+   2
+  ],
+  [
+   "duty",
+   4,
+   2
+  ],
+  [
+   "overwhelming",
+   4,
+   2
+  ],
+  [
+   "common",
+   2,
+   2
+  ],
+  [
+   "trigger",
+   5,
+   2
+  ],
+  [
+   "famous",
+   3,
+   2
+  ],
+  [
+   "familiar",
+   3,
+   2
+  ],
+  [
+   "motor",
+   3,
+   2
+  ],
+  [
+   "quantity",
+   2,
+   2
+  ],
+  [
+   "immune",
+   2,
+   2
+  ],
+  [
+   "syllabus",
+   3,
+   2
+  ],
+  [
+   "capable",
+   2,
+   2
+  ],
+  [
+   "reflect",
+   2,
+   2
+  ]
+ ],
+ "unsupported": [
+  {
+   "head": "altitude",
+   "syn": "height"
+  },
+  {
+   "head": "altitude",
+   "syn": "elevation"
+  },
+  {
+   "head": "disaster",
+   "syn": "calamity"
+  },
+  {
+   "head": "disaster",
+   "syn": "catastrophe"
+  },
+  {
+   "head": "calamity",
+   "syn": "catastrophe"
+  },
+  {
+   "head": "calamity",
+   "syn": "disaster"
+  },
+  {
+   "head": "endanger",
+   "syn": "threaten"
+  },
+  {
+   "head": "endanger",
+   "syn": "jeopardize"
+  },
+  {
+   "head": "jeopardise",
+   "syn": "threaten"
+  },
+  {
+   "head": "drought",
+   "syn": "aridity"
+  },
+  {
+   "head": "drought",
+   "syn": "water shortage"
+  },
+  {
+   "head": "drought",
+   "syn": "dry spell"
+  },
+  {
+   "head": "landscape",
+   "syn": "prospect"
+  },
+  {
+   "head": "landscape",
+   "syn": "scene"
+  },
+  {
+   "head": "landscape",
+   "syn": "view"
+  },
+  {
+   "head": "upgrade",
+   "syn": "enhance"
+  },
+  {
+   "head": "upgrade",
+   "syn": "improve"
+  },
+  {
+   "head": "marine",
+   "syn": "ocean"
+  },
+  {
+   "head": "marine",
+   "syn": "sea"
+  },
+  {
+   "head": "navigation",
+   "syn": "direction"
+  },
+  {
+   "head": "navigation",
+   "syn": "orientation"
+  },
+  {
+   "head": "navigation",
+   "syn": "positioning"
+  },
+  {
+   "head": "damp",
+   "syn": "humid"
+  },
+  {
+   "head": "humid",
+   "syn": "damp"
+  },
+  {
+   "head": "freeze",
+   "syn": "solidify"
+  },
+  {
+   "head": "freeze",
+   "syn": "congeal"
+  },
+  {
+   "head": "freeze",
+   "syn": "chill"
+  },
+  {
+   "head": "peak",
+   "syn": "summit"
+  },
+  {
+   "head": "peak",
+   "syn": "top"
+  },
+  {
+   "head": "range",
+   "syn": "scope"
+  },
+  {
+   "head": "overlook",
+   "syn": "ignore"
+  },
+  {
+   "head": "overlook",
+   "syn": "neglect"
+  },
+  {
+   "head": "suburb",
+   "syn": "suburbia"
+  },
+  {
+   "head": "toxic",
+   "syn": "poisonous"
+  },
+  {
+   "head": "toxic",
+   "syn": "noxious"
+  },
+  {
+   "head": "dramatic",
+   "syn": "impressive"
+  },
+  {
+   "head": "dramatic",
+   "syn": "striking"
+  },
+  {
+   "head": "dramatic",
+   "syn": "surprising"
+  },
+  {
+   "head": "dramatic",
+   "syn": "unexpected"
+  },
+  {
+   "head": "intensive",
+   "syn": "concentrated"
+  },
+  {
+   "head": "intensive",
+   "syn": "compact"
+  },
+  {
+   "head": "intensive",
+   "syn": "focused"
+  },
+  {
+   "head": "nature",
+   "syn": "essence"
+  },
+  {
+   "head": "nature",
+   "syn": "character"
+  },
+  {
+   "head": "nature",
+   "syn": "disposition"
+  },
+  {
+   "head": "artificial",
+   "syn": "synthetic"
+  },
+  {
+   "head": "artificial",
+   "syn": "man-made"
+  },
+  {
+   "head": "artificial",
+   "syn": "simulated"
+  },
+  {
+   "head": "synthetic",
+   "syn": "artificial"
+  },
+  {
+   "head": "synthetic",
+   "syn": "man-made"
+  },
+  {
+   "head": "synthetic",
+   "syn": "synthesized"
+  },
+  {
+   "head": "element",
+   "syn": "component"
+  },
+  {
+   "head": "element",
+   "syn": "part"
+  },
+  {
+   "head": "factor",
+   "syn": "element"
+  },
+  {
+   "head": "factor",
+   "syn": "consideration"
+  },
+  {
+   "head": "factor",
+   "syn": "cause"
+  },
+  {
+   "head": "handle",
+   "syn": "address"
+  },
+  {
+   "head": "portable",
+   "syn": "mobile"
+  },
+  {
+   "head": "portable",
+   "syn": "handheld"
+  },
+  {
+   "head": "portable",
+   "syn": "lightweight"
+  },
+  {
+   "head": "hurdle",
+   "syn": "barrier"
+  },
+  {
+   "head": "hurdle",
+   "syn": "challenge"
+  },
+  {
+   "head": "available",
+   "syn": "obtainable"
+  },
+  {
+   "head": "available",
+   "syn": "accessible"
+  },
+  {
+   "head": "available",
+   "syn": "usable"
+  },
+  {
+   "head": "durable",
+   "syn": "long-wearing"
+  },
+  {
+   "head": "durable",
+   "syn": "sturdy"
+  },
+  {
+   "head": "provision",
+   "syn": "supply"
+  },
+  {
+   "head": "provision",
+   "syn": "preparation"
+  },
+  {
+   "head": "provision",
+   "syn": "stock"
+  },
+  {
+   "head": "supplement",
+   "syn": "complement"
+  },
+  {
+   "head": "supplement",
+   "syn": "addition"
+  },
+  {
+   "head": "construct",
+   "syn": "form"
+  },
+  {
+   "head": "construct",
+   "syn": "create"
+  },
+  {
+   "head": "stability",
+   "syn": "steadiness"
+  },
+  {
+   "head": "stability",
+   "syn": "solidity"
+  },
+  {
+   "head": "stability",
+   "syn": "balance"
+  },
+  {
+   "head": "settle",
+   "syn": "address"
+  },
+  {
+   "head": "settle",
+   "syn": "establish"
+  },
+  {
+   "head": "skyscraper",
+   "syn": "tower"
+  },
+  {
+   "head": "skyscraper",
+   "syn": "building"
+  },
+  {
+   "head": "skyscraper",
+   "syn": "high-rise"
+  },
+  {
+   "head": "shelter",
+   "syn": "shade"
+  },
+  {
+   "head": "complex",
+   "syn": "intricate"
+  },
+  {
+   "head": "complex",
+   "syn": "involved"
+  },
+  {
+   "head": "urban",
+   "syn": "civic"
+  },
+  {
+   "head": "fix",
+   "syn": "repair"
+  },
+  {
+   "head": "fix",
+   "syn": "mend"
+  },
+  {
+   "head": "fix",
+   "syn": "secure"
+  },
+  {
+   "head": "modify",
+   "syn": "adapt"
+  },
+  {
+   "head": "modify",
+   "syn": "amend"
+  },
+  {
+   "head": "assemble",
+   "syn": "put together"
+  },
+  {
+   "head": "assemble",
+   "syn": "construct"
+  },
+  {
+   "head": "assemble",
+   "syn": "gather"
+  },
+  {
+   "head": "outside",
+   "syn": "external"
+  },
+  {
+   "head": "exterior",
+   "syn": "external"
+  },
+  {
+   "head": "external",
+   "syn": "exterior"
+  },
+  {
+   "head": "external",
+   "syn": "outside"
+  },
+  {
+   "head": "traffic",
+   "syn": "flow"
+  },
+  {
+   "head": "traffic",
+   "syn": "volume"
+  },
+  {
+   "head": "vehicle",
+   "syn": "transport"
+  },
+  {
+   "head": "vehicle",
+   "syn": "conveyance"
+  },
+  {
+   "head": "motor",
+   "syn": "engine"
+  },
+  {
+   "head": "vanish",
+   "syn": "fade"
+  },
+  {
+   "head": "disappear",
+   "syn": "fade"
+  },
+  {
+   "head": "disappear",
+   "syn": "dissolve"
+  },
+  {
+   "head": "delay",
+   "syn": "lag"
+  },
+  {
+   "head": "delay",
+   "syn": "postpone"
+  },
+  {
+   "head": "postpone",
+   "syn": "delay"
+  },
+  {
+   "head": "postpone",
+   "syn": "defer"
+  },
+  {
+   "head": "burden",
+   "syn": "load"
+  },
+  {
+   "head": "burden",
+   "syn": "weight"
+  },
+  {
+   "head": "burden",
+   "syn": "encumbrance"
+  },
+  {
+   "head": "convey",
+   "syn": "communicate"
+  },
+  {
+   "head": "convey",
+   "syn": "express"
+  },
+  {
+   "head": "swift",
+   "syn": "breakneck"
+  },
+  {
+   "head": "swift",
+   "syn": "prompt"
+  },
+  {
+   "head": "swift",
+   "syn": "quick"
+  },
+  {
+   "head": "authority",
+   "syn": "council"
+  },
+  {
+   "head": "authority",
+   "syn": "government"
+  },
+  {
+   "head": "authority",
+   "syn": "ministry"
+  },
+  {
+   "head": "authority",
+   "syn": "official"
+  },
+  {
+   "head": "conservative",
+   "syn": "traditional"
+  },
+  {
+   "head": "conservative",
+   "syn": "old-fashioned"
+  },
+  {
+   "head": "conservative",
+   "syn": "anti-reform"
+  },
+  {
+   "head": "organisation",
+   "syn": "business"
+  },
+  {
+   "head": "organisation",
+   "syn": "corporation"
+  },
+  {
+   "head": "association",
+   "syn": "institute"
+  },
+  {
+   "head": "institution",
+   "syn": "organization"
+  },
+  {
+   "head": "institution",
+   "syn": "establishment"
+  },
+  {
+   "head": "institution",
+   "syn": "association"
+  },
+  {
+   "head": "worldwide",
+   "syn": "global"
+  },
+  {
+   "head": "worldwide",
+   "syn": "international"
+  },
+  {
+   "head": "overseas",
+   "syn": "international"
+  },
+  {
+   "head": "overseas",
+   "syn": "worldwide"
+  },
+  {
+   "head": "reign",
+   "syn": "sovereignty"
+  },
+  {
+   "head": "reign",
+   "syn": "crown"
+  },
+  {
+   "head": "liberty",
+   "syn": "freedom"
+  },
+  {
+   "head": "liberty",
+   "syn": "independence"
+  },
+  {
+   "head": "preference",
+   "syn": "partiality"
+  },
+  {
+   "head": "preference",
+   "syn": "liking"
+  },
+  {
+   "head": "harmony",
+   "syn": "cooperation"
+  },
+  {
+   "head": "harmony",
+   "syn": "coordination"
+  },
+  {
+   "head": "prospect",
+   "syn": "outlook"
+  },
+  {
+   "head": "prospect",
+   "syn": "possibility"
+  },
+  {
+   "head": "prospect",
+   "syn": "promise"
+  },
+  {
+   "head": "proposal",
+   "syn": "initiative"
+  },
+  {
+   "head": "proposal",
+   "syn": "plan"
+  },
+  {
+   "head": "encourage",
+   "syn": "advance"
+  },
+  {
+   "head": "implement",
+   "syn": "execute"
+  },
+  {
+   "head": "implement",
+   "syn": "fulfill"
+  },
+  {
+   "head": "monitor",
+   "syn": "observe"
+  },
+  {
+   "head": "monitor",
+   "syn": "track"
+  },
+  {
+   "head": "monitor",
+   "syn": "oversee"
+  },
+  {
+   "head": "admit",
+   "syn": "acknowledge"
+  },
+  {
+   "head": "admit",
+   "syn": "confess"
+  },
+  {
+   "head": "admit",
+   "syn": "concede"
+  },
+  {
+   "head": "financial",
+   "syn": "fiscal"
+  },
+  {
+   "head": "financial",
+   "syn": "monetary"
+  },
+  {
+   "head": "financial",
+   "syn": "economic"
+  },
+  {
+   "head": "fund",
+   "syn": "finance"
+  },
+  {
+   "head": "fund",
+   "syn": "reserve"
+  },
+  {
+   "head": "fund",
+   "syn": "endowment"
+  },
+  {
+   "head": "donate",
+   "syn": "contribute"
+  },
+  {
+   "head": "donate",
+   "syn": "dedicate"
+  },
+  {
+   "head": "commercial",
+   "syn": "corporate"
+  },
+  {
+   "head": "retail",
+   "syn": "trade"
+  },
+  {
+   "head": "exchange",
+   "syn": "interchange"
+  },
+  {
+   "head": "exchange",
+   "syn": "share"
+  },
+  {
+   "head": "levy",
+   "syn": "charge"
+  },
+  {
+   "head": "levy",
+   "syn": "toll"
+  },
+  {
+   "head": "consume",
+   "syn": "eat"
+  },
+  {
+   "head": "consume",
+   "syn": "feed"
+  },
+  {
+   "head": "depression",
+   "syn": "gloom"
+  },
+  {
+   "head": "depression",
+   "syn": "despondency"
+  },
+  {
+   "head": "depression",
+   "syn": "slump"
+  },
+  {
+   "head": "crisis",
+   "syn": "emergency"
+  },
+  {
+   "head": "crisis",
+   "syn": "upheaval"
+  },
+  {
+   "head": "security",
+   "syn": "safety"
+  },
+  {
+   "head": "expand",
+   "syn": "extend"
+  },
+  {
+   "head": "expand",
+   "syn": "enlarge"
+  },
+  {
+   "head": "expand",
+   "syn": "broaden"
+  },
+  {
+   "head": "sufficient",
+   "syn": "adequate"
+  },
+  {
+   "head": "sufficient",
+   "syn": "enough"
+  },
+  {
+   "head": "adequate",
+   "syn": "enough"
+  },
+  {
+   "head": "adequate",
+   "syn": "sufficient"
+  },
+  {
+   "head": "company",
+   "syn": "business"
+  },
+  {
+   "head": "company",
+   "syn": "corporation"
+  },
+  {
+   "head": "enterprise",
+   "syn": "business"
+  },
+  {
+   "head": "entity",
+   "syn": "organization"
+  },
+  {
+   "head": "entity",
+   "syn": "unit"
+  },
+  {
+   "head": "entity",
+   "syn": "being"
+  },
+  {
+   "head": "guarantee",
+   "syn": "assurance"
+  },
+  {
+   "head": "guarantee",
+   "syn": "assure"
+  },
+  {
+   "head": "guarantee",
+   "syn": "ensure"
+  },
+  {
+   "head": "reliable",
+   "syn": "dependable"
+  },
+  {
+   "head": "sale",
+   "syn": "auction"
+  },
+  {
+   "head": "sale",
+   "syn": "discount"
+  },
+  {
+   "head": "deal",
+   "syn": "bargain"
+  },
+  {
+   "head": "transaction",
+   "syn": "exchange"
+  },
+  {
+   "head": "export",
+   "syn": "ship abroad"
+  },
+  {
+   "head": "export",
+   "syn": "sell overseas"
+  },
+  {
+   "head": "export",
+   "syn": "send out"
+  },
+  {
+   "head": "import",
+   "syn": "bring in"
+  },
+  {
+   "head": "import",
+   "syn": "purchase abroad"
+  },
+  {
+   "head": "valuable",
+   "syn": "costly"
+  },
+  {
+   "head": "valuable",
+   "syn": "precious"
+  },
+  {
+   "head": "incentive",
+   "syn": "motivation"
+  },
+  {
+   "head": "incentive",
+   "syn": "stimulus"
+  },
+  {
+   "head": "accelerate",
+   "syn": "hasten"
+  },
+  {
+   "head": "accelerate",
+   "syn": "precipitate"
+  },
+  {
+   "head": "prompt",
+   "syn": "activate"
+  },
+  {
+   "head": "prompt",
+   "syn": "breakneck"
+  },
+  {
+   "head": "income",
+   "syn": "earnings"
+  },
+  {
+   "head": "income",
+   "syn": "revenue"
+  },
+  {
+   "head": "income",
+   "syn": "wages"
+  },
+  {
+   "head": "discharge",
+   "syn": "release"
+  },
+  {
+   "head": "loss",
+   "syn": "damage"
+  },
+  {
+   "head": "loss",
+   "syn": "deficit"
+  },
+  {
+   "head": "loss",
+   "syn": "ruin"
+  },
+  {
+   "head": "opportunity",
+   "syn": "chance"
+  },
+  {
+   "head": "opportunity",
+   "syn": "possibility"
+  },
+  {
+   "head": "chance",
+   "syn": "likelihood"
+  },
+  {
+   "head": "chance",
+   "syn": "opportunity"
+  },
+  {
+   "head": "chance",
+   "syn": "possibility"
+  },
+  {
+   "head": "solve",
+   "syn": "address"
+  },
+  {
+   "head": "solve",
+   "syn": "answer"
+  },
+  {
+   "head": "manage",
+   "syn": "control"
+  },
+  {
+   "head": "manage",
+   "syn": "direct"
+  },
+  {
+   "head": "regulate",
+   "syn": "adjust"
+  },
+  {
+   "head": "regulate",
+   "syn": "govern"
+  },
+  {
+   "head": "coordinate",
+   "syn": "organize"
+  },
+  {
+   "head": "coordinate",
+   "syn": "align"
+  },
+  {
+   "head": "coordinate",
+   "syn": "synchronize"
+  },
+  {
+   "head": "legal",
+   "syn": "lawful"
+  },
+  {
+   "head": "criteria",
+   "syn": "benchmarks"
+  },
+  {
+   "head": "criteria",
+   "syn": "requirements"
+  },
+  {
+   "head": "standard",
+   "syn": "norm"
+  },
+  {
+   "head": "standard",
+   "syn": "criterion"
+  },
+  {
+   "head": "permit",
+   "syn": "licence"
+  },
+  {
+   "head": "permit",
+   "syn": "permission"
+  },
+  {
+   "head": "enforce",
+   "syn": "force"
+  },
+  {
+   "head": "enforce",
+   "syn": "impose"
+  },
+  {
+   "head": "enforce",
+   "syn": "compel"
+  },
+  {
+   "head": "reject",
+   "syn": "deny"
+  },
+  {
+   "head": "reject",
+   "syn": "exclude"
+  },
+  {
+   "head": "official",
+   "syn": "authority"
+  },
+  {
+   "head": "official",
+   "syn": "officer"
+  },
+  {
+   "head": "official",
+   "syn": "formal"
+  },
+  {
+   "head": "condemn",
+   "syn": "criticise"
+  },
+  {
+   "head": "condemn",
+   "syn": "denounce"
+  },
+  {
+   "head": "condemn",
+   "syn": "sentence"
+  },
+  {
+   "head": "boycott",
+   "syn": "shun"
+  },
+  {
+   "head": "boycott",
+   "syn": "ostracize"
+  },
+  {
+   "head": "boycott",
+   "syn": "embargo"
+  },
+  {
+   "head": "investigate",
+   "syn": "probe"
+  },
+  {
+   "head": "witness",
+   "syn": "notice"
+  },
+  {
+   "head": "witness",
+   "syn": "view"
+  },
+  {
+   "head": "crime",
+   "syn": "offence"
+  },
+  {
+   "head": "crime",
+   "syn": "felony"
+  },
+  {
+   "head": "crime",
+   "syn": "wrongdoing"
+  },
+  {
+   "head": "conform",
+   "syn": "comply"
+  },
+  {
+   "head": "conform",
+   "syn": "accord"
+  },
+  {
+   "head": "conform",
+   "syn": "match"
+  },
+  {
+   "head": "obey",
+   "syn": "comply"
+  },
+  {
+   "head": "succumb",
+   "syn": "submit"
+  },
+  {
+   "head": "succumb",
+   "syn": "yield"
+  },
+  {
+   "head": "conflict",
+   "syn": "clash"
+  },
+  {
+   "head": "conflict",
+   "syn": "dispute"
+  },
+  {
+   "head": "conflict",
+   "syn": "friction"
+  },
+  {
+   "head": "target",
+   "syn": "intention"
+  },
+  {
+   "head": "target",
+   "syn": "purpose"
+  },
+  {
+   "head": "prepare",
+   "syn": "arrange"
+  },
+  {
+   "head": "prepare",
+   "syn": "rehearse"
+  },
+  {
+   "head": "prepare",
+   "syn": "equip"
+  },
+  {
+   "head": "famine",
+   "syn": "hunger"
+  },
+  {
+   "head": "threat",
+   "syn": "danger"
+  },
+  {
+   "head": "threat",
+   "syn": "menace"
+  },
+  {
+   "head": "offend",
+   "syn": "insult"
+  },
+  {
+   "head": "offend",
+   "syn": "upset"
+  },
+  {
+   "head": "offend",
+   "syn": "anger"
+  },
+  {
+   "head": "aggressive",
+   "syn": "fierce"
+  },
+  {
+   "head": "aggressive",
+   "syn": "violent"
+  },
+  {
+   "head": "violate",
+   "syn": "infringe"
+  },
+  {
+   "head": "violate",
+   "syn": "breach"
+  },
+  {
+   "head": "violate",
+   "syn": "break"
+  },
+  {
+   "head": "attack",
+   "syn": "assault"
+  },
+  {
+   "head": "attack",
+   "syn": "strike"
+  },
+  {
+   "head": "attack",
+   "syn": "invade"
+  },
+  {
+   "head": "challenge",
+   "syn": "contest"
+  },
+  {
+   "head": "challenge",
+   "syn": "dispute"
+  },
+  {
+   "head": "challenge",
+   "syn": "test"
+  },
+  {
+   "head": "halt",
+   "syn": "suspend"
+  },
+  {
+   "head": "cease",
+   "syn": "discontinue"
+  },
+  {
+   "head": "counter",
+   "syn": "refute"
+  },
+  {
+   "head": "counter",
+   "syn": "offset"
+  },
+  {
+   "head": "deter",
+   "syn": "dissuade"
+  },
+  {
+   "head": "evidence",
+   "syn": "testimony"
+  },
+  {
+   "head": "tension",
+   "syn": "anxiety"
+  },
+  {
+   "head": "tension",
+   "syn": "stress"
+  },
+  {
+   "head": "compete",
+   "syn": "vie"
+  },
+  {
+   "head": "compete",
+   "syn": "contend"
+  },
+  {
+   "head": "compete",
+   "syn": "contest"
+  },
+  {
+   "head": "enemy",
+   "syn": "opponent"
+  },
+  {
+   "head": "enemy",
+   "syn": "adversary"
+  },
+  {
+   "head": "force",
+   "syn": "dynamic"
+  },
+  {
+   "head": "force",
+   "syn": "energy"
+  },
+  {
+   "head": "force",
+   "syn": "enforce"
+  },
+  {
+   "head": "force",
+   "syn": "power"
+  },
+  {
+   "head": "force",
+   "syn": "push"
+  },
+  {
+   "head": "reinforce",
+   "syn": "strengthen"
+  },
+  {
+   "head": "reinforce",
+   "syn": "support"
+  },
+  {
+   "head": "reinforce",
+   "syn": "bolster"
+  },
+  {
+   "head": "matter",
+   "syn": "substance"
+  },
+  {
+   "head": "matter",
+   "syn": "material"
+  },
+  {
+   "head": "fierce",
+   "syn": "aggressive"
+  },
+  {
+   "head": "fierce",
+   "syn": "violent"
+  },
+  {
+   "head": "execute",
+   "syn": "fulfill"
+  },
+  {
+   "head": "execute",
+   "syn": "implement"
+  },
+  {
+   "head": "progress",
+   "syn": "advance"
+  },
+  {
+   "head": "progress",
+   "syn": "headway"
+  },
+  {
+   "head": "progress",
+   "syn": "development"
+  },
+  {
+   "head": "military",
+   "syn": "army"
+  },
+  {
+   "head": "poison",
+   "syn": "drug"
+  },
+  {
+   "head": "poison",
+   "syn": "toxin"
+  },
+  {
+   "head": "catastrophe",
+   "syn": "calamity"
+  },
+  {
+   "head": "catastrophe",
+   "syn": "disaster"
+  },
+  {
+   "head": "interrupt",
+   "syn": "disrupt"
+  },
+  {
+   "head": "interrupt",
+   "syn": "disturb"
+  },
+  {
+   "head": "interrupt",
+   "syn": "interfere with"
+  },
+  {
+   "head": "withstand",
+   "syn": "hold"
+  },
+  {
+   "head": "escape",
+   "syn": "flee"
+  },
+  {
+   "head": "escape",
+   "syn": "evade"
+  },
+  {
+   "head": "escape",
+   "syn": "break free"
+  },
+  {
+   "head": "quit",
+   "syn": "resign"
+  },
+  {
+   "head": "quit",
+   "syn": "withdraw"
+  },
+  {
+   "head": "abandon",
+   "syn": "discard"
+  },
+  {
+   "head": "discard",
+   "syn": "abandon"
+  },
+  {
+   "head": "defeat",
+   "syn": "beat"
+  },
+  {
+   "head": "conquer",
+   "syn": "subdue"
+  },
+  {
+   "head": "contribute",
+   "syn": "dedicate"
+  },
+  {
+   "head": "contribute",
+   "syn": "donate"
+  },
+  {
+   "head": "obstacle",
+   "syn": "barrier"
+  },
+  {
+   "head": "obstacle",
+   "syn": "hurdle"
+  },
+  {
+   "head": "general",
+   "syn": "common"
+  },
+  {
+   "head": "gender",
+   "syn": "sex"
+  },
+  {
+   "head": "spouse",
+   "syn": "mate"
+  },
+  {
+   "head": "spouse",
+   "syn": "partner"
+  },
+  {
+   "head": "relative",
+   "syn": "kin"
+  },
+  {
+   "head": "boss",
+   "syn": "director"
+  },
+  {
+   "head": "boss",
+   "syn": "leader"
+  },
+  {
+   "head": "boss",
+   "syn": "manager"
+  },
+  {
+   "head": "mate",
+   "syn": "breed"
+  },
+  {
+   "head": "mate",
+   "syn": "pair"
+  },
+  {
+   "head": "mate",
+   "syn": "couple"
+  },
+  {
+   "head": "apprentice",
+   "syn": "intern"
+  },
+  {
+   "head": "apprentice",
+   "syn": "trainee"
+  },
+  {
+   "head": "apprentice",
+   "syn": "learner"
+  },
+  {
+   "head": "director",
+   "syn": "boss"
+  },
+  {
+   "head": "director",
+   "syn": "entrepreneur"
+  },
+  {
+   "head": "council",
+   "syn": "authority"
+  },
+  {
+   "head": "council",
+   "syn": "government"
+  },
+  {
+   "head": "council",
+   "syn": "ministry"
+  },
+  {
+   "head": "council",
+   "syn": "official"
+  },
+  {
+   "head": "specialist",
+   "syn": "authority"
+  },
+  {
+   "head": "solicitor",
+   "syn": "attorney"
+  },
+  {
+   "head": "solicitor",
+   "syn": "counsel"
+  },
+  {
+   "head": "reproduce",
+   "syn": "breed"
+  },
+  {
+   "head": "reproduce",
+   "syn": "copy"
+  },
+  {
+   "head": "reproduce",
+   "syn": "replicate"
+  },
+  {
+   "head": "cultivate",
+   "syn": "foster"
+  },
+  {
+   "head": "cultivate",
+   "syn": "grow"
+  },
+  {
+   "head": "cultivate",
+   "syn": "nurture"
+  },
+  {
+   "head": "yield",
+   "syn": "produce"
+  },
+  {
+   "head": "yield",
+   "syn": "output"
+  },
+  {
+   "head": "yield",
+   "syn": "profit"
+  },
+  {
+   "head": "mould",
+   "syn": "form"
+  },
+  {
+   "head": "mould",
+   "syn": "model"
+  },
+  {
+   "head": "scent",
+   "syn": "aroma"
+  },
+  {
+   "head": "scent",
+   "syn": "odour"
+  },
+  {
+   "head": "scent",
+   "syn": "smell"
+  },
+  {
+   "head": "release",
+   "syn": "discharge"
+  },
+  {
+   "head": "release",
+   "syn": "free"
+  },
+  {
+   "head": "release",
+   "syn": "publish"
+  },
+  {
+   "head": "exceed",
+   "syn": "excel"
+  },
+  {
+   "head": "exceed",
+   "syn": "overtake"
+  },
+  {
+   "head": "exceed",
+   "syn": "surpass"
+  },
+  {
+   "head": "exceed",
+   "syn": "transcend"
+  },
+  {
+   "head": "preserve",
+   "syn": "conserve"
+  },
+  {
+   "head": "preserve",
+   "syn": "protect"
+  },
+  {
+   "head": "preserve",
+   "syn": "retain"
+  },
+  {
+   "head": "conservation",
+   "syn": "protection"
+  },
+  {
+   "head": "conservation",
+   "syn": "preservation"
+  },
+  {
+   "head": "conservation",
+   "syn": "saving"
+  },
+  {
+   "head": "pattern",
+   "syn": "design"
+  },
+  {
+   "head": "pattern",
+   "syn": "shape"
+  },
+  {
+   "head": "pattern",
+   "syn": "image"
+  },
+  {
+   "head": "effective",
+   "syn": "beneficial"
+  },
+  {
+   "head": "effective",
+   "syn": "helpful"
+  },
+  {
+   "head": "considerable",
+   "syn": "substantial"
+  },
+  {
+   "head": "considerable",
+   "syn": "sizable"
+  },
+  {
+   "head": "considerable",
+   "syn": "significant"
+  },
+  {
+   "head": "react",
+   "syn": "respond"
+  },
+  {
+   "head": "react",
+   "syn": "reply"
+  },
+  {
+   "head": "react",
+   "syn": "act"
+  },
+  {
+   "head": "reflect",
+   "syn": "echo"
+  },
+  {
+   "head": "reflect",
+   "syn": "indicate"
+  },
+  {
+   "head": "reflect",
+   "syn": "show"
+  },
+  {
+   "head": "bear",
+   "syn": "endure"
+  },
+  {
+   "head": "bear",
+   "syn": "stand"
+  },
+  {
+   "head": "revive",
+   "syn": "restore"
+  },
+  {
+   "head": "revive",
+   "syn": "recover"
+  },
+  {
+   "head": "revive",
+   "syn": "renew"
+  },
+  {
+   "head": "survive",
+   "syn": "endure"
+  },
+  {
+   "head": "survive",
+   "syn": "outlive"
+  },
+  {
+   "head": "survive",
+   "syn": "last"
+  },
+  {
+   "head": "explain",
+   "syn": "clarify"
+  },
+  {
+   "head": "explain",
+   "syn": "describe"
+  },
+  {
+   "head": "explain",
+   "syn": "account for"
+  },
+  {
+   "head": "overtake",
+   "syn": "exceed"
+  },
+  {
+   "head": "overtake",
+   "syn": "excel"
+  },
+  {
+   "head": "overtake",
+   "syn": "surpass"
+  },
+  {
+   "head": "overtake",
+   "syn": "transcend"
+  },
+  {
+   "head": "combine",
+   "syn": "merge"
+  },
+  {
+   "head": "combine",
+   "syn": "unite"
+  },
+  {
+   "head": "combine",
+   "syn": "blend"
+  },
+  {
+   "head": "integrate",
+   "syn": "combine"
+  },
+  {
+   "head": "integrate",
+   "syn": "merge"
+  },
+  {
+   "head": "integrate",
+   "syn": "incorporate"
+  },
+  {
+   "head": "steer",
+   "syn": "guide"
+  },
+  {
+   "head": "steer",
+   "syn": "direct"
+  },
+  {
+   "head": "involve",
+   "syn": "include"
+  },
+  {
+   "head": "involve",
+   "syn": "implicate"
+  },
+  {
+   "head": "involve",
+   "syn": "associate"
+  },
+  {
+   "head": "upset",
+   "syn": "nervous"
+  },
+  {
+   "head": "upset",
+   "syn": "stress"
+  },
+  {
+   "head": "neglect",
+   "syn": "disregard"
+  },
+  {
+   "head": "neglect",
+   "syn": "oversight"
+  },
+  {
+   "head": "neglect",
+   "syn": "omission"
+  },
+  {
+   "head": "bias",
+   "syn": "prejudice"
+  },
+  {
+   "head": "bias",
+   "syn": "partiality"
+  },
+  {
+   "head": "bias",
+   "syn": "predisposition"
+  },
+  {
+   "head": "impede",
+   "syn": "obstruct"
+  },
+  {
+   "head": "impede",
+   "syn": "block"
+  },
+  {
+   "head": "induce",
+   "syn": "cause"
+  },
+  {
+   "head": "induce",
+   "syn": "prompt"
+  },
+  {
+   "head": "induce",
+   "syn": "persuade"
+  },
+  {
+   "head": "designate",
+   "syn": "appoint"
+  },
+  {
+   "head": "designate",
+   "syn": "assign"
+  },
+  {
+   "head": "assign",
+   "syn": "allocate"
+  },
+  {
+   "head": "assign",
+   "syn": "appoint"
+  },
+  {
+   "head": "assign",
+   "syn": "designate"
+  },
+  {
+   "head": "assign",
+   "syn": "distribute"
+  },
+  {
+   "head": "distribute",
+   "syn": "allocate"
+  },
+  {
+   "head": "distribute",
+   "syn": "assign"
+  },
+  {
+   "head": "distribute",
+   "syn": "spread"
+  },
+  {
+   "head": "conceal",
+   "syn": "hide"
+  },
+  {
+   "head": "conceal",
+   "syn": "obscure"
+  },
+  {
+   "head": "exclude",
+   "syn": "reject"
+  },
+  {
+   "head": "exclude",
+   "syn": "omit"
+  },
+  {
+   "head": "exclude",
+   "syn": "eliminate"
+  },
+  {
+   "head": "assure",
+   "syn": "ensure"
+  },
+  {
+   "head": "assure",
+   "syn": "guarantee"
+  },
+  {
+   "head": "invoke",
+   "syn": "cite"
+  },
+  {
+   "head": "invoke",
+   "syn": "appeal to"
+  },
+  {
+   "head": "invoke",
+   "syn": "call on"
+  },
+  {
+   "head": "attempt",
+   "syn": "try"
+  },
+  {
+   "head": "attempt",
+   "syn": "endeavor"
+  },
+  {
+   "head": "attempt",
+   "syn": "seek"
+  },
+  {
+   "head": "exploit",
+   "syn": "use"
+  },
+  {
+   "head": "exploit",
+   "syn": "utilize"
+  },
+  {
+   "head": "exploit",
+   "syn": "mine"
+  },
+  {
+   "head": "explore",
+   "syn": "probe"
+  },
+  {
+   "head": "tackle",
+   "syn": "address"
+  },
+  {
+   "head": "dispose",
+   "syn": "address"
+  },
+  {
+   "head": "restore",
+   "syn": "revive"
+  },
+  {
+   "head": "restore",
+   "syn": "recover"
+  },
+  {
+   "head": "restore",
+   "syn": "renew"
+  },
+  {
+   "head": "offset",
+   "syn": "compensate"
+  },
+  {
+   "head": "offset",
+   "syn": "balance"
+  },
+  {
+   "head": "offset",
+   "syn": "counterbalance"
+  },
+  {
+   "head": "obtain",
+   "syn": "gain"
+  },
+  {
+   "head": "obtain",
+   "syn": "get"
+  },
+  {
+   "head": "offer",
+   "syn": "confer"
+  },
+  {
+   "head": "offer",
+   "syn": "grant"
+  },
+  {
+   "head": "exaggerate",
+   "syn": "overstate"
+  },
+  {
+   "head": "prolong",
+   "syn": "extend"
+  },
+  {
+   "head": "prolong",
+   "syn": "lengthen"
+  },
+  {
+   "head": "prolong",
+   "syn": "stretch"
+  },
+  {
+   "head": "cause",
+   "syn": "origin"
+  },
+  {
+   "head": "cause",
+   "syn": "source"
+  },
+  {
+   "head": "purpose",
+   "syn": "aim"
+  },
+  {
+   "head": "purpose",
+   "syn": "goal"
+  },
+  {
+   "head": "purpose",
+   "syn": "objective"
+  },
+  {
+   "head": "purpose",
+   "syn": "target"
+  },
+  {
+   "head": "objective",
+   "syn": "intention"
+  },
+  {
+   "head": "objective",
+   "syn": "purpose"
+  },
+  {
+   "head": "verify",
+   "syn": "authenticate"
+  },
+  {
+   "head": "verify",
+   "syn": "certify"
+  },
+  {
+   "head": "verify",
+   "syn": "confirm"
+  },
+  {
+   "head": "verify",
+   "syn": "test"
+  },
+  {
+   "head": "participate",
+   "syn": "involve"
+  },
+  {
+   "head": "participate",
+   "syn": "join"
+  },
+  {
+   "head": "replace",
+   "syn": "supersede"
+  },
+  {
+   "head": "replace",
+   "syn": "substitute"
+  },
+  {
+   "head": "replace",
+   "syn": "displace"
+  },
+  {
+   "head": "attitude",
+   "syn": "opinion"
+  },
+  {
+   "head": "attitude",
+   "syn": "perspective"
+  },
+  {
+   "head": "trait",
+   "syn": "characteristic"
+  },
+  {
+   "head": "trait",
+   "syn": "feature"
+  },
+  {
+   "head": "trait",
+   "syn": "property"
+  },
+  {
+   "head": "feature",
+   "syn": "characteristic"
+  },
+  {
+   "head": "feature",
+   "syn": "property"
+  },
+  {
+   "head": "feature",
+   "syn": "trait"
+  },
+  {
+   "head": "skeleton",
+   "syn": "frame"
+  },
+  {
+   "head": "skeleton",
+   "syn": "bones"
+  },
+  {
+   "head": "brain",
+   "syn": "intellect"
+  },
+  {
+   "head": "mental",
+   "syn": "psychological"
+  },
+  {
+   "head": "mental",
+   "syn": "intellectual"
+  },
+  {
+   "head": "immune",
+   "syn": "resistant"
+  },
+  {
+   "head": "immune",
+   "syn": "exempt"
+  },
+  {
+   "head": "immune",
+   "syn": "unaffected"
+  },
+  {
+   "head": "visual",
+   "syn": "optical"
+  },
+  {
+   "head": "visual",
+   "syn": "visible"
+  },
+  {
+   "head": "visible",
+   "syn": "plain"
+  },
+  {
+   "head": "visible",
+   "syn": "observable"
+  },
+  {
+   "head": "visible",
+   "syn": "noticeable"
+  },
+  {
+   "head": "patient",
+   "syn": "tolerant"
+  },
+  {
+   "head": "patient",
+   "syn": "forbearing"
+  },
+  {
+   "head": "patient",
+   "syn": "calm"
+  },
+  {
+   "head": "death",
+   "syn": "demise"
+  },
+  {
+   "head": "death",
+   "syn": "passing"
+  },
+  {
+   "head": "death",
+   "syn": "decease"
+  },
+  {
+   "head": "fatigue",
+   "syn": "tiredness"
+  },
+  {
+   "head": "fatigue",
+   "syn": "weariness"
+  },
+  {
+   "head": "fatigue",
+   "syn": "exhaustion"
+  },
+  {
+   "head": "chronic",
+   "syn": "persistent"
+  },
+  {
+   "head": "chronic",
+   "syn": "long-standing"
+  },
+  {
+   "head": "chronic",
+   "syn": "incurable"
+  },
+  {
+   "head": "cure",
+   "syn": "heal"
+  },
+  {
+   "head": "cure",
+   "syn": "treat"
+  },
+  {
+   "head": "recovery",
+   "syn": "renaissance"
+  },
+  {
+   "head": "recovery",
+   "syn": "revival"
+  },
+  {
+   "head": "recovery",
+   "syn": "restoration"
+  },
+  {
+   "head": "relief",
+   "syn": "comfort"
+  },
+  {
+   "head": "relief",
+   "syn": "aid"
+  },
+  {
+   "head": "relief",
+   "syn": "assistance"
+  },
+  {
+   "head": "normal",
+   "syn": "average"
+  },
+  {
+   "head": "normal",
+   "syn": "general"
+  },
+  {
+   "head": "common",
+   "syn": "average"
+  },
+  {
+   "head": "common",
+   "syn": "general"
+  },
+  {
+   "head": "usual",
+   "syn": "common"
+  },
+  {
+   "head": "pessimistic",
+   "syn": "negative"
+  },
+  {
+   "head": "pessimistic",
+   "syn": "hopeless"
+  },
+  {
+   "head": "positive",
+   "syn": "beneficial"
+  },
+  {
+   "head": "passive",
+   "syn": "inactive"
+  },
+  {
+   "head": "passive",
+   "syn": "neutral"
+  },
+  {
+   "head": "surprising",
+   "syn": "dramatic"
+  },
+  {
+   "head": "surprising",
+   "syn": "striking"
+  },
+  {
+   "head": "surprising",
+   "syn": "unexpected"
+  },
+  {
+   "head": "liberal",
+   "syn": "free"
+  },
+  {
+   "head": "liberal",
+   "syn": "tolerant"
+  },
+  {
+   "head": "liberal",
+   "syn": "open-minded"
+  },
+  {
+   "head": "freedom",
+   "syn": "liberty"
+  },
+  {
+   "head": "freedom",
+   "syn": "independence"
+  },
+  {
+   "head": "freedom",
+   "syn": "autonomy"
+  },
+  {
+   "head": "remarkable",
+   "syn": "outstanding"
+  },
+  {
+   "head": "remarkable",
+   "syn": "notable"
+  },
+  {
+   "head": "tough",
+   "syn": "challenging"
+  },
+  {
+   "head": "delicate",
+   "syn": "subtle"
+  },
+  {
+   "head": "liable",
+   "syn": "prone"
+  },
+  {
+   "head": "liable",
+   "syn": "inclined"
+  },
+  {
+   "head": "trustworthy",
+   "syn": "dependable"
+  },
+  {
+   "head": "resemble",
+   "syn": "like"
+  },
+  {
+   "head": "resemble",
+   "syn": "similar"
+  },
+  {
+   "head": "similar",
+   "syn": "like"
+  },
+  {
+   "head": "familiar",
+   "syn": "acquainted"
+  },
+  {
+   "head": "familiar",
+   "syn": "accustomed"
+  },
+  {
+   "head": "implicit",
+   "syn": "implied"
+  },
+  {
+   "head": "implicit",
+   "syn": "unspoken"
+  },
+  {
+   "head": "implicit",
+   "syn": "tacit"
+  },
+  {
+   "head": "discourage",
+   "syn": "dissuade"
+  },
+  {
+   "head": "irritate",
+   "syn": "annoy"
+  },
+  {
+   "head": "irritate",
+   "syn": "provoke"
+  },
+  {
+   "head": "irritate",
+   "syn": "vex"
+  },
+  {
+   "head": "troublesome",
+   "syn": "challenging"
+  },
+  {
+   "head": "troublesome",
+   "syn": "difficult"
+  },
+  {
+   "head": "troublesome",
+   "syn": "annoying"
+  },
+  {
+   "head": "hostile",
+   "syn": "unfriendly"
+  },
+  {
+   "head": "hostile",
+   "syn": "aggressive"
+  },
+  {
+   "head": "hostile",
+   "syn": "antagonistic"
+  },
+  {
+   "head": "anxiety",
+   "syn": "stress"
+  },
+  {
+   "head": "anxiety",
+   "syn": "tension"
+  },
+  {
+   "head": "anxiety",
+   "syn": "upset"
+  },
+  {
+   "head": "fear",
+   "syn": "dread"
+  },
+  {
+   "head": "fear",
+   "syn": "terror"
+  },
+  {
+   "head": "fear",
+   "syn": "fright"
+  },
+  {
+   "head": "unwilling",
+   "syn": "reluctant"
+  },
+  {
+   "head": "reluctant",
+   "syn": "unwilling"
+  },
+  {
+   "head": "immediately",
+   "syn": "instantly"
+  },
+  {
+   "head": "immediately",
+   "syn": "at once"
+  },
+  {
+   "head": "creature",
+   "syn": "animal"
+  },
+  {
+   "head": "creature",
+   "syn": "being"
+  },
+  {
+   "head": "creature",
+   "syn": "organism"
+  },
+  {
+   "head": "species",
+   "syn": "category"
+  },
+  {
+   "head": "species",
+   "syn": "breed"
+  },
+  {
+   "head": "species",
+   "syn": "sort"
+  },
+  {
+   "head": "derive",
+   "syn": "originate"
+  },
+  {
+   "head": "derive",
+   "syn": "obtain"
+  },
+  {
+   "head": "derive",
+   "syn": "stem"
+  },
+  {
+   "head": "feed",
+   "syn": "nourish"
+  },
+  {
+   "head": "feed",
+   "syn": "sustain"
+  },
+  {
+   "head": "feed",
+   "syn": "rear"
+  },
+  {
+   "head": "breed",
+   "syn": "reproduce"
+  },
+  {
+   "head": "breed",
+   "syn": "propagate"
+  },
+  {
+   "head": "breed",
+   "syn": "raise"
+  },
+  {
+   "head": "courtship",
+   "syn": "courting"
+  },
+  {
+   "head": "courtship",
+   "syn": "wooing"
+  },
+  {
+   "head": "courtship",
+   "syn": "romance"
+  },
+  {
+   "head": "habitat",
+   "syn": "environment"
+  },
+  {
+   "head": "habitat",
+   "syn": "surroundings"
+  },
+  {
+   "head": "stable",
+   "syn": "steady"
+  },
+  {
+   "head": "stable",
+   "syn": "firm"
+  },
+  {
+   "head": "stable",
+   "syn": "solid"
+  },
+  {
+   "head": "barrier",
+   "syn": "obstacle"
+  },
+  {
+   "head": "barrier",
+   "syn": "hurdle"
+  },
+  {
+   "head": "barrier",
+   "syn": "obstruction"
+  },
+  {
+   "head": "secrete",
+   "syn": "release"
+  },
+  {
+   "head": "instinct",
+   "syn": "intuition"
+  },
+  {
+   "head": "instinct",
+   "syn": "natural impulse"
+  },
+  {
+   "head": "potential",
+   "syn": "chance"
+  },
+  {
+   "head": "potential",
+   "syn": "likelihood"
+  },
+  {
+   "head": "intelligence",
+   "syn": "intellect"
+  },
+  {
+   "head": "intelligence",
+   "syn": "brainpower"
+  },
+  {
+   "head": "intelligence",
+   "syn": "cognition"
+  },
+  {
+   "head": "track",
+   "syn": "trace"
+  },
+  {
+   "head": "trace",
+   "syn": "track"
+  },
+  {
+   "head": "prey",
+   "syn": "consume"
+  },
+  {
+   "head": "prey",
+   "syn": "eat"
+  },
+  {
+   "head": "prey",
+   "syn": "feed"
+  },
+  {
+   "head": "predator",
+   "syn": "carnivore"
+  },
+  {
+   "head": "predator",
+   "syn": "hunter"
+  },
+  {
+   "head": "predator",
+   "syn": "raider"
+  },
+  {
+   "head": "undergo",
+   "syn": "endure"
+  },
+  {
+   "head": "undergo",
+   "syn": "experience"
+  },
+  {
+   "head": "module",
+   "syn": "unit"
+  },
+  {
+   "head": "module",
+   "syn": "component"
+  },
+  {
+   "head": "substance",
+   "syn": "matter"
+  },
+  {
+   "head": "substance",
+   "syn": "material"
+  },
+  {
+   "head": "compound",
+   "syn": "chemical"
+  },
+  {
+   "head": "compound",
+   "syn": "matter"
+  },
+  {
+   "head": "compound",
+   "syn": "substance"
+  },
+  {
+   "head": "formation",
+   "syn": "arrangement"
+  },
+  {
+   "head": "formation",
+   "syn": "structure"
+  },
+  {
+   "head": "formation",
+   "syn": "constitution"
+  },
+  {
+   "head": "signal",
+   "syn": "sign"
+  },
+  {
+   "head": "signal",
+   "syn": "mark"
+  },
+  {
+   "head": "signal",
+   "syn": "gesture"
+  },
+  {
+   "head": "fragment",
+   "syn": "piece"
+  },
+  {
+   "head": "fragment",
+   "syn": "shard"
+  },
+  {
+   "head": "fragment",
+   "syn": "scrap"
+  },
+  {
+   "head": "education",
+   "syn": "learning"
+  },
+  {
+   "head": "education",
+   "syn": "training"
+  },
+  {
+   "head": "institute",
+   "syn": "association"
+  },
+  {
+   "head": "expertise",
+   "syn": "ability"
+  },
+  {
+   "head": "expertise",
+   "syn": "capability"
+  },
+  {
+   "head": "expertise",
+   "syn": "capacity"
+  },
+  {
+   "head": "expertise",
+   "syn": "competence"
+  },
+  {
+   "head": "controversial",
+   "syn": "debatable"
+  },
+  {
+   "head": "controversial",
+   "syn": "disputed"
+  },
+  {
+   "head": "controversial",
+   "syn": "contentious"
+  },
+  {
+   "head": "puzzle",
+   "syn": "riddle"
+  },
+  {
+   "head": "puzzle",
+   "syn": "mystery"
+  },
+  {
+   "head": "puzzle",
+   "syn": "enigma"
+  },
+  {
+   "head": "obscure",
+   "syn": "ambiguous"
+  },
+  {
+   "head": "obscure",
+   "syn": "uncertain"
+  },
+  {
+   "head": "enhance",
+   "syn": "advance"
+  },
+  {
+   "head": "motivate",
+   "syn": "advance"
+  },
+  {
+   "head": "stimulate",
+   "syn": "advance"
+  },
+  {
+   "head": "indulge",
+   "syn": "spoil"
+  },
+  {
+   "head": "spoil",
+   "syn": "indulge"
+  },
+  {
+   "head": "intelligent",
+   "syn": "bright"
+  },
+  {
+   "head": "intelligent",
+   "syn": "clever"
+  },
+  {
+   "head": "capable",
+   "syn": "able"
+  },
+  {
+   "head": "capable",
+   "syn": "competent"
+  },
+  {
+   "head": "capable",
+   "syn": "proficient"
+  },
+  {
+   "head": "scheme",
+   "syn": "initiative"
+  },
+  {
+   "head": "scheme",
+   "syn": "plan"
+  },
+  {
+   "head": "scheme",
+   "syn": "program"
+  },
+  {
+   "head": "scheme",
+   "syn": "project"
+  },
+  {
+   "head": "principal",
+   "syn": "first"
+  },
+  {
+   "head": "principal",
+   "syn": "leading"
+  },
+  {
+   "head": "principal",
+   "syn": "major"
+  },
+  {
+   "head": "faculty",
+   "syn": "teaching staff"
+  },
+  {
+   "head": "faculty",
+   "syn": "academic staff"
+  },
+  {
+   "head": "professor",
+   "syn": "faculty"
+  },
+  {
+   "head": "professor",
+   "syn": "lecturer"
+  },
+  {
+   "head": "scholar",
+   "syn": "intellectual"
+  },
+  {
+   "head": "scholar",
+   "syn": "academic"
+  },
+  {
+   "head": "lecturer",
+   "syn": "professor"
+  },
+  {
+   "head": "certify",
+   "syn": "authenticate"
+  },
+  {
+   "head": "certify",
+   "syn": "confirm"
+  },
+  {
+   "head": "certify",
+   "syn": "verify"
+  },
+  {
+   "head": "orientation",
+   "syn": "direction"
+  },
+  {
+   "head": "orientation",
+   "syn": "positioning"
+  },
+  {
+   "head": "experiment",
+   "syn": "trial"
+  },
+  {
+   "head": "quantity",
+   "syn": "amount"
+  },
+  {
+   "head": "quantity",
+   "syn": "volume"
+  },
+  {
+   "head": "quantity",
+   "syn": "number"
+  },
+  {
+   "head": "literature",
+   "syn": "fiction"
+  },
+  {
+   "head": "literature",
+   "syn": "writings"
+  },
+  {
+   "head": "literature",
+   "syn": "publication"
+  },
+  {
+   "head": "record",
+   "syn": "document"
+  },
+  {
+   "head": "record",
+   "syn": "log"
+  },
+  {
+   "head": "category",
+   "syn": "type"
+  },
+  {
+   "head": "context",
+   "syn": "setting"
+  },
+  {
+   "head": "context",
+   "syn": "background"
+  },
+  {
+   "head": "context",
+   "syn": "circumstance"
+  },
+  {
+   "head": "minor",
+   "syn": "secondary"
+  },
+  {
+   "head": "minor",
+   "syn": "slight"
+  },
+  {
+   "head": "minor",
+   "syn": "lesser"
+  },
+  {
+   "head": "agriculture",
+   "syn": "farm"
+  },
+  {
+   "head": "agriculture",
+   "syn": "farming"
+  },
+  {
+   "head": "geography",
+   "syn": "topography"
+  },
+  {
+   "head": "geography",
+   "syn": "terrain"
+  },
+  {
+   "head": "geography",
+   "syn": "earth science"
+  },
+  {
+   "head": "sum",
+   "syn": "total"
+  },
+  {
+   "head": "sum",
+   "syn": "amount"
+  },
+  {
+   "head": "sum",
+   "syn": "aggregate"
+  },
+  {
+   "head": "odd",
+   "syn": "strange"
+  },
+  {
+   "head": "odd",
+   "syn": "suspicious"
+  },
+  {
+   "head": "multiple",
+   "syn": "considerable"
+  },
+  {
+   "head": "multiple",
+   "syn": "many"
+  },
+  {
+   "head": "multiple",
+   "syn": "numerous"
+  },
+  {
+   "head": "approximately",
+   "syn": "around"
+  },
+  {
+   "head": "proportion",
+   "syn": "ratio"
+  },
+  {
+   "head": "proportion",
+   "syn": "share"
+  },
+  {
+   "head": "proportion",
+   "syn": "percentage"
+  },
+  {
+   "head": "rate",
+   "syn": "grade"
+  },
+  {
+   "head": "rate",
+   "syn": "measure"
+  },
+  {
+   "head": "inherent",
+   "syn": "built-in"
+  },
+  {
+   "head": "inherent",
+   "syn": "inborn"
+  },
+  {
+   "head": "component",
+   "syn": "element"
+  },
+  {
+   "head": "compose",
+   "syn": "write"
+  },
+  {
+   "head": "compose",
+   "syn": "create"
+  },
+  {
+   "head": "compose",
+   "syn": "make up"
+  },
+  {
+   "head": "practical",
+   "syn": "feasible"
+  },
+  {
+   "head": "practical",
+   "syn": "realistic"
+  },
+  {
+   "head": "syllabus",
+   "syn": "outline"
+  },
+  {
+   "head": "syllabus",
+   "syn": "summary"
+  },
+  {
+   "head": "rudimentary",
+   "syn": "basic"
+  },
+  {
+   "head": "rudimentary",
+   "syn": "essential"
+  },
+  {
+   "head": "rudimentary",
+   "syn": "fundamental"
+  },
+  {
+   "head": "revise",
+   "syn": "amend"
+  },
+  {
+   "head": "test",
+   "syn": "authenticate"
+  },
+  {
+   "head": "plagiarise",
+   "syn": "copy"
+  },
+  {
+   "head": "plagiarise",
+   "syn": "duplicate"
+  },
+  {
+   "head": "plagiarise",
+   "syn": "replicate"
+  },
+  {
+   "head": "opinion",
+   "syn": "attitude"
+  },
+  {
+   "head": "opinion",
+   "syn": "perspective"
+  },
+  {
+   "head": "cite",
+   "syn": "refer to"
+  },
+  {
+   "head": "cite",
+   "syn": "mention"
+  },
+  {
+   "head": "extract",
+   "syn": "pull out"
+  },
+  {
+   "head": "extract",
+   "syn": "obtain"
+  },
+  {
+   "head": "extract",
+   "syn": "excerpt"
+  },
+  {
+   "head": "assume",
+   "syn": "suppose"
+  },
+  {
+   "head": "assume",
+   "syn": "presume"
+  },
+  {
+   "head": "assume",
+   "syn": "take for granted"
+  },
+  {
+   "head": "hypothesis",
+   "syn": "assumption"
+  },
+  {
+   "head": "hypothesis",
+   "syn": "theory"
+  },
+  {
+   "head": "hypothesis",
+   "syn": "premise"
+  },
+  {
+   "head": "predict",
+   "syn": "anticipate"
+  },
+  {
+   "head": "predict",
+   "syn": "conjecture"
+  },
+  {
+   "head": "predict",
+   "syn": "expect"
+  },
+  {
+   "head": "perceive",
+   "syn": "appreciate"
+  },
+  {
+   "head": "perceive",
+   "syn": "ascertain"
+  },
+  {
+   "head": "perceive",
+   "syn": "comprehend"
+  },
+  {
+   "head": "detect",
+   "syn": "discover"
+  },
+  {
+   "head": "detect",
+   "syn": "notice"
+  },
+  {
+   "head": "conscious",
+   "syn": "aware"
+  },
+  {
+   "head": "conscious",
+   "syn": "awake"
+  },
+  {
+   "head": "conscious",
+   "syn": "cognizant"
+  },
+  {
+   "head": "imply",
+   "syn": "suggest"
+  },
+  {
+   "head": "imply",
+   "syn": "indicate"
+  },
+  {
+   "head": "comprehend",
+   "syn": "understand"
+  },
+  {
+   "head": "comprehend",
+   "syn": "grasp"
+  },
+  {
+   "head": "comprehend",
+   "syn": "apprehend"
+  },
+  {
+   "head": "diagnose",
+   "syn": "identify"
+  },
+  {
+   "head": "diagnose",
+   "syn": "pinpoint"
+  },
+  {
+   "head": "contrast",
+   "syn": "compare"
+  },
+  {
+   "head": "instance",
+   "syn": "example"
+  },
+  {
+   "head": "instance",
+   "syn": "case"
+  },
+  {
+   "head": "instance",
+   "syn": "illustration"
+  },
+  {
+   "head": "confirm",
+   "syn": "authenticate"
+  },
+  {
+   "head": "confirm",
+   "syn": "certify"
+  },
+  {
+   "head": "confirm",
+   "syn": "verify"
+  },
+  {
+   "head": "demonstrate",
+   "syn": "display"
+  },
+  {
+   "head": "demonstrate",
+   "syn": "show"
+  },
+  {
+   "head": "demonstrate",
+   "syn": "prove"
+  },
+  {
+   "head": "illustrate",
+   "syn": "demonstrate"
+  },
+  {
+   "head": "illustrate",
+   "syn": "exemplify"
+  },
+  {
+   "head": "illustrate",
+   "syn": "depict"
+  },
+  {
+   "head": "manifest",
+   "syn": "demonstrate"
+  },
+  {
+   "head": "manifest",
+   "syn": "disclose"
+  },
+  {
+   "head": "manifest",
+   "syn": "display"
+  },
+  {
+   "head": "manifest",
+   "syn": "expose"
+  },
+  {
+   "head": "resolve",
+   "syn": "address"
+  },
+  {
+   "head": "attain",
+   "syn": "achieve"
+  },
+  {
+   "head": "attain",
+   "syn": "reach"
+  },
+  {
+   "head": "attain",
+   "syn": "gain"
+  },
+  {
+   "head": "queue",
+   "syn": "order"
+  },
+  {
+   "head": "queue",
+   "syn": "line"
+  },
+  {
+   "head": "queue",
+   "syn": "row"
+  },
+  {
+   "head": "grant",
+   "syn": "confer"
+  },
+  {
+   "head": "grant",
+   "syn": "offer"
+  },
+  {
+   "head": "praise",
+   "syn": "commend"
+  },
+  {
+   "head": "praise",
+   "syn": "credit"
+  },
+  {
+   "head": "appreciate",
+   "syn": "acknowledge"
+  },
+  {
+   "head": "appreciate",
+   "syn": "comprehend"
+  },
+  {
+   "head": "underestimate",
+   "syn": "underrate"
+  },
+  {
+   "head": "underestimate",
+   "syn": "undervalue"
+  },
+  {
+   "head": "advance",
+   "syn": "boost"
+  },
+  {
+   "head": "advance",
+   "syn": "progress"
+  },
+  {
+   "head": "advance",
+   "syn": "headway"
+  },
+  {
+   "head": "disclose",
+   "syn": "expose"
+  },
+  {
+   "head": "disclose",
+   "syn": "reveal"
+  },
+  {
+   "head": "disclose",
+   "syn": "divulge"
+  },
+  {
+   "head": "reveal",
+   "syn": "disclose"
+  },
+  {
+   "head": "reveal",
+   "syn": "display"
+  },
+  {
+   "head": "reveal",
+   "syn": "expose"
+  },
+  {
+   "head": "uncover",
+   "syn": "disclose"
+  },
+  {
+   "head": "uncover",
+   "syn": "display"
+  },
+  {
+   "head": "uncover",
+   "syn": "expose"
+  },
+  {
+   "head": "expose",
+   "syn": "disclose"
+  },
+  {
+   "head": "expose",
+   "syn": "display"
+  },
+  {
+   "head": "usage",
+   "syn": "use"
+  },
+  {
+   "head": "measure",
+   "syn": "assess"
+  },
+  {
+   "head": "measure",
+   "syn": "assessment"
+  },
+  {
+   "head": "measure",
+   "syn": "calculate"
+  },
+  {
+   "head": "measure",
+   "syn": "evaluation"
+  },
+  {
+   "head": "measure",
+   "syn": "grade"
+  },
+  {
+   "head": "calculate",
+   "syn": "assess"
+  },
+  {
+   "head": "calculate",
+   "syn": "measure"
+  },
+  {
+   "head": "estimate",
+   "syn": "approximate"
+  },
+  {
+   "head": "estimate",
+   "syn": "calculate"
+  },
+  {
+   "head": "estimate",
+   "syn": "gauge"
+  },
+  {
+   "head": "assess",
+   "syn": "calculate"
+  },
+  {
+   "head": "assess",
+   "syn": "measure"
+  },
+  {
+   "head": "attach",
+   "syn": "associate"
+  },
+  {
+   "head": "attach",
+   "syn": "connect"
+  },
+  {
+   "head": "attach",
+   "syn": "join"
+  },
+  {
+   "head": "purify",
+   "syn": "clean"
+  },
+  {
+   "head": "purify",
+   "syn": "refine"
+  },
+  {
+   "head": "purify",
+   "syn": "cleanse"
+  },
+  {
+   "head": "mode",
+   "syn": "form"
+  },
+  {
+   "head": "mode",
+   "syn": "manner"
+  },
+  {
+   "head": "mode",
+   "syn": "pattern"
+  },
+  {
+   "head": "framework",
+   "syn": "frame"
+  },
+  {
+   "head": "phase",
+   "syn": "stage"
+  },
+  {
+   "head": "phase",
+   "syn": "step"
+  },
+  {
+   "head": "phase",
+   "syn": "period"
+  },
+  {
+   "head": "facilitate",
+   "syn": "ease"
+  },
+  {
+   "head": "facilitate",
+   "syn": "enable"
+  },
+  {
+   "head": "facilitate",
+   "syn": "expedite"
+  },
+  {
+   "head": "alter",
+   "syn": "adapt"
+  },
+  {
+   "head": "alter",
+   "syn": "amend"
+  },
+  {
+   "head": "adapt",
+   "syn": "adjust"
+  },
+  {
+   "head": "adapt",
+   "syn": "alter"
+  },
+  {
+   "head": "adjust",
+   "syn": "adapt"
+  },
+  {
+   "head": "accurate",
+   "syn": "correct"
+  },
+  {
+   "head": "accurate",
+   "syn": "exact"
+  },
+  {
+   "head": "accurate",
+   "syn": "precise"
+  },
+  {
+   "head": "precise",
+   "syn": "accurate"
+  },
+  {
+   "head": "precise",
+   "syn": "correct"
+  },
+  {
+   "head": "precise",
+   "syn": "exact"
+  },
+  {
+   "head": "correct",
+   "syn": "accurate"
+  },
+  {
+   "head": "correct",
+   "syn": "exact"
+  },
+  {
+   "head": "correct",
+   "syn": "precise"
+  },
+  {
+   "head": "mistake",
+   "syn": "error"
+  },
+  {
+   "head": "mistake",
+   "syn": "blunder"
+  },
+  {
+   "head": "mistake",
+   "syn": "fault"
+  },
+  {
+   "head": "renaissance",
+   "syn": "recovery"
+  },
+  {
+   "head": "renaissance",
+   "syn": "revival"
+  },
+  {
+   "head": "renaissance",
+   "syn": "rebirth"
+  },
+  {
+   "head": "tradition",
+   "syn": "convention"
+  },
+  {
+   "head": "tradition",
+   "syn": "custom"
+  },
+  {
+   "head": "tradition",
+   "syn": "heritage"
+  },
+  {
+   "head": "convention",
+   "syn": "custom"
+  },
+  {
+   "head": "convention",
+   "syn": "tradition"
+  },
+  {
+   "head": "convention",
+   "syn": "assembly"
+  },
+  {
+   "head": "ethical",
+   "syn": "moral"
+  },
+  {
+   "head": "moral",
+   "syn": "ethical"
+  },
+  {
+   "head": "local",
+   "syn": "home"
+  },
+  {
+   "head": "inherit",
+   "syn": "receive"
+  },
+  {
+   "head": "inherit",
+   "syn": "derive"
+  },
+  {
+   "head": "inherit",
+   "syn": "succeed to"
+  },
+  {
+   "head": "religion",
+   "syn": "faith"
+  },
+  {
+   "head": "religion",
+   "syn": "creed"
+  },
+  {
+   "head": "religion",
+   "syn": "worship"
+  },
+  {
+   "head": "sacred",
+   "syn": "religious"
+  },
+  {
+   "head": "sacred",
+   "syn": "holy"
+  },
+  {
+   "head": "sacred",
+   "syn": "divine"
+  },
+  {
+   "head": "adversity",
+   "syn": "hardship"
+  },
+  {
+   "head": "adversity",
+   "syn": "misfortune"
+  },
+  {
+   "head": "adversity",
+   "syn": "distress"
+  },
+  {
+   "head": "oral",
+   "syn": "spoken"
+  },
+  {
+   "head": "verbal",
+   "syn": "spoken"
+  },
+  {
+   "head": "consistent",
+   "syn": "compatible"
+  },
+  {
+   "head": "complicated",
+   "syn": "intricate"
+  },
+  {
+   "head": "complicated",
+   "syn": "involved"
+  },
+  {
+   "head": "interpret",
+   "syn": "comprehend"
+  },
+  {
+   "head": "interpret",
+   "syn": "explain"
+  },
+  {
+   "head": "interpret",
+   "syn": "construe"
+  },
+  {
+   "head": "critic",
+   "syn": "reviewer"
+  },
+  {
+   "head": "critic",
+   "syn": "commentator"
+  },
+  {
+   "head": "anticipate",
+   "syn": "conjecture"
+  },
+  {
+   "head": "anticipate",
+   "syn": "expect"
+  },
+  {
+   "head": "anticipate",
+   "syn": "predict"
+  },
+  {
+   "head": "expect",
+   "syn": "anticipate"
+  },
+  {
+   "head": "expect",
+   "syn": "predict"
+  },
+  {
+   "head": "recreation",
+   "syn": "amusement"
+  },
+  {
+   "head": "program",
+   "syn": "initiative"
+  },
+  {
+   "head": "program",
+   "syn": "plan"
+  },
+  {
+   "head": "program",
+   "syn": "project"
+  },
+  {
+   "head": "rehearsal",
+   "syn": "preparation"
+  },
+  {
+   "head": "rehearsal",
+   "syn": "practice"
+  },
+  {
+   "head": "imitate",
+   "syn": "copy"
+  },
+  {
+   "head": "imitate",
+   "syn": "duplicate"
+  },
+  {
+   "head": "imitate",
+   "syn": "mimic"
+  },
+  {
+   "head": "imitate",
+   "syn": "replicate"
+  },
+  {
+   "head": "mimic",
+   "syn": "copy"
+  },
+  {
+   "head": "mimic",
+   "syn": "duplicate"
+  },
+  {
+   "head": "mimic",
+   "syn": "imitate"
+  },
+  {
+   "head": "mimic",
+   "syn": "replicate"
+  },
+  {
+   "head": "scene",
+   "syn": "landscape"
+  },
+  {
+   "head": "scene",
+   "syn": "prospect"
+  },
+  {
+   "head": "scene",
+   "syn": "scenery"
+  },
+  {
+   "head": "scene",
+   "syn": "view"
+  },
+  {
+   "head": "select",
+   "syn": "choose"
+  },
+  {
+   "head": "select",
+   "syn": "opt"
+  },
+  {
+   "head": "select",
+   "syn": "pick"
+  },
+  {
+   "head": "photograph",
+   "syn": "image"
+  },
+  {
+   "head": "photograph",
+   "syn": "snapshot"
+  },
+  {
+   "head": "photograph",
+   "syn": "picture"
+  },
+  {
+   "head": "painting",
+   "syn": "drawing"
+  },
+  {
+   "head": "painting",
+   "syn": "image"
+  },
+  {
+   "head": "classical",
+   "syn": "classic"
+  },
+  {
+   "head": "classical",
+   "syn": "traditional"
+  },
+  {
+   "head": "famous",
+   "syn": "renowned"
+  },
+  {
+   "head": "famous",
+   "syn": "noted"
+  },
+  {
+   "head": "exercise",
+   "syn": "drill"
+  },
+  {
+   "head": "exercise",
+   "syn": "training"
+  },
+  {
+   "head": "goal",
+   "syn": "intention"
+  },
+  {
+   "head": "goal",
+   "syn": "purpose"
+  },
+  {
+   "head": "stride",
+   "syn": "step"
+  },
+  {
+   "head": "stride",
+   "syn": "pace"
+  },
+  {
+   "head": "stride",
+   "syn": "gait"
+  },
+  {
+   "head": "lag",
+   "syn": "delay"
+  },
+  {
+   "head": "lag",
+   "syn": "late"
+  }
+ ],
+ "supported": [
+  {
+   "head": "endanger",
+   "syn": "risk"
+  },
+  {
+   "head": "jeopardise",
+   "syn": "endanger"
+  },
+  {
+   "head": "jeopardise",
+   "syn": "risk"
+  },
+  {
+   "head": "landscape",
+   "syn": "scenery"
+  },
+  {
+   "head": "upgrade",
+   "syn": "boost"
+  },
+  {
+   "head": "damp",
+   "syn": "wet"
+  },
+  {
+   "head": "humid",
+   "syn": "wet"
+  },
+  {
+   "head": "abnormal",
+   "syn": "exceptional"
+  },
+  {
+   "head": "abnormal",
+   "syn": "extraordinary"
+  },
+  {
+   "head": "abnormal",
+   "syn": "rare"
+  },
+  {
+   "head": "abnormal",
+   "syn": "remarkable"
+  },
+  {
+   "head": "suburb",
+   "syn": "outskirts"
+  },
+  {
+   "head": "outskirts",
+   "syn": "suburb"
+  },
+  {
+   "head": "outskirts",
+   "syn": "suburban"
+  },
+  {
+   "head": "remote",
+   "syn": "rustic"
+  },
+  {
+   "head": "remote",
+   "syn": "suburban"
+  },
+  {
+   "head": "handle",
+   "syn": "deal with"
+  },
+  {
+   "head": "handle",
+   "syn": "manage"
+  },
+  {
+   "head": "durable",
+   "syn": "lasting"
+  },
+  {
+   "head": "construct",
+   "syn": "build"
+  },
+  {
+   "head": "establish",
+   "syn": "build"
+  },
+  {
+   "head": "establish",
+   "syn": "create"
+  },
+  {
+   "head": "establish",
+   "syn": "found"
+  },
+  {
+   "head": "establish",
+   "syn": "initiate"
+  },
+  {
+   "head": "site",
+   "syn": "location"
+  },
+  {
+   "head": "site",
+   "syn": "place"
+  },
+  {
+   "head": "site",
+   "syn": "spot"
+  },
+  {
+   "head": "settle",
+   "syn": "resolve"
+  },
+  {
+   "head": "complex",
+   "syn": "complicated"
+  },
+  {
+   "head": "urban",
+   "syn": "municipal"
+  },
+  {
+   "head": "urban",
+   "syn": "metropolitan"
+  },
+  {
+   "head": "modify",
+   "syn": "adjust"
+  },
+  {
+   "head": "modify",
+   "syn": "alter"
+  },
+  {
+   "head": "outside",
+   "syn": "exterior"
+  },
+  {
+   "head": "exterior",
+   "syn": "outside"
+  },
+  {
+   "head": "inner",
+   "syn": "inside"
+  },
+  {
+   "head": "inner",
+   "syn": "interior"
+  },
+  {
+   "head": "inner",
+   "syn": "internal"
+  },
+  {
+   "head": "interior",
+   "syn": "inner"
+  },
+  {
+   "head": "interior",
+   "syn": "inside"
+  },
+  {
+   "head": "interior",
+   "syn": "internal"
+  },
+  {
+   "head": "internal",
+   "syn": "inner"
+  },
+  {
+   "head": "internal",
+   "syn": "inside"
+  },
+  {
+   "head": "internal",
+   "syn": "interior"
+  },
+  {
+   "head": "traffic",
+   "syn": "transport"
+  },
+  {
+   "head": "curb",
+   "syn": "confine"
+  },
+  {
+   "head": "curb",
+   "syn": "constrain"
+  },
+  {
+   "head": "curb",
+   "syn": "limit"
+  },
+  {
+   "head": "vehicle",
+   "syn": "car"
+  },
+  {
+   "head": "motor",
+   "syn": "vehicle"
+  },
+  {
+   "head": "vanish",
+   "syn": "disappear"
+  },
+  {
+   "head": "disappear",
+   "syn": "vanish"
+  },
+  {
+   "head": "transmit",
+   "syn": "convey"
+  },
+  {
+   "head": "transmit",
+   "syn": "send"
+  },
+  {
+   "head": "transmit",
+   "syn": "transfer"
+  },
+  {
+   "head": "convey",
+   "syn": "transmit"
+  },
+  {
+   "head": "municipal",
+   "syn": "city"
+  },
+  {
+   "head": "municipal",
+   "syn": "civic"
+  },
+  {
+   "head": "municipal",
+   "syn": "urban"
+  },
+  {
+   "head": "dominate",
+   "syn": "control"
+  },
+  {
+   "head": "dominate",
+   "syn": "influence"
+  },
+  {
+   "head": "dominate",
+   "syn": "lead"
+  },
+  {
+   "head": "affect",
+   "syn": "disturb"
+  },
+  {
+   "head": "affect",
+   "syn": "impact"
+  },
+  {
+   "head": "affect",
+   "syn": "influence"
+  },
+  {
+   "head": "organisation",
+   "syn": "company"
+  },
+  {
+   "head": "unique",
+   "syn": "exceptional"
+  },
+  {
+   "head": "unique",
+   "syn": "extraordinary"
+  },
+  {
+   "head": "unique",
+   "syn": "rare"
+  },
+  {
+   "head": "reign",
+   "syn": "rule"
+  },
+  {
+   "head": "preference",
+   "syn": "priority"
+  },
+  {
+   "head": "guideline",
+   "syn": "instruction"
+  },
+  {
+   "head": "guideline",
+   "syn": "norm"
+  },
+  {
+   "head": "guideline",
+   "syn": "policy"
+  },
+  {
+   "head": "hint",
+   "syn": "clue"
+  },
+  {
+   "head": "hint",
+   "syn": "cue"
+  },
+  {
+   "head": "aid",
+   "syn": "assistance"
+  },
+  {
+   "head": "aid",
+   "syn": "help"
+  },
+  {
+   "head": "aid",
+   "syn": "support"
+  },
+  {
+   "head": "encourage",
+   "syn": "activate"
+  },
+  {
+   "head": "encourage",
+   "syn": "boost"
+  },
+  {
+   "head": "encourage",
+   "syn": "develop"
+  },
+  {
+   "head": "encourage",
+   "syn": "drive"
+  },
+  {
+   "head": "commercial",
+   "syn": "business"
+  },
+  {
+   "head": "retail",
+   "syn": "sale"
+  },
+  {
+   "head": "duty",
+   "syn": "obligation"
+  },
+  {
+   "head": "duty",
+   "syn": "responsibility"
+  },
+  {
+   "head": "crisis",
+   "syn": "danger"
+  },
+  {
+   "head": "decrease",
+   "syn": "cut"
+  },
+  {
+   "head": "decrease",
+   "syn": "decline"
+  },
+  {
+   "head": "decrease",
+   "syn": "diminish"
+  },
+  {
+   "head": "decline",
+   "syn": "decrease"
+  },
+  {
+   "head": "decline",
+   "syn": "diminish"
+  },
+  {
+   "head": "diminish",
+   "syn": "cut"
+  },
+  {
+   "head": "diminish",
+   "syn": "decrease"
+  },
+  {
+   "head": "diminish",
+   "syn": "decline"
+  },
+  {
+   "head": "reduce",
+   "syn": "alleviate"
+  },
+  {
+   "head": "reduce",
+   "syn": "cut"
+  },
+  {
+   "head": "reduce",
+   "syn": "decline"
+  },
+  {
+   "head": "reduce",
+   "syn": "decrease"
+  },
+  {
+   "head": "increase",
+   "syn": "boom"
+  },
+  {
+   "head": "increase",
+   "syn": "boost"
+  },
+  {
+   "head": "growth",
+   "syn": "boom"
+  },
+  {
+   "head": "growth",
+   "syn": "boost"
+  },
+  {
+   "head": "enterprise",
+   "syn": "company"
+  },
+  {
+   "head": "enterprise",
+   "syn": "corporation"
+  },
+  {
+   "head": "product",
+   "syn": "commodity"
+  },
+  {
+   "head": "product",
+   "syn": "goods"
+  },
+  {
+   "head": "goods",
+   "syn": "commodity"
+  },
+  {
+   "head": "goods",
+   "syn": "product"
+  },
+  {
+   "head": "reliable",
+   "syn": "credible"
+  },
+  {
+   "head": "reliable",
+   "syn": "trustworthy"
+  },
+  {
+   "head": "deal",
+   "syn": "business"
+  },
+  {
+   "head": "deal",
+   "syn": "transaction"
+  },
+  {
+   "head": "transaction",
+   "syn": "deal"
+  },
+  {
+   "head": "import",
+   "syn": "introduce"
+  },
+  {
+   "head": "estate",
+   "syn": "property"
+  },
+  {
+   "head": "estate",
+   "syn": "real estate"
+  },
+  {
+   "head": "valuable",
+   "syn": "beneficial"
+  },
+  {
+   "head": "incentive",
+   "syn": "drive"
+  },
+  {
+   "head": "accelerate",
+   "syn": "speed up"
+  },
+  {
+   "head": "prompt",
+   "syn": "accelerate"
+  },
+  {
+   "head": "profession",
+   "syn": "job"
+  },
+  {
+   "head": "profession",
+   "syn": "occupation"
+  },
+  {
+   "head": "profession",
+   "syn": "vocation"
+  },
+  {
+   "head": "profession",
+   "syn": "work"
+  },
+  {
+   "head": "occupation",
+   "syn": "job"
+  },
+  {
+   "head": "occupation",
+   "syn": "profession"
+  },
+  {
+   "head": "occupation",
+   "syn": "vocation"
+  },
+  {
+   "head": "occupation",
+   "syn": "work"
+  },
+  {
+   "head": "vocation",
+   "syn": "job"
+  },
+  {
+   "head": "vocation",
+   "syn": "occupation"
+  },
+  {
+   "head": "vocation",
+   "syn": "profession"
+  },
+  {
+   "head": "vocation",
+   "syn": "work"
+  },
+  {
+   "head": "labour",
+   "syn": "employee"
+  },
+  {
+   "head": "labour",
+   "syn": "staff"
+  },
+  {
+   "head": "labour",
+   "syn": "worker"
+  },
+  {
+   "head": "labour",
+   "syn": "workforce"
+  },
+  {
+   "head": "workforce",
+   "syn": "employee"
+  },
+  {
+   "head": "workforce",
+   "syn": "labour"
+  },
+  {
+   "head": "workforce",
+   "syn": "staff"
+  },
+  {
+   "head": "workforce",
+   "syn": "worker"
+  },
+  {
+   "head": "discharge",
+   "syn": "exude"
+  },
+  {
+   "head": "discharge",
+   "syn": "secrete"
+  },
+  {
+   "head": "solve",
+   "syn": "resolve"
+  },
+  {
+   "head": "manage",
+   "syn": "handle"
+  },
+  {
+   "head": "regulate",
+   "syn": "control"
+  },
+  {
+   "head": "legal",
+   "syn": "judicial"
+  },
+  {
+   "head": "legal",
+   "syn": "legitimate"
+  },
+  {
+   "head": "regulation",
+   "syn": "act"
+  },
+  {
+   "head": "regulation",
+   "syn": "guideline"
+  },
+  {
+   "head": "regulation",
+   "syn": "instruction"
+  },
+  {
+   "head": "regulation",
+   "syn": "norm"
+  },
+  {
+   "head": "norm",
+   "syn": "guideline"
+  },
+  {
+   "head": "norm",
+   "syn": "instruction"
+  },
+  {
+   "head": "norm",
+   "syn": "policy"
+  },
+  {
+   "head": "criteria",
+   "syn": "standards"
+  },
+  {
+   "head": "standard",
+   "syn": "criteria"
+  },
+  {
+   "head": "constraint",
+   "syn": "curb"
+  },
+  {
+   "head": "constraint",
+   "syn": "limit"
+  },
+  {
+   "head": "obligation",
+   "syn": "duty"
+  },
+  {
+   "head": "obligation",
+   "syn": "responsibility"
+  },
+  {
+   "head": "investigate",
+   "syn": "examine"
+  },
+  {
+   "head": "investigate",
+   "syn": "look into"
+  },
+  {
+   "head": "confine",
+   "syn": "constrain"
+  },
+  {
+   "head": "confine",
+   "syn": "curb"
+  },
+  {
+   "head": "confine",
+   "syn": "limit"
+  },
+  {
+   "head": "restrict",
+   "syn": "confine"
+  },
+  {
+   "head": "restrict",
+   "syn": "constrain"
+  },
+  {
+   "head": "clue",
+   "syn": "cue"
+  },
+  {
+   "head": "clue",
+   "syn": "evidence"
+  },
+  {
+   "head": "clue",
+   "syn": "hint"
+  },
+  {
+   "head": "procedure",
+   "syn": "approach"
+  },
+  {
+   "head": "procedure",
+   "syn": "mechanism"
+  },
+  {
+   "head": "procedure",
+   "syn": "method"
+  },
+  {
+   "head": "demand",
+   "syn": "need"
+  },
+  {
+   "head": "demand",
+   "syn": "require"
+  },
+  {
+   "head": "demand",
+   "syn": "want"
+  },
+  {
+   "head": "require",
+   "syn": "demand"
+  },
+  {
+   "head": "require",
+   "syn": "need"
+  },
+  {
+   "head": "require",
+   "syn": "want"
+  },
+  {
+   "head": "target",
+   "syn": "aim"
+  },
+  {
+   "head": "target",
+   "syn": "goal"
+  },
+  {
+   "head": "target",
+   "syn": "objective"
+  },
+  {
+   "head": "halt",
+   "syn": "cease"
+  },
+  {
+   "head": "halt",
+   "syn": "stop"
+  },
+  {
+   "head": "cease",
+   "syn": "stop"
+  },
+  {
+   "head": "cease",
+   "syn": "halt"
+  },
+  {
+   "head": "oppose",
+   "syn": "boycott"
+  },
+  {
+   "head": "oppose",
+   "syn": "counter"
+  },
+  {
+   "head": "counter",
+   "syn": "oppose"
+  },
+  {
+   "head": "deter",
+   "syn": "discourage"
+  },
+  {
+   "head": "deter",
+   "syn": "prevent"
+  },
+  {
+   "head": "prevent",
+   "syn": "counter"
+  },
+  {
+   "head": "prevent",
+   "syn": "deter"
+  },
+  {
+   "head": "evidence",
+   "syn": "clue"
+  },
+  {
+   "head": "evidence",
+   "syn": "proof"
+  },
+  {
+   "head": "proof",
+   "syn": "clue"
+  },
+  {
+   "head": "proof",
+   "syn": "evidence"
+  },
+  {
+   "head": "limit",
+   "syn": "confine"
+  },
+  {
+   "head": "limit",
+   "syn": "constrain"
+  },
+  {
+   "head": "limit",
+   "syn": "constraint"
+  },
+  {
+   "head": "limit",
+   "syn": "curb"
+  },
+  {
+   "head": "enemy",
+   "syn": "foe"
+  },
+  {
+   "head": "mitigate",
+   "syn": "decrease"
+  },
+  {
+   "head": "mitigate",
+   "syn": "diminish"
+  },
+  {
+   "head": "risk",
+   "syn": "danger"
+  },
+  {
+   "head": "risk",
+   "syn": "hazard"
+  },
+  {
+   "head": "disturb",
+   "syn": "affect"
+  },
+  {
+   "head": "disturb",
+   "syn": "impact"
+  },
+  {
+   "head": "disturb",
+   "syn": "influence"
+  },
+  {
+   "head": "shrink",
+   "syn": "decline"
+  },
+  {
+   "head": "shrink",
+   "syn": "decrease"
+  },
+  {
+   "head": "withstand",
+   "syn": "bear"
+  },
+  {
+   "head": "withstand",
+   "syn": "face"
+  },
+  {
+   "head": "quit",
+   "syn": "cease"
+  },
+  {
+   "head": "abandon",
+   "syn": "forsake"
+  },
+  {
+   "head": "discard",
+   "syn": "forsake"
+  },
+  {
+   "head": "defeat",
+   "syn": "conquer"
+  },
+  {
+   "head": "defeat",
+   "syn": "overcome"
+  },
+  {
+   "head": "conquer",
+   "syn": "defeat"
+  },
+  {
+   "head": "conquer",
+   "syn": "overcome"
+  },
+  {
+   "head": "general",
+   "syn": "average"
+  },
+  {
+   "head": "infant",
+   "syn": "baby"
+  },
+  {
+   "head": "infant",
+   "syn": "child"
+  },
+  {
+   "head": "infant",
+   "syn": "kid"
+  },
+  {
+   "head": "juvenile",
+   "syn": "child"
+  },
+  {
+   "head": "juvenile",
+   "syn": "kid"
+  },
+  {
+   "head": "relative",
+   "syn": "relation"
+  },
+  {
+   "head": "relative",
+   "syn": "connection"
+  },
+  {
+   "head": "customer",
+   "syn": "consumer"
+  },
+  {
+   "head": "customer",
+   "syn": "user"
+  },
+  {
+   "head": "boss",
+   "syn": "employer"
+  },
+  {
+   "head": "boss",
+   "syn": "entrepreneur"
+  },
+  {
+   "head": "director",
+   "syn": "employer"
+  },
+  {
+   "head": "director",
+   "syn": "leader"
+  },
+  {
+   "head": "director",
+   "syn": "manager"
+  },
+  {
+   "head": "specialist",
+   "syn": "expert"
+  },
+  {
+   "head": "solicitor",
+   "syn": "lawyer"
+  },
+  {
+   "head": "root",
+   "syn": "base"
+  },
+  {
+   "head": "root",
+   "syn": "basis"
+  },
+  {
+   "head": "mechanism",
+   "syn": "approach"
+  },
+  {
+   "head": "mechanism",
+   "syn": "method"
+  },
+  {
+   "head": "impact",
+   "syn": "affect"
+  },
+  {
+   "head": "impact",
+   "syn": "disturb"
+  },
+  {
+   "head": "impact",
+   "syn": "effect"
+  },
+  {
+   "head": "impact",
+   "syn": "influence"
+  },
+  {
+   "head": "massive",
+   "syn": "big"
+  },
+  {
+   "head": "massive",
+   "syn": "enormous"
+  },
+  {
+   "head": "massive",
+   "syn": "large"
+  },
+  {
+   "head": "massive",
+   "syn": "tremendous"
+  },
+  {
+   "head": "minimal",
+   "syn": "less"
+  },
+  {
+   "head": "minimal",
+   "syn": "limited"
+  },
+  {
+   "head": "bear",
+   "syn": "tolerate"
+  },
+  {
+   "head": "steer",
+   "syn": "control"
+  },
+  {
+   "head": "impede",
+   "syn": "hinder"
+  },
+  {
+   "head": "undertake",
+   "syn": "commence"
+  },
+  {
+   "head": "undertake",
+   "syn": "start"
+  },
+  {
+   "head": "commence",
+   "syn": "start"
+  },
+  {
+   "head": "commence",
+   "syn": "undertake"
+  },
+  {
+   "head": "explore",
+   "syn": "investigate"
+  },
+  {
+   "head": "explore",
+   "syn": "examine"
+  },
+  {
+   "head": "tackle",
+   "syn": "confront"
+  },
+  {
+   "head": "dispose",
+   "syn": "handle"
+  },
+  {
+   "head": "dispose",
+   "syn": "deal with"
+  },
+  {
+   "head": "raise",
+   "syn": "boost"
+  },
+  {
+   "head": "raise",
+   "syn": "foster"
+  },
+  {
+   "head": "cause",
+   "syn": "reason"
+  },
+  {
+   "head": "purpose",
+   "syn": "intention"
+  },
+  {
+   "head": "objective",
+   "syn": "aim"
+  },
+  {
+   "head": "objective",
+   "syn": "goal"
+  },
+  {
+   "head": "objective",
+   "syn": "target"
+  },
+  {
+   "head": "trigger",
+   "syn": "commence"
+  },
+  {
+   "head": "trigger",
+   "syn": "invoke"
+  },
+  {
+   "head": "trigger",
+   "syn": "start"
+  },
+  {
+   "head": "drop",
+   "syn": "cut"
+  },
+  {
+   "head": "drop",
+   "syn": "decline"
+  },
+  {
+   "head": "drop",
+   "syn": "decrease"
+  },
+  {
+   "head": "participate",
+   "syn": "associate"
+  },
+  {
+   "head": "skeleton",
+   "syn": "outline"
+  },
+  {
+   "head": "brain",
+   "syn": "intelligence"
+  },
+  {
+   "head": "brain",
+   "syn": "mind"
+  },
+  {
+   "head": "mind",
+   "syn": "brain"
+  },
+  {
+   "head": "mind",
+   "syn": "intelligence"
+  },
+  {
+   "head": "mental",
+   "syn": "cognitive"
+  },
+  {
+   "head": "first",
+   "syn": "firstly"
+  },
+  {
+   "head": "first",
+   "syn": "initial"
+  },
+  {
+   "head": "first",
+   "syn": "leading"
+  },
+  {
+   "head": "first",
+   "syn": "major"
+  },
+  {
+   "head": "therapy",
+   "syn": "cure"
+  },
+  {
+   "head": "therapy",
+   "syn": "drug"
+  },
+  {
+   "head": "therapy",
+   "syn": "medication"
+  },
+  {
+   "head": "therapy",
+   "syn": "medicine"
+  },
+  {
+   "head": "therapy",
+   "syn": "remedy"
+  },
+  {
+   "head": "cure",
+   "syn": "remedy"
+  },
+  {
+   "head": "medicine",
+   "syn": "cure"
+  },
+  {
+   "head": "medicine",
+   "syn": "drug"
+  },
+  {
+   "head": "medicine",
+   "syn": "medication"
+  },
+  {
+   "head": "medicine",
+   "syn": "remedy"
+  },
+  {
+   "head": "medicine",
+   "syn": "therapy"
+  },
+  {
+   "head": "remedy",
+   "syn": "cure"
+  },
+  {
+   "head": "remedy",
+   "syn": "drug"
+  },
+  {
+   "head": "remedy",
+   "syn": "medication"
+  },
+  {
+   "head": "remedy",
+   "syn": "medicine"
+  },
+  {
+   "head": "remedy",
+   "syn": "therapy"
+  },
+  {
+   "head": "drug",
+   "syn": "medication"
+  },
+  {
+   "head": "drug",
+   "syn": "medicine"
+  },
+  {
+   "head": "drug",
+   "syn": "remedy"
+  },
+  {
+   "head": "alleviate",
+   "syn": "decrease"
+  },
+  {
+   "head": "alleviate",
+   "syn": "diminish"
+  },
+  {
+   "head": "normal",
+   "syn": "common"
+  },
+  {
+   "head": "usual",
+   "syn": "average"
+  },
+  {
+   "head": "usual",
+   "syn": "general"
+  },
+  {
+   "head": "positive",
+   "syn": "effective"
+  },
+  {
+   "head": "confidence",
+   "syn": "belief"
+  },
+  {
+   "head": "confidence",
+   "syn": "faith"
+  },
+  {
+   "head": "remarkable",
+   "syn": "exceptional"
+  },
+  {
+   "head": "tough",
+   "syn": "complex"
+  },
+  {
+   "head": "tough",
+   "syn": "complicated"
+  },
+  {
+   "head": "liable",
+   "syn": "responsible"
+  },
+  {
+   "head": "trustworthy",
+   "syn": "reliable"
+  },
+  {
+   "head": "trustworthy",
+   "syn": "credible"
+  },
+  {
+   "head": "familiar",
+   "syn": "well-known"
+  },
+  {
+   "head": "discourage",
+   "syn": "deter"
+  },
+  {
+   "head": "discourage",
+   "syn": "prevent"
+  },
+  {
+   "head": "doubt",
+   "syn": "skepticism"
+  },
+  {
+   "head": "annual",
+   "syn": "yearly"
+  },
+  {
+   "head": "yearly",
+   "syn": "annual"
+  },
+  {
+   "head": "immediately",
+   "syn": "straightaway"
+  },
+  {
+   "head": "duration",
+   "syn": "period"
+  },
+  {
+   "head": "duration",
+   "syn": "time"
+  },
+  {
+   "head": "habitat",
+   "syn": "home"
+  },
+  {
+   "head": "germ",
+   "syn": "bacteria"
+  },
+  {
+   "head": "germ",
+   "syn": "microbe"
+  },
+  {
+   "head": "bacteria",
+   "syn": "germ"
+  },
+  {
+   "head": "bacteria",
+   "syn": "microbe"
+  },
+  {
+   "head": "microbe",
+   "syn": "bacteria"
+  },
+  {
+   "head": "microbe",
+   "syn": "germ"
+  },
+  {
+   "head": "secrete",
+   "syn": "discharge"
+  },
+  {
+   "head": "secrete",
+   "syn": "exude"
+  },
+  {
+   "head": "undergo",
+   "syn": "face"
+  },
+  {
+   "head": "suffer",
+   "syn": "bear"
+  },
+  {
+   "head": "suffer",
+   "syn": "face"
+  },
+  {
+   "head": "overwhelming",
+   "syn": "dominant"
+  },
+  {
+   "head": "overwhelming",
+   "syn": "predominant"
+  },
+  {
+   "head": "education",
+   "syn": "schooling"
+  },
+  {
+   "head": "primary",
+   "syn": "first"
+  },
+  {
+   "head": "primary",
+   "syn": "initial"
+  },
+  {
+   "head": "primary",
+   "syn": "leading"
+  },
+  {
+   "head": "primary",
+   "syn": "major"
+  },
+  {
+   "head": "enhance",
+   "syn": "boost"
+  },
+  {
+   "head": "enhance",
+   "syn": "develop"
+  },
+  {
+   "head": "enhance",
+   "syn": "drive"
+  },
+  {
+   "head": "inspire",
+   "syn": "boost"
+  },
+  {
+   "head": "inspire",
+   "syn": "drive"
+  },
+  {
+   "head": "motivate",
+   "syn": "activate"
+  },
+  {
+   "head": "motivate",
+   "syn": "boost"
+  },
+  {
+   "head": "motivate",
+   "syn": "develop"
+  },
+  {
+   "head": "motivate",
+   "syn": "drive"
+  },
+  {
+   "head": "stimulate",
+   "syn": "activate"
+  },
+  {
+   "head": "stimulate",
+   "syn": "boost"
+  },
+  {
+   "head": "stimulate",
+   "syn": "develop"
+  },
+  {
+   "head": "stimulate",
+   "syn": "drive"
+  },
+  {
+   "head": "intelligent",
+   "syn": "gifted"
+  },
+  {
+   "head": "smart",
+   "syn": "gifted"
+  },
+  {
+   "head": "smart",
+   "syn": "intelligent"
+  },
+  {
+   "head": "approach",
+   "syn": "method"
+  },
+  {
+   "head": "approach",
+   "syn": "practice"
+  },
+  {
+   "head": "faculty",
+   "syn": "department"
+  },
+  {
+   "head": "scholar",
+   "syn": "researcher"
+  },
+  {
+   "head": "scientist",
+   "syn": "investigator"
+  },
+  {
+   "head": "scientist",
+   "syn": "researcher"
+  },
+  {
+   "head": "lecturer",
+   "syn": "faculty"
+  },
+  {
+   "head": "experiment",
+   "syn": "test"
+  },
+  {
+   "head": "data",
+   "syn": "information"
+  },
+  {
+   "head": "volume",
+   "syn": "capacity"
+  },
+  {
+   "head": "major",
+   "syn": "dominant"
+  },
+  {
+   "head": "major",
+   "syn": "first"
+  },
+  {
+   "head": "major",
+   "syn": "leading"
+  },
+  {
+   "head": "plus",
+   "syn": "also"
+  },
+  {
+   "head": "plus",
+   "syn": "and"
+  },
+  {
+   "head": "plus",
+   "syn": "besides"
+  },
+  {
+   "head": "plus",
+   "syn": "moreover"
+  },
+  {
+   "head": "multiple",
+   "syn": "countless"
+  },
+  {
+   "head": "approximately",
+   "syn": "about"
+  },
+  {
+   "head": "component",
+   "syn": "part"
+  },
+  {
+   "head": "discipline",
+   "syn": "area"
+  },
+  {
+   "head": "discipline",
+   "syn": "domain"
+  },
+  {
+   "head": "discipline",
+   "syn": "field"
+  },
+  {
+   "head": "curriculum",
+   "syn": "course"
+  },
+  {
+   "head": "curriculum",
+   "syn": "syllabus"
+  },
+  {
+   "head": "syllabus",
+   "syn": "curriculum"
+  },
+  {
+   "head": "revise",
+   "syn": "adjust"
+  },
+  {
+   "head": "revise",
+   "syn": "alter"
+  },
+  {
+   "head": "test",
+   "syn": "analyse"
+  },
+  {
+   "head": "test",
+   "syn": "analysis"
+  },
+  {
+   "head": "introduce",
+   "syn": "bring"
+  },
+  {
+   "head": "introduce",
+   "syn": "import"
+  },
+  {
+   "head": "cite",
+   "syn": "quote"
+  },
+  {
+   "head": "detect",
+   "syn": "find"
+  },
+  {
+   "head": "diagnose",
+   "syn": "analyse"
+  },
+  {
+   "head": "resolve",
+   "syn": "confront"
+  },
+  {
+   "head": "research",
+   "syn": "analyse"
+  },
+  {
+   "head": "research",
+   "syn": "analysis"
+  },
+  {
+   "head": "invent",
+   "syn": "coin"
+  },
+  {
+   "head": "invent",
+   "syn": "create"
+  },
+  {
+   "head": "invent",
+   "syn": "devise"
+  },
+  {
+   "head": "domain",
+   "syn": "area"
+  },
+  {
+   "head": "domain",
+   "syn": "discipline"
+  },
+  {
+   "head": "domain",
+   "syn": "field"
+  },
+  {
+   "head": "specialise",
+   "syn": "concentrate"
+  },
+  {
+   "head": "specialise",
+   "syn": "focus"
+  },
+  {
+   "head": "concentrate",
+   "syn": "focus"
+  },
+  {
+   "head": "concentrate",
+   "syn": "gather"
+  },
+  {
+   "head": "accumulate",
+   "syn": "concentrate"
+  },
+  {
+   "head": "accumulate",
+   "syn": "gather"
+  },
+  {
+   "head": "framework",
+   "syn": "skeleton"
+  },
+  {
+   "head": "framework",
+   "syn": "structure"
+  },
+  {
+   "head": "alter",
+   "syn": "adjust"
+  },
+  {
+   "head": "alter",
+   "syn": "change"
+  },
+  {
+   "head": "shift",
+   "syn": "adjust"
+  },
+  {
+   "head": "shift",
+   "syn": "alter"
+  },
+  {
+   "head": "adjust",
+   "syn": "alter"
+  },
+  {
+   "head": "adjust",
+   "syn": "change"
+  },
+  {
+   "head": "local",
+   "syn": "domestic"
+  },
+  {
+   "head": "oral",
+   "syn": "verbal"
+  },
+  {
+   "head": "verbal",
+   "syn": "oral"
+  },
+  {
+   "head": "complicated",
+   "syn": "complex"
+  },
+  {
+   "head": "narrate",
+   "syn": "convey"
+  },
+  {
+   "head": "narrate",
+   "syn": "speak"
+  },
+  {
+   "head": "narrate",
+   "syn": "talk"
+  },
+  {
+   "head": "recreation",
+   "syn": "entertainment"
+  },
+  {
+   "head": "famous",
+   "syn": "well-known"
+  },
+  {
+   "head": "exercise",
+   "syn": "practice"
+  },
+  {
+   "head": "goal",
+   "syn": "aim"
+  },
+  {
+   "head": "goal",
+   "syn": "objective"
+  },
+  {
+   "head": "goal",
+   "syn": "target"
+  }
+ ]
+}

@@ -1,0 +1,3999 @@
+[
+ {
+  "w": "secondary",
+  "disp": "secondary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 中学的；次要的"
+ },
+ {
+  "w": "institute",
+  "disp": "institute",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 研究所；v. 建立"
+ },
+ {
+  "w": "academy",
+  "disp": "academy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 学院"
+ },
+ {
+  "w": "acquire",
+  "disp": "acquire",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 获得；学会"
+ },
+ {
+  "w": "novice",
+  "disp": "novice",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 新手"
+ },
+ {
+  "w": "recruit",
+  "disp": "recruit",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 招聘"
+ },
+ {
+  "w": "literate",
+  "disp": "literate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 有读写能力的"
+ },
+ {
+  "w": "illiteracy",
+  "disp": "illiteracy",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 文盲"
+ },
+ {
+  "w": "numerate",
+  "disp": "numerate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 计算；adj. 识数的"
+ },
+ {
+  "w": "affair",
+  "disp": "affair",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 事务；事件"
+ },
+ {
+  "w": "controversial",
+  "disp": "controversial",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 有争议的"
+ },
+ {
+  "w": "puzzle",
+  "disp": "puzzle",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 谜；难题"
+ },
+ {
+  "w": "riddle",
+  "disp": "riddle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 谜语；v. 解谜"
+ },
+ {
+  "w": "obscure",
+  "disp": "obscure",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 不清楚的；无名的"
+ },
+ {
+  "w": "instil",
+  "disp": "instil",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 逐渐灌输"
+ },
+ {
+  "w": "cram",
+  "disp": "cram",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 填鸭式学习；塞满"
+ },
+ {
+  "w": "night",
+  "disp": "night",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 夜晚；晚上"
+ },
+ {
+  "w": "emphasise",
+  "disp": "emphasised",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 强调"
+ },
+ {
+  "w": "enable",
+  "disp": "enable",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使能够"
+ },
+ {
+  "w": "motive",
+  "disp": "motive",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 动机"
+ },
+ {
+  "w": "spur",
+  "disp": "spur",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 鞭策；v. 刺激"
+ },
+ {
+  "w": "impetus",
+  "disp": "impetus",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 冲力；推动力；刺激"
+ },
+ {
+  "w": "indulge",
+  "disp": "indulge",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 放任；沉溺；使满足"
+ },
+ {
+  "w": "spoil",
+  "disp": "spoil",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 搞糟；宠坏；变质"
+ },
+ {
+  "w": "intelligent",
+  "disp": "intelligent",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 有才智的；聪明的；明智的"
+ },
+ {
+  "w": "clever",
+  "disp": "clever",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 聪明的"
+ },
+ {
+  "w": "smart",
+  "disp": "smart",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 衣冠楚楚的；时髦的；聪明的"
+ },
+ {
+  "w": "all round",
+  "disp": "all-round",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 全能的；多方面的；多才多艺的"
+ },
+ {
+  "w": "genius",
+  "disp": "genius",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 天才"
+ },
+ {
+  "w": "elite",
+  "disp": "elite",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. （社会）精英；上层人士"
+ },
+ {
+  "w": "dawn",
+  "disp": "dawn",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 黎明；破晓"
+ },
+ {
+  "w": "idiot",
+  "disp": "idiot",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 白痴"
+ },
+ {
+  "w": "wisdom",
+  "disp": "wisdom",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 智慧；明智"
+ },
+ {
+  "w": "wit",
+  "disp": "wit",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 机智（的人）"
+ },
+ {
+  "w": "aptitude",
+  "disp": "aptitude",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 天资；天赋；才能"
+ },
+ {
+  "w": "outstanding",
+  "disp": "outstanding",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 杰出的；尚未处理的"
+ },
+ {
+  "w": "brilliant",
+  "disp": "brilliant",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 卓越的；明亮的"
+ },
+ {
+  "w": "prestige",
+  "disp": "prestige",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 声望"
+ },
+ {
+  "w": "reputation",
+  "disp": "reputation",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 名声；名誉"
+ },
+ {
+  "w": "eminent",
+  "disp": "eminent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 杰出的；著名的"
+ },
+ {
+  "w": "notorious",
+  "disp": "notorious",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 声名狼藉的；臭名昭著的"
+ },
+ {
+  "w": "esteem",
+  "disp": "esteem",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 尊重；尊敬"
+ },
+ {
+  "w": "diligent",
+  "disp": "diligent",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 勤勉的；勤奋的"
+ },
+ {
+  "w": "painstaking",
+  "disp": "painstaking",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 需细心的"
+ },
+ {
+  "w": "headmaster",
+  "disp": "headmaster",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 校长"
+ },
+ {
+  "w": "principal",
+  "disp": "principal",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 负责人；校长；adj. 主要的"
+ },
+ {
+  "w": "dean",
+  "disp": "dean",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 学院院长；系主任"
+ },
+ {
+  "w": "faculty",
+  "disp": "faculty",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 院系；全体教员"
+ },
+ {
+  "w": "professor",
+  "disp": "professor",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 教授；导师"
+ },
+ {
+  "w": "scholar",
+  "disp": "scholar",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 学者"
+ },
+ {
+  "w": "scientist",
+  "disp": "scientist",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 科学家"
+ },
+ {
+  "w": "tutor",
+  "disp": "tutor",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 导师"
+ },
+ {
+  "w": "assistant",
+  "disp": "assistant",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 助理；助手"
+ },
+ {
+  "w": "candidate",
+  "disp": "candidate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 候选人；应试者"
+ },
+ {
+  "w": "qualify",
+  "disp": "qualify",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使合格；使具有资格"
+ },
+ {
+  "w": "certify",
+  "disp": "certify",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 证明；保证；证实"
+ },
+ {
+  "w": "diploma",
+  "disp": "diploma",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 毕业文凭；学位证书"
+ },
+ {
+  "w": "diplomat",
+  "disp": "diplomat",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 外交官；会耍手腕儿的人"
+ },
+ {
+  "w": "ambassador",
+  "disp": "ambassador",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大使"
+ },
+ {
+  "w": "pupil",
+  "disp": "pupil",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小学生"
+ },
+ {
+  "w": "graduate",
+  "disp": "graduate",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 大学毕业生；v. 毕业"
+ },
+ {
+  "w": "ceremony",
+  "disp": "ceremony",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 仪式；典礼"
+ },
+ {
+  "w": "bachelor",
+  "disp": "bachelor",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 学士（本科）"
+ },
+ {
+  "w": "master",
+  "disp": "master",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 掌握；n. 大师；主人"
+ },
+ {
+  "w": "fresher",
+  "disp": "fresher",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大学一年级新生；adj. 新鲜的"
+ },
+ {
+  "w": "sophomore",
+  "disp": "sophomore",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. （大学）二年级学生"
+ },
+ {
+  "w": "junior",
+  "disp": "junior",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 年幼者；adj. （职位或等级）较低的；年幼的"
+ },
+ {
+  "w": "senior",
+  "disp": "senior",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 年长者；adj. 资深的"
+ },
+ {
+  "w": "alumni",
+  "disp": "alumni",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 校友；复数词形"
+ },
+ {
+  "w": "campus",
+  "disp": "campus",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 校园"
+ },
+ {
+  "w": "orientation",
+  "disp": "orientation",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 方向；入学介绍"
+ },
+ {
+  "w": "coed",
+  "disp": "coed",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 男女同校的；n. （男女同校学校的）女学生"
+ },
+ {
+  "w": "register",
+  "disp": "register",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 注册；登记；n. 登记簿"
+ },
+ {
+  "w": "roster",
+  "disp": "roster",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 花名册；勤务簿"
+ },
+ {
+  "w": "enrol",
+  "disp": "enrol",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 登记；注册；（使）加入"
+ },
+ {
+  "w": "matriculation",
+  "disp": "matriculation",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大学入学许可；录取入学；入学考试"
+ },
+ {
+  "w": "accommodation",
+  "disp": "accommodation",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 住处；膳宿；(交通工具内的)空间"
+ },
+ {
+  "w": "dorm",
+  "disp": "dorm",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. (集体)宿舍"
+ },
+ {
+  "w": "dining hall",
+  "disp": "dining hall",
+  "need_syn": true,
+  "need_col": true,
+  "m": "phrase. 餐厅；食堂"
+ },
+ {
+  "w": "canteen",
+  "disp": "canteen",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 食堂"
+ },
+ {
+  "w": "laboratory",
+  "disp": "laboratory",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 实验室"
+ },
+ {
+  "w": "quantity",
+  "disp": "quantity",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 量；数量"
+ },
+ {
+  "w": "quality",
+  "disp": "quality",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 质量；素质；品质"
+ },
+ {
+  "w": "quiet",
+  "disp": "quiet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 安静的"
+ },
+ {
+  "w": "library",
+  "disp": "library",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 图书馆"
+ },
+ {
+  "w": "literature",
+  "disp": "literature",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 文学；文学作品"
+ },
+ {
+  "w": "article",
+  "disp": "article",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 文章；条款"
+ },
+ {
+  "w": "author",
+  "disp": "author",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 作者"
+ },
+ {
+  "w": "tale",
+  "disp": "tale",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 故事；叙述；传说"
+ },
+ {
+  "w": "fiction",
+  "disp": "fiction",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小说；虚构"
+ },
+ {
+  "w": "story",
+  "disp": "story",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 故事；轶事"
+ },
+ {
+  "w": "diary",
+  "disp": "diary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 日记"
+ },
+ {
+  "w": "poetry",
+  "disp": "poetry",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 诗歌；诗作"
+ },
+ {
+  "w": "magazine",
+  "disp": "magazine",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 杂志"
+ },
+ {
+  "w": "journal",
+  "disp": "journal",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 期刊；日志；日记"
+ },
+ {
+  "w": "coverage lettering",
+  "disp": "coverage lettering",
+  "need_syn": true,
+  "need_col": true,
+  "m": "phrase. 覆盖说明"
+ },
+ {
+  "w": "bibliography",
+  "disp": "bibliography",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 参考书目"
+ },
+ {
+  "w": "opening",
+  "disp": "Opening",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 开始；空缺职位；adj. 开始的"
+ },
+ {
+  "w": "encyclopedia",
+  "disp": "encyclopedia",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 百科全书"
+ },
+ {
+  "w": "biography",
+  "disp": "biography",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 传记"
+ },
+ {
+  "w": "file",
+  "disp": "file",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 档案"
+ },
+ {
+  "w": "profile",
+  "disp": "profile",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 简介；受公众注意的程度；轮廓"
+ },
+ {
+  "w": "draught",
+  "disp": "draught",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 通风气流；一口"
+ },
+ {
+  "w": "sketch",
+  "disp": "sketch",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 草图；概述；v. 速写"
+ },
+ {
+  "w": "brochure",
+  "disp": "brochure",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小册子"
+ },
+ {
+  "w": "manual",
+  "disp": "manual",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 说明书；adj. 手工的；体力的"
+ },
+ {
+  "w": "frame",
+  "disp": "frame",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 框架；v. 表达；陷害"
+ },
+ {
+  "w": "index",
+  "disp": "index",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 索引；指数；指标"
+ },
+ {
+  "w": "wooden",
+  "disp": "wooden",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 木制的；木头的"
+ },
+ {
+  "w": "card catalogue",
+  "disp": "card catalogue",
+  "need_syn": true,
+  "need_col": true,
+  "m": "phrase. 卡片目录"
+ },
+ {
+  "w": "category",
+  "disp": "category",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 类别"
+ },
+ {
+  "w": "inventory",
+  "disp": "inventory",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 清单；存货"
+ },
+ {
+  "w": "content",
+  "disp": "content",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 内容；含量；adj. 满足的"
+ },
+ {
+  "w": "list",
+  "disp": "list",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 表；名单；v. 列出"
+ },
+ {
+  "w": "chapter",
+  "disp": "chapter",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 篇章"
+ },
+ {
+  "w": "volume",
+  "disp": "volume",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 体积；卷；音量"
+ },
+ {
+  "w": "subject",
+  "disp": "subject",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 学科；主题；adj. 易遭受…的"
+ },
+ {
+  "w": "major",
+  "disp": "major",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 主修课；大调；adj. 主要的"
+ },
+ {
+  "w": "minor",
+  "disp": "minor",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 辅修课；未成年人；adj. 次要的"
+ },
+ {
+  "w": "sociology",
+  "disp": "sociology",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 社会学"
+ },
+ {
+  "w": "politics",
+  "disp": "politics",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 政治；政治学"
+ },
+ {
+  "w": "economics",
+  "disp": "economics",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 经济学；经济"
+ },
+ {
+  "w": "marketing",
+  "disp": "marketing",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 营销"
+ },
+ {
+  "w": "accounting",
+  "disp": "accounting",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 会计；会计学；v. 解释说明"
+ },
+ {
+  "w": "audit",
+  "disp": "audit",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 审计；查账"
+ },
+ {
+  "w": "statistics",
+  "disp": "statistics",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 统计数字；统计学"
+ },
+ {
+  "w": "psychology",
+  "disp": "psychology",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 心理学；心理"
+ },
+ {
+  "w": "philosophy",
+  "disp": "philosophy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 哲学"
+ },
+ {
+  "w": "logic",
+  "disp": "logic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 逻辑"
+ },
+ {
+  "w": "physics",
+  "disp": "physics",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 物理学"
+ },
+ {
+  "w": "logistics",
+  "disp": "logistics",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 物流；（军事）后勤学"
+ },
+ {
+  "w": "geography",
+  "disp": "geography",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 地理学；地理"
+ },
+ {
+  "w": "mechanics",
+  "disp": "mechanics",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 运作方式；力学；复数词形"
+ },
+ {
+  "w": "electronics",
+  "disp": "electronics",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 电子器件"
+ },
+ {
+  "w": "maths",
+  "disp": "maths",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 数学"
+ },
+ {
+  "w": "arithmetic",
+  "disp": "arithmetic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 算术"
+ },
+ {
+  "w": "geometry",
+  "disp": "geometry",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 几何学"
+ },
+ {
+  "w": "algebra",
+  "disp": "algebra",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 代数"
+ },
+ {
+  "w": "calculus",
+  "disp": "calculus",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 微积分学；（人体内的）结石"
+ },
+ {
+  "w": "plus",
+  "disp": "plus",
+  "need_syn": false,
+  "need_col": true,
+  "m": "prep. 加；conj. 并且；n. 优势"
+ },
+ {
+  "w": "sum",
+  "disp": "sum",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 金额；总数；v. 概括"
+ },
+ {
+  "w": "total",
+  "disp": "total",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 总计；adj. 总的；v. 共计"
+ },
+ {
+  "w": "merge",
+  "disp": "merge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 融合"
+ },
+ {
+  "w": "equation",
+  "disp": "equation",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 方程式；等式"
+ },
+ {
+  "w": "identical",
+  "disp": "identical",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 相同的；同样的"
+ },
+ {
+  "w": "minus",
+  "disp": "minus",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 负的；n. 缺点；prep. 减去"
+ },
+ {
+  "w": "subtract",
+  "disp": "subtract",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 减去"
+ },
+ {
+  "w": "multiply",
+  "disp": "multiply",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 增加；繁殖"
+ },
+ {
+  "w": "remainder",
+  "disp": "remainder",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 剩余物"
+ },
+ {
+  "w": "parameter",
+  "disp": "parameters",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 参数"
+ },
+ {
+  "w": "variable",
+  "disp": "variables",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 变量；adj. 可变的；易变的"
+ },
+ {
+  "w": "quadruple",
+  "disp": "quadruple",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 成四倍；翻两番"
+ },
+ {
+  "w": "approximately",
+  "disp": "approximately",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adv. 大约；大概"
+ },
+ {
+  "w": "diagram",
+  "disp": "diagram",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 图表；图解"
+ },
+ {
+  "w": "matrix",
+  "disp": "matrix",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 矩阵；母体；发源地"
+ },
+ {
+  "w": "rectangle",
+  "disp": "rectangle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 矩形；长方形"
+ },
+ {
+  "w": "triangle",
+  "disp": "triangle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 三角形；三角形物"
+ },
+ {
+  "w": "diagonal",
+  "disp": "diagonal",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 对角线；adj. 斜的"
+ },
+ {
+  "w": "round",
+  "disp": "round",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 回合；adj. 圆的；prep./adv. 在…周围"
+ },
+ {
+  "w": "dot",
+  "disp": "dots",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小圆点；点"
+ },
+ {
+  "w": "sphere",
+  "disp": "sphere",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 球体；范围"
+ },
+ {
+  "w": "cone",
+  "disp": "cone",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 圆锥体；球果"
+ },
+ {
+  "w": "extent",
+  "disp": "extent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 程度；广度"
+ },
+ {
+  "w": "decimal",
+  "disp": "decimals",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小数；adj. 小数的；十进位的"
+ },
+ {
+  "w": "proportion",
+  "disp": "proportion",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 比例；份额"
+ },
+ {
+  "w": "ratio",
+  "disp": "ratio",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 比率；比值"
+ },
+ {
+  "w": "fraction",
+  "disp": "fraction",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小部分"
+ },
+ {
+  "w": "scale",
+  "disp": "scale",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 秤；规模；等级"
+ },
+ {
+  "w": "ounce",
+  "disp": "ounce",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 少量；盎司"
+ },
+ {
+  "w": "density",
+  "disp": "density",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 密度"
+ },
+ {
+  "w": "fahrenheit",
+  "disp": "Fahrenheit",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 华氏温度计的"
+ },
+ {
+  "w": "mercury",
+  "disp": "mercury",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 水银；汞"
+ },
+ {
+  "w": "battery",
+  "disp": "batteries",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 电池；一组"
+ },
+ {
+  "w": "volt",
+  "disp": "volts",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 伏特"
+ },
+ {
+  "w": "radiate",
+  "disp": "radiate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 散发；发射（光或热）；辐射"
+ },
+ {
+  "w": "emit",
+  "disp": "emit",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 发出；散发"
+ },
+ {
+  "w": "transparent",
+  "disp": "transparent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 透明的；显然的"
+ },
+ {
+  "w": "hollow",
+  "disp": "hollow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 中空的；空洞的"
+ },
+ {
+  "w": "ozone",
+  "disp": "ozone",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 臭氧"
+ },
+ {
+  "w": "gravity",
+  "disp": "gravity",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 重力；地心吸力"
+ },
+ {
+  "w": "friction",
+  "disp": "friction",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 摩擦；不和"
+ },
+ {
+  "w": "eccentric",
+  "disp": "eccentric",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 古怪的"
+ },
+ {
+  "w": "displace",
+  "disp": "displace",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 取代；迫使…离开家园"
+ },
+ {
+  "w": "melt",
+  "disp": "melt",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. （使）融化；（使）熔化"
+ },
+ {
+  "w": "dissolve",
+  "disp": "dissolve",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 溶解"
+ },
+ {
+  "w": "rust",
+  "disp": "rust",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 生锈；n. 锈"
+ },
+ {
+  "w": "ferment",
+  "disp": "ferment",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. （使）发酵；动乱；n. 发酵"
+ },
+ {
+  "w": "dilute",
+  "disp": "dilute",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 稀释；adj. 稀释的"
+ },
+ {
+  "w": "acid",
+  "disp": "acid",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 酸性的；n. 酸"
+ },
+ {
+  "w": "noxious",
+  "disp": "noxious",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 有害的"
+ },
+ {
+  "w": "static",
+  "disp": "static",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 静电的；静止的；不变的"
+ },
+ {
+  "w": "inert",
+  "disp": "inert",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 惰性的"
+ },
+ {
+  "w": "formula",
+  "disp": "formula",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 公式；方案；配方"
+ },
+ {
+  "w": "compose",
+  "disp": "compose",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 创作；组成"
+ },
+ {
+  "w": "blend",
+  "disp": "blend",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 混合；融合"
+ },
+ {
+  "w": "narrow",
+  "disp": "narrow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 狭窄的；窄小的；v. 使窄小"
+ },
+ {
+  "w": "steady",
+  "disp": "steady",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 稳定的；v. 使稳住"
+ },
+ {
+  "w": "theory",
+  "disp": "theory",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 理论；学说"
+ },
+ {
+  "w": "empirical",
+  "disp": "empirical",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 经验主义的；以经验为根据的"
+ },
+ {
+  "w": "doctrine",
+  "disp": "doctrine",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 教义；教条"
+ },
+ {
+  "w": "timetable",
+  "disp": "timetable",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 时间表；时刻表；课程表"
+ },
+ {
+  "w": "seminar",
+  "disp": "seminar",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 研讨会；专题讨论"
+ },
+ {
+  "w": "forum",
+  "disp": "forum",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 论坛；讨论会"
+ },
+ {
+  "w": "spring",
+  "disp": "spring",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 跳；n. 春天；弹簧"
+ },
+ {
+  "w": "syllabus",
+  "disp": "syllabus",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 教学大纲"
+ },
+ {
+  "w": "rudimentary",
+  "disp": "rudimentary",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 未充分发展的；初步的；基本的"
+ },
+ {
+  "w": "elementary",
+  "disp": "elementary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 初级的；基本的"
+ },
+ {
+  "w": "profound",
+  "disp": "profound",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 深远的；深刻的"
+ },
+ {
+  "w": "compulsory",
+  "disp": "compulsory",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 必须做的；强制的"
+ },
+ {
+  "w": "prerequisite",
+  "disp": "prerequisite",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 前提；先决条件"
+ },
+ {
+  "w": "selective",
+  "disp": "selective",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 选择性的；精挑细选的"
+ },
+ {
+  "w": "elective",
+  "disp": "elective",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 选修课；adj. 选修的"
+ },
+ {
+  "w": "assignment",
+  "disp": "assignment",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 作业；任务"
+ },
+ {
+  "w": "consult",
+  "disp": "consult",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 咨询；查询；请教"
+ },
+ {
+  "w": "skim",
+  "disp": "skim",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 掠过；略读"
+ },
+ {
+  "w": "scrutinise",
+  "disp": "scrutinise",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 详细检查；仔细察看"
+ },
+ {
+  "w": "recite",
+  "disp": "recite",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 背诵"
+ },
+ {
+  "w": "dictate",
+  "disp": "dictate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 口述；命令；影响"
+ },
+ {
+  "w": "examination",
+  "disp": "examination",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 考试；检查；审查"
+ },
+ {
+  "w": "quiz",
+  "disp": "quiz",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小测验；知识竞赛"
+ },
+ {
+  "w": "presentation",
+  "disp": "presentation",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 报告；展示；陈述"
+ },
+ {
+  "w": "plagiarise",
+  "disp": "plagiarise",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 抄袭；剽窃"
+ },
+ {
+  "w": "print",
+  "disp": "print",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 打印；n. 印刷"
+ },
+ {
+  "w": "thesis",
+  "disp": "thesis",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 学位论文"
+ },
+ {
+  "w": "paper",
+  "disp": "paper",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 论文；纸；报纸"
+ },
+ {
+  "w": "dissertation",
+  "disp": "dissertation",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 学位论文"
+ },
+ {
+  "w": "heading",
+  "disp": "heading",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 标题；v. 朝向；现在分词词形"
+ },
+ {
+  "w": "outset",
+  "disp": "outset",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 开端；起始"
+ },
+ {
+  "w": "gist",
+  "disp": "gist",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 要点"
+ },
+ {
+  "w": "reference",
+  "disp": "reference",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 参考；提及"
+ },
+ {
+  "w": "cite",
+  "disp": "cite",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 引用；提及"
+ },
+ {
+  "w": "elicit",
+  "disp": "elicit",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 引出"
+ },
+ {
+  "w": "quote",
+  "disp": "quote",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 引文；报价；v. 引用"
+ },
+ {
+  "w": "extract",
+  "disp": "extract",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 提取；n. 摘录；提取物"
+ },
+ {
+  "w": "abstract",
+  "disp": "abstract",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 摘要；概要；adj. 抽象的"
+ },
+ {
+  "w": "summary",
+  "disp": "summary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 总结；摘要"
+ },
+ {
+  "w": "assume",
+  "disp": "assume",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 假定；设想；呈现"
+ },
+ {
+  "w": "midnight",
+  "disp": "midnight",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 午夜；子夜"
+ },
+ {
+  "w": "presume",
+  "disp": "presume",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 假设；假定；设想"
+ },
+ {
+  "w": "suppose",
+  "disp": "suppose",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 认为；猜想；假设"
+ },
+ {
+  "w": "hypothesis",
+  "disp": "hypothesis",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 假设；假说"
+ },
+ {
+  "w": "postulate",
+  "disp": "postulate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 假设；v. 假定"
+ },
+ {
+  "w": "speculate",
+  "disp": "speculate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 推测；思索"
+ },
+ {
+  "w": "predict",
+  "disp": "predict",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 预言；预测"
+ },
+ {
+  "w": "perceive",
+  "disp": "perceive",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 感知；察觉"
+ },
+ {
+  "w": "detect",
+  "disp": "detect",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 测出；察觉"
+ },
+ {
+  "w": "discern",
+  "disp": "discern",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 辨明"
+ },
+ {
+  "w": "reckon",
+  "disp": "reckon",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 估计；认为"
+ },
+ {
+  "w": "deem",
+  "disp": "deem",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 视作；认为"
+ },
+ {
+  "w": "imply",
+  "disp": "imply",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 暗示；意味"
+ },
+ {
+  "w": "deliberate",
+  "disp": "deliberate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 深思熟虑的；故意的；v. 深思熟虑"
+ },
+ {
+  "w": "represent",
+  "disp": "represent",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 代表；体现"
+ },
+ {
+  "w": "insist",
+  "disp": "insist",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 坚决要求"
+ },
+ {
+  "w": "persist",
+  "disp": "persist",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 持续"
+ },
+ {
+  "w": "diagnose",
+  "disp": "diagnose",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 诊断"
+ },
+ {
+  "w": "infer",
+  "disp": "infer",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 推断"
+ },
+ {
+  "w": "deduce",
+  "disp": "deduce",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 推断；演绎；推论"
+ },
+ {
+  "w": "analogy",
+  "disp": "analogy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 类比"
+ },
+ {
+  "w": "breeze",
+  "disp": "breeze",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 微风；和风"
+ },
+ {
+  "w": "blossom",
+  "disp": "blossom",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. （果树的）花朵；v. 开花"
+ },
+ {
+  "w": "scent",
+  "disp": "scent",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 香味；香水；察觉"
+ },
+ {
+  "w": "overlap",
+  "disp": "overlap",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 重叠部分；v. 交叠；使部分重叠"
+ },
+ {
+  "w": "contradiction",
+  "disp": "contradiction",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 矛盾；不一致；反驳"
+ },
+ {
+  "w": "disagree",
+  "disp": "disagree",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 不同意"
+ },
+ {
+  "w": "differ",
+  "disp": "differ",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 与…不同；与…相异"
+ },
+ {
+  "w": "diverse",
+  "disp": "diverse",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 不同的；多种多样的"
+ },
+ {
+  "w": "nuance",
+  "disp": "nuance",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 细微差别"
+ },
+ {
+  "w": "gentle",
+  "disp": "gentle",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 温和的；文雅的；温柔的"
+ },
+ {
+  "w": "inductive",
+  "disp": "inductive",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 归纳的；诱导的；感应的"
+ },
+ {
+  "w": "instance",
+  "disp": "instance",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 例子；情况"
+ },
+ {
+  "w": "confirm",
+  "disp": "confirm",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 证实；确认；批准"
+ },
+ {
+  "w": "manifest",
+  "disp": "manifest",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 显现"
+ },
+ {
+  "w": "survey",
+  "disp": "survey",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 调查；v. 勘测"
+ },
+ {
+  "w": "observe",
+  "disp": "observe",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 观察；遵守；注意到"
+ },
+ {
+  "w": "inquire",
+  "disp": "inquire",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 询问；调查"
+ },
+ {
+  "w": "query",
+  "disp": "query",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 疑问；v. 询问；怀疑"
+ },
+ {
+  "w": "questionnaire",
+  "disp": "questionnaire",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 问卷；调查表"
+ },
+ {
+  "w": "accomplish",
+  "disp": "accomplish",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 实现；完成"
+ },
+ {
+  "w": "stable",
+  "disp": "stable",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 马厩；厩房；adj. 稳定的"
+ },
+ {
+  "w": "queue",
+  "disp": "queue",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 长队；v. 排队"
+ },
+ {
+  "w": "grant",
+  "disp": "grant",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 承认；授予；n. 补助金"
+ },
+ {
+  "w": "praise",
+  "disp": "praise",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 赞美；赞扬"
+ },
+ {
+  "w": "feedback",
+  "disp": "feedback",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 反馈"
+ },
+ {
+  "w": "overestimate",
+  "disp": "overestimate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 过高估计"
+ },
+ {
+  "w": "fellowship",
+  "disp": "fellowship",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 情谊；团体；研究生奖学金"
+ },
+ {
+  "w": "lively",
+  "disp": "lively",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 充满生机的；活泼的"
+ },
+ {
+  "w": "scholarship",
+  "disp": "scholarship",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 奖学金"
+ },
+ {
+  "w": "reward",
+  "disp": "reward",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 报酬；v. 回报"
+ },
+ {
+  "w": "fee",
+  "disp": "fee",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 费用"
+ },
+ {
+  "w": "civilisation",
+  "disp": "civilisation",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 文明"
+ },
+ {
+  "w": "renaissance",
+  "disp": "Renaissance",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 复兴"
+ },
+ {
+  "w": "epic",
+  "disp": "epic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 史诗的；叙事诗的；宏丽的"
+ },
+ {
+  "w": "ideology",
+  "disp": "ideology",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 意识形态；思想体系"
+ },
+ {
+  "w": "convention",
+  "disp": "convention",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 习俗；大会"
+ },
+ {
+  "w": "feudalism",
+  "disp": "feudalism",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 封建主义；封建制度"
+ },
+ {
+  "w": "slavery",
+  "disp": "slavery",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 奴隶制；奴隶身份"
+ },
+ {
+  "w": "tribe",
+  "disp": "tribe",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 部落；部族"
+ },
+ {
+  "w": "aboriginal",
+  "disp": "aboriginal",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 土著的"
+ },
+ {
+  "w": "inhabitant",
+  "disp": "inhabitant",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 居住者；居民"
+ },
+ {
+  "w": "exotic",
+  "disp": "exotic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 奇异的；外来的；外国来的"
+ },
+ {
+  "w": "fruit",
+  "disp": "fruit",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 水果；v. 结果实"
+ },
+ {
+  "w": "foreigner",
+  "disp": "foreigner",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 外国人；外来人"
+ },
+ {
+  "w": "alien",
+  "disp": "alien",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 陌生的；n. 外星人；外国人"
+ },
+ {
+  "w": "anthropologist",
+  "disp": "anthropologist",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 人类学家"
+ },
+ {
+  "w": "humanitarian",
+  "disp": "humanitarian",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 人道主义的；慈善的"
+ },
+ {
+  "w": "heritage",
+  "disp": "heritage",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 遗产；继承物；传统"
+ },
+ {
+  "w": "antique",
+  "disp": "antique",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 古老的；n. 古董"
+ },
+ {
+  "w": "archaeology",
+  "disp": "archaeology",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 考古学"
+ },
+ {
+  "w": "excavate",
+  "disp": "excavate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 挖掘"
+ },
+ {
+  "w": "clay",
+  "disp": "clay",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 黏土；粘土"
+ },
+ {
+  "w": "museum",
+  "disp": "museum",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 博物馆"
+ },
+ {
+  "w": "pottery",
+  "disp": "pottery",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 陶器；制陶手艺；陶器作坊"
+ },
+ {
+  "w": "engrave",
+  "disp": "engrave",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 在…上雕刻；铭记"
+ },
+ {
+  "w": "decorate",
+  "disp": "decorate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 装饰；装修"
+ },
+ {
+  "w": "religion",
+  "disp": "religion",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 宗教"
+ },
+ {
+  "w": "ritual",
+  "disp": "ritual",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. （宗教等的）仪式；例行习惯"
+ },
+ {
+  "w": "etiquette",
+  "disp": "etiquette",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 礼仪；礼节"
+ },
+ {
+  "w": "sacred",
+  "disp": "sacred",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 神圣的"
+ },
+ {
+  "w": "hallowed",
+  "disp": "hallowed",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 神圣化的；受崇敬的"
+ },
+ {
+  "w": "holy",
+  "disp": "holy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 神圣的；圣洁的"
+ },
+ {
+  "w": "pope",
+  "disp": "pope",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. （天主教）教皇"
+ },
+ {
+  "w": "bishop",
+  "disp": "bishop",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 主教；（国际象棋的）象"
+ },
+ {
+  "w": "missionary",
+  "disp": "missionary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 传教士"
+ },
+ {
+  "w": "priest",
+  "disp": "priest",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 牧师"
+ },
+ {
+  "w": "bible",
+  "disp": "Bible",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 《圣经》"
+ },
+ {
+  "w": "church",
+  "disp": "church",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 教堂"
+ },
+ {
+  "w": "cathedral",
+  "disp": "cathedral",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大教堂"
+ },
+ {
+  "w": "choir",
+  "disp": "choir",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 唱诗班；合唱"
+ },
+ {
+  "w": "monk",
+  "disp": "monk",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 僧侣；修道士"
+ },
+ {
+  "w": "temple",
+  "disp": "temple",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 庙宇；太阳穴"
+ },
+ {
+  "w": "pagoda",
+  "disp": "pagoda",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 塔；宝塔"
+ },
+ {
+  "w": "empire",
+  "disp": "empire",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 帝国"
+ },
+ {
+  "w": "imperial",
+  "disp": "imperial",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 帝国的；皇帝的"
+ },
+ {
+  "w": "dynasty",
+  "disp": "dynasty",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 朝代；王朝"
+ },
+ {
+  "w": "chronology",
+  "disp": "chronology",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 年表；年代学；按年代次序的排列"
+ },
+ {
+  "w": "emperor",
+  "disp": "emperor",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 皇帝；帝王"
+ },
+ {
+  "w": "prince",
+  "disp": "prince",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 王子；君主"
+ },
+ {
+  "w": "princess",
+  "disp": "princess",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 公主"
+ },
+ {
+  "w": "majesty",
+  "disp": "majesty",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 最高权威；王权；威严"
+ },
+ {
+  "w": "nobility",
+  "disp": "nobility",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 贵族阶级"
+ },
+ {
+  "w": "lord",
+  "disp": "lord",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 勋爵；上帝"
+ },
+ {
+  "w": "knight",
+  "disp": "knight",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 骑士"
+ },
+ {
+  "w": "crowd",
+  "disp": "crowd",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 人群；群众"
+ },
+ {
+  "w": "guardian",
+  "disp": "guardian",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 保护人；监护人"
+ },
+ {
+  "w": "nostalgia",
+  "disp": "nostalgia",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 怀旧"
+ },
+ {
+  "w": "homesick",
+  "disp": "homesick",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 想家的"
+ },
+ {
+  "w": "celebrity",
+  "disp": "celebrity",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 名人"
+ },
+ {
+  "w": "status",
+  "disp": "status",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 地位；状态；身份"
+ },
+ {
+  "w": "anecdote",
+  "disp": "anecdote",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 趣闻；轶事"
+ },
+ {
+  "w": "accident",
+  "disp": "accident",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 事故；意外事件；意外"
+ },
+ {
+  "w": "incident",
+  "disp": "incident",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 事件"
+ },
+ {
+  "w": "thrive",
+  "disp": "thrive",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 兴旺；繁荣；茁壮成长"
+ },
+ {
+  "w": "prosperity",
+  "disp": "prosperity",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 繁荣；兴旺"
+ },
+ {
+  "w": "setback",
+  "disp": "setback",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 退步；挫折"
+ },
+ {
+  "w": "adversity",
+  "disp": "adversity",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 逆境"
+ },
+ {
+  "w": "handwriting",
+  "disp": "handwriting",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 笔迹；手写"
+ },
+ {
+  "w": "pictograph",
+  "disp": "pictograph",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 象形文字；象形图；古代石壁画"
+ },
+ {
+  "w": "wedge",
+  "disp": "wedge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 楔子；v. 把…楔住"
+ },
+ {
+  "w": "knot",
+  "disp": "knot",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 结；（树） 节"
+ },
+ {
+  "w": "linguistics",
+  "disp": "linguistics",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 语言学"
+ },
+ {
+  "w": "semantic",
+  "disp": "semantic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 语义的"
+ },
+ {
+  "w": "syntax",
+  "disp": "syntax",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 句法"
+ },
+ {
+  "w": "phonetics",
+  "disp": "phonetics",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 语音学"
+ },
+ {
+  "w": "pronounce",
+  "disp": "pronounce",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 发音；宣告"
+ },
+ {
+  "w": "smooth",
+  "disp": "smooth",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 平滑的；平坦的；v. 使平滑"
+ },
+ {
+  "w": "intonation",
+  "disp": "intonation",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 语调"
+ },
+ {
+  "w": "inflection",
+  "disp": "inflection",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 变音；转调；曲折变化"
+ },
+ {
+  "w": "dialect",
+  "disp": "dialect",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 方言；地方话"
+ },
+ {
+  "w": "utterance",
+  "disp": "utterance",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 言辞；言语；言论"
+ },
+ {
+  "w": "syllable",
+  "disp": "syllable",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 音节"
+ },
+ {
+  "w": "phoneme",
+  "disp": "phoneme",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 音位"
+ },
+ {
+  "w": "vowel",
+  "disp": "vowel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 元音"
+ },
+ {
+  "w": "consonant",
+  "disp": "consonant",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 辅音"
+ },
+ {
+  "w": "alphabet",
+  "disp": "alphabet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 字母表"
+ },
+ {
+  "w": "logogram",
+  "disp": "logogram",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 词符"
+ },
+ {
+  "w": "vocabulary",
+  "disp": "vocabulary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 词汇量"
+ },
+ {
+  "w": "dictionary",
+  "disp": "dictionary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 词典；字典"
+ },
+ {
+  "w": "idiom",
+  "disp": "idiom",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 成语；习语；惯用语"
+ },
+ {
+  "w": "phrase",
+  "disp": "phrase",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 短语；词组"
+ },
+ {
+  "w": "clause",
+  "disp": "clause",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 从句；条款"
+ },
+ {
+  "w": "expression",
+  "disp": "expression",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 表达；表情；措辞"
+ },
+ {
+  "w": "tense",
+  "disp": "tense",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 时态；adj. 紧张的；拉紧的"
+ },
+ {
+  "w": "prefix",
+  "disp": "prefix",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 前缀；v. 加前缀"
+ },
+ {
+  "w": "suffix",
+  "disp": "suffix",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 后缀；词尾"
+ },
+ {
+  "w": "abbreviation",
+  "disp": "abbreviation",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 缩写；缩略"
+ },
+ {
+  "w": "synonym",
+  "disp": "synonym",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 同义词"
+ },
+ {
+  "w": "antonym",
+  "disp": "antonym",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 反义词"
+ },
+ {
+  "w": "noun",
+  "disp": "noun",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 名词"
+ },
+ {
+  "w": "singular",
+  "disp": "singular",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 单个的；单数的；特异的"
+ },
+ {
+  "w": "plural",
+  "disp": "plural",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 复数的；n. 复数"
+ },
+ {
+  "w": "pronoun",
+  "disp": "pronoun",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 代词"
+ },
+ {
+  "w": "adjective",
+  "disp": "adjective",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 形容词"
+ },
+ {
+  "w": "adverb",
+  "disp": "adverb",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 副词"
+ },
+ {
+  "w": "preposition",
+  "disp": "preposition",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 介词"
+ },
+ {
+  "w": "conjunction",
+  "disp": "conjunction",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 连接词；同时发生"
+ },
+ {
+  "w": "complicated",
+  "disp": "complicated",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 复杂的"
+ },
+ {
+  "w": "compile",
+  "disp": "compiled",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 汇编"
+ },
+ {
+  "w": "version",
+  "disp": "version",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 版本"
+ },
+ {
+  "w": "paraphrase",
+  "disp": "paraphrase",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 意译；解释；改述"
+ },
+ {
+  "w": "narrate",
+  "disp": "narrate",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 叙述；给（电视或电影）作旁白"
+ },
+ {
+  "w": "illuminate",
+  "disp": "illuminate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 照亮"
+ },
+ {
+  "w": "decipher",
+  "disp": "decipher",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 破译；解读"
+ },
+ {
+  "w": "eloquence",
+  "disp": "eloquence",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 雄辩；口才"
+ },
+ {
+  "w": "communicate",
+  "disp": "communicate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 沟通；交流"
+ },
+ {
+  "w": "discussion",
+  "disp": "discussion",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 讨论；商讨"
+ },
+ {
+  "w": "brainstorm",
+  "disp": "brainstorm",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 头脑风暴；v. 集思广益"
+ },
+ {
+  "w": "commentary",
+  "disp": "commentary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 评论；解说词；实况报道"
+ },
+ {
+  "w": "negotiate",
+  "disp": "negotiate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 协商；谈判；通过"
+ },
+ {
+  "w": "contention",
+  "disp": "contention",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 争论；争辩"
+ },
+ {
+  "w": "medium",
+  "disp": "medium",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 媒介；adj. 中等的"
+ },
+ {
+  "w": "press",
+  "disp": "press",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 新闻界；v. 按"
+ },
+ {
+  "w": "journalist",
+  "disp": "journalist",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 新闻工作者"
+ },
+ {
+  "w": "critic",
+  "disp": "critic",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 评论家；批评者"
+ },
+ {
+  "w": "commentator",
+  "disp": "commentator",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 评论员；解说员"
+ },
+ {
+  "w": "exponent",
+  "disp": "exponent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 拥护者；指数"
+ },
+ {
+  "w": "announcer",
+  "disp": "announcer",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 广播员；报幕员"
+ },
+ {
+  "w": "correspondent",
+  "disp": "correspondent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 通讯记者；通信者"
+ },
+ {
+  "w": "messenger",
+  "disp": "messenger",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 送信者；通信员"
+ },
+ {
+  "w": "editor",
+  "disp": "editor",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 编辑（者）"
+ },
+ {
+  "w": "typist",
+  "disp": "typist",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 打字员"
+ },
+ {
+  "w": "handout",
+  "disp": "handout",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 讲义"
+ },
+ {
+  "w": "leaflet",
+  "disp": "leaflet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 传单；单页宣传品"
+ },
+ {
+  "w": "propaganda",
+  "disp": "propaganda",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 宣传"
+ },
+ {
+  "w": "publish",
+  "disp": "publish",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 出版；发布"
+ },
+ {
+  "w": "disseminate",
+  "disp": "disseminate",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 传播；散播；扩散"
+ },
+ {
+  "w": "foresee",
+  "disp": "foreseen",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 预见；预知"
+ },
+ {
+  "w": "anticipate",
+  "disp": "anticipated",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 预料；预期"
+ },
+ {
+  "w": "await",
+  "disp": "awaited",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 等待"
+ },
+ {
+  "w": "pastime",
+  "disp": "pastime",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 消遣"
+ },
+ {
+  "w": "entertain",
+  "disp": "entertain",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 娱乐；使快乐；款待"
+ },
+ {
+  "w": "recreation",
+  "disp": "recreation",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 娱乐；消遣；休闲活动"
+ },
+ {
+  "w": "amuse",
+  "disp": "amuse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 娱乐"
+ },
+ {
+  "w": "gossip",
+  "disp": "gossip",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 流言蜚语"
+ },
+ {
+  "w": "rumour",
+  "disp": "rumour",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 谣言；v. 谣传"
+ },
+ {
+  "w": "consensus",
+  "disp": "consensus",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 共识；一致"
+ },
+ {
+  "w": "festival",
+  "disp": "festival",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 节日"
+ },
+ {
+  "w": "feast",
+  "disp": "feast",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 盛宴；宴会；节日"
+ },
+ {
+  "w": "rehearsal",
+  "disp": "rehearsal",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 排练"
+ },
+ {
+  "w": "simulate",
+  "disp": "simulate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 模拟"
+ },
+ {
+  "w": "circus",
+  "disp": "circus",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 马戏团"
+ },
+ {
+  "w": "dusk",
+  "disp": "dusk",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 黄昏"
+ },
+ {
+  "w": "magic",
+  "disp": "magic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 魔术；adj. 神奇的"
+ },
+ {
+  "w": "drama",
+  "disp": "drama",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 戏剧；话剧"
+ },
+ {
+  "w": "concert",
+  "disp": "concert",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 音乐会；一致"
+ },
+ {
+  "w": "symphony",
+  "disp": "symphony",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 交响乐；交响曲"
+ },
+ {
+  "w": "orchestra",
+  "disp": "orchestra",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 管弦乐队"
+ },
+ {
+  "w": "ballet",
+  "disp": "ballet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 芭蕾舞；芭蕾"
+ },
+ {
+  "w": "opera",
+  "disp": "opera",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 歌剧"
+ },
+ {
+  "w": "comedy",
+  "disp": "comedy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 喜剧"
+ },
+ {
+  "w": "tragedy",
+  "disp": "tragedy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 悲剧"
+ },
+ {
+  "w": "animation",
+  "disp": "animation",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 动画"
+ },
+ {
+  "w": "film",
+  "disp": "film",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 电影；薄薄的一层"
+ },
+ {
+  "w": "movie",
+  "disp": "movie",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 电影"
+ },
+ {
+  "w": "x-rated",
+  "disp": "x-rated",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 限制级的；色情的；充满暴力的"
+ },
+ {
+  "w": "artist",
+  "disp": "artist",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 艺术家；画家"
+ },
+ {
+  "w": "craftsman",
+  "disp": "craftsman",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 工匠；手艺人；匠人"
+ },
+ {
+  "w": "painter",
+  "disp": "painter",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 画家；油漆工"
+ },
+ {
+  "w": "role",
+  "disp": "role",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 角色；职能；作用"
+ },
+ {
+  "w": "scene",
+  "disp": "scene",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 场景；现场；景色"
+ },
+ {
+  "w": "exhibition",
+  "disp": "exhibition",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 展览；展出"
+ },
+ {
+  "w": "aesthetic",
+  "disp": "aesthetic",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 审美的；美学的"
+ },
+ {
+  "w": "collect",
+  "disp": "collect",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 收集"
+ },
+ {
+  "w": "select",
+  "disp": "select",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 选择；挑选；adj. 精心挑选的"
+ },
+ {
+  "w": "opt",
+  "disp": "opt",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 选择；决定"
+ },
+ {
+  "w": "photograph",
+  "disp": "photograph",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 拍照；n. 照片；相片"
+ },
+ {
+  "w": "portrait",
+  "disp": "portrait",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 肖像"
+ },
+ {
+  "w": "painting",
+  "disp": "painting",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 绘画；油画；v. 刷油漆"
+ },
+ {
+  "w": "sculpture",
+  "disp": "sculpture",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 雕刻（术）；雕塑品；雕刻品"
+ },
+ {
+  "w": "draw",
+  "disp": "draw",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 画；拉；吸引"
+ },
+ {
+  "w": "depict",
+  "disp": "depict",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 描绘；描述"
+ },
+ {
+  "w": "describe",
+  "disp": "describe",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 描述"
+ },
+ {
+  "w": "carve",
+  "disp": "carve",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 雕刻；切开"
+ },
+ {
+  "w": "improvise",
+  "disp": "improvise",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 即兴创作；即兴表演；临时准备"
+ },
+ {
+  "w": "musical",
+  "disp": "musical",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 音乐的；n. 音乐剧"
+ },
+ {
+  "w": "jazz",
+  "disp": "jazz",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 爵士乐"
+ },
+ {
+  "w": "rock",
+  "disp": "rock",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 岩石；摇滚乐；v. （使）摇动"
+ },
+ {
+  "w": "hip-hop",
+  "disp": "hip-hop",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 街舞；嘻哈文化；adj. 嘻哈的"
+ },
+ {
+  "w": "pop",
+  "disp": "pop",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 流行音乐；v. 发出砰的一声；突然地行动"
+ },
+ {
+  "w": "lyric",
+  "disp": "lyric",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 歌词；抒情诗；adj. 抒情的"
+ },
+ {
+  "w": "band",
+  "disp": "band",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 乐队；带子；一伙"
+ },
+ {
+  "w": "solo",
+  "disp": "solo",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 独唱；adj. 单独的"
+ },
+ {
+  "w": "melody",
+  "disp": "melody",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 旋律；曲调"
+ },
+ {
+  "w": "sunrise",
+  "disp": "sunrise",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 日出；黎明"
+ },
+ {
+  "w": "rhythm",
+  "disp": "rhythms",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 节奏"
+ },
+ {
+  "w": "tone",
+  "disp": "tone",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 音调；语气；氛围"
+ },
+ {
+  "w": "tune",
+  "disp": "tune",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 曲调；v. 调整"
+ },
+ {
+  "w": "disc",
+  "disp": "disc",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 圆盘；磁碟；唱片"
+ },
+ {
+  "w": "piano",
+  "disp": "piano",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 钢琴"
+ },
+ {
+  "w": "violin",
+  "disp": "violin",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小提琴"
+ },
+ {
+  "w": "cello",
+  "disp": "cello",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大提琴"
+ },
+ {
+  "w": "guitar",
+  "disp": "guitar",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 吉他"
+ },
+ {
+  "w": "harmonica",
+  "disp": "harmonica",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 口琴"
+ },
+ {
+  "w": "trumpet",
+  "disp": "trumpet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 喇叭；小号"
+ },
+ {
+  "w": "drum",
+  "disp": "drum",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 鼓；v. 敲打"
+ },
+ {
+  "w": "flute",
+  "disp": "flute",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 长笛"
+ },
+ {
+  "w": "grand",
+  "disp": "grand",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 壮丽的；重大的"
+ },
+ {
+  "w": "tournament",
+  "disp": "tournament",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 锦标赛；比赛"
+ },
+ {
+  "w": "olympic",
+  "disp": "Olympic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 奥林匹克的"
+ },
+ {
+  "w": "sponsor",
+  "disp": "sponsor",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 赞助商；v. 赞助"
+ },
+ {
+  "w": "patron",
+  "disp": "patron",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 赞助人；资助人；老主顾"
+ },
+ {
+  "w": "athlete",
+  "disp": "athlete",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 运动员；田径运动员"
+ },
+ {
+  "w": "champion",
+  "disp": "champion",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 优胜者；冠军"
+ },
+ {
+  "w": "spectator",
+  "disp": "spectator",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 旁观者"
+ },
+ {
+  "w": "volunteer",
+  "disp": "volunteer",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 志愿者；v. 自愿做"
+ },
+ {
+  "w": "well-known",
+  "disp": "well-known",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 众所周知的；著名的"
+ },
+ {
+  "w": "energetic",
+  "disp": "energetic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 有活力的；精力旺盛的"
+ },
+ {
+  "w": "vigorous",
+  "disp": "Vigorous",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 精力充沛的；茂盛的"
+ },
+ {
+  "w": "stadium",
+  "disp": "stadium",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 体育场；运动场"
+ },
+ {
+  "w": "gym",
+  "disp": "gym",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 健身房；体育馆"
+ },
+ {
+  "w": "training",
+  "disp": "training",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 培训；训练；v. 现在分词词形"
+ },
+ {
+  "w": "indoor",
+  "disp": "indoor",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 户内的；室内的"
+ },
+ {
+  "w": "outdoor",
+  "disp": "outdoor",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 户外的"
+ },
+ {
+  "w": "mobile",
+  "disp": "mobile",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 可移动的"
+ },
+ {
+  "w": "movement",
+  "disp": "movement",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 运动；活动"
+ },
+ {
+  "w": "yoga",
+  "disp": "yoga",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 瑜伽"
+ },
+ {
+  "w": "sprawl",
+  "disp": "sprawl",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 蔓延；铺展；n. 杂乱无序的拓展"
+ },
+ {
+  "w": "stretch",
+  "disp": "stretch",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 伸展；持续；n. 一段"
+ },
+ {
+  "w": "chess",
+  "disp": "chess",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 国际象棋"
+ },
+ {
+  "w": "badminton",
+  "disp": "badminton",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 羽毛球运动；羽毛球"
+ },
+ {
+  "w": "golf",
+  "disp": "golf",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 高尔夫球"
+ },
+ {
+  "w": "billiards",
+  "disp": "billiards",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 台球"
+ },
+ {
+  "w": "soccer",
+  "disp": "soccer",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 足球"
+ },
+ {
+  "w": "tennis",
+  "disp": "tennis",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 网球"
+ },
+ {
+  "w": "volleyball",
+  "disp": "volleyball",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 排球"
+ },
+ {
+  "w": "hockey",
+  "disp": "hockey",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 曲棍球"
+ },
+ {
+  "w": "bat",
+  "disp": "bat",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 球棒；球拍；n. 蝙蝠"
+ },
+ {
+  "w": "racket",
+  "disp": "racket",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 网球拍；喧闹；非法勾当"
+ },
+ {
+  "w": "kick",
+  "disp": "kick",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 踢；踹"
+ },
+ {
+  "w": "knock",
+  "disp": "knock",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 敲击；v. 撞"
+ },
+ {
+  "w": "flip",
+  "disp": "flip",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 快速翻转"
+ },
+ {
+  "w": "pitch",
+  "disp": "pitch",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 投；n. 音高；球场"
+ },
+ {
+  "w": "throw",
+  "disp": "throw",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 扔；投"
+ },
+ {
+  "w": "toss",
+  "disp": "toss",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. （随意地）抛掷；甩"
+ },
+ {
+  "w": "slide",
+  "disp": "slide",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 下滑；n. 幻灯片"
+ },
+ {
+  "w": "slip",
+  "disp": "slip",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 失足；v. 溜走"
+ },
+ {
+  "w": "glide",
+  "disp": "glide",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 滑行；滑动"
+ },
+ {
+  "w": "tumble",
+  "disp": "tumble",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 跌倒；暴跌；n. 摔倒"
+ },
+ {
+  "w": "ski",
+  "disp": "ski",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 滑雪"
+ },
+ {
+  "w": "skate",
+  "disp": "skate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 溜冰"
+ },
+ {
+  "w": "cycling",
+  "disp": "cycling",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 骑自行车；v. 骑自行车；现在分词词形"
+ },
+ {
+  "w": "dive",
+  "disp": "dive",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 跳水；暴跌；v. 潜水"
+ },
+ {
+  "w": "drift",
+  "disp": "drift",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 漂移；n. 流动"
+ },
+ {
+  "w": "jump",
+  "disp": "jump",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 跳；n. 跳跃"
+ },
+ {
+  "w": "leap",
+  "disp": "leap",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 跳跃；n. 跳跃"
+ },
+ {
+  "w": "plunge",
+  "disp": "plunge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 跳入；n. 骤降"
+ },
+ {
+  "w": "hop",
+  "disp": "hop",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 跃过；跳跃"
+ },
+ {
+  "w": "fence",
+  "disp": "fence",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 栅栏；围栏；篱笆"
+ },
+ {
+  "w": "bounce",
+  "disp": "bounce",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 反弹；n. 弹跳"
+ },
+ {
+  "w": "tent",
+  "disp": "tent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 帐篷；帐棚"
+ },
+ {
+  "w": "camp",
+  "disp": "camp",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 营地；v. 宿营；露营"
+ },
+ {
+  "w": "picnic",
+  "disp": "picnic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 野餐；v. 去野餐"
+ },
+ {
+  "w": "hunt",
+  "disp": "hunt",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 打猎；搜寻"
+ },
+ {
+  "w": "race",
+  "disp": "race",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 比赛；种族；v. 快速移动"
+ },
+ {
+  "w": "marathon",
+  "disp": "marathon",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 马拉松赛跑；耐力赛"
+ },
+ {
+  "w": "pedestrian",
+  "disp": "pedestrians",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 行人；步行者"
+ },
+ {
+  "w": "pace",
+  "disp": "pace",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 步伐；步速"
+ },
+ {
+  "w": "step",
+  "disp": "step",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 步骤；v. 踩"
+ },
+ {
+  "w": "excursion",
+  "disp": "excursion",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 短途旅行"
+ },
+ {
+  "w": "cruise",
+  "disp": "cruise",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 乘船游览；v. 航游"
+ },
+ {
+  "w": "trip",
+  "disp": "trip",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 旅行；旅程；v. 绊倒"
+ },
+ {
+  "w": "vacation",
+  "disp": "vacation",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 假期"
+ },
+ {
+  "w": "hike",
+  "disp": "hike",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 远足；n. 远足"
+ },
+ {
+  "w": "jog",
+  "disp": "jog",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 慢跑；轻碰；轻撞"
+ },
+ {
+  "w": "stride",
+  "disp": "stride",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 大步；v. 跨一大步"
+ },
+ {
+  "w": "wander",
+  "disp": "wander",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 徘徊；漫游"
+ },
+ {
+  "w": "linger",
+  "disp": "linger",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 逗留"
+ },
+ {
+  "w": "lag",
+  "disp": "lag",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 落后；n. 延迟"
+ },
+ {
+  "w": "climb",
+  "disp": "climb",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 攀爬；爬升"
+ },
+ {
+  "w": "pull",
+  "disp": "pull",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 拉；拖；拔"
+ },
+ {
+  "w": "drag",
+  "disp": "drag",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 拖；n. 累赘"
+ },
+ {
+  "w": "bend",
+  "disp": "bend",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 弯腰；弯曲"
+ }
+]

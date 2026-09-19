@@ -1,0 +1,2970 @@
+[
+ {
+  "w": "violence",
+  "disp": "violence",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 暴力"
+ },
+ {
+  "w": "night",
+  "disp": "night",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 夜晚；晚上"
+ },
+ {
+  "w": "raid",
+  "disp": "raid",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 突袭；v. 搜捕"
+ },
+ {
+  "w": "enormity",
+  "disp": "enormity",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 巨大；庞大；极恶"
+ },
+ {
+  "w": "campaign",
+  "disp": "campaign",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 战役；n. （政治、商业或社会性）活动；运动"
+ },
+ {
+  "w": "battle",
+  "disp": "battle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 战斗；v. 战斗"
+ },
+ {
+  "w": "quiet",
+  "disp": "quiet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 安静的"
+ },
+ {
+  "w": "struggle",
+  "disp": "struggle",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 斗争；v. 努力"
+ },
+ {
+  "w": "explosion",
+  "disp": "explosion",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 爆炸；（感情）爆发；激增"
+ },
+ {
+  "w": "bombard",
+  "disp": "bombard",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 炮轰；轰击"
+ },
+ {
+  "w": "bomb",
+  "disp": "bomb",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 投弹于；轰炸；n. 炸弹"
+ },
+ {
+  "w": "blast",
+  "disp": "blast",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 爆炸；巨响；一阵强劲的气流"
+ },
+ {
+  "w": "burst",
+  "disp": "burst",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 爆裂；n. 突然而起"
+ },
+ {
+  "w": "spark",
+  "disp": "spark",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 火花；火星；v. 激发"
+ },
+ {
+  "w": "stove",
+  "disp": "stove",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 火炉"
+ },
+ {
+  "w": "twinkle",
+  "disp": "twinkles",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 闪耀；闪烁；n. 闪烁"
+ },
+ {
+  "w": "gunpowder",
+  "disp": "gunpowder",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 火药"
+ },
+ {
+  "w": "tank",
+  "disp": "tank",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 坦克；罐；箱"
+ },
+ {
+  "w": "field",
+  "disp": "field",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 田地；领域；v. 处理，应付（问题、电话等）"
+ },
+ {
+  "w": "cannon",
+  "disp": "cannon",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大炮；v. 碰撞"
+ },
+ {
+  "w": "missile",
+  "disp": "missile",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 导弹"
+ },
+ {
+  "w": "weapon",
+  "disp": "weapon",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 武器"
+ },
+ {
+  "w": "pistol",
+  "disp": "pistol",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 手枪"
+ },
+ {
+  "w": "wooden",
+  "disp": "wooden",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 木制的；木头的"
+ },
+ {
+  "w": "rifle",
+  "disp": "rifle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 步枪；来复枪（又称来福枪）；v. 快速搜寻"
+ },
+ {
+  "w": "bullet",
+  "disp": "bullet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 子弹；枪弹"
+ },
+ {
+  "w": "deflect",
+  "disp": "deflect",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使转向"
+ },
+ {
+  "w": "mission",
+  "disp": "mission",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 使命；任务；使团"
+ },
+ {
+  "w": "flame",
+  "disp": "flame",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 火焰；v. 燃烧"
+ },
+ {
+  "w": "flare",
+  "disp": "flare",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 信号弹；v. （突然）烧旺；突然爆发"
+ },
+ {
+  "w": "glitter",
+  "disp": "glitter",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 闪耀；v. 闪亮"
+ },
+ {
+  "w": "glow",
+  "disp": "glow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 微光；辉光；n. 炽热"
+ },
+ {
+  "w": "blade",
+  "disp": "blade",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 刀刃；叶片"
+ },
+ {
+  "w": "supper",
+  "disp": "supper",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 晚饭；晚餐"
+ },
+ {
+  "w": "sword",
+  "disp": "sword",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 剑"
+ },
+ {
+  "w": "axe",
+  "disp": "axe",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 斧子"
+ },
+ {
+  "w": "fireplace",
+  "disp": "fireplace",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 壁炉"
+ },
+ {
+  "w": "hammer",
+  "disp": "hammer",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 锤子；v. 锤打"
+ },
+ {
+  "w": "bow",
+  "disp": "bow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 弓；鞠躬；（使）鞠躬"
+ },
+ {
+  "w": "arrow",
+  "disp": "arrow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 箭；箭头"
+ },
+ {
+  "w": "spear",
+  "disp": "spear",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 矛；枪"
+ },
+ {
+  "w": "helmet",
+  "disp": "helmet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 头盔；防护帽"
+ },
+ {
+  "w": "shield",
+  "disp": "shield",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 盾牌"
+ },
+ {
+  "w": "equip",
+  "disp": "equip",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 装备；配备"
+ },
+ {
+  "w": "provide",
+  "disp": "provide",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 提供"
+ },
+ {
+  "w": "deploy",
+  "disp": "deploy",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 部署；有效地利用"
+ },
+ {
+  "w": "hit",
+  "disp": "hit",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 碰撞；袭击"
+ },
+ {
+  "w": "beat",
+  "disp": "beat",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 打；击败；n. 跳动"
+ },
+ {
+  "w": "strike",
+  "disp": "strike",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 袭击；罢工；v. 击打"
+ },
+ {
+  "w": "punch",
+  "disp": "punch",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 打孔；拳打"
+ },
+ {
+  "w": "chop",
+  "disp": "chop",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 剁；砍"
+ },
+ {
+  "w": "stab",
+  "disp": "stab",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 刺；n. 戳"
+ },
+ {
+  "w": "dilemma",
+  "disp": "dilemma",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 困境；两难"
+ },
+ {
+  "w": "plight",
+  "disp": "plight",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 困境"
+ },
+ {
+  "w": "pitfall",
+  "disp": "pitfall",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 陷阱；隐患；想不到的困难"
+ },
+ {
+  "w": "cruel",
+  "disp": "cruel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 残酷的"
+ },
+ {
+  "w": "conspiracy",
+  "disp": "conspiracy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 阴谋"
+ },
+ {
+  "w": "destitute",
+  "disp": "destitute",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 赤贫的；贫困的；一无所有的"
+ },
+ {
+  "w": "famine",
+  "disp": "famine",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 饥荒"
+ },
+ {
+  "w": "valley",
+  "disp": "valley",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 山谷；溪谷；流域"
+ },
+ {
+  "w": "starve",
+  "disp": "starve",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 挨饿；饿死"
+ },
+ {
+  "w": "seize",
+  "disp": "seize",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 抓住；夺取"
+ },
+ {
+  "w": "grain",
+  "disp": "grain",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 谷物；颗粒"
+ },
+ {
+  "w": "pursue",
+  "disp": "pursue",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 追求；追逐"
+ },
+ {
+  "w": "offend",
+  "disp": "offend",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 冒犯；触怒；得罪"
+ },
+ {
+  "w": "invade",
+  "disp": "invade",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 侵犯；侵略"
+ },
+ {
+  "w": "trespass",
+  "disp": "trespass",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 非法侵入；冒犯"
+ },
+ {
+  "w": "fence",
+  "disp": "fence",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 栅栏；围栏；篱笆"
+ },
+ {
+  "w": "intrude",
+  "disp": "intrude",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 闯入；打扰；强使"
+ },
+ {
+  "w": "attack",
+  "disp": "attack",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 攻击；n. 袭击"
+ },
+ {
+  "w": "assault",
+  "disp": "assault",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 攻击；袭击"
+ },
+ {
+  "w": "siege",
+  "disp": "siege",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 围攻；封锁"
+ },
+ {
+  "w": "surround",
+  "disp": "surround",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 环绕；围绕"
+ },
+ {
+  "w": "guard",
+  "disp": "guard",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 保卫；警卫；v. 守卫"
+ },
+ {
+  "w": "enclose",
+  "disp": "enclose",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 围起；附上；封入"
+ },
+ {
+  "w": "pause",
+  "disp": "pause",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 暂停；v. 停顿"
+ },
+ {
+  "w": "halt",
+  "disp": "halt",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 中断；暂停；n. 停顿下来"
+ },
+ {
+  "w": "cease",
+  "disp": "cease",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 停息；停止"
+ },
+ {
+  "w": "oppress",
+  "disp": "oppress",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 压迫；使烦恼"
+ },
+ {
+  "w": "counter",
+  "disp": "counter",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 抵消；反驳；n. 柜台"
+ },
+ {
+  "w": "deter",
+  "disp": "deter",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 制止"
+ },
+ {
+  "w": "forbid",
+  "disp": "forbid",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 禁止；不准"
+ },
+ {
+  "w": "prohibit",
+  "disp": "prohibited",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 禁止"
+ },
+ {
+  "w": "revolt",
+  "disp": "revolt",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 反叛；（使）厌恶；n. 叛乱"
+ },
+ {
+  "w": "betray",
+  "disp": "betray",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 背叛；泄露"
+ },
+ {
+  "w": "treason",
+  "disp": "treason",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 叛国（罪）；卖国（罪）"
+ },
+ {
+  "w": "stain",
+  "disp": "stain",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 污渍；v. 玷污"
+ },
+ {
+  "w": "rebel",
+  "disp": "rebel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 叛逆者；造反者"
+ },
+ {
+  "w": "praise",
+  "disp": "praise",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 赞美；赞扬"
+ },
+ {
+  "w": "traitor",
+  "disp": "traitor",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 叛徒；背叛者；卖国贼"
+ },
+ {
+  "w": "patriot",
+  "disp": "patriot",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 爱国者"
+ },
+ {
+  "w": "blame",
+  "disp": "blame",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 责任；v. 责怪；归咎于"
+ },
+ {
+  "w": "reproach",
+  "disp": "reproach",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 责备；v. 指责"
+ },
+ {
+  "w": "proof",
+  "disp": "proof",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 证明；证据"
+ },
+ {
+  "w": "terror",
+  "disp": "terror",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 恐怖"
+ },
+ {
+  "w": "terrible",
+  "disp": "terrible",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 可怕的；极坏的；糟糕的"
+ },
+ {
+  "w": "terrific",
+  "disp": "terrific",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 极大的；强烈的；极好的"
+ },
+ {
+  "w": "horrible",
+  "disp": "horrible",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 恐怖的；可怕的"
+ },
+ {
+  "w": "alarm",
+  "disp": "alarm",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 警报；闹钟；v. 使惊恐"
+ },
+ {
+  "w": "dread",
+  "disp": "dread",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 恐惧；v. 害怕"
+ },
+ {
+  "w": "frighten",
+  "disp": "frighten",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使惊吓；使惊恐"
+ },
+ {
+  "w": "turbulent",
+  "disp": "turbulent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 狂暴的；动荡的"
+ },
+ {
+  "w": "turmoil",
+  "disp": "turmoil",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 混乱；动荡"
+ },
+ {
+  "w": "scenario",
+  "disp": "scenario",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 可能发生的情况；设想"
+ },
+ {
+  "w": "occasion",
+  "disp": "occasion",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 特殊场合；时机"
+ },
+ {
+  "w": "boundary",
+  "disp": "boundary",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 分界线；边界"
+ },
+ {
+  "w": "rein",
+  "disp": "rein",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 缰绳；控制"
+ },
+ {
+  "w": "contest",
+  "disp": "contests",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 比赛；竞赛"
+ },
+ {
+  "w": "harvest",
+  "disp": "harvest",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 收成；v. 收割"
+ },
+ {
+  "w": "contend",
+  "disp": "contend",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 竞争；主张"
+ },
+ {
+  "w": "rival",
+  "disp": "rival",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 敌手；v. 相匹敌"
+ },
+ {
+  "w": "spoil",
+  "disp": "spoil",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 搞糟；宠坏；变质"
+ },
+ {
+  "w": "spring",
+  "disp": "spring",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 跳；n. 春天；弹簧"
+ },
+ {
+  "w": "competitor",
+  "disp": "competitor",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 竞争者"
+ },
+ {
+  "w": "enemy",
+  "disp": "enemy",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 敌人；敌军"
+ },
+ {
+  "w": "strategy",
+  "disp": "strategy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 策略；战略"
+ },
+ {
+  "w": "tactic",
+  "disp": "tactics",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 战术；策略"
+ },
+ {
+  "w": "bitter",
+  "disp": "bitter",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 有苦味的；痛苦的；刺痛的"
+ },
+ {
+  "w": "clever",
+  "disp": "clever",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 聪明的"
+ },
+ {
+  "w": "manoeuvre",
+  "disp": "manoeuvre",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 机动；v. 移动；操控"
+ },
+ {
+  "w": "blueprint",
+  "disp": "blueprint",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 蓝图"
+ },
+ {
+  "w": "warn",
+  "disp": "warn",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 警告；告诫；提醒注意"
+ },
+ {
+  "w": "compel",
+  "disp": "compel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 强迫；胁迫"
+ },
+ {
+  "w": "oblige",
+  "disp": "obliged",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 有义务；迫使"
+ },
+ {
+  "w": "order",
+  "disp": "order",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 订购；命令；n. 顺序"
+ },
+ {
+  "w": "protest",
+  "disp": "protest",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 抗议活动；v. 抗议"
+ },
+ {
+  "w": "refute",
+  "disp": "refute",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 驳斥；反驳；批驳"
+ },
+ {
+  "w": "might",
+  "disp": "might",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 强大力量；v. 可能；过去式词形"
+ },
+ {
+  "w": "force",
+  "disp": "force",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 力量；武力；v. 强迫"
+ },
+ {
+  "w": "gentle",
+  "disp": "gentle",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 温和的；文雅的；温柔的"
+ },
+ {
+  "w": "can",
+  "disp": "can",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 金属罐；v. 能"
+ },
+ {
+  "w": "impair",
+  "disp": "impair",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 损害；削弱"
+ },
+ {
+  "w": "comfort",
+  "disp": "comfort",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 安慰；舒服；安逸"
+ },
+ {
+  "w": "event",
+  "disp": "event",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 事件；大事；比赛项目"
+ },
+ {
+  "w": "worthy",
+  "disp": "worthy",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 值得…的；值得尊敬的"
+ },
+ {
+  "w": "happen",
+  "disp": "happen",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 发生"
+ },
+ {
+  "w": "occur",
+  "disp": "occur",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 发生；出现"
+ },
+ {
+  "w": "savage",
+  "disp": "savage",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 野性的"
+ },
+ {
+  "w": "reckless",
+  "disp": "reckless",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 鲁莽的；不计后果的"
+ },
+ {
+  "w": "foul",
+  "disp": "foul",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 恶劣的；肮脏恶臭的；v. 对…犯规"
+ },
+ {
+  "w": "evil",
+  "disp": "evil",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 恶毒的；n. 邪恶；罪恶"
+ },
+ {
+  "w": "devil",
+  "disp": "devil",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 魔鬼；恶魔"
+ },
+ {
+  "w": "punishment",
+  "disp": "punishment",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 处罚；惩罚"
+ },
+ {
+  "w": "execute",
+  "disp": "execute",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 执行"
+ },
+ {
+  "w": "hang",
+  "disp": "hang",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 悬挂；吊；n. 悬挂"
+ },
+ {
+  "w": "sacrifice",
+  "disp": "sacrifice",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 牺牲；n. 牺牲（品）"
+ },
+ {
+  "w": "casualty",
+  "disp": "casualty",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 受伤的人"
+ },
+ {
+  "w": "bury",
+  "disp": "bury",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 埋葬"
+ },
+ {
+  "w": "funeral",
+  "disp": "funeral",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 葬礼"
+ },
+ {
+  "w": "grave",
+  "disp": "grave",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 坟墓；adj. 严重的"
+ },
+ {
+  "w": "plain",
+  "disp": "plain",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 平原；adj. 简单明了的；朴素的"
+ },
+ {
+  "w": "tomb",
+  "disp": "tomb",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 坟墓；冢"
+ },
+ {
+  "w": "hell",
+  "disp": "hell",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 地狱"
+ },
+ {
+  "w": "maritime",
+  "disp": "maritime",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 海的；海运的"
+ },
+ {
+  "w": "naval",
+  "disp": "naval",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 海军的"
+ },
+ {
+  "w": "fleet",
+  "disp": "fleet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 舰队；船队；机群"
+ },
+ {
+  "w": "troop",
+  "disp": "troop",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 部队（复）"
+ },
+ {
+  "w": "rough",
+  "disp": "rough",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 粗糙的；粗略的"
+ },
+ {
+  "w": "landing",
+  "disp": "landing",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 着陆；降落；楼梯平台"
+ },
+ {
+  "w": "hover",
+  "disp": "hover",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 盘旋"
+ },
+ {
+  "w": "proceed",
+  "disp": "proceed",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 继续进行；进行"
+ },
+ {
+  "w": "truck",
+  "disp": "truck",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 卡车"
+ },
+ {
+  "w": "nuclear",
+  "disp": "nuclear",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 原子能的；核能的"
+ },
+ {
+  "w": "devastate",
+  "disp": "devastate",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 毁灭；摧毁"
+ },
+ {
+  "w": "adventure",
+  "disp": "adventure",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 冒险"
+ },
+ {
+  "w": "peril",
+  "disp": "peril",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 危险"
+ },
+ {
+  "w": "catastrophe",
+  "disp": "catastrophe",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 灾难"
+ },
+ {
+  "w": "collapse",
+  "disp": "collapse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 倒塌；崩溃；n. 暴跌"
+ },
+ {
+  "w": "torture",
+  "disp": "torture",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 酷刑；v. 折磨"
+ },
+ {
+  "w": "humiliate",
+  "disp": "humiliate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使屈辱；使丢脸；使蒙羞"
+ },
+ {
+  "w": "damage",
+  "disp": "damage",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 损害；破坏；n. 破损"
+ },
+ {
+  "w": "harmful",
+  "disp": "harmful",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 有害的"
+ },
+ {
+  "w": "mislead",
+  "disp": "mislead",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 误导"
+ },
+ {
+  "w": "disturb",
+  "disp": "disturb",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 打扰；妨碍"
+ },
+ {
+  "w": "interfere",
+  "disp": "interfere",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 干扰"
+ },
+ {
+  "w": "interrupt",
+  "disp": "interrupt",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 打断；打扰；打岔"
+ },
+ {
+  "w": "retreat",
+  "disp": "retreat",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 撤退；n. 静居处"
+ },
+ {
+  "w": "shrink",
+  "disp": "shrink",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 收缩"
+ },
+ {
+  "w": "withdraw",
+  "disp": "withdraw",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 提取；撤回"
+ },
+ {
+  "w": "withstand",
+  "disp": "withstand",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 经受住；抵挡"
+ },
+ {
+  "w": "compromise",
+  "disp": "compromise",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 妥协；v. 危及"
+ },
+ {
+  "w": "surrender",
+  "disp": "surrender",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 投降"
+ },
+ {
+  "w": "quit",
+  "disp": "quit",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 停止；辞职；离开"
+ },
+ {
+  "w": "forgo",
+  "disp": "forgo",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 弃绝；摒绝"
+ },
+ {
+  "w": "rid",
+  "disp": "rid",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 摆脱；除去"
+ },
+ {
+  "w": "defend",
+  "disp": "defend",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 防御；辩护"
+ },
+ {
+  "w": "safeguard",
+  "disp": "safeguard",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 保卫；保护"
+ },
+ {
+  "w": "resist",
+  "disp": "resist",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 抵制；抵抗"
+ },
+ {
+  "w": "capture",
+  "disp": "capture",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 捕捉；记录；吸引"
+ },
+ {
+  "w": "victory",
+  "disp": "victory",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 胜利"
+ },
+ {
+  "w": "triumph",
+  "disp": "triumph",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 胜利"
+ },
+ {
+  "w": "conquer",
+  "disp": "conquer",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 征服；克服"
+ },
+ {
+  "w": "monument",
+  "disp": "monument",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 历史遗迹；纪念碑；不朽作品"
+ },
+ {
+  "w": "tablet",
+  "disp": "tablet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 石碑；（刻有文字的）匾；平板电脑"
+ },
+ {
+  "w": "statue",
+  "disp": "statue",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 雕像；雕塑"
+ },
+ {
+  "w": "bronze",
+  "disp": "bronze",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 青铜；青铜色"
+ },
+ {
+  "w": "medal",
+  "disp": "medal",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 奖章；勋章"
+ },
+ {
+  "w": "honour",
+  "disp": "honour",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 荣誉；荣幸；v. 尊敬"
+ },
+ {
+  "w": "glorious",
+  "disp": "glorious",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 辉煌的"
+ },
+ {
+  "w": "devote",
+  "disp": "devote",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 投入"
+ },
+ {
+  "w": "owe",
+  "disp": "owe",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 欠；归功于"
+ },
+ {
+  "w": "patrol",
+  "disp": "patrols",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 巡逻；v. 巡逻"
+ },
+ {
+  "w": "camouflage",
+  "disp": "camouflage",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 伪装；掩饰"
+ },
+ {
+  "w": "burrow",
+  "disp": "burrows",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 地洞；v. 挖洞；钻进"
+ },
+ {
+  "w": "spy",
+  "disp": "spy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 间谍；v. 秘密侦察"
+ },
+ {
+  "w": "midnight",
+  "disp": "midnight",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 午夜；子夜"
+ },
+ {
+  "w": "scout",
+  "disp": "scouts",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 侦察兵；v. 搜寻"
+ },
+ {
+  "w": "soldier",
+  "disp": "soldier",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 士兵；军人"
+ },
+ {
+  "w": "veteran",
+  "disp": "veteran",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 老兵；退伍军人；adj. 老练的"
+ },
+ {
+  "w": "polytechnic",
+  "disp": "polytechnic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 工艺专科学院；理工专科学院"
+ },
+ {
+  "w": "mechanic",
+  "disp": "mechanic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 机修工"
+ },
+ {
+  "w": "innovate",
+  "disp": "innovate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 改革；创新"
+ },
+ {
+  "w": "breakthrough",
+  "disp": "breakthrough",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 突破；突破性进展"
+ },
+ {
+  "w": "gizmo",
+  "disp": "gizmo",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小发明"
+ },
+ {
+  "w": "clerk",
+  "disp": "clerk",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 职员；店员"
+ },
+ {
+  "w": "patent",
+  "disp": "patents",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 专利"
+ },
+ {
+  "w": "disclose",
+  "disp": "disclose",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 透露"
+ },
+ {
+  "w": "uncover",
+  "disp": "uncover",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 揭开；揭露"
+ },
+ {
+  "w": "domain",
+  "disp": "domain",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 领域"
+ },
+ {
+  "w": "realm",
+  "disp": "realm",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 王国；领域"
+ },
+ {
+  "w": "foundation",
+  "disp": "foundation",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 基金（会）；基础；创建"
+ },
+ {
+  "w": "utilise",
+  "disp": "utilise",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 利用"
+ },
+ {
+  "w": "tester",
+  "disp": "tester",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 测试员；试验员"
+ },
+ {
+  "w": "trial",
+  "disp": "trial",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 审判；试验；试用"
+ },
+ {
+  "w": "device",
+  "disp": "device",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 设备；装置；手段"
+ },
+ {
+  "w": "kitchen",
+  "disp": "kitchen",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 厨房"
+ },
+ {
+  "w": "appliance",
+  "disp": "appliance",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 家用电器"
+ },
+ {
+  "w": "facility",
+  "disp": "facilities",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 设施；资质"
+ },
+ {
+  "w": "equipment",
+  "disp": "equipment",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 设备；装备"
+ },
+ {
+  "w": "instrument",
+  "disp": "instrument",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 仪器；工具"
+ },
+ {
+  "w": "tool",
+  "disp": "tool",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 工具；刀具；器具"
+ },
+ {
+  "w": "brass",
+  "disp": "brass",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 黄铜制品"
+ },
+ {
+  "w": "gauge",
+  "disp": "gauge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 测量仪器；规格；评估"
+ },
+ {
+  "w": "muddy",
+  "disp": "muddy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 泥泞的；模糊不清的"
+ },
+ {
+  "w": "steady",
+  "disp": "steady",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 稳定的；v. 使稳住"
+ },
+ {
+  "w": "calculate",
+  "disp": "calculate",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 计算；推测"
+ },
+ {
+  "w": "compute",
+  "disp": "compute",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 估算；计算"
+ },
+ {
+  "w": "paper",
+  "disp": "paper",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 论文；纸；报纸"
+ },
+ {
+  "w": "count",
+  "disp": "count",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 计算；看作；n. 计数"
+ },
+ {
+  "w": "estimate",
+  "disp": "estimate",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 估算；n. 估价"
+ },
+ {
+  "w": "assess",
+  "disp": "assess",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 评估"
+ },
+ {
+  "w": "spare",
+  "disp": "spare",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 多余的；v. 抽出"
+ },
+ {
+  "w": "accessory",
+  "disp": "accessory",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 配件"
+ },
+ {
+  "w": "byproduct",
+  "disp": "byproduct",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 副产品；意外结果"
+ },
+ {
+  "w": "auxiliary",
+  "disp": "auxiliary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 辅助的；n. 辅助物"
+ },
+ {
+  "w": "tube",
+  "disp": "tube",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 管子；地铁"
+ },
+ {
+  "w": "versatile",
+  "disp": "versatile",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 多方面的；有多种技能的"
+ },
+ {
+  "w": "attach",
+  "disp": "attach",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 附加；系上"
+ },
+ {
+  "w": "string",
+  "disp": "string",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 细绳；线"
+ },
+ {
+  "w": "belong",
+  "disp": "belong",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 属于"
+ },
+ {
+  "w": "optics",
+  "disp": "optics",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 光学"
+ },
+ {
+  "w": "microscope",
+  "disp": "microscope",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 显微镜"
+ },
+ {
+  "w": "dirt",
+  "disp": "dirt",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 污垢；泥土"
+ },
+ {
+  "w": "lens",
+  "disp": "lens",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 透镜；镜片"
+ },
+ {
+  "w": "radar",
+  "disp": "radar",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 雷达"
+ },
+ {
+  "w": "echo",
+  "disp": "echo",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 回声；v. 回响"
+ },
+ {
+  "w": "sensor",
+  "disp": "sensor",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 传感器"
+ },
+ {
+  "w": "multimedia",
+  "disp": "multimedia",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 多媒体的；n. 多媒体"
+ },
+ {
+  "w": "network",
+  "disp": "network",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 网络；网路；网状物"
+ },
+ {
+  "w": "round",
+  "disp": "round",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 回合；adj. 圆的；prep./adv. 在…周围"
+ },
+ {
+  "w": "dial",
+  "disp": "dial",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 刻度盘；v. 拨"
+ },
+ {
+  "w": "laptop",
+  "disp": "laptop",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 便携式电脑；笔记本电脑"
+ },
+ {
+  "w": "loudspeaker",
+  "disp": "loudspeaker",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 扬声器；喇叭"
+ },
+ {
+  "w": "microphone",
+  "disp": "microphone",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 麦克风"
+ },
+ {
+  "w": "cassette",
+  "disp": "cassette",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 盒式磁带"
+ },
+ {
+  "w": "tape",
+  "disp": "tape",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 磁带；胶带"
+ },
+ {
+  "w": "tight",
+  "disp": "tight",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 紧的"
+ },
+ {
+  "w": "binary",
+  "disp": "binary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 二进位的；二元的"
+ },
+ {
+  "w": "wireless",
+  "disp": "wireless",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 无线的"
+ },
+ {
+  "w": "high-definition",
+  "disp": "high-definition",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 高清的"
+ },
+ {
+  "w": "pond",
+  "disp": "pond",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 池塘"
+ },
+ {
+  "w": "audio",
+  "disp": "audio",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 音频的；声音的"
+ },
+ {
+  "w": "vision",
+  "disp": "vision",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 想象；视力；视野"
+ },
+ {
+  "w": "fantasy",
+  "disp": "fantasy",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 幻想"
+ },
+ {
+  "w": "science fiction",
+  "disp": "Science fiction",
+  "need_syn": true,
+  "need_col": true,
+  "m": "phrase. 科幻作品"
+ },
+ {
+  "w": "pump",
+  "disp": "pump",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 泵；v. 打气"
+ },
+ {
+  "w": "generator",
+  "disp": "generator",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 发电机；发生器"
+ },
+ {
+  "w": "plastic",
+  "disp": "plastic",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 塑料的；n. 塑料"
+ },
+ {
+  "w": "gear",
+  "disp": "gear",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 齿轮；排挡；用具"
+ },
+ {
+  "w": "pivot",
+  "disp": "pivot",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 以…为中心；n. 中心"
+ },
+ {
+  "w": "hydraulic",
+  "disp": "hydraulic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 液压的；流体的；利用液体压力的"
+ },
+ {
+  "w": "drainage",
+  "disp": "drainage",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 排水系统；排水"
+ },
+ {
+  "w": "sewage",
+  "disp": "sewage",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 污水；污物；下水道"
+ },
+ {
+  "w": "ventilation",
+  "disp": "ventilation",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 通风"
+ },
+ {
+  "w": "shed",
+  "disp": "shed",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 棚屋；v. 使脱落；去除"
+ },
+ {
+  "w": "compress",
+  "disp": "compressed",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 压缩"
+ },
+ {
+  "w": "condense",
+  "disp": "condensed",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. （使）冷凝"
+ },
+ {
+  "w": "refine",
+  "disp": "refined",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 精炼；改进"
+ },
+ {
+  "w": "simplify",
+  "disp": "simplified",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 简化"
+ },
+ {
+  "w": "purify",
+  "disp": "purified",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 净化"
+ },
+ {
+  "w": "filter",
+  "disp": "filtered",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 过滤；n. 过滤器"
+ },
+ {
+  "w": "distil",
+  "disp": "distilled",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 蒸馏；用蒸馏法制造；提炼"
+ },
+ {
+  "w": "prototype",
+  "disp": "prototype",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 原型"
+ },
+ {
+  "w": "framework",
+  "disp": "framework",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 骨架；支架；框架"
+ },
+ {
+  "w": "aspect",
+  "disp": "aspect",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 方面"
+ },
+ {
+  "w": "phase",
+  "disp": "phase",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 阶段；时期；v. 分阶段进行"
+ },
+ {
+  "w": "operate",
+  "disp": "operate",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 运转；操作；施行手术"
+ },
+ {
+  "w": "transform",
+  "disp": "transform",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 转变"
+ },
+ {
+  "w": "ditch",
+  "disp": "ditch",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 沟；渠"
+ },
+ {
+  "w": "convert",
+  "disp": "convert",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 转换；转变；变换"
+ },
+ {
+  "w": "alter",
+  "disp": "alter",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 改动；变更"
+ },
+ {
+  "w": "shift",
+  "disp": "shift",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 转移；换（挡）；n. 轮班"
+ },
+ {
+  "w": "dusk",
+  "disp": "dusk",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 黄昏"
+ },
+ {
+  "w": "crew",
+  "disp": "crew",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 全体船员；全体人员"
+ },
+ {
+  "w": "turn",
+  "disp": "turn",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 转动；转变；n. 轮到的机会"
+ },
+ {
+  "w": "thirsty",
+  "disp": "thirsty",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 口渴的；渴望的"
+ },
+ {
+  "w": "pinpoint",
+  "disp": "pinpoint",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 精准定位"
+ },
+ {
+  "w": "precise",
+  "disp": "precise",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 准确的；确切的"
+ },
+ {
+  "w": "error",
+  "disp": "error",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 错误；差错"
+ },
+ {
+  "w": "flaw",
+  "disp": "flaw",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 瑕疵；缺陷；裂痕"
+ },
+ {
+  "w": "welcome home",
+  "disp": "Welcome home",
+  "need_syn": true,
+  "need_col": true,
+  "m": "phrase. 欢迎回家"
+ },
+ {
+  "w": "fault",
+  "disp": "fault",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 故障；缺陷；过错"
+ },
+ {
+  "w": "stumble",
+  "disp": "stumble",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 绊倒；绊跌；n. 绊倒"
+ },
+ {
+  "w": "contingency",
+  "disp": "contingency",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 偶然事故；意外事件"
+ },
+ {
+  "w": "circumstance",
+  "disp": "circumstances",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 情况"
+ },
+ {
+  "w": "pioneer",
+  "disp": "pioneer",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 先驱者"
+ },
+ {
+  "w": "prophet",
+  "disp": "prophet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 预言者；先知"
+ },
+ {
+  "w": "herald",
+  "disp": "herald",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 传令官"
+ },
+ {
+  "w": "heir",
+  "disp": "heir",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 继承人"
+ },
+ {
+  "w": "successor",
+  "disp": "successor",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 接班人；继任人"
+ },
+ {
+  "w": "generation",
+  "disp": "generations",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 代；产生"
+ },
+ {
+  "w": "surname",
+  "disp": "surname",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 姓"
+ },
+ {
+  "w": "list",
+  "disp": "list",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 表；名单；v. 列出"
+ },
+ {
+  "w": "pupil",
+  "disp": "pupil",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小学生"
+ },
+ {
+  "w": "spouse",
+  "disp": "spouse",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 配偶"
+ },
+ {
+  "w": "grandfather",
+  "disp": "grandfather",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 祖父；爷爷"
+ },
+ {
+  "w": "father-in-law",
+  "disp": "father-in-law",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 岳父；公公"
+ },
+ {
+  "w": "sibling",
+  "disp": "sibling",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 兄弟姐妹"
+ },
+ {
+  "w": "cousin",
+  "disp": "cousin",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 表兄弟（或姐妹）；堂兄弟（或姐妹）"
+ },
+ {
+  "w": "nephew",
+  "disp": "nephew",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 侄子"
+ },
+ {
+  "w": "niece",
+  "disp": "niece",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 侄女"
+ },
+ {
+  "w": "embryo",
+  "disp": "embryos",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 胚；胚胎"
+ },
+ {
+  "w": "infant",
+  "disp": "infant",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 婴儿；adj. 初期的"
+ },
+ {
+  "w": "orphan",
+  "disp": "orphan",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 孤儿；失去生母的幼小动物"
+ },
+ {
+  "w": "youngster",
+  "disp": "youngster",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 年轻人"
+ },
+ {
+  "w": "youth",
+  "disp": "youth",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 青春；年轻；青年"
+ },
+ {
+  "w": "gang",
+  "disp": "gang",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 一伙；v. 合伙攻击"
+ },
+ {
+  "w": "teenage",
+  "disp": "teenage",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 青少年的；十来岁的"
+ },
+ {
+  "w": "adolescence",
+  "disp": "adolescence",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 青春期"
+ },
+ {
+  "w": "kin",
+  "disp": "kin",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 亲属；亲戚"
+ },
+ {
+  "w": "folk",
+  "disp": "folk",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 人们；人民；adj. 民间的"
+ },
+ {
+  "w": "relative",
+  "disp": "relative",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 亲戚；adj. 相对的；相关联的"
+ },
+ {
+  "w": "intimate",
+  "disp": "intimate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 亲密的；私密的"
+ },
+ {
+  "w": "dear",
+  "disp": "dear",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 亲爱的；昂贵的；宝贵的"
+ },
+ {
+  "w": "darling",
+  "disp": "darling",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 心爱的人；adj. 亲爱的"
+ },
+ {
+  "w": "lover",
+  "disp": "lover",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 爱好者；情人；爱人"
+ },
+ {
+  "w": "beloved",
+  "disp": "beloved",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 钟爱的"
+ },
+ {
+  "w": "madam",
+  "disp": "Madam",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 夫人"
+ },
+ {
+  "w": "hostess",
+  "disp": "hostess",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 女主人；女招待"
+ },
+ {
+  "w": "stern",
+  "disp": "stern",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 船尾"
+ },
+ {
+  "w": "landlady",
+  "disp": "landlady",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 女房东"
+ },
+ {
+  "w": "mistress",
+  "disp": "mistress",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 女主人；情妇；女教师（英）"
+ },
+ {
+  "w": "housewife",
+  "disp": "housewife",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 家庭主妇"
+ },
+ {
+  "w": "widow",
+  "disp": "widow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 寡妇；遗孀"
+ },
+ {
+  "w": "maid",
+  "disp": "maid",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 女仆；侍女"
+ },
+ {
+  "w": "maiden",
+  "disp": "maiden",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 初次的"
+ },
+ {
+  "w": "household",
+  "disp": "household",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 家庭；adj. 家庭的"
+ },
+ {
+  "w": "chore",
+  "disp": "chore",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 杂活；繁重工作"
+ },
+ {
+  "w": "host",
+  "disp": "host",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 主持人；主人；v. 主持"
+ },
+ {
+  "w": "landlord",
+  "disp": "landlord",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 房东"
+ },
+ {
+  "w": "tenant",
+  "disp": "tenant",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 房客；租户；佃户"
+ },
+ {
+  "w": "guest",
+  "disp": "guest",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 客人；宾客"
+ },
+ {
+  "w": "customer",
+  "disp": "customer",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 客户；顾客；主顾"
+ },
+ {
+  "w": "client",
+  "disp": "client",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 客户"
+ },
+ {
+  "w": "encounter",
+  "disp": "encounter",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 遭遇；v. 遇到"
+ },
+ {
+  "w": "chase",
+  "disp": "chase",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 追逐；n. 追逐"
+ },
+ {
+  "w": "miss",
+  "disp": "miss",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 错过；想念；n. 小姐"
+ },
+ {
+  "w": "appointment",
+  "disp": "appointment",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 约会；约定；任命"
+ },
+ {
+  "w": "accompany",
+  "disp": "accompany",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 伴随"
+ },
+ {
+  "w": "dependent",
+  "disp": "dependent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 依靠的；依赖的；n. 受赡养者"
+ },
+ {
+  "w": "propose",
+  "disp": "propose",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 提议；计划"
+ },
+ {
+  "w": "engagement",
+  "disp": "engagement",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 密切关系；订婚"
+ },
+ {
+  "w": "honeymoon",
+  "disp": "honeymoon",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 蜜月"
+ },
+ {
+  "w": "divorce",
+  "disp": "divorce",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 离婚；v. 和…离婚"
+ },
+ {
+  "w": "single",
+  "disp": "single",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 单一的；单独的；单身的"
+ },
+ {
+  "w": "sole",
+  "disp": "sole",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 唯一的；n. 鞋底"
+ },
+ {
+  "w": "respective",
+  "disp": "respective",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 各自的；各个的"
+ },
+ {
+  "w": "individual",
+  "disp": "individual",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 个人；adj. 个别的；单独的"
+ },
+ {
+  "w": "commuter",
+  "disp": "commuter",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 通勤者；经常往返者"
+ },
+ {
+  "w": "neighbourhood",
+  "disp": "neighbourhood",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 街坊；四邻；附近地区"
+ },
+ {
+  "w": "boss",
+  "disp": "boss",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 老板"
+ },
+ {
+  "w": "supervisor",
+  "disp": "supervisor",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 主管人"
+ },
+ {
+  "w": "subordinate",
+  "disp": "subordinate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 下属；adj. 次要的"
+ },
+ {
+  "w": "partner",
+  "disp": "partner",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 合伙人；搭档"
+ },
+ {
+  "w": "mate",
+  "disp": "mate",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 交配"
+ },
+ {
+  "w": "colleague",
+  "disp": "colleague",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 同事"
+ },
+ {
+  "w": "comrade",
+  "disp": "comrade",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 同志；伙伴"
+ },
+ {
+  "w": "acquaintance",
+  "disp": "acquaintance",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 认识的人；相识"
+ },
+ {
+  "w": "affection",
+  "disp": "affection",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 钟爱；喜爱"
+ },
+ {
+  "w": "stranger",
+  "disp": "stranger",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 陌生人；新来者；adj. 比较级词形"
+ },
+ {
+  "w": "apprentice",
+  "disp": "apprentice",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 学徒；徒弟"
+ },
+ {
+  "w": "deputy",
+  "disp": "deputy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 代理人；副手"
+ },
+ {
+  "w": "hero",
+  "disp": "hero",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 英雄；男主角"
+ },
+ {
+  "w": "heroine",
+  "disp": "heroine",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 女主角"
+ },
+ {
+  "w": "drama",
+  "disp": "drama",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 戏剧；话剧"
+ },
+ {
+  "w": "actress",
+  "disp": "actress",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 女演员"
+ },
+ {
+  "w": "chancellor",
+  "disp": "chancellor",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大臣；总理"
+ },
+ {
+  "w": "commander",
+  "disp": "commander",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 指挥官"
+ },
+ {
+  "w": "director",
+  "disp": "director",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 主任；导演；董事"
+ },
+ {
+  "w": "proponent",
+  "disp": "proponent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 支持者；拥护者；辩护者"
+ },
+ {
+  "w": "committee",
+  "disp": "committee",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 委员会"
+ },
+ {
+  "w": "council",
+  "disp": "council",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 理事会；委员会；议会"
+ },
+ {
+  "w": "delegate",
+  "disp": "delegate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 代表；v. 委派"
+ },
+ {
+  "w": "consultant",
+  "disp": "consultant",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 顾问"
+ },
+ {
+  "w": "veterinary",
+  "disp": "veterinary",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 兽医的"
+ },
+ {
+  "w": "counsellor",
+  "disp": "counsellor",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 辅导员"
+ },
+ {
+  "w": "solicitor",
+  "disp": "solicitor",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 事务律师"
+ },
+ {
+  "w": "attorney",
+  "disp": "attorney",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 律师；辩护律师；代理人"
+ },
+ {
+  "w": "umpire",
+  "disp": "umpire",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 裁判员；仲裁人"
+ },
+ {
+  "w": "cashier",
+  "disp": "cashier",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 出纳员，收银员；v. 革除（军职）"
+ },
+ {
+  "w": "fireman",
+  "disp": "fireman",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 消防队员"
+ },
+ {
+  "w": "nurse",
+  "disp": "nurse",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 护士"
+ },
+ {
+  "w": "bound",
+  "disp": "bound",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 一定会；密切相关的；有义务的"
+ },
+ {
+  "w": "gardener",
+  "disp": "gardener",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 园丁"
+ },
+ {
+  "w": "barber",
+  "disp": "barber",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 理发师"
+ },
+ {
+  "w": "haircut",
+  "disp": "haircuts",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 发型"
+ },
+ {
+  "w": "fisherman",
+  "disp": "fisherman",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 渔夫"
+ },
+ {
+  "w": "butcher",
+  "disp": "butcher",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 屠夫；v. 屠宰；糟蹋"
+ },
+ {
+  "w": "groom",
+  "disp": "groom",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 梳理毛发"
+ },
+ {
+  "w": "hostage",
+  "disp": "hostage",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 人质"
+ },
+ {
+  "w": "toil",
+  "disp": "toil",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 苦工；v. 苦干"
+ },
+ {
+  "w": "beggar",
+  "disp": "beggar",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 乞丐"
+ },
+ {
+  "w": "slave",
+  "disp": "slave",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 奴隶"
+ },
+ {
+  "w": "coward",
+  "disp": "coward",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 懦夫；adj. 胆小的"
+ }
+]

@@ -1,0 +1,3376 @@
+[
+ {
+  "w": "stuff",
+  "disp": "stuff",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 东西；v. 塞"
+ },
+ {
+  "w": "merchandise",
+  "disp": "merchandise",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 商品"
+ },
+ {
+  "w": "souvenir",
+  "disp": "souvenir",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 纪念品；纪念物"
+ },
+ {
+  "w": "clay",
+  "disp": "clay",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 黏土；粘土"
+ },
+ {
+  "w": "artifact",
+  "disp": "artifact",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 人工制品；手工艺品；加工品"
+ },
+ {
+  "w": "raw",
+  "disp": "raw",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 未加工处理过的；生的"
+ },
+ {
+  "w": "crude",
+  "disp": "crude",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 简陋的"
+ },
+ {
+  "w": "gentle",
+  "disp": "gentle",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 温和的；文雅的；温柔的"
+ },
+ {
+  "w": "step",
+  "disp": "step",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 步骤；v. 踩"
+ },
+ {
+  "w": "necessity",
+  "disp": "necessity",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 必需品；需要"
+ },
+ {
+  "w": "festival",
+  "disp": "festival",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 节日"
+ },
+ {
+  "w": "outfit",
+  "disp": "outfit",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 整套服装"
+ },
+ {
+  "w": "kit",
+  "disp": "kit",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 成套工具；装备"
+ },
+ {
+  "w": "utensil",
+  "disp": "utensil",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 用具；器具"
+ },
+ {
+  "w": "rubbish",
+  "disp": "rubbish",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 垃圾；废物"
+ },
+ {
+  "w": "reuse",
+  "disp": "reuse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 再使用"
+ },
+ {
+  "w": "junk",
+  "disp": "junk",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 废旧杂物；无价值的东西"
+ },
+ {
+  "w": "landfill",
+  "disp": "landfill",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 垃圾填埋（场）；垃圾堆填（区）"
+ },
+ {
+  "w": "sewerage",
+  "disp": "sewerage",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 排水系统；污水"
+ },
+ {
+  "w": "dust",
+  "disp": "dust",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 粉尘；尘埃"
+ },
+ {
+  "w": "mild",
+  "disp": "mild",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 温和的；轻微的"
+ },
+ {
+  "w": "detergent",
+  "disp": "detergent",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 洗涤剂；洗衣粉；去垢剂"
+ },
+ {
+  "w": "lotion",
+  "disp": "lotion",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 乳液"
+ },
+ {
+  "w": "tub",
+  "disp": "tub",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 桶；盆；浴盆"
+ },
+ {
+  "w": "pull",
+  "disp": "pull",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 拉；拖；拔"
+ },
+ {
+  "w": "plug",
+  "disp": "plug",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 塞子；v. 插上"
+ },
+ {
+  "w": "tap",
+  "disp": "tap",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 水龙头；轻拍；v. 利用"
+ },
+ {
+  "w": "frame",
+  "disp": "frame",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 框架；v. 表达；陷害"
+ },
+ {
+  "w": "pipe",
+  "disp": "pipe",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 管道；烟斗"
+ },
+ {
+  "w": "hollow",
+  "disp": "hollow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 中空的；空洞的"
+ },
+ {
+  "w": "tube",
+  "disp": "tube",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 管子；地铁"
+ },
+ {
+  "w": "mop",
+  "disp": "mop",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 拖把；n. 乱蓬蓬的头发"
+ },
+ {
+  "w": "straw",
+  "disp": "straw",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 稻草；吸管"
+ },
+ {
+  "w": "broom",
+  "disp": "broom",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 扫帚"
+ },
+ {
+  "w": "mattress",
+  "disp": "mattress",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 褥垫；床垫"
+ },
+ {
+  "w": "carpet",
+  "disp": "carpet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 地毯"
+ },
+ {
+  "w": "rug",
+  "disp": "rug",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小地毯；垫子"
+ },
+ {
+  "w": "mat",
+  "disp": "mat",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 垫子；席子"
+ },
+ {
+  "w": "flat",
+  "disp": "flat",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 公寓；adj. 平坦的"
+ },
+ {
+  "w": "cushion",
+  "disp": "cushion",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 靠垫；软垫；缓冲物"
+ },
+ {
+  "w": "feather",
+  "disp": "feather",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 羽毛"
+ },
+ {
+  "w": "pad",
+  "disp": "pad",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 垫；便笺簿；v. 放轻脚步走"
+ },
+ {
+  "w": "blanket",
+  "disp": "blanket",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 毛毯；厚的覆盖物；adj. 包括所有的"
+ },
+ {
+  "w": "quilt",
+  "disp": "quilt",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 被褥；被子"
+ },
+ {
+  "w": "pillow",
+  "disp": "pillow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 枕头"
+ },
+ {
+  "w": "sponge",
+  "disp": "sponge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 海绵；海绵动物"
+ },
+ {
+  "w": "towel",
+  "disp": "towel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 毛巾；手巾"
+ },
+ {
+  "w": "staple",
+  "disp": "staple",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 订书钉；主食；adj. 主要的"
+ },
+ {
+  "w": "nail",
+  "disp": "nail",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 钉子"
+ },
+ {
+  "w": "razor",
+  "disp": "razor",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 剃须刀；刮脸刀"
+ },
+ {
+  "w": "rough",
+  "disp": "rough",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 粗糙的；粗略的"
+ },
+ {
+  "w": "shave",
+  "disp": "shaved",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 刮；剃"
+ },
+ {
+  "w": "smooth",
+  "disp": "smooth",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 平滑的；平坦的；v. 使平滑"
+ },
+ {
+  "w": "fuse",
+  "disp": "fuse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 保险丝；v. 结合"
+ },
+ {
+  "w": "cable",
+  "disp": "cable",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 电缆；钢索"
+ },
+ {
+  "w": "cord",
+  "disp": "cord",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 电线；细绳；绳索"
+ },
+ {
+  "w": "strand",
+  "disp": "strand",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 缕；v. 使滞留"
+ },
+ {
+  "w": "candle",
+  "disp": "candle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 蜡烛"
+ },
+ {
+  "w": "wax",
+  "disp": "wax",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 蜡；v. 给…上蜡"
+ },
+ {
+  "w": "paperback",
+  "disp": "paperback",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 平装书；平装本"
+ },
+ {
+  "w": "pamphlet",
+  "disp": "pamphlet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小册子"
+ },
+ {
+  "w": "tissue",
+  "disp": "tissue",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 纸巾；薄纸；n. 组织"
+ },
+ {
+  "w": "xerox",
+  "disp": "xerox",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 复印；n. 施乐复印机（商标名称）"
+ },
+ {
+  "w": "memorandum",
+  "disp": "memorandum",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 备忘录；便笺"
+ },
+ {
+  "w": "stationery",
+  "disp": "stationery",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 文具"
+ },
+ {
+  "w": "glue",
+  "disp": "glue",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 胶；胶水；v. 粘合"
+ },
+ {
+  "w": "ink",
+  "disp": "ink",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 墨水"
+ },
+ {
+  "w": "rubber",
+  "disp": "rubber",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 橡胶"
+ },
+ {
+  "w": "band",
+  "disp": "band",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 乐队；带子；一伙"
+ },
+ {
+  "w": "scissors",
+  "disp": "scissors",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 剪刀"
+ },
+ {
+  "w": "shear",
+  "disp": "shear",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 剪（羊毛）；剪（头发）"
+ },
+ {
+  "w": "round",
+  "disp": "round",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 回合；adj. 圆的；prep./adv. 在…周围"
+ },
+ {
+  "w": "rim",
+  "disp": "rim",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 边缘"
+ },
+ {
+  "w": "element",
+  "disp": "element",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 要素；元素；成分"
+ },
+ {
+  "w": "section",
+  "disp": "section",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 部分；章节；部门"
+ },
+ {
+  "w": "badge",
+  "disp": "badge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 徽章"
+ },
+ {
+  "w": "bolt",
+  "disp": "bolt",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 螺栓"
+ },
+ {
+  "w": "knob",
+  "disp": "knob",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 旋钮"
+ },
+ {
+  "w": "shutter",
+  "disp": "shutter",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 百叶窗；窗板；n. （照相机的）快门"
+ },
+ {
+  "w": "curtain",
+  "disp": "curtain",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 帷幕；窗帘"
+ },
+ {
+  "w": "pane",
+  "disp": "pane",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 一块窗玻璃"
+ },
+ {
+  "w": "opacity",
+  "disp": "opacity",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 不透明；费解；晦涩"
+ },
+ {
+  "w": "jar",
+  "disp": "jar",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 玻璃罐子"
+ },
+ {
+  "w": "barrel",
+  "disp": "barrel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 桶；枪管"
+ },
+ {
+  "w": "bucket",
+  "disp": "bucket",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 水桶"
+ },
+ {
+  "w": "pail",
+  "disp": "pail",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 桶；一桶之量"
+ },
+ {
+  "w": "phone",
+  "disp": "phone",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 电话；v. 打电话"
+ },
+ {
+  "w": "bell",
+  "disp": "bell",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 铃（声）；钟（声）"
+ },
+ {
+  "w": "spotlight",
+  "disp": "spotlight",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 聚光灯；v. 使公众注意"
+ },
+ {
+  "w": "paper",
+  "disp": "paper",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 论文；纸；报纸"
+ },
+ {
+  "w": "lantern",
+  "disp": "lantern",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 灯笼；提灯"
+ },
+ {
+  "w": "bulb",
+  "disp": "bulb",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 电灯泡"
+ },
+ {
+  "w": "flashlight",
+  "disp": "flashlight",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 手电筒；闪光灯"
+ },
+ {
+  "w": "refrigerator",
+  "disp": "refrigerator",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 冰箱"
+ },
+ {
+  "w": "fridge",
+  "disp": "fridge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 冰箱"
+ },
+ {
+  "w": "vacuum",
+  "disp": "vacuum",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 吸尘器；真空；v. 用真空吸尘器打扫"
+ },
+ {
+  "w": "hurdle",
+  "disp": "hurdle",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 跨栏；障碍；v. 克服"
+ },
+ {
+  "w": "fence",
+  "disp": "fence",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 栅栏；围栏；篱笆"
+ },
+ {
+  "w": "pedal",
+  "disp": "pedal",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 踏板；踩踏板"
+ },
+ {
+  "w": "shelf",
+  "disp": "shelf",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 架子"
+ },
+ {
+  "w": "climb",
+  "disp": "climb",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 攀爬；爬升"
+ },
+ {
+  "w": "ladder",
+  "disp": "ladder",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 梯子；阶梯"
+ },
+ {
+  "w": "painting",
+  "disp": "painting",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 绘画；油画；v. 刷油漆"
+ },
+ {
+  "w": "stool",
+  "disp": "stool",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 凳子；粪便"
+ },
+ {
+  "w": "umbrella",
+  "disp": "umbrella",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 伞；雨伞"
+ },
+ {
+  "w": "raincoat",
+  "disp": "raincoat",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 雨衣"
+ },
+ {
+  "w": "drip",
+  "disp": "drip",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 滴落；n. 水滴"
+ },
+ {
+  "w": "dredge",
+  "disp": "dredge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 疏浚；n. 挖泥船"
+ },
+ {
+  "w": "pour",
+  "disp": "pour",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 倒；倾倒"
+ },
+ {
+  "w": "can",
+  "disp": "can",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 金属罐；v. 能"
+ },
+ {
+  "w": "mill",
+  "disp": "mill",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 磨坊；磨粉机；工厂"
+ },
+ {
+  "w": "forge",
+  "disp": "forge",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 锻造车间；v. 建立（联系等）"
+ },
+ {
+  "w": "alloy",
+  "disp": "alloy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 合金；v. 把…铸成合金"
+ },
+ {
+  "w": "metal",
+  "disp": "metal",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 金属"
+ },
+ {
+  "w": "iron",
+  "disp": "iron",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 铁；铁器；熨斗"
+ },
+ {
+  "w": "brass",
+  "disp": "brass",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 黄铜制品"
+ },
+ {
+  "w": "bronze",
+  "disp": "bronze",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 青铜；青铜色"
+ },
+ {
+  "w": "horse",
+  "disp": "horse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 马"
+ },
+ {
+  "w": "cement",
+  "disp": "cement",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 水泥"
+ },
+ {
+  "w": "lime",
+  "disp": "lime",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 石灰"
+ },
+ {
+  "w": "plaster",
+  "disp": "plaster",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 灰泥；v. 涂以灰泥；敷以膏药"
+ },
+ {
+  "w": "leather",
+  "disp": "leather",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 皮革"
+ },
+ {
+  "w": "plastic",
+  "disp": "plastic",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 塑料的；n. 塑料"
+ },
+ {
+  "w": "fibre",
+  "disp": "fibre",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 纤维"
+ },
+ {
+  "w": "fabric",
+  "disp": "fabric",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 织物；（建筑物的）结构"
+ },
+ {
+  "w": "knit",
+  "disp": "knit",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 针织"
+ },
+ {
+  "w": "weave",
+  "disp": "weave",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 编织"
+ },
+ {
+  "w": "canvas",
+  "disp": "canvas",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 帆布；（帆布）画布"
+ },
+ {
+  "w": "linen",
+  "disp": "linen",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 亚麻布；亚麻织品"
+ },
+ {
+  "w": "cotton",
+  "disp": "cotton",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 棉花；棉；棉布"
+ },
+ {
+  "w": "nylon",
+  "disp": "nylon",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 尼龙"
+ },
+ {
+  "w": "lumber",
+  "disp": "lumber",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 木材"
+ },
+ {
+  "w": "wooden",
+  "disp": "wooden",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 木制的；木头的"
+ },
+ {
+  "w": "pit",
+  "disp": "pit",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 果核；深坑"
+ },
+ {
+  "w": "steady",
+  "disp": "steady",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 稳定的；v. 使稳住"
+ },
+ {
+  "w": "fuel",
+  "disp": "fuel",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 燃料；燃油；v. 加剧"
+ },
+ {
+  "w": "lubricate",
+  "disp": "lubricate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 润滑；加润滑油于"
+ },
+ {
+  "w": "crystal",
+  "disp": "crystal",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 水晶；结晶"
+ },
+ {
+  "w": "inferior",
+  "disp": "inferior",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 较差的"
+ },
+ {
+  "w": "counterfeit",
+  "disp": "counterfeit",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 伪造的；假冒的；v. 伪造"
+ },
+ {
+  "w": "fake",
+  "disp": "fake",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 假的；v. 伪造；假装"
+ },
+ {
+  "w": "fragile",
+  "disp": "fragile",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 脆弱的；易碎的；不牢固的"
+ },
+ {
+  "w": "miniature",
+  "disp": "miniature",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 微型的；n. 微型画；小型模型"
+ },
+ {
+  "w": "available",
+  "disp": "available",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 可获得的；有空的；可用的"
+ },
+ {
+  "w": "durable",
+  "disp": "durable",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 耐用的；持久的"
+ },
+ {
+  "w": "popularity",
+  "disp": "popularity",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 流行；普及"
+ },
+ {
+  "w": "vogue",
+  "disp": "vogue",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 时髦；时兴"
+ },
+ {
+  "w": "prevail",
+  "disp": "prevail",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 盛行；占上风；劝服"
+ },
+ {
+  "w": "idol",
+  "disp": "idol",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 偶像；神像"
+ },
+ {
+  "w": "plain",
+  "disp": "plain",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 平原；adj. 简单明了的；朴素的"
+ },
+ {
+  "w": "luxury",
+  "disp": "luxury",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 奢华；奢侈品；难得的享受"
+ },
+ {
+  "w": "extravagant",
+  "disp": "extravagant",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 奢侈的；过度的"
+ },
+ {
+  "w": "jewellery",
+  "disp": "jewellery",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 珠宝；首饰"
+ },
+ {
+  "w": "jewel",
+  "disp": "jewel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 珠宝；宝石"
+ },
+ {
+  "w": "gem",
+  "disp": "gem",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 宝石"
+ },
+ {
+  "w": "jade",
+  "disp": "jade",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 玉；翡翠"
+ },
+ {
+  "w": "adorn",
+  "disp": "adorn",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 装饰；佩戴；使美观"
+ },
+ {
+  "w": "ornament",
+  "disp": "ornament",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 装饰"
+ },
+ {
+  "w": "embellish",
+  "disp": "embellish",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 装饰"
+ },
+ {
+  "w": "embroider",
+  "disp": "embroider",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 刺绣；绣（花）；加以渲染（或润色）"
+ },
+ {
+  "w": "hairdressing",
+  "disp": "hairdressing",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 美发"
+ },
+ {
+  "w": "pigment",
+  "disp": "pigment",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 色素；颜料"
+ },
+ {
+  "w": "dye",
+  "disp": "dye",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 染料；v. 给...染色"
+ },
+ {
+  "w": "spring",
+  "disp": "spring",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 跳；n. 春天；弹簧"
+ },
+ {
+  "w": "masquerade",
+  "disp": "masquerade",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 化妆舞会；伪装；v. 冒充"
+ },
+ {
+  "w": "veil",
+  "disp": "veil",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 面纱"
+ },
+ {
+  "w": "costume",
+  "disp": "costume",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 服装；衣服"
+ },
+ {
+  "w": "fascinate",
+  "disp": "fascinate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 强烈吸引住；使着迷"
+ },
+ {
+  "w": "decent",
+  "disp": "decent",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 像样的"
+ },
+ {
+  "w": "exquisite",
+  "disp": "exquisite",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 精美的；细腻的；强烈的"
+ },
+ {
+  "w": "grace",
+  "disp": "grace",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 优雅；恩宠"
+ },
+ {
+  "w": "quiet",
+  "disp": "quiet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 安静的"
+ },
+ {
+  "w": "elegance",
+  "disp": "elegance",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 高雅；典雅；优雅"
+ },
+ {
+  "w": "appearance",
+  "disp": "appearance",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 外表；出现"
+ },
+ {
+  "w": "cosmetics",
+  "disp": "cosmetics",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 化妆品；美容品；复数词形"
+ },
+ {
+  "w": "makeup",
+  "disp": "makeup",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 化妆品；组成"
+ },
+ {
+  "w": "charming",
+  "disp": "charming",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 迷人的；娇媚的；v. 现在分词词形"
+ },
+ {
+  "w": "clothe",
+  "disp": "clothe",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 给...穿衣；供给衣服"
+ },
+ {
+  "w": "garment",
+  "disp": "garment",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 衣服；外衣"
+ },
+ {
+  "w": "laundry",
+  "disp": "laundry",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 要洗的衣物；洗衣店"
+ },
+ {
+  "w": "wardrobe",
+  "disp": "wardrobe",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 衣柜；衣橱"
+ },
+ {
+  "w": "overall",
+  "disp": "overalls",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 全面的；adv. 总计"
+ },
+ {
+  "w": "overcoat",
+  "disp": "overcoat",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大衣；外套"
+ },
+ {
+  "w": "robe",
+  "disp": "robe",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 长袍；v. （使）穿上长袍"
+ },
+ {
+  "w": "gown",
+  "disp": "gown",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 礼服"
+ },
+ {
+  "w": "sweater",
+  "disp": "sweater",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 毛衣"
+ },
+ {
+  "w": "jacket",
+  "disp": "jacket",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 夹克衫"
+ },
+ {
+  "w": "trousers",
+  "disp": "trousers",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 裤子；长裤"
+ },
+ {
+  "w": "clasp",
+  "disp": "clasp",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 扣；紧握；v. 抱紧"
+ },
+ {
+  "w": "brim",
+  "disp": "brim",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 边缘；v. （装）满"
+ },
+ {
+  "w": "scarf",
+  "disp": "scarf",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 围巾；头巾"
+ },
+ {
+  "w": "handkerchief",
+  "disp": "handkerchief",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 手帕；方巾"
+ },
+ {
+  "w": "purse",
+  "disp": "purse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 女用小包；钱包；资金"
+ },
+ {
+  "w": "wallet",
+  "disp": "wallet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 钱包；皮夹；钱夹"
+ },
+ {
+  "w": "vest",
+  "disp": "vest",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 背心；v. 授予"
+ },
+ {
+  "w": "wrap",
+  "disp": "wrap",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 包；n. 包裹"
+ },
+ {
+  "w": "cloak",
+  "disp": "cloak",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 斗篷；掩护物；v. 隐瞒"
+ },
+ {
+  "w": "collar",
+  "disp": "collar",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 衣领"
+ },
+ {
+  "w": "sleeve",
+  "disp": "sleeve",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 袖子"
+ },
+ {
+  "w": "sock",
+  "disp": "sock",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 短袜；重击；v. 猛打"
+ },
+ {
+  "w": "stocking",
+  "disp": "stocking",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 长袜"
+ },
+ {
+  "w": "slipper",
+  "disp": "slippers",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 拖鞋"
+ },
+ {
+  "w": "lace",
+  "disp": "lace",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 花边"
+ },
+ {
+  "w": "tailor",
+  "disp": "tailor",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 裁缝"
+ },
+ {
+  "w": "sew",
+  "disp": "sew",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 缝制；缝补"
+ },
+ {
+  "w": "spin",
+  "disp": "spin",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 纺纱；旋转；n. 旋转"
+ },
+ {
+  "w": "stitch",
+  "disp": "stitch",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 一针；v. 缝"
+ },
+ {
+  "w": "needle",
+  "disp": "needle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 针"
+ },
+ {
+  "w": "pin",
+  "disp": "pin",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大头针；v. 固定"
+ },
+ {
+  "w": "string",
+  "disp": "string",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 细绳；线"
+ },
+ {
+  "w": "thread",
+  "disp": "thread",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 线；v. 穿过"
+ },
+ {
+  "w": "strap",
+  "disp": "strap",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 带子；皮带；皮条"
+ },
+ {
+  "w": "stripe",
+  "disp": "stripe",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 条纹"
+ },
+ {
+  "w": "ribbon",
+  "disp": "ribbon",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 带状物"
+ },
+ {
+  "w": "belt",
+  "disp": "belt",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 腰带；皮带；n. 传送带"
+ },
+ {
+  "w": "chain",
+  "disp": "chain",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 链条；链子"
+ },
+ {
+  "w": "bracelet",
+  "disp": "bracelet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 手镯"
+ },
+ {
+  "w": "necklace",
+  "disp": "necklace",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 项链"
+ },
+ {
+  "w": "bead",
+  "disp": "bead",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 有孔的小珠"
+ },
+ {
+  "w": "textile",
+  "disp": "textile",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 纺织品；纺织业"
+ },
+ {
+  "w": "velvet",
+  "disp": "velvet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 天鹅绒；丝绒；adj. 天鹅绒的"
+ },
+ {
+  "w": "wool",
+  "disp": "wool",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 羊毛"
+ },
+ {
+  "w": "patch",
+  "disp": "patch",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 补丁；小块地"
+ },
+ {
+  "w": "rag",
+  "disp": "rag",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 旧布，破布"
+ },
+ {
+  "w": "shabby",
+  "disp": "shabby",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 破旧的；肮脏破烂的；衣衫褴褛的"
+ },
+ {
+  "w": "tight",
+  "disp": "tight",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 紧的"
+ },
+ {
+  "w": "purple",
+  "disp": "purple",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 紫色的；n. 紫色"
+ },
+ {
+  "w": "tan",
+  "disp": "tan",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 棕褐色的；v. 将皮肤晒成棕褐色"
+ },
+ {
+  "w": "fade",
+  "disp": "fade",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 逐渐消失；褪色"
+ },
+ {
+  "w": "stain",
+  "disp": "stain",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 污渍；v. 玷污"
+ },
+ {
+  "w": "blot",
+  "disp": "blot",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 墨渍；污点"
+ },
+ {
+  "w": "figure",
+  "disp": "figure",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 人物；数字；v. 弄懂"
+ },
+ {
+  "w": "slender",
+  "disp": "slender",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 苗条的"
+ },
+ {
+  "w": "dusk",
+  "disp": "dusk",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 黄昏"
+ },
+ {
+  "w": "slight",
+  "disp": "slight",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 轻微的；微小的"
+ },
+ {
+  "w": "erection",
+  "disp": "erection",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 建造；建筑物"
+ },
+ {
+  "w": "stricture",
+  "disp": "stricture",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 指责；限制"
+ },
+ {
+  "w": "construct",
+  "disp": "construct",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 建造；构造；n. 概念"
+ },
+ {
+  "w": "obstruct",
+  "disp": "obstruct",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 阻碍；阻塞；阻挡"
+ },
+ {
+  "w": "ruin",
+  "disp": "ruin",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 废墟；v. 破坏"
+ },
+ {
+  "w": "concrete",
+  "disp": "concrete",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 混凝土的；n. 混凝土；adj. 具体的"
+ },
+ {
+  "w": "steel",
+  "disp": "steel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 钢；钢铁"
+ },
+ {
+  "w": "venue",
+  "disp": "venue",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 举办地点；（比赛）地点；会场"
+ },
+ {
+  "w": "landmark",
+  "disp": "landmark",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 里程碑；地标"
+ },
+ {
+  "w": "situated",
+  "disp": "situated",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 位于…的；v. 使位于"
+ },
+ {
+  "w": "narrow",
+  "disp": "narrow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 狭窄的；窄小的；v. 使窄小"
+ },
+ {
+  "w": "locate",
+  "disp": "locate",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 确定…的位置；使坐落于；查找…的地点"
+ },
+ {
+  "w": "reside",
+  "disp": "reside",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 居住；（性质）存在"
+ },
+ {
+  "w": "inhabit",
+  "disp": "inhabit",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 居住于"
+ },
+ {
+  "w": "migrate",
+  "disp": "migrate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 迁移；移居；迁徙"
+ },
+ {
+  "w": "settle",
+  "disp": "settle",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 安顿；定居；解决"
+ },
+ {
+  "w": "dwelling",
+  "disp": "dwelling",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 住宅；v. 居住；沉湎于"
+ },
+ {
+  "w": "lively",
+  "disp": "lively",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 充满生机的；活泼的"
+ },
+ {
+  "w": "night",
+  "disp": "night",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 夜晚；晚上"
+ },
+ {
+  "w": "skyscraper",
+  "disp": "skyscraper",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 摩天大楼"
+ },
+ {
+  "w": "villa",
+  "disp": "villa",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 别墅"
+ },
+ {
+  "w": "mansion",
+  "disp": "mansion",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大厦；宅邸"
+ },
+ {
+  "w": "apartment",
+  "disp": "apartment",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 单元住宅；公寓住宅"
+ },
+ {
+  "w": "hostel",
+  "disp": "hostel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. （校外）学生宿舍；旅社；招待所"
+ },
+ {
+  "w": "lodge",
+  "disp": "lodge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小舍；传达室"
+ },
+ {
+  "w": "hut",
+  "disp": "hut",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小屋；棚屋；茅屋"
+ },
+ {
+  "w": "cabin",
+  "disp": "cabin",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 小木屋；船舱；客舱"
+ },
+ {
+  "w": "cellar",
+  "disp": "cellar",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 地窖；地下室"
+ },
+ {
+  "w": "shed",
+  "disp": "shed",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 棚屋；v. 使脱落；去除"
+ },
+ {
+  "w": "cottage",
+  "disp": "cottage",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 村舍；小屋"
+ },
+ {
+  "w": "nursery",
+  "disp": "nursery",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 托儿所"
+ },
+ {
+  "w": "cradle",
+  "disp": "cradle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 摇篮；n. 吊架；发源地"
+ },
+ {
+  "w": "block",
+  "disp": "block",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 块；大楼；v. 阻塞"
+ },
+ {
+  "w": "grid",
+  "disp": "grid",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 网格；方格；n. （电、气）输送网"
+ },
+ {
+  "w": "aisle",
+  "disp": "aisle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 过道；通道；走廊"
+ },
+ {
+  "w": "porch",
+  "disp": "porch",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 门廊"
+ },
+ {
+  "w": "corridor",
+  "disp": "corridor",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 走廊"
+ },
+ {
+  "w": "spider",
+  "disp": "spider",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 蜘蛛"
+ },
+ {
+  "w": "staircase",
+  "disp": "staircase",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 楼梯"
+ },
+ {
+  "w": "storey",
+  "disp": "storey",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 楼层"
+ },
+ {
+  "w": "layer",
+  "disp": "layer",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 层；层次"
+ },
+ {
+  "w": "ash",
+  "disp": "ash",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 灰"
+ },
+ {
+  "w": "escalator",
+  "disp": "escalator",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 自动扶梯；电动扶梯"
+ },
+ {
+  "w": "handrail",
+  "disp": "handrail",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 扶栏"
+ },
+ {
+  "w": "pillar",
+  "disp": "pillar",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 柱子；栋梁"
+ },
+ {
+  "w": "column",
+  "disp": "column",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 圆柱；列"
+ },
+ {
+  "w": "beam",
+  "disp": "beam",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 梁；横梁；v. 发射（电波或光）"
+ },
+ {
+  "w": "vault",
+  "disp": "vault",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 穹顶；拱顶；n. 金库"
+ },
+ {
+  "w": "arch",
+  "disp": "arch",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 拱形；拱门；弧形"
+ },
+ {
+  "w": "ceiling",
+  "disp": "ceiling",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 天花板"
+ },
+ {
+  "w": "eaves",
+  "disp": "eaves",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 屋檐"
+ },
+ {
+  "w": "chimney",
+  "disp": "chimney",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 烟囱"
+ },
+ {
+  "w": "reception",
+  "disp": "reception",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 接待；招待会"
+ },
+ {
+  "w": "lobby",
+  "disp": "lobby",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大厅；游说团队"
+ },
+ {
+  "w": "bench",
+  "disp": "bench",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 长凳"
+ },
+ {
+  "w": "parlour",
+  "disp": "parlour",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 客厅；起居室；营业室"
+ },
+ {
+  "w": "fireplace",
+  "disp": "fireplace",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 壁炉"
+ },
+ {
+  "w": "radiator",
+  "disp": "radiator",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 散热器；暖气装置"
+ },
+ {
+  "w": "living room",
+  "disp": "living room",
+  "need_syn": true,
+  "need_col": true,
+  "m": "phrase. 客厅；起居室"
+ },
+ {
+  "w": "cabinet",
+  "disp": "cabinet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 储藏柜；内阁"
+ },
+ {
+  "w": "balcony",
+  "disp": "balcony",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 阳台"
+ },
+ {
+  "w": "terrace",
+  "disp": "terrace",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 平台"
+ },
+ {
+  "w": "kitchen",
+  "disp": "kitchen",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 厨房"
+ },
+ {
+  "w": "lavatory",
+  "disp": "lavatory",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 盥洗室；厕所"
+ },
+ {
+  "w": "toilet",
+  "disp": "toilet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 马桶"
+ },
+ {
+  "w": "bath",
+  "disp": "bath",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 浴缸；浴室；洗澡"
+ },
+ {
+  "w": "mall",
+  "disp": "mall",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 购物中心"
+ },
+ {
+  "w": "supermarket",
+  "disp": "supermarket",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 超市；超级市场"
+ },
+ {
+  "w": "booth",
+  "disp": "booth",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小亭；隔间"
+ },
+ {
+  "w": "casino",
+  "disp": "casino",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 赌场"
+ },
+ {
+  "w": "studio",
+  "disp": "studio",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 工作室；演播室"
+ },
+ {
+  "w": "peripheral",
+  "disp": "peripheral",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 外围的；次要的"
+ },
+ {
+  "w": "vicinity",
+  "disp": "vicinity",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 附近"
+ },
+ {
+  "w": "void",
+  "disp": "void",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 空白"
+ },
+ {
+  "w": "spacious",
+  "disp": "spacious",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 宽敞的"
+ },
+ {
+  "w": "airtight",
+  "disp": "airtight",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 密封的"
+ },
+ {
+  "w": "expanse",
+  "disp": "expanse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 辽阔；广袤"
+ },
+ {
+  "w": "plaza",
+  "disp": "plaza",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 广场；市场"
+ },
+ {
+  "w": "castle",
+  "disp": "castle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 城堡"
+ },
+ {
+  "w": "carpenter",
+  "disp": "carpenter",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 木匠；木工"
+ },
+ {
+  "w": "mason",
+  "disp": "mason",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 石匠"
+ },
+ {
+  "w": "tile",
+  "disp": "tile",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 瓷砖"
+ },
+ {
+  "w": "tune",
+  "disp": "tune",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 曲调；v. 调整"
+ },
+ {
+  "w": "sunset",
+  "disp": "sunset",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 夕阳；落日"
+ },
+ {
+  "w": "brickwork",
+  "disp": "brickwork",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 砖结构"
+ },
+ {
+  "w": "appetite",
+  "disp": "appetite",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 嗜好；食欲"
+ },
+ {
+  "w": "cater",
+  "disp": "cater",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 备办食物；承办酒席；满足需要"
+ },
+ {
+  "w": "edible",
+  "disp": "edible",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 可食用的；可以吃的"
+ },
+ {
+  "w": "provision",
+  "disp": "provision",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 供应；预备"
+ },
+ {
+  "w": "recipe",
+  "disp": "recipe",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 秘诀"
+ },
+ {
+  "w": "restaurant",
+  "disp": "restaurant",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 餐厅；餐馆"
+ },
+ {
+  "w": "refectory",
+  "disp": "refectory",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 食堂；餐厅"
+ },
+ {
+  "w": "bar",
+  "disp": "bar",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 酒吧；条状物；栅栏"
+ },
+ {
+  "w": "cafeteria",
+  "disp": "cafeteria",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 自助餐厅；自助食堂"
+ },
+ {
+  "w": "buffet",
+  "disp": "buffet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 自助餐"
+ },
+ {
+  "w": "barbecue",
+  "disp": "barbecue",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 户外烧烤；烤架"
+ },
+ {
+  "w": "supper",
+  "disp": "supper",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 晚饭；晚餐"
+ },
+ {
+  "w": "harvest",
+  "disp": "harvest",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 收成；v. 收割"
+ },
+ {
+  "w": "banquet",
+  "disp": "banquet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 宴会；盛宴"
+ },
+ {
+  "w": "refreshment",
+  "disp": "refreshment",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 茶点和饮料"
+ },
+ {
+  "w": "snack",
+  "disp": "snack",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 小吃；点心；快餐"
+ },
+ {
+  "w": "appetiser",
+  "disp": "appetiser",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 开胃菜；开胃品"
+ },
+ {
+  "w": "cuisine",
+  "disp": "cuisine",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 烹调风格"
+ },
+ {
+  "w": "takeaway",
+  "disp": "takeaway",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 外卖餐馆；外卖食物"
+ },
+ {
+  "w": "chef",
+  "disp": "chef",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 主厨；厨师"
+ },
+ {
+  "w": "gourmet",
+  "disp": "gourmet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 美食家"
+ },
+ {
+  "w": "vegetarian",
+  "disp": "vegetarian",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 素菜的；n. 素食者"
+ },
+ {
+  "w": "cutlery",
+  "disp": "cutlery",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 餐具（刀、叉和匙）"
+ },
+ {
+  "w": "sliver",
+  "disp": "sliver",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 细片；长条；小片"
+ },
+ {
+  "w": "ceramic",
+  "disp": "ceramic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 陶质的；n. 陶瓷器"
+ },
+ {
+  "w": "porcelain",
+  "disp": "porcelain",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 瓷；瓷器"
+ },
+ {
+  "w": "saucer",
+  "disp": "saucer",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 茶托；碟子"
+ },
+ {
+  "w": "tray",
+  "disp": "tray",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 托盘"
+ },
+ {
+  "w": "mug",
+  "disp": "mug",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. （有柄的）大杯"
+ },
+ {
+  "w": "kettle",
+  "disp": "kettle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 水壶"
+ },
+ {
+  "w": "pot",
+  "disp": "pot",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 壶；锅"
+ },
+ {
+  "w": "stove",
+  "disp": "stove",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 火炉"
+ },
+ {
+  "w": "furnace",
+  "disp": "furnace",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 熔炉"
+ },
+ {
+  "w": "oven",
+  "disp": "oven",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 烤箱；烤炉"
+ },
+ {
+  "w": "tin",
+  "disp": "tin",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 锡；罐头"
+ },
+ {
+  "w": "lid",
+  "disp": "lid",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 盖子"
+ },
+ {
+  "w": "beverage",
+  "disp": "beverage",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 饮料"
+ },
+ {
+  "w": "alcohol",
+  "disp": "alcohol",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 含酒精的饮料；酒精"
+ },
+ {
+  "w": "fruit",
+  "disp": "fruit",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 水果；v. 结果实"
+ },
+ {
+  "w": "liquor",
+  "disp": "liquor",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 酒"
+ },
+ {
+  "w": "whisky",
+  "disp": "whisky",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 威士忌"
+ },
+ {
+  "w": "brandy",
+  "disp": "brandy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 白兰地"
+ },
+ {
+  "w": "drunk",
+  "disp": "drunk",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 喝醉的；v. 喝；过去分词词形"
+ },
+ {
+  "w": "tobacco",
+  "disp": "tobacco",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 烟草；烟叶"
+ },
+ {
+  "w": "cigarette",
+  "disp": "cigarette",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 香烟；纸烟"
+ },
+ {
+  "w": "sober",
+  "disp": "sober",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 清醒的；严肃的；素淡的"
+ },
+ {
+  "w": "dawn",
+  "disp": "dawn",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 黎明；破晓"
+ },
+ {
+  "w": "pea",
+  "disp": "pea",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 豌豆"
+ },
+ {
+  "w": "cucumber",
+  "disp": "cucumbers",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 黄瓜"
+ },
+ {
+  "w": "cabbage",
+  "disp": "cabbage",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 卷心菜"
+ },
+ {
+  "w": "eggplant",
+  "disp": "eggplants",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 茄子"
+ },
+ {
+  "w": "carrot",
+  "disp": "carrot",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 胡萝卜"
+ },
+ {
+  "w": "turnip",
+  "disp": "turnip",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 芜菁；萝卜"
+ },
+ {
+  "w": "radish",
+  "disp": "radish",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小萝卜"
+ },
+ {
+  "w": "peel",
+  "disp": "peel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 去皮；剥落；n. 果皮"
+ },
+ {
+  "w": "strip",
+  "disp": "strip",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 剥去；剥夺；n. 长条"
+ },
+ {
+  "w": "core",
+  "disp": "core",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 核心；adj. 核心的"
+ },
+ {
+  "w": "seed",
+  "disp": "seed",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 种子；籽；v. 播种"
+ },
+ {
+  "w": "hull",
+  "disp": "hull",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 籽壳；外壳；n. 船体"
+ },
+ {
+  "w": "berry",
+  "disp": "berry",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 浆果"
+ },
+ {
+  "w": "grape",
+  "disp": "grapes",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 葡萄"
+ },
+ {
+  "w": "papaya",
+  "disp": "papayas",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 木瓜"
+ },
+ {
+  "w": "plum",
+  "disp": "plum",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 李子；adj. 吸引人的"
+ },
+ {
+  "w": "crop",
+  "disp": "crop",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 农作物；收成"
+ },
+ {
+  "w": "corn",
+  "disp": "corn",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 玉米；谷物"
+ },
+ {
+  "w": "grain",
+  "disp": "grain",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 谷物；颗粒"
+ },
+ {
+  "w": "wheat",
+  "disp": "wheat",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小麦"
+ },
+ {
+  "w": "reap",
+  "disp": "reap",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 获得；收割；收获"
+ },
+ {
+  "w": "flour",
+  "disp": "flour",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 面粉"
+ },
+ {
+  "w": "porridge",
+  "disp": "porridge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 麦片粥；面糊"
+ },
+ {
+  "w": "paste",
+  "disp": "paste",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 面团；浆糊"
+ },
+ {
+  "w": "livestock",
+  "disp": "livestock",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 家畜；牲畜"
+ },
+ {
+  "w": "chicken",
+  "disp": "chicken",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 鸡肉；鸡"
+ },
+ {
+  "w": "turkey",
+  "disp": "turkey",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 火鸡"
+ },
+ {
+  "w": "feast",
+  "disp": "feast",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 盛宴；宴会；节日"
+ },
+ {
+  "w": "beef",
+  "disp": "beef",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 牛肉"
+ },
+ {
+  "w": "pork",
+  "disp": "pork",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 猪肉"
+ },
+ {
+  "w": "mutton",
+  "disp": "mutton",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 羊肉"
+ },
+ {
+  "w": "sausage",
+  "disp": "sausage",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 香肠；腊肠"
+ },
+ {
+  "w": "fish",
+  "disp": "fish",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 鱼；鱼肉；v. 钓鱼"
+ },
+ {
+  "w": "pond",
+  "disp": "pond",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 池塘"
+ },
+ {
+  "w": "rod",
+  "disp": "rod",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 杆；棒"
+ },
+ {
+  "w": "dairy",
+  "disp": "dairy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 牛奶的；乳品的；n. 乳品店"
+ },
+ {
+  "w": "yogurt",
+  "disp": "yogurt",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 酸奶"
+ },
+ {
+  "w": "butter",
+  "disp": "butter",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 黄油；奶油"
+ },
+ {
+  "w": "hamburger",
+  "disp": "hamburger",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 汉堡包"
+ },
+ {
+  "w": "loaf",
+  "disp": "loaf",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 一条（面包）；v. 游荡；虚度光阴"
+ },
+ {
+  "w": "pie",
+  "disp": "pie",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 果馅饼"
+ },
+ {
+  "w": "pasta",
+  "disp": "pasta",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 意大利面食"
+ },
+ {
+  "w": "spaghetti",
+  "disp": "spaghetti",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 意大利式细面条"
+ },
+ {
+  "w": "pudding",
+  "disp": "pudding",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 布丁"
+ },
+ {
+  "w": "biscuit",
+  "disp": "biscuit",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 饼干"
+ },
+ {
+  "w": "jam",
+  "disp": "jam",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 果酱"
+ },
+ {
+  "w": "ice cream",
+  "disp": "ice cream",
+  "need_syn": true,
+  "need_col": true,
+  "m": "phrase. 冰淇淋"
+ },
+ {
+  "w": "vanilla",
+  "disp": "vanilla",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 香草；adj. 寻常的"
+ },
+ {
+  "w": "mustard",
+  "disp": "mustard",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 芥末；芥末酱"
+ },
+ {
+  "w": "wasabi",
+  "disp": "wasabi",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 山葵；山葵根"
+ },
+ {
+  "w": "pepper",
+  "disp": "pepper",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 胡椒粉；甜椒"
+ },
+ {
+  "w": "ginger",
+  "disp": "ginger",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 生姜"
+ },
+ {
+  "w": "garlic",
+  "disp": "garlic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大蒜"
+ },
+ {
+  "w": "scallion",
+  "disp": "scallions",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大葱"
+ },
+ {
+  "w": "vinegar",
+  "disp": "vinegar",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 醋"
+ },
+ {
+  "w": "salt",
+  "disp": "salt",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 盐；食盐"
+ },
+ {
+  "w": "flavour",
+  "disp": "flavour",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 风味；味道；v. 给…添风味"
+ },
+ {
+  "w": "sour",
+  "disp": "sour",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 酸的"
+ },
+ {
+  "w": "bitter",
+  "disp": "bitter",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 有苦味的；痛苦的；刺痛的"
+ },
+ {
+  "w": "spicy",
+  "disp": "spicy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 辣的"
+ },
+ {
+  "w": "delicious",
+  "disp": "delicious",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 美味的"
+ },
+ {
+  "w": "yummy",
+  "disp": "yummy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 美味的；可口的"
+ },
+ {
+  "w": "tasty",
+  "disp": "tasty",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 美味的；可口的"
+ },
+ {
+  "w": "thirsty",
+  "disp": "thirsty",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 口渴的；渴望的"
+ },
+ {
+  "w": "spice",
+  "disp": "spice",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 香料；调味品"
+ },
+ {
+  "w": "sauce",
+  "disp": "sauce",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 酱汁；调味汁"
+ },
+ {
+  "w": "ketchup",
+  "disp": "ketchup",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 番茄酱"
+ },
+ {
+  "w": "perfume",
+  "disp": "perfume",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 香水"
+ },
+ {
+  "w": "ingredient",
+  "disp": "ingredient",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 成分；要素；配料"
+ },
+ {
+  "w": "digest",
+  "disp": "digest",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 消化；领会"
+ },
+ {
+  "w": "bake",
+  "disp": "bake",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 烤"
+ },
+ {
+  "w": "fry",
+  "disp": "fry",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 油炸；油煎"
+ },
+ {
+  "w": "roast",
+  "disp": "roast",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 烤；n. 烤肉"
+ },
+ {
+  "w": "toast",
+  "disp": "toast",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 烤面包片"
+ },
+ {
+  "w": "suck",
+  "disp": "suck",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 吮吸"
+ },
+ {
+  "w": "swallow",
+  "disp": "swallow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 吞咽"
+ },
+ {
+  "w": "lick",
+  "disp": "lick",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 舔；n. 少许"
+ },
+ {
+  "w": "chew",
+  "disp": "chew",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 咀嚼"
+ },
+ {
+  "w": "mint",
+  "disp": "mint",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 薄荷"
+ },
+ {
+  "w": "gum",
+  "disp": "gum",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 口香糖；n. 树胶；牙龈"
+ },
+ {
+  "w": "soak",
+  "disp": "soak",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 浸泡；吸收；n. 浸泡"
+ },
+ {
+  "w": "dip",
+  "disp": "dip",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 蘸；n. 下降"
+ },
+ {
+  "w": "squeeze",
+  "disp": "squeeze",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 挤（进）"
+ },
+ {
+  "w": "stir",
+  "disp": "stir",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 搅拌"
+ },
+ {
+  "w": "grind",
+  "disp": "grind",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 碾碎；磨碎"
+ },
+ {
+  "w": "suspension",
+  "disp": "suspension",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 悬挂；悬浮；暂时停职（停学、停赛）"
+ },
+ {
+  "w": "knot",
+  "disp": "knot",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 结；（树） 节"
+ },
+ {
+  "w": "hook",
+  "disp": "hook",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 钩；挂钩；v. 钩住"
+ },
+ {
+  "w": "lever",
+  "disp": "lever",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 杠杆；操纵杆；v. 撬动"
+ },
+ {
+  "w": "scaffold",
+  "disp": "scaffold",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 脚手架"
+ },
+ {
+  "w": "infrastructure",
+  "disp": "infrastructure",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 基础设施"
+ },
+ {
+  "w": "apparatus",
+  "disp": "apparatus",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 装置；仪器；器官"
+ },
+ {
+  "w": "malfunction",
+  "disp": "malfunction",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 故障"
+ },
+ {
+  "w": "debate",
+  "disp": "debate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 辩论；v. 讨论"
+ },
+ {
+  "w": "mend",
+  "disp": "mend",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 修补"
+ },
+ {
+  "w": "modify",
+  "disp": "modify",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 更改"
+ },
+ {
+  "w": "trim",
+  "disp": "trim",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 修剪；adj. 整洁的"
+ },
+ {
+  "w": "weld",
+  "disp": "weld",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 焊接；n. 焊接"
+ },
+ {
+  "w": "saw",
+  "disp": "saw",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 锯；v. 看"
+ },
+ {
+  "w": "screw",
+  "disp": "screw",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 螺丝钉；v. 拧紧"
+ },
+ {
+  "w": "drill",
+  "disp": "drill",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 钻孔；打洞；n. 钻机"
+ },
+ {
+  "w": "plumb",
+  "disp": "plumb",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 铅锤"
+ },
+ {
+  "w": "viaduct",
+  "disp": "viaduct",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 高架桥；高架铁路"
+ },
+ {
+  "w": "dam",
+  "disp": "dam",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 水坝；拦河坝"
+ },
+ {
+  "w": "install",
+  "disp": "install",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 安装"
+ },
+ {
+  "w": "furnish",
+  "disp": "furnish",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 布置家具；提供"
+ },
+ {
+  "w": "placement",
+  "disp": "placement",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 安排；实习工作"
+ },
+ {
+  "w": "clever",
+  "disp": "clever",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 聪明的"
+ },
+ {
+  "w": "layout",
+  "disp": "layout",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 布局；布置"
+ },
+ {
+  "w": "entrance",
+  "disp": "entrance",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 入口"
+ },
+ {
+  "w": "entry",
+  "disp": "entry",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 入口；条目；参赛作品"
+ },
+ {
+  "w": "outward",
+  "disp": "outward",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adv. 向外；adj. 外表的"
+ },
+ {
+  "w": "inward",
+  "disp": "inward",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adv. 向内地"
+ },
+ {
+  "w": "internal",
+  "disp": "internal",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 内部的；国内的"
+ },
+ {
+  "w": "crane",
+  "disp": "crane",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 起重机"
+ }
+]

@@ -1,0 +1,2347 @@
+[
+ {
+  "w": "deed",
+  "disp": "deed",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 行为；事迹"
+ },
+ {
+  "w": "accustom",
+  "disp": "accustom",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使习惯；习惯于"
+ },
+ {
+  "w": "alarm",
+  "disp": "alarm",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 警报；闹钟；v. 使惊恐"
+ },
+ {
+  "w": "react",
+  "disp": "react",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 反应"
+ },
+ {
+  "w": "reflect",
+  "disp": "reflect",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 反映；反射；反省"
+ },
+ {
+  "w": "bear",
+  "disp": "bear",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 忍受；生（孩子）；n. 熊"
+ },
+ {
+  "w": "adopt",
+  "disp": "adopt",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 采纳；采用"
+ },
+ {
+  "w": "can",
+  "disp": "can",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 金属罐；v. 能"
+ },
+ {
+  "w": "nourish",
+  "disp": "nourish",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 滋养"
+ },
+ {
+  "w": "mow",
+  "disp": "mow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 修剪；扫杀"
+ },
+ {
+  "w": "grass",
+  "disp": "grass",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 草；草地"
+ },
+ {
+  "w": "exhale",
+  "disp": "exhale",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 呼出；散发"
+ },
+ {
+  "w": "intake",
+  "disp": "intake",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 摄入量"
+ },
+ {
+  "w": "glare",
+  "disp": "glare",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 刺眼"
+ },
+ {
+  "w": "glimpse",
+  "disp": "glimpse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 一瞥"
+ },
+ {
+  "w": "glance",
+  "disp": "glance",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 一瞥；扫视"
+ },
+ {
+  "w": "peep",
+  "disp": "peep",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 窥视；v. 偷看"
+ },
+ {
+  "w": "steady",
+  "disp": "steady",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 稳定的；v. 使稳住"
+ },
+ {
+  "w": "gaze",
+  "disp": "gaze",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 凝视；v. 注视"
+ },
+ {
+  "w": "peer",
+  "disp": "peer",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 凝视；n. 同辈；同等的人"
+ },
+ {
+  "w": "contemplate",
+  "disp": "contemplated",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 考虑；凝视；思考…的可能性"
+ },
+ {
+  "w": "stare",
+  "disp": "stared",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 凝视；盯着看"
+ },
+ {
+  "w": "night",
+  "disp": "night",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 夜晚；晚上"
+ },
+ {
+  "w": "oath",
+  "disp": "oath",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 誓言"
+ },
+ {
+  "w": "vow",
+  "disp": "vow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 誓言；v. 发誓"
+ },
+ {
+  "w": "pledge",
+  "disp": "pledge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 保证"
+ },
+ {
+  "w": "whistler",
+  "disp": "whistler",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 吹哨的人"
+ },
+ {
+  "w": "reply",
+  "disp": "reply",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 回答；n. 答复"
+ },
+ {
+  "w": "notify",
+  "disp": "notify",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 通知"
+ },
+ {
+  "w": "assert",
+  "disp": "assert",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 断言；维护"
+ },
+ {
+  "w": "explain",
+  "disp": "explain",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 解释；说明；阐明"
+ },
+ {
+  "w": "quarrel",
+  "disp": "quarrel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 争吵；v. 吵架"
+ },
+ {
+  "w": "dispute",
+  "disp": "dispute",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 纠纷；争端；v. 对（某事）有异议"
+ },
+ {
+  "w": "argument",
+  "disp": "argument",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 论点；争论；辩论"
+ },
+ {
+  "w": "hasten",
+  "disp": "hasten",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 赶紧"
+ },
+ {
+  "w": "guard",
+  "disp": "guard",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 保卫；警卫；v. 守卫"
+ },
+ {
+  "w": "urge",
+  "disp": "urge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 力劝；n. 强烈欲望"
+ },
+ {
+  "w": "scold",
+  "disp": "scold",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 责骂；训斥"
+ },
+ {
+  "w": "curse",
+  "disp": "curse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 咒骂；n. 诅咒"
+ },
+ {
+  "w": "swear",
+  "disp": "swear",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 发誓；咒骂"
+ },
+ {
+  "w": "provoke",
+  "disp": "provoke",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 激怒；挑衅"
+ },
+ {
+  "w": "preach",
+  "disp": "preach",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 宣扬；鼓吹；布道"
+ },
+ {
+  "w": "boast",
+  "disp": "boast",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 自夸；夸耀；自豪地拥有"
+ },
+ {
+  "w": "tease",
+  "disp": "tease",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 戏弄"
+ },
+ {
+  "w": "mock",
+  "disp": "mock",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 嘲笑；嘲弄；adj. 仿制的"
+ },
+ {
+  "w": "clap",
+  "disp": "clap",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 鼓掌；n. 拍手"
+ },
+ {
+  "w": "applaud",
+  "disp": "applaud",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 鼓掌；称赞"
+ },
+ {
+  "w": "catch",
+  "disp": "catch",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 抓住；理解；感冒"
+ },
+ {
+  "w": "snatch",
+  "disp": "snatch",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 夺取；n. 一把抓住"
+ },
+ {
+  "w": "grab",
+  "disp": "grab",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 抓取"
+ },
+ {
+  "w": "overtake",
+  "disp": "overtake",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 赶上；超过"
+ },
+ {
+  "w": "grip",
+  "disp": "grip",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 掌握；v. 紧握"
+ },
+ {
+  "w": "mess",
+  "disp": "mess",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 脏乱；杂乱；v. 弄糟"
+ },
+ {
+  "w": "twist",
+  "disp": "twist",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 拧；扭转；n. 曲折"
+ },
+ {
+  "w": "fold",
+  "disp": "fold",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 折叠；n. 折痕；褶"
+ },
+ {
+  "w": "scatter",
+  "disp": "scatter",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 分散；（使）散开；散布"
+ },
+ {
+  "w": "fasten",
+  "disp": "fastening",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 拴紧；使牢固"
+ },
+ {
+  "w": "loosen",
+  "disp": "loosen",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 松开；放松"
+ },
+ {
+  "w": "smash",
+  "disp": "smashed",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 打碎"
+ },
+ {
+  "w": "scratch",
+  "disp": "scratched",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 抓搔；n. 抓痕"
+ },
+ {
+  "w": "scrape",
+  "disp": "scraped",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 刮；勉强通过；n. 擦痕"
+ },
+ {
+  "w": "polish",
+  "disp": "polished",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 擦亮；润色；n. 光泽"
+ },
+ {
+  "w": "split",
+  "disp": "split",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 分开；n. 分歧"
+ },
+ {
+  "w": "sway",
+  "disp": "sway",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 摇摆；n. 影响"
+ },
+ {
+  "w": "phone",
+  "disp": "phone",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 电话；v. 打电话"
+ },
+ {
+  "w": "vibrate",
+  "disp": "vibrate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 振动；颤动"
+ },
+ {
+  "w": "dust",
+  "disp": "dust",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 粉尘；尘埃"
+ },
+ {
+  "w": "whirl",
+  "disp": "whirl",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. （使）旋转；n. 一连串的事；混乱"
+ },
+ {
+  "w": "rotate",
+  "disp": "rotate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 转动"
+ },
+ {
+  "w": "reel",
+  "disp": "reel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 眩晕；n. 卷筒"
+ },
+ {
+  "w": "shuffle",
+  "disp": "shuffle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 拖曳；搅乱；n. 洗牌"
+ },
+ {
+  "w": "collide",
+  "disp": "collide",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 碰撞；相撞；冲突"
+ },
+ {
+  "w": "narrow",
+  "disp": "narrow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 狭窄的；窄小的；v. 使窄小"
+ },
+ {
+  "w": "fruit",
+  "disp": "fruit",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 水果；v. 结果实"
+ },
+ {
+  "w": "penetrate",
+  "disp": "penetrate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 渗透；洞察"
+ },
+ {
+  "w": "pierce",
+  "disp": "pierce",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 刺穿"
+ },
+ {
+  "w": "insert",
+  "disp": "insert",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 插入"
+ },
+ {
+  "w": "tilt",
+  "disp": "tilt",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. （使）倾斜；（使）偏向"
+ },
+ {
+  "w": "tray",
+  "disp": "tray",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 托盘"
+ },
+ {
+  "w": "tow",
+  "disp": "tow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 牵引；n. 拖"
+ },
+ {
+  "w": "trail",
+  "disp": "trail",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小径；v. 跟踪；落后于"
+ },
+ {
+  "w": "arrange",
+  "disp": "arrange",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 安排；排列"
+ },
+ {
+  "w": "manipulate",
+  "disp": "manipulate",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 操纵；使用"
+ },
+ {
+  "w": "steer",
+  "disp": "steer",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 引导；掌舵；操纵"
+ },
+ {
+  "w": "baptise",
+  "disp": "baptise",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 浸透；浸染；给……施行洗礼（或浸礼）"
+ },
+ {
+  "w": "bet",
+  "disp": "bet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 打赌；n. 赌注"
+ },
+ {
+  "w": "stake",
+  "disp": "stake",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 风险；股份；桩"
+ },
+ {
+  "w": "gamble",
+  "disp": "gamble",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 赌博；冒险；n. 打赌"
+ },
+ {
+  "w": "promise",
+  "disp": "promise",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 许诺；v. 承诺"
+ },
+ {
+  "w": "attract",
+  "disp": "attract",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 吸引"
+ },
+ {
+  "w": "obsess",
+  "disp": "obsess",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使困扰；使着迷"
+ },
+ {
+  "w": "smooth",
+  "disp": "Smooth",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 平滑的；平坦的；v. 使平滑"
+ },
+ {
+  "w": "mesmerize",
+  "disp": "mesmerize",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 施以催眠术；迷住；迷惑"
+ },
+ {
+  "w": "nightmare",
+  "disp": "nightmare",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 噩梦；不愉快的经历"
+ },
+ {
+  "w": "amaze",
+  "disp": "amaze",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使惊奇"
+ },
+ {
+  "w": "marvel",
+  "disp": "marvel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 惊异于；惊异；n. 令人惊异的人（或事）"
+ },
+ {
+  "w": "jump",
+  "disp": "jump",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 跳；n. 跳跃"
+ },
+ {
+  "w": "astonish",
+  "disp": "astonish",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使惊讶"
+ },
+ {
+  "w": "involve",
+  "disp": "involve",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 包括；牵涉"
+ },
+ {
+  "w": "annoy",
+  "disp": "annoy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使烦恼；使气恼"
+ },
+ {
+  "w": "upset",
+  "disp": "upset",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 打乱；使心烦；adj. 难过的"
+ },
+ {
+  "w": "bewilder",
+  "disp": "bewilder",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使迷惑；使...不知所措"
+ },
+ {
+  "w": "irony",
+  "disp": "irony",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 讽刺之事；讽刺"
+ },
+ {
+  "w": "indignity",
+  "disp": "indignity",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 侮辱；侮辱性言行"
+ },
+ {
+  "w": "contempt",
+  "disp": "contempt",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 蔑视；轻蔑"
+ },
+ {
+  "w": "foul",
+  "disp": "foul",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 恶劣的；肮脏恶臭的；v. 对…犯规"
+ },
+ {
+  "w": "training",
+  "disp": "training",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 培训；训练；v. 现在分词词形"
+ },
+ {
+  "w": "disregard",
+  "disp": "disregard",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 忽视；v. 不顾"
+ },
+ {
+  "w": "ignorance",
+  "disp": "ignorance",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 无知；愚昧"
+ },
+ {
+  "w": "deviate",
+  "disp": "deviate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 偏离"
+ },
+ {
+  "w": "expel",
+  "disp": "expel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 驱逐；开除；排出"
+ },
+ {
+  "w": "flee",
+  "disp": "flee",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 逃跑；逃离"
+ },
+ {
+  "w": "bully",
+  "disp": "bully",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 欺负"
+ },
+ {
+  "w": "court",
+  "disp": "court",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 法院；球场；宫廷"
+ },
+ {
+  "w": "panic",
+  "disp": "panic",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 恐慌；v. 感到恐慌"
+ },
+ {
+  "w": "terrify",
+  "disp": "terrify",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使恐惧；使惊吓"
+ },
+ {
+  "w": "revenge",
+  "disp": "revenge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 报复；报仇；v. 报复"
+ },
+ {
+  "w": "kidnap",
+  "disp": "kidnap",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 绑架；n. 绑架罪"
+ },
+ {
+  "w": "hijack",
+  "disp": "hijack",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 劫持（交通工具）"
+ },
+ {
+  "w": "smuggle",
+  "disp": "smuggle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 走私；偷运"
+ },
+ {
+  "w": "convict",
+  "disp": "convict",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 定罪；n. 罪犯"
+ },
+ {
+  "w": "strangle",
+  "disp": "strangle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 勒死；扼杀；制止"
+ },
+ {
+  "w": "massacre",
+  "disp": "massacre",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大屠杀；v. 屠杀"
+ },
+ {
+  "w": "decimation",
+  "disp": "decimation",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大批杀害"
+ },
+ {
+  "w": "intervene",
+  "disp": "intervene",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 干涉；介入；干扰"
+ },
+ {
+  "w": "victory",
+  "disp": "Victory",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 胜利"
+ },
+ {
+  "w": "allure",
+  "disp": "allure",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 诱惑；吸引"
+ },
+ {
+  "w": "bait",
+  "disp": "bait",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 鱼饵；诱惑物；v. 下诱饵"
+ },
+ {
+  "w": "induce",
+  "disp": "induce",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 诱使"
+ },
+ {
+  "w": "tempt",
+  "disp": "tempt",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 诱惑；怂恿"
+ },
+ {
+  "w": "assign",
+  "disp": "assign",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 分配；指派"
+ },
+ {
+  "w": "distribute",
+  "disp": "distribute",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 分发；分配"
+ },
+ {
+  "w": "despatch",
+  "disp": "despatch",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 派遣；n. 发送"
+ },
+ {
+  "w": "detach",
+  "disp": "detach",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 脱离；拆卸；分离"
+ },
+ {
+  "w": "undo",
+  "disp": "undo",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 撤销"
+ },
+ {
+  "w": "knot",
+  "disp": "knot",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 结；（树） 节"
+ },
+ {
+  "w": "disguise",
+  "disp": "disguise",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 伪装；v. 掩饰"
+ },
+ {
+  "w": "refuse",
+  "disp": "refuse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 拒绝；不接受"
+ },
+ {
+  "w": "assure",
+  "disp": "assure",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 保证"
+ },
+ {
+  "w": "reverse",
+  "disp": "reverse",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. （使）倒车；撤销；n. 反面"
+ },
+ {
+  "w": "undertake",
+  "disp": "undertake",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 从事；承担"
+ },
+ {
+  "w": "stipulate",
+  "disp": "stipulate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 规定；明确要求"
+ },
+ {
+  "w": "convince",
+  "disp": "convince",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 说服；使确信"
+ },
+ {
+  "w": "reassure",
+  "disp": "reassure",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使…安心"
+ },
+ {
+  "w": "aspire",
+  "disp": "aspire",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 向往；追求；立志"
+ },
+ {
+  "w": "desire",
+  "disp": "desire",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 欲望；v. 渴望"
+ },
+ {
+  "w": "yearn",
+  "disp": "yearn",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 渴望；渴求"
+ },
+ {
+  "w": "invoke",
+  "disp": "invoke",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 援引"
+ },
+ {
+  "w": "itch",
+  "disp": "itch",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 渴望；痒；v. （使）痒"
+ },
+ {
+  "w": "attempt",
+  "disp": "attempt",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 企图；v. 试图"
+ },
+ {
+  "w": "strive",
+  "disp": "strive",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 努力；奋斗；力求"
+ },
+ {
+  "w": "fulfil",
+  "disp": "fulfil",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 履行；满足"
+ },
+ {
+  "w": "loom",
+  "disp": "looms",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 迫近；n. 织布机"
+ },
+ {
+  "w": "sort",
+  "disp": "sort",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 把…分类；解决；n. 种类"
+ },
+ {
+  "w": "commence",
+  "disp": "commence",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 开始发生；着手"
+ },
+ {
+  "w": "launch",
+  "disp": "launch",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 发起；发射；n. 启动"
+ },
+ {
+  "w": "purpose",
+  "disp": "purpose",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 目的；意图"
+ },
+ {
+  "w": "exert",
+  "disp": "exert",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 施加；运用"
+ },
+ {
+  "w": "cope",
+  "disp": "cope",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 应付；处理"
+ },
+ {
+  "w": "conduct",
+  "disp": "conduct",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 实施；传导（电、热）；n. 行为"
+ },
+ {
+  "w": "omit",
+  "disp": "omit",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 省略"
+ },
+ {
+  "w": "erase",
+  "disp": "erase",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 抹去；擦掉"
+ },
+ {
+  "w": "rescue",
+  "disp": "rescue",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 救援；v. 营救"
+ },
+ {
+  "w": "resort",
+  "disp": "resort",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 求助于；n. 度假胜地；手段"
+ },
+ {
+  "w": "recover",
+  "disp": "recover",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 恢复；重新获得；复原"
+ },
+ {
+  "w": "restore",
+  "disp": "restore",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 恢复"
+ },
+ {
+  "w": "rectify",
+  "disp": "rectify",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 纠正；矫正"
+ },
+ {
+  "w": "redeem",
+  "disp": "redeem",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 弥补；兑换"
+ },
+ {
+  "w": "replenish",
+  "disp": "replenish",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 补充"
+ },
+ {
+  "w": "library",
+  "disp": "library",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 图书馆"
+ },
+ {
+  "w": "supply",
+  "disp": "supply",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 供应；供给；v. 供给"
+ },
+ {
+  "w": "quiet",
+  "disp": "quiet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 安静的"
+ },
+ {
+  "w": "render",
+  "disp": "render",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使变得"
+ },
+ {
+  "w": "enlarge",
+  "disp": "enlarge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 扩大；放大"
+ },
+ {
+  "w": "augment",
+  "disp": "augment",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 增强"
+ },
+ {
+  "w": "magnify",
+  "disp": "magnify",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 放大"
+ },
+ {
+  "w": "amplify",
+  "disp": "amplify",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 放大；增强"
+ },
+ {
+  "w": "uphold",
+  "disp": "uphold",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 拥护；支持；维护"
+ },
+ {
+  "w": "backup",
+  "disp": "backup",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 后援"
+ },
+ {
+  "w": "propel",
+  "disp": "propel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 推动"
+ },
+ {
+  "w": "update",
+  "disp": "update",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 更新；v. 更新；升级"
+ },
+ {
+  "w": "leak",
+  "disp": "leak",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 漏；泄露；n. 漏洞"
+ },
+ {
+  "w": "spill",
+  "disp": "spill",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 溢出；n. 溅出"
+ },
+ {
+  "w": "wooden",
+  "disp": "wooden",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 木制的；木头的"
+ },
+ {
+  "w": "damp",
+  "disp": "Damp",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 潮湿的"
+ },
+ {
+  "w": "seep",
+  "disp": "seep",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 渗出"
+ },
+ {
+  "w": "ooze",
+  "disp": "ooze",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 缓流；渗出；n. 淤泥"
+ },
+ {
+  "w": "evacuate",
+  "disp": "evacuate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 撤离"
+ },
+ {
+  "w": "muddy",
+  "disp": "muddy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 泥泞的；模糊不清的"
+ },
+ {
+  "w": "trench",
+  "disp": "trench",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 沟；战壕"
+ },
+ {
+  "w": "saturate",
+  "disp": "saturate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使浸透；使饱和"
+ },
+ {
+  "w": "excuse",
+  "disp": "excuse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 借口；理由；v. 原谅"
+ },
+ {
+  "w": "forgive",
+  "disp": "forgive",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 原谅；宽恕"
+ },
+ {
+  "w": "contain",
+  "disp": "contain",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 包含；容纳"
+ },
+ {
+  "w": "regard",
+  "disp": "regard",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 尊敬；v. 看待"
+ },
+ {
+  "w": "flatter",
+  "disp": "flatter",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 奉承；adj. 更平坦的；adv. 更平直地"
+ },
+ {
+  "w": "worship",
+  "disp": "worship",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 礼拜；v. 崇拜"
+ },
+ {
+  "w": "sake",
+  "disp": "sake",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 缘故；理由"
+ },
+ {
+  "w": "arouse",
+  "disp": "arouse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 唤起；引起"
+ },
+ {
+  "w": "trigger",
+  "disp": "trigger",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 触发；发动"
+ },
+ {
+  "w": "seek",
+  "disp": "seek",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 寻求；寻找"
+ },
+ {
+  "w": "retrieve",
+  "disp": "retrieve",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 取回"
+ },
+ {
+  "w": "testify",
+  "disp": "testify",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 证明；作证"
+ },
+ {
+  "w": "verify",
+  "disp": "verify",
+  "need_syn": false,
+  "need_col": true,
+  "m": "v. 核实"
+ },
+ {
+  "w": "specify",
+  "disp": "specify",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 详细说明"
+ },
+ {
+  "w": "enlighten",
+  "disp": "enlighten",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 启发；开导"
+ },
+ {
+  "w": "impart",
+  "disp": "impart",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 传授；给予；告知"
+ },
+ {
+  "w": "deserve",
+  "disp": "deserve",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 值得；应得"
+ },
+ {
+  "w": "sink",
+  "disp": "sink",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. （使）沉没；n. 洗涤槽；水槽"
+ },
+ {
+  "w": "plummet",
+  "disp": "plummet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 垂直落下；暴跌"
+ },
+ {
+  "w": "muffle",
+  "disp": "muffle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使声音降低；蒙住"
+ },
+ {
+  "w": "overshadow",
+  "disp": "overshadow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使黯然失色"
+ },
+ {
+  "w": "dawn",
+  "disp": "dawn",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 黎明；破晓"
+ },
+ {
+  "w": "greet",
+  "disp": "greet",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 问候；打招呼；迎接"
+ },
+ {
+  "w": "salute",
+  "disp": "salute",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 敬礼；v. 致敬"
+ },
+ {
+  "w": "congratulate",
+  "disp": "congratulate",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 祝贺；恭喜"
+ },
+ {
+  "w": "bless",
+  "disp": "bless",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 祝福；保佑"
+ },
+ {
+  "w": "farewell",
+  "disp": "farewell",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 再会"
+ },
+ {
+  "w": "assort",
+  "disp": "assort",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 把…分类；相称；交往"
+ },
+ {
+  "w": "correspond",
+  "disp": "corresponds",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 相对应"
+ },
+ {
+  "w": "accord",
+  "disp": "accord",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 一致；和谐；协议"
+ },
+ {
+  "w": "attribute",
+  "disp": "attribute",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 把…归因于；n. 品质；属性"
+ },
+ {
+  "w": "recall",
+  "disp": "recall",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 回忆起；召回；n. 记忆力"
+ },
+ {
+  "w": "recollect",
+  "disp": "recollect",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 回想起；记起"
+ },
+ {
+  "w": "remind",
+  "disp": "remind",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 提醒；使想起"
+ },
+ {
+  "w": "retell",
+  "disp": "retell",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 重讲；复述"
+ },
+ {
+  "w": "repeat",
+  "disp": "repeat",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 重复；重做"
+ },
+ {
+  "w": "retrospect",
+  "disp": "retrospect",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 回想；v. 回想"
+ },
+ {
+  "w": "impress",
+  "disp": "impress",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使留下深刻印象；使铭记"
+ },
+ {
+  "w": "surmount",
+  "disp": "surmount",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 克服；越过；在...顶上"
+ },
+ {
+  "w": "mortify",
+  "disp": "mortify",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使蒙屈辱；克制"
+ },
+ {
+  "w": "pervade",
+  "disp": "pervade",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 弥漫；遍及；蔓延"
+ },
+ {
+  "w": "substitute",
+  "disp": "substitute",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 代用品；代替物；v. 替代"
+ },
+ {
+  "w": "differentiate",
+  "disp": "differentiate",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 区别；区分；辨别"
+ },
+ {
+  "w": "distinguish",
+  "disp": "distinguish",
+  "need_syn": true,
+  "need_col": false,
+  "m": "v. 使有别于；区分"
+ },
+ {
+  "w": "incline",
+  "disp": "incline",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 倾斜"
+ },
+ {
+  "w": "anger",
+  "disp": "anger",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 愤怒"
+ },
+ {
+  "w": "lean",
+  "disp": "lean",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 倚靠；倾斜；adj. 瘦的"
+ },
+ {
+  "w": "sideways",
+  "disp": "sideways",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adv. 斜向一边地"
+ },
+ {
+  "w": "temper",
+  "disp": "temper",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 暴躁脾气；情绪；v. 使…缓和"
+ },
+ {
+  "w": "manner",
+  "disp": "manner",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 方式；举止"
+ },
+ {
+  "w": "personality",
+  "disp": "personality",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 个性；人格"
+ },
+ {
+  "w": "virtue",
+  "disp": "virtue",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 美德；优点"
+ },
+ {
+  "w": "stature",
+  "disp": "stature",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 身材；身高；n. 声望"
+ },
+ {
+  "w": "flesh",
+  "disp": "flesh",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 肉体；果肉"
+ },
+ {
+  "w": "mankind",
+  "disp": "mankind",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 人类"
+ },
+ {
+  "w": "bone",
+  "disp": "bone",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 骨；骨头"
+ },
+ {
+  "w": "backbone",
+  "disp": "backbone",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 中坚；骨干"
+ },
+ {
+  "w": "skeleton",
+  "disp": "skeleton",
+  "need_syn": false,
+  "need_col": true,
+  "m": "n. 骨架；纲要；梗概"
+ },
+ {
+  "w": "round",
+  "disp": "round",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 回合；adj. 圆的；prep./adv. 在…周围"
+ },
+ {
+  "w": "skull",
+  "disp": "skull",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 颅骨；头骨"
+ },
+ {
+  "w": "physical",
+  "disp": "physical",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 身体的；物质的；外观的"
+ },
+ {
+  "w": "nurse",
+  "disp": "nurse",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 护士"
+ },
+ {
+  "w": "cheek",
+  "disp": "cheek",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 脸颊"
+ },
+ {
+  "w": "forehead",
+  "disp": "forehead",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 前额"
+ },
+ {
+  "w": "gentle",
+  "disp": "gentle",
+  "need_syn": true,
+  "need_col": false,
+  "m": "adj. 温和的；文雅的；温柔的"
+ },
+ {
+  "w": "brow",
+  "disp": "brow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 额头"
+ },
+ {
+  "w": "eyelash",
+  "disp": "eyelashes",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 眼睫毛"
+ },
+ {
+  "w": "lip",
+  "disp": "lips",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 嘴唇；边"
+ },
+ {
+  "w": "space",
+  "disp": "space",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 空间；太空"
+ },
+ {
+  "w": "tongue",
+  "disp": "tongue",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 舌头；语言"
+ },
+ {
+  "w": "throat",
+  "disp": "throat",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 咽喉；嗓子"
+ },
+ {
+  "w": "chin",
+  "disp": "chin",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 下巴；颏"
+ },
+ {
+  "w": "gorge",
+  "disp": "gorge",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 峡谷；山谷"
+ },
+ {
+  "w": "jaw",
+  "disp": "jaw",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 下巴；颚；颌"
+ },
+ {
+  "w": "neck",
+  "disp": "neck",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 颈；脖子"
+ },
+ {
+  "w": "beard",
+  "disp": "beard",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 胡须"
+ },
+ {
+  "w": "shoulder",
+  "disp": "shoulder",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 肩膀"
+ },
+ {
+  "w": "limb",
+  "disp": "limb",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 肢体"
+ },
+ {
+  "w": "elbow",
+  "disp": "elbow",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 肘部；v. 用肘推挤"
+ },
+ {
+  "w": "wrist",
+  "disp": "wrist",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 手腕；腕关节"
+ },
+ {
+  "w": "thumb",
+  "disp": "thumb",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大拇指"
+ },
+ {
+  "w": "palm",
+  "disp": "palm",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 手掌；手心；n. 棕榈"
+ },
+ {
+  "w": "finger",
+  "disp": "finger",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 手指"
+ },
+ {
+  "w": "chest",
+  "disp": "chest",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 胸部；箱子；柜子"
+ },
+ {
+  "w": "tube",
+  "disp": "tube",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 管子；地铁"
+ },
+ {
+  "w": "abdomen",
+  "disp": "abdomen",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 腹部"
+ },
+ {
+  "w": "rib",
+  "disp": "rib",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 肋骨"
+ },
+ {
+  "w": "band",
+  "disp": "band",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 乐队；带子；一伙"
+ },
+ {
+  "w": "waist",
+  "disp": "waist",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 腰"
+ },
+ {
+  "w": "echo",
+  "disp": "echo",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 回声；v. 回响"
+ },
+ {
+  "w": "organ",
+  "disp": "organ",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 器官"
+ },
+ {
+  "w": "liver",
+  "disp": "liver",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 肝脏"
+ },
+ {
+  "w": "fine",
+  "disp": "fine",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 罚款；adj. 很好的；健康的"
+ },
+ {
+  "w": "stomach",
+  "disp": "stomach",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 胃"
+ },
+ {
+  "w": "womb",
+  "disp": "womb",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 子宫"
+ },
+ {
+  "w": "kidney",
+  "disp": "kidney",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 肾；肾脏；腰子"
+ },
+ {
+  "w": "lung",
+  "disp": "lung",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 肺"
+ },
+ {
+  "w": "gland",
+  "disp": "gland",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 腺"
+ },
+ {
+  "w": "chamber",
+  "disp": "chambers",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 室；大会议室"
+ },
+ {
+  "w": "intestine",
+  "disp": "intestine",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 肠"
+ },
+ {
+  "w": "thigh",
+  "disp": "thigh",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 大腿；股"
+ },
+ {
+  "w": "joint",
+  "disp": "joint",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 关节；adj. 联合的"
+ },
+ {
+  "w": "blanket",
+  "disp": "blanket",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 毛毯；厚的覆盖物；adj. 包括所有的"
+ },
+ {
+  "w": "lap",
+  "disp": "lap",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. （人坐着时）大腿部；一圈"
+ },
+ {
+  "w": "ankle",
+  "disp": "ankle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 踝；踝关节"
+ },
+ {
+  "w": "heel",
+  "disp": "heel",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 足跟；脚后跟"
+ },
+ {
+  "w": "toe",
+  "disp": "toe",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 脚趾；v. 用脚尖触"
+ },
+ {
+  "w": "muscle",
+  "disp": "muscle",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 肌肉；权力；影响力"
+ },
+ {
+  "w": "pore",
+  "disp": "pore",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 毛孔；v. 细看"
+ },
+ {
+  "w": "pulse",
+  "disp": "pulse",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 脉搏"
+ },
+ {
+  "w": "artery",
+  "disp": "artery",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 动脉；干线；要道"
+ },
+ {
+  "w": "nerve",
+  "disp": "nerve",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 神经"
+ },
+ {
+  "w": "hormone",
+  "disp": "hormone",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 荷尔蒙；激素"
+ },
+ {
+  "w": "stimulus",
+  "disp": "stimulus",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 刺激物；促进因素"
+ },
+ {
+  "w": "immune",
+  "disp": "immune",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 有免疫力的；免疫的；不受影响的"
+ },
+ {
+  "w": "biorhythm",
+  "disp": "biorhythm",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 生物节律"
+ },
+ {
+  "w": "spring",
+  "disp": "spring",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 跳；n. 春天；弹簧"
+ },
+ {
+  "w": "eyesight",
+  "disp": "eyesight",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 视力"
+ },
+ {
+  "w": "visible",
+  "disp": "visible",
+  "need_syn": false,
+  "need_col": true,
+  "m": "adj. 看得见的；显眼的"
+ },
+ {
+  "w": "vague",
+  "disp": "vague",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 不明确的；含糊的"
+ },
+ {
+  "w": "dumb",
+  "disp": "dumb",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 愚笨的；哑的"
+ },
+ {
+  "w": "aural",
+  "disp": "aural",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 听觉的；听的"
+ },
+ {
+  "w": "dental",
+  "disp": "dental",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 牙齿的；牙科的"
+ },
+ {
+  "w": "awake",
+  "disp": "awake",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 醒着的"
+ },
+ {
+  "w": "yawn",
+  "disp": "yawn",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 打呵欠；n. 呵欠"
+ },
+ {
+  "w": "nap",
+  "disp": "nap",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 小睡；v. 打盹"
+ },
+ {
+  "w": "doze",
+  "disp": "doze",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 打瞌睡"
+ },
+ {
+  "w": "cripple",
+  "disp": "cripple",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使成瘸子；严重损坏（削弱）"
+ },
+ {
+  "w": "lame",
+  "disp": "lame",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 瘸的；站不住脚的"
+ },
+ {
+  "w": "dwarf",
+  "disp": "dwarf",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使显得矮小；n. 矮星"
+ },
+ {
+  "w": "pregnancy",
+  "disp": "pregnancy",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 妊娠；怀孕；孕期"
+ },
+ {
+  "w": "condom",
+  "disp": "condom",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 避孕套；阴茎套"
+ },
+ {
+  "w": "clone",
+  "disp": "clone",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 克隆；无性繁殖"
+ },
+ {
+  "w": "error",
+  "disp": "error",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 错误；差错"
+ },
+ {
+  "w": "symptom",
+  "disp": "symptom",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 征兆；症状"
+ },
+ {
+  "w": "disease",
+  "disp": "disease",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 疾病"
+ },
+ {
+  "w": "mild",
+  "disp": "mild",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 温和的；轻微的"
+ },
+ {
+  "w": "illness",
+  "disp": "illness",
+  "need_syn": true,
+  "need_col": false,
+  "m": "n. 病；疾病"
+ },
+ {
+  "w": "moan",
+  "disp": "moan",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 呻吟；抱怨；n. 呻吟声"
+ },
+ {
+  "w": "infection",
+  "disp": "infection",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 感染"
+ },
+ {
+  "w": "detriment",
+  "disp": "detriment",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 损害物"
+ },
+ {
+  "w": "broken",
+  "disp": "broken",
+  "need_syn": true,
+  "need_col": true,
+  "m": "adj. 破损的；v. 打破；过去分词词形"
+ },
+ {
+  "w": "disable",
+  "disp": "disable",
+  "need_syn": true,
+  "need_col": true,
+  "m": "v. 使残废；使无能力"
+ },
+ {
+  "w": "invalid",
+  "disp": "invalid",
+  "need_syn": true,
+  "need_col": true,
+  "m": "n. 病人；病弱者；adj. 无效的"
+ }
+]

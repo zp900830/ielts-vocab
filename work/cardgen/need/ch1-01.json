@@ -1,0 +1,1276 @@
+[
+ {
+  "w": "abnormal",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "found abnormal"
+  ]
+ },
+ {
+  "w": "acoustic",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "use soft acoustic",
+   "soft acoustic"
+  ]
+ },
+ {
+  "w": "adjacent",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "stand adjacent"
+  ]
+ },
+ {
+  "w": "alga",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "green alga",
+   "green alga coats",
+   "alga coats"
+  ]
+ },
+ {
+  "w": "alternate",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "alternate path",
+   "alternate path back"
+  ]
+ },
+ {
+  "w": "altitude",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "high altitude",
+   "low altitude"
+  ]
+ },
+ {
+  "w": "amphibian",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small green amphibian",
+   "small green amphibian pool",
+   "green amphibian",
+   "green amphibian pool",
+   "green amphibian pool nearby",
+   "amphibian pool"
+  ]
+ },
+ {
+  "w": "anatomy",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "basic bird anatomy",
+   "basic bird anatomy charts",
+   "bird anatomy",
+   "bird anatomy charts",
+   "anatomy charts"
+  ]
+ },
+ {
+  "w": "antarctic",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "antarctic lies",
+   "antarctic lies even"
+  ]
+ },
+ {
+  "w": "antenna",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "thin antenna"
+  ]
+ },
+ {
+  "w": "arable",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "arable land",
+   "arable land exists"
+  ]
+ },
+ {
+  "w": "arctic",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "frozen arctic",
+   "frozen arctic ice",
+   "arctic ice"
+  ]
+ },
+ {
+  "w": "arid",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "arid desert"
+  ]
+ },
+ {
+  "w": "aromatic",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small aromatic",
+   "small aromatic leaves",
+   "small aromatic leaves ripen",
+   "aromatic leaves",
+   "aromatic leaves ripen"
+  ]
+ },
+ {
+  "w": "ash",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "found ash"
+  ]
+ },
+ {
+  "w": "astronaut",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "astronaut hat"
+  ]
+ },
+ {
+  "w": "astronomy",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "astronomy became",
+   "astronomy became clear"
+  ]
+ },
+ {
+  "w": "atom",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "atom gives"
+  ]
+ },
+ {
+  "w": "bacteria",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "harmless mouth bacteria",
+   "mouth bacteria"
+  ]
+ },
+ {
+  "w": "bark",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "short warning bark",
+   "warning bark"
+  ]
+ },
+ {
+  "w": "barn",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "barn stood",
+   "barn stood stable"
+  ]
+ },
+ {
+  "w": "barren",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "vast barren",
+   "vast barren plain",
+   "vast barren plain without",
+   "barren plain",
+   "barren plain without"
+  ]
+ },
+ {
+  "w": "beach",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quiet golden beach",
+   "golden beach"
+  ]
+ },
+ {
+  "w": "beast",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "large tired beast",
+   "large tired beast rested",
+   "tired beast",
+   "tired beast rested",
+   "tired beast rested quietly",
+   "beast rested"
+  ]
+ },
+ {
+  "w": "bite",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "deep bite"
+  ]
+ },
+ {
+  "w": "bloom",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "fresh bloom",
+   "fresh bloom adds",
+   "bloom adds"
+  ]
+ },
+ {
+  "w": "blossom",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "pink blossom"
+  ]
+ },
+ {
+  "w": "botanist",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "cheerful botanist",
+   "cheerful botanist showed",
+   "botanist showed"
+  ]
+ },
+ {
+  "w": "botany",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "botany books"
+  ]
+ },
+ {
+  "w": "bough",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "stout bough"
+  ]
+ },
+ {
+  "w": "branch",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "crowded branch",
+   "crowded branch safely",
+   "branch safely"
+  ]
+ },
+ {
+  "w": "breeze",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "soft breeze",
+   "soft breeze cooled",
+   "breeze cooled",
+   "cool breezes",
+   "cool breezes circulate",
+   "breezes circulate"
+  ]
+ },
+ {
+  "w": "bristle",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "stiff bristle",
+   "stiff bristle coat",
+   "stiff bristle coat then",
+   "bristle coat",
+   "bristle coat then"
+  ]
+ },
+ {
+  "w": "brook",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "narrow brook"
+  ]
+ },
+ {
+  "w": "brute",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "rough brute"
+  ]
+ },
+ {
+  "w": "bud",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "every firm bud",
+   "firm bud"
+  ]
+ },
+ {
+  "w": "buffalo",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "calm grey buffalo",
+   "grey buffalo"
+  ]
+ },
+ {
+  "w": "bull",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "loud angry bull",
+   "loud angry bull stamped",
+   "angry bull",
+   "angry bull stamped",
+   "bull stamped"
+  ]
+ },
+ {
+  "w": "bunch",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "fresh bunch"
+  ]
+ },
+ {
+  "w": "bundle",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "neat bundle"
+  ]
+ },
+ {
+  "w": "cage",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "locked in cages"
+  ]
+ },
+ {
+  "w": "calamity",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "dreadful calamity"
+  ]
+ },
+ {
+  "w": "calf",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "spotted calf"
+  ]
+ },
+ {
+  "w": "carnivore",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "predator"
+  ],
+  "col": [
+   "meat eating carnivore",
+   "meat eating carnivore needs",
+   "eating carnivore",
+   "eating carnivore needs",
+   "eating carnivore needs different",
+   "carnivore needs"
+  ]
+ },
+ {
+  "w": "cataclysmic",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "cataclysmic storm",
+   "cataclysmic storm arrived"
+  ]
+ },
+ {
+  "w": "catastrophic",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "catastrophic harm"
+  ]
+ },
+ {
+  "w": "cattle",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quiet milk cattle",
+   "quiet milk cattle stood",
+   "milk cattle",
+   "milk cattle stood",
+   "cattle stood"
+  ]
+ },
+ {
+  "w": "cave",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "dark cave"
+  ]
+ },
+ {
+  "w": "celestial",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "celestial bodies"
+  ]
+ },
+ {
+  "w": "celsius",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "five degrees celsius",
+   "degrees celsius"
+  ]
+ },
+ {
+  "w": "charcoal",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small charcoal"
+  ]
+ },
+ {
+  "w": "chill",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "freeze"
+  ],
+  "col": [
+   "evening chill",
+   "evening chill soon",
+   "evening chill soon forced",
+   "chill soon",
+   "chill soon forced"
+  ]
+ },
+ {
+  "w": "chunk",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "loose chunk"
+  ]
+ },
+ {
+  "w": "circuit",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "lamp circuit"
+  ]
+ },
+ {
+  "w": "claw",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "sharp little claw",
+   "little claw"
+  ]
+ },
+ {
+  "w": "clay",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "damp clay"
+  ]
+ },
+ {
+  "w": "collision",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "funny collision"
+  ]
+ },
+ {
+  "w": "comet",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "bright comet"
+  ]
+ },
+ {
+  "w": "composition",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "basic composition"
+  ]
+ },
+ {
+  "w": "compound",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "strange compound"
+  ]
+ },
+ {
+  "w": "considerable",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "feel considerable",
+   "feel considerable pride",
+   "considerable pride"
+  ]
+ },
+ {
+  "w": "continent",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "northern continent"
+  ]
+ },
+ {
+  "w": "counterbalance",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "offset"
+  ],
+  "col": [
+   "shade nets counterbalance",
+   "shade nets counterbalance harsh",
+   "nets counterbalance",
+   "nets counterbalance harsh",
+   "nets counterbalance harsh light",
+   "counterbalance harsh"
+  ]
+ },
+ {
+  "w": "courtship",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "spring courtship",
+   "spring courtship songs",
+   "spring courtship songs filled",
+   "courtship songs",
+   "courtship songs filled"
+  ]
+ },
+ {
+  "w": "crack",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "thin crack",
+   "thin crack spreading",
+   "crack spreading"
+  ]
+ },
+ {
+  "w": "crater",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "circular crater",
+   "circular crater yesterday",
+   "crater yesterday"
+  ]
+ },
+ {
+  "w": "crawl",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "crawl low"
+  ]
+ },
+ {
+  "w": "creep",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "creep close"
+  ]
+ },
+ {
+  "w": "cricket",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "loud green cricket",
+   "loud green cricket sang",
+   "green cricket",
+   "green cricket sang",
+   "green cricket sang outdoors",
+   "cricket sang"
+  ]
+ },
+ {
+  "w": "crow",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "stand out from the crowd",
+   "bigger weekend crowd",
+   "bigger weekend crowd came",
+   "weekend crowd",
+   "weekend crowd came",
+   "crowd came"
+  ]
+ },
+ {
+  "w": "cube",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "square food cube",
+   "food cube"
+  ]
+ },
+ {
+  "w": "curl",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "curling vine",
+   "warm curl"
+  ]
+ },
+ {
+  "w": "curve",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "soft curve",
+   "soft curve across",
+   "curve across",
+   "watched refraction curve",
+   "watched refraction curve lines",
+   "refraction curve"
+  ]
+ },
+ {
+  "w": "damp",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "damp clay"
+  ]
+ },
+ {
+  "w": "debris",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "sharp debris",
+   "sharp debris across",
+   "debris across"
+  ]
+ },
+ {
+  "w": "decompose",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "fallen bits decompose",
+   "fallen bits decompose fast",
+   "bits decompose",
+   "bits decompose fast",
+   "decompose fast"
+  ]
+ },
+ {
+  "w": "defensive",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "defensive around"
+  ]
+ },
+ {
+  "w": "degrade",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old tents degrade",
+   "old tents degrade fast",
+   "tents degrade",
+   "tents degrade fast",
+   "degrade fast"
+  ]
+ },
+ {
+  "w": "delta",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "green river delta",
+   "river delta"
+  ]
+ },
+ {
+  "w": "dense",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "dense snow",
+   "dense full"
+  ]
+ },
+ {
+  "w": "descendant",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "happy descendant",
+   "happy descendant beside",
+   "descendant beside"
+  ]
+ },
+ {
+  "w": "desert",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "arid desert",
+   "hot dry desert",
+   "dry desert"
+  ]
+ },
+ {
+  "w": "desolate",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "long desolate",
+   "long desolate road",
+   "desolate road"
+  ]
+ },
+ {
+  "w": "despair",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "felt brief despair",
+   "felt brief despair then",
+   "brief despair",
+   "brief despair then",
+   "brief despair then took",
+   "despair then"
+  ]
+ },
+ {
+  "w": "desperate",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "then took desperate",
+   "then took desperate steps",
+   "took desperate",
+   "took desperate steps",
+   "desperate steps"
+  ]
+ },
+ {
+  "w": "destructive",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "destructive storm",
+   "destructive garden",
+   "destructive garden pest"
+  ]
+ },
+ {
+  "w": "devour",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quickly devour"
+  ]
+ },
+ {
+  "w": "dew",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "fresh morning dew",
+   "fresh morning dew still",
+   "morning dew",
+   "morning dew still",
+   "morning dew still covers",
+   "dew still"
+  ]
+ },
+ {
+  "w": "dimension",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "box dimension"
+  ]
+ },
+ {
+  "w": "dioxide",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "carbon dioxide"
+  ]
+ },
+ {
+  "w": "dirt",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "wipes dirt"
+  ]
+ },
+ {
+  "w": "donkey",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "kind grey donkey",
+   "kind grey donkey carried",
+   "grey donkey",
+   "grey donkey carried",
+   "grey donkey carried light",
+   "donkey carried"
+  ]
+ },
+ {
+  "w": "downpour",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "sudden downpour"
+  ]
+ },
+ {
+  "w": "dragon",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "dragon slept",
+   "dragon slept behind"
+  ]
+ },
+ {
+  "w": "dramatic",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "dramatic change"
+  ]
+ },
+ {
+  "w": "drip",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "keeps drip"
+  ]
+ },
+ {
+  "w": "drown",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "easily drown",
+   "easily drown careless",
+   "drown careless"
+  ]
+ },
+ {
+  "w": "eagle",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "bald eagle",
+   "bald eagle sat",
+   "eagle sat"
+  ]
+ },
+ {
+  "w": "eclipse",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "strange partial eclipse",
+   "strange partial eclipse together",
+   "partial eclipse",
+   "partial eclipse together",
+   "eclipse together"
+  ]
+ },
+ {
+  "w": "ecliptic",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "dim ecliptic",
+   "dim ecliptic line",
+   "dim ecliptic line runs",
+   "ecliptic line",
+   "ecliptic line runs"
+  ]
+ },
+ {
+  "w": "ecologist",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "friendly ecologist"
+  ]
+ },
+ {
+  "w": "ecology",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "ecology grew"
+  ]
+ },
+ {
+  "w": "emerge",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "shy deer emerge",
+   "shy deer emerge suddenly",
+   "deer emerge",
+   "deer emerge suddenly",
+   "emerge suddenly"
+  ]
+ },
+ {
+  "w": "enzyme",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "busy enzyme",
+   "busy enzyme breaks",
+   "busy enzyme breaks waste",
+   "enzyme breaks",
+   "enzyme breaks waste"
+  ]
+ },
+ {
+  "w": "equator",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "equator divides"
+  ]
+ },
+ {
+  "w": "evaporate",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "pools quickly evaporate",
+   "quickly evaporate"
+  ]
+ },
+ {
+  "w": "exceed",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "never exceed"
+  ]
+ },
+ {
+  "w": "excrete",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "excrete waste"
+  ]
+ },
+ {
+  "w": "expedition",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "real expedition"
+  ]
+ },
+ {
+  "w": "experimental",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small experimental",
+   "small experimental corner",
+   "experimental corner"
+  ]
+ }
+]

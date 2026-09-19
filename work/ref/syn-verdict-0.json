@@ -1,0 +1,3744 @@
+[
+ {
+  "head": "abandon",
+  "verdict": "trim",
+  "wrong": [
+   "derelict: n./adj.「废弃物/玩忽的」，非动词「抛弃」"
+  ],
+  "corrected": [
+   "discard",
+   "forsake"
+  ],
+  "sample_new_note": "同义词：discard, forsake"
+ },
+ {
+  "head": "abnormal",
+  "verdict": "trim",
+  "wrong": [
+   "extreme: 「极端的」≠「反常的」，程度词与偏离常态不同义"
+  ],
+  "corrected": [
+   "exceptional",
+   "extraordinary",
+   "rare",
+   "remarkable"
+  ],
+  "sample_new_note": "同义词：exceptional, extraordinary, rare, remarkable"
+ },
+ {
+  "head": "accelerate",
+  "verdict": "replace",
+  "wrong": [
+   "breakneck: 形容词（breakneck speed），词性不合",
+   "immediately: 副词「立即」≠加速",
+   "prompt: adj.迅速的 / v.促使，均非「加速」",
+   "quick: 形容词",
+   "rapid: 形容词"
+  ],
+  "corrected": [
+   "speed up",
+   "hasten",
+   "precipitate"
+  ],
+  "sample_new_note": "同义词：speed up, hasten, precipitate"
+ },
+ {
+  "head": "accumulate",
+  "verdict": "trim",
+  "wrong": [
+   "concentration: 名词，词性不合",
+   "emphasis: 名词「强调」，话题词",
+   "focus: 「聚焦」≠「积累」，话题词"
+  ],
+  "corrected": [
+   "concentrate",
+   "gather"
+  ],
+  "sample_new_note": "同义词：concentrate, gather"
+ },
+ {
+  "head": "accurate",
+  "verdict": "trim",
+  "wrong": [
+   "accuracy: 名词形式，非形容词同义词"
+  ],
+  "corrected": [
+   "correct",
+   "exact",
+   "precise"
+  ],
+  "sample_new_note": "同义词：correct, exact, precise"
+ },
+ {
+  "head": "adapt",
+  "verdict": "trim",
+  "wrong": [
+   "adaption: 名词，词性不合",
+   "adjustment: 名词，词性不合",
+   "amend: 「修订（法律/文本）」，不适配「适应」义"
+  ],
+  "corrected": [
+   "adjust",
+   "alter"
+  ],
+  "sample_new_note": "同义词：adjust, alter"
+ },
+ {
+  "head": "adequate",
+  "verdict": "trim",
+  "wrong": [
+   "abundance: 名词，词性不合",
+   "sufficiency: 名词，词性不合"
+  ],
+  "corrected": [
+   "enough",
+   "sufficient"
+  ],
+  "sample_new_note": "同义词：enough, sufficient"
+ },
+ {
+  "head": "adjust",
+  "verdict": "trim",
+  "wrong": [
+   "adjustment: 名词，词性不合",
+   "amend: 「修订」≠「调整」"
+  ],
+  "corrected": [
+   "adapt",
+   "alter",
+   "change"
+  ],
+  "sample_new_note": "同义词：adapt, alter, change"
+ },
+ {
+  "head": "admit",
+  "verdict": "replace",
+  "wrong": [
+   "appreciate: 「欣赏/感激」集群残留，≠承认",
+   "ascertain: 「查明」≠承认",
+   "comprehend: 「理解」≠承认",
+   "identify: 「识别」≠承认"
+  ],
+  "corrected": [
+   "acknowledge",
+   "confess",
+   "concede"
+  ],
+  "sample_new_note": "同义词：acknowledge, confess, concede"
+ },
+ {
+  "head": "advance",
+  "verdict": "replace",
+  "wrong": [
+   "activate: 「激活」≠进步/前进",
+   "advantage: 「优势」≠「进步」，话题词",
+   "beneficial: 形容词，词性不合",
+   "benefit: 「利益」≠「进步」"
+  ],
+  "corrected": [
+   "boost",
+   "progress",
+   "headway"
+  ],
+  "sample_new_note": "同义词：boost, progress, headway"
+ },
+ {
+  "head": "adversity",
+  "verdict": "replace",
+  "wrong": [
+   "barrier: 「障碍」≠「逆境」",
+   "burden: 「负担」≠「逆境」",
+   "challenge: 「挑战」相关但不同概念",
+   "challenging: 形容词，词性不合",
+   "defect: 「缺陷」≠「逆境」"
+  ],
+  "corrected": [
+   "hardship",
+   "misfortune",
+   "distress"
+  ],
+  "sample_new_note": "同义词：hardship, misfortune, distress"
+ },
+ {
+  "head": "affect",
+  "verdict": "trim",
+  "wrong": [
+   "effect: 名词「影响/效果」，动词词条下会误导"
+  ],
+  "corrected": [
+   "disturb",
+   "impact",
+   "influence"
+  ],
+  "sample_new_note": "同义词：disturb, impact, influence"
+ },
+ {
+  "head": "aggressive",
+  "verdict": "trim",
+  "wrong": [
+   "aggression: 名词，词性不合",
+   "attack: 动词/名词，词性不合",
+   "violate: 动词「违反」，词性与义均不合"
+  ],
+  "corrected": [
+   "fierce",
+   "violent"
+  ],
+  "sample_new_note": "同义词：fierce, violent"
+ },
+ {
+  "head": "agriculture",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "farm",
+   "farming"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "aid",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "assistance",
+   "help",
+   "support"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "alleviate",
+  "verdict": "trim",
+  "wrong": [
+   "cut: 「削减（具体数量）」≠缓解（痛苦）",
+   "decline: 不及物「下降」，词义与方向不合",
+   "deduction: 名词「扣除」"
+  ],
+  "corrected": [
+   "decrease",
+   "diminish"
+  ],
+  "sample_new_note": "同义词：decrease, diminish"
+ },
+ {
+  "head": "alter",
+  "verdict": "trim",
+  "wrong": [
+   "adjustment: 名词，词性不合"
+  ],
+  "corrected": [
+   "adapt",
+   "adjust",
+   "amend",
+   "change"
+  ],
+  "sample_new_note": "同义词：adapt, adjust, amend, change"
+ },
+ {
+  "head": "altitude",
+  "verdict": "replace",
+  "wrong": [
+   "high: 形容词，词性不合"
+  ],
+  "corrected": [
+   "height",
+   "elevation"
+  ],
+  "sample_new_note": "同义词：height, elevation"
+ },
+ {
+  "head": "annual",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "yearly"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "anticipate",
+  "verdict": "trim",
+  "wrong": [
+   "prophecy: 名词（动词为 prophesy），词性不合"
+  ],
+  "corrected": [
+   "conjecture",
+   "expect",
+   "predict"
+  ],
+  "sample_new_note": "同义词：conjecture, expect, predict"
+ },
+ {
+  "head": "anxiety",
+  "verdict": "trim",
+  "wrong": [
+   "nervous: 形容词，词性不合"
+  ],
+  "corrected": [
+   "stress",
+   "tension",
+   "upset"
+  ],
+  "sample_new_note": "同义词：stress, tension, upset"
+ },
+ {
+  "head": "appreciate",
+  "verdict": "trim",
+  "wrong": [
+   "admit: 「承认」集群残留，≠欣赏/感激",
+   "ascertain: 「查明」≠欣赏",
+   "identify: 「识别」≠欣赏"
+  ],
+  "corrected": [
+   "acknowledge",
+   "comprehend"
+  ],
+  "sample_new_note": "同义词：acknowledge, comprehend"
+ },
+ {
+  "head": "apprentice",
+  "verdict": "replace",
+  "wrong": [
+   "apprenticeship: 名词指「学徒身份/时期」，非人",
+   "practitioner: 「执业者」，与学徒相对"
+  ],
+  "corrected": [
+   "intern",
+   "trainee",
+   "learner"
+  ],
+  "sample_new_note": "同义词：intern, trainee, learner"
+ },
+ {
+  "head": "approach",
+  "verdict": "trim",
+  "wrong": [
+   "exercise: 「练习」≠方法",
+   "mechanism: 「机制」≠方法",
+   "phase: 「阶段」≠方法"
+  ],
+  "corrected": [
+   "method",
+   "practice"
+  ],
+  "sample_new_note": "同义词：method, practice"
+ },
+ {
+  "head": "approximately",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "about",
+   "around"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "artificial",
+  "verdict": "replace",
+  "wrong": [
+   "automated: 「自动化的」≠人造的",
+   "automatically: 副词，词性不合",
+   "automation: 名词「自动化」",
+   "autonomy: 名词「自主权」",
+   "independent: 「独立的」≠人造的"
+  ],
+  "corrected": [
+   "synthetic",
+   "man-made",
+   "simulated"
+  ],
+  "sample_new_note": "同义词：synthetic, man-made, simulated"
+ },
+ {
+  "head": "assemble",
+  "verdict": "replace",
+  "wrong": [
+   "component: 名词「成分」",
+   "compose: 「组成/创作」，方向相反",
+   "element: 名词「要素」",
+   "fragment: 名词「碎片」，近反义",
+   "part: 名词「部分」"
+  ],
+  "corrected": [
+   "put together",
+   "construct",
+   "gather"
+  ],
+  "sample_new_note": "同义词：put together, construct, gather"
+ },
+ {
+  "head": "assess",
+  "verdict": "trim",
+  "wrong": [
+   "assessment: 名词，词性不合",
+   "evaluation: 名词，词性不合"
+  ],
+  "corrected": [
+   "calculate",
+   "measure"
+  ],
+  "sample_new_note": "同义词：calculate, measure"
+ },
+ {
+  "head": "assign",
+  "verdict": "trim",
+  "wrong": [
+   "spread: 「传播」≠分配"
+  ],
+  "corrected": [
+   "allocate",
+   "appoint",
+   "designate",
+   "distribute"
+  ],
+  "sample_new_note": "同义词：allocate, appoint, designate, distribute"
+ },
+ {
+  "head": "association",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "institute"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "assume",
+  "verdict": "replace",
+  "wrong": [
+   "assumption: 名词，词性不合",
+   "hypothesis: 名词，词性不合"
+  ],
+  "corrected": [
+   "suppose",
+   "presume",
+   "take for granted"
+  ],
+  "sample_new_note": "同义词：suppose, presume, take for granted"
+ },
+ {
+  "head": "assure",
+  "verdict": "trim",
+  "wrong": [
+   "assurance: 名词，词性不合",
+   "bone: 「骨头」，集群残留，完全无关",
+   "death: 「死亡」，集群残留，完全无关"
+  ],
+  "corrected": [
+   "ensure",
+   "guarantee"
+  ],
+  "sample_new_note": "同义词：ensure, guarantee"
+ },
+ {
+  "head": "attach",
+  "verdict": "trim",
+  "wrong": [
+   "connection: 名词，词性不合",
+   "correlation: 名词「相关性」"
+  ],
+  "corrected": [
+   "associate",
+   "connect",
+   "join"
+  ],
+  "sample_new_note": "同义词：associate, connect, join"
+ },
+ {
+  "head": "attack",
+  "verdict": "replace",
+  "wrong": [
+   "aggression: 名词，词性不合",
+   "aggressive: 形容词，词性不合",
+   "fierce: 形容词",
+   "violate: 动词「违反」≠攻击",
+   "violent: 形容词"
+  ],
+  "corrected": [
+   "assault",
+   "strike",
+   "invade"
+  ],
+  "sample_new_note": "同义词：assault, strike, invade"
+ },
+ {
+  "head": "attain",
+  "verdict": "replace",
+  "wrong": [
+   "bear: 「忍受/承担」≠达到",
+   "detain: 「拘留」，近形词",
+   "face: 「面对」≠达到",
+   "hold: 「持有」≠达到",
+   "keep: 「保持」≠达到"
+  ],
+  "corrected": [
+   "achieve",
+   "reach",
+   "gain"
+  ],
+  "sample_new_note": "同义词：achieve, reach, gain"
+ },
+ {
+  "head": "attempt",
+  "verdict": "replace",
+  "wrong": [
+   "test: 「检验/测试」≠「企图/试图」"
+  ],
+  "corrected": [
+   "try",
+   "endeavor",
+   "seek"
+  ],
+  "sample_new_note": "同义词：try, endeavor, seek"
+ },
+ {
+  "head": "attitude",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "opinion",
+   "perspective"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "authority",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "council",
+   "government",
+   "ministry",
+   "official"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "available",
+  "verdict": "replace",
+  "wrong": [
+   "conveyable: 罕用词「可传达的」，非「可获得」",
+   "feasible: 「可行的」≠可获得的",
+   "portable: 「便携的」",
+   "practical: 「实用的」",
+   "realistic: 「现实的」"
+  ],
+  "corrected": [
+   "obtainable",
+   "accessible",
+   "usable"
+  ],
+  "sample_new_note": "同义词：obtainable, accessible, usable"
+ },
+ {
+  "head": "bacteria",
+  "verdict": "trim",
+  "wrong": [
+   "fungi: 「真菌」，与细菌并列的不同生物类群",
+   "virus: 「病毒」≠细菌，语料中刻意对比"
+  ],
+  "corrected": [
+   "germ",
+   "microbe"
+  ],
+  "sample_new_note": "同义词：germ, microbe"
+ },
+ {
+  "head": "barrier",
+  "verdict": "replace",
+  "wrong": [
+   "adversity: 「逆境」≠障碍",
+   "burden: 「负担」≠障碍",
+   "challenge: 「挑战」≠障碍",
+   "challenging: 形容词",
+   "defect: 「缺陷」≠障碍"
+  ],
+  "corrected": [
+   "obstacle",
+   "hurdle",
+   "obstruction"
+  ],
+  "sample_new_note": "同义词：obstacle, hurdle, obstruction"
+ },
+ {
+  "head": "bear",
+  "verdict": "replace",
+  "wrong": [
+   "attain: 「达到」≠忍受",
+   "detain: 「拘留」",
+   "face: 「面对」，非「忍受」",
+   "hold: 「持有」",
+   "keep: 「保持」"
+  ],
+  "corrected": [
+   "endure",
+   "tolerate",
+   "stand"
+  ],
+  "sample_new_note": "同义词：endure, tolerate, stand"
+ },
+ {
+  "head": "bias",
+  "verdict": "replace",
+  "wrong": [
+   "biased: 形容词，词性不合"
+  ],
+  "corrected": [
+   "prejudice",
+   "partiality",
+   "predisposition"
+  ],
+  "sample_new_note": "同义词：prejudice, partiality, predisposition"
+ },
+ {
+  "head": "bone",
+  "verdict": "delete",
+  "wrong": [
+   "assurance: 「保证」集群残留，与骨头无关",
+   "assure: 同上，动词",
+   "death: 「死亡」，无关",
+   "ensure: 无关",
+   "guarantee: 无关"
+  ],
+  "corrected": [],
+  "sample_new_note": ""
+ },
+ {
+  "head": "boss",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "director",
+   "employer",
+   "entrepreneur",
+   "leader",
+   "manager"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "boycott",
+  "verdict": "replace",
+  "wrong": [
+   "avoid: 「回避」≠抵制",
+   "cease: 「停止」≠抵制",
+   "counter: 「反驳/抵消」≠抵制",
+   "deter: 「阻止（他人）」≠抵制",
+   "discourage: 「劝阻」≠抵制"
+  ],
+  "corrected": [
+   "shun",
+   "ostracize",
+   "embargo"
+  ],
+  "sample_new_note": "同义词：shun, ostracize, embargo"
+ },
+ {
+  "head": "brain",
+  "verdict": "replace",
+  "wrong": [
+   "cognitive: 形容词，词性不合",
+   "gifted: 形容词",
+   "intelligent: 形容词",
+   "mental: 形容词"
+  ],
+  "corrected": [
+   "intelligence",
+   "intellect",
+   "mind"
+  ],
+  "sample_new_note": "同义词：intelligence, intellect, mind"
+ },
+ {
+  "head": "breed",
+  "verdict": "replace",
+  "wrong": [
+   "cultivate: 「栽培（植物）」≠繁殖",
+   "environment: 名词「环境」",
+   "foster: 「寄养/抚养（人）」≠繁殖",
+   "grow: 「生长」，主体不同",
+   "nurture: 「培育」≠繁殖"
+  ],
+  "corrected": [
+   "reproduce",
+   "propagate",
+   "raise"
+  ],
+  "sample_new_note": "同义词：reproduce, propagate, raise"
+ },
+ {
+  "head": "burden",
+  "verdict": "replace",
+  "wrong": [
+   "adversity: 「逆境」≠负担",
+   "barrier: 「障碍」≠负担",
+   "challenge: 「挑战」≠负担",
+   "challenging: 形容词",
+   "defect: 「缺陷」≠负担"
+  ],
+  "corrected": [
+   "load",
+   "weight",
+   "encumbrance"
+  ],
+  "sample_new_note": "同义词：load, weight, encumbrance"
+ },
+ {
+  "head": "calamity",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "catastrophe",
+   "disaster"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "calculate",
+  "verdict": "trim",
+  "wrong": [
+   "assessment: 名词，词性不合",
+   "evaluation: 名词，词性不合"
+  ],
+  "corrected": [
+   "assess",
+   "measure"
+  ],
+  "sample_new_note": "同义词：assess, measure"
+ },
+ {
+  "head": "capable",
+  "verdict": "replace",
+  "wrong": [
+   "ability: 名词，词性不合",
+   "capability: 名词",
+   "capacity: 名词",
+   "competence: 名词",
+   "expertise: 名词"
+  ],
+  "corrected": [
+   "able",
+   "competent",
+   "proficient"
+  ],
+  "sample_new_note": "同义词：able, competent, proficient"
+ },
+ {
+  "head": "catastrophe",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "calamity",
+   "disaster"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "category",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "type"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "cause",
+  "verdict": "replace",
+  "wrong": [
+   "as: 连词",
+   "because: 连词",
+   "derive: 「源自」，方向相反",
+   "explain: 「解释」≠导致",
+   "explanation: 名词"
+  ],
+  "corrected": [
+   "reason",
+   "origin",
+   "source"
+  ],
+  "sample_new_note": "同义词：reason, origin, source"
+ },
+ {
+  "head": "cease",
+  "verdict": "replace",
+  "wrong": [
+   "avoid: 「回避」≠停止",
+   "boycott: 「抵制」≠停止",
+   "counter: 「反驳」≠停止",
+   "deter: 「阻止他人」≠停止",
+   "discourage: 「劝阻」≠停止"
+  ],
+  "corrected": [
+   "stop",
+   "halt",
+   "discontinue"
+  ],
+  "sample_new_note": "同义词：stop, halt, discontinue"
+ },
+ {
+  "head": "certify",
+  "verdict": "trim",
+  "wrong": [
+   "identify: 「识别」≠证明",
+   "test: 「检验」≠证明"
+  ],
+  "corrected": [
+   "authenticate",
+   "confirm",
+   "verify"
+  ],
+  "sample_new_note": "同义词：authenticate, confirm, verify"
+ },
+ {
+  "head": "challenge",
+  "verdict": "replace",
+  "wrong": [
+   "adversity: 「逆境」≠挑战",
+   "barrier: 「障碍」≠挑战",
+   "burden: 「负担」≠挑战",
+   "challenging: 形容词",
+   "defect: 「缺陷」≠挑战"
+  ],
+  "corrected": [
+   "contest",
+   "dispute",
+   "test"
+  ],
+  "sample_new_note": "同义词：contest, dispute, test"
+ },
+ {
+  "head": "chance",
+  "verdict": "trim",
+  "wrong": [
+   "choice: 「选择」≠机会，近形话题词",
+   "option: 「选项」≠机会"
+  ],
+  "corrected": [
+   "likelihood",
+   "opportunity",
+   "possibility"
+  ],
+  "sample_new_note": "同义词：likelihood, opportunity, possibility"
+ },
+ {
+  "head": "chronic",
+  "verdict": "replace",
+  "wrong": [
+   "durable: 「耐用的（物品）」≠慢性的",
+   "duration: 名词",
+   "lasting: 「持久的」，用于物品/影响，非病症",
+   "period: 名词",
+   "time: 名词"
+  ],
+  "corrected": [
+   "persistent",
+   "long-standing",
+   "incurable"
+  ],
+  "sample_new_note": "同义词：persistent, long-standing, incurable"
+ },
+ {
+  "head": "cite",
+  "verdict": "replace",
+  "wrong": [
+   "comment: 「评论」≠引用",
+   "extract: 「提取/摘录片段」≠引用（动词）",
+   "quotation: 名词，词性不合"
+  ],
+  "corrected": [
+   "quote",
+   "refer to",
+   "mention"
+  ],
+  "sample_new_note": "同义词：quote, refer to, mention"
+ },
+ {
+  "head": "classical",
+  "verdict": "replace",
+  "wrong": [
+   "conservation: 「（资源）保护」，集群残留",
+   "conservative: 「保守的」，集群残留",
+   "convention: 名词「习俗/大会」",
+   "earlier: 「更早的」，无关"
+  ],
+  "corrected": [
+   "classic",
+   "traditional"
+  ],
+  "sample_new_note": "同义词：classic, traditional"
+ },
+ {
+  "head": "clue",
+  "verdict": "trim",
+  "wrong": [
+   "clarity: 名词「清晰度」",
+   "clear: 形容词，词性不合"
+  ],
+  "corrected": [
+   "cue",
+   "evidence",
+   "hint"
+  ],
+  "sample_new_note": "同义词：cue, evidence, hint"
+ },
+ {
+  "head": "combine",
+  "verdict": "replace",
+  "wrong": [
+   "combination: 名词，词性不合",
+   "cumulative: 形容词「累积的」",
+   "entire: 形容词「全部的」",
+   "hybrid: 名词「杂交种」",
+   "integral: 形容词「构成必需的」"
+  ],
+  "corrected": [
+   "merge",
+   "unite",
+   "blend"
+  ],
+  "sample_new_note": "同义词：merge, unite, blend"
+ },
+ {
+  "head": "commence",
+  "verdict": "trim",
+  "wrong": [
+   "invoke: 「援引」≠开始",
+   "trigger: 「触发（他因）」≠着手"
+  ],
+  "corrected": [
+   "start",
+   "undertake"
+  ],
+  "sample_new_note": "同义词：start, undertake"
+ },
+ {
+  "head": "commercial",
+  "verdict": "trim",
+  "wrong": [
+   "company: 名词「公司」，非形容词「商业的」",
+   "corporation: 名词「公司」",
+   "deal: 名词「交易」"
+  ],
+  "corrected": [
+   "business",
+   "corporate"
+  ],
+  "sample_new_note": "同义词：business, corporate"
+ },
+ {
+  "head": "common",
+  "verdict": "trim",
+  "wrong": [
+   "criteria: 名词「标准」，集群残留",
+   "mainly: 副词",
+   "majority: 名词「多数」"
+  ],
+  "corrected": [
+   "average",
+   "general"
+  ],
+  "sample_new_note": "同义词：average, general"
+ },
+ {
+  "head": "company",
+  "verdict": "trim",
+  "wrong": [
+   "commercial: 形容词，词性不合",
+   "corporate: 形容词",
+   "deal: 名词「交易」≠公司"
+  ],
+  "corrected": [
+   "business",
+   "corporation"
+  ],
+  "sample_new_note": "同义词：business, corporation"
+ },
+ {
+  "head": "compete",
+  "verdict": "replace",
+  "wrong": [
+   "conflict: 「冲突」≠竞争",
+   "interference: 名词「干扰」",
+   "intervention: 名词「干预」"
+  ],
+  "corrected": [
+   "vie",
+   "contend",
+   "contest"
+  ],
+  "sample_new_note": "同义词：vie, contend, contest"
+ },
+ {
+  "head": "complex",
+  "verdict": "replace",
+  "wrong": [
+   "challenging: 「有挑战性的」≠复杂的",
+   "complexity: 名词",
+   "comprehensive: 「全面的」≠复杂的",
+   "demanding: 「要求高的」≠复杂的"
+  ],
+  "corrected": [
+   "complicated",
+   "intricate",
+   "involved"
+  ],
+  "sample_new_note": "同义词：complicated, intricate, involved"
+ },
+ {
+  "head": "complicated",
+  "verdict": "replace",
+  "wrong": [
+   "challenging: 「有挑战性的」≠复杂的",
+   "complexity: 名词",
+   "comprehensive: 「全面的」",
+   "demanding: 「要求高的」"
+  ],
+  "corrected": [
+   "complex",
+   "intricate",
+   "involved"
+  ],
+  "sample_new_note": "同义词：complex, intricate, involved"
+ },
+ {
+  "head": "component",
+  "verdict": "trim",
+  "wrong": [
+   "assemble: 动词，词性不合",
+   "compose: 动词",
+   "fragment: 名词「碎片」≠成分"
+  ],
+  "corrected": [
+   "element",
+   "part"
+  ],
+  "sample_new_note": "同义词：element, part"
+ },
+ {
+  "head": "compose",
+  "verdict": "replace",
+  "wrong": [
+   "assemble: 「装配」，方向相反",
+   "component: 名词",
+   "element: 名词",
+   "fragment: 名词",
+   "part: 名词"
+  ],
+  "corrected": [
+   "write",
+   "create",
+   "make up"
+  ],
+  "sample_new_note": "同义词：write, create, make up"
+ },
+ {
+  "head": "compound",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "chemical",
+   "matter",
+   "substance"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "comprehend",
+  "verdict": "replace",
+  "wrong": [
+   "acknowledge: 「承认」集群残留",
+   "admit: 「承认」≠理解",
+   "appreciate: 「欣赏/感激」义接近但非「理解」",
+   "ascertain: 「查明」≠理解",
+   "identify: 「识别」≠理解"
+  ],
+  "corrected": [
+   "understand",
+   "grasp",
+   "apprehend"
+  ],
+  "sample_new_note": "同义词：understand, grasp, apprehend"
+ },
+ {
+  "head": "conceal",
+  "verdict": "trim",
+  "wrong": [
+   "ambiguous: 形容词「模糊的」≠隐藏",
+   "contingent: 形容词「偶然的」",
+   "uncertain: 形容词「不确定的」"
+  ],
+  "corrected": [
+   "hide",
+   "obscure"
+  ],
+  "sample_new_note": "同义词：hide, obscure"
+ },
+ {
+  "head": "concentrate",
+  "verdict": "trim",
+  "wrong": [
+   "accumulate: 「积累」≠集中",
+   "concentration: 名词",
+   "emphasis: 名词「强调」"
+  ],
+  "corrected": [
+   "focus",
+   "gather"
+  ],
+  "sample_new_note": "同义词：focus, gather"
+ },
+ {
+  "head": "condemn",
+  "verdict": "replace",
+  "wrong": [
+   "critic: 名词「评论家」",
+   "critical: 形容词",
+   "criticism: 名词"
+  ],
+  "corrected": [
+   "criticise",
+   "denounce",
+   "sentence"
+  ],
+  "sample_new_note": "同义词：criticise, denounce, sentence"
+ },
+ {
+  "head": "confidence",
+  "verdict": "trim",
+  "wrong": [
+   "believe: 动词，词性不合",
+   "credible: 形容词",
+   "hidden: 「隐藏的」，无关残留"
+  ],
+  "corrected": [
+   "belief",
+   "faith"
+  ],
+  "sample_new_note": "同义词：belief, faith"
+ },
+ {
+  "head": "confine",
+  "verdict": "trim",
+  "wrong": [
+   "constraint: 名词，词性不合",
+   "hold: 「握住/扣留」≠限制"
+  ],
+  "corrected": [
+   "constrain",
+   "curb",
+   "limit"
+  ],
+  "sample_new_note": "同义词：constrain, curb, limit"
+ },
+ {
+  "head": "confirm",
+  "verdict": "trim",
+  "wrong": [
+   "identify: 「识别」≠确认",
+   "test: 「检验」≠证实"
+  ],
+  "corrected": [
+   "authenticate",
+   "certify",
+   "verify"
+  ],
+  "sample_new_note": "同义词：authenticate, certify, verify"
+ },
+ {
+  "head": "conflict",
+  "verdict": "replace",
+  "wrong": [
+   "compete: 动词「竞争」≠冲突",
+   "interference: 名词「干扰」≠冲突",
+   "intervention: 名词「干预」≠冲突"
+  ],
+  "corrected": [
+   "clash",
+   "dispute",
+   "friction"
+  ],
+  "sample_new_note": "同义词：clash, dispute, friction"
+ },
+ {
+  "head": "conform",
+  "verdict": "replace",
+  "wrong": [
+   "accordance: 名词（in accordance with）",
+   "coherence: 名词「连贯」",
+   "persistent: 形容词「持续的」",
+   "stability: 名词「稳定性」",
+   "corresponding: 形容词，非动词「符合」"
+  ],
+  "corrected": [
+   "comply",
+   "accord",
+   "match"
+  ],
+  "sample_new_note": "同义词：comply, accord, match"
+ },
+ {
+  "head": "conquer",
+  "verdict": "replace",
+  "wrong": [
+   "address: 「处理」≠征服",
+   "confront: 「面对」≠征服",
+   "disposal: 名词",
+   "dispose: 「处置」≠征服"
+  ],
+  "corrected": [
+   "defeat",
+   "overcome",
+   "subdue"
+  ],
+  "sample_new_note": "同义词：defeat, overcome, subdue"
+ },
+ {
+  "head": "conscious",
+  "verdict": "replace",
+  "wrong": [
+   "awarene: 拼写错误，非英文词（应为 awareness/aware）",
+   "discover: 动词",
+   "know: 动词",
+   "realise: 动词，词性不合"
+  ],
+  "corrected": [
+   "aware",
+   "awake",
+   "cognizant"
+  ],
+  "sample_new_note": "同义词：aware, awake, cognizant"
+ },
+ {
+  "head": "conservation",
+  "verdict": "replace",
+  "wrong": [
+   "classic: 「经典的」，classical 集群残留",
+   "classical: 「古典的」，集群残留",
+   "conservative: 「保守的」，近形但不同义",
+   "convention: 「习俗/大会」",
+   "earlier: 「更早的」"
+  ],
+  "corrected": [
+   "protection",
+   "preservation",
+   "saving"
+  ],
+  "sample_new_note": "同义词：protection, preservation, saving"
+ },
+ {
+  "head": "conservative",
+  "verdict": "replace",
+  "wrong": [
+   "classic: 「经典的」≠保守的",
+   "classical: 「古典的」≠保守的",
+   "conservation: 名词「（资源）保护」≠保守的",
+   "convention: 名词「习俗」",
+   "earlier: 「更早的」"
+  ],
+  "corrected": [
+   "traditional",
+   "old-fashioned",
+   "anti-reform"
+  ],
+  "sample_new_note": "同义词：traditional, old-fashioned, anti-reform"
+ },
+ {
+  "head": "considerable",
+  "verdict": "replace",
+  "wrong": [
+   "countless: 「无数的」≠相当大的",
+   "many: 「许多」≠大量（修饰不可数）",
+   "mass: 名词「质量/大众」",
+   "multiple: 「多个的」",
+   "numerous: 「许多的」"
+  ],
+  "corrected": [
+   "substantial",
+   "sizable",
+   "significant"
+  ],
+  "sample_new_note": "同义词：substantial, sizable, significant"
+ },
+ {
+  "head": "consistent",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "compatible"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "constraint",
+  "verdict": "trim",
+  "wrong": [
+   "confine: 动词，词性不合",
+   "constrain: 动词，词性不合",
+   "hold: 「握住/扣留」，非名词「约束」"
+  ],
+  "corrected": [
+   "curb",
+   "limit"
+  ],
+  "sample_new_note": "同义词：curb, limit"
+ },
+ {
+  "head": "construct",
+  "verdict": "replace",
+  "wrong": [
+   "building: 名词「建筑物」",
+   "constructing: 动名词",
+   "construction: 名词「建造」",
+   "framework: 名词「框架」≠construct 的动词义"
+  ],
+  "corrected": [
+   "build",
+   "form",
+   "create"
+  ],
+  "sample_new_note": "同义词：build, form, create"
+ },
+ {
+  "head": "consume",
+  "verdict": "trim",
+  "wrong": [
+   "prey: n.「猎物」/v.捕食，对象不同"
+  ],
+  "corrected": [
+   "eat",
+   "feed"
+  ],
+  "sample_new_note": "同义词：eat, feed"
+ },
+ {
+  "head": "context",
+  "verdict": "replace",
+  "wrong": [
+   "language: 「语言」≠语境",
+   "linguistic: 形容词",
+   "literacy: 「读写能力」",
+   "literature: 「文学/文献」",
+   "term: 「术语」"
+  ],
+  "corrected": [
+   "setting",
+   "background",
+   "circumstance"
+  ],
+  "sample_new_note": "同义词：setting, background, circumstance"
+ },
+ {
+  "head": "contrast",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "compare"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "contribute",
+  "verdict": "trim",
+  "wrong": [
+   "contribution: 名词，词性不合"
+  ],
+  "corrected": [
+   "dedicate",
+   "donate"
+  ],
+  "sample_new_note": "同义词：dedicate, donate"
+ },
+ {
+  "head": "controversial",
+  "verdict": "replace",
+  "wrong": [
+   "constant: 「恒定的」，近形词，无关"
+  ],
+  "corrected": [
+   "debatable",
+   "disputed",
+   "contentious"
+  ],
+  "sample_new_note": "同义词：debatable, disputed, contentious"
+ },
+ {
+  "head": "convention",
+  "verdict": "replace",
+  "wrong": [
+   "classic: 「经典的」，集群残留",
+   "classical: 「古典的」",
+   "conservation: 「保护」",
+   "conservative: 「保守的」",
+   "earlier: 「更早的」"
+  ],
+  "corrected": [
+   "custom",
+   "tradition",
+   "assembly"
+  ],
+  "sample_new_note": "同义词：custom, tradition, assembly"
+ },
+ {
+  "head": "convey",
+  "verdict": "replace",
+  "wrong": [
+   "communication: 名词",
+   "oral: 形容词「口头的」",
+   "speak: 「说」，不含「使被理解」义",
+   "talk: 「谈话」",
+   "narrate: 「叙述」，仅故事语境"
+  ],
+  "corrected": [
+   "communicate",
+   "express",
+   "transmit"
+  ],
+  "sample_new_note": "同义词：communicate, express, transmit"
+ },
+ {
+  "head": "coordinate",
+  "verdict": "replace",
+  "wrong": [
+   "cooperation: 名词",
+   "cooperative: 形容词",
+   "coordination: 名词",
+   "harmony: 名词",
+   "interaction: 名词"
+  ],
+  "corrected": [
+   "organize",
+   "align",
+   "synchronize"
+  ],
+  "sample_new_note": "同义词：organize, align, synchronize"
+ },
+ {
+  "head": "correct",
+  "verdict": "trim",
+  "wrong": [
+   "accuracy: 名词，词性不合"
+  ],
+  "corrected": [
+   "accurate",
+   "exact",
+   "precise"
+  ],
+  "sample_new_note": "同义词：accurate, exact, precise"
+ },
+ {
+  "head": "council",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "authority",
+   "government",
+   "ministry",
+   "official"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "counter",
+  "verdict": "replace",
+  "wrong": [
+   "avoid: 「回避」≠抵消/反驳",
+   "boycott: 「抵制」≠反驳",
+   "cease: 「停止」≠反驳",
+   "deter: 「阻止」≠反驳",
+   "discourage: 「劝阻」≠反驳"
+  ],
+  "corrected": [
+   "oppose",
+   "refute",
+   "offset"
+  ],
+  "sample_new_note": "同义词：oppose, refute, offset"
+ },
+ {
+  "head": "courtship",
+  "verdict": "replace",
+  "wrong": [
+   "couple: 「一对」，近形/话题碰撞",
+   "double: 「双倍」，近形碰撞",
+   "mate: 「交配/配偶」，行为而非求偶期",
+   "spouse: 「配偶」≠求偶",
+   "twice: 「两次」，近形碰撞"
+  ],
+  "corrected": [
+   "courting",
+   "wooing",
+   "romance"
+  ],
+  "sample_new_note": "同义词：courting, wooing, romance"
+ },
+ {
+  "head": "creature",
+  "verdict": "replace",
+  "wrong": [
+   "mammal: 下位词「哺乳动物」",
+   "species: 「物种」，非生物个体",
+   "wildlife: 「野生动物」总称"
+  ],
+  "corrected": [
+   "animal",
+   "being",
+   "organism"
+  ],
+  "sample_new_note": "同义词：animal, being, organism"
+ },
+ {
+  "head": "crime",
+  "verdict": "replace",
+  "wrong": [
+   "conviction: 「定罪」，是结果不是罪行",
+   "criminal: n.罪犯 / adj.犯罪的，词性与义均不合"
+  ],
+  "corrected": [
+   "offence",
+   "felony",
+   "wrongdoing"
+  ],
+  "sample_new_note": "同义词：offence, felony, wrongdoing"
+ },
+ {
+  "head": "crisis",
+  "verdict": "replace",
+  "wrong": [
+   "endanger: 动词",
+   "enemy: 名词「敌人」",
+   "foe: 名词「敌人」",
+   "hostile: 形容词"
+  ],
+  "corrected": [
+   "emergency",
+   "danger",
+   "upheaval"
+  ],
+  "sample_new_note": "同义词：emergency, danger, upheaval"
+ },
+ {
+  "head": "criteria",
+  "verdict": "replace",
+  "wrong": [
+   "average: 「平均」，common 集群残留",
+   "common: 「普通的」",
+   "general: 「一般的」",
+   "mainly: 副词",
+   "majority: 名词「多数」"
+  ],
+  "corrected": [
+   "standards",
+   "benchmarks",
+   "requirements"
+  ],
+  "sample_new_note": "同义词：standards, benchmarks, requirements"
+ },
+ {
+  "head": "critic",
+  "verdict": "replace",
+  "wrong": [
+   "condemn: 动词",
+   "critical: 形容词",
+   "criticise: 动词",
+   "criticism: 名词"
+  ],
+  "corrected": [
+   "reviewer",
+   "commentator"
+  ],
+  "sample_new_note": "同义词：reviewer, commentator"
+ },
+ {
+  "head": "cultivate",
+  "verdict": "trim",
+  "wrong": [
+   "breed: 「（动物）繁殖」≠耕作/培养",
+   "environment: 名词「环境」"
+  ],
+  "corrected": [
+   "foster",
+   "grow",
+   "nurture"
+  ],
+  "sample_new_note": "同义词：foster, grow, nurture"
+ },
+ {
+  "head": "curb",
+  "verdict": "trim",
+  "wrong": [
+   "constraint: 名词，词性不合",
+   "hold: 「握住」≠抑制"
+  ],
+  "corrected": [
+   "confine",
+   "constrain",
+   "limit"
+  ],
+  "sample_new_note": "同义词：confine, constrain, limit"
+ },
+ {
+  "head": "cure",
+  "verdict": "replace",
+  "wrong": [
+   "drug: 名词「药物」，非「治愈」",
+   "medication: 名词",
+   "medicine: 名词",
+   "therapy: 名词「疗程」"
+  ],
+  "corrected": [
+   "heal",
+   "remedy",
+   "treat"
+  ],
+  "sample_new_note": "同义词：heal, remedy, treat"
+ },
+ {
+  "head": "curriculum",
+  "verdict": "trim",
+  "wrong": [
+   "lecture: 「讲座/讲授」≠课程"
+  ],
+  "corrected": [
+   "course",
+   "syllabus"
+  ],
+  "sample_new_note": "同义词：course, syllabus"
+ },
+ {
+  "head": "customer",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "consumer",
+   "user"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "damp",
+  "verdict": "trim",
+  "wrong": [
+   "humidity: 名词，词性不合",
+   "moisture: 名词"
+  ],
+  "corrected": [
+   "humid",
+   "wet"
+  ],
+  "sample_new_note": "同义词：humid, wet"
+ },
+ {
+  "head": "data",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "information"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "deal",
+  "verdict": "replace",
+  "wrong": [
+   "commercial: 形容词",
+   "company: 名词「公司」≠交易",
+   "corporate: 形容词",
+   "corporation: 名词"
+  ],
+  "corrected": [
+   "business",
+   "bargain",
+   "transaction"
+  ],
+  "sample_new_note": "同义词：business, bargain, transaction"
+ },
+ {
+  "head": "death",
+  "verdict": "replace",
+  "wrong": [
+   "assurance: 「保证」集群残留",
+   "assure: 同上",
+   "bone: 「骨头」，无关",
+   "ensure: 无关",
+   "guarantee: 无关"
+  ],
+  "corrected": [
+   "demise",
+   "passing",
+   "decease"
+  ],
+  "sample_new_note": "同义词：demise, passing, decease"
+ },
+ {
+  "head": "decline",
+  "verdict": "trim",
+  "wrong": [
+   "alleviate: 「减轻（痛苦）」≠下降",
+   "cut: 及物「削减」，与不及物 decline 不同",
+   "deduction: 名词「扣除」"
+  ],
+  "corrected": [
+   "decrease",
+   "diminish"
+  ],
+  "sample_new_note": "同义词：decrease, diminish"
+ },
+ {
+  "head": "decrease",
+  "verdict": "trim",
+  "wrong": [
+   "alleviate: 「缓解」≠减少",
+   "deduction: 名词「扣除/演绎」"
+  ],
+  "corrected": [
+   "cut",
+   "decline",
+   "diminish"
+  ],
+  "sample_new_note": "同义词：cut, decline, diminish"
+ },
+ {
+  "head": "defeat",
+  "verdict": "replace",
+  "wrong": [
+   "address: 「处理」",
+   "confront: 「面对」",
+   "disposal: 名词",
+   "dispose: 「处置」"
+  ],
+  "corrected": [
+   "conquer",
+   "beat",
+   "overcome"
+  ],
+  "sample_new_note": "同义词：conquer, beat, overcome"
+ },
+ {
+  "head": "delay",
+  "verdict": "trim",
+  "wrong": [
+   "late: 形容词，词性不合"
+  ],
+  "corrected": [
+   "lag",
+   "postpone"
+  ],
+  "sample_new_note": "同义词：lag, postpone"
+ },
+ {
+  "head": "delicate",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "subtle"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "demand",
+  "verdict": "trim",
+  "wrong": [
+   "necessary: 形容词「必要的」，词性不合"
+  ],
+  "corrected": [
+   "need",
+   "require",
+   "want"
+  ],
+  "sample_new_note": "同义词：need, require, want"
+ },
+ {
+  "head": "demonstrate",
+  "verdict": "replace",
+  "wrong": [
+   "disclose: 「揭露」≠展示",
+   "elaborate: 「详述」≠展示",
+   "expose: 「暴露」≠展示",
+   "exposure: 名词"
+  ],
+  "corrected": [
+   "display",
+   "show",
+   "prove"
+  ],
+  "sample_new_note": "同义词：display, show, prove"
+ },
+ {
+  "head": "depression",
+  "verdict": "replace",
+  "wrong": [
+   "frustration: 「挫败感」≠抑郁，也≠萧条"
+  ],
+  "corrected": [
+   "gloom",
+   "despondency",
+   "slump"
+  ],
+  "sample_new_note": "同义词：gloom, despondency, slump"
+ },
+ {
+  "head": "derive",
+  "verdict": "replace",
+  "wrong": [
+   "as: 连词",
+   "because: 连词",
+   "cause: 「原因/导致」≠源自",
+   "explain: 「解释」",
+   "explanation: 名词"
+  ],
+  "corrected": [
+   "originate",
+   "obtain",
+   "stem"
+  ],
+  "sample_new_note": "同义词：originate, obtain, stem"
+ },
+ {
+  "head": "designate",
+  "verdict": "trim",
+  "wrong": [
+   "allocate: 「分配（资源）」≠指明",
+   "distribute: 「分发」≠指明",
+   "spread: 「传播」"
+  ],
+  "corrected": [
+   "appoint",
+   "assign"
+  ],
+  "sample_new_note": "同义词：appoint, assign"
+ },
+ {
+  "head": "detect",
+  "verdict": "replace",
+  "wrong": [
+   "look: 「看」≠察觉",
+   "search: 「搜寻」（过程，非结果）",
+   "sought: 过去式/分词形式，词形不合"
+  ],
+  "corrected": [
+   "find",
+   "discover",
+   "notice"
+  ],
+  "sample_new_note": "同义词：find, discover, notice"
+ },
+ {
+  "head": "deter",
+  "verdict": "replace",
+  "wrong": [
+   "avoid: 「回避」",
+   "boycott: 「抵制」",
+   "cease: 「停止」",
+   "counter: 「反驳」"
+  ],
+  "corrected": [
+   "discourage",
+   "prevent",
+   "dissuade"
+  ],
+  "sample_new_note": "同义词：discourage, prevent, dissuade"
+ },
+ {
+  "head": "diagnose",
+  "verdict": "replace",
+  "wrong": [
+   "analysis: 名词",
+   "analytical: 形容词",
+   "discover: 「发现」≠诊断",
+   "enquiry: 名词「询问」"
+  ],
+  "corrected": [
+   "analyse",
+   "identify",
+   "pinpoint"
+  ],
+  "sample_new_note": "同义词：analyse, identify, pinpoint"
+ },
+ {
+  "head": "diminish",
+  "verdict": "trim",
+  "wrong": [
+   "alleviate: 「缓解」≠削弱",
+   "deduction: 名词「扣除」"
+  ],
+  "corrected": [
+   "cut",
+   "decrease",
+   "decline"
+  ],
+  "sample_new_note": "同义词：cut, decrease, decline"
+ },
+ {
+  "head": "director",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "boss",
+   "employer",
+   "entrepreneur",
+   "leader",
+   "manager"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "disappear",
+  "verdict": "replace",
+  "wrong": [
+   "decrease: 「减少」≠消失",
+   "diminish: 「减弱」≠消失",
+   "eliminate: 及物「消灭」",
+   "eradicate: 及物「根除」",
+   "gone: 形容词"
+  ],
+  "corrected": [
+   "vanish",
+   "fade",
+   "dissolve"
+  ],
+  "sample_new_note": "同义词：vanish, fade, dissolve"
+ },
+ {
+  "head": "disaster",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "calamity",
+   "catastrophe"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "discard",
+  "verdict": "trim",
+  "wrong": [
+   "derelict: 名词「废弃物/玩忽者」，非动词"
+  ],
+  "corrected": [
+   "abandon",
+   "forsake"
+  ],
+  "sample_new_note": "同义词：abandon, forsake"
+ },
+ {
+  "head": "discharge",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "exude",
+   "release",
+   "secrete"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "discipline",
+  "verdict": "trim",
+  "wrong": [
+   "region: 「地区」，地理义≠学科/领域"
+  ],
+  "corrected": [
+   "area",
+   "domain",
+   "field"
+  ],
+  "sample_new_note": "同义词：area, domain, field"
+ },
+ {
+  "head": "disclose",
+  "verdict": "replace",
+  "wrong": [
+   "demonstrate: 「展示」≠透露",
+   "display: 「展示」",
+   "elaborate: 「详述」",
+   "exposure: 名词"
+  ],
+  "corrected": [
+   "expose",
+   "reveal",
+   "divulge"
+  ],
+  "sample_new_note": "同义词：expose, reveal, divulge"
+ },
+ {
+  "head": "discourage",
+  "verdict": "replace",
+  "wrong": [
+   "avoid: 「回避」",
+   "boycott: 「抵制」",
+   "cease: 「停止」",
+   "counter: 「反驳」"
+  ],
+  "corrected": [
+   "deter",
+   "dissuade",
+   "prevent"
+  ],
+  "sample_new_note": "同义词：deter, dissuade, prevent"
+ },
+ {
+  "head": "dispose",
+  "verdict": "replace",
+  "wrong": [
+   "confront: 「面对」",
+   "conquer: 「征服」",
+   "disposal: 名词，词性不合",
+   "defeat: 「击败」"
+  ],
+  "corrected": [
+   "address",
+   "handle",
+   "deal with"
+  ],
+  "sample_new_note": "同义词：address, handle, deal with"
+ },
+ {
+  "head": "distribute",
+  "verdict": "trim",
+  "wrong": [
+   "appoint: 「任命」≠分发",
+   "designate: 「指明」≠分发"
+  ],
+  "corrected": [
+   "allocate",
+   "assign",
+   "spread"
+  ],
+  "sample_new_note": "同义词：allocate, assign, spread"
+ },
+ {
+  "head": "disturb",
+  "verdict": "trim",
+  "wrong": [
+   "effect: 名词，词性不合"
+  ],
+  "corrected": [
+   "affect",
+   "impact",
+   "influence"
+  ],
+  "sample_new_note": "同义词：affect, impact, influence"
+ },
+ {
+  "head": "domain",
+  "verdict": "trim",
+  "wrong": [
+   "region: 「地区」，地理义"
+  ],
+  "corrected": [
+   "area",
+   "discipline",
+   "field"
+  ],
+  "sample_new_note": "同义词：area, discipline, field"
+ },
+ {
+  "head": "dominate",
+  "verdict": "trim",
+  "wrong": [
+   "governance: 名词「治理」",
+   "hold: 「握住」≠支配"
+  ],
+  "corrected": [
+   "control",
+   "influence",
+   "lead"
+  ],
+  "sample_new_note": "同义词：control, influence, lead"
+ },
+ {
+  "head": "donate",
+  "verdict": "trim",
+  "wrong": [
+   "contribution: 名词，词性不合"
+  ],
+  "corrected": [
+   "contribute",
+   "dedicate"
+  ],
+  "sample_new_note": "同义词：contribute, dedicate"
+ },
+ {
+  "head": "doubt",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "skepticism"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "dramatic",
+  "verdict": "trim",
+  "wrong": [
+   "touching: 「感人的」≠急剧的/引人注目的"
+  ],
+  "corrected": [
+   "impressive",
+   "striking",
+   "surprising",
+   "unexpected"
+  ],
+  "sample_new_note": "同义词：impressive, striking, surprising, unexpected"
+ },
+ {
+  "head": "drop",
+  "verdict": "trim",
+  "wrong": [
+   "alleviate: 「缓解」≠下降",
+   "deduction: 名词「扣除」"
+  ],
+  "corrected": [
+   "cut",
+   "decline",
+   "decrease"
+  ],
+  "sample_new_note": "同义词：cut, decline, decrease"
+ },
+ {
+  "head": "drought",
+  "verdict": "replace",
+  "wrong": [
+   "dry: 形容词，词性不合"
+  ],
+  "corrected": [
+   "aridity",
+   "water shortage",
+   "dry spell"
+  ],
+  "sample_new_note": "同义词：aridity, water shortage, dry spell"
+ },
+ {
+  "head": "drug",
+  "verdict": "trim",
+  "wrong": [
+   "cure: 「疗法/治愈」≠药物",
+   "poison: 「毒药」，含义不同且带误导"
+  ],
+  "corrected": [
+   "medication",
+   "medicine",
+   "remedy"
+  ],
+  "sample_new_note": "同义词：medication, medicine, remedy"
+ },
+ {
+  "head": "durable",
+  "verdict": "replace",
+  "wrong": [
+   "chronic: 「慢性的（病症）」≠耐用的",
+   "duration: 名词",
+   "period: 名词",
+   "time: 名词"
+  ],
+  "corrected": [
+   "lasting",
+   "long-wearing",
+   "sturdy"
+  ],
+  "sample_new_note": "同义词：lasting, long-wearing, sturdy"
+ },
+ {
+  "head": "duration",
+  "verdict": "trim",
+  "wrong": [
+   "chronic: 形容词「慢性的」",
+   "durable: 形容词「耐用的」",
+   "lasting: 形容词，词性不合"
+  ],
+  "corrected": [
+   "period",
+   "time"
+  ],
+  "sample_new_note": "同义词：period, time"
+ },
+ {
+  "head": "duty",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "obligation",
+   "responsibility"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "education",
+  "verdict": "replace",
+  "wrong": [
+   "academic: 形容词",
+   "institution: 「机构」≠教育",
+   "literacy: 「读写能力」≠教育"
+  ],
+  "corrected": [
+   "schooling",
+   "learning",
+   "training"
+  ],
+  "sample_new_note": "同义词：schooling, learning, training"
+ },
+ {
+  "head": "effective",
+  "verdict": "trim",
+  "wrong": [
+   "advance: 动词/名词「进步」",
+   "advantage: 名词「优势」",
+   "benefit: 名词/动词「利益」"
+  ],
+  "corrected": [
+   "beneficial",
+   "helpful"
+  ],
+  "sample_new_note": "同义词：beneficial, helpful"
+ },
+ {
+  "head": "element",
+  "verdict": "trim",
+  "wrong": [
+   "assemble: 动词，词性不合",
+   "compose: 动词，词性不合",
+   "fragment: 名词「碎片」≠要素/成分"
+  ],
+  "corrected": [
+   "component",
+   "part"
+  ],
+  "sample_new_note": "同义词：component, part"
+ },
+ {
+  "head": "encourage",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "activate",
+   "advance",
+   "boost",
+   "develop",
+   "drive"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "endanger",
+  "verdict": "replace",
+  "wrong": [
+   "crisis: 名词「危机」",
+   "danger: 名词",
+   "enemy: 名词「敌人」",
+   "foe: 名词",
+   "hostile: 形容词"
+  ],
+  "corrected": [
+   "threaten",
+   "jeopardize",
+   "risk"
+  ],
+  "sample_new_note": "同义词：threaten, jeopardize, risk"
+ },
+ {
+  "head": "enemy",
+  "verdict": "replace",
+  "wrong": [
+   "crisis: 「危机」≠敌人",
+   "danger: 「危险」≠敌人",
+   "endanger: 动词「危及」",
+   "hostile: 形容词"
+  ],
+  "corrected": [
+   "foe",
+   "opponent",
+   "adversary"
+  ],
+  "sample_new_note": "同义词：foe, opponent, adversary"
+ },
+ {
+  "head": "enforce",
+  "verdict": "replace",
+  "wrong": [
+   "dynamic: 形容词/名词「动力」",
+   "energy: 名词",
+   "power: 名词「权力」",
+   "push: 「推动」≠强制执行"
+  ],
+  "corrected": [
+   "force",
+   "impose",
+   "compel"
+  ],
+  "sample_new_note": "同义词：force, impose, compel"
+ },
+ {
+  "head": "enhance",
+  "verdict": "trim",
+  "wrong": [
+   "activate: 「激活（机器/系统）」≠提高"
+  ],
+  "corrected": [
+   "advance",
+   "boost",
+   "develop",
+   "drive"
+  ],
+  "sample_new_note": "同义词：advance, boost, develop, drive"
+ },
+ {
+  "head": "enterprise",
+  "verdict": "trim",
+  "wrong": [
+   "commercial: 形容词",
+   "corporate: 形容词"
+  ],
+  "corrected": [
+   "business",
+   "company",
+   "corporation"
+  ],
+  "sample_new_note": "同义词：business, company, corporation"
+ },
+ {
+  "head": "entity",
+  "verdict": "replace",
+  "wrong": [
+   "business: 「企业」，下位词而非抽象实体",
+   "commercial: 形容词",
+   "company: 「公司」",
+   "corporate: 形容词",
+   "corporation: 「公司」"
+  ],
+  "corrected": [
+   "organization",
+   "unit",
+   "being"
+  ],
+  "sample_new_note": "同义词：organization, unit, being"
+ },
+ {
+  "head": "equator",
+  "verdict": "delete",
+  "wrong": [
+   "geography: 名词「地理学」，话题词",
+   "hot: 形容词",
+   "tropical: 形容词「热带的」"
+  ],
+  "corrected": [],
+  "sample_new_note": ""
+ },
+ {
+  "head": "escape",
+  "verdict": "replace",
+  "wrong": [
+   "avoid: 「避免」",
+   "boycott: 「抵制」",
+   "cease: 「停止」",
+   "counter: 「反驳」",
+   "deter: 「阻止」"
+  ],
+  "corrected": [
+   "flee",
+   "evade",
+   "break free"
+  ],
+  "sample_new_note": "同义词：flee, evade, break free"
+ },
+ {
+  "head": "establish",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "build",
+   "create",
+   "found",
+   "initiate"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "estate",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "property",
+   "real estate"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "estimate",
+  "verdict": "replace",
+  "wrong": [
+   "may: 情态动词「可能」",
+   "probably: 副词"
+  ],
+  "corrected": [
+   "approximate",
+   "calculate",
+   "gauge"
+  ],
+  "sample_new_note": "同义词：approximate, calculate, gauge"
+ },
+ {
+  "head": "ethical",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "moral"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "evidence",
+  "verdict": "replace",
+  "wrong": [
+   "clarity: 名词「清晰」",
+   "clear: 形容词，词性不合",
+   "cue: 「提示/信号」≠证据",
+   "hint: 「暗示」≠证据"
+  ],
+  "corrected": [
+   "clue",
+   "proof",
+   "testimony"
+  ],
+  "sample_new_note": "同义词：clue, proof, testimony"
+ },
+ {
+  "head": "exaggerate",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "overstate"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "exceed",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "excel",
+   "overtake",
+   "surpass",
+   "transcend"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "exchange",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "interchange",
+   "share"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "exclude",
+  "verdict": "replace",
+  "wrong": [
+   "deny: 「拒绝/否认」≠排除",
+   "reluctant: 形容词「不情愿的」",
+   "unwilling: 形容词"
+  ],
+  "corrected": [
+   "reject",
+   "omit",
+   "eliminate"
+  ],
+  "sample_new_note": "同义词：reject, omit, eliminate"
+ },
+ {
+  "head": "execute",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "fulfill",
+   "implement"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "exercise",
+  "verdict": "replace",
+  "wrong": [
+   "approach: 「方法」≠练习",
+   "mechanism: 「机制」",
+   "method: 「方法」",
+   "phase: 「阶段」"
+  ],
+  "corrected": [
+   "practice",
+   "drill",
+   "training"
+  ],
+  "sample_new_note": "同义词：practice, drill, training"
+ },
+ {
+  "head": "expand",
+  "verdict": "replace",
+  "wrong": [
+   "broad: 形容词",
+   "expansion: 名词",
+   "prolong: 「延长（时间）」≠扩大",
+   "wide: 形容词"
+  ],
+  "corrected": [
+   "extend",
+   "enlarge",
+   "broaden"
+  ],
+  "sample_new_note": "同义词：extend, enlarge, broaden"
+ },
+ {
+  "head": "expect",
+  "verdict": "trim",
+  "wrong": [
+   "conjecture: 「猜测」，无预期义",
+   "prophecy: 名词（动词为 prophesy）"
+  ],
+  "corrected": [
+   "anticipate",
+   "predict"
+  ],
+  "sample_new_note": "同义词：anticipate, predict"
+ },
+ {
+  "head": "experiment",
+  "verdict": "replace",
+  "wrong": [
+   "analyse: 「分析」≠做实验",
+   "analysis: 名词",
+   "analytical: 形容词",
+   "diagnose: 「诊断」",
+   "discover: 「发现」"
+  ],
+  "corrected": [
+   "trial",
+   "test"
+  ],
+  "sample_new_note": "同义词：trial, test"
+ },
+ {
+  "head": "expertise",
+  "verdict": "trim",
+  "wrong": [
+   "capable: 形容词，词性不合"
+  ],
+  "corrected": [
+   "ability",
+   "capability",
+   "capacity",
+   "competence"
+  ],
+  "sample_new_note": "同义词：ability, capability, capacity, competence"
+ },
+ {
+  "head": "explain",
+  "verdict": "replace",
+  "wrong": [
+   "as: 连词",
+   "because: 连词",
+   "cause: 「原因/导致」",
+   "derive: 「源自」",
+   "explanation: 名词"
+  ],
+  "corrected": [
+   "clarify",
+   "describe",
+   "account for"
+  ],
+  "sample_new_note": "同义词：clarify, describe, account for"
+ },
+ {
+  "head": "exploit",
+  "verdict": "replace",
+  "wrong": [
+   "usage: 名词「用法」，词性不合"
+  ],
+  "corrected": [
+   "use",
+   "utilize",
+   "mine"
+  ],
+  "sample_new_note": "同义词：use, utilize, mine"
+ },
+ {
+  "head": "explore",
+  "verdict": "replace",
+  "wrong": [
+   "analyse: 「分析」≠探索",
+   "analysis: 名词",
+   "analytical: 形容词",
+   "diagnose: 「诊断」",
+   "discover: 「发现」是结果而非探索"
+  ],
+  "corrected": [
+   "investigate",
+   "probe",
+   "examine"
+  ],
+  "sample_new_note": "同义词：investigate, probe, examine"
+ },
+ {
+  "head": "export",
+  "verdict": "replace",
+  "wrong": [
+   "bring: 「带来」，方向相反",
+   "import: 反义词「进口」",
+   "introduce: 「引进」≠出口",
+   "smuggle: 「走私」，非法行为≠出口"
+  ],
+  "corrected": [
+   "ship abroad",
+   "sell overseas",
+   "send out"
+  ],
+  "sample_new_note": "同义词：ship abroad, sell overseas, send out"
+ },
+ {
+  "head": "expose",
+  "verdict": "trim",
+  "wrong": [
+   "demonstrate: 「展示」≠揭露",
+   "elaborate: 「详述」",
+   "exposure: 名词，词性不合"
+  ],
+  "corrected": [
+   "disclose",
+   "display"
+  ],
+  "sample_new_note": "同义词：disclose, display"
+ },
+ {
+  "head": "exterior",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "external",
+   "outside"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "external",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "exterior",
+   "outside"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "extract",
+  "verdict": "replace",
+  "wrong": [
+   "cite: 动词「引用」，非「提取」",
+   "comment: 「评论」",
+   "quotation: 名词「引文」，仅部分重叠"
+  ],
+  "corrected": [
+   "pull out",
+   "obtain",
+   "excerpt"
+  ],
+  "sample_new_note": "同义词：pull out, obtain, excerpt"
+ },
+ {
+  "head": "facilitate",
+  "verdict": "replace",
+  "wrong": [
+   "convenient: 形容词",
+   "easy: 形容词",
+   "straightforward: 形容词"
+  ],
+  "corrected": [
+   "ease",
+   "enable",
+   "expedite"
+  ],
+  "sample_new_note": "同义词：ease, enable, expedite"
+ },
+ {
+  "head": "factor",
+  "verdict": "replace",
+  "wrong": [
+   "characteristic: 「特征」≠因素",
+   "feature: 「特征」≠因素",
+   "property: 「属性」≠因素",
+   "trait: 「特质」≠因素"
+  ],
+  "corrected": [
+   "element",
+   "consideration",
+   "cause"
+  ],
+  "sample_new_note": "同义词：element, consideration, cause"
+ },
+ {
+  "head": "faculty",
+  "verdict": "replace",
+  "wrong": [
+   "ability: 「能力」义与「院系/教员」无关",
+   "capability: 无关",
+   "capable: 形容词且无关",
+   "capacity: 无关",
+   "competence: 无关"
+  ],
+  "corrected": [
+   "department",
+   "teaching staff",
+   "academic staff"
+  ],
+  "sample_new_note": "同义词：department, teaching staff, academic staff"
+ },
+ {
+  "head": "familiar",
+  "verdict": "replace",
+  "wrong": [
+   "famous: 「著名的」≠熟悉的",
+   "notoriety: 名词「恶名」"
+  ],
+  "corrected": [
+   "well-known",
+   "acquainted",
+   "accustomed"
+  ],
+  "sample_new_note": "同义词：well-known, acquainted, accustomed"
+ },
+ {
+  "head": "famine",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "hunger"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "famous",
+  "verdict": "replace",
+  "wrong": [
+   "familiar: 「熟悉的」≠著名的",
+   "notoriety: 名词「恶名」，词性不合"
+  ],
+  "corrected": [
+   "well-known",
+   "renowned",
+   "noted"
+  ],
+  "sample_new_note": "同义词：well-known, renowned, noted"
+ },
+ {
+  "head": "fatigue",
+  "verdict": "replace",
+  "wrong": [
+   "exhausted: 形容词，词性不合"
+  ],
+  "corrected": [
+   "tiredness",
+   "weariness",
+   "exhaustion"
+  ],
+  "sample_new_note": "同义词：tiredness, weariness, exhaustion"
+ },
+ {
+  "head": "fear",
+  "verdict": "replace",
+  "wrong": [
+   "afraid: 形容词，词性不合",
+   "horror: 「惊骇」，强度与对象不同"
+  ],
+  "corrected": [
+   "dread",
+   "terror",
+   "fright"
+  ],
+  "sample_new_note": "同义词：dread, terror, fright"
+ },
+ {
+  "head": "feature",
+  "verdict": "trim",
+  "wrong": [
+   "factor: 「因素」≠特征"
+  ],
+  "corrected": [
+   "characteristic",
+   "property",
+   "trait"
+  ],
+  "sample_new_note": "同义词：characteristic, property, trait"
+ },
+ {
+  "head": "feed",
+  "verdict": "replace",
+  "wrong": [
+   "consume: 「消耗/进食」，主体相反",
+   "eat: 「吃」，主体是进食者",
+   "prey: 「捕食/猎物」"
+  ],
+  "corrected": [
+   "nourish",
+   "sustain",
+   "rear"
+  ],
+  "sample_new_note": "同义词：nourish, sustain, rear"
+ },
+ {
+  "head": "fierce",
+  "verdict": "trim",
+  "wrong": [
+   "aggression: 名词，词性不合",
+   "attack: 动词/名词，词性不合",
+   "violate: 动词「违反」，义不合"
+  ],
+  "corrected": [
+   "aggressive",
+   "violent"
+  ],
+  "sample_new_note": "同义词：aggressive, violent"
+ },
+ {
+  "head": "financial",
+  "verdict": "replace",
+  "wrong": [
+   "benefit: 名词「福利」",
+   "budget: 名词「预算」",
+   "compensate: 动词「补偿」",
+   "compensation: 名词",
+   "costly: 形容词「昂贵的」"
+  ],
+  "corrected": [
+   "fiscal",
+   "monetary",
+   "economic"
+  ],
+  "sample_new_note": "同义词：fiscal, monetary, economic"
+ },
+ {
+  "head": "first",
+  "verdict": "trim",
+  "wrong": [
+   "origin: 名词「起源」≠第一"
+  ],
+  "corrected": [
+   "firstly",
+   "initial",
+   "leading",
+   "major"
+  ],
+  "sample_new_note": "同义词：firstly, initial, leading, major"
+ },
+ {
+  "head": "fix",
+  "verdict": "replace",
+  "wrong": [
+   "address: 「处理」≠修理",
+   "confront: 「面对」",
+   "conquer: 「征服」",
+   "defeat: 「击败」≠修理",
+   "disposal: 名词，词性不合"
+  ],
+  "corrected": [
+   "repair",
+   "mend",
+   "secure"
+  ],
+  "sample_new_note": "同义词：repair, mend, secure"
+ },
+ {
+  "head": "force",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "dynamic",
+   "energy",
+   "enforce",
+   "power",
+   "push"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "formation",
+  "verdict": "replace",
+  "wrong": [
+   "chart: 「图表」，图形集群残留",
+   "drawing: 「图画」",
+   "graph: 「图表」",
+   "image: 「图像」",
+   "mark: 「标记」"
+  ],
+  "corrected": [
+   "arrangement",
+   "structure",
+   "constitution"
+  ],
+  "sample_new_note": "同义词：arrangement, structure, constitution"
+ },
+ {
+  "head": "fragment",
+  "verdict": "replace",
+  "wrong": [
+   "assemble: 动词，且为近反义词",
+   "component: 名词「成分」≠碎片",
+   "compose: 动词，近反义",
+   "element: 名词「要素」",
+   "part: 名词「部分」"
+  ],
+  "corrected": [
+   "piece",
+   "shard",
+   "scrap"
+  ],
+  "sample_new_note": "同义词：piece, shard, scrap"
+ },
+ {
+  "head": "framework",
+  "verdict": "replace",
+  "wrong": [
+   "build: 动词，词性不合",
+   "building: 名词「建筑物」≠框架",
+   "construct: n.「概念」/v.建造，非框架",
+   "constructing: 动名词",
+   "construction: 名词「建造（过程）」"
+  ],
+  "corrected": [
+   "frame",
+   "skeleton",
+   "structure"
+  ],
+  "sample_new_note": "同义词：frame, skeleton, structure"
+ },
+ {
+  "head": "freedom",
+  "verdict": "replace",
+  "wrong": [
+   "free: 形容词，词性不合",
+   "liberal: 形容词"
+  ],
+  "corrected": [
+   "liberty",
+   "independence",
+   "autonomy"
+  ],
+  "sample_new_note": "同义词：liberty, independence, autonomy"
+ },
+ {
+  "head": "freeze",
+  "verdict": "replace",
+  "wrong": [
+   "cold: 形容词，词性不合"
+  ],
+  "corrected": [
+   "solidify",
+   "congeal",
+   "chill"
+  ],
+  "sample_new_note": "同义词：solidify, congeal, chill"
+ },
+ {
+  "head": "fund",
+  "verdict": "replace",
+  "wrong": [
+   "benefit: 「福利/利益」≠资金",
+   "budget: 「预算」是计划≠资金",
+   "compensate: 动词「补偿」",
+   "compensation: 名词",
+   "costly: 形容词"
+  ],
+  "corrected": [
+   "finance",
+   "reserve",
+   "endowment"
+  ],
+  "sample_new_note": "同义词：finance, reserve, endowment"
+ },
+ {
+  "head": "gender",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "sex"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "gene",
+  "verdict": "delete",
+  "wrong": [
+   "built-in: 形容词，词性不合",
+   "DNA: 「DNA」是物质≠基因",
+   "heredity: 名词「遗传」现象≠基因",
+   "inborn: 形容词",
+   "inherent: 形容词"
+  ],
+  "corrected": [],
+  "sample_new_note": ""
+ },
+ {
+  "head": "general",
+  "verdict": "trim",
+  "wrong": [
+   "criteria: 名词「标准」，集群残留",
+   "mainly: 副词",
+   "majority: 名词"
+  ],
+  "corrected": [
+   "average",
+   "common"
+  ],
+  "sample_new_note": "同义词：average, common"
+ },
+ {
+  "head": "geography",
+  "verdict": "replace",
+  "wrong": [
+   "equator: 「赤道」是具体纬线",
+   "hot: 形容词",
+   "tropical: 形容词「热带的」"
+  ],
+  "corrected": [
+   "topography",
+   "terrain",
+   "earth science"
+  ],
+  "sample_new_note": "同义词：topography, terrain, earth science"
+ },
+ {
+  "head": "germ",
+  "verdict": "trim",
+  "wrong": [
+   "fungi: 「真菌」≠病菌",
+   "virus: 「病毒」≠病菌"
+  ],
+  "corrected": [
+   "bacteria",
+   "microbe"
+  ],
+  "sample_new_note": "同义词：bacteria, microbe"
+ },
+ {
+  "head": "goal",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "aim",
+   "intention",
+   "objective",
+   "purpose",
+   "target"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "goods",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "commodity",
+   "product"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "grant",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "confer",
+   "offer"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "growth",
+  "verdict": "trim",
+  "wrong": [
+   "additional: 形容词，词性不合",
+   "extra: 形容词",
+   "foster: 动词"
+  ],
+  "corrected": [
+   "boom",
+   "boost"
+  ],
+  "sample_new_note": "同义词：boom, boost"
+ },
+ {
+  "head": "guarantee",
+  "verdict": "trim",
+  "wrong": [
+   "bone: 「骨头」，集群残留，完全无关",
+   "death: 「死亡」，集群残留，完全无关"
+  ],
+  "corrected": [
+   "assurance",
+   "assure",
+   "ensure"
+  ],
+  "sample_new_note": "同义词：assurance, assure, ensure"
+ },
+ {
+  "head": "guideline",
+  "verdict": "trim",
+  "wrong": [
+   "act: 「法案」≠方针",
+   "contract: 「合同」≠方针"
+  ],
+  "corrected": [
+   "instruction",
+   "norm",
+   "policy"
+  ],
+  "sample_new_note": "同义词：instruction, norm, policy"
+ },
+ {
+  "head": "habitat",
+  "verdict": "replace",
+  "wrong": [
+   "city: 「城市」",
+   "domestic: 形容词「国内的/家庭的」",
+   "family: 「家庭」",
+   "house: 「房屋」"
+  ],
+  "corrected": [
+   "home",
+   "environment",
+   "surroundings"
+  ],
+  "sample_new_note": "同义词：home, environment, surroundings"
+ },
+ {
+  "head": "halt",
+  "verdict": "replace",
+  "wrong": [
+   "avoid: 「回避」",
+   "boycott: 「抵制」",
+   "counter: 「反驳」",
+   "deter: 「阻止」"
+  ],
+  "corrected": [
+   "cease",
+   "stop",
+   "suspend"
+  ],
+  "sample_new_note": "同义词：cease, stop, suspend"
+ },
+ {
+  "head": "handle",
+  "verdict": "replace",
+  "wrong": [
+   "confront: 「面对」≠处理",
+   "conquer: 「征服」≠处理",
+   "defeat: 「击败」≠处理",
+   "disposal: 名词，词性不合"
+  ],
+  "corrected": [
+   "address",
+   "deal with",
+   "manage"
+  ],
+  "sample_new_note": "同义词：address, deal with, manage"
+ },
+ {
+  "head": "harmony",
+  "verdict": "trim",
+  "wrong": [
+   "cooperative: 形容词，词性不合",
+   "coordinate: 动词，词性不合",
+   "interaction: 「互动」≠和谐"
+  ],
+  "corrected": [
+   "cooperation",
+   "coordination"
+  ],
+  "sample_new_note": "同义词：cooperation, coordination"
+ },
+ {
+  "head": "hint",
+  "verdict": "trim",
+  "wrong": [
+   "clarity: 名词「清晰」",
+   "clear: 形容词",
+   "evidence: 「证据」≠暗示"
+  ],
+  "corrected": [
+   "clue",
+   "cue"
+  ],
+  "sample_new_note": "同义词：clue, cue"
+ },
+ {
+  "head": "hostile",
+  "verdict": "replace",
+  "wrong": [
+   "crisis: 名词",
+   "danger: 名词",
+   "endanger: 动词",
+   "enemy: 名词「敌人」",
+   "foe: 名词"
+  ],
+  "corrected": [
+   "unfriendly",
+   "aggressive",
+   "antagonistic"
+  ],
+  "sample_new_note": "同义词：unfriendly, aggressive, antagonistic"
+ },
+ {
+  "head": "humid",
+  "verdict": "trim",
+  "wrong": [
+   "humidity: 名词，词性不合",
+   "moisture: 名词"
+  ],
+  "corrected": [
+   "damp",
+   "wet"
+  ],
+  "sample_new_note": "同义词：damp, wet"
+ },
+ {
+  "head": "hurdle",
+  "verdict": "trim",
+  "wrong": [
+   "adversity: 「逆境」≠障碍",
+   "burden: 「负担」≠障碍",
+   "challenging: 形容词，词性不合"
+  ],
+  "corrected": [
+   "barrier",
+   "challenge"
+  ],
+  "sample_new_note": "同义词：barrier, challenge"
+ },
+ {
+  "head": "hypothesis",
+  "verdict": "replace",
+  "wrong": [
+   "assume: 动词，词性不合"
+  ],
+  "corrected": [
+   "assumption",
+   "theory",
+   "premise"
+  ],
+  "sample_new_note": "同义词：assumption, theory, premise"
+ },
+ {
+  "head": "illustrate",
+  "verdict": "replace",
+  "wrong": [
+   "disclose: 「揭露」≠举例说明",
+   "display: 「展示」≠阐明",
+   "elaborate: 「详述」≠举例",
+   "expose: 「暴露」≠举例"
+  ],
+  "corrected": [
+   "demonstrate",
+   "exemplify",
+   "depict"
+  ],
+  "sample_new_note": "同义词：demonstrate, exemplify, depict"
+ },
+ {
+  "head": "imitate",
+  "verdict": "trim",
+  "wrong": [
+   "plagiarise: 「抄袭」，行为与贬义色彩均不同"
+  ],
+  "corrected": [
+   "copy",
+   "duplicate",
+   "mimic",
+   "replicate"
+  ],
+  "sample_new_note": "同义词：copy, duplicate, mimic, replicate"
+ },
+ {
+  "head": "immediately",
+  "verdict": "replace",
+  "wrong": [
+   "accelerate: 动词「加速」",
+   "breakneck: 形容词",
+   "prompt: 形容词/动词「促使」",
+   "quick: 形容词",
+   "rapid: 形容词"
+  ],
+  "corrected": [
+   "instantly",
+   "at once",
+   "straightaway"
+  ],
+  "sample_new_note": "同义词：instantly, at once, straightaway"
+ },
+ {
+  "head": "immune",
+  "verdict": "replace",
+  "wrong": [
+   "immunity: 名词，词性不合",
+   "resistance: 名词"
+  ],
+  "corrected": [
+   "resistant",
+   "exempt",
+   "unaffected"
+  ],
+  "sample_new_note": "同义词：resistant, exempt, unaffected"
+ },
+ {
+  "head": "impact",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "affect",
+   "disturb",
+   "effect",
+   "influence"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "impede",
+  "verdict": "replace",
+  "wrong": [
+   "avoid: 「回避」≠阻碍",
+   "boycott: 「抵制」≠阻碍",
+   "cease: 「停止」≠阻碍",
+   "counter: 「抵消」≠阻碍",
+   "deter: 「使却步」，不等同阻碍进程"
+  ],
+  "corrected": [
+   "hinder",
+   "obstruct",
+   "block"
+  ],
+  "sample_new_note": "同义词：hinder, obstruct, block"
+ },
+ {
+  "head": "implement",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "execute",
+   "fulfill"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "implicit",
+  "verdict": "replace",
+  "wrong": [
+   "implication: 名词，词性不合",
+   "imply: 动词"
+  ],
+  "corrected": [
+   "implied",
+   "unspoken",
+   "tacit"
+  ],
+  "sample_new_note": "同义词：implied, unspoken, tacit"
+ },
+ {
+  "head": "imply",
+  "verdict": "replace",
+  "wrong": [
+   "implication: 名词，词性不合",
+   "implicit: 形容词"
+  ],
+  "corrected": [
+   "suggest",
+   "indicate"
+  ],
+  "sample_new_note": "同义词：suggest, indicate"
+ },
+ {
+  "head": "import",
+  "verdict": "replace",
+  "wrong": [
+   "bring: 「带来」，泛义",
+   "export: 反义词「出口」",
+   "smuggle: 「走私」"
+  ],
+  "corrected": [
+   "introduce",
+   "bring in",
+   "purchase abroad"
+  ],
+  "sample_new_note": "同义词：introduce, bring in, purchase abroad"
+ },
+ {
+  "head": "incentive",
+  "verdict": "replace",
+  "wrong": [
+   "activate: 动词「激活」",
+   "advance: 动词「前进」",
+   "boost: 「提升」≠诱因",
+   "develop: 动词「发展」"
+  ],
+  "corrected": [
+   "drive",
+   "motivation",
+   "stimulus"
+  ],
+  "sample_new_note": "同义词：drive, motivation, stimulus"
+ },
+ {
+  "head": "income",
+  "verdict": "replace",
+  "wrong": [
+   "benefit: 「福利」≠收入",
+   "budget: 「预算」≠收入",
+   "compensate: 动词「补偿」",
+   "compensation: 名词",
+   "costly: 形容词"
+  ],
+  "corrected": [
+   "earnings",
+   "revenue",
+   "wages"
+  ],
+  "sample_new_note": "同义词：earnings, revenue, wages"
+ },
+ {
+  "head": "increase",
+  "verdict": "trim",
+  "wrong": [
+   "additional: 形容词，词性不合",
+   "extra: 形容词",
+   "foster: 动词「培养」"
+  ],
+  "corrected": [
+   "boom",
+   "boost"
+  ],
+  "sample_new_note": "同义词：boom, boost"
+ },
+ {
+  "head": "induce",
+  "verdict": "replace",
+  "wrong": [
+   "pose: 「提出（问题）/构成（威胁）」≠诱使"
+  ],
+  "corrected": [
+   "cause",
+   "prompt",
+   "persuade"
+  ],
+  "sample_new_note": "同义词：cause, prompt, persuade"
+ },
+ {
+  "head": "indulge",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "spoil"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "infant",
+  "verdict": "trim",
+  "wrong": [
+   "childhood: 名词「童年时期」，非人",
+   "juvenile: 「少年」，年龄段不同"
+  ],
+  "corrected": [
+   "baby",
+   "child",
+   "kid"
+  ],
+  "sample_new_note": "同义词：baby, child, kid"
+ },
+ {
+  "head": "inherent",
+  "verdict": "trim",
+  "wrong": [
+   "DNA: 名词",
+   "gene: 名词「基因」",
+   "heredity: 名词「遗传」"
+  ],
+  "corrected": [
+   "built-in",
+   "inborn"
+  ],
+  "sample_new_note": "同义词：built-in, inborn"
+ },
+ {
+  "head": "inherit",
+  "verdict": "replace",
+  "wrong": [
+   "built-in: 形容词",
+   "DNA: 名词，话题词",
+   "gene: 名词，话题词",
+   "heredity: 名词，话题词",
+   "inborn: 形容词"
+  ],
+  "corrected": [
+   "receive",
+   "derive",
+   "succeed to"
+  ],
+  "sample_new_note": "同义词：receive, derive, succeed to"
+ },
+ {
+  "head": "inner",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "inside",
+   "interior",
+   "internal"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "inspire",
+  "verdict": "trim",
+  "wrong": [
+   "activate: 「激活」用于系统/激素，≠鼓舞",
+   "advance: 「推进」≠鼓舞",
+   "develop: 「发展」≠鼓舞"
+  ],
+  "corrected": [
+   "boost",
+   "drive"
+  ],
+  "sample_new_note": "同义词：boost, drive"
+ },
+ {
+  "head": "instance",
+  "verdict": "replace",
+  "wrong": [
+   "including: 介词/现在分词「包括」，非「例子」"
+  ],
+  "corrected": [
+   "example",
+   "case",
+   "illustration"
+  ],
+  "sample_new_note": "同义词：example, case, illustration"
+ },
+ {
+  "head": "instinct",
+  "verdict": "replace",
+  "wrong": [
+   "built-in: 形容词",
+   "DNA: 名词",
+   "gene: 名词",
+   "heredity: 名词「遗传现象」",
+   "inborn: 形容词"
+  ],
+  "corrected": [
+   "intuition",
+   "natural impulse"
+  ],
+  "sample_new_note": "同义词：intuition, natural impulse"
+ },
+ {
+  "head": "institute",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "association"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "institution",
+  "verdict": "replace",
+  "wrong": [
+   "academic: 形容词",
+   "education: 「教育」≠机构",
+   "literacy: 「读写能力」"
+  ],
+  "corrected": [
+   "organization",
+   "establishment",
+   "association"
+  ],
+  "sample_new_note": "同义词：organization, establishment, association"
+ },
+ {
+  "head": "integrate",
+  "verdict": "replace",
+  "wrong": [
+   "combination: 名词",
+   "cumulative: 形容词",
+   "entire: 形容词",
+   "hybrid: 名词"
+  ],
+  "corrected": [
+   "combine",
+   "merge",
+   "incorporate"
+  ],
+  "sample_new_note": "同义词：combine, merge, incorporate"
+ },
+ {
+  "head": "intelligence",
+  "verdict": "replace",
+  "wrong": [
+   "brain: 名词指器官「大脑」≠智力",
+   "cognitive: 形容词",
+   "gifted: 形容词",
+   "intelligent: 形容词",
+   "mental: 形容词"
+  ],
+  "corrected": [
+   "intellect",
+   "brainpower",
+   "cognition"
+  ],
+  "sample_new_note": "同义词：intellect, brainpower, cognition"
+ },
+ {
+  "head": "intelligent",
+  "verdict": "replace",
+  "wrong": [
+   "brain: 名词",
+   "cognitive: 「认知的」≠聪明的",
+   "intelligence: 名词",
+   "mental: 「精神的」"
+  ],
+  "corrected": [
+   "bright",
+   "clever",
+   "gifted"
+  ],
+  "sample_new_note": "同义词：bright, clever, gifted"
+ },
+ {
+  "head": "intensive",
+  "verdict": "replace",
+  "wrong": [
+   "intense: 「强烈的」，与 intensive 是经典混用对",
+   "strong: 「强大的」≠密集的"
+  ],
+  "corrected": [
+   "concentrated",
+   "compact",
+   "focused"
+  ],
+  "sample_new_note": "同义词：concentrated, compact, focused"
+ },
+ {
+  "head": "interior",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "inner",
+   "inside",
+   "internal"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "internal",
+  "verdict": "keep",
+  "wrong": [],
+  "corrected": [
+   "inner",
+   "inside",
+   "interior"
+  ],
+  "sample_new_note": ""
+ },
+ {
+  "head": "interpret",
+  "verdict": "replace",
+  "wrong": [
+   "acknowledge: 「承认」集群残留",
+   "admit: 「承认」≠解释",
+   "ascertain: 「查明」≠解释",
+   "appreciate: 「欣赏/感激」义，与「解释」无关"
+  ],
+  "corrected": [
+   "comprehend",
+   "explain",
+   "construe"
+  ],
+  "sample_new_note": "同义词：comprehend, explain, construe"
+ },
+ {
+  "head": "interrupt",
+  "verdict": "replace",
+  "wrong": [
+   "avoid: 「回避」",
+   "boycott: 「抵制」",
+   "cease: 「停止」，近反义",
+   "counter: 「反驳」",
+   "deter: 「阻止」"
+  ],
+  "corrected": [
+   "disrupt",
+   "disturb",
+   "interfere with"
+  ],
+  "sample_new_note": "同义词：disrupt, disturb, interfere with"
+ },
+ {
+  "head": "introduce",
+  "verdict": "trim",
+  "wrong": [
+   "export: 「出口」，方向相反",
+   "smuggle: 「走私」，非法"
+  ],
+  "corrected": [
+   "bring",
+   "import"
+  ],
+  "sample_new_note": "同义词：bring, import"
+ },
+ {
+  "head": "invent",
+  "verdict": "trim",
+  "wrong": [
+   "erect: 「竖立（实物）」≠发明",
+   "form: 「形成」≠发明"
+  ],
+  "corrected": [
+   "coin",
+   "create",
+   "devise"
+  ],
+  "sample_new_note": "同义词：coin, create, devise"
+ },
+ {
+  "head": "investigate",
+  "verdict": "replace",
+  "wrong": [
+   "analyse: 「分析」≠调查",
+   "analysis: 名词",
+   "analytical: 形容词",
+   "diagnose: 「诊断」",
+   "discover: 「发现」"
+  ],
+  "corrected": [
+   "examine",
+   "probe",
+   "look into"
+  ],
+  "sample_new_note": "同义词：examine, probe, look into"
+ },
+ {
+  "head": "invoke",
+  "verdict": "replace",
+  "wrong": [
+   "commence: 「开始」≠援引",
+   "start: 「开始」≠援引",
+   "trigger: 「触发」≠援引",
+   "undertake: 「着手」≠援引"
+  ],
+  "corrected": [
+   "cite",
+   "appeal to",
+   "call on"
+  ],
+  "sample_new_note": "同义词：cite, appeal to, call on"
+ }
+]

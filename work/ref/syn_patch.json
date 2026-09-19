@@ -1,0 +1,735 @@
+{
+ "advise": {
+  "old": [],
+  "new": [
+   "propose"
+  ],
+  "added": [
+   "propose"
+  ]
+ },
+ "alter": {
+  "old": [
+   "adapt",
+   "adjust",
+   "amend",
+   "change"
+  ],
+  "new": [
+   "adapt",
+   "adjust",
+   "amend",
+   "change",
+   "shift"
+  ],
+  "added": [
+   "shift"
+  ]
+ },
+ "apartment": {
+  "old": [],
+  "new": [
+   "flat"
+  ],
+  "added": [
+   "flat"
+  ]
+ },
+ "assess": {
+  "old": [
+   "calculate",
+   "measure"
+  ],
+  "new": [
+   "calculate",
+   "measure",
+   "evaluate"
+  ],
+  "added": [
+   "evaluate"
+  ]
+ },
+ "avenue": {
+  "old": [],
+  "new": [
+   "lane"
+  ],
+  "added": [
+   "lane"
+  ]
+ },
+ "balcony": {
+  "old": [],
+  "new": [
+   "terrace",
+   "platform",
+   "gallery"
+  ],
+  "added": [
+   "terrace",
+   "platform",
+   "gallery"
+  ]
+ },
+ "bone": {
+  "old": [],
+  "new": [
+   "skeleton"
+  ],
+  "added": [
+   "skeleton"
+  ]
+ },
+ "competition": {
+  "old": [],
+  "new": [
+   "contest"
+  ],
+  "added": [
+   "contest"
+  ]
+ },
+ "component": {
+  "old": [
+   "element",
+   "part"
+  ],
+  "new": [
+   "element",
+   "part",
+   "proportion"
+  ],
+  "added": [
+   "proportion"
+  ]
+ },
+ "constraint": {
+  "old": [
+   "curb",
+   "limit"
+  ],
+  "new": [
+   "curb",
+   "limit",
+   "restrict"
+  ],
+  "added": [
+   "restrict"
+  ]
+ },
+ "contaminate": {
+  "old": [],
+  "new": [
+   "pollution"
+  ],
+  "added": [
+   "pollution"
+  ]
+ },
+ "contemporary": {
+  "old": [],
+  "new": [
+   "present"
+  ],
+  "added": [
+   "present"
+  ]
+ },
+ "contest": {
+  "old": [],
+  "new": [
+   "competition"
+  ],
+  "added": [
+   "competition"
+  ]
+ },
+ "decline": {
+  "old": [
+   "decrease",
+   "diminish"
+  ],
+  "new": [
+   "decrease",
+   "diminish",
+   "reduce",
+   "deprive"
+  ],
+  "added": [
+   "reduce",
+   "deprive"
+  ]
+ },
+ "decrease": {
+  "old": [
+   "cut",
+   "decline",
+   "diminish"
+  ],
+  "new": [
+   "cut",
+   "decline",
+   "diminish",
+   "reduce",
+   "deprive"
+  ],
+  "added": [
+   "reduce",
+   "deprive"
+  ]
+ },
+ "department": {
+  "old": [],
+  "new": [
+   "faculty"
+  ],
+  "added": [
+   "faculty"
+  ]
+ },
+ "deprive": {
+  "old": [],
+  "new": [
+   "reduce",
+   "decrease",
+   "decline"
+  ],
+  "added": [
+   "reduce",
+   "decrease",
+   "decline"
+  ]
+ },
+ "evaluate": {
+  "old": [],
+  "new": [
+   "assess"
+  ],
+  "added": [
+   "assess"
+  ]
+ },
+ "experiment": {
+  "old": [
+   "trial",
+   "test"
+  ],
+  "new": [
+   "trial",
+   "test",
+   "experimental"
+  ],
+  "added": [
+   "experimental"
+  ]
+ },
+ "experimental": {
+  "old": [],
+  "new": [
+   "experiment"
+  ],
+  "added": [
+   "experiment"
+  ]
+ },
+ "flat": {
+  "old": [],
+  "new": [
+   "apartment"
+  ],
+  "added": [
+   "apartment"
+  ]
+ },
+ "gallery": {
+  "old": [],
+  "new": [
+   "terrace",
+   "balcony",
+   "platform"
+  ],
+  "added": [
+   "terrace",
+   "balcony",
+   "platform"
+  ]
+ },
+ "halt": {
+  "old": [
+   "cease",
+   "stop",
+   "suspend"
+  ],
+  "new": [
+   "cease",
+   "stop",
+   "suspend",
+   "quit"
+  ],
+  "added": [
+   "quit"
+  ]
+ },
+ "happiness": {
+  "old": [],
+  "new": [
+   "well-being"
+  ],
+  "added": [
+   "well-being"
+  ]
+ },
+ "incentive": {
+  "old": [
+   "drive",
+   "motivation",
+   "stimulus"
+  ],
+  "new": [
+   "drive",
+   "motivation",
+   "stimulus",
+   "stimulate"
+  ],
+  "added": [
+   "stimulate"
+  ]
+ },
+ "increase": {
+  "old": [
+   "boom",
+   "boost"
+  ],
+  "new": [
+   "boom",
+   "boost",
+   "raise"
+  ],
+  "added": [
+   "raise"
+  ]
+ },
+ "inhabitant": {
+  "old": [],
+  "new": [
+   "resident"
+  ],
+  "added": [
+   "resident"
+  ]
+ },
+ "inspire": {
+  "old": [
+   "boost",
+   "drive"
+  ],
+  "new": [
+   "boost",
+   "drive",
+   "motivate"
+  ],
+  "added": [
+   "motivate"
+  ]
+ },
+ "investigate": {
+  "old": [
+   "examine",
+   "probe",
+   "look into"
+  ],
+  "new": [
+   "examine",
+   "probe",
+   "look into",
+   "research",
+   "survey"
+  ],
+  "added": [
+   "research",
+   "survey"
+  ]
+ },
+ "irritate": {
+  "old": [
+   "annoy",
+   "provoke",
+   "vex"
+  ],
+  "new": [
+   "annoy",
+   "provoke",
+   "vex",
+   "motivate"
+  ],
+  "added": [
+   "motivate"
+  ]
+ },
+ "lane": {
+  "old": [],
+  "new": [
+   "avenue"
+  ],
+  "added": [
+   "avenue"
+  ]
+ },
+ "major": {
+  "old": [
+   "dominant",
+   "first",
+   "leading"
+  ],
+  "new": [
+   "dominant",
+   "first",
+   "leading",
+   "primary"
+  ],
+  "added": [
+   "primary"
+  ]
+ },
+ "motivate": {
+  "old": [
+   "activate",
+   "advance",
+   "boost",
+   "develop",
+   "drive"
+  ],
+  "new": [
+   "activate",
+   "advance",
+   "boost",
+   "develop",
+   "drive"
+  ],
+  "added": [
+   "inspire"
+  ]
+ },
+ "natural": {
+  "old": [],
+  "new": [
+   "normal"
+  ],
+  "added": [
+   "normal"
+  ]
+ },
+ "normal": {
+  "old": [
+   "average",
+   "common",
+   "general"
+  ],
+  "new": [
+   "average",
+   "common",
+   "general",
+   "natural"
+  ],
+  "added": [
+   "natural"
+  ]
+ },
+ "platform": {
+  "old": [],
+  "new": [
+   "terrace",
+   "balcony",
+   "gallery"
+  ],
+  "added": [
+   "terrace",
+   "balcony",
+   "gallery"
+  ]
+ },
+ "pollution": {
+  "old": [],
+  "new": [
+   "contaminate"
+  ],
+  "added": [
+   "contaminate"
+  ]
+ },
+ "present": {
+  "old": [],
+  "new": [
+   "contemporary"
+  ],
+  "added": [
+   "contemporary"
+  ]
+ },
+ "pressure": {
+  "old": [],
+  "new": [
+   "strain"
+  ],
+  "added": [
+   "strain"
+  ]
+ },
+ "propose": {
+  "old": [],
+  "new": [
+   "advise"
+  ],
+  "added": [
+   "advise"
+  ]
+ },
+ "quit": {
+  "old": [
+   "cease",
+   "resign",
+   "withdraw"
+  ],
+  "new": [
+   "cease",
+   "resign",
+   "withdraw",
+   "halt"
+  ],
+  "added": [
+   "halt"
+  ]
+ },
+ "quote": {
+  "old": [],
+  "new": [
+   "cite"
+  ],
+  "added": [
+   "cite"
+  ]
+ },
+ "raise": {
+  "old": [
+   "boost",
+   "foster"
+  ],
+  "new": [
+   "boost",
+   "foster",
+   "increase"
+  ],
+  "added": [
+   "increase"
+  ]
+ },
+ "reduce": {
+  "old": [
+   "alleviate",
+   "cut",
+   "decline",
+   "decrease"
+  ],
+  "new": [
+   "alleviate",
+   "cut",
+   "decline",
+   "decrease",
+   "deprive"
+  ],
+  "added": [
+   "deprive"
+  ]
+ },
+ "refreshment": {
+  "old": [],
+  "new": [
+   "snack"
+  ],
+  "added": [
+   "snack"
+  ]
+ },
+ "request": {
+  "old": [],
+  "new": [
+   "require"
+  ],
+  "added": [
+   "require"
+  ]
+ },
+ "require": {
+  "old": [
+   "demand",
+   "need",
+   "want"
+  ],
+  "new": [
+   "demand",
+   "need",
+   "want",
+   "request"
+  ],
+  "added": [
+   "request"
+  ]
+ },
+ "research": {
+  "old": [
+   "analyse",
+   "analysis"
+  ],
+  "new": [
+   "analyse",
+   "analysis",
+   "investigate",
+   "survey"
+  ],
+  "added": [
+   "investigate",
+   "survey"
+  ]
+ },
+ "resident": {
+  "old": [],
+  "new": [
+   "inhabitant"
+  ],
+  "added": [
+   "inhabitant"
+  ]
+ },
+ "restrict": {
+  "old": [
+   "confine",
+   "constrain"
+  ],
+  "new": [
+   "confine",
+   "constrain",
+   "constraint"
+  ],
+  "added": [
+   "constraint"
+  ]
+ },
+ "sale": {
+  "old": [
+   "auction",
+   "discount"
+  ],
+  "new": [
+   "auction",
+   "discount",
+   "retail"
+  ],
+  "added": [
+   "retail"
+  ]
+ },
+ "skeleton": {
+  "old": [
+   "frame",
+   "outline",
+   "bones"
+  ],
+  "new": [
+   "frame",
+   "outline",
+   "bones",
+   "framework"
+  ],
+  "added": [
+   "framework"
+  ]
+ },
+ "snack": {
+  "old": [],
+  "new": [
+   "refreshment"
+  ],
+  "added": [
+   "refreshment"
+  ]
+ },
+ "stage": {
+  "old": [],
+  "new": [
+   "step"
+  ],
+  "added": [
+   "step"
+  ]
+ },
+ "step": {
+  "old": [],
+  "new": [
+   "stage"
+  ],
+  "added": [
+   "stage"
+  ]
+ },
+ "stimulate": {
+  "old": [
+   "activate",
+   "advance",
+   "boost",
+   "develop",
+   "drive"
+  ],
+  "new": [
+   "activate",
+   "advance",
+   "boost",
+   "develop",
+   "drive"
+  ],
+  "added": [
+   "incentive"
+  ]
+ },
+ "strain": {
+  "old": [],
+  "new": [
+   "pressure"
+  ],
+  "added": [
+   "pressure"
+  ]
+ },
+ "survey": {
+  "old": [],
+  "new": [
+   "investigate",
+   "research"
+  ],
+  "added": [
+   "investigate",
+   "research"
+  ]
+ },
+ "terrace": {
+  "old": [],
+  "new": [
+   "balcony",
+   "platform",
+   "gallery"
+  ],
+  "added": [
+   "balcony",
+   "platform",
+   "gallery"
+  ]
+ },
+ "well-being": {
+  "old": [],
+  "new": [
+   "happiness"
+  ],
+  "added": [
+   "happiness"
+  ]
+ }
+}
