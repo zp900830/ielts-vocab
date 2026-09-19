@@ -13,7 +13,7 @@ Verifies continuous playback advances through sentences with highlight following
 
 ### Setup 1. Open the app
 Navigate to `{E2E_BASE_URL}/index.html`.
-**Verify:** Page title contains 影子跟读 and 1809 sentences render.
+**Verify:** Page title contains 影子跟读 and every sentence in the data renders (count derived from data).
 
 ## Test Steps
 

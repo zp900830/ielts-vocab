@@ -23,7 +23,7 @@ Navigate to `{E2E_BASE_URL}/index.html`.
 ### 1. No orphan inflection suffix after a highlighted word
 Walk every `.sent` node; for each text node that directly follows a `.w` (or its `.gl` gloss)
 element, assert it does not begin with a lowercase letter.
-**Verify:** zero offenders across all 1809 sentences.
+**Verify:** zero offenders across every sentence in the data.
 
 ### 2. Every highlighted word resolves in the dictionary
 For each `.w`, assert `data-w` exists as a key in `VOCAB` and carries a meaning.
