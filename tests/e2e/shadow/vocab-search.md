@@ -18,8 +18,11 @@ Navigate to `{E2E_BASE_URL}/index.html`.
 ## Test Steps
 
 ### 1. Search for a word
+Before typing, read the total out of `#vcnt` (the `N` in `… / N词`) and keep it as `{vocabTotal}`.
 Type `oxygen` into the search input and wait for the debounced render.
-**Verify:** Exactly 1 `.item` renders and `#vcnt` reads `1 / 3219词`.
+**Verify:** Exactly 1 `.item` renders and `#vcnt` reads `1 / {vocabTotal}词`.
+Do not hardcode the word count — it changes every time a card is added, and a hardcoded
+number turns a content change into a red test.
 
 ### 2. Clear the search
 Clear the search input.
