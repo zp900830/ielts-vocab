@@ -17,6 +17,7 @@ CAP = 3
 
 def main():
     dry = '--apply' not in sys.argv
+    rc = 0
     # 片号 → 该片的词头顺序，第二轮的条目要落回原来的片
     home = {}
     for nf in sorted(glob.glob(ROOT + '/work/cardgen/need/*.json')):
@@ -26,6 +27,23 @@ def main():
         for r in json.load(open(nf, encoding='utf-8')):
             home[r['w']] = sid
     added = {}
+    # 覆盖率先查：捞回代理漏判的词头不会被"默认放行"，也不会被"默认该砍"，
+    # 只会在这里被拦下来 —— 漏判等于没看过，必须补判而不是静默丢掉。
+    for jf in sorted(glob.glob(ROOT + '/work/cardgen/refix/rf*.json')):
+        sid = jf.split('/')[-1][:-5]
+        want = [str(r.get('w', '')).lower() for r in json.load(open(jf, encoding='utf-8'))]
+        of = f'{ROOT}/work/cardgen/refix_out/{sid}.json'
+        try:
+            have = {str(x.get('w', '')).lower() for x in json.load(open(of, encoding='utf-8'))}
+        except (OSError, ValueError):
+            print(f'!! {sid} 没交回或不可读：{len(want)} 行未复核', file=sys.stderr)
+            rc = 1
+            continue
+        miss = [w for w in want if w not in have]
+        if miss:
+            rc = 1
+            print(f'!! {sid} 漏判 {len(miss)} 个词头：{",".join(miss[:12])}'
+                  + ('…' if len(miss) > 12 else ''), file=sys.stderr)
     for rf in sorted(glob.glob(ROOT + '/work/cardgen/refix_out/*.json')):
         for x in json.load(open(rf, encoding='utf-8')):
             w = str(x.get('w', '')).lower()
@@ -61,7 +79,7 @@ def main():
             json.dump(got, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     print(f'捞回涉及 {len(added)} 片、{sum(len(v) for v in added.values())} 个词头，'
           f'追加同义词 {n_syn} 条、词伙 {n_col} 条' + ('（干跑，未写文件）' if dry else '，已并回 got/'))
-    return 0
+    return rc
 
 
 if __name__ == '__main__':
