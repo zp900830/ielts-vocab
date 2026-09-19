@@ -1,0 +1,929 @@
+{
+ "utterance": {
+  "syn": {},
+  "col": {
+   "soft utterance": "keep"
+  }
+ },
+ "vacation": {
+  "syn": {},
+  "col": {
+   "calm sweet vacation": "keep",
+   "sweet vacation": "keep"
+  }
+ },
+ "variable": {
+  "syn": {},
+  "col": {
+   "only variable": "keep"
+  }
+ },
+ "vigorous": {
+  "syn": {},
+  "col": {
+   "vigorous cheers": "keep"
+  }
+ },
+ "violin": {
+  "syn": {},
+  "col": {
+   "old brown violin": "keep",
+   "brown violin": "keep"
+  }
+ },
+ "vowel": {
+  "syn": {},
+  "col": {
+   "bright vowel": "keep"
+  }
+ },
+ "wander": {
+  "syn": {},
+  "col": {
+   "wander past": "keep"
+  }
+ },
+ "wedge": {
+  "syn": {},
+  "col": {
+   "thin wedge": "keep"
+  }
+ },
+ "yoga": {
+  "syn": {},
+  "col": {
+   "morning yoga": "keep",
+   "gentle morning yoga": "keep"
+  }
+ },
+ "carrot": {
+  "syn": {},
+  "col": {
+   "orange carrot": "keep",
+   "orange carrot roots": "keep"
+  }
+ },
+ "chicken": {
+  "syn": {},
+  "col": {
+   "fat village chicken": "keep"
+  }
+ },
+ "cucumber": {
+  "syn": {},
+  "col": {
+   "long cucumber": "keep"
+  }
+ },
+ "fry": {
+  "syn": {},
+  "col": {
+   "helped fry": "keep"
+  }
+ },
+ "garment": {
+  "syn": {},
+  "col": {
+   "school garment": "keep"
+  }
+ },
+ "hurdle": {
+  "syn": {},
+  "col": {
+   "worn delivery hurdle": "keep",
+   "delivery hurdle": "keep"
+  }
+ },
+ "knob": {
+  "syn": {},
+  "col": {
+   "round door knob": "keep"
+  }
+ },
+ "lumber": {
+  "syn": {},
+  "col": {
+   "cut lumber": "keep"
+  }
+ },
+ "makeup": {
+  "syn": {},
+  "col": {
+   "light soft makeup": "keep",
+   "soft makeup": "keep"
+  }
+ },
+ "masquerade": {
+  "syn": {},
+  "col": {
+   "spring masquerade": "keep",
+   "masquerade dance": "keep"
+  }
+ },
+ "pamphlet": {
+  "syn": {},
+  "col": {
+   "picture pamphlet": "keep"
+  }
+ },
+ "peel": {
+  "syn": {},
+  "col": {
+   "helped grandma peel": "keep"
+  }
+ },
+ "refreshment": {
+  "syn": {},
+  "col": {
+   "as refreshment": "keep"
+  }
+ },
+ "roast": {
+  "syn": {},
+  "col": {
+   "watched grandma roast": "keep"
+  }
+ },
+ "saucer": {
+  "syn": {},
+  "col": {
+   "small flower saucer": "keep",
+   "flower saucer": "keep"
+  }
+ },
+ "stool": {
+  "syn": {},
+  "col": {
+   "painting stool": "keep"
+  }
+ },
+ "trainer": {
+  "syn": {},
+  "col": {
+   "red trainer": "keep"
+  }
+ },
+ "vegetarian": {
+  "syn": {},
+  "col": {
+   "vegetarian aunt": "keep"
+  }
+ },
+ "abortion": {
+  "syn": {},
+  "col": {
+   "painful abortion": "keep"
+  }
+ },
+ "accuse": {
+  "syn": {},
+  "col": {
+   "accuse anyone": "keep"
+  }
+ },
+ "administration": {
+  "syn": {},
+  "col": {
+   "new administration": "keep"
+  }
+ },
+ "agent": {
+  "syn": {},
+  "col": {
+   "friendly agent": "keep"
+  }
+ },
+ "agreement": {
+  "syn": {},
+  "col": {
+   "paper agreement": "keep",
+   "signed paper agreement": "keep"
+  }
+ },
+ "ambulance": {
+  "syn": {},
+  "col": {
+   "white ambulance": "keep"
+  }
+ },
+ "anchor": {
+  "syn": {},
+  "col": {
+   "heavy anchor": "keep"
+  }
+ },
+ "arabian": {
+  "syn": {},
+  "col": {
+   "arabian seller": "keep",
+   "smiling arabian seller": "keep",
+   "smiling arabian": "drop"
+  }
+ },
+ "arena": {
+  "syn": {},
+  "col": {
+   "old arena": "keep"
+  }
+ },
+ "arrest": {
+  "syn": {},
+  "col": {
+   "arrest anyone": "keep"
+  }
+ },
+ "asylum": {
+  "syn": {},
+  "col": {
+   "city asylum": "keep"
+  }
+ },
+ "avenue": {
+  "syn": {},
+  "col": {
+   "wide avenue": "keep"
+  }
+ },
+ "banner": {
+  "syn": {},
+  "col": {
+   "red banner": "keep"
+  }
+ },
+ "benchmark": {
+  "syn": {},
+  "col": {
+   "cold benchmark": "keep"
+  }
+ },
+ "brake": {
+  "syn": {},
+  "col": {
+   "new brake": "keep"
+  }
+ },
+ "bureau": {
+  "syn": {},
+  "col": {
+   "travel bureau": "keep"
+  }
+ },
+ "canal": {
+  "syn": {},
+  "col": {
+   "old canal": "keep"
+  }
+ },
+ "captain": {
+  "syn": {},
+  "col": {
+   "kind captain": "keep"
+  }
+ },
+ "cargo": {
+  "syn": {},
+  "col": {
+   "winter cargo": "keep"
+  }
+ },
+ "carriage": {
+  "syn": {},
+  "col": {
+   "old carriage": "keep"
+  }
+ },
+ "charter": {
+  "syn": {},
+  "col": {
+   "shop charter": "keep"
+  }
+ },
+ "clan": {
+  "syn": {},
+  "col": {
+   "mountain clan": "keep",
+   "old mountain clan": "keep"
+  }
+ },
+ "clerk": {
+  "syn": {},
+  "col": {
+   "young clerk": "keep"
+  }
+ },
+ "clue": {
+  "syn": {},
+  "col": {
+   "paper clue": "keep",
+   "small paper clue": "keep"
+  }
+ },
+ "consortium": {
+  "syn": {},
+  "col": {
+   "consortium dam": "keep"
+  }
+ },
+ "copper": {
+  "syn": {},
+  "col": {
+   "old copper": "keep"
+  }
+ },
+ "copyright": {
+  "syn": {},
+  "col": {
+   "simple copyright": "keep"
+  }
+ },
+ "crash": {
+  "syn": {},
+  "col": {
+   "loud crash": "keep"
+  }
+ },
+ "currency": {
+  "syn": {},
+  "col": {
+   "different currency": "keep"
+  }
+ },
+ "deceive": {
+  "syn": {},
+  "col": {
+   "deceive old friends": "keep"
+  }
+ },
+ "deck": {
+  "syn": {},
+  "col": {
+   "windy deck": "keep"
+  }
+ },
+ "depression": {
+  "syn": {},
+  "col": {
+   "quiet depression": "keep"
+  }
+ },
+ "discharge": {
+  "syn": {},
+  "col": {
+   "discharge nothing": "keep"
+  }
+ },
+ "ditch": {
+  "syn": {},
+  "col": {
+   "deep ditch": "keep"
+  }
+ },
+ "dock": {
+  "syn": {},
+  "col": {
+   "old dock": "keep"
+  }
+ },
+ "emergency": {
+  "syn": {},
+  "col": {
+   "train emergency": "keep",
+   "small train emergency": "keep"
+  }
+ },
+ "envelope": {
+  "syn": {},
+  "col": {
+   "old envelope": "keep"
+  }
+ },
+ "equity": {
+  "syn": {},
+  "col": {
+   "rough equity": "keep",
+   "keep rough equity": "keep"
+  }
+ },
+ "estate": {
+  "syn": {},
+  "col": {
+   "old estate": "keep"
+  }
+ },
+ "european": {
+  "syn": {},
+  "col": {
+   "european trains": "keep"
+  }
+ },
+ "explain": {
+  "syn": {},
+  "col": {
+   "then explain": "keep"
+  }
+ },
+ "export": {
+  "syn": {},
+  "col": {
+   "export problems": "keep"
+  }
+ },
+ "fault": {
+  "syn": {},
+  "col": {
+   "sad faults": "keep",
+   "small fault": "keep"
+  }
+ },
+ "fury": {
+  "syn": {},
+  "col": {
+   "old fury": "keep"
+  }
+ },
+ "garage": {
+  "syn": {},
+  "col": {
+   "dark garage": "keep"
+  }
+ },
+ "governance": {
+  "syn": {},
+  "col": {
+   "fairer governance": "keep"
+  }
+ },
+ "greek": {
+  "syn": {},
+  "col": {
+   "greek story": "keep"
+  }
+ },
+ "grocery": {
+  "syn": {},
+  "col": {
+   "little grocery": "keep"
+  }
+ },
+ "guarantee": {
+  "syn": {},
+  "col": {
+   "strong guarantee": "keep"
+  }
+ },
+ "guest": {
+  "syn": {},
+  "col": {
+   "tired guests": "keep"
+  }
+ },
+ "headquarters": {
+  "syn": {},
+  "col": {
+   "big headquarters": "keep"
+  }
+ },
+ "helicopter": {
+  "syn": {},
+  "col": {
+   "red helicopter": "keep"
+  }
+ },
+ "hierarchy": {
+  "syn": {},
+  "col": {
+   "old hierarchy": "keep"
+  }
+ },
+ "honk": {
+  "syn": {},
+  "col": {
+   "long honk": "keep"
+  }
+ },
+ "impose": {
+  "syn": {
+   "enforce": "drop"
+  },
+  "col": {}
+ },
+ "increment": {
+  "syn": {},
+  "col": {
+   "tiny increment": "keep"
+  }
+ },
+ "independence": {
+  "syn": {
+   "liberty": "keep",
+   "freedom": "keep"
+  },
+  "col": {}
+ },
+ "indian": {
+  "syn": {},
+  "col": {
+   "indian temple": "keep"
+  }
+ },
+ "jewish": {
+  "syn": {},
+  "col": {
+   "jewish festival": "keep"
+  }
+ },
+ "latin": {
+  "syn": {},
+  "col": {
+   "latin word": "keep"
+  }
+ },
+ "legislate": {
+  "syn": {},
+  "col": {
+   "legislate harsh orders": "keep"
+  }
+ },
+ "liner": {
+  "syn": {},
+  "col": {
+   "big liner": "keep"
+  }
+ },
+ "locomotive": {
+  "syn": {},
+  "col": {
+   "small locomotive": "keep"
+  }
+ },
+ "lorry": {
+  "syn": {},
+  "col": {
+   "big lorry": "keep"
+  }
+ },
+ "lull": {
+  "syn": {},
+  "col": {
+   "quiet lull": "keep"
+  }
+ },
+ "materialism": {
+  "syn": {},
+  "col": {
+   "empty materialism": "keep"
+  }
+ },
+ "meltdown": {
+  "syn": {},
+  "col": {
+   "quiet meltdown": "keep"
+  }
+ },
+ "memorial": {
+  "syn": {},
+  "col": {
+   "old memorial": "keep"
+  }
+ },
+ "merchant": {
+  "syn": {},
+  "col": {
+   "corner merchant": "keep",
+   "street corner merchant": "keep"
+  }
+ },
+ "minister": {
+  "syn": {},
+  "col": {
+   "old minister": "keep",
+   "kind old minister": "keep"
+  }
+ },
+ "monitor": {
+  "syn": {},
+  "col": {
+   "monitor every train": "keep"
+  }
+ },
+ "municipal": {
+  "syn": {},
+  "col": {
+   "municipal inn": "keep"
+  }
+ },
+ "murmur": {
+  "syn": {},
+  "col": {
+   "soft murmur": "keep"
+  }
+ },
+ "notoriety": {
+  "syn": {},
+  "col": {
+   "sudden notoriety": "keep"
+  }
+ },
+ "oversee": {
+  "syn": {},
+  "col": {
+   "oversee morning arrivals": "keep"
+  }
+ },
+ "parcel": {
+  "syn": {},
+  "col": {
+   "brown parcel": "keep"
+  }
+ },
+ "parliament": {
+  "syn": {},
+  "col": {
+   "famous parliament": "keep"
+  }
+ },
+ "passage": {
+  "syn": {},
+  "col": {
+   "mountain passage": "keep"
+  }
+ },
+ "passenger": {
+  "syn": {},
+  "col": {
+   "tired passenger": "keep"
+  }
+ },
+ "payroll": {
+  "syn": {},
+  "col": {
+   "paper payroll": "keep"
+  }
+ },
+ "persuade": {
+  "syn": {
+   "induce": "keep"
+  },
+  "col": {}
+ },
+ "petition": {
+  "syn": {},
+  "col": {
+   "shared petition": "keep"
+  }
+ },
+ "pilot": {
+  "syn": {},
+  "col": {
+   "brave pilot": "keep"
+  }
+ },
+ "plea": {
+  "syn": {},
+  "col": {
+   "tired plea": "keep"
+  }
+ },
+ "prejudice": {
+  "syn": {},
+  "col": {
+   "old prejudice": "keep"
+  }
+ },
+ "premier": {
+  "syn": {},
+  "col": {
+   "premier himself": "drop"
+  }
+ },
+ "pretend": {
+  "syn": {},
+  "col": {
+   "pretend cheer": "keep"
+  }
+ },
+ "privilege": {
+  "syn": {},
+  "col": {
+   "quiet privilege": "keep"
+  }
+ },
+ "promise": {
+  "syn": {},
+  "col": {
+   "fair promise": "keep",
+   "promised daily practice": "keep"
+  }
+ },
+ "proposal": {
+  "syn": {},
+  "col": {
+   "simple proposal": "keep"
+  }
+ },
+ "protocol": {
+  "syn": {},
+  "col": {
+   "delivery protocol": "keep"
+  }
+ },
+ "railroad": {
+  "syn": {},
+  "col": {
+   "whole railroad": "keep"
+  }
+ },
+ "railway": {
+  "syn": {},
+  "col": {
+   "new railway": "keep"
+  }
+ },
+ "reasonable": {
+  "syn": {},
+  "col": {
+   "reasonable new delivery": "keep"
+  }
+ },
+ "receipt": {
+  "syn": {},
+  "col": {
+   "every receipt": "keep"
+  }
+ },
+ "recommend": {
+  "syn": {},
+  "col": {
+   "recommend honest youths": "keep"
+  }
+ },
+ "refuge": {
+  "syn": {},
+  "col": {
+   "quiet refuge": "keep"
+  }
+ },
+ "refund": {
+  "syn": {},
+  "col": {
+   "small refund": "keep"
+  }
+ },
+ "resident": {
+  "syn": {},
+  "col": {
+   "resident cats": "keep"
+  }
+ },
+ "resume": {
+  "syn": {},
+  "col": {
+   "resume slowly": "drop"
+  }
+ },
+ "retail": {
+  "syn": {},
+  "col": {
+   "small retail": "keep"
+  }
+ },
+ "revolution": {
+  "syn": {},
+  "col": {
+   "old revolution": "keep"
+  }
+ },
+ "routine": {
+  "syn": {},
+  "col": {
+   "calm routine": "keep"
+  }
+ },
+ "russian": {
+  "syn": {},
+  "col": {
+   "old russian song": "keep"
+  }
+ },
+ "safari": {
+  "syn": {},
+  "col": {
+   "safari trail": "keep",
+   "quiet safari trail": "keep",
+   "quiet safari": "keep"
+  }
+ },
+ "sailor": {
+  "syn": {},
+  "col": {
+   "old sailor": "keep",
+   "tired sailor": "keep"
+  }
+ },
+ "seaman": {
+  "syn": {},
+  "col": {
+   "tired seaman": "keep"
+  }
+ },
+ "shilling": {
+  "syn": {},
+  "col": {
+   "every shilling": "keep"
+  }
+ },
+ "signpost": {
+  "syn": {},
+  "col": {
+   "white signpost": "keep"
+  }
+ },
+ "sin": {
+  "syn": {},
+  "col": {
+   "darker sin": "keep"
+  }
+ },
+ "slogan": {
+  "syn": {},
+  "col": {
+   "warm slogan": "keep"
+  }
+ },
+ "slum": {
+  "syn": {},
+  "col": {
+   "old slum school": "keep",
+   "old slum": "keep"
+  }
+ },
+ "soviet": {
+  "syn": {},
+  "col": {
+   "old soviet film": "keep",
+   "soviet film": "keep"
+  }
+ },
+ "spanish": {
+  "syn": {},
+  "col": {
+   "spanish train": "keep"
+  }
+ },
+ "stamp": {
+  "syn": {},
+  "col": {
+   "small stamp": "keep"
+  }
+ },
+ "statesman": {
+  "syn": {},
+  "col": {
+   "old statesman": "keep"
+  }
+ },
+ "steal": {
+  "syn": {},
+  "col": {
+   "steal coins": "keep"
+  }
+ },
+ "stigma": {
+  "syn": {},
+  "col": {
+   "old stigma": "keep"
+  }
+ },
+ "submerge": {
+  "syn": {},
+  "col": {
+   "slowly submerge": "keep"
+  }
+ },
+ "succession": {
+  "syn": {},
+  "col": {
+   "peaceful succession": "keep"
+  }
+ },
+ "superiority": {
+  "syn": {
+   "virtue": "drop"
+  },
+  "col": {}
+ },
+ "surveillance": {
+  "syn": {},
+  "col": {
+   "surveillance cameras": "keep",
+   "surveillance camera": "keep",
+   "new surveillance camera": "keep"
+  }
+ },
+ "swap": {
+  "syn": {},
+  "col": {
+   "sometimes swap": "keep"
+  }
+ }
+}

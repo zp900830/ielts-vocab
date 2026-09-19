@@ -1,0 +1,952 @@
+{
+"ash": {
+"syn": {},
+"col": {
+"found ash": "keep"
+}
+},
+"botanist": {
+"syn": {},
+"col": {
+"cheerful botanist": "keep"
+}
+},
+"bristle": {
+"syn": {},
+"col": {
+"bristle coat": "keep",
+"stiff bristle": "keep",
+"stiff bristle coat": "keep"
+}
+},
+"brute": {
+"syn": {},
+"col": {
+"rough brute": "keep"
+}
+},
+"carnivore": {
+"syn": {
+"predator": "keep"
+},
+"col": {}
+},
+"cattle": {
+"syn": {},
+"col": {
+"quiet milk cattle": "keep"
+}
+},
+"chill": {
+"syn": {
+"freeze": "keep"
+},
+"col": {}
+},
+"counterbalance": {
+"syn": {},
+"col": {
+"counterbalance harsh light": "keep"
+}
+},
+"crow": {
+"syn": {},
+"col": {
+"black noisy crow": "keep",
+"noisy crow": "keep"
+}
+},
+"descendant": {
+"syn": {},
+"col": {
+"happy descendant": "keep"
+}
+},
+"dirt": {
+"syn": {},
+"col": {
+"wipes dirt": "keep"
+}
+},
+"ecologist": {
+"syn": {},
+"col": {
+"friendly ecologist": "keep"
+}
+},
+"elusive": {
+"syn": {},
+"col": {
+"stayed elusive": "keep"
+}
+},
+"enzyme": {
+"syn": {},
+"col": {
+"busy enzyme": "keep"
+}
+},
+"expedition": {
+"syn": {},
+"col": {
+"real expedition": "keep"
+}
+},
+"hopeless": {
+"syn": {
+"pessimistic": "keep"
+},
+"col": {}
+},
+"induction": {
+"syn": {
+"orientation": "keep"
+},
+"col": {
+"safety induction": "keep"
+}
+},
+"magnet": {
+"syn": {},
+"col": {
+"little red magnet": "keep",
+"red magnet": "keep"
+}
+},
+"mite": {
+"syn": {
+"parasite": "keep"
+},
+"col": {
+"tiny mite": "keep"
+}
+},
+"nest": {
+"syn": {},
+"col": {
+"ruin nests": "keep"
+}
+},
+"offspring": {
+"syn": {},
+"col": {
+"tiny offspring": "keep"
+}
+},
+"olive": {
+"syn": {},
+"col": {
+"young olive": "keep"
+}
+},
+"optical": {
+"syn": {
+"visual": "drop"
+},
+"col": {}
+},
+"organism": {
+"syn": {},
+"col": {
+"tiny organism": "keep"
+}
+},
+"owl": {
+"syn": {},
+"col": {
+"sleepy brown owl": "keep",
+"brown owl": "keep"
+}
+},
+"ox": {
+"syn": {},
+"col": {
+"strong brown ox": "keep",
+"brown ox": "keep"
+}
+},
+"oxygen": {
+"syn": {},
+"col": {
+"holds oxygen": "keep"
+}
+},
+"parasite": {
+"syn": {
+"mite": "keep"
+},
+"col": {}
+},
+"particle": {
+"syn": {},
+"col": {
+"tiny particle": "keep"
+}
+},
+"paw": {
+"syn": {},
+"col": {
+"soft paw": "keep"
+}
+},
+"peninsula": {
+"syn": {},
+"col": {
+"windy southern peninsula": "keep",
+"southern peninsula": "keep"
+}
+},
+"perennial": {
+"syn": {},
+"col": {
+"old perennial": "keep"
+}
+},
+"perish": {
+"syn": {},
+"col": {
+"perish fast": "keep"
+}
+},
+"petrol": {
+"syn": {},
+"col": {
+"costly petrol": "keep"
+}
+},
+"pigeon": {
+"syn": {},
+"col": {
+"grey mild pigeon": "keep",
+"mild pigeon": "keep"
+}
+},
+"plateau": {
+"syn": {},
+"col": {
+"high windy plateau": "keep",
+"windy plateau": "keep"
+}
+},
+"plume": {
+"syn": {},
+"col": {
+"loose grey plume": "keep",
+"grey plume": "keep"
+}
+},
+"pollen": {
+"syn": {},
+"col": {
+"yellow pollen": "keep"
+}
+},
+"probe": {
+"syn": {},
+"col": {
+"small probe": "keep"
+}
+},
+"proliferate": {
+"syn": {},
+"col": {
+"proliferate fast": "keep"
+}
+},
+"propulsion": {
+"syn": {},
+"col": {
+"simple propulsion": "keep"
+}
+},
+"puff": {
+"syn": {},
+"col": {
+"puff fast": "keep"
+}
+},
+"radioactive": {
+"syn": {},
+"col": {
+"radioactive meter": "keep",
+"old radioactive meter": "keep"
+}
+},
+"rake": {
+"syn": {},
+"col": {
+"light rake": "keep"
+}
+},
+"range": {
+"syn": {},
+"col": {
+"nearby range": "keep"
+}
+},
+"rear": {
+"syn": {
+"feed": "keep"
+},
+"col": {}
+},
+"reclaim": {
+"syn": {},
+"col": {
+"reclaim old boxes": "keep"
+}
+},
+"refraction": {
+"syn": {},
+"col": {
+"refraction curve": "keep"
+}
+},
+"reservoir": {
+"syn": {},
+"col": {
+"stone reservoir": "keep",
+"old stone reservoir": "keep"
+}
+},
+"roar": {
+"syn": {},
+"col": {
+"low sleepy roar": "keep",
+"sleepy roar": "keep"
+}
+},
+"rough": {
+"syn": {},
+"col": {
+"stayed rough": "keep",
+"rough brute": "keep"
+}
+},
+"seal": {
+"syn": {},
+"col": {
+"sealed boxes": "keep",
+"old tired seal": "keep"
+}
+},
+"seed": {
+"syn": {},
+"col": {
+"saved seed": "keep"
+}
+},
+"shepherd": {
+"syn": {},
+"col": {
+"gentle old shepherd": "keep",
+"old shepherd": "keep"
+}
+},
+"signal": {
+"syn": {},
+"col": {
+"wind signal": "keep"
+}
+},
+"smooth": {
+"syn": {},
+"col": {
+"felt surprisingly smooth": "keep"
+}
+},
+"solid": {
+"syn": {
+"stable": "keep"
+},
+"col": {}
+},
+"sow": {
+"syn": {},
+"col": {
+"sow new rows": "keep"
+}
+},
+"spacecraft": {
+"syn": {},
+"col": {
+"model spacecraft": "keep"
+}
+},
+"spaceship": {
+"syn": {},
+"col": {
+"toy spaceship": "keep"
+}
+},
+"spade": {
+"syn": {},
+"col": {
+"small spade": "keep"
+}
+},
+"sparrow": {
+"syn": {},
+"col": {
+"tiny hungry sparrow": "keep",
+"hungry sparrow": "keep"
+}
+},
+"specimen": {
+"syn": {},
+"col": {
+"leaf specimen": "keep"
+}
+},
+"spectacle": {
+"syn": {},
+"col": {
+"silver spectacle": "keep"
+}
+},
+"spectrum": {
+"syn": {},
+"col": {
+"light spectrum": "keep"
+}
+},
+"squash": {
+"syn": {},
+"col": {
+"soft squash": "keep"
+}
+},
+"squirrel": {
+"syn": {},
+"col": {
+"red quick squirrel": "keep",
+"quick squirrel": "keep"
+}
+},
+"stable": {
+"syn": {},
+"col": {
+"stable doors": "keep",
+"stood stable": "keep"
+}
+},
+"stack": {
+"syn": {},
+"col": {
+"stack washed pots": "keep"
+}
+},
+"stem": {
+"syn": {},
+"col": {
+"wet stems": "keep",
+"young stems": "keep"
+}
+},
+"subgroup": {
+"syn": {},
+"col": {
+"separate subgroup": "keep"
+}
+},
+"surroundings": {
+"syn": {
+"habitat": "keep"
+},
+"col": {}
+},
+"swamp": {
+"syn": {},
+"col": {
+"warm swamp": "keep"
+}
+},
+"swan": {
+"syn": {},
+"col": {
+"white calm swan": "keep",
+"calm swan": "keep"
+}
+},
+"swarm": {
+"syn": {},
+"col": {
+"busy swarm": "keep"
+}
+},
+"tail": {
+"syn": {},
+"col": {
+"bright tail": "keep"
+}
+},
+"telescope": {
+"syn": {},
+"col": {
+"small telescope": "keep"
+}
+},
+"terrain": {
+"syn": {
+"geography": "drop"
+},
+"col": {}
+},
+"thermodynamic": {
+"syn": {},
+"col": {
+"thermodynamic report": "keep"
+}
+},
+"timber": {
+"syn": {},
+"col": {
+"old timber": "keep"
+}
+},
+"tornado": {
+"syn": {},
+"col": {
+"spinning tornado": "keep"
+}
+},
+"torrent": {
+"syn": {},
+"col": {
+"brown torrent": "keep"
+}
+},
+"tortoise": {
+"syn": {},
+"col": {
+"heavy sleepy tortoise": "keep",
+"sleepy tortoise": "keep"
+}
+},
+"tropics": {
+"syn": {},
+"col": {
+"distant tropics": "keep"
+}
+},
+"tulip": {
+"syn": {},
+"col": {
+"tulip row": "keep"
+}
+},
+"typhoon": {
+"syn": {},
+"col": {
+"coastal typhoon": "keep"
+}
+},
+"ubiquitous": {
+"syn": {},
+"col": {
+"seem ubiquitous": "keep",
+"ubiquitous near water": "keep"
+}
+},
+"ultraviolet": {
+"syn": {},
+"col": {
+"harsh ultraviolet": "keep"
+}
+},
+"undermine": {
+"syn": {},
+"col": {
+"undermine shared beds": "keep"
+}
+},
+"variation": {
+"syn": {},
+"col": {
+"pleasant variation": "keep"
+}
+},
+"vase": {
+"syn": {},
+"col": {
+"blue vase": "keep"
+}
+},
+"vertebrate": {
+"syn": {},
+"col": {
+"strong vertebrate": "keep"
+}
+},
+"victim": {
+"syn": {},
+"col": {
+"helpless victim": "keep"
+}
+},
+"volcano": {
+"syn": {},
+"col": {
+"old volcano": "keep"
+}
+},
+"waterfall": {
+"syn": {},
+"col": {
+"noisy distant waterfall": "keep",
+"distant waterfall": "keep"
+}
+},
+"weed": {
+"syn": {},
+"col": {
+"spreading weed": "keep"
+}
+},
+"whale": {
+"syn": {},
+"col": {
+"distant huge whale": "keep",
+"huge whale": "keep"
+}
+},
+"wing": {
+"syn": {},
+"col": {
+"weak little wing": "keep",
+"little wing": "keep"
+}
+},
+"wolf": {
+"syn": {},
+"col": {
+"far lonely wolf": "keep",
+"lonely wolf": "keep"
+}
+},
+"zebra": {
+"syn": {},
+"col": {
+"calm zebra": "keep"
+}
+},
+"zoologist": {
+"syn": {},
+"col": {
+"kind zoologist": "keep"
+}
+},
+"abbreviation": {
+"syn": {},
+"col": {
+"short abbreviation": "keep"
+}
+},
+"adverb": {
+"syn": {},
+"col": {
+"short adverb": "keep"
+}
+},
+"algebra": {
+"syn": {},
+"col": {
+"algebra tasks": "keep",
+"easy algebra": "keep",
+"easy algebra tasks": "keep"
+}
+},
+"anecdote": {
+"syn": {},
+"col": {
+"warm anecdote": "keep"
+}
+},
+"animation": {
+"syn": {},
+"col": {
+"bright animation": "keep"
+}
+},
+"announcer": {
+"syn": {},
+"col": {
+"clear announcer": "keep"
+}
+},
+"anthropologist": {
+"syn": {},
+"col": {
+"wise anthropologist": "keep"
+}
+},
+"antique": {
+"syn": {},
+"col": {
+"antique cup": "keep"
+}
+},
+"antonym": {
+"syn": {},
+"col": {
+"soft antonym": "keep"
+}
+},
+"archaeology": {
+"syn": {},
+"col": {
+"loves archaeology": "keep"
+}
+},
+"arithmetic": {
+"syn": {},
+"col": {
+"silent arithmetic": "keep",
+"fast silent arithmetic": "keep"
+}
+},
+"artwork": {
+"syn": {
+"painting": "keep"
+},
+"col": {}
+},
+"author": {
+"syn": {},
+"col": {
+"kind author": "keep"
+}
+},
+"bachelor": {
+"syn": {},
+"col": {
+"young bachelor": "keep"
+}
+},
+"ballet": {
+"syn": {},
+"col": {
+"new ballet": "keep"
+}
+},
+"battery": {
+"syn": {},
+"col": {
+"strong battery": "keep",
+"fresh strong battery": "keep"
+}
+},
+"bible": {
+"syn": {},
+"col": {
+"old bible": "keep"
+}
+},
+"bibliography": {
+"syn": {},
+"col": {
+"reading bibliography": "keep",
+"short reading bibliography": "keep"
+}
+},
+"biography": {
+"syn": {},
+"col": {
+"photo biography": "keep",
+"short photo biography": "keep"
+}
+},
+"bishop": {
+"syn": {},
+"col": {
+"young bishop": "keep"
+}
+},
+"blend": {
+"syn": {},
+"col": {
+"blend jokes": "keep"
+}
+},
+"brainstorm": {
+"syn": {},
+"col": {
+"lively brainstorm": "keep",
+"quick lively brainstorm": "keep"
+}
+},
+"camp": {
+"syn": {},
+"col": {
+"small camp": "keep"
+}
+},
+"candidate": {
+"syn": {},
+"col": {
+"class candidate": "keep"
+}
+},
+"canteen": {
+"syn": {},
+"col": {
+"street canteen": "keep",
+"small street canteen": "keep",
+"bright canteen": "keep"
+}
+},
+"category": {
+"syn": {},
+"col": {
+"sweet category": "keep"
+}
+},
+"cello": {
+"syn": {},
+"col": {
+"deep cello": "keep"
+}
+},
+"champion": {
+"syn": {},
+"col": {
+"young champion": "keep"
+}
+},
+"chronology": {
+"syn": {},
+"col": {
+"chronology charts": "keep",
+"old chronology charts": "keep"
+}
+},
+"church": {
+"syn": {},
+"col": {
+"white church": "keep"
+}
+},
+"comedy": {
+"syn": {},
+"col": {
+"comedy jokes": "keep",
+"loud comedy": "keep",
+"loud comedy jokes": "keep"
+}
+},
+"commentary": {
+"syn": {},
+"col": {
+"friendly commentary": "keep"
+}
+},
+"commentator": {
+"syn": {
+"critic": "keep"
+},
+"col": {
+"young commentator": "keep"
+}
+},
+"communicate": {
+"syn": {
+"convey": "drop"
+},
+"col": {
+"communicate warm thoughts": "keep"
+}
+},
+"complicated": {
+"syn": {},
+"col": {
+"seemed complicated": "keep"
+}
+},
+"conjunction": {
+"syn": {},
+"col": {
+"small conjunction": "keep"
+}
+},
+"consensus": {
+"syn": {},
+"col": {
+"warm consensus": "keep"
+}
+},
+"contradiction": {
+"syn": {},
+"col": {
+"harsh contradiction": "keep"
+}
+},
+"correspondent": {
+"syn": {},
+"col": {
+"kind correspondent": "keep"
+}
+},
+"craftsman": {
+"syn": {},
+"col": {
+"wise craftsman": "keep"
+}
+},
+"critic": {
+"syn": {},
+"col": {
+"fair critic": "keep"
+}
+},
+"cycling": {
+"syn": {},
+"col": {
+"cycling pleasure": "keep"
+}
+},
+"dean": {
+"syn": {},
+"col": {
+"busy dean": "keep"
+}
+},
+"decipher": {
+"syn": {},
+"col": {
+"decipher old cards": "keep"
+}
+},
+"depict": {
+"syn": {},
+"col": {
+"depict birds": "keep"
+}
+},
+"diagonal": {
+"syn": {},
+"col": {
+"black diagonal": "keep",
+"bold black diagonal": "keep"
+}
+},
+"diagram": {
+"syn": {},
+"col": {
+"study diagram": "keep",
+"clear study diagram": "keep"
+}
+},
+"diary": {
+"syn": {},
+"col": {
+"small diary": "keep"
+}
+},
+"disc": {
+"syn": {},
+"col": {
+"black disc": "keep",
+"old black disc": "keep"
+}
+}
+}
