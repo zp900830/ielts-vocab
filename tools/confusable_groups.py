@@ -141,6 +141,57 @@ def main():
     covered = {w for g in comp.values() for w in g if len(g) >= 2}
     both_col = sum(1 for a, b in conf if col[a] and col[b])
     same_chap = sum(1 for (a, b) in conf if chap.get(a, set()) & chap.get(b, set()))
+    # 「辨析」的候选来源跟「出题」正好相反：出题要挑「义项重叠但填了会说错」的，
+    # 辨析要挑「作者故意放在同一句/同一段里的近义词」，越近越要辨析（含被同义词黑名单挡掉的）。
+    # 所以这里按共现重新统计一遍，别复用 conf 那份边集。
+    marked = []          # 每句的可点词集合
+    for s in sents:
+        ws = []
+        for mm in re.finditer(r'\[\[([^\]:]+):', s):
+            w = mm.group(1).strip().lower()
+            if w not in ws:
+                ws.append(w)
+        marked.append(set(ws))
+    syn_pairs = set()
+    for a in syn:
+        for b in syn[a]:
+            if a < b:
+                syn_pairs.add((a, b))
+    # 辨析组的成员一律限死为目标词（有卡、在课文里被标的词）。
+    # 「同义词：」段（来自 PDF 同义替换资料）**不作为辨析组的来源**，它只服务卡上那一栏；
+    # 这里只统计它带来的一个副作用：这些对子不能互为选项（填哪个都对）。
+    co_sent, co_groups = {}, collections.Counter()
+    para_of = []                       # 全局句号 → (文章索引, 段索引)，与 sents 同序
+    for ai, a in enumerate(S):
+        for pi, para in enumerate(a['paragraphs']):
+            for _ in para:
+                para_of.append((ai, pi))
+    para_words = collections.defaultdict(set)
+    for gi, ws in enumerate(marked):
+        para_words[para_of[gi]].update(ws)
+    for gi, ws in enumerate(marked):
+        for x, bucket in usable.items():
+            hit = ws & set(bucket)
+            if len(hit) >= 2:
+                co_sent.setdefault(gi, []).append((x, tuple(sorted(hit))))
+                co_groups[(x, tuple(sorted(hit)))] += 1
+    # 互为同义词的对子在课文里也常共现，但它按新口径不进辨析清单，只统计「选项黑名单要挡掉多少」
+    syn_co = {tuple(sorted((p, q))) for p, q in syn_pairs
+              if p in set().union(*marked) and q in set().union(*marked)}
+    syn_co_para = {k for k, ws in para_words.items() if any(p in ws and q in ws for p, q in syn_pairs)}
+    para_hit = sum(1 for k, ws in para_words.items()
+                   if any(len(ws & set(b)) >= 2 for b in usable.values()))
+    # 共现主要发生在**段**一级（作者把近义词铺在一整段里），所以段级才是辨析组的工作清单
+    co_groups_para = collections.Counter()
+    for k, ws in para_words.items():
+        for x, bucket in usable.items():
+            hit = ws & set(bucket)
+            if len(hit) >= 2:
+                co_groups_para[(x, tuple(sorted(hit)))] += 1
+    para_words_covered = {w for (_, g) in co_groups_para for w in g}
+    worklist = sorted({g for (_, g) in co_groups_para})
+    # 组内目标词数 = 2 时只有两选一，出不了合格的四选一 → 该组只作辨析，题目走回忆题
+    tiny = {g for g in worklist if len(g) <= 2}
     # 例句与课文两个语境（挖空题要能在卡上例句里二次验证）
     def loose(w):
         return r'(?<![a-z])' + re.escape(w) + r'[a-z]{0,4}(?![a-z])'
@@ -170,11 +221,44 @@ def main():
         print(f'    {x}: {" ".join(g)}')
     print(f'课文中出现 ≥2 次但没有卡的简单词（辨析组要收、且要么加可点标记要么只做纯文本选项） {len(nocard)} 个')
     print(f'  高频示例: ' + ' '.join(f'{t}×{c}' for t, c in sorted(nocard.items(), key=lambda kv: -kv[1])[:16]))
+    print(f'── 共现口径（辨析卡的真正来源：作者故意把近义词写在一起）──')
+    print(f'同句内 ≥2 个近义词共现的句子 {len(co_sent)} / {len(sents)} 句 = {len(co_sent)/len(sents)*100:.1f}%')
+    print(f'同段内共现的段落 {para_hit} / {len(para_words)} 段 = {para_hit/len(para_words)*100:.1f}%')
+    print(f'去重后的共现组 {len(co_groups)} 个，其中在课文里出现 ≥2 次的 {sum(1 for v in co_groups.values() if v >= 2)} 个')
+    for (x, g), c in co_groups.most_common(6):
+        print(f'    ×{c} [{x}] {" ".join(g)}')
+    print(f'  段级共现组（一期辨析工作清单，成员全是目标词） {len(worklist)} 组，'
+          f'覆盖 {len(para_words_covered)} 个词头 = {len(para_words_covered)/len(V)*100:.1f}%')
+    print(f'  规模分布 {dict(sorted(collections.Counter(len(g) for g in worklist).items()))}'
+          f' · 只有 2 个目标词的组 {len(tiny)} 组（够辨析，不够出四选一 → 走回忆题）')
+    print(f'  互为同义词且同段共现的对子 {len(syn_co)} 对（不进辨析清单，但要在出题时挡掉），'
+          f'涉及 {len(syn_co_para)} 个段落')
+    for (x, g), c in co_groups_para.most_common(14):
+        print(f'    ×{c} [{x}] {" ".join(g)}')
     print(f'两语境（卡上有例句且课文里有标记） {two_ctx}/{len(V)}')
     print(f'其中例句没写出词头本体 {len(eg_missing)} 张: ' + ' '.join(eg_missing[:30]))
     if args.json:
+        para_sents = collections.defaultdict(list)
+        for gi, pk in enumerate(para_of):
+            para_sents[pk].append(gi)
+        loc = collections.defaultdict(lambda: {'paras': set(), 'senses': set()})
+        for pk, ws in para_words.items():
+            for x, bucket in usable.items():
+                hit = tuple(sorted(ws & set(bucket)))
+                if len(hit) >= 2:
+                    loc[hit]['paras'].add(pk)
+                    loc[hit]['senses'].add(x)
         json.dump({'groups': groups, 'pairs': sorted(conf), 'eg_missing': eg_missing},
                   open(args.json, 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
+        out = []
+        for g, v in sorted(loc.items(), key=lambda kv: (-len(kv[1]['paras']), len(kv[0]))):
+            sents_in = sorted({gi for pk in v['paras'] for gi in para_sents[pk]
+                               if marked[gi] & set(g)})
+            out.append({'words': list(g), 'senses': sorted(v['senses']),
+                        'paras': [list(pk) for pk in sorted(v['paras'])], 'sents': sents_in})
+        json.dump(out, open('work/compare_groups_worklist.json', 'w', encoding='utf-8'),
+                  ensure_ascii=False, indent=1)
+        print(f'工作清单已写 work/compare_groups_worklist.json（{len(out)} 组，带段落与句号定位）')
     return 0
 
 
