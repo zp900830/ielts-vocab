@@ -80,6 +80,24 @@ def load_simple():
             if not l.startswith('#') and l.strip()}
 
 
+def trim_match(sub, cands):
+    """代理交回的词伙是不是某条候选「掐头去尾」后的连续片段。
+
+    候选是从课文里切的窗口（travel bureau take），能背的单位往往只是其中一段
+    （travel bureau）。允许剪两端、不许换词、不许中间掏空 —— 这样既拿到可复用形状，
+    又不可能凭空造词。命中时返回原候选，出处照原候选记。
+    """
+    w = sub.split()
+    if not w:
+        return None
+    for c in cands:
+        cw = c.split()
+        for i in range(len(cw) - len(w) + 1):
+            if cw[i:i + len(w)] == w:
+                return c
+    return None
+
+
 def rejected_pairs():
     """上一轮逐条裁决判 wrong 的 (词头 → 被否词)。"""
     out = collections.defaultdict(set)
@@ -172,9 +190,10 @@ def main():
                     ws = c.split()
                     if not (2 <= len(ws) <= 6):
                         rejected.append((h, sid, f'col 词数越界 {c!r}')); continue
-                    if c not in ccol:
-                        # 同上：词伙只许从候选里挑，候选全是资料/课文里真出现过的
+                    if c not in ccol and trim_match(c, list(ccol)) is None:
+                        # 同上：词伙只许从候选里挑（允许掐头去尾），候选全是资料/课文里真出现过的
                         rejected.append((h, sid, f'col 不在候选里（自由作答）{c!r}')); continue
+                    src = ccol.get(c) or ccol.get(trim_match(c, list(ccol)), 'T')
                     if not any(w in hf or any(w in forms(x) for x in h.split()) for w in ws):
                         rejected.append((h, sid, f'col 不含词头 {c!r}')); continue
                     badw = [w for w in ws if w not in hf and w not in simple and w not in allowed]

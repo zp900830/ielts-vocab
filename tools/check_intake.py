@@ -3,7 +3,8 @@
 """收件核验：子代理交回的 got/*.json 结构上对不对。
 
 这是门禁 1（validate_card_patch.py）之前的**收货检查**，只看形式不看语义：
-条数齐不齐、有没有重复、有没有缺条、字符串是否逐字来自该片候选、单卡有没有超 3 条。
+条数齐不齐、有没有重复、有没有缺条、字符串出自不出本片候选（词伙允许掐头去尾，
+   但必须是某条候选的连续片段）、单卡有没有超 3 条。
 语义审核是门禁 2 的事；这里查出问题说明代理没照规则干活，整片打回重跑。
 """
 import json
@@ -11,6 +12,9 @@ import os
 import sys
 
 ROOT = '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目'
+sys.path.insert(0, ROOT + '/tools')
+from validate_card_patch import trim_match  # noqa: E402  同一套判定，别两处各写一遍
+
 CAP = 3
 
 
@@ -24,7 +28,6 @@ def check(sid, verbose=True):
     nw = {r['w'].lower(): r for r in need}
     gw = [str(x.get('w', '')).lower() for x in got]
     problems = []
-    free_per_head = {}
     for w in set(gw):
         if w not in nw:
             problems.append(f'越权词头 {w}')
@@ -48,13 +51,12 @@ def check(sid, verbose=True):
             problems.append(f'{w} col 超 {CAP} 条')
         for v in syn:
             if v not in r['syn']:
-                free_per_head.setdefault(w, []).append(v)
+                problems.append(f'{w} syn 不在候选里（自由作答一律拒）{v}')
         for v in col:
-            if v not in r['col']:
+            # 词伙允许把课文窗口掐头去尾（travel bureau take → travel bureau），
+            # 但必须是某条候选的连续片段 —— 换词、中间掏空都不行
+            if v not in r['col'] and trim_match(v, r['col']) is None:
                 problems.append(f'{w} col 越界候选（词伙不许自由作答）{v}')
-    if any(len(x) > 1 for x in free_per_head.values()):
-        problems.append('自由作答同义词超过 1 个/词：' + ', '.join(
-            f'{k}→{v}' for k, v in free_per_head.items() if len(v) > 1))
     empty = sum(1 for x in got if not (x.get('syn') or x.get('col')))
     if verbose:
         print(f'{sid:<9} 输入 {len(need):>3} 输出 {len(got):>3} | syn {ns:>3} col {nc:>3} | 交空 {empty:>3} | '
