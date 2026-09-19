@@ -69,11 +69,11 @@ def main():
         sh_out = {f.split('/')[-1][:-5] for f in glob.glob(ROOT + '/work/cardgen/shape_out/*.json')}
         if len(sh_in) != len(sh_out):
             rc = 1
-            print(f'!! 专判包 {len(sh_in)} 份，只交回 {len(sh_out)} 份：缺 {sorted({f.split('/')[-1][:-5] for f in sh_in} - sh_out)}',
+            print(f'!! 专判包 {len(sh_in)} 份，只交回 {len(sh_out)} 份：缺 {sorted({f.split('/')[-1][:-4] for f in sh_in} - sh_out)}',
                   file=sys.stderr)
         extra = 0
         for f in sh_in:
-            sid = f.split('/')[-1][:-5]
+            sid = f.split('/')[-1][:-4]
             try:
                 sv = json.load(open(ROOT + f'/work/cardgen/shape_out/{sid}.json', encoding='utf-8'))
             except (OSError, ValueError):
