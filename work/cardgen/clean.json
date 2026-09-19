@@ -1,0 +1,26 @@
+[
+ {
+  "w": "carnivore",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [
+   {
+    "s": "predator",
+    "src": "R"
+   }
+  ],
+  "col": []
+ },
+ {
+  "w": "alga",
+  "pkt": "ch1",
+  "merge_syn_ext": false,
+  "syn": [],
+  "col": [
+   {
+    "c": "green alga",
+    "src": "T"
+   }
+  ]
+ }
+]

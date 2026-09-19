@@ -1,0 +1,1305 @@
+[
+ {
+  "w": "aisle",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "narrow aisle"
+  ]
+ },
+ {
+  "w": "alloy",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "light alloy",
+   "light alloy frame",
+   "alloy frame"
+  ]
+ },
+ {
+  "w": "apartment",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "crowded apartment"
+  ]
+ },
+ {
+  "w": "apparatus",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "shining new apparatus",
+   "shining new apparatus arrived",
+   "new apparatus",
+   "new apparatus arrived",
+   "apparatus arrived"
+  ]
+ },
+ {
+  "w": "appetiser",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "tiny appetiser"
+  ]
+ },
+ {
+  "w": "arch",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "round arch"
+  ]
+ },
+ {
+  "w": "artifact",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "clay artifact"
+  ]
+ },
+ {
+  "w": "available",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "gift still available",
+   "gift still available today",
+   "still available",
+   "still available today",
+   "available today"
+  ]
+ },
+ {
+  "w": "badge",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old school badge",
+   "school badge"
+  ]
+ },
+ {
+  "w": "bake",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "mom baked",
+   "bake soft",
+   "bake soft cakes"
+  ]
+ },
+ {
+  "w": "balcony",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "sunny balcony",
+   "sunny balcony doors",
+   "sunny balcony doors sweeping",
+   "balcony doors",
+   "balcony doors sweeping"
+  ]
+ },
+ {
+  "w": "banquet",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "harvest banquet"
+  ]
+ },
+ {
+  "w": "bar",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "noisy street bar",
+   "street bar"
+  ]
+ },
+ {
+  "w": "barbecue",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "yard barbecue",
+   "yard barbecue stand",
+   "yard barbecue stand freeing",
+   "barbecue stand",
+   "barbecue stand freeing"
+  ]
+ },
+ {
+  "w": "barrel",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small barrel"
+  ]
+ },
+ {
+  "w": "bath",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "stained bath",
+   "stained bath tub",
+   "bath tub"
+  ]
+ },
+ {
+  "w": "bead",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "tiny fallen bead",
+   "fallen bead"
+  ]
+ },
+ {
+  "w": "beam",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "cracked wooden beam",
+   "cracked wooden beam held",
+   "wooden beam",
+   "wooden beam held",
+   "wooden beam held up",
+   "beam held"
+  ]
+ },
+ {
+  "w": "beef",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "prime pink beef",
+   "prime pink beef slices",
+   "pink beef",
+   "pink beef slices",
+   "beef slices"
+  ]
+ },
+ {
+  "w": "bell",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "little door bell",
+   "little door bell sings",
+   "door bell",
+   "door bell sings",
+   "bell sings"
+  ]
+ },
+ {
+  "w": "belt",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "black school belt",
+   "black school belt needs",
+   "school belt",
+   "school belt needs",
+   "school belt needs holes",
+   "belt needs"
+  ]
+ },
+ {
+  "w": "bench",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "wooden bench",
+   "wooden bench gone",
+   "bench gone"
+  ]
+ },
+ {
+  "w": "berry",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "red wild berry",
+   "wild berry"
+  ]
+ },
+ {
+  "w": "beverage",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "hot beverage",
+   "hot beverage made",
+   "beverage made"
+  ]
+ },
+ {
+  "w": "biscuit",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "square biscuit"
+  ]
+ },
+ {
+  "w": "bitter",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "bitter skin",
+   "bitter skin reaching"
+  ]
+ },
+ {
+  "w": "blanket",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "blue blanket"
+  ]
+ },
+ {
+  "w": "block",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": false,
+  "syn": [
+   "impede"
+  ],
+  "col": []
+ },
+ {
+  "w": "blot",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "paint blot",
+   "paint blot slowly",
+   "paint blot slowly fades",
+   "blot slowly",
+   "blot slowly fades"
+  ]
+ },
+ {
+  "w": "bolt",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "tiny silver bolt",
+   "silver bolt"
+  ]
+ },
+ {
+  "w": "booth",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "night market booth",
+   "market booth"
+  ]
+ },
+ {
+  "w": "bracelet",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small new bracelet",
+   "new bracelet"
+  ]
+ },
+ {
+  "w": "brandy",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "sweet brandy"
+  ]
+ },
+ {
+  "w": "brass",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "yellow brass"
+  ]
+ },
+ {
+  "w": "brickwork",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "fresh gray brickwork",
+   "fresh gray brickwork along",
+   "gray brickwork",
+   "gray brickwork along",
+   "brickwork along"
+  ]
+ },
+ {
+  "w": "brim",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "bent hat brim",
+   "hat brim"
+  ]
+ },
+ {
+  "w": "bronze",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small green bronze",
+   "small green bronze horse",
+   "green bronze",
+   "green bronze horse",
+   "bronze horse"
+  ]
+ },
+ {
+  "w": "broom",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old straw broom",
+   "straw broom"
+  ]
+ },
+ {
+  "w": "bucket",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "red bucket"
+  ]
+ },
+ {
+  "w": "buffet",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "costly hotel buffet",
+   "hotel buffet"
+  ]
+ },
+ {
+  "w": "bulb",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "little warm bulb",
+   "warm bulb"
+  ]
+ },
+ {
+  "w": "butter",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "soft yellow butter",
+   "yellow butter"
+  ]
+ },
+ {
+  "w": "cabbage",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "chose round cabbage",
+   "chose round cabbage heads",
+   "round cabbage",
+   "round cabbage heads",
+   "cabbage heads"
+  ]
+ },
+ {
+  "w": "cabinet",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "every wooden cabinet",
+   "every wooden cabinet door",
+   "wooden cabinet",
+   "wooden cabinet door",
+   "cabinet door"
+  ]
+ },
+ {
+  "w": "cable",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "black power cable",
+   "power cable"
+  ]
+ },
+ {
+  "w": "cafeteria",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "dull cafeteria",
+   "dull cafeteria lines",
+   "cafeteria lines"
+  ]
+ },
+ {
+  "w": "candle",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "blow out candles",
+   "small honey candle",
+   "honey candle"
+  ]
+ },
+ {
+  "w": "canvas",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "thick painted canvas",
+   "painted canvas"
+  ]
+ },
+ {
+  "w": "carpenter",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old carpenter",
+   "old carpenter appear",
+   "carpenter appear"
+  ]
+ },
+ {
+  "w": "carpet",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "dusty rolled carpet",
+   "rolled carpet"
+  ]
+ },
+ {
+  "w": "carrot",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "pulled orange carrot",
+   "pulled orange carrot roots",
+   "orange carrot",
+   "orange carrot roots",
+   "carrot roots"
+  ]
+ },
+ {
+  "w": "castle",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "castle then",
+   "castle then watched"
+  ]
+ },
+ {
+  "w": "cellar",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "dark cellar"
+  ]
+ },
+ {
+  "w": "cement",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "grey cement",
+   "grey cement sit",
+   "grey cement sit together",
+   "cement sit",
+   "cement sit together"
+  ]
+ },
+ {
+  "w": "ceramic",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "blue ceramic",
+   "blue ceramic bowls",
+   "ceramic bowls"
+  ]
+ },
+ {
+  "w": "chef",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "retired chef",
+   "retired chef nearby",
+   "retired chef nearby smiled",
+   "chef nearby",
+   "chef nearby smiled"
+  ]
+ },
+ {
+  "w": "chew",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "chew loudly"
+  ]
+ },
+ {
+  "w": "chicken",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "fat village chicken",
+   "village chicken"
+  ]
+ },
+ {
+  "w": "chimney",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "tall stone chimney",
+   "tall stone chimney full",
+   "stone chimney",
+   "stone chimney full",
+   "chimney full"
+  ]
+ },
+ {
+  "w": "cigarette",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "wet cigarette",
+   "wet cigarette end",
+   "wet cigarette end keeping",
+   "cigarette end",
+   "cigarette end keeping"
+  ]
+ },
+ {
+  "w": "clasp",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small silver clasp",
+   "silver clasp"
+  ]
+ },
+ {
+  "w": "cloak",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "dark theatre cloak",
+   "dark theatre cloak inside",
+   "theatre cloak",
+   "theatre cloak inside",
+   "cloak inside"
+  ]
+ },
+ {
+  "w": "collar",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "white shirt collar",
+   "shirt collar"
+  ]
+ },
+ {
+  "w": "column",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "tall column",
+   "tall column aloud",
+   "column aloud"
+  ]
+ },
+ {
+  "w": "concrete",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "gray concrete",
+   "gray concrete floor",
+   "concrete floor"
+  ]
+ },
+ {
+  "w": "cord",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "long white cord",
+   "white cord",
+   "thin suspension cords",
+   "thin suspension cords tying",
+   "suspension cords",
+   "suspension cords tying"
+  ]
+ },
+ {
+  "w": "corn",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "cracked corner",
+   "simple reception corner",
+   "simple reception corner brighter",
+   "reception corner",
+   "reception corner brighter",
+   "reception corner brighter than"
+  ]
+ },
+ {
+  "w": "corridor",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "long corridor"
+  ]
+ },
+ {
+  "w": "cosmetics",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "costly shop cosmetics",
+   "shop cosmetics"
+  ]
+ },
+ {
+  "w": "costume",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old dance costume",
+   "dance costume"
+  ]
+ },
+ {
+  "w": "cottage",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small cottage",
+   "small cottage next",
+   "small cottage next door",
+   "cottage next",
+   "cottage next door"
+  ]
+ },
+ {
+  "w": "cotton",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "soft white cotton",
+   "soft white cotton shirts",
+   "white cotton",
+   "white cotton shirts",
+   "cotton shirts"
+  ]
+ },
+ {
+  "w": "counterfeit",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "every counterfeit",
+   "every counterfeit coin",
+   "every counterfeit coin goes",
+   "counterfeit coin",
+   "counterfeit coin goes"
+  ]
+ },
+ {
+  "w": "cradle",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "tiny cradle"
+  ]
+ },
+ {
+  "w": "crane",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "tall yellow crane",
+   "tall yellow crane lifted",
+   "yellow crane",
+   "yellow crane lifted",
+   "yellow crane lifted new",
+   "crane lifted"
+  ]
+ },
+ {
+  "w": "crude",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "crude joints"
+  ]
+ },
+ {
+  "w": "crystal",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "clear shining crystal",
+   "shining crystal"
+  ]
+ },
+ {
+  "w": "cucumber",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "crisp long cucumber",
+   "long cucumber"
+  ]
+ },
+ {
+  "w": "curtain",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "long flowered curtain",
+   "long flowered curtain hangs",
+   "flowered curtain",
+   "flowered curtain hangs",
+   "flowered curtain hangs down",
+   "curtain hangs"
+  ]
+ },
+ {
+  "w": "cushion",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "flat seat cushion",
+   "seat cushion"
+  ]
+ },
+ {
+  "w": "cutlery",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "clean extra cutlery",
+   "extra cutlery"
+  ]
+ },
+ {
+  "w": "dairy",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "dairy food"
+  ]
+ },
+ {
+  "w": "dam",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small earth dam",
+   "small earth dam learning",
+   "earth dam",
+   "earth dam learning",
+   "dam learning"
+  ]
+ },
+ {
+  "w": "debate",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "lively debate"
+  ]
+ },
+ {
+  "w": "detergent",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "mild detergent"
+  ]
+ },
+ {
+  "w": "digest",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "digest well"
+  ]
+ },
+ {
+  "w": "dip",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "then briefly dip",
+   "then briefly dip greens",
+   "briefly dip",
+   "briefly dip greens",
+   "dip greens"
+  ]
+ },
+ {
+  "w": "drill",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": false,
+  "syn": [
+   "exercise"
+  ],
+  "col": []
+ },
+ {
+  "w": "drunk",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "nobody arrived drunk",
+   "arrived drunk"
+  ]
+ },
+ {
+  "w": "durable",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "repair durable"
+  ]
+ },
+ {
+  "w": "dwelling",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "whole dwelling",
+   "whole dwelling lively",
+   "whole dwelling lively day",
+   "dwelling lively",
+   "dwelling lively day"
+  ]
+ },
+ {
+  "w": "dye",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "safe brown dye",
+   "safe brown dye color",
+   "brown dye",
+   "brown dye color",
+   "dye color"
+  ]
+ },
+ {
+  "w": "eaves",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "wide eaves",
+   "wide eaves near",
+   "eaves near"
+  ]
+ },
+ {
+  "w": "eggplant",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "purple eggplant"
+  ]
+ },
+ {
+  "w": "elegance",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quiet simple elegance",
+   "simple elegance"
+  ]
+ },
+ {
+  "w": "element",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "element stays",
+   "element stays truly"
+  ]
+ },
+ {
+  "w": "embroider",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "embroider red",
+   "embroider red flowers"
+  ]
+ },
+ {
+  "w": "expanse",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "wide expanse"
+  ]
+ },
+ {
+  "w": "exquisite",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "exquisite touch"
+  ]
+ },
+ {
+  "w": "fabric",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "soft blue fabric",
+   "soft blue fabric feels",
+   "blue fabric",
+   "blue fabric feels",
+   "blue fabric feels smooth",
+   "fabric feels"
+  ]
+ },
+ {
+  "w": "fade",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "vanish",
+   "disappear"
+  ],
+  "col": [
+   "never fade",
+   "blot slowly fades",
+   "slowly fades"
+  ]
+ },
+ {
+  "w": "fascinate",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "fascinate every",
+   "fascinate every child"
+  ]
+ },
+ {
+  "w": "fibre",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "plant fibre",
+   "plant fibre feels",
+   "plant fibre feels rough",
+   "fibre feels",
+   "fibre feels rough"
+  ]
+ },
+ {
+  "w": "fireplace",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "stone fireplace"
+  ]
+ },
+ {
+  "w": "flashlight",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "pocket flashlight",
+   "pocket flashlight helps",
+   "flashlight helps"
+  ]
+ },
+ {
+  "w": "flavour",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "mild fruit flavour",
+   "fruit flavour"
+  ]
+ },
+ {
+  "w": "flour",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "mixed white flour",
+   "white flour"
+  ]
+ },
+ {
+  "w": "fragile",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quite fragile"
+  ]
+ },
+ {
+  "w": "fridge",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small fridge"
+  ]
+ },
+ {
+  "w": "fry",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "helped fry",
+   "helped fry golden",
+   "helped fry golden potato",
+   "fry golden",
+   "fry golden potato"
+  ]
+ }
+]

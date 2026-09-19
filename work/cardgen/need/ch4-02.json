@@ -1,0 +1,1242 @@
+[
+ {
+  "w": "impose",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": false,
+  "syn": [
+   "enforce"
+  ],
+  "col": []
+ },
+ {
+  "w": "increment",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "every tiny increment",
+   "tiny increment"
+  ]
+ },
+ {
+  "w": "independence",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": false,
+  "syn": [
+   "liberty",
+   "freedom"
+  ],
+  "col": []
+ },
+ {
+  "w": "indian",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "indian temple",
+   "indian temple beside"
+  ]
+ },
+ {
+  "w": "inflation",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "rising inflation",
+   "rising inflation pushed",
+   "rising inflation pushed prices",
+   "inflation pushed",
+   "inflation pushed prices"
+  ]
+ },
+ {
+  "w": "installment",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "regular installment"
+  ]
+ },
+ {
+  "w": "instruct",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "gently instruct"
+  ]
+ },
+ {
+  "w": "intersection",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "busy intersection"
+  ]
+ },
+ {
+  "w": "italian",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "father called italian",
+   "called italian"
+  ]
+ },
+ {
+  "w": "itinerary",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "itinerary out",
+   "itinerary out loud"
+  ]
+ },
+ {
+  "w": "jet",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "jet crossed"
+  ]
+ },
+ {
+  "w": "jewish",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "jewish festival"
+  ]
+ },
+ {
+  "w": "judge",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "stern judge"
+  ]
+ },
+ {
+  "w": "latin",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "latin word"
+  ]
+ },
+ {
+  "w": "layoff",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "sudden layoff",
+   "sudden layoff frightened",
+   "layoff frightened"
+  ]
+ },
+ {
+  "w": "league",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "large football league",
+   "football league"
+  ]
+ },
+ {
+  "w": "legislate",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "legislate harsh",
+   "legislate harsh orders"
+  ]
+ },
+ {
+  "w": "levy",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "new levy"
+  ]
+ },
+ {
+  "w": "liner",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "big liner",
+   "big liner came",
+   "big liner came back",
+   "liner came",
+   "liner came back"
+  ]
+ },
+ {
+  "w": "load",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "burden"
+  ],
+  "col": [
+   "heavy load"
+  ]
+ },
+ {
+  "w": "locomotive",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small locomotive",
+   "small locomotive pulled",
+   "small locomotive pulled six",
+   "locomotive pulled",
+   "locomotive pulled six"
+  ]
+ },
+ {
+  "w": "lorry",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "big lorry",
+   "big lorry father",
+   "big lorry father told",
+   "lorry father",
+   "lorry father told"
+  ]
+ },
+ {
+  "w": "luggage",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "luggage up"
+  ]
+ },
+ {
+  "w": "lull",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quiet lull"
+  ]
+ },
+ {
+  "w": "mail",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "mail box"
+  ]
+ },
+ {
+  "w": "mandatory",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "morning delivery mandatory",
+   "delivery mandatory"
+  ]
+ },
+ {
+  "w": "materialism",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "empty materialism"
+  ]
+ },
+ {
+  "w": "mediate",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "mediate gently"
+  ]
+ },
+ {
+  "w": "meltdown",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quiet meltdown",
+   "quiet meltdown behind",
+   "meltdown behind"
+  ]
+ },
+ {
+  "w": "memorial",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old memorial"
+  ]
+ },
+ {
+  "w": "merchant",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "street corner merchant",
+   "street corner merchant facing",
+   "corner merchant",
+   "corner merchant facing",
+   "corner merchant facing serious",
+   "merchant facing"
+  ]
+ },
+ {
+  "w": "might",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "whether strangers might",
+   "whether strangers might ever",
+   "strangers might",
+   "strangers might ever",
+   "strangers might ever unite",
+   "might ever"
+  ]
+ },
+ {
+  "w": "minister",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "kind old minister",
+   "old minister"
+  ]
+ },
+ {
+  "w": "monitor",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "border monitor",
+   "border monitor every",
+   "border monitor every train",
+   "monitor every",
+   "monitor every train"
+  ]
+ },
+ {
+  "w": "municipal",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "municipal inn"
+  ]
+ },
+ {
+  "w": "murder",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "murder felt",
+   "murder felt far"
+  ]
+ },
+ {
+  "w": "murmur",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "soft murmur"
+  ]
+ },
+ {
+  "w": "mute",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "uncles stayed mute",
+   "stayed mute"
+  ]
+ },
+ {
+  "w": "negotiation",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "long negotiation",
+   "long negotiation followed",
+   "negotiation followed"
+  ]
+ },
+ {
+  "w": "neutral",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "passive"
+  ],
+  "col": [
+   "stayed neutral"
+  ]
+ },
+ {
+  "w": "oar",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "long wooden oar",
+   "long wooden oar behind",
+   "wooden oar",
+   "wooden oar behind",
+   "oar behind"
+  ]
+ },
+ {
+  "w": "occupation",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "honest occupation"
+  ]
+ },
+ {
+  "w": "outlook",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "prospect"
+  ],
+  "col": [
+   "bright outlook"
+  ]
+ },
+ {
+  "w": "oversee",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "monitor"
+  ],
+  "col": [
+   "oversee morning",
+   "oversee morning arrivals"
+  ]
+ },
+ {
+  "w": "parachute",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "parachute instead"
+  ]
+ },
+ {
+  "w": "parcel",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "brown parcel",
+   "brown parcel off",
+   "parcel off"
+  ]
+ },
+ {
+  "w": "parliament",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "famous parliament",
+   "famous parliament father",
+   "famous parliament father said",
+   "parliament father",
+   "parliament father said"
+  ]
+ },
+ {
+  "w": "passage",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "mountain passage"
+  ]
+ },
+ {
+  "w": "passenger",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "every tired passenger",
+   "tired passenger"
+  ]
+ },
+ {
+  "w": "payroll",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "paper payroll",
+   "paper payroll locked",
+   "payroll locked"
+  ]
+ },
+ {
+  "w": "pedicab",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "pedicab crossing"
+  ]
+ },
+ {
+  "w": "permit",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "written permit"
+  ]
+ },
+ {
+  "w": "personnel",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "shop personnel"
+  ]
+ },
+ {
+  "w": "perspective",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "attitude",
+   "opinion"
+  ],
+  "col": [
+   "fresh perspective"
+  ]
+ },
+ {
+  "w": "persuade",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "induce"
+  ],
+  "col": []
+ },
+ {
+  "w": "petition",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "shared petition"
+  ]
+ },
+ {
+  "w": "pilot",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "brave pilot"
+  ]
+ },
+ {
+  "w": "plea",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "tired plea"
+  ]
+ },
+ {
+  "w": "poll",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "latest poll",
+   "latest poll found",
+   "poll found"
+  ]
+ },
+ {
+  "w": "port",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "busy port"
+  ]
+ },
+ {
+  "w": "possess",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "soon possess"
+  ]
+ },
+ {
+  "w": "postage",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "extra postage",
+   "extra postage father",
+   "extra postage father spoke",
+   "postage father",
+   "postage father spoke"
+  ]
+ },
+ {
+  "w": "potent",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "potent boost"
+  ]
+ },
+ {
+  "w": "prejudice",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "bias"
+  ],
+  "col": [
+   "old prejudice"
+  ]
+ },
+ {
+  "w": "premier",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "premier himself",
+   "premier himself step"
+  ]
+ },
+ {
+  "w": "pretend",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "pretend cheer"
+  ]
+ },
+ {
+  "w": "privilege",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quiet privilege"
+  ]
+ },
+ {
+  "w": "promise",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "prospect"
+  ],
+  "col": [
+   "show promising results",
+   "fair promise",
+   "promised daily",
+   "promised daily practice",
+   "scores looked promising",
+   "looked promising"
+  ]
+ },
+ {
+  "w": "prompt",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "prompt service",
+   "prompt service pleased"
+  ]
+ },
+ {
+  "w": "proposal",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "simple proposal"
+  ]
+ },
+ {
+  "w": "protocol",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "delivery protocol",
+   "delivery protocol kept",
+   "protocol kept"
+  ]
+ },
+ {
+  "w": "proud",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "felt proud"
+  ]
+ },
+ {
+  "w": "puppet",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "wooden puppet",
+   "wooden puppet stood",
+   "wooden puppet stood up",
+   "puppet stood",
+   "puppet stood up"
+  ]
+ },
+ {
+  "w": "quota",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "agreed quota"
+  ]
+ },
+ {
+  "w": "rack",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old wooden rack",
+   "old wooden rack behind",
+   "wooden rack",
+   "wooden rack behind",
+   "rack behind"
+  ]
+ },
+ {
+  "w": "raft",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "raft take"
+  ]
+ },
+ {
+  "w": "rail",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "steel rail",
+   "steel rail ran",
+   "steel rail ran straight",
+   "rail ran",
+   "rail ran straight"
+  ]
+ },
+ {
+  "w": "railroad",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "whole railroad"
+  ]
+ },
+ {
+  "w": "railway",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "new railway",
+   "new railway cuts",
+   "railway cuts"
+  ]
+ },
+ {
+  "w": "reasonable",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "reasonable new",
+   "reasonable new delivery"
+  ]
+ },
+ {
+  "w": "receipt",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "every receipt"
+  ]
+ },
+ {
+  "w": "recommend",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "recommend honest",
+   "recommend honest youths"
+  ]
+ },
+ {
+  "w": "reconcile",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "reconcile fully"
+  ]
+ },
+ {
+  "w": "redundant",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "boxes became redundant",
+   "became redundant"
+  ]
+ },
+ {
+  "w": "refuge",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quiet refuge",
+   "quiet refuge behind",
+   "refuge behind"
+  ]
+ },
+ {
+  "w": "refund",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small refund"
+  ]
+ },
+ {
+  "w": "reimburse",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "reimburse bus"
+  ]
+ },
+ {
+  "w": "reject",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "reject every",
+   "reject every rotten"
+  ]
+ },
+ {
+  "w": "remuneration",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "extra remuneration"
+  ]
+ },
+ {
+  "w": "resident",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "resident cats",
+   "resident cats doze"
+  ]
+ },
+ {
+  "w": "resign",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "quit"
+  ],
+  "col": []
+ },
+ {
+  "w": "respondent",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "survey respondent"
+  ]
+ },
+ {
+  "w": "restrain",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "restrain loud"
+  ]
+ },
+ {
+  "w": "resume",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "resume slowly"
+  ]
+ },
+ {
+  "w": "retail",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small retail",
+   "small retail pleasure",
+   "retail pleasure"
+  ]
+ },
+ {
+  "w": "retire",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "never retire",
+   "never retire early",
+   "retire early"
+  ]
+ },
+ {
+  "w": "revenue",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": false,
+  "syn": [
+   "income"
+  ],
+  "col": []
+ },
+ {
+  "w": "revolution",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old revolution",
+   "old revolution father",
+   "old revolution father made",
+   "revolution father",
+   "revolution father made"
+  ]
+ },
+ {
+  "w": "roman",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old roman",
+   "old roman roads",
+   "old roman roads father",
+   "roman roads",
+   "roman roads father"
+  ]
+ },
+ {
+  "w": "route",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "route twice"
+  ]
+ },
+ {
+  "w": "routine",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "calm routine"
+  ]
+ },
+ {
+  "w": "russian",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old russian",
+   "old russian song",
+   "russian song"
+  ]
+ },
+ {
+  "w": "sack",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "flour sack",
+   "flour sack as",
+   "flour sack as chairs",
+   "sack as",
+   "sack as chairs"
+  ]
+ },
+ {
+  "w": "safari",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quiet safari",
+   "quiet safari trail",
+   "quiet safari trail behind",
+   "safari trail",
+   "safari trail behind"
+  ]
+ },
+ {
+  "w": "sail",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "sail away"
+  ]
+ },
+ {
+  "w": "sailor",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old sailor",
+   "old sailor father",
+   "old sailor father describe",
+   "sailor father",
+   "sailor father describe",
+   "tired sailor"
+  ]
+ },
+ {
+  "w": "sanction",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "impose sanctions on"
+  ]
+ },
+ {
+  "w": "saving",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": false,
+  "syn": [
+   "conservation"
+  ],
+  "col": []
+ },
+ {
+  "w": "seaman",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "tired seaman"
+  ]
+ },
+ {
+  "w": "session",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quiet evening session",
+   "evening session"
+  ]
+ }
+]

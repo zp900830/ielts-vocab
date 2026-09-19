@@ -1,0 +1,728 @@
+[
+ {
+  "w": "stony",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "hard stony",
+   "hard stony path",
+   "stony path"
+  ]
+ },
+ {
+  "w": "stormy",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "stormy waves"
+  ]
+ },
+ {
+  "w": "straw",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "spread dry straw",
+   "spread dry straw around",
+   "dry straw",
+   "dry straw around",
+   "dry straw around shoots",
+   "straw around"
+  ]
+ },
+ {
+  "w": "subgroup",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "separate subgroup",
+   "separate subgroup played",
+   "subgroup played"
+  ]
+ },
+ {
+  "w": "subsistence",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "daily subsistence"
+  ]
+ },
+ {
+  "w": "substance",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "substance called",
+   "substance called potting"
+  ]
+ },
+ {
+  "w": "suburb",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "suburb full"
+  ]
+ },
+ {
+  "w": "sunlight",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "sunlight crosses",
+   "catches morning sunlight",
+   "catches morning sunlight softly",
+   "morning sunlight",
+   "morning sunlight softly",
+   "sunlight softly"
+  ]
+ },
+ {
+  "w": "sunrise",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "splendid sunrise",
+   "splendid sunrise above",
+   "sunrise above",
+   "golden sunrise",
+   "golden sunrise spread",
+   "sunrise spread"
+  ]
+ },
+ {
+  "w": "sunset",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "peaceful sunset"
+  ]
+ },
+ {
+  "w": "superficial",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "superficial judgments"
+  ]
+ },
+ {
+  "w": "surroundings",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "habitat"
+  ],
+  "col": [
+   "keeping clean surroundings",
+   "clean surroundings"
+  ]
+ },
+ {
+  "w": "swamp",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "warm swamp",
+   "warm swamp down",
+   "swamp down"
+  ]
+ },
+ {
+  "w": "swan",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "white calm swan",
+   "white calm swan floated",
+   "calm swan",
+   "calm swan floated",
+   "swan floated"
+  ]
+ },
+ {
+  "w": "swarm",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "busy swarm"
+  ]
+ },
+ {
+  "w": "synthesise",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "plant cannot synthesise",
+   "plant cannot synthesise food",
+   "cannot synthesise",
+   "cannot synthesise food",
+   "synthesise food"
+  ]
+ },
+ {
+  "w": "synthetic",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "synthetic cloth"
+  ]
+ },
+ {
+  "w": "tail",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "bright tail",
+   "bright tail drew",
+   "tail drew"
+  ]
+ },
+ {
+  "w": "telescope",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small telescope"
+  ]
+ },
+ {
+  "w": "terrain",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "geography"
+  ],
+  "col": []
+ },
+ {
+  "w": "terrestrial",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "terrestrial ones"
+  ]
+ },
+ {
+  "w": "thermal",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "thick thermal",
+   "thick thermal coat",
+   "thermal coat"
+  ]
+ },
+ {
+  "w": "thermodynamic",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "thermodynamic report"
+  ]
+ },
+ {
+  "w": "thorn",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "sharp thorn"
+  ]
+ },
+ {
+  "w": "throng",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "noisy throng"
+  ]
+ },
+ {
+  "w": "thunder",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "then distant thunder",
+   "then distant thunder rolled",
+   "distant thunder",
+   "distant thunder rolled",
+   "distant thunder rolled across",
+   "thunder rolled"
+  ]
+ },
+ {
+  "w": "tide",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "rising tide",
+   "rising tide covered",
+   "tide covered"
+  ]
+ },
+ {
+  "w": "timber",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old timber"
+  ]
+ },
+ {
+  "w": "tornado",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "spinning tornado"
+  ]
+ },
+ {
+  "w": "torrent",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "brown torrent"
+  ]
+ },
+ {
+  "w": "tortoise",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "heavy sleepy tortoise",
+   "sleepy tortoise"
+  ]
+ },
+ {
+  "w": "tremble",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "tremble as"
+  ]
+ },
+ {
+  "w": "tropics",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "distant tropics"
+  ]
+ },
+ {
+  "w": "trunk",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "thick trunk"
+  ]
+ },
+ {
+  "w": "tulip",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "tulip row"
+  ]
+ },
+ {
+  "w": "turtle",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "baby sea turtle",
+   "baby sea turtle swam",
+   "sea turtle",
+   "sea turtle swam",
+   "turtle swam"
+  ]
+ },
+ {
+  "w": "typhoon",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "coastal typhoon"
+  ]
+ },
+ {
+  "w": "ultraviolet",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "blocked harsh ultraviolet",
+   "harsh ultraviolet"
+  ]
+ },
+ {
+  "w": "undermine",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "undermine shared",
+   "undermine shared beds"
+  ]
+ },
+ {
+  "w": "universe",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "universe fascinated"
+  ]
+ },
+ {
+  "w": "uptake",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "slow uptake"
+  ]
+ },
+ {
+  "w": "valley",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "peaceful green valley",
+   "green valley",
+   "valley feels",
+   "valley feels exactly"
+  ]
+ },
+ {
+  "w": "vapour",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "thin white vapour",
+   "thin white vapour rises",
+   "white vapour",
+   "white vapour rises",
+   "white vapour rises softly",
+   "vapour rises"
+  ]
+ },
+ {
+  "w": "variation",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "gave pleasant variation",
+   "pleasant variation"
+  ]
+ },
+ {
+  "w": "vase",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "blue vase"
+  ]
+ },
+ {
+  "w": "vegetation",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "new vegetation",
+   "new vegetation covered",
+   "vegetation covered"
+  ]
+ },
+ {
+  "w": "vertebrate",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "strong vertebrate"
+  ]
+ },
+ {
+  "w": "vertical",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "tall vertical",
+   "tall vertical cliff",
+   "vertical cliff"
+  ]
+ },
+ {
+  "w": "victim",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "helpless victim"
+  ]
+ },
+ {
+  "w": "violet",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "violet tag",
+   "violet tag marks"
+  ]
+ },
+ {
+  "w": "vitamin",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "extra orange vitamin",
+   "extra orange vitamin drops",
+   "orange vitamin",
+   "orange vitamin drops",
+   "vitamin drops"
+  ]
+ },
+ {
+  "w": "volcano",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old volcano",
+   "old volcano above",
+   "volcano above"
+  ]
+ },
+ {
+  "w": "vulnerable",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "vulnerable today"
+  ]
+ },
+ {
+  "w": "waterfall",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "noisy distant waterfall",
+   "distant waterfall"
+  ]
+ },
+ {
+  "w": "weed",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "every spreading weed",
+   "every spreading weed early",
+   "spreading weed",
+   "spreading weed early",
+   "weed early"
+  ]
+ },
+ {
+  "w": "whale",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "distant huge whale",
+   "distant huge whale sang",
+   "huge whale",
+   "huge whale sang",
+   "huge whale sang low",
+   "whale sang"
+  ]
+ },
+ {
+  "w": "wilderness",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "silent wilderness"
+  ]
+ },
+ {
+  "w": "wing",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "weak little wing",
+   "little wing"
+  ]
+ },
+ {
+  "w": "wolf",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "far lonely wolf",
+   "far lonely wolf howl",
+   "lonely wolf",
+   "lonely wolf howl",
+   "wolf howl"
+  ]
+ },
+ {
+  "w": "wooden",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "narrow wooden",
+   "narrow wooden bridge",
+   "wooden bridge",
+   "little wooden",
+   "wooden barrier",
+   "wooden leg"
+  ]
+ },
+ {
+  "w": "worm",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "rear worms",
+   "pink worm",
+   "pink worm off",
+   "worm off"
+  ]
+ },
+ {
+  "w": "zebra",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "calm zebra",
+   "calm zebra nearby",
+   "zebra nearby"
+  ]
+ },
+ {
+  "w": "zoologist",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "kind zoologist"
+  ]
+ }
+]
