@@ -5,9 +5,9 @@
 与上一版的两点区别：
  1 输入改成目录驱动的 need/*.json ↔ got/*.json 配对。上一轮 7 个代理里 4 个的产出
    随会话崩溃蒸发，因为它们的产出只存在于对话里。现在一片一个文件，崩了最多丢一片。
- 2 每条交回的词都要回查 work/cardgen/cand.json 的候选表，拿得到候选 = 有出处（M/R/B/T），
-   拿不到的一律标 free —— 不是禁掉自由作答，而是要让它**在账面上区分得出来**，
-   审核代理和你抽查时能优先盯这些。
+ 2 每条交回的词都要回查 work/cardgen/cand.json 的候选表 —— 拿不到候选的一律**直接拒绝**。
+   上一版只是打个 free 标记放行，结果代理仍然会顺手造词；用户 2026-09-19 定调
+   「词伙、同义词不用自己造」，所以自由作答从「记账」改成「拦截」。
 
 只拦能被机械证明的错，不判「意思像不像」（那是门禁 2 的职责）：
   1 词头必须在 need 清单里，且该词头确实缺这一段的（不许越权改别的词/改已有段）
@@ -40,18 +40,38 @@ def pos_set(m):
     return out
 
 
-def forms(w):
+def forms(w, pos=None):
     """词头 → 允许出现的词形。
 
     刻意不无脑加 `d`/`er`：kin→kind、corn→corner 这种拼得出真词的错误匹配，
     上一轮就是这么把从句窗口里的别的词当成词头搭配喂进词卡的。
+    传 pos（pos_set 的结果）时按词性再收一道：-er/-est 只给形容词/副词，
+    -ed/-ing 只给动词，-s/-es 给名词和动词 —— 名词 corn 就再也拼不出 corner。
+    pos 为 None 或解析不出来时退回宽松集合，宁多不漏。
     """
     w = w.lower()
-    f = {w, w + 's', w + 'es', w + 'ed', w + 'ing', w + 'er', w + 'est'}
+    if not pos:
+        pos = {'n', 'v', 'adj', 'adv'}
+    f = {w}
+    if pos & {'n', 'v'}:
+        f |= {w + 's', w + 'es'}
+    if 'v' in pos:
+        f |= {w + 'ed', w + 'ing'}
+    if pos & {'adj', 'adv'}:
+        f |= {w + 'er', w + 'est'}
     if w.endswith('e'):
-        f |= {w + 'd', w + 'r', w + 'st', w[:-1] + 'ing', w[:-1] + 'est'}
+        if 'v' in pos:
+            f |= {w + 'd', w[:-1] + 'ing', w[:-1] + 'ed'}
+        if pos & {'adj', 'adv'}:
+            f |= {w + 'r', w + 'st', w[:-1] + 'est'}
     if w.endswith('y') and len(w) > 2:
-        f |= {w[:-1] + 'ies', w[:-1] + 'ed', w[:-1] + 'ing', w[:-1] + 'er', w[:-1] + 'est'}
+        stem = w[:-1]
+        if pos & {'n', 'v'}:
+            f.add(stem + 'ies')
+        if 'v' in pos:
+            f |= {stem + 'ed', stem + 'ing'}
+        if pos & {'adj', 'adv'}:
+            f |= {stem + 'er', stem + 'est'}
     return f
 
 
@@ -120,13 +140,16 @@ def main():
             seen_head.add(h)
             row, (csyn, ccol) = want[h], src_of.get(h, ({}, {}))
             head_pos = pos_set((V.get(h) or (V.get(next((k for k in V if k.lower() == h), ''))) or {}).get('m'))
-            hf = forms(h)
+            hf = forms(h, head_pos)
             syn, col = [], []
             if row.get('need_syn') or row.get('need_syn_ext'):
                 for s in (item.get('syn') or []):
                     s = str(s).lower().strip()
                     if s == h:
                         rejected.append((h, sid, f'syn 含词头自身 {s}')); continue
+                    if s not in csyn:
+                        # 用户 2026-09-19 定调：同义词不许自己造，只许从资料抽好的候选里挑
+                        rejected.append((h, sid, f'syn 不在候选里（自由作答）{s}')); continue
                     if s not in allowed:
                         rejected.append((h, sid, f'syn 非本书目标词 {s}')); continue
                     if s in [x['s'] for x in syn]:
@@ -149,6 +172,9 @@ def main():
                     ws = c.split()
                     if not (2 <= len(ws) <= 6):
                         rejected.append((h, sid, f'col 词数越界 {c!r}')); continue
+                    if c not in ccol:
+                        # 同上：词伙只许从候选里挑，候选全是资料/课文里真出现过的
+                        rejected.append((h, sid, f'col 不在候选里（自由作答）{c!r}')); continue
                     if not any(w in hf or any(w in forms(x) for x in h.split()) for w in ws):
                         rejected.append((h, sid, f'col 不含词头 {c!r}')); continue
                     badw = [w for w in ws if w not in hf and w not in simple and w not in allowed]

@@ -1,5 +1,10 @@
 # 词伙「成品搭配 vs 偶然相邻」专判规则
 
+> **适用范围（2026-09-19 收窄）**：只判来源是 `T`（课文窗口切片）的词伙。
+> 凡带 `B`/`M` 出处 —— 也就是 PDF 上印着原文的 —— **一律 keep**，用户已经拍板：
+> "低价值描写只要是 pdf 上的就全部捞回"。这类里你唯一能提的异议是**事实错误**
+> （书里其实不是这么搭配的），那要写进 `why` 交回主流程，不要直接判 drop。
+
 你只回答一个问题：**这串词，雅思考生能不能原样背下来、在自己的作文或口语里套用？**
 
 不能 —— 判 drop。能 —— 判 keep。不要改写、不要拆分、不要换词，只能对整条说 keep 或 drop。
@@ -24,9 +29,12 @@
 | 冗余修饰 | `meat eating carnivore`、`grass eating herbivore` | carnivore 本就指吃肉，herbivore 本就指吃草 |
 | 跨句法边界 | `let scores plummet`、`shows deep regard`、`refuses any shipment` | 拖上了主语/助动词，换个人称就得改 |
 | 临时副词/限定词 | `quickly diagnose weak points`、`followed every convention`、`every past stricture` | 去掉副词才是可套用的搭配；副词只属于那一句 |
-| 偶然相邻的描述堆叠 | `white farm goose`、`bitter skin`、`tiny lawn`（原句中心词其实是 edge） | 只是那一句里恰好挨着，不是习惯搭配 |
+| 偶然相邻的描述堆叠 | `tiny lawn`（原句中心词其实是 edge）、`lion stayed elusive` | 只是那一句里恰好挨着，不是习惯搭配 |
 | 依赖上下文的片段 | `render hard lessons`（原句 render hard lessons simple） | 少了宾补就不成话 |
 | 具体数字/专名 | `ninety degrees fahrenheit`、`astronaut hat` | 不可迁移 |
+
+> 上面表里的 `meat eating carnivore`、`grass eating herbivore` 后来查明是**词伙书原文**，
+> 按开头的适用范围已经改判 keep。这张表现在只用来判 `T` 切片，例子按同样标准看即可。
 
 ## 容易被误砍、应当 keep 的几类（别过度杀）
 

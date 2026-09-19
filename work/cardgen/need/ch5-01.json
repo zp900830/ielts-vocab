@@ -1,31 +1,5 @@
 [
  {
-  "w": "accessory",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "spare accessory",
-   "spare accessory came",
-   "spare accessory came free",
-   "accessory came",
-   "accessory came free"
-  ]
- },
- {
-  "w": "acquaintance",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "old acquaintance",
-   "old acquaintance smiled",
-   "acquaintance smiled"
-  ]
- },
- {
   "w": "actress",
   "need_syn": true,
   "need_syn_ext": false,
@@ -46,22 +20,13 @@
   ]
  },
  {
-  "w": "affection",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "showing true affection",
-   "true affection"
-  ]
- },
- {
   "w": "alarm",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
-  "syn": [],
+  "syn": [
+   "warn"
+  ],
   "col": [
    "woke sharp alarm",
    "woke sharp alarm inside",
@@ -93,20 +58,6 @@
   ]
  },
  {
-  "w": "assault",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "attack"
-  ],
-  "col": [
-   "sudden assault",
-   "sudden assault tested",
-   "assault tested"
-  ]
- },
- {
   "w": "attack",
   "need_syn": false,
   "need_syn_ext": false,
@@ -123,28 +74,14 @@
  },
  {
   "w": "attorney",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "solicitor"
-  ],
-  "col": [
-   "stern attorney",
-   "stern attorney argued",
-   "attorney argued"
-  ]
- },
- {
-  "w": "audio",
-  "need_syn": true,
+  "need_syn": false,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "clear audio",
-   "clear audio helped",
-   "audio helped"
+   "stern attorney",
+   "stern attorney argued",
+   "attorney argued"
   ]
  },
  {
@@ -197,16 +134,6 @@
   ]
  },
  {
-  "w": "beat",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": false,
-  "syn": [
-   "defeat"
-  ],
-  "col": []
- },
- {
   "w": "beggar",
   "need_syn": true,
   "need_syn_ext": false,
@@ -221,27 +148,6 @@
   ]
  },
  {
-  "w": "belong",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "sense of belonging"
-  ]
- },
- {
-  "w": "beloved",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "beloved teacher",
-   "beloved teacher madam"
-  ]
- },
- {
   "w": "betray",
   "need_syn": true,
   "need_syn_ext": false,
@@ -249,16 +155,6 @@
   "syn": [],
   "col": [
    "betray friends"
-  ]
- },
- {
-  "w": "binary",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "binary code"
   ]
  },
  {
@@ -270,20 +166,6 @@
   "col": [
    "blade grandpa",
    "blade grandpa cleaned"
-  ]
- },
- {
-  "w": "blast",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "loud blast",
-   "loud blast made",
-   "loud blast made windows",
-   "blast made",
-   "blast made windows"
   ]
  },
  {
@@ -309,34 +191,11 @@
  {
   "w": "boss",
   "need_syn": false,
-  "need_syn_ext": true,
+  "need_syn_ext": false,
   "need_col": true,
-  "syn": [
-   "director"
-  ],
+  "syn": [],
   "col": [
    "stern boss"
-  ]
- },
- {
-  "w": "bow",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "deputy head bowed",
-   "head bowed"
-  ]
- },
- {
-  "w": "breakthrough",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "big breakthrough"
   ]
  },
  {
@@ -348,29 +207,6 @@
   "col": [
    "bullet kept",
    "bullet kept as"
-  ]
- },
- {
-  "w": "burrow",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "deep burrow",
-   "deep burrow shelter",
-   "burrow shelter"
-  ]
- },
- {
-  "w": "bury",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "bury pride",
-   "bury pride along"
   ]
  },
  {
@@ -491,16 +327,6 @@
   ]
  },
  {
-  "w": "chop",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "chop wood"
-  ]
- },
- {
   "w": "circumstance",
   "need_syn": true,
   "need_syn_ext": false,
@@ -585,16 +411,6 @@
   ]
  },
  {
-  "w": "compute",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "compute costs"
-  ]
- },
- {
   "w": "comrade",
   "need_syn": true,
   "need_syn_ext": false,
@@ -606,16 +422,6 @@
    "brave comrade brought soup",
    "comrade brought",
    "comrade brought soup"
-  ]
- },
- {
-  "w": "condense",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "steam condense"
   ]
  },
  {
@@ -653,16 +459,6 @@
   ]
  },
  {
-  "w": "contend",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "compete"
-  ],
-  "col": []
- },
- {
   "w": "contest",
   "need_syn": false,
   "need_syn_ext": false,
@@ -688,32 +484,6 @@
   ]
  },
  {
-  "w": "council",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "town council",
-   "town council lent",
-   "town council lent chairs",
-   "council lent",
-   "council lent chairs"
-  ]
- },
- {
-  "w": "counsellor",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "school counsellor",
-   "school counsellor smiled",
-   "counsellor smiled"
-  ]
- },
- {
   "w": "counter",
   "need_syn": false,
   "need_syn_ext": false,
@@ -721,16 +491,6 @@
   "syn": [],
   "col": [
    "counter fright"
-  ]
- },
- {
-  "w": "cousin",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "distant cousins"
   ]
  },
  {
@@ -823,18 +583,6 @@
   ]
  },
  {
-  "w": "deputy",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "tired deputy",
-   "tired deputy head",
-   "deputy head"
-  ]
- },
- {
   "w": "destitute",
   "need_syn": true,
   "need_syn_ext": false,
@@ -891,17 +639,6 @@
   ]
  },
  {
-  "w": "disclose",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "disclose plans",
-   "disclose plans early"
-  ]
- },
- {
   "w": "disturb",
   "need_syn": false,
   "need_syn_ext": false,
@@ -948,22 +685,6 @@
   ]
  },
  {
-  "w": "dread",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "fear"
-  ],
-  "col": [
-   "deep dread",
-   "deep dread filled",
-   "deep dread filled nights",
-   "dread filled",
-   "dread filled nights"
-  ]
- },
- {
   "w": "echo",
   "need_syn": true,
   "need_syn_ext": false,
@@ -972,21 +693,6 @@
    "reflect"
   ],
   "col": []
- },
- {
-  "w": "embryo",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "watched bean embryo",
-   "watched bean embryo wake",
-   "bean embryo",
-   "bean embryo wake",
-   "bean embryo wake just",
-   "embryo wake"
-  ]
  },
  {
   "w": "enemy",
@@ -1012,26 +718,6 @@
    "helped equip",
    "helped equip kids",
    "equip kids"
-  ]
- },
- {
-  "w": "error",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": false,
-  "syn": [
-   "mistake"
-  ],
-  "col": []
- },
- {
-  "w": "estimate",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "estimate savings"
   ]
  },
  {
@@ -1119,18 +805,6 @@
   ]
  },
  {
-  "w": "flare",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "red flare",
-   "red flare rose",
-   "flare rose"
-  ]
- },
- {
   "w": "flaw",
   "need_syn": true,
   "need_syn_ext": false,
@@ -1150,6 +824,20 @@
    "quiet fleet",
    "quiet fleet sleeps",
    "fleet sleeps"
+  ]
+ },
+ {
+  "w": "foe",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "enemy"
+  ],
+  "col": [
+   "old foe",
+   "old foe learned",
+   "foe learned"
   ]
  },
  {
@@ -1205,20 +893,6 @@
    "green foundation",
    "green foundation paid",
    "foundation paid"
-  ]
- },
- {
-  "w": "framework",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "light wooden framework",
-   "light wooden framework near",
-   "wooden framework",
-   "wooden framework near",
-   "framework near"
   ]
  },
  {
@@ -1286,6 +960,327 @@
    "brass gauge helped pupils",
    "gauge helped",
    "gauge helped pupils"
+  ]
+ },
+ {
+  "w": "glitter",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "glitter fell",
+   "glitter fell softly"
+  ]
+ },
+ {
+  "w": "grandfather",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "kind old grandfather",
+   "old grandfather"
+  ]
+ },
+ {
+  "w": "grave",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "grave behind",
+   "grave behind white"
+  ]
+ },
+ {
+  "w": "gunpowder",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "gunpowder rose",
+   "gunpowder rose around"
+  ]
+ },
+ {
+  "w": "haircut",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "promised free haircut",
+   "free haircut"
+  ]
+ },
+ {
+  "w": "happen",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "keep up to date with what is happening"
+  ]
+ },
+ {
+  "w": "hell",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "noisy hell"
+  ]
+ },
+ {
+  "w": "herald",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "kind herald",
+   "kind herald praised",
+   "herald praised"
+  ]
+ },
+ {
+  "w": "hero",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small hero"
+  ]
+ },
+ {
+  "w": "heroine",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "brave heroine"
+  ]
+ },
+ {
+  "w": "honour",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "keeps high honour",
+   "high honour"
+  ]
+ },
+ {
+  "w": "hostage",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "held patience hostage",
+   "patience hostage"
+  ]
+ },
+ {
+  "w": "hostess",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "smiling hostess",
+   "smiling hostess poured",
+   "smiling hostess poured tea",
+   "hostess poured",
+   "hostess poured tea"
+  ]
+ },
+ {
+  "w": "housewife",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "busy housewife"
+  ]
+ },
+ {
+  "w": "humiliate",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "cruel words humiliate",
+   "words humiliate"
+  ]
+ },
+ {
+  "w": "infant",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "weak infant"
+  ]
+ },
+ {
+  "w": "interfere",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "shouts interfere"
+  ]
+ },
+ {
+  "w": "kin",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "close kin",
+   "close kin nearby",
+   "kin nearby"
+  ]
+ },
+ {
+  "w": "landlady",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "stern landlady",
+   "stern landlady washed",
+   "stern landlady washed cups",
+   "landlady washed",
+   "landlady washed cups"
+  ]
+ },
+ {
+  "w": "landlord",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "grey haired landlord",
+   "grey haired landlord lent",
+   "haired landlord",
+   "haired landlord lent",
+   "landlord lent"
+  ]
+ },
+ {
+  "w": "laptop",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "borrowed laptop",
+   "borrowed laptop recorded",
+   "borrowed laptop recorded charts",
+   "laptop recorded",
+   "laptop recorded charts"
+  ]
+ },
+ {
+  "w": "madam",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "beloved teacher madam",
+   "teacher madam"
+  ]
+ },
+ {
+  "w": "maid",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "quick maid"
+  ]
+ },
+ {
+  "w": "mechanic",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "kind mechanic"
+  ]
+ },
+ {
+  "w": "microscope",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "school microscope",
+   "school microscope showed",
+   "school microscope showed dirt",
+   "microscope showed",
+   "microscope showed dirt"
+  ]
+ },
+ {
+  "w": "missile",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "small missile",
+   "small missile lay",
+   "small missile lay beside",
+   "missile lay",
+   "missile lay beside"
+  ]
+ },
+ {
+  "w": "mistress",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "kind mistress"
+  ]
+ },
+ {
+  "w": "monument",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "white monument",
+   "white monument holds",
+   "white monument holds silent",
+   "monument holds",
+   "monument holds silent"
   ]
  }
 ]

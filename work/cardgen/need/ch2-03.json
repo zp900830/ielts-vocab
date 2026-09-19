@@ -1,1278 +1,487 @@
 [
  {
-  "w": "magazine",
+  "w": "slip",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "cheap sports magazine",
-   "sports magazine"
+   "small slip"
   ]
  },
  {
-  "w": "magic",
+  "w": "sociology",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "simple magic",
-   "simple magic tricks",
-   "simple magic tricks began",
-   "magic tricks",
-   "magic tricks began"
+   "easy sociology",
+   "easy sociology video",
+   "sociology video"
   ]
  },
  {
-  "w": "majesty",
+  "w": "sophomore",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "great majesty",
-   "great majesty came",
-   "majesty came"
+   "helpful sophomore"
   ]
  },
  {
-  "w": "major",
+  "w": "spectator",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "happy spectator"
+  ]
+ },
+ {
+  "w": "sphere",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "soft foam sphere",
+   "foam sphere"
+  ]
+ },
+ {
+  "w": "spoil",
   "need_syn": false,
-  "need_syn_ext": true,
-  "need_col": true,
-  "syn": [
-   "primary",
-   "first",
-   "principal"
-  ],
-  "col": []
- },
- {
-  "w": "manifest",
-  "need_syn": false,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "manifest as",
-   "manifest as friends"
+   "sad incident spoiled",
+   "incident spoiled"
   ]
  },
  {
-  "w": "marathon",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "long marathon"
-  ]
- },
- {
-  "w": "maths",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "evening maths",
-   "evening maths help",
-   "evening maths help made",
-   "maths help",
-   "maths help made",
-   "maths teacher"
-  ]
- },
- {
-  "w": "matriculation",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "final matriculation",
-   "final matriculation forms",
-   "matriculation forms"
-  ]
- },
- {
-  "w": "matrix",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "large matrix",
-   "large matrix beside",
-   "matrix beside"
-  ]
- },
- {
-  "w": "mechanics",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "bike mechanics"
-  ]
- },
- {
-  "w": "medium",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "clear medium",
-   "clear medium carried",
-   "clear medium carried kind",
-   "medium carried",
-   "medium carried kind"
-  ]
- },
- {
-  "w": "melody",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "sweet soft melody",
-   "soft melody"
-  ]
- },
- {
-  "w": "melt",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "stress slowly melt",
-   "slowly melt"
-  ]
- },
- {
-  "w": "mercury",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "weak mercury",
-   "weak mercury light",
-   "weak mercury light needed",
-   "mercury light",
-   "mercury light needed"
-  ]
- },
- {
-  "w": "merge",
+  "w": "sponsor",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [
-   "combine",
-   "integrate"
+   "provide"
   ],
   "col": []
  },
  {
-  "w": "messenger",
+  "w": "spur",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "quick messenger"
+   "useful spur"
   ]
  },
  {
-  "w": "midnight",
+  "w": "stadium",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "near midnight",
-   "midnight lamp",
-   "midnight lamp burned"
+   "wide sunny stadium",
+   "sunny stadium"
   ]
  },
  {
-  "w": "minus",
+  "w": "stretch",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "prolong"
+  ],
+  "col": [
+   "helped friends stretch",
+   "helped friends stretch arms",
+   "friends stretch",
+   "friends stretch arms",
+   "stretch arms"
+  ]
+ },
+ {
+  "w": "subtract",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "finals week minus",
-   "week minus"
+   "subtract old",
+   "subtract old scores"
   ]
  },
  {
-  "w": "missionary",
+  "w": "suffix",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "young missionary",
-   "young missionary met",
-   "missionary met"
+   "blue suffix"
   ]
  },
  {
-  "w": "mobile",
+  "w": "summary",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [
+   "syllabus"
+  ],
+  "col": [
+   "brief morning summary",
+   "morning summary"
+  ]
+ },
+ {
+  "w": "survey",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "short fun survey",
+   "fun survey"
+  ]
+ },
+ {
+  "w": "syllable",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "new syllable"
+  ]
+ },
+ {
+  "w": "syllabus",
+  "need_syn": false,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "new spring syllabus",
+   "spring syllabus"
+  ]
+ },
+ {
+  "w": "symphony",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "sweet symphony"
+  ]
+ },
+ {
+  "w": "synonym",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "simple synonym"
+  ]
+ },
+ {
+  "w": "tale",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old family tale",
+   "family tale",
+   "epic tale",
+   "heard tales",
+   "every tale",
+   "learned verbal tales"
+  ]
+ },
+ {
+  "w": "temple",
+  "need_syn": true,
+  "need_syn_ext": false,
+  "need_col": true,
+  "syn": [],
+  "col": [
+   "old temple",
+   "old temple yard",
+   "old temple yard full",
+   "temple yard",
+   "temple yard full"
+  ]
+ },
+ {
+  "w": "theory",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": false,
   "syn": [
-   "portable"
+   "hypothesis"
   ],
   "col": []
  },
  {
-  "w": "monk",
+  "w": "thrive",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "quiet monk",
-   "quiet monk showed",
-   "monk showed"
+   "small shops thrive",
+   "shops thrive"
   ]
  },
  {
-  "w": "motive",
+  "w": "timetable",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "main motive"
+   "clear wall timetable",
+   "clear wall timetable kept",
+   "wall timetable",
+   "wall timetable kept",
+   "timetable kept"
   ]
  },
  {
-  "w": "movement",
+  "w": "toss",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "slow movement",
-   "slow movement calmed",
-   "movement calmed"
+   "then toss"
   ]
  },
  {
-  "w": "multiply",
+  "w": "tournament",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "daily gains multiply",
-   "gains multiply"
+   "grand tournament",
+   "grand tournament downtown",
+   "tournament downtown"
   ]
  },
  {
-  "w": "museum",
+  "w": "tragedy",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "art museums",
-   "war museums",
-   "museum halls"
+   "soft tragedy",
+   "soft tragedy dried",
+   "soft tragedy dried as",
+   "tragedy dried",
+   "tragedy dried as"
   ]
  },
  {
-  "w": "negotiate",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "negotiate plans",
-   "negotiate plans without"
-  ]
- },
- {
-  "w": "nobility",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "old nobility"
-  ]
- },
- {
-  "w": "nostalgia",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "soft nostalgia"
-  ]
- },
- {
-  "w": "notorious",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "student notorious"
-  ]
- },
- {
-  "w": "noun",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "new noun"
-  ]
- },
- {
-  "w": "novice",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "every nervous novice",
-   "nervous novice"
-  ]
- },
- {
-  "w": "noxious",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "toxic"
-  ],
-  "col": [
-   "air felt noxious",
-   "felt noxious"
-  ]
- },
- {
-  "w": "nuance",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "subtle nuance"
-  ]
- },
- {
-  "w": "obscure",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "rule seemed obscure",
-   "seemed obscure"
-  ]
- },
- {
-  "w": "observe",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "monitor"
-  ],
-  "col": [
-   "observe seniors"
-  ]
- },
- {
-  "w": "olympic",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "olympic dream"
-  ]
- },
- {
-  "w": "opt",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "select"
-  ],
-  "col": []
- },
- {
-  "w": "orchestra",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "small orchestra"
-  ]
- },
- {
-  "w": "orientation",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "short orientation",
-   "short orientation week",
-   "short orientation week helped",
-   "orientation week",
-   "orientation week helped"
-  ]
- },
- {
-  "w": "ounce",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "last ounce"
-  ]
- },
- {
-  "w": "outstanding",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "remarkable"
-  ],
-  "col": [
-   "doing outstanding",
-   "doing outstanding work",
-   "outstanding work"
-  ]
- },
- {
-  "w": "overestimate",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "overestimate talent"
-  ]
- },
- {
-  "w": "pace",
+  "w": "training",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": false,
   "syn": [
-   "stride"
+   "education",
+   "exercise"
   ],
   "col": []
  },
  {
-  "w": "pagoda",
+  "w": "transparent",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "red pagoda"
+   "clean transparent",
+   "clean transparent covers",
+   "transparent covers"
   ]
  },
  {
-  "w": "painstaking",
+  "w": "triangle",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "took painstaking",
-   "took painstaking care",
-   "painstaking care"
+   "small blue triangle",
+   "blue triangle"
   ]
  },
  {
-  "w": "painter",
+  "w": "tribe",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "calm painter",
-   "calm painter carry",
-   "calm painter carry bright",
-   "painter carry",
-   "painter carry bright"
+   "distant tribe",
+   "distant tribe shared",
+   "distant tribe shared aboriginal",
+   "tribe shared",
+   "tribe shared aboriginal"
   ]
  },
  {
-  "w": "painting",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "bright painting"
-  ]
- },
- {
-  "w": "paper",
+  "w": "trumpet",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "neat model paper",
-   "neat model paper as",
-   "model paper",
-   "model paper as",
-   "model paper as guides",
-   "paper as"
+   "bright gold trumpet",
+   "gold trumpet"
   ]
  },
  {
-  "w": "parameter",
+  "w": "typist",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "firm daily parameter",
-   "daily parameter"
+   "fast typist",
+   "fast typist finish",
+   "fast typist finish pages",
+   "typist finish",
+   "typist finish pages"
   ]
  },
  {
-  "w": "paraphrase",
+  "w": "utterance",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "then paraphrase"
+   "every soft utterance",
+   "every soft utterance gave",
+   "soft utterance",
+   "soft utterance gave",
+   "utterance gave"
   ]
  },
  {
-  "w": "pastime",
+  "w": "vacation",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "sweet pastime",
-   "sweet pastime filled",
-   "pastime filled"
+   "calm sweet vacation",
+   "calm sweet vacation dream",
+   "sweet vacation",
+   "sweet vacation dream",
+   "vacation dream"
   ]
  },
  {
-  "w": "patron",
+  "w": "variable",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "gentle patron"
+   "only variable"
   ]
  },
  {
-  "w": "perceive",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "perceive small",
-   "perceive small changes"
-  ]
- },
- {
-  "w": "phoneme",
+  "w": "vigorous",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "small phoneme",
-   "small phoneme matched",
-   "phoneme matched"
+   "vigorous cheers",
+   "vigorous cheers filled"
   ]
  },
  {
-  "w": "photograph",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "then photograph",
-   "then photograph flowers",
-   "photograph flowers"
-  ]
- },
- {
-  "w": "phrase",
+  "w": "violin",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "short phrase",
-   "short phrase aloud",
-   "phrase aloud"
+   "old brown violin",
+   "brown violin"
   ]
  },
  {
-  "w": "physics",
+  "w": "volt",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "fun physics"
+   "carried volt",
+   "carried volt seemed",
+   "volt seemed"
   ]
  },
  {
-  "w": "piano",
+  "w": "vowel",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "black piano",
-   "black piano stood",
-   "black piano stood beside",
-   "piano stood",
-   "piano stood beside"
+   "bright vowel"
   ]
  },
  {
-  "w": "picnic",
+  "w": "wander",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "sunday picnic",
-   "sunday picnic sheet",
-   "picnic sheet"
+   "wander past"
   ]
  },
  {
-  "w": "pictograph",
+  "w": "wedge",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "old pictograph",
-   "old pictograph onto",
-   "old pictograph onto white",
-   "pictograph onto",
-   "pictograph onto white"
+   "thin wedge",
+   "thin wedge held",
+   "wedge held"
   ]
  },
  {
-  "w": "pitch",
+  "w": "yoga",
   "need_syn": true,
   "need_syn_ext": false,
   "need_col": true,
   "syn": [],
   "col": [
-   "then pitch"
-  ]
- },
- {
-  "w": "plunge",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "brave kids plunge",
-   "kids plunge"
-  ]
- },
- {
-  "w": "plural",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "round plural"
-  ]
- },
- {
-  "w": "plus",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "calculus ideas plus",
-   "ideas plus"
-  ]
- },
- {
-  "w": "poetry",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "love poetry",
-   "love poetry every",
-   "love poetry every sunday",
-   "poetry every",
-   "poetry every sunday"
-  ]
- },
- {
-  "w": "politics",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "short politics",
-   "short politics talk",
-   "short politics talk filled",
-   "politics talk",
-   "politics talk filled"
-  ]
- },
- {
-  "w": "pope",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "kind pope",
-   "kind pope smiled",
-   "pope smiled"
-  ]
- },
- {
-  "w": "portrait",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "smiling portrait",
-   "smiling portrait hung",
-   "smiling portrait hung beside",
-   "portrait hung",
-   "portrait hung beside"
-  ]
- },
- {
-  "w": "postulate",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "quiet simple postulate",
-   "simple postulate"
-  ]
- },
- {
-  "w": "pottery",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "bright pottery",
-   "bright pottery bowls",
-   "pottery bowls"
-  ]
- },
- {
-  "w": "praise",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "warm honest praise",
-   "honest praise",
-   "fair critic praised",
-   "critic praised"
-  ]
- },
- {
-  "w": "predict",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "truly predict",
-   "truly predict results",
-   "predict results"
-  ]
- },
- {
-  "w": "prefix",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "red prefix"
-  ]
- },
- {
-  "w": "preposition",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "long preposition"
-  ]
- },
- {
-  "w": "presentation",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "long group presentation",
-   "long group presentation practice",
-   "group presentation",
-   "group presentation practice",
-   "presentation practice"
-  ]
- },
- {
-  "w": "presume",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "assume"
-  ],
-  "col": [
-   "never presume"
-  ]
- },
- {
-  "w": "priest",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "old priest",
-   "old priest near",
-   "priest near"
-  ]
- },
- {
-  "w": "prince",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "brave prince",
-   "brave prince smiled",
-   "prince smiled"
-  ]
- },
- {
-  "w": "princess",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "little princess"
-  ]
- },
- {
-  "w": "principal",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "assistant principal",
-   "assistant principal shook",
-   "assistant principal shook hands",
-   "principal shook",
-   "principal shook hands"
-  ]
- },
- {
-  "w": "professor",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "old professor"
-  ]
- },
- {
-  "w": "pronoun",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "pronoun replaced"
-  ]
- },
- {
-  "w": "pronounce",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "pronounce new",
-   "pronounce new words"
-  ]
- },
- {
-  "w": "propaganda",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "loud propaganda",
-   "loud propaganda faded",
-   "loud propaganda faded as",
-   "propaganda faded",
-   "propaganda faded as"
-  ]
- },
- {
-  "w": "proportion",
-  "need_syn": false,
-  "need_syn_ext": true,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "large proportion"
-  ]
- },
- {
-  "w": "psychology",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "basic psychology",
-   "basic psychology tips",
-   "basic psychology tips helped",
-   "psychology tips",
-   "psychology tips helped"
-  ]
- },
- {
-  "w": "publish",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "release"
-  ],
-  "col": [
-   "publish only",
-   "publish only true"
-  ]
- },
- {
-  "w": "pull",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "sleep pulled",
-   "then pull"
-  ]
- },
- {
-  "w": "pupil",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "visiting school pupil",
-   "visiting school pupil asked",
-   "school pupil",
-   "school pupil asked",
-   "pupil asked"
-  ]
- },
- {
-  "w": "puzzle",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "difficult puzzle",
-   "clear semantic puzzles",
-   "semantic puzzles"
-  ]
- },
- {
-  "w": "quadruple",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "quadruple as",
-   "quadruple as tired"
-  ]
- },
- {
-  "w": "quantity",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "quantity twice"
-  ]
- },
- {
-  "w": "query",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "short query"
-  ]
- },
- {
-  "w": "questionnaire",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "simple questionnaire",
-   "simple questionnaire carefully",
-   "questionnaire carefully"
-  ]
- },
- {
-  "w": "queue",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "tidy queue"
-  ]
- },
- {
-  "w": "quiz",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "short morning quiz",
-   "short morning quiz felt",
-   "morning quiz",
-   "morning quiz felt",
-   "morning quiz felt easy",
-   "quiz felt"
-  ]
- },
- {
-  "w": "quote",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "perfect quote"
-  ]
- },
- {
-  "w": "race",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "friendly morning race",
-   "friendly morning race today",
-   "morning race",
-   "morning race today",
-   "race today"
-  ]
- },
- {
-  "w": "racket",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "light racket"
-  ]
- },
- {
-  "w": "radiate",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "radiate heat",
-   "radiate heat across"
-  ]
- },
- {
-  "w": "ratio",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [
-   "proportion"
-  ],
-  "col": [
-   "simple study ratio",
-   "study ratio"
-  ]
- },
- {
-  "w": "recite",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "recite new",
-   "recite new terms"
-  ]
- },
- {
-  "w": "reckon",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "seniors reckon",
-   "seniors reckon late",
-   "seniors reckon late effort",
-   "reckon late",
-   "reckon late effort"
-  ]
- },
- {
-  "w": "recreation",
-  "need_syn": false,
-  "need_syn_ext": true,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "bring quiet recreation",
-   "quiet recreation"
-  ]
- },
- {
-  "w": "recruit",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "recruit new",
-   "recruit new members"
-  ]
- },
- {
-  "w": "rectangle",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "neat red rectangle",
-   "red rectangle"
-  ]
- },
- {
-  "w": "reference",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "useful reference",
-   "useful reference book",
-   "reference book"
-  ]
- },
- {
-  "w": "register",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "helped teachers register",
-   "helped teachers register names",
-   "teachers register",
-   "teachers register names",
-   "register names"
-  ]
- },
- {
-  "w": "rehearsal",
-  "need_syn": false,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "quick rehearsal"
-  ]
- },
- {
-  "w": "reputation",
-  "need_syn": true,
-  "need_syn_ext": false,
-  "need_col": true,
-  "syn": [],
-  "col": [
-   "good reputation"
+   "gentle morning yoga",
+   "morning yoga"
   ]
  }
 ]
