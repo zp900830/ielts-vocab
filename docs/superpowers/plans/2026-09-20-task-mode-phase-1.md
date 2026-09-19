@@ -450,7 +450,6 @@ Expected: FAIL —— `ShadowPlan.mkContact is not a function`
             if (!slot.firstSeenAt) slot.firstSeenAt = ev.ts || 0;
           }
         }
-        slot.err = 0;                       // 读到了就不算「一直错」
         slot.stage = stageOf(slot);
         slot.due = (ev.ts || 0) + wordInterval(slot.reps) * DAY_MS;
         if (slot.stage !== before) touchDaily(st, day).promote = (touchDaily(st, day).promote || 0) + 1;
@@ -459,6 +458,7 @@ Expected: FAIL —— `ShadowPlan.mkContact is not a function`
         const slot = st.words[ev.w] || (st.words[ev.w] = newWord());
         const before = slot.stage;
         bumpCtx(slot, ev.s, ev.kind, !!ev.ok);
+        if (ev.ok) slot.err = 0;       // 只有答对才清零：读到不等于会了
         if (!ev.ok) {
           slot.err++;
           slot.leech = slot.err >= LEECH_ERR;
