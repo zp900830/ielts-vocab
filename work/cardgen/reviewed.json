@@ -70,7 +70,7 @@
  "astronaut": {
   "syn": {},
   "col": {
-   "astronaut hat": "keep"
+   "astronaut hat": "drop"
   }
  },
  "bacteria": {
@@ -102,7 +102,7 @@
  "beast": {
   "syn": {},
   "col": {
-   "tired beast": "keep"
+   "tired beast": "drop"
   }
  },
  "bite": {
@@ -211,7 +211,7 @@
  "carnivore": {
   "syn": {},
   "col": {
-   "meat eating carnivore": "keep"
+   "meat eating carnivore": "drop"
   }
  },
  "cataclysmic": {
@@ -229,7 +229,7 @@
  "cattle": {
   "syn": {},
   "col": {
-   "milk cattle": "keep"
+   "milk cattle": "drop"
   }
  },
  "cave": {
@@ -271,7 +271,7 @@
  "claw": {
   "syn": {},
   "col": {
-   "sharp little claw": "keep"
+   "sharp little claw": "drop"
   }
  },
  "clay": {
@@ -283,7 +283,7 @@
  "collision": {
   "syn": {},
   "col": {
-   "funny collision": "keep"
+   "funny collision": "drop"
   }
  },
  "comet": {
@@ -337,7 +337,7 @@
  "crater": {
   "syn": {},
   "col": {
-   "circular crater": "keep"
+   "circular crater": "drop"
   }
  },
  "crawl": {
@@ -391,13 +391,13 @@
  "decompose": {
   "syn": {},
   "col": {
-   "decompose fast": "keep"
+   "decompose fast": "drop"
   }
  },
  "degrade": {
   "syn": {},
   "col": {
-   "degrade fast": "keep"
+   "degrade fast": "drop"
   }
  },
  "delta": {
@@ -416,7 +416,7 @@
   "syn": {},
   "col": {
    "arid desert": "keep",
-   "hot dry desert": "keep"
+   "hot dry desert": "drop"
   }
  },
  "desolate": {
@@ -428,7 +428,7 @@
  "despair": {
   "syn": {},
   "col": {
-   "brief despair": "keep"
+   "brief despair": "drop"
   }
  },
  "desperate": {
@@ -441,13 +441,13 @@
   "syn": {},
   "col": {
    "destructive storm": "keep",
-   "destructive garden pest": "keep"
+   "destructive garden pest": "drop"
   }
  },
  "devour": {
   "syn": {},
   "col": {
-   "quickly devour": "keep"
+   "quickly devour": "drop"
   }
  },
  "dew": {
@@ -490,7 +490,7 @@
  "drown": {
   "syn": {},
   "col": {
-   "easily drown": "keep"
+   "easily drown": "drop"
   }
  },
  "eagle": {
@@ -514,19 +514,19 @@
  "emerge": {
   "syn": {},
   "col": {
-   "emerge suddenly": "keep"
+   "emerge suddenly": "drop"
   }
  },
  "evaporate": {
   "syn": {},
   "col": {
-   "quickly evaporate": "keep"
+   "quickly evaporate": "drop"
   }
  },
  "exceed": {
   "syn": {},
   "col": {
-   "never exceed": "keep"
+   "never exceed": "drop"
   }
  },
  "excrete": {
@@ -582,7 +582,7 @@
  "fire": {
   "syn": {},
   "col": {
-   "fire anyone": "keep"
+   "fire anyone": "drop"
   }
  },
  "flash": {
@@ -594,13 +594,13 @@
  "flat": {
   "syn": {},
   "col": {
-   "dry flat": "keep"
+   "dry flat": "drop"
   }
  },
  "float": {
   "syn": {},
   "col": {
-   "gently float": "keep"
+   "gently float": "drop"
   }
  },
  "flooding": {
@@ -612,7 +612,7 @@
  "flora": {
   "syn": {},
   "col": {
-   "tall flora": "keep"
+   "tall flora": "drop"
   }
  },
  "fluctuate": {
@@ -661,7 +661,7 @@
  "fragment": {
   "syn": {},
   "col": {
-   "damaged fragment": "keep"
+   "damaged fragment": "drop"
   }
  },
  "frequency": {
@@ -739,7 +739,7 @@
  "goose": {
   "syn": {},
   "col": {
-   "white farm goose": "keep"
+   "white farm goose": "drop"
   }
  },
  "grand": {
@@ -758,7 +758,7 @@
   "syn": {},
   "col": {
    "long grass": "keep",
-   "fresh grass": "keep"
+   "fresh grass": "drop"
   }
  },
  "gulf": {
@@ -770,7 +770,7 @@
  "gush": {
   "syn": {},
   "col": {
-   "gush suddenly": "keep"
+   "gush suddenly": "drop"
   }
  },
  "gust": {
@@ -824,19 +824,19 @@
  "herbivore": {
   "syn": {},
   "col": {
-   "grass eating herbivore": "keep"
+   "grass eating herbivore": "drop"
   }
  },
  "herd": {
   "syn": {},
   "col": {
-   "calm herd": "keep"
+   "calm herd": "drop"
   }
  },
  "hibernation": {
   "syn": {},
   "col": {
-   "winter hibernation": "keep"
+   "winter hibernation": "drop"
   }
  },
  "hillside": {
@@ -867,7 +867,7 @@
  "hurricane": {
   "syn": {},
   "col": {
-   "small hurricane": "keep"
+   "small hurricane": "drop"
   }
  },
  "hybridisation": {
@@ -879,7 +879,7 @@
  "hybridise": {
   "syn": {},
   "col": {
-   "never hybridise": "keep"
+   "never hybridise": "drop"
   }
  },
  "immense": {
@@ -903,7 +903,7 @@
  "interbreed": {
   "syn": {},
   "col": {
-   "families interbreed": "keep"
+   "families interbreed": "drop"
   }
  },
  "interesting": {
@@ -927,7 +927,7 @@
  "invisible": {
   "syn": {},
   "col": {
-   "invisible microbe": "keep"
+   "invisible microbe": "drop"
   }
  },
  "irregularly": {
@@ -951,7 +951,7 @@
  "kangaroo": {
   "syn": {},
   "col": {
-   "jumping kangaroo": "keep"
+   "jumping kangaroo": "drop"
   }
  },
  "keeper": {
@@ -1000,7 +1000,7 @@
  "magnificent": {
   "syn": {},
   "col": {
-   "truly magnificent": "keep"
+   "truly magnificent": "drop"
   }
  },
  "mammal": {
@@ -1038,7 +1038,7 @@
  "mediterranean": {
   "syn": {},
   "col": {
-   "warm mediterranean": "keep"
+   "warm mediterranean": "drop"
   }
  },
  "metabolism": {
@@ -1063,13 +1063,13 @@
  "microbe": {
   "syn": {},
   "col": {
-   "invisible microbe": "keep"
+   "invisible microbe": "drop"
   }
  },
  "mild": {
   "syn": {},
   "col": {
-   "surprisingly mild": "keep",
+   "surprisingly mild": "drop",
    "mild afternoon": "keep"
   }
  },
@@ -1118,7 +1118,7 @@
  "mouse": {
   "syn": {},
   "col": {
-   "brown mouse": "keep"
+   "brown mouse": "drop"
   }
  },
  "mutation": {
@@ -1281,7 +1281,7 @@
  "protein": {
   "syn": {},
   "col": {
-   "high protein": "keep"
+   "high protein": "drop"
   }
  },
  "quantum": {
@@ -1295,13 +1295,13 @@
   "col": {
    "quiet lake": "keep",
    "quiet farm": "keep",
-   "quiet old forest": "keep"
+   "quiet old forest": "drop"
   }
  },
  "rainforest": {
   "syn": {},
   "col": {
-   "wet rainforest": "keep"
+   "wet rainforest": "drop"
   }
  },
  "rear": {
@@ -1313,7 +1313,7 @@
  "reed": {
   "syn": {},
   "col": {
-   "tall reed": "keep"
+   "tall reed": "drop"
   }
  },
  "reef": {
@@ -1442,7 +1442,7 @@
   "syn": {},
   "col": {
    "spring water": "drop",
-   "warm spring": "keep"
+   "warm spring": "drop"
   }
  },
  "sprinkle": {
@@ -1539,7 +1539,7 @@
  "thorn": {
   "syn": {},
   "col": {
-   "sharp thorn": "keep"
+   "sharp thorn": "drop"
   }
  },
  "throng": {
@@ -1647,7 +1647,7 @@
  "acid": {
   "syn": {},
   "col": {
-   "acid taste": "keep"
+   "acid taste": "drop"
   }
  },
  "adversity": {
@@ -1659,7 +1659,7 @@
  "alien": {
   "syn": {},
   "col": {
-   "felt alien": "keep"
+   "felt alien": "drop"
   }
  },
  "alphabet": {
@@ -1713,7 +1713,7 @@
  "assume": {
   "syn": {},
   "col": {
-   "simply assume": "keep"
+   "simply assume": "drop"
   }
  },
  "audit": {
@@ -1743,7 +1743,7 @@
  "bounce": {
   "syn": {},
   "col": {
-   "bounce lightly": "keep"
+   "bounce lightly": "drop"
   }
  },
  "brilliant": {
@@ -1817,7 +1817,7 @@
  "complicated": {
   "syn": {},
   "col": {
-   "seemed complicated": "keep"
+   "seemed complicated": "drop"
   }
  },
  "compulsory": {
@@ -1877,7 +1877,7 @@
  "diagnose": {
   "syn": {},
   "col": {
-   "quickly diagnose weak points": "keep"
+   "quickly diagnose weak points": "drop"
   }
  },
  "dictate": {
@@ -1901,7 +1901,7 @@
  "disagree": {
   "syn": {},
   "col": {
-   "disagree softly": "keep"
+   "disagree softly": "drop"
   }
  },
  "displace": {
@@ -1931,7 +1931,7 @@
  "draught": {
   "syn": {},
   "col": {
-   "cold night draught": "keep"
+   "cold night draught": "drop"
   }
  },
  "draw": {
@@ -1949,7 +1949,7 @@
  "eccentric": {
   "syn": {},
   "col": {
-   "eccentric club leader": "keep"
+   "eccentric club leader": "drop"
   }
  },
  "economics": {
@@ -1979,13 +1979,13 @@
  "elicit": {
   "syn": {},
   "col": {
-   "elicit fresh thoughts": "keep"
+   "elicit fresh thoughts": "drop"
   }
  },
  "eminent": {
   "syn": {},
   "col": {
-   "eminent visitor": "keep"
+   "eminent visitor": "drop"
   }
  },
  "empire": {
@@ -2003,7 +2003,7 @@
  "energetic": {
   "syn": {},
   "col": {
-   "energetic games": "keep"
+   "energetic games": "drop"
   }
  },
  "engrave": {
@@ -2027,7 +2027,7 @@
  "equation": {
   "syn": {},
   "col": {
-   "hard equation": "keep"
+   "hard equation": "drop"
   }
  },
  "excavate": {
@@ -2180,7 +2180,7 @@
  "index": {
   "syn": {},
   "col": {
-   "book index": "keep"
+   "book index": "drop"
   }
  },
  "inductive": {
@@ -2192,7 +2192,7 @@
  "infer": {
   "syn": {},
   "col": {
-   "safely infer": "keep"
+   "safely infer": "drop"
   }
  },
  "instil": {
@@ -2228,7 +2228,7 @@
  "kick": {
   "syn": {},
   "col": {
-   "kick softly": "keep"
+   "kick softly": "drop"
   }
  },
  "knight": {
@@ -2258,7 +2258,7 @@
  "linger": {
   "syn": {},
   "col": {
-   "linger long": "keep"
+   "linger long": "drop"
   }
  },
  "literate": {
@@ -2346,7 +2346,7 @@
  "nuance": {
   "syn": {},
   "col": {
-   "subtle nuance": "keep"
+   "subtle nuance": "drop"
   }
  },
  "observe": {
@@ -2546,7 +2546,7 @@
  "scrutinise": {
   "syn": {},
   "col": {
-   "closely scrutinise": "keep"
+   "closely scrutinise": "drop"
   }
  },
  "sculpture": {
@@ -2566,7 +2566,7 @@
  "selective": {
   "syn": {},
   "col": {
-   "selective entry test": "keep"
+   "selective entry test": "drop"
   }
  },
  "sketch": {
@@ -2578,7 +2578,7 @@
  "skim": {
   "syn": {},
   "col": {
-   "quickly skim": "keep"
+   "quickly skim": "drop"
   }
  },
  "smart": {
@@ -2696,19 +2696,19 @@
  "apparatus": {
   "syn": {},
   "col": {
-   "new apparatus": "keep"
+   "new apparatus": "drop"
   }
  },
  "appetiser": {
   "syn": {},
   "col": {
-   "tiny appetiser": "keep"
+   "tiny appetiser": "drop"
   }
  },
  "arch": {
   "syn": {},
   "col": {
-   "round arch": "keep"
+   "round arch": "drop"
   }
  },
  "artifact": {
@@ -2733,13 +2733,13 @@
  "bake": {
   "syn": {},
   "col": {
-   "bake soft cakes": "keep"
+   "bake soft cakes": "drop"
   }
  },
  "balcony": {
   "syn": {},
   "col": {
-   "sunny balcony": "keep",
+   "sunny balcony": "drop",
    "balcony doors": "keep"
   }
  },
@@ -2764,7 +2764,7 @@
  "barrel": {
   "syn": {},
   "col": {
-   "small barrel": "keep"
+   "small barrel": "drop"
   }
  },
  "bath": {
@@ -2776,7 +2776,7 @@
  "bead": {
   "syn": {},
   "col": {
-   "fallen bead": "keep"
+   "fallen bead": "drop"
   }
  },
  "beam": {
@@ -2824,19 +2824,19 @@
  "biscuit": {
   "syn": {},
   "col": {
-   "square biscuit": "keep"
+   "square biscuit": "drop"
   }
  },
  "bitter": {
   "syn": {},
   "col": {
-   "bitter skin": "keep"
+   "bitter skin": "drop"
   }
  },
  "blanket": {
   "syn": {},
   "col": {
-   "blue blanket": "keep"
+   "blue blanket": "drop"
   }
  },
  "block": {
@@ -2854,7 +2854,7 @@
  "bolt": {
   "syn": {},
   "col": {
-   "silver bolt": "keep"
+   "silver bolt": "drop"
   }
  },
  "booth": {
@@ -2866,25 +2866,25 @@
  "bracelet": {
   "syn": {},
   "col": {
-   "new bracelet": "keep"
+   "new bracelet": "drop"
   }
  },
  "brandy": {
   "syn": {},
   "col": {
-   "sweet brandy": "keep"
+   "sweet brandy": "drop"
   }
  },
  "brass": {
   "syn": {},
   "col": {
-   "yellow brass": "keep"
+   "yellow brass": "drop"
   }
  },
  "brickwork": {
   "syn": {},
   "col": {
-   "gray brickwork": "keep"
+   "gray brickwork": "drop"
   }
  },
  "brim": {
@@ -2896,7 +2896,7 @@
  "bronze": {
   "syn": {},
   "col": {
-   "green bronze horse": "keep"
+   "green bronze horse": "drop"
   }
  },
  "broom": {
@@ -2908,7 +2908,7 @@
  "bucket": {
   "syn": {},
   "col": {
-   "red bucket": "keep"
+   "red bucket": "drop"
   }
  },
  "buffet": {
@@ -2920,13 +2920,13 @@
  "bulb": {
   "syn": {},
   "col": {
-   "warm bulb": "keep"
+   "warm bulb": "drop"
   }
  },
  "butter": {
   "syn": {},
   "col": {
-   "yellow butter": "keep"
+   "yellow butter": "drop"
   }
  },
  "cabbage": {
@@ -2970,19 +2970,19 @@
  "carpenter": {
   "syn": {},
   "col": {
-   "old carpenter": "keep"
+   "old carpenter": "drop"
   }
  },
  "carpet": {
   "syn": {},
   "col": {
-   "rolled carpet": "keep"
+   "rolled carpet": "drop"
   }
  },
  "carrot": {
   "syn": {},
   "col": {
-   "carrot roots": "keep"
+   "carrot roots": "drop"
   }
  },
  "cellar": {
@@ -2994,7 +2994,7 @@
  "cement": {
   "syn": {},
   "col": {
-   "grey cement": "keep"
+   "grey cement": "drop"
   }
  },
  "ceramic": {
@@ -3006,7 +3006,7 @@
  "chef": {
   "syn": {},
   "col": {
-   "retired chef": "keep"
+   "retired chef": "drop"
   }
  },
  "chew": {
@@ -3018,7 +3018,7 @@
  "chicken": {
   "syn": {},
   "col": {
-   "village chicken": "keep"
+   "village chicken": "drop"
   }
  },
  "chimney": {
@@ -3036,13 +3036,13 @@
  "clasp": {
   "syn": {},
   "col": {
-   "silver clasp": "keep"
+   "silver clasp": "drop"
   }
  },
  "cloak": {
   "syn": {},
   "col": {
-   "theatre cloak": "keep"
+   "theatre cloak": "drop"
   }
  },
  "collar": {
@@ -3060,14 +3060,14 @@
  "concrete": {
   "syn": {},
   "col": {
-   "gray concrete": "keep",
+   "gray concrete": "drop",
    "concrete floor": "keep"
   }
  },
  "cord": {
   "syn": {},
   "col": {
-   "white cord": "keep"
+   "white cord": "drop"
   }
  },
  "corridor": {
@@ -3091,7 +3091,7 @@
  "cottage": {
   "syn": {},
   "col": {
-   "small cottage": "keep"
+   "small cottage": "drop"
   }
  },
  "cotton": {
@@ -3109,13 +3109,13 @@
  "cradle": {
   "syn": {},
   "col": {
-   "tiny cradle": "keep"
+   "tiny cradle": "drop"
   }
  },
  "crane": {
   "syn": {},
   "col": {
-   "yellow crane": "keep"
+   "yellow crane": "drop"
   }
  },
  "crude": {
@@ -3127,7 +3127,7 @@
  "crystal": {
   "syn": {},
   "col": {
-   "shining crystal": "keep"
+   "shining crystal": "drop"
   }
  },
  "cucumber": {
@@ -3139,7 +3139,7 @@
  "curtain": {
   "syn": {},
   "col": {
-   "flowered curtain": "keep"
+   "flowered curtain": "drop"
   }
  },
  "cushion": {
@@ -3151,7 +3151,7 @@
  "cutlery": {
   "syn": {},
   "col": {
-   "extra cutlery": "keep"
+   "extra cutlery": "drop"
   }
  },
  "dairy": {
@@ -3193,19 +3193,19 @@
  "drunk": {
   "syn": {},
   "col": {
-   "arrived drunk": "keep"
+   "arrived drunk": "drop"
   }
  },
  "dwelling": {
   "syn": {},
   "col": {
-   "whole dwelling": "keep"
+   "whole dwelling": "drop"
   }
  },
  "dye": {
   "syn": {},
   "col": {
-   "brown dye": "keep"
+   "brown dye": "drop"
   }
  },
  "eaves": {
@@ -3217,7 +3217,7 @@
  "eggplant": {
   "syn": {},
   "col": {
-   "purple eggplant": "keep"
+   "purple eggplant": "drop"
   }
  },
  "elegance": {
@@ -3229,13 +3229,13 @@
  "embroider": {
   "syn": {},
   "col": {
-   "embroider red flowers": "keep"
+   "embroider red flowers": "drop"
   }
  },
  "expanse": {
   "syn": {},
   "col": {
-   "wide expanse": "keep"
+   "wide expanse": "drop"
   }
  },
  "exquisite": {
@@ -3247,7 +3247,7 @@
  "fabric": {
   "syn": {},
   "col": {
-   "blue fabric": "keep"
+   "blue fabric": "drop"
   }
  },
  "fade": {
@@ -3255,14 +3255,14 @@
    "disappear": "keep"
   },
   "col": {
-   "never fade": "keep",
-   "slowly fades": "keep"
+   "never fade": "drop",
+   "slowly fades": "drop"
   }
  },
  "fascinate": {
   "syn": {},
   "col": {
-   "fascinate every child": "keep"
+   "fascinate every child": "drop"
   }
  },
  "fibre": {
@@ -3298,7 +3298,7 @@
  "fragile": {
   "syn": {},
   "col": {
-   "quite fragile": "keep"
+   "quite fragile": "drop"
   }
  },
  "fridge": {
@@ -3328,7 +3328,7 @@
  "garlic": {
   "syn": {},
   "col": {
-   "white garlic": "keep"
+   "white garlic": "drop"
   }
  },
  "garment": {
@@ -3340,7 +3340,7 @@
  "gem": {
   "syn": {},
   "col": {
-   "blue gem": "keep"
+   "blue gem": "drop"
   }
  },
  "ginger": {
@@ -3358,7 +3358,7 @@
  "gourmet": {
   "syn": {},
   "col": {
-   "little gourmet": "keep"
+   "little gourmet": "drop"
   }
  },
  "gown": {
@@ -3382,13 +3382,13 @@
  "grape": {
   "syn": {},
   "col": {
-   "purple grape": "keep"
+   "purple grape": "drop"
   }
  },
  "grid": {
   "syn": {},
   "col": {
-   "neat grid": "keep"
+   "neat grid": "drop"
   }
  },
  "gum": {
@@ -3406,7 +3406,7 @@
  "hamburger": {
   "syn": {},
   "col": {
-   "warm hamburger": "keep"
+   "warm hamburger": "drop"
   }
  },
  "handrail": {
@@ -3424,7 +3424,7 @@
  "hostel": {
   "syn": {},
   "col": {
-   "noisy hostel": "keep"
+   "noisy hostel": "drop"
   }
  },
  "hull": {
@@ -3436,7 +3436,7 @@
  "hut": {
   "syn": {},
   "col": {
-   "weak hut": "keep"
+   "weak hut": "drop"
   }
  },
  "idol": {
@@ -3461,7 +3461,7 @@
  "inward": {
   "syn": {},
   "col": {
-   "flowed inward": "keep"
+   "flowed inward": "drop"
   }
  },
  "iron": {
@@ -3491,7 +3491,7 @@
  "jewel": {
   "syn": {},
   "col": {
-   "bright jewel": "keep"
+   "bright jewel": "drop"
   }
  },
  "jewellery": {
@@ -3509,13 +3509,13 @@
  "ketchup": {
   "syn": {},
   "col": {
-   "red ketchup": "keep"
+   "red ketchup": "drop"
   }
  },
  "kettle": {
   "syn": {},
   "col": {
-   "black kettle": "keep"
+   "black kettle": "drop"
   }
  },
  "kit": {
@@ -3563,7 +3563,7 @@
  "lavatory": {
   "syn": {},
   "col": {
-   "back lavatory": "keep"
+   "back lavatory": "drop"
   }
  },
  "layer": {
@@ -3611,7 +3611,7 @@
  "livestock": {
   "syn": {},
   "col": {
-   "village livestock": "keep"
+   "village livestock": "drop"
   }
  },
  "lobby": {
@@ -3647,13 +3647,13 @@
  "mansion": {
   "syn": {},
   "col": {
-   "cold mansion": "keep"
+   "cold mansion": "drop"
   }
  },
  "mason": {
   "syn": {},
   "col": {
-   "careful mason": "keep"
+   "careful mason": "drop"
   }
  },
  "masquerade": {
@@ -3677,7 +3677,7 @@
  "memorandum": {
   "syn": {},
   "col": {
-   "short memorandum": "keep"
+   "short memorandum": "drop"
   }
  },
  "mend": {
@@ -3685,7 +3685,7 @@
    "fix": "keep"
   },
   "col": {
-   "carefully mend": "keep"
+   "carefully mend": "drop"
   }
  },
  "merchandise": {
@@ -3727,13 +3727,13 @@
  "mustard": {
   "syn": {},
   "col": {
-   "yellow mustard": "keep"
+   "yellow mustard": "drop"
   }
  },
  "mutton": {
   "syn": {},
   "col": {
-   "dark mutton": "keep"
+   "dark mutton": "drop"
   }
  },
  "nail": {
@@ -3769,7 +3769,7 @@
  "opacity": {
   "syn": {},
   "col": {
-   "cloudy opacity": "keep"
+   "cloudy opacity": "drop"
   }
  },
  "ornament": {
@@ -3781,7 +3781,7 @@
  "outward": {
   "syn": {},
   "col": {
-   "ran outward": "keep"
+   "ran outward": "drop"
   }
  },
  "oven": {
@@ -3817,7 +3817,7 @@
  "papaya": {
   "syn": {},
   "col": {
-   "sweet papaya": "keep"
+   "sweet papaya": "drop"
   }
  },
  "paperback": {
@@ -3835,13 +3835,13 @@
  "pasta": {
   "syn": {},
   "col": {
-   "thin long pasta": "keep"
+   "thin long pasta": "drop"
   }
  },
  "paste": {
   "syn": {},
   "col": {
-   "sticky rice paste": "keep"
+   "sticky rice paste": "drop"
   }
  },
  "patch": {
@@ -3853,7 +3853,7 @@
  "pea": {
   "syn": {},
   "col": {
-   "green pea": "keep"
+   "green pea": "drop"
   }
  },
  "pedal": {
@@ -3878,7 +3878,7 @@
  "peripheral": {
   "syn": {},
   "col": {
-   "almost peripheral": "keep"
+   "almost peripheral": "drop"
   }
  },
  "pie": {
@@ -3908,7 +3908,7 @@
  "pin": {
   "syn": {},
   "col": {
-   "colored pin": "keep"
+   "colored pin": "drop"
   }
  },
  "pipe": {
@@ -3939,13 +3939,13 @@
   "syn": {},
   "col": {
    "small front plaza": "drop",
-   "front plaza": "keep"
+   "front plaza": "drop"
   }
  },
  "plug": {
   "syn": {},
   "col": {
-   "small plug": "keep"
+   "small plug": "drop"
   }
  },
  "plum": {
@@ -4006,7 +4006,7 @@
  "prevail": {
   "syn": {},
   "col": {
-   "always prevail": "keep"
+   "always prevail": "drop"
   }
  },
  "pudding": {
@@ -4028,7 +4028,7 @@
   "syn": {},
   "col": {
    "small buttoned purse": "drop",
-   "buttoned purse": "keep"
+   "buttoned purse": "drop"
   }
  },
  "quilt": {
@@ -4047,7 +4047,7 @@
  "radish": {
   "syn": {},
   "col": {
-   "small radish": "keep"
+   "small radish": "drop"
   }
  },
  "rag": {
@@ -4066,13 +4066,13 @@
  "razor": {
   "syn": {},
   "col": {
-   "sharp razor": "keep"
+   "sharp razor": "drop"
   }
  },
  "reception": {
   "syn": {},
   "col": {
-   "simple reception": "keep",
+   "simple reception": "drop",
    "reception corner": "drop"
   }
  },
@@ -4110,7 +4110,7 @@
   "syn": {},
   "col": {
    "round chair rim": "drop",
-   "chair rim": "keep"
+   "chair rim": "drop"
   }
  },
  "robe": {
@@ -4153,7 +4153,7 @@
   "syn": {},
   "col": {
    "small flower saucer": "drop",
-   "flower saucer": "keep"
+   "flower saucer": "drop"
   }
  },
  "sausage": {
@@ -4166,7 +4166,7 @@
  "saw": {
   "syn": {},
   "col": {
-   "sharp saw": "keep"
+   "sharp saw": "drop"
   }
  },
  "scaffold": {
@@ -4180,7 +4180,7 @@
   "syn": {},
   "col": {
    "long green scallion": "drop",
-   "green scallion": "keep"
+   "green scallion": "drop"
   }
  },
  "scarf": {
@@ -4257,7 +4257,7 @@
  "slender": {
   "syn": {},
   "col": {
-   "looks slender": "keep"
+   "looks slender": "drop"
   }
  },
  "slight": {
@@ -4278,7 +4278,7 @@
  "sliver": {
   "syn": {},
   "col": {
-   "thin sliver": "keep"
+   "thin sliver": "drop"
   }
  },
  "snack": {
@@ -4317,13 +4317,13 @@
  "spacious": {
   "syn": {},
   "col": {
-   "looked spacious": "keep"
+   "looked spacious": "drop"
   }
  },
  "spaghetti": {
   "syn": {},
   "col": {
-   "long spaghetti": "keep"
+   "long spaghetti": "drop"
   }
  },
  "spice": {
@@ -4337,7 +4337,7 @@
  "sponge": {
   "syn": {},
   "col": {
-   "soft sponge": "keep"
+   "soft sponge": "drop"
   }
  },
  "spotlight": {
@@ -4363,7 +4363,7 @@
  "staple": {
   "syn": {},
   "col": {
-   "small staple": "keep"
+   "small staple": "drop"
   }
  },
  "stationery": {
@@ -4383,7 +4383,7 @@
  "stir": {
   "syn": {},
   "col": {
-   "gently stir": "keep",
+   "gently stir": "drop",
    "stir honey": "keep"
   }
  },
@@ -4437,7 +4437,7 @@
   "syn": {},
   "col": {
    "every past stricture": "drop",
-   "past stricture": "keep"
+   "past stricture": "drop"
   }
  },
  "string": {
@@ -4451,7 +4451,7 @@
   "syn": {},
   "col": {
    "painted wall stripe": "drop",
-   "wall stripe": "keep"
+   "wall stripe": "drop"
   }
  },
  "studio": {
@@ -4464,7 +4464,7 @@
  "supermarket": {
   "syn": {},
   "col": {
-   "distant supermarket": "keep"
+   "distant supermarket": "drop"
   }
  },
  "supper": {
@@ -4571,21 +4571,21 @@
   "syn": {},
   "col": {
    "low wide tub": "drop",
-   "wide tub": "keep",
+   "wide tub": "drop",
    "bath tub": "keep"
   }
  },
  "turkey": {
   "syn": {},
   "col": {
-   "brown turkey": "keep"
+   "brown turkey": "drop"
   }
  },
  "turnip": {
   "syn": {},
   "col": {
    "flat white turnip": "drop",
-   "white turnip": "keep",
+   "white turnip": "drop",
    "turnip heads": "keep"
   }
  },
@@ -4599,7 +4599,7 @@
  "vacuum": {
   "syn": {},
   "col": {
-   "loud vacuum": "keep"
+   "loud vacuum": "drop"
   }
  },
  "vanilla": {
@@ -4607,20 +4607,20 @@
   "col": {
    "pale vanilla": "drop",
    "pale vanilla drops": "drop",
-   "vanilla drops": "keep"
+   "vanilla drops": "drop"
   }
  },
  "vault": {
   "syn": {},
   "col": {
-   "curved vault": "keep"
+   "curved vault": "drop"
   }
  },
  "veil": {
   "syn": {},
   "col": {
    "thin shining veil": "drop",
-   "shining veil": "keep"
+   "shining veil": "drop"
   }
  },
  "velvet": {
@@ -4657,32 +4657,32 @@
  "void": {
   "syn": {},
   "col": {
-   "empty void": "keep"
+   "empty void": "drop"
   }
  },
  "wallet": {
   "syn": {},
   "col": {
    "worn brown wallet": "drop",
-   "brown wallet": "keep"
+   "brown wallet": "drop"
   }
  },
  "wardrobe": {
   "syn": {},
   "col": {
-   "small wardrobe": "keep"
+   "small wardrobe": "drop"
   }
  },
  "wasabi": {
   "syn": {},
   "col": {
-   "green wasabi": "keep"
+   "green wasabi": "drop"
   }
  },
  "wax": {
   "syn": {},
   "col": {
-   "warm wax": "keep"
+   "warm wax": "drop"
   }
  },
  "weld": {
@@ -4694,7 +4694,7 @@
  "wheat": {
   "syn": {},
   "col": {
-   "pale wheat": "keep"
+   "pale wheat": "drop"
   }
  },
  "whisky": {
@@ -4707,20 +4707,20 @@
   "syn": {},
   "col": {
    "soft grey wool": "drop",
-   "grey wool": "keep"
+   "grey wool": "drop"
   }
  },
  "yogurt": {
   "syn": {},
   "col": {
    "thick white yogurt": "drop",
-   "white yogurt": "keep"
+   "white yogurt": "drop"
   }
  },
  "yummy": {
   "syn": {},
   "col": {
-   "simply yummy": "keep"
+   "simply yummy": "drop"
   }
  },
  "aboard": {
@@ -4738,7 +4738,7 @@
  "admit": {
   "syn": {},
   "col": {
-   "never admit": "keep"
+   "never admit": "drop"
   }
  },
  "bid": {
@@ -4756,7 +4756,7 @@
  "bound": {
   "syn": {},
   "col": {
-   "felt bound": "keep"
+   "felt bound": "drop"
   }
  },
  "bribe": {
@@ -4948,7 +4948,7 @@
  "gross": {
   "syn": {},
   "col": {
-   "gross total": "keep"
+   "gross total": "drop"
   }
  },
  "guard": {
@@ -4962,7 +4962,7 @@
    "risk": "drop"
   },
   "col": {
-   "biggest hazard": "keep"
+   "biggest hazard": "drop"
   }
  },
  "import": {
@@ -5031,7 +5031,7 @@
  "mail": {
   "syn": {},
   "col": {
-   "mail box": "keep"
+   "mail box": "drop"
   }
  },
  "mediate": {
@@ -5043,7 +5043,7 @@
  "mute": {
   "syn": {},
   "col": {
-   "stayed mute": "keep"
+   "stayed mute": "drop"
   }
  },
  "negotiation": {
@@ -5055,7 +5055,7 @@
  "neutral": {
   "syn": {},
   "col": {
-   "stayed neutral": "keep"
+   "stayed neutral": "drop"
   }
  },
  "oar": {
@@ -5125,7 +5125,7 @@
  "potent": {
   "syn": {},
   "col": {
-   "potent boost": "keep"
+   "potent boost": "drop"
   }
  },
  "prejudice": {
@@ -5143,7 +5143,7 @@
  "proud": {
   "syn": {},
   "col": {
-   "felt proud": "keep"
+   "felt proud": "drop"
   }
  },
  "puppet": {
@@ -5179,7 +5179,7 @@
  "redundant": {
   "syn": {},
   "col": {
-   "became redundant": "keep"
+   "became redundant": "drop"
   }
  },
  "remuneration": {
@@ -5215,7 +5215,7 @@
  "roman": {
   "syn": {},
   "col": {
-   "roman roads": "keep"
+   "roman roads": "drop"
   }
  },
  "sack": {
@@ -5299,7 +5299,7 @@
  "supervise": {
   "syn": {},
   "col": {
-   "personally supervise": "keep"
+   "personally supervise": "drop"
   }
  },
  "supreme": {
@@ -5549,7 +5549,7 @@
  "gizmo": {
   "syn": {},
   "col": {
-   "tiny gizmo": "keep"
+   "tiny gizmo": "drop"
   }
  },
  "glow": {
@@ -5688,7 +5688,7 @@
  "occur": {
   "syn": {},
   "col": {
-   "occur daily": "keep"
+   "occur daily": "drop"
   }
  },
  "owe": {
@@ -5724,13 +5724,13 @@
  "pitfall": {
   "syn": {},
   "col": {
-   "hidden pitfall": "keep"
+   "hidden pitfall": "drop"
   }
  },
  "polytechnic": {
   "syn": {},
   "col": {
-   "small town polytechnic": "keep"
+   "small town polytechnic": "drop"
   }
  },
  "proceed": {
@@ -5810,7 +5810,7 @@
  "sewage": {
   "syn": {},
   "col": {
-   "dirty sewage": "keep"
+   "dirty sewage": "drop"
   }
  },
  "siege": {
@@ -5912,7 +5912,7 @@
  "abdomen": {
   "syn": {},
   "col": {
-   "soft abdomen": "keep"
+   "soft abdomen": "drop"
   }
  },
  "accord": {
@@ -5924,7 +5924,7 @@
  "accustom": {
   "syn": {},
   "col": {
-   "accustom himself": "keep"
+   "accustom himself": "drop"
   }
  },
  "allure": {
@@ -5936,7 +5936,7 @@
  "ankle": {
   "syn": {},
   "col": {
-   "thick ankle": "keep"
+   "thick ankle": "drop"
   }
  },
  "annoy": {
@@ -5950,7 +5950,7 @@
  "applaud": {
   "syn": {},
   "col": {
-   "loudly applaud": "keep"
+   "loudly applaud": "drop"
   }
  },
  "arouse": {
@@ -5968,7 +5968,7 @@
  "aspire": {
   "syn": {},
   "col": {
-   "aspire high": "keep"
+   "aspire high": "drop"
   }
  },
  "assign": {
@@ -6004,7 +6004,7 @@
  "awake": {
   "syn": {},
   "col": {
-   "stays awake": "keep",
+   "stays awake": "drop",
    "awake till ten": "drop"
   }
  },
@@ -6071,7 +6071,7 @@
  "condom": {
   "syn": {},
   "col": {
-   "thin condom": "keep"
+   "thin condom": "drop"
   }
  },
  "contain": {
@@ -6083,7 +6083,7 @@
  "contempt": {
   "syn": {},
   "col": {
-   "shows contempt": "keep"
+   "shows contempt": "drop"
   }
  },
  "decimation": {
@@ -6147,7 +6147,7 @@
    "expand": "keep"
   },
   "col": {
-   "enlarge small steps": "keep"
+   "enlarge small steps": "drop"
   }
  },
  "enlighten": {
@@ -6177,7 +6177,7 @@
  "exhale": {
   "syn": {},
   "col": {
-   "exhale white air": "keep"
+   "exhale white air": "drop"
   }
  },
  "eyelash": {
@@ -6195,7 +6195,7 @@
  "finger": {
   "syn": {},
   "col": {
-   "shaking finger": "keep"
+   "shaking finger": "drop"
   }
  },
  "flatter": {
@@ -6219,7 +6219,7 @@
  "forgive": {
   "syn": {},
   "col": {
-   "forgive late steps": "keep"
+   "forgive late steps": "drop"
   }
  },
  "glance": {
@@ -6231,7 +6231,7 @@
  "gland": {
   "syn": {},
   "col": {
-   "small gland": "keep"
+   "small gland": "drop"
   }
  },
  "glare": {
@@ -6249,7 +6249,7 @@
  "gorge": {
   "syn": {},
   "col": {
-   "green gorge": "keep"
+   "green gorge": "drop"
   }
  },
  "grab": {
@@ -6273,7 +6273,7 @@
  "hormone": {
   "syn": {},
   "col": {
-   "small hormone": "keep"
+   "small hormone": "drop"
   }
  },
  "immune": {
@@ -6285,7 +6285,7 @@
  "impress": {
   "syn": {},
   "col": {
-   "impress firm judges": "keep"
+   "impress firm judges": "drop"
   }
  },
  "induce": {
@@ -6309,7 +6309,7 @@
  "involve": {
   "syn": {},
   "col": {
-   "involve every friend": "keep"
+   "involve every friend": "drop"
   }
  },
  "irony": {
@@ -6339,7 +6339,7 @@
  "lame": {
   "syn": {},
   "col": {
-   "lame forever": "keep"
+   "lame forever": "drop"
   }
  },
  "limb": {
@@ -6375,7 +6375,7 @@
  "massacre": {
   "syn": {},
   "col": {
-   "bloody massacre": "keep"
+   "bloody massacre": "drop"
   }
  },
  "mesmerize": {
@@ -6399,7 +6399,7 @@
  "muscle": {
   "syn": {},
   "col": {
-   "thin muscle": "keep"
+   "thin muscle": "drop"
   }
  },
  "nap": {
@@ -6418,13 +6418,13 @@
  "nerve": {
   "syn": {},
   "col": {
-   "thin nerve": "keep"
+   "thin nerve": "drop"
   }
  },
  "nightmare": {
   "syn": {},
   "col": {
-   "short nightmare": "keep"
+   "short nightmare": "drop"
   }
  },
  "nourish": {
@@ -6454,7 +6454,7 @@
  "palm": {
   "syn": {},
   "col": {
-   "warm palm": "keep"
+   "warm palm": "drop"
   }
  },
  "panic": {
@@ -6466,13 +6466,13 @@
  "plummet": {
   "syn": {},
   "col": {
-   "let scores plummet": "keep"
+   "let scores plummet": "drop"
   }
  },
  "pore": {
   "syn": {},
   "col": {
-   "tiny pore": "keep"
+   "tiny pore": "drop"
   }
  },
  "preach": {
@@ -6496,7 +6496,7 @@
  "purpose": {
   "syn": {},
   "col": {
-   "clear study purpose": "keep"
+   "clear study purpose": "drop"
   }
  },
  "quarrel": {
@@ -6514,14 +6514,14 @@
  "recall": {
   "syn": {},
   "col": {
-   "recall morning words": "keep"
+   "recall morning words": "drop"
   }
  },
  "recollect": {
   "syn": {},
   "col": {
-   "quietly recollect": "keep",
-   "recollect evening grammar": "keep"
+   "quietly recollect": "drop",
+   "recollect evening grammar": "drop"
   }
  },
  "recover": {
@@ -6545,7 +6545,7 @@
  "regard": {
   "syn": {},
   "col": {
-   "shows deep regard": "keep"
+   "shows deep regard": "drop"
   }
  },
  "render": {
@@ -6599,19 +6599,19 @@
  "shoulder": {
   "syn": {},
   "col": {
-   "shaking shoulder": "keep"
+   "shaking shoulder": "drop"
   }
  },
  "sideways": {
   "syn": {},
   "col": {
-   "turns sideways": "keep"
+   "turns sideways": "drop"
   }
  },
  "sink": {
   "syn": {},
   "col": {
-   "let hope sink low": "keep"
+   "let hope sink low": "drop"
   }
  },
  "skeleton": {
@@ -6619,25 +6619,25 @@
    "framework": "keep"
   },
   "col": {
-   "full skeleton": "keep"
+   "full skeleton": "drop"
   }
  },
  "skull": {
   "syn": {},
   "col": {
-   "round skull": "keep"
+   "round skull": "drop"
   }
  },
  "smuggle": {
   "syn": {},
   "col": {
-   "smuggle bad feelings": "keep"
+   "smuggle bad feelings": "drop"
   }
  },
  "specify": {
   "syn": {},
   "col": {
-   "clearly specify": "keep",
+   "clearly specify": "drop",
    "specify time": "keep"
   }
  },
@@ -6650,7 +6650,7 @@
  "stipulate": {
   "syn": {},
   "col": {
-   "clearly stipulate": "keep",
+   "clearly stipulate": "drop",
    "stipulate daily time": "drop"
   }
  },
@@ -6664,7 +6664,7 @@
  "strangle": {
   "syn": {},
   "col": {
-   "strangle pleasure": "keep"
+   "strangle pleasure": "drop"
   }
  },
  "substitute": {
@@ -6694,7 +6694,7 @@
  "symptom": {
   "syn": {},
   "col": {
-   "small symptom": "keep"
+   "small symptom": "drop"
   }
  },
  "tempt": {
@@ -6724,7 +6724,7 @@
  "thumb": {
   "syn": {},
   "col": {
-   "small thumb": "keep"
+   "small thumb": "drop"
   }
  },
  "toe": {
@@ -6748,7 +6748,7 @@
  "undertake": {
   "syn": {},
   "col": {
-   "undertake extra listening": "keep"
+   "undertake extra listening": "drop"
   }
  },
  "verify": {
@@ -6760,7 +6760,7 @@
  "vibrate": {
   "syn": {},
   "col": {
-   "vibrate softly": "keep"
+   "vibrate softly": "drop"
   }
  },
  "visible": {
@@ -6934,7 +6934,7 @@
  "gloomy": {
   "syn": {},
   "col": {
-   "gloomy grey days": "keep"
+   "gloomy grey days": "drop"
   }
  },
  "grateful": {
@@ -7018,7 +7018,7 @@
  "millennium": {
   "syn": {},
   "col": {
-   "last millennium": "keep"
+   "last millennium": "drop"
   }
  },
  "nasty": {
@@ -7036,7 +7036,7 @@
  "overnight": {
   "syn": {},
   "col": {
-   "rain fell overnight": "keep"
+   "rain fell overnight": "drop"
   }
  },
  "pain": {
@@ -7090,7 +7090,7 @@
  "seriously": {
   "syn": {},
   "col": {
-   "spoke seriously": "keep"
+   "spoke seriously": "drop"
   }
  },
  "sigh": {
