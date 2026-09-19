@@ -19,6 +19,16 @@ declare const ShadowPlan: {
   eventId(ev: unknown): string;
   mkContact(w: string, s: number | string, at: number, day: string): unknown;
   mkQuiz(w: string, s: number | string, kind: string, ok: boolean, at: number, day: string): unknown;
+  assemble(state: unknown, opts: unknown): {
+    queue: { kind: string; i: number; pool: string; sec: number; words: string[] }[];
+    items: { kind: string; pass: number; s: number | string; w: string; pool: string }[];
+    words: string[];
+    stats: Record<string, unknown>;
+  };
+  recallQuiz(o: unknown): { kind: string; blank: string; initial: string; len: number; pos: string; colFirst: string; answer: string };
+  meaningQuiz(o: unknown): { kind: string; opts: string[]; answer: string } | null;
+  judgeRecall(input: string, answer: string): boolean;
+  editDistance(a: string, b: string): number;
   mkPromote(w: string, from: string, to: string, at: number, day: string): unknown;
   replay(events: unknown[], opts: unknown): {
     words: Record<string, WordSlot>;
@@ -224,5 +234,155 @@ test.describe('plan engine · word state reducer', () => {
     expect(got.after).toBe('seen');
     expect(got.ctxLeft).toBe(0);
     expect(got.hist).toBe(5);            // 历史一条没删，只是加了一条用户动作
+  });
+});
+
+
+// 夹具：60 句 × 每句 2 个词。0–9 句已毕业，10–49 句到期，50 句以后全新。
+const FIXTURE = `(function (mkContact, mkQuiz, DAY_MS) {
+  const ev = [];
+  const now = Date.parse('2026-09-20T09:00:00');
+  const at = (d, h) => now - d * DAY_MS + (h || 0) * 36e5;
+  for (let i = 0; i < 60; i++) {
+    const ws = ['w' + i + 'a', 'w' + i + 'b'];
+    for (const w of ws) {
+      if (i < 10) {
+        for (let k = 0; k < 21; k++) ev.push(mkContact(w, i, at(60 - k), 'day-' + k));
+        ev.push(mkQuiz(w, i, 'mc4zh', true, at(5), 'day-x'));
+      } else if (i < 50) {                           // 到期复习：40 句 × 2 个词
+        ev.push(mkContact(w, i, at(10), 'old'));
+      }
+    }
+  }
+  return ev;
+})`;
+
+test.describe('plan engine · time budget', () => {
+  test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
+  test.beforeEach(async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+  });
+
+  const run = (page: import('@playwright/test').Page, minutes: number) =>
+    page.evaluate(([mins, src]) => {
+      const ev = (new Function('return ' + src)())(
+        ShadowPlan.mkContact, ShadowPlan.mkQuiz, ShadowPlan.DAY_MS);
+      const st = ShadowPlan.replay(ev, {
+        boundaryHour: 4,
+        wordsOf: (i: number) => (i >= 0 && i < 60 ? ['w' + i + 'a', 'w' + i + 'b'] : []),
+      });
+      return ShadowPlan.assemble(st, {
+        now: Date.parse('2026-09-20T09:00:00'), todayMinutes: mins, rate: 1,
+        secNew: 25, secReview: 8, secQuiz: 6,
+        wordsOf: (i: number) => (i >= 0 && i < 60 ? ['w' + i + 'a', 'w' + i + 'b'] : []),
+        totalSents: 60, boundaryHour: 4,
+      });
+    }, [minutes, FIXTURE] as [number, string]);
+
+  test('a 10-minute day fits 10 minutes and says how much it had to leave out', async ({ page }) => {
+    const got = await run(page, 10);
+    expect(got.queue.length).toBeGreaterThan(0);
+    expect(got.queue.length).toBeLessThan(40);   // 40 句到期，10 分钟装不下
+    expect((got.stats as Record<string, number>).usedSec).toBeLessThanOrEqual(601);
+    expect((got.stats as Record<string, number>).droppedA).toBeGreaterThan(0);
+    expect((got.stats as Record<string, number>).dueWords).toBeGreaterThan(0);
+  });
+
+  test('more time only ever adds sentences', async ({ page }) => {
+    const a = await run(page, 10);
+    const b = await run(page, 30);
+    const ai = a.queue.map(q => q.i), bi = b.queue.map(q => q.i);
+    expect(bi.length).toBeGreaterThan(ai.length);
+    expect(ai.every(i => bi.indexOf(i) >= 0)).toBe(true);
+    expect((b.stats as Record<string, number>).usedSec).toBeLessThanOrEqual(1801);
+  });
+
+  test('new words only show up when the review did not eat the day', async ({ page }) => {
+    const tight = await run(page, 8);
+    const loose = await run(page, 45);
+    expect(tight.queue.some(q => q.pool === 'C')).toBe(false);
+    expect(loose.queue.some(q => q.pool === 'C')).toBe(true);
+  });
+
+  test('quiz slots and reading time add up to exactly what the budget reports', async ({ page }) => {
+    const got = await run(page, 20);
+    const read = got.queue.reduce((a, q) => a + q.sec, 0);
+    expect((got.stats as Record<string, number>).usedSec).toBe(read + got.items.length * 6);
+    expect(got.items.filter(x => x.pass === 2).length).toBeGreaterThanOrEqual(got.queue.length);
+    expect(got.items.filter(x => x.pass === 3).length).toBe(got.queue.length);
+  });
+
+  test('a zero-minute day still serves the floor task instead of nothing', async ({ page }) => {
+    const got = await run(page, 0);
+    expect(got.stats.floor).toBe(true);
+    expect(got.queue.length).toBe(1);
+    expect(got.items.length).toBeGreaterThan(0);
+  });
+
+  test('the plan carries no debt-shaped field anywhere', async ({ page }) => {
+    const got = await run(page, 12);
+    const dump = JSON.stringify(got);
+    expect(/debt|backlog|pending|overdue/i.test(dump)).toBe(false);
+    expect(got.queue.every(q => q.kind === 'sent')).toBe(true);
+    expect(got.items.every(x => x.kind === 'quiz')).toBe(true);
+  });
+});
+
+test.describe('quiz builder', () => {
+  test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
+  test.beforeEach(async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 4);
+    await page.goto(`${baseURL}/index.html`);
+  });
+
+  test('recall keeps the word length and shows the answer only in the answer field', async ({ page }) => {
+    const got = await page.evaluate(() => ShadowPlan.recallQuiz({
+      sent: 72, word: 'damp', disp: 'damp',
+      sentZh: '深夜里，外套被雨打湿，摸上去还是又冷又潮。',
+      card: { m: 'adj. 潮湿的', note: '词伙：damp clay' },
+    }));
+    expect(got.kind).toBe('recall');
+    expect(got.blank).toBe('d _ _ _');
+    expect(got.initial).toBe('d');
+    expect(got.len).toBe(4);
+    expect(got.pos).toBe('adj.');
+    expect(got.colFirst).toBe('damp');
+    expect(got.answer).toBe('damp');
+  });
+
+  test('meaning quiz takes distractors from the same paragraph and rejects overlapping senses', async ({ page }) => {
+    const got = await page.evaluate(() => ShadowPlan.meaningQuiz({
+      sent: 1500, word: 'peer',
+      card: { m: 'v. 凝视；费力看；n. 同辈' },
+      paraCards: { gaze: 'n. 凝视；注视', steady: 'adj. 稳定的；使稳住', road: 'n. 路，道路' },
+    }));
+    expect(got).not.toBeNull();
+    const q = got as { kind: string; opts: string[]; answer: string };
+    expect(q.kind).toBe('mc4zh');
+    expect(q.opts.length).toBe(4);
+    expect(q.opts).toContain(q.answer);
+    expect(new Set(q.opts).size).toBe(4);
+  });
+
+  test('meaning quiz refuses to build when four clean options are not available', async ({ page }) => {
+    const got = await page.evaluate(() => ShadowPlan.meaningQuiz({
+      sent: 26, word: 'mist', card: { m: 'n. 薄雾' }, paraCards: { bay: 'n. 海湾' },
+    }));
+    expect(got).toBe(null);
+  });
+
+  test('recall judging tolerates one typo but not a different word', async ({ page }) => {
+    const got = await page.evaluate(() => ({
+      exact: ShadowPlan.judgeRecall('DAMP', 'damp'),
+      spaced: ShadowPlan.judgeRecall(' damp ', 'damp'),
+      inflect: ShadowPlan.judgeRecall('damps', 'damp'),
+      near: ShadowPlan.judgeRecall('wet', 'damp'),
+      far: ShadowPlan.judgeRecall('humid', 'damp'),
+      empty: ShadowPlan.judgeRecall('', 'damp'),
+      dist: [ShadowPlan.editDistance('kitten', 'sitting'), ShadowPlan.editDistance('a', 'a')],
+    }));
+    expect(got).toEqual({ exact: true, spaced: true, inflect: true, near: false,
+                          far: false, empty: false, dist: [3, 0] });
   });
 });

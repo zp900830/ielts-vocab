@@ -157,9 +157,218 @@
     return (st && st.words && st.words[key]) || newWord();
   }
 
+  /* ---------- 三池装配 ----------
+     A 到期复习 / C 新词 / B 加深。时间预算是唯一输入，句数与题数是它的结果。
+     装不下的部分今天不排、明天重算 —— 状态里没有任何 debt 字段（原则 5）。 */
+  function assemble(state, opts) {
+    const o = opts || {};
+    const now = o.now || Date.now();
+    const total = o.totalSents || 0;
+    const wordsOf = typeof o.wordsOf === 'function' ? o.wordsOf : function () { return []; };
+    const rate = o.rate || 1;
+    const secNew = (o.secNew || 25) / rate;
+    const secReview = (o.secReview || 8) / rate;
+    const secQuiz = (o.secQuiz || 6) / rate;
+    const budget = Math.max(0, (o.todayMinutes || 0) * 60);
+    const boundary = Number.isInteger(o.boundaryHour) ? o.boundaryHour : 4;
+    const ws = (state && state.words) || {};
+    const today = dayKey(now, boundary);
+
+    // 每个未毕业词只算一次：due 已过 → A；见过但没到期 → B；连一面都没见 → C
+    const due = [], grow = [], fresh = [];
+    let dueWords = 0;
+    const inPool = {};
+    for (let i = 0; i < total; i++) {
+      const list = wordsOf(i);
+      for (let j = 0; j < list.length; j++) {
+        const w = list[j];
+        if (inPool[w]) continue;
+        const st = ws[w];
+        if (!st || st.stage === 'fresh') { inPool[w] = 'C'; fresh.push({ w: w, i: i }); continue; }
+        if (st.stage === 'graduated') continue;
+        if (st.lastContactDay === today) continue;         // 今天已经见过，不重复占位
+        inPool[w] = (st.due || 0) <= now ? 'A' : 'B';
+        if (inPool[w] === 'A') { dueWords++; due.push({ w: w, i: i, due: st.due || 0, leech: !!st.leech }); }
+        else grow.push({ w: w, i: i });
+      }
+    }
+    due.sort(function (a, b) { return (b.leech ? 1 : 0) - (a.leech ? 1 : 0) || a.due - b.due || a.i - b.i; });
+
+    const chosen = new Map();                              // 句号 → {i, pool, sec}
+    let left = budget, droppedA = 0;
+    function take(i, pool, sec) {
+      const cost = sec + 2 * secQuiz;                      // 一句的代价 = 读 + ② ③ 各一题
+      if (left < cost) return false;
+      let cur = chosen.get(i);
+      if (cur) { if (cur.pool === 'C' && pool !== 'C') { left -= cur.sec - sec; cur.pool = pool; cur.sec = sec; } return true; }
+      chosen.set(i, { i: i, kind: 'sent', pool: pool, sec: sec, words: wordsOf(i).slice() });
+      left -= cost;
+      return true;
+    }
+    for (let n = 0; n < due.length; n++) {
+      if (!take(due[n].i, 'A', secReview)) droppedA++;
+    }
+    const plan = o.plan || (state && state.plan) || null;
+    if (!plan || !plan.pausedNew) {
+      const roomy = left >= 0.6 * budget || chosen.size === 0 && budget === 0;
+      if (roomy) for (let n = 0; n < fresh.length; n++) if (!take(fresh[n].i, 'C', secNew)) break;
+      for (let n = 0; n < grow.length; n++) take(grow[n].i, 'B', secReview);
+    }
+
+    const queue = [];
+    Array.from(chosen.keys()).sort(function (a, b) { return a - b; })
+      .forEach(function (i) { queue.push(chosen.get(i)); });
+
+    const items = [];
+    queue.forEach(function (q) {
+      const w = pickWord(q, ws, due);
+      if (!w) return;
+      items.push({ kind: 'quiz', pass: 2, s: q.i, w: w, pool: q.pool });
+      items.push({ kind: 'quiz', pass: 3, s: q.i, w: w, pool: q.pool });
+    });
+    // 二次确认题（k）：课文语境已经对过、例句语境还没对的词，补一道例句题
+    let kSlots = 0;
+    queue.forEach(function (q) {
+      q.words.forEach(function (w) {
+        const st = ws[w];
+        if (!st || st.stage === 'graduated') return;
+        if (!(st.ctx[String(q.i)] > 0) || st.ctx.ex > 0) return;
+        if (left < secQuiz) return;
+        left -= secQuiz; kSlots++;
+        items.push({ kind: 'quiz', pass: 2, s: 'ex', w: w, pool: q.pool });
+      });
+    });
+
+    let floor = false;
+    if (!queue.length && (dueWords || fresh.length || grow.length)) {
+      const seedWord = due.length ? due[0] : (grow.length ? grow[0] : fresh[0]);
+      const i = seedWord.i;
+      chosen.set(i, { i: i, kind: 'sent', pool: due.length ? 'A' : 'C',
+                      sec: due.length ? secReview : secNew, words: wordsOf(i).slice() });
+      queue.push(chosen.get(i));
+      items.push({ kind: 'quiz', pass: 2, s: i, w: seedWord.w, pool: 'A' });
+      items.push({ kind: 'quiz', pass: 3, s: i, w: seedWord.w, pool: 'A' });
+      floor = true;
+    }
+
+    const readSec = queue.reduce(function (a, q) { return a + q.sec; }, 0);
+    return {
+      queue: queue, items: items,
+      words: Array.from(new Set(queue.reduce(function (a, q) { return a.concat(q.words); }, []))),
+      stats: {
+        // 每句按 (句时 + 2×secQuiz) 预留、k 槽按 1×secQuiz 预留，
+        // 所以 usedSec = readSec + items×secQuiz ≤ budget 由构造保证
+        budgetSec: budget, usedSec: readSec + items.length * secQuiz,
+        dueWords: dueWords, newWords: fresh.length, droppedA: droppedA,
+        floor: floor, day: today, kSlots: kSlots,
+        todayMinutes: o.todayMinutes || 0,
+      },
+    };
+  }
+
+  function pickWord(q, ws, due) {
+    const ranked = q.words.map(function (w) { return { w: w, st: ws[w] }; })
+      .filter(function (x) { return x.st && x.st.stage !== 'graduated'; });
+    if (!ranked.length) return q.words[0] || '';
+    ranked.sort(function (a, b) {
+      return (b.st.leech ? 1 : 0) - (a.st.leech ? 1 : 0) || (a.st.due || 0) - (b.st.due || 0);
+    });
+    return ranked[0].w;
+  }
+
+  /* ---------- 出题 ----------
+     ② 永远遮目标词（原则 3）。第一期没有裁决过的辨析组，所以只出回忆题 ——
+     回忆题结构上不存在双解，宁可不给选项也不出错题（原则 8）。 */
+  function parseSenses(m) {
+    return String(m || '').split(/[；;]/).map(function (x) { return x.trim(); }).filter(Boolean);
+  }
+  function posOf(m) {
+    const x = String(m || '').match(/^\s*(n|v|vt|vi|adj|adv|prep|conj|pron|num|int|abbr)\./i);
+    return x ? x[1].toLowerCase() + '.' : '';
+  }
+  function colFirstOf(note) {
+    if (typeof note !== 'string') return '';
+    const parts = String(note).split('；');
+    for (let i = 0; i < parts.length; i++) {
+      const p = parts[i].trim();
+      if (p.indexOf('词伙：') === 0) return p.slice(3).split(',')[0].trim().split(/\s+/)[0] || '';
+    }
+    return '';
+  }
+  function recallQuiz(o) {
+    const w = String(o.word || '').toLowerCase();
+    const card = o.card || {};
+    return {
+      kind: 'recall', s: o.sent, w: w,
+      blank: w ? w.charAt(0) + ' _'.repeat(Math.max(0, w.length - 1)) : '_ _ _',
+      zh: o.sentZh || '', initial: w.charAt(0), len: w.length,
+      pos: posOf(card.m), colFirst: colFirstOf(card.note), answer: w,
+    };
+  }
+  function editDistance(a, b) {
+    if (a === b) return 0;
+    const m = a.length, n = b.length;
+    if (!m) return n;
+    if (!n) return m;
+    let prev = [];
+    for (let j = 0; j <= n; j++) prev.push(j);
+    for (let i = 1; i <= m; i++) {
+      const cur = [i];
+      for (let j = 1; j <= n; j++) {
+        cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1));
+      }
+      prev = cur;
+    }
+    return prev[n];
+  }
+  // 忽略大小写与首尾空格，容忍 1 个字符的误差（屈折、单复数、手滑）
+  function judgeRecall(input, answer) {
+    const a = String(input || '').trim().toLowerCase();
+    const b = String(answer || '').trim().toLowerCase();
+    if (!a || !b) return false;
+    return a === b || editDistance(a, b) <= 1;
+  }
+  function hash32(s) {
+    let h = 5381;
+    for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
+    return h;
+  }
+  /* ③ 看英文选中文：正确答案取卡上第一个义项，干扰项取同段其它目标词的义项。
+     义项重叠（互相包含）的两个不算干扰项 —— 那是「两个都对」。凑不满四个就不出这道题。 */
+  function meaningQuiz(o) {
+    const card = o.card || {};
+    const answer = (o.answer || '').trim() || (parseSenses(card.m)[0] || '').trim();
+    if (!answer) return null;
+    const norm = function (s) { return String(s).replace(/[，。、,.;；：:\s]/g, ''); };
+    const ak = norm(answer);
+    const opts = [answer];
+    const pool = Object.keys(o.paraCards || {});
+    for (let i = 0; i < pool.length && opts.length < 4; i++) {
+      const key = pool[i];
+      if (key === o.word) continue;
+      const src = o.paraCards[key];
+      const senses = parseSenses(typeof src === 'string' ? src : src.m);
+      for (let j = 0; j < senses.length; j++) {
+        const sk = norm(senses[j]);
+        if (!sk || sk === ak || sk.indexOf(ak) >= 0 || ak.indexOf(sk) >= 0) continue;
+        if (opts.indexOf(senses[j]) >= 0) continue;
+        opts.push(senses[j]);
+        break;
+      }
+    }
+    if (opts.length < 4) return null;
+    const seed = String(o.sent) + '|' + String(o.word);
+    const shuffled = opts.map(function (x, i2) { return { x: x, k: hash32(seed + i2) % 997 }; })
+      .sort(function (a, b) { return a.k - b.k; })
+      .map(function (v) { return v.x; });
+    return { kind: 'mc4zh', s: o.sent, w: String(o.word).toLowerCase(),
+             prompt: o.sentZh || '', opts: shuffled, answer: answer };
+  }
+
   window.ShadowPlan = {
     DAY_MS, WORD_INTERVALS, GRADUATED_INTERVALS, STAGES, MASTER_REPS, LEECH_ERR,
     dayKey, dayDiff, wordInterval, emptyState,
     eventId, mkContact, mkQuiz, mkPromote, newWord, stageOf, replay, wordState,
+    assemble, recallQuiz, meaningQuiz, judgeRecall, editDistance, parseSenses, hash32,
   };
 })();
