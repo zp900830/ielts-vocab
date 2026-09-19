@@ -17,6 +17,7 @@ import json
 import re
 import sys
 
+SEGNAME = '同义词'          # 运行时可被 --segment 改写
 SEG = re.compile(r'同义词：([^；\n]*)')
 OK = re.compile(r"^[A-Za-z][A-Za-z'’.\- ]*$")
 
@@ -25,21 +26,32 @@ def rebuild(note, corrected):
     """只替换 note 里的「同义词：…」那一段。
     实测全库 530 条里 0 条会把同义词列表用 ； 切断，所以一段就够，其余段原样保留。"""
     if corrected:
-        new_seg = '同义词：' + ', '.join(corrected)
+        new_seg = SEGNAME + '：' + ', '.join(corrected)
         out, n = SEG.subn(lambda m: new_seg, note, count=1)
         return out if n else None
     # delete：连同分隔符一起摘掉这一段
-    parts = [p for p in note.split('；') if not p.startswith('同义词：')]
+    parts = [p for p in note.split('；') if not p.startswith(SEGNAME + '：')]
     return '；'.join(parts)
 
 
 def main():
     do = '--apply' in sys.argv
+    create_missing = '--create-missing' in sys.argv
+    global SEG, SEGNAME
+    if '--segment' in sys.argv:
+        SEGNAME = sys.argv[sys.argv.index('--segment') + 1]
+        SEG = re.compile(SEGNAME + r'：([^；\n]*)')
     V = json.load(open('shadow/data/vocab.json', encoding='utf-8'))
     verdicts = {}
-    for f in sys.argv[1:]:
-        if f.startswith('--'):
-            continue
+    # --segment 的值不是输入文件，别把它当路径去 open
+    skip = {'--apply', '--create-missing'}
+    args = sys.argv[1:]
+    if '--segment' in args:
+        i = args.index('--segment')
+        skip.add(args[i + 1])
+        args = args[:i] + args[i + 2:]
+    files = [a for a in args if a not in skip and not a.startswith('--')]
+    for f in files:
         for r in json.load(open(f, encoding='utf-8')):
             verdicts[r['head'].lower()] = r
     changed, skipped, illegal = {}, [], []
@@ -49,17 +61,32 @@ def main():
             skipped.append((head, '词条不存在'))
             continue
         note = e.get('note')
-        if not isinstance(note, str) or not note.strip():
-            skipped.append((head, '本就没有 note'))
-            continue
-        if '同义词' not in note:
-            skipped.append((head, 'note 里没有同义词段'))
-            continue
         verdict = r['verdict']
         if verdict == 'keep':
             continue
+        corr0 = [c.strip() for c in r.get('corrected') or [] if str(c).strip()]
+        maxw0 = 6 if SEGNAME == '词伙' else 3
+        bad0 = [c for c in corr0 if not OK.match(c) or len(c.split()) > maxw0 or c.lower() == head]
+        if bad0:
+            illegal.append((head, bad0))
+            continue
+        has_seg = isinstance(note, str) and SEGNAME in note
+        if not has_seg:
+            # 整条卡片原本没有「同义词：」段时，默认跳过（上一批 530 张的语义），
+            # 但「按资料补齐」这一类要的就是新建这一段，所以用 --create-missing 打开。
+            if not create_missing or not (r.get('corrected') or []):
+                skipped.append((head, '本就没有 note' if not (isinstance(note, str) and note.strip())
+                                else 'note 里没有同义词段'))
+                continue
+            new = (SEGNAME + '：' + ', '.join(x.strip() for x in r['corrected']))
+            if isinstance(note, str) and note.strip():
+                new = note.rstrip('；') + '；' + new
+            changed[head] = (note or '', new, verdict)
+            continue
         corr = [c.strip() for c in r.get('corrected') or [] if str(c).strip()]
-        bad = [c for c in corr if not OK.match(c) or len(c.split()) > 3 or c.lower() == head]
+        # 词组型段（词伙）天然是 2–5 个词，不能套同义词的 3 词上限
+        maxw = 6 if SEGNAME == '词伙' else 3
+        bad = [c for c in corr if not OK.match(c) or len(c.split()) > maxw or c.lower() == head]
         if bad:
             illegal.append((head, bad))
             continue
@@ -68,10 +95,10 @@ def main():
             continue
         new = rebuild(note, corr)
         if new is None:
-            skipped.append((head, '定位不到同义词段'))
+            skipped.append((head, '定位不到' + SEGNAME + '段'))
             continue
         if corr and not SEG.search(new):
-            illegal.append((head, '改写后同义词段丢失'))
+            illegal.append((head, '改写后' + SEGNAME + '段丢失'))
             continue
         if new != note:
             changed[head] = (note, new, verdict)
