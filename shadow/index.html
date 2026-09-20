@@ -2332,19 +2332,21 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     function syncNavMode() {
       const b = document.body;
-      // 滚动收缩态会把工具栏压成 0 宽，量出来永远「放得下」—— 量之前先按展开态摆一次，
-      // 加删在同一个任务里完成，中间不产帧，所以看不到闪。
-      const stash = ['scrolled', 'fade-nav'].filter(c => b.classList.contains(c));
-      stash.forEach(c => b.classList.remove(c));
-      // 顶栏的 padding/height 自带 0.3s 过渡，滚动那一刻量到的是「动画中间值」，会把已经放不下的
-      // 顶栏误判成放得下 → 汉堡自己消失、面板再也打不开。量期间把过渡全关掉（CSS 见 body.nav-measure）。
+      /* 滚动收缩态（沉浸阅读）下顶栏被压成 0 宽，量出来永远「放得下」。更要紧的是：
+         为了量宽去摘/挂 scrolled，会把顶栏那条 0.3s 过渡从头重启 → ResizeObserver 又量到尺寸变了
+         → 再量一次 → 再重启，整页每帧都在动（词卡用例就是被这个卡到 click 永远等不到「元素稳定」）。
+         所以收缩态一律不量，维持上一次的结论；回到顶部自然会再触发一次。 */
+      if (b.classList.contains('scrolled') || b.classList.contains('fade-nav')) return;
+      const narrow = window.matchMedia('(max-width: 700px)').matches;
+      // 量之前先按「铺开」摆一次：nav-menu 开着时这一行只剩标题+汉堡，永远量不出真实宽度。
+      // 加删在同一个任务里完成、且期间关掉过渡（CSS 见 body.nav-measure），所以既不闪也不会带动画重启。
       b.classList.add('nav-measure');
       b.classList.remove('nav-menu'); placeAppLink(false);
-      const narrow = window.matchMedia('(max-width: 700px)').matches;
-      if (narrow || navRowWraps()) { b.classList.add('nav-menu'); placeAppLink(true); }
-      else b.classList.remove('menu-open');
-      stash.forEach(c => b.classList.add(c));
+      const want = narrow || navRowWraps();
       b.classList.remove('nav-measure');
+      if (want) { b.classList.add('nav-menu'); placeAppLink(true); return; }
+      if (b.classList.contains('nav-menu')) b.classList.remove('menu-open');
+      placeAppLink(false);
     }
     let _navRaf = 0;
     function requestNavSync() {
