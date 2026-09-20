@@ -8,12 +8,15 @@ interface QI { kind: string; pass: number; s: number | string; w: string; pool: 
 declare const TASK: {
   buildQueue(): void; enterTaskMode(): void; exitTaskMode(): void; active: boolean;
   resetV2(): void; initPlan(minutes: number): void;
-  todayPlan(): { queue: { i: number; kind: string; pool: string; sec: number }[];
+  todayPlan(force?: boolean): { queue: { i: number; kind: string; pool: string; sec: number }[];
                  items: QI[]; words: string[]; stats: Record<string, unknown> };
-  state(): { words: Record<string, { stage: string; reps: number }>; daily: Record<string, Record<string, number>> };
+  state(): { words: Record<string, { stage: string; reps: number; due: number; ctx: object }>; daily: Record<string, Record<string, number>> };
   events(): { type: string }[];
   readDone(i: number): void; relearn(w: string): void;
   openPanel(): void; setView(v: string): void;
+  pass(): number; setPass(n: number): void; advance(): void; finished(): boolean;
+  currentQuiz(): { kind: string; w: string; answer: string; opts?: string[]; blank: string } | null;
+  answerQuiz(choice: string): boolean; nextQuiz(): void; quizDone(): number; quizWrong(): number;
 };
 declare const ShadowPlan: { dayKey(ts: number, h: number): string };
 
@@ -169,5 +172,108 @@ test.describe('today panel · new spec', () => {
     expect(got.minutes).toBe(20);
     expect(got.words).toBeGreaterThan(0);
     expect(got.root.state.migratedAt).toBeGreaterThan(0);
+  });
+});
+
+/* ---- Task 7：三遍流程 ---- */
+test.describe('three passes', () => {
+  test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
+  test.beforeEach(async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    await page.locator('.sent').first().waitFor();
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(10); TASK.enterTaskMode(); });
+  });
+
+  test('pass 1 asks no questions and starts at ①', async ({ page }) => {
+    const got = await page.evaluate(() => ({ p: TASK.pass(), q: TASK.currentQuiz(), bar: document.getElementById('taskBar').dataset.state }));
+    expect(got.p).toBe(1);
+    expect(got.q).toBe(null);
+    expect(got.bar).toBe('read');
+  });
+
+  test('② masks exactly the target word —— the answer never shows on screen', async ({ page }) => {
+    await page.evaluate(() => { TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i)); TASK.setPass(2); });
+    await expect(page.locator('.qz-blank')).toBeVisible();
+    const got = await page.evaluate(() => {
+      const q = TASK.currentQuiz();
+      return { w: q.w, kind: q.kind, text: document.querySelector('.qz-sent').innerText,
+               card: !document.getElementById('taskCard').hidden };
+    });
+    expect(got.kind).toBe('recall');
+    expect(got.card).toBe(true);
+    expect(got.text.toLowerCase()).not.toContain(got.w.toLowerCase());
+  });
+
+  test('a wrong recall answer never downgrades the word and costs no progress', async ({ page }) => {
+    const got = await page.evaluate(() => {
+      TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i));
+      TASK.setPass(2);
+      const q = TASK.currentQuiz();
+      const before = TASK.state().words[q.w].stage;
+      const ok = TASK.answerQuiz('definitely-not-this-word');
+      const w = TASK.state().words[q.w];
+      return { ok, before, stage: w.stage, due: w.due, answered: TASK.quizDone(), wrong: TASK.quizWrong() };
+    });
+    expect(got.ok).toBe(false);
+    expect(got.stage).toBe(got.before);              // 答错不倒退（原则 2）
+    expect(got.due).toBeLessThan(Date.now() + 60000); // 但今天之内要再见一次
+    expect(got.answered).toBe(1);
+    expect(got.wrong).toBe(1);
+  });
+
+  test('a right ② answer banks one more context for that word', async ({ page }) => {
+    const got = await page.evaluate(() => {
+      TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i));
+      TASK.setPass(2);
+      const q = TASK.currentQuiz();
+      const before = Object.keys(TASK.state().words[q.w].ctx).length;
+      TASK.answerQuiz(q.answer);
+      const w = TASK.state().words[q.w];
+      // 走完 ②：只在这一遍里走，别把 ③ 的分数算进来
+      let guard = 0;
+      while (TASK.pass() === 2 && guard++ < 80) { TASK.nextQuiz(); }
+      const twoCtx = Object.keys(w.ctx).length;
+      const all = TASK.state().words;
+      return { before, twoCtx,
+               stage: w.stage, pass: TASK.pass(),
+               // 攒满两个语境的词，状态必须已经越过「已见面」
+               recognizedOk: Object.keys(all).filter(k => Object.keys(all[k].ctx).length >= 2)
+                                        .every(k => all[k].stage !== 'seen' && all[k].stage !== 'fresh') };
+    });
+    expect(got.twoCtx).toBeGreaterThan(got.before);
+    expect(got.pass).toBe(3);
+    expect(got.recognizedOk).toBe(true);
+  });
+
+  test('① → ② → ③ rolls through and the day is finished at the end', async ({ page }) => {
+    const got = await page.evaluate(() => {
+      const log: string[] = [];
+      TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i));
+      for (let g = 0; g < 200; g++) {
+        log.push('p' + TASK.pass());
+        const q = TASK.currentQuiz();
+        if (!q) { if (TASK.pass() === 1) TASK.setPass(2); else if (TASK.pass() === 2) TASK.setPass(3); else break; continue; }
+        TASK.answerQuiz(q.answer);
+        TASK.nextQuiz();
+      }
+      const d = TASK.state().daily[Object.keys(TASK.state().daily).pop()];
+      return { passes: Array.from(new Set(log)).join(','), done: TASK.finished(), quizDone: d.quizDone, correct: d.correct };
+    });
+    expect(got.passes).toBe('p1,p2,p3');
+    expect(got.done).toBe(true);
+    expect(got.quizDone).toBeGreaterThan(3);
+    expect(got.correct).toBe(got.quizDone);
+  });
+
+  test('the between-pass summary is the only place these three numbers live', async ({ page }) => {
+    await page.evaluate(() => TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i)));
+    await page.evaluate(() => TASK.advance());
+    const card = page.locator('.pass-summary');
+    await expect(card).toBeVisible();
+    const txt = await card.innerText();
+    expect((txt.match(/\d+/g) || []).length).toBeLessThanOrEqual(5);
+    expect(/欠|待补|积压|轮/.test(txt)).toBe(false);
+    expect(await page.locator('.pass-summary .go').innerText()).toContain('②');
   });
 });

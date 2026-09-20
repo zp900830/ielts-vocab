@@ -1127,6 +1127,59 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.task-mode .audiobar { bottom: calc(var(--task-bar-h, 62px) + 8px + env(safe-area-inset-bottom, 0px)); }
   body.task-mode .back-to-play { bottom: calc(var(--task-bar-h, 62px) + 98px + env(safe-area-inset-bottom, 0px)); }
   /* 任务模式下上一句/下一句保持原位可见：模式切换不该作废肌肉记忆（PRD §10.1） */
+  /* ---- ②③ 做题卡片 + 遍间小结（PRD §6 §7 §10.1） ---- */
+  .task-card { position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(var(--task-card-b, 132px) + env(safe-area-inset-bottom, 0px));
+    width: min(560px, calc(100vw - 20px)); z-index: 210; padding: 12px 14px 13px; border-radius: 16px;
+    background: var(--glass-strong, rgba(255,255,255,.97)); -webkit-backdrop-filter: var(--blur, blur(22px)) saturate(170%); backdrop-filter: var(--blur, blur(22px)) saturate(170%);
+    border: 1px solid var(--glass-line, rgba(255,255,255,.65)); box-shadow: var(--shadow-lg, 0 12px 40px rgba(30,60,48,.14)); }
+  .task-card[hidden] { display: none; }
+  body.dark .task-card { background: rgba(30,28,25,.97); border-color: #33302b; }
+  .qz-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .qz-tag { font-size: 12px; font-weight: 700; color: var(--task-new); }
+  .qz-head .sp { flex: 1; }
+  .qz-mini { min-height: 30px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px;
+    background: transparent; color: var(--muted); font-size: 11.5px; cursor: pointer; }
+  .qz-mini:hover { color: var(--text); border-color: var(--muted); }
+  .qz-sent { font-size: 15px; line-height: 1.75; font-family: var(--serif, Georgia, serif); }
+  .qz-sent .qz-blank { display: inline-block; min-width: 3.2em; border-bottom: 2px solid var(--task-new);
+    color: var(--task-new); font-weight: 700; letter-spacing: .04em; text-align: center; }
+  .qz-sent .qz-hi { background: var(--accent-soft, rgba(16,180,135,.1)); border-radius: 4px; padding: 0 2px; font-weight: 700; }
+  .qz-zh { font-size: 12.5px; color: var(--muted); margin-top: 5px; line-height: 1.6; }
+  .qz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 11px; }
+  .qz-opt { min-height: 44px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 11px;
+    background: var(--card); color: var(--text); font-size: 13.5px; font-weight: 600; cursor: pointer; text-align: left; }
+  .qz-opt .n { display: inline-block; width: 15px; color: var(--muted); font-weight: 700; }
+  .qz-opt:hover { border-color: var(--task-new); }
+  .qz-opt.right { border-color: var(--task-new); background: var(--task-bg); color: var(--task-new); }
+  .qz-opt.wrong { border-color: var(--coral, #d9694f); background: rgba(217,105,79,.09); color: var(--coral-deep, #c0492f); }
+  .qz-inputrow { display: flex; gap: 7px; margin-top: 11px; }
+  .qz-input { flex: 1; min-width: 0; min-height: 44px; padding: 8px 12px; font-size: 15px; font-family: var(--serif, Georgia, serif);
+    border: 1px solid var(--border); border-radius: 11px; background: var(--card); color: var(--text); }
+  .qz-input:focus { outline: 2px solid var(--task-new); outline-offset: 1px; }
+  .qz-go { min-height: 44px; padding: 0 16px; border: none; border-radius: 11px; background: linear-gradient(135deg,#2bd4a4,#0fae7e);
+    color: #fff; font-size: 13.5px; font-weight: 700; cursor: pointer; }
+  .qz-hint { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
+  .qz-note { margin-top: 10px; padding: 9px 11px; border-radius: 11px; font-size: 12.5px; line-height: 1.65;
+    background: var(--accent-soft, rgba(16,180,135,.07)); border: 1px solid var(--accent-line, rgba(16,180,135,.18)); }
+  .qz-note b { color: var(--task-new); }
+  /* 遍间小结：三个数字唯一的家（PRD §10.1 数字唯一性表） */
+  .pass-summary { text-align: center; }
+  .pass-summary h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+  .pass-summary .sub { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+  .pass-summary .nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+  .pass-summary .nums div { background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 8px 4px; }
+  .pass-summary .nums b { display: block; font-size: 20px; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .pass-summary .nums span { font-size: 10.5px; color: var(--muted); }
+  .pass-summary .go { margin-top: 11px; width: 100%; min-height: 44px; border: none; border-radius: 999px;
+    background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; }
+  @media (max-width: 700px) {
+    .qz-opts { grid-template-columns: 1fr 1fr; gap: 6px; }
+    .qz-sent { font-size: 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .task-card, .tp-tab, .qz-opt { transition: none; }
+  }
   /* 计划设置弹窗 */
   .plan-setup { text-align: center; }
   .plan-setup h3 { font-size: 17px; margin-bottom: 6px; }
@@ -1304,13 +1357,15 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <div class="today-panel" id="todayPanel" role="dialog" aria-modal="true" aria-label="今日学习任务" tabindex="-1"></div>
     <div id="todayScrim" style="position:fixed;inset:0;z-index:590;background:rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .2s" onclick="TASK.closePanel()"></div>
     <!-- 任务模式底部操作栏 -->
-    <div class="task-bar" id="taskBar">
+    <div class="task-bar" id="taskBar" data-state="idle">
       <div class="tb-info"><div class="tb-title" id="tbTitle">—</div><div class="tb-sub" id="tbSub"></div></div>
       <div class="tb-btns">
         <button class="tb-btn again" id="tbAgain" onclick="TASK.again()"><i class="ri-repeat-line" aria-hidden="true"></i> 再来</button>
         <button class="tb-btn next" id="tbNext" onclick="TASK.next()"><i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句</button>
       </div>
     </div>
+    <!-- ②③ 做题卡片 / 遍间小结：一条卡片换内容，不新开弹窗（PRD §10.1） -->
+    <div class="task-card" id="taskCard" role="group" aria-label="当前题目" hidden></div>
 
     <div class="layout">
       <main id="main"><article id="art"><div id="abRegion" class="ab-region" style="display:none" aria-hidden="true"><button class="ab-cancel" onclick="abCancel()" title="取消循环" aria-label="取消循环">×</button></div></article></main>
@@ -4001,6 +4056,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           WORDS_BY_SENT.push(out);
         }
         ALL_TARGET_WORDS = Object.keys(seen).length;
+        indexLayout();
       }
       function wordsOfSent(i) { if (!WORDS_BY_SENT) indexWords(); return WORDS_BY_SENT[i] || []; }
       function readLegacy(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }
@@ -4118,6 +4174,235 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
 
       function today() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
       function dayIndex() { if (!plan) return 0; const s = new Date(plan.startDate + 'T00:00:00'); const n = new Date(today() + 'T00:00:00'); return Math.max(0, Math.round((n - s) / 864e5)); }
+
+      /* ============ 三遍流程控制器（PRD §6：成块的 ①通读 → ②挖空 → ③选义） ============
+         ② 出题的是「这一批刚读过的那几句」，所以批次必须在 ① 开始时快照：
+         队列是滚动的，读完的句子会被顶掉，不快照就会发现 ② 无题可出。 */
+      let pass = 1, quizCursor = 0, quizWrongN = 0, quizAnsweredN = 0, taskFinished = false,
+          reveal = null, batchItems = [], DISP = [], SENT_ZH = [], PARA_ID = [];
+
+      function indexLayout() {
+        DISP = []; SENT_ZH = []; PARA_ID = [];
+        const secs = (typeof SECTIONS !== 'undefined' && SECTIONS) || [];
+        let i = 0;
+        secs.forEach((s, si) => {
+          (s.paragraphs || []).forEach((p, pi) => p.forEach((t, ti) => {
+            const map = {}, re = /\[\[([^\]:]+):([^\]]+)\]\]/g; let m;
+            while ((m = re.exec(String(t)))) map[m[1].trim().toLowerCase()] = m[2];
+            DISP[i] = map;
+            SENT_ZH[i] = (s.sentZh && s.sentZh[pi] && s.sentZh[pi][ti]) || '';
+            PARA_ID[i] = si + '.' + pi;
+            i++;
+          }));
+        });
+      }
+      function day2() { return ShadowPlan.dayKey(Date.now(), (ROOT2.plan && ROOT2.plan.boundaryHour) || 4); }
+      function plainOf(i) { return String(SENT_RAW[i] || '').replace(/\[\[([^\]:]+):([^\]]+)\]\]/g, '$2'); }
+      function displayOf(i, w) { return (DISP[i] && DISP[i][w]) || w; }
+      /* ③ 的正确答案必须是「这个词在这一句里的意思」。行内小字已经会按上下文挑义项，
+         直接复用它的判断，否则会出现「答对了被判错」。 */
+      function senseInSent(i, w) {
+        const raw = String(SENT_RAW[i] || ''), plain = plainOf(i);
+        const re = /\[\[([^\]:]+):([^\]]+)\]\]/g;
+        let walk = 0, at = -1, disp = w, m;
+        while ((m = re.exec(raw))) {
+          disp = m[2];
+          const j = plain.toLowerCase().indexOf(String(disp).toLowerCase(), walk);
+          if (j >= 0) walk = j + disp.length;
+          if (m[1].trim().toLowerCase() === w) { at = j; break; }
+        }
+        const left = at >= 0 ? plain.slice(0, at) : '';
+        const right = at >= 0 ? plain.slice(at + String(disp).length) : plain;
+        const g = (typeof glossParts === 'function') ? glossParts(w, String(disp), left, right) : null;
+        return (g && g.m) || '';
+      }
+      function paraCardsOf(i, w) {
+        const out = {}, pid = PARA_ID[i];
+        if (!pid) return out;
+        for (let k = 0; k < SENT_RAW.length; k++) {
+          if (PARA_ID[k] !== pid) continue;
+          wordsOfSent(k).forEach(x => { if (x !== w && VOCAB[x]) out[x] = VOCAB[x]; });
+        }
+        return out;
+      }
+      function maskSplit(text, surface) {
+        const t = String(text || '');
+        const s = String(surface || '');
+        const i = s ? t.toLowerCase().indexOf(s.toLowerCase()) : -1;
+        if (i < 0) return { before: t, mid: '', after: '' };
+        return { before: t.slice(0, i), mid: t.slice(i, i + s.length), after: t.slice(i + s.length) };
+      }
+      /* pass 3 出不干净四选项 → 这道题跳过（不在 ③ 里默写拼写，那是 ② 的事） */
+      function buildQuiz(item) {
+        if (!item) return null;
+        if (item.built !== undefined) return item.built;
+        const card = VOCAB[item.w] || {};
+        const isEx = item.s === 'ex';
+        const zh = isEx ? String(card.exZh || '') : (SENT_ZH[item.s] || '');
+        let q = null;
+        if (pass === 3) q = ShadowPlan.meaningQuiz({ sent: item.s, word: item.w, card: card,
+          answer: isEx ? '' : senseInSent(item.s, item.w), paraCards: paraCardsOf(item.s, item.w) });
+        if (!q && pass === 2) q = ShadowPlan.recallQuiz({ sent: item.s, word: item.w, card: card, sentZh: zh });
+        item.built = q;
+        return q;
+      }
+      function quizList() { return batchItems.filter(x => x.pass === pass); }
+      function ensureCursor() {
+        const list = quizList();
+        while (quizCursor < list.length && !buildQuiz(list[quizCursor])) quizCursor++;
+        return quizCursor < list.length ? buildQuiz(list[quizCursor]) : null;
+      }
+      function currentQuiz() { return ensureCursor(); }
+      function setPass(n) {
+        pass = n; quizCursor = 0; quizWrongN = 0; quizAnsweredN = 0; reveal = null;
+        renderQuiz(); updateTaskBar(); syncQueueFromPlan(); updateMarkers();
+      }
+      function answerQuiz(choice) {
+        const item = quizList()[quizCursor];
+        const q = buildQuiz(item);
+        if (!q || reveal) return false;
+        const ok = q.kind === 'recall' ? ShadowPlan.judgeRecall(choice, q.answer)
+                                       : String(choice).trim() === String(q.answer).trim();
+        push2(ShadowPlan.mkQuiz(q.w, item.s, q.kind, ok, Date.now(), day2()));
+        quizAnsweredN++;
+        if (!ok) quizWrongN++;
+        reveal = { q: q, s: item.s, ok: ok };
+        renderQuiz(); updateTaskBar();
+        return ok;
+      }
+      function nextQuiz() {
+        reveal = null; quizCursor++;
+        if (!currentQuiz()) finishPass(pass);
+        else { renderQuiz(); updateTaskBar(); }
+      }
+      function flagQuiz() {
+        const item = quizList()[quizCursor], q = buildQuiz(item);
+        if (!q) return;
+        push2({ type: 'flag', w: q.w, s: item.s, kind: q.kind, opts: q.opts || null, ts: Date.now(), day: day2() });
+        showAbToast('已记下：这题有问题 —— 它会停止出现，等裁决后再放回');
+        nextQuiz();
+      }
+      function finishPass(n) {
+        renderPassSummary(n);
+        if (n === 1) { pass = 2; quizCursor = 0; quizWrongN = 0; quizAnsweredN = 0; reveal = null; }
+        else if (n === 2) { pass = 3; quizCursor = 0; quizWrongN = 0; quizAnsweredN = 0; reveal = null; }
+        else { taskFinished = true; pass = 3; }
+        _cachedPlan = null;
+        updateTaskBar();
+      }
+      function startSummaryContinue() {
+        if (taskFinished) { hideCard(); updateTaskBar(); return; }
+        hideCard();
+        if (pass === 2) { if (!currentQuiz()) { finishPass(2); return; } renderQuiz(); updateTaskBar(); }
+        else if (pass === 3) { if (!currentQuiz()) { taskFinished = true; finishPass(3); updateTaskBar(); return; } renderQuiz(); updateTaskBar(); }
+        else { goToNextTask(true); }
+      }
+      function hideCard() { const el = document.getElementById('taskCard'); if (el) { el.hidden = true; el.innerHTML = ''; } }
+      function advance() {
+        if (taskFinished) return;
+        if (pass === 1) { goToNextTask(true); return; }
+        if (reveal) nextQuiz();
+      }
+      function syncCardBottom() {
+        const bar = document.getElementById('taskBar'), ab = document.querySelector('.audiobar');
+        const h = (bar ? bar.offsetHeight : 62) + (ab ? ab.offsetHeight : 56) + 16;
+        document.documentElement.style.setProperty('--task-card-b', h + 'px');
+      }
+      function syncQueueFromPlan() {
+        if (!ROOT2 || !ROOT2.plan) return;
+        todayQueue = todayPlan().queue.map(q => ({ i: q.i, type: q.pool === 'C' ? 'new' : 'review' }));
+      }
+      function revealNote(q) {
+        if (!reveal) return '';
+        const card = VOCAB[q.w] || {};
+        const compare = (!reveal.ok && card.note && typeof card.note === 'object' && typeof renderCompareNote === 'function')
+          ? renderCompareNote(card.note) : '';
+        return `<div class="qz-note">${reveal.ok ? '对了。' : '正确的那一个是 '}<b>${esc(q.answer)}</b>
+          ${q.kind === 'recall' && q.zh ? `<span class="sm">${esc(q.zh)}</span>` : ''}</div>
+          ${compare}
+          <div class="qz-inputrow"><button class="qz-go" style="flex:1" onclick="TASK.nextQuiz()">${quizCursor + 1 >= quizList().length ? '看这一遍的小结' : '下一题'}</button></div>`;
+      }
+      function renderQuiz() {
+        const el = document.getElementById('taskCard');
+        if (!el) return;
+        const item = quizList()[quizCursor];
+        const q = buildQuiz(item);
+        if (!taskMode || pass < 2 || !q) { hideCard(); return; }
+        const isEx = item.s === 'ex';
+        const card = VOCAB[q.w] || {};
+        const text = isEx ? String(card.ex || '') : plainOf(item.s);
+        const m = maskSplit(text, isEx ? q.w : displayOf(item.s, q.w));
+        const zhLine = isEx ? String(card.exZh || '') : (SENT_ZH[item.s] || '');
+        const total = quizList().length;
+        const tag = (pass === 2 ? '② 挖空填词 ' : '③ 看英文选中文 ') + (quizCursor + 1) + '/' + total;
+        let body;
+        if (q.kind === 'recall') {
+          // 例句里没写出词头本体的那 18 张卡：宁可不给英文，也不给一个泄答案的句子
+          const sentLine = m.mid ? `${esc(m.before)}<span class="qz-blank">${'_'.repeat(Math.min(14, m.mid.length))}</span>${esc(m.after)}`
+                                 : `<span class="qz-blank">${esc(q.blank)}</span>`;
+          body = `<div class="qz-sent">${sentLine}</div>
+            <div class="qz-zh">${esc(zhLine)}</div>
+            <div class="qz-hint">写出这个词：<b>${esc(q.initial)}</b> 开头 · 共 ${q.len} 个字母${q.colFirst ? ` · 词伙「${esc(q.colFirst)} …」` : ''}</div>
+            ${reveal ? revealNote(q) : `<div class="qz-inputrow"><input class="qz-input" id="qzInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="打字默写，回车提交" aria-label="默写这个单词"><button class="qz-go" onclick="TASK.submitRecall()">提交</button></div>`}`;
+        } else {
+          body = `<div class="qz-sent">${esc(m.before)}<span class="qz-hi">${esc(m.mid || displayOf(item.s, q.w))}</span>${esc(m.after)}</div>
+            <div class="qz-hint">它在这句里是哪个意思？（按 1–4 也能选）</div>
+            <div class="qz-opts" role="group" aria-label="四个义项选项">${q.opts.map((o, i) => {
+              const cls = reveal ? (o === q.answer ? ' right' : (reveal.pick === o ? ' wrong' : '')) : '';
+              return `<button class="qz-opt${cls}" aria-label="选项 ${i + 1}，共 ${q.opts.length} 个" onclick="TASK.pickOpt(${i})"><span class="n">${i + 1}</span>${esc(o)}</button>`;
+            }).join('')}</div>${reveal ? revealNote(q) : ''}`;
+        }
+        el.innerHTML = `<div class="qz-head"><span class="qz-tag">${tag}</span><span class="sp"></span>
+            <button class="qz-mini" onclick="TASK.reviewSentence()">回看句子</button>
+            <button class="qz-mini" onclick="TASK.flagQuiz()">这题有问题</button></div>${body}`;
+        el.hidden = false;
+        syncCardBottom();
+        if (!reveal && q.kind === 'recall') {
+          const inp = document.getElementById('qzInput');
+          if (inp) inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); submitRecall(); } };
+        }
+      }
+      function submitRecall() {
+        const inp = document.getElementById('qzInput');
+        if (!inp) return;
+        if (!answerQuiz(inp.value)) { const i = document.getElementById('qzInput'); if (i) i.focus(); }
+      }
+      function pickOpt(i) {
+        const q = currentQuiz();
+        if (!q || !q.opts || !q.opts[i]) return;
+        answerQuiz(q.opts[i]);
+      }
+      function reviewSentence() {
+        const item = quizList()[quizCursor];
+        if (!item) return;
+        if (item.s === 'ex') { showAbToast('这句是词卡上的例句 —— 看卡片就行'); return; }
+        const local = globalToLocal(item.s);
+        if (local >= 0 && sents[local]) { sents[local].scrollIntoView({ block: 'center', behavior: 'smooth' }); playFrom(local); }
+      }
+      function renderPassSummary(n) {
+        const el = document.getElementById('taskCard');
+        if (!el || !ROOT2) return;
+        const d = ROOT2.state.daily[day2()] || {};
+        const nums = n === 1 ? [['句', todayPlan(true).words.length, '覆盖的词'], ['个词', d.promote || 0, '晋升'], ['题', quizCountToday(), '今天答过']]
+                             : [['题', quizAnsweredN, '这一遍答了'], ['题', quizWrongN, '答错（不倒退）'], ['个词', d.promote || 0, '累计晋升']];
+        const title = n === 1 ? '① 通读完成' : n === 2 ? '② 挖空完成' : '③ 选义完成';
+        const label = n === 1 ? '开始 ② 挖空填词' : n === 2 ? '开始 ③ 看英文选中文' : '今天完成';
+        el.innerHTML = `<div class="pass-summary"><h4>${title}</h4>
+          <div class="sub">${n === 3 ? '这一批过了三遍：读到 → 认得出 → 说得出意思' : '这一遍的小结，下一遍是另一批题'}</div>
+          <div class="nums">${nums.map(x => `<div><b>${x[1]}</b><span>${esc(x[2])} ${esc(x[0])}</span></div>`).join('')}</div>
+          <button class="go" onclick="TASK.summaryContinue()">${label}</button></div>`;
+        el.hidden = false;
+        syncCardBottom();
+      }
+      function quizCountToday() {
+        const d = (ROOT2 && ROOT2.state.daily[day2()]) || {};
+        return d.quizDone || 0;
+      }
+      function passNumber() { return pass; }
+      function quizDoneCount() { return quizAnsweredN; }
+      function quizWrongCount() { return quizWrongN; }
+      function isFinished() { return taskFinished; }
+
 
       // ---- 计划生成 ----
       function createPlan(totalDays, dailyMinutes) {
@@ -4305,8 +4590,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       // ---- 任务模式 ----
       function enterTaskMode() {
         if (!plan) return;
-        buildQueue();
-        if (!todayQueue.length) { showAbToast('今日任务已完成'); return; }
+        buildQueue(); syncQueueFromPlan();
+        // 批次快照：②③ 考的就是这一批读过的句子，不是队列此刻还剩下什么
+        batchItems = todayPlan(true).items.map(x => Object.assign({}, x));
+        pass = 1; quizCursor = 0; quizWrongN = 0; quizAnsweredN = 0; reveal = null; taskFinished = false;
+        if (!todayQueue.length) { showAbToast('今天没有排到的句子 —— 把每天的分钟数调大一点试试'); return; }
         taskMode = true;
         sessionStart = Date.now();
         sessionReps = 0;
@@ -4322,6 +4610,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         document.body.classList.remove('task-mode');
         document.getElementById('taskBar').classList.remove('show');
         sents.forEach(el => el.classList.remove('task-current'));
+        hideCard();
         updateMarkers();
       }
 
@@ -4329,17 +4618,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         // 找队列中下一个未完成的
         let found = -1;
         for (let qi = 0; qi < todayQueue.length; qi++) {
-          const item = todayQueue[qi];
-          const st = sentState(item.i);
-          const doneToday = st.lastRead >= startOfToday();
-          if (item.type === 'new' && st.reps >= PHASE_THRESHOLDS.learning && doneToday) continue;
-          if (item.type === 'review' && doneToday) continue;
-          found = qi;
-          break;
+          if (!readToday2(todayQueue[qi].i)) { found = qi; break; }
         }
         if (found < 0) {
-          // 全部完成
-          showAbToast('今日任务全部完成！');
+          if (pass === 1) { finishPass(1); return; }
+          showAbToast('今天这批读完了');
           updateTaskBar(true);
           return;
         }
@@ -4375,8 +4658,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
 
       function again() {
-        // 重播当前句
-        if (!taskMode || taskPos >= todayQueue.length) return;
+        // ①：重播当前句；②③：回看这句（重听不算答错，也不记接触）
+        if (!taskMode) return;
+        if (pass >= 2) { reviewSentence(); return; }
+        if (taskPos >= todayQueue.length) return;
         const globalIdx = todayQueue[taskPos].i;
         const localIdx = globalToLocal(globalIdx);
         if (localIdx >= 0) {
@@ -4387,8 +4672,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         }
       }
       function next() {
-        // 记录当前句完成，跳下一个
-        if (!taskMode || taskPos >= todayQueue.length) return;
+        // 记录当前句完成，跳下一个；②③ 态下这个键是「下一题 / 跳过这题」
+        if (!taskMode) return;
+        if (pass >= 2) {
+          if (!quizList().length) { finishPass(pass); return; }
+          nextQuiz();
+          return;
+        }
+        if (taskPos >= todayQueue.length) return;
         const globalIdx = todayQueue[taskPos].i;
         recordRep(globalIdx);
         sessionReps++;
@@ -4485,37 +4776,49 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const bar = document.getElementById('taskBar');
         if (bar && taskMode) document.documentElement.style.setProperty('--task-bar-h', bar.offsetHeight + 'px');
       }
+      /* 一条栏三种态，只换内容不藏控件（PRD §10.1）。
+         今日进度这一个数字只活在任务栏；播放条标题回过去报「读到第几句」。 */
       function updateTaskBar(allDone) {
         const bar = document.getElementById('taskBar');
         if (!bar) return;
         const titleEl = document.getElementById('tbTitle');
         const subEl = document.getElementById('tbSub');
-        const est = estimateRemaining();
-        const total = todayQueue.length;
-        const done = total - est.newLeft - est.reviewLeft;
-        if (allDone || (est.newLeft === 0 && est.reviewLeft === 0)) {
-          titleEl.innerHTML = '<i class="ri-trophy-line" aria-hidden="true"></i> 今日任务完成';
-          subEl.textContent = `共跟读 ${done} 句 · 用时 ${fmtTime((Date.now() - sessionStart) / 1000)}`;
-          document.getElementById('tbAgain').style.display = 'none';
-          document.getElementById('tbNext').textContent = '退出任务';
-          document.getElementById('tbNext').onclick = exitTaskMode;
+        const againBtn = document.getElementById('tbAgain');
+        const nextBtn = document.getElementById('tbNext');
+        if (!ROOT2 || !ROOT2.plan) { bar.dataset.state = 'idle'; return; }
+        const tp = todayPlan(true);
+        const d = ROOT2.state.daily[day2()] || {};
+        const leftN = tp.queue.filter(q => !readToday2(q.i)).length;
+        const doneN = d.sentDone || 0;
+        const quizN = quizList().length;
+        const fin = taskFinished || allDone === true;
+        bar.dataset.state = fin ? 'done' : (pass >= 2 ? 'quiz' : 'read');
+        if (fin) {
+          titleEl.innerHTML = '<i class="ri-trophy-line" aria-hidden="true"></i> 今天完成';
+          subEl.textContent = `${doneN} 句 · ${d.promote || 0} 个词往前走了`;
+          againBtn.style.display = 'none';
+          nextBtn.textContent = '看词本';
+        } else if (pass >= 2) {
+          titleEl.textContent = (pass === 2 ? '② 挖空 ' : '③ 选义 ') + Math.min(quizCursor + 1, quizN) + '/' + quizN
+            + (quizWrongN ? ' · 错 ' + quizWrongN : '');
+          subEl.textContent = quizWrongN ? '答错不倒退，今天之内还会再见到它' : '写出这个词，或选出它这句里的意思';
+          againBtn.style.display = '';
+          againBtn.textContent = '回看句子';
+          nextBtn.textContent = reveal ? '下一题' : '跳过这题';
         } else {
-          const cur = todayQueue[taskPos];
-          const typeIcon = cur && cur.type === 'new' ? '<i class="ri-sparkling-2-line" aria-hidden="true"></i> 新句' : '<i class="ri-repeat-line" aria-hidden="true"></i> 复习';
-          titleEl.innerHTML = `${typeIcon} · ${done}/${total}`;
-          // 副标题只报「还剩多久」。「已读 x/y」是同一个进度的第二套算法，
-          // 「已完成 N 轮」是句子遍历的旧承诺 —— 两个都不再说（PRD §10.1、§15 关于「轮」的处置）
-          subEl.textContent = `剩余 ~${fmtTime(est.sec)}`;
-          document.getElementById('tbAgain').style.display = '';
-          document.getElementById('tbNext').innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句';
-          document.getElementById('tbNext').onclick = next;
+          titleEl.textContent = `① 通读 ${doneN}/${doneN + leftN} · 今天 ${tp.stats.todayMinutes} 分钟`;
+          subEl.textContent = leftN ? `这批还剩 ~${fmtTime(leftN * (secNew() / (rate || 1)))}` : '这批读完了，接着出这一批的词';
+          againBtn.style.display = '';
+          againBtn.innerHTML = '<i class="ri-repeat-line" aria-hidden="true"></i> 再来';
+          nextBtn.innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句';
         }
-        // 播放条标题只报「读到第几句」；今日进度归任务栏说，一处一次（PRD §10.1）
         const abT = document.getElementById('abTitle');
         if (abT && taskMode) {
           const cur2 = todayQueue[taskPos];
-          abT.textContent = cur2 ? `第 ${cur2.i + 1} / ${SENT_RAW.length} 句` : '今日任务';
+          const chName = (cur2 && SECTIONS[artOfSent[cur2.i]] && SECTIONS[artOfSent[cur2.i]].title) || '';
+          abT.textContent = cur2 ? `读到第 ${cur2.i + 1} 句${chName ? ' · ' + chName : ''}` : '今日任务';
         }
+        syncTaskBarHeight(); syncCardBottom();
       }
 
       function updateMarkers() {
@@ -4890,9 +5193,25 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         recordRep, buildQueue, updateMarkers, updateBtn,
         loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
         initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
+        pass: passNumber, setPass, currentQuiz, answerQuiz, nextQuiz, advance, finished: isFinished,
+        submitRecall, pickOpt, flagQuiz, reviewSentence, summaryContinue: startSummaryContinue,
+        quizTotal: () => quizList().length, quizDone: quizDoneCount, quizWrong: quizWrongCount,
         get view() { return _view; }
       };
     })();
+
+    /* ②③ 的 1–4 数字键（PRD §6 键盘/无障碍）。输入框里有光标时不抢键。 */
+    document.addEventListener('keydown', e => {
+      try {
+        if (!TASK.active || TASK.pass() < 2) return;
+        const tag = (document.activeElement && document.activeElement.tagName) || '';
+        if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+        const i = '1234'.indexOf(e.key);
+        if (i < 0) return;
+        const q = TASK.currentQuiz();
+        if (q && q.opts && q.opts[i]) { e.preventDefault(); TASK.pickOpt(i); }
+      } catch (err) {}
+    });
 
     initApp(); loadVoices();
     function mobileBtnIcons() { // 移动端播放条：确保图标在窄屏下正常显示，不再替换文字
