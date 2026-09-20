@@ -4055,6 +4055,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          老的 prog.sentences 要撑到三遍流程接上为止（计划 Task 7），所以现在是
          「老的继续写、新的负责读」；界面只读 ROOT2，不会再出现两个口径打架。 */
       const LS_V2 = 'ielts.shadow.v2';
+      const MIG_KEY = 'ielts.shadow.migNotice';
       let ROOT2 = null;
       let WORDS_BY_SENT = null, ALL_TARGET_WORDS = 0, _cachedPlan = null, _cachedDay = '';
       const STAGE_LABEL = { all: '全部', seen: '已见面', recognized: '文中可辨',
@@ -5104,6 +5105,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           `<div class="ps-group"><label>新词</label><div class="ps-opts">
             <button class="ps-opt${ROOT2.plan.pausedNew ? '' : ' sel'}" onclick="TASK.setPauseNew(false)">正常见新词</button>
             <button class="ps-opt${ROOT2.plan.pausedNew ? ' sel' : ''}" onclick="TASK.setPauseNew(true)">只复习，先不见新词</button></div></div>
+          ${ROOT2.report && ROOT2.report.words ? `<div class="tp-note sm">上次改成按词记：<b>${ROOT2.report.words}</b> 个词从句子账搬过来，`
+            + `其中 ${ROOT2.report.cappedWords} 个原本算「巩固/掌握」的被压回「已见面」，要重新考才算数。</div>` : ''}
           <div class="tp-note sm">进度存在这台设备上，并以上传「完成记录」的方式同步。<span class="sync-state" id="syncState">${syncHintText()}</span></div>
           <div class="ps-adjust"><button class="btn" onclick="TASK.exportBackup()">导出进度备份</button>
             <button class="btn" onclick="TASK.importBackup()">导入备份恢复</button></div>
@@ -5308,6 +5311,17 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         }
         // 开页先拉后推：没登录时这两个函数自己就返回，不发请求
         try { cloudSync(); } catch (e) { dlog('cloud-sync-fail', (e && e.message) || e); }
+        migrationNotice();
+      }
+      /* 迁移不能静默（PRD R4）：把一句读 8 遍的词从「巩固」压回「已见面」，
+         不解释一句就会被当成"我的进度被清零了"。只说一次，说完就闭嘴。 */
+      function migrationNotice() {
+        if (!ROOT2 || !ROOT2.report || localStorage.getItem(MIG_KEY)) return;
+        localStorage.setItem(MIG_KEY, '1');
+        const r = ROOT2.report;
+        if (!r.words) return;
+        showAbToast(`进度改成按词记了：${r.words} 个词搬过来，其中 ${r.cappedWords} 个本来算「巩固/掌握」，`
+          + `现在回到「已见面」要重新考 —— 一句读八遍不等于每个词都熟了`);
       }
 
       // ---- 公开 API ----
