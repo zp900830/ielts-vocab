@@ -1127,6 +1127,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.task-mode .audiobar { bottom: calc(var(--task-bar-h, 62px) + 8px + env(safe-area-inset-bottom, 0px)); }
   body.task-mode .back-to-play { bottom: calc(var(--task-bar-h, 62px) + 98px + env(safe-area-inset-bottom, 0px)); }
   /* 任务模式下上一句/下一句保持原位可见：模式切换不该作废肌肉记忆（PRD §10.1） */
+  /* ②③ 做题态：播放条让位。这条态的控件是选项 / 这题有问题 / 回看句子，
+     三栏叠在手机上会把正文挤没 —— 回看句子照样能听。 */
+  body.task-mode.quiz-mode .audiobar { display: none; }
   /* ---- ②③ 做题卡片 + 遍间小结（PRD §6 §7 §10.1） ---- */
   .task-card { position: fixed; left: 50%; transform: translateX(-50%);
     bottom: calc(var(--task-card-b, 132px) + env(safe-area-inset-bottom, 0px));
@@ -4108,6 +4111,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         ROOT2.plan = { todayMinutes: m, boundaryHour: 4, startDate: ShadowPlan.dayKey(Date.now(), 4),
                        endDate: null, pausedNew: false, totalDays: 30 };
         ROOT2.state = ShadowPlan.emptyState(); ROOT2.events = []; ROOT2.uploaded = 0; ROOT2.migratedAt = 0;
+        ROOT2.planned = {};
         syncLegacyPlan(); savePlan();
         prog = prog || { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {}, pace: {} };
         saveProg();
@@ -4170,6 +4174,19 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (!ROOT2) return 0;
         const d = ROOT2.state.daily;
         return Object.keys(d).filter(k => (d[k].sentDone || 0) >= 3 && (d[k].quizDone || 0) < 3).length;
+      }
+      /* 今天的句数承诺一旦定下就不许往上漂：队列是滚动的，读完一句预算会放出下一句，
+         拿「已读 + 队列未读」当分母就会看到 6/24 变成 6/31 —— 像目标被偷偷抬高了。
+         所以每天第一次算的时候钉住它；改分钟数时再放开重算。 */
+      function plannedToday() {
+        if (!ROOT2 || !ROOT2.plan) return 0;
+        const day = day2();
+        const left = todayPlan().queue.filter(q => !readToday2(q.i)).length;
+        const live = ((ROOT2.state.daily[day] || {}).sentDone || 0) + left;
+        ROOT2.planned = ROOT2.planned || {};
+        if (!ROOT2.planned[day]) { ROOT2.planned[day] = live; persist2(); }
+        // 只兜住「已经读了的不能比计划的还多」，不跟队列一起涨 —— 涨的就是那个 6/31
+        return Math.max(ROOT2.planned[day], ((ROOT2.state.daily[day] || {}).sentDone || 0));
       }
 
       function today() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
@@ -4261,12 +4278,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const item = quizList()[quizCursor];
         const q = buildQuiz(item);
         if (!q || reveal) return false;
+        // 「回看句子」可能还在播；答题先把声音收掉，否则下一题还压着上一句的朗读
+        try { playing = false; speakToken++; speechSynthesis.cancel(); } catch (e) {}
         const ok = q.kind === 'recall' ? ShadowPlan.judgeRecall(choice, q.answer)
                                        : String(choice).trim() === String(q.answer).trim();
         push2(ShadowPlan.mkQuiz(q.w, item.s, q.kind, ok, Date.now(), day2()));
         quizAnsweredN++;
         if (!ok) quizWrongN++;
-        reveal = { q: q, s: item.s, ok: ok };
+        reveal = { q: q, s: item.s, ok: ok, pick: choice };
         renderQuiz(); updateTaskBar();
         return ok;
       }
@@ -4305,7 +4324,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
       function syncCardBottom() {
         const bar = document.getElementById('taskBar'), ab = document.querySelector('.audiobar');
-        const h = (bar ? bar.offsetHeight : 62) + (ab ? ab.offsetHeight : 56) + 16;
+        const off = document.body.classList.contains('quiz-mode');   // 做题态播放条已隐藏
+        const h = (bar ? bar.offsetHeight : 62) + (off ? 0 : (ab ? ab.offsetHeight + 8 : 64)) + 10;
         document.documentElement.style.setProperty('--task-card-b', h + 'px');
       }
       function syncQueueFromPlan() {
@@ -4317,8 +4337,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const card = VOCAB[q.w] || {};
         const compare = (!reveal.ok && card.note && typeof card.note === 'object' && typeof renderCompareNote === 'function')
           ? renderCompareNote(card.note) : '';
-        return `<div class="qz-note">${reveal.ok ? '对了。' : '正确的那一个是 '}<b>${esc(q.answer)}</b>
-          ${q.kind === 'recall' && q.zh ? `<span class="sm">${esc(q.zh)}</span>` : ''}</div>
+        return `<div class="qz-note">${reveal.ok ? '对了。' : '正确的那一个是 '}<b>${esc(q.answer)}</b></div>
           ${compare}
           <div class="qz-inputrow"><button class="qz-go" style="flex:1" onclick="TASK.nextQuiz()">${quizCursor + 1 >= quizList().length ? '看这一遍的小结' : '下一题'}</button></div>`;
       }
@@ -4383,20 +4402,20 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const el = document.getElementById('taskCard');
         if (!el || !ROOT2) return;
         const d = ROOT2.state.daily[day2()] || {};
-        const nums = n === 1 ? [['句', todayPlan(true).words.length, '覆盖的词'], ['个词', d.promote || 0, '晋升'], ['题', quizCountToday(), '今天答过']]
-                             : [['题', quizAnsweredN, '这一遍答了'], ['题', quizWrongN, '答错（不倒退）'], ['个词', d.promote || 0, '累计晋升']];
+        const nums = n === 1 ? [[doneToday(), '句读完了'], [todayPlan(true).words.length, '个词今天见过'], [d.promote || 0, '个词往前走了一步']]
+                             : [[quizAnsweredN, '题答了'], [quizWrongN, '题答错（不倒退）'], [d.promote || 0, '个词累计晋升']];
         const title = n === 1 ? '① 通读完成' : n === 2 ? '② 挖空完成' : '③ 选义完成';
         const label = n === 1 ? '开始 ② 挖空填词' : n === 2 ? '开始 ③ 看英文选中文' : '今天完成';
         el.innerHTML = `<div class="pass-summary"><h4>${title}</h4>
           <div class="sub">${n === 3 ? '这一批过了三遍：读到 → 认得出 → 说得出意思' : '这一遍的小结，下一遍是另一批题'}</div>
-          <div class="nums">${nums.map(x => `<div><b>${x[1]}</b><span>${esc(x[2])} ${esc(x[0])}</span></div>`).join('')}</div>
+          <div class="nums">${nums.map(x => `<div><b>${x[0]}</b><span>${esc(x[1])}</span></div>`).join('')}</div>
           <button class="go" onclick="TASK.summaryContinue()">${label}</button></div>`;
         el.hidden = false;
         syncCardBottom();
       }
-      function quizCountToday() {
+      function doneToday() {
         const d = (ROOT2 && ROOT2.state.daily[day2()]) || {};
-        return d.quizDone || 0;
+        return d.sentDone || 0;
       }
       function passNumber() { return pass; }
       function quizDoneCount() { return quizAnsweredN; }
@@ -4607,7 +4626,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
       function exitTaskMode() {
         taskMode = false;
-        document.body.classList.remove('task-mode');
+        document.body.classList.remove('task-mode', 'quiz-mode');
         document.getElementById('taskBar').classList.remove('show');
         sents.forEach(el => el.classList.remove('task-current'));
         hideCard();
@@ -4788,11 +4807,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (!ROOT2 || !ROOT2.plan) { bar.dataset.state = 'idle'; return; }
         const tp = todayPlan(true);
         const d = ROOT2.state.daily[day2()] || {};
-        const leftN = tp.queue.filter(q => !readToday2(q.i)).length;
         const doneN = d.sentDone || 0;
+        const planned = plannedToday();
+        const leftN = Math.max(0, planned - doneN);
         const quizN = quizList().length;
         const fin = taskFinished || allDone === true;
         bar.dataset.state = fin ? 'done' : (pass >= 2 ? 'quiz' : 'read');
+        document.body.classList.toggle('quiz-mode', !!taskMode && !fin && pass >= 2);
         if (fin) {
           titleEl.innerHTML = '<i class="ri-trophy-line" aria-hidden="true"></i> 今天完成';
           subEl.textContent = `${doneN} 句 · ${d.promote || 0} 个词往前走了`;
@@ -4806,7 +4827,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           againBtn.textContent = '回看句子';
           nextBtn.textContent = reveal ? '下一题' : '跳过这题';
         } else {
-          titleEl.textContent = `① 通读 ${doneN}/${doneN + leftN} · 今天 ${tp.stats.todayMinutes} 分钟`;
+          titleEl.textContent = `① 通读 ${doneN}/${planned} · 今天 ${tp.stats.todayMinutes} 分钟`;
           subEl.textContent = leftN ? `这批还剩 ~${fmtTime(leftN * (secNew() / (rate || 1)))}` : '这批读完了，接着出这一批的词';
           againBtn.style.display = '';
           againBtn.innerHTML = '<i class="ri-repeat-line" aria-hidden="true"></i> 再来';
@@ -4937,12 +4958,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const tp = todayPlan(true);
         const b = ROOT2.plan.boundaryHour, day = ShadowPlan.dayKey(Date.now(), b);
         const d = ROOT2.state.daily[day] || {};
-        // 队列是滚动的：读完的那句会被未读的新句顶掉，所以「今天读了多少」不能只数队列里
-        // 剩下的已读项（会永远显示 0/N）。分母 = 今天已读 + 队列里还没读的。
         const qz = 6 / (rate || 1);
         const left = tp.queue.filter(q => !readToday2(q.i));
         const done = d.sentDone || 0;
-        const n = done + left.length;
+        const n = plannedToday();
+        const leftN = Math.max(0, n - done);
         const pct = n > 0 ? Math.round(done / n * 100) : 100;
         const c = countStages();
         // 「还剩」= 队列里没读的那几句的预留成本（句时 + ②③ 各一题），
@@ -4965,7 +4985,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             <div class="tp-kv"><span>重点词</span><b>${c.leech}</b></div>
           </div>
         </div>
-        <div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>还剩 ${left.length} 句 · 覆盖 ${tp.words.length} 个词</b>
+        <div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>还剩 ${leftN} 句 · 覆盖 ${tp.words.length} 个词</b>
           <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}</span></div>
         <div class="tp-actions"><button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始 · 先通读这一批'}</button>
           ${taskMode ? '<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>' : ''}</div>`;
@@ -4988,7 +5008,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           <div class="ps-adjust"><button class="btn" onclick="TASK.resetPlan()">清空重来</button></div>`;
       }
 
-      function setMinutes(m) { ROOT2.plan.todayMinutes = Math.max(1, Math.min(180, m)); _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel')); }
+      function setMinutes(m) {
+        ROOT2.plan.todayMinutes = Math.max(1, Math.min(180, m));
+        if (ROOT2.planned) ROOT2.planned[day2()] = 0;   // 预算变了，今天的句数承诺重算一次
+        _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel'));
+      }
       function setBoundary(h) { ROOT2.plan.boundaryHour = h; recompute2(); _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel')); }
       function setPauseNew(v) { ROOT2.plan.pausedNew = !!v; _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel')); }
       function syncHintText() {

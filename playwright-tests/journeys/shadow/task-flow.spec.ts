@@ -246,6 +246,34 @@ test.describe('three passes', () => {
     expect(got.recognizedOk).toBe(true);
   });
 
+  test('the 今日 denominator never grows while reading', async ({ page }) => {
+    const dens = await page.evaluate(() => {
+      TASK.initPlan(15); TASK.enterTaskMode();
+      const out: string[] = [];
+      for (let i = 0; i < 10; i++) {
+        document.getElementById('tbNext').click();
+        out.push((document.getElementById('tbTitle').textContent.trim().match(/(\d+)\/(\d+)/) || [])[2]);
+      }
+      return Array.from(new Set(out));
+    });
+    expect(dens.length).toBe(1);      // 队列会滚动补句，分母跟着涨就是「目标被偷偷抬高」
+  });
+
+  test('③ marks the picked wrong option red and the right one green', async ({ page }) => {
+    const idx = await page.evaluate(() => {
+      TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i));
+      TASK.setPass(3);
+      const q = TASK.currentQuiz();
+      return q && q.opts ? q.opts.findIndex(o => o !== q.answer) : -1;
+    });
+    test.skip(idx < 0, '这一批凑不出干净的四个义项 —— ③ 按规格跳过');
+    await expect(page.locator('.qz-opts')).toBeVisible();
+    await page.locator('.qz-opt').nth(idx).click();
+    expect(await page.locator('.qz-opt.wrong').count()).toBe(1);
+    expect(await page.locator('.qz-opt.right').count()).toBe(1);
+    expect(await page.locator('.qz-note').innerText()).toContain('正确的那一个是');
+  });
+
   test('① → ② → ③ rolls through and the day is finished at the end', async ({ page }) => {
     const got = await page.evaluate(() => {
       const log: string[] = [];
