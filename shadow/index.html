@@ -2368,6 +2368,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     const { error } = await c.auth.signInWithPassword({ email: em, password: pw });
     if (error) { alert('登录失败：' + error.message); return; }
     CLOUD._userMail = em;
+    // 登录前攒下的进度立刻上云，不必等下一次刷新（云同步是后台动作，不打断登录反馈）
+    try { TASK.cloudSync().catch(() => {}); } catch (e) {}
     CLOUD.setStatus('正在连接云端语音…'); // 先立即刷新菜单，别等网络查询（慢网下最长 12s+）
     await CLOUD.checkStatus();
     } finally { cloudLogin._busy = false; }
@@ -2868,7 +2870,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     const bp = _getDom('btnPlay');
     if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill" aria-hidden="true"></i> 暂停' : '<i class="ri-play-fill" aria-hidden="true"></i> 播放';
     // 更新章节标题
-    const titleEl = _getDom('abTitle');
+    // 任务模式下这一行归任务栏说（「读到第 N 句 · 章节名」），播放路径别再把它盖回去
+    const titleEl = (typeof TASK !== 'undefined' && TASK.active) ? null : _getDom('abTitle');
     if (titleEl && idx >= 0) {
     const ai0 = artOfSent[idx];
     if (ai0 !== undefined) {
@@ -4733,8 +4736,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         document.body.classList.remove('task-mode', 'quiz-mode');
         document.getElementById('taskBar').classList.remove('show');
         sents.forEach(el => el.classList.remove('task-current'));
-        hideCard();
-        updateMarkers();
+        hideCard(); updateMarkers();
+        try { paint(); } catch (e) {}   // 播放条标题在任务模式里让给了任务栏，退出时要拿回来
       }
 
       function goToNextTask(autoPlay) {

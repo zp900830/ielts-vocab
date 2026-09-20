@@ -1,6 +1,6 @@
 // Hand-written alongside docs/superpowers/plans/2026-09-20-task-mode-phase-1.md (Task 6)
-// 界面不变量。这两条是「回归锁」：现状用 CSS 藏掉上一句/下一句、
-// 并把同一个进度数字在任务栏和播放条各写一遍。
+// 界面不变量：控件位置跨模式零变化、今日进度这个数字全页只说一次、
+// 播放条标题那一行在任务模式里归任务栏。
 import { test, expect } from '../../fixtures';
 import { currentTimeout } from '../../utils/timeouts';
 
@@ -70,6 +70,21 @@ test.describe('task mode · UI invariants', () => {
     });
     expect(got.dupProgress).toBeLessThanOrEqual(1);
     expect(got.sameInAb).toBe(false);
+  });
+
+  // 真机走查抓到的：读完几句后播放条重绘把「读到第 N 句」盖回了「第1章 5/339」
+  test('a playback repaint never reclaims the title line from the task bar', async ({ page, baseURL }) => {
+    test.setTimeout(currentTimeout() * 8);
+    await startPlanAndTaskMode(page, baseURL);
+    const next = page.locator('#tbNext');
+    await next.click();
+    await next.click();
+    await expect(page.locator('#abTitle')).toContainText('读到第');
+    await page.locator('.audiobar').getByRole('button', { name: '上一句' }).click();
+    await expect(page.locator('#abTitle')).toContainText('读到第');
+    // 退出任务模式后这一行要还给播放条，不能留在任务栏的说法上
+    await page.evaluate(() => TASK.exitTaskMode());
+    await expect(page.locator('#abTitle')).toContainText(/^第\d+章/);
   });
 });
 
