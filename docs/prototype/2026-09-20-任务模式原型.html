@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>学习计划 + 任务模式 · 原型与页面流程 v1.0</title>
+<style>
+  :root{
+    --accent:#0c9c74; --accent-bg:rgba(12,156,116,.09); --ink:#20242a; --ink2:#4b5563;
+    --muted:#8a94a0; --line:#e6e8ec; --bg:#f4f5f7; --card:#fff; --coral:#f2603c;
+    --new:#2f6fed; --rev:#b8860b; --done:#1f9d55; --wrong:#d13c3c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.65 -apple-system,"PingFang SC","Helvetica Neue",sans-serif}
+  wrap{display:block}
+  .wrap{max-width:1240px;margin:0 auto;padding:28px 20px 80px}
+  h1{font-size:26px;margin:0 0 6px}
+  h2{font-size:19px;margin:44px 0 4px;padding-top:18px;border-top:1px solid var(--line)}
+  h2 .en{font-size:12px;color:var(--muted);font-weight:400;margin-left:8px}
+  h3{font-size:15px;margin:22px 0 8px}
+  p{margin:8px 0}
+  .lead{color:var(--ink2);max-width:70em}
+  code,.mono{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:.92em;
+             background:#eceff3;padding:1px 5px;border-radius:4px}
+  .phase{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+  .ph{flex:1 1 260px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .ph b{display:block;font-size:13px;color:var(--accent);letter-spacing:.04em}
+  .ph span{color:var(--ink2);font-size:13px}
+  /* 流程图 */
+  .flow{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin:14px 0}
+  .lane{display:flex;align-items:stretch;gap:12px;flex-wrap:wrap}
+  .node{background:#fbfcfd;border:1.5px solid var(--line);border-radius:9px;padding:9px 12px;
+        font-size:13px;min-width:120px}
+  .node k{display:block;font-size:11px;color:var(--muted);letter-spacing:.06em}
+  .node.hi{border-color:var(--accent);background:var(--accent-bg)}
+  .node.alt{border-style:dashed}
+  .arw{align-self:center;color:var(--muted);font-size:17px}
+  .down{display:flex;justify-content:center;color:var(--muted);font-size:17px;margin:2px 0}
+  .brk{border-left:2px dashed var(--line);margin:12px 0 12px 18px;padding-left:16px}
+  .tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;
+       background:var(--accent-bg);color:var(--accent);margin-left:6px;vertical-align:2px}
+  .tag.warn{background:rgba(242,96,60,.12);color:var(--coral)}
+  /* 手机框 */
+  .grid{display:flex;flex-wrap:wrap;gap:26px;margin-top:18px}
+  .item{width:330px}
+  .phone{width:330px;height:640px;background:#0f1114;border-radius:34px;padding:9px;
+         box-shadow:0 10px 26px rgba(20,24,30,.18)}
+  .scr{position:relative;width:100%;height:100%;background:#fff;border-radius:26px;overflow:hidden;
+       display:flex;flex-direction:column;font-size:13px}
+  .stat{height:22px;background:#fff;display:flex;align-items:center;justify-content:space-between;
+        padding:0 14px;font-size:10px;color:var(--muted);flex:0 0 auto}
+  .app{flex:1 1 auto;overflow:hidden;padding:10px 12px 0;position:relative}
+  .scrfoot{flex:0 0 auto;border-top:1px solid var(--line);background:#fff}
+  .h{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+  .ttl{font-weight:700;font-size:14px;margin:2px 0 8px}
+  .para{line-height:1.85;color:#22262c}
+  .w{border-bottom:1px solid transparent}
+  .tw{color:var(--accent);border-bottom:1px dotted rgba(12,156,116,.5);cursor:pointer}
+  .gl{font-size:11px;color:var(--muted);margin-left:3px}
+  .blank{display:inline-block;min-width:52px;border-bottom:2px solid var(--new);
+         text-align:center;font-weight:700;color:var(--new);letter-spacing:1px}
+  .bar{margin:8px 0 0;padding:8px 10px;border-radius:10px;background:#161a1f;color:#fff;
+       display:flex;align-items:center;gap:8px;font-size:12px}
+  .bar b{font-size:13px}
+  .bar .sp{margin-left:auto;display:flex;gap:5px}
+  .bt{background:rgba(255,255,255,.13);border:0;color:#fff;border-radius:7px;padding:5px 8px;font-size:12px}
+  .bt.p{background:var(--accent)}
+  .bt.ghost{background:transparent;border:1px solid rgba(255,255,255,.35)}
+  .playrow{display:flex;align-items:center;gap:7px;padding:7px 10px;background:#fff;
+           border-top:1px solid var(--line);font-size:11px;color:var(--ink2)}
+  .circular{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;
+            display:grid;place-items:center;font-size:13px;flex:0 0 auto}
+  .opts{display:flex;flex-direction:column;gap:7px;margin:10px 0}
+  .opt{border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;
+       display:flex;gap:8px;align-items:baseline}
+  .opt i{font-style:normal;width:17px;height:17px;border-radius:5px;background:#eef1f4;color:var(--ink2);
+         font-size:11px;display:grid;place-items:center;flex:0 0 auto;transform:translateY(2px)}
+  .opt.good{border-color:var(--accent);background:var(--accent-bg)}
+  .opt.bad{border-color:var(--wrong);background:rgba(209,60,60,.07)}
+  .opt em{font-style:normal;color:var(--muted);font-size:11px;margin-left:auto;padding-left:8px}
+  .card{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;
+        padding:8px 10px;margin:9px 0;background:#fcfdfc}
+  .card .lab{font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-bg);
+             padding:1px 6px;border-radius:5px}
+  .oneline{font-size:13.5px;font-weight:600;margin:5px 0 0;color:var(--ink)}
+  .more{font-size:11px;color:var(--muted);margin-top:5px}
+  table.t{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:7px}
+  table.t th,table.t td{border:1px solid var(--line);padding:4px 5px;text-align:left;vertical-align:top}
+  table.t th{background:var(--accent-bg);font-weight:600}
+  table.t td.k{color:var(--ink2);white-space:nowrap}
+  table.t td.hl{background:rgba(12,156,116,.14);font-weight:600}
+  .zh{font-size:12px;color:var(--ink2);background:#f7f8fa;border-radius:7px;padding:6px 8px;margin:8px 0}
+  .notes{margin:11px 0 0;padding:0;list-style:none;font-size:12.5px;color:var(--ink2)}
+  .notes li{margin:5px 0;padding-left:20px;position:relative}
+  .notes li b{position:absolute;left:0;top:0;color:var(--accent);font-weight:700}
+  .cap{font-size:13px;font-weight:700;margin:0 0 2px}
+  .capno{color:var(--muted);font-weight:400}
+  .row{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--ink2);margin:5px 0}
+  .pill{border:1px solid var(--line);border-radius:16px;padding:3px 9px;font-size:11.5px}
+  .pill.on{border-color:var(--accent);background:var(--accent-bg);color:var(--accent);font-weight:600}
+  .kv{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
+  .kv b{font-weight:600}
+  .twocol{display:flex;gap:9px}
+  .box{flex:1;border:1px solid var(--line);border-radius:9px;padding:8px 9px}
+  .box h4{margin:0 0 6px;font-size:11px;letter-spacing:.05em;color:var(--muted);font-weight:700}
+  .big{font-size:21px;font-weight:700;letter-spacing:-.02em}
+  .prog{height:5px;border-radius:5px;background:#eef1f4;overflow:hidden;margin-top:6px}
+  .prog i{display:block;height:100%;background:var(--accent)}
+  .sm{font-size:11px;color:var(--muted)}
+  .toast{position:absolute;left:10px;right:10px;bottom:8px;background:#161a1f;color:#fff;
+         border-radius:9px;padding:8px 10px;font-size:11.5px}
+  .flag{position:absolute;right:9px;top:34px;font-size:10.5px;color:var(--muted);
+        border:1px solid var(--line);border-radius:14px;padding:2px 7px;background:#fff}
+  table.cmp{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+  table.cmp th,table.cmp td{border:1px solid var(--line);padding:7px 9px;text-align:left}
+  table.cmp th{background:#fff;font-size:12px;color:var(--ink2)}
+  .old{color:var(--wrong)}.new{color:var(--accent);font-weight:600}
+  details{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:10px 14px;margin:8px 0}
+  summary{cursor:pointer;font-weight:600;font-size:14px}
+</style>
+</head>
+<body><div class="wrap">
+
+<h1>学习计划 + 任务模式 · 原型与页面流程</h1>
+<p class="lead">配套文档：<code>docs/2026-09-20-学习计划与任务模式重设计-PRD.md</code>。
+这里所有屏幕都是<b>静态示意图</b>（用真实课文句、真实词卡数据画的，不是能点的 app），
+用来看版式、层级、控件位置、以及一句话辨析长什么样。每张图下面的编号注释对应 PRD 的条款。
+比例按 iPhone（330×640）绘制，深色=现状保留的控件。</p>
+
+<div class="phase">
+  <div class="ph"><b>第一期 · 骨架（4 项，不依赖新内容）</b>
+    <span>词状态机 → 按分钟排词 → 三遍流程 → 进度上云。挖空先用「回忆题」，界面按新规格重做。</span></div>
+  <div class="ph"><b>第二期 · 辨析内容（220 组，分 6 批）</b>
+    <span>课文里 153 个段落的近义词组写一句话辨析 → 入库后四选一逐批解锁、辨析表挂到段末。</span></div>
+  <div class="ph"><b>第三期 · 精修</b>
+    <span>换更准的排程算法、词本按辨析组逛、重点词通道、看要不要把这套接到阅读主站。</span></div>
+</div>
+
+<h2>图 A · 一天的页面流程 <span class="en">打开 → 三遍 → 关掉</span></h2>
+<div class="flow">
+  <div class="lane">
+    <div class="node"><k>进入</k>跟读页<br><span class="sm">底部「今日」按钮亮起</span></div>
+    <div class="arw">→</div>
+    <div class="node hi"><k>1 次点击</k>今日面板<br><span class="sm">今天 15 分钟：6 句 · 12 题</span></div>
+    <div class="arw">→</div>
+    <div class="node"><k>开始</k>① 通读遍<br><span class="sm">零选择操作，只管读</span></div>
+    <div class="arw">→</div>
+    <div class="node"><k>读满 6 句</k>遍间小结<br><span class="sm">3 个数字</span></div>
+    <div class="arw">→</div>
+    <div class="node"><k>自动</k>② 挖空遍<br><span class="sm">只遮目标词</span></div>
+    <div class="arw">→</div>
+    <div class="node"><k>自动</k>③ 选义遍<br><span class="sm">看英文选中文字</span></div>
+    <div class="arw">→</div>
+    <div class="node hi"><k>完成</k>今天完成<br><span class="sm">关掉就走，不留欠账</span></div>
+  </div>
+  <div class="brk">
+    <div class="lane">
+      <div class="node alt"><k>② 里出不干净</k>自动降级<br><span class="sm">中文译文 + 首字母 + 词长 → 自己回想</span></div>
+      <div class="arw">→</div>
+      <div class="node alt"><k>② 答错</k>弹一句话辨析<br><span class="sm">不扣分、不拦路，读完继续</span></div>
+      <div class="arw">→</div>
+      <div class="node alt"><k>任何时候</k>「这题有问题」<br><span class="sm">点了就停用，等你有空裁决</span></div>
+      <div class="arw">→</div>
+      <div class="node alt"><k>词错 3 次</k>进重点词<br><span class="sm">下次跟读强制排进来</span></div>
+    </div>
+  </div>
+  <p class="sm">中途关页面 = 什么都不用做：回来还是这一遍这一句（续读位已有云同步）。跨到今天 = 队列按今天重算，昨天的没做完不欠。</p>
+</div>
+
+<h2>图 B · 词状态机 <span class="en">"这个字我会不会"唯一的答案</span></h2>
+<div class="flow">
+  <div class="lane">
+    <div class="node"><k>陌生</k>fresh</div><div class="arw">—① 读过 →</div>
+    <div class="node"><k>已见面</k>seen<br><span class="sm">句子读到了</span></div><div class="arw">—② 两个语境各对 1 次 →</div>
+    <div class="node"><k>文中可辨</k>recognized<br><span class="sm">在句子里挑得对</span></div><div class="arw">—③ 对 1 次 →</div>
+    <div class="node hi"><k>义项直连</k>owned<br><span class="sm">看到词就知道这里啥意思</span></div><div class="arw">—20 次接触 →</div>
+    <div class="node"><k>已毕业</k>graduated<br><span class="sm">不再占今天的位置</span></div>
+  </div>
+  <p class="sm">答错<b>不降级</b>，只把下次见面时间拉回今天；连错 3 次进「重点词」。句子没有自己的记忆曲线——一句读一遍，句里每个没毕业的词各记一次接触。</p>
+</div>
+
+<h2>图 C · 11 个界面 <span class="en">按一天的顺序排</span></h2>
+<div class="grid">
+
+  <div class="item">
+    <div class="cap">C1 <span class="capno">· 今日面板（打开第一屏）</span></div>
+    <div class="phone"><div class="scr">
+      <div class="stat"><span>9:41</span><span>􀙇 􀛨</span></div>
+      <div class="app">
+        <div class="h"><span>今日任务</span><span>✕</span></div>
+        <div class="ttl" style="font-size:16px">今天 15 分钟：6 句 · 12 题</div>
+        <div class="twocol">
+          <div class="box"><h4>今天</h4>
+            <div class="big">0<span class="sm"> / 6 句</span></div>
+            <div class="prog"><i style="width:0"></i></div>
+            <div class="kv"><span>连续</span><b>12 天<span class="sm"> · 含 3 个地板日</span></b></div>
+            <div class="kv"><span>地板</span><b class="sm">3 句 + 3 题</b></div>
+          </div>
+          <div class="box"><h4>词汇</h4>
+            <div class="big">4<span class="sm"> 个待晋升</span></div>
+            <div class="kv"><span>文中可辨</span><b>41</b></div>
+            <div class="kv"><span>义项直连</span><b>18</b></div>
+            <div class="kv"><span>重点词</span><b style="color:var(--coral)">3</b></div>
+          </div>
+        </div>
+        <div class="row" style="margin-top:9px">
+          <span class="pill on">① 通读 6 句</span><span class="pill">② 挖空 6+2 题</span><span class="pill">③ 选义 6 题</span>
+        </div>
+        <div class="card" style="border-left-color:var(--new)">
+          <span class="lab" style="color:var(--new);background:rgba(47,111,237,.1)">今天怎么排的</span>
+          <div class="oneline" style="font-weight:400;font-size:12.5px">
+            到期复习 4 句（<b>5 个词</b>到期，最久 6 天没见）+ 新句 2 句（<b>5 个新词</b>）。<br>
+            <span class="sm">按你选的 15 分钟装；装不下的明天重算，不欠。</span></div>
+        </div>
+      </div>
+      <div class="scrfoot">
+        <div style="padding:9px 12px"><button class="bt p" style="width:100%;padding:9px;border-radius:9px">开始 · 先通读 6 句</button></div>
+        <div class="playrow"><span class="pill">调整计划</span><span class="pill">词本</span><span class="pill">数据</span><span class="sm" style="margin-left:auto">未同步 · 点一下</span></div>
+      </div>
+    </div></div>
+    <ul class="notes">
+      <li><b>1</b>两栏并列、永不合并成一个总进度 —— 今天 100% 可能只是因为今天只排了 3 句。</li>
+      <li><b>2</b>「今天怎么排的」第一次把<b>词</b>说出来：哪几个词到期、几个新词，而不是"第 23/61 句"。</li>
+      <li><b>3</b>没有「计划 X 轮 / 已完成 Y 轮 / 本轮 A÷1833」三个打架的数了，全删。</li>
+      <li><b>4</b>未同步提示是常驻一条，不是弹窗；导出/导入 JSON 降级到「数据」里。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="cap">C2 <span class="capno">· ① 通读态（跟读中）</span></div>
+    <div class="phone"><div class="scr">
+      <div class="stat"><span>9:43</span><span>􀙇 􀛨</span></div>
+      <div class="app">
+        <div class="h"><span>第 3 章 · 第 4 段</span><span>1.25×</span></div>
+        <div class="ttl">River Mist</div>
+        <div class="para">
+          The morning <span class="tw">mist<span class="gl">薄雾</span></span> softened the bay before the bus left.<br>
+          <span style="background:rgba(12,156,116,.1);border-radius:4px;padding:2px 0">Late at <span class="tw">night<span class="gl">深夜</span></span> their coats still felt cold and <span class="tw">damp<span class="gl">潮湿的</span></span> from the rain.</span><br>
+          The small room turned uncomfortably <span class="tw">humid<span class="gl">潮湿的</span></span> as wet clothing dried by the heater.
+        </div>
+        <div class="card" style="margin-top:10px">
+          <span class="lab">辨析 · 这一段 2 个词都翻成「潮湿的」</span>
+          <div class="oneline">damp = 摸上去潮（雨、汗、衣服）　humid = 闷得潮（空气、天气）</div>
+          <div class="more">展开对比表 ▾</div>
+        </div>
+      </div>
+      <div class="scrfoot">
+        <div class="bar"><b>① 通读</b> 3/6<span class="sm" style="opacity:.7;margin-left:6px">~4 分钟</span>
+          <span class="sp"><button class="bt ghost">上一句</button><button class="bt">下一句</button></span></div>
+        <div class="playrow"><button class="circular">▶</button><span>循环本句</span><span class="pill">A-B</span>
+          <span class="sm" style="margin-left:auto">第 3 / 6 句</span></div>
+      </div>
+    </div></div>
+    <ul class="notes">
+      <li><b>1</b>「上一句 / 下一句」<b>不再被藏</b>（现状进任务模式就用 CSS 隐藏，想回读只能退出）。同一条栏换内容，控件位置零变化。</li>
+      <li><b>2</b>通读遍<b>不遮任何词</b>、不弹任何选择 —— 读句子本身就是背单词，这是主要推进方式。</li>
+      <li><b>3</b>条上只出现一次 <code>3/6</code>；播放条标题不再重复"今日 3/6 · 剩余 ~4 分钟"（现状重复显示两遍）。</li>
+      <li><b>4</b>辨析卡钉在<b>段落末尾</b>，默认只露那一句话（见 C7）。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="cap">C3 <span class="capno">· ② 挖空选词（四选一）</span></div>
+    <div class="phone"><div class="scr">
+      <div class="stat"><span>9:47</span><span>􀙇 􀛨</span></div>
+      <div class="app">
+        <div class="h"><span>② 挖空填词 · 第 4 / 6 题</span><span>来自第 3 章</span></div>
+        <div class="flag">这题有问题 ⚑</div>
+        <div class="para" style="margin-top:16px">
+          His steady <span class="tw">gaze<span class="gl">凝视</span></span> stays on the road while he tries to
+          <span class="blank">_ _ _ _</span> through light morning rain.
+        </div>
+        <div class="zh">他目光稳定地看着路面，努力透过清晨小雨<u>费力地看</u>。<br><span class="sm">中文已经把这个位置的意思告诉你了</span></div>
+        <div class="opts">
+          <div class="opt"><i>1</i>glance<em>扫一眼（快、随意）</em></div>
+          <div class="opt"><i>2</i>peer<em>费力看（看不清）</em></div>
+          <div class="opt"><i>3</i>glimpse<em>瞥见（偶然、不完整）</em></div>
+          <div class="opt"><i>4</i>peep<em>偷看（不想被发现）</em></div>
+        </div>
+        <div class="sm">提示：空格里要填的词，是这一句里那个<b>有卡的目标词</b>；四个选项同一个语义场，词性相同。</div>
+      </div>
+      <div class="scrfoot"><div class="bar"><b>② 挖空</b> 3/6 · 错 1
+        <span class="sp"><button class="bt ghost">回看句子</button><button class="bt">跳过</button></span></div></div>
+    </div></div>
+    <ul class="notes">
+      <li><b>1</b><b>永远遮目标词</b>（你的纠正）。不遮词伙、不遮搭配 —— 遮错对象就本末倒置。</li>
+      <li><b>2</b>选项来自<b>已裁决的辨析组</b>（这题用的是数据里已有的 <code>look-verbs</code> 组），没裁决过的词不配出四选一。</li>
+      <li><b>3</b>中文译文带下划线锁定这个位置的意思 —— 让"两个都对"的概率再降一档。</li>
+      <li><b>4</b>右上角「这题有问题」：你点了立刻停用这道题，我不猜你为什么点。</li>
+      <li><b>5</b>键盘 1–4 可答；VoiceOver 逐条读「选项 2 of 4，peer」。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="cap">C4 <span class="capno">· ② 答错 → 一句话辨析（不拦路）</span></div>
+    <div class="phone"><div class="scr">
+      <div class="stat"><span>9:48</span><span>􀙇 􀛨</span></div>
+      <div class="app">
+        <div class="h"><span>② 挖空填词 · 第 4 / 6 题</span><span style="color:var(--wrong)">答错</span></div>
+        <div class="para" style="margin-top:10px;font-size:12.5px">
+          His steady gaze stays on the road while he tries to <span class="blank" style="border-color:var(--done);color:var(--done)">peer</span> through light morning rain.
+        </div>
+        <div class="opts" style="margin:8px 0">
+          <div class="opt bad"><i>1</i>glance<em>你选的</em></div>
+          <div class="opt good"><i>2</i>peer<em>✓ 正确</em></div>
+        </div>
+        <div class="card">
+          <span class="lab">辨析 · 看</span>
+          <div class="oneline">peer = 眯着眼费力看，glance = 快速扫一眼，glimpse = 偶然瞥见，peep = 偷偷看</div>
+          <table class="t">
+            <tr><th></th><th>gaze</th><th>peer</th><th>glance</th></tr>
+            <tr><td class="k">力气</td><td>不费力</td><td class="hl">看不清，费力</td><td>不费力</td></tr>
+            <tr><td class="k">时长</td><td>持续盯着</td><td class="hl">持续但吃劲</td><td>一闪</td></tr>
+            <tr><td class="k">常见</td><td>gaze at the sea</td><td class="hl">peer through rain</td><td>glance at a watch</td></tr>
+          </table>
+          <div class="more">收起 ▴</div>
+        </div>
+        <div class="sm" style="margin-top:6px">进度没扣：<b>接触已经记上了</b>，只是这个词今天还没晋升。<br>
+          这个词今天会再排一次；再错 2 次就进「重点词」。</div>
+      </div>
+      <div class="scrfoot"><div class="bar">读完继续<span class="sp"><button class="bt p">下一题 ▸</button></span></div></div>
+    </div></div>
+    <ul class="notes">
+      <li><b>1</b>答错<b>只多给一行辨析，不罚任何东西</b>（"接触是货币，检索只是升级考试"）。</li>
+      <li><b>2</b>辨析表里<b>每一列都是目标词</b>，都可点开词卡；没有"顺手混进来的简单词"。</li>
+      <li><b>3</b>这一屏 = 段末辨析卡的同一份内容，只是正确列被高亮。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="cap">C5 <span class="capno">· ② 降级：回忆题（出不干净时）</span></div>
+    <div class="phone"><div class="scr">
+      <div class="stat"><span>9:50</span><span>􀙇 􀛨</span></div>
+      <div class="app">
+        <div class="h"><span>② 挖空填词 · 第 2 / 6 题</span><span style="color:var(--muted)">回忆题</span></div>
+        <div class="para" style="margin-top:14px">
+          Late at night their coats still felt cold and <span class="blank">d _ _ _</span> from the rain.
+        </div>
+        <div class="zh">深夜里，外套被雨打湿，摸上去还是<b>又冷又潮</b>。</div>
+        <div class="row"><span class="pill">4 个字母</span><span class="pill">d 开头</span><span class="pill">形容词</span><span class="pill">词伙：damp clay</span></div>
+        <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 10px;margin-top:8px;color:var(--muted)">
+          想起来就打字，想不起就点下面</div>
+        <div class="row" style="margin-top:8px"><button class="bt p" style="padding:7px 12px;border-radius:8px">看答案</button>
+          <span class="sm">答案：<b style="color:var(--ink)">damp</b>　<span class="w">moist 也算错了吗？→ 它填进去这句也通，所以这题从一开始就不该出成四选一</span></span></div>
+        <div class="card" style="border-left-color:var(--muted)">
+          <span class="lab" style="background:#eef1f4;color:var(--ink2)">为什么没有选项</span>
+          <div class="oneline" style="font-weight:400;font-size:12.5px">
+            同场的 <code>moist</code> 填回这个空照样说得通（真实语料里成立）→ 多解题，宁可不给选项。<br>
+            <span class="sm">回忆题结构上不存在双解，而且比选择题更管用（自己想出来才记得住）。</span></div>
+        </div>
+      </div>
+      <div class="scrfoot"><div class="bar">想起来了 / 没想起<span class="sp"><button class="bt">下一题 ▸</button></span></div></div>
+    </div></div>
+    <ul class="notes">
+      <li><b>1</b>这是<b>第一期默认形态</b>：辨析内容还没做，② 全靠回忆题推进，不等你验收内容质量。</li>
+      <li><b>2</b>提示只给「译文 + 首字母 + 词长 + 词性 + 一条词伙」，不给中文以外的英文线索。</li>
+      <li><b>3</b>判分容错：忽略大小写、允许 1 个字母的屈折/单复数误差。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="cap">C6 <span class="capno">· ③ 看英文选中文</span></div>
+    <div class="phone"><div class="scr">
+      <div class="stat"><span>9:53</span><span>􀙇 􀛨</span></div>
+      <div class="app">
+        <div class="h"><span>③ 看英文选中文 · 第 4 / 6 题</span><span>义项直连</span></div>
+        <div class="para" style="margin-top:12px">His steady <span class="tw" style="font-weight:700;color:var(--ink)">gaze<span class="gl">?</span></span> stays on the road while he tries to peer through light morning rain.
+          <div class="sm" style="margin-top:4px">这一句里，<b>gaze</b> 是哪个意思？</div></div>
+        <div class="opts">
+          <div class="opt"><i>1</i>n. 凝视；注视</div>
+          <div class="opt"><i>2</i>v. 使稳定；使牢固</div>
+          <div class="opt"><i>3</i>n. 凝视（来自辨析组另一头的词）</div>
+          <div class="opt"><i>4</i>adj. 稳定的；平静的</div>
+        </div>
+        <div class="card">
+          <span class="lab">辨析 · 凝视</span>
+          <div class="oneline">gaze 盯着不动（ admiration、发呆）　peer 费力看清（雨、雾、小字）</div>
+          <div class="more">这一句里他「目光稳定地」看着路面，所以是 gaze；努力透过小雨看的是 peer ▸</div>
+        </div>
+      </div>
+      <div class="scrfoot"><div class="bar"><b>③ 选义</b> 4/6<span class="sp"><button class="bt ghost">上一题</button><button class="bt">下一题 ▸</button></span></div></div>
+    </div></div>
+    <ul class="notes">
+      <li><b>1</b>遮的是<b>中文</b>：给英文词 + 语境，选它在<b>这一句里</b>的义项（考 form→meaning）。</li>
+      <li><b>2</b>干扰义项取自<b>同一辨析组</b>兄弟词的义项，所以这一遍顺手又练了一次辨析，不是随机凑四个中文。</li>
+      <li><b>3</b>词卡义项少于 2 项的词不出这一遍（等辨析组补齐）。答对 = <code>recognized → owned</code>。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="cap">C7 <span class="capno">· 课文里的段末辨析卡（收起 / 展开）</span></div>
+    <div class="phone"><div class="scr">
+      <div class="stat"><span>9:56</span><span>􀙇 􀛨</span></div>
+      <div class="app">
+        <div class="h"><span>第 3 章 · 第 4 段末</span><span>1.25×</span></div>
+        <div class="para" style="font-size:12px;color:#3a4048">
+          …their coats still felt cold and
+          <span class="tw" style="font-weight:700">damp<span class="gl">潮湿的</span></span> from the rain.<br>
+          The small room turned uncomfortably
+          <span class="tw" style="font-weight:700">humid<span class="gl">潮湿的</span></span> as wet clothing dried by the heater.
+        </div>
+        <div class="card">
+          <span class="lab">辨析 · 这一段 2 个词都翻成「潮湿的」</span>
+          <div class="oneline">damp = 摸上去潮（雨、汗、衣服）　humid = 闷得潮（空气、天气）</div>
+          <div class="more">展开 ▾</div>
+        </div>
+        <div class="card" style="background:#f7fbf9">
+          <span class="lab">辨析 · 潮湿（已展开）</span>
+          <table class="t">
+            <tr><th></th><th>damp</th><th>humid</th><th>moist</th></tr>
+            <tr><td class="k">从哪来</td><td class="hl">水、雨、汗</td><td>空气、天气</td><td>一点点水，常是刻意</td></tr>
+            <tr><td class="k">常搭</td><td>damp clothes</td><td>humid summer</td><td>moist soil</td></tr>
+            <tr><td class="k">提醒</td><td colspan="3">damp 与 humid 在书里被列为同义词（换哪个中文都一样），
+              但<b>考试不会让你填两个</b> —— 所以它们一起讲，却永远不同时出现在选项里。</td></tr>
+          </table>
+          <div class="more">3 个词都能点开词卡 ▸</div>
+        </div>
+      </div>
+      <div class="scrfoot"><div class="playrow"><button class="circular">▶</button><span>连播本段</span>
+        <span class="sm" style="margin-left:auto">辨析不打断跟读：不自动播、不挡路</span></div></div>
+    </div></div>
+    <ul class="notes">
+      <li><b>1</b>辨析表钉在<b>段落末尾、一段一张</b>（共现是段级的：43.8% 的段 vs 只有 3.7% 的句）。现状挂在句子下面，同段挨着的两个词根本碰不到一张表里。</li>
+      <li><b>2</b>默认<b>只显示那一句话</b>，点开才出表 —— 你要的是 1 秒判对，不是读一张表。</li>
+      <li><b>3</b>成员全是目标词，所以每一个都可点开卡；表里没有不可点的灰词。</li>
+      <li><b>4</b>底部那行提醒就是「辨析与出题两套准入」：同义对<b>可以一起讲</b>，<b>不能互为选项</b>。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="cap">C8 <span class="capno">· 遍间小结（只有 3 个数字）</span></div>
+    <div class="phone"><div class="scr">
+      <div class="stat"><span>9:58</span><span>􀙇 􀛨</span></div>
+      <div class="app" style="display:flex;flex-direction:column;justify-content:center;text-align:center;padding:0 22px">
+        <div class="sm" style="letter-spacing:.1em">② 挖空填词 · 本轮结束</div>
+        <div class="ttl" style="font-size:17px;margin-top:2px">6 句读完，词往前走了几步</div>
+        <div class="twocol" style="margin:14px 0 4px">
+          <div class="box"><h4>读了</h4><div class="big">6<span class="sm"> 句</span></div><div class="sm">覆盖 11 个词</div></div>
+          <div class="box"><h4>晋升</h4><div class="big" style="color:var(--accent)">4<span class="sm"> 个词</span></div><div class="sm">2 个进入「文中可辨」</div></div>
+          <div class="box"><h4>填错</h4><div class="big" style="color:var(--coral)">1<span class="sm"> 处</span></div><div class="sm">今天会再排一次</div></div>
+        </div>
+        <div class="sm" style="margin-top:8px">「读了 6 句 / 覆盖 11 个词」是为了让你看见<b>读一句顺手背几个词</b>；
+          进度只认词，不认句。</div>
+      </div>
+      <div class="scrfoot"><div style="padding:9px 12px;display:flex;gap:8px">
+        <button class="bt p" style="flex:1;padding:9px;border-radius:9px">继续 ③ 选义 6 题</button>
+        <button class="bt ghost" style="border-color:var(--line);color:var(--ink2)">今天到这儿</button></div></div>
+    </div></div>
+    <ul class="notes">
+      <li><b>1</b>「今天到这儿」随时可点：已经完成的量都算数，<b>没有欠账</b>字段。</li>
+      <li><b>2</b>这一屏是三个数字唯一的家（面板上不再重复一遍）。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="cap">C9 <span class="capno">· 计划设置（就三个输入）</span></div>
+    <div class="phone"><div class="scr">
+      <div class="stat"><span>9:59</span><span>􀙇 􀛨</span></div>
+      <div class="app">
+        <div class="h"><span>调整计划</span><span>✕</span></div>
+        <div class="ttl">每天有多少分钟</div>
+        <div class="row"><span class="pill">5</span><span class="pill">10</span><span class="pill">15</span>
+          <span class="pill on">20 分钟</span><span class="pill">30</span><span class="pill">45</span><span class="pill">60</span></div>
+        <div class="card"><span class="lab">会排出来什么</span>
+          <div class="oneline" style="font-weight:400;font-size:12.5px">20 分钟 ≈ 8 句 · 16 题（复习 5 句 + 新句 3 句）<br>
+            <span class="sm">按你最近 47 次的实测速度算，不按拍脑袋的常数。</span></div></div>
+        <div class="ttl" style="margin-top:12px">新词</div>
+        <div class="row"><span class="pill on">正常见新词</span><span class="pill">暂停新词（只复习）</span></div>
+        <div class="ttl" style="margin-top:12px">几点算换一天</div>
+        <div class="row"><span class="pill">0 点</span><span class="pill">3 点</span><span class="pill on">凌晨 4 点</span><span class="pill">早 6 点</span></div>
+        <div class="ttl" style="margin-top:12px">有考试日就填（可选）</div>
+        <div class="row"><span class="pill">11 月 22 日</span><span class="sm">填了才会按剩余天数拉平强度；不填就是每天只看今天</span></div>
+      </div>
+      <div class="scrfoot"><div class="playrow"><span class="sm">「总天数 → 每天句数」这条除法链、慢/正常/快三档，全删。</span>
+        <button class="bt p" style="margin-left:auto;padding:7px 14px;border-radius:8px">存</button></div></div>
+    </div></div>
+    <ul class="notes">
+      <li><b>1</b>唯一的输入是<b>分钟</b>，句数与题数是它的结果 —— 现状那个"每天 60 分钟"只用来显示一行小字，不参与排任务。</li>
+      <li><b>2</b>不再有的：慢/快档（本质是偷偷把每天句数乘 0.5 或 1.5，没人知道今天到底几句）。</li>
+      <li><b>3</b>日界凌晨 4 点：熬夜读到 3 点不该算断更，也不该一次看到两天的任务。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="cap">C10 <span class="capno">· 断了 9 天之后回来</span></div>
+    <div class="phone"><div class="scr">
+      <div class="stat"><span>10:02</span><span>􀙇 􀛨</span></div>
+      <div class="app">
+        <div class="card" style="border-left-color:var(--coral)">
+          <span class="lab" style="background:rgba(242,96,60,.12);color:var(--coral)">欢迎回来</span>
+          <div class="oneline" style="font-weight:400">上次读到第 3 章第 4 段。今天 15 分钟：<b>6 句 · 12 题</b>。</div>
+          <div class="more" style="color:var(--ink2)">
+            到期 31 个词，今天先见其中 9 个（最久没见的先排）。<b>剩下 22 个明天见，不用补。</b></div>
+        </div>
+        <div class="ttl" style="margin-top:10px;font-size:14px">先选今天有多少时间</div>
+        <div class="row"><span class="pill">5 分钟</span><span class="pill on">15 分钟</span><span class="pill">30 分钟</span><span class="pill">今天只地板</span></div>
+        <div class="twocol" style="margin-top:10px">
+          <div class="box"><h4>今天</h4><div class="big">0<span class="sm"> / 6 句</span></div>
+            <div class="kv"><span>连续</span><b class="sm">断了，从 1 开始</b></div></div>
+          <div class="box"><h4>词汇</h4><div class="big">274<span class="sm"> 个词</span></div>
+            <div class="kv"><span>已见面</span><b>196</b></div><div class="kv"><span>文中可辨</span><b>60</b></div>
+            <div class="kv"><span>义项直连</span><b>18</b></div></div>
+        </div>
+        <div class="card"><span class="lab">迁移说明（只弹一次）</span>
+          <div class="oneline" style="font-weight:400;font-size:12.5px">改成按词记之后，<b>42 个词</b>回到「已见面」——
+            它们以前是靠"这句读了 5 遍"记在句子上的。点一下看是哪些词。</div></div>
+      </div>
+      <div class="scrfoot"><div style="padding:9px 12px"><button class="bt p" style="width:100%;padding:9px;border-radius:9px">开始今天这 6 句</button></div></div>
+    </div></div>
+    <ul class="notes">
+      <li><b>1</b>断更回归<b>不说「欠 320 句」</b>，也没有任何"积压"进度条 —— 只显示今天排出来的量。</li>
+      <li><b>2</b>复习会<b>自动摊到后面几天</b>（每天重算），而不是今天一次性堆满。</li>
+      <li><b>3</b>旧数据迁移的影响<b>主动交代 + 可查是哪些词</b>，不静默改你的进度。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="cap">C11 <span class="capno">· 词本（按状态逛 / 按辨析组逛）</span></div>
+    <div class="phone"><div class="scr">
+      <div class="stat"><span>10:04</span><span>􀙇 􀛨</span></div>
+      <div class="app">
+        <div class="h"><span>词本 · 3245 个目标词</span><span>✕</span></div>
+        <div class="row"><span class="pill">全部</span><span class="pill">已见面</span><span class="pill on">文中可辨 60</span>
+          <span class="pill">重点词 3</span><span class="pill">我标的问题题 2</span></div>
+        <div class="row"><span class="pill">按章节</span><span class="pill on">按辨析组</span></div>
+        <div class="card">
+          <span class="lab">辨析 · 潮湿</span>
+          <div class="oneline">damp = 摸上去潮　humid = 闷得潮　moist = 微润</div>
+          <div class="more">2 个段落里出现过 ▸</div>
+        </div>
+        <div class="card">
+          <span class="lab">辨析 · 看</span>
+          <div class="oneline">glance 扫一眼 · glimpse 瞥见 · peer 费力看 · peep 偷看</div>
+          <div class="more">已上线（这是数据里本来就有的 3 张卡之一）▸</div>
+        </div>
+        <div class="card">
+          <span class="lab">辨析 · 退化</span>
+          <div class="oneline" style="color:var(--muted)">还没写这一句 —— 第二期第 3 批</div>
+          <div class="more">degrade · deteriorate　<span style="color:var(--coral)">组有了，一句话还没有</span></div>
+        </div>
+        <div class="sm" style="margin-top:8px">这里<b>不是背单词的入口</b>，是查「我到底会没会」和「这两个词差在哪」的地方。</div>
+      </div>
+      <div class="scrfoot"><div class="playrow"><span class="sm">搜词 / 按状态 / 按辨析组 三种找法</span>
+        <span class="pill" style="margin-left:auto">重学这个词</span></div></div>
+    </div></div>
+    <ul class="notes">
+      <li><b>1</b>「按辨析组逛」是这期新加的浏览方式 —— 因为课文本来就是按近义场铺词的。</li>
+      <li><b>2</b>组有了但一句话还没写的，<b>明说"还没写"</b>，不拿中文义项凑数显示成一张假辨析表。</li>
+      <li><b>3</b>「重学这个词」把状态打回 <code>seen</code>，是你手动干预排程的唯一入口。</li>
+    </ul>
+  </div>
+
+</div>
+
+<h2>图 D · 界面债务对照 <span class="en">现状的每条毛病 → 原型里哪一屏解掉</span></h2>
+<table class="cmp">
+  <tr><th>现在的问题</th><th>后果（你体感到的）</th><th>新版怎么做</th><th>看图</th></tr>
+  <tr><td class="old">记的是「句子读了几遍」，词没有状态</td><td>问不出"这个词我会没会"</td><td>状态机搬到词上；句只记最后读的时间</td><td>图 B / C1</td></tr>
+  <tr><td class="old">「每天几分钟」只显示不参与排任务</td><td>只有 15 分钟也照发 61 句</td><td>分钟是唯一输入，句数与题数是结果</td><td>C9</td></tr>
+  <tr><td class="old">到期复习全量堆回队列</td><td>断一周 = 一个读不完的今天</td><td>按今天容量取最旧的，其余顺延，不生成欠账</td><td>C10</td></tr>
+  <tr><td class="old">任务模式用 CSS 藏掉上一句/下一句</td><td>想回读刚才那句只能退出任务模式</td><td>控件常驻、位置零变化，只换条上文字</td><td>C2 vs C3</td></tr>
+  <tr><td class="old">同一个进度在三个地方各说一遍</td><td>数字还会互相对不上</td><td>每个数字只有一个家（写进自动化测试断言）</td><td>图 D 末行 / C8</td></tr>
+  <tr><td class="old">「计划 1.4 轮 / 已完成 2 轮 / 本轮 3/1833」三个口径</td><td>看不懂也无法解释</td><td>删掉「轮」这个概念</td><td>C1 注 3</td></tr>
+  <tr><td class="old">打卡只有"全做完才算完成"</td><td>要么 100% 要么没有</td><td>地板 / 扎实日 / 词汇推进三层，地板也保连续但会标注</td><td>C1 · C10</td></tr>
+  <tr><td class="old">进度不出这台设备</td><td>iOS 隔一周不打开可能整份蒸发</td><td>只把「完成记录」当事实流上云，计划每次现算</td><td>C1 注 4</td></tr>
+</table>
+
+<h2>图 E · 第二期辨析内容的批次（220 组）</h2>
+<div class="flow">
+  <table class="cmp">
+    <tr><th>批次</th><th>范围</th><th>组数</th><th>为什么先做这批</th></tr>
+    <tr><td>1</td><td>第 3、4 章（近期在跟读的段落）+ 第一期实测会被排到的词</td><td>46</td><td>内容做完立刻能在题里见到，才有反馈闭环</td></tr>
+    <tr><td>2–5</td><td>其余按章切，每批约 43–44 组</td><td>174</td><td>同一段的近义词一起写，判"能不能互换"最准</td></tr>
+    <tr><td>6</td><td>义项团补集（课文里没挨着但同场的家族：看 / 走 / 雾…）</td><td>+60~100</td><td>只为一个目的：给四选一补足第 2、3 个干净选项</td></tr>
+  </table>
+  <p class="sm">1–5 批合计 220 组（= PRD §8.1 的辨析清单）；第 6 批是额外补池，只为凑选项。<br>每批都走同一条流水线：机器出候选（打出处标签）→ 分片给代理做<b>选择题</b>（不许提词）→ 门禁 1 机械校验 → 门禁 2 独立审核 + 一句话专判 → 你抽查 → 落地并换数据版本号。<br>
+  两条已经付过学费的规矩保留：<b>没有审核结论的条目一律拒写</b>；<b>辨析卡的结构化内容不许被当文本覆写</b>。</p>
+</div>
+
+<details><summary>看原型时值得先挑毛病的 5 个点</summary>
+  <ul class="notes">
+    <li><b>1</b>C3 那四个选项你会不会犹豫太久？犹豫到读不下去，就说明题出得太密，得降回回忆题。</li>
+    <li><b>2</b>C7 一句话辨析的口味对不对：「damp = 摸上去潮，humid = 闷得潮」这种是你要的密度吗？还要更短？</li>
+    <li><b>3</b>C1 两栏并排会不会还是太挤？挤的话栏 2 只留 3 个数，其余挪进词本。</li>
+    <li><b>4</b>C9 只留「每天几分钟」这一个主输入，你够不够用？（想要"考试日"就填，不填就纯按今天算）</li>
+    <li><b>5</b>C10 断更回来这个话术你能不能接受："剩下 22 个明天见，不用补"。</li>
+  </ul>
+</details>
+
+<p class="sm" style="margin-top:36px">原型文件：<code>docs/prototype/2026-09-20-任务模式原型.html</code> ·
+数字口径：<code>python3 tools/confusable_groups.py</code>（辨析 220 组 / 443 词头 / 153 段；选项池 186 团）</p>
+</div></body></html>

@@ -30,6 +30,7 @@ const FILES = [
   'data/sup.json',
   // data/vocab.json 与 data/chapters-raw.json 只被 scripts/ 用，运行时不抓 —— 不进发布包
   'shadow/index.html',
+  'shadow/js/plan-engine.js',
   'shadow/data/chapters.json',
   'shadow/data/sections.json',
   'shadow/data/vocab.json',
