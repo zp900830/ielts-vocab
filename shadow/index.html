@@ -1055,6 +1055,42 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-actions { display: flex; gap: 8px; margin-top: 16px; }
   .tp-actions .btn { flex: 1; justify-content: center; min-height: 40px; font-size: 13px; }
   .tp-actions .btn.primary { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: #fff; border: none; font-weight: 600; box-shadow: 0 3px 10px rgba(16,180,135,.25); }
+  /* ---- v2 面板：三视图标签 + 两栏并列（PRD §9.2 / §10.2） ---- */
+  .sm { font-size: 11.5px; color: var(--muted); }
+  .tp-tabs { display: flex; gap: 4px; margin: -6px -4px 14px; padding: 0 4px; border-bottom: 1px solid var(--border); }
+  .tp-tab { flex: 1; min-height: 44px; border: none; background: transparent; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .tp-tab.on { color: var(--task-new); border-bottom-color: var(--task-new); }
+  .tp-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tp-col { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 11px; min-width: 0; }
+  .tp-col h4 { font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tp-num { display: flex; align-items: baseline; gap: 3px; font-size: 26px; font-weight: 800; line-height: 1.1; color: var(--text); font-variant-numeric: tabular-nums; }
+  .tp-num .unit { font-size: 11.5px; font-weight: 600; color: var(--muted); font-variant-numeric: normal; }
+  .tp-col .tp-prog { margin: 8px 0 6px; }
+  .tp-kv { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--muted); padding: 3px 0; }
+  .tp-kv b { font-size: 12px; font-weight: 700; color: var(--text); text-align: right; font-variant-numeric: tabular-nums; }
+  .tp-note { margin-top: 12px; padding: 9px 11px; background: var(--accent-soft, rgba(16,180,135,.07)); border: 1px solid var(--accent-line, rgba(16,180,135,.18)); border-radius: 11px; font-size: 12.5px; line-height: 1.6; }
+  .tp-note b { font-weight: 700; }
+  .tp-note .sm { display: block; margin-top: 2px; }
+  .tp-note.sm { background: transparent; border: none; padding: 10px 0 0; }
+  .sync-state { color: var(--coral-deep, #c0492f); font-weight: 600; }
+  /* 词本：状态过滤器 + 词行 */
+  .tp-filters { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+  .pill { min-height: 30px; padding: 4px 11px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--text); font-size: 12px; cursor: pointer; }
+  .pill.on { background: var(--task-new); color: #fff; border-color: var(--task-new); font-weight: 600; }
+  .tp-book { max-height: 44vh; overflow-y: auto; border: 1px solid var(--border); border-radius: 12px; }
+  .tp-book-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--border); }
+  .tp-book-row:last-child { border-bottom: none; }
+  .tp-book-row .bw { font-size: 13.5px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tp-book-row .bs { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .tp-book-row .bx { min-height: 28px; padding: 3px 10px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--muted); font-size: 11.5px; cursor: pointer; }
+  .tp-book-row .bx:hover { color: var(--task-new); border-color: var(--task-new); }
+  .tp-book p.sm { padding: 14px 12px; text-align: center; }
+  body.dark .tp-tab { color: var(--muted); }
+  body.dark .tp-tab.on { color: var(--task-new); }
+  body.dark .tp-note { background: rgba(52,211,153,.07); border-color: rgba(52,211,153,.16); }
+  body.dark .pill { color: var(--text); }
+  body.dark .pill.on { color: #062d22; }
+  body.dark .sync-state { color: #f0a08c; }
   .tp-stats { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--border); }
   .tp-stats h4 { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
   .tp-cycle { display: flex; align-items: center; gap: 14px; padding: 12px 14px; background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: 12px; }
@@ -3945,6 +3981,141 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
       function saveProg() { safeStore(LS_PROG, JSON.stringify(prog)); }
 
+
+      /* ============ v2：单一事件根（真值只有一份） ============
+         老的 prog.sentences 要撑到三遍流程接上为止（计划 Task 7），所以现在是
+         「老的继续写、新的负责读」；界面只读 ROOT2，不会再出现两个口径打架。 */
+      const LS_V2 = 'ielts.shadow.v2';
+      let ROOT2 = null;
+      let WORDS_BY_SENT = null, ALL_TARGET_WORDS = 0, _cachedPlan = null, _cachedDay = '';
+      const STAGE_LABEL = { all: '全部', seen: '已见面', recognized: '文中可辨',
+                            owned: '义项直连', graduated: '已毕业', leech: '重点词' };
+
+      function indexWords() {
+        WORDS_BY_SENT = [];
+        const seen = {};
+        for (let i = 0; i < SENT_RAW.length; i++) {
+          const re = /\[\[([^\]:]+):/g, raw = SENT_RAW[i] || '';
+          const out = []; let m;
+          while ((m = re.exec(raw))) { const k = m[1].trim().toLowerCase(); if (out.indexOf(k) < 0) out.push(k); seen[k] = 1; }
+          WORDS_BY_SENT.push(out);
+        }
+        ALL_TARGET_WORDS = Object.keys(seen).length;
+      }
+      function wordsOfSent(i) { if (!WORDS_BY_SENT) indexWords(); return WORDS_BY_SENT[i] || []; }
+      function readLegacy(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }
+      function persist2() { ROOT2.savedAt = Date.now(); safeStore(LS_V2, JSON.stringify(ROOT2)); }
+      function recompute2() {
+        const b = (ROOT2.plan && ROOT2.plan.boundaryHour) || 4;
+        const st = ShadowPlan.replay(ROOT2.events, { boundaryHour: b, wordsOf: wordsOfSent, plan: ROOT2.plan });
+        st.legacy = ROOT2.state && ROOT2.state.legacy ? ROOT2.state.legacy : null;
+        st.migratedAt = ROOT2.state && ROOT2.state.migratedAt ? ROOT2.state.migratedAt : 0;
+        st.eventsSeen = ROOT2.events.length;
+        ROOT2.state = st;
+      }
+      function push2(ev) {
+        ev.id = ShadowPlan.eventId(ev);
+        ROOT2.events.push(ev);
+        if (ROOT2.events.length > 5000) ROOT2.events.splice(0, ROOT2.events.length - 5000);
+        recompute2(); _cachedPlan = null; persist2();
+        return ev;
+      }
+      function loadRoot() {
+        indexWords();
+        try { ROOT2 = JSON.parse(localStorage.getItem(LS_V2) || 'null'); } catch (e) { ROOT2 = null; }
+        if (ROOT2 && ROOT2.state && ROOT2.state.v === 2 && Array.isArray(ROOT2.events)) {
+          if (ROOT2.state.eventsSeen !== ROOT2.events.length) recompute2();
+          syncLegacyPlan();
+          return;
+        }
+        const oldPlan = readLegacy(LS_PLAN);
+        const r = ShadowPlan.migrate(oldPlan, readLegacy(LS_PROG), Date.now(), wordsOfSent);
+        // 引擎对空输入也给一份默认计划（保持纯函数可单测），但「没建过计划」不等于
+        // 「建了一份 15 分钟的」：替他建好就把设置屏跳过了，第一击变成第零击。
+        ROOT2 = { plan: oldPlan ? r.state.plan : null, state: r.state, events: r.events,
+                  uploaded: r.events.length, migratedAt: Date.now(), report: r.report };
+        ROOT2.state.eventsSeen = r.events.length;
+        syncLegacyPlan();
+        persist2();
+      }
+      // 老代码（① 遍的句队列、剩余时间估算）还在读 plan.totalDays/newPerDay，
+      // 这里给一个不绑新模型的固定值，等 Task 7 把那条链删掉。
+      function syncLegacyPlan() {
+        const p = ROOT2 && ROOT2.plan;
+        if (!p) { plan = null; return; }
+        plan = { startDate: p.startDate, totalDays: p.totalDays || 30, dailyMinutes: p.todayMinutes,
+                 newPerDay: p.newPerDay || newPerDayOf(p.totalDays || 30), paused: !!p.pausedNew };
+      }
+      function initPlan(minutes) {
+        const m = Math.max(1, Math.min(180, Math.round(Number(minutes) || 15)));
+        ROOT2 = ROOT2 || {};
+        ROOT2.plan = { todayMinutes: m, boundaryHour: 4, startDate: ShadowPlan.dayKey(Date.now(), 4),
+                       endDate: null, pausedNew: false, totalDays: 30 };
+        ROOT2.state = ShadowPlan.emptyState(); ROOT2.events = []; ROOT2.uploaded = 0; ROOT2.migratedAt = 0;
+        syncLegacyPlan(); savePlan();
+        prog = prog || { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {}, pace: {} };
+        saveProg();
+        push2({ type: 'dayplan', day: ShadowPlan.dayKey(Date.now(), 4), minutes: m, ts: Date.now() });
+      }
+      function resetV2() { localStorage.removeItem(LS_V2); ROOT2 = null; _cachedPlan = null; loadRoot(); }
+      function todayPlan(force) {
+        if (!ROOT2) loadRoot();
+        const b = (ROOT2.plan && ROOT2.plan.boundaryHour) || 4;
+        const d = ShadowPlan.dayKey(Date.now(), b);
+        if (!force && _cachedPlan && _cachedDay === d) return _cachedPlan;
+        _cachedPlan = ShadowPlan.assemble(ROOT2.state, {
+          now: Date.now(), todayMinutes: ROOT2.plan ? ROOT2.plan.todayMinutes : 0, rate: rate || 1,
+          secNew: secNew(), secReview: secReview(), secQuiz: 6, wordsOf: wordsOfSent,
+          totalSents: SENT_RAW.length, boundaryHour: b, plan: ROOT2.plan,
+        });
+        _cachedDay = d;
+        return _cachedPlan;
+      }
+      function readToday2(i) {
+        if (!ROOT2 || !ROOT2.plan) return false;
+        const s = ROOT2.state.sents[i];
+        return !!(s && ShadowPlan.dayKey(s.lastReadAt, ROOT2.plan.boundaryHour) ===
+                  ShadowPlan.dayKey(Date.now(), ROOT2.plan.boundaryHour));
+      }
+      function readDone(i) {
+        if (!ROOT2 || !ROOT2.plan) return;
+        const day = ShadowPlan.dayKey(Date.now(), ROOT2.plan.boundaryHour);
+        const now = Date.now();
+        wordsOfSent(i).forEach(w => {
+          const st = ROOT2.state.words[w];
+          if (st && st.stage === 'graduated') return;
+          push2(ShadowPlan.mkContact(w, i, now, day));
+        });
+      }
+      function relearn(w) {
+        if (!ROOT2 || !ROOT2.state.words[w]) return;
+        push2({ type: 'relearn', w: w, day: ShadowPlan.dayKey(Date.now(), ROOT2.plan.boundaryHour), ts: Date.now() });
+      }
+      function countStages() {
+        const c = { fresh: 0, seen: 0, recognized: 0, owned: 0, graduated: 0, leech: 0 };
+        const ws = ROOT2.state.words;
+        for (const k in ws) { const x = ws[k]; c[x.stage] = (c[x.stage] || 0) + 1; if (x.leech) c.leech++; }
+        c.fresh = Math.max(0, ALL_TARGET_WORDS - (Object.keys(ws).length - c.fresh));
+        return c;
+      }
+      function streak2() {
+        if (!ROOT2 || !ROOT2.plan) return 0;
+        const b = ROOT2.plan.boundaryHour, today = ShadowPlan.dayKey(Date.now(), b);
+        let n = 0;
+        for (let k = 0; k < 400; k++) {
+          const key = ShadowPlan.dayKey(Date.now() - k * ShadowPlan.DAY_MS, b);
+          const d = ROOT2.state.daily[key];
+          if (d && (d.sentDone || 0) >= 3) n++;
+          else if (key !== today) break;
+        }
+        return n;
+      }
+      function floorDayCount() {
+        if (!ROOT2) return 0;
+        const d = ROOT2.state.daily;
+        return Object.keys(d).filter(k => (d[k].sentDone || 0) >= 3 && (d[k].quizDone || 0) < 3).length;
+      }
+
       function today() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
       function dayIndex() { if (!plan) return 0; const s = new Date(plan.startDate + 'T00:00:00'); const n = new Date(today() + 'T00:00:00'); return Math.max(0, Math.round((n - s) / 864e5)); }
 
@@ -3998,6 +4169,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         s.reps++;
         s.lastRead = now;
         s.phase = phaseOf(s.reps);
+        try { readDone(globalIdx); } catch (e) {}   // 同一句读一遍 = 句里每个未毕业词各一次接触
         // 计算下次到期
         const intIdx = Math.min(s.reps, INTERVALS.length - 1);
         // 注意：间隔表前几档是 0（当日重复），必须用 ?? 而不是 ||，否则 0 会被误当成 14 天
@@ -4332,8 +4504,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           const typeIcon = cur && cur.type === 'new' ? '<i class="ri-sparkling-2-line" aria-hidden="true"></i> 新句' : '<i class="ri-repeat-line" aria-hidden="true"></i> 复习';
           titleEl.innerHTML = `${typeIcon} · ${done}/${total}`;
           // 副标题只报「还剩多久」。「已读 x/y」是同一个进度的第二套算法，
-          // 两处口径在边界上会打架，所以删掉：今日进度归标题那一个数字说（PRD §10.1）
-          subEl.textContent = `剩余 ~${fmtTime(est.sec)} · 已完成 ${prog.cycleCount || 0} 轮`;
+          // 「已完成 N 轮」是句子遍历的旧承诺 —— 两个都不再说（PRD §10.1、§15 关于「轮」的处置）
+          subEl.textContent = `剩余 ~${fmtTime(est.sec)}`;
           document.getElementById('tbAgain').style.display = '';
           document.getElementById('tbNext').innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句';
           document.getElementById('tbNext').onclick = next;
@@ -4404,154 +4576,143 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         _panelOpen = false;
       }
 
+      let _view = 'today', _bookFilter = 'all';
+      function setView(v) { _view = v; const el = document.getElementById('todayPanel'); if (el) renderToday(el); }
+      function setBookFilter(f) { _bookFilter = f; setView('book'); }
+
+      /* 计划设置只问一件事：每天有多少分钟。
+         「总天数 → 反推每天句数」这条除法链和「慢/正常/快」三档一起删掉了：
+         前者是债务膨胀的根源，后者是把每天句数偷偷乘个倍数，没人知道今天到底几句。 */
       function renderSetup(p) {
-        let selDays = 30, selMin = 60;
-        const MINS = [30, 45, 60, 90];
+        const MINS = [5, 10, 15, 20, 30, 45, 60];
+        let sel = 15;
         p.innerHTML = `<div class="plan-setup">
-          <h3>制定学习计划</h3>
-          <p class="ps-sub">共 ${SENT_RAW.length} 句 · ${Object.keys(VOCAB).length} 词 · 1 轮 = 全部句子通读一遍</p>
-          <div class="ps-group"><label>总天数</label>
-            <input type="range" id="psDays" min="1" max="902" value="${selDays}" class="ps-slider">
-            <div class="ps-slider-value"><span id="psDaysVal">${selDays}</span> 天</div>
-          </div></div>
-          <div class="ps-group"><label>每日时间</label><div class="ps-opts" id="psMin">
-            ${MINS.map(m => `<button class="ps-opt${m === selMin ? ' sel' : ''}" data-v="${m}">${m}分钟</button>`).join('')}
+          <h3>每天有多少分钟</h3>
+          <p class="ps-sub">共 ${SENT_RAW.length} 句 · ${ALL_TARGET_WORDS} 个目标词。句数和题数由分钟数算出来。</p>
+          <div class="ps-group"><label>每天</label><div class="ps-opts" id="psMin">
+            ${MINS.map(m => `<button class="ps-opt${m === sel ? ' sel' : ''}" data-v="${m}">${m} 分钟</button>`).join('')}
           </div></div>
           <div class="ps-sum" id="psSum"></div>
-          <button class="ps-start" id="psStart">开始计划</button>
+          <button class="ps-start" id="psStart">开始这个计划</button>
         </div>`;
         const refresh = () => {
+          const per = Math.max(1, Math.round(sel * 60 / (secNew() + 12)));
           const el = document.getElementById('psSum');
-          if (el) el.innerHTML = planSummary(planCapacity(selDays, selMin), MINS);
+          if (el) el.innerHTML = `<div class="ps-sum-row"><span>今天大约</span><b>${Math.min(per, SENT_RAW.length)} 句 · ${Math.min(per * 2, SENT_RAW.length * 2)} 题</b></div>`;
         };
         refresh();
-        document.getElementById('psDays').addEventListener('input', e => {
-          selDays = parseInt(e.target.value);
-          document.getElementById('psDaysVal').textContent = selDays;
+        p.querySelectorAll('.ps-opts').forEach(group => group.addEventListener('click', e => {
+          const btn = e.target.closest('.ps-opt');
+          if (!btn) return;
+          group.querySelectorAll('.ps-opt').forEach(x => x.classList.remove('sel'));
+          btn.classList.add('sel');
+          sel = parseInt(btn.dataset.v, 10);
           refresh();
-        });
-        p.querySelectorAll('.ps-opts').forEach(group => {
-          group.addEventListener('click', e => {
-            const btn = e.target.closest('.ps-opt');
-            if (!btn) return;
-            group.querySelectorAll('.ps-opt').forEach(b => b.classList.remove('sel'));
-            btn.classList.add('sel');
-            const v = btn.dataset.v;
-            if (group.id === 'psMin') selMin = parseInt(v);
-            refresh();
-          });
-        });
+        }));
         document.getElementById('psStart').onclick = () => {
-          const cap = planCapacity(selDays, selMin);
-          createPlan(selDays, selMin);
-          showAbToast(`计划已创建：${selDays} 天 · 每天 ~${cap.perDay} 句新句 · 预计 ${fmtCycles(cap.cycles)}`);
-          renderToday(p);
+          initPlan(sel);
+          buildQueue(); updateBtn();
+          showAbToast(`计划已建好：每天 ${sel} 分钟，今天先排 ${todayPlan(true).queue.length} 句`);
+          _view = 'today'; renderToday(p);
         };
       }
 
       function renderToday(p) {
-        buildQueue();
-        const est = estimateRemaining();
-        const cap = planCapacity(plan.totalDays, plan.dailyMinutes, plan.newPerDay);
-        const di = dayIndex();
-        const total = todayQueue.length;
-        const done = total - est.newLeft - est.reviewLeft;
-        const pct = total > 0 ? Math.round(done / total * 100) : 100;
-        const allDone = est.newLeft === 0 && est.reviewLeft === 0;
-        const daily = prog.daily[today()] || { reps: 0, totalSec: 0 };
-        const elapsed = taskMode && sessionStart ? (Date.now() - sessionStart) / 1000 : 0;
-        // 统计已读/未读句子
-        const readCount = todayQueue.filter(item => {
-          const s = sentState(item.i);
-          return s.reps >= PHASE_THRESHOLDS.learning && s.lastRead >= startOfToday();
-        }).length;
-        const unreadCount = todayQueue.length - readCount;
-
-        let html = `<div class="tp-head"><h3>今日任务</h3><button class="tp-close" onclick="TASK.closePanel()">✕</button></div>`;
-
-        if (allDone && total > 0) {
-          html += `<div class="tp-done"><div class="emoji"><i class="ri-trophy-line" aria-hidden="true"></i></div><h3>今日任务完成</h3><p>共跟读 ${daily.reps} 句次 · 连续 ${prog.streak} 天</p></div>`;
-        } else if (allDone && total === 0) {
-          html += `<div class="tp-done"><div class="emoji"><i class="ri-checkbox-circle-line" aria-hidden="true"></i></div><h3>暂无到期任务</h3><p>明天的复习句将自动排入</p></div>`;
-        } else {
-          html += `<div class="tp-day">第 ${di + 1} 天 / 共 ${plan.totalDays} 天 · 预计 ${fmtCycles(cap.cycles)} · 连续 ${prog.streak} 天 <i class="ri-fire-fill" style="color:var(--coral)" aria-hidden="true"></i></div>`;
-          html += `<div class="tp-prog"><div class="tp-prog-fill" style="width:${pct}%"></div></div>`;
-          
-          // 循环次数 + 已读/未读统计
-          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-repeat-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">当前循环</div><div class="tp-sub">计划 ${fmtCycles(cap.cycles)}</div></div><div class="tp-time"><span class="tp-badge task-new">已完成 ${prog.cycleCount || 0} 轮</span></div></div>`;
-          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-checkbox-circle-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">已读 / 未读</div><div class="tp-sub">${readCount} / ${unreadCount} 句</div></div><div class="tp-time"></div></div>`;
-          
-          // 新句/复习时间预估（简化显示）
-          html += `<div class="tp-row"><div class="tp-icon"><i class="ri-time-line" aria-hidden="true"></i></div><div class="tp-info"><div class="tp-label">预计剩余</div><div class="tp-sub">新句 ${est.newLeft} · 复习 ${est.reviewLeft} 句 · 已跟读 ${daily.reps} 句次</div></div><div class="tp-time">${fmtTime(est.sec)}</div></div>`;
-        }
-
-        html += `<div class="tp-actions">`;
-        if (!allDone) html += `<button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始跟读'}</button>`;
-        if (taskMode) html += `<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>`;
-        html += `</div>`;
-
-        // 调整计划
-        html += `<div class="ps-adjust"><button class="btn" onclick="TASK.adjustPlan()">调整计划</button><button class="btn" onclick="TASK.pauseNew()">${plan.paused ? '恢复新句' : '暂停新句'}</button></div>`;
-
-        // 本地备份（进度不出本机，清缓存即归零，这是唯一的兜底）
-        html += `<div class="ps-adjust"><button class="btn" onclick="TASK.exportBackup()">导出进度备份</button><button class="btn" onclick="TASK.importBackup()">导入备份恢复</button></div>`;
-        html += `<input type="file" id="importFile" accept="application/json,.json" style="display:none">`;
-
-        // 统计
-        html += renderStatsSection();
-        p.innerHTML = html;
+        if (!ROOT2 || !ROOT2.plan) { renderSetup(p); return; }
+        p.dataset.view = _view;
+        const tabs = [['today', '今天'], ['plan', '计划'], ['book', '词本']]
+          .map(v => `<button class="tp-tab${_view === v[0] ? ' on' : ''}" data-view="${v[0]}" onclick="TASK.setView('${v[0]}')">${v[1]}</button>`).join('');
+        p.innerHTML = `<div class="tp-head"><h3>${_view === 'today' ? '今天' : _view === 'plan' ? '计划' : '词本'}</h3>
+          <button class="tp-close" onclick="TASK.closePanel()">✕</button></div>
+          <div class="tp-tabs">${tabs}</div>` +
+          (_view === 'plan' ? renderPlanView() : _view === 'book' ? renderBookView() : renderTodayView());
       }
 
-      function renderStatsSection() {
-        const counts = { new: 0, learning: 0, solid: 0, mastered: 0 };
-        for (let i = 0; i < SENT_RAW.length; i++) {
-          const ph = sentState(i).phase;
-          counts[ph] = (counts[ph] || 0) + 1;
-        }
-        const totalReps = Object.values(prog.daily).reduce((a, d) => a + (d.reps || 0), 0);
-        // 词汇覆盖
-        const wordsCovered = new Set();
-        for (const gi in prog.sentences) {
-          if (prog.sentences[gi].reps > 0) {
-            const raw = SENT_RAW[parseInt(gi)] || '';
-            const re = /\[\[([^\]:]+):/g; let m;
-            while ((m = re.exec(raw))) wordsCovered.add(m[1].toLowerCase());
-          }
-        }
-        // 循环（一轮 = 全部句子通读一遍）
-        const cycleCount = prog.cycleCount || 0;
-        const cycleSeenCount = Object.keys(prog.cycleSeen || {}).length;
-        const total = SENT_RAW.length;
-        const cyclePct = Math.round(cycleSeenCount / total * 100);
-        let html = `<div class="tp-stats"><h4>学习统计</h4>`;
-        html += `<div class="tp-cycle">
-          <div class="tp-cycle-num"><span class="big">${cycleCount}</span><span class="unit">轮</span></div>
-          <div class="tp-cycle-info">
-            <div class="tp-cycle-label">已完成循环 · 本轮 ${cycleSeenCount}/${total}（${cyclePct}%）</div>
-            <div class="tp-prog" style="margin:6px 0 0"><div class="tp-prog-fill" style="width:${cyclePct}%"></div></div>
+      /* 两栏并列、永不合并成一个「总进度」：今天做到位没有，和词往前走了几步，
+         是两件不同的事 —— 今天 100% 可能只因为今天只排了 3 句。 */
+      function renderTodayView() {
+        const tp = todayPlan(true);
+        const b = ROOT2.plan.boundaryHour, day = ShadowPlan.dayKey(Date.now(), b);
+        const d = ROOT2.state.daily[day] || {};
+        // 队列是滚动的：读完的那句会被未读的新句顶掉，所以「今天读了多少」不能只数队列里
+        // 剩下的已读项（会永远显示 0/N）。分母 = 今天已读 + 队列里还没读的。
+        const qz = 6 / (rate || 1);
+        const left = tp.queue.filter(q => !readToday2(q.i));
+        const done = d.sentDone || 0;
+        const n = done + left.length;
+        const pct = n > 0 ? Math.round(done / n * 100) : 100;
+        const c = countStages();
+        // 「还剩」= 队列里没读的那几句的预留成本（句时 + ②③ 各一题），
+        // 不是「预算减已用」—— 后者刚开局就报 12 秒，说的是钱不是活
+        const leftSec = left.reduce((a, q) => a + q.sec + 2 * qz, 0);
+        const grade = done >= 3 ? (done * 2 >= n ? '今天算扎实' : '今天只是地板')
+                                : `还差 ${Math.max(1, 3 - done)} 句`;
+        return `<div class="tp-cols">
+          <div class="tp-col tp-col-today"><h4>今天 · ${ROOT2.plan.todayMinutes} 分钟</h4>
+            <div class="tp-num">${done}<span class="unit"> / ${n} 句</span></div>
+            <div class="tp-prog"><div class="tp-prog-fill" style="width:${pct}%"></div></div>
+            <div class="tp-kv"><span>连续</span><b>${streak2()} 天${floorDayCount() ? ` · 含 ${floorDayCount()} 个地板日` : ''}</b></div>
+            <div class="tp-kv"><span>完成度</span><b>${grade}</b></div>
+            <div class="tp-kv"><span>还剩</span><b>${fmtTime(leftSec)}</b></div>
           </div>
-        </div>`;
-        html += `<div class="tp-stat-grid" style="margin-top:10px">
-          <div class="tp-stat"><div class="v">${prog.streak}</div><div class="k">连续天数</div></div>
-          <div class="tp-stat"><div class="v">${totalReps}</div><div class="k">累计句次</div></div>
-          <div class="tp-stat"><div class="v">${wordsCovered.size}</div><div class="k">覆盖词汇</div></div>
-        </div>`;
-        html += `<div class="tp-stat-grid" style="margin-top:8px">
-          <div class="tp-stat"><div class="v" style="color:var(--task-new)">${counts.learning}</div><div class="k">学习中</div></div>
-          <div class="tp-stat"><div class="v" style="color:var(--task-review)">${counts.solid}</div><div class="k">巩固中</div></div>
-          <div class="tp-stat"><div class="v" style="color:var(--task-done)">${counts.mastered}</div><div class="k">已掌握</div></div>
-        </div>`;
-        // 本周柱状图
-        const days = [];
-        for (let i = 6; i >= 0; i--) {
-          const d = new Date(Date.now() - i * 864e5);
-          const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-          days.push({ label: ['日', '一', '二', '三', '四', '五', '六'][d.getDay()], reps: (prog.daily[key] || {}).reps || 0 });
-        }
-        const maxRep = Math.max(1, ...days.map(d => d.reps));
-        html += `<div class="tp-week">${days.map(d => `<div class="tp-week-bar"><div class="tp-week-fill" style="height:${Math.round(d.reps / maxRep * 100)}%"></div><div class="tp-week-label">${d.label}</div></div>`).join('')}</div>`;
-        html += `</div>`;
-        return html;
+          <div class="tp-col tp-col-words"><h4>词汇</h4>
+            <div class="tp-num">${d.promote || 0}<span class="unit"> 个词今天晋升</span></div>
+            <div class="tp-kv"><span>文中可辨</span><b>${c.recognized}</b></div>
+            <div class="tp-kv"><span>义项直连</span><b>${c.owned}</b></div>
+            <div class="tp-kv"><span>重点词</span><b>${c.leech}</b></div>
+          </div>
+        </div>
+        <div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>还剩 ${left.length} 句 · 覆盖 ${tp.words.length} 个词</b>
+          <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}</span></div>
+        <div class="tp-actions"><button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始 · 先通读这一批'}</button>
+          ${taskMode ? '<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>' : ''}</div>`;
+      }
+
+      function renderPlanView() {
+        const MINS = [5, 10, 15, 20, 30, 45, 60];
+        const BOUND = [[0, '0 点'], [2, '2 点'], [3, '3 点'], [4, '凌晨 4 点'], [5, '5 点'], [6, '6 点']];
+        const row = (label, opts, cur, fn) => `<div class="ps-group"><label>${label}</label>
+          <div class="ps-opts">${opts.map(o => `<button class="ps-opt${String(o[0]) === String(cur) ? ' sel' : ''}" data-v="${o[0]}" onclick="${fn}(${o[0]})">${o[1]}</button>`).join('')}</div></div>`;
+        return row('每天有多少分钟', MINS.map(m => [m, m + ' 分钟']), ROOT2.plan.todayMinutes, 'TASK.setMinutes') +
+          row('几点算换一天', BOUND, ROOT2.plan.boundaryHour, 'TASK.setBoundary') +
+          `<div class="ps-group"><label>新词</label><div class="ps-opts">
+            <button class="ps-opt${ROOT2.plan.pausedNew ? '' : ' sel'}" onclick="TASK.setPauseNew(false)">正常见新词</button>
+            <button class="ps-opt${ROOT2.plan.pausedNew ? ' sel' : ''}" onclick="TASK.setPauseNew(true)">只复习，先不见新词</button></div></div>
+          <div class="tp-note sm">进度存在这台设备上，并以上传「完成记录」的方式同步。<span class="sync-state" id="syncState">${syncHintText()}</span></div>
+          <div class="ps-adjust"><button class="btn" onclick="TASK.exportBackup()">导出进度备份</button>
+            <button class="btn" onclick="TASK.importBackup()">导入备份恢复</button></div>
+          <input type="file" id="importFile" accept="application/json,.json" style="display:none">
+          <div class="ps-adjust"><button class="btn" onclick="TASK.resetPlan()">清空重来</button></div>`;
+      }
+
+      function setMinutes(m) { ROOT2.plan.todayMinutes = Math.max(1, Math.min(180, m)); _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel')); }
+      function setBoundary(h) { ROOT2.plan.boundaryHour = h; recompute2(); _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel')); }
+      function setPauseNew(v) { ROOT2.plan.pausedNew = !!v; _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel')); }
+      function syncHintText() {
+        // 只有真的登录了、且上传链已接上才报差额 —— 没登录时说「还有 N 条没传上去」是空许诺
+        if (typeof CLOUD === 'undefined' || !CLOUD._userMail) return '';
+        const left = ROOT2 ? ROOT2.events.length - (ROOT2.uploaded || 0) : 0;
+        return left > 0 ? `还有 ${left} 条没传上去` : '';
+      }
+
+      function renderBookView() {
+        const c = countStages();
+        const filters = [['all', '全部'], ['seen', '已见面'], ['recognized', '文中可辨'],
+                         ['owned', '义项直连'], ['graduated', '已毕业'], ['leech', '重点词']]
+          .map(f => `<button class="pill${_bookFilter === f[0] ? ' on' : ''}" onclick="TASK.setBookFilter('${f[0]}')">${f[1]} ${f[0] === 'leech' ? c.leech : (f[0] === 'all' ? Object.keys(ROOT2.state.words).length : c[f[0]])}</button>`).join('');
+        const rows = Object.keys(ROOT2.state.words)
+          .filter(k => _bookFilter === 'all' || (_bookFilter === 'leech' ? ROOT2.state.words[k].leech : ROOT2.state.words[k].stage === _bookFilter))
+          .sort((a, x) => (ROOT2.state.words[x].reps || 0) - (ROOT2.state.words[a].reps || 0))
+          .slice(0, 160)
+          .map(k => {
+            const w = ROOT2.state.words[k];
+            return `<div class="tp-book-row"><span class="bw">${esc(k)}</span>
+              <span class="bs">${STAGE_LABEL[w.stage] || w.stage} · ${w.reps} 次接触${w.leech ? ' · 重点' : ''}</span>
+              <button class="bx" onclick="TASK.relearn('${esc(k)}')">重学</button></div>`;
+          }).join('');
+        return `<div class="tp-filters">${filters}</div>
+          <div class="tp-book">${rows || '<p class="sm">这一档还没有词 —— 先去读几句，词是自己走进来的。</p>'}</div>
+          <p class="sm">这里不是背单词的入口，是查「我到底会没会」的地方。</p>`;
       }
 
       function adjustPlan() {
@@ -4674,6 +4835,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function resetPlan() {
         if (!confirm('重置将清空当前计划与全部跟读进度（连续天数、统计一并清零），回到初始设置。确定继续吗？')) return;
         try { localStorage.removeItem(LS_PLAN); localStorage.removeItem(LS_PROG); } catch (e) {}
+        // v2 事件根必须一起清：只清老 key 的话，重载后 ROOT2 还在，进度等于没重置
+        try { localStorage.removeItem(LS_V2); } catch (e) {}
+        ROOT2 = null; _cachedPlan = null;
         plan = null;
         prog = { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {} };
         todayQueue = [];
@@ -4698,6 +4862,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       // ---- 初始化 ----
       function init() {
         loadPlan(); loadProg();
+        try { loadRoot(); } catch (e) { dlog('root-load-fail', (e && e.message) || e); }
         if (plan) {
           buildQueue();
           updateBtn();
@@ -4707,7 +4872,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           if (lastDay) {
             const gap = Math.round((startOfToday() - new Date(lastDay + 'T00:00:00').getTime()) / 864e5);
             if (gap > 2) {
-              showAbToast(`欢迎回来！${gap} 天没练，欠下的句子仍在队列里，按原进度继续`);
+              showAbToast(`欢迎回来。上次读到这里，今天先排 ${todayPlan(true).queue.length} 句（${ROOT2 && ROOT2.plan ? ROOT2.plan.todayMinutes : 15} 分钟），剩下的不用补`);
             }
           }
         }
@@ -4722,7 +4887,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         get hasPlan() { return !!plan; },
         get queue() { return todayQueue; },
         get progress() { return prog; },
-        recordRep, buildQueue, updateMarkers, updateBtn
+        recordRep, buildQueue, updateMarkers, updateBtn,
+        loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
+        initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
+        get view() { return _view; }
       };
     })();
 

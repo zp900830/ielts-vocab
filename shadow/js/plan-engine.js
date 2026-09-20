@@ -252,6 +252,12 @@
     }
 
     const readSec = queue.reduce(function (a, q) { return a + q.sec; }, 0);
+    // 「今天进了几个新词」= 真的被排进队列的 C 池词，不是全库还没见过面的词。
+    // 报后者会在第一天显示「3245 个新词」，等于把整本词表说成今天的任务。
+    var newTaken = 0, takenSeen = {};
+    queue.forEach(function (q) {
+      q.words.forEach(function (w) { if (inPool[w] === 'C' && !takenSeen[w]) { takenSeen[w] = 1; newTaken++; } });
+    });
     return {
       queue: queue, items: items,
       words: Array.from(new Set(queue.reduce(function (a, q) { return a.concat(q.words); }, []))),
@@ -259,7 +265,7 @@
         // 每句按 (句时 + 2×secQuiz) 预留、k 槽按 1×secQuiz 预留，
         // 所以 usedSec = readSec + items×secQuiz ≤ budget 由构造保证
         budgetSec: budget, usedSec: readSec + items.length * secQuiz,
-        dueWords: dueWords, newWords: fresh.length, droppedA: droppedA,
+        dueWords: dueWords, newWords: newTaken, newPool: fresh.length, droppedA: droppedA,
         floor: floor, day: today, kSlots: kSlots,
         todayMinutes: o.todayMinutes || 0,
       },
