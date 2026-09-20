@@ -838,6 +838,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     opacity: 0; visibility: hidden; transform: translateY(-8px); pointer-events: none;
     transition: opacity .2s ease, transform .2s ease, visibility .2s; }
   body.nav-menu.menu-open .topbar-right { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+  /* 量宽时关掉过渡：顶栏的 padding/height 带 0.3s 动画，滚动那一瞬间量到的是「动画中间值」，
+     会把已经放不下的顶栏误判成放得下，于是汉堡自己消失、面板再也打不开。 */
+  body.nav-measure .topbar, body.nav-measure .topbar * { transition: none !important; }
   /* 面板里的按钮一律带字：宽屏平时是图标钮，收进面板后只剩图标就认不出来了 */
   body.nav-menu .topbar-right .only-mobile { display: inline; }
   /* 让位给面板开关：body.scrolled 那套「滚动时压扁工具栏」在收纳模式里会把面板一起压没 */
@@ -956,29 +959,24 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       flex-direction: row; }
     body.scrolled .audiobar .ab-left { gap: 3px; flex-wrap: nowrap; }
     body.scrolled .audiobar .ab-left > .jump-btn { display: none; }
-    body.scrolled .audiobar .ab-left > .btn { padding: 4px 6px; }
-    body.scrolled .audiobar .ab-left > .btn.play { font-size: 0; padding: 4px 6px; }
     body.scrolled .audiobar .ab-right { max-width: 0; max-height: 0; position: absolute;
       transition: opacity .18s ease, max-width .25s ease-out, max-height .25s ease-out, width .25s ease-out; }
     /* 收起（expanded→mini）与展开对称：容器无延迟同步 morph，内容从中心收缩消失 */
     body.scrolled .audiobar:not(.expanded) { transition: padding .25s var(--ease-bar), gap .25s var(--ease-bar),
       border-radius .25s var(--ease-bar), max-width .25s var(--ease-bar); }
-    body.scrolled .audiobar:not(.expanded) .ab-right { 
+    body.scrolled .audiobar:not(.expanded) .ab-right,
+    body.scrolled .audiobar:not(.expanded) .ab-title { 
       animation: abContentCollapse .2s var(--ease-bar) forwards; 
       opacity: 0; max-width: 0; max-height: 0; width: 0; pointer-events: none; }
-    body.scrolled .audiobar:not(.expanded) .ab-left > .btn { 
-      animation: abContentCollapse .2s var(--ease-bar) forwards;
-      opacity: 0; font-size: 0; max-width: 0; min-height: 28px; }
-    body.scrolled .audiobar:not(.expanded) .ab-title,
-    body.scrolled .audiobar:not(.expanded) .loop-wrap,
-    body.scrolled .audiobar:not(.expanded) .rate-wrap { 
-      animation: abContentCollapse .2s var(--ease-bar) forwards;
-      opacity: 0; max-width: 0; }
+    /* 收缩动画只归「进度条 + 标题」：控制按钮在 mini 胶囊里必须留下（与桌面端同一套 7 个图标）。
+       早先这里把 .ab-left > .btn 一起塞进 collapse，forwards 把它们钉在 opacity:0，
+       手机上小胶囊就只剩 AB 和书签两颗孤零零的图标。 */
     body.scrolled .audiobar .ab-left { order: 0; flex-wrap: nowrap; gap: 0; flex: 1; justify-content: center; }
-    body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 28px;
+    body.scrolled .audiobar .ab-left > .btn { font-size: 0; padding: 4px 8px; min-height: 30px;
+      max-width: none; opacity: 1; pointer-events: auto; overflow: visible;
       transition: font-size .18s ease, padding .25s ease-out, min-height .25s ease-out,
         max-width .25s ease-out, opacity .18s ease-out; }
-    body.scrolled .audiobar .ab-left > .btn.play { font-size: 11px; padding: 4px 12px; }
+    body.scrolled .audiobar .ab-left > .btn.play { font-size: 0; padding: 4px 10px; }
   body.scrolled .audiobar .ab-left > .btn i { font-size: 16px; line-height: 1; }
     /* mini 胶囊里四个小按钮同步压成图标 pill：字号/高度与主按钮一致；AB 文字与定宽去掉，倍速保留 1x 数字 */
     body.scrolled .audiobar .ab-left .loop-wrap > .btn,
@@ -2338,11 +2336,15 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       // 加删在同一个任务里完成，中间不产帧，所以看不到闪。
       const stash = ['scrolled', 'fade-nav'].filter(c => b.classList.contains(c));
       stash.forEach(c => b.classList.remove(c));
+      // 顶栏的 padding/height 自带 0.3s 过渡，滚动那一刻量到的是「动画中间值」，会把已经放不下的
+      // 顶栏误判成放得下 → 汉堡自己消失、面板再也打不开。量期间把过渡全关掉（CSS 见 body.nav-measure）。
+      b.classList.add('nav-measure');
       b.classList.remove('nav-menu'); placeAppLink(false);
       const narrow = window.matchMedia('(max-width: 700px)').matches;
       if (narrow || navRowWraps()) { b.classList.add('nav-menu'); placeAppLink(true); }
       else b.classList.remove('menu-open');
       stash.forEach(c => b.classList.add(c));
+      b.classList.remove('nav-measure');
     }
     let _navRaf = 0;
     function requestNavSync() {
