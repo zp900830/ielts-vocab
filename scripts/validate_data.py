@@ -294,14 +294,25 @@ def main():
             return False
         return any(f'[[{w}:' in s or f'[[{w}]]' in s for s in para if isinstance(s, str))
     def _width(t):
-        return sum(1 if '一' <= c <= '鿿' else 0.5 for c in t)
+        # 口径（2026-09-20 两份独立审核各自从批次 1A 你点头的 5 条实测数反推，结论一致）：
+        # 汉字和全角标点各记 1，其余（拉丁字母、空格、半角括号）记 0.5。
+        # 之前这里只认汉字，中文标点被记 0.5 —— 上限因此比 PRD 说的松，超宽的行能混过去。
+        return sum(1 if ('一' <= c <= '鿿') or ('　' <= c <= '〿') or ('＀' <= c <= '￯') else 0.5 for c in t)
     n_cmp = 0
     for w, c in vocab.items():
         note = c.get('note') if isinstance(c, dict) else None
+        # (a) 落地器历史上把结构化辨析卡压成过 Python repr 字符串，线上一显示就是一坨
+        #     {'type': 'compare', ...}。守卫只能防以后再压坏，已经压坏的必须被这里点名。
+        if isinstance(note, str) and re.match(r'^\{\s*[\'"]type[\'"]\s*:', note.strip()):
+            errors.append(f'辨析卡 {w}: note 被压成了字符串（页面上会直接显示 dict 字面量），要还原成对象')
+            continue
         if not (isinstance(note, dict) and note.get('type') == 'compare'):
             continue
         n_cmp += 1
         members = [it.get('w') for it in note.get('items', []) if isinstance(it, dict)]
+        # (b) 卡片挂在段落末尾，「这一句」没有可指的句子了 —— 要么写「这一段」，要么写「同句里」
+        if re.search(r'这一?句', str(note.get('title') or '')):
+            errors.append(f'辨析卡 {w}: 表头用「这一句」指代，但卡片挂在段末（改「这一段」或「同句里」）')
         for m in members:
             if m not in vocab:
                 errors.append(f'辨析卡 {w}: 成员 {m} 在 vocab.json 里没有卡（辨析只许讨论目标词，PRD §5.10）')
@@ -332,6 +343,13 @@ def main():
             if not any(all(_in_para(p[0], p[1], m) for m in members)
                        for p in paras if isinstance(p, (list, tuple)) and len(p) == 2):
                 errors.append(f'辨析卡 {w}: 声明的共现段 {paras} 里并非所有成员都在，这张表没有可挂的段')
+        # (c) at = 渲染时挂哪一段。挂错段 = 表出现在没有这些词的段落后面，比不挂更糟
+        at = note.get('at')
+        if at is not None:
+            if not (isinstance(at, (list, tuple)) and len(at) == 2):
+                errors.append(f'辨析卡 {w}: at 要写成 [章号, 段号]，现在是 {at!r}')
+            elif members and not all(_in_para(at[0], at[1], m) for m in members):
+                errors.append(f'辨析卡 {w}: 锚点段 {list(at)} 里并非所有成员都在（{members}）')
 
     # 9. 基础统计
     print(f"vocab: {len(vocab)} words")
