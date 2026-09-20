@@ -1148,12 +1148,16 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .task-bar .tb-btn:active { filter: brightness(.92); }
   body.dark .task-bar .tb-btn.again { background: #252220; color: #e2ddd5; border-color: #33302b; }
   /* 任务模式时 audiobar 上移避让 */
-  body.task-mode .audiobar { bottom: calc(var(--task-bar-h, 62px) + 8px + env(safe-area-inset-bottom, 0px)); }
+  body.task-mode .audiobar, body.resume-offer .audiobar { bottom: calc(var(--task-bar-h, 62px) + 8px + env(safe-area-inset-bottom, 0px)); }
   body.task-mode .back-to-play { bottom: calc(var(--task-bar-h, 62px) + 98px + env(safe-area-inset-bottom, 0px)); }
-  /* 任务模式下上一句/下一句保持原位可见：模式切换不该作废肌肉记忆（PRD §10.1） */
-  /* ②③ 做题态：播放条让位。这条态的控件是选项 / 这题有问题 / 回看句子，
-     三栏叠在手机上会把正文挤没 —— 回看句子照样能听。 */
-  body.task-mode.quiz-mode .audiobar { display: none; }
+  /* 全页只留一个「下一句」：任务模式里往后翻归任务栏那颗，播放条把重复的那颗让出来。
+     他拍板的是「下一句只留一个 + 播放条不藏」，不是砍掉回看 —— 上一句必须留着，
+     不然①通读里"刚才那句没听清，退回去再听一遍"这条动作就没了（真机走查用例守着它）。 */
+  body.task-mode .audiobar .ab-left > .btn.ab-step-fwd,
+  body.task-mode .audiobar .rate-wrap { display: none; }
+  /* ②③ 做题态：播放条只留「播放/暂停 + 回看」这一窄条，选项 / 这题有问题 / 回看句子 归做题卡。 */
+  body.task-mode.quiz-mode .audiobar .loop-wrap,
+  body.task-mode.quiz-mode .audiobar .ab-wrap { display: none; }
   /* ---- ②③ 做题卡片 + 遍间小结（PRD §6 §7 §10.1） ---- */
   .task-card { position: fixed; left: 50%; transform: translateX(-50%);
     bottom: calc(var(--task-card-b, 132px) + env(safe-area-inset-bottom, 0px));
@@ -1314,7 +1318,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       <nav class="ab-left" aria-label="播放控制">
         <button class="btn ab-step" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i> 上一句</button>
         <button class="btn play" id="btnPlay" onclick="togglePlay()" aria-label="播放或暂停"><i class="ri-play-fill" aria-hidden="true"></i> 播放</button>
-        <button class="btn ab-step" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line" aria-hidden="true"></i> 下一句</button>
+        <button class="btn ab-step ab-step-fwd" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line" aria-hidden="true"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
           <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="单句循环：选择每句重复次数" aria-label="单句循环次数"><i class="ri-repeat-line" aria-hidden="true"></i><span id="loopCount">3</span></button>
@@ -4536,8 +4540,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
       function syncCardBottom() {
         const bar = document.getElementById('taskBar'), ab = document.querySelector('.audiobar');
-        const off = document.body.classList.contains('quiz-mode');   // 做题态播放条已隐藏
-        const h = (bar ? bar.offsetHeight : 62) + (off ? 0 : (ab ? ab.offsetHeight + 8 : 64)) + 10;
+        // 做题态播放条不再消失，所以做题卡永远要给两条都让位
+        const h = (bar ? bar.offsetHeight : 62) + (ab ? ab.offsetHeight + 8 : 64) + 10;
         document.documentElement.style.setProperty('--task-card-b', h + 'px');
       }
       function syncQueueFromPlan() {
@@ -4826,6 +4830,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         batchItems = todayPlan(true).items.map(x => Object.assign({}, x));
         pass = 1; quizCursor = 0; quizWrongN = 0; quizAnsweredN = 0; reveal = null; taskFinished = false;
         if (!todayQueue.length) { showAbToast('今天没有排到的句子 —— 把每天的分钟数调大一点试试'); return; }
+        hideResumeOffer();
         taskMode = true;
         sessionStart = Date.now();
         sessionReps = 0;
@@ -4889,6 +4894,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
 
       function again() {
+        const _bar = document.getElementById('taskBar');
+        if (_bar && _bar.dataset.state === 'resume') { skipResume(); return; }   // 续读条上的「今天先不做」
         // ①：重播当前句；②③：回看这句（重听不算答错，也不记接触）
         if (!taskMode) return;
         if (pass >= 2) { reviewSentence(); return; }
@@ -4903,6 +4910,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         }
       }
       function next() {
+        const _bar = document.getElementById('taskBar');
+        if (_bar && _bar.dataset.state === 'resume') { resumeTask(); return; }    // 续读条上的「接着做」
         // 记录当前句完成，跳下一个；②③ 态下这个键是「下一题 / 跳过这题」
         if (!taskMode) return;
         if (pass >= 2) {
@@ -5016,6 +5025,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const subEl = document.getElementById('tbSub');
         const againBtn = document.getElementById('tbAgain');
         const nextBtn = document.getElementById('tbNext');
+        if (!taskMode && bar.dataset.state === 'resume') return;   // 续读条占着这一行，别把它刷成任务态
         if (!ROOT2 || !ROOT2.plan) { bar.dataset.state = 'idle'; return; }
         const tp = todayPlan(true);
         const d = ROOT2.state.daily[day2()] || {};
@@ -5393,6 +5403,44 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (p && _panelOpen) renderSetup(p);
       }
 
+      /* 刷新时今天的任务没做完 → 直接占用底部这块本来就是任务栏的地方。
+         不弹窗：弹窗每刷一次都要点掉一次，就成了新的打断源。一天只提一次，
+         说「今天先不做」就当天不再提（sessionStorage 管这一趟，localStorage 管今天）。 */
+      const RESUME_KEY = 'ielts.shadow.resumeDay';
+      function hideResumeOffer() {
+        const bar = document.getElementById('taskBar');
+        if (bar && bar.dataset.state === 'resume') { bar.classList.remove('show'); bar.dataset.state = 'idle'; }
+        document.body.classList.remove('resume-offer');
+      }
+      function offerResume() {
+        const bar = document.getElementById('taskBar');
+        if (!bar || taskMode || bar.classList.contains('show')) return;
+        if (!ROOT2 || !ROOT2.plan) return;
+        const d = (ROOT2.state.daily || {})[day2()] || {};
+        const planned = plannedToday(), doneN = d.sentDone || 0;
+        if (!(doneN > 0 && planned > doneN)) return;
+        let gone = null, told = null;
+        try { gone = localStorage.getItem(RESUME_KEY); told = sessionStorage.getItem(RESUME_KEY + '.told'); } catch (e) {}
+        if (gone === day2() || told === day2()) return;
+        bar.dataset.state = 'resume';
+        document.getElementById('tbTitle').innerHTML =
+          '<i class="ri-play-circle-line" aria-hidden="true"></i> 今天的任务还没做完';
+        document.getElementById('tbSub').textContent = `已读 ${doneN}/${planned} 句 · 还剩 ${planned - doneN} 句`;
+        const again = document.getElementById('tbAgain'), nxt = document.getElementById('tbNext');
+        if (again) { again.style.display = ''; again.textContent = '今天先不做'; }
+        if (nxt) nxt.innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> 接着做';
+        bar.classList.add('show');
+        document.body.classList.add('resume-offer');
+        syncTaskBarHeight();
+        try { sessionStorage.setItem(RESUME_KEY + '.told', day2()); } catch (e) {}
+      }
+      function resumeTask() { hideResumeOffer(); enterTaskMode(); }
+      function skipResume() {
+        try { localStorage.setItem(RESUME_KEY, day2()); } catch (e) {}
+        hideResumeOffer();
+        showAbToast('今天剩下的不补 —— 明天还是从这批里接着往下排');
+      }
+
       // ---- 与播放链路集成 ----
       // 自由模式下读了任务句也计数
       function onSentenceComplete(globalIdx) {
@@ -5407,6 +5455,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (plan) {
           buildQueue();
           updateBtn();
+          try { offerResume(); } catch (e) { dlog('resume-offer-fail', (e && e.message) || e); }
           // 断更提示：新句窗口已改为按进度游标推进（见 buildQueue），欠下的句子
           // 不会因日历前移而被跳过，所以这里只如实说明现状，不再声称"已调整计划"。
           const lastDay = prog.lastDay;
@@ -5444,6 +5493,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         recordRep, buildQueue, updateMarkers, updateBtn,
         loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
         pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
+        offerResume, resumeTask, skipResume, hideResumeOffer,
         initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
         pass: passNumber, setPass, currentQuiz, answerQuiz, nextQuiz, advance, finished: isFinished,
         submitRecall, pickOpt, flagQuiz, reviewSentence, summaryContinue: startSummaryContinue,
