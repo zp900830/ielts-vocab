@@ -199,23 +199,67 @@ def parse_group(heading, lines, a, b, fname):
     if not g['summary_line']:
         errs.append(f'{fname} 组{idx}: 没有总结句')
 
-    # --- diff（只吃宽表）---
+    # --- diff ---
+    # 两种形状都收，**草稿一种也不改写**（四份审核是逐行核过草稿原文的，批量重排会把
+    # 那份"已被人工核过"的凭据洗掉）。转换只在这里、只在这一次发生：
+    #   宽表（批次 1A）`| 维度 | dawn | sunrise |`  → {label: 维度, dawn:…, sunrise:…}
+    #   长表（批次 2） `| 维度 | 词 | 搭配 | 用在哪 | 一句话区别 |`
+    #       → 按维度转置成宽表，每维度出 2–3 行，并多带一个 dim 字段，
+    #         渲染时 dim 变化处插一行小标题 —— 手机上读起来是"四块"，不是"十二行"。
     di = find(r'差异维度表|^\*\*差异')
     head, rows = table_after(lines, di + 1) if di is not None else (None, None)
     diff = []
+    LONGTAG = [('常见搭配', '搭配'), ('搭配', '搭配'), ('用在哪', '用在哪'),
+               ('一句话区别', '区别'), ('区别', '区别')]
     if not head:
         errs.append(f'{fname} 组{idx}: 找不到差异表')
-    elif len(head) >= 3 and head[1].strip('*`').lower() in ('词',) :
-        errs.append(f'{fname} 组{idx}: 差异表是长表（第 2 列是「词」），先转成 `| 维度 | 词1 | 词2 |` 宽表再落地')
+    elif len(head) >= 3 and re.sub(r'[*`\s]', '', head[1]) == '词':
+        cols = {}
+        for k, name in enumerate(head):
+            for key, tag in LONGTAG:
+                if key in name and tag not in cols:
+                    cols[tag] = k
+        need = [m for m in members if m not in
+                {re.sub(r'[*`\s]', '', r[1]).lower() for r in rows if len(r) > 1}]
+        if need:
+            errs.append(f'{fname} 组{idx}: 长表里缺成员行 {need}')
+        order, seen = [], set()
+        for r in rows:
+            w = re.sub(r'[*`\s]', '', r[1]).lower() if len(r) > 1 else ''
+            if w and w not in seen:
+                seen.add(w)
+                if w in members:
+                    order.append(w)
+                # 否则这是一行「两个词一起说」的横切（作者常写「两个词」「两者」），
+                # 不该按成员逐个补格 —— 存进 both，渲染时整行合并。
+            dim = re.sub(r'[*`]', '', r[0]).strip() if r else ''
+            if not dim:
+                errs.append(f'{fname} 组{idx}: 长表有一行没有维度名')
+                continue
+            for tag in ('区别', '搭配', '用在哪'):
+                k = cols.get(tag)
+                if k is None or k >= len(r) or not r[k].strip():
+                    continue
+                row = next((x for x in diff if x['dim'] == dim and x['label'] == tag), None)
+                if row is None:
+                    row = {'dim': dim, 'label': tag}
+                    diff.append(row)
+                row[w if w in members else 'both'] = r[k].strip()
+        for row in diff:
+            if 'both' in row:
+                continue
+            miss = [m for m in order if m not in row]
+            if miss:
+                errs.append(f'{fname} 组{idx}: 长表转置后「{row["dim"]}·{row["label"]}」缺 {miss}')
     elif head[0].startswith('维度') or len(head) - 1 == len(members):
-        cols = [c.strip('*`').lower() for c in head[1:]]
+        cols = [re.sub(r'[*`\s]', '', c).lower() for c in head[1:]]
         bad = [c for c in cols if c not in members]
         if bad:
             errs.append(f'{fname} 组{idx}: 差异表列名与成员不符: {bad} vs {members}')
         for row in rows:
             if len(row) < len(head):
                 continue
-            r = {'label': row[0].strip('*').strip()}
+            r = {'label': re.sub(r'[*`]', '', row[0]).strip()}
             for k, c in enumerate(cols):
                 v = row[k + 1].strip() if k + 1 < len(row) else ''
                 if v:

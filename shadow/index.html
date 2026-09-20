@@ -241,6 +241,8 @@
   .cmp-card .nb-tc { color: var(--ink2); }
   .cmp-card .nb-scene { color: var(--muted); font-size: 11px; }
   .cmp-card .nb-tl { font-weight: 600; background: rgba(12,156,116,.04); }
+  /* 长表转置后一个维度占两三行，靠这条小标题分块；不加分隔就是一堵平铺的十二行墙 */
+  .cmp-card .nb-dim td { font-weight: 700; background: rgba(12,156,116,.10); padding: 5px 7px; }
   .cmp-card .nb-summary { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); color: var(--accent); font-weight: 600; font-size: 12px; }
   body.dark .cmp-card { border-color: #33302b; }
   body.dark .cmp-card .nb-table td, body.dark .cmp-card .nb-table th { border-color: #33302b; }
@@ -1680,9 +1682,21 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       html += `</table>`;
     }
     if (note.diff && note.diff.length) {
-      const keys = Object.keys(note.diff[0]).filter(k => k !== 'label');
+      const keys = Object.keys(note.diff[0]).filter(k => k !== 'label' && k !== 'dim' && k !== 'both');
       html += `<table class="nb-table nb-diff"><tr><th></th>${keys.map(k => `<th>${esc(k)}</th>`).join('')}</tr>`;
+      // dim = 作者写的那个"维度"标题（长表转置后每两三行共用一个）。
+      // 不加小标题的话，一个维度三行 ×四个维度就是十二行平铺，看不出哪几行是一回事。
+      let prevDim = null;
       for (const row of note.diff) {
+      if (row.dim && row.dim !== prevDim) {
+        html += `<tr class="nb-dim"><td colspan="${keys.length + 1}">${esc(row.dim)}</td></tr>`;
+      }
+      prevDim = row.dim || prevDim;
+      if (row.both) {
+        // 作者把这行写成「两个词一起看」（讲中文怎么译、卡给不给词伙这类），不该按词拆两格
+        html += `<tr><td class="nb-tl">${esc(row.label)}</td><td colspan="${keys.length}">${esc(row.both)}</td></tr>`;
+        continue;
+      }
       html += `<tr><td class="nb-tl">${esc(row.label)}</td>${keys.map(k => `<td>${esc(row[k] || '')}</td>`).join('')}</tr>`;
       }
       html += `</table>`;
