@@ -15,12 +15,8 @@ import glob
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-def _width(t):
-    """与 scripts/validate_data.py 的 _width 保持一字不差（口径变了这里要同步改）。"""
-    return sum(1 if ('一' <= c <= '鿿') or ('　' <= c <= '〿') or ('＀' <= c <= '￯') else 0.5 for c in t)
-
+sys.path.insert(0, os.path.join(ROOT, 'tools'))
+from width_rule import width as _width   # noqa: E402  一把尺：口径只在 tools/width_rule.py 里改（≤40 = 手机上两行以内）
 
 # 各切片作者用了三种小标题写法（### 默认显示的那一行 / ### 默认那一行 / **默认那一行**），
 # 落地前要把 42 组一次性量齐，所以三种都要认，否则会误报"这组没写默认行"。

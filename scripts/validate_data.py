@@ -6,6 +6,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
+sys.path.insert(0, str(ROOT / 'tools'))
+from width_rule import width as _ruler_width   # 唯一一把尺；口径与上限都只在 tools/width_rule.py 里改
+
 # 主站 fetchCached 用 DATA_VER 做 Cache API 的 x-ver 键：改了数据文件而没 bump
 # DATA_VER，线上会永久命中旧缓存且无任何报错。故把版本号定义为这些文件的内容哈希，
 # 由本脚本校验一致性 —— 忘记 bump 会直接 FAIL，而不是静默服务旧词库。
@@ -296,8 +299,9 @@ def main():
     def _width(t):
         # 口径（2026-09-20 两份独立审核各自从批次 1A 你点头的 5 条实测数反推，结论一致）：
         # 汉字和全角标点各记 1，其余（拉丁字母、空格、半角括号）记 0.5。
-        # 之前这里只认汉字，中文标点被记 0.5 —— 上限因此比 PRD 说的松，超宽的行能混过去。
-        return sum(1 if ('一' <= c <= '鿿') or ('　' <= c <= '〿') or ('＀' <= c <= '￯') else 0.5 for c in t)
+        # 之前这里抄了一份自己算，中文标点被记 0.5 —— 上限因此比 PRD 说的松，超宽的行能混过去。
+        # 现在只留一个委托：尺子在 tools/width_rule.py，别再这里改口径。
+        return _ruler_width(t)
     n_cmp = 0
     for w, c in vocab.items():
         if not isinstance(c, dict):
@@ -339,7 +343,7 @@ def main():
         if m:
             line = m.group(1).strip()
             if _width(line) > 40:
-                errors.append(f'辨析卡 {w}: 默认那一行宽度 {_width(line)} > 40，手机上会折行（PRD §7.2）: {line[:30]}')
+                errors.append(f'辨析卡 {w}: 默认那一行宽度 {_width(line)} > 40，手机上会超过两行（PRD §5.10：≤40 的口径是"两行以内"，不是"一行"）: {line[:30]}')
         elif text:
             warnings.append(f'辨析卡 {w}: summary 里没有「简单记：」那半句，段末默认行只能整段显示（会超宽）')
         paras = note.get('paras') or []
