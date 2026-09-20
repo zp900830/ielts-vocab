@@ -134,7 +134,9 @@ def parse_group(heading, lines, a, b, fname):
     idx = int(m.group(1))
     head_members = re.split(r'[（｜(—]', m.group(2), 1)[0]
     members = [x.strip().lower() for x in re.split(r'\s*/\s*', head_members) if x.strip()]
-    members = [x for x in members if re.fullmatch(r'[a-z][a-z\-]*', x)]
+    # 允许词组型词头（`dining hall`、`swear word`）—— 第一版只认 [a-z-]，把 idx 28/73
+    # 两组直接判成"成员数 <2"，等于凭空丢掉两张表。
+    members = [x for x in members if re.fullmatch(r'[a-z][a-z\- ]*[a-z]|[a-z]', x)]
     if len(members) < 2:
         return None, [f'{fname} 组{idx}: 成员数 <2'], []
     g['members'] = members
