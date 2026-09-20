@@ -16,7 +16,8 @@ declare const TASK: {
   cloudPull(): Promise<{ got: number; newEvents: number }>;
   state(): { words: Record<string, { reps: number; stage: string }> };
 };
-declare const window: { __supaRows: { event_id: string }[]; __supaReject: boolean };
+declare const window: { __supaRows: { event_id: string }[]; __supaReject: boolean;
+  __supaOpts: { onConflict?: string; ignoreDuplicates?: boolean } | null };
 
 // 行存在 localStorage 里，这样 reload 之后「云端」还在 —— 幂等只能跨刷新来验
 const STUB = `
@@ -33,7 +34,8 @@ window.supabase = {
       },
       from: function () {
         var q = {};
-        q.upsert = function (incoming) {
+        q.upsert = function (incoming, opts) {
+          window.__supaOpts = opts || null;   // 让用例能钉住「撞主键时是跳过还是更新」
           if (window.__supaReject) return Promise.resolve({ error: { message: 'rls denied' } });
           var list = Array.isArray(incoming) ? incoming : [incoming];
           var cur = rows();
@@ -114,6 +116,37 @@ test.describe('append-only event stream', () => {
     expect(got.added).toBeGreaterThan(0);
     expect(got.again).toBe(0);              // 第二次一条都不再新增：event_id 去重
     expect(got.same).toBe(true);
+  });
+
+  /* 他报的「点了『本机进度还没传上去 · 点这里重试』没有任何反应」，两个原因都在这里钉住：
+     ① 拉回来的历史事件以前会被 uploaded=0 打成「待传」，于是每次重试都重推整段；
+     ② 重推在只有 select+insert 两条 RLS 策略的表上必然被拒（upsert 默认走 ON CONFLICT DO UPDATE，
+        需要 UPDATE 权限 → 42501），所以点了确实什么都没发生。
+     断言全部走「相对量」：换设备后本地会新长出一条今日计划，那是真待传，别把它算成回归。 */
+  test('rows that are already on the server stop counting as pending, and retry answers back', async ({ page }) => {
+    const got = await page.evaluate(async () => {
+      TASK.initPlan(10);
+      TASK.todayPlan(true).queue.slice(0, 3).forEach(x => TASK.readDone(x.i));
+      await TASK.cloudPush();
+      const pushed = window.__supaRows.length;
+      TASK.resetV2();                              // 模拟换设备：本地清空，历史只在「云端」
+      TASK.initPlan(10);
+      const localOnly = TASK.pendingEvents().length;
+      await TASK.cloudPull();
+      const opts = window.__supaOpts;
+      const afterPull = TASK.pendingEvents().length;
+      const r = await TASK.retrySync();            // 点一下重试：不该重推全量，也不该毫无回应
+      return { pushed, localOnly, afterPull, againSent: r.sent, rows: window.__supaRows.length,
+               conflict: opts && opts.onConflict, ignore: opts && opts.ignoreDuplicates,
+               hint: (document.getElementById('syncHint') || {}).textContent || '' };
+    });
+    expect(got.pushed).toBeGreaterThan(0);
+    expect(got.conflict).toBe('event_id,user_id');
+    expect(got.ignore).toBe(true);                 // 撞键跳过，不要求 UPDATE 权限
+    expect(got.afterPull).toBe(got.localOnly);     // 服务端已有的历史不再算待传（以前归零 → 每次重推全量）
+    expect(got.againSent).toBe(got.localOnly);     // 重试只补真正缺的那几条
+    expect(got.rows).toBe(got.pushed + got.localOnly);
+    expect(got.hint).not.toMatch(/重试/);           // 而且给了话，不是原地不动
   });
 
   test('a refused upload never breaks local progress and leaves a standing hint', async ({ page }) => {
