@@ -1150,10 +1150,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 任务模式时 audiobar 上移避让 */
   body.task-mode .audiobar, body.resume-offer .audiobar { bottom: calc(var(--task-bar-h, 62px) + 8px + env(safe-area-inset-bottom, 0px)); }
   body.task-mode .back-to-play { bottom: calc(var(--task-bar-h, 62px) + 98px + env(safe-area-inset-bottom, 0px)); }
-  /* 任务模式下上一句/下一句保持原位可见：模式切换不该作废肌肉记忆（PRD §10.1） */
-  /* 全页只留一个「下一句」：任务模式里翻句归任务栏，播放条那两颗 ab-step 收掉。
-     他要的是播放条别消失（暂停要能按、想回听要能听），不是要两个「下一句」。 */
-  body.task-mode .audiobar .ab-left > .btn.ab-step,
+  /* 全页只留一个「下一句」：任务模式里往后翻归任务栏那颗，播放条把重复的那颗让出来。
+     他拍板的是「下一句只留一个 + 播放条不藏」，不是砍掉回看 —— 上一句必须留着，
+     不然①通读里"刚才那句没听清，退回去再听一遍"这条动作就没了（真机走查用例守着它）。 */
+  body.task-mode .audiobar .ab-left > .btn.ab-step-fwd,
   body.task-mode .audiobar .rate-wrap { display: none; }
   /* ②③ 做题态：播放条只留「播放/暂停 + 回看」这一窄条，选项 / 这题有问题 / 回看句子 归做题卡。 */
   body.task-mode.quiz-mode .audiobar .loop-wrap,
@@ -1318,7 +1318,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       <nav class="ab-left" aria-label="播放控制">
         <button class="btn ab-step" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i> 上一句</button>
         <button class="btn play" id="btnPlay" onclick="togglePlay()" aria-label="播放或暂停"><i class="ri-play-fill" aria-hidden="true"></i> 播放</button>
-        <button class="btn ab-step" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line" aria-hidden="true"></i> 下一句</button>
+        <button class="btn ab-step ab-step-fwd" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line" aria-hidden="true"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
           <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="单句循环：选择每句重复次数" aria-label="单句循环次数"><i class="ri-repeat-line" aria-hidden="true"></i><span id="loopCount">3</span></button>

@@ -39,20 +39,20 @@ async function startPlanAndTaskMode(page: import('@playwright/test').Page, baseU
 test.describe('task mode · UI invariants', () => {
   test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
 
-  /* 旧的不变量是「控件位置跨模式零变化」，他 2026-09-20 改口了：全页只留一颗「下一句」（归任务栏），
-     播放条不藏但也不重复。所以这条从「三颗都在」改成「播放在、翻句不在、退出后三颗全回来」。 */
-  test('任务模式里播放条只留播放，翻句交回任务栏；退出后一切照旧', async ({ page, baseURL }) => {
+  /* 他拍的板（2026-09-20）：「下一句」全页只留一颗（归任务栏），播放条不藏。
+     收掉的只有重复的那一颗 —— 上一句是①通读里"退回去再听一遍"的唯一入口，必须留。 */
+  test('任务模式里播放条不藏、上一句留在原地，下一句让给任务栏', async ({ page, baseURL }) => {
     test.setTimeout(currentTimeout() * 8);
     await startPlanAndTaskMode(page, baseURL);
     const play = page.locator('.audiobar').getByRole('button', { name: '播放或暂停' });
     await expect(play).toBeVisible();
     await expect(play).toBeEnabled();
-    await expect(page.locator('.audiobar .ab-step')).toHaveCount(2);   // DOM 里还在，只是这一态不摆出来
-    for (const name of ['上一句', '下一句'])
-      await expect(page.locator('.audiobar').getByRole('button', { name })).not.toBeVisible();
+    const back = page.locator('.audiobar').getByRole('button', { name: '上一句' });
+    await expect(back).toBeVisible();
+    await expect(back).toBeEnabled();
+    await expect(page.locator('.audiobar').getByRole('button', { name: '下一句' })).not.toBeVisible();
     await page.evaluate(() => TASK.exitTaskMode());
-    for (const name of ['上一句', '下一句'])
-      await expect(page.locator('.audiobar').getByRole('button', { name })).toBeVisible();
+    await expect(page.locator('.audiobar').getByRole('button', { name: '下一句' })).toBeVisible();
   });
 
   test('the progress readout appears once on the page, not twice', async ({ page, baseURL }) => {
@@ -336,21 +336,25 @@ test.describe('three passes', () => {
   const barState = (page: import('@playwright/test').Page) =>
     page.evaluate(() => (document.getElementById('taskBar') as HTMLElement).dataset.state);
 
-  test('任务模式里播放条仍在，但翻句只剩任务栏那颗', async ({ page, baseURL }) => {
-    await startPlanAndTaskMode(page, baseURL);
+  /* beforeEach 已经 initPlan + enterTaskMode，这里别再走 startPlanAndTaskMode：
+     那颗 .ps-start 只在「还没有计划」时才存在，计划已建就会点到永远等不到的按钮。
+     可见性一律用 Playwright 的 :visible —— 任务栏和播放条都是 position:fixed，
+     offsetParent 恒为 null，拿它判可见会把两颗都在屏幕上的按钮读成"不存在"。 */
+  test('任务模式里播放条仍在，但翻句只剩任务栏那颗', async ({ page }) => {
+    test.setTimeout(currentTimeout());   // hook 给了 12 分钟；这条本地 5 秒内该完
     await expect(page.locator('#audiobar')).toBeVisible();
     await expect(page.locator('#btnPlay')).toBeVisible();
-    await expect(page.locator('.ab-left > .btn.ab-step')).toHaveCount(2);   // DOM 里还在
-    await expect(page.locator('.ab-left > .btn.ab-step').first()).not.toBeVisible();  // 但收进任务栏那一颗
-    const steppers = await page.evaluate(() => [...document.querySelectorAll('.btn')]
-      .filter(el => (el.textContent || '').indexOf('下一句') >= 0 && (el as HTMLElement).offsetParent !== null).length);
-    expect(steppers).toBe(1);
+    await expect(page.locator('.ab-left > .btn.ab-step:visible')).toHaveCount(1);  // 只剩上一句
+    await expect(page.locator('.ab-left > .btn.ab-step-fwd')).toHaveCount(1);       // 让出去的那颗还在 DOM 里
+    await expect(page.locator('button:visible', { hasText: '下一句' })).toHaveCount(1);
+    await expect(page.locator('#tbNext')).toBeVisible();
+
     // ②③ 做题态：只留播放这一窄条，且做题卡要给播放条 + 任务栏两条都让位
     await page.evaluate(() => { TASK.setPass(2); TASK.next(); });
     await expect.poll(() => page.evaluate(() => document.body.classList.contains('quiz-mode'))).toBe(true);
     await expect(page.locator('#audiobar')).toBeVisible();
     await expect(page.locator('#btnPlay')).toBeVisible();
-    await expect(page.locator('.loop-wrap').first()).not.toBeVisible();
+    await expect(page.locator('.loop-wrap:visible')).toHaveCount(0);
     const fits = await page.evaluate(() => {
       const px = (v: string) => parseFloat(v) || 0;
       const gap = px(getComputedStyle(document.documentElement).getPropertyValue('--task-card-b'));
@@ -362,6 +366,7 @@ test.describe('three passes', () => {
   });
 
   test('刷新时任务没做完：底部那行变成续读条，点「接着做」进任务模式', async ({ page, baseURL }) => {
+    test.setTimeout(currentTimeout());   // hook 给了 12 分钟；这几条本地 5 秒内该完，卡住就早点红
     await page.goto(`${baseURL}/index.html`);
     await expect(page.locator('.sent').first()).toBeVisible();
     const room = await page.evaluate(() => {
@@ -382,6 +387,7 @@ test.describe('three passes', () => {
   });
 
   test('「今天先不做」当天就不再提，明天照常', async ({ page, baseURL }) => {
+    test.setTimeout(currentTimeout());   // hook 给了 12 分钟；这几条本地 5 秒内该完，卡住就早点红
     await page.goto(`${baseURL}/index.html`);
     await expect(page.locator('.sent').first()).toBeVisible();
     await page.evaluate(() => {
