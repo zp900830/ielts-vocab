@@ -815,6 +815,42 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark.scrolled.show-nav .topbar { border-bottom-color: #33302b; }
   body.scrolled.show-nav .topbar .ctrl .btn { font-size: 13px; padding: 7px 14px; min-height: 34px; }
 
+  /* ============ 汉堡收纳模式 ============
+     顶栏这一行放不下时，整排工具收进汉堡，不再让顶栏自己折成两排吃掉阅读区。
+     窄屏（≤700px）必进；宽屏由 syncNavMode() 量出来 —— 它把 body.nav-menu 挂上，
+     于是宽屏和移动端走的是同一套面板、同一个开关（body.menu-open）。 */
+  body.nav-menu .topbar { flex-wrap: nowrap; overflow: visible; }
+  body.nav-menu .topbar h1 { flex: 1 1 auto; min-width: 0; margin-right: auto;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  body.nav-menu #btnMenu { display: inline-flex; flex: none; min-width: 24px; min-height: 24px;
+    padding: 4px; justify-content: center; align-items: center; }
+  body.nav-menu #btnMenu .burger { display: block; width: 11px; height: 7px; flex: none;
+    border-top: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+    background: linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat; }
+  /* 面板：节点不搬迁（绑定不受影响），显隐唯一由 body.menu-open 控制；
+     挂在顶栏下沿，顶栏滚动收缩时面板跟着走，不再写死 top */
+  body.nav-menu .topbar-right { position: absolute; top: calc(100% + 6px); right: 12px; z-index: 160;
+    margin-left: 0; flex: none; width: min(300px, calc(100vw - 24px));
+    flex-direction: column; align-items: stretch; gap: 8px; padding: 12px;
+    background: var(--glass-strong); border: 1px solid var(--border); border-radius: 14px;
+    -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px);
+    box-shadow: 0 16px 48px rgba(0,0,0,.14);
+    opacity: 0; visibility: hidden; transform: translateY(-8px); pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease, visibility .2s; }
+  body.nav-menu.menu-open .topbar-right { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+  /* 面板里的按钮一律带字：宽屏平时是图标钮，收进面板后只剩图标就认不出来了 */
+  body.nav-menu .topbar-right .only-mobile { display: inline; }
+  /* 让位给面板开关：body.scrolled 那套「滚动时压扁工具栏」在收纳模式里会把面板一起压没 */
+  body.nav-menu.scrolled .topbar { overflow: visible; }
+  body.nav-menu.scrolled .topbar-right, body.nav-menu.scrolled.show-nav .topbar-right,
+  body.nav-menu.scrolled .topbar:hover .topbar-right { max-width: none; max-height: none; overflow: visible;
+    opacity: 0; visibility: hidden; transform: translateY(-8px); pointer-events: none; }
+  body.nav-menu.scrolled.menu-open .topbar-right, body.nav-menu.scrolled.show-nav.menu-open .topbar-right,
+  body.nav-menu.scrolled.menu-open .topbar:hover .topbar-right { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+  body.nav-menu.scrolled .topbar .ctrl, body.nav-menu.scrolled.show-nav .topbar .ctrl,
+  body.nav-menu.scrolled .topbar-right > .btn, body.nav-menu.scrolled.show-nav .topbar-right > .btn {
+    max-width: none; max-height: none; opacity: 1; overflow: visible; pointer-events: auto; }
+
   /* ============ 移动端（借鉴词汇真经：去矩形块感——顶栏精简、播放条单行、词库抽屉化） ============ */
   @media (max-width: 700px) {
     /* iOS 不支持 background-attachment:fixed，改固定层绘制（否则背景整块发白） */
@@ -831,17 +867,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       background-image:
       radial-gradient(ellipse 80% 50% at 50% 0%, rgba(16,180,135,.08) 0%, transparent 70%),
       linear-gradient(180deg, #1c1a17 0%, #161412 100%); }
-    /* 顶栏：单行＋汉堡菜单（把阅读区还给正文） */
-    .topbar { padding: 8px 12px; gap: 6px; flex-wrap: nowrap; overflow: visible; }
-    .topbar h1 { flex: 1 1 auto; min-width: 0; margin-right: auto; font-size: 14px;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    #btnMenu { display: inline-flex; flex: none; min-width: 24px; min-height: 24px; padding: 4px 4px; justify-content: center; align-items: center; }
-    #btnMenu .burger { display: block; width: 11px; height: 7px; flex: none;
-      border-top: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
-      background: linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat; }
+    /* 顶栏：单行＋汉堡菜单（把阅读区还给正文）。收纳模式本身的结构规则在上面 body.nav-menu 里，
+       这里只补移动端的尺寸：更窄的内边距、14px 标题 */
+    body.nav-menu .topbar { padding: 8px 12px; gap: 6px; }
+    body.nav-menu .topbar h1 { font-size: 14px; }
     .only-mobile { display: inline; }
     /* 面板内按移动端规范：整行左对齐、44px 触区、组内双列 */
-    .topbar-right { gap: 10px; width: min(280px, calc(100vw - 24px)); }
+    body.nav-menu .topbar-right { gap: 10px; }
     .topbar-right .btn { min-height: 44px; font-size: 14px; justify-content: flex-start; }
     .topbar-right > .btn { width: 100%; }
     .topbar-right > #btnCloud { max-width: none; } /* 盖掉旧单行顶栏的 110px 限宽，菜单里整行 */
@@ -858,16 +890,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     /* loop/倍速小菜单：选项行按 44px 触区 */
     .loop-menu, .rate-menu { min-width: 120px; }
     .loop-menu button, .rate-menu button { min-height: 44px; padding: 12px 16px; font-size: 15px; }
-    /* .topbar-right 改为下拉面板；显隐唯一由 body.menu-open 控制，节点不搬迁、绑定不受影响 */
-    .topbar-right { position: fixed; top: 54px; right: 12px; z-index: 160; margin-left: 0; flex: none;
-      width: min(300px, calc(100vw - 24px));
-      flex-direction: column; align-items: stretch; gap: 8px; padding: 12px;
-      background: var(--glass-strong); border: 1px solid var(--border); border-radius: 14px;
-      -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px);
-      box-shadow: 0 16px 48px rgba(0,0,0,.14);
-      opacity: 0; visibility: hidden; transform: translateY(-8px); pointer-events: none;
-      transition: opacity .2s ease, transform .2s ease, visibility .2s; }
-    body.menu-open .topbar-right { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+    /* 面板本体与「压过 scrolled / show-nav / hover」的覆盖统一在上面的 body.nav-menu 块里，
+       宽屏挤不下时要用同一套，所以不能只写在这个 media query 里 */
     .topbar-right .ctrl { flex-wrap: wrap; row-gap: 6px; }
     /* 压过 scrolled / show-nav / hover 的压缩与显隐：移动端一律走菜单开关 */
     body.scrolled .topbar { padding: 4px 12px; gap: 4px; flex-wrap: nowrap; overflow: visible;
@@ -877,13 +901,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     body.scrolled .topbar h1 { font-size: 12px; }
     body.scrolled.show-nav .topbar, body.fade-nav.scrolled.show-nav .topbar { padding: 8px 12px; gap: 6px; flex-wrap: nowrap; overflow: visible; }
     body.scrolled.show-nav .topbar h1 { font-size: 14px; }
-    body.scrolled .topbar-right, body.scrolled.show-nav .topbar-right,
-    body.scrolled .topbar:hover .topbar-right { max-width: none; max-height: none; overflow: visible;
-      opacity: 0; visibility: hidden; transform: translateY(-8px); pointer-events: none; }
-    body.scrolled.menu-open .topbar-right, body.scrolled.show-nav.menu-open .topbar-right,
-    body.scrolled.menu-open .topbar:hover .topbar-right { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
-    body.scrolled .topbar .ctrl, body.scrolled.show-nav .topbar .ctrl { max-width: none; max-height: none; opacity: 1; overflow: visible; pointer-events: auto; }
-    body.scrolled .topbar-right > .btn, body.scrolled.show-nav .topbar-right > .btn { max-width: none; max-height: none; opacity: 1; overflow: visible; pointer-events: auto; }
     .ctrl { font-size: 12px; gap: 5px; flex: none; }
     .btn { padding: 6px 10px; font-size: 12px; min-height: 30px; white-space: nowrap; flex: none; }
     .voice-sel { max-width: 150px; font-size: 16px; touch-action: manipulation; }
@@ -2291,6 +2308,60 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }), 0);
     }
     function toggleMenu() { document.body.classList.toggle('menu-open'); }
+
+    /* ---- 顶栏放不下就收进汉堡（CSS 侧见 body.nav-menu） ----
+       量宽之前先把收纳类摘掉、把「阅读训练」放回行内，才能量到它到底会不会折成两行；
+       加删在同一个任务里完成，中间不产帧，所以不会闪。 */
+    function navRowWraps() {
+      const bar = document.querySelector('.topbar');
+      if (!bar) return false;
+      const kids = [].filter.call(bar.children, el => el.offsetParent !== null);
+      if (kids.length < 2) return false;
+      // 别拿 offsetTop 比：顶栏是 align-items:center，一颗高一颗矮本来就不齐。
+      // flex-wrap 折行时内容高度 = 两行行高之和，所以「比最高那颗还高」就是折了。
+      const cs = getComputedStyle(bar);
+      const contentH = bar.clientHeight - (parseFloat(cs.paddingTop) || 0) - (parseFloat(cs.paddingBottom) || 0);
+      const tallest = Math.max.apply(null, kids.map(el => el.offsetHeight));
+      return contentH > tallest + 2;
+    }
+    function placeAppLink(inPanel) {
+      const a = document.querySelector('.topbar .app-link');
+      const panel = document.querySelector('.topbar-right');
+      const today = document.getElementById('btnToday');
+      if (!a || !panel) return;
+      if (inPanel) { if (a.parentElement !== panel) panel.insertBefore(a, panel.firstChild); }
+      else if (a.parentElement === panel) panel.parentElement.insertBefore(a, today);
+    }
+    function syncNavMode() {
+      const b = document.body;
+      // 滚动收缩态会把工具栏压成 0 宽，量出来永远「放得下」—— 量之前先按展开态摆一次，
+      // 加删在同一个任务里完成，中间不产帧，所以看不到闪。
+      const stash = ['scrolled', 'fade-nav'].filter(c => b.classList.contains(c));
+      stash.forEach(c => b.classList.remove(c));
+      b.classList.remove('nav-menu'); placeAppLink(false);
+      const narrow = window.matchMedia('(max-width: 700px)').matches;
+      if (narrow || navRowWraps()) { b.classList.add('nav-menu'); placeAppLink(true); }
+      else b.classList.remove('menu-open');
+      stash.forEach(c => b.classList.add(c));
+    }
+    let _navRaf = 0;
+    function requestNavSync() {
+      if (_navRaf) return;
+      _navRaf = requestAnimationFrame(() => { _navRaf = 0; try { syncNavMode(); } catch (e) {} });
+    }
+    /* 顶栏里哪颗会变宽（章节名、音色名、登录态、译文开关的字），就盯着谁 ——
+       它们一撑宽这一行，量到放不下立刻收进汉堡。 */
+    function initNavCollapse() {
+      syncNavMode();
+      if (!window.ResizeObserver) return;
+      const ro = new ResizeObserver(requestNavSync);
+      const bar = document.querySelector('.topbar');
+      if (bar) ro.observe(bar);
+      ['chapSel', 'voiceSel', 'btnCloud', 'btnZh', 'btnGloss'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) ro.observe(el);
+      });
+    }
     function populateChapterSelect() {
     const sel = document.getElementById('chapSel');
     if (!sel || sel.dataset.bound) return;
@@ -5372,11 +5443,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     });
     }
     mobileBtnIcons();
+    try { initNavCollapse(); } catch (e) {}
     window.addEventListener('orientationchange', () => setTimeout(mobileBtnIcons, 300));
     let _rzT = false;
     window.addEventListener('resize', () => {
     if (_rzT) return; _rzT = true;
-    requestAnimationFrame(() => { _rzT = false; mobileBtnIcons(); if (abMode === 3) paintAB(); });
+    requestAnimationFrame(() => { _rzT = false; mobileBtnIcons(); if (abMode === 3) paintAB(); requestNavSync(); });
     });
     if (typeof CLOUD !== 'undefined') CLOUD.boot();
     // 断网恢复后自动重连云端（移动端网络抖动常见）
