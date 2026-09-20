@@ -1384,7 +1384,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <div class="today-panel" id="todayPanel" role="dialog" aria-modal="true" aria-label="今日学习任务" tabindex="-1"></div>
     <div id="todayScrim" style="position:fixed;inset:0;z-index:590;background:rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .2s" onclick="TASK.closePanel()"></div>
     <!-- 常驻同步提示：不是弹窗，失败了就在原地挂着，点一下重试（PRD 原则 6 §12） -->
-    <div id="syncHint" class="sync-hint" role="status" aria-live="polite" hidden onclick="TASK.cloudSync()"></div>
+    <div id="syncHint" class="sync-hint" role="status" aria-live="polite" hidden onclick="TASK.retrySync()"></div>
     <!-- 任务模式底部操作栏 -->
     <div class="task-bar" id="taskBar" data-state="idle">
       <div class="tb-info"><div class="tb-title" id="tbTitle">—</div><div class="tb-sub" id="tbSub"></div></div>
@@ -4201,7 +4201,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             ts: ev.ts || Date.now(), type: ev.type, payload: ev,
           }));
           if (!rows.length) { setSyncHint(''); return { sent: 0 }; }
-          const res = await c.from('shadow_events').upsert(rows, { onConflict: 'event_id,user_id' });
+          // ignoreDuplicates 不是洁癖，是能不能重试的分水岭：默认 upsert 走 ON CONFLICT DO UPDATE，
+          // 而 shadow_events 只有 select + insert 两条 RLS 策略（sql/shadow_events.sql）——
+          // 撞上已有主键就要 UPDATE 权限 → 42501 → 「点这里重试」永远失败。
+          // 事件是内容寻址、只追加的，重复行原样跳过就是正确答案。
+          const res = await c.from('shadow_events').upsert(rows, { onConflict: 'event_id,user_id', ignoreDuplicates: true });
           if (res.error) {
             dlog('events-push-fail', res.error.message || res.error);
             setSyncHint('本机进度还没传上去 · 点这里重试');
@@ -4230,6 +4234,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           if (res.error || !Array.isArray(res.data)) return { got: 0, newEvents: 0 };
           const have = {};
           ROOT2.events.forEach(e => { have[e.id || ShadowPlan.eventId(e)] = 1; });
+          const onServer = {};                      // 服务端到底有哪几条，只有这份清单说了才算
+          res.data.forEach(r => { if (r && r.event_id) onServer[r.event_id] = 1; });
           let added = 0;
           res.data.forEach(row => {
             if (!row || have[row.event_id]) return;
@@ -4238,9 +4244,16 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           });
           if (added) {
             ROOT2.events.sort((a, b) => (a.ts || 0) - (b.ts || 0));
-            ROOT2.uploaded = 0;              // 顺序变了，游标作废：下一次 push 靠主键去重
-            recompute2(); _cachedPlan = null; persist2();
+            recompute2(); _cachedPlan = null;
           }
+          /* 游标按「服务端已经有谁」重算，不再归零。
+             归零的代价实测很实在：139 条早就在库里的历史事件被当成待传，每次重试都重推全量，
+             而重推在只有 insert 策略的表上必然被拒（见 cloudPush 里那段注释）→ 提示永远挂着。
+             往前走到第一条不在服务端的为止：中间若真有一条没传上去，宁可少算（会重推几条，无害），不可漏传。 */
+          let cur = 0;
+          while (cur < ROOT2.events.length && onServer[ROOT2.events[cur].id || ShadowPlan.eventId(ROOT2.events[cur])]) cur++;
+          ROOT2.uploaded = cur;
+          persist2();
           return { got: res.data.length, newEvents: added };
         } catch (e) {
           dlog('events-pull-fail', (e && e.message) || e);
@@ -4251,6 +4264,23 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         await cloudPull();
         const r = await cloudPush();
         try { renderToday(document.getElementById('todayPanel')); } catch (e) {}
+        return r;
+      }
+      /* 那行常驻提示是可以点的，点了必须有回应 —— 他报的就是「点了没有任何反应」：
+         以前直接调 cloudSync()，成功就把提示清掉（看不出是刚刚传上去的），失败就原样挂着，
+         两种情况在屏幕上长得一模一样。 */
+      async function retrySync() {
+        const c = (typeof CLOUD !== 'undefined') ? CLOUD.client() : null;
+        if (!c) { setSyncHint('未登录 · 进度先记在本机'); return { sent: 0, offline: true }; }
+        const left = pendingEvents().length;
+        setSyncHint(left ? '正在补传 ' + Math.min(left, 400) + ' 条…' : '正在和云端核对…');
+        const r = await cloudSync();
+        if (r && r.error) { setSyncHint('补传失败：' + String(r.error).slice(0, 40) + ' · 再点一次'); return r; }
+        if (r && r.offline) { setSyncHint('连不上云端 · 进度先记在本机'); return r; }
+        const rest = pendingEvents().length;
+        setSyncHint(r && r.sent ? '已补传 ' + r.sent + ' 条' + (rest ? '，还有 ' + rest + ' 条' : '')
+                                : (rest ? '还有 ' + rest + ' 条没传上去 · 点这里重试' : '进度已与云端一致'));
+        if (!(rest > 0)) setTimeout(() => { try { if (!pendingEvents().length) setSyncHint(''); } catch (e) {} }, 2600);
         return r;
       }
       function setSyncHint(msg) {
@@ -5413,7 +5443,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         get progress() { return prog; },
         recordRep, buildQueue, updateMarkers, updateBtn,
         loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
-        pendingEvents, cloudPush, cloudPull, cloudSync, syncHintText,
+        pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
         initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
         pass: passNumber, setPass, currentQuiz, answerQuiz, nextQuiz, advance, finished: isFinished,
         submitRecall, pickOpt, flagQuiz, reviewSentence, summaryContinue: startSummaryContinue,
