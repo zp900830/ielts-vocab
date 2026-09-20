@@ -3,8 +3,10 @@
 """把辨析卡草稿（work/…辨析…md）落地进 shadow/data/vocab.json。
 
 草稿是人写的、格式有两种历史形状：
-  · 批次 1：差异表已经是宽表 `| 维度 | dawn | sunrise |` —— 和数据的 diff 一模一样
-  · 批次 2：差异表是长表 `| 维度 | 词 | 常见搭配 | 用在哪 | 一句话区别 |`
+  · 批次 1A：差异表已经是宽表 `| 维度 | dawn | sunrise |` —— 和数据的 diff 一模一样
+  · 批次 1B/2：差异表是长表 `| 维度 | 词 | 常见搭配 | 用在哪 | 一句话区别 |`
+长表在**这里**（内存里、只在落地这一次）转置成宽表，草稿一种都不改写 —— 四份门禁 2
+审核是逐行核过草稿原文的，重排文件等于把「已被人工核过」的凭据洗掉。
 本工具**只吃宽表**，遇到长表就报错，不做静默降级 —— 上一轮代理把 note 压成字符串
 直接显示在线上，就是因为落地器"尽力而为"。宁可停下。
 
@@ -30,12 +32,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VOCAB = os.path.join(ROOT, 'shadow', 'data', 'vocab.json')
 SECTIONS = os.path.join(ROOT, 'shadow', 'data', 'sections.json')
 INDEX = os.path.join(ROOT, 'shadow', 'index.html')
-
-
-def width(t):
-    """与 scripts/validate_data.py._width 一字不差：汉字与全角标点各 1，其余 0.5。"""
-    return sum(1 if ('一' <= c <= '鿿') or ('　' <= c <= '〿') or ('＀' <= c <= '￯') else 0.5
-               for c in t)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from width_rule import width  # noqa: E402  一把尺：与 validate_data.py 同源，别再抄一份
 
 
 PROV = re.compile(r'[（(]\s*(?:课文|卡|ex|note|词伙|同位|原文|书|章)\s*\d*[^）)]*[)）]\s*$')
@@ -120,8 +118,24 @@ def split_groups(md):
     return out, lines
 
 
-def parse_group(heading, lines, a, b, fname):
-    """返回 (card_dict, warnings[])。任何解析不出来的一律进 errors，不猜。"""
+def items_from_vocab(vocab, members):
+    """没有成员表时（批次 1A 的全部 5 组早于这套版式），items 直接从现卡取。
+    只搬 vocab 里已有的字段，不补 core/scene —— 那两格是人写的钩子，工具编不出来。"""
+    out = []
+    for w in members:
+        c = vocab.get(w) or {}
+        m = str(c.get('m') or '').strip()
+        mm = re.match(r'^((?:n|v|vt|vi|adj|adv|prep|conj|pron|phrase)\.\s*)', m)
+        pos = mm.group(1).strip() if mm else ''
+        raw = str(c.get('p') or '').strip().strip('/')
+        out.append({'w': w, 'p': f'/{raw}/' if raw else '',
+                    'pos': pos, 'sense': (m[len(pos):] if pos else m).strip(),
+                    'core': '', 'eg': str(c.get('ex') or '').strip()})
+    return out
+
+
+def parse_group(heading, lines, a, b, fname, vocab):
+    """返回 (card_dict, errors[], warnings[])。任何解析不出来的一律进 errors，不猜。"""
     errs, warns = [], []
     g = {'raw_heading': heading}
 
@@ -132,7 +146,7 @@ def parse_group(heading, lines, a, b, fname):
     if not m:
         return None, [f'{fname}: 组标题解析不出成员: {heading[:60]}'], []
     idx = int(m.group(1))
-    head_members = re.split(r'[（｜(—]', m.group(2), 1)[0]
+    head_members = re.split(r"[（｜(—]", m.group(2), maxsplit=1)[0]
     members = [x.strip().lower() for x in re.split(r'\s*/\s*', head_members) if x.strip()]
     # 允许词组型词头（`dining hall`、`swear word`）—— 第一版只认 [a-z-]，把 idx 28/73
     # 两组直接判成"成员数 <2"，等于凭空丢掉两张表。
@@ -148,6 +162,19 @@ def parse_group(heading, lines, a, b, fname):
                 return i
         return None
 
+    def table_by_sig(pat, sig, lo=a, hi=b):
+        """扫 pat 在组内的**所有**命中，返回第一张「表头签名对得上」的表。
+        只取第一个命中会踩坑：作者常在小节正文里先提一句「差异维度表按…」，
+        那句后面紧跟着的是本段原文表（表头是 全局句/英文原句），拿它当差异表
+        等于把课文塞进对比栏 —— 所以对不上签名就继续往下找。"""
+        for i in range(lo, hi):
+            if not re.search(pat, lines[i]):
+                continue
+            head, rows = table_after(lines, i + 1)
+            if head and sig(head):
+                return head, rows
+        return None, None
+
     # --- title ---
     ti = find(r'(表头一句|^\*\*表头)')
     g['title'] = block_after_quote(lines, ti + 1).strip() if ti else ''
@@ -155,11 +182,14 @@ def parse_group(heading, lines, a, b, fname):
         errs.append(f'{fname} 组{idx}: 没有表头一句')
 
     # --- items ---
-    ii = find(r'成员（items）|^\*\*成员')
-    head, rows = table_after(lines, ii + 1) if ii is not None else (None, None)
-    if not head or '词' not in head[0]:
-        errs.append(f'{fname} 组{idx}: 找不到成员表')
-        items = []
+    head, rows = table_by_sig(r'成员（items）|^\*\*成员|^#+\s*成员',
+                              lambda h: '词' in h[0] and any('sense' in c or 'core' in c for c in h))
+    items = []
+    if not head:
+        # 批次 1A 早于「成员表」这套版式，5 组都没有这一节。音标/词性/义项/例句现卡里就有，
+        # 工具搬过去（不是编）；core 和 scene 是人写的钩子，搬不出来就留着，报表点名。
+        warns.append(f'{fname} 组{idx}: 无成员表 → items 取自 vocab.json 现卡（core/scene 空着）')
+        items = items_from_vocab(vocab, members)
     else:
         col = {name: k for k, name in enumerate(head)}
 
@@ -206,51 +236,70 @@ def parse_group(heading, lines, a, b, fname):
     #   长表（批次 2） `| 维度 | 词 | 搭配 | 用在哪 | 一句话区别 |`
     #       → 按维度转置成宽表，每维度出 2–3 行，并多带一个 dim 字段，
     #         渲染时 dim 变化处插一行小标题 —— 手机上读起来是"四块"，不是"十二行"。
-    di = find(r'差异维度表|^\*\*差异')
-    head, rows = table_after(lines, di + 1) if di is not None else (None, None)
+    head, rows = table_by_sig(r'^#+\s*差异|^\*\*差异|差异维度表',
+                              lambda h: '维度' in h[0])
     diff = []
-    LONGTAG = [('常见搭配', '搭配'), ('搭配', '搭配'), ('用在哪', '用在哪'),
-               ('一句话区别', '区别'), ('区别', '区别')]
+    TAGS = (('区别', ('一句话区别', '区别')), ('搭配', ('常见搭配', '搭配')),
+            ('用在哪', ('用在哪',)))
     if not head:
         errs.append(f'{fname} 组{idx}: 找不到差异表')
     elif len(head) >= 3 and re.sub(r'[*`\s]', '', head[1]) == '词':
+        # 长表：先按维度聚合成块，再决定这一块怎么摆 ——
+        #   两侧都有话     → 一行一列，词当列名（这才是对比表）
+        #   只有一侧有话   → 整行合并，词名写进正文（「谁能夸事」→「grand：…」）
+        #   「两个词」那一行 → 本来就不点名某个词，整行合并
+        # 不给缺的那侧补空格子：空格子在表里读作「书里没有」，而作者早就把另一侧的
+        # 情况写进「一句话区别」了（「magnificent 卡上没有这一义」）。补格子=盖真话。
         cols = {}
-        for k, name in enumerate(head):
-            for key, tag in LONGTAG:
-                if key in name and tag not in cols:
+        for tag, keys in TAGS:
+            for k, name in enumerate(head):
+                if k and any(key in name for key in keys):
                     cols[tag] = k
-        need = [m for m in members if m not in
-                {re.sub(r'[*`\s]', '', r[1]).lower() for r in rows if len(r) > 1}]
+                    break
+
+        def nz(s):
+            return re.sub(r'[\s　]', '', re.sub(r'[*`]', '', s or '')).lower()
+        n2m = {nz(m): m for m in members}
+        need = [m for m in members if m not in {n2m.get(nz(r[1])) for r in rows if len(r) > 1}]
         if need:
             errs.append(f'{fname} 组{idx}: 长表里缺成员行 {need}')
-        order, seen = [], set()
+        blocks = {}
         for r in rows:
-            w = re.sub(r'[*`\s]', '', r[1]).lower() if len(r) > 1 else ''
-            if w and w not in seen:
-                seen.add(w)
-                if w in members:
-                    order.append(w)
-                # 否则这是一行「两个词一起说」的横切（作者常写「两个词」「两者」），
-                # 不该按成员逐个补格 —— 存进 both，渲染时整行合并。
             dim = re.sub(r'[*`]', '', r[0]).strip() if r else ''
             if not dim:
                 errs.append(f'{fname} 组{idx}: 长表有一行没有维度名')
                 continue
-            for tag in ('区别', '搭配', '用在哪'):
+            blk = blocks.setdefault(dim, {'words': [], 'cells': []})
+            w = n2m.get(nz(r[1])) if len(r) > 1 else None
+            if w and w not in blk['words']:
+                blk['words'].append(w)
+            for tag, _ in TAGS:
                 k = cols.get(tag)
-                if k is None or k >= len(r) or not r[k].strip():
-                    continue
-                row = next((x for x in diff if x['dim'] == dim and x['label'] == tag), None)
-                if row is None:
-                    row = {'dim': dim, 'label': tag}
-                    diff.append(row)
-                row[w if w in members else 'both'] = r[k].strip()
-        for row in diff:
-            if 'both' in row:
-                continue
-            miss = [m for m in order if m not in row]
-            if miss:
-                errs.append(f'{fname} 组{idx}: 长表转置后「{row["dim"]}·{row["label"]}」缺 {miss}')
+                txt = r[k].strip() if k is not None and k < len(r) else ''
+                if txt:
+                    blk['cells'].append((tag, w, txt))
+        for dim, blk in blocks.items():
+            full = len(blk['words']) == len(members)
+            if not full and blk['words']:
+                side = [m for m in members if m not in blk['words']]
+                warns.append(f'{fname} 组{idx}: 维度「{dim}」只有 {blk["words"]} 有话（{side} 那侧书里没给）'
+                             f'→ 整行合并摆，不补空格子')
+            by_tag = {}
+            for tag, w, txt in blk['cells']:
+                by_tag.setdefault(tag, []).append((w, txt))
+            for tag in ('区别', '搭配', '用在哪'):
+                for w, txt in by_tag.get(tag, []):
+                    row = None
+                    if full and w:
+                        row = next((x for x in diff if x['dim'] == dim and x['label'] == tag
+                                    and 'both' not in x and w not in x), None)
+                    if row is None:
+                        row = {'dim': dim, 'label': tag}
+                        diff.append(row)
+                    if full and w:
+                        row[w] = txt
+                    else:
+                        row['both'] = f'{w}：{txt}' if w else txt
     elif head[0].startswith('维度') or len(head) - 1 == len(members):
         cols = [re.sub(r'[*`\s]', '', c).lower() for c in head[1:]]
         bad = [c for c in cols if c not in members]
@@ -259,7 +308,11 @@ def parse_group(heading, lines, a, b, fname):
         for row in rows:
             if len(row) < len(head):
                 continue
-            r = {'label': re.sub(r'[*`]', '', row[0]).strip()}
+            lab = re.sub(r'[*`]', '', row[0]).strip()
+            bare = re.sub(r'[（(].*?[)）]', '', lab).strip()
+            # 表头列名统一成长表转置后的那三个词，两种形状摆在页面上才是一回事
+            tag = next((t for t, keys in TAGS if any(k in bare for k in keys)), None)
+            r = {'label': tag or bare or lab}
             for k, c in enumerate(cols):
                 v = row[k + 1].strip() if k + 1 < len(row) else ''
                 if v:
@@ -316,7 +369,7 @@ def main(argv):
         md = open(p, encoding='utf-8').read()
         gls, lines = split_groups(md)
         for heading, a, b in gls:
-            g, errs, warns = parse_group(heading, lines, a, b, os.path.basename(p))
+            g, errs, warns = parse_group(heading, lines, a, b, os.path.basename(p), vocab)
             all_errs += errs
             for w in warns:
                 all_errs.append('WARN ' + w)

@@ -1682,7 +1682,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       html += `</table>`;
     }
     if (note.diff && note.diff.length) {
-      const keys = Object.keys(note.diff[0]).filter(k => k !== 'label' && k !== 'dim' && k !== 'both');
+      // 词列以成员表为准，再补上 diff 里出现过的键。只看 diff[0] 会踩坑：
+      // 第一个维度恰好是「两个词一起说」的横切行时，那一行没有任何词键，整张表就没列了。
+      const keys = [];
+      for (const it of items) if (it.w && keys.indexOf(it.w) < 0) keys.push(it.w);
+      for (const r of note.diff) for (const k of Object.keys(r)) {
+        if (k !== 'label' && k !== 'dim' && k !== 'both' && keys.indexOf(k) < 0) keys.push(k);
+      }
       html += `<table class="nb-table nb-diff"><tr><th></th>${keys.map(k => `<th>${esc(k)}</th>`).join('')}</tr>`;
       // dim = 作者写的那个"维度"标题（长表转置后每两三行共用一个）。
       // 不加小标题的话，一个维度三行 ×四个维度就是十二行平铺，看不出哪几行是一回事。
