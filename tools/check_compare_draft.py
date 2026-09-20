@@ -14,6 +14,7 @@ import re, sys, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPAN = re.compile(r'`([^`]+)`')
+MARK = re.compile(r'\[\[([^\]:"\n]+):([^\]"]+)\]\]')          # 课文里的 [[词头:表面形式]]，见 sec_variants 的说明
 CJK = re.compile(r'[一-鿿]')
 IPA = re.compile(r'^/[^一-鿿]*/$|^\[.+\]$')
 NEG = re.compile(r'没有|不含|不出现|未出现|查不到|找不到|一处都|都不|不成立|不写|因此不|禁|不存在|×|✗|误写|不能说|不说|无此|不是')
@@ -24,13 +25,24 @@ SKIP = re.compile(r'^(m|ex|exZh|note|title|items|diff|summary|sense|core|eg|scen
                   r'd\.|v\.|n\.|adj\.|adv\.|phrase|pl\.|sing\.|abbr\.|US|UK)$', re.I)
 
 
+def sec_variants(raw):
+    """课文原文的三种查法：原样 + 标记拆成「表面形式」+ 标记拆成「词头 表面形式」。
+
+    正则必须排除 `"` 与换行：JSON 里段落数组开头就是字面 `[[`，紧跟换行和引号，
+    旧写法 `[^\\]:]+` 会把这个 `[[` 当成标记起点、一路吞到本章第一句里的第一个真标记，
+    于是**每章第一句**（全局句号 0 / 339 / 651 / 883 / 1277 / 1492）整句永远查不到 ——
+    门禁 1 会逼作者「别整句引用」，把真书证绕成没法核的形式。
+    """
+    return [raw,
+            re.sub(MARK, r'\2', raw),
+            re.sub(MARK, r'\1 \2', raw)]
+
+
 def haystack():
     out = []
     for name in ('shadow/data/sections.json', 'shadow/data/vocab.json'):
         raw = open(os.path.join(ROOT, name), encoding='utf-8').read()
-        out += [raw,
-                re.sub(r'\[\[([^\]:]+):([^\]]+)\]\]', r'\2', raw),
-                re.sub(r'\[\[([^\]:]+):([^\]]+)\]\]', r'\1 \2', raw)]
+        out += sec_variants(raw)
     return ' \n '.join(out).lower()
 
 

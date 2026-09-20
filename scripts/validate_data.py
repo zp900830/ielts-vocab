@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 sys.path.insert(0, str(ROOT / 'tools'))
 from width_rule import width as _ruler_width   # 唯一一把尺；口径与上限都只在 tools/width_rule.py 里改
+from check_compare_draft import sec_variants   # 课文标记的拆法也只有一份（门禁 1 与这里必须同口径）
 
 # 主站 fetchCached 用 DATA_VER 做 Cache API 的 x-ver 键：改了数据文件而没 bump
 # DATA_VER，线上会永久命中旧缓存且无任何报错。故把版本号定义为这些文件的内容哈希，
@@ -284,11 +285,10 @@ def main():
         _card_bits += [str(_c.get(k) or '') for k in ('m', 'ex', 'exZh')]
         if isinstance(_c.get('note'), str):
             _card_bits.append(_c['note'])
-    # 课文里的 [[词头:表面形式]] 会切断连续串，两种拆法都收进可查集合
-    hay = ' '.join([_sec_raw,
-                    re.sub(r'\[\[([^\]:]+):([^\]]+)\]\]', r'\2', _sec_raw),
-                    re.sub(r'\[\[([^\]:]+):([^\]]+)\]\]', r'\1 \2', _sec_raw),
-                    ' '.join(_card_bits)]).lower()
+    # 课文里的 [[词头:表面形式]] 会切断连续串，两种拆法都收进可查集合。
+    # 拆法只有一份实现（tools/check_compare_draft.sec_variants）—— 这里原先抄了一份正则，
+    # 那份会把段落数组开头的字面 `[[` 当标记起点、吞掉整章开头，导致每章第一句永远查不到。
+    hay = ' '.join([*sec_variants(_sec_raw), ' '.join(_card_bits)]).lower()
     # 每个成员必须真的出现在它声称的共现段里 —— 这是"表挂段末"的前提
     def _in_para(ci, pi, w):
         try:
