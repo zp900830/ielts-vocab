@@ -48,8 +48,10 @@ create policy "shadow_events self insert" on public.shadow_events
 -- 前端如果发 update/delete，会被 RLS 直接拒掉，这是预期行为，不是 bug。
 
 -- ============ 3. 只读核对（跑完看结果） ============
-select table_name, policy_name, cmd, qual is not null as has_using, with_check is not null as has_check
-from pg_policies where schemaname = 'public' and table_name = 'shadow_events'
-order by cmd, policy_name;
+-- 注意：pg_policies / pg_class 这些系统目录里的列名是 tablename、policyname（没有下划线），
+-- 写成 table_name 会报 42703，而且整批语句在一个事务里 —— 末尾报错会把前面的建表一起回滚。
+select tablename, policyname, cmd, qual is not null as has_using, with_check is not null as has_check
+from pg_policies where schemaname = 'public' and tablename = 'shadow_events'
+order by cmd, policyname;
 
 select 'shadow_events 现有行数' as check, count(*) from public.shadow_events;
