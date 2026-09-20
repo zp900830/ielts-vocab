@@ -198,6 +198,10 @@ def parse_group(heading, lines, a, b, fname, vocab):
     g['title'] = block_after_quote(lines, ti + 1).strip() if ti else ''
     if not g['title']:
         errs.append(f'{fname} 组{idx}: 没有表头一句')
+    elif re.search(r'这一?句', g['title']):
+        # 与 validate_data.py 第 16 条 (b) 同一条规则：卡挂在段末，「这一句/这句」没有可指的句子。
+        # 在落地前就拦下来，而不是等写进 vocab.json 后由门禁 3 报错（批次 3 有两组就是这么撞上的）。
+        errs.append(f'{fname} 组{idx}: 表头用「这一句/这句」指代，但卡挂段末（改「这一段」或「同句里」）')
 
     # --- items ---
     head, rows = table_by_sig(r'成员（items）|^\*\*成员|^#+\s*成员',
