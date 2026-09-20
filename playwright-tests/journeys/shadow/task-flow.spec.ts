@@ -1,5 +1,5 @@
 // Hand-written alongside docs/superpowers/plans/2026-09-20-task-mode-phase-1.md (Task 6)
-// 界面不变量：控件位置跨模式零变化、今日进度这个数字全页只说一次、
+// 界面不变量：今日进度这个数字全页只说一次、任务模式里翻句只剩任务栏那颗、
 // 播放条标题那一行在任务模式里归任务栏。
 import { test, expect } from '../../fixtures';
 import { currentTimeout } from '../../utils/timeouts';
@@ -39,18 +39,20 @@ async function startPlanAndTaskMode(page: import('@playwright/test').Page, baseU
 test.describe('task mode · UI invariants', () => {
   test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
 
-  test('step controls stay visible and usable inside task mode', async ({ page, baseURL }) => {
+  /* 旧的不变量是「控件位置跨模式零变化」，他 2026-09-20 改口了：全页只留一颗「下一句」（归任务栏），
+     播放条不藏但也不重复。所以这条从「三颗都在」改成「播放在、翻句不在、退出后三颗全回来」。 */
+  test('任务模式里播放条只留播放，翻句交回任务栏；退出后一切照旧', async ({ page, baseURL }) => {
     test.setTimeout(currentTimeout() * 8);
     await startPlanAndTaskMode(page, baseURL);
-    await expect(page.locator('.audiobar .ab-step')).toHaveCount(2);
-    for (const name of ['上一句', '下一句']) {
-      const btn = page.locator('.audiobar').getByRole('button', { name });
-      await expect(btn).toBeVisible();
-      await expect(btn).toBeEnabled();
-    }
-    // 退出后位置不变：肌肉记忆不该被模式切换作废
+    const play = page.locator('.audiobar').getByRole('button', { name: '播放或暂停' });
+    await expect(play).toBeVisible();
+    await expect(play).toBeEnabled();
+    await expect(page.locator('.audiobar .ab-step')).toHaveCount(2);   // DOM 里还在，只是这一态不摆出来
+    for (const name of ['上一句', '下一句'])
+      await expect(page.locator('.audiobar').getByRole('button', { name })).not.toBeVisible();
     await page.evaluate(() => TASK.exitTaskMode());
-    await expect(page.locator('.audiobar').getByRole('button', { name: '上一句' })).toBeVisible();
+    for (const name of ['上一句', '下一句'])
+      await expect(page.locator('.audiobar').getByRole('button', { name })).toBeVisible();
   });
 
   test('the progress readout appears once on the page, not twice', async ({ page, baseURL }) => {
@@ -327,5 +329,76 @@ test.describe('three passes', () => {
     expect((txt.match(/\d+/g) || []).length).toBeLessThanOrEqual(5);
     expect(/欠|待补|积压|轮/.test(txt)).toBe(false);
     expect(await page.locator('.pass-summary .go').innerText()).toContain('②');
+  });
+
+  /* 他拍的板：① 任务模式里播放条别整条藏（暂停要能按、想回听要能听），但「下一句」全页只留一颗；
+     ② 刷新时有没做完的任务 → 直接占用底部本来就是任务栏的那一行，不弹窗。 */
+  const barState = (page: import('@playwright/test').Page) =>
+    page.evaluate(() => (document.getElementById('taskBar') as HTMLElement).dataset.state);
+
+  test('任务模式里播放条仍在，但翻句只剩任务栏那颗', async ({ page, baseURL }) => {
+    await startPlanAndTaskMode(page, baseURL);
+    await expect(page.locator('#audiobar')).toBeVisible();
+    await expect(page.locator('#btnPlay')).toBeVisible();
+    await expect(page.locator('.ab-left > .btn.ab-step')).toHaveCount(2);   // DOM 里还在
+    await expect(page.locator('.ab-left > .btn.ab-step').first()).not.toBeVisible();  // 但收进任务栏那一颗
+    const steppers = await page.evaluate(() => [...document.querySelectorAll('.btn')]
+      .filter(el => (el.textContent || '').indexOf('下一句') >= 0 && (el as HTMLElement).offsetParent !== null).length);
+    expect(steppers).toBe(1);
+    // ②③ 做题态：只留播放这一窄条，且做题卡要给播放条 + 任务栏两条都让位
+    await page.evaluate(() => { TASK.setPass(2); TASK.next(); });
+    await expect.poll(() => page.evaluate(() => document.body.classList.contains('quiz-mode'))).toBe(true);
+    await expect(page.locator('#audiobar')).toBeVisible();
+    await expect(page.locator('#btnPlay')).toBeVisible();
+    await expect(page.locator('.loop-wrap').first()).not.toBeVisible();
+    const fits = await page.evaluate(() => {
+      const px = (v: string) => parseFloat(v) || 0;
+      const gap = px(getComputedStyle(document.documentElement).getPropertyValue('--task-card-b'));
+      const bar = document.getElementById('taskBar')!.getBoundingClientRect().height;
+      const ab = document.getElementById('audiobar')!.getBoundingClientRect().height;
+      return { gap, need: bar + ab + 8 };
+    });
+    expect(fits.gap).toBeGreaterThanOrEqual(fits.need - 4);
+  });
+
+  test('刷新时任务没做完：底部那行变成续读条，点「接着做」进任务模式', async ({ page, baseURL }) => {
+    await page.goto(`${baseURL}/index.html`);
+    await expect(page.locator('.sent').first()).toBeVisible();
+    const room = await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(20);
+      const q = TASK.todayPlan(true).queue;
+      q.slice(0, 2).forEach(x => TASK.readDone(x.i));
+      return q.length;
+    });
+    expect(room).toBeGreaterThan(2);                      // 得真留点没做完的
+    await page.reload();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    expect(await barState(page)).toBe('resume');
+    await expect(page.locator('#tbTitle')).toContainText('还没做完');
+    await expect(page.locator('#audiobar')).toBeVisible();  // 续读条不许把播放条挤掉
+    await page.locator('#tbNext').click();
+    await expect.poll(() => page.evaluate(() => TASK.active)).toBe(true);
+    expect(await barState(page)).not.toBe('resume');
+  });
+
+  test('「今天先不做」当天就不再提，明天照常', async ({ page, baseURL }) => {
+    await page.goto(`${baseURL}/index.html`);
+    await expect(page.locator('.sent').first()).toBeVisible();
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(20);
+      TASK.todayPlan(true).queue.slice(0, 2).forEach(x => TASK.readDone(x.i));
+    });
+    await page.reload();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    await page.locator('#tbAgain').click();               // 今天先不做
+    await expect(page.locator('#taskBar')).not.toBeVisible();
+    await page.reload();
+    await expect(page.locator('#taskBar')).not.toBeVisible();   // 同一趟不再提
+    await page.evaluate(() => { sessionStorage.clear(); });     // 换一趟来：还是不提，因为已经按「今天」记下了
+    await page.reload();
+    await expect(page.locator('#taskBar')).not.toBeVisible();
+    await page.evaluate(() => localStorage.removeItem('ielts.shadow.resumeDay'));
+    await page.reload();
+    await expect(page.locator('#taskBar')).toBeVisible();       // 换一天（清掉那把锁）就又提得起来
   });
 });
