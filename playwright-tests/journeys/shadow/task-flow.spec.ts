@@ -162,16 +162,25 @@ test.describe('today panel · new spec', () => {
     });
     await page.reload();
     await page.locator('.sent').first().waitFor();
-    const got = await page.evaluate(() => ({
-      root: JSON.parse(localStorage.getItem('ielts.shadow.v2') || 'null'),
-      minutes: TASK.todayPlan().stats.todayMinutes,
-      words: Object.keys(TASK.state().words).length,
-    }));
+    const got = await page.evaluate(() => {
+      TASK.setView('plan'); TASK.openPanel();
+      return {
+        root: JSON.parse(localStorage.getItem('ielts.shadow.v2') || 'null'),
+        minutes: TASK.todayPlan().stats.todayMinutes,
+        words: Object.keys(TASK.state().words).length,
+        noticed: localStorage.getItem('ielts.shadow.migNotice'),
+        planNote: [...document.querySelectorAll('#todayPanel .tp-note')].map(e => e.textContent).join(' '),
+      };
+    });
     expect(got.root).toBeTruthy();
     expect(got.root.state.legacy.streak).toBe(5);
     expect(got.minutes).toBe(20);
     expect(got.words).toBeGreaterThan(0);
     expect(got.root.state.migratedAt).toBeGreaterThan(0);
+    // 迁移不能静默（PRD R4）：说一次，并且在计划页留一行可回看
+    expect(got.noticed).toBe('1');
+    expect(got.planNote).toContain('按词记');
+    expect(got.planNote).toMatch(/个词从句子账搬过来/);
   });
 });
 
