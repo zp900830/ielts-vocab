@@ -390,7 +390,15 @@ def in_para(sections, ci, pi, w):
 def main(argv):
     write = '--write' in argv
     check = '--check' in argv
-    paths = [a for a in argv if not a.startswith('--')]
+    # --skip <slug>：把某一组整组排除在本次之外（载体撞车 / 与线上旧表同 slug 会被静默覆盖时，
+    # 落 41 组比因为 1 组卡住整批不落更有用，但那组必须**显式**报给用户，不能悄悄跳过）。
+    skip, paths, isval = set(), [], False
+    for a in argv:
+        if isval and not a.startswith('--'):
+            skip.add(a); isval = False; continue
+        isval = (a == '--skip')
+        if not a.startswith('--'):
+            paths.append(a)
     if not paths:
         paths = sorted(glob.glob(os.path.join(ROOT, 'work', '辨析草稿', '2_*.md')))
         paths += [os.path.join(ROOT, 'work', '2026-09-20-辨析批次1A.md'),
@@ -407,6 +415,15 @@ def main(argv):
                 all_errs.append('WARN ' + w)
             if g:
                 cards.append(g)
+
+    if skip:
+        held = [g['slug'] for g in cards if g['slug'] in skip]
+        cards = [g for g in cards if g['slug'] not in skip]
+        for s in sorted(skip):
+            tag = '已排除' if s in held else '!! 本次草稿里没有这个 slug（拼错了？）'
+            print(f'{tag} --skip {s}')
+        if len(held) != len(set(held)):
+            all_errs.append(f'--skip 的 slug 在草稿里出现多份：{held}')
 
     # 自查（validate #16 的口径，提前跑一遍，别等落地后红）
     slug_seen, carrier_plan = {}, []
@@ -429,6 +446,17 @@ def main(argv):
         taken = [m for m in g['members']
                  if isinstance((vocab.get(m) or {}).get('cmp'), dict)
                  and (vocab[m]['cmp'].get('group') or vocab[m]['cmp'].get('slug')) != g['slug']]
+        # slug 与线上已有表同名 → 上面那句会把它当成"本工具上一轮落的"放行，于是**原地覆盖**。
+        # 覆盖我们自己的产出没问题（重跑幂等）；覆盖**别人手写/更早的旧表**是另一件事：
+        # 只写载体那一张卡，同组其余成员卡上的旧拷贝不会清，段末显示新表、点开旧成员卡还是老表。
+        # 批次 5 的 curse-swear 就是这么差点静默上线的（旧表里「swear to do」零书证）。
+        for m in g['members']:
+            old = (vocab.get(m) or {}).get('cmp')
+            if isinstance(old, dict) and (old.get('group') or old.get('slug')) == g['slug'] \
+                    and str(old.get('title') or '').strip() != clean_text(g['title']).strip():
+                all_errs.append(f'WARN ⚠覆盖 {f} 组{g["idx"]}: slug {g["slug"]} 与 {m} 卡上已有表同名但**内容不同** → '
+                                f'本次只覆盖载体那一张，其余成员卡上的旧表会留着继续给学生看；'
+                                f'要先清旧表或改 slug，别静默落')
         carrier_plan.append((g, [m for m in g['members'] if m not in taken]))
 
     # 载体分配：一个词头只能带一张表 —— 逐个组挑一个还没被占用的成员
@@ -448,13 +476,17 @@ def main(argv):
         print(f'  冲突 {g["file"]} 组{g["idx"]} {g["slug"]}: 成员 {g["members"]} 都已被别的组占用')
     hard = [e for e in all_errs if not e.startswith('WARN')]
     soft = [e for e in all_errs if e.startswith('WARN')]
+    loud = [e for e in soft if e.startswith('WARN ⚠')]     # 会改到线上已有内容的，一条都不许被 20 行上限挤掉
+    quiet = [e for e in soft if e not in loud]
     print(f'\n错误 {len(hard)} 条 / 提醒 {len(soft)} 条')
     for e in hard:
         print('  ' + e)
-    for e in soft[:20]:
+    for e in loud:
         print('  ' + e)
-    if len(soft) > 20:
-        print(f'  …另有 {len(soft) - 20} 条提醒')
+    for e in quiet[:20]:
+        print('  ' + e)
+    if len(quiet) > 20:
+        print(f'  …另有 {len(quiet) - 20} 条提醒')
 
     if hard or unmapped or check:
         print('\n未落地。' + ('（--check 模式不写文件）' if check and not hard and not unmapped else ''))
