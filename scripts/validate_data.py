@@ -268,12 +268,78 @@ def main():
     if misalign:
         errors.append(f'英文句与中文译文不齐（译文会整段串位）: {misalign[:8]}')
 
+    # 16. 结构化辨析卡（note.type === 'compare'）：不许造词、不许无处可挂
+    #     这类卡是第二期 220 组辨析的落库形状，靠人工守不住，所以每条都机检。
+    _sec_raw = (ROOT / 'shadow/data/sections.json').read_text(encoding='utf-8')
+    # 可查集合**不能**含辨析卡自己的内容 —— 否则卡片里编一条搭配，就被它自己"证明"了（自证循环）。
+    # 所以卡片侧只收：词头、义项 m、例句 ex/exZh、字符串型 note（同义词/词伙）。
+    _card_bits = []
+    for _w, _c in vocab.items():
+        _card_bits.append(str(_w))
+        if not isinstance(_c, dict):
+            continue
+        _card_bits += [str(_c.get(k) or '') for k in ('m', 'ex', 'exZh')]
+        if isinstance(_c.get('note'), str):
+            _card_bits.append(_c['note'])
+    # 课文里的 [[词头:表面形式]] 会切断连续串，两种拆法都收进可查集合
+    hay = ' '.join([_sec_raw,
+                    re.sub(r'\[\[([^\]:]+):([^\]]+)\]\]', r'\2', _sec_raw),
+                    re.sub(r'\[\[([^\]:]+):([^\]]+)\]\]', r'\1 \2', _sec_raw),
+                    ' '.join(_card_bits)]).lower()
+    # 每个成员必须真的出现在它声称的共现段里 —— 这是"表挂段末"的前提
+    def _in_para(ci, pi, w):
+        try:
+            para = sections[ci]['paragraphs'][pi]
+        except (IndexError, KeyError, TypeError):
+            return False
+        return any(f'[[{w}:' in s or f'[[{w}]]' in s for s in para if isinstance(s, str))
+    def _width(t):
+        return sum(1 if '一' <= c <= '鿿' else 0.5 for c in t)
+    n_cmp = 0
+    for w, c in vocab.items():
+        note = c.get('note') if isinstance(c, dict) else None
+        if not (isinstance(note, dict) and note.get('type') == 'compare'):
+            continue
+        n_cmp += 1
+        members = [it.get('w') for it in note.get('items', []) if isinstance(it, dict)]
+        for m in members:
+            if m not in vocab:
+                errors.append(f'辨析卡 {w}: 成员 {m} 在 vocab.json 里没有卡（辨析只许讨论目标词，PRD §5.10）')
+        for it in note.get('items', []):
+            eg = it.get('eg')
+            if isinstance(eg, str) and eg.strip() and eg.lower().strip() not in hay:
+                errors.append(f'辨析卡 {w}/{it.get("w")}: 例句查无出处（疑似造搭配）: {eg[:60]}')
+        for row in note.get('diff', []):
+            for k in ('eg', 'collocation'):
+                v = row.get(k)
+                if isinstance(v, str) and v.strip() and v.lower().strip() not in hay:
+                    errors.append(f'辨析卡 {w}: 差异表 {k} 查无出处: {v[:60]}')
+        miss = [k for k in ('title', 'items', 'summary') if not note.get(k)]
+        if miss:
+            errors.append(f'辨析卡 {w}: 缺字段 {miss}（渲染按这三段摆，缺一个就白屏）')
+        summ = note.get('summary')
+        text = summ if isinstance(summ, str) else (summ or {}).get('easy', '') if isinstance(summ, dict) else ''
+        # ≤40 只管「简单记」那半句 —— 段末默认行显示的就是它，整段 summary 是点开才出的
+        m = re.search(r'简单记[:：](.+)$', text)
+        if m:
+            line = m.group(1).strip()
+            if _width(line) > 40:
+                errors.append(f'辨析卡 {w}: 默认那一行宽度 {_width(line)} > 40，手机上会折行（PRD §7.2）: {line[:30]}')
+        elif text:
+            warnings.append(f'辨析卡 {w}: summary 里没有「简单记：」那半句，段末默认行只能整段显示（会超宽）')
+        paras = note.get('paras') or []
+        if members and paras:
+            if not any(all(_in_para(p[0], p[1], m) for m in members)
+                       for p in paras if isinstance(p, (list, tuple)) and len(p) == 2):
+                errors.append(f'辨析卡 {w}: 声明的共现段 {paras} 里并非所有成员都在，这张表没有可挂的段')
+
     # 9. 基础统计
     print(f"vocab: {len(vocab)} words")
     print(f"chapters: {len(chapters)} macro chapters, {len(ch_words)} unique words")
     print(f"sections placeholders: {len(ph_words)} unique words")
     print(f"root vocab: {len(root_vocab)} words")
     print(f"book: {len(book)} rows")
+    print(f"compare cards (辨析卡): {n_cmp}")
 
     if warnings:
         print('\n待修告警（不阻断）:')
