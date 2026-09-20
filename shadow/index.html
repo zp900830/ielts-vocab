@@ -1452,7 +1452,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       /* 数据缓存版本：必须等于 shadow/data/ 三个 JSON 的内容哈希，由 scripts/validate_data.py 校验。
          不写它，iOS Safari 会按 Last-Modified 启发式缓存 —— 课文改了、词表没改，句序与词表就会错位。
          改了数据忘了 bump 会直接让门禁 FAIL，而不是静默服务旧数据。 */
-      const SHADOW_DATA_VER = "9d9c88ebbc";
+      const SHADOW_DATA_VER = "5b926efca7";
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
@@ -1737,7 +1737,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }));
       const idx = {}, done = new Set();
       for (const k of Object.keys(VOCAB || {})) {
-        const note = (VOCAB[k] || {}).note;
+        const note = (VOCAB[k] || {}).cmp;   // 辨析卡在 cmp；note 永远是那人手写的同义词/词伙串，别互相覆盖
         if (!isCompareNote(note)) continue;
         const gid = String(note.group || k);
         if (done.has(gid)) continue; done.add(gid);
@@ -1765,10 +1765,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (seen.has(k)) continue; seen.add(k);
     const info = (typeof VOCAB !== 'undefined' && VOCAB[k]) || null;
     if (!info || !info.note) continue;
-    if (isCompareNote(info.note)) continue;
     const ph = glossPhon(k);
     // 标题标签按内容类型自适应：同义词/词伙 从 note 前缀抽取；手写辨析归为「辨析」。标签用 nb-label 小胶囊包裹，不再叠「辨析：同义词：」双冒号
-    const noteText = typeof info.note === 'string' ? info.note : (info.note.title || '');
+    const noteText = info.note;
     let label = '辨析', rest = noteText;
     const lm = noteText.match(/^(同义词|词伙)(：)/);
     if (lm) { label = lm[1]; rest = noteText.slice(lm[0].length); }
@@ -4633,8 +4632,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function revealNote(q) {
         if (!reveal) return '';
         const card = VOCAB[q.w] || {};
-        const compare = (!reveal.ok && card.note && typeof card.note === 'object' && typeof renderCompareNote === 'function')
-          ? renderCompareNote(card.note, true) : '';   // 做题答错直接摊开表：这里再让人多点一次就成打断源了
+        const compare = (!reveal.ok && card.cmp && typeof renderCompareNote === 'function')
+          ? renderCompareNote(card.cmp, true) : '';   // 做题答错直接摊开表：这里再让人多点一次就成打断源了
         return `<div class="qz-note">${reveal.ok ? '对了。' : '正确的那一个是 '}<b>${esc(q.answer)}</b></div>
           ${compare}
           <div class="qz-inputrow"><button class="qz-go" style="flex:1" onclick="TASK.nextQuiz()">${quizCursor + 1 >= quizList().length ? '看这一遍的小结' : '下一题'}</button></div>`;

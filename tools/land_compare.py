@@ -34,19 +34,37 @@ SECTIONS = os.path.join(ROOT, 'shadow', 'data', 'sections.json')
 INDEX = os.path.join(ROOT, 'shadow', 'index.html')
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from width_rule import width  # noqa: E402  一把尺：与 validate_data.py 同源，别再抄一份
+sys.path.insert(0, os.path.join(ROOT, 'scripts'))
+from validate_data import shadow_data_ver  # noqa: E402  版本号算法也只有一份，抄一遍就会漂
 
 
-PROV = re.compile(r'[（(]\s*(?:课文|卡|ex|note|词伙|同位|原文|书|章)\s*\d*[^）)]*[)）]\s*$')
+PROV = re.compile(r'[（(]\s*(?:课文|卡|ex|note|词伙|同位|原文|书|章)\s*\d*[^）)]*[)）]\s*')
 
 
-def strip_prov(s):
-    """剥掉草稿 eg 末尾的出处括号 —— validate 拿 eg 去全库 grep，带中文后缀必查无。"""
+def clean_text(s):
+    """草稿里的 markdown 记号到了页面上是死字（渲染走 esc，没有 markdown 解析器）。"""
+    s = re.sub(r'\*\*(.+?)\*\*', r'\1', str(s or ''))
+    s = s.replace('`', '')
+    return re.sub(r' {2,}', ' ', s).strip()
+
+
+def strip_prov(s, warn=None, where=''):
+    """剥掉草稿 eg 里的出处括号与反引号 —— validate 拿 eg 去全库 grep，带后缀必查无。
+    一格塞两句（用 ／ 分隔）时只留第一句：整串永远 grep 不到，而第二句在差异表里原样还在。"""
+    s = str(s or '')
+    # 一格塞两条书证（用 ／ 或 、连着）时取第一条：validate 拿 eg 去全库 grep，两条连在一起永远查无。
+    # 「第一条」不是随手挑的 —— 作者按「先书证、后备证」的顺序写，第二条在差异表里原样还在。
+    m = re.search(r'`([^`]+)`', s)
+    if m:
+        rest = s[m.end():].strip().strip('／、,；; ').strip()
+        if rest and warn is not None:
+            warn.append(f'{where}: eg 还有第二条书证，只落第一条（第二条在差异表里原样还在）: {rest[:40]}')
+        return clean_text(m.group(1))
     prev = None
-    s = (s or '').strip().strip('`').strip()
     while prev != s:
         prev = s
         s = PROV.sub('', s).strip().rstrip('；;，,').strip()
-    return s
+    return clean_text(s)
 
 
 def cells(line):
@@ -207,7 +225,7 @@ def parse_group(heading, lines, a, b, fname, vocab):
                   'pos': cell(row, '词性'), 'sense': cell(row, 'sense'),
                   'core': cell(row, 'core').strip('*')}
             sc = cell(row, 'scene').strip('*')
-            eg = strip_prov(cell(row, 'eg'))
+            eg = strip_prov(cell(row, 'eg'), warns, f'{fname} 组{idx}/{w or "?"}')
             if sc:
                 it['scene'] = sc
             if eg:
@@ -344,6 +362,16 @@ def parse_group(heading, lines, a, b, fname, vocab):
 def load():
     vocab = json.load(open(VOCAB, encoding='utf-8'))
     sections = json.load(open(SECTIONS, encoding='utf-8'))
+    # 辨析卡放 `cmp`，不放 `note`：note 是人手写的「同义词：…／词伙：…」串，句下词级笔记
+    # 读的就是它（shadow 的 noteBar），52 组里有 46 组的载体带着这种串 —— 写进 note
+    # 等于把人家背的东西覆盖掉。早先落地的 5 张卡占着 note，这里一并搬走（幂等）。
+    moved = 0
+    for k, c in vocab.items():
+        if isinstance(c.get('note'), dict):
+            c['cmp'] = c.pop('note')
+            moved += 1
+    if moved:
+        print(f'迁移：{moved} 张旧辨析卡从 note 搬到 cmp（note 还给词伙/同义词串）')
     return vocab, sections
 
 
@@ -392,7 +420,11 @@ def main(argv):
                 all_errs.append(f'{f} 组{g["idx"]}: 成员 {m} 在 vocab.json 没卡')
         if g['at'] and not all(in_para(sections, g['at'][0], g['at'][1], m) for m in g['members']):
             all_errs.append(f'{f} 组{g["idx"]}: 锚点段 {g["at"]} 里成员没到齐')
-        taken = [m for m in g['members'] if isinstance((vocab.get(m) or {}).get('note'), dict)]
+        # 「已被占用」要排除本工具自己上一轮落的卡 —— 否则重跑第二遍时，第一遍挑的载体
+        # 会把这一组顶到另一个成员上，连锁产生一堆假冲突（落地就不幂等了）。
+        taken = [m for m in g['members']
+                 if isinstance((vocab.get(m) or {}).get('cmp'), dict)
+                 and (vocab[m]['cmp'].get('group') or vocab[m]['cmp'].get('slug')) != g['slug']]
         carrier_plan.append((g, [m for m in g['members'] if m not in taken]))
 
     # 载体分配：一个词头只能带一张表 —— 逐个组挑一个还没被占用的成员
@@ -411,11 +443,14 @@ def main(argv):
     for g in unmapped:
         print(f'  冲突 {g["file"]} 组{g["idx"]} {g["slug"]}: 成员 {g["members"]} 都已被别的组占用')
     hard = [e for e in all_errs if not e.startswith('WARN')]
-    print(f'\n错误 {len(hard)} 条 / 提醒 {len(all_errs) - len(hard)} 条')
-    for e in all_errs[:60]:
+    soft = [e for e in all_errs if e.startswith('WARN')]
+    print(f'\n错误 {len(hard)} 条 / 提醒 {len(soft)} 条')
+    for e in hard:
         print('  ' + e)
-    if len(all_errs) > 60:
-        print(f'  …另有 {len(all_errs) - 60} 条')
+    for e in soft[:20]:
+        print('  ' + e)
+    if len(soft) > 20:
+        print(f'  …另有 {len(soft) - 20} 条提醒')
 
     if hard or unmapped or check:
         print('\n未落地。' + ('（--check 模式不写文件）' if check and not hard and not unmapped else ''))
@@ -431,23 +466,21 @@ def main(argv):
 
     before = len(vocab)
     for g in cards:
-        note = {'type': 'compare', 'group': g['slug'], 'title': g['title'],
-                'items': [{k: v for k, v in it.items() if v} for it in g['items']],
-                'diff': g['diff'],
-                'summary': f"辨析：{g['summary_line']} 简单记：{g['line']}",
+        note = {'type': 'compare', 'group': g['slug'], 'title': clean_text(g['title']),
+                'items': [{k: clean_text(v) for k, v in it.items() if v} for it in g['items']],
+                'diff': [{k: (clean_text(v) if isinstance(v, str) else v) for k, v in row.items()}
+                         for row in g['diff']],
+                'summary': clean_text(f"辨析：{g['summary_line']} 简单记：{g['line']}"),
                 'at': g['at']}
-        vocab[g['carrier']]['note'] = note
+        vocab[g['carrier']]['cmp'] = note   # 写 cmp，不写 note —— note 是句下要显示的同义词/词伙串
     tmp = VOCAB + '.tmp'
     with open(tmp, 'w', encoding='utf-8') as f:
         json.dump(vocab, f, ensure_ascii=False, separators=(',', ':'))
     os.replace(tmp, VOCAB)
     print(f'已写 vocab.json：{before} → {len(vocab)} 词头，新增/覆盖 {len(cards)} 张辨析卡')
 
-    # SHADOW_DATA_VER：内容哈希，跟 build/validate 的口径一致
-    h = hashlib.sha256()
-    for p in sorted(glob.glob(os.path.join(ROOT, 'shadow', 'data', '*.json'))):
-        h.update(open(p, 'rb').read())
-    ver = h.hexdigest()[:10]
+    # SHADOW_DATA_VER：直接调 validate_data 的那个函数（同一份文件清单、同一个摘要配方）
+    ver = shadow_data_ver()
     src = open(INDEX, encoding='utf-8').read()
     new, n = re.subn(r'(const SHADOW_DATA_VER = ")[0-9a-f]{10}(";)', r'\g<1>' + ver + r'\g<2>', src)
     if n != 1:

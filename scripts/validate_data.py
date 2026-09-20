@@ -268,7 +268,7 @@ def main():
     if misalign:
         errors.append(f'英文句与中文译文不齐（译文会整段串位）: {misalign[:8]}')
 
-    # 16. 结构化辨析卡（note.type === 'compare'）：不许造词、不许无处可挂
+    # 16. 结构化辨析卡（cmp.type === 'compare'）：不许造词、不许无处可挂
     #     这类卡是第二期 220 组辨析的落库形状，靠人工守不住，所以每条都机检。
     _sec_raw = (ROOT / 'shadow/data/sections.json').read_text(encoding='utf-8')
     # 可查集合**不能**含辨析卡自己的内容 —— 否则卡片里编一条搭配，就被它自己"证明"了（自证循环）。
@@ -300,11 +300,15 @@ def main():
         return sum(1 if ('一' <= c <= '鿿') or ('　' <= c <= '〿') or ('＀' <= c <= '￯') else 0.5 for c in t)
     n_cmp = 0
     for w, c in vocab.items():
-        note = c.get('note') if isinstance(c, dict) else None
+        if not isinstance(c, dict):
+            continue
+        note = c.get('cmp')   # 辨析卡在 cmp；note 是句下要显示的同义词/词伙串，两者不互占
         # (a) 落地器历史上把结构化辨析卡压成过 Python repr 字符串，线上一显示就是一坨
         #     {'type': 'compare', ...}。守卫只能防以后再压坏，已经压坏的必须被这里点名。
-        if isinstance(note, str) and re.match(r'^\{\s*[\'"]type[\'"]\s*:', note.strip()):
-            errors.append(f'辨析卡 {w}: note 被压成了字符串（页面上会直接显示 dict 字面量），要还原成对象')
+        flat = [f for f in (note, c.get('note')) if isinstance(f, str)
+                and re.match(r'^\{\s*[\'"]type[\'"]\s*:', f.strip())]
+        if flat:
+            errors.append(f'辨析卡 {w}: 卡被压成了字符串（页面上会直接显示 dict 字面量），要还原成对象')
             continue
         if not (isinstance(note, dict) and note.get('type') == 'compare'):
             continue
