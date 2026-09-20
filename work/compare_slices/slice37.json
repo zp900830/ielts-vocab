@@ -1,0 +1,111 @@
+{
+ "batch": 6,
+ "worklist_idx": [
+  178,
+  179,
+  180,
+  181,
+  182
+ ],
+ "groups": [
+  {
+   "words": [
+    "severe",
+    "strict"
+   ],
+   "senses": [
+    "严厉"
+   ],
+   "paras": [
+    [
+     5,
+     42
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1748,
+    1749
+   ]
+  },
+  {
+   "words": [
+    "resemble",
+    "similar"
+   ],
+   "senses": [
+    "类似"
+   ],
+   "paras": [
+    [
+     5,
+     43
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1750
+   ]
+  },
+  {
+   "words": [
+    "grief",
+    "grieve"
+   ],
+   "senses": [
+    "悲痛"
+   ],
+   "paras": [
+    [
+     5,
+     44
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1757,
+    1758
+   ]
+  },
+  {
+   "words": [
+    "miserable",
+    "wretched"
+   ],
+   "senses": [
+    "悲惨"
+   ],
+   "paras": [
+    [
+     5,
+     44
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1758,
+    1761
+   ]
+  },
+  {
+   "words": [
+    "hate",
+    "hatred"
+   ],
+   "senses": [
+    "憎恨"
+   ],
+   "paras": [
+    [
+     5,
+     45
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1765,
+    1766
+   ]
+  }
+ ]
+}

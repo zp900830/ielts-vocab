@@ -1,0 +1,109 @@
+{
+ "batch": 3,
+ "worklist_idx": [
+  57,
+  58,
+  59,
+  60,
+  61
+ ],
+ "groups": [
+  {
+   "words": [
+    "opt",
+    "select"
+   ],
+   "senses": [
+    "选择"
+   ],
+   "paras": [
+    [
+     1,
+     42
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    594,
+    595
+   ]
+  },
+  {
+   "words": [
+    "depict",
+    "describe"
+   ],
+   "senses": [
+    "描述"
+   ],
+   "paras": [
+    [
+     1,
+     42
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    598
+   ]
+  },
+  {
+   "words": [
+    "famous",
+    "well-known"
+   ],
+   "senses": [
+    "著名"
+   ],
+   "paras": [
+    [
+     1,
+     45
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    615,
+    616
+   ]
+  },
+  {
+   "words": [
+    "competition",
+    "tournament"
+   ],
+   "senses": [
+    "比赛"
+   ],
+   "paras": [
+    [
+     1,
+     45
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    611
+   ]
+  },
+  {
+   "words": [
+    "mat",
+    "rug"
+   ],
+   "senses": [
+    "垫子"
+   ],
+   "paras": [
+    [
+     2,
+     2
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    664
+   ]
+  }
+ ]
+}

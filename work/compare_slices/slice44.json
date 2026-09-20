@@ -1,0 +1,119 @@
+{
+ "batch": 6,
+ "worklist_idx": [
+  213,
+  214,
+  215,
+  216,
+  217
+ ],
+ "groups": [
+  {
+   "words": [
+    "amplify",
+    "enlarge",
+    "magnify"
+   ],
+   "senses": [
+    "放大"
+   ],
+   "paras": [
+    [
+     5,
+     14
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1576,
+    1577,
+    1578
+   ]
+  },
+  {
+   "words": [
+    "fatal",
+    "lethal",
+    "mortal"
+   ],
+   "senses": [
+    "致命"
+   ],
+   "paras": [
+    [
+     5,
+     30
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1676,
+    1678
+   ]
+  },
+  {
+   "words": [
+    "alleviate",
+    "ease",
+    "relieve"
+   ],
+   "senses": [
+    "缓解"
+   ],
+   "paras": [
+    [
+     5,
+     35
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1703,
+    1704
+   ]
+  },
+  {
+   "words": [
+    "doubt",
+    "sceptical",
+    "suspicion"
+   ],
+   "senses": [
+    "怀疑"
+   ],
+   "paras": [
+    [
+     5,
+     48
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1784,
+    1785
+   ]
+  },
+  {
+   "words": [
+    "hypothesis",
+    "postulate",
+    "presume",
+    "suppose"
+   ],
+   "senses": [
+    "假设"
+   ],
+   "paras": [
+    [
+     1,
+     22
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    473,
+    474
+   ]
+  }
+ ]
+}

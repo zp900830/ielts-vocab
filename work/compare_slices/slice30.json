@@ -1,0 +1,109 @@
+{
+ "batch": 5,
+ "worklist_idx": [
+  146,
+  147,
+  148,
+  149,
+  150
+ ],
+ "groups": [
+  {
+   "words": [
+    "individual",
+    "single"
+   ],
+   "senses": [
+    "单独"
+   ],
+   "paras": [
+    [
+     4,
+     31
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1464,
+    1466
+   ]
+  },
+  {
+   "words": [
+    "committee",
+    "council"
+   ],
+   "senses": [
+    "委员会"
+   ],
+   "paras": [
+    [
+     4,
+     33
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1478
+   ]
+  },
+  {
+   "words": [
+    "glance",
+    "glimpse"
+   ],
+   "senses": [
+    "一瞥"
+   ],
+   "paras": [
+    [
+     5,
+     1
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1498,
+    1499
+   ]
+  },
+  {
+   "words": [
+    "oath",
+    "vow"
+   ],
+   "senses": [
+    "誓言"
+   ],
+   "paras": [
+    [
+     5,
+     1
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1502
+   ]
+  },
+  {
+   "words": [
+    "curse",
+    "swear"
+   ],
+   "senses": [
+    "咒骂"
+   ],
+   "paras": [
+    [
+     5,
+     2
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1509
+   ]
+  }
+ ]
+}

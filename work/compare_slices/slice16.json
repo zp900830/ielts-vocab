@@ -1,0 +1,115 @@
+{
+ "batch": 3,
+ "worklist_idx": [
+  82,
+  83,
+  84,
+  85,
+  86
+ ],
+ "groups": [
+  {
+   "words": [
+    "sailor",
+    "seaman"
+   ],
+   "senses": [
+    "水手",
+    "海员"
+   ],
+   "paras": [
+    [
+     3,
+     11
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    951,
+    952,
+    954
+   ]
+  },
+  {
+   "words": [
+    "railroad",
+    "railway"
+   ],
+   "senses": [
+    "铁路"
+   ],
+   "paras": [
+    [
+     3,
+     14
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    971,
+    972
+   ]
+  },
+  {
+   "words": [
+    "defer",
+    "delay"
+   ],
+   "senses": [
+    "延缓",
+    "推迟"
+   ],
+   "paras": [
+    [
+     3,
+     16
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    980,
+    982
+   ]
+  },
+  {
+   "words": [
+    "package",
+    "parcel"
+   ],
+   "senses": [
+    "包裹"
+   ],
+   "paras": [
+    [
+     3,
+     18
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    991,
+    993
+   ]
+  },
+  {
+   "words": [
+    "speed",
+    "velocity"
+   ],
+   "senses": [
+    "速度"
+   ],
+   "paras": [
+    [
+     3,
+     19
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1001,
+    1002
+   ]
+  }
+ ]
+}

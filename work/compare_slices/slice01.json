@@ -1,0 +1,112 @@
+{
+ "batch": 2,
+ "worklist_idx": [
+  5,
+  11,
+  12,
+  13,
+  14
+ ],
+ "groups": [
+  {
+   "words": [
+    "damp",
+    "humid"
+   ],
+   "senses": [
+    "潮湿"
+   ],
+   "paras": [
+    [
+     0,
+     13
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    72,
+    73
+   ]
+  },
+  {
+   "words": [
+    "natural",
+    "nature"
+   ],
+   "senses": [
+    "自然"
+   ],
+   "paras": [
+    [
+     0,
+     26
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    153,
+    154
+   ]
+  },
+  {
+   "words": [
+    "gas",
+    "petrol"
+   ],
+   "senses": [
+    "汽油"
+   ],
+   "paras": [
+    [
+     0,
+     27
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    157,
+    158
+   ]
+  },
+  {
+   "words": [
+    "cosmos",
+    "universe"
+   ],
+   "senses": [
+    "宇宙"
+   ],
+   "paras": [
+    [
+     0,
+     28
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    162,
+    163
+   ]
+  },
+  {
+   "words": [
+    "spacecraft",
+    "spaceship"
+   ],
+   "senses": [
+    "宇宙飞船"
+   ],
+   "paras": [
+    [
+     0,
+     29
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    169,
+    170
+   ]
+  }
+ ]
+}

@@ -1,0 +1,118 @@
+{
+ "batch": 6,
+ "worklist_idx": [
+  198,
+  199,
+  200,
+  201,
+  202
+ ],
+ "groups": [
+  {
+   "words": [
+    "hop",
+    "jump",
+    "leap"
+   ],
+   "senses": [
+    "跳跃"
+   ],
+   "paras": [
+    [
+     1,
+     49
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    636,
+    637,
+    638
+   ]
+  },
+  {
+   "words": [
+    "adorn",
+    "embellish",
+    "ornament"
+   ],
+   "senses": [
+    "装饰"
+   ],
+   "paras": [
+    [
+     2,
+     11
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    718,
+    719
+   ]
+  },
+  {
+   "words": [
+    "delicious",
+    "tasty",
+    "yummy"
+   ],
+   "senses": [
+    "美味"
+   ],
+   "paras": [
+    [
+     2,
+     34
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    852,
+    853
+   ]
+  },
+  {
+   "words": [
+    "exterior",
+    "external",
+    "outside"
+   ],
+   "senses": [
+    "外部"
+   ],
+   "paras": [
+    [
+     2,
+     39
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    878,
+    879
+   ]
+  },
+  {
+   "words": [
+    "inner",
+    "interior",
+    "internal"
+   ],
+   "senses": [
+    "内部"
+   ],
+   "paras": [
+    [
+     2,
+     39
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    880,
+    881
+   ]
+  }
+ ]
+}

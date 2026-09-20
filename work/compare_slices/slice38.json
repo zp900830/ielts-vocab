@@ -1,0 +1,108 @@
+{
+ "batch": 6,
+ "worklist_idx": [
+  183,
+  184,
+  185,
+  186,
+  187
+ ],
+ "groups": [
+  {
+   "words": [
+    "crazy",
+    "mad"
+   ],
+   "senses": [
+    "疯狂"
+   ],
+   "paras": [
+    [
+     5,
+     46
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1772,
+    1773
+   ]
+  },
+  {
+   "words": [
+    "bother",
+    "harass"
+   ],
+   "senses": [
+    "烦扰"
+   ],
+   "paras": [
+    [
+     5,
+     46
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1768
+   ]
+  },
+  {
+   "words": [
+    "envy",
+    "jealous"
+   ],
+   "senses": [
+    "妒忌"
+   ],
+   "paras": [
+    [
+     5,
+     48
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1783
+   ]
+  },
+  {
+   "words": [
+    "reluctant",
+    "unwilling"
+   ],
+   "senses": [
+    "不情愿"
+   ],
+   "paras": [
+    [
+     5,
+     49
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    1787
+   ]
+  },
+  {
+   "words": [
+    "awkward",
+    "clumsy"
+   ],
+   "senses": [
+    "笨拙"
+   ],
+   "paras": [
+    [
+     5,
+     50
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1796
+   ]
+  }
+ ]
+}

@@ -1,0 +1,111 @@
+{
+ "batch": 4,
+ "worklist_idx": [
+  119,
+  120,
+  121,
+  122,
+  123
+ ],
+ "groups": [
+  {
+   "words": [
+    "hit",
+    "strike"
+   ],
+   "senses": [
+    "袭击"
+   ],
+   "paras": [
+    [
+     4,
+     3
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1298,
+    1299
+   ]
+  },
+  {
+   "words": [
+    "dilemma",
+    "plight"
+   ],
+   "senses": [
+    "困境"
+   ],
+   "paras": [
+    [
+     4,
+     4
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1301
+   ]
+  },
+  {
+   "words": [
+    "invade",
+    "violate"
+   ],
+   "senses": [
+    "侵犯"
+   ],
+   "paras": [
+    [
+     4,
+     5
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1307,
+    1309
+   ]
+  },
+  {
+   "words": [
+    "assault",
+    "attack"
+   ],
+   "senses": [
+    "攻击",
+    "袭击"
+   ],
+   "paras": [
+    [
+     4,
+     5
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    1309,
+    1310
+   ]
+  },
+  {
+   "words": [
+    "forbid",
+    "prohibit"
+   ],
+   "senses": [
+    "禁止"
+   ],
+   "paras": [
+    [
+     4,
+     6
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1317
+   ]
+  }
+ ]
+}

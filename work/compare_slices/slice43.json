@@ -1,0 +1,118 @@
+{
+ "batch": 6,
+ "worklist_idx": [
+  208,
+  209,
+  210,
+  211,
+  212
+ ],
+ "groups": [
+  {
+   "words": [
+    "expose",
+    "reveal",
+    "uncover"
+   ],
+   "senses": [
+    "揭露"
+   ],
+   "paras": [
+    [
+     4,
+     18
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1388,
+    1389
+   ]
+  },
+  {
+   "words": [
+    "calculate",
+    "compute",
+    "count"
+   ],
+   "senses": [
+    "计算"
+   ],
+   "paras": [
+    [
+     4,
+     20
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1398,
+    1399
+   ]
+  },
+  {
+   "words": [
+    "convert",
+    "transform",
+    "turn"
+   ],
+   "senses": [
+    "转变"
+   ],
+   "paras": [
+    [
+     4,
+     25
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1426,
+    1428
+   ]
+  },
+  {
+   "words": [
+    "desire",
+    "itch",
+    "yearn"
+   ],
+   "senses": [
+    "渴望"
+   ],
+   "paras": [
+    [
+     5,
+     11
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1560,
+    1561,
+    1562
+   ]
+  },
+  {
+   "words": [
+    "cope",
+    "dispose",
+    "tackle"
+   ],
+   "senses": [
+    "处理"
+   ],
+   "paras": [
+    [
+     5,
+     12
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1567,
+    1568
+   ]
+  }
+ ]
+}

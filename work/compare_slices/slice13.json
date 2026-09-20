@@ -1,0 +1,112 @@
+{
+ "batch": 3,
+ "worklist_idx": [
+  67,
+  68,
+  69,
+  70,
+  71
+ ],
+ "groups": [
+  {
+   "words": [
+    "purse",
+    "wallet"
+   ],
+   "senses": [
+    "钱包"
+   ],
+   "paras": [
+    [
+     2,
+     14
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    735,
+    736
+   ]
+  },
+  {
+   "words": [
+    "belt",
+    "strap"
+   ],
+   "senses": [
+    "皮带"
+   ],
+   "paras": [
+    [
+     2,
+     15
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    745,
+    746
+   ]
+  },
+  {
+   "words": [
+    "construct",
+    "erection"
+   ],
+   "senses": [
+    "建造"
+   ],
+   "paras": [
+    [
+     2,
+     18
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    757,
+    758
+   ]
+  },
+  {
+   "words": [
+    "dwelling",
+    "reside"
+   ],
+   "senses": [
+    "居住"
+   ],
+   "paras": [
+    [
+     2,
+     19
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    763,
+    765
+   ]
+  },
+  {
+   "words": [
+    "hut",
+    "shed"
+   ],
+   "senses": [
+    "棚屋"
+   ],
+   "paras": [
+    [
+     2,
+     20
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    769,
+    770
+   ]
+  }
+ ]
+}

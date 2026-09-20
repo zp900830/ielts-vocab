@@ -1,0 +1,108 @@
+{
+ "batch": 2,
+ "worklist_idx": [
+  15,
+  16,
+  17,
+  18,
+  19
+ ],
+ "groups": [
+  {
+   "words": [
+    "expedition",
+    "exploration"
+   ],
+   "senses": [
+    "探险"
+   ],
+   "paras": [
+    [
+     0,
+     30
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    175
+   ]
+  },
+  {
+   "words": [
+    "sample",
+    "specimen"
+   ],
+   "senses": [
+    "样品"
+   ],
+   "paras": [
+    [
+     0,
+     31
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    182
+   ]
+  },
+  {
+   "words": [
+    "despair",
+    "desperate"
+   ],
+   "senses": [
+    "绝望"
+   ],
+   "paras": [
+    [
+     0,
+     33
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    197
+   ]
+  },
+  {
+   "words": [
+    "decay",
+    "rot"
+   ],
+   "senses": [
+    "腐烂"
+   ],
+   "paras": [
+    [
+     0,
+     38
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    225,
+    226
+   ]
+  },
+  {
+   "words": [
+    "grass",
+    "meadow"
+   ],
+   "senses": [
+    "草地"
+   ],
+   "paras": [
+    [
+     0,
+     40
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    235
+   ]
+  }
+ ]
+}

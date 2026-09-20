@@ -1,0 +1,48 @@
+{
+ "batch": 5,
+ "worklist_idx": [
+  176,
+  177
+ ],
+ "groups": [
+  {
+   "words": [
+    "considerate",
+    "thoughtful"
+   ],
+   "senses": [
+    "体贴"
+   ],
+   "paras": [
+    [
+     5,
+     40
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1732,
+    1733
+   ]
+  },
+  {
+   "words": [
+    "rigorous",
+    "strict"
+   ],
+   "senses": [
+    "严格"
+   ],
+   "paras": [
+    [
+     5,
+     42
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1748
+   ]
+  }
+ ]
+}

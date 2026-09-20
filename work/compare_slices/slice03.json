@@ -1,0 +1,109 @@
+{
+ "batch": 2,
+ "worklist_idx": [
+  20,
+  21,
+  22,
+  23,
+  24
+ ],
+ "groups": [
+  {
+   "words": [
+    "breed",
+    "feed"
+   ],
+   "senses": [
+    "饲养"
+   ],
+   "paras": [
+    [
+     0,
+     47
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    275
+   ]
+  },
+  {
+   "words": [
+    "descendant",
+    "offspring"
+   ],
+   "senses": [
+    "后代"
+   ],
+   "paras": [
+    [
+     0,
+     47
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    273,
+    274
+   ]
+  },
+  {
+   "words": [
+    "excrete",
+    "secrete"
+   ],
+   "senses": [
+    "分泌"
+   ],
+   "paras": [
+    [
+     0,
+     55
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    323
+   ]
+  },
+  {
+   "words": [
+    "trace",
+    "track"
+   ],
+   "senses": [
+    "追踪"
+   ],
+   "paras": [
+    [
+     0,
+     56
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    330,
+    331
+   ]
+  },
+  {
+   "words": [
+    "motivate",
+    "stimulate"
+   ],
+   "senses": [
+    "激励"
+   ],
+   "paras": [
+    [
+     1,
+     2
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    351
+   ]
+  }
+ ]
+}

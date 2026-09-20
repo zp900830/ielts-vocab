@@ -1,0 +1,111 @@
+{
+ "batch": 5,
+ "worklist_idx": [
+  156,
+  157,
+  158,
+  159,
+  160
+ ],
+ "groups": [
+  {
+   "words": [
+    "reverse",
+    "undo"
+   ],
+   "senses": [
+    "撤销"
+   ],
+   "paras": [
+    [
+     5,
+     10
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1554,
+    1557
+   ]
+  },
+  {
+   "words": [
+    "recover",
+    "restore"
+   ],
+   "senses": [
+    "恢复"
+   ],
+   "paras": [
+    [
+     5,
+     13
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1571,
+    1572
+   ]
+  },
+  {
+   "words": [
+    "amplify",
+    "augment"
+   ],
+   "senses": [
+    "增强"
+   ],
+   "paras": [
+    [
+     5,
+     14
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1577,
+    1578
+   ]
+  },
+  {
+   "words": [
+    "ooze",
+    "seep"
+   ],
+   "senses": [
+    "渗出"
+   ],
+   "paras": [
+    [
+     5,
+     15
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1583
+   ]
+  },
+  {
+   "words": [
+    "excuse",
+    "forgive"
+   ],
+   "senses": [
+    "原谅"
+   ],
+   "paras": [
+    [
+     5,
+     15
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1585,
+    1586
+   ]
+  }
+ ]
+}

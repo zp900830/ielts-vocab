@@ -1,0 +1,112 @@
+{
+ "batch": 2,
+ "worklist_idx": [
+  45,
+  46,
+  47,
+  48,
+  49
+ ],
+ "groups": [
+  {
+   "words": [
+    "empire",
+    "imperial"
+   ],
+   "senses": [
+    "帝国"
+   ],
+   "paras": [
+    [
+     1,
+     30
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    525,
+    526
+   ]
+  },
+  {
+   "words": [
+    "prosperity",
+    "thrive"
+   ],
+   "senses": [
+    "兴旺",
+    "繁荣"
+   ],
+   "paras": [
+    [
+     1,
+     32
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    535
+   ]
+  },
+  {
+   "words": [
+    "oral",
+    "verbal"
+   ],
+   "senses": [
+    "口头"
+   ],
+   "paras": [
+    [
+     1,
+     33
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    543,
+    544
+   ]
+  },
+  {
+   "words": [
+    "narrate",
+    "tale"
+   ],
+   "senses": [
+    "叙述"
+   ],
+   "paras": [
+    [
+     1,
+     36
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    558,
+    560
+   ]
+  },
+  {
+   "words": [
+    "interpret",
+    "paraphrase"
+   ],
+   "senses": [
+    "解释"
+   ],
+   "paras": [
+    [
+     1,
+     36
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    559,
+    560
+   ]
+  }
+ ]
+}

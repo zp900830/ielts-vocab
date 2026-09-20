@@ -1,0 +1,112 @@
+{
+ "batch": 4,
+ "worklist_idx": [
+  99,
+  100,
+  101,
+  102,
+  103
+ ],
+ "groups": [
+  {
+   "words": [
+    "increase",
+    "increment"
+   ],
+   "senses": [
+    "增加"
+   ],
+   "paras": [
+    [
+     3,
+     47
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1165,
+    1166
+   ]
+  },
+  {
+   "words": [
+    "decrease",
+    "reduce"
+   ],
+   "senses": [
+    "降低"
+   ],
+   "paras": [
+    [
+     3,
+     47
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    1163,
+    1165
+   ]
+  },
+  {
+   "words": [
+    "growth",
+    "increase"
+   ],
+   "senses": [
+    "增长"
+   ],
+   "paras": [
+    [
+     3,
+     47
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1165,
+    1166
+   ]
+  },
+  {
+   "words": [
+    "adequate",
+    "sufficient"
+   ],
+   "senses": [
+    "足够"
+   ],
+   "paras": [
+    [
+     3,
+     48
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    1169,
+    1170
+   ]
+  },
+  {
+   "words": [
+    "redundant",
+    "spare"
+   ],
+   "senses": [
+    "多余"
+   ],
+   "paras": [
+    [
+     3,
+     48
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1170,
+    1171
+   ]
+  }
+ ]
+}

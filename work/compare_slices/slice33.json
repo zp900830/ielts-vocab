@@ -1,0 +1,109 @@
+{
+ "batch": 5,
+ "worklist_idx": [
+  161,
+  162,
+  163,
+  164,
+  165
+ ],
+ "groups": [
+  {
+   "words": [
+    "differentiate",
+    "distinguish"
+   ],
+   "senses": [
+    "区分"
+   ],
+   "paras": [
+    [
+     5,
+     19
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1609
+   ]
+  },
+  {
+   "words": [
+    "incline",
+    "lean"
+   ],
+   "senses": [
+    "倾斜"
+   ],
+   "paras": [
+    [
+     5,
+     19
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1610
+   ]
+  },
+  {
+   "words": [
+    "chin",
+    "jaw"
+   ],
+   "senses": [
+    "下巴"
+   ],
+   "paras": [
+    [
+     5,
+     22
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1625,
+    1626
+   ]
+  },
+  {
+   "words": [
+    "disease",
+    "illness"
+   ],
+   "senses": [
+    "疾病"
+   ],
+   "paras": [
+    [
+     5,
+     27
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1656
+   ]
+  },
+  {
+   "words": [
+    "invalid",
+    "patient"
+   ],
+   "senses": [
+    "病人"
+   ],
+   "paras": [
+    [
+     5,
+     27
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1659,
+    1660
+   ]
+  }
+ ]
+}

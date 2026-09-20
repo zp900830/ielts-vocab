@@ -1,0 +1,112 @@
+{
+ "batch": 5,
+ "worklist_idx": [
+  141,
+  142,
+  143,
+  144,
+  145
+ ],
+ "groups": [
+  {
+   "words": [
+    "fault",
+    "flaw"
+   ],
+   "senses": [
+    "缺陷"
+   ],
+   "paras": [
+    [
+     4,
+     26
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1432,
+    1433
+   ]
+  },
+  {
+   "words": [
+    "juvenile",
+    "teenage"
+   ],
+   "senses": [
+    "青少年"
+   ],
+   "paras": [
+    [
+     4,
+     28
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1444,
+    1446
+   ]
+  },
+  {
+   "words": [
+    "kin",
+    "relative"
+   ],
+   "senses": [
+    "亲戚"
+   ],
+   "paras": [
+    [
+     4,
+     28
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    1447,
+    1448
+   ]
+  },
+  {
+   "words": [
+    "hostess",
+    "mistress"
+   ],
+   "senses": [
+    "女主人"
+   ],
+   "paras": [
+    [
+     4,
+     29
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1452,
+    1453
+   ]
+  },
+  {
+   "words": [
+    "client",
+    "customer"
+   ],
+   "senses": [
+    "客户"
+   ],
+   "paras": [
+    [
+     4,
+     30
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1458,
+    1459
+   ]
+  }
+ ]
+}

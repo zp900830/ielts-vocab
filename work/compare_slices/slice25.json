@@ -1,0 +1,111 @@
+{
+ "batch": 4,
+ "worklist_idx": [
+  124,
+  125,
+  126,
+  127,
+  128
+ ],
+ "groups": [
+  {
+   "words": [
+    "evidence",
+    "proof"
+   ],
+   "senses": [
+    "证据"
+   ],
+   "paras": [
+    [
+     4,
+     7
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    1322,
+    1323
+   ]
+  },
+  {
+   "words": [
+    "horrible",
+    "terror"
+   ],
+   "senses": [
+    "恐怖"
+   ],
+   "paras": [
+    [
+     4,
+     7
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1323,
+    1325
+   ]
+  },
+  {
+   "words": [
+    "horrible",
+    "terrible"
+   ],
+   "senses": [
+    "可怕"
+   ],
+   "paras": [
+    [
+     4,
+     7
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1324,
+    1325
+   ]
+  },
+  {
+   "words": [
+    "compete",
+    "contest"
+   ],
+   "senses": [
+    "比赛"
+   ],
+   "paras": [
+    [
+     4,
+     8
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1331
+   ]
+  },
+  {
+   "words": [
+    "turbulent",
+    "turmoil"
+   ],
+   "senses": [
+    "动荡"
+   ],
+   "paras": [
+    [
+     4,
+     8
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1327,
+    1328
+   ]
+  }
+ ]
+}

@@ -1,0 +1,49 @@
+{
+ "batch": 3,
+ "worklist_idx": [
+  92,
+  93
+ ],
+ "groups": [
+  {
+   "words": [
+    "perspective",
+    "viewpoint"
+   ],
+   "senses": [
+    "观点"
+   ],
+   "paras": [
+    [
+     3,
+     36
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1102,
+    1103
+   ]
+  },
+  {
+   "words": [
+    "declare",
+    "proclaim"
+   ],
+   "senses": [
+    "宣告"
+   ],
+   "paras": [
+    [
+     3,
+     38
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1111,
+    1114
+   ]
+  }
+ ]
+}
