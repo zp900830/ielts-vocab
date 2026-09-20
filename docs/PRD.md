@@ -7,7 +7,7 @@
 | 状态 | Released（2026-09-17 发版） |
 | 维护模式 | 单人维护 · 多 AI Agent 协作 |
 | 线上地址 | https://ielts-vocab.bond/ （主站）<br>https://ielts-vocab.bond/shadow/ （跟读）<br>https://zp900830.github.io/ielts-vocab/ （国际备用） |
-| 最后更新 | 2026-09-18 |
+| 最后更新 | 2026-09-20 |
 
 ---
 
@@ -1116,8 +1116,11 @@ python3 scripts/validate_data.py
 
 | 环境 | 平台 | 分支 | 地址 |
 |------|------|------|------|
-| 生产（国内主线） | Netlify | main | https://ielts-vocab.bond/ |
+| 生产（国内主线） | **腾讯云 EdgeOne Pages（已改名 EdgeOne Makers）**，只监听 `main`，推上去约 1 分钟自动部署 | main | https://ielts-vocab.bond/ |
 | 生产（国际备用） | GitHub Pages | main | https://zp900830.github.io/ielts-vocab/ |
+
+> `netlify.toml` 与 `_redirects` 平台完全不认，是死文件；改缓存/重定向要在 EdgeOne 控制台做。
+> 发布产物由 `node scripts/build_site.mjs` 生成 `dist/`（白名单制，见 `edgeone.json`）。
 
 ### 13.2 构建流程
 
