@@ -1073,6 +1073,15 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-note .sm { display: block; margin-top: 2px; }
   .tp-note.sm { background: transparent; border: none; padding: 10px 0 0; }
   .sync-state { color: var(--coral-deep, #c0492f); font-weight: 600; }
+  /* 常驻同步提示条：贴在任务栏上方，失败时一直挂着，点一下重试 */
+  .sync-hint { position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(var(--task-bar-h, 62px) + 8px + 62px + env(safe-area-inset-bottom, 0px));
+    z-index: 595; max-width: calc(100vw - 28px); padding: 6px 13px; border-radius: 999px; cursor: pointer;
+    font-size: 12px; font-weight: 600; color: var(--coral-deep, #c0492f);
+    background: rgba(255,241,236,.96); border: 1px solid rgba(192,73,47,.28);
+    box-shadow: 0 3px 12px rgba(30,60,48,.12); }
+  .sync-hint[hidden] { display: none; }
+  body.dark .sync-hint { background: rgba(58,36,30,.96); color: #f0a08c; border-color: rgba(240,160,140,.3); }
   /* 词本：状态过滤器 + 词行 */
   .tp-filters { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
   .pill { min-height: 30px; padding: 4px 11px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--text); font-size: 12px; cursor: pointer; }
@@ -1359,6 +1368,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <!-- 每日学习任务面板 -->
     <div class="today-panel" id="todayPanel" role="dialog" aria-modal="true" aria-label="今日学习任务" tabindex="-1"></div>
     <div id="todayScrim" style="position:fixed;inset:0;z-index:590;background:rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .2s" onclick="TASK.closePanel()"></div>
+    <!-- 常驻同步提示：不是弹窗，失败了就在原地挂着，点一下重试（PRD 原则 6 §12） -->
+    <div id="syncHint" class="sync-hint" role="status" aria-live="polite" hidden onclick="TASK.cloudSync()"></div>
     <!-- 任务模式底部操作栏 -->
     <div class="task-bar" id="taskBar" data-state="idle">
       <div class="tb-info"><div class="tb-title" id="tbTitle">—</div><div class="tb-sub" id="tbSub"></div></div>
@@ -4075,9 +4086,101 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function push2(ev) {
         ev.id = ShadowPlan.eventId(ev);
         ROOT2.events.push(ev);
-        if (ROOT2.events.length > 5000) ROOT2.events.splice(0, ROOT2.events.length - 5000);
+        if (ROOT2.events.length > 5000) {
+          const cut = ROOT2.events.length - 5000;
+          ROOT2.events.splice(0, cut);
+          // 上传游标是下标，掐头之后必须一起往前挪，否则会把没传的当成已传
+          ROOT2.uploaded = Math.max(0, (ROOT2.uploaded || 0) - cut);
+        }
         recompute2(); _cachedPlan = null; persist2();
+        queueEventUpload();
         return ev;
+      }
+
+      /* ---------- 事件流上云：只传事实，计划不上传（PRD §12） ----------
+         没有 update、没有合并策略：拉回来重放，靠 event_id 去重，天然幂等。
+         失败只在原地挂一条常驻提示，不弹窗 —— 断网不该打断跟读。 */
+      let _evPushT = null, _pushing = false, _pulling = false;
+      function queueEventUpload() {
+        clearTimeout(_evPushT);
+        _evPushT = setTimeout(() => { try { cloudPush(); } catch (e) {} }, 2500);
+      }
+      function pendingEvents() {
+        if (!ROOT2) return [];
+        return ROOT2.events.slice(ROOT2.uploaded || 0);
+      }
+      async function cloudPush() {
+        const c = (typeof CLOUD !== 'undefined') ? CLOUD.client() : null;
+        if (!c) { setSyncHint(''); return { sent: 0, offline: true }; }
+        if (_pushing) return { sent: 0, busy: true };
+        _pushing = true;
+        try {
+          const sess = (await c.auth.getSession()).data.session;
+          if (!sess) { setSyncHint(''); return { sent: 0, offline: true }; }
+          const rows = pendingEvents().slice(0, 400).map(ev => ({
+            user_id: sess.user.id, event_id: ev.id || ShadowPlan.eventId(ev),
+            ts: ev.ts || Date.now(), type: ev.type, payload: ev,
+          }));
+          if (!rows.length) { setSyncHint(''); return { sent: 0 }; }
+          const res = await c.from('shadow_events').upsert(rows, { onConflict: 'event_id,user_id' });
+          if (res.error) {
+            dlog('events-push-fail', res.error.message || res.error);
+            setSyncHint('本机进度还没传上去 · 点这里重试');
+            return { sent: 0, error: res.error.message };
+          }
+          ROOT2.uploaded = Math.min(ROOT2.events.length, (ROOT2.uploaded || 0) + rows.length);
+          persist2();
+          setSyncHint(pendingEvents().length ? '还有 ' + pendingEvents().length + ' 条没传完' : '');
+          return { sent: rows.length };
+        } catch (e) {
+          dlog('events-push-fail', (e && e.message) || e);
+          setSyncHint('本机进度还没传上去 · 点这里重试');
+          return { sent: 0, error: String((e && e.message) || e) };
+        } finally { _pushing = false; }
+      }
+      async function cloudPull() {
+        const c = (typeof CLOUD !== 'undefined') ? CLOUD.client() : null;
+        if (!c || _pulling) return { got: 0, newEvents: 0 };
+        _pulling = true;
+        try {
+          const sess = (await c.auth.getSession()).data.session;
+          if (!sess) return { got: 0, newEvents: 0 };
+          const res = await c.from('shadow_events')
+            .select('event_id,ts,type,payload').eq('user_id', sess.user.id)
+            .order('ts', { ascending: true }).range(0, 1999);
+          if (res.error || !Array.isArray(res.data)) return { got: 0, newEvents: 0 };
+          const have = {};
+          ROOT2.events.forEach(e => { have[e.id || ShadowPlan.eventId(e)] = 1; });
+          let added = 0;
+          res.data.forEach(row => {
+            if (!row || have[row.event_id]) return;
+            ROOT2.events.push(Object.assign({}, row.payload, { id: row.event_id, ts: row.ts }));
+            added++;
+          });
+          if (added) {
+            ROOT2.events.sort((a, b) => (a.ts || 0) - (b.ts || 0));
+            ROOT2.uploaded = 0;              // 顺序变了，游标作废：下一次 push 靠主键去重
+            recompute2(); _cachedPlan = null; persist2();
+          }
+          return { got: res.data.length, newEvents: added };
+        } catch (e) {
+          dlog('events-pull-fail', (e && e.message) || e);
+          return { got: 0, newEvents: 0 };
+        } finally { _pulling = false; }
+      }
+      async function cloudSync() {
+        await cloudPull();
+        const r = await cloudPush();
+        try { renderToday(document.getElementById('todayPanel')); } catch (e) {}
+        return r;
+      }
+      function setSyncHint(msg) {
+        const el = document.getElementById('syncHint');
+        if (!el) return;
+        el.textContent = msg || '';
+        el.hidden = !msg;
+        const p = document.getElementById('syncState');
+        if (p) p.textContent = syncHintText();
       }
       function loadRoot() {
         indexWords();
@@ -5203,6 +5306,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             }
           }
         }
+        // 开页先拉后推：没登录时这两个函数自己就返回，不发请求
+        try { cloudSync(); } catch (e) { dlog('cloud-sync-fail', (e && e.message) || e); }
       }
 
       // ---- 公开 API ----
@@ -5216,6 +5321,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         get progress() { return prog; },
         recordRep, buildQueue, updateMarkers, updateBtn,
         loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
+        pendingEvents, cloudPush, cloudPull, cloudSync, syncHintText,
         initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
         pass: passNumber, setPass, currentQuiz, answerQuiz, nextQuiz, advance, finished: isFinished,
         submitRecall, pickOpt, flagQuiz, reviewSentence, summaryContinue: startSummaryContinue,
@@ -5259,6 +5365,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     // 断网恢复后自动重连云端（移动端网络抖动常见）
     window.addEventListener('online', () => {
     try { if (typeof CLOUD !== 'undefined' && CLOUD._userMail && !CLOUD._on) CLOUD.checkStatus(); } catch (e) {}
+    try { TASK.cloudSync(); } catch (e) {}   // 断网期间攒下的事件，回网就补传
     });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => loadVoices());
     setTimeout(loadVoices, 500);
