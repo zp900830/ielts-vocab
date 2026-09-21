@@ -2426,11 +2426,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     function syncNavMode() {
       const b = document.body;
-      /* 滚动收缩态（沉浸阅读）下顶栏被压成 0 宽，量出来永远「放得下」。更要紧的是：
-         为了量宽去摘/挂 scrolled，会把顶栏那条 0.3s 过渡从头重启 → ResizeObserver 又量到尺寸变了
-         → 再量一次 → 再重启，整页每帧都在动（词卡用例就是被这个卡到 click 永远等不到「元素稳定」）。
-         所以收缩态一律不量，维持上一次的结论；回到顶部自然会再触发一次。 */
-      if (b.classList.contains('scrolled') || b.classList.contains('fade-nav')) return;
+      /* 滚动收缩态（沉浸阅读）下顶栏被压成 0 宽，量出来永远「放得下」，所以不量，维持上一次的结论。
+         更要紧的是：为了量宽去摘/挂 scrolled，会把顶栏那条 0.3s 过渡从头重启 → ResizeObserver
+         又量到尺寸变了 → 再量一次 → 再重启，整页每帧都在动（词卡用例就是被这个卡到 click 永远等不到
+         「元素稳定」）。2026-09-21 又试过用既有的 show-nav「把完整顶栏露出来」在量宽时临时复原压扁，
+         当场把「面板打得开」那条用例从 3s 拖到 47s 点不动 —— 那条路走不通，守卫留着。
+         但 fade-nav 不配当守卫：它只改透明度（.topbar{opacity:.55}），一个字节的宽度都不动，
+         而它是空闲计时器挂上的，一旦挂上就永远不量 —— 顶栏会一直停在两行直到用户碰一下鼠标。 */
+      if (b.classList.contains('scrolled')) return;
       const narrow = window.matchMedia('(max-width: 700px)').matches;
       // 量之前先按「铺开」摆一次：nav-menu 开着时这一行只剩标题+汉堡，永远量不出真实宽度。
       // 加删在同一个任务里完成、且期间关掉过渡（CSS 见 body.nav-measure），所以既不闪也不会带动画重启。
