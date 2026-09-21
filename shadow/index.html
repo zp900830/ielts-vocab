@@ -43,7 +43,7 @@
     --glass: rgba(30,28,25,.94); --glass-strong: rgba(30,28,25,.97);
     }
   body.dark { background-color: #1c1a17; }
-  html.dark { background-color: #1c1a17; }
+  html.dark { background-color: #1c1a17; background-image: none; } /* 桌面暗色：清除基样式浅色渐变，杜绝回弹/覆盖层露出米白 */
   body.dark .topbar { background: transparent; border-bottom-color: #33302b; }
   body.dark .topbar::before {
     background: linear-gradient(145deg, rgba(30,28,25,.92), rgba(30,28,25,.78) 42%, rgba(30,28,25,.62));
@@ -104,9 +104,15 @@
     text-rendering: optimizeLegibility; overflow-x: hidden; }
   ::selection { background: var(--accent-soft); }
   :focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 2px; }
+
+  /* 触屏拇指区：这些颗实测 24–35px，够不到 44px 的最低线（汉堡 24×24、抽屉 ✕ 27×22 连 24 线都擦边）。
+     只写在 ≤700px 里 —— 桌面用鼠标，不为此改播放条/顶栏的高度。 */
+  @media (max-width: 700px) {
+    .audiobar .btn, .tb-btn, .ps-opt, #btnMenu, #edgeTab, aside .x { min-height: 44px; }
+  }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     }
 
   /* ============ 顶栏（暖色玻璃） ============ */
@@ -433,7 +439,7 @@
   .cloud-menu .ct { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
   .cloud-menu .cs { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
   .cloud-menu input { width: 100%; border: 1px solid var(--border); border-radius: 10px;
-    padding: 7px 12px; font-size: 14px; outline: none; margin-bottom: 8px;
+    padding: 7px 12px; font-size: 16px; outline: none; margin-bottom: 8px; /* iOS：>=16px 防输入聚焦自动放大 */
     background-color: #fff; color: var(--text); box-sizing: border-box; }
   .cloud-menu input:focus { border-color: var(--accent-bright); }
   .cloud-menu .row { display: flex; gap: 8px; }
@@ -1200,7 +1206,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .qz-opt.right { border-color: var(--task-new); background: var(--task-bg); color: var(--task-new); }
   .qz-opt.wrong { border-color: var(--coral, #d9694f); background: rgba(217,105,79,.09); color: var(--coral-deep, #c0492f); }
   .qz-inputrow { display: flex; gap: 7px; margin-top: 11px; }
-  .qz-input { flex: 1; min-width: 0; min-height: 44px; padding: 8px 12px; font-size: 15px; font-family: var(--serif, Georgia, serif);
+  .qz-input { flex: 1; min-width: 0; min-height: 44px; padding: 8px 12px; font-size: 16px; font-family: var(--serif, Georgia, serif); /* iOS：>=16px 防默写输入聚焦自动放大 */
     border: 1px solid var(--border); border-radius: 11px; background: var(--card); color: var(--text); }
   .qz-input:focus { outline: 2px solid var(--task-new); outline-offset: 1px; }
   .qz-go { min-height: 44px; padding: 0 16px; border: none; border-radius: 11px; background: linear-gradient(135deg,#2bd4a4,#0fae7e);
@@ -1277,6 +1283,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <!-- 实测：把下面这行图标字体样式表改成非阻塞加载后，顶栏收纳会开始等第三方字体 ——
+         4 秒内没落地就判「放得下」，汉堡不出现（并行跑套件时复现）。首屏那 3–5 倍的收益
+         要等「顶栏测量不依赖远端图标字体」之后再来拿，所以这里保持阻塞加载。 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20color=%22%23000%22%20d=%22M0%200h16v16H0V0zm16%200H0v16h16V0zm-7-5h7v2h-7V2zm0%205h7v2h-7V2zm0%205h7v2h-7V2%22/%3E%3C/svg%22">
@@ -1328,7 +1337,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     </header>
 
     <div id="abToast" role="status" aria-live="polite" aria-atomic="true"></div>
-    <button id="abLive" onclick="abCancel()" title="点击退出 A-B 循环" aria-hidden="true"></button>
+    <button id="abLive" onclick="abCancel()" title="点击退出 A-B 循环" aria-label="退出 A-B 循环"></button>
     <footer class="audiobar" id="audiobar" role="contentinfo">
       <nav class="ab-left" aria-label="播放控制">
         <button class="btn ab-step" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i> 上一句</button>
@@ -1419,11 +1428,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       <main id="main"><article id="art"><div id="abRegion" class="ab-region" style="display:none" aria-hidden="true"><button class="ab-cancel" onclick="abCancel()" title="取消循环" aria-label="取消循环">×</button></div></article></main>
       <aside id="panel">
         <div class="head">
-           <div class="t">📚词库 <span class="t-en">Word Bank</span><button class="x" onclick="togglePanel()" title="收起">✕</button></div>
+           <div class="t">📚词库 <span class="t-en">Word Bank</span><button class="x" onclick="togglePanel()" title="收起" aria-label="收起词库">✕</button></div>
           <input id="q" placeholder="搜索单词或释义…" oninput="queueRenderList()" aria-label="搜索单词或释义">
         </div>
         <div class="list" id="vlist"></div>
-        <div class="cnt">共<span id="vcnt"></span> · 点卡片跳到该句 · ⌖文中定位</div>
+        <div class="cnt" aria-live="polite">共<span id="vcnt"></span> · 点卡片跳到该句 · ⌖文中定位</div>
       </aside>
     </div>
 
@@ -1831,7 +1840,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     });
     // 单词键盘支持：Enter/Space 打开弹窗
     document.querySelectorAll('.w').forEach(el => {
-    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPop(el); } };
+    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); openPop(el); } };
     });
     // 句→文章映射
     artOfSent = [];
@@ -3575,6 +3584,27 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (tp && tp.classList.contains('open')) TASK.closePanel();
     document.body.classList.remove('menu-open');
     }
+    /* 顶栏/播放条这排开关的「按下没按下、菜单开没开」此前只写在 class 里，读屏软件拿不到。
+       与其在八个开关各自的函数里补一行同步（漏一个就长期不一致），不如按当前 DOM 反推：
+       以后加按钮只要沿用 .active / .open 两套约定就自动被覆盖。 */
+    function syncToggleAria() {
+      ['btnZh', 'btnGloss', 'btnLoop'].forEach(function (id) {
+        const e = document.getElementById(id);
+        if (e) e.setAttribute('aria-pressed', e.classList.contains('active') ? 'true' : 'false');
+      });
+      [['btnCloud', 'cloudWrap'], ['markBtn', 'markWrap'], ['btnAB', 'abWrap'], ['rateCycle', 'rateWrap']]
+        .forEach(function (x) {
+          const b = document.getElementById(x[0]), w = document.getElementById(x[1]);
+          if (b && w) b.setAttribute('aria-expanded', w.classList.contains('open') ? 'true' : 'false');
+        });
+      const m = document.getElementById('btnMenu');
+      if (m) m.setAttribute('aria-expanded', document.body.classList.contains('menu-open') ? 'true' : 'false');
+    }
+    document.addEventListener('click', function () {
+      setTimeout(function () { try { syncToggleAria(); } catch (e) {} }, 0);
+    }, true);
+    window.addEventListener('load', function () { try { syncToggleAria(); } catch (e) {} });
+
     document.addEventListener('click', e => {
     const t = _inPath(e, '.w') ? e.target.closest('.w') : null;
     if (t) { openPop(t); return; }
@@ -5250,7 +5280,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const tabs = [['today', '今天'], ['plan', '计划'], ['book', '词本']]
           .map(v => `<button class="tp-tab${_view === v[0] ? ' on' : ''}" data-view="${v[0]}" onclick="TASK.setView('${v[0]}')">${v[1]}</button>`).join('');
         p.innerHTML = `<div class="tp-head"><h3>${_view === 'today' ? '今天' : _view === 'plan' ? '计划' : '词本'}</h3>
-          <button class="tp-close" onclick="TASK.closePanel()">✕</button></div>
+          <button class="tp-close" onclick="TASK.closePanel()" aria-label="关闭面板">✕</button></div>
           <div class="tp-tabs">${tabs}</div>` +
           (_view === 'plan' ? renderPlanView() : _view === 'book' ? renderBookView() : renderTodayView());
       }
