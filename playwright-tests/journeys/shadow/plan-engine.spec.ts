@@ -36,6 +36,12 @@ declare const ShadowPlan: {
     daily: Record<string, Record<string, number>>;
     eventsSeen: number;
   };
+  countGraduated: (st: any) => number;
+  estimateDays: (state: any, minutes: number, opts: any) => {
+    graduatedNow: number; total: number; done: boolean; days: number | null;
+    doneAt: number | null; atHorizon: { days: number; graduated: number; at: number } | null;
+    capped: boolean; empty: boolean;
+  };
 };
 
 const ENV = process.env.E2E_ENVIRONMENT || 'local';
@@ -384,5 +390,138 @@ test.describe('quiz builder', () => {
     }));
     expect(got).toEqual({ exact: true, spaced: true, inflect: true, near: false,
                           far: false, empty: false, dist: [3, 0] });
+  });
+});
+
+/* ---------- Task 1：replay 的「接着算」入口（docs/superpowers/plans/2026-09-21 §Task 1） ----------
+   引擎侧唯一的改动是给 replay 加一个可选 opts.state。不传 = 与今天逐字一致（从空重建），
+   所以上面那批旧用例一条都不该被动到 —— 那本身就是本任务的一半验收。 */
+test.describe('replay 续算（opts.state）', () => {
+  test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
+
+  test('只喂新事件 ≡ 全量重放，最终毕业数必须逐词相等', async ({ page, baseURL }) => {
+    await page.goto(`${baseURL}/index.html`);
+    const out = await page.evaluate(() => {
+      const ev: unknown[] = [];
+      const t0 = Date.now();
+      const PER_DAY = 24;                       // 6 个只露一面的新词 + 6 个回炉词 ×3 条事件
+      // 30 天。每天见 6 个全新词（撑大词表，让 sameKeys 不是个空检查），
+      // 外加 6 个「回炉词」每天 contact + ② + ③ 各一次 —— 毕业判据是 reps>=20 && ok3>=1，
+      // 只露一面的新词永远毕不了业，没有这 6 个回炉词的话末尾那条 fullGrad>0 就是空断言。
+      for (let d = 0; d < 30; d++) {
+        const ts = t0 + d * 864e5;
+        const day = ShadowPlan.dayKey(ts, 4);
+        for (let k = 0; k < 6; k++) {
+          ev.push(ShadowPlan.mkContact('w' + (d * 6 + k), d * 6 + k, ts, day));
+        }
+        for (let k = 0; k < 6; k++) {
+          const w = 'c' + k;
+          ev.push(ShadowPlan.mkContact(w, 1000 + k, ts, day));
+          ev.push(ShadowPlan.mkQuiz(w, 1000 + k, 'recall', true, ts, day));
+          ev.push(ShadowPlan.mkQuiz(w, 1000 + k, 'mc4zh', true, ts, day));
+        }
+      }
+      const full = ShadowPlan.replay(ev, { boundaryHour: 4 });
+      let inc = ShadowPlan.emptyState();
+      for (let d = 0; d < 30; d++) {
+        inc = ShadowPlan.replay(ev.slice(d * PER_DAY, (d + 1) * PER_DAY), { state: inc, boundaryHour: 4 });
+      }
+      const grad = (s: any) => Object.keys(s.words).filter((k) => s.words[k].stage === 'graduated').length;
+      return {
+        fullGrad: grad(full), incGrad: grad(inc),
+        sameKeys: JSON.stringify(Object.keys(full.words).sort()) === JSON.stringify(Object.keys(inc.words).sort()),
+      };
+    });
+    expect(out.sameKeys).toBe(true);
+    expect(out.incGrad).toBe(out.fullGrad);
+    expect(out.fullGrad).toBeGreaterThan(0);      // 都为 0 的话这条断言是空的
+  });
+
+  // 契约测试（不是"待修的坏行为"）：传了 opts.state 就是**原地续算**，replay 不替你深拷。
+  // 故意的 —— estimateDays 要在一上千天的循环里天天调它，内部深拷等于每天重拷一份 3245 词的表。
+  // 所以"先自己拷一份再喂进来"是调用方的责任（Task 2 计划里「两条不能省」第 ① 条）。
+  // 哪天有人给 replay 加了内部深拷，这条会红：那是性能回退，不是 bug 被修好了。
+  test('replay 带 opts.state 是原地续算：深拷是调用方的责任', async ({ page, baseURL }) => {
+    await page.goto(`${baseURL}/index.html`);
+    const mutated = await page.evaluate(() => {
+      const base = ShadowPlan.replay([ShadowPlan.mkContact('alpha', 1, Date.now(), '2026-09-21')], { boundaryHour: 4 });
+      const snap = JSON.stringify(base);
+      ShadowPlan.replay([ShadowPlan.mkContact('beta', 2, Date.now() + 864e5, '2026-09-22')], { state: base, boundaryHour: 4 });
+      return JSON.stringify(base) !== snap;
+    });
+    expect(mutated).toBe(true);
+  });
+});
+
+/* ---------- Task 2：estimateDays —— 全项目唯一那份「要多久」的算式（规格 §4.1） ----------
+   夹具沿用上面 time-budget 那套写法（60 句 × 每句 2 词 = 120 词），不另造词表。
+   est() 从空 state 冷启动；分钟数之外只注入 maxDays / accuracy。 */
+test.describe('estimateDays', () => {
+  test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
+
+  const est = (page: any, minutes: number, extra?: any) => page.evaluate((a: any) => {
+    const st = ShadowPlan.replay([], { boundaryHour: 4 });
+    return ShadowPlan.estimateDays(st, a.minutes, {
+      totalSents: 60, wordsOf: (i: number) => ['w' + (i * 2), 'w' + (i * 2 + 1)],
+      totalWords: 120, now: Date.UTC(2026, 8, 21), boundaryHour: 4, plan: null,
+      maxDays: a.maxDays || 1095, accuracy: a.accuracy,
+    });
+  }, { minutes, ...extra });
+
+  test('冷启动（空 state）也必须给得出有限结果，不许抛', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    const r = await est(page, 30);
+    expect(r.graduatedNow).toBe(0);
+    expect(r.total).toBe(120);
+    expect(typeof r.capped).toBe('boolean');
+    if (r.done) { expect(r.days).toBeGreaterThan(0); expect(r.doneAt).toBeGreaterThan(0); }
+  });
+
+  test('单调性：分钟加倍，天数严格不增', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    const a = await est(page, 15), b = await est(page, 30), c = await est(page, 60);
+    const d = (x: any) => (x.done ? x.days : 1e9);
+    expect(d(c)).toBeLessThanOrEqual(d(b));
+    expect(d(b)).toBeLessThanOrEqual(d(a));
+    // 看门狗：三档至少有一档真走到达标（全 capped 时 d()≡1e9，上面两条就是空断言）。
+    expect(Math.min(d(a), d(b), d(c))).toBeLessThan(1e9);
+  });
+
+  test('同一份输入跑两次结果逐字段相等（禁 Math.random 的看门狗）', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    expect(await est(page, 20)).toEqual(await est(page, 20));
+  });
+
+  test('封顶分支：maxDays 太小 → capped=true 且 done=false，days 必须是 null', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    const r = await est(page, 15, { maxDays: 5 });
+    expect(r.done).toBe(false);
+    expect(r.capped).toBe(true);
+    expect(r.days).toBe(null);
+    expect(r.doneAt).toBe(null);
+  });
+
+  test('里程碑与完工日是同一次行走的读数，不许再跑第二遍', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    const r = await est(page, 60, { maxDays: 1095 });
+    expect(r.atHorizon).not.toBe(null);
+    const h = r.atHorizon as { days: number; graduated: number; at: number };
+    expect(h.days).toBe(365);
+    expect(h.graduated).toBeGreaterThan(0);
+    if (r.done) expect(h.graduated).toBeLessThanOrEqual(r.total);
+  });
+
+  // 附录 B 第 2 条（规格 §7 第 6 条）：分母是入参，界面那行「全部 X 个词」实时跟它走。
+  test('分母来自入参，不许写死 3245', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    const t = await page.evaluate(() => ShadowPlan.estimateDays(ShadowPlan.replay([], {}), 30,
+      { totalSents: 60, wordsOf: () => [], totalWords: 777 }).total);
+    expect(t).toBe(777);
   });
 });
