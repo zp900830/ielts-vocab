@@ -1152,12 +1152,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-week-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
   .tp-week-fill { width: 100%; background: linear-gradient(180deg, var(--task-new), #0fae7e); border-radius: 3px 3px 0 0; min-height: 2px; transition: height .3s; }
   .tp-week-label { font-size: 9px; color: var(--muted); margin-top: 3px; }
-  /* 任务模式底部操作栏 */
+  /* 任务模式底部操作栏：一条通栏，里面最多两行（第一行进度+翻句，第二行播放控件，仅 ① 态出现） */
   .task-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; padding: 7px 16px calc(7px + env(safe-area-inset-bottom, 0px));
-    display: none; align-items: center; gap: 10px;
+    display: none; flex-direction: column; align-items: stretch; gap: 6px;
     background: var(--glass-strong, rgba(255,255,255,.97)); -webkit-backdrop-filter: var(--blur, blur(22px)) saturate(170%); backdrop-filter: var(--blur, blur(22px)) saturate(170%);
     border-top: 1px solid var(--glass-line, rgba(255,255,255,.65)); box-shadow: 0 -4px 20px rgba(0,0,0,.08); }
   .task-bar.show { display: flex; }
+  .tb-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
   body.dark .task-bar { background: rgba(30,28,25,.97); border-top-color: #33302b; }
   .task-bar .tb-info { flex: 1; min-width: 0; }
   .task-bar .tb-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1168,17 +1169,45 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .task-bar .tb-btn.next { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: #fff; box-shadow: 0 2px 8px rgba(16,180,135,.3); }
   .task-bar .tb-btn:active { filter: brightness(.92); }
   body.dark .task-bar .tb-btn.again { background: #252220; color: #e2ddd5; border-color: #33302b; }
-  /* 任务模式时 audiobar 上移避让 */
-  body.task-mode .audiobar, body.resume-offer .audiobar { bottom: calc(var(--task-bar-h, 62px) + 8px + env(safe-area-inset-bottom, 0px)); }
-  body.task-mode .back-to-play { bottom: calc(var(--task-bar-h, 62px) + 98px + env(safe-area-inset-bottom, 0px)); }
-  /* 全页只留一个「下一句」：任务模式里往后翻归任务栏那颗，播放条把重复的那颗让出来。
-     他拍板的是「下一句只留一个 + 播放条不藏」，不是砍掉回看 —— 上一句必须留着，
-     不然①通读里"刚才那句没听清，退回去再听一遍"这条动作就没了（真机走查用例守着它）。 */
-  body.task-mode .audiobar .ab-left > .btn.ab-step-fwd,
-  body.task-mode .audiobar .rate-wrap { display: none; }
-  /* ②③ 做题态：播放条只留「播放/暂停 + 回看」这一窄条，选项 / 这题有问题 / 回看句子 归做题卡。 */
-  body.task-mode.quiz-mode .audiobar .loop-wrap,
-  body.task-mode.quiz-mode .audiobar .ab-wrap { display: none; }
+  /* 「上一句」和「退出」只在任务模式的该显示它们的态里出现：
+     ① 通读要能往回听（原型 C2 把两颗都画在同一条通栏上），②③ 与完成态没有"上一句"这个动作，
+     续读条（data-state=resume，此时没有 task-mode）两颗都不该露脸 —— 全交给选择器，不写进 JS，
+     免得渲染顺序一变就漏关。 */
+  #tbPrev, #tbExit { display: none; }
+  body.task-mode #tbExit { display: inline-flex; }
+  body.task-mode .task-bar[data-state="read"] #tbPrev { display: inline-flex; }
+  .task-bar .tb-btn.exit { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 6px 9px; }
+  /* 手机上四颗按钮（退出/上一句/再来/下一句）要和标题挤在同一行：
+     「上一句」退成图标，把宽度还给「① 通读 3/6 · 今天 15 分钟」这一行。 */
+  @media (max-width: 560px) {
+    .task-bar #tbPrev .lbl { display: none; }
+    .task-bar .tb-btn { padding: 6px 11px; }
+    /* 窄屏放不下「读到第 N 句」，而任务条已经在说 0/24 —— 与其截成"读到…"不如不说。
+       选择器多带一层 .task-bar：下面 .tb-play .ab-right 那条会按顺序盖过来，光靠 .tb-play 压不住。 */
+    .task-bar .tb-play .ab-right { display: none; }
+  }
+  /* 续读条（非任务模式）仍要让开底部那一行 */
+  body.resume-offer .audiobar { bottom: calc(var(--task-bar-h, 62px) + 8px + env(safe-area-inset-bottom, 0px)); }
+  body.task-mode .back-to-play { bottom: calc(var(--task-bar-h, 62px) + 12px + env(safe-area-inset-bottom, 0px)); }
+  /* ---- 任务模式：底部只有**一条通栏任务条**（2026-09-21 他拍的：播放条所有功能都放这条上） ----
+     以前播放条整条压在任务栏上面，底部三层吃掉 18.6% 屏高（390×844 实测 157px），
+     而且「上一句」在那条上、「下一句」在任务栏上，翻句这对最高频动作被拆到两处。
+     做法：播放条整条隐藏，enterTaskMode 把它的两排控件搬进任务条的第二行（#tbPlay），退出时搬回。
+     搬 DOM 而不是复制一份 —— id / 事件 / paint() / 下拉菜单只有一份真值；
+     这些菜单的样式全部只认自己的类名（.loop-menu / .rate-menu / .ab-menu / .menu-bridge），
+     不挂在 .audiobar 下面，所以搬走照样能弹（已核对）。 */
+  body.task-mode .audiobar { display: none !important; }
+  .tb-play { display: none; align-items: center; gap: 8px; min-width: 0; }
+  body.task-mode .task-bar[data-state="read"] .tb-play { display: flex; }
+  .tb-play .ab-left { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; }
+  .tb-play .ab-left > .btn { opacity: 1; max-width: none; animation: none; }
+  .tb-play .ab-right { flex: 0 1 auto; min-width: 0; display: block; text-align: right; }
+  .tb-play .ab-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11.5px; }
+  /* 进度条：任务模式里不给位置，同一能力由「快速跳转」那颗承担（弹窗输章节+句号）；
+     翻句两颗归第一行，所以这一排里把它们藏掉，避免同屏两颗同名按钮。 */
+  .tb-play .ab-seek,
+  .tb-play .ab-step,
+  .tb-play .btn.play .lbl { display: none; }
   /* ---- ②③ 做题卡片 + 遍间小结（PRD §6 §7 §10.1） ---- */
   .task-card { position: fixed; left: 50%; transform: translateX(-50%);
     bottom: calc(var(--task-card-b, 132px) + env(safe-area-inset-bottom, 0px));
@@ -1253,6 +1282,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .ps-sum-row.big b { font-size: 24px; color: var(--task-new); }
   .ps-sum-row.warn, .ps-sum-row.warn b { color: var(--coral-deep, #c0492f); }
   .ps-sum-row.warn b { font-size: 12.5px; }
+  /* 「这一期还要多久」那一行：设置屏 / 计划页 / 今天面板 / 任务条共用，全部只读 estimateDays 的返回值 */
+  .ps-eta { margin: 0 0 12px; padding: 8px 12px; font-size: 12.5px; line-height: 1.45; color: var(--muted);
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; font-variant-numeric: tabular-nums; }
+  .ps-eta b { color: var(--text); font-weight: 700; }
+  .ps-eta.sm { margin-top: -6px; padding: 0 12px 8px; border-top: 0; font-size: 11px; opacity: .8; }
+  .task-bar .tb-eta { font-size: 10.5px; color: var(--muted); margin-top: 1px; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; }
   .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 12px rgba(16,180,135,.3); }
   .ps-start:active { filter: brightness(.92); }
   /* 调整计划 */
@@ -1341,7 +1377,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <footer class="audiobar" id="audiobar" role="contentinfo">
       <nav class="ab-left" aria-label="播放控制">
         <button class="btn ab-step" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i> 上一句</button>
-        <button class="btn play" id="btnPlay" onclick="togglePlay()" aria-label="播放或暂停"><i class="ri-play-fill" aria-hidden="true"></i> 播放</button>
+        <button class="btn play" id="btnPlay" onclick="togglePlay()" aria-label="播放或暂停"><i class="ri-play-fill" aria-hidden="true"></i><span class="lbl"> 播放</span></button>
         <button class="btn ab-step ab-step-fwd" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line" aria-hidden="true"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
           <div class="menu-bridge" aria-hidden="true"></div>
@@ -1415,11 +1451,18 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <div id="syncHint" class="sync-hint" role="status" aria-live="polite" hidden onclick="TASK.retrySync()"></div>
     <!-- 任务模式底部操作栏 -->
     <div class="task-bar" id="taskBar" data-state="idle">
-      <div class="tb-info"><div class="tb-title" id="tbTitle">—</div><div class="tb-sub" id="tbSub"></div></div>
+      <div class="tb-row">
+      <div class="tb-info"><div class="tb-title" id="tbTitle">—</div><div class="tb-sub" id="tbSub"></div><div class="tb-eta" id="tbEta"></div></div>
       <div class="tb-btns">
+        <button class="tb-btn exit" id="tbExit" onclick="TASK.exitTaskMode()" title="退出任务模式" aria-label="退出任务模式"><i class="ri-close-line" aria-hidden="true"></i></button>
+        <button class="tb-btn again" id="tbPrev" onclick="step(-1)" aria-label="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i><span class="lbl"> 上一句</span></button>
         <button class="tb-btn again" id="tbAgain" onclick="TASK.again()"><i class="ri-repeat-line" aria-hidden="true"></i> 再来</button>
         <button class="tb-btn next" id="tbNext" onclick="TASK.next()"><i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句</button>
       </div>
+      </div>
+      <!-- ① 通读态：播放条那一整排控件搬进这条通栏的第二行（enterTaskMode 里 appendChild，退出时搬回播放条）。
+           搬 DOM 而不是复制一份：id / 事件 / paint() 只有一份，播放状态不会两处各说各话。 -->
+      <div class="tb-play" id="tbPlay"></div>
     </div>
     <!-- ②③ 做题卡片 / 遍间小结：一条卡片换内容，不新开弹窗（PRD §10.1） -->
     <div class="task-card" id="taskCard" role="group" aria-label="当前题目" hidden></div>
@@ -3040,7 +3083,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     }
     const bp = _getDom('btnPlay');
-    if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill" aria-hidden="true"></i> 暂停' : '<i class="ri-play-fill" aria-hidden="true"></i> 播放';
+    if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill" aria-hidden="true"></i><span class="lbl"> 暂停</span>' : '<i class="ri-play-fill" aria-hidden="true"></i><span class="lbl"> 播放</span>';
     // 更新章节标题
     // 任务模式下这一行归任务栏说（「读到第 N 句 · 章节名」），播放路径别再把它盖回去
     const titleEl = (typeof TASK !== 'undefined' && TASK.active) ? null : _getDom('abTitle');
@@ -4683,7 +4726,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const m = maskSplit(text, isEx ? q.w : displayOf(item.s, q.w));
         const zhLine = isEx ? String(card.exZh || '') : (SENT_ZH[item.s] || '');
         const total = quizList().length;
-        const tag = (pass === 2 ? '② 挖空填词 ' : '③ 看英文选中文 ') + (quizCursor + 1) + '/' + total;
+        const tag = pass === 2 ? '② 挖空填词' : '③ 看英文选中文';   // 题号只由任务栏说一次（PRD §10.1 数字唯一性）
         let body;
         if (q.kind === 'recall') {
           // 例句里没写出词头本体的那 18 张卡：宁可不给英文，也不给一个泄答案的句子
@@ -4702,7 +4745,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             }).join('')}</div>${reveal ? revealNote(q) : ''}`;
         }
         el.innerHTML = `<div class="qz-head"><span class="qz-tag">${tag}</span><span class="sp"></span>
-            <button class="qz-mini" onclick="TASK.reviewSentence()">回看句子</button>
             <button class="qz-mini" onclick="TASK.flagQuiz()">这题有问题</button></div>${body}`;
         el.hidden = false;
         syncCardBottom();
@@ -4937,6 +4979,25 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
 
       // ---- 任务模式 ----
+      /* 他 2026-09-21 拍的：任务模式底部只留一条通栏任务条，播放条的全部功能都放这条上。
+         做法是把播放条那两排控件搬进任务条的第二行，退出时搬回 —— 搬 DOM 而不是复制一份，
+         这样 id、事件、paint() 只有一份真值，播放状态不会在两个地方各说各话。 */
+      function dockAudiobar(on) {
+        const ab = document.getElementById('audiobar'), slot = document.getElementById('tbPlay');
+        if (!ab || !slot) return;
+        if (on) {
+          ['.ab-left', '.ab-right'].forEach(sel => {
+            const el = ab.querySelector(':scope > ' + sel);
+            if (el) slot.appendChild(el);
+          });
+        } else {
+          const anchor = ab.querySelector('.ab-expand') || null;
+          ['.ab-left', '.ab-right'].forEach(sel => {
+            const el = slot.querySelector(':scope > ' + sel);
+            if (el) ab.insertBefore(el, anchor);
+          });
+        }
+      }
       function enterTaskMode() {
         if (!plan) return;
         buildQueue(); syncQueueFromPlan();
@@ -4949,6 +5010,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         sessionStart = Date.now();
         sessionReps = 0;
         document.body.classList.add('task-mode');
+        dockAudiobar(true);
         document.getElementById('taskBar').classList.add('show');
         syncTaskBarHeight();
         closePanel();
@@ -4958,6 +5020,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function exitTaskMode() {
         taskMode = false;
         document.body.classList.remove('task-mode', 'quiz-mode');
+        dockAudiobar(false);
         document.getElementById('taskBar').classList.remove('show');
         sents.forEach(el => el.classList.remove('task-current'));
         hideCard(); updateMarkers();
@@ -5176,6 +5239,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           abT.textContent = cur2 ? `读到第 ${cur2.i + 1} 句${chName ? ' · ' + chName : ''}` : '今日任务';
         }
         syncTaskBarHeight(); syncCardBottom();
+        paintTaskEta();          // 命中缓存时是同步取值，绝不在这里跑模拟
       }
 
       function updateMarkers() {
@@ -5243,6 +5307,126 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       /* 计划设置只问一件事：每天有多少分钟。
          「总天数 → 反推每天句数」这条除法链和「慢/正常/快」三档一起删掉了：
          前者是债务膨胀的根源，后者是把每天句数偷偷乘个倍数，没人知道今天到底几句。 */
+      /* ---- 「这一期还要多久」----
+         他 2026-09-21：「这一期单词毕业需要多久需要在设置计划时和任务正在进行时都要展示。」
+         设置屏 / 计划页 / 今天面板 / 任务条四处读的是同一份 ShadowPlan.estimateDays 的返回值，
+         这里只负责缓存和措辞，一律不许另立算式（PRD「界面数字单一来源」）。
+         措辞用「新词全部过完一遍」而不是「全部毕业」：保温还没做，引擎里毕业词永不再回来
+         （assemble 直接 continue），说"毕业"就是许诺一件做不到的事。 */
+      const _etaMemo = new Map();          // 一次全量模拟 0.3–0.9s，同一档分钟绝不许重跑
+      const _etaPending = new Map();
+      const etaCalls = { n: 0 };           // 只给测试看：证明缓存真的生效
+      /* 缓存键里【故意不放事件条数】。放了才"诚实"，但代价是每读一句、每答一题都要重跑一遍
+         上千个模拟日（实测 0.3–0.9 秒），而他 2026-09-21 的要求正是「任务条那一处只在进任务模式时算一次」；
+         更要紧的是那个数对 887 天的工期根本不会动，动了反而是在抖 —— 底层假设本身就带 ±20%。
+         所以按「计划的指纹」缓存：改分钟 / 改日界 / 暂停新词 / 换一天 / 词表变了 才重算。 */
+      function etaKey(m) {
+        const p = (ROOT2 && ROOT2.plan) || {};
+        return [m, ALL_TARGET_WORDS, day2(), p.boundaryHour, p.pausedNew ? 1 : 0, rate].join('|');
+      }
+      function etaFor(minutes) {
+        const key = etaKey(minutes);
+        if (_etaMemo.has(key)) return Promise.resolve(_etaMemo.get(key));
+        if (_etaPending.has(key)) return _etaPending.get(key);      // 同时在算同一档：只跑一遍
+        const p = (ROOT2 && ROOT2.plan) || {};
+        const run = new Promise(function (resolve) {
+          setTimeout(function () {                                  // 让浏览器先把「算一下…」画出去
+            etaCalls.n++;
+            const val = ShadowPlan.estimateDays(ROOT2 && ROOT2.state, minutes, {
+              totalSents: SENT_RAW.length, wordsOf: wordsOfSent, totalWords: ALL_TARGET_WORDS,
+              boundaryHour: p.boundaryHour || 4, plan: ROOT2 && ROOT2.plan,
+              secNew: secNew(), secReview: secReview(), secQuiz: 6,
+            });
+            _etaPending.delete(key);
+            if (_etaMemo.size > 24) _etaMemo.clear();
+            _etaMemo.set(key, val);
+            resolve(val);
+          }, 0);
+        });
+        _etaPending.set(key, run);
+        return run;
+      }
+      function etaMonth(ts, exact) {
+        const d = new Date(ts);
+        return d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月' + (exact ? ' ' + d.getDate() + ' 日' : '');
+      }
+      function etaText(r, m, exact) {
+        if (!r || r.empty) return '按每天 ' + m + ' 分钟排不出任务，先调大一点或取消「只复习」';
+        if (!r.done) return '按每天 ' + m + ' 分钟，三年内到不了终点（先把每天时间调大些）';
+        return '到 ' + etaMonth(r.doneAt, exact) + ' <b>新词全部过完一遍</b>（需要 ' + r.days + ' 天）';
+      }
+      function etaShort(r) {                 // 任务条那一行：已经有今日进度和「这批还剩」，第三个数只留最短形态
+        if (!r) return '';
+        if (!r.done) return r.empty ? '排不出任务' : '三年内到不了终点';
+        return '全部过完约 ' + etaMonth(r.doneAt, false);
+      }
+      function milestoneText(r) {
+        if (!r || !r.atHorizon) return '';
+        return '到 ' + etaMonth(r.atHorizon.at, false) + ' 能过完约 ' + r.atHorizon.graduated + ' 个词';
+      }
+      function activeDaysRecent(n) {         // 数出来的事实，不是第二个模型
+        const d = (ROOT2 && ROOT2.state && ROOT2.state.daily) || {};
+        const bd = (ROOT2 && ROOT2.plan && ROOT2.plan.boundaryHour) || 4;
+        let c = 0;
+        for (let i = 0; i < n; i++) {
+          const x = d[ShadowPlan.dayKey(Date.now() - i * 864e5, bd)];
+          if (x && ((x.sentDone || 0) > 0 || (x.minutes || 0) > 0)) c++;
+        }
+        return c;
+      }
+      function seedDailyForTest(back) {      // 唯一允许的测试后门：函数名带 ForTest，免得被当成产品代码接走
+        if (!ROOT2) return;
+        const bd = (ROOT2.plan && ROOT2.plan.boundaryHour) || 4;
+        const k = ShadowPlan.dayKey(Date.now() - back * 864e5, (ROOT2.plan && ROOT2.plan.boundaryHour) || 4);
+        ROOT2.state.daily[k] = { minutes: (ROOT2.plan && ROOT2.plan.todayMinutes) || 30, sentDone: 5, promote: 3 };
+        // 造一段「两周前就开始了」的老存档：补句的判据是这个计划的年龄，光塞 daily 不算老
+        if (ROOT2.plan) {
+          // 只往早了挪：连调多次时留下最早那天，否则最后一次会把存档又变回几天前
+          const want = Date.now() - (back + 1) * 864e5;
+          const born = Date.parse(ROOT2.plan.startDate || '0');
+          if (!isFinite(born) || born > want) ROOT2.plan.startDate = ShadowPlan.dayKey(want, bd);
+          savePlan();
+        }
+        _etaMemo.clear(); persist2();
+      }
+      function etaSet(el, html, r) {
+        if (!el || !el.isConnected) return;
+        el.innerHTML = html;
+        el.dataset.days = r && r.done ? String(r.days) : '';
+      }
+      function paintPlanEta() {
+        const el = document.getElementById('planEta');
+        if (!el || !ROOT2 || !ROOT2.plan) return;
+        const m = ROOT2.plan.todayMinutes;
+        el.textContent = '算一下…';
+        etaFor(m).then(r => etaSet(el, etaText(r, m, false) + (milestoneText(r) ? ' · ' + milestoneText(r) : ''), r));
+      }
+      function paintTodayEta() {
+        const el = document.getElementById('todayEta');
+        if (!el || !ROOT2 || !ROOT2.plan) return;
+        const m = ROOT2.plan.todayMinutes;
+        el.textContent = '算一下…';
+        etaFor(m).then(r => {
+          const c = countStages();
+          let t = '已毕业 ' + c.graduated + ' / ' + ALL_TARGET_WORDS + ' · ' + etaText(r, m, false);
+          const ms = milestoneText(r); if (ms) t += ' · ' + ms;
+          /* 补句要有历史可说才说：刚建好计划第一天就冒出「最近两周你实际只做了 1 天」是凭空指责。
+             判据用「这个计划存在多久」，不是「做过几天」—— 不满两周不评价。 */
+          const born = Date.parse((ROOT2.plan && ROOT2.plan.startDate) || '');
+          const planDays = isFinite(born) ? Math.floor((Date.now() - born) / 864e5) + 1 : 1;
+          const act = activeDaysRecent(14);
+          if (planDays >= 14 && act < 7) t += '（最近两周你实际只做了 ' + act + ' 天）';
+          etaSet(el, t, r);
+        });
+      }
+      function paintTaskEta() {
+        const el = document.getElementById('tbEta');
+        if (!el) return;
+        if (!ROOT2 || !ROOT2.plan) { el.textContent = ''; return; }
+        if (!el.dataset.days && !_etaMemo.size) el.textContent = '算一下…';
+        etaFor(ROOT2.plan.todayMinutes).then(r => etaSet(el, etaShort(r), r));
+      }
+
       function renderSetup(p) {
         const MINS = [5, 10, 15, 20, 30, 45, 60];
         let sel = 15;
@@ -5253,12 +5437,20 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             ${MINS.map(m => `<button class="ps-opt${m === sel ? ' sel' : ''}" data-v="${m}">${m} 分钟</button>`).join('')}
           </div></div>
           <div class="ps-sum" id="psSum"></div>
+          <div class="ps-eta" id="psEta" data-days="">算一下…</div>
+          <div class="ps-eta sm" id="psEtaAssume">（按你一句约 25 秒、做题答对 8 成来估算）</div>
           <button class="ps-start" id="psStart">开始这个计划</button>
         </div>`;
         const refresh = () => {
           const per = Math.max(1, Math.round(sel * 60 / (secNew() + 12)));
           const el = document.getElementById('psSum');
           if (el) el.innerHTML = `<div class="ps-sum-row"><span>今天大约</span><b>${Math.min(per, SENT_RAW.length)} 句 · ${Math.min(per * 2, SENT_RAW.length * 2)} 题</b></div>`;
+          const eta = document.getElementById('psEta');
+          if (eta) {
+            eta.textContent = '算一下…';
+            const want = sel;
+            etaFor(want).then(r => etaSet(eta, etaText(r, want, true), r));
+          }
         };
         refresh();
         p.querySelectorAll('.ps-opts').forEach(group => group.addEventListener('click', e => {
@@ -5286,6 +5478,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           <button class="tp-close" onclick="TASK.closePanel()" aria-label="关闭面板">✕</button></div>
           <div class="tp-tabs">${tabs}</div>` +
           (_view === 'plan' ? renderPlanView() : _view === 'book' ? renderBookView() : renderTodayView());
+        // 数字停在「打开面板那一刻」是这类双路径写同一节点最典型的翻车；放在这里，
+        // 改分钟 / 改日界 / 暂停新词三条重绘路径就都自动带上，不用一个个补。
+        if (_view === 'plan') paintPlanEta(); else if (_view === 'today') paintTodayEta();
       }
 
       /* 两栏并列、永不合并成一个「总进度」：今天做到位没有，和词往前走了几步，
@@ -5323,6 +5518,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         </div>
         <div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>还剩 ${leftN} 句 · 覆盖 ${tp.words.length} 个词</b>
           <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}</span></div>
+        <div class="tp-note sm ps-eta" id="todayEta" data-days="">算一下…</div>
         <div class="tp-actions"><button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始 · 先通读这一批'}</button>
           ${taskMode ? '<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>' : ''}</div>`;
       }
@@ -5337,6 +5533,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           `<div class="ps-group"><label>新词</label><div class="ps-opts">
             <button class="ps-opt${ROOT2.plan.pausedNew ? '' : ' sel'}" onclick="TASK.setPauseNew(false)">正常见新词</button>
             <button class="ps-opt${ROOT2.plan.pausedNew ? ' sel' : ''}" onclick="TASK.setPauseNew(true)">只复习，先不见新词</button></div></div>
+          <div class="ps-eta" id="planEta" data-days="">算一下…</div>
           ${ROOT2.report && ROOT2.report.words ? `<div class="tp-note sm">上次改成按词记：<b>${ROOT2.report.words}</b> 个词从句子账搬过来，`
             + `其中 ${ROOT2.report.cappedWords} 个原本算「巩固/掌握」的被压回「已见面」，要重新考才算数。</div>` : ''}
           <div class="tp-note sm">进度存在这台设备上，并以上传「完成记录」的方式同步。<span class="sync-state" id="syncState">${syncHintText()}</span></div>
@@ -5508,6 +5705,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         todayQueue = [];
         taskMode = false; taskPos = 0; sessionStart = 0; sessionReps = 0;
         document.body.classList.remove('task-mode');
+        dockAudiobar(false);
         const bar = document.getElementById('taskBar');
         if (bar) bar.classList.remove('show');
         sents.forEach(el => el.classList.remove('task-new', 'task-review', 'task-done', 'task-current'));
@@ -5609,6 +5807,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
         offerResume, resumeTask, skipResume, hideResumeOffer,
         initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
+        etaFor, etaCalls, countStages, seedDailyForTest,
         pass: passNumber, setPass, currentQuiz, answerQuiz, nextQuiz, advance, finished: isFinished,
         submitRecall, pickOpt, flagQuiz, reviewSentence, summaryContinue: startSummaryContinue,
         quizTotal: () => quizList().length, quizDone: quizDoneCount, quizWrong: quizWrongCount,
