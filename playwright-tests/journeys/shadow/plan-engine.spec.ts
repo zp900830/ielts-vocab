@@ -7,6 +7,14 @@ import { currentTimeout } from '../../utils/timeouts';
 
 interface WordSlot { stage: string; reps: number; err: number; due: number; leech: boolean; ctx: Record<string, number> }
 
+// 页面里 TASK 是脚本顶层的 const —— 顶层 const 不挂到 window 上，
+// 所以只能像其他用例那样按名字引用它，写成 window.TASK 会恒为 undefined。
+declare const TASK: {
+  sentTotal(): number;
+  sentWordsOf(i: number): string[];
+  blankQuizFor(s: number | string, w: string, from?: number): unknown;
+};
+
 declare const ShadowPlan: {
   DAY_MS: number;
   WORD_INTERVALS: number[];
@@ -21,12 +29,16 @@ declare const ShadowPlan: {
   mkQuiz(w: string, s: number | string, kind: string, ok: boolean, at: number, day: string): unknown;
   assemble(state: unknown, opts: unknown): {
     queue: { kind: string; i: number; pool: string; sec: number; words: string[] }[];
-    items: { kind: string; pass: number; s: number | string; w: string; pool: string }[];
+    items: { kind: string; pass: number; s: number | string; w: string; pool: string; from?: number }[];
     words: string[];
     stats: Record<string, unknown>;
   };
   recallQuiz(o: unknown): { kind: string; blank: string; initial: string; len: number; pos: string; colFirst: string; answer: string };
   meaningQuiz(o: unknown): { kind: string; opts: string[]; answer: string } | null;
+  blankQuiz(o: unknown): {
+    kind: string; s: number | string; w: string; answer: string; opts: string[];
+    sense: string; pos: string; prompt: string;
+  } | null;
   judgeRecall(input: string, answer: string): boolean;
   editDistance(a: string, b: string): number;
   mkPromote(w: string, from: string, to: string, at: number, day: string): unknown;
@@ -165,7 +177,9 @@ test.describe('plan engine · word state reducer', () => {
     expect(got.ctxes).toBe('1500,ex');
   });
 
-  test('③ right answer makes it owned; 20 contacts plus ok3 graduates it', async ({ page }) => {
+  test('② 答对既记语境也记 ok3；20 次接触 + ok3 才毕业', async ({ page }) => {
+    // 两步制（docs/superpowers/specs/2026-09-22-任务模式两步制.md D1）：毕业凭据 mc4zh 事件
+    // 由 ② 挖空选择产生（原来是 ③ 选义）。字段名 ok3 与 stageOf 的判据一个字都没改。
     const got = await page.evaluate(() => {
       const ev: unknown[] = [];
       for (let d = 1; d <= 25; d++) {
@@ -180,14 +194,30 @@ test.describe('plan engine · word state reducer', () => {
       return {
         beforeReps: before.words.gaze.reps, beforeStage: before.words.gaze.stage,
         afterStage: after.words.gaze.stage,
+        ctxBanked: after.words.gaze.ctx['1500'] || 0,
         gradInterval: ShadowPlan.wordInterval(after.words.gaze.reps),
       };
     });
     expect(got.beforeReps).toBe(25);
-    expect(got.beforeStage).toBe('seen');          // 没答对过 ③ 就不许毕业
+    expect(got.beforeStage).toBe('seen');          // 没答对过 ② 就不许毕业（判据没动）
+    expect(got.ctxBanked).toBe(1);                 // 答对同时把这一个语境记上：认得出与直连是同一道题给的
     expect(got.afterStage).toBe('graduated');
     expect(got.gradInterval).toBe(14);
   });
+
+  test('② 答错只记 err，既不给语境也不给毕业凭据', async ({ page }) => {
+    const got = await page.evaluate(() => {
+      const at = Date.parse('2026-09-20T09:00:00');
+      const st = ShadowPlan.replay([
+        ShadowPlan.mkContact('gaze', 1500, at, '2026-09-20'),
+        ShadowPlan.mkQuiz('gaze', 1500, 'mc4zh', false, at + 60000, '2026-09-20'),
+      ], { boundaryHour: 4, wordsOf: () => ['gaze'] });
+      return { stage: st.words.gaze.stage, ctx: Object.keys(st.words.gaze.ctx).length,
+               err: st.words.gaze.err, ok3: st.words.gaze.ok3, dueToday: st.words.gaze.due <= at + 864e5 };
+    });
+    expect(got).toEqual({ stage: 'seen', ctx: 0, err: 1, ok3: 0, dueToday: true });
+  });
+
 
   test('three wrong answers flag it as a key word but never hide it', async ({ page }) => {
     const got = await page.evaluate(() => {
@@ -286,11 +316,13 @@ test.describe('plan engine · time budget', () => {
       });
     }, [minutes, FIXTURE] as [number, string]);
 
-  test('a 10-minute day fits 10 minutes and says how much it had to leave out', async ({ page }) => {
-    const got = await run(page, 10);
+  test('一个短日子装不下全部到期词时，必须说清漏了多少', async ({ page }) => {
+    // 两步制后每句只留一题（句时 + 1×每题），原来 10 分钟装不下 40 句、现在装得下 ——
+    // 这条守的不是"10 分钟"这个数，是「装不下的部分要报出来」，所以按新成本收紧到 5 分钟。
+    const got = await run(page, 5);
     expect(got.queue.length).toBeGreaterThan(0);
-    expect(got.queue.length).toBeLessThan(40);   // 40 句到期，10 分钟装不下
-    expect((got.stats as Record<string, number>).usedSec).toBeLessThanOrEqual(601);
+    expect(got.queue.length).toBeLessThan(40);   // 40 句到期，5 分钟装不下
+    expect((got.stats as Record<string, number>).usedSec).toBeLessThanOrEqual(301);
     expect((got.stats as Record<string, number>).droppedA).toBeGreaterThan(0);
     expect((got.stats as Record<string, number>).dueWords).toBeGreaterThan(0);
   });
@@ -314,9 +346,11 @@ test.describe('plan engine · time budget', () => {
   test('quiz slots and reading time add up to exactly what the budget reports', async ({ page }) => {
     const got = await run(page, 20);
     const read = got.queue.reduce((a, q) => a + q.sec, 0);
+    // 两步制：一句只预留一题（原来是 ②③ 两题），所以 usedSec = 句时 + 题数 × 每题
     expect((got.stats as Record<string, number>).usedSec).toBe(read + got.items.length * 6);
-    expect(got.items.filter(x => x.pass === 2).length).toBeGreaterThanOrEqual(got.queue.length);
-    expect(got.items.filter(x => x.pass === 3).length).toBe(got.queue.length);
+    expect(got.items.every(x => x.pass === 2)).toBe(true);
+    expect(got.items.filter(x => x.s !== 'ex').length).toBe(got.queue.length);
+    expect(got.items.filter(x => x.pass === 3).length).toBe(0);
   });
 
   test('a zero-minute day still serves the floor task instead of nothing', async ({ page }) => {
@@ -378,6 +412,134 @@ test.describe('quiz builder', () => {
     expect(got).toBe(null);
   });
 
+  /* ---------- ② 挖空选择（两步制规格 §2 / D4 / D5）----------
+     与 ③ 共用同一台四选一机器：候选必须是目标词、同词性、且出自这个词的已裁决辨析组
+     （组不足三个再补同段目标词，PRD §7.2 的两档供给）。义项与答案在这一句里重叠的
+     候选等于「填进去也对」，一律不许进选项；凑不满四个 → 返回 null = 这道题不出。 */
+  const BLANK_FIXTURE = {
+    sent: 1500, word: 'peer', card: { m: 'v. 凝视；费力看' },
+    sense: 'v. 凝视', sentZh: '他凝视着路面。',
+    // 辨析组里的兄弟词义项都跟「凝视」不重叠，才有资格当干扰项（重叠 = 填进去也对）
+    groupCards: { gaze: { m: 'v. 注视' }, stare: { m: 'v. 盯着看' }, glance: { m: 'v. 一瞥' } },
+    paraCards: { road: { m: 'n. 路，道路' }, wet: { m: 'adj. 潮湿的' } },
+  };
+
+  test('② 出四个英文候选，正确答案就是被挖掉的那个词头', async ({ page }) => {
+    const got = await page.evaluate((f) => ShadowPlan.blankQuiz(f), BLANK_FIXTURE as any) as
+      { kind: string; w: string; answer: string; opts: string[]; sense: string; pos: string };
+    expect(got.kind).toBe('mc4zh');                 // D1：② 答对记的就是原 ③ 的那个事件类型
+    expect(got.answer).toBe('peer');
+    expect(got.w).toBe('peer');
+    expect(got.pos).toBe('v.');
+    expect(got.sense).toBe('v. 凝视');               // 提示要用：译文里下划线的就是它
+    expect(got.opts.length).toBe(4);
+    expect(new Set(got.opts).size).toBe(4);
+    expect(got.opts.filter(o => o === 'peer').length).toBe(1);
+    expect(got.opts.every(o => /^[a-z ]+$/.test(o))).toBe(true);   // 选项是英文词，不是中文义项
+  });
+
+  test('② 的候选优先取自该词的已裁决辨析组，组里凑够就不动补池', async ({ page }) => {
+    const got = await page.evaluate((f) => {
+      const q = ShadowPlan.blankQuiz(Object.assign({}, f, {
+        groupCards: { gaze: { m: 'v. 注视' }, stare: { m: 'v. 盯着看' }, glance: { m: 'v. 一瞥' } },
+        paraCards: { peek: { m: 'v. 偷看' }, peep: { m: 'v. 瞥见' } },
+      }));
+      const noGroup = ShadowPlan.blankQuiz(Object.assign({}, f, {
+        groupCards: {}, paraCards: { gaze: { m: 'v. 注视' }, stare: { m: 'v. 盯着看' }, glance: { m: 'v. 一瞥' } },
+      }));
+      return { withGroup: q && q.opts, onlyPool: noGroup && noGroup.opts };
+    }, BLANK_FIXTURE as any);
+    // 组内三个成员全进，补池一个都不进 —— 补池只是组不够时的第二档（PRD §7.2）
+    expect(got.withGroup).toEqual(expect.arrayContaining(['peer', 'gaze', 'stare', 'glance']));
+    expect(got.withGroup).not.toContain('peek');
+    expect(got.withGroup).not.toContain('peep');
+    expect(got.onlyPool).toEqual(expect.arrayContaining(['peer', 'gaze', 'stare', 'glance']));
+  });
+
+  test('② 不许把词性不合、或义项与本句重叠（填进去也对）的词当干扰项', async ({ page }) => {
+    const got = await page.evaluate((f) => {
+      const pos = ShadowPlan.blankQuiz(Object.assign({}, f, {
+        groupCards: { gaze: { m: 'v. 注视' }, stare: { m: 'v. 盯着看' }, glance: { m: 'v. 一瞥' } },
+        paraCards: { road: { m: 'n. 路，道路' } },
+      }));
+      const clash = ShadowPlan.blankQuiz(Object.assign({}, f, {
+        groupCards: { gaze: { m: 'v. 注视' }, stare: { m: 'v. 盯着看' }, look: { m: 'v. 看；凝视' } },
+        paraCards: { glance: { m: 'v. 一瞥' } },
+      }));
+      return { pos: pos && pos.opts, clash: clash && clash.opts };
+    }, BLANK_FIXTURE as any);
+    expect(got.pos).toBeTruthy();
+    expect(got.pos).not.toContain('road');          // n. 填不进动词位
+    expect(got.clash).toBeTruthy();
+    expect(got.clash).not.toContain('look');        // 义项与本句重叠 = 两个都对 = 双解题
+  });
+
+  test('② 凑不出三个合格干扰项就返回 null（不出题，也不降级成默写）', async ({ page }) => {
+    const got = await page.evaluate((f) => ({
+      short: ShadowPlan.blankQuiz(Object.assign({}, f, { groupCards: { gaze: { m: 'v. 凝视' } }, paraCards: {} })),
+      noSense: ShadowPlan.blankQuiz(Object.assign({}, f, { sense: '', card: {} })),
+    }), BLANK_FIXTURE as any);
+    expect(got.short).toBe(null);
+    expect(got.noSense).toBe(null);                 // 连「这一句里的意思」都挑不出来 → 无法证明唯一 → 不出
+  });
+
+  test('② 的选项顺序是确定性的：同句同词永远同一个排布', async ({ page }) => {
+    const got = await page.evaluate((f) => [
+      ShadowPlan.blankQuiz(f).opts.join('|'), ShadowPlan.blankQuiz(f).opts.join('|'),
+    ], BLANK_FIXTURE as any);
+    expect(got[0]).toBe(got[1]);
+  });
+
+  test('② 组与同段都不够三个时，用整本同词性的词补第三档（仍受词性闸与双解闸管）', async ({ page }) => {
+    const got = await page.evaluate((f) => ({
+      noBook: ShadowPlan.blankQuiz(Object.assign({}, f, {
+        groupCards: { gaze: { m: 'v. 注视' } }, paraCards: { road: { m: 'n. 路' } },
+      })),
+      withBook: ShadowPlan.blankQuiz(Object.assign({}, f, {
+        groupCards: { gaze: { m: 'v. 注视' } }, paraCards: { road: { m: 'n. 路' } },
+        bookCards: {
+          peek: { m: 'v. 偷看' }, peep: { m: 'v. 瞥见' }, scan: { m: 'v. 扫描' },
+          stare: { m: 'v. 盯着看' }, asphalt: { m: 'n. 柏油路' }, look: { m: 'v. 看；凝视' },
+        },
+      })),
+    }), BLANK_FIXTURE as any);
+    expect(got.noBook).toBe(null);                      // 没有第三档 = 这种词一局题都出不了
+    expect(got.withBook).toBeTruthy();
+    const opts: string[] = got.withBook.opts;
+    expect(opts.length).toBe(4);
+    expect(opts).not.toContain('asphalt');              // n. 填不进动词位
+    expect(opts).not.toContain('look');                 // 义项与本句重叠 = 两个都对
+    expect(opts.filter(o => ['gaze', 'peek', 'peep', 'scan', 'stare'].indexOf(o) >= 0).length).toBe(3);
+  });
+
+  /* 全库不变式。为什么值得为它单跑一遍全表（约十秒）：
+     estimateDays 的模拟默认「排进来的每道题都出得出来」，而界面规则是凑不满四个
+     合格干扰项就不出题。两者一旦不一致，那些词永远拿不到毕业凭据，界面上那句
+     「全部过约 2028 年 6 月」就是空头承诺 —— 而这个偏差在界面上看不出来。
+     余量 5 个：实测全书只剩 million / billion（num. 卡太少，凑不满四个同词性选项）。 */
+  test('全库不变式：几乎每个词都至少有一处出得了题，否则工期数字是假的', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 12);
+    await page.goto(`${baseURL}/index.html`);
+    await expect.poll(() => page.evaluate(() =>
+      (typeof TASK === 'undefined' || !TASK.sentTotal) ? 0 : TASK.sentTotal()),
+      { timeout: 30_000 }).toBeGreaterThan(1000);
+    const r = await page.evaluate(() => {
+      const byWord: Record<string, number[]> = {};
+      for (let i = 0; i < TASK.sentTotal(); i++) {
+        (TASK.sentWordsOf(i) || []).forEach((w: string) => { (byWord[w] = byWord[w] || []).push(i); });
+      }
+      const dead: string[] = [];
+      Object.keys(byWord).forEach((w) => {
+        for (const i of byWord[w]) if (TASK.blankQuizFor(i, w)) return;
+        dead.push(w);
+      });
+      return { words: Object.keys(byWord).length, dead };
+    });
+    expect(r.words).toBeGreaterThan(3000);              // 确实扫到了全表，不是空跑
+    expect(r.dead.length).toBeLessThanOrEqual(5);
+    expect(r.dead.every(w => ['million', 'billion'].indexOf(w) >= 0)).toBe(true);
+  });
+
   test('recall judging tolerates one typo but not a different word', async ({ page }) => {
     const got = await page.evaluate(() => ({
       exact: ShadowPlan.judgeRecall('DAMP', 'damp'),
@@ -406,7 +568,8 @@ test.describe('replay 续算（opts.state）', () => {
       const t0 = Date.now();
       const PER_DAY = 24;                       // 6 个只露一面的新词 + 6 个回炉词 ×3 条事件
       // 30 天。每天见 6 个全新词（撑大词表，让 sameKeys 不是个空检查），
-      // 外加 6 个「回炉词」每天 contact + ② + ③ 各一次 —— 毕业判据是 reps>=20 && ok3>=1，
+      // 外加 6 个「回炉词」每天 contact + 一题回忆 + 一题四选一（mc4zh）各一次 —— 毕业判据是
+      // reps>=20 && ok3>=1；两步制后 mc4zh 由 ② 产生（D1），事件类型与判据都没改，
       // 只露一面的新词永远毕不了业，没有这 6 个回炉词的话末尾那条 fullGrad>0 就是空断言。
       for (let d = 0; d < 30; d++) {
         const ts = t0 + d * 864e5;

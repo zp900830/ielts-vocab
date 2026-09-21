@@ -3,29 +3,33 @@
 // 播放条标题那一行在任务模式里归任务栏。
 //
 // 底栏口径 2026-09-21 照原型重排：依据是 docs/prototype/2026-09-20-任务模式原型.html:248-253（① 通读
-// = 通栏任务条 + 一条 playrow）、:283-284（② 挖空 = 只有任务条）、:382（③ 选义 = 只有任务条），
-// 以及他 2026-09-21 的缺陷报告「说好的隐藏播放条、保留底部通栏的任务条，一直没改」
-// （排查记录：work/任务模式底栏排查_2026-09-21.md）。
+// = 通栏任务条 + 一条 playrow）、:283-284（② 做题 = 只有任务条），以及他 2026-09-21 的缺陷报告
+// 「说好的隐藏播放条、保留底部通栏的任务条，一直没改」（排查记录：work/任务模式底栏排查_2026-09-21.md）。
+// 原型 :382 那一步「③ 选义」已于 2026-09-22 两步制整步删除（docs/superpowers/specs/2026-09-22-任务模式两步制.md），
+// 所以这个文件里所有做题态的断言现在都只针对 ②。
 // 旧版注释把相反口径写成「他拍的板：播放条不藏」，那句话在 docs/ 里查不到任何出处（只有 agent 写的注释），
 // 已作废 —— 别再拿它当依据。
 import { test, expect } from '../../fixtures';
 import { currentTimeout } from '../../utils/timeouts';
 
-interface QI { kind: string; pass: number; s: number | string; w: string; pool: string }
+interface QI { kind: string; pass: number; s: number | string; w: string; pool: string; from?: number }
+interface BlankQ { kind: string; w: string; answer: string; opts: string[]; sense: string; pos: string; s: number | string }
 declare const TASK: {
   buildQueue(): void; enterTaskMode(): void; exitTaskMode(): void; active: boolean;
   resetV2(): void; initPlan(minutes: number): void;
   todayPlan(force?: boolean): { queue: { i: number; kind: string; pool: string; sec: number }[];
                  items: QI[]; words: string[]; stats: Record<string, unknown> };
-  state(): { words: Record<string, { stage: string; reps: number; due: number; ctx: object }>; daily: Record<string, Record<string, number>> };
+  state(): { words: Record<string, { stage: string; reps: number; due: number; ctx: object; ok3: number }>; daily: Record<string, Record<string, number>> };
   events(): { type: string }[];
   readDone(i: number): void; relearn(w: string): void;
   openPanel(): void; setView(v: string): void;
   pass(): number; setPass(n: number): void; advance(): void; finished(): boolean;
-  currentQuiz(): { kind: string; w: string; answer: string; opts?: string[]; blank: string } | null;
-  answerQuiz(choice: string): boolean; nextQuiz(): void; quizDone(): number; quizWrong(): number;
+  currentQuiz(): BlankQ | null; answerQuiz(choice: string): boolean; nextQuiz(): void;
+  quizDone(): number; quizWrong(): number; quizTotal(): number;
+  blankQuizFor(s: number | string, w: string): BlankQ | null;
 };
 declare const ShadowPlan: { dayKey(ts: number, h: number): string };
+declare const VOCAB: Record<string, { m?: string; ex?: string }>;
 
 const ENV = process.env.E2E_ENVIRONMENT || 'local';
 const PLAN_KEY = 'ielts-task-plan';
@@ -247,8 +251,10 @@ test.describe('today panel · new spec', () => {
   });
 });
 
-/* ---- Task 7：三遍流程 ---- */
-test.describe('three passes', () => {
+/* ---- 两步流程（docs/superpowers/specs/2026-09-22-任务模式两步制.md） ----
+   ③「看英文选中文」整步删除，②「挖空选择」改成四选一，并接手 ③ 的毕业凭据 ok3（D1）。
+   这里锁三件事：只有两步、② 是四选一且唯一正确项、凑不出合格干扰项的句子不弹题。 */
+test.describe('two passes', () => {
   test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
   test.beforeEach(async ({ page, baseURL }) => {
     test.info().setTimeout(currentTimeout() * 6);
@@ -264,20 +270,97 @@ test.describe('three passes', () => {
     expect(got.bar).toBe('read');
   });
 
-  test('② masks exactly the target word —— the answer never shows on screen', async ({ page }) => {
+  test('② masks exactly the target word and is a four-choice with one right answer', async ({ page }) => {
     await page.evaluate(() => { TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i)); TASK.setPass(2); });
-    await expect(page.locator('.qz-blank')).toBeVisible();
+    await expect(page.locator('.qz-opts')).toBeVisible();
     const got = await page.evaluate(() => {
       const q = TASK.currentQuiz();
-      return { w: q.w, kind: q.kind, text: document.querySelector('.qz-sent').innerText,
+      return { w: q.w, kind: q.kind, opts: q.opts, answer: q.answer, sense: q.sense,
+               text: document.querySelector('.qz-sent').innerText,
+               zh: (document.querySelector('.qz-zh u') || {}).textContent || '',
+               n: document.querySelectorAll('.qz-opt').length,
                card: !document.getElementById('taskCard').hidden };
     });
-    expect(got.kind).toBe('recall');
+    expect(got.kind).toBe('mc4zh');               // D1：② 答对记的就是这个事件类型，判据没换名字
     expect(got.card).toBe(true);
-    expect(got.text.toLowerCase()).not.toContain(got.w.toLowerCase());
+    expect(got.n).toBe(4);
+    expect(got.opts.length).toBe(4);
+    expect(new Set(got.opts).size).toBe(4);       // 四个各不相同的候选
+    expect(got.opts.filter(o => o === got.answer).length).toBe(1);   // 有且仅有一个正确项
+    expect(got.answer.toLowerCase()).toBe(got.w.toLowerCase());
+    expect(got.text.toLowerCase()).not.toContain(got.w.toLowerCase());  // 空格处不许把答案写出来
+    expect(got.sense.length).toBeGreaterThan(0);
+    expect(got.zh.length).toBeGreaterThan(0);     // 译文里被下划线标出的那个意思 = 把答案锁成唯一一个的提示
   });
 
-  test('a wrong recall answer never downgrades the word and costs no progress', async ({ page }) => {
+  /* 干扰项资格（规格 D5）：候选必须是目标词、与空格要求的词性一致，
+     并且出自这个词的已裁决辨析组（vocab.cmp）；组里凑不够才从同段目标词补（PRD §7.2 的两档）。
+     义项与答案在这一句里重叠的候选算「填进去也对」，一律不许进选项。 */
+  test('每个候选都是同段/同辨析组的目标词，且与答案同词性', async ({ page }) => {
+    const got = await page.evaluate(() => {
+      TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i));
+      TASK.setPass(2);
+      const q = TASK.currentQuiz();
+      if (!q) return { skip: true };
+      const POS = /\b(n|v|vt|vi|adj|adv|prep|conj|pron|num|int|abbr)\./ig;
+      const posSet = (m: string) => { const s: string[] = []; let x; while ((x = POS.exec(String(m || '')))) s.push(x[1].toLowerCase() + '.'); return s; };
+      // 辨析组成员（反向索引：谁的卡上 cmp 里出现了这个词）
+      const grouped = (a: string, b: string) => Object.keys(VOCAB).some((k) => {
+        const c = (VOCAB[k] as { cmp?: { items?: { w: string }[] } }).cmp;
+        if (!c || !c.items) return false;
+        const mem = [k.toLowerCase()].concat(c.items.map(i => String(i.w || '').toLowerCase()));
+        return mem.indexOf(a) >= 0 && mem.indexOf(b) >= 0;
+      });
+      // 同段：正文里已经按段渲染，句子里的目标词都带 data-w；取这一句所在段的词头集合
+      const paraWords = new Set<string>();
+      document.querySelectorAll('.sent').forEach((el) => {
+        el.querySelectorAll('.w').forEach((w) => paraWords.add((((w as HTMLElement).dataset || {}).w || '').toLowerCase()));
+      });
+      return {
+        skip: false, pos: q.pos, sense: q.sense,
+        opts: q.opts,
+        allHaveCards: q.opts.every(o => !!VOCAB[o.toLowerCase()]),
+        samePos: q.opts.filter(o => o.toLowerCase() !== q.w.toLowerCase())
+          .every(o => posSet((VOCAB[o.toLowerCase()] || {}).m).indexOf(q.pos) >= 0),
+        inCorpus: q.opts.every(o => paraWords.has(o.toLowerCase()) || grouped(q.w.toLowerCase(), o.toLowerCase())),
+        senseOfAnswer: posSet(q.sense).length > 0,
+      };
+    });
+    test.skip(got.skip === true, '这一批一个都凑不出合格干扰项 —— 按规格不弹题');
+    expect(got.allHaveCards).toBe(true);      // 原则 10：选项一律是有卡的目标词
+    expect(got.samePos).toBe(true);           // 同词性（L2）
+    expect(got.inCorpus).toBe(true);
+    expect(got.senseOfAnswer).toBe(true);     // 提示得带词性，否则无法判「同词性」
+  });
+
+  test('凑不出三个合格干扰项的句子不弹题（宁缺毋滥，也不降级成默写）', async ({ page }) => {
+    const got = await page.evaluate(() => {
+      // 全库扫一遍：① 至少存在出不了题的 (句, 词) —— 闸门真的会落下；
+      // ② 任何能出题的 (句, 词) 必须是恰好 4 个候选、1 个正确项。
+      const wordsOf = (i: number) => Array.from(document.querySelectorAll('.sent')[i]
+        ? Array.from(document.querySelectorAll('.sent')[i].querySelectorAll('.w'))
+            .map((w) => (((w as HTMLElement).dataset || {}).w || '').toLowerCase()).filter(Boolean) : []);
+      let built = 0, refused = 0, bad = 0;
+      const n = document.querySelectorAll('.sent').length;
+      for (let i = 0; i < n; i++) {
+        wordsOf(i).forEach((w) => {
+          const q = TASK.blankQuizFor(i, w);
+          if (!q) { refused++; return; }
+          built++;
+          if (q.opts.length !== 4 || q.opts.filter(o => o === q.answer).length !== 1
+              || new Set(q.opts).size !== 4) bad++;
+        });
+      }
+      return { built, refused, bad, n };
+    });
+    expect(got.bad).toBe(0);
+    expect(got.built).toBeGreaterThan(0);
+    expect(got.refused).toBeGreaterThan(0);   // 闸门不是一次都没落下的死代码
+    // 弹题率 = 出题的句占比；这一条只锁「有题可出且不合格的一律不弹」，比例不许掉到没法毕业
+    expect(got.built / (got.built + got.refused)).toBeGreaterThan(0.5);
+  });
+
+  test('a wrong ② answer never downgrades the word and costs no progress', async ({ page }) => {
     const got = await page.evaluate(() => {
       TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i));
       TASK.setPass(2);
@@ -285,16 +368,17 @@ test.describe('three passes', () => {
       const before = TASK.state().words[q.w].stage;
       const ok = TASK.answerQuiz('definitely-not-this-word');
       const w = TASK.state().words[q.w];
-      return { ok, before, stage: w.stage, due: w.due, answered: TASK.quizDone(), wrong: TASK.quizWrong() };
+      return { ok, before, stage: w.stage, due: w.due, answered: TASK.quizDone(), wrong: TASK.quizWrong(), ok3: w.ok3 };
     });
     expect(got.ok).toBe(false);
-    expect(got.stage).toBe(got.before);              // 答错不倒退（原则 2）
+    expect(got.stage).toBe(got.before);              // 答错不倒退（原则 2 / D7）
     expect(got.due).toBeLessThan(Date.now() + 60000); // 但今天之内要再见一次
     expect(got.answered).toBe(1);
     expect(got.wrong).toBe(1);
+    expect(got.ok3).toBe(0);                          // 答错不算毕业凭据
   });
 
-  test('a right ② answer banks one more context for that word', async ({ page }) => {
+  test('② 答对就是毕业凭据：ok3 由 ② 写入，走完 ② 今天就算完', async ({ page }) => {
     const got = await page.evaluate(() => {
       TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i));
       TASK.setPass(2);
@@ -302,20 +386,58 @@ test.describe('three passes', () => {
       const before = Object.keys(TASK.state().words[q.w].ctx).length;
       TASK.answerQuiz(q.answer);
       const w = TASK.state().words[q.w];
-      // 走完 ②：只在这一遍里走，别把 ③ 的分数算进来
       let guard = 0;
-      while (TASK.pass() === 2 && guard++ < 80) { TASK.nextQuiz(); }
-      const twoCtx = Object.keys(w.ctx).length;
+      while (!TASK.finished() && guard++ < 200) { if (TASK.currentQuiz()) TASK.nextQuiz(); else break; }
       const all = TASK.state().words;
-      return { before, twoCtx,
-               stage: w.stage, pass: TASK.pass(),
+      return { before, ctx: Object.keys(w.ctx).length, ok3: w.ok3, stage: w.stage,
+               pass: TASK.pass(), finished: TASK.finished(),
                // 攒满两个语境的词，状态必须已经越过「已见面」
                recognizedOk: Object.keys(all).filter(k => Object.keys(all[k].ctx).length >= 2)
                                         .every(k => all[k].stage !== 'seen' && all[k].stage !== 'fresh') };
     });
-    expect(got.twoCtx).toBeGreaterThan(got.before);
-    expect(got.pass).toBe(3);
+    expect(got.ok3).toBeGreaterThan(0);            // D1：毕业信号搬到了 ②
+    expect(got.ctx).toBeGreaterThan(got.before);   // 同一个语境也记账
     expect(got.recognizedOk).toBe(true);
+    expect(got.pass).toBeLessThanOrEqual(2);       // 没有第三步可走
+    expect(got.finished).toBe(true);
+  });
+
+  test('the plan never produces a third pass, and setPass(3) cannot open one', async ({ page }) => {
+    const got = await page.evaluate(() => {
+      const items = TASK.todayPlan(true).items;
+      TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i));
+      TASK.setPass(3);
+      const afterForced = TASK.pass();
+      TASK.setPass(2);
+      const d = TASK.state().daily[ShadowPlan.dayKey(Date.now(), 4)];
+      return { passes: Array.from(new Set(items.map(x => x.pass))).sort().join(','),
+               exItems: items.filter(x => x.s === 'ex').every(x => x.pass === 2),
+               afterForced, bar: document.getElementById('taskBar').dataset.state,
+               quizTotal: TASK.quizTotal(), done: (d || {}).quizDone };
+    });
+    expect(got.passes).toBe('2');                                  // 只剩一步题
+    expect(got.exItems).toBe(true);                                // 例句二次确认题也在 ②
+    expect(got.afterForced).toBeLessThanOrEqual(2);                // 旧的第三步入口点不动
+    expect(got.bar).toBe('quiz');
+  });
+
+  test('界面上不许留任何「第三步 / ③ 选义」字样（D8）', async ({ page }) => {
+    await page.evaluate(() => { TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i)); TASK.setPass(2); });
+    const seen: string[] = [];
+    seen.push((await page.locator('#taskBar').innerText()) || '');
+    seen.push((await page.locator('#taskCard').innerText()) || '');
+    for (const view of ['today', 'plan', 'book'] as const) {
+      await page.evaluate((v) => { TASK.setView(v); TASK.openPanel(); }, view);
+      await expect(page.locator('#todayPanel')).toBeVisible();
+      seen.push((await page.locator('#todayPanel').innerText()) || '');
+      await page.evaluate(() => TASK.closePanel());
+    }
+    await page.evaluate(() => { TASK.setPass(1); });
+    seen.push((await page.locator('#taskBar').innerText()) || '');
+    const all = seen.join(' ');
+    for (const banned of ['③', '第三步', '选义', '看英文选中文', '三遍']) {
+      expect(all, `界面上还留着「${banned}」`).not.toContain(banned);
+    }
   });
 
   test('the 今日 denominator never grows while reading', async ({ page }) => {
@@ -331,14 +453,14 @@ test.describe('three passes', () => {
     expect(dens.length).toBe(1);      // 队列会滚动补句，分母跟着涨就是「目标被偷偷抬高」
   });
 
-  test('③ marks the picked wrong option red and the right one green', async ({ page }) => {
+  test('② marks the picked wrong option red and the right one green', async ({ page }) => {
     const idx = await page.evaluate(() => {
       TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i));
-      TASK.setPass(3);
+      TASK.setPass(2);
       const q = TASK.currentQuiz();
       return q && q.opts ? q.opts.findIndex(o => o !== q.answer) : -1;
     });
-    test.skip(idx < 0, '这一批凑不出干净的四个义项 —— ③ 按规格跳过');
+    test.skip(idx < 0, '这一批凑不出合格的四个候选 —— ② 按规格跳过');
     await expect(page.locator('.qz-opts')).toBeVisible();
     await page.locator('.qz-opt').nth(idx).click();
     expect(await page.locator('.qz-opt.wrong').count()).toBe(1);
@@ -346,21 +468,21 @@ test.describe('three passes', () => {
     expect(await page.locator('.qz-note').innerText()).toContain('正确的那一个是');
   });
 
-  test('① → ② → ③ rolls through and the day is finished at the end', async ({ page }) => {
+  test('① → ② rolls through and the day is finished at the end', async ({ page }) => {
     const got = await page.evaluate(() => {
       const log: string[] = [];
       TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i));
       for (let g = 0; g < 200; g++) {
         log.push('p' + TASK.pass());
         const q = TASK.currentQuiz();
-        if (!q) { if (TASK.pass() === 1) TASK.setPass(2); else if (TASK.pass() === 2) TASK.setPass(3); else break; continue; }
+        if (!q) { if (TASK.pass() === 1) TASK.setPass(2); else break; continue; }
         TASK.answerQuiz(q.answer);
         TASK.nextQuiz();
       }
       const d = TASK.state().daily[Object.keys(TASK.state().daily).pop()];
       return { passes: Array.from(new Set(log)).join(','), done: TASK.finished(), quizDone: d.quizDone, correct: d.correct };
     });
-    expect(got.passes).toBe('p1,p2,p3');
+    expect(got.passes).toBe('p1,p2');
     expect(got.done).toBe(true);
     expect(got.quizDone).toBeGreaterThan(3);
     expect(got.correct).toBe(got.quizDone);
@@ -388,9 +510,9 @@ test.describe('three passes', () => {
      可见性一律用 Playwright 的 :visible —— 任务栏和播放条都是 position:fixed，
      offsetParent 恒为 null，拿它判可见会把两颗都在屏幕上的按钮读成"不存在"。 */
   /* 底栏口径 2026-09-21 定稿（他原话：「播放条的所有功能都放在通栏任务条上」）：
-     播放条整条隐藏，它那一排控件搬进任务条的第二行；②③ 做题态第二行也去掉。
+     播放条整条隐藏，它那一排控件搬进任务条的第二行；② 做题态第二行也去掉。
      所以断言一律以 #taskBar 为家 —— 别再拿 #audiobar 的可见性当依据。 */
-  test('任务模式底栏只有一条：① 两行全在通栏上、②③ 收成一行，翻句/退出/回看各只一颗', async ({ page }) => {
+  test('任务模式底栏只有一条：① 两行全在通栏上、② 做题态收成一行，翻句/退出/回看各只一颗', async ({ page }) => {
     test.setTimeout(currentTimeout());   // hook 给了 12 分钟；这条本地 5 秒内该完
     // ① 通读：播放条整条不显示，它的功能全部住在任务条里
     await expect(page.locator('#audiobar')).not.toBeVisible();
@@ -408,7 +530,7 @@ test.describe('three passes', () => {
     await expect(page.locator('#btnLoop')).toBeVisible();
     await expect(page.locator('#btnAB')).toBeVisible();
 
-    // ②③ 做题态：第二行整行消失（原型 :283-284、:382 底部只有任务条一条）
+    // ② 做题态：第二行整行消失（原型 :283-284 底部只有任务条一条；:382 那一步已随两步制删除）
     await page.evaluate(() => { TASK.setPass(2); TASK.next(); });
     await expect.poll(() => page.evaluate(() => document.body.classList.contains('quiz-mode'))).toBe(true);
     await expect(page.locator('#tbPlay')).not.toBeVisible();

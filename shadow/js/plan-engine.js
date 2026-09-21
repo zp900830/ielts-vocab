@@ -9,7 +9,7 @@
   const WORD_INTERVALS = [0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 5, 5, 5, 7, 7, 7, 7, 7];
   const GRADUATED_INTERVALS = [14, 30];
   const STAGES = ['fresh', 'seen', 'recognized', 'owned', 'graduated'];
-  const MASTER_REPS = 20;   // 接触够 20 次且 ③ 答对过 → 已毕业
+  const MASTER_REPS = 20;   // 接触够 20 次且 ②（挖空选择）答对过 → 已毕业
   const LEECH_ERR = 3;      // 连错 3 次 → 重点词（强制回炉，但不隐藏）
 
   const pad = (n) => String(n).padStart(2, '0');
@@ -59,8 +59,12 @@
   // 一次 ② 答对记在「语境」上：课文句是句索引，卡上例句是 'ex'。
   // 两个不同语境各对一次才算「文中可辨」—— 原则 3：同一个词得在两处都站得住。
   function bumpCtx(w, sentKey, kind, ok) {
-    if (kind === 'mc4zh') { if (ok) w.ok3++; return; }
     if (!ok) return;
+    // 两步制（docs/superpowers/specs/2026-09-22-任务模式两步制.md D1）：
+    // 毕业凭据 mc4zh 事件由 ②「挖空选择」产生（原来是 ③「看英文选中文」）。
+    // 事件类型名、ok3 字段名、stageOf 的判据都没动 —— 改的只是「谁产生它」。
+    // ② 答对同时也把这一个语境记上：认得出（语境账）与义项直连（ok3）是同一道题给的凭据。
+    if (kind === 'mc4zh') w.ok3++;
     const k = String(sentKey);
     w.ctx[k] = (w.ctx[k] || 0) + 1;
   }
@@ -198,7 +202,7 @@
     const chosen = new Map();                              // 句号 → {i, pool, sec}
     let left = budget, droppedA = 0;
     function take(i, pool, sec) {
-      const cost = sec + 2 * secQuiz;                      // 一句的代价 = 读 + ② ③ 各一题
+      const cost = sec + secQuiz;                            // 一句的代价 = 读 + ② 一题（两步制前是 ②③ 两题）
       if (left < cost) return false;
       let cur = chosen.get(i);
       if (cur) { if (cur.pool === 'C' && pool !== 'C') { left -= cur.sec - sec; cur.pool = pool; cur.sec = sec; } return true; }
@@ -221,11 +225,11 @@
       .forEach(function (i) { queue.push(chosen.get(i)); });
 
     const items = [];
+    // 两步制：一句只出一题（② 挖空选择）。原来这里的 pass:3 是「③ 看英文选中文」，整步已删。
     queue.forEach(function (q) {
       const w = pickWord(q, ws, due);
       if (!w) return;
       items.push({ kind: 'quiz', pass: 2, s: q.i, w: w, pool: q.pool });
-      items.push({ kind: 'quiz', pass: 3, s: q.i, w: w, pool: q.pool });
     });
     // 二次确认题（k）：课文语境已经对过、例句语境还没对的词，补一道例句题
     let kSlots = 0;
@@ -236,7 +240,8 @@
         if (!(st.ctx[String(q.i)] > 0) || st.ctx.ex > 0) return;
         if (left < secQuiz) return;
         left -= secQuiz; kSlots++;
-        items.push({ kind: 'quiz', pass: 2, s: 'ex', w: w, pool: q.pool });
+        // from = 这道例句题是从哪一句排进队列的：宿主拿它去找同段/同辨析组的干扰项
+        items.push({ kind: 'quiz', pass: 2, s: 'ex', w: w, pool: q.pool, from: q.i });
       });
     });
 
@@ -248,7 +253,6 @@
                       sec: due.length ? secReview : secNew, words: wordsOf(i).slice() });
       queue.push(chosen.get(i));
       items.push({ kind: 'quiz', pass: 2, s: i, w: seedWord.w, pool: 'A' });
-      items.push({ kind: 'quiz', pass: 3, s: i, w: seedWord.w, pool: 'A' });
       floor = true;
     }
 
@@ -263,7 +267,7 @@
       queue: queue, items: items,
       words: Array.from(new Set(queue.reduce(function (a, q) { return a.concat(q.words); }, []))),
       stats: {
-        // 每句按 (句时 + 2×secQuiz) 预留、k 槽按 1×secQuiz 预留，
+        // 每句按 (句时 + 1×secQuiz) 预留、k 槽按 1×secQuiz 预留，
         // 所以 usedSec = readSec + items×secQuiz ≤ budget 由构造保证
         budgetSec: budget, usedSec: readSec + items.length * secQuiz,
         dueWords: dueWords, newWords: newTaken, newPool: fresh.length, droppedA: droppedA,
@@ -333,7 +337,8 @@
       }
       for (let i = 0; i < r.items.length; i++) {
         const it = r.items[i];
-        const kind = it.pass === 3 ? 'mc4zh' : 'recall';
+        // 两步制后只剩一种题：② 挖空选择（它接手原 ③ 的毕业凭据，事件类型仍叫 mc4zh）
+        const kind = 'mc4zh';
         // 确定性抽签：同一个（天, 词, 题种）永远同结果；换成 Math.random 单调性测试会随机红。
         // 注意 hash32 只吃字符串 —— 直接喂数字会被它内部当空串（恒返回 5381），accuracy 就失效了。
         const ok = (hash32(day + '|' + it.w + '|' + it.s + '|' + kind) % 1000) < accuracy * 1000;
@@ -355,15 +360,43 @@
     };
   }
 
-  /* ---------- 出题 ----------
-     ② 永远遮目标词（原则 3）。第一期没有裁决过的辨析组，所以只出回忆题 ——
-     回忆题结构上不存在双解，宁可不给选项也不出错题（原则 8）。 */
+  /* ---------- 出题（两步制：只有 ② 挖空选择会真的弹题） ----------
+     ② 永远遮目标词（原则 3 / D6：只遮目标词，不遮词伙、不遮搭配）。
+     ②③ 历史上共用「四选一」这套判据，今天仍然共用一份实现（fourChoice），
+     只是方向相反：③ 遮中文义项、② 遮英文词。别再写第二台出题机器。 */
+  /* 义项 / 词性两张记忆表：② 的第三档候选池是整本词表（3245 条），
+     每建一道题都要问一遍「这条卡是什么词性、有几个义项」。不缓存的话
+     一道题就是三千次正则切分，手机上点下一题会卡一下。键是卡上 m 那个字符串，
+     整本最多几千个不同值，不会一直长。 */
+  const _senseMemo = Object.create(null);
+  const _posMemo = Object.create(null);
   function parseSenses(m) {
-    return String(m || '').split(/[；;]/).map(function (x) { return x.trim(); }).filter(Boolean);
+    return _senseMemo[String(m || '')] || (_senseMemo[String(m || '')] =
+      String(m || '').split(/[；;]/).map(function (x) { return x.trim(); }).filter(Boolean));
   }
   function posOf(m) {
     const x = String(m || '').match(/^\s*(n|v|vt|vi|adj|adv|prep|conj|pron|num|int|abbr)\./i);
     return x ? x[1].toLowerCase() + '.' : '';
+  }
+  // 卡上标了哪些词性：'n. 大气；v. 氛围' 两个都要算，只取第一条会把兼类词判死
+  function posSetOf(m) {
+    const ck = String(m || '');
+    if (_posMemo[ck]) return _posMemo[ck];
+    const out = [], re = /\b(n|v|vt|vi|adj|adv|prep|conj|pron|num|int|abbr)\./ig;
+    let x;
+    while ((x = re.exec(ck))) {
+      const p = x[1].toLowerCase() + '.';
+      if (out.indexOf(p) < 0) out.push(p);
+    }
+    _posMemo[ck] = out;
+    return out;
+  }
+  function normSense(s) { return String(s || '').replace(/[，。、,.;；：:\s]/g, ''); }
+  // 两条中文义项互相包含 = 这两个词在这个空里都可能对 = 双解题，不许当干扰项
+  function sensesClash(a, b) {
+    const x = normSense(a), y = normSense(b);
+    if (!x || !y) return false;
+    return x === y || x.indexOf(y) >= 0 || y.indexOf(x) >= 0;
   }
   function colFirstOf(note) {
     if (typeof note !== 'string') return '';
@@ -412,36 +445,116 @@
     for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
     return h;
   }
-  /* ③ 看英文选中文：正确答案取卡上第一个义项，干扰项取同段其它目标词的义项。
-     义项重叠（互相包含）的两个不算干扰项 —— 那是「两个都对」。凑不满四个就不出这道题。 */
-  function meaningQuiz(o) {
-    const card = o.card || {};
-    const answer = (o.answer || '').trim() || (parseSenses(card.m)[0] || '').trim();
+  /* ---------- 四选一机器（②③ 共用这一份，别再写第二套） ----------
+     答案 + 至多三个干扰项 → 洗牌 → 凑不满四个就返回 null。
+     o = { kind, sent, word, answer, sentZh, pool, accept(cand), label(cand, chosen) }
+       · pool    候选（已经按优先级排好：辨析组在前、补池在后）
+       · accept  这道候选能不能进选项（词性闸 L2 / 双解闸 L3）
+       · label   选项上显示什么：③ 显示中文义项，② 显示英文词头
+     被否掉的候选、以及没有 accept/label 判据的候选都不许占坑 —— 错选项比没选项危险得多。 */
+  function fourChoice(o) {
+    const answer = String(o.answer || '').trim();
     if (!answer) return null;
-    const norm = function (s) { return String(s).replace(/[，。、,.;；：:\s]/g, ''); };
-    const ak = norm(answer);
     const opts = [answer];
-    const pool = Object.keys(o.paraCards || {});
+    const pool = o.pool || [];
     for (let i = 0; i < pool.length && opts.length < 4; i++) {
-      const key = pool[i];
-      if (key === o.word) continue;
-      const src = o.paraCards[key];
-      const senses = parseSenses(typeof src === 'string' ? src : src.m);
-      for (let j = 0; j < senses.length; j++) {
-        const sk = norm(senses[j]);
-        if (!sk || sk === ak || sk.indexOf(ak) >= 0 || ak.indexOf(sk) >= 0) continue;
-        if (opts.indexOf(senses[j]) >= 0) continue;
-        opts.push(senses[j]);
-        break;
-      }
+      const cand = pool[i];
+      if (!cand || String(cand.key) === String(o.word)) continue;
+      if (o.accept && !o.accept(cand)) continue;
+      const label = o.label ? o.label(cand, opts) : cand.key;
+      if (!label || opts.indexOf(label) >= 0) continue;
+      opts.push(label);
     }
     if (opts.length < 4) return null;
     const seed = String(o.sent) + '|' + String(o.word);
     const shuffled = opts.map(function (x, i2) { return { x: x, k: hash32(seed + i2) % 997 }; })
       .sort(function (a, b) { return a.k - b.k; })
       .map(function (v) { return v.x; });
-    return { kind: 'mc4zh', s: o.sent, w: String(o.word).toLowerCase(),
+    return { kind: o.kind, s: o.sent, w: String(o.word).toLowerCase(),
              prompt: o.sentZh || '', opts: shuffled, answer: answer };
+  }
+  /* 【界面已无入口】③「看英文选中文」整步删除（2026-09-22 两步制）。这个方向的出题留着，
+     一是 blankQuiz 与它共用 fourChoice，二是它的单测就是那台机器的判据回归。
+     义项重叠（互相包含）的两个不算干扰项 —— 那是「两个都对」。凑不满四个就不出这道题。 */
+  function meaningQuiz(o) {
+    const card = o.card || {};
+    const answer = (o.answer || '').trim() || (parseSenses(card.m)[0] || '').trim();
+    if (!answer) return null;
+    const cards = o.paraCards || {};
+    return fourChoice({
+      kind: 'mc4zh', sent: o.sent, word: o.word, answer: answer, sentZh: o.sentZh,
+      pool: Object.keys(cards).map(function (key) {
+        const src = cards[key];
+        return { key: key, senses: parseSenses(typeof src === 'string' ? src : src.m) };
+      }),
+      label: function (cand, chosen) {
+        for (let j = 0; j < cand.senses.length; j++) {
+          const s = cand.senses[j];
+          if (!sensesClash(answer, s) && chosen.indexOf(s) < 0) return s;
+        }
+        return '';
+      },
+    });
+  }
+  /* ②「挖空选择」：句中把目标词挖成空格，给 4 个英文候选（1 真 3 干扰），
+     题干下方给中文译文并把「这个词在这一句里的意思」下划线标出来 —— 那条下划线就是
+     把答案锁成唯一性的提示，也是判干扰项的尺子。
+     o = { sent, word, sense, sentZh, card, groupCards, paraCards }
+       · groupCards 该词所在【已裁决辨析组】（vocab.cmp）的其它成员 —— 第一优先（D5）
+       · paraCards  同段其它目标词 —— 组里凑不够三个才用（PRD §7.2 的两档供给）
+     干扰项三闸：① 必须是目标词（有卡，宿主只送有卡的）② 词性与这一句要求的相同（L2）
+                ③ 它的任一条义项与本句这个意思重叠 → 填进去也可能对 → 踢掉（L3 的机械部分）
+     过完三闸凑不满四个 → 返回 null：这道题【不出】，该句只走 ① 通读（D4：宁缺毋滥，
+     不降级成默写 —— 答对了也不知道是不是蒙的，答错了还白记一次 err）。 */
+  function blankQuiz(o) {
+    const word = String(o.word || '').toLowerCase();
+    const card = o.card || {};
+    // 这一句里的意思：宿主按上下文挑好（行内小字那套判断），挑不出来就不出题
+    const sense = String(o.sense || '').trim() || (parseSenses(card.m)[0] || '').trim();
+    if (!word || !sense) return null;
+    const wantPos = posOf(sense) || posOf(card.m);
+    const mOf = function (c) { return typeof c === 'string' ? c : (c && c.m); };
+    const pool = [];
+    const seen = Object.create(null);
+    const push = function (k, m) {
+      if (k === word || seen[k]) return;
+      seen[k] = 1;
+      pool.push({ key: k, m: m });
+    };
+    const add = function (cards) {
+      Object.keys(cards || {}).forEach(function (key) { push(String(key).toLowerCase(), mOf(cards[key])); });
+    };
+    add(o.groupCards);      // 1) 已裁决辨析组的成员优先：这一遍顺手又练了一次辨析
+    add(o.paraCards);       // 2) 不足三个才轮到同段目标词
+    /* 3) 全书同词性补池。少了这一档，「同段恰好没第二个同词性目标词」的词一局题都出不了：
+       实测 188 个词（5.8%）在它们出现过的每一句里都凑不满四选一，而 estimateDays 的模拟
+       默认每道排进来的题都出得出来 —— 那四处「全部过约 X 年 X 月」就成了空头承诺。
+       顺序按 hash32(词头|候选) 定：同一个词永远拿到同一批候选（确定性，探针与测试要复算），
+       换个词就换一批（否则全书都拿数组开头那三个词当干扰项，做十句就背下选项了）。 */
+    if (o.bookCards) {
+      const bk = Object.keys(o.bookCards)
+        .map(function (key) {
+          const k = String(key).toLowerCase();
+          return { key: k, m: mOf(o.bookCards[key]), h: hash32(word + '|' + k) };
+        })
+        .filter(function (c) { return c.key !== word; })
+        .sort(function (a, b) { return a.h - b.h; });
+      for (let i = 0; i < bk.length; i++) push(bk[i].key, bk[i].m);
+    }
+    const q = fourChoice({
+      kind: 'mc4zh', sent: o.sent, word: word, answer: word, sentZh: o.sentZh, pool: pool,
+      accept: function (cand) {
+        const senses = parseSenses(cand.m);
+        if (!senses.length) return false;
+        for (let j = 0; j < senses.length; j++) if (sensesClash(sense, senses[j])) return false;
+        if (wantPos) return posSetOf(cand.m).indexOf(wantPos) >= 0;
+        return posSetOf(cand.m).length > 0;         // 连答案的词性都判不出来 → 无法保证同词性 → 不进选项
+      },
+    });
+    if (!q) return null;
+    q.sense = sense;
+    q.pos = wantPos;
+    return q;
   }
 
   /* ---------- 老进度迁移：句子记的功搬到词上 ----------
@@ -503,7 +616,7 @@
     DAY_MS, WORD_INTERVALS, GRADUATED_INTERVALS, STAGES, MASTER_REPS, LEECH_ERR,
     dayKey, dayDiff, wordInterval, emptyState,
     eventId, mkContact, mkQuiz, mkPromote, newWord, stageOf, replay, wordState,
-    assemble, recallQuiz, meaningQuiz, judgeRecall, editDistance, parseSenses, hash32, migrate,
+    assemble, recallQuiz, meaningQuiz, blankQuiz, judgeRecall, editDistance, parseSenses, hash32, migrate,
     countGraduated, estimateDays,
   };
 })();

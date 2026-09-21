@@ -79,7 +79,7 @@ test.describe('走完全部词要多久 · 四处同源', () => {
     const d60 = Number(await daysOf(eta));
     expect(d60).toBeLessThanOrEqual(d15);            // 单调性（规格 §7.1）
 
-    // 同一档再点一次：命中缓存，不许再跑一遍 887 个模拟日
+    // 同一档再点一次：命中缓存，不许再跑一遍几百个模拟日（15 分钟档 = 637 个模拟日）
     await page.locator('#psMin .ps-opt[data-v="15"]').click();
     await settled(eta);
     await page.locator('#psMin .ps-opt[data-v="60"]').click();
