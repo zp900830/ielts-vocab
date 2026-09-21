@@ -1,0 +1,264 @@
+{
+ "curse": {
+  "type": "compare",
+  "group": "curse-swear",
+  "title": "同句里两个词都和“骂”有关，但侧重点不同：",
+  "items": [
+   {
+    "w": "curse",
+    "p": "/kɜːs/",
+    "pos": "v./n.",
+    "sense": "咒骂；诅咒",
+    "core": "语气重，带恶意和愤怒，希望对方遭殃",
+    "eg": "curse the bad luck"
+   },
+   {
+    "w": "swear",
+    "p": "/sweə/",
+    "pos": "v.",
+    "sense": "发誓；咒骂",
+    "core": "日常爆粗口发泄；也可表示郑重发誓",
+    "eg": "swear at the heavy traffic"
+   }
+  ],
+  "diff": [
+   {
+    "label": "语气",
+    "curse": "重，带“诅咒”意味",
+    "swear": "较轻，日常“爆粗口”"
+   },
+   {
+    "label": "对象",
+    "curse": "运气、命运等抽象事物也可",
+    "swear": "多针对人或具体事物"
+   },
+   {
+    "label": "其他含义",
+    "curse": "名词：诅咒、咒语",
+    "swear": "发誓、宣誓（swear to）"
+   }
+  ],
+  "summary": "辨析：swear at sb = 骂某人；swear to do = 发誓做……。简单记：curse = 诅咒（恨你），swear = 骂街（烦你）。",
+  "at": [
+   5,
+   2
+  ]
+ },
+ "glance": {
+  "type": "compare",
+  "group": "look-verbs",
+  "title": "这一段几个词都和“看”有关，但“看”法不同：",
+  "items": [
+   {
+    "w": "glance",
+    "p": "/ɡlɑːns/",
+    "pos": "v./n.",
+    "sense": "一瞥；扫视",
+    "core": "主动、快速地看一眼",
+    "scene": "抬眼看表"
+   },
+   {
+    "w": "glimpse",
+    "p": "/ɡlɪmps/",
+    "pos": "v./n.",
+    "sense": "瞥见",
+    "core": "被动、偶然、不完整的一瞥",
+    "scene": "人群中看到一个背影"
+   },
+   {
+    "w": "peep",
+    "p": "/piːp/",
+    "pos": "v./n.",
+    "sense": "偷看；窥视",
+    "core": "偷偷摸摸、不想被发现",
+    "scene": "从门缝后探头"
+   },
+   {
+    "w": "peer",
+    "p": "/pɪə/",
+    "pos": "v.",
+    "sense": "凝视；费力看",
+    "core": "看不清，努力辨认",
+    "scene": "眯着眼看远处 / 小字"
+   }
+  ],
+  "diff": [
+   {
+    "label": "方式",
+    "glance": "主动快速扫一眼",
+    "glimpse": "被动偶然瞥见",
+    "peep": "偷偷摸摸地看",
+    "peer": "费力专注地看"
+   },
+   {
+    "label": "关键特征",
+    "glance": "快、随意",
+    "glimpse": "短暂、不完整",
+    "peep": "隐蔽、不想被发现",
+    "peer": "看不清、努力辨认"
+   }
+  ],
+  "summary": "glance 是主动快看，glimpse 是被动瞥见，peep 是偷看，peer 是费力辨认。peer 作名词还指“同龄人、同辈”（peer pressure 同伴压力），与“看”无关。"
+ },
+ "glimpse": {
+  "type": "compare",
+  "group": "look-verbs",
+  "title": "这一段几个词都和“看”有关，但“看”法不同：",
+  "items": [
+   {
+    "w": "glance",
+    "p": "/ɡlɑːns/",
+    "pos": "v./n.",
+    "sense": "一瞥；扫视",
+    "core": "主动、快速地看一眼",
+    "scene": "抬眼看表"
+   },
+   {
+    "w": "glimpse",
+    "p": "/ɡlɪmps/",
+    "pos": "v./n.",
+    "sense": "瞥见",
+    "core": "被动、偶然、不完整的一瞥",
+    "scene": "人群中看到一个背影"
+   },
+   {
+    "w": "peep",
+    "p": "/piːp/",
+    "pos": "v./n.",
+    "sense": "偷看；窥视",
+    "core": "偷偷摸摸、不想被发现",
+    "scene": "从门缝后探头"
+   },
+   {
+    "w": "peer",
+    "p": "/pɪə/",
+    "pos": "v.",
+    "sense": "凝视；费力看",
+    "core": "看不清，努力辨认",
+    "scene": "眯着眼看远处 / 小字"
+   }
+  ],
+  "diff": [
+   {
+    "label": "方式",
+    "glance": "主动快速扫一眼",
+    "glimpse": "被动偶然瞥见",
+    "peep": "偷偷摸摸地看",
+    "peer": "费力专注地看"
+   },
+   {
+    "label": "关键特征",
+    "glance": "快、随意",
+    "glimpse": "短暂、不完整",
+    "peep": "隐蔽、不想被发现",
+    "peer": "看不清、努力辨认"
+   }
+  ],
+  "summary": "glance 是主动快看，glimpse 是被动瞥见，peep 是偷看，peer 是费力辨认。peer 作名词还指“同龄人、同辈”（peer pressure 同伴压力），与“看”无关。"
+ },
+ "peep": {
+  "type": "compare",
+  "group": "look-verbs",
+  "title": "这一段几个词都和“看”有关，但“看”法不同：",
+  "items": [
+   {
+    "w": "glance",
+    "p": "/ɡlɑːns/",
+    "pos": "v./n.",
+    "sense": "一瞥；扫视",
+    "core": "主动、快速地看一眼",
+    "scene": "抬眼看表"
+   },
+   {
+    "w": "glimpse",
+    "p": "/ɡlɪmps/",
+    "pos": "v./n.",
+    "sense": "瞥见",
+    "core": "被动、偶然、不完整的一瞥",
+    "scene": "人群中看到一个背影"
+   },
+   {
+    "w": "peep",
+    "p": "/piːp/",
+    "pos": "v./n.",
+    "sense": "偷看；窥视",
+    "core": "偷偷摸摸、不想被发现",
+    "scene": "从门缝后探头"
+   },
+   {
+    "w": "peer",
+    "p": "/pɪə/",
+    "pos": "v.",
+    "sense": "凝视；费力看",
+    "core": "看不清，努力辨认",
+    "scene": "眯着眼看远处 / 小字"
+   }
+  ],
+  "diff": [
+   {
+    "label": "方式",
+    "glance": "主动快速扫一眼",
+    "glimpse": "被动偶然瞥见",
+    "peep": "偷偷摸摸地看",
+    "peer": "费力专注地看"
+   },
+   {
+    "label": "关键特征",
+    "glance": "快、随意",
+    "glimpse": "短暂、不完整",
+    "peep": "隐蔽、不想被发现",
+    "peer": "看不清、努力辨认"
+   }
+  ],
+  "summary": "glance 是主动快看，glimpse 是被动瞥见，peep 是偷看，peer 是费力辨认。peer 作名词还指“同龄人、同辈”（peer pressure 同伴压力），与“看”无关。",
+  "at": [
+   5,
+   1
+  ]
+ },
+ "swear": {
+  "type": "compare",
+  "group": "curse-swear",
+  "title": "同句里两个词都和“骂”有关，但侧重点不同：",
+  "items": [
+   {
+    "w": "curse",
+    "p": "/kɜːs/",
+    "pos": "v./n.",
+    "sense": "咒骂；诅咒",
+    "core": "语气重，带恶意和愤怒，希望对方遭殃",
+    "eg": "curse the bad luck"
+   },
+   {
+    "w": "swear",
+    "p": "/sweə/",
+    "pos": "v.",
+    "sense": "发誓；咒骂",
+    "core": "日常爆粗口发泄；也可表示郑重发誓",
+    "eg": "swear at the heavy traffic"
+   }
+  ],
+  "diff": [
+   {
+    "label": "语气",
+    "curse": "重，带“诅咒”意味",
+    "swear": "较轻，日常“爆粗口”"
+   },
+   {
+    "label": "对象",
+    "curse": "运气、命运等抽象事物也可",
+    "swear": "多针对人或具体事物"
+   },
+   {
+    "label": "其他含义",
+    "curse": "名词：诅咒、咒语",
+    "swear": "发誓、宣誓（swear to）"
+   }
+  ],
+  "summary": "辨析：swear at sb = 骂某人；swear to do = 发誓做……。简单记：curse = 诅咒（恨你），swear = 骂街（烦你）。",
+  "at": [
+   5,
+   2
+  ]
+ }
+}

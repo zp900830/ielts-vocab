@@ -28,7 +28,7 @@ Each sentence-level `.notebar` must follow `.sent`/`.sent-zh` (or another `.note
 
 ### 3. 辨析表挂段末、默认折叠、一组只挂一处
 Find `.cmp-card[data-grp="curse-swear"]`（`curse`/`swear` 同句共现于第 6 章）。
-**Verify:** 卡片不在任何 `.para` 里面（是段落的兄弟节点），且它所在的 `.cmp-block` 前面紧邻 `.para-zh`（不打断正文与译文）；`.cmp-body` 计算样式 `display: none`；整页该 `data-grp` 只出现 **1** 次；折叠行里能看到「简单记」那半句 `curse = 诅咒`。
+**Verify:** 卡片不在任何 `.para` 里面（是段落的兄弟节点），且它所在的 `.cmp-block` 前面紧邻 `.para-zh`（不打断正文与译文）；`.cmp-body` 计算样式 `display: none`；整页该 `data-grp` 只出现 **1** 次；折叠行里能看到「简单记」那半句 —— **期望值从 `vocab.json` 现取**（按渲染器同一条规则切出「简单记：」后面那半句），不把文案抄进用例：卡片内容会改版，抄一次就等于把测试绑死在某一版文案上（curse-swear 换版时这条假红过一次）。
 
 ### 4. 点一下出对比表，再点收回
 Click that card's `.cmp-head`.

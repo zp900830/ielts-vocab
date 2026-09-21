@@ -74,7 +74,18 @@ test.describe('Note bar under sentences, compare table at paragraph end', () => 
       await test.step('Step 3: 辨析表挂段末、默认折叠、一组只挂一处', async () => {
         const card = page.locator('.cmp-card[data-grp="curse-swear"]');
         await expect(card).toHaveCount(1);            // 重复挂 = 一张表按成员出现几遍
-        await expect(card.locator('.cmp-line')).toContainText('curse = 诅咒');
+        // 默认那一行的内容不抄进用例：从数据里取「简单记：」那半句，和渲染器同一条规则。
+        // 抄文案 = 每次改卡片就得回来改测试（curse-swear 换版时这条就是假红）。
+        const want = await page.evaluate(() => {
+          const hit = Object.keys(VOCAB || [])
+            .map((k) => (VOCAB[k] as any).cmp)
+            .filter((n: any) => n && n.group === 'curse-swear')[0];
+          const sm = (hit && hit.summary) || '';
+          const m = sm.match(/简单记[:：](.+?)\s*$/);
+          return (m ? m[1] : sm).trim();
+        });
+        expect(want.length).toBeGreaterThan(0);       // 数据里没这句 → 断言会变成空断言
+        await expect(card.locator('.cmp-line')).toHaveText(want);
         const geo = await card.evaluate((el) => ({
           insidePara: !!el.closest('.para'),          // 必须在段落外面
           prevOfBlock: (el.parentElement as HTMLElement).previousElementSibling?.className || '',
