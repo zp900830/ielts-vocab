@@ -359,6 +359,60 @@ def main():
             elif members and not all(_in_para(at[0], at[1], m) for m in members):
                 errors.append(f'辨析卡 {w}: 锚点段 {list(at)} 里并非所有成员都在（{members}）')
 
+    # 17. 卡面禁流水线黑话（阻断）。辨析卡上会渲染给学生看的文字（title/summary/diff 各格/
+    #     items 各栏）里不许出现只对审核人有意义的流水线内部词 —— 2026-09-21 实测 95 格 /
+    #     71 个词头中招（词表出处：work/辨析审核/LEGACY_CLEAR_0921.md §四），模式共 6 类：
+    #     worklist、「落地时…」、「口径 N」、「§五.N」式章节引用、见「数据边界」（该节不在
+    #     页面上 = 悬空引用）、「切片」。先立闸再清文案，顺序不能反，否则改完没有防回归。
+    #     2026-09-22 再扩 7 类：卡面上直接甩数据字段名（ex=例句、m=释义、note=同义词／词伙、
+    #     exZh/sentZh/paraZh=三种译文、all_synonyms=书里给的同义词），实测 1987 格中招。
+    #     这 7 条都是「窄」正则，不会误伤卡上本来就该有的英文例句：
+    #       · ex / note 一类要求独立成词（前后不接字母或连字符），英文句子里的 example、
+    #         extend、notebook、take note that 这类都不会命中；note 还额外要求后面紧跟中文，
+    #         所以 "Please note that..." 这种真英文过不了；
+    #       · m 只认「卡/上/的/张 ＋ m」这一种搭配，音标 /ˈmɪmɪk/、I'm、me 都进不来；
+    #       · exZh/sentZh/paraZh/all_synonyms 是数据字段名，不是英文词，零歧义；
+    #       · 点号字段路径要求词头至少 3 个字母，e.g. / i.e. / vs. 都过不了；
+    #       · us/uk 只认「卡 us」「卡上 us」这种带卡的写法，课文原句里的 "assist us" 不算。
+    JARGON_PATTERNS = [
+        ('worklist', re.compile(r'worklist', re.I)),                # 内部待办文件名
+        ('落地时', re.compile(r'落地时')),                            # 说流水线动作，学生读不通
+        ('口径 N', re.compile(r'口径\s*\d')),                         # 送审规则编号
+        ('§章节引用', re.compile(r'§\s*[一二三四五六七八九十0-9]')),   # 草稿章节号不在页面上
+        ('数据边界', re.compile(r'数据边界')),                        # 悬空引用：那节不渲染
+        ('切片', re.compile(r'切片')),                               # 代理分包用的词
+        ('卡 ex 记号', re.compile(r'(?<![A-Za-z-])ex(?![A-Za-z-])')),
+        ('卡 m 记号', re.compile(r'(?:卡|上|的|张)\s*m(?![A-Za-z])')),
+        ('卡 note 记号', re.compile(r'(?<![A-Za-z])note(?![A-Za-z])(?=[ ]?[^\x00-\x7f])')),
+        ('译文字段名', re.compile(r'(?<![A-Za-z])(?:exZh|sentZh|paraZh|all_synonyms)(?![A-Za-z])')),
+        ('字段名＋冒号', re.compile(r'(?<![A-Za-z])(?:ex|exZh|sentZh|paraZh|all_synonyms'
+                                   r'|note|m|p|w|pos|syn|collocation)\s*[:：]')),
+        ('点号字段路径', re.compile(r'\b[a-z]{3,}\.(?:ex|note|exZh|sentZh|cmp|zh|m)\b')),
+        ('卡 us/uk 记号', re.compile(r'卡上?\s*(?:us|uk)(?![A-Za-z])')),
+    ]
+
+    def _cmp_strings(o, path):
+        if isinstance(o, str):
+            yield path, o
+        elif isinstance(o, dict):
+            for k, val in o.items():
+                yield from _cmp_strings(val, (path + '.' + str(k)) if path else str(k))
+        elif isinstance(o, list):
+            for i, x in enumerate(o):
+                yield from _cmp_strings(x, f'{path}[{i}]')
+
+    jargon = []
+    for w, c in vocab.items():
+        if not (isinstance(c, dict) and isinstance(c.get('cmp'), dict)):
+            continue
+        for path, text in _cmp_strings(c['cmp'], ''):
+            hit = [name for name, pat in JARGON_PATTERNS if pat.search(text)]
+            if hit:
+                jargon.append(f'辨析卡 {w}（{path}｜{"、".join(hit)}）: {text[:48]}')
+    if jargon:
+        errors.append(f'{len(jargon)} 处卡面流水线黑话（对着学习者说审核的事，判据见 '
+                      f'work/辨析审核/LEGACY_CLEAR_0921.md §四）:\n      ' + '\n      '.join(jargon))
+
     # 9. 基础统计
     print(f"vocab: {len(vocab)} words")
     print(f"chapters: {len(chapters)} macro chapters, {len(ch_words)} unique words")
