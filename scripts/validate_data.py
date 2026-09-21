@@ -359,6 +359,42 @@ def main():
             elif members and not all(_in_para(at[0], at[1], m) for m in members):
                 errors.append(f'辨析卡 {w}: 锚点段 {list(at)} 里并非所有成员都在（{members}）')
 
+    # 17. 卡面禁流水线黑话（阻断）。辨析卡上会渲染给学生看的文字（title/summary/diff 各格/
+    #     items 各栏）里不许出现只对审核人有意义的流水线内部词 —— 2026-09-21 实测 95 格 /
+    #     71 个词头中招（词表出处：work/辨析审核/LEGACY_CLEAR_0921.md §四），模式共 6 类：
+    #     worklist、「落地时…」、「口径 N」、「§五.N」式章节引用、见「数据边界」（该节不在
+    #     页面上 = 悬空引用）、「切片」。先立闸再清文案，顺序不能反，否则改完没有防回归。
+    JARGON_PATTERNS = [
+        ('worklist', re.compile(r'worklist', re.I)),                # 内部待办文件名
+        ('落地时', re.compile(r'落地时')),                            # 说流水线动作，学生读不通
+        ('口径 N', re.compile(r'口径\s*\d')),                         # 送审规则编号
+        ('§章节引用', re.compile(r'§\s*[一二三四五六七八九十0-9]')),   # 草稿章节号不在页面上
+        ('数据边界', re.compile(r'数据边界')),                        # 悬空引用：那节不渲染
+        ('切片', re.compile(r'切片')),                               # 代理分包用的词
+    ]
+
+    def _cmp_strings(o, path):
+        if isinstance(o, str):
+            yield path, o
+        elif isinstance(o, dict):
+            for k, val in o.items():
+                yield from _cmp_strings(val, (path + '.' + str(k)) if path else str(k))
+        elif isinstance(o, list):
+            for i, x in enumerate(o):
+                yield from _cmp_strings(x, f'{path}[{i}]')
+
+    jargon = []
+    for w, c in vocab.items():
+        if not (isinstance(c, dict) and isinstance(c.get('cmp'), dict)):
+            continue
+        for path, text in _cmp_strings(c['cmp'], ''):
+            hit = [name for name, pat in JARGON_PATTERNS if pat.search(text)]
+            if hit:
+                jargon.append(f'辨析卡 {w}（{path}｜{"、".join(hit)}）: {text[:48]}')
+    if jargon:
+        errors.append(f'{len(jargon)} 处卡面流水线黑话（对着学习者说审核的事，判据见 '
+                      f'work/辨析审核/LEGACY_CLEAR_0921.md §四）:\n      ' + '\n      '.join(jargon))
+
     # 9. 基础统计
     print(f"vocab: {len(vocab)} words")
     print(f"chapters: {len(chapters)} macro chapters, {len(ch_words)} unique words")
