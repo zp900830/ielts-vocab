@@ -1,6 +1,13 @@
 // Hand-written alongside docs/superpowers/plans/2026-09-20-task-mode-phase-1.md (Task 6)
-// 界面不变量：今日进度这个数字全页只说一次、任务模式里翻句只剩任务栏那颗、
+// 界面不变量：今日进度这个数字全页只说一次、任务模式底部只剩一条通栏任务条 +（① 态）一条极窄播放行、
 // 播放条标题那一行在任务模式里归任务栏。
+//
+// 底栏口径 2026-09-21 照原型重排：依据是 docs/prototype/2026-09-20-任务模式原型.html:248-253（① 通读
+// = 通栏任务条 + 一条 playrow）、:283-284（② 挖空 = 只有任务条）、:382（③ 选义 = 只有任务条），
+// 以及他 2026-09-21 的缺陷报告「说好的隐藏播放条、保留底部通栏的任务条，一直没改」
+// （排查记录：work/任务模式底栏排查_2026-09-21.md）。
+// 旧版注释把相反口径写成「他拍的板：播放条不藏」，那句话在 docs/ 里查不到任何出处（只有 agent 写的注释），
+// 已作废 —— 别再拿它当依据。
 import { test, expect } from '../../fixtures';
 import { currentTimeout } from '../../utils/timeouts';
 
@@ -39,20 +46,59 @@ async function startPlanAndTaskMode(page: import('@playwright/test').Page, baseU
 test.describe('task mode · UI invariants', () => {
   test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
 
-  /* 他拍的板（2026-09-20）：「下一句」全页只留一颗（归任务栏），播放条不藏。
-     收掉的只有重复的那一颗 —— 上一句是①通读里"退回去再听一遍"的唯一入口，必须留。 */
-  test('任务模式里播放条不藏、上一句留在原地，下一句让给任务栏', async ({ page, baseURL }) => {
+  /* 2026-09-21 定稿口径（他原话：「任务模式，播放条的所有功能都放在通栏任务条上」）：
+     播放条整条隐藏，它那一排控件搬进任务条；上一句/下一句/退出本来就在任务条上。
+     所以下面全部以 #taskBar 为家 —— #audiobar 在任务模式里必须是不可见的。 */
+  test('任务模式① 态：播放条整条隐藏、功能全搬到通栏，翻句与退出都在通栏上', async ({ page, baseURL }) => {
     test.setTimeout(currentTimeout() * 8);
     await startPlanAndTaskMode(page, baseURL);
-    const play = page.locator('.audiobar').getByRole('button', { name: '播放或暂停' });
-    await expect(play).toBeVisible();
-    await expect(play).toBeEnabled();
-    const back = page.locator('.audiobar').getByRole('button', { name: '上一句' });
-    await expect(back).toBeVisible();
-    await expect(back).toBeEnabled();
-    await expect(page.locator('.audiobar').getByRole('button', { name: '下一句' })).not.toBeVisible();
+    await expect(page.locator('#audiobar')).not.toBeVisible();
+    // 播放/循环/A-B/书签/倍速 这五颗现在住在任务条第二行里 —— 用 closest 确认真的搬进来了，不是只"碰巧可见"
+    const inBar = (id: string) => page.evaluate((i) =>
+      document.getElementById(i)!.closest('#taskBar') !== null, id);
+    for (const id of ['btnPlay', 'btnLoop', 'btnAB', 'markBtn', 'rateCycle']) {
+      await expect(page.locator('#' + id)).toBeVisible();
+      expect(await inBar(id)).toBe(true);
+    }
+    await expect(page.locator('#btnPlay')).toBeEnabled();
+    await expect(page.locator('#rateCycle')).toBeEnabled();   // 倍速旧版被整条藏掉、全页无第二个入口，这条守它别再丢
+    // 原型 :250：上一句 / 下一句 同一条通栏右侧，不再拆在两条栏上
+    await expect(page.locator('#tbPrev')).toBeVisible();
+    await expect(page.locator('#tbNext')).toBeVisible();
+    await expect(page.locator('button:visible', { hasText: '下一句' })).toHaveCount(1);
+    await expect(page.locator('button:visible', { hasText: '上一句' })).toHaveCount(1);
+    // 搬过来的这一排里，翻句两颗与进度条仍然不显示（否则通栏上会出现两颗同名按钮）
+    await expect(page.locator('#tbPlay .btn.ab-step:visible')).toHaveCount(0);
+    await expect(page.locator('#tbPlay .ab-seek')).not.toBeVisible();
+    await expect(page.locator('#abCollapse')).not.toBeVisible();
+    await expect(page.locator('#abExpand')).not.toBeVisible();
+    // §10.1 ① 态控件表要求的「退出」，常驻通栏（旧版唯一入口在面板里，手机上要三跳）
+    await expect(page.locator('#taskBar #tbExit')).toBeVisible();
+    // 整条底栏高度：390×844 实测 99px（旧版两条栏 157px），留 120 的余量防字号变化
+    expect((await page.locator('#taskBar').boundingBox()).height).toBeLessThanOrEqual(120);
     await page.evaluate(() => TASK.exitTaskMode());
     await expect(page.locator('.audiobar').getByRole('button', { name: '下一句' })).toBeVisible();
+  });
+
+  // 续读条借用的是同一行（data-state=resume，此刻没有 body.task-mode）：新加的退出/上一句两颗都不许露脸
+  test('续读条状态下「退出」和「上一句」都不出现，只有播放条照常', async ({ page, baseURL }) => {
+    test.setTimeout(currentTimeout() * 8);
+    await page.goto(`${baseURL}/index.html`);
+    await expect(page.locator('.sent').first()).toBeVisible();
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(20);
+      TASK.todayPlan(true).queue.slice(0, 2).forEach(x => TASK.readDone(x.i));
+    });
+    await page.reload();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    expect(await page.evaluate(() => document.getElementById('taskBar').dataset.state)).toBe('resume');
+    expect(await page.evaluate(() => document.body.classList.contains('task-mode'))).toBe(false);
+    await expect(page.locator('#tbExit')).not.toBeVisible();
+    await expect(page.locator('#tbPrev')).not.toBeVisible();
+    await expect(page.locator('#tbNext')).toBeVisible();    // 「接着做」
+    await expect(page.locator('#tbAgain')).toBeVisible();   // 「今天先不做」
+    await expect(page.locator('#audiobar')).toBeVisible();  // 续读条不许把播放条挤掉，也不许把它降级
+    expect((await page.locator('#audiobar').boundingBox()).height).toBeGreaterThan(46);
   });
 
   test('the progress readout appears once on the page, not twice', async ({ page, baseURL }) => {
@@ -82,7 +128,7 @@ test.describe('task mode · UI invariants', () => {
     await next.click();
     await next.click();
     await expect(page.locator('#abTitle')).toContainText('读到第');
-    await page.locator('.audiobar').getByRole('button', { name: '上一句' }).click();
+    await page.locator('#tbPrev').click();
     await expect(page.locator('#abTitle')).toContainText('读到第');
     // 退出任务模式后这一行要还给播放条，不能留在任务栏的说法上
     await page.evaluate(() => TASK.exitTaskMode());
@@ -331,7 +377,8 @@ test.describe('three passes', () => {
     expect(await page.locator('.pass-summary .go').innerText()).toContain('②');
   });
 
-  /* 他拍的板：① 任务模式里播放条别整条藏（暂停要能按、想回听要能听），但「下一句」全页只留一颗；
+  /* 底栏口径 2026-09-21 已换（见文件头）：旧注释写的是「他拍的板：播放条别整条藏」，
+     那句在 docs/ 里查不到出处，守的是三层堆叠的旧现状。
      ② 刷新时有没做完的任务 → 直接占用底部本来就是任务栏的那一行，不弹窗。 */
   const barState = (page: import('@playwright/test').Page) =>
     page.evaluate(() => (document.getElementById('taskBar') as HTMLElement).dataset.state);
@@ -340,29 +387,61 @@ test.describe('three passes', () => {
      那颗 .ps-start 只在「还没有计划」时才存在，计划已建就会点到永远等不到的按钮。
      可见性一律用 Playwright 的 :visible —— 任务栏和播放条都是 position:fixed，
      offsetParent 恒为 null，拿它判可见会把两颗都在屏幕上的按钮读成"不存在"。 */
-  test('任务模式里播放条仍在，但翻句只剩任务栏那颗', async ({ page }) => {
+  /* 底栏口径 2026-09-21 定稿（他原话：「播放条的所有功能都放在通栏任务条上」）：
+     播放条整条隐藏，它那一排控件搬进任务条的第二行；②③ 做题态第二行也去掉。
+     所以断言一律以 #taskBar 为家 —— 别再拿 #audiobar 的可见性当依据。 */
+  test('任务模式底栏只有一条：① 两行全在通栏上、②③ 收成一行，翻句/退出/回看各只一颗', async ({ page }) => {
     test.setTimeout(currentTimeout());   // hook 给了 12 分钟；这条本地 5 秒内该完
-    await expect(page.locator('#audiobar')).toBeVisible();
+    // ① 通读：播放条整条不显示，它的功能全部住在任务条里
+    await expect(page.locator('#audiobar')).not.toBeVisible();
     await expect(page.locator('#btnPlay')).toBeVisible();
-    await expect(page.locator('.ab-left > .btn.ab-step:visible')).toHaveCount(1);  // 只剩上一句
-    await expect(page.locator('.ab-left > .btn.ab-step-fwd')).toHaveCount(1);       // 让出去的那颗还在 DOM 里
+    expect(await page.evaluate(() => document.getElementById('btnPlay')!.closest('#taskBar') !== null)).toBe(true);
+    await expect(page.locator('.ab-left > .btn.ab-step:visible')).toHaveCount(0);
+    await expect(page.locator('.ab-left > .btn.ab-step-fwd')).toHaveCount(1);       // 让出去的那颗还在 DOM 里，只是不显示
     await expect(page.locator('button:visible', { hasText: '下一句' })).toHaveCount(1);
+    await expect(page.locator('button:visible', { hasText: '上一句' })).toHaveCount(1);
+    await expect(page.locator('#tbPrev')).toBeVisible();
     await expect(page.locator('#tbNext')).toBeVisible();
+    await expect(page.locator('#tbExit')).toBeVisible();
+    // 倍速旧版被 `body.task-mode .rate-wrap{display:none}` 整条藏掉、全页无第二个入口，这条守它别再丢
+    await expect(page.locator('#rateCycle')).toBeVisible();
+    await expect(page.locator('#btnLoop')).toBeVisible();
+    await expect(page.locator('#btnAB')).toBeVisible();
 
-    // ②③ 做题态：只留播放这一窄条，且做题卡要给播放条 + 任务栏两条都让位
+    // ②③ 做题态：第二行整行消失（原型 :283-284、:382 底部只有任务条一条）
     await page.evaluate(() => { TASK.setPass(2); TASK.next(); });
     await expect.poll(() => page.evaluate(() => document.body.classList.contains('quiz-mode'))).toBe(true);
-    await expect(page.locator('#audiobar')).toBeVisible();
-    await expect(page.locator('#btnPlay')).toBeVisible();
+    await expect(page.locator('#tbPlay')).not.toBeVisible();
+    await expect(page.locator('#btnPlay')).not.toBeVisible();
     await expect(page.locator('.loop-wrap:visible')).toHaveCount(0);
+    // 「回看句子」全页只有一颗，且归任务条（旧口径做题卡里还有一颗同名的，实测 dupBtn:["回看句子"]）
+    await expect(page.locator('#taskCard button:visible', { hasText: '回看句子' })).toHaveCount(0);
+    await expect(page.locator('button:visible', { hasText: '回看句子' })).toHaveCount(1);
+    await expect(page.locator('#tbAgain')).toHaveText(/回看句子/);
+    // 卡头不再复述 n/N：今日进度唯一的家是任务栏（PRD §10.1 数字唯一性表）
+    const nums = await page.evaluate(() => {
+      const rx = /\d+\s*\/\s*\d+/g;
+      const grab = (id: string) => ((document.getElementById(id) as HTMLElement) || { textContent: '' }).textContent || '';
+      const card = document.getElementById('taskCard')!.querySelector('.qz-head');
+      return {
+        onBar: (grab('tbTitle').match(rx) || []).length,
+        onCard: ((card as HTMLElement) && card.textContent ? card.textContent.match(rx) || [] : []).length,
+        tag: ((document.getElementById('taskCard')!.querySelector('.qz-tag') as HTMLElement) || { textContent: '' }).textContent!.trim(),
+      };
+    });
+    expect(nums.onBar).toBe(1);
+    expect(nums.onCard).toBe(0);
+    expect(nums.tag).not.toMatch(/\d+\s*\/\s*\d+/);
+    // 做题卡只给任务条一条让位：--task-card-b ≈ 任务条高（旧口径要多让一条播放条 = 88px）
     const fits = await page.evaluate(() => {
       const px = (v: string) => parseFloat(v) || 0;
       const gap = px(getComputedStyle(document.documentElement).getPropertyValue('--task-card-b'));
       const bar = document.getElementById('taskBar')!.getBoundingClientRect().height;
-      const ab = document.getElementById('audiobar')!.getBoundingClientRect().height;
-      return { gap, need: bar + ab + 8 };
+      return { gap, bar, top: document.getElementById('taskCard')!.getBoundingClientRect().top, inner: innerHeight };
     });
-    expect(fits.gap).toBeGreaterThanOrEqual(fits.need - 4);
+    expect(fits.gap).toBeGreaterThanOrEqual(fits.bar);
+    expect(fits.gap).toBeLessThanOrEqual(fits.bar + 40);
+    expect(fits.bar + 88).toBeLessThan(fits.inner - fits.top);   // 底部合计里那条播放条确实是没了
   });
 
   test('刷新时任务没做完：底部那行变成续读条，点「接着做」进任务模式', async ({ page, baseURL }) => {

@@ -62,6 +62,29 @@
   不要只读 `getComputedStyle().display !== 'none'`：面板收起时它 display 可以不是 none 但盒子为 0，
   用例会一边「断言通过」一边点不动。
 
+## Task-mode footer gotchas (discovered 2026-09-21, 底栏照原型重排后稳定)
+口径（真值：`docs/prototype/2026-09-20-任务模式原型.html:248-253`/`:283-284`/`:382`，排查记录 `work/任务模式底栏排查_2026-09-21.md`）：
+- `body.task-mode` 下 `.audiobar` **不是整条留着、也不是整条藏**，而是降级成一条极窄播放行
+  （390×844 实测高 41px、1280×762 实测 40px），只剩 播放·暂停 / 单句循环次数 / A-B / 倍速 / 书签（宽屏再加「读到第 N 句」）。
+  **倍速在任务模式里必须点得到** —— 旧版 `body.task-mode .audiobar .rate-wrap{display:none}` 把它藏死、全页无第二个入口，
+  那是功能丢失不是美观问题，别再用例把它锁成"合理现状"。
+- **② ③ 做题态整条播放行消失**（`body.task-mode.quiz-mode .audiobar{display:none}`），底部只剩通栏任务条一条。
+- 翻句与退出都在通栏上：`#tbPrev`（上一句）/ `#tbNext`（下一句）/ `#tbExit`（退出）/ `#tbAgain`（① 再来、②③ 回看句子）。
+  这四颗的显隐**只由 CSS 选择器决定**（`body.task-mode` + `.task-bar[data-state="read"]`），不写进 JS ——
+  写进 JS 的话渲染顺序一变就漏关。续读条是 `data-state="resume"` 且**没有** `task-mode`，`#tbExit`/`#tbPrev` 两颗都不许露脸。
+- **任务模式里播放条的四套动画必须整体失效**：收起/展开（`.ab-collapse`/`.ab-expand`）、滚动收成 mini
+  （`body.scrolled .audiobar`）、闲置淡出（`fade-nav`）。这四套都是给「独立的、浮在内容上的播放条」写的，
+  任务模式里它已经贴在任务条上方变成一条通栏，再收起/展开就会在任务条上跳出一条新栏，形高也不再是那条 41px。
+  其中**收起键必须 `display:none !important` 才压得住**：base 里 `.audiobar.expanded .ab-collapse` 这类选择器
+  与 `body.task-mode .audiobar .ab-collapse` 特异度相同、**规则顺序在后**，普通写法被它翻盘
+  （用例里给 `.audiobar` 强挂 `.expanded` 就能复现）。
+- `--task-card-b` 由 `syncCardBottom()` 用 `offsetHeight` 算：播放条 `display:none` 时 `offsetHeight` 是 0，
+  所以做题卡会自动只给任务条一条让位（390 实测 ② 底部 300px/35.5%，比旧口径省 84px）。
+  断言这个用 `--task-card-b` 与 `#taskBar` 的高度，别用 `getBoundingClientRect().bottom` 反推。
+- 判这几颗的可见性一律用 Playwright 的 `toBeVisible()`/`:visible`（两条栏都是 `position:fixed`，
+  `offsetParent` 恒 null）；但 `toBeVisible()` 不看 `opacity`，`fade-nav` 那类只改透明度的状态要靠
+  `getComputedStyle` 自己乘透明度。
+
 ## Markers
 - Phase: `@regression`; polarity: `@positive` unless stated; area: `@shadow`.
 

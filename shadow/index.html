@@ -1152,12 +1152,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-week-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
   .tp-week-fill { width: 100%; background: linear-gradient(180deg, var(--task-new), #0fae7e); border-radius: 3px 3px 0 0; min-height: 2px; transition: height .3s; }
   .tp-week-label { font-size: 9px; color: var(--muted); margin-top: 3px; }
-  /* 任务模式底部操作栏 */
+  /* 任务模式底部操作栏：一条通栏，里面最多两行（第一行进度+翻句，第二行播放控件，仅 ① 态出现） */
   .task-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; padding: 7px 16px calc(7px + env(safe-area-inset-bottom, 0px));
-    display: none; align-items: center; gap: 10px;
+    display: none; flex-direction: column; align-items: stretch; gap: 6px;
     background: var(--glass-strong, rgba(255,255,255,.97)); -webkit-backdrop-filter: var(--blur, blur(22px)) saturate(170%); backdrop-filter: var(--blur, blur(22px)) saturate(170%);
     border-top: 1px solid var(--glass-line, rgba(255,255,255,.65)); box-shadow: 0 -4px 20px rgba(0,0,0,.08); }
   .task-bar.show { display: flex; }
+  .tb-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
   body.dark .task-bar { background: rgba(30,28,25,.97); border-top-color: #33302b; }
   .task-bar .tb-info { flex: 1; min-width: 0; }
   .task-bar .tb-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1168,17 +1169,45 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .task-bar .tb-btn.next { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: #fff; box-shadow: 0 2px 8px rgba(16,180,135,.3); }
   .task-bar .tb-btn:active { filter: brightness(.92); }
   body.dark .task-bar .tb-btn.again { background: #252220; color: #e2ddd5; border-color: #33302b; }
-  /* 任务模式时 audiobar 上移避让 */
-  body.task-mode .audiobar, body.resume-offer .audiobar { bottom: calc(var(--task-bar-h, 62px) + 8px + env(safe-area-inset-bottom, 0px)); }
-  body.task-mode .back-to-play { bottom: calc(var(--task-bar-h, 62px) + 98px + env(safe-area-inset-bottom, 0px)); }
-  /* 全页只留一个「下一句」：任务模式里往后翻归任务栏那颗，播放条把重复的那颗让出来。
-     他拍板的是「下一句只留一个 + 播放条不藏」，不是砍掉回看 —— 上一句必须留着，
-     不然①通读里"刚才那句没听清，退回去再听一遍"这条动作就没了（真机走查用例守着它）。 */
-  body.task-mode .audiobar .ab-left > .btn.ab-step-fwd,
-  body.task-mode .audiobar .rate-wrap { display: none; }
-  /* ②③ 做题态：播放条只留「播放/暂停 + 回看」这一窄条，选项 / 这题有问题 / 回看句子 归做题卡。 */
-  body.task-mode.quiz-mode .audiobar .loop-wrap,
-  body.task-mode.quiz-mode .audiobar .ab-wrap { display: none; }
+  /* 「上一句」和「退出」只在任务模式的该显示它们的态里出现：
+     ① 通读要能往回听（原型 C2 把两颗都画在同一条通栏上），②③ 与完成态没有"上一句"这个动作，
+     续读条（data-state=resume，此时没有 task-mode）两颗都不该露脸 —— 全交给选择器，不写进 JS，
+     免得渲染顺序一变就漏关。 */
+  #tbPrev, #tbExit { display: none; }
+  body.task-mode #tbExit { display: inline-flex; }
+  body.task-mode .task-bar[data-state="read"] #tbPrev { display: inline-flex; }
+  .task-bar .tb-btn.exit { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 6px 9px; }
+  /* 手机上四颗按钮（退出/上一句/再来/下一句）要和标题挤在同一行：
+     「上一句」退成图标，把宽度还给「① 通读 3/6 · 今天 15 分钟」这一行。 */
+  @media (max-width: 560px) {
+    .task-bar #tbPrev .lbl { display: none; }
+    .task-bar .tb-btn { padding: 6px 11px; }
+    /* 窄屏放不下「读到第 N 句」，而任务条已经在说 0/24 —— 与其截成"读到…"不如不说。
+       选择器多带一层 .task-bar：下面 .tb-play .ab-right 那条会按顺序盖过来，光靠 .tb-play 压不住。 */
+    .task-bar .tb-play .ab-right { display: none; }
+  }
+  /* 续读条（非任务模式）仍要让开底部那一行 */
+  body.resume-offer .audiobar { bottom: calc(var(--task-bar-h, 62px) + 8px + env(safe-area-inset-bottom, 0px)); }
+  body.task-mode .back-to-play { bottom: calc(var(--task-bar-h, 62px) + 12px + env(safe-area-inset-bottom, 0px)); }
+  /* ---- 任务模式：底部只有**一条通栏任务条**（2026-09-21 他拍的：播放条所有功能都放这条上） ----
+     以前播放条整条压在任务栏上面，底部三层吃掉 18.6% 屏高（390×844 实测 157px），
+     而且「上一句」在那条上、「下一句」在任务栏上，翻句这对最高频动作被拆到两处。
+     做法：播放条整条隐藏，enterTaskMode 把它的两排控件搬进任务条的第二行（#tbPlay），退出时搬回。
+     搬 DOM 而不是复制一份 —— id / 事件 / paint() / 下拉菜单只有一份真值；
+     这些菜单的样式全部只认自己的类名（.loop-menu / .rate-menu / .ab-menu / .menu-bridge），
+     不挂在 .audiobar 下面，所以搬走照样能弹（已核对）。 */
+  body.task-mode .audiobar { display: none !important; }
+  .tb-play { display: none; align-items: center; gap: 8px; min-width: 0; }
+  body.task-mode .task-bar[data-state="read"] .tb-play { display: flex; }
+  .tb-play .ab-left { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; }
+  .tb-play .ab-left > .btn { opacity: 1; max-width: none; animation: none; }
+  .tb-play .ab-right { flex: 0 1 auto; min-width: 0; display: block; text-align: right; }
+  .tb-play .ab-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11.5px; }
+  /* 进度条：任务模式里不给位置，同一能力由「快速跳转」那颗承担（弹窗输章节+句号）；
+     翻句两颗归第一行，所以这一排里把它们藏掉，避免同屏两颗同名按钮。 */
+  .tb-play .ab-seek,
+  .tb-play .ab-step,
+  .tb-play .btn.play .lbl { display: none; }
   /* ---- ②③ 做题卡片 + 遍间小结（PRD §6 §7 §10.1） ---- */
   .task-card { position: fixed; left: 50%; transform: translateX(-50%);
     bottom: calc(var(--task-card-b, 132px) + env(safe-area-inset-bottom, 0px));
@@ -1341,7 +1370,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <footer class="audiobar" id="audiobar" role="contentinfo">
       <nav class="ab-left" aria-label="播放控制">
         <button class="btn ab-step" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i> 上一句</button>
-        <button class="btn play" id="btnPlay" onclick="togglePlay()" aria-label="播放或暂停"><i class="ri-play-fill" aria-hidden="true"></i> 播放</button>
+        <button class="btn play" id="btnPlay" onclick="togglePlay()" aria-label="播放或暂停"><i class="ri-play-fill" aria-hidden="true"></i><span class="lbl"> 播放</span></button>
         <button class="btn ab-step ab-step-fwd" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line" aria-hidden="true"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
           <div class="menu-bridge" aria-hidden="true"></div>
@@ -1415,11 +1444,18 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <div id="syncHint" class="sync-hint" role="status" aria-live="polite" hidden onclick="TASK.retrySync()"></div>
     <!-- 任务模式底部操作栏 -->
     <div class="task-bar" id="taskBar" data-state="idle">
+      <div class="tb-row">
       <div class="tb-info"><div class="tb-title" id="tbTitle">—</div><div class="tb-sub" id="tbSub"></div></div>
       <div class="tb-btns">
+        <button class="tb-btn exit" id="tbExit" onclick="TASK.exitTaskMode()" title="退出任务模式" aria-label="退出任务模式"><i class="ri-close-line" aria-hidden="true"></i></button>
+        <button class="tb-btn again" id="tbPrev" onclick="step(-1)" aria-label="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i><span class="lbl"> 上一句</span></button>
         <button class="tb-btn again" id="tbAgain" onclick="TASK.again()"><i class="ri-repeat-line" aria-hidden="true"></i> 再来</button>
         <button class="tb-btn next" id="tbNext" onclick="TASK.next()"><i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句</button>
       </div>
+      </div>
+      <!-- ① 通读态：播放条那一整排控件搬进这条通栏的第二行（enterTaskMode 里 appendChild，退出时搬回播放条）。
+           搬 DOM 而不是复制一份：id / 事件 / paint() 只有一份，播放状态不会两处各说各话。 -->
+      <div class="tb-play" id="tbPlay"></div>
     </div>
     <!-- ②③ 做题卡片 / 遍间小结：一条卡片换内容，不新开弹窗（PRD §10.1） -->
     <div class="task-card" id="taskCard" role="group" aria-label="当前题目" hidden></div>
@@ -3040,7 +3076,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     }
     const bp = _getDom('btnPlay');
-    if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill" aria-hidden="true"></i> 暂停' : '<i class="ri-play-fill" aria-hidden="true"></i> 播放';
+    if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill" aria-hidden="true"></i><span class="lbl"> 暂停</span>' : '<i class="ri-play-fill" aria-hidden="true"></i><span class="lbl"> 播放</span>';
     // 更新章节标题
     // 任务模式下这一行归任务栏说（「读到第 N 句 · 章节名」），播放路径别再把它盖回去
     const titleEl = (typeof TASK !== 'undefined' && TASK.active) ? null : _getDom('abTitle');
@@ -4683,7 +4719,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const m = maskSplit(text, isEx ? q.w : displayOf(item.s, q.w));
         const zhLine = isEx ? String(card.exZh || '') : (SENT_ZH[item.s] || '');
         const total = quizList().length;
-        const tag = (pass === 2 ? '② 挖空填词 ' : '③ 看英文选中文 ') + (quizCursor + 1) + '/' + total;
+        const tag = pass === 2 ? '② 挖空填词' : '③ 看英文选中文';   // 题号只由任务栏说一次（PRD §10.1 数字唯一性）
         let body;
         if (q.kind === 'recall') {
           // 例句里没写出词头本体的那 18 张卡：宁可不给英文，也不给一个泄答案的句子
@@ -4702,7 +4738,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             }).join('')}</div>${reveal ? revealNote(q) : ''}`;
         }
         el.innerHTML = `<div class="qz-head"><span class="qz-tag">${tag}</span><span class="sp"></span>
-            <button class="qz-mini" onclick="TASK.reviewSentence()">回看句子</button>
             <button class="qz-mini" onclick="TASK.flagQuiz()">这题有问题</button></div>${body}`;
         el.hidden = false;
         syncCardBottom();
@@ -4937,6 +4972,25 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
 
       // ---- 任务模式 ----
+      /* 他 2026-09-21 拍的：任务模式底部只留一条通栏任务条，播放条的全部功能都放这条上。
+         做法是把播放条那两排控件搬进任务条的第二行，退出时搬回 —— 搬 DOM 而不是复制一份，
+         这样 id、事件、paint() 只有一份真值，播放状态不会在两个地方各说各话。 */
+      function dockAudiobar(on) {
+        const ab = document.getElementById('audiobar'), slot = document.getElementById('tbPlay');
+        if (!ab || !slot) return;
+        if (on) {
+          ['.ab-left', '.ab-right'].forEach(sel => {
+            const el = ab.querySelector(':scope > ' + sel);
+            if (el) slot.appendChild(el);
+          });
+        } else {
+          const anchor = ab.querySelector('.ab-expand') || null;
+          ['.ab-left', '.ab-right'].forEach(sel => {
+            const el = slot.querySelector(':scope > ' + sel);
+            if (el) ab.insertBefore(el, anchor);
+          });
+        }
+      }
       function enterTaskMode() {
         if (!plan) return;
         buildQueue(); syncQueueFromPlan();
@@ -4949,6 +5003,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         sessionStart = Date.now();
         sessionReps = 0;
         document.body.classList.add('task-mode');
+        dockAudiobar(true);
         document.getElementById('taskBar').classList.add('show');
         syncTaskBarHeight();
         closePanel();
@@ -4958,6 +5013,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function exitTaskMode() {
         taskMode = false;
         document.body.classList.remove('task-mode', 'quiz-mode');
+        dockAudiobar(false);
         document.getElementById('taskBar').classList.remove('show');
         sents.forEach(el => el.classList.remove('task-current'));
         hideCard(); updateMarkers();
@@ -5508,6 +5564,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         todayQueue = [];
         taskMode = false; taskPos = 0; sessionStart = 0; sessionReps = 0;
         document.body.classList.remove('task-mode');
+        dockAudiobar(false);
         const bar = document.getElementById('taskBar');
         if (bar) bar.classList.remove('show');
         sents.forEach(el => el.classList.remove('task-new', 'task-review', 'task-done', 'task-current'));
