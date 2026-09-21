@@ -1,0 +1,113 @@
+{
+ "batch": 4,
+ "worklist_idx": [
+  94,
+  95,
+  96,
+  97,
+  98
+ ],
+ "groups": [
+  {
+   "words": [
+    "announce",
+    "declare"
+   ],
+   "senses": [
+    "宣布"
+   ],
+   "paras": [
+    [
+     3,
+     38
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1111,
+    1116
+   ]
+  },
+  {
+   "words": [
+    "affirm",
+    "declare"
+   ],
+   "senses": [
+    "断言"
+   ],
+   "paras": [
+    [
+     3,
+     38
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1111,
+    1112
+   ]
+  },
+  {
+   "words": [
+    "aid",
+    "assist"
+   ],
+   "senses": [
+    "协助",
+    "帮助",
+    "援助"
+   ],
+   "paras": [
+    [
+     3,
+     39
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1118,
+    1119
+   ]
+  },
+  {
+   "words": [
+    "donate",
+    "endow"
+   ],
+   "senses": [
+    "捐赠"
+   ],
+   "paras": [
+    [
+     3,
+     44
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1145,
+    1146
+   ]
+  },
+  {
+   "words": [
+    "exchange",
+    "swap"
+   ],
+   "senses": [
+    "交换"
+   ],
+   "paras": [
+    [
+     3,
+     45
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1153
+   ]
+  }
+ ]
+}

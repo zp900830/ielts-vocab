@@ -1,0 +1,110 @@
+{
+ "batch": 3,
+ "worklist_idx": [
+  72,
+  73,
+  74,
+  75,
+  76
+ ],
+ "groups": [
+  {
+   "words": [
+    "cottage",
+    "hut"
+   ],
+   "senses": [
+    "小屋"
+   ],
+   "paras": [
+    [
+     2,
+     20
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    769,
+    771
+   ]
+  },
+  {
+   "words": [
+    "living room",
+    "parlour"
+   ],
+   "senses": [
+    "起居室"
+   ],
+   "paras": [
+    [
+     2,
+     22
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    783,
+    785
+   ]
+  },
+  {
+   "words": [
+    "complex",
+    "mall"
+   ],
+   "senses": [
+    "购物中心"
+   ],
+   "paras": [
+    [
+     2,
+     23
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    789
+   ]
+  },
+  {
+   "words": [
+    "refectory",
+    "restaurant"
+   ],
+   "senses": [
+    "餐厅"
+   ],
+   "paras": [
+    [
+     2,
+     26
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    801,
+    802
+   ]
+  },
+  {
+   "words": [
+    "corn",
+    "grain"
+   ],
+   "senses": [
+    "谷物"
+   ],
+   "paras": [
+    [
+     2,
+     31
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    831
+   ]
+  }
+ ]
+}

@@ -1,0 +1,782 @@
+[
+ {
+  "file": "slice01.json",
+  "batch": 2,
+  "idx": [
+   5,
+   11,
+   12,
+   13,
+   14
+  ],
+  "pairs": [
+   "damp/humid",
+   "natural/nature",
+   "gas/petrol",
+   "cosmos/universe",
+   "spacecraft/spaceship"
+  ]
+ },
+ {
+  "file": "slice02.json",
+  "batch": 2,
+  "idx": [
+   15,
+   16,
+   17,
+   18,
+   19
+  ],
+  "pairs": [
+   "expedition/exploration",
+   "sample/specimen",
+   "despair/desperate",
+   "decay/rot",
+   "grass/meadow"
+  ]
+ },
+ {
+  "file": "slice03.json",
+  "batch": 2,
+  "idx": [
+   20,
+   21,
+   22,
+   23,
+   24
+  ],
+  "pairs": [
+   "breed/feed",
+   "descendant/offspring",
+   "excrete/secrete",
+   "trace/track",
+   "motivate/stimulate"
+  ]
+ },
+ {
+  "file": "slice04.json",
+  "batch": 2,
+  "idx": [
+   25,
+   26,
+   27,
+   28,
+   29
+  ],
+  "pairs": [
+   "eminent/outstanding",
+   "headmaster/principal",
+   "professor/tutor",
+   "canteen/dining hall",
+   "story/tale"
+  ]
+ },
+ {
+  "file": "slice05.json",
+  "batch": 2,
+  "idx": [
+   30,
+   31,
+   32,
+   33,
+   34
+  ],
+  "pairs": [
+   "diary/journal",
+   "minus/subtract",
+   "rate/ratio",
+   "elementary/rudimentary",
+   "dissertation/thesis"
+  ]
+ },
+ {
+  "file": "slice06.json",
+  "batch": 2,
+  "idx": [
+   35,
+   36,
+   37,
+   38,
+   39
+  ],
+  "pairs": [
+   "cite/reference",
+   "cite/quote",
+   "abstract/summary",
+   "detect/perceive",
+   "postulate/presume"
+  ]
+ },
+ {
+  "file": "slice07.json",
+  "batch": 2,
+  "idx": [
+   40,
+   41,
+   42,
+   43,
+   44
+  ],
+  "pairs": [
+   "deduce/infer",
+   "inquire/query",
+   "ethical/moral",
+   "alien/foreigner",
+   "holy/sacred"
+  ]
+ },
+ {
+  "file": "slice08.json",
+  "batch": 2,
+  "idx": [
+   45,
+   46,
+   47,
+   48,
+   49
+  ],
+  "pairs": [
+   "empire/imperial",
+   "prosperity/thrive",
+   "oral/verbal",
+   "narrate/tale",
+   "interpret/paraphrase"
+  ]
+ },
+ {
+  "file": "slice09.json",
+  "batch": 2,
+  "idx": [
+   50,
+   51
+  ],
+  "pairs": [
+   "anticipate/expect",
+   "pastime/recreation"
+  ]
+ },
+ {
+  "file": "slice10.json",
+  "batch": 3,
+  "idx": [
+   52,
+   53,
+   54,
+   55,
+   56
+  ],
+  "pairs": [
+   "feast/festival",
+   "imitate/mimic",
+   "mimic/simulate",
+   "film/movie",
+   "artist/painter"
+  ]
+ },
+ {
+  "file": "slice11.json",
+  "batch": 3,
+  "idx": [
+   57,
+   58,
+   59,
+   60,
+   61
+  ],
+  "pairs": [
+   "opt/select",
+   "depict/describe",
+   "famous/well-known",
+   "competition/tournament",
+   "mat/rug"
+  ]
+ },
+ {
+  "file": "slice12.json",
+  "batch": 3,
+  "idx": [
+   62,
+   63,
+   64,
+   65,
+   66
+  ],
+  "pairs": [
+   "fridge/refrigerator",
+   "gem/jewel",
+   "costume/garment",
+   "elegance/grace",
+   "cosmetics/makeup"
+  ]
+ },
+ {
+  "file": "slice13.json",
+  "batch": 3,
+  "idx": [
+   67,
+   68,
+   69,
+   70,
+   71
+  ],
+  "pairs": [
+   "purse/wallet",
+   "belt/strap",
+   "construct/erection",
+   "dwelling/reside",
+   "hut/shed"
+  ]
+ },
+ {
+  "file": "slice14.json",
+  "batch": 3,
+  "idx": [
+   72,
+   73,
+   74,
+   75,
+   76
+  ],
+  "pairs": [
+   "cottage/hut",
+   "living room/parlour",
+   "complex/mall",
+   "refectory/restaurant",
+   "corn/grain"
+  ]
+ },
+ {
+  "file": "slice15.json",
+  "batch": 3,
+  "idx": [
+   77,
+   78,
+   79,
+   80,
+   81
+  ],
+  "pairs": [
+   "tasty/yummy",
+   "exterior/outward",
+   "entrance/entry",
+   "itinerary/route",
+   "lorry/truck"
+  ]
+ },
+ {
+  "file": "slice16.json",
+  "batch": 3,
+  "idx": [
+   82,
+   83,
+   84,
+   85,
+   86
+  ],
+  "pairs": [
+   "sailor/seaman",
+   "railroad/railway",
+   "defer/delay",
+   "package/parcel",
+   "speed/velocity"
+  ]
+ },
+ {
+  "file": "slice17.json",
+  "batch": 3,
+  "idx": [
+   87,
+   88,
+   89,
+   90,
+   91
+  ],
+  "pairs": [
+   "importance/significance",
+   "abroad/overseas",
+   "asylum/refuge",
+   "demographic/population",
+   "ethnic/racial"
+  ]
+ },
+ {
+  "file": "slice18.json",
+  "batch": 3,
+  "idx": [
+   92,
+   93
+  ],
+  "pairs": [
+   "perspective/viewpoint",
+   "declare/proclaim"
+  ]
+ },
+ {
+  "file": "slice19.json",
+  "batch": 4,
+  "idx": [
+   94,
+   95,
+   96,
+   97,
+   98
+  ],
+  "pairs": [
+   "announce/declare",
+   "affirm/declare",
+   "aid/assist",
+   "donate/endow",
+   "exchange/swap"
+  ]
+ },
+ {
+  "file": "slice20.json",
+  "batch": 4,
+  "idx": [
+   99,
+   100,
+   101,
+   102,
+   103
+  ],
+  "pairs": [
+   "increase/increment",
+   "decrease/reduce",
+   "growth/increase",
+   "adequate/sufficient",
+   "redundant/spare"
+  ]
+ },
+ {
+  "file": "slice21.json",
+  "batch": 4,
+  "idx": [
+   104,
+   105,
+   106,
+   107,
+   108
+  ],
+  "pairs": [
+   "cargo/goods",
+   "deal/transaction",
+   "clerk/personnel",
+   "manage/regulate",
+   "chance/opportunity"
+  ]
+ },
+ {
+  "file": "slice22.json",
+  "batch": 4,
+  "idx": [
+   109,
+   110,
+   111,
+   112,
+   113
+  ],
+  "pairs": [
+   "collaborate/cooperate",
+   "norm/standard",
+   "mandatory/obligation",
+   "prosecute/sue",
+   "murmur/whisper"
+  ]
+ },
+ {
+  "file": "slice23.json",
+  "batch": 4,
+  "idx": [
+   114,
+   115,
+   116,
+   117,
+   118
+  ],
+  "pairs": [
+   "jail/prison",
+   "confine/prison",
+   "oversee/supervise",
+   "crime/sin",
+   "blast/explosion"
+  ]
+ },
+ {
+  "file": "slice24.json",
+  "batch": 4,
+  "idx": [
+   119,
+   120,
+   121,
+   122,
+   123
+  ],
+  "pairs": [
+   "hit/strike",
+   "dilemma/plight",
+   "invade/violate",
+   "assault/attack",
+   "forbid/prohibit"
+  ]
+ },
+ {
+  "file": "slice25.json",
+  "batch": 4,
+  "idx": [
+   124,
+   125,
+   126,
+   127,
+   128
+  ],
+  "pairs": [
+   "evidence/proof",
+   "horrible/terror",
+   "horrible/terrible",
+   "compete/contest",
+   "turbulent/turmoil"
+  ]
+ },
+ {
+  "file": "slice26.json",
+  "batch": 4,
+  "idx": [
+   129,
+   130,
+   131,
+   132,
+   133
+  ],
+  "pairs": [
+   "enemy/foe",
+   "strategy/tactic",
+   "happen/occur",
+   "grave/tomb",
+   "disturb/interrupt"
+  ]
+ },
+ {
+  "file": "slice27.json",
+  "batch": 4,
+  "idx": [
+   134,
+   135
+  ],
+  "pairs": [
+   "triumph/victory",
+   "domain/realm"
+  ]
+ },
+ {
+  "file": "slice28.json",
+  "batch": 5,
+  "idx": [
+   136,
+   137,
+   138,
+   139,
+   140
+  ],
+  "pairs": [
+   "device/equipment",
+   "instrument/tool",
+   "assess/gauge",
+   "compute/estimate",
+   "estimate/evaluate"
+  ]
+ },
+ {
+  "file": "slice29.json",
+  "batch": 5,
+  "idx": [
+   141,
+   142,
+   143,
+   144,
+   145
+  ],
+  "pairs": [
+   "fault/flaw",
+   "juvenile/teenage",
+   "kin/relative",
+   "hostess/mistress",
+   "client/customer"
+  ]
+ },
+ {
+  "file": "slice30.json",
+  "batch": 5,
+  "idx": [
+   146,
+   147,
+   148,
+   149,
+   150
+  ],
+  "pairs": [
+   "individual/single",
+   "committee/council",
+   "glance/glimpse",
+   "oath/vow",
+   "curse/swear"
+  ]
+ },
+ {
+  "file": "slice31.json",
+  "batch": 5,
+  "idx": [
+   151,
+   152,
+   153,
+   154,
+   155
+  ],
+  "pairs": [
+   "applaud/clap",
+   "manipulate/steer",
+   "bet/gamble",
+   "allure/tempt",
+   "assign/distribute"
+  ]
+ },
+ {
+  "file": "slice32.json",
+  "batch": 5,
+  "idx": [
+   156,
+   157,
+   158,
+   159,
+   160
+  ],
+  "pairs": [
+   "reverse/undo",
+   "recover/restore",
+   "amplify/augment",
+   "ooze/seep",
+   "excuse/forgive"
+  ]
+ },
+ {
+  "file": "slice33.json",
+  "batch": 5,
+  "idx": [
+   161,
+   162,
+   163,
+   164,
+   165
+  ],
+  "pairs": [
+   "differentiate/distinguish",
+   "incline/lean",
+   "chin/jaw",
+   "disease/illness",
+   "invalid/patient"
+  ]
+ },
+ {
+  "file": "slice34.json",
+  "batch": 5,
+  "idx": [
+   166,
+   167,
+   168,
+   169,
+   170
+  ],
+  "pairs": [
+   "injure/injury",
+   "death/demise",
+   "curative/therapy",
+   "hygiene/sanitary",
+   "cure/heal"
+  ]
+ },
+ {
+  "file": "slice35.json",
+  "batch": 5,
+  "idx": [
+   171,
+   172,
+   173,
+   174,
+   175
+  ],
+  "pairs": [
+   "alleviate/relieve",
+   "happiness/joy",
+   "delight/rejoice",
+   "joy/rejoice",
+   "favour/fond"
+  ]
+ },
+ {
+  "file": "slice36.json",
+  "batch": 5,
+  "idx": [
+   176,
+   177
+  ],
+  "pairs": [
+   "considerate/thoughtful",
+   "rigorous/strict"
+  ]
+ },
+ {
+  "file": "slice37.json",
+  "batch": 6,
+  "idx": [
+   178,
+   179,
+   180,
+   181,
+   182
+  ],
+  "pairs": [
+   "severe/strict",
+   "resemble/similar",
+   "grief/grieve",
+   "miserable/wretched",
+   "hate/hatred"
+  ]
+ },
+ {
+  "file": "slice38.json",
+  "batch": 6,
+  "idx": [
+   183,
+   184,
+   185,
+   186,
+   187
+  ],
+  "pairs": [
+   "crazy/mad",
+   "bother/harass",
+   "envy/jealous",
+   "reluctant/unwilling",
+   "awkward/clumsy"
+  ]
+ },
+ {
+  "file": "slice39.json",
+  "batch": 6,
+  "idx": [
+   188,
+   189,
+   190,
+   191,
+   192
+  ],
+  "pairs": [
+   "preceding/prior",
+   "intermediate/midst",
+   "meantime/meanwhile",
+   "everlasting/permanent",
+   "conservation/preserve/protect"
+  ]
+ },
+ {
+  "file": "slice40.json",
+  "batch": 6,
+  "idx": [
+   193,
+   194,
+   195,
+   196,
+   197
+  ],
+  "pairs": [
+   "impetus/spur/stimulate",
+   "clever/intelligent/smart",
+   "deem/reckon/suppose",
+   "inquire/research/survey",
+   "amuse/entertain/recreation"
+  ]
+ },
+ {
+  "file": "slice41.json",
+  "batch": 6,
+  "idx": [
+   198,
+   199,
+   200,
+   201,
+   202
+  ],
+  "pairs": [
+   "hop/jump/leap",
+   "adorn/embellish/ornament",
+   "delicious/tasty/yummy",
+   "exterior/external/outside",
+   "inner/interior/internal"
+  ]
+ },
+ {
+  "file": "slice42.json",
+  "batch": 6,
+  "idx": [
+   203,
+   204,
+   205,
+   206,
+   207
+  ],
+  "pairs": [
+   "occupation/profession/vocation",
+   "dismiss/fire/layoff",
+   "agreement/protocol/treaty",
+   "cheat/deceive/fraud",
+   "demand/request/require"
+  ]
+ },
+ {
+  "file": "slice43.json",
+  "batch": 6,
+  "idx": [
+   208,
+   209,
+   210,
+   211,
+   212
+  ],
+  "pairs": [
+   "expose/reveal/uncover",
+   "calculate/compute/count",
+   "convert/transform/turn",
+   "desire/itch/yearn",
+   "cope/dispose/tackle"
+  ]
+ },
+ {
+  "file": "slice44.json",
+  "batch": 6,
+  "idx": [
+   213,
+   214,
+   215,
+   216,
+   217
+  ],
+  "pairs": [
+   "amplify/enlarge/magnify",
+   "fatal/lethal/mortal",
+   "alleviate/ease/relieve",
+   "doubt/sceptical/suspicion",
+   "hypothesis/postulate/presume/suppose"
+  ]
+ },
+ {
+  "file": "slice45.json",
+  "batch": 6,
+  "idx": [
+   218,
+   219
+  ],
+  "pairs": [
+   "decrease/diminish/dwindle/reduce",
+   "contemplate/gaze/peer/stare"
+  ]
+ }
+]

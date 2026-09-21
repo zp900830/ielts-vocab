@@ -1,0 +1,112 @@
+{
+ "batch": 3,
+ "worklist_idx": [
+  87,
+  88,
+  89,
+  90,
+  91
+ ],
+ "groups": [
+  {
+   "words": [
+    "importance",
+    "significance"
+   ],
+   "senses": [
+    "重要性"
+   ],
+   "paras": [
+    [
+     3,
+     27
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1045,
+    1046
+   ]
+  },
+  {
+   "words": [
+    "abroad",
+    "overseas"
+   ],
+   "senses": [
+    "在国外"
+   ],
+   "paras": [
+    [
+     3,
+     29
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1061,
+    1062
+   ]
+  },
+  {
+   "words": [
+    "asylum",
+    "refuge"
+   ],
+   "senses": [
+    "避难所"
+   ],
+   "paras": [
+    [
+     3,
+     32
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1075,
+    1076
+   ]
+  },
+  {
+   "words": [
+    "demographic",
+    "population"
+   ],
+   "senses": [
+    "人口"
+   ],
+   "paras": [
+    [
+     3,
+     32
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1077,
+    1078
+   ]
+  },
+  {
+   "words": [
+    "ethnic",
+    "racial"
+   ],
+   "senses": [
+    "种族"
+   ],
+   "paras": [
+    [
+     3,
+     33
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1081,
+    1082
+   ]
+  }
+ ]
+}

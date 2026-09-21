@@ -1,0 +1,117 @@
+{
+ "batch": 6,
+ "worklist_idx": [
+  203,
+  204,
+  205,
+  206,
+  207
+ ],
+ "groups": [
+  {
+   "words": [
+    "occupation",
+    "profession",
+    "vocation"
+   ],
+   "senses": [
+    "职业"
+   ],
+   "paras": [
+    [
+     3,
+     53
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    1200,
+    1201
+   ]
+  },
+  {
+   "words": [
+    "dismiss",
+    "fire",
+    "layoff"
+   ],
+   "senses": [
+    "解雇"
+   ],
+   "paras": [
+    [
+     3,
+     54
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1206,
+    1207
+   ]
+  },
+  {
+   "words": [
+    "agreement",
+    "protocol",
+    "treaty"
+   ],
+   "senses": [
+    "协议"
+   ],
+   "paras": [
+    [
+     3,
+     56
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1218,
+    1219
+   ]
+  },
+  {
+   "words": [
+    "cheat",
+    "deceive",
+    "fraud"
+   ],
+   "senses": [
+    "欺骗"
+   ],
+   "paras": [
+    [
+     3,
+     62
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1259,
+    1260
+   ]
+  },
+  {
+   "words": [
+    "demand",
+    "request",
+    "require"
+   ],
+   "senses": [
+    "要求"
+   ],
+   "paras": [
+    [
+     3,
+     64
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1274,
+    1275
+   ]
+  }
+ ]
+}

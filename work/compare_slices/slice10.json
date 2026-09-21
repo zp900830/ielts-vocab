@@ -1,0 +1,109 @@
+{
+ "batch": 3,
+ "worklist_idx": [
+  52,
+  53,
+  54,
+  55,
+  56
+ ],
+ "groups": [
+  {
+   "words": [
+    "feast",
+    "festival"
+   ],
+   "senses": [
+    "节日"
+   ],
+   "paras": [
+    [
+     1,
+     39
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    579
+   ]
+  },
+  {
+   "words": [
+    "imitate",
+    "mimic"
+   ],
+   "senses": [
+    "模仿"
+   ],
+   "paras": [
+    [
+     1,
+     40
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    581
+   ]
+  },
+  {
+   "words": [
+    "mimic",
+    "simulate"
+   ],
+   "senses": [
+    "模拟"
+   ],
+   "paras": [
+    [
+     1,
+     40
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    581,
+    582
+   ]
+  },
+  {
+   "words": [
+    "film",
+    "movie"
+   ],
+   "senses": [
+    "电影"
+   ],
+   "paras": [
+    [
+     1,
+     41
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    588
+   ]
+  },
+  {
+   "words": [
+    "artist",
+    "painter"
+   ],
+   "senses": [
+    "画家"
+   ],
+   "paras": [
+    [
+     1,
+     41
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    589,
+    590
+   ]
+  }
+ ]
+}

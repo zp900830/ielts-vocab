@@ -1,0 +1,110 @@
+{
+ "batch": 4,
+ "worklist_idx": [
+  129,
+  130,
+  131,
+  132,
+  133
+ ],
+ "groups": [
+  {
+   "words": [
+    "enemy",
+    "foe"
+   ],
+   "senses": [
+    "敌人"
+   ],
+   "paras": [
+    [
+     4,
+     9
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    1332,
+    1333
+   ]
+  },
+  {
+   "words": [
+    "strategy",
+    "tactic"
+   ],
+   "senses": [
+    "策略"
+   ],
+   "paras": [
+    [
+     4,
+     9
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    1334
+   ]
+  },
+  {
+   "words": [
+    "happen",
+    "occur"
+   ],
+   "senses": [
+    "发生"
+   ],
+   "paras": [
+    [
+     4,
+     10
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1343
+   ]
+  },
+  {
+   "words": [
+    "grave",
+    "tomb"
+   ],
+   "senses": [
+    "坟墓"
+   ],
+   "paras": [
+    [
+     4,
+     12
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1350,
+    1351
+   ]
+  },
+  {
+   "words": [
+    "disturb",
+    "interrupt"
+   ],
+   "senses": [
+    "打扰"
+   ],
+   "paras": [
+    [
+     4,
+     14
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1363,
+    1364
+   ]
+  }
+ ]
+}

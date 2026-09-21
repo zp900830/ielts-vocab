@@ -1,0 +1,111 @@
+{
+ "batch": 2,
+ "worklist_idx": [
+  40,
+  41,
+  42,
+  43,
+  44
+ ],
+ "groups": [
+  {
+   "words": [
+    "deduce",
+    "infer"
+   ],
+   "senses": [
+    "推断"
+   ],
+   "paras": [
+    [
+     1,
+     23
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    482,
+    483
+   ]
+  },
+  {
+   "words": [
+    "inquire",
+    "query"
+   ],
+   "senses": [
+    "询问"
+   ],
+   "paras": [
+    [
+     1,
+     25
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    493,
+    494
+   ]
+  },
+  {
+   "words": [
+    "ethical",
+    "moral"
+   ],
+   "senses": [
+    "道德"
+   ],
+   "paras": [
+    [
+     1,
+     27
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    507
+   ]
+  },
+  {
+   "words": [
+    "alien",
+    "foreigner"
+   ],
+   "senses": [
+    "外国人"
+   ],
+   "paras": [
+    [
+     1,
+     28
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    510,
+    511
+   ]
+  },
+  {
+   "words": [
+    "holy",
+    "sacred"
+   ],
+   "senses": [
+    "神圣"
+   ],
+   "paras": [
+    [
+     1,
+     29
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    518,
+    519
+   ]
+  }
+ ]
+}

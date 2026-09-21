@@ -1,0 +1,110 @@
+{
+ "batch": 2,
+ "worklist_idx": [
+  35,
+  36,
+  37,
+  38,
+  39
+ ],
+ "groups": [
+  {
+   "words": [
+    "cite",
+    "reference"
+   ],
+   "senses": [
+    "提及"
+   ],
+   "paras": [
+    [
+     1,
+     21
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    468
+   ]
+  },
+  {
+   "words": [
+    "cite",
+    "quote"
+   ],
+   "senses": [
+    "引用"
+   ],
+   "paras": [
+    [
+     1,
+     21
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    468,
+    469
+   ]
+  },
+  {
+   "words": [
+    "abstract",
+    "summary"
+   ],
+   "senses": [
+    "摘要"
+   ],
+   "paras": [
+    [
+     1,
+     21
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    470,
+    471
+   ]
+  },
+  {
+   "words": [
+    "detect",
+    "perceive"
+   ],
+   "senses": [
+    "察觉"
+   ],
+   "paras": [
+    [
+     1,
+     22
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    476
+   ]
+  },
+  {
+   "words": [
+    "postulate",
+    "presume"
+   ],
+   "senses": [
+    "假定"
+   ],
+   "paras": [
+    [
+     1,
+     22
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    473,
+    474
+   ]
+  }
+ ]
+}

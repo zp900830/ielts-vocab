@@ -1,0 +1,44 @@
+扫描 11 份草稿 / 42 组
+按当前机检口径（汉字+全角标点=1）超限的组数：7
+
+  2_01.md · 组 5 · spacecraft / spaceship —— 宇宙飞船 · sum>30 · 31.0 > 30
+  2_02.md · 组 2 · sample / specimen —— 样品 · line>40 · 40.5 > 40
+  2_02.md · 组 3 · despair / desperate —— 绝望 · line>40 · 42.5 > 40
+  2_02.md · 组 5 · grass / meadow —— 草地 · line>40 · 40.5 > 40
+  2_07.md · 组 40 · deduce / infer —— 共享义项：推断 · line>40 · 40.5 > 40
+  2_07.md · 组 42 · ethical / moral —— 共享义项：道德 · line>40 · 41.5 > 40
+  2_07.md · 组 43 · alien / foreigner —— 标称共享义项：外国人 · line>40 · 42.0 > 40
+
+--- 明细（超限行原文）---
+
+[2_02.md 组 2 · sample / specimen —— 样品] 标称 38.0 / 现口径 40.5
+  sample = 舀一份去化验（sample of soil），specimen = 贴标签的那件（leaf specimen）
+
+[2_02.md 组 3 · despair / desperate —— 绝望] 标称 40.0 / 现口径 42.5
+  despair = 心里那一下（felt brief despair），desperate = 手上那几步（desperate steps）
+
+[2_02.md 组 5 · grass / meadow —— 草地] 标称 38.0 / 现口径 40.5
+  grass = 嚼的割的那层（chewed long grass），meadow = 能散步的那一片（wide meadow）
+
+[2_07.md 组 40 · deduce / infer —— 共享义项：推断] 标称 38.0 / 现口径 40.5
+  deduce = 从提示推出答案（deduce answers），infer = 从哈欠看出累（from her yawns）
+
+[2_07.md 组 42 · ethical / moral —— 共享义项：道德] 标称 39.0 / 现口径 41.5
+  ethical = 定规矩的那条线（ethical principles），moral = 心里那点良知（moral heart）
+
+[2_07.md 组 43 · alien / foreigner —— 标称共享义项：外国人] 标称 39.5 / 现口径 42.0
+  foreigner = 当面那位外宾（asked for directions），alien = 心里那点见外（felt alien）
+
+--- 标称 vs 现口径 差值最大的 12 组（默认行）---
+  OVER 2_02.md 组 2 · sample / specimen —— 样   标称  38.0 → 现  40.5 (Δ+2.5)
+  OVER 2_02.md 组 3 · despair / desperate ——   标称  40.0 → 现  42.5 (Δ+2.5)
+       2_02.md 组 4 · decay / rot —— 腐烂        标称  33.5 → 现  36.0 (Δ+2.5)
+  OVER 2_02.md 组 5 · grass / meadow —— 草地     标称  38.0 → 现  40.5 (Δ+2.5)
+  OVER 2_07.md 组 40 · deduce / infer —— 共享义   标称  38.0 → 现  40.5 (Δ+2.5)
+       2_07.md 组 41 · inquire / query —— 共享   标称  35.0 → 现  37.5 (Δ+2.5)
+  OVER 2_07.md 组 42 · ethical / moral —— 共享   标称  39.0 → 现  41.5 (Δ+2.5)
+  OVER 2_07.md 组 43 · alien / foreigner ——    标称  39.5 → 现  42.0 (Δ+2.5)
+       2_07.md 组 44 · holy / sacred —— 共享义项   标称  33.0 → 现  35.5 (Δ+2.5)
+       2_02.md 组 1 · expedition / explorati   标称  38.5 → 现  40.0 (Δ+1.5)
+       2026-09-20-辨析批次1A.md 组 1 · dawn / sunrise（共享义项：黎明   标称  38.0 → 现  38.0 (Δ+0.0)
+       2026-09-20-辨析批次1A.md 组 2 · flat / smooth（worklist   标称  38.0 → 现  38.0 (Δ+0.0)

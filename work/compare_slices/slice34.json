@@ -1,0 +1,111 @@
+{
+ "batch": 5,
+ "worklist_idx": [
+  166,
+  167,
+  168,
+  169,
+  170
+ ],
+ "groups": [
+  {
+   "words": [
+    "injure",
+    "injury"
+   ],
+   "senses": [
+    "伤害"
+   ],
+   "paras": [
+    [
+     5,
+     29
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1671
+   ]
+  },
+  {
+   "words": [
+    "death",
+    "demise"
+   ],
+   "senses": [
+    "死亡"
+   ],
+   "paras": [
+    [
+     5,
+     30
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    1676,
+    1677
+   ]
+  },
+  {
+   "words": [
+    "curative",
+    "therapy"
+   ],
+   "senses": [
+    "治疗"
+   ],
+   "paras": [
+    [
+     5,
+     32
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1687,
+    1689
+   ]
+  },
+  {
+   "words": [
+    "hygiene",
+    "sanitary"
+   ],
+   "senses": [
+    "卫生"
+   ],
+   "paras": [
+    [
+     5,
+     32
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1688,
+    1689
+   ]
+  },
+  {
+   "words": [
+    "cure",
+    "heal"
+   ],
+   "senses": [
+    "治愈"
+   ],
+   "paras": [
+    [
+     5,
+     33
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1691,
+    1692
+   ]
+  }
+ ]
+}

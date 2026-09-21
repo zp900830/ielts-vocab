@@ -1,0 +1,110 @@
+{
+ "batch": 2,
+ "worklist_idx": [
+  25,
+  26,
+  27,
+  28,
+  29
+ ],
+ "groups": [
+  {
+   "words": [
+    "eminent",
+    "outstanding"
+   ],
+   "senses": [
+    "杰出"
+   ],
+   "paras": [
+    [
+     1,
+     3
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    359,
+    361
+   ]
+  },
+  {
+   "words": [
+    "headmaster",
+    "principal"
+   ],
+   "senses": [
+    "校长"
+   ],
+   "paras": [
+    [
+     1,
+     4
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    365
+   ]
+  },
+  {
+   "words": [
+    "professor",
+    "tutor"
+   ],
+   "senses": [
+    "导师"
+   ],
+   "paras": [
+    [
+     1,
+     4
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    367,
+    368
+   ]
+  },
+  {
+   "words": [
+    "canteen",
+    "dining hall"
+   ],
+   "senses": [
+    "食堂"
+   ],
+   "paras": [
+    [
+     1,
+     7
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    383
+   ]
+  },
+  {
+   "words": [
+    "story",
+    "tale"
+   ],
+   "senses": [
+    "故事"
+   ],
+   "paras": [
+    [
+     1,
+     8
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    388,
+    389
+   ]
+  }
+ ]
+}

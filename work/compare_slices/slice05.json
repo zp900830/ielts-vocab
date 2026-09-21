@@ -1,0 +1,111 @@
+{
+ "batch": 2,
+ "worklist_idx": [
+  30,
+  31,
+  32,
+  33,
+  34
+ ],
+ "groups": [
+  {
+   "words": [
+    "diary",
+    "journal"
+   ],
+   "senses": [
+    "日记"
+   ],
+   "paras": [
+    [
+     1,
+     8
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    390,
+    391
+   ]
+  },
+  {
+   "words": [
+    "minus",
+    "subtract"
+   ],
+   "senses": [
+    "减去"
+   ],
+   "paras": [
+    [
+     1,
+     13
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    417,
+    418
+   ]
+  },
+  {
+   "words": [
+    "rate",
+    "ratio"
+   ],
+   "senses": [
+    "比率"
+   ],
+   "paras": [
+    [
+     1,
+     15
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    429,
+    430
+   ]
+  },
+  {
+   "words": [
+    "elementary",
+    "rudimentary"
+   ],
+   "senses": [
+    "基本"
+   ],
+   "paras": [
+    [
+     1,
+     18
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    452
+   ]
+  },
+  {
+   "words": [
+    "dissertation",
+    "thesis"
+   ],
+   "senses": [
+    "学位论文"
+   ],
+   "paras": [
+    [
+     1,
+     20
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    464,
+    465
+   ]
+  }
+ ]
+}

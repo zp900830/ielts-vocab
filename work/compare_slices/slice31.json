@@ -1,0 +1,112 @@
+{
+ "batch": 5,
+ "worklist_idx": [
+  151,
+  152,
+  153,
+  154,
+  155
+ ],
+ "groups": [
+  {
+   "words": [
+    "applaud",
+    "clap"
+   ],
+   "senses": [
+    "鼓掌"
+   ],
+   "paras": [
+    [
+     5,
+     3
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1512,
+    1513
+   ]
+  },
+  {
+   "words": [
+    "manipulate",
+    "steer"
+   ],
+   "senses": [
+    "操纵"
+   ],
+   "paras": [
+    [
+     5,
+     6
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1529,
+    1530
+   ]
+  },
+  {
+   "words": [
+    "bet",
+    "gamble"
+   ],
+   "senses": [
+    "打赌"
+   ],
+   "paras": [
+    [
+     5,
+     6
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1531,
+    1532
+   ]
+  },
+  {
+   "words": [
+    "allure",
+    "tempt"
+   ],
+   "senses": [
+    "诱惑"
+   ],
+   "paras": [
+    [
+     5,
+     9
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1550,
+    1551
+   ]
+  },
+  {
+   "words": [
+    "assign",
+    "distribute"
+   ],
+   "senses": [
+    "分配"
+   ],
+   "paras": [
+    [
+     5,
+     10
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    1552,
+    1553
+   ]
+  }
+ ]
+}

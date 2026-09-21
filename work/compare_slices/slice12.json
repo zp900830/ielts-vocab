@@ -1,0 +1,110 @@
+{
+ "batch": 3,
+ "worklist_idx": [
+  62,
+  63,
+  64,
+  65,
+  66
+ ],
+ "groups": [
+  {
+   "words": [
+    "fridge",
+    "refrigerator"
+   ],
+   "senses": [
+    "冰箱"
+   ],
+   "paras": [
+    [
+     2,
+     6
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    690,
+    691
+   ]
+  },
+  {
+   "words": [
+    "gem",
+    "jewel"
+   ],
+   "senses": [
+    "宝石"
+   ],
+   "paras": [
+    [
+     2,
+     11
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    717
+   ]
+  },
+  {
+   "words": [
+    "costume",
+    "garment"
+   ],
+   "senses": [
+    "衣服"
+   ],
+   "paras": [
+    [
+     2,
+     12
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    723,
+    728
+   ]
+  },
+  {
+   "words": [
+    "elegance",
+    "grace"
+   ],
+   "senses": [
+    "优雅"
+   ],
+   "paras": [
+    [
+     2,
+     12
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    725
+   ]
+  },
+  {
+   "words": [
+    "cosmetics",
+    "makeup"
+   ],
+   "senses": [
+    "化妆品"
+   ],
+   "paras": [
+    [
+     2,
+     12
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    726,
+    727
+   ]
+  }
+ ]
+}

@@ -1,0 +1,111 @@
+{
+ "batch": 5,
+ "worklist_idx": [
+  136,
+  137,
+  138,
+  139,
+  140
+ ],
+ "groups": [
+  {
+   "words": [
+    "device",
+    "equipment"
+   ],
+   "senses": [
+    "设备"
+   ],
+   "paras": [
+    [
+     4,
+     19
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1394,
+    1395
+   ]
+  },
+  {
+   "words": [
+    "instrument",
+    "tool"
+   ],
+   "senses": [
+    "工具"
+   ],
+   "paras": [
+    [
+     4,
+     20
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1396
+   ]
+  },
+  {
+   "words": [
+    "assess",
+    "gauge"
+   ],
+   "senses": [
+    "评估"
+   ],
+   "paras": [
+    [
+     4,
+     20
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1397,
+    1400
+   ]
+  },
+  {
+   "words": [
+    "compute",
+    "estimate"
+   ],
+   "senses": [
+    "估算"
+   ],
+   "paras": [
+    [
+     4,
+     20
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1398,
+    1399
+   ]
+  },
+  {
+   "words": [
+    "estimate",
+    "evaluate"
+   ],
+   "senses": [
+    "估价"
+   ],
+   "paras": [
+    [
+     4,
+     20
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1399,
+    1400
+   ]
+  }
+ ]
+}

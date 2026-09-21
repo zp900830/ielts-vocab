@@ -218,20 +218,35 @@
     background: rgba(0,0,0,.04); border-radius: 5px; padding: 0 6px; margin-right: 5px; line-height: 1.6; vertical-align: 1px; }
   body.dark .notebar { background: rgba(255,255,255,.03); border-color: rgba(255,255,255,.06); }
   body.dark .notebar .nb-label { color: var(--muted); }
-  .notebar.compare { display: block; width: 100%; margin: 6px 0; }
-  .notebar.compare .nb-ct { display: block; font-weight: 700; margin-bottom: 4px; color: var(--text); }
-  .notebar.compare .nb-table { width: 100%; border-collapse: collapse; margin: 4px 0; font-size: 12px; line-height: 1.5; }
-  .notebar.compare .nb-table td, .notebar.compare .nb-table th { border: 1px solid var(--border); padding: 4px 6px; text-align: left; vertical-align: top; }
-  .notebar.compare .nb-table th { background: rgba(12,156,116,.08); color: var(--ink2); font-weight: 600; }
-  .notebar.compare .nb-tw { font-weight: 700; white-space: nowrap; color: var(--ink2); }
-  .notebar.compare .nb-tp { font-weight: 400; color: var(--muted); font-size: 11px; }
-  .notebar.compare .nb-tm { color: var(--ink2); white-space: nowrap; }
-  .notebar.compare .nb-tc { color: var(--ink2); }
-  .notebar.compare .nb-scene { color: var(--muted); font-size: 11px; }
-  .notebar.compare .nb-tl { font-weight: 600; background: rgba(12,156,116,.04); }
-  .notebar.compare .nb-summary { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); color: var(--accent); font-weight: 600; font-size: 12px; }
-  body.dark .notebar.compare .nb-table td, body.dark .notebar.compare .nb-table th { border-color: #33302b; }
-  body.dark .notebar.compare .nb-table th, body.dark .notebar.compare .nb-tl { background: rgba(16,180,135,.1); }
+  /* 辨析卡：挂段末、默认只露一行「简单记」，点开才出对比表（PRD §7.2）。
+     一段可挂 2–5 张（实测 51 段 ≥2 张），所以每张自带边框、各自折叠，不共用一个表头。 */
+  .cmp-block { display: block; margin: 6px 0 10px; }
+  .cmp-card { display: block; margin: 5px 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .cmp-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 7px; width: 100%; text-align: left; background: none; border: 0; padding: 7px 9px; font: inherit; font-size: 13px; color: var(--text); cursor: pointer; }
+  .cmp-card .nb-label { flex: none; }
+  .cmp-ws { flex: none; font-weight: 700; font-family: var(--serif); color: var(--ink2); }
+  /* 那一行辨析独占一行：390px 屏上跟词头挤在一起会被切成两截，正是要背的那半句反而最难读 */
+  .cmp-line { flex: 1 0 100%; order: 3; min-width: 0; color: var(--muted); }
+  .cmp-caret { margin-left: auto; flex: none; color: var(--muted); transition: transform .18s ease; }
+  .cmp-card.open .cmp-caret { transform: rotate(180deg); }
+  .cmp-body { display: none; padding: 0 9px 9px; }
+  .cmp-card.open .cmp-body { display: block; }
+  .cmp-card .nb-ct { display: block; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+  .cmp-card .nb-table { width: 100%; border-collapse: collapse; margin: 4px 0; font-size: 12px; line-height: 1.5; }
+  .cmp-card .nb-table td, .cmp-card .nb-table th { border: 1px solid var(--border); padding: 4px 6px; text-align: left; vertical-align: top; }
+  .cmp-card .nb-table th { background: rgba(12,156,116,.08); color: var(--ink2); font-weight: 600; }
+  .cmp-card .nb-tw { font-weight: 700; white-space: nowrap; color: var(--ink2); }
+  .cmp-card .nb-tp { font-weight: 400; color: var(--muted); font-size: 11px; }
+  .cmp-card .nb-tm { color: var(--ink2); white-space: nowrap; }
+  .cmp-card .nb-tc { color: var(--ink2); }
+  .cmp-card .nb-scene { color: var(--muted); font-size: 11px; }
+  .cmp-card .nb-tl { font-weight: 600; background: rgba(12,156,116,.04); white-space: nowrap; }  /* 「用在哪」三列窄时会竖排成「用\n在\n哪」，标签必须一行 */
+  /* 长表转置后一个维度占两三行，靠这条小标题分块；不加分隔就是一堵平铺的十二行墙 */
+  .cmp-card .nb-dim td { font-weight: 700; background: rgba(12,156,116,.10); padding: 5px 7px; }
+  .cmp-card .nb-summary { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); color: var(--accent); font-weight: 600; font-size: 12px; }
+  body.dark .cmp-card { border-color: #33302b; }
+  body.dark .cmp-card .nb-table td, body.dark .cmp-card .nb-table th { border-color: #33302b; }
+  body.dark .cmp-card .nb-table th, body.dark .cmp-card .nb-tl { background: rgba(16,180,135,.1); }
   /* 音色下拉：与顶栏其余按钮一致的 pill 胶囊样式（13px 字＋999px 圆角；移动端面板内仍用 16px/44px 大触区） */
   .voice-sel { border: 1px solid var(--accent-line); background-color: #fff; color: var(--accent);
     border-radius: 999px; font-size: 13px; font-weight: 500; padding: 7px 14px; padding-right: 32px;
@@ -259,7 +274,7 @@
   body.hide-gl .gl { display: none; }
   body.hide-gl .w { color: var(--text); font-weight: 400;
     border-bottom: none; cursor: pointer; }
-  body.hide-gl .notebar { display: none; } /* 隐藏词义时辨析卡片同步隐藏 */
+  body.hide-gl .notebar, body.hide-gl .cmp-block { display: none; } /* 隐藏词义时辨析卡片同步隐藏 */
   /* ============ 底部播放条（Liquid Glass 风格） ============ */
   .audiobar { position: fixed; left: 24px; right: 24px; transform: none;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 120;
@@ -1437,7 +1452,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       /* 数据缓存版本：必须等于 shadow/data/ 三个 JSON 的内容哈希，由 scripts/validate_data.py 校验。
          不写它，iOS Safari 会按 Last-Modified 启发式缓存 —— 课文改了、词表没改，句序与词表就会错位。
          改了数据忘了 bump 会直接让门禁 FAIL，而不是静默服务旧数据。 */
-      const SHADOW_DATA_VER = "82fd9a4b6a";
+      const SHADOW_DATA_VER = "8912a37329";
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
@@ -1643,52 +1658,116 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     (gh ? `<span class="gl" aria-hidden="true">${gh}</span>` : '');
     });
     }
-    function renderCompareNote(note) {
-    const words = (note.items || []).map(it => it.w).filter(Boolean);
-    let html = `<span class="notebar compare"><span class="nb-t">${words.map(w => `<span class="nb-w">${esc(w)}</span>`).join(' ')}</span><span class="nb-n"><span class="nb-label">辨析</span>${esc(note.summary ? note.summary.replace(/^辨析：/, '') : (note.title || ''))}</span>`;
-    if (note.items && note.items.length) {
+    /* 默认那一行：作者写给"当天背下来"的是「简单记：」那半句，不是整段 summary。
+       没有「简单记」的旧卡退回标题，再退回整段（validate_data 第 16 条会把这种卡报成告警）。 */
+    function compareLine(note) {
+      const sm = String(note.summary || '');
+      const m = sm.match(/简单记[:：](.+?)\s*$/);
+      return (m ? m[1] : (note.title || sm.replace(/^辨析[:：]/, ''))).trim();
+    }
+    function renderCompareNote(note, open) {
+    const items = note.items || [];
+    const words = items.map(it => it.w).filter(Boolean);
+    const gid = String(note.group || words.join('-'));
+    let html = `<div class="cmp-card${open ? ' open' : ''}" data-grp="${esc(gid)}">`;
+    html += `<button type="button" class="cmp-head" aria-expanded="${open ? 'true' : 'false'}" onclick="toggleCmp(this)">` +
+      `<span class="nb-label">辨析</span><span class="cmp-ws">${words.map(w => esc(w)).join(' · ')}</span>` +
+      `<span class="cmp-line">${esc(compareLine(note))}</span><span class="cmp-caret" aria-hidden="true">▾</span></button>`;
+    html += `<div class="cmp-body">`;
+    if (items.length) {
       html += `<table class="nb-table">`;
-      for (const it of note.items) {
-      html += `<tr><td class="nb-tw">${esc(it.w)} <span class="nb-tp">${esc(it.p || '')}</span></td><td class="nb-tm">${esc(it.pos || '')} ${esc(it.sense || '')}</td><td class="nb-tc">${esc(it.core || '')}${it.scene ? `<br><span class="nb-scene">🎬 ${esc(it.scene)}</span>` : ''}</td></tr>`;
+      for (const it of items) {
+      html += `<tr><td class="nb-tw">${esc(it.w)} <span class="nb-tp">${esc(it.p || '')}</span></td><td class="nb-tm">${esc(it.pos || '')} ${esc(it.sense || '')}</td><td class="nb-tc">${esc(it.core || '')}${it.scene ? `<br><span class="nb-scene">🎬 ${esc(it.scene)}</span>` : ''}${it.eg ? `<br><span class="nb-scene">${esc(it.eg)}</span>` : ''}</td></tr>`;
       }
       html += `</table>`;
     }
     if (note.diff && note.diff.length) {
-      const keys = Object.keys(note.diff[0]).filter(k => k !== 'label');
+      // 词列以成员表为准，再补上 diff 里出现过的键。只看 diff[0] 会踩坑：
+      // 第一个维度恰好是「两个词一起说」的横切行时，那一行没有任何词键，整张表就没列了。
+      const keys = [];
+      for (const it of items) if (it.w && keys.indexOf(it.w) < 0) keys.push(it.w);
+      for (const r of note.diff) for (const k of Object.keys(r)) {
+        if (k !== 'label' && k !== 'dim' && k !== 'both' && keys.indexOf(k) < 0) keys.push(k);
+      }
       html += `<table class="nb-table nb-diff"><tr><th></th>${keys.map(k => `<th>${esc(k)}</th>`).join('')}</tr>`;
+      // dim = 作者写的那个"维度"标题（长表转置后每两三行共用一个）。
+      // 不加小标题的话，一个维度三行 ×四个维度就是十二行平铺，看不出哪几行是一回事。
+      let prevDim = null;
       for (const row of note.diff) {
+      if (row.dim && row.dim !== prevDim) {
+        html += `<tr class="nb-dim"><td colspan="${keys.length + 1}">${esc(row.dim)}</td></tr>`;
+      }
+      prevDim = row.dim || prevDim;
+      if (row.both) {
+        // 作者把这行写成「两个词一起看」（讲中文怎么译、卡给不给词伙这类），不该按词拆两格
+        html += `<tr><td class="nb-tl">${esc(row.label)}</td><td colspan="${keys.length}">${esc(row.both)}</td></tr>`;
+        continue;
+      }
       html += `<tr><td class="nb-tl">${esc(row.label)}</td>${keys.map(k => `<td>${esc(row[k] || '')}</td>`).join('')}</tr>`;
       }
       html += `</table>`;
     }
     if (note.summary) html += `<span class="nb-summary">${esc(note.summary)}</span>`;
-    html += `</span>`;
+    html += `</div></div>`;
     return html;
     }
+    function toggleCmp(btn) {
+    const card = btn.closest('.cmp-card');
+    if (!card) return;
+    btn.setAttribute('aria-expanded', card.classList.toggle('open') ? 'true' : 'false');
+    }
+    const isCompareNote = (note) => !!note && typeof note === 'object' && note.type === 'compare';
+    const noteMembers = (note) => (note.items || []).map(it => String(it.w || '').toLowerCase()).filter(Boolean);
+    /* 一张辨析表只挂一个段落末尾。锚点优先用卡片自带的 at=[章,段]（落地器从草稿的「主锚点」写进来），
+       没有就退回「第一个 ≥2 个成员同时被标出的段」。只出现一个成员的段不挂 —— 一组近义词散在三个段里
+       时，挂三遍等于把一张表复制三遍；挂一遍但那一处只有半个词，等于指错东西。 */
+    function cmpIndex() {
+      const marks = [];
+      const re = /\[\[([^\]:]+):([^\]]+)\]\]/g;
+      SECTIONS.forEach((s, ci) => (s.paragraphs || []).forEach((p, pi) => {
+        let at = -1; const set = new Set();
+        p.forEach((t, ti) => {
+          let m; re.lastIndex = 0;
+          while ((m = re.exec(String(t)))) {
+            const w = m[1].toLowerCase();
+            if (!set.has(w)) { set.add(w); if (at < 0) at = ti; }
+          }
+        });
+        marks.push({ ci, pi, at, set });
+      }));
+      const idx = {}, done = new Set();
+      for (const k of Object.keys(VOCAB || {})) {
+        const note = (VOCAB[k] || {}).cmp;   // 辨析卡在 cmp；note 永远是那人手写的同义词/词伙串，别互相覆盖
+        if (!isCompareNote(note)) continue;
+        const gid = String(note.group || k);
+        if (done.has(gid)) continue; done.add(gid);
+        const mem = noteMembers(note);
+        let hit = null;
+        if (note.at && note.at.length >= 2) hit = marks.find(m => m.ci === note.at[0] && m.pi === note.at[1]) || null;
+        if (!hit) hit = marks.find(m => mem.filter(w => m.set.has(w)).length >= 2) || null;
+        if (!hit) continue;
+        const key = hit.ci + ':' + hit.pi;
+        (idx[key] = idx[key] || []).push({ note, at: hit.at });
+      }
+      for (const key in idx) idx[key].sort((a, b) => a.at - b.at);   // 同段多张：按撞上的那句先后排
+      return idx;
+    }
+    function compareAt(idx, ci, pi) {
+      const list = idx[ci + ':' + pi];
+      return list && list.length ? `<div class="cmp-block">${list.map(x => renderCompareNote(x.note)).join('')}</div>` : '';
+    }
     function noteBar(t) {
-    // 句下辨析卡：凡句中出现有 note 字段的词，句下插一张紧凑卡（纯展示：词不可点；查词点正文单词走单词弹窗）
+    // 句下只留词级笔记（同义词 / 词伙）；辨析表不在这里，走 paraCompareHTML 挂段末
     const seen = new Set(); let html = '';
-    const groups = {};
-    const singles = [];
     const re = /\[\[([^\]:]+):([^\]]+)\]\]/g; let m;
     while ((m = re.exec(t))) {
     const k = m[1].toLowerCase();
     if (seen.has(k)) continue; seen.add(k);
     const info = (typeof VOCAB !== 'undefined' && VOCAB[k]) || null;
     if (!info || !info.note) continue;
-    if (typeof info.note === 'object' && info.note.type === 'compare' && info.note.group) {
-      const g = info.note.group;
-      if (!groups[g]) groups[g] = { note: info.note, keys: new Set() };
-      groups[g].keys.add(k);
-      continue;
-    }
-    singles.push({ k, info });
-    }
-    for (const g in groups) html += renderCompareNote(groups[g].note);
-    for (const { k, info } of singles) {
     const ph = glossPhon(k);
     // 标题标签按内容类型自适应：同义词/词伙 从 note 前缀抽取；手写辨析归为「辨析」。标签用 nb-label 小胶囊包裹，不再叠「辨析：同义词：」双冒号
-    const noteText = typeof info.note === 'string' ? info.note : (info.note.title || '');
+    const noteText = info.note;
     let label = '辨析', rest = noteText;
     const lm = noteText.match(/^(同义词|词伙)(：)/);
     if (lm) { label = lm[1]; rest = noteText.slice(lm[0].length); }
@@ -1721,8 +1800,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     function render() {
     const art = document.getElementById('art');
     const filtered = (currentChapter >= 0) ? [SECTIONS[currentChapter]] : SECTIONS;
+    const CMP = cmpIndex();
     art.innerHTML = filtered.map((s, si) => {
       const displayIdx = (currentChapter >= 0) ? (currentChapter + 1) : (si + 1);
+      const chIdx = (currentChapter >= 0) ? currentChapter : si;   // 辨析锚点按真实章号存，单章视图里 si 恒为 0
       return `
     <div class="sec"><h2>${displayIdx}. ${esc(s.title)}${titEN(s.title)}</h2>
       ${s.zh ? `<div class="zh">${esc(s.zh)}</div>` : ''}
@@ -1730,7 +1811,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const zh = s.sentZh && s.sentZh[pi] && s.sentZh[pi][ti]
         ? `<span class="sent-zh">${esc(s.sentZh[pi][ti])}</span>` : '';
         return `<span class="sent" tabindex="0" role="button" aria-label="朗读该句">${wrapWords(t)}</span>${zh}${noteBar(t)}`;
-      }).join(' ')}</div>${s.paraZh && s.paraZh[pi] ? `<div class="para-zh">💡 ${esc(s.paraZh[pi])}</div>` : ''}`).join('')}
+      }).join(' ')}</div>${s.paraZh && s.paraZh[pi] ? `<div class="para-zh">💡 ${esc(s.paraZh[pi])}</div>` : ''}${compareAt(CMP, chIdx, pi)}`).join('')}
     </div>`;
     }).join('');
     sents = [...document.querySelectorAll('.sent')];
@@ -4551,8 +4632,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function revealNote(q) {
         if (!reveal) return '';
         const card = VOCAB[q.w] || {};
-        const compare = (!reveal.ok && card.note && typeof card.note === 'object' && typeof renderCompareNote === 'function')
-          ? renderCompareNote(card.note) : '';
+        const compare = (!reveal.ok && card.cmp && typeof renderCompareNote === 'function')
+          ? renderCompareNote(card.cmp, true) : '';   // 做题答错直接摊开表：这里再让人多点一次就成打断源了
         return `<div class="qz-note">${reveal.ok ? '对了。' : '正确的那一个是 '}<b>${esc(q.answer)}</b></div>
           ${compare}
           <div class="qz-inputrow"><button class="qz-go" style="flex:1" onclick="TASK.nextQuiz()">${quizCursor + 1 >= quizList().length ? '看这一遍的小结' : '下一题'}</button></div>`;

@@ -1,0 +1,110 @@
+{
+ "batch": 4,
+ "worklist_idx": [
+  114,
+  115,
+  116,
+  117,
+  118
+ ],
+ "groups": [
+  {
+   "words": [
+    "jail",
+    "prison"
+   ],
+   "senses": [
+    "监狱"
+   ],
+   "paras": [
+    [
+     3,
+     60
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1250,
+    1251
+   ]
+  },
+  {
+   "words": [
+    "confine",
+    "prison"
+   ],
+   "senses": [
+    "监禁"
+   ],
+   "paras": [
+    [
+     3,
+     60
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1251
+   ]
+  },
+  {
+   "words": [
+    "oversee",
+    "supervise"
+   ],
+   "senses": [
+    "监督"
+   ],
+   "paras": [
+    [
+     3,
+     61
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1252
+   ]
+  },
+  {
+   "words": [
+    "crime",
+    "sin"
+   ],
+   "senses": [
+    "罪行"
+   ],
+   "paras": [
+    [
+     3,
+     61
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1254,
+    1255
+   ]
+  },
+  {
+   "words": [
+    "blast",
+    "explosion"
+   ],
+   "senses": [
+    "爆炸"
+   ],
+   "paras": [
+    [
+     4,
+     0
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1280,
+    1282
+   ]
+  }
+ ]
+}

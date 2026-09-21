@@ -1,0 +1,48 @@
+{
+ "batch": 2,
+ "worklist_idx": [
+  50,
+  51
+ ],
+ "groups": [
+  {
+   "words": [
+    "anticipate",
+    "expect"
+   ],
+   "senses": [
+    "预期"
+   ],
+   "paras": [
+    [
+     1,
+     38
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    574
+   ]
+  },
+  {
+   "words": [
+    "pastime",
+    "recreation"
+   ],
+   "senses": [
+    "消遣"
+   ],
+   "paras": [
+    [
+     1,
+     39
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    575,
+    576
+   ]
+  }
+ ]
+}

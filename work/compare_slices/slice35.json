@@ -1,0 +1,110 @@
+{
+ "batch": 5,
+ "worklist_idx": [
+  171,
+  172,
+  173,
+  174,
+  175
+ ],
+ "groups": [
+  {
+   "words": [
+    "alleviate",
+    "relieve"
+   ],
+   "senses": [
+    "减轻"
+   ],
+   "paras": [
+    [
+     5,
+     35
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1703
+   ]
+  },
+  {
+   "words": [
+    "happiness",
+    "joy"
+   ],
+   "senses": [
+    "快乐"
+   ],
+   "paras": [
+    [
+     5,
+     36
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1711,
+    1713
+   ]
+  },
+  {
+   "words": [
+    "delight",
+    "rejoice"
+   ],
+   "senses": [
+    "高兴"
+   ],
+   "paras": [
+    [
+     5,
+     36
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1711,
+    1713
+   ]
+  },
+  {
+   "words": [
+    "joy",
+    "rejoice"
+   ],
+   "senses": [
+    "喜悦"
+   ],
+   "paras": [
+    [
+     5,
+     36
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1713
+   ]
+  },
+  {
+   "words": [
+    "favour",
+    "fond"
+   ],
+   "senses": [
+    "喜爱"
+   ],
+   "paras": [
+    [
+     5,
+     37
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1718,
+    1719
+   ]
+  }
+ ]
+}

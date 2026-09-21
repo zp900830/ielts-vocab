@@ -1,0 +1,5563 @@
+[
+ {
+  "gi": 0,
+  "words": [
+   "dawn",
+   "sunrise"
+  ],
+  "senses": [
+   "黎明"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    20
+   ],
+   [
+    1,
+    43
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    20
+   ],
+   [
+    1,
+    43
+   ],
+   [
+    3,
+    0
+   ]
+  ],
+  "absent": [],
+  "min_attest": 8,
+  "all_syn": false
+ },
+ {
+  "gi": 1,
+  "words": [
+   "flat",
+   "smooth"
+  ],
+  "senses": [
+   "平坦"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    10
+   ],
+   [
+    2,
+    8
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    10
+   ],
+   [
+    2,
+    8
+   ]
+  ],
+  "absent": [],
+  "min_attest": 6,
+  "all_syn": false
+ },
+ {
+  "gi": 2,
+  "words": [
+   "endanger",
+   "jeopardise"
+  ],
+  "senses": [
+   "危及"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    2
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    2
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 3,
+  "words": [
+   "degrade",
+   "deteriorate"
+  ],
+  "senses": [
+   "退化"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    8
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    8
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 4,
+  "words": [
+   "mild",
+   "moderate"
+  ],
+  "senses": [
+   "温和"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    12
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    12
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 5,
+  "words": [
+   "damp",
+   "humid"
+  ],
+  "senses": [
+   "潮湿"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    13
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    13
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 6,
+  "words": [
+   "outskirts",
+   "suburb"
+  ],
+  "senses": [
+   "郊区"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    18
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    18
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 7,
+  "words": [
+   "contaminate",
+   "pollution"
+  ],
+  "senses": [
+   "污染"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    19
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    19
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 8,
+  "words": [
+   "grand",
+   "magnificent"
+  ],
+  "senses": [
+   "壮丽"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    20
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    20
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 9,
+  "words": [
+   "heaven",
+   "paradise"
+  ],
+  "senses": [
+   "天堂"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    22
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    22
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 10,
+  "words": [
+   "dense",
+   "intensive"
+  ],
+  "senses": [
+   "密集"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    25
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    25
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 11,
+  "words": [
+   "natural",
+   "nature"
+  ],
+  "senses": [
+   "自然"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    26
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    26
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 12,
+  "words": [
+   "gas",
+   "petrol"
+  ],
+  "senses": [
+   "汽油"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    27
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    27
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 13,
+  "words": [
+   "cosmos",
+   "universe"
+  ],
+  "senses": [
+   "宇宙"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    28
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    28
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 14,
+  "words": [
+   "spacecraft",
+   "spaceship"
+  ],
+  "senses": [
+   "宇宙飞船"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    29
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    29
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 15,
+  "words": [
+   "expedition",
+   "exploration"
+  ],
+  "senses": [
+   "探险"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    30
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    30
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 16,
+  "words": [
+   "sample",
+   "specimen"
+  ],
+  "senses": [
+   "样品"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    31
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    31
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 17,
+  "words": [
+   "despair",
+   "desperate"
+  ],
+  "senses": [
+   "绝望"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    33
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    33
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 18,
+  "words": [
+   "decay",
+   "rot"
+  ],
+  "senses": [
+   "腐烂"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    38
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    38
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 19,
+  "words": [
+   "grass",
+   "meadow"
+  ],
+  "senses": [
+   "草地"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    40
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    40
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 20,
+  "words": [
+   "breed",
+   "feed"
+  ],
+  "senses": [
+   "饲养"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    47
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    47
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 21,
+  "words": [
+   "descendant",
+   "offspring"
+  ],
+  "senses": [
+   "后代"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    47
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    47
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 22,
+  "words": [
+   "excrete",
+   "secrete"
+  ],
+  "senses": [
+   "分泌"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    55
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    55
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 23,
+  "words": [
+   "trace",
+   "track"
+  ],
+  "senses": [
+   "追踪"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    56
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    56
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 24,
+  "words": [
+   "motivate",
+   "stimulate"
+  ],
+  "senses": [
+   "激励"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    2
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    2
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 25,
+  "words": [
+   "eminent",
+   "outstanding"
+  ],
+  "senses": [
+   "杰出"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    3
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    3
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 26,
+  "words": [
+   "headmaster",
+   "principal"
+  ],
+  "senses": [
+   "校长"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    4
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    4
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 27,
+  "words": [
+   "professor",
+   "tutor"
+  ],
+  "senses": [
+   "导师"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    4
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    4
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 28,
+  "words": [
+   "canteen",
+   "dining hall"
+  ],
+  "senses": [
+   "食堂"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    7
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    7
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 29,
+  "words": [
+   "story",
+   "tale"
+  ],
+  "senses": [
+   "故事"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    8
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    8
+   ]
+  ],
+  "absent": [],
+  "min_attest": 5,
+  "all_syn": false
+ },
+ {
+  "gi": 30,
+  "words": [
+   "diary",
+   "journal"
+  ],
+  "senses": [
+   "日记"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    8
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    8
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 31,
+  "words": [
+   "minus",
+   "subtract"
+  ],
+  "senses": [
+   "减去"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    13
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    13
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 32,
+  "words": [
+   "rate",
+   "ratio"
+  ],
+  "senses": [
+   "比率"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    15
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    15
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 33,
+  "words": [
+   "elementary",
+   "rudimentary"
+  ],
+  "senses": [
+   "基本"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    18
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    18
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 34,
+  "words": [
+   "dissertation",
+   "thesis"
+  ],
+  "senses": [
+   "学位论文"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    20
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    20
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 35,
+  "words": [
+   "cite",
+   "reference"
+  ],
+  "senses": [
+   "提及"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    21
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    21
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 36,
+  "words": [
+   "cite",
+   "quote"
+  ],
+  "senses": [
+   "引用"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    21
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    21
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 37,
+  "words": [
+   "abstract",
+   "summary"
+  ],
+  "senses": [
+   "摘要"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    21
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    21
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 38,
+  "words": [
+   "detect",
+   "perceive"
+  ],
+  "senses": [
+   "察觉"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    22
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    22
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 39,
+  "words": [
+   "postulate",
+   "presume"
+  ],
+  "senses": [
+   "假定"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    22
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    22
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 40,
+  "words": [
+   "deduce",
+   "infer"
+  ],
+  "senses": [
+   "推断"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    23
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    23
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 41,
+  "words": [
+   "inquire",
+   "query"
+  ],
+  "senses": [
+   "询问"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    25
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    25
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 42,
+  "words": [
+   "ethical",
+   "moral"
+  ],
+  "senses": [
+   "道德"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    27
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    27
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 43,
+  "words": [
+   "alien",
+   "foreigner"
+  ],
+  "senses": [
+   "外国人"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    28
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    28
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 44,
+  "words": [
+   "holy",
+   "sacred"
+  ],
+  "senses": [
+   "神圣"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    29
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    29
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 45,
+  "words": [
+   "empire",
+   "imperial"
+  ],
+  "senses": [
+   "帝国"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    30
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    30
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 46,
+  "words": [
+   "prosperity",
+   "thrive"
+  ],
+  "senses": [
+   "兴旺",
+   "繁荣"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    32
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    32
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 47,
+  "words": [
+   "oral",
+   "verbal"
+  ],
+  "senses": [
+   "口头"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    33
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    33
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 48,
+  "words": [
+   "narrate",
+   "tale"
+  ],
+  "senses": [
+   "叙述"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    36
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    36
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 49,
+  "words": [
+   "interpret",
+   "paraphrase"
+  ],
+  "senses": [
+   "解释"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    36
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    36
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 50,
+  "words": [
+   "anticipate",
+   "expect"
+  ],
+  "senses": [
+   "预期"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    38
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    38
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 51,
+  "words": [
+   "pastime",
+   "recreation"
+  ],
+  "senses": [
+   "消遣"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    39
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    39
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 52,
+  "words": [
+   "feast",
+   "festival"
+  ],
+  "senses": [
+   "节日"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    39
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    39
+   ]
+  ],
+  "absent": [],
+  "min_attest": 2,
+  "all_syn": false
+ },
+ {
+  "gi": 53,
+  "words": [
+   "imitate",
+   "mimic"
+  ],
+  "senses": [
+   "模仿"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    40
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    40
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 54,
+  "words": [
+   "mimic",
+   "simulate"
+  ],
+  "senses": [
+   "模拟"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    40
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    40
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 55,
+  "words": [
+   "film",
+   "movie"
+  ],
+  "senses": [
+   "电影"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    41
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    41
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 56,
+  "words": [
+   "artist",
+   "painter"
+  ],
+  "senses": [
+   "画家"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    41
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    41
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 57,
+  "words": [
+   "opt",
+   "select"
+  ],
+  "senses": [
+   "选择"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    42
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    42
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 58,
+  "words": [
+   "depict",
+   "describe"
+  ],
+  "senses": [
+   "描述"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    42
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    42
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 59,
+  "words": [
+   "famous",
+   "well-known"
+  ],
+  "senses": [
+   "著名"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    45
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    45
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 60,
+  "words": [
+   "competition",
+   "tournament"
+  ],
+  "senses": [
+   "比赛"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    45
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    45
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 61,
+  "words": [
+   "mat",
+   "rug"
+  ],
+  "senses": [
+   "垫子"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    2
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    2
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 62,
+  "words": [
+   "fridge",
+   "refrigerator"
+  ],
+  "senses": [
+   "冰箱"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    6
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    6
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 63,
+  "words": [
+   "gem",
+   "jewel"
+  ],
+  "senses": [
+   "宝石"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    11
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    11
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 64,
+  "words": [
+   "costume",
+   "garment"
+  ],
+  "senses": [
+   "衣服"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    12
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    12
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 65,
+  "words": [
+   "elegance",
+   "grace"
+  ],
+  "senses": [
+   "优雅"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    12
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    12
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 66,
+  "words": [
+   "cosmetics",
+   "makeup"
+  ],
+  "senses": [
+   "化妆品"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    12
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    12
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 67,
+  "words": [
+   "purse",
+   "wallet"
+  ],
+  "senses": [
+   "钱包"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    14
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    14
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 68,
+  "words": [
+   "belt",
+   "strap"
+  ],
+  "senses": [
+   "皮带"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    15
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    15
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 69,
+  "words": [
+   "construct",
+   "erection"
+  ],
+  "senses": [
+   "建造"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    18
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    18
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 70,
+  "words": [
+   "dwelling",
+   "reside"
+  ],
+  "senses": [
+   "居住"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    19
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    19
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 71,
+  "words": [
+   "hut",
+   "shed"
+  ],
+  "senses": [
+   "棚屋"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    20
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    20
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 72,
+  "words": [
+   "cottage",
+   "hut"
+  ],
+  "senses": [
+   "小屋"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    20
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    20
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 73,
+  "words": [
+   "living room",
+   "parlour"
+  ],
+  "senses": [
+   "起居室"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    22
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    22
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 74,
+  "words": [
+   "complex",
+   "mall"
+  ],
+  "senses": [
+   "购物中心"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    23
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    23
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 75,
+  "words": [
+   "refectory",
+   "restaurant"
+  ],
+  "senses": [
+   "餐厅"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    26
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    26
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 76,
+  "words": [
+   "corn",
+   "grain"
+  ],
+  "senses": [
+   "谷物"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    31
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    31
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 77,
+  "words": [
+   "tasty",
+   "yummy"
+  ],
+  "senses": [
+   "可口"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    34
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    34
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 78,
+  "words": [
+   "exterior",
+   "outward"
+  ],
+  "senses": [
+   "外表"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    39
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    39
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 79,
+  "words": [
+   "entrance",
+   "entry"
+  ],
+  "senses": [
+   "入口"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    39
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    39
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 80,
+  "words": [
+   "itinerary",
+   "route"
+  ],
+  "senses": [
+   "路线"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    4
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    4
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 81,
+  "words": [
+   "lorry",
+   "truck"
+  ],
+  "senses": [
+   "卡车"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    6
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    6
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 82,
+  "words": [
+   "sailor",
+   "seaman"
+  ],
+  "senses": [
+   "水手",
+   "海员"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    11
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    11
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 83,
+  "words": [
+   "railroad",
+   "railway"
+  ],
+  "senses": [
+   "铁路"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    14
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    14
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 84,
+  "words": [
+   "defer",
+   "delay"
+  ],
+  "senses": [
+   "延缓",
+   "推迟"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    16
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    16
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 85,
+  "words": [
+   "package",
+   "parcel"
+  ],
+  "senses": [
+   "包裹"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    18
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    18
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 86,
+  "words": [
+   "speed",
+   "velocity"
+  ],
+  "senses": [
+   "速度"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    19
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    19
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 87,
+  "words": [
+   "importance",
+   "significance"
+  ],
+  "senses": [
+   "重要性"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    27
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    27
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 88,
+  "words": [
+   "abroad",
+   "overseas"
+  ],
+  "senses": [
+   "在国外"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    29
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    29
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 89,
+  "words": [
+   "asylum",
+   "refuge"
+  ],
+  "senses": [
+   "避难所"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    32
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    32
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 90,
+  "words": [
+   "demographic",
+   "population"
+  ],
+  "senses": [
+   "人口"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    32
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    32
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 91,
+  "words": [
+   "ethnic",
+   "racial"
+  ],
+  "senses": [
+   "种族"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    33
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    33
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 92,
+  "words": [
+   "perspective",
+   "viewpoint"
+  ],
+  "senses": [
+   "观点"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    36
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    36
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 93,
+  "words": [
+   "declare",
+   "proclaim"
+  ],
+  "senses": [
+   "宣告"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    38
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    38
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 94,
+  "words": [
+   "announce",
+   "declare"
+  ],
+  "senses": [
+   "宣布"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    38
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    38
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 95,
+  "words": [
+   "affirm",
+   "declare"
+  ],
+  "senses": [
+   "断言"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    38
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    38
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 96,
+  "words": [
+   "aid",
+   "assist"
+  ],
+  "senses": [
+   "协助",
+   "帮助",
+   "援助"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    39
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    39
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 97,
+  "words": [
+   "donate",
+   "endow"
+  ],
+  "senses": [
+   "捐赠"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    44
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    44
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 98,
+  "words": [
+   "exchange",
+   "swap"
+  ],
+  "senses": [
+   "交换"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    45
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    45
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 99,
+  "words": [
+   "increase",
+   "increment"
+  ],
+  "senses": [
+   "增加"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    47
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    47
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 100,
+  "words": [
+   "decrease",
+   "reduce"
+  ],
+  "senses": [
+   "降低"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    47
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    47
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 101,
+  "words": [
+   "growth",
+   "increase"
+  ],
+  "senses": [
+   "增长"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    47
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    47
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 102,
+  "words": [
+   "adequate",
+   "sufficient"
+  ],
+  "senses": [
+   "足够"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    48
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    48
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 103,
+  "words": [
+   "redundant",
+   "spare"
+  ],
+  "senses": [
+   "多余"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    48
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    48
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 104,
+  "words": [
+   "cargo",
+   "goods"
+  ],
+  "senses": [
+   "货物"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    49
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    49
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 105,
+  "words": [
+   "deal",
+   "transaction"
+  ],
+  "senses": [
+   "交易"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    50
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    50
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 106,
+  "words": [
+   "clerk",
+   "personnel"
+  ],
+  "senses": [
+   "职员"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    53
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    53
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 107,
+  "words": [
+   "manage",
+   "regulate"
+  ],
+  "senses": [
+   "管理"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    55
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    55
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 108,
+  "words": [
+   "chance",
+   "opportunity"
+  ],
+  "senses": [
+   "机会"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    55
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    55
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 109,
+  "words": [
+   "collaborate",
+   "cooperate"
+  ],
+  "senses": [
+   "合作"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    56
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    56
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 110,
+  "words": [
+   "norm",
+   "standard"
+  ],
+  "senses": [
+   "标准"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    56
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    56
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 111,
+  "words": [
+   "mandatory",
+   "obligation"
+  ],
+  "senses": [
+   "义务"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    57
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    57
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 112,
+  "words": [
+   "prosecute",
+   "sue"
+  ],
+  "senses": [
+   "起诉"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    58
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    58
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 113,
+  "words": [
+   "murmur",
+   "whisper"
+  ],
+  "senses": [
+   "低语"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    59
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    59
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 114,
+  "words": [
+   "jail",
+   "prison"
+  ],
+  "senses": [
+   "监狱"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    60
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    60
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 115,
+  "words": [
+   "confine",
+   "prison"
+  ],
+  "senses": [
+   "监禁"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    60
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    60
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 116,
+  "words": [
+   "oversee",
+   "supervise"
+  ],
+  "senses": [
+   "监督"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    61
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    61
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 117,
+  "words": [
+   "crime",
+   "sin"
+  ],
+  "senses": [
+   "罪行"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    61
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    61
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 118,
+  "words": [
+   "blast",
+   "explosion"
+  ],
+  "senses": [
+   "爆炸"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    0
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    0
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 119,
+  "words": [
+   "hit",
+   "strike"
+  ],
+  "senses": [
+   "袭击"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    3
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    3
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 120,
+  "words": [
+   "dilemma",
+   "plight"
+  ],
+  "senses": [
+   "困境"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    4
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    4
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 121,
+  "words": [
+   "invade",
+   "violate"
+  ],
+  "senses": [
+   "侵犯"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    5
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    5
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 122,
+  "words": [
+   "assault",
+   "attack"
+  ],
+  "senses": [
+   "攻击",
+   "袭击"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    5
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    5
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 123,
+  "words": [
+   "forbid",
+   "prohibit"
+  ],
+  "senses": [
+   "禁止"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    6
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    6
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 124,
+  "words": [
+   "evidence",
+   "proof"
+  ],
+  "senses": [
+   "证据"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    7
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    7
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 125,
+  "words": [
+   "horrible",
+   "terror"
+  ],
+  "senses": [
+   "恐怖"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    7
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    7
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 126,
+  "words": [
+   "horrible",
+   "terrible"
+  ],
+  "senses": [
+   "可怕"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    7
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    7
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 127,
+  "words": [
+   "compete",
+   "contest"
+  ],
+  "senses": [
+   "比赛"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    8
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    8
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 128,
+  "words": [
+   "turbulent",
+   "turmoil"
+  ],
+  "senses": [
+   "动荡"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    8
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    8
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 129,
+  "words": [
+   "enemy",
+   "foe"
+  ],
+  "senses": [
+   "敌人"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    9
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    9
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 130,
+  "words": [
+   "strategy",
+   "tactic"
+  ],
+  "senses": [
+   "策略"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    9
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    9
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 131,
+  "words": [
+   "happen",
+   "occur"
+  ],
+  "senses": [
+   "发生"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    10
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    10
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 132,
+  "words": [
+   "grave",
+   "tomb"
+  ],
+  "senses": [
+   "坟墓"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    12
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    12
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 133,
+  "words": [
+   "disturb",
+   "interrupt"
+  ],
+  "senses": [
+   "打扰"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    14
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    14
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 134,
+  "words": [
+   "triumph",
+   "victory"
+  ],
+  "senses": [
+   "胜利"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    15
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    15
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 135,
+  "words": [
+   "domain",
+   "realm"
+  ],
+  "senses": [
+   "领域"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    19
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    19
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 136,
+  "words": [
+   "device",
+   "equipment"
+  ],
+  "senses": [
+   "设备"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    19
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    19
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 137,
+  "words": [
+   "instrument",
+   "tool"
+  ],
+  "senses": [
+   "工具"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    20
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    20
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 138,
+  "words": [
+   "assess",
+   "gauge"
+  ],
+  "senses": [
+   "评估"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    20
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    20
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 139,
+  "words": [
+   "compute",
+   "estimate"
+  ],
+  "senses": [
+   "估算"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    20
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    20
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 140,
+  "words": [
+   "estimate",
+   "evaluate"
+  ],
+  "senses": [
+   "估价"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    20
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    20
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 141,
+  "words": [
+   "fault",
+   "flaw"
+  ],
+  "senses": [
+   "缺陷"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    26
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    26
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 142,
+  "words": [
+   "juvenile",
+   "teenage"
+  ],
+  "senses": [
+   "青少年"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    28
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    28
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 143,
+  "words": [
+   "kin",
+   "relative"
+  ],
+  "senses": [
+   "亲戚"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    28
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    28
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 144,
+  "words": [
+   "hostess",
+   "mistress"
+  ],
+  "senses": [
+   "女主人"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    29
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    29
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 145,
+  "words": [
+   "client",
+   "customer"
+  ],
+  "senses": [
+   "客户"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    30
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    30
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 146,
+  "words": [
+   "individual",
+   "single"
+  ],
+  "senses": [
+   "单独"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    31
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    31
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 147,
+  "words": [
+   "committee",
+   "council"
+  ],
+  "senses": [
+   "委员会"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    33
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    33
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 148,
+  "words": [
+   "glance",
+   "glimpse"
+  ],
+  "senses": [
+   "一瞥"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    1
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    1
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 149,
+  "words": [
+   "oath",
+   "vow"
+  ],
+  "senses": [
+   "誓言"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    1
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    1
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 150,
+  "words": [
+   "curse",
+   "swear"
+  ],
+  "senses": [
+   "咒骂"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    2
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    2
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 151,
+  "words": [
+   "applaud",
+   "clap"
+  ],
+  "senses": [
+   "鼓掌"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    3
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    3
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 152,
+  "words": [
+   "manipulate",
+   "steer"
+  ],
+  "senses": [
+   "操纵"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    6
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    6
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 153,
+  "words": [
+   "bet",
+   "gamble"
+  ],
+  "senses": [
+   "打赌"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    6
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    6
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 154,
+  "words": [
+   "allure",
+   "tempt"
+  ],
+  "senses": [
+   "诱惑"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    9
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    9
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 155,
+  "words": [
+   "assign",
+   "distribute"
+  ],
+  "senses": [
+   "分配"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    10
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    10
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 156,
+  "words": [
+   "reverse",
+   "undo"
+  ],
+  "senses": [
+   "撤销"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    10
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    10
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 157,
+  "words": [
+   "recover",
+   "restore"
+  ],
+  "senses": [
+   "恢复"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    13
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    13
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 158,
+  "words": [
+   "amplify",
+   "augment"
+  ],
+  "senses": [
+   "增强"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    14
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    14
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 159,
+  "words": [
+   "ooze",
+   "seep"
+  ],
+  "senses": [
+   "渗出"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    15
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    15
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 160,
+  "words": [
+   "excuse",
+   "forgive"
+  ],
+  "senses": [
+   "原谅"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    15
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    15
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 161,
+  "words": [
+   "differentiate",
+   "distinguish"
+  ],
+  "senses": [
+   "区分"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    19
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    19
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 162,
+  "words": [
+   "incline",
+   "lean"
+  ],
+  "senses": [
+   "倾斜"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    19
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    19
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 163,
+  "words": [
+   "chin",
+   "jaw"
+  ],
+  "senses": [
+   "下巴"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    22
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    22
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 164,
+  "words": [
+   "disease",
+   "illness"
+  ],
+  "senses": [
+   "疾病"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    27
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    27
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 165,
+  "words": [
+   "invalid",
+   "patient"
+  ],
+  "senses": [
+   "病人"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    27
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    27
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 166,
+  "words": [
+   "injure",
+   "injury"
+  ],
+  "senses": [
+   "伤害"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    29
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    29
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 167,
+  "words": [
+   "death",
+   "demise"
+  ],
+  "senses": [
+   "死亡"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    30
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    30
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 168,
+  "words": [
+   "curative",
+   "therapy"
+  ],
+  "senses": [
+   "治疗"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    32
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    32
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 169,
+  "words": [
+   "hygiene",
+   "sanitary"
+  ],
+  "senses": [
+   "卫生"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    32
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    32
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 170,
+  "words": [
+   "cure",
+   "heal"
+  ],
+  "senses": [
+   "治愈"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    33
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    33
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 171,
+  "words": [
+   "alleviate",
+   "relieve"
+  ],
+  "senses": [
+   "减轻"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    35
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    35
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 172,
+  "words": [
+   "happiness",
+   "joy"
+  ],
+  "senses": [
+   "快乐"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    36
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    36
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 173,
+  "words": [
+   "delight",
+   "rejoice"
+  ],
+  "senses": [
+   "高兴"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    36
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    36
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 174,
+  "words": [
+   "joy",
+   "rejoice"
+  ],
+  "senses": [
+   "喜悦"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    36
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    36
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 175,
+  "words": [
+   "favour",
+   "fond"
+  ],
+  "senses": [
+   "喜爱"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    37
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    37
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 176,
+  "words": [
+   "considerate",
+   "thoughtful"
+  ],
+  "senses": [
+   "体贴"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    40
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    40
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 177,
+  "words": [
+   "rigorous",
+   "strict"
+  ],
+  "senses": [
+   "严格"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    42
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    42
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 178,
+  "words": [
+   "severe",
+   "strict"
+  ],
+  "senses": [
+   "严厉"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    42
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    42
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 179,
+  "words": [
+   "resemble",
+   "similar"
+  ],
+  "senses": [
+   "类似"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    43
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    43
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 180,
+  "words": [
+   "grief",
+   "grieve"
+  ],
+  "senses": [
+   "悲痛"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    44
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    44
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 181,
+  "words": [
+   "miserable",
+   "wretched"
+  ],
+  "senses": [
+   "悲惨"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    44
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    44
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 182,
+  "words": [
+   "hate",
+   "hatred"
+  ],
+  "senses": [
+   "憎恨"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    45
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    45
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 183,
+  "words": [
+   "crazy",
+   "mad"
+  ],
+  "senses": [
+   "疯狂"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    46
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    46
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 184,
+  "words": [
+   "bother",
+   "harass"
+  ],
+  "senses": [
+   "烦扰"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    46
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    46
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 185,
+  "words": [
+   "envy",
+   "jealous"
+  ],
+  "senses": [
+   "妒忌"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    48
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    48
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 186,
+  "words": [
+   "reluctant",
+   "unwilling"
+  ],
+  "senses": [
+   "不情愿"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    49
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    49
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 187,
+  "words": [
+   "awkward",
+   "clumsy"
+  ],
+  "senses": [
+   "笨拙"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    50
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    50
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 188,
+  "words": [
+   "preceding",
+   "prior"
+  ],
+  "senses": [
+   "在前"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    53
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    53
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 189,
+  "words": [
+   "intermediate",
+   "midst"
+  ],
+  "senses": [
+   "中间"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    54
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    54
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 190,
+  "words": [
+   "meantime",
+   "meanwhile"
+  ],
+  "senses": [
+   "与此同时"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    54
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    54
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 191,
+  "words": [
+   "everlasting",
+   "permanent"
+  ],
+  "senses": [
+   "永久"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    54
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    54
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 192,
+  "words": [
+   "conservation",
+   "preserve",
+   "protect"
+  ],
+  "senses": [
+   "保护"
+  ],
+  "claimed_paras": [
+   [
+    0,
+    42
+   ]
+  ],
+  "true_co_paras": [
+   [
+    0,
+    42
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 193,
+  "words": [
+   "impetus",
+   "spur",
+   "stimulate"
+  ],
+  "senses": [
+   "刺激"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    2
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    2
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 194,
+  "words": [
+   "clever",
+   "intelligent",
+   "smart"
+  ],
+  "senses": [
+   "聪明"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    2
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    2
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 195,
+  "words": [
+   "deem",
+   "reckon",
+   "suppose"
+  ],
+  "senses": [
+   "认为"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    22
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    22
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 196,
+  "words": [
+   "inquire",
+   "research",
+   "survey"
+  ],
+  "senses": [
+   "调查"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    25
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    25
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 197,
+  "words": [
+   "amuse",
+   "entertain",
+   "recreation"
+  ],
+  "senses": [
+   "娱乐"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    39
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    39
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 198,
+  "words": [
+   "hop",
+   "jump",
+   "leap"
+  ],
+  "senses": [
+   "跳跃"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    49
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    49
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 199,
+  "words": [
+   "adorn",
+   "embellish",
+   "ornament"
+  ],
+  "senses": [
+   "装饰"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    11
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    11
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 200,
+  "words": [
+   "delicious",
+   "tasty",
+   "yummy"
+  ],
+  "senses": [
+   "美味"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    34
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    34
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 201,
+  "words": [
+   "exterior",
+   "external",
+   "outside"
+  ],
+  "senses": [
+   "外部"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    39
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    39
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 202,
+  "words": [
+   "inner",
+   "interior",
+   "internal"
+  ],
+  "senses": [
+   "内部"
+  ],
+  "claimed_paras": [
+   [
+    2,
+    39
+   ]
+  ],
+  "true_co_paras": [
+   [
+    2,
+    39
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 203,
+  "words": [
+   "occupation",
+   "profession",
+   "vocation"
+  ],
+  "senses": [
+   "职业"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    53
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    53
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": true
+ },
+ {
+  "gi": 204,
+  "words": [
+   "dismiss",
+   "fire",
+   "layoff"
+  ],
+  "senses": [
+   "解雇"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    54
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    54
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 205,
+  "words": [
+   "agreement",
+   "protocol",
+   "treaty"
+  ],
+  "senses": [
+   "协议"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    56
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    56
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 206,
+  "words": [
+   "cheat",
+   "deceive",
+   "fraud"
+  ],
+  "senses": [
+   "欺骗"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    62
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    62
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 207,
+  "words": [
+   "demand",
+   "request",
+   "require"
+  ],
+  "senses": [
+   "要求"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    64
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    64
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 208,
+  "words": [
+   "expose",
+   "reveal",
+   "uncover"
+  ],
+  "senses": [
+   "揭露"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    18
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    18
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 209,
+  "words": [
+   "calculate",
+   "compute",
+   "count"
+  ],
+  "senses": [
+   "计算"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    20
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    20
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 210,
+  "words": [
+   "convert",
+   "transform",
+   "turn"
+  ],
+  "senses": [
+   "转变"
+  ],
+  "claimed_paras": [
+   [
+    4,
+    25
+   ]
+  ],
+  "true_co_paras": [
+   [
+    4,
+    25
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 211,
+  "words": [
+   "desire",
+   "itch",
+   "yearn"
+  ],
+  "senses": [
+   "渴望"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    11
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    11
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 212,
+  "words": [
+   "cope",
+   "dispose",
+   "tackle"
+  ],
+  "senses": [
+   "处理"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    12
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    12
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 213,
+  "words": [
+   "amplify",
+   "enlarge",
+   "magnify"
+  ],
+  "senses": [
+   "放大"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    14
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    14
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 214,
+  "words": [
+   "fatal",
+   "lethal",
+   "mortal"
+  ],
+  "senses": [
+   "致命"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    30
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    30
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 215,
+  "words": [
+   "alleviate",
+   "ease",
+   "relieve"
+  ],
+  "senses": [
+   "缓解"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    35
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    35
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 216,
+  "words": [
+   "doubt",
+   "sceptical",
+   "suspicion"
+  ],
+  "senses": [
+   "怀疑"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    48
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    48
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 217,
+  "words": [
+   "hypothesis",
+   "postulate",
+   "presume",
+   "suppose"
+  ],
+  "senses": [
+   "假设"
+  ],
+  "claimed_paras": [
+   [
+    1,
+    22
+   ]
+  ],
+  "true_co_paras": [
+   [
+    1,
+    22
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 218,
+  "words": [
+   "decrease",
+   "diminish",
+   "dwindle",
+   "reduce"
+  ],
+  "senses": [
+   "减少"
+  ],
+  "claimed_paras": [
+   [
+    3,
+    47
+   ]
+  ],
+  "true_co_paras": [
+   [
+    3,
+    47
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ },
+ {
+  "gi": 219,
+  "words": [
+   "contemplate",
+   "gaze",
+   "peer",
+   "stare"
+  ],
+  "senses": [
+   "凝视"
+  ],
+  "claimed_paras": [
+   [
+    5,
+    1
+   ]
+  ],
+  "true_co_paras": [
+   [
+    5,
+    1
+   ]
+  ],
+  "absent": [],
+  "min_attest": 1,
+  "all_syn": false
+ }
+]

@@ -1,0 +1,111 @@
+{
+ "batch": 3,
+ "worklist_idx": [
+  77,
+  78,
+  79,
+  80,
+  81
+ ],
+ "groups": [
+  {
+   "words": [
+    "tasty",
+    "yummy"
+   ],
+   "senses": [
+    "可口"
+   ],
+   "paras": [
+    [
+     2,
+     34
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    852,
+    853
+   ]
+  },
+  {
+   "words": [
+    "exterior",
+    "outward"
+   ],
+   "senses": [
+    "外表"
+   ],
+   "paras": [
+    [
+     2,
+     39
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    878,
+    879
+   ]
+  },
+  {
+   "words": [
+    "entrance",
+    "entry"
+   ],
+   "senses": [
+    "入口"
+   ],
+   "paras": [
+    [
+     2,
+     39
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    877
+   ]
+  },
+  {
+   "words": [
+    "itinerary",
+    "route"
+   ],
+   "senses": [
+    "路线"
+   ],
+   "paras": [
+    [
+     3,
+     4
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    908,
+    909
+   ]
+  },
+  {
+   "words": [
+    "lorry",
+    "truck"
+   ],
+   "senses": [
+    "卡车"
+   ],
+   "paras": [
+    [
+     3,
+     6
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    921,
+    922
+   ]
+  }
+ ]
+}

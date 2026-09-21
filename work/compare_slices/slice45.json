@@ -1,0 +1,55 @@
+{
+ "batch": 6,
+ "worklist_idx": [
+  218,
+  219
+ ],
+ "groups": [
+  {
+   "words": [
+    "decrease",
+    "diminish",
+    "dwindle",
+    "reduce"
+   ],
+   "senses": [
+    "减少"
+   ],
+   "paras": [
+    [
+     3,
+     47
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1162,
+    1163,
+    1164,
+    1165
+   ]
+  },
+  {
+   "words": [
+    "contemplate",
+    "gaze",
+    "peer",
+    "stare"
+   ],
+   "senses": [
+    "凝视"
+   ],
+   "paras": [
+    [
+     5,
+     1
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1500,
+    1501
+   ]
+  }
+ ]
+}

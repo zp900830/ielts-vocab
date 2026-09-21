@@ -1,0 +1,110 @@
+{
+ "batch": 4,
+ "worklist_idx": [
+  104,
+  105,
+  106,
+  107,
+  108
+ ],
+ "groups": [
+  {
+   "words": [
+    "cargo",
+    "goods"
+   ],
+   "senses": [
+    "货物"
+   ],
+   "paras": [
+    [
+     3,
+     49
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1176,
+    1177
+   ]
+  },
+  {
+   "words": [
+    "deal",
+    "transaction"
+   ],
+   "senses": [
+    "交易"
+   ],
+   "paras": [
+    [
+     3,
+     50
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    1182,
+    1183
+   ]
+  },
+  {
+   "words": [
+    "clerk",
+    "personnel"
+   ],
+   "senses": [
+    "职员"
+   ],
+   "paras": [
+    [
+     3,
+     53
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1203
+   ]
+  },
+  {
+   "words": [
+    "manage",
+    "regulate"
+   ],
+   "senses": [
+    "管理"
+   ],
+   "paras": [
+    [
+     3,
+     55
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1214
+   ]
+  },
+  {
+   "words": [
+    "chance",
+    "opportunity"
+   ],
+   "senses": [
+    "机会"
+   ],
+   "paras": [
+    [
+     3,
+     55
+    ]
+   ],
+   "all_synonyms": true,
+   "sents": [
+    1211,
+    1212
+   ]
+  }
+ ]
+}

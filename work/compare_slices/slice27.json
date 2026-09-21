@@ -1,0 +1,47 @@
+{
+ "batch": 4,
+ "worklist_idx": [
+  134,
+  135
+ ],
+ "groups": [
+  {
+   "words": [
+    "triumph",
+    "victory"
+   ],
+   "senses": [
+    "胜利"
+   ],
+   "paras": [
+    [
+     4,
+     15
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1373
+   ]
+  },
+  {
+   "words": [
+    "domain",
+    "realm"
+   ],
+   "senses": [
+    "领域"
+   ],
+   "paras": [
+    [
+     4,
+     19
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1390
+   ]
+  }
+ ]
+}

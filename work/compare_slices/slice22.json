@@ -1,0 +1,111 @@
+{
+ "batch": 4,
+ "worklist_idx": [
+  109,
+  110,
+  111,
+  112,
+  113
+ ],
+ "groups": [
+  {
+   "words": [
+    "collaborate",
+    "cooperate"
+   ],
+   "senses": [
+    "合作"
+   ],
+   "paras": [
+    [
+     3,
+     56
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1216
+   ]
+  },
+  {
+   "words": [
+    "norm",
+    "standard"
+   ],
+   "senses": [
+    "标准"
+   ],
+   "paras": [
+    [
+     3,
+     56
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1220,
+    1221
+   ]
+  },
+  {
+   "words": [
+    "mandatory",
+    "obligation"
+   ],
+   "senses": [
+    "义务"
+   ],
+   "paras": [
+    [
+     3,
+     57
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1225,
+    1227
+   ]
+  },
+  {
+   "words": [
+    "prosecute",
+    "sue"
+   ],
+   "senses": [
+    "起诉"
+   ],
+   "paras": [
+    [
+     3,
+     58
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1231,
+    1232
+   ]
+  },
+  {
+   "words": [
+    "murmur",
+    "whisper"
+   ],
+   "senses": [
+    "低语"
+   ],
+   "paras": [
+    [
+     3,
+     59
+    ]
+   ],
+   "all_synonyms": false,
+   "sents": [
+    1243,
+    1244
+   ]
+  }
+ ]
+}

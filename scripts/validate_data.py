@@ -6,6 +6,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
+sys.path.insert(0, str(ROOT / 'tools'))
+from width_rule import width as _ruler_width   # 唯一一把尺；口径与上限都只在 tools/width_rule.py 里改
+from check_compare_draft import sec_variants   # 课文标记的拆法也只有一份（门禁 1 与这里必须同口径）
+
 # 主站 fetchCached 用 DATA_VER 做 Cache API 的 x-ver 键：改了数据文件而没 bump
 # DATA_VER，线上会永久命中旧缓存且无任何报错。故把版本号定义为这些文件的内容哈希，
 # 由本脚本校验一致性 —— 忘记 bump 会直接 FAIL，而不是静默服务旧词库。
@@ -268,12 +272,100 @@ def main():
     if misalign:
         errors.append(f'英文句与中文译文不齐（译文会整段串位）: {misalign[:8]}')
 
+    # 16. 结构化辨析卡（cmp.type === 'compare'）：不许造词、不许无处可挂
+    #     这类卡是第二期 220 组辨析的落库形状，靠人工守不住，所以每条都机检。
+    _sec_raw = (ROOT / 'shadow/data/sections.json').read_text(encoding='utf-8')
+    # 可查集合**不能**含辨析卡自己的内容 —— 否则卡片里编一条搭配，就被它自己"证明"了（自证循环）。
+    # 所以卡片侧只收：词头、义项 m、例句 ex/exZh、字符串型 note（同义词/词伙）。
+    _card_bits = []
+    for _w, _c in vocab.items():
+        _card_bits.append(str(_w))
+        if not isinstance(_c, dict):
+            continue
+        _card_bits += [str(_c.get(k) or '') for k in ('m', 'ex', 'exZh')]
+        if isinstance(_c.get('note'), str):
+            _card_bits.append(_c['note'])
+    # 课文里的 [[词头:表面形式]] 会切断连续串，两种拆法都收进可查集合。
+    # 拆法只有一份实现（tools/check_compare_draft.sec_variants）—— 这里原先抄了一份正则，
+    # 那份会把段落数组开头的字面 `[[` 当标记起点、吞掉整章开头，导致每章第一句永远查不到。
+    hay = ' '.join([*sec_variants(_sec_raw), ' '.join(_card_bits)]).lower()
+    # 每个成员必须真的出现在它声称的共现段里 —— 这是"表挂段末"的前提
+    def _in_para(ci, pi, w):
+        try:
+            para = sections[ci]['paragraphs'][pi]
+        except (IndexError, KeyError, TypeError):
+            return False
+        return any(f'[[{w}:' in s or f'[[{w}]]' in s for s in para if isinstance(s, str))
+    def _width(t):
+        # 口径（2026-09-20 两份独立审核各自从批次 1A 你点头的 5 条实测数反推，结论一致）：
+        # 汉字和全角标点各记 1，其余（拉丁字母、空格、半角括号）记 0.5。
+        # 之前这里抄了一份自己算，中文标点被记 0.5 —— 上限因此比 PRD 说的松，超宽的行能混过去。
+        # 现在只留一个委托：尺子在 tools/width_rule.py，别再这里改口径。
+        return _ruler_width(t)
+    n_cmp = 0
+    for w, c in vocab.items():
+        if not isinstance(c, dict):
+            continue
+        note = c.get('cmp')   # 辨析卡在 cmp；note 是句下要显示的同义词/词伙串，两者不互占
+        # (a) 落地器历史上把结构化辨析卡压成过 Python repr 字符串，线上一显示就是一坨
+        #     {'type': 'compare', ...}。守卫只能防以后再压坏，已经压坏的必须被这里点名。
+        flat = [f for f in (note, c.get('note')) if isinstance(f, str)
+                and re.match(r'^\{\s*[\'"]type[\'"]\s*:', f.strip())]
+        if flat:
+            errors.append(f'辨析卡 {w}: 卡被压成了字符串（页面上会直接显示 dict 字面量），要还原成对象')
+            continue
+        if not (isinstance(note, dict) and note.get('type') == 'compare'):
+            continue
+        n_cmp += 1
+        members = [it.get('w') for it in note.get('items', []) if isinstance(it, dict)]
+        # (b) 卡片挂在段落末尾，「这一句」没有可指的句子了 —— 要么写「这一段」，要么写「同句里」
+        if re.search(r'这一?句', str(note.get('title') or '')):
+            errors.append(f'辨析卡 {w}: 表头用「这一句」指代，但卡片挂在段末（改「这一段」或「同句里」）')
+        for m in members:
+            if m not in vocab:
+                errors.append(f'辨析卡 {w}: 成员 {m} 在 vocab.json 里没有卡（辨析只许讨论目标词，PRD §5.10）')
+        for it in note.get('items', []):
+            eg = it.get('eg')
+            if isinstance(eg, str) and eg.strip() and eg.lower().strip() not in hay:
+                errors.append(f'辨析卡 {w}/{it.get("w")}: 例句查无出处（疑似造搭配）: {eg[:60]}')
+        for row in note.get('diff', []):
+            for k in ('eg', 'collocation'):
+                v = row.get(k)
+                if isinstance(v, str) and v.strip() and v.lower().strip() not in hay:
+                    errors.append(f'辨析卡 {w}: 差异表 {k} 查无出处: {v[:60]}')
+        miss = [k for k in ('title', 'items', 'summary') if not note.get(k)]
+        if miss:
+            errors.append(f'辨析卡 {w}: 缺字段 {miss}（渲染按这三段摆，缺一个就白屏）')
+        summ = note.get('summary')
+        text = summ if isinstance(summ, str) else (summ or {}).get('easy', '') if isinstance(summ, dict) else ''
+        # ≤40 只管「简单记」那半句 —— 段末默认行显示的就是它，整段 summary 是点开才出的
+        m = re.search(r'简单记[:：](.+)$', text)
+        if m:
+            line = m.group(1).strip()
+            if _width(line) > 40:
+                errors.append(f'辨析卡 {w}: 默认那一行宽度 {_width(line)} > 40，手机上会超过两行（PRD §5.10：≤40 的口径是"两行以内"，不是"一行"）: {line[:30]}')
+        elif text:
+            warnings.append(f'辨析卡 {w}: summary 里没有「简单记：」那半句，段末默认行只能整段显示（会超宽）')
+        paras = note.get('paras') or []
+        if members and paras:
+            if not any(all(_in_para(p[0], p[1], m) for m in members)
+                       for p in paras if isinstance(p, (list, tuple)) and len(p) == 2):
+                errors.append(f'辨析卡 {w}: 声明的共现段 {paras} 里并非所有成员都在，这张表没有可挂的段')
+        # (c) at = 渲染时挂哪一段。挂错段 = 表出现在没有这些词的段落后面，比不挂更糟
+        at = note.get('at')
+        if at is not None:
+            if not (isinstance(at, (list, tuple)) and len(at) == 2):
+                errors.append(f'辨析卡 {w}: at 要写成 [章号, 段号]，现在是 {at!r}')
+            elif members and not all(_in_para(at[0], at[1], m) for m in members):
+                errors.append(f'辨析卡 {w}: 锚点段 {list(at)} 里并非所有成员都在（{members}）')
+
     # 9. 基础统计
     print(f"vocab: {len(vocab)} words")
     print(f"chapters: {len(chapters)} macro chapters, {len(ch_words)} unique words")
     print(f"sections placeholders: {len(ph_words)} unique words")
     print(f"root vocab: {len(root_vocab)} words")
     print(f"book: {len(book)} rows")
+    print(f"compare cards (辨析卡): {n_cmp}")
 
     if warnings:
         print('\n待修告警（不阻断）:')
