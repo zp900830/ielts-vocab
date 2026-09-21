@@ -4,24 +4,27 @@ import { test, expect } from '../../fixtures';
 import { currentTimeout } from '../../utils/timeouts';
 
 const ENV = process.env.E2E_ENVIRONMENT || 'local';
+const budget = () => test.setTimeout(Math.min(currentTimeout() * 8, 45000)); // 正常 3s 内跑完；卡住要早点红
 
-// 不用系统音色列表做断言：headless 里它有几条、名字多长都不确定，
-// 拿它当「放得下」的前提会偶发假红。这里把两颗最宽的直接钉死。
-const SHORT = 'Daniel';
-const LONG = 'Guy · 美式男声 ★★★ Neuron Online (en-US) Microsoft Azure Speech —— '.repeat(4);
+/* 「放不下」用窗口宽度造，不往 #voiceSel / #btnCloud 里写长文字。
+   那两个节点归应用所有：loadVoices() 会在 document.fonts.ready、
+   speechSynthesis.onvoiceschanged、云端会话恢复三个异步时刻整体重建它们 —— 覆写晚一步就被冲掉。
+   2026-09-21 那条间歇红就是这个形状（未修版 410 次红 1 次，带探针的 550 次 0 红）：
+   负载决定「覆写」和「重建」谁先到，改产品代码也判不了真假。
+   宽度则量过：真实内容下 ≤1000px 一定放不下、≥1440px 一定放得下，与音色名/章节名长短无关
+   （复测：node work/nav_probe.mjs --sweep）。 */
+const WIDE = 1600;   // 放得下：整排工具保持一行铺开
+const TIGHT = 900;   // 放不下：整排收进汉堡
 
 async function openAt(page: import('@playwright/test').Page, baseURL: string, width: number) {
   await page.goto(`${baseURL}/index.html`);
   await expect(page.locator('.sent').first()).toBeVisible();
   await page.setViewportSize({ width, height: 900 });
-}
-
-async function setLabels(page: import('@playwright/test').Page, voice: string) {
-  await page.evaluate((v) => {
-    document.getElementById('voiceSel')!.innerHTML = `<option>${v}</option>`;
-    document.getElementById('btnCloud')!.innerHTML =
-      '<i class="ri-cloud-line"></i> ' + (v.length > 20 ? '1013711120 已登录，点击可退出' : '未登录');
-  }, voice);
+  // 续读位（ielts-pos 在 profile 里跨轮存活）会让开页直接落在正文中段，把「存档落在哪」
+  // 和「这一行放不放得下」两件事绑在一起，红绿就由上一个用例的残留决定。回顶部再开始量。
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect.poll(() => page.evaluate(() => document.body.classList.contains('scrolled')),
+    { timeout: 4000 }).toBe(false);
 }
 
 const state = (page: import('@playwright/test').Page) => page.evaluate(() => ({
@@ -38,22 +41,20 @@ test.describe('topbar collapse · 汉堡收纳', () => {
   test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
 
   test('放得下就保持一行铺开，不出现汉堡', async ({ page, baseURL }) => {
-    test.setTimeout(Math.min(currentTimeout() * 8, 45000));   // 这四条正常 3s 内跑完；卡住要早点红，别拖满预算
-    await openAt(page, baseURL, 1440);
-    await setLabels(page, SHORT);
+    budget();
+    await openAt(page, baseURL, WIDE);
     await waitsFor(page)(false);
     const s = await state(page);
     expect(s.burgerShown).toBe(false);
     expect(s.inPanel).toBe(false);
   });
 
-  test('放不下就自动收进汉堡，阅读训练那颗也一起进去', async ({ page, baseURL }) => {
-    test.setTimeout(Math.min(currentTimeout() * 8, 45000));   // 这四条正常 3s 内跑完；卡住要早点红，别拖满预算
-    await openAt(page, baseURL, 1280);
-    await setLabels(page, SHORT);
-    await waitsFor(page)(false);            // 前提：这一行本来就放得下
-    await setLabels(page, LONG);
-    await waitsFor(page)(true);             // 被撑宽 → 自动收
+  test('放不下就自动收进汉堡，阅读训练那颗也一起进去；宽度还回去就重新铺开', async ({ page, baseURL }) => {
+    budget();
+    await openAt(page, baseURL, WIDE);
+    await waitsFor(page)(false);            // 前提：宽屏本来就放得下
+    await page.setViewportSize({ width: TIGHT, height: 900 });
+    await waitsFor(page)(true);             // 挤不下 → 自动收
     const s = await state(page);
     expect(s.burgerShown).toBe(true);
     expect(s.inPanel).toBe(true);
@@ -61,11 +62,14 @@ test.describe('topbar collapse · 汉堡收纳', () => {
     await page.locator('#btnMenu').click();
     await expect(page.locator('.topbar-right')).toBeVisible();
     await expect(page.locator('.topbar-right .app-link')).toHaveAttribute('href', '../index.html');
+    await page.setViewportSize({ width: WIDE, height: 900 });
+    await waitsFor(page)(false);            // 反向：放得下了要自己摊回去，不能一收定终身
+    expect((await state(page)).inPanel).toBe(false);
   });
 
   test('窄屏一律走汉堡，面板里的按钮点得到', async ({ page, baseURL }) => {
-    test.setTimeout(Math.min(currentTimeout() * 8, 45000));   // 这四条正常 3s 内跑完；卡住要早点红，别拖满预算
-    await openAt(page, baseURL, 1440);
+    budget();
+    await openAt(page, baseURL, WIDE);
     await page.setViewportSize({ width: 390, height: 844 });
     await waitsFor(page)(true);
     const s = await state(page);
@@ -81,9 +85,8 @@ test.describe('topbar collapse · 汉堡收纳', () => {
   });
 
   test('滚动收缩态下面板照样打得开（body.scrolled 不许把它压没）', async ({ page, baseURL }) => {
-    test.setTimeout(Math.min(currentTimeout() * 8, 45000));   // 这四条正常 3s 内跑完；卡住要早点红，别拖满预算
-    await openAt(page, baseURL, 1280);
-    await setLabels(page, LONG);
+    budget();
+    await openAt(page, baseURL, TIGHT);
     await waitsFor(page)(true);
     await page.evaluate(() => window.scrollTo(0, 800));
     await expect.poll(() => page.evaluate(() => document.body.classList.contains('scrolled')))
@@ -130,8 +133,8 @@ test.describe('topbar collapse · 汉堡收纳', () => {
   });
 
   test('手机上收进小胶囊后，上一句/播放/下一句 仍然看得见点得着', async ({ page, baseURL }) => {
-    test.setTimeout(Math.min(currentTimeout() * 8, 45000));
-    await openAt(page, baseURL, 1440);
+    budget();
+    await openAt(page, baseURL, WIDE);
     await page.setViewportSize({ width: 390, height: 844 });
     await page.evaluate(() => window.scrollTo(0, 900));
     await expect.poll(() => page.evaluate(() => document.body.classList.contains('scrolled')))
