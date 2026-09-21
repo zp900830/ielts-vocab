@@ -90,7 +90,7 @@ test.describe('Plan setup: the first-run screen asks only about minutes', () => 
       });
 
       let n60 = 0; const MIN_SEL = 60;
-      await test.step('Step 3: 换分钟重算「今天大约」，题数恒等于句数 ×2', async () => {
+      await test.step('Step 3: 换分钟重算「今天大约」，题数恒等于句数 ×1（两步制：一句只剩 ② 一题）', async () => {
         const read = async () => {
           const txt = (await page.locator('#psSum').textContent()) || '';
           const m = txt.match(/(\d+)\s*句[^0-9]*(\d+)\s*题/);
@@ -101,12 +101,12 @@ test.describe('Plan setup: the first-run screen asks only about minutes', () => 
         await expect(page.locator('#psMin .ps-opt.sel')).toHaveText('60 分钟');
         const big = await read();
         n60 = big.sents;
-        expect(big.quizzes).toBe(big.sents * 2);
+        expect(big.quizzes).toBe(big.sents);
 
         await page.getByRole('button', { name: '5 分钟', exact: true }).click();
         const small = await read();
         expect(small.sents).toBeLessThan(big.sents);
-        expect(small.quizzes).toBe(small.sents * 2);
+        expect(small.quizzes).toBe(small.sents);
 
         await page.getByRole('button', { name: '60 分钟', exact: true }).click();
         await expect(page.locator('#psMin .ps-opt.sel')).toHaveText('60 分钟');

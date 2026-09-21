@@ -63,13 +63,14 @@
   用例会一边「断言通过」一边点不动。
 
 ## Task-mode footer gotchas (discovered 2026-09-21, 底栏照原型重排后稳定)
-口径（真值：`docs/prototype/2026-09-20-任务模式原型.html:248-253`/`:283-284`/`:382`，排查记录 `work/任务模式底栏排查_2026-09-21.md`）：
+口径（真值：`docs/prototype/2026-09-20-任务模式原型.html:248-253`/`:283-284`，排查记录 `work/任务模式底栏排查_2026-09-21.md`；原型 `:382` 那一步「③ 选义」已于 2026-09-22 删除）：
 - `body.task-mode` 下 `.audiobar` **不是整条留着、也不是整条藏**，而是降级成一条极窄播放行
   （390×844 实测高 41px、1280×762 实测 40px），只剩 播放·暂停 / 单句循环次数 / A-B / 倍速 / 书签（宽屏再加「读到第 N 句」）。
   **倍速在任务模式里必须点得到** —— 旧版 `body.task-mode .audiobar .rate-wrap{display:none}` 把它藏死、全页无第二个入口，
   那是功能丢失不是美观问题，别再用例把它锁成"合理现状"。
-- **② ③ 做题态整条播放行消失**（`body.task-mode.quiz-mode .audiobar{display:none}`），底部只剩通栏任务条一条。
-- 翻句与退出都在通栏上：`#tbPrev`（上一句）/ `#tbNext`（下一句）/ `#tbExit`（退出）/ `#tbAgain`（① 再来、②③ 回看句子）。
+- **② 做题态整条播放行消失**（`body.task-mode.quiz-mode .audiobar{display:none}`），底部只剩通栏任务条一条。
+  （2026-09-22 两步制：原「③ 选义」那一步整删，做题态只剩 ② —— 口径与布局不变，别把它当成漏做。）
+- 翻句与退出都在通栏上：`#tbPrev`（上一句）/ `#tbNext`（下一句）/ `#tbExit`（退出）/ `#tbAgain`（① 再来、② 回看句子）。
   这四颗的显隐**只由 CSS 选择器决定**（`body.task-mode` + `.task-bar[data-state="read"]`），不写进 JS ——
   写进 JS 的话渲染顺序一变就漏关。续读条是 `data-state="resume"` 且**没有** `task-mode`，`#tbExit`/`#tbPrev` 两颗都不许露脸。
 - **任务模式里播放条的四套动画必须整体失效**：收起/展开（`.ab-collapse`/`.ab-expand`）、滚动收成 mini
