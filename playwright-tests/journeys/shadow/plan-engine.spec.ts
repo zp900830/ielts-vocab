@@ -431,18 +431,18 @@ test.describe('replay 续算（opts.state）', () => {
     expect(out.fullGrad).toBeGreaterThan(0);      // 都为 0 的话这条断言是空的
   });
 
-  // 标题说的是本任务的验收方向，断言锁的是当下事实：传了 opts.state 的 replay 就是**原地续算**
-  // （Step 3 那行 `o.state || ...` 不做深拷），所以 base 会被第二次调用改写 → 快照不相等 → false。
-  // 这条逼着 Task 2 的 estimateDays 自己 JSON.parse(JSON.stringify(state)) 再喂进来（计划里
-  // 「两条不能省」的第 ① 条）。改 Step 3 之前它是红的：那时 opts.state 整个被忽略，base 碰都不碰。
-  test('续算不得改写调用方传进来的 state', async ({ page, baseURL }) => {
+  // 契约测试（不是"待修的坏行为"）：传了 opts.state 就是**原地续算**，replay 不替你深拷。
+  // 故意的 —— estimateDays 要在一上千天的循环里天天调它，内部深拷等于每天重拷一份 3245 词的表。
+  // 所以"先自己拷一份再喂进来"是调用方的责任（Task 2 计划里「两条不能省」第 ① 条）。
+  // 哪天有人给 replay 加了内部深拷，这条会红：那是性能回退，不是 bug 被修好了。
+  test('replay 带 opts.state 是原地续算：深拷是调用方的责任', async ({ page, baseURL }) => {
     await page.goto(`${baseURL}/index.html`);
-    const dirty = await page.evaluate(() => {
+    const mutated = await page.evaluate(() => {
       const base = ShadowPlan.replay([ShadowPlan.mkContact('alpha', 1, Date.now(), '2026-09-21')], { boundaryHour: 4 });
       const snap = JSON.stringify(base);
       ShadowPlan.replay([ShadowPlan.mkContact('beta', 2, Date.now() + 864e5, '2026-09-22')], { state: base, boundaryHour: 4 });
-      return JSON.stringify(base) === snap;
+      return JSON.stringify(base) !== snap;
     });
-    expect(dirty).toBe(false);   // 先红：现在的 replay 完全无视 opts.state —— 这条就是本任务要修的
+    expect(mutated).toBe(true);
   });
 });
