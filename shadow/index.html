@@ -1282,6 +1282,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .ps-sum-row.big b { font-size: 24px; color: var(--task-new); }
   .ps-sum-row.warn, .ps-sum-row.warn b { color: var(--coral-deep, #c0492f); }
   .ps-sum-row.warn b { font-size: 12.5px; }
+  /* 「这一期还要多久」那一行：设置屏 / 计划页 / 今天面板 / 任务条共用，全部只读 estimateDays 的返回值 */
+  .ps-eta { margin: 0 0 12px; padding: 8px 12px; font-size: 12.5px; line-height: 1.45; color: var(--muted);
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; font-variant-numeric: tabular-nums; }
+  .ps-eta b { color: var(--text); font-weight: 700; }
+  .ps-eta.sm { margin-top: -6px; padding: 0 12px 8px; border-top: 0; font-size: 11px; opacity: .8; }
+  .task-bar .tb-eta { font-size: 10.5px; color: var(--muted); margin-top: 1px; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; }
   .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 12px rgba(16,180,135,.3); }
   .ps-start:active { filter: brightness(.92); }
   /* 调整计划 */
@@ -1445,7 +1452,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <!-- 任务模式底部操作栏 -->
     <div class="task-bar" id="taskBar" data-state="idle">
       <div class="tb-row">
-      <div class="tb-info"><div class="tb-title" id="tbTitle">—</div><div class="tb-sub" id="tbSub"></div></div>
+      <div class="tb-info"><div class="tb-title" id="tbTitle">—</div><div class="tb-sub" id="tbSub"></div><div class="tb-eta" id="tbEta"></div></div>
       <div class="tb-btns">
         <button class="tb-btn exit" id="tbExit" onclick="TASK.exitTaskMode()" title="退出任务模式" aria-label="退出任务模式"><i class="ri-close-line" aria-hidden="true"></i></button>
         <button class="tb-btn again" id="tbPrev" onclick="step(-1)" aria-label="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i><span class="lbl"> 上一句</span></button>
@@ -5232,6 +5239,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           abT.textContent = cur2 ? `读到第 ${cur2.i + 1} 句${chName ? ' · ' + chName : ''}` : '今日任务';
         }
         syncTaskBarHeight(); syncCardBottom();
+        paintTaskEta();          // 命中缓存时是同步取值，绝不在这里跑模拟
       }
 
       function updateMarkers() {
@@ -5299,6 +5307,126 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       /* 计划设置只问一件事：每天有多少分钟。
          「总天数 → 反推每天句数」这条除法链和「慢/正常/快」三档一起删掉了：
          前者是债务膨胀的根源，后者是把每天句数偷偷乘个倍数，没人知道今天到底几句。 */
+      /* ---- 「这一期还要多久」----
+         他 2026-09-21：「这一期单词毕业需要多久需要在设置计划时和任务正在进行时都要展示。」
+         设置屏 / 计划页 / 今天面板 / 任务条四处读的是同一份 ShadowPlan.estimateDays 的返回值，
+         这里只负责缓存和措辞，一律不许另立算式（PRD「界面数字单一来源」）。
+         措辞用「新词全部过完一遍」而不是「全部毕业」：保温还没做，引擎里毕业词永不再回来
+         （assemble 直接 continue），说"毕业"就是许诺一件做不到的事。 */
+      const _etaMemo = new Map();          // 一次全量模拟 0.3–0.9s，同一档分钟绝不许重跑
+      const _etaPending = new Map();
+      const etaCalls = { n: 0 };           // 只给测试看：证明缓存真的生效
+      /* 缓存键里【故意不放事件条数】。放了才"诚实"，但代价是每读一句、每答一题都要重跑一遍
+         上千个模拟日（实测 0.3–0.9 秒），而他 2026-09-21 的要求正是「任务条那一处只在进任务模式时算一次」；
+         更要紧的是那个数对 887 天的工期根本不会动，动了反而是在抖 —— 底层假设本身就带 ±20%。
+         所以按「计划的指纹」缓存：改分钟 / 改日界 / 暂停新词 / 换一天 / 词表变了 才重算。 */
+      function etaKey(m) {
+        const p = (ROOT2 && ROOT2.plan) || {};
+        return [m, ALL_TARGET_WORDS, day2(), p.boundaryHour, p.pausedNew ? 1 : 0, rate].join('|');
+      }
+      function etaFor(minutes) {
+        const key = etaKey(minutes);
+        if (_etaMemo.has(key)) return Promise.resolve(_etaMemo.get(key));
+        if (_etaPending.has(key)) return _etaPending.get(key);      // 同时在算同一档：只跑一遍
+        const p = (ROOT2 && ROOT2.plan) || {};
+        const run = new Promise(function (resolve) {
+          setTimeout(function () {                                  // 让浏览器先把「算一下…」画出去
+            etaCalls.n++;
+            const val = ShadowPlan.estimateDays(ROOT2 && ROOT2.state, minutes, {
+              totalSents: SENT_RAW.length, wordsOf: wordsOfSent, totalWords: ALL_TARGET_WORDS,
+              boundaryHour: p.boundaryHour || 4, plan: ROOT2 && ROOT2.plan,
+              secNew: secNew(), secReview: secReview(), secQuiz: 6,
+            });
+            _etaPending.delete(key);
+            if (_etaMemo.size > 24) _etaMemo.clear();
+            _etaMemo.set(key, val);
+            resolve(val);
+          }, 0);
+        });
+        _etaPending.set(key, run);
+        return run;
+      }
+      function etaMonth(ts, exact) {
+        const d = new Date(ts);
+        return d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月' + (exact ? ' ' + d.getDate() + ' 日' : '');
+      }
+      function etaText(r, m, exact) {
+        if (!r || r.empty) return '按每天 ' + m + ' 分钟排不出任务，先调大一点或取消「只复习」';
+        if (!r.done) return '按每天 ' + m + ' 分钟，三年内到不了终点（先把每天时间调大些）';
+        return '到 ' + etaMonth(r.doneAt, exact) + ' <b>新词全部过完一遍</b>（需要 ' + r.days + ' 天）';
+      }
+      function etaShort(r) {                 // 任务条那一行：已经有今日进度和「这批还剩」，第三个数只留最短形态
+        if (!r) return '';
+        if (!r.done) return r.empty ? '排不出任务' : '三年内到不了终点';
+        return '全部过完约 ' + etaMonth(r.doneAt, false);
+      }
+      function milestoneText(r) {
+        if (!r || !r.atHorizon) return '';
+        return '到 ' + etaMonth(r.atHorizon.at, false) + ' 能过完约 ' + r.atHorizon.graduated + ' 个词';
+      }
+      function activeDaysRecent(n) {         // 数出来的事实，不是第二个模型
+        const d = (ROOT2 && ROOT2.state && ROOT2.state.daily) || {};
+        const bd = (ROOT2 && ROOT2.plan && ROOT2.plan.boundaryHour) || 4;
+        let c = 0;
+        for (let i = 0; i < n; i++) {
+          const x = d[ShadowPlan.dayKey(Date.now() - i * 864e5, bd)];
+          if (x && ((x.sentDone || 0) > 0 || (x.minutes || 0) > 0)) c++;
+        }
+        return c;
+      }
+      function seedDailyForTest(back) {      // 唯一允许的测试后门：函数名带 ForTest，免得被当成产品代码接走
+        if (!ROOT2) return;
+        const bd = (ROOT2.plan && ROOT2.plan.boundaryHour) || 4;
+        const k = ShadowPlan.dayKey(Date.now() - back * 864e5, (ROOT2.plan && ROOT2.plan.boundaryHour) || 4);
+        ROOT2.state.daily[k] = { minutes: (ROOT2.plan && ROOT2.plan.todayMinutes) || 30, sentDone: 5, promote: 3 };
+        // 造一段「两周前就开始了」的老存档：补句的判据是这个计划的年龄，光塞 daily 不算老
+        if (ROOT2.plan) {
+          // 只往早了挪：连调多次时留下最早那天，否则最后一次会把存档又变回几天前
+          const want = Date.now() - (back + 1) * 864e5;
+          const born = Date.parse(ROOT2.plan.startDate || '0');
+          if (!isFinite(born) || born > want) ROOT2.plan.startDate = ShadowPlan.dayKey(want, bd);
+          savePlan();
+        }
+        _etaMemo.clear(); persist2();
+      }
+      function etaSet(el, html, r) {
+        if (!el || !el.isConnected) return;
+        el.innerHTML = html;
+        el.dataset.days = r && r.done ? String(r.days) : '';
+      }
+      function paintPlanEta() {
+        const el = document.getElementById('planEta');
+        if (!el || !ROOT2 || !ROOT2.plan) return;
+        const m = ROOT2.plan.todayMinutes;
+        el.textContent = '算一下…';
+        etaFor(m).then(r => etaSet(el, etaText(r, m, false) + (milestoneText(r) ? ' · ' + milestoneText(r) : ''), r));
+      }
+      function paintTodayEta() {
+        const el = document.getElementById('todayEta');
+        if (!el || !ROOT2 || !ROOT2.plan) return;
+        const m = ROOT2.plan.todayMinutes;
+        el.textContent = '算一下…';
+        etaFor(m).then(r => {
+          const c = countStages();
+          let t = '已毕业 ' + c.graduated + ' / ' + ALL_TARGET_WORDS + ' · ' + etaText(r, m, false);
+          const ms = milestoneText(r); if (ms) t += ' · ' + ms;
+          /* 补句要有历史可说才说：刚建好计划第一天就冒出「最近两周你实际只做了 1 天」是凭空指责。
+             判据用「这个计划存在多久」，不是「做过几天」—— 不满两周不评价。 */
+          const born = Date.parse((ROOT2.plan && ROOT2.plan.startDate) || '');
+          const planDays = isFinite(born) ? Math.floor((Date.now() - born) / 864e5) + 1 : 1;
+          const act = activeDaysRecent(14);
+          if (planDays >= 14 && act < 7) t += '（最近两周你实际只做了 ' + act + ' 天）';
+          etaSet(el, t, r);
+        });
+      }
+      function paintTaskEta() {
+        const el = document.getElementById('tbEta');
+        if (!el) return;
+        if (!ROOT2 || !ROOT2.plan) { el.textContent = ''; return; }
+        if (!el.dataset.days && !_etaMemo.size) el.textContent = '算一下…';
+        etaFor(ROOT2.plan.todayMinutes).then(r => etaSet(el, etaShort(r), r));
+      }
+
       function renderSetup(p) {
         const MINS = [5, 10, 15, 20, 30, 45, 60];
         let sel = 15;
@@ -5309,12 +5437,20 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             ${MINS.map(m => `<button class="ps-opt${m === sel ? ' sel' : ''}" data-v="${m}">${m} 分钟</button>`).join('')}
           </div></div>
           <div class="ps-sum" id="psSum"></div>
+          <div class="ps-eta" id="psEta" data-days="">算一下…</div>
+          <div class="ps-eta sm" id="psEtaAssume">（按你一句约 25 秒、做题答对 8 成来估算）</div>
           <button class="ps-start" id="psStart">开始这个计划</button>
         </div>`;
         const refresh = () => {
           const per = Math.max(1, Math.round(sel * 60 / (secNew() + 12)));
           const el = document.getElementById('psSum');
           if (el) el.innerHTML = `<div class="ps-sum-row"><span>今天大约</span><b>${Math.min(per, SENT_RAW.length)} 句 · ${Math.min(per * 2, SENT_RAW.length * 2)} 题</b></div>`;
+          const eta = document.getElementById('psEta');
+          if (eta) {
+            eta.textContent = '算一下…';
+            const want = sel;
+            etaFor(want).then(r => etaSet(eta, etaText(r, want, true), r));
+          }
         };
         refresh();
         p.querySelectorAll('.ps-opts').forEach(group => group.addEventListener('click', e => {
@@ -5342,6 +5478,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           <button class="tp-close" onclick="TASK.closePanel()" aria-label="关闭面板">✕</button></div>
           <div class="tp-tabs">${tabs}</div>` +
           (_view === 'plan' ? renderPlanView() : _view === 'book' ? renderBookView() : renderTodayView());
+        // 数字停在「打开面板那一刻」是这类双路径写同一节点最典型的翻车；放在这里，
+        // 改分钟 / 改日界 / 暂停新词三条重绘路径就都自动带上，不用一个个补。
+        if (_view === 'plan') paintPlanEta(); else if (_view === 'today') paintTodayEta();
       }
 
       /* 两栏并列、永不合并成一个「总进度」：今天做到位没有，和词往前走了几步，
@@ -5379,6 +5518,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         </div>
         <div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>还剩 ${leftN} 句 · 覆盖 ${tp.words.length} 个词</b>
           <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}</span></div>
+        <div class="tp-note sm ps-eta" id="todayEta" data-days="">算一下…</div>
         <div class="tp-actions"><button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始 · 先通读这一批'}</button>
           ${taskMode ? '<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>' : ''}</div>`;
       }
@@ -5393,6 +5533,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           `<div class="ps-group"><label>新词</label><div class="ps-opts">
             <button class="ps-opt${ROOT2.plan.pausedNew ? '' : ' sel'}" onclick="TASK.setPauseNew(false)">正常见新词</button>
             <button class="ps-opt${ROOT2.plan.pausedNew ? ' sel' : ''}" onclick="TASK.setPauseNew(true)">只复习，先不见新词</button></div></div>
+          <div class="ps-eta" id="planEta" data-days="">算一下…</div>
           ${ROOT2.report && ROOT2.report.words ? `<div class="tp-note sm">上次改成按词记：<b>${ROOT2.report.words}</b> 个词从句子账搬过来，`
             + `其中 ${ROOT2.report.cappedWords} 个原本算「巩固/掌握」的被压回「已见面」，要重新考才算数。</div>` : ''}
           <div class="tp-note sm">进度存在这台设备上，并以上传「完成记录」的方式同步。<span class="sync-state" id="syncState">${syncHintText()}</span></div>
@@ -5666,6 +5807,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
         offerResume, resumeTask, skipResume, hideResumeOffer,
         initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
+        etaFor, etaCalls, countStages, seedDailyForTest,
         pass: passNumber, setPass, currentQuiz, answerQuiz, nextQuiz, advance, finished: isFinished,
         submitRecall, pickOpt, flagQuiz, reviewSentence, summaryContinue: startSummaryContinue,
         quizTotal: () => quizList().length, quizDone: quizDoneCount, quizWrong: quizWrongCount,
