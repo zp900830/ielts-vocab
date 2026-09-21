@@ -242,14 +242,23 @@ def parse_group(heading, lines, a, b, fname, vocab):
     g['items'] = items
 
     # --- 默认行 / 总结句 ---
-    li = find(r'默认.*行')
+    # 必须按「小标题形状」定位：批次 6 的修复代理在组里加了讲"默认行/总结句不复用旧表"的说明段，
+    # 老正则 `默认.*行` 先撞上那段散文，于是把整段「这一段在讲什么」当成了默认行（量出 282 宽）。
+    HEAD = r'^\s*>?\s*(?:#{1,6}\s*|\*\*)?%s'
+    li = find(HEAD % r'默认.{0,14}行')
     g['line'] = code_after(lines, li + 1) if li else ''
     if not g['line']:
         errs.append(f'{fname} 组{idx}: 没有默认那一行')
-    si = find(r'总结句')
+    elif '\n' in g['line'] or width(g['line']) > 120:
+        errs.append(f'{fname} 组{idx}: 默认行取到的是整段（{width(g["line"]):.0f} 宽）而不是那一行 '
+                    f'—— 小标题没写成 `### 默认那一行（实测宽度 X / ≤40）` + 紧跟一个 ``` 围栏')
+    si = find(HEAD % '总结句')
     g['summary_line'] = block_after_quote(lines, si + 1) if si else ''
     if not g['summary_line']:
         errs.append(f'{fname} 组{idx}: 没有总结句')
+    elif width(g['summary_line']) > 120:
+        errs.append(f'{fname} 组{idx}: 总结句取到的是整段（{width(g["summary_line"]):.0f} 宽）'
+                    f'—— 小标题没写成 `### 总结句（实测宽度 X / ≤30）` + 紧跟一行')
 
     # --- diff ---
     # 两种形状都收，**草稿一种也不改写**（四份审核是逐行核过草稿原文的，批量重排会把
