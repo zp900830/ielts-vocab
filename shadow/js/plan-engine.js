@@ -283,6 +283,78 @@
     return ranked[0].w;
   }
 
+  /* ---------- 完工估算（规格 2026-09-21 §4.1）---------- */
+  /* 已毕业词数。引擎里没有现成计数器（daily 只记 promote/minutes 这类过程量），
+     所以只能遍历 —— 3245 个槽一天一次，量级毫秒，别为它加字段（加了就多一份真值）。 */
+  function countGraduated(st) {
+    let n = 0;
+    const ws = (st && st.words) || {};
+    for (const k in ws) if (ws[k].stage === 'graduated') n++;
+    return n;
+  }
+
+  /* 「照每天 N 分钟，全部毕业大约要多久」—— 全项目唯一一份算式，界面三处都调这里。
+     做法是照真流程走一遍：逐日用现成 assemble 排队列 → 队列翻成 contact/quiz 事件
+     → 只把新事件续算进同一份 state（Task 1 的 opts.state）→ 数毕业词。
+     两条不能省：
+       ① 必须深拷 state（见下面 replay 前那行注释）。
+       ② 不许在这里另写「每天几个词」的公式。宁可慢，也不能有两份真值。 */
+  function estimateDays(state, minutes, opts) {
+    const o = opts || {};
+    const boundary = Number.isInteger(o.boundaryHour) ? o.boundaryHour : 4;
+    const total = o.totalSents || 0;
+    const wordsOf = typeof o.wordsOf === 'function' ? o.wordsOf : function () { return []; };
+    const accuracy = typeof o.accuracy === 'number' ? o.accuracy : 0.85;
+    const maxDays = o.maxDays || 1095;
+    const horizon = o.horizonDays || 365;
+    const start = Number.isFinite(o.now) ? o.now : Date.now();
+    const allWords = o.totalWords || 0;
+    const plan = o.plan || (state && state.plan) || null;
+    const asOpts = { totalSents: total, wordsOf: wordsOf, boundaryHour: boundary, plan: plan,
+                     secNew: o.secNew, secReview: o.secReview, secQuiz: o.secQuiz, rate: o.rate };
+    // 深拷是调用方的责任、不是 replay 的（Task 1 契约测试锁死了这个分工）：估算要在
+    // 上千个模拟日的循环里天天调 replay，让 replay 内部拷一份 3245 词的表等于白拷一千遍；
+    // 但不拷直接喂活状态，replay 原地续算会把他真实进度算坏。两个都不能要，所以拷在这里。
+    let st = JSON.parse(JSON.stringify(state || emptyState()));
+    st.plan = plan;
+    const graduatedNow = countGraduated(st);
+    let daysUsed = 0, done = allWords > 0 && graduatedNow >= allWords, atHorizon = null, empty = false;
+    for (let day = 0; !done && day <= maxDays; day++) {
+      const now = start + day * DAY_MS;
+      const dayName = dayKey(now, boundary);
+      // 里程碑与完工日是同一次前向行走上的两个读数（§4.1），绝不为了「一年后毕业几个」再跑一遍。
+      if (day === horizon) atHorizon = { days: horizon, graduated: countGraduated(st), at: now };
+      asOpts.now = now; asOpts.todayMinutes = minutes;
+      const r = assemble(st, asOpts);
+      const fresh = [];
+      for (let i = 0; i < r.queue.length; i++) {
+        const q = r.queue[i];
+        for (let j = 0; j < q.words.length; j++) fresh.push(mkContact(q.words[j], q.i, now, dayName));
+      }
+      for (let i = 0; i < r.items.length; i++) {
+        const it = r.items[i];
+        const kind = it.pass === 3 ? 'mc4zh' : 'recall';
+        // 确定性抽签：同一个（天, 词, 题种）永远同结果；换成 Math.random 单调性测试会随机红。
+        // 注意 hash32 只吃字符串 —— 直接喂数字会被它内部当空串（恒返回 5381），accuracy 就失效了。
+        const ok = (hash32(day + '|' + it.w + '|' + it.s + '|' + kind) % 1000) < accuracy * 1000;
+        fresh.push(mkQuiz(it.w, it.s, kind, ok, now, dayName));
+      }
+      if (!fresh.length) { empty = true; break; }   // 今天一个都排不出来 → 再等下去也不会毕业，别再空转
+      st = replay(fresh, { state: st, boundaryHour: boundary, wordsOf: wordsOf, plan: plan });
+      if (allWords > 0 && countGraduated(st) >= allWords) {
+        done = true; daysUsed = day + 1;
+        // 完工早于里程碑日：毕业只进不退（模拟流里没有 relearn），收口时的读数即一年后的答案，
+        // 就地补记这一次行走的读数 —— 这不是第二遍模拟，也不写死任何日期算法。
+        if (!atHorizon) atHorizon = { days: horizon, graduated: countGraduated(st), at: start + horizon * DAY_MS };
+      }
+    }
+    return {
+      graduatedNow: graduatedNow, total: allWords,
+      done: done, days: done ? daysUsed : null, doneAt: done ? start + daysUsed * DAY_MS : null,
+      atHorizon: atHorizon, capped: !done && !empty, empty: empty,
+    };
+  }
+
   /* ---------- 出题 ----------
      ② 永远遮目标词（原则 3）。第一期没有裁决过的辨析组，所以只出回忆题 ——
      回忆题结构上不存在双解，宁可不给选项也不出错题（原则 8）。 */
@@ -432,5 +504,6 @@
     dayKey, dayDiff, wordInterval, emptyState,
     eventId, mkContact, mkQuiz, mkPromote, newWord, stageOf, replay, wordState,
     assemble, recallQuiz, meaningQuiz, judgeRecall, editDistance, parseSenses, hash32, migrate,
+    countGraduated, estimateDays,
   };
 })();

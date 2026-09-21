@@ -36,6 +36,12 @@ declare const ShadowPlan: {
     daily: Record<string, Record<string, number>>;
     eventsSeen: number;
   };
+  countGraduated: (st: any) => number;
+  estimateDays: (state: any, minutes: number, opts: any) => {
+    graduatedNow: number; total: number; done: boolean; days: number | null;
+    doneAt: number | null; atHorizon: { days: number; graduated: number; at: number } | null;
+    capped: boolean; empty: boolean;
+  };
 };
 
 const ENV = process.env.E2E_ENVIRONMENT || 'local';
@@ -444,5 +450,78 @@ test.describe('replay 续算（opts.state）', () => {
       return JSON.stringify(base) !== snap;
     });
     expect(mutated).toBe(true);
+  });
+});
+
+/* ---------- Task 2：estimateDays —— 全项目唯一那份「要多久」的算式（规格 §4.1） ----------
+   夹具沿用上面 time-budget 那套写法（60 句 × 每句 2 词 = 120 词），不另造词表。
+   est() 从空 state 冷启动；分钟数之外只注入 maxDays / accuracy。 */
+test.describe('estimateDays', () => {
+  test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
+
+  const est = (page: any, minutes: number, extra?: any) => page.evaluate((a: any) => {
+    const st = ShadowPlan.replay([], { boundaryHour: 4 });
+    return ShadowPlan.estimateDays(st, a.minutes, {
+      totalSents: 60, wordsOf: (i: number) => ['w' + (i * 2), 'w' + (i * 2 + 1)],
+      totalWords: 120, now: Date.UTC(2026, 8, 21), boundaryHour: 4, plan: null,
+      maxDays: a.maxDays || 1095, accuracy: a.accuracy,
+    });
+  }, { minutes, ...extra });
+
+  test('冷启动（空 state）也必须给得出有限结果，不许抛', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    const r = await est(page, 30);
+    expect(r.graduatedNow).toBe(0);
+    expect(r.total).toBe(120);
+    expect(typeof r.capped).toBe('boolean');
+    if (r.done) { expect(r.days).toBeGreaterThan(0); expect(r.doneAt).toBeGreaterThan(0); }
+  });
+
+  test('单调性：分钟加倍，天数严格不增', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    const a = await est(page, 15), b = await est(page, 30), c = await est(page, 60);
+    const d = (x: any) => (x.done ? x.days : 1e9);
+    expect(d(c)).toBeLessThanOrEqual(d(b));
+    expect(d(b)).toBeLessThanOrEqual(d(a));
+    // 看门狗：三档至少有一档真走到达标（全 capped 时 d()≡1e9，上面两条就是空断言）。
+    expect(Math.min(d(a), d(b), d(c))).toBeLessThan(1e9);
+  });
+
+  test('同一份输入跑两次结果逐字段相等（禁 Math.random 的看门狗）', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    expect(await est(page, 20)).toEqual(await est(page, 20));
+  });
+
+  test('封顶分支：maxDays 太小 → capped=true 且 done=false，days 必须是 null', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    const r = await est(page, 15, { maxDays: 5 });
+    expect(r.done).toBe(false);
+    expect(r.capped).toBe(true);
+    expect(r.days).toBe(null);
+    expect(r.doneAt).toBe(null);
+  });
+
+  test('里程碑与完工日是同一次行走的读数，不许再跑第二遍', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    const r = await est(page, 60, { maxDays: 1095 });
+    expect(r.atHorizon).not.toBe(null);
+    const h = r.atHorizon as { days: number; graduated: number; at: number };
+    expect(h.days).toBe(365);
+    expect(h.graduated).toBeGreaterThan(0);
+    if (r.done) expect(h.graduated).toBeLessThanOrEqual(r.total);
+  });
+
+  // 附录 B 第 2 条（规格 §7 第 6 条）：分母是入参，界面那行「全部 X 个词」实时跟它走。
+  test('分母来自入参，不许写死 3245', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    const t = await page.evaluate(() => ShadowPlan.estimateDays(ShadowPlan.replay([], {}), 30,
+      { totalSents: 60, wordsOf: () => [], totalWords: 777 }).total);
+    expect(t).toBe(777);
   });
 });
