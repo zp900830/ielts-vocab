@@ -83,8 +83,9 @@
     const o = opts || {};
     const boundary = Number.isInteger(o.boundaryHour) ? o.boundaryHour : 4;
     const wordsOf = typeof o.wordsOf === 'function' ? o.wordsOf : function () { return []; };
-    const st = emptyState();
-    st.plan = o.plan || null;
+    // 续算：传了 state 就在它上面接着走。不传时行为与旧实现逐字一致（从空重建）。
+    // 传了 state 就**不再动它的 plan** —— 续算方自己保证 plan 已经在那份拷贝里。
+    const st = o.state || Object.assign(emptyState(), { plan: o.plan || null });
     const ids = new Set();
     const credited = new Set();          // 词 + 句 + 日 只记一次接触
     const daySents = new Map();          // dayKey → Set<句号>

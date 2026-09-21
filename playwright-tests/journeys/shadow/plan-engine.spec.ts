@@ -386,3 +386,63 @@ test.describe('quiz builder', () => {
                           far: false, empty: false, dist: [3, 0] });
   });
 });
+
+/* ---------- Task 1：replay 的「接着算」入口（docs/superpowers/plans/2026-09-21 §Task 1） ----------
+   引擎侧唯一的改动是给 replay 加一个可选 opts.state。不传 = 与今天逐字一致（从空重建），
+   所以上面那批旧用例一条都不该被动到 —— 那本身就是本任务的一半验收。 */
+test.describe('replay 续算（opts.state）', () => {
+  test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
+
+  test('只喂新事件 ≡ 全量重放，最终毕业数必须逐词相等', async ({ page, baseURL }) => {
+    await page.goto(`${baseURL}/index.html`);
+    const out = await page.evaluate(() => {
+      const ev: unknown[] = [];
+      const t0 = Date.now();
+      const PER_DAY = 24;                       // 6 个只露一面的新词 + 6 个回炉词 ×3 条事件
+      // 30 天。每天见 6 个全新词（撑大词表，让 sameKeys 不是个空检查），
+      // 外加 6 个「回炉词」每天 contact + ② + ③ 各一次 —— 毕业判据是 reps>=20 && ok3>=1，
+      // 只露一面的新词永远毕不了业，没有这 6 个回炉词的话末尾那条 fullGrad>0 就是空断言。
+      for (let d = 0; d < 30; d++) {
+        const ts = t0 + d * 864e5;
+        const day = ShadowPlan.dayKey(ts, 4);
+        for (let k = 0; k < 6; k++) {
+          ev.push(ShadowPlan.mkContact('w' + (d * 6 + k), d * 6 + k, ts, day));
+        }
+        for (let k = 0; k < 6; k++) {
+          const w = 'c' + k;
+          ev.push(ShadowPlan.mkContact(w, 1000 + k, ts, day));
+          ev.push(ShadowPlan.mkQuiz(w, 1000 + k, 'recall', true, ts, day));
+          ev.push(ShadowPlan.mkQuiz(w, 1000 + k, 'mc4zh', true, ts, day));
+        }
+      }
+      const full = ShadowPlan.replay(ev, { boundaryHour: 4 });
+      let inc = ShadowPlan.emptyState();
+      for (let d = 0; d < 30; d++) {
+        inc = ShadowPlan.replay(ev.slice(d * PER_DAY, (d + 1) * PER_DAY), { state: inc, boundaryHour: 4 });
+      }
+      const grad = (s: any) => Object.keys(s.words).filter((k) => s.words[k].stage === 'graduated').length;
+      return {
+        fullGrad: grad(full), incGrad: grad(inc),
+        sameKeys: JSON.stringify(Object.keys(full.words).sort()) === JSON.stringify(Object.keys(inc.words).sort()),
+      };
+    });
+    expect(out.sameKeys).toBe(true);
+    expect(out.incGrad).toBe(out.fullGrad);
+    expect(out.fullGrad).toBeGreaterThan(0);      // 都为 0 的话这条断言是空的
+  });
+
+  // 标题说的是本任务的验收方向，断言锁的是当下事实：传了 opts.state 的 replay 就是**原地续算**
+  // （Step 3 那行 `o.state || ...` 不做深拷），所以 base 会被第二次调用改写 → 快照不相等 → false。
+  // 这条逼着 Task 2 的 estimateDays 自己 JSON.parse(JSON.stringify(state)) 再喂进来（计划里
+  // 「两条不能省」的第 ① 条）。改 Step 3 之前它是红的：那时 opts.state 整个被忽略，base 碰都不碰。
+  test('续算不得改写调用方传进来的 state', async ({ page, baseURL }) => {
+    await page.goto(`${baseURL}/index.html`);
+    const dirty = await page.evaluate(() => {
+      const base = ShadowPlan.replay([ShadowPlan.mkContact('alpha', 1, Date.now(), '2026-09-21')], { boundaryHour: 4 });
+      const snap = JSON.stringify(base);
+      ShadowPlan.replay([ShadowPlan.mkContact('beta', 2, Date.now() + 864e5, '2026-09-22')], { state: base, boundaryHour: 4 });
+      return JSON.stringify(base) === snap;
+    });
+    expect(dirty).toBe(false);   // 先红：现在的 replay 完全无视 opts.state —— 这条就是本任务要修的
+  });
+});
