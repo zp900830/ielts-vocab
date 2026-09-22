@@ -156,7 +156,9 @@ async function measurePopup(page: import('@playwright/test').Page, p: { name: st
     await last.click({ timeout: 4000 });
   } catch (e) {
     throw new Error(`${p.name} 最外侧那一项「${geo.lastLabel}」点不到：`
-      + String((e as Error).message).split('\n')[0]);
+      /* 别只留第一行 —— 2026-09-23 那次偶发红，第一行只有 "Timeout 4000ms exceeded"，
+         真正点名的那行（谁 intercepts pointer events）在第 8 行，被截掉之后白查二十分钟。 */
+      + String((e as Error).message).split('\n').slice(0, 10).join('\n'));
   }
   // 选完通常自己收；没收的（书签那条）手工收一下，别挡住下一颗
   await page.evaluate(() => document.querySelectorAll('.loop-wrap.open, .rate-wrap.open, .ab-wrap.open')
@@ -244,4 +246,10 @@ test.describe('播放条小弹层 · 不许伸出屏幕', () => {
     await run(page);
     await page.evaluate(() => { try { TASK.exitTaskMode(); TASK.resetV2(); } catch (e) {} });
   });
+
+  /* 已知未修（别在这里加断言，先修 CSS 再说）：这条锁偶发红，量到的不是弹层伸出屏幕，
+     而是常驻的「连不上云端」药丸压在弹层最下面那一档上 —— 390 档实测药丸下沿与末项上沿
+     同为 671px，底栏高度取整差 1px 就压上去。根因与"为什么改 z-index 没用"写在
+     shadow/index.html 的 .sync-hint 注释里。曾在此加过一条强制显形药丸的断言，
+     反向验证（把 595 改回 110）它不响 —— 量不到的锁比没锁更坏，已撤。 */
 });
