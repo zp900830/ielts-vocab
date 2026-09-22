@@ -509,10 +509,10 @@ test.describe('two passes', () => {
      那颗 .ps-start 只在「还没有计划」时才存在，计划已建就会点到永远等不到的按钮。
      可见性一律用 Playwright 的 :visible —— 任务栏和播放条都是 position:fixed，
      offsetParent 恒为 null，拿它判可见会把两颗都在屏幕上的按钮读成"不存在"。 */
-  /* 底栏口径 2026-09-21 定稿（他原话：「播放条的所有功能都放在通栏任务条上」）：
-     播放条整条隐藏，它那一排控件搬进任务条的第二行；② 做题态第二行也去掉。
+  /* 底栏口径：2026-09-21 他先定「播放条的所有功能都放在通栏任务条上」，2026-09-22 又改一次
+     「所有操作按钮一行展示，最重要的在最右、依次往左排」。以最后一句为准：一条通栏、一行按钮。
      所以断言一律以 #taskBar 为家 —— 别再拿 #audiobar 的可见性当依据。 */
-  test('任务模式底栏只有一条：① 两行全在通栏上、② 做题态收成一行，翻句/退出/回看各只一颗', async ({ page }) => {
+  test('任务模式底栏只有一条、**一行**：所有操作按钮同一行，下一句在最右、退出在最左', async ({ page }) => {
     test.setTimeout(currentTimeout());   // hook 给了 12 分钟；这条本地 5 秒内该完
     // ① 通读：播放条整条不显示，它的功能全部住在任务条里
     await expect(page.locator('#audiobar')).not.toBeVisible();
@@ -529,6 +529,37 @@ test.describe('two passes', () => {
     await expect(page.locator('#rateCycle')).toBeVisible();
     await expect(page.locator('#btnLoop')).toBeVisible();
     await expect(page.locator('#btnAB')).toBeVisible();
+
+    /* 他 2026-09-22：「底部工具条是乱的，所有操作按钮一行展示。最重要的操作按钮在最右侧，依次往左排。」
+       所以量三件事：① 播放那一组已经搬进按钮堆里（不再是第二行）；② 所有可见按钮的垂直中心在同一行；
+       ③ 从右往左的次序是 下一句 → 再来 → 上一句 → 播放 → 退出。 */
+    const geo = await page.evaluate(() => {
+      const ids = ['tbExit', 'btnPlay', 'btnLoop', 'rateCycle', 'tbPrev', 'tbAgain', 'tbNext'];
+      const r: Record<string, { x: number; y: number }> = {};
+      ids.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const b = el.getBoundingClientRect();
+        r[id] = { x: b.left, y: b.top + b.height / 2 };
+      });
+      const ys = Object.values(r).map((v) => v.y);
+      const ab = document.querySelector('.tb-play .ab-right') as HTMLElement | null;
+      return {
+        r,
+        inBtns: !!document.getElementById('tbPlay')?.closest('.tb-btns'),
+        spread: ys.length ? Math.max(...ys) - Math.min(...ys) : 999,
+        abRightShown: !!ab && getComputedStyle(ab).display !== 'none',
+      };
+    });
+    expect(geo.inBtns, '播放控件必须住在按钮行里（#tbPlay 在 .tb-btns 内），不许再单独占一行').toBe(true);
+    expect(geo.abRightShown, '「读到第 N 句」那格在一行里没有位置，必须藏掉').toBe(false);
+    expect(geo.spread, '所有操作按钮的垂直中心必须落在同一行').toBeLessThan(6);
+    const order = ['tbNext', 'tbAgain', 'tbPrev', 'btnPlay', 'tbExit'].map((k) => geo.r[k].x);
+    expect(order, '从右往左：下一句 → 再来 → 上一句 → 播放 → 退出').toEqual([...order].sort((a, b) => b - a));
+    // 退出那颗只有图标，名字靠悬浮提示（他：鼠标悬浮状态需要有提示「退出任务模式」）
+    await expect(page.locator('#tbExit')).toHaveAttribute('title', '退出任务模式');
+    expect(await page.evaluate(() =>
+      getComputedStyle(document.querySelector('#tbExit .lbl') as Element).display)).toBe('none');
 
     // ② 做题态：第二行整行消失（原型 :283-284 底部只有任务条一条；:382 那一步已随两步制删除）
     await page.evaluate(() => { TASK.setPass(2); TASK.next(); });

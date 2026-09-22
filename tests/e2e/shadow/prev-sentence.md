@@ -33,7 +33,9 @@ the chain makes the case flaky; what this case asserts is what the cut submits, 
 without audio._
 
 ### 2. Press 上一句
-Instrument `speak()` to count submissions, then press 上一句.
+Instrument `speak()` to count submissions, then press the **play bar's** 上一句
+(`#audiobar button[title="上一句"]`). Not a bare title match: since 2026-09-22 the task bar has its own
+上一句 carrying the same tooltip, so an unscoped title selector is ambiguous in the DOM.
 **Verify:** `idx` becomes exactly `5`, and the highlighted `.sent.playing` element is sentence 5.
 
 ### 3. Only the target sentence is submitted

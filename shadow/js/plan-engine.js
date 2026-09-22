@@ -173,7 +173,10 @@
     const rate = o.rate || 1;
     const secNew = (o.secNew || 25) / rate;
     const secReview = (o.secReview || 8) / rate;
-    const secQuiz = (o.secQuiz || 6) / rate;
+    /* 预算里【没有】做题时间 —— 规格 2026-09-22 D10。他原话：「这个时间用通读时间算，
+       不加挖空选词了，我希望是快速刷词」「挖词 20 几个词我可以 5 分钟左右选完，因为不用通读全文了」。
+       题照旧出、照旧答（② 是毕业凭据），只是不再占每天分钟数：一句读完顺手选一空，
+       不必回头再读全文，所以它不该出现在工期算式里。别把它加回去。 */
     const budget = Math.max(0, (o.todayMinutes || 0) * 60);
     const boundary = Number.isInteger(o.boundaryHour) ? o.boundaryHour : 4;
     const ws = (state && state.words) || {};
@@ -202,7 +205,7 @@
     const chosen = new Map();                              // 句号 → {i, pool, sec}
     let left = budget, droppedA = 0;
     function take(i, pool, sec) {
-      const cost = sec + secQuiz;                            // 一句的代价 = 读 + ② 一题（两步制前是 ②③ 两题）
+      const cost = sec;                                       // 一句的代价 = 只算通读（D10：② 挖空选词不占预算）
       if (left < cost) return false;
       let cur = chosen.get(i);
       if (cur) { if (cur.pool === 'C' && pool !== 'C') { left -= cur.sec - sec; cur.pool = pool; cur.sec = sec; } return true; }
@@ -238,8 +241,8 @@
         const st = ws[w];
         if (!st || st.stage === 'graduated') return;
         if (!(st.ctx[String(q.i)] > 0) || st.ctx.ex > 0) return;
-        if (left < secQuiz) return;
-        left -= secQuiz; kSlots++;
+        // D10 后题不占预算，例句题的上限天然就是「今天读到的这些词」，不会自己长出来。
+        kSlots++;
         // from = 这道例句题是从哪一句排进队列的：宿主拿它去找同段/同辨析组的干扰项
         items.push({ kind: 'quiz', pass: 2, s: 'ex', w: w, pool: q.pool, from: q.i });
       });
@@ -267,9 +270,9 @@
       queue: queue, items: items,
       words: Array.from(new Set(queue.reduce(function (a, q) { return a.concat(q.words); }, []))),
       stats: {
-        // 每句按 (句时 + 1×secQuiz) 预留、k 槽按 1×secQuiz 预留，
-        // 所以 usedSec = readSec + items×secQuiz ≤ budget 由构造保证
-        budgetSec: budget, usedSec: readSec + items.length * secQuiz,
+        // D10：预算与用量都只算通读时间，所以 usedSec = readSec ≤ budget 由构造保证。
+        // 做题时间故意不进来（他 2026-09-22 的原话与理由见上面 secNew 那段注释）。
+        budgetSec: budget, usedSec: readSec,
         dueWords: dueWords, newWords: newTaken, newPool: fresh.length, droppedA: droppedA,
         floor: floor, day: today, kSlots: kSlots,
         todayMinutes: o.todayMinutes || 0,
@@ -287,19 +290,26 @@
     return ranked[0].w;
   }
 
-  /* ---------- 完工估算（规格 2026-09-21 §4.1）---------- */
-  /* 已毕业词数。引擎里没有现成计数器（daily 只记 promote/minutes 这类过程量），
-     所以只能遍历 —— 3245 个槽一天一次，量级毫秒，别为它加字段（加了就多一份真值）。 */
-  function countGraduated(st) {
+  /* ---------- 完工估算（规格 2026-09-21 §4.1 + 2026-09-22 D10）---------- */
+  /* 「过完一遍」= 这个词被通读到过至少一次（有一条算进账的接触事件）。
+     2026-09-22 他把工期口径改成这个：原话「我希望是快速刷词」「这个时间用通读时间算」。
+     判据不是毕业（reps≥20 且答对过 ②）—— 那会把「一年只过完 48 个词」这种数摆到界面上，
+     而他每天实打实读进去几十个词，那个数与他的体感差一个量级，压力全来自这里。
+     毕业数仍然看得到，但那是 state 里数出来的真值（countStages），不由这个模型许诺。
+     引擎里没有现成计数器，只能遍历 —— 3245 个槽一天一次，量级毫秒，别为它加字段。 */
+  function countPassed(st) {
     let n = 0;
     const ws = (st && st.words) || {};
-    for (const k in ws) if (ws[k].stage === 'graduated') n++;
+    for (const k in ws) {
+      const w = ws[k];
+      if ((w.reps || 0) > 0 || (w.firstSeenAt || 0) > 0) n++;
+    }
     return n;
   }
 
-  /* 「照每天 N 分钟，全部毕业大约要多久」—— 全项目唯一一份算式，界面三处都调这里。
+  /* 「照每天 N 分钟，把整本词表通读一遍大约要多久」—— 全项目唯一一份算式，界面四处都调这里。
      做法是照真流程走一遍：逐日用现成 assemble 排队列 → 队列翻成 contact/quiz 事件
-     → 只把新事件续算进同一份 state（Task 1 的 opts.state）→ 数毕业词。
+     → 只把新事件续算进同一份 state（Task 1 的 opts.state）→ 数过完的词。
      两条不能省：
        ① 必须深拷 state（见下面 replay 前那行注释）。
        ② 不许在这里另写「每天几个词」的公式。宁可慢，也不能有两份真值。 */
@@ -309,25 +319,27 @@
     const total = o.totalSents || 0;
     const wordsOf = typeof o.wordsOf === 'function' ? o.wordsOf : function () { return []; };
     const accuracy = typeof o.accuracy === 'number' ? o.accuracy : 0.85;
-    const maxDays = o.maxDays || 1095;
-    const horizon = o.horizonDays || 365;
+    // 用 Number.isFinite 而不是 `||`：`o.maxDays || 1095` 会把合法的 0 吃掉，
+    // 于是「只许跑 0 天」这个输入永远传不进来（封顶分支因此在测试里根本走不到）。
+    const maxDays = Number.isFinite(o.maxDays) ? o.maxDays : 1095;
+    const horizon = Number.isFinite(o.horizonDays) ? o.horizonDays : 365;
     const start = Number.isFinite(o.now) ? o.now : Date.now();
     const allWords = o.totalWords || 0;
     const plan = o.plan || (state && state.plan) || null;
     const asOpts = { totalSents: total, wordsOf: wordsOf, boundaryHour: boundary, plan: plan,
-                     secNew: o.secNew, secReview: o.secReview, secQuiz: o.secQuiz, rate: o.rate };
+                     secNew: o.secNew, secReview: o.secReview, rate: o.rate };
     // 深拷是调用方的责任、不是 replay 的（Task 1 契约测试锁死了这个分工）：估算要在
     // 上千个模拟日的循环里天天调 replay，让 replay 内部拷一份 3245 词的表等于白拷一千遍；
     // 但不拷直接喂活状态，replay 原地续算会把他真实进度算坏。两个都不能要，所以拷在这里。
     let st = JSON.parse(JSON.stringify(state || emptyState()));
     st.plan = plan;
-    const graduatedNow = countGraduated(st);
-    let daysUsed = 0, done = allWords > 0 && graduatedNow >= allWords, atHorizon = null, empty = false;
+    const passedNow = countPassed(st);
+    let daysUsed = 0, done = allWords > 0 && passedNow >= allWords, atHorizon = null, empty = false;
     for (let day = 0; !done && day <= maxDays; day++) {
       const now = start + day * DAY_MS;
       const dayName = dayKey(now, boundary);
-      // 里程碑与完工日是同一次前向行走上的两个读数（§4.1），绝不为了「一年后毕业几个」再跑一遍。
-      if (day === horizon) atHorizon = { days: horizon, graduated: countGraduated(st), at: now };
+      // 里程碑与完工日是同一次前向行走上的两个读数（§4.1），绝不为了「一年后过完几个」再跑一遍。
+      if (day === horizon) atHorizon = { days: horizon, passed: countPassed(st), at: now };
       asOpts.now = now; asOpts.todayMinutes = minutes;
       const r = assemble(st, asOpts);
       const fresh = [];
@@ -344,17 +356,17 @@
         const ok = (hash32(day + '|' + it.w + '|' + it.s + '|' + kind) % 1000) < accuracy * 1000;
         fresh.push(mkQuiz(it.w, it.s, kind, ok, now, dayName));
       }
-      if (!fresh.length) { empty = true; break; }   // 今天一个都排不出来 → 再等下去也不会毕业，别再空转
+      if (!fresh.length) { empty = true; break; }   // 今天一个都排不出来 → 再等下去也不会多过完一个词，别再空转
       st = replay(fresh, { state: st, boundaryHour: boundary, wordsOf: wordsOf, plan: plan });
-      if (allWords > 0 && countGraduated(st) >= allWords) {
+      if (allWords > 0 && countPassed(st) >= allWords) {
         done = true; daysUsed = day + 1;
-        // 完工早于里程碑日：毕业只进不退（模拟流里没有 relearn），收口时的读数即一年后的答案，
+        // 完工早于里程碑日：过完只进不退（读到过就是读到过），收口时的读数即一年后的答案，
         // 就地补记这一次行走的读数 —— 这不是第二遍模拟，也不写死任何日期算法。
-        if (!atHorizon) atHorizon = { days: horizon, graduated: countGraduated(st), at: start + horizon * DAY_MS };
+        if (!atHorizon) atHorizon = { days: horizon, passed: countPassed(st), at: start + horizon * DAY_MS };
       }
     }
     return {
-      graduatedNow: graduatedNow, total: allWords,
+      passedNow: passedNow, total: allWords,
       done: done, days: done ? daysUsed : null, doneAt: done ? start + daysUsed * DAY_MS : null,
       atHorizon: atHorizon, capped: !done && !empty, empty: empty,
     };
@@ -617,6 +629,6 @@
     dayKey, dayDiff, wordInterval, emptyState,
     eventId, mkContact, mkQuiz, mkPromote, newWord, stageOf, replay, wordState,
     assemble, recallQuiz, meaningQuiz, blankQuiz, judgeRecall, editDistance, parseSenses, hash32, migrate,
-    countGraduated, estimateDays,
+    countPassed, estimateDays,
   };
 })();
