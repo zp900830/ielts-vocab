@@ -20,13 +20,14 @@ declare const TASK: {
   todayPlan(force?: boolean): { queue: { i: number; kind: string; pool: string; sec: number }[];
                  items: QI[]; words: string[]; stats: Record<string, unknown> };
   state(): { words: Record<string, { stage: string; reps: number; due: number; ctx: object; ok3: number }>; daily: Record<string, Record<string, number>> };
-  events(): { type: string }[];
+  events(): { type: string; w?: string; s?: number | string; ok?: boolean }[];
   readDone(i: number): void; relearn(w: string): void;
   openPanel(): void; setView(v: string): void;
   pass(): number; setPass(n: number): void; advance(): void; finished(): boolean;
   currentQuiz(): BlankQ | null; answerQuiz(choice: string): boolean; nextQuiz(): void;
   quizDone(): number; quizWrong(): number; quizTotal(): number;
   blankQuizFor(s: number | string, w: string): BlankQ | null;
+  updateBtn(): void;
 };
 declare const ShadowPlan: { dayKey(ts: number, h: number): string };
 declare const VOCAB: Record<string, { m?: string; ex?: string }>;
@@ -376,6 +377,67 @@ test.describe('two passes', () => {
     expect(got.answered).toBe(1);
     expect(got.wrong).toBe(1);
     expect(got.ok3).toBe(0);                          // 答错不算毕业凭据
+  });
+
+  /* 走查 2026-09-22「下一批」#1 + #2（各钉一条）：
+     #1 推进按钮全页只剩任务条那一颗 —— 做题卡里那颗 .qz-go 已删（同屏两颗同名按钮，
+        末题两处文字还会不一致）；末题任务条那颗写「小结」。
+     #2 答错过的词在本遍末尾补考一次、只补一次；补考走的是同一份 quizList()/answerQuiz() 账，
+        所以分母 N 一起涨（分子分母同一份，不会出现 3/2），事件也只有一本。 */
+  test('② 答错的词在本遍末尾补考一次（只补一次），推进只剩任务条那一颗', async ({ page }) => {
+    const got = await page.evaluate(() => {
+      /* 先抓一份今天的批次（此刻一句没读，等于 enterTaskMode 里的快照）：读完之后队列会滚动，
+         再调 todayPlan(true) 拿到的已经不是出题的那批了。 */
+      const snap = TASK.todayPlan(true).items.slice();
+      TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i));
+      TASK.setPass(2);
+      const first = TASK.currentQuiz();
+      if (!first) return { skip: true } as { skip: boolean };
+      // 批次里同一「词 + 句」出现两次的话，下面的判重会误判 —— 这条用例只锁补考，不锁那种批次
+      const dupes = snap.filter(x => x.w === first.w && String(x.s) === String(first.s)).length;
+      const baseN = TASK.quizTotal();
+      TASK.answerQuiz((first.opts.find(o => o !== first.answer) || 'x') as string);   // 第一题故意答错
+      const nAfterWrong = TASK.quizTotal();
+      const goInCard = document.querySelectorAll('.qz-go').length;
+      const labels: string[] = [];
+      let served = 0, retakeAt = 0, guard = 0;
+      TASK.nextQuiz();
+      while (guard++ < 400 && !TASK.finished()) {
+        const q = TASK.currentQuiz();
+        if (!q) break;
+        served++;
+        // 原题在进循环前已经答过这一次了，所以再碰到同一「词 + 句」就是那道补考 —— 它再答错一次，
+        // 用来验证「补考只补一次」。别的题一律答对，保证整遍只多出那一道题。
+        const isRetake = q.w === first.w && q.s === first.s;
+        if (isRetake) retakeAt = served;
+        TASK.answerQuiz((isRetake ? q.opts.find(o => o !== q.answer) : q.answer) as string);
+        labels.push((document.getElementById('tbNext')!.textContent || '').trim());
+        TASK.nextQuiz();
+      }
+      const evs = TASK.events().filter(e => e.type === 'quiz');
+      const forFirst = evs.filter(e => e.w === first.w && e.s === first.s).length;
+      const sub = document.querySelector('.pass-summary .sub');
+      return { skip: false, dupes, baseN, nAfterWrong, goInCard, served, retakeAt,
+               nEnd: TASK.quizTotal(), finished: TASK.finished(), labels,
+               wrong: TASK.quizWrong(), answered: TASK.quizDone(), events: evs.length, forFirst,
+               summarySub: (sub && sub.textContent) || '' };
+    });
+    expect(got.skip).toBe(false);
+    expect(got.dupes).toBe(1);
+    expect(got.goInCard, '做题卡里不许再有第二颗推进按钮').toBe(0);
+    expect(got.nAfterWrong, '补考进同一份清单：分母 +1').toBe(got.baseN + 1);
+    expect(got.nEnd, '补考再错也不再补：整遍最多只多这一道题').toBe(got.baseN + 1);
+    expect(got.retakeAt, '补考排在整遍（含自己）的最末尾').toBe(got.served);
+    expect(got.finished, '补考只一轮，收工路径照样到得了').toBe(true);
+    expect(got.forFirst, '原题 + 补考，各一道事件，没有第二条记账路径').toBe(2);
+    expect(got.events).toBe(got.answered);
+    // 进循环前那道原题也答了一次，所以 served（循环里答的题数）比总答题数少 1
+    expect(got.answered).toBe(got.served + 1);
+    expect(got.wrong, '「错 N」不双记：同一个词补考再错算一次').toBe(1);
+    expect(got.labels[got.labels.length - 1], '末题任务条那颗写「小结」').toBe('小结');
+    expect(got.labels, '中途仍然写「下一题」').toContain('下一题');
+    expect(got.summarySub).toContain('补考 1 个，对 0 个');
+    expect(/欠|待补|积压/.test(got.summarySub), '补考不是欠账').toBe(false);
   });
 
   test('② 答对就是毕业凭据：ok3 由 ② 写入，走完 ② 今天就算完', async ({ page }) => {
@@ -773,5 +835,36 @@ test.describe('two passes', () => {
     await page.evaluate(() => localStorage.removeItem('ielts.shadow.resumeDay'));
     await page.reload();
     await expect(page.locator('#taskBar')).toBeVisible();       // 换一天（清掉那把锁）就又提得起来
+  });
+
+  /* 走查 2026-09-22「下一批」#5 + #4：
+     #5 全新的一天（一句没读）首屏也得给一条能点的提示 —— 以前被 `doneN > 0` 挡着，界面零提示；
+     #4 顶栏那颗绿点的判据与条上那个 n/N 同源（都读 todayLeftN()），不再走旧句子账。 */
+  test('今天一句没读：首屏给一条能点的「今天 N 句」，绿点与进度同源', async ({ page, baseURL }) => {
+    test.setTimeout(currentTimeout());
+    await page.goto(`${baseURL}/index.html`);
+    await expect(page.locator('.sent').first()).toBeVisible();
+    // beforeEach 那一趟已经提过一次「开跑」了（锁在 sessionStorage，管的是同一趟）：清掉它 = 换一趟开
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(20); sessionStorage.clear(); });
+    await page.reload();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    expect(await barState(page)).toBe('resume');
+    await expect(page.locator('#tbTitle')).toContainText(/今天 \d+ 句/);
+    await expect(page.locator('#tbNext')).toContainText('开始');
+    expect(await page.evaluate(() => document.getElementById('tbSub')!.textContent?.trim()),
+      '开跑那一屏不给第二个数').toBe('');
+    // 绿点：今天还有没读完的 → 亮
+    expect(await page.evaluate(() => document.getElementById('btnToday')!.classList.contains('has-task'))).toBe(true);
+    await page.locator('#tbNext').click();                      // 一步开跑
+    await expect.poll(() => page.evaluate(() => TASK.active)).toBe(true);
+    await page.evaluate(() => TASK.exitTaskMode());
+    // 把今天这批读完：绿点跟着灭 —— 它读的就是条上那个 n/N 的同一份账
+    const after = await page.evaluate(() => {
+      TASK.todayPlan(true).queue.forEach((x: any) => TASK.readDone(x.i));
+      TASK.updateBtn();
+      return { dot: document.getElementById('btnToday')!.classList.contains('has-task'),
+               left: ((document.getElementById('tbTitle')!.textContent || '').match(/\d+\s*\/\s*\d+/) || [''])[0] };
+    });
+    expect(after.dot, `今天读完了（条上 ${after.left}）绿点还亮着，就是两本账又分叉了`).toBe(false);
   });
 });
