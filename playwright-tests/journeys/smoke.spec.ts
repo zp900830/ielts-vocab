@@ -1,15 +1,7 @@
 import { test, expect } from '../fixtures';
-import { startRootServer, stopRootServer } from '../utils/root-server';
 
-let rootUrl = '';
-
-test.beforeAll(async () => {
-  rootUrl = await startRootServer();
-});
-
-test.afterAll(async () => {
-  await stopRootServer();
-});
+// 服务器归 global-setup.ts 起停，这里只取地址（以前各 spec 自己起停会互杀，见 global-setup.ts）
+const rootUrl = process.env.E2E_ROOT_URL || '';
 
 function ignoreKnownErrors(page: any) {
   const errors: string[] = [];

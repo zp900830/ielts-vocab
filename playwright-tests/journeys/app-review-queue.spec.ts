@@ -2,7 +2,6 @@
 // 主站业务逻辑此前 0 测试覆盖（smoke.spec.ts 只验标题与两个按钮）。
 
 import { test, expect } from '../fixtures';
-import { startRootServer, stopRootServer } from '../utils/root-server';
 
 const ENV = process.env.E2E_ENVIRONMENT || 'local';
 
@@ -19,15 +18,8 @@ declare function startReview(): void;
 declare function revealReview(): void;
 declare function gradeReview(know: boolean): void;
 
-let rootUrl = '';
-
-test.beforeAll(async () => {
-  rootUrl = await startRootServer();
-});
-
-test.afterAll(async () => {
-  await stopRootServer();
-});
+// 服务器归 global-setup.ts 起停，这里只取地址（以前各 spec 自己起停会互杀，见 global-setup.ts）
+const rootUrl = process.env.E2E_ROOT_URL || '';
 
 test.describe('Read story words enter the spaced-review queue', () => {
   test.skip(
