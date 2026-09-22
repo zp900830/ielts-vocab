@@ -597,6 +597,52 @@ test.describe('two passes', () => {
     expect(fits.bar + 88).toBeLessThan(fits.inner - fits.top);   // 底部合计里那条播放条确实是没了
   });
 
+  /* 2026-09-22 全量走查（work/task_mode_audit.mjs + 代码审计）抓到的四个真问题，各钉一条。
+     规格见 docs/superpowers/specs/2026-09-22-任务模式走查.md。 */
+  test('走查修复：② 里点「继续任务」不拍回 ①、键盘 → 真的记进度、倍速不把句数平方、0 点日界线真的生效', async ({ page }) => {
+    test.setTimeout(currentTimeout());
+
+    // (1) 键盘 → 必须等于屏幕上那颗「下一句」。以前它直接 step(1)：能刷完整篇而 0/24 一动不动
+    const num = () => page.evaluate(() => ((document.getElementById('tbTitle') as HTMLElement).textContent || '').match(/\d+\s*\/\s*\d+/)?.[0]);
+    const before = await num();
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(() => num()).not.toBe(before);
+
+    // (2) 已经在任务模式里，今日面板那颗写着「继续任务」—— 再点一次不许把流程拍回 ①、
+    //     也不许让挂着的题卡变成四颗哑按钮（旧实现重拍批次 + pass=1，选项点了没反应）
+    await page.evaluate(() => { TASK.todayPlan(true).queue.forEach((x: any) => TASK.readDone(x.i)); TASK.setPass(2); TASK.next(); });
+    await expect.poll(() => page.evaluate(() => TASK.pass())).toBe(2);
+    const optsBefore = await page.evaluate(() => document.querySelectorAll('#taskCard .qz-opt').length);
+    await page.evaluate(() => TASK.enterTaskMode());
+    expect(await page.evaluate(() => TASK.pass())).toBe(2);
+    if (optsBefore) {
+      expect(await page.evaluate(() => document.querySelectorAll('#taskCard .qz-opt').length)).toBe(optsBefore);
+      // 出题后焦点要进卡：整块换 innerHTML 的卡片不主动接手，键盘就只能靠 1–4
+      expect(await page.evaluate(() => !!(document.activeElement && document.activeElement.closest('#taskCard')))).toBe(true);
+    }
+
+    // (3) 倍速只许除一次。旧写法 host 传 secNew()（已除过）又传 rate，引擎再除一遍 → 1.5× 排 2.25 倍句子
+    const rateLoad = await page.evaluate(() => {
+      const set = (window as unknown as { setRate: (r: number) => void }).setRate;
+      set(1); const one = TASK.todayPlan(true).queue.length;
+      set(1.5); const fast = TASK.todayPlan(true).queue.length;
+      set(1); return { one, fast };
+    });
+    expect(rateLoad.one).toBeGreaterThan(0);
+    expect(rateLoad.fast).toBeLessThanOrEqual(Math.ceil(rateLoad.one * 1.6));   // 平方会到 2.25 倍
+
+    // (4) 「几点算换一天」选 0 点得真的生效：以前宿主写 `boundaryHour || 4`，0 被吞回 4 点，
+    //     而另一批读原始值的地方按 0 点算 —— 凌晨开工时两套账分叉
+    const bd = await page.evaluate(() => {
+      TASK.setBoundary(0);
+      const got = TASK.todayPlan(true).stats.day;
+      const want = ShadowPlan.dayKey(Date.now(), 0);
+      TASK.setBoundary(4);
+      return { got, want };
+    });
+    expect(bd.got).toBe(bd.want);
+  });
+
   test('刷新时任务没做完：底部那行变成续读条，点「接着做」进任务模式', async ({ page, baseURL }) => {
     test.setTimeout(currentTimeout());   // hook 给了 12 分钟；这几条本地 5 秒内该完，卡住就早点红
     await page.goto(`${baseURL}/index.html`);
