@@ -4944,6 +4944,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           // 没有这档，188 个词在它们出现过的每一句都凑不满四选一 —— 那些词永远毕不了业，
           // 而 estimateDays 假设题出得出来，四处「全部过约 X 年 X 月」就成了空头承诺。
           bookCards: VOCAB,
+          /* 补考那道要换一种排法（他 2026-09-22 拍的第二条）：同样四个词，但顺序不能和原题一样。
+             不换的话他记的是"第二个是答案"那个位置，不是那个词 —— 补考就成了考短期视觉记忆。
+             换序的判据全在引擎那台四选一机器里（salt 只影响排法，不动候选池、不动三道闸），
+             这里只负责说"我是补考的那一道"。 */
+          salt: item.retake ? 'retake' : '',
         });
         if (q && !blanked.mid) { item.built = null; return null; }   // 遮不住 = 答案还写在题干上 → 不出
         if (q) { q.text = text; q.blank = blanked; }
@@ -4998,7 +5003,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           retakeServedN++; if (ok) retakeOkN++;
         } else if (!ok) {
           quizWrongN++;                // 「错 N」= 这一遍错过的题数：同一个词补考再错不双记
-          retakeItems.push(item);
+          /* 补考那份是**拷贝**，不是原题对象：共享 built 缓存会把原题那道（连选项顺序一起）
+             直接端回来，换序就成了空话。tries 跟着拷过来 = 1，所以补考这一答必然走上面
+             那条 tries > 1 的分支 —— 只补一次这条不靠数组去重，靠的是这一格。 */
+          retakeItems.push(Object.assign({}, item, { retake: true, built: undefined }));
         }
         reveal = { q: q, s: item.s, ok: ok, pick: choice };
         renderQuiz(); updateTaskBar();
