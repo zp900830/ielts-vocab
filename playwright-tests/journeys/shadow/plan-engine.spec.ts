@@ -177,7 +177,7 @@ test.describe('plan engine · word state reducer', () => {
     expect(got.ctxes).toBe('1500,ex');
   });
 
-  test('② 答对既记语境也记 ok3；20 次接触 + ok3 才毕业', async ({ page }) => {
+  test('② 答对既记语境也记 ok3；接触够门槛 + ok3 才毕业（门槛的具体数字锁在下面那条）', async ({ page }) => {
     // 两步制（docs/superpowers/specs/2026-09-22-任务模式两步制.md D1）：毕业凭据 mc4zh 事件
     // 由 ② 挖空选择产生（原来是 ③ 选义）。字段名 ok3 与 stageOf 的判据一个字都没改。
     const got = await page.evaluate(() => {
@@ -203,6 +203,29 @@ test.describe('plan engine · word state reducer', () => {
     expect(got.ctxBanked).toBe(1);                 // 答对同时把这一个语境记上：认得出与直连是同一道题给的
     expect(got.afterStage).toBe('graduated');
     expect(got.gradInterval).toBe(14);
+  });
+
+  /* 门槛这个数本期从 20 改到 12（决策记录 scheduling-decisions-round3 第 1 条），
+     上面那条用 25 次接触，改门槛它照样绿 —— 等于没锁。这条专门卡在边界上：
+     谁再动 MASTER_REPS，要么这里是红的，要么他得同时来改这条，逼他看见这个决定。 */
+  test('毕业门槛锁死在 12 次：差一次不毕业，够一次才毕业', async ({ page }) => {
+    const got = await page.evaluate((gate: number) => {
+      const t0 = Date.parse('2026-01-05T09:00:00');
+      const build = (reps) => {
+        const ev: unknown[] = [];
+        for (let d = 0; d < reps; d++) {
+          const ts = t0 + d * 864e5;
+          ev.push(ShadowPlan.mkContact('gk', 0, ts, ShadowPlan.dayKey(ts, 4)));
+        }
+        const q = t0 + 60 * 864e5;                    // ② 遥遥放在最后，不与接触同日
+        ev.push(ShadowPlan.mkQuiz('gk', 0, 'mc4zh', true, q, ShadowPlan.dayKey(q, 4)));
+        return ShadowPlan.replay(ev, { boundaryHour: 4, wordsOf: () => ['gk'] }).words.gk.stage;
+      };
+      return { at: build(gate), oneShort: build(gate - 1), engineGate: ShadowPlan.MASTER_REPS };
+    }, 12);
+    expect(got.engineGate).toBe(12);
+    expect(got.at).toBe('graduated');
+    expect(got.oneShort).toBe('owned');               // 答对过 ② 但差一次接触 → 还不能毕业
   });
 
   test('② 答错只记 err，既不给语境也不给毕业凭据', async ({ page }) => {
@@ -570,7 +593,8 @@ test.describe('replay 续算（opts.state）', () => {
       const PER_DAY = 24;                       // 6 个只露一面的新词 + 6 个回炉词 ×3 条事件
       // 30 天。每天见 6 个全新词（撑大词表，让 sameKeys 不是个空检查），
       // 外加 6 个「回炉词」每天 contact + 一题回忆 + 一题四选一（mc4zh）各一次 —— 毕业判据是
-      // reps>=20 && ok3>=1；两步制后 mc4zh 由 ② 产生（D1），事件类型与判据都没改，
+      // reps>=MASTER_REPS && ok3>=1（本期门槛 20→12）；两步制后 mc4zh 由 ② 产生（D1），
+      // 事件类型与判据都没改，
       // 只露一面的新词永远毕不了业，没有这 6 个回炉词的话末尾那条 fullGrad>0 就是空断言。
       for (let d = 0; d < 30; d++) {
         const ts = t0 + d * 864e5;
@@ -711,5 +735,192 @@ test.describe('estimateDays', () => {
     const t = await page.evaluate(() => ShadowPlan.estimateDays(ShadowPlan.replay([], {}), 30,
       { totalSents: 60, wordsOf: () => [], totalWords: 777 }).total);
     expect(t).toBe(777);
+  });
+});
+
+/* ---------------- 保温：毕业 ≠ 永不再见（第一期 Task 2） ----------------
+   出处：docs/superpowers/plans/2026-09-22-保温第一期.md §4 Task 2。
+   配额那一档（cap=8 句/天、15 分钟以下不保温）不是拍的：判据是「工期比不保温拖长 ≤10% 的最大档」，
+   数在 work/保温预算-实测-2026-09-22.md §8（现行成本模型复测）。
+   这一族两半都要锁：① 毕业词回得来；② 回得来的量有上限 —— 只做完①就是实测里那一列
+   「不限配额：连每天 60 分钟都三年到不了终点」。 */
+test.describe('plan engine · 保温（毕业后回池）', () => {
+  test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
+  test.beforeEach(async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+  });
+
+  /* 造「各自独占一句、都已毕业」的词：一句只放一个词，才分得清哪句是"专为回炉排进来的"。
+     毕业凭据 = 12 次接触（门槛本期从 20 降到 12）+ 一次 ② 答对；接触按天给，
+     因为引擎按「词|句|日」记功，同一天同一句读十遍只算一次。
+     ⚠️ 句号必须从 0 起、并且 ≤ 用例传的 totalSents：assemble 是 `for (i = 0; i < totalSents; i++)`
+     遍历句表的，句子号超出 totalSents 就等于那个词在引擎眼里不存在 —— 这种夹具会静默测了个空。
+     ⚠️ "今天"取第 26 天而不是第 25 天：最后一次接触在第 11 天，毕业后 due 顺延 14 天 = 第 25 天整，
+     与"今天"撞上就成了 due === now 的相等边界（判据是 due <= now，引擎算到期，读数却像没到期）。 */
+  const gradScene = `(function (names) {
+    const base = Date.parse('2026-01-05T09:00:00');
+    const sentOf = {}; names.forEach((w, k) => { sentOf[w] = k; });
+    const ev = [];
+    for (let d = 0; d < ShadowPlan.MASTER_REPS; d++) {
+      const ts = base + d * 864e5, day = ShadowPlan.dayKey(ts, 4);
+      names.forEach((w) => ev.push(ShadowPlan.mkContact(w, sentOf[w], ts, day)));
+    }
+    const last = base + (ShadowPlan.MASTER_REPS - 1) * 864e5;
+    names.forEach((w) => ev.push(ShadowPlan.mkQuiz(w, sentOf[w], 'mc4zh', true, last, ShadowPlan.dayKey(last, 4))));
+    const st = ShadowPlan.replay(ev, { boundaryHour: 4,
+      wordsOf: (i) => names.filter((w) => sentOf[w] === i) });
+    return { st, base, sentOf, DAY: 26, dueAt: st.words[names[0]].due };
+  })`;
+
+  test('到期毕业词回池：独占一句、进队列、并计入今天的保温负载', async ({ page }) => {
+    const got = await page.evaluate((src: any) => {
+      const mk = eval(src);
+      const sc = mk(['glen']);
+      const now = sc.base + sc.DAY * 864e5;
+      const plan = { todayMinutes: 60, boundaryHour: 4, pausedNew: false, baowenCap: 8 };
+      const r = ShadowPlan.assemble(sc.st, {
+        now: now, todayMinutes: 60, rate: 1, secNew: 25, secReview: 8,
+        totalSents: 1, wordsOf: (i) => (i === 0 ? ['glen'] : []), plan: plan,
+      });
+      const st = sc.st.words.glen;
+      return { stage: st.stage, due: st.due, at: now,
+        len: r.queue.length, pools: r.queue.map((q) => q.pool), sent: r.stats.baowenSent,
+        words: r.stats.retentionWords, cap: r.stats.baowenCap, items: r.items.length,
+        dueWords: r.stats.dueWords };
+    }, gradScene);
+    expect(got.stage).toBe('graduated');
+    expect(got.due).toBeLessThan(got.at);                 // 确实到期了
+    expect(got.len).toBe(1);
+    expect(got.words).toBe(1);
+    expect(got.sent).toBe(1);
+    expect(got.cap).toBe(8);
+    // 回炉句照常出一题（②），题目词就是那个毕业词 —— 不然是"读到了但不算练过"
+    expect(got.items).toBe(1);
+    expect(got.pools).toEqual(['A']);
+    // dueWords 只数未毕业的到期词：界面那行是「N 个词到期 · K 个词是回炉保温」，两批人不重复计
+    expect(got.dueWords).toBe(0);
+  });
+
+  test('没到期（14 天以内）不回池，也不许偷偷进 B 池吃预算', async ({ page }) => {
+    const got = await page.evaluate((src: any) => {
+      const mk = eval(src);
+      const sc = mk(['glen']);
+      const plan = { todayMinutes: 60, boundaryHour: 4, pausedNew: false, baowenCap: 8 };
+      const r = ShadowPlan.assemble(sc.st, {
+        now: sc.dueAt - 6 * 864e5, todayMinutes: 60, rate: 1, secNew: 25, secReview: 8,
+        totalSents: 1, wordsOf: (i) => (i === 0 ? ['glen'] : []), plan: plan,
+      });
+      return { len: r.queue.length, sent: r.stats.baowenSent, words: r.stats.retentionWords,
+        dueWords: r.stats.dueWords, newPool: r.stats.newPool, floor: r.stats.floor };
+    }, gradScene);
+    expect(got.len).toBe(0);
+    expect(got.sent).toBe(0);
+    /* 这几条是"偷偷漏"的探测器：没到期的毕业词不该算到期数、不该进新词池，
+       也不该被兜底机制当成"今天还有事做"硬塞一句 —— floor 那一格专门盯这个。 */
+    expect(got.dueWords).toBe(0);
+    expect(got.newPool).toBe(0);
+    expect(got.floor).toBe(false);
+  });
+
+  test('每日配额是硬上限：20 个词到期也只排 cap 句', async ({ page }) => {
+    const got = await page.evaluate(([src, cap]: any) => {
+      const mk = eval(src);
+      const names = []; for (let k = 0; k < 20; k++) names.push('g' + k);
+      const sc = mk(names);
+      const plan = { todayMinutes: 60, boundaryHour: 4, pausedNew: false, baowenCap: cap };
+      const r = ShadowPlan.assemble(sc.st, {
+        now: sc.base + sc.DAY * 864e5, todayMinutes: 60, rate: 1, secNew: 25, secReview: 8,
+        totalSents: 20, wordsOf: (i) => names.filter((w) => sc.sentOf[w] === i), plan: plan,
+      });
+      return { len: r.queue.length, sent: r.stats.baowenSent, dropped: r.stats.retentionDropped,
+        words: r.stats.retentionWords, budgetSec: r.stats.budgetSec, used: r.stats.usedSec };
+    }, [gradScene, 8]);
+    expect(got.len).toBe(8);
+    expect(got.sent).toBe(8);
+    expect(got.words).toBe(8);
+    expect(got.dropped).toBe(12);
+    // 预算充足（3600 秒）却只排了 64 秒 —— 这就是"上限"的样子，不是排不动
+    expect(got.used).toBeLessThan(got.budgetSec);
+  });
+
+  test('句子已为未毕业词排进来时，同句的毕业词免费顺带、不吃配额', async ({ page }) => {
+    const got = await page.evaluate((src: any) => {
+      const base = Date.parse('2026-01-05T09:00:00');
+      const mk = eval(src);
+      /* mk(['gride','gfar']) → gride 在句 0、gfar 在句 1，两个都已毕业并已到期。
+         keep 只读 3 次、② 没答对 → 未毕业但已到期，**和 gride 同句**（这才是"顺带"）。 */
+      const sc = mk(['gride', 'gfar']);
+      const wordsOf = (i) => (i === 0 ? ['keep', 'gride'] : (i === 1 ? ['gfar'] : []));
+      const ev = [];
+      for (let d = 0; d < 3; d++) {
+        const ts = base + d * 864e5;
+        ev.push(ShadowPlan.mkContact('keep', 0, ts, ShadowPlan.dayKey(ts, 4)));
+      }
+      const st = ShadowPlan.replay(ev, { boundaryHour: 4, wordsOf: wordsOf });
+      ['gride', 'gfar'].forEach((w) => { st.words[w] = sc.st.words[w]; });   // 引擎跑出来的真毕业状态，不手搓字段
+      const run = (cap) => {
+        const plan = { todayMinutes: 60, boundaryHour: 4, pausedNew: false, baowenCap: cap };
+        const r = ShadowPlan.assemble(st, { now: base + 26 * 864e5, todayMinutes: 60, rate: 1,
+          secNew: 25, secReview: 8, totalSents: 2, wordsOf: wordsOf, plan: plan });
+        return { len: r.queue.length, sent: r.stats.baowenSent, words: r.stats.retentionWords,
+          dropped: r.stats.retentionDropped, sents: r.queue.map((q) => q.i), quizOn: r.items.map((x) => x.w) };
+      };
+      return { cap1: run(1), cap0: run(0) };
+    }, gradScene);
+    // cap=1：句 0 为 keep 排进来，gride 免费搭车；句 1 的 gfar 用掉那一句配额
+    expect(got.cap1.sents).toEqual([0, 1]);
+    expect(got.cap1.sent).toBe(1);
+    expect(got.cap1.words).toBe(2);           // 两个毕业词今天都被读到了，只花了一句的预算
+    expect(got.cap1.dropped).toBe(0);
+    // cap=0（5/10 分钟那一档）：搭车的照旧免费，专为回炉新排的才停
+    expect(got.cap0.sents).toEqual([0]);
+    expect(got.cap0.sent).toBe(0);
+    expect(got.cap0.words).toBe(1);
+    expect(got.cap0.dropped).toBe(1);
+    // ② 的题目词该是那句里**还没毕业**的那个 —— 毕业词不该把练习位抢走
+    expect(got.cap1.quizOn).toContain('keep');
+  });
+
+  test('每天 10 分钟这一档不保温，并且如实报出上限是 0', async ({ page }) => {
+    const got = await page.evaluate((src: any) => {
+      const mk = eval(src);
+      const names = []; for (let k = 0; k < 6; k++) names.push('g' + k);
+      const sc = mk(names);
+      const wordsOf = (i) => names.filter((w) => sc.sentOf[w] === i);
+      const run = (mins) => {
+        const plan = { todayMinutes: mins, boundaryHour: 4, pausedNew: false, baowenCap: 8 };
+        const r = ShadowPlan.assemble(sc.st, { now: sc.base + sc.DAY * 864e5, todayMinutes: mins,
+          rate: 1, secNew: 25, secReview: 8, totalSents: 6, wordsOf: wordsOf, plan: plan });
+        return { len: r.queue.length, cap: r.stats.baowenCap, sent: r.stats.baowenSent,
+          dropped: r.stats.retentionDropped };
+      };
+      return { low: run(10), high: run(15) };
+    }, gradScene);
+    expect(got.low.cap).toBe(0);
+    expect(got.low.sent).toBe(0);
+    expect(got.low.dropped).toBe(6);          // 6 个都到期了，但这一档一个都不排
+    expect(got.low.len).toBe(0);              // 今天没有正事可排：时间太少，先只顾新词
+    expect(got.high.cap).toBe(8);             // 15 分钟起才保温（判据见实测 §8）
+    expect(got.high.sent).toBe(6);
+  });
+
+  test('回炉读到要进账：reps 续加、due 再顺延 14 天、stage 不回退', async ({ page }) => {
+    const got = await page.evaluate((src: any) => {
+      const mk = eval(src);
+      const sc = mk(['glen']);
+      const before = { reps: sc.st.words.glen.reps, stage: sc.st.words.glen.stage, due: sc.st.words.glen.due };
+      const at = sc.base + sc.DAY * 864e5, day = ShadowPlan.dayKey(at, 4);
+      const after = ShadowPlan.replay(
+        [ShadowPlan.mkContact('glen', 0, at, day)],
+        { state: JSON.parse(JSON.stringify(sc.st)), boundaryHour: 4, wordsOf: () => ['glen'] });
+      const w = after.words.glen;
+      return { before, reps: w.reps, stage: w.stage, due: w.due, at,
+        interval: ShadowPlan.wordInterval(w.reps) };
+    }, gradScene);
+    expect(got.stage).toBe('graduated');                    // 毕业态不回落（回落是 Task 5，等他拍）
+    expect(got.reps).toBe(got.before.reps + 1);             // 但这一遍读是实打实的接触，进账
+    expect(got.due - got.at).toBe(14 * 864e5);              // 顺延到下一次回访，不再天天占位
+    expect(got.interval).toBe(14);
   });
 });

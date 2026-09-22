@@ -1,18 +1,26 @@
 #!/usr/bin/env node
 /* 一次性探针（不进产品）：保温（毕业词 14 天回访回池）到底吃掉多少预算、把工期拖长多少。
-   做法照抄 work/sched_probe.mjs：把 plan-engine.js 的源码按候选改动做一次字符串替换，
-   在 Node 里装成 window.ShadowPlan，再用它自带的 estimateDays 跑真实词表。
-   为什么不用另一套算式：本仓库的规矩是「一份逻辑两份实现就会漂移」。
-   规格出处：docs/superpowers/plans/2026-09-22-保温第一期.md §4 Task 1。
-   三组数：
-     基线      —— MASTER_REPS 20（现状）与 12（已拍板门槛），无保温；
-     保温打开  —— 门槛固定 12，把 assemble() 里毕业词那句 continue 换成
-                  「按 GRADUATED_INTERVALS[0]（14 天）到期才回池」（即不限配额）；
-     配额扫描  —— cap ∈ {0, 2, 4, 8, 不限}，单位是「句」：每天最多几「句」
-                  是为了带一个到期回炉词而排进来的（句已被排进来则免费顺带）。
-   确定性：不许 Math.random()，抽签全走引擎现成 hash32。每个格子连跑两遍，
-   逐字段（含 estimateDays 返回的整个 JSON）比对，不一致就标 red 并退出非零。
-   跑法：node work/baowen_probe.mjs   （约 1-2 分钟，明细写 work/baowen_probe_result.json） */
+   做法照抄 work/sched_probe.mjs：把真 plan-engine.js 装进 Node 沙箱当 window.ShadowPlan，
+   用它自带的 estimateDays 跑真实词表。为什么不用另一套算式：本仓库的规矩是
+   「一份逻辑两份实现就会漂移」。
+   规格出处：docs/superpowers/plans/2026-09-22-保温第一期.md §4 Task 1 与 Task 4。
+
+   —— 这个文件有过两代，别把两代的数混着引用 ——
+   v1（Task 1 用）：保温还没实现，那批「保温打开」的数是把 assemble() 里毕业词那句 continue
+       用【字符串补丁】换出来的。整份文件在 git 里：`git show HEAD~1:work/baowen_probe.mjs`，
+       结论留在 work/保温预算-实测-2026-09-22.md §1–§8。
+   v2（现在这份，Task 4 用）：保温已经在引擎里了，所以除了一格「拆掉 clamp」，
+       一行源码都不改 —— 配额直接喂 plan.baowenCap。量的是【真要上线的那份实现】。
+
+   四组数：
+     对照·不保温 —— plan.baowenCap=0，等价于旧行为「毕业 = 永不再见」；
+     上线口径    —— 不传 baowenCap，走引擎默认 BAOWEN_CAP_SENTS，界面上就是这个数；
+     配额扫描    —— cap ∈ {2,4,8,16,32}，把「工期拖长 ≤10% 的最大档」这条判据在真实现上复核；
+     不限额      —— 唯一需要补丁的一组：resolveBaowenCap 把 cap 钳到 64 是防呆不是策略，
+                    要看真·不限额怎么塌必须绕开它。
+   确定性：不许 Math.random()，抽签全走引擎现成 hash32。每格连跑两遍，
+   逐字段（含 estimateDays 返回的整个 JSON）比对，不一致就报错退出非零。
+   跑法：node work/baowen_probe.mjs   （约 2-4 分钟，明细写 work/baowen_probe_result.json） */
 'use strict';
 import fs from 'fs';
 import path from 'path';
@@ -49,55 +57,30 @@ const WORDS_BY_SENT = SENT_RAW.map((raw) => {
 const ALL_WORDS = new Set([].concat.apply([], WORDS_BY_SENT)).size;
 const wordsOf = (i) => WORDS_BY_SENT[i] || [];
 
-/* ---------- 字符串补丁（必须精确命中当前源码，撞不上就抛错） ---------- */
-const REPS = 'const MASTER_REPS = 20;';
-const REPS_N = (n) => 'const MASTER_REPS = ' + n + ';';
+/* 唯一一处字符串补丁：拆掉 resolveBaowenCap 的 64 上限。撞不上源码就抛错，不许静默跳过。 */
+const CLAMP = 'return Number.isFinite(n) ? Math.max(0, Math.min(64, Math.floor(n))) : BAOWEN_CAP_SENTS;';
+const NO_CLAMP = 'return Number.isFinite(n) ? Math.max(0, Math.floor(n)) : BAOWEN_CAP_SENTS;';
 
-// 「毕业 = 永不再见」的唯一实现处（本文件写作时在 plan-engine.js:189）
-const SKIP = "if (st.stage === 'graduated') continue;";
-// 换成：到期（GRADUATED_INTERVALS[0] = 14 天，due 由 replay 里 wordInterval 在毕业那刻排好）
-// 才回池，按普通到期词进 A 池，但打上 g:1 标记，好在下面配额处计数。
-const BACKPOOL = "if (st.stage === 'graduated') { if ((st.due || 0) > now) continue; " +
-  "inPool[w] = 'A'; dueWords++; due.push({ w: w, i: i, due: st.due || 0, leech: false, g: 1 }); continue; }";
-
-// A 池取句循环：加「每日保温句上限」。cap 计的是「为了带一个回炉词而新排的句」——
-// 句子若已因未毕业词被排进（riding），回炉词免费顺带，不吃配额。
-const TAKE_OLD = `    for (let n = 0; n < due.length; n++) {
-      if (!take(due[n].i, 'A', secReview)) droppedA++;
-    }`;
-const TAKE_NEW = (cap) => `    let baowenSent = 0;
-    for (let n = 0; n < due.length; n++) {
-      const e = due[n];
-      const riding = chosen.has(e.i);
-      if (e.g && !riding && baowenSent >= ${cap}) { droppedA++; continue; }
-      if (!take(e.i, 'A', secReview)) { droppedA++; continue; }
-      if (e.g && !riding) baowenSent++;
-    }`;
-
-const baowenPatch = (capExpr) => [[SKIP, BACKPOOL], [TAKE_OLD, TAKE_NEW(capExpr)]];
-
-/* ---------- 跑一格：同一格连跑两遍，逐字段比对 ---------- */
 const MINUTES = [5, 10, 15, 20, 30, 45, 60];
+const START = Date.parse('2026-09-21T09:00:00');
 
-function estimateOnce(label, minutes, patch) {
+function estimateOnce(minutes, cap, patch) {
   const eng = loadEngine(patch);
+  const plan = { todayMinutes: minutes, boundaryHour: 4, pausedNew: false };
+  if (cap !== null) plan.baowenCap = cap;
   const o = {
     accuracy: 0.85, maxDays: 1095,
-    totalSents: SENT_RAW.length,
-    wordsOf: wordsOf,
-    totalWords: ALL_WORDS,
-    boundaryHour: 4,
-    now: Date.parse('2026-09-21T09:00:00'),
-    plan: { todayMinutes: minutes, boundaryHour: 4, pausedNew: false },
+    totalSents: SENT_RAW.length, wordsOf: wordsOf, totalWords: ALL_WORDS,
+    boundaryHour: 4, now: START, plan: plan,
   };
   const t0 = Date.now();
   const r = eng.estimateDays(eng.emptyState(), minutes, o);
   return { ms: Date.now() - t0, json: JSON.stringify(r), r: r };
 }
 
-function runCell(group, capLabel, minutes, patch, problems) {
-  const a = estimateOnce(capLabel, minutes, patch);
-  const b = estimateOnce(capLabel, minutes, patch);
+function runCell(group, capLabel, minutes, cap, patch, problems) {
+  const a = estimateOnce(minutes, cap, patch);
+  const b = estimateOnce(minutes, cap, patch);
   const deterministic = a.json === b.json;
   if (!deterministic) problems.push(group + ' / cap=' + capLabel + ' / ' + minutes + 'min：两遍结果不一致');
   const r = a.r;
@@ -105,8 +88,10 @@ function runCell(group, capLabel, minutes, patch, problems) {
     group, cap: capLabel, minutes,
     done: r.done, days: r.days, capped: r.capped, empty: r.empty,
     doneAt: r.doneAt ? new Date(r.doneAt).toISOString().slice(0, 10) : '—',
-    year1: r.atHorizon ? r.atHorizon.graduated : null,
-    graduatedNow: r.graduatedNow, total: r.total,
+    /* D10 之后 estimateDays 返回 passed/passedNow（「被通读到过一次」），不再是 graduated。
+       v1 那版读错过字段、静默打了 null —— 读数缺了不报错，比报错坏，所以这里显式读对的名字。 */
+    year1: r.atHorizon ? r.atHorizon.passed : null,
+    passedNow: r.passedNow, total: r.total,
     ms1: a.ms, ms2: b.ms, deterministic,
   };
 }
@@ -114,52 +99,79 @@ function runCell(group, capLabel, minutes, patch, problems) {
 const problems = [];
 const rows = [];
 
-function runGroup(group, label, minutes, patch) {
-  const cell = runCell(group, label, minutes, patch, problems);
+function runGroup(group, capLabel, minutes, cap, patch) {
+  const cell = runCell(group, capLabel, minutes, cap, patch, problems);
   rows.push(cell);
-  console.log(`[${group}] cap=${label} ${String(minutes).padStart(2)}min → ` +
+  console.log(`[${group}] cap=${capLabel} ${String(minutes).padStart(2)}min → ` +
     `days=${cell.days === null ? '封顶(>1095)' : cell.days} doneAt=${cell.doneAt} ` +
-    `capped=${cell.capped} empty=${cell.empty} 一年后=${cell.year1} ` +
+    `capped=${cell.capped} empty=${cell.empty} 一年后过完=${cell.year1} ` +
     `耗时=${cell.ms1}/${cell.ms2}ms 确定=${cell.deterministic}`);
 }
 
-// 1) 基线：门槛 20（现状）/ 12（已拍板），无保温
-MINUTES.forEach((m) => runGroup('基线-20次', '无保温', m, []));
-MINUTES.forEach((m) => runGroup('基线-12次', '无保温', m, [[REPS, REPS_N(12)]]));
+const ENG = loadEngine([]);
+console.log('引擎常数：MASTER_REPS=' + ENG.MASTER_REPS + ' BAOWEN_CAP_SENTS=' + ENG.BAOWEN_CAP_SENTS +
+  ' BAOWEN_MIN_MINUTES=' + ENG.BAOWEN_MIN_MINUTES + ' 句=' + SENT_RAW.length + ' 词=' + ALL_WORDS + '\n');
 
-// 2+3) 保温打开 + 配额扫描：门槛固定 12（否则差异分不清是门槛的还是保温的）。
-//      cap=不限 即「保温打开」那一组；cap=0 是边界对照，理论上应与基线-12 完全一致（顺带当自检）。
-const CAPS = [[0, '0'], [2, '2'], [4, '4'], [8, '8'], ['Infinity', '不限']];
-CAPS.forEach(([capExpr, capLabel]) => {
-  MINUTES.forEach((m) => {
-    const group = capLabel === '不限' ? '保温打开(不限)' : '配额cap=' + capLabel;
-    runGroup(group, capLabel, m, [[REPS, REPS_N(12)], ...baowenPatch(capExpr)]);
-  });
+// 1) 对照：cap=0 ≡ 旧的「永不再见」
+MINUTES.forEach((m) => runGroup('对照·不保温', '0', m, 0, []));
+// 2) 上线口径：不传 baowenCap，走引擎默认 —— 界面与文档 §9 引用的就是这一列
+MINUTES.forEach((m) => runGroup('上线口径·引擎默认', '默认', m, null, []));
+// 3) 配额扫描：判据要在真实现上复核一遍
+[2, 4, 8, 16, 32].forEach((cap) => {
+  MINUTES.forEach((m) => runGroup('配额cap=' + cap, String(cap), m, cap, []));
+});
+// 4) 边界对照：拆掉 clamp 的真·不限额。预期全档塌（§8.3 第 3 条的论证要在实现上再验一次）
+MINUTES.forEach((m) => runGroup('不限额(拆clamp)', '不限', m, 1e9, [[CLAMP, NO_CLAMP]]));
+
+/* ---------- 自检：低档（<15min）不保温必须由引擎自己兑现 ----------
+   v1 的自检是「cap=0 与基线逐字段相同」（证明补丁没顺手改坏别的行为）；
+   保温已经在引擎里了，能塌的方换成了这个：低档传默认与传 0 必须一模一样。
+   ⚠️ 比的是【排程结果字段】，不能把 ms1/ms2 卷进来 —— 那是墙钟耗时，任何两跑都不相等，
+      上一版整行 JSON.stringify 比，结果每档都假报"不保温没生效"。 */
+const SEMANTIC = ['done', 'days', 'capped', 'empty', 'doneAt', 'year1', 'passedNow', 'total'];
+const semantic = (r) => JSON.stringify(SEMANTIC.map((k) => r[k]));
+MINUTES.filter((m) => m < ENG.BAOWEN_MIN_MINUTES).forEach((m) => {
+  const a = semantic(rows.find((r) => r.group === '对照·不保温' && r.minutes === m));
+  const b = semantic(rows.find((r) => r.group === '上线口径·引擎默认' && r.minutes === m));
+  if (a !== b) problems.push(`${m}min 档：默认口径与 cap=0 不一致 —— 低档「不保温」这条口径没生效`);
 });
 
-/* ---------- 汇总：各档位 相对不保温(12次) 的工期拖长 % ---------- */
-const byKey = {};
-rows.forEach((r) => { byKey[r.cap + '@' + r.minutes] = r; });
-console.log('\n拖长百分比（相对 门槛12·无保温，同档位；封顶=三年内无完工日，百分比无定义）：');
+/* ---------- 汇总：相对「不保温」的工期拖长 % ---------- */
+console.log('\n拖长百分比（相对同档位 cap=0；封顶=三年内无完工日，百分比无定义）：');
 const pct = {};
+const LABELS = [['默认', '默认'], ['2', '2'], ['4', '4'], ['8', '8'], ['16', '16'], ['32', '32'], ['不限', '不限']];
 MINUTES.forEach((m) => {
-  const b = rows.find((r) => r.group === '基线-12次' && r.minutes === m);
-  const line = CAPS.map(([, label]) => {
-    const cell = rows.find((r) => r.group !== '基线-20次' && r.group !== '基线-12次' && r.cap === label && r.minutes === m);
-    if (!cell || cell.days === null || b.days === null) { (pct[label] = pct[label] || {})[m] = null; return label + ':' + '—'; }
-    const p = (cell.days - b.days) / b.days * 100;
-    (pct[label] = pct[label] || {})[m] = p;
+  const base = rows.find((r) => r.group === '对照·不保温' && r.minutes === m);
+  const line = LABELS.map(([key, label]) => {
+    const cell = rows.find((r) => r.cap === key && r.minutes === m && r.group !== '对照·不保温');
+    if (!cell || cell.days === null || base.days === null) {
+      (pct[key] = pct[key] || {})[m] = null; return label + ':—';
+    }
+    const p = (cell.days - base.days) / base.days * 100;
+    (pct[key] = pct[key] || {})[m] = p;
     return label + ':' + (p >= 0 ? '+' : '') + p.toFixed(1) + '%';
   });
-  console.log(m + 'min  ' + line.join('  '));
+  console.log(String(m).padStart(2) + 'min  ' + line.join('  '));
 });
 
+console.log('\n上线口径一表（文档 §9 与 spec §3 引用的是这一列）：');
+MINUTES.forEach((m) => {
+  const c = rows.find((r) => r.group === '上线口径·引擎默认' && r.minutes === m);
+  console.log(`  ${String(m).padStart(2)}min → ${c.days === null ? '封顶(>1095)' : c.days + ' 天'} ` +
+    `完工 ${c.doneAt} · 一年后过完 ${c.year1} · estimateDays ${c.ms1}ms`);
+});
+
+const slowest = rows.reduce((a, r) => Math.max(a, Math.max(r.ms1, r.ms2)), 0);
+console.log('\nestimateDays 单次最慢 ' + slowest + ' ms（界面三处靠它；>1000ms 就要考虑限频）');
+
 fs.writeFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), 'baowen_probe_result.json'),
-  JSON.stringify({ rows, pct, words: ALL_WORDS, sents: SENT_RAW.length }, null, 2) + '\n');
-console.log('\n明细已写 work/baowen_probe_result.json');
+  JSON.stringify({ engine: { masterReps: ENG.MASTER_REPS, cap: ENG.BAOWEN_CAP_SENTS,
+                             minMinutes: ENG.BAOWEN_MIN_MINUTES },
+                   rows, pct, words: ALL_WORDS, sents: SENT_RAW.length }, null, 2) + '\n');
+console.log('明细已写 work/baowen_probe_result.json');
 
 if (problems.length) {
-  console.error('\n确定性被破坏：\n' + problems.join('\n'));
+  console.error('\n不成立：\n' + problems.join('\n'));
   process.exit(1);
 }
-console.log('确定性验证：全部 ' + rows.length + ' 格 ×2 遍逐字段一致。');
+console.log('确定性 + 低档不保温自检：全部 ' + rows.length + ' 格 ×2 遍逐字段一致。');

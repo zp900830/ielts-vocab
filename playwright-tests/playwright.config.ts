@@ -9,6 +9,9 @@ export default defineConfig({
     channel: 'chromium',
     headless: true,
   },
+  /* 8932 那台服务器（主站根目录）由这两个钩子统一管，见 global-setup.ts 顶部的原因说明。 */
+  globalSetup: './global-setup.ts',
+  globalTeardown: './global-teardown.ts',
   webServer: process.env.E2E_NO_SERVER ? undefined : {
     command: 'python3 -m http.server 8931 --bind 127.0.0.1 --directory ../shadow',
     port: 8931,

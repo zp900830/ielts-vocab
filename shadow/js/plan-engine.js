@@ -5,12 +5,44 @@
   'use strict';
 
   const DAY_MS = 864e5;
-  // 第 n 次接触后隔几天再见。前几档是 0（当天回锅），毕业后进 14 → 30。
+  // 第 n 次接触后隔几天再见。前几档是 0（当天回锅）；毕业后恒取 GRADUATED_INTERVALS[0]。
   const WORD_INTERVALS = [0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 5, 5, 5, 7, 7, 7, 7, 7];
+  /* [1]=30 到今天仍然取不到（wordInterval 只要 reps 过门槛就返回 [0]）。保温上线后
+     毕业词的 reps 会继续长，也还是取不到 —— 它是死档不是漏档，调研已证改它对结果零影响。
+     留着是因为删它要改索引语义，而本期正在改的东西够多了。 */
   const GRADUATED_INTERVALS = [14, 30];
   const STAGES = ['fresh', 'seen', 'recognized', 'owned', 'graduated'];
-  const MASTER_REPS = 20;   // 接触够 20 次且 ②（挖空选择）答对过 → 已毕业
+  /* 12 而不是 20：2026-09-21 拍板（决策记录 scheduling-decisions-round3 第 1 条）——
+     后半程那几档长间隔是「已经会了还在反复考」，拉长工期最多、加固记忆最少。
+     配套的另一半是保温：毕业词现在会按 GRADUATED_INTERVALS[0] 回池，
+     所以"毕业"不再是"永不再见"，门槛降下来才不会变成假阳性。
+     出处 docs/superpowers/plans/2026-09-22-保温第一期.md §4 Task 2。 */
+  const MASTER_REPS = 12;   // 接触够 12 次且 ②（挖空选择）答对过 → 已毕业
   const LEECH_ERR = 3;      // 连错 3 次 → 重点词（强制回炉，但不隐藏）
+  /* 保温配额：**每天最多为「毕业词回炉」新排几句**（不是几个词 —— 预算按句算，
+     界面上也是句数，说成词数会和句数对不上）。
+     8 这一档不是猜的：判据是「使总工期比不保温时拖长 ≤10% 的最大档」，
+     数在 work/保温预算-实测-2026-09-22.md §8（现行成本模型复测：15 分钟档 238→257 天，+8.0%）。
+     ⚠️ 上限是**防塌**，不是优化：3245 个词按 14 天回访，稳态约 232 个词/天到期，
+     不设上限就是新词当天被挤光 —— 实测「不限配额」那一列连每天 60 分钟都三年到不了终点。
+     也别把它当成"每 14 天真的能复习一遍"：cap 句/天 ≈ 十几个词/天，一个毕业词平均
+     约 300 天才轮到一次。第一期兑现的是"毕业不再永别"，不是遗忘曲线本身。 */
+  const BAOWEN_CAP_SENTS = 8;
+  const BAOWEN_MIN_MINUTES = 15;   // 每天不到 15 分钟不保温（实测：5 分钟档一保温就 +13%~+46%）
+
+  /* 今天这一档到底给不给保温 —— 唯一一份判据，assemble 与界面都从这里取，
+     界面不许自己写「15 分钟」这个数。
+     minutes 传当天真实预算：档位口径是"今天有多少分钟"，而 plan.todayMinutes 可能是
+     上一次存下的旧值（estimateDays 就是拿入参 minutes 天天覆盖它的）。两者不一致时以分钟数为准。 */
+  function resolveBaowenCap(plan, minutes) {
+    const p = plan || {};
+    const m = Number.isFinite(minutes) ? minutes : (Number(p.todayMinutes) || 0);
+    if (m < BAOWEN_MIN_MINUTES) return 0;
+    const raw = p.baowenCap;
+    if (raw === undefined || raw === null || raw === '') return BAOWEN_CAP_SENTS;
+    const n = Number(raw);
+    return Number.isFinite(n) ? Math.max(0, Math.min(64, Math.floor(n))) : BAOWEN_CAP_SENTS;
+  }
 
   const pad = (n) => String(n).padStart(2, '0');
 
@@ -111,7 +143,11 @@
         if (!daySents.has(day)) daySents.set(day, new Set());
         daySents.get(day).add(sKey);
         const creditKey = ev.w + '|' + sKey + '|' + day;
-        if (!credited.has(creditKey) && before !== 'graduated') {
+        /* 毕业词再被读到也照样进账（Task 2.5）。原来这里挡着 `before !== 'graduated'` 是
+           "毕业 = 永不再见"的另一半：事件不进来，引擎就算把词排回池子，due 也永远不顺延，
+           同一句会被天天重排。回炉这一遍是实打实的一次接触 —— reps 继续加、
+           stage 只升不降（答错也不倒退，那是 Task 5 等他拍的），due 走 wordInterval 排 14 天。 */
+        if (!credited.has(creditKey)) {
           credited.add(creditKey);
           slot.reps++;
           slot.lastContactAt = ev.ts || 0;
@@ -193,7 +229,22 @@
         if (inPool[w]) continue;
         const st = ws[w];
         if (!st || st.stage === 'fresh') { inPool[w] = 'C'; fresh.push({ w: w, i: i }); continue; }
-        if (st.stage === 'graduated') continue;
+        /* 毕业词不再"永不再见"（保温第一期 Task 2）：到点了回 A 池，带 g:1 标记，
+           下面按每日配额限量接收。没到点（due 还在 14 天内）的直接跳过 —— 注意
+           **不许把它塞进 B 池**：B 池的 take 在配额循环之外，塞进去就等于绕开上限。
+           优先级说明：计划里写"回炉句低于未毕业词"，真按字面把回炉排到新词之后，
+           稳态下 A 池天天满 → 保温一句也排不进去，功能直接等于零。实测那一版
+           （回炉与到期词同池按 due 排序、但每天最多 cap 句「专为它新排」）才是
+           work/保温预算-实测 §8 量出来的语义，保护新词靠的是 cap 这个上限。 */
+        if (st.stage === 'graduated') {
+          if ((st.due || 0) > now) continue;
+          /* dueWords【不加】：界面上那格是「N 个词到期 · K 个词是回炉保温」，两个数是两批人，
+             加进去就重复计数。更要紧的是下面兜底那句靠它判断"今天还有没有正事" ——
+             把保温算成正事，等于让兜底绕过配额上限（见 floor 处注释）。 */
+          inPool[w] = 'A';
+          due.push({ w: w, i: i, due: st.due || 0, leech: false, g: 1 });
+          continue;
+        }
         if (st.lastContactDay === today) continue;         // 今天已经见过，不重复占位
         inPool[w] = (st.due || 0) <= now ? 'A' : 'B';
         if (inPool[w] === 'A') { dueWords++; due.push({ w: w, i: i, due: st.due || 0, leech: !!st.leech }); }
@@ -213,10 +264,25 @@
       left -= cost;
       return true;
     }
-    for (let n = 0; n < due.length; n++) {
-      if (!take(due[n].i, 'A', secReview)) droppedA++;
-    }
+    /* 到期句（含回炉句）先取，再取新词，最后加深句 —— 与 work/baowen_probe.mjs 量那批数时
+       用的顺序逐字一致，改了顺序就等于换了成本模型，实测那张表不再适用。 */
     const plan = o.plan || (state && state.plan) || null;
+    const baowenCap = resolveBaowenCap(plan, o.todayMinutes);
+    let baowenSent = 0, retentionDropped = 0;
+    const retainedWords = {};
+    for (let n = 0; n < due.length; n++) {
+      const e = due[n];
+      if (!e.g) { if (!take(e.i, 'A', secReview)) droppedA++; continue; }
+      /* riding：这句已经因为别的词被排进来了 → 这个回炉词免费搭车，**不吃配额**
+         （否则"今天为复习排的那句里正好也有它"要白占一句，保温量凭空少一截）。
+         riding 必须在 take 之前判 —— take 之后这句就已经在 chosen 里，分不出是谁带进来的。 */
+      const riding = chosen.has(e.i);
+      if (!riding && baowenSent >= baowenCap) { droppedA++; retentionDropped++; continue; }
+      if (!take(e.i, 'A', secReview)) { droppedA++; continue; }
+      if (!riding) baowenSent++;
+      retainedWords[e.w] = 1;
+    }
+    const baowenWords = Object.keys(retainedWords).length;
     if (!plan || !plan.pausedNew) {
       const roomy = left >= 0.6 * budget || chosen.size === 0 && budget === 0;
       if (roomy) for (let n = 0; n < fresh.length; n++) if (!take(fresh[n].i, 'C', secNew)) break;
@@ -250,10 +316,14 @@
 
     let floor = false;
     if (!queue.length && (dueWords || fresh.length || grow.length)) {
-      const seedWord = due.length ? due[0] : (grow.length ? grow[0] : fresh[0]);
+      /* 兜底那句只从【未毕业】的活儿里挑。毕业词是被 cap 拦下来的，不是"预算装不下"：
+         兜底的本意是「预算小到一句都排不出，别让他今天没得读」，拿它绕过保温上限，
+         等于把「每天不到 15 分钟不保温」这条口径偷偷改成"其实每天还是排一句"。 */
+      const seedDue = due.filter(function (e) { return !e.g; });
+      const seedWord = seedDue.length ? seedDue[0] : (grow.length ? grow[0] : fresh[0]);
       const i = seedWord.i;
-      chosen.set(i, { i: i, kind: 'sent', pool: due.length ? 'A' : 'C',
-                      sec: due.length ? secReview : secNew, words: wordsOf(i).slice() });
+      chosen.set(i, { i: i, kind: 'sent', pool: seedDue.length ? 'A' : 'C',
+                      sec: seedDue.length ? secReview : secNew, words: wordsOf(i).slice() });
       queue.push(chosen.get(i));
       items.push({ kind: 'quiz', pass: 2, s: i, w: seedWord.w, pool: 'A' });
       floor = true;
@@ -276,6 +346,12 @@
         dueWords: dueWords, newWords: newTaken, newPool: fresh.length, droppedA: droppedA,
         floor: floor, day: today, kSlots: kSlots,
         todayMinutes: o.todayMinutes || 0,
+        /* 保温负载：界面上那句「今天 K 个词是回炉保温」只能从这里取，不许 UI 自己数队列
+           （一份逻辑一份实现）。baowenSent 是**句**、且只算"专为回炉新排的"，与配额同单位；
+           retentionWords 是**词**，含免费搭车的那些，所以它会 ≥ baowenSent。 */
+        baowenCap: baowenCap, baowenSent: baowenSent, retentionWords: baowenWords,
+        retentionDropped: retentionDropped,
+
       },
     };
   }
@@ -293,7 +369,7 @@
   /* ---------- 完工估算（规格 2026-09-21 §4.1 + 2026-09-22 D10）---------- */
   /* 「过完一遍」= 这个词被通读到过至少一次（有一条算进账的接触事件）。
      2026-09-22 他把工期口径改成这个：原话「我希望是快速刷词」「这个时间用通读时间算」。
-     判据不是毕业（reps≥20 且答对过 ②）—— 那会把「一年只过完 48 个词」这种数摆到界面上，
+     判据不是毕业（reps≥门槛 且答对过 ②）—— 那会把「一年只过完 48 个词」这种数摆到界面上，
      而他每天实打实读进去几十个词，那个数与他的体感差一个量级，压力全来自这里。
      毕业数仍然看得到，但那是 state 里数出来的真值（countStages），不由这个模型许诺。
      引擎里没有现成计数器，只能遍历 —— 3245 个槽一天一次，量级毫秒，别为它加字段。 */
@@ -626,6 +702,7 @@
 
   window.ShadowPlan = {
     DAY_MS, WORD_INTERVALS, GRADUATED_INTERVALS, STAGES, MASTER_REPS, LEECH_ERR,
+    BAOWEN_CAP_SENTS, BAOWEN_MIN_MINUTES, resolveBaowenCap,
     dayKey, dayDiff, wordInterval, emptyState,
     eventId, mkContact, mkQuiz, mkPromote, newWord, stageOf, replay, wordState,
     assemble, recallQuiz, meaningQuiz, blankQuiz, judgeRecall, editDistance, parseSenses, hash32, migrate,

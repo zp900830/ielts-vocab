@@ -6,8 +6,10 @@
 // 都要展示。这一点到现在都没优化。」—— 真相是 estimateDays 写完了、单测过了，但产品 UI 一处都没接，
 // 全仓库唯一的调用方是 work/sched_probe.mjs 那个一次性探针。所以这条首先锁"接上了"，其次才锁"同源"。
 //
-// 措辞口径（他 2026-09-21 拍的 (a) 条）：保温还没做，引擎里毕业词永不回访，所以不许许诺"全部学完就完事"，
-// 那行说「新词全部过完一遍」。断言一律读 data-* 属性，不解析中文句子 —— 文案还要跟他再对一轮。
+// 措辞口径（他 2026-09-21 拍的 (a) 条）：那行说「新词全部过完一遍」，不许说"全部学完/永久记住"。
+// 2026-09-24 保温上线后这条**仍然成立**，但理由换了：以前是"毕业词永不回访，说毕业是空头许诺"；
+// 现在是"毕业词会回访，可这个工期模型只覆盖新词过完一遍"——两件事不是一件事，所以也不许改口。
+// 断言一律读 data-* 属性，不解析中文句子 —— 文案还要跟他再对一轮。
 import { test, expect } from '../../fixtures';
 import { currentTimeout } from '../../utils/timeouts';
 
@@ -105,11 +107,20 @@ test.describe('走完全部词要多久 · 四处同源', () => {
     const eng = await page.evaluate(() => TASK.etaFor(15).then((r) => r.days));
     expect(d15).toBe(eng);
 
-    // D10：一年之内就能全过完的档，不许再挂一句「到 … 能过完约 N 个词」—— 那是把同一件事说两遍
-    // （15 分钟档现在 354 天全过完，比一年还短）。换 10 分钟档（542 天）里程碑才有话可说。
+    /* D10：一年之内就能全过完的档，不许再挂一句「到 … 能过完约 N 个词」—— 那是把同一件事说两遍。
+       判据跟着那一行自己的 data-days 走，**不写死档位**。写死过两次都栽在这儿：
+       门槛 20→12 + 保温上线后，10 分钟档从 542 天掉到 362 天（不到一年就全过完了），
+       原句「换 10 分钟档里程碑才有话可说」就从"验证行为"退化成"钉住一个旧数字"，
+       而工期数字本来就会被引擎改动推着走（实测 §8/§9）。 */
     expect(at15).not.toContain('能过完约');
-    await page.locator('[onclick="TASK.setMinutes(10)"]').click();
-    expect(await settled(eta)).toMatch(/能过完约 \d+ 个词/);
+    for (const m of [10, 5]) {
+      await page.locator(`[onclick="TASK.setMinutes(${m})"]`).click();
+      const t = await settled(eta);
+      // 封顶 / 排不出任务时 data-days 是空串（`etaSet` 只在 r.done 时写数字），那都算"一年之内过不完"
+      const d = Number((await daysOf(eta)) || '9999');
+      if (d > 365) expect(t, `${m} 分钟档要 ${d} 天，超过一年，里程碑该说话`).toMatch(/能过完约 \d+ 个词/);
+      else expect(t, `${m} 分钟档 ${d} 天就全过完了，不许把同一件事说两遍`).not.toContain('能过完约');
+    }
     await page.locator('[onclick="TASK.setMinutes(15)"]').click();
     await settled(eta);
 

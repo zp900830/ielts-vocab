@@ -1408,9 +1408,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .qz-opt:hover { border-color: var(--task-new); }
   .qz-opt.right { border-color: var(--task-new); background: var(--task-bg); color: var(--task-new); }
   .qz-opt.wrong { border-color: var(--coral, #d9694f); background: rgba(217,105,79,.09); color: var(--coral-deep, #c0492f); }
-  .qz-actions { display: flex; gap: 7px; margin-top: 11px; }
-  .qz-go { min-height: 44px; padding: 0 16px; border: none; border-radius: 11px; background: linear-gradient(135deg,#2bd4a4,#0fae7e);
-    color: var(--cta-ink); font-size: 13.5px; font-weight: 700; cursor: pointer; }
   .qz-hint { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
   .qz-hint .qz-sense { color: var(--ink2); font-weight: 700; }
   .qz-note { margin-top: 10px; padding: 9px 11px; border-radius: 11px; font-size: 12.5px; line-height: 1.65;
@@ -4759,8 +4756,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const day = ShadowPlan.dayKey(Date.now(), ROOT2.plan.boundaryHour);
         const now = Date.now();
         wordsOfSent(i).forEach(w => {
-          const st = ROOT2.state.words[w];
-          if (st && st.stage === 'graduated') return;
+          /* 毕业词以前在这里被挡掉（`stage === 'graduated'` 就 return）。那一刀是
+             "毕业 = 永不再见"的另一半：引擎把到期的毕业词排回队列了，可读到的时候不记账，
+             due 就永远不顺延，同一句会被天天重排、保温配额全浪费在它身上。
+             现在照记 —— 引擎里 reps 续加、stage 不回落、due 顺延 14 天。 */
           push2(ShadowPlan.mkContact(w, i, now, day));
         });
       }
@@ -4805,6 +4804,18 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         // 只兜住「已经读了的不能比计划的还多」，不跟队列一起涨 —— 涨的就是那个 6/31
         return Math.max(ROOT2.planned[day], ((ROOT2.state.daily[day] || {}).sentDone || 0));
       }
+      /* 今天还剩几句没读完 —— 这个数全项目只在这里算一次，三处读它：任务条的「还剩」、
+         顶栏「今日」那颗绿点、首屏那条提示。
+         以前绿点走 estimateRemaining() → sentState() → prog.sentences（旧句子账），
+         而任务条走这里（新引擎账）：两本账一打架，绿点就跟条上的 n/N 互相打脸
+         （2026-09-22 走查「下一批」#4 与代码审计 P2-e 两路独立命中同一件事）。
+         代价：plannedToday() 会碰 todayPlan()，但那是按天缓存的，而 updateBtn 跟着每次翻句、
+         答题、15 秒一跳的时钟在跑 —— 这里绝不许写成 todayPlan(true)：那是全量装配。 */
+      function todayLeftN() {
+        if (!ROOT2 || !ROOT2.plan) return 0;
+        const d = ROOT2.state.daily[day2()] || {};
+        return Math.max(0, plannedToday() - (d.sentDone || 0));
+      }
 
       function today() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
       function dayIndex() { if (!plan) return 0; const s = new Date(plan.startDate + 'T00:00:00'); const n = new Date(today() + 'T00:00:00'); return Math.max(0, Math.round((n - s) / 864e5)); }
@@ -4817,6 +4828,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       let pass = 1, quizCursor = 0, quizWrongN = 0, quizAnsweredN = 0, taskFinished = false,
           exitConfirm = false, quizStart = 0;   // ② 的剩余时间按「本次真实答题速度」算，所以要记住 ② 是从哪一刻开始的
           reveal = null, batchItems = [], DISP = [], SENT_ZH = [], PARA_ID = [];
+      /* 本遍末尾的补考清单（走查 2026-09-22 #2：答错过的词这一遍里要再考一次，只一次）。
+         存的是 batchItems 里那批 item 对象本体 —— 身份即「这个词在这一句」，同一句不会进两次。 */
+      let retakeItems = [], retakeServedN = 0, retakeOkN = 0;
 
       function indexLayout() {
         DISP = []; SENT_ZH = []; PARA_ID = [];
@@ -4936,7 +4950,27 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         item.built = q;
         return q;
       }
-      function quizList() { return batchItems.filter(x => x.pass === pass); }
+      /* 这一遍要做的题 = 批次快照里 pass===2 的那些 + 本遍末尾的补考。
+         补考是"挂在同一份清单后面"，不是另开一条流程：quizN / quizCursor / quizPaceLeft / 进度条
+         因此天然把补考算进同一份账（分子分母同一份，不会看到 3/2）。批次快照本身没动 ——
+         补考题出自 ① 开始时快照的那批，绝不反查滚动队列。 */
+      function quizList() {
+        const base = batchItems.filter(x => x.pass === pass);
+        return (pass >= 2 && retakeItems.length) ? base.concat(retakeItems) : base;
+      }
+      /* 一趟 ② 的全部计数器。进模式 / setPass / ①→② 三处都要重置，
+         少清一样（比如补考清单）就会把上一遍错过的词带进这一遍。 */
+      function resetQuizRun() {
+        quizCursor = 0; quizWrongN = 0; quizAnsweredN = 0; reveal = null;
+        retakeItems = []; retakeServedN = 0; retakeOkN = 0;
+      }
+      /* 「这一题之后还有没有题」要跳过出不了题的项（ensureCursor 干的活），
+         光看数组长度会把末题写成「下一题」，点下去却弹出小结。 */
+      function hasNextQuiz() {
+        const list = quizList();
+        for (let n = quizCursor + 1; n < list.length; n++) if (buildQuiz(list[n])) return true;
+        return false;
+      }
       function ensureCursor() {
         const list = quizList();
         while (quizCursor < list.length && !buildQuiz(list[quizCursor])) quizCursor++;
@@ -4946,7 +4980,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       /* 两步制：只有 ① 通读 与 ② 挖空选择。旧的第三步（③ 选义）整步删除，
          setPass(3) 这种历史调用一律折回 ②，不许再开出第三步。 */
       function setPass(n) {
-        pass = (n === 1 ? 1 : 2); quizCursor = 0; quizWrongN = 0; quizAnsweredN = 0; reveal = null;
+        pass = (n === 1 ? 1 : 2); resetQuizRun();
         quizStart = (pass === 2 ? Date.now() : 0);
         renderQuiz(); updateTaskBar(); syncQueueFromPlan(); updateMarkers();
       }
@@ -4959,11 +4993,19 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const ok = String(choice).trim().toLowerCase() === String(q.answer).trim().toLowerCase();
         push2(ShadowPlan.mkQuiz(q.w, item.s, q.kind, ok, Date.now(), day2()));
         quizAnsweredN++;
-        if (!ok) quizWrongN++;
+        item.tries = (item.tries || 0) + 1;
+        if (item.tries > 1) {          // 补考那一遍：只统计结果，不再进清单 —— 补考只一轮，收工才有尽头
+          retakeServedN++; if (ok) retakeOkN++;
+        } else if (!ok) {
+          quizWrongN++;                // 「错 N」= 这一遍错过的题数：同一个词补考再错不双记
+          retakeItems.push(item);
+        }
         reveal = { q: q, s: item.s, ok: ok, pick: choice };
         renderQuiz(); updateTaskBar();
         return ok;
       }
+      /* 推进只有一处实现：任务条那颗（唯一的推进按钮）、键盘 → 、「这题有问题」都调这里。
+         补考题挂在 quizList() 末尾，所以这里不必知道补考存在 —— 游标自然走进那一段。 */
       function nextQuiz() {
         reveal = null; quizCursor++;
         if (!currentQuiz()) finishPass(pass);
@@ -4978,7 +5020,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
       function finishPass(n) {
         renderPassSummary(n);
-        if (n === 1) { pass = 2; quizCursor = 0; quizWrongN = 0; quizAnsweredN = 0; reveal = null; quizStart = Date.now(); }
+        if (n === 1) { pass = 2; resetQuizRun(); quizStart = Date.now(); }
         else { taskFinished = true; pass = 2; }
         _cachedPlan = null;
         updateTaskBar();
@@ -5010,9 +5052,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const card = VOCAB[q.w] || {};
         const compare = (!reveal.ok && card.cmp && typeof renderCompareNote === 'function')
           ? renderCompareNote(card.cmp, true) : '';   // 做题答错直接摊开表：这里再让人多点一次就成打断源了
+        // 这里不摆推进按钮：全页唯一的「下一题 / 小结」在任务条上（那颗也是键盘 → 的等价物）。
+        // 卡里再放一颗就是同屏两颗同名按钮，末题两处文字还会不一致（走查 2026-09-22 #1）。
         return `<div class="qz-note">${reveal.ok ? '对了。' : '正确的那一个是 '}<b>${esc(q.answer)}</b></div>
-          ${compare}
-          <div class="qz-actions"><button class="qz-go" style="flex:1" onclick="TASK.nextQuiz()">${quizCursor + 1 >= quizList().length ? '看这一遍的小结' : '下一题'}</button></div>`;
+          ${compare}`;
       }
       /* 义项字符串（'n. 薄雾；烟雾' 这种）剥掉词性前缀，剩下的就是能在译文里划出来的那几个字 */
       function senseText(sense) {
@@ -5073,8 +5116,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
                              : [[quizAnsweredN, '题答了'], [quizWrongN, '题答错（不倒退）'], [d.promote || 0, '个词累计晋升']];
         const title = n === 1 ? '① 通读完成' : '② 挖空选择完成';
         const label = n === 1 ? '开始 ② 挖空选择' : '今天完成';
+        /* 补考的账只在这句里说一次：任务条不加、也不另起一格（条上是三个数，见 updateTaskBar）。
+           措辞不用「欠 / 待补」—— 补考是本遍里做完的事，不是留给明天的账。 */
+        const sub = n === 1 ? '这一遍读完了，下一遍是这一批句子的词'
+          : '这一批过了两遍：读到 → 选得出' + (retakeServedN ? ` · 补考 ${retakeServedN} 个，对 ${retakeOkN} 个` : '');
         el.innerHTML = `<div class="pass-summary"><h4>${title}</h4>
-          <div class="sub">${n === 1 ? '这一遍读完了，下一遍是这一批句子的词' : '这一批过了两遍：读到 → 选得出'}</div>
+          <div class="sub">${sub}</div>
           <div class="nums">${nums.map(x => `<div><b>${x[0]}</b><span>${esc(x[1])}</span></div>`).join('')}</div>
           <button class="go" onclick="TASK.summaryContinue()">${label}</button></div>`;
         el.hidden = false;
@@ -5302,7 +5349,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         buildQueue(); syncQueueFromPlan();
         // 批次快照：② 考的就是这一批读过的句子，不是队列此刻还剩下什么
         batchItems = todayPlan(true).items.map(x => Object.assign({}, x));
-        pass = 1; quizCursor = 0; quizWrongN = 0; quizAnsweredN = 0; reveal = null; taskFinished = false;
+        pass = 1; resetQuizRun(); taskFinished = false;
         if (!todayQueue.length) { showAbToast('今天没有排到的句子 —— 把每天的分钟数调大一点试试'); return; }
         hideResumeOffer();
         taskMode = true;
@@ -5469,6 +5516,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
 
       // ---- 时间估算 ----
+      /* 今天还剩多少新句 / 复习句，走的是旧句子账（prog.sentences + todayQueue）。
+         2026-09-22 走查 #4 把顶栏绿点改到 todayLeftN()（新引擎账）之后这条暂时没有读者：
+         留着是因为它算的是「今天的量」，与工期（estimateDays）两回事（走查 §7(b)），
+         别把它接进任何工期展示；要接回界面，先确认它不会跟条上那个 n/N 变成两个数。 */
       function estimateRemaining() {
         let newLeft = 0, reviewLeft = 0;
         const st = startOfToday();
@@ -5582,7 +5633,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const d = ROOT2.state.daily[day2()] || {};
         const doneN = d.sentDone || 0;
         const planned = plannedToday();
-        const leftN = Math.max(0, planned - doneN);
+        const leftN = todayLeftN();   // 这条减法只住在 todayLeftN() 里：绿点与首屏提示读同一个函数
         const quizN = quizList().length;
         const fin = taskFinished || allDone === true;
         const asking = !!taskMode && exitConfirm;
@@ -5616,7 +5667,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           subEl.textContent = quizPaceLeft(Math.max(0, quizN - quizCursor));
           againBtn.style.display = '';
           againBtn.textContent = '回看句子';
-          nextBtn.textContent = reveal ? '下一题' : '跳过这题';
+          /* 这一颗是全页唯一的推进按钮（做题卡里那颗已删）。末题写「小结」不写「下一题」——
+             点下去就是把这一遍（含末尾的补考）收掉，说「下一题」是假承诺。 */
+          nextBtn.textContent = reveal ? (hasNextQuiz() ? '下一题' : '小结') : '跳过这题';
           setProg(quizN ? quizCursor / quizN : 1);
         } else {
           titleEl.textContent = `① 通读 ${doneN}/${planned}`;
@@ -5796,9 +5849,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function updateBtn() {
         const btn = document.getElementById('btnToday');
         if (!btn) return;
-        const hasPlan = !!plan;
-        const est = hasPlan ? estimateRemaining() : { newLeft: 0, reviewLeft: 0 };
-        btn.classList.toggle('has-task', hasPlan && (est.newLeft > 0 || est.reviewLeft > 0));
+        /* 绿点的判据与任务条同源（todayLeftN）。estimateRemaining() 那条旧句子账不再参与这里 ——
+           它算的是「今天的量」，与工期两回事（走查 §7(b)），仍留给展示用。 */
+        btn.classList.toggle('has-task', todayLeftN() > 0);
       }
 
       // ---- 面板 ----
@@ -6041,10 +6094,24 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           </div>
         </div>
         <div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>还剩 ${leftN} 句 · 覆盖 ${tp.words.length} 个词</b>
-          <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}</span></div>
+          <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}${baowenNote(tp.stats)}</span></div>
         <div class="tp-note sm ps-eta" id="todayEta" data-days="">算一下…</div>
         <div class="tp-actions"><button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始 · 先通读这一批'}</button>
           ${taskMode ? '<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>' : ''}</div>`;
+      }
+
+      /* 保温那一格的话（Task 3：只报负载、不报终点）。三个数全部从引擎的 stats 取 ——
+         界面不许自己数队列、也不许自己写「15 分钟」这个门槛（一份逻辑一份实现）。
+         刻意**不提「14 天」**：稳态约 232 个毕业词/天到期，配额一天只带得动十几个，
+         一个词平均约 300 天才轮到一次；说"14 天回访"是空头许诺（实测 §8.3 第 2 条）。 */
+      function baowenNote(st) {
+        /* 先判档位再判负载：cap=0 是"这一档根本不保温"这条口径本身，
+           不先判它，遇到"今天正好有毕业词被别的句顺带读到了"（riding，不吃配额）
+           就会把那一句说成"今天 K 个词是回炉保温"，把"不保温"这档显示成在保温。 */
+        if (!st.baowenCap) return ` · 每天不到 ${ShadowPlan.BAOWEN_MIN_MINUTES} 分钟不安排保温，先只顾新词`;
+        if (st.retentionWords) return ` · ${st.retentionWords} 个词是回炉保温`;
+        if (st.retentionDropped) return ' · 毕业词太多排不下，先顾完手头的词';
+        return '';
       }
 
       function renderPlanView() {
@@ -6240,37 +6307,51 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (p && _panelOpen) renderSetup(p);
       }
 
-      /* 刷新时今天的任务没做完 → 直接占用底部这块本来就是任务栏的地方。
-         不弹窗：弹窗每刷一次都要点掉一次，就成了新的打断源。一天只提一次，
-         说「今天先不做」就当天不再提（sessionStorage 管这一趟，localStorage 管今天）。 */
+      /* 「今天先不做」那把锁按天记；为什么一天只提一次见下面 offerResume 的注释 */
       const RESUME_KEY = 'ielts.shadow.resumeDay';
       function hideResumeOffer() {
         const bar = document.getElementById('taskBar');
         if (bar && bar.dataset.state === 'resume') { bar.classList.remove('show'); bar.dataset.state = 'idle'; }
         document.body.classList.remove('resume-offer');
       }
+      /* 刷新时底部这一行本来是任务栏的位置，今天的活没干完（或干脆还没开干）就占用它。
+         不弹窗：弹窗每刷一次都要点掉一次，就成了新的打断源。一天只提一次，
+         说「今天先不做」就当天不再提（sessionStorage 管这一趟，localStorage 管今天）。
+         2026-09-22 走查 #5：以前只在「做了一半」时才提（doneN > 0 那道闸），
+         全新的一天界面零提示，得自己去顶栏找面板 —— 现在一句没读也提，条上就是「今天 N 句」+ 开始。
+         两种提示各占一格「这一趟提过没有」：开跑那条提过，不算把「还没做完」那条也消耗掉了 ——
+         他早上点开看一眼就关掉、下午读了两句再回来，仍然要看得到续读条。
+         （这一锁只存最后一个值，够用：两种态由 doneN 分叉，读过句之后就不会再走「开跑」那支。） */
       function offerResume() {
         const bar = document.getElementById('taskBar');
-        if (!bar || taskMode || bar.classList.contains('show')) return;
-        if (!ROOT2 || !ROOT2.plan) return;
+        if (!bar || taskMode || bar.classList.contains('show')) return false;
+        if (!ROOT2 || !ROOT2.plan) return false;
         const d = (ROOT2.state.daily || {})[day2()] || {};
         const planned = plannedToday(), doneN = d.sentDone || 0;
-        if (!(doneN > 0 && planned > doneN)) return;
+        if (!(planned > doneN)) return false;
+        const fresh = doneN === 0;
+        const toldKey = day2() + (fresh ? ':start' : ':resume');
         let gone = null, told = null;
         try { gone = localStorage.getItem(RESUME_KEY); told = sessionStorage.getItem(RESUME_KEY + '.told'); } catch (e) {}
-        if (gone === day2() || told === day2()) return;
+        if (gone === day2() || told === toldKey) return false;
         bar.dataset.state = 'resume';
-        document.getElementById('tbTitle').innerHTML =
-          '<i class="ri-play-circle-line" aria-hidden="true"></i> 今天的任务还没做完';
-        document.getElementById('tbSub').textContent = `已读 ${doneN}/${planned} 句 · 还剩 ${planned - doneN} 句`;
+        document.getElementById('tbTitle').innerHTML = fresh
+          ? '<i class="ri-play-circle-line" aria-hidden="true"></i> 今天 ' + planned + ' 句'
+          : '<i class="ri-play-circle-line" aria-hidden="true"></i> 今天的任务还没做完';
+        // 开跑那一屏不给第二个数：N 句就是全部要做的，还剩多少等进了 ① 条上自然会说
+        // 「还剩」这一格调 todayLeftN() 而不是就地做减法：算式只许住在一处（上面那行 planned/doneN
+        // 是同一本账的另一半，减法多写一遍就是两份实现，本仓库反复栽在这上面）。
+        document.getElementById('tbSub').textContent = fresh
+          ? '' : `已读 ${doneN}/${planned} 句 · 还剩 ${todayLeftN()} 句`;
         syncTaskSeek(false, planned ? doneN / planned : 0);   // 续读条在任务模式外，这一根只读不拖
         const again = document.getElementById('tbAgain'), nxt = document.getElementById('tbNext');
         if (again) { again.style.display = ''; again.textContent = '今天先不做'; }
-        if (nxt) nxt.innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> 接着做';
+        if (nxt) nxt.innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> ' + (fresh ? '开始' : '接着做');
         bar.classList.add('show');
         document.body.classList.add('resume-offer');
         syncTaskBarHeight();
-        try { sessionStorage.setItem(RESUME_KEY + '.told', day2()); } catch (e) {}
+        try { sessionStorage.setItem(RESUME_KEY + '.told', toldKey); } catch (e) {}
+        return true;   // 调用方（init）拿它决定那条断更 toast 还弹不弹
       }
       function resumeTask() { hideResumeOffer(); enterTaskMode(); }
       function skipResume() {
@@ -6293,11 +6374,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (plan) {
           buildQueue();
           updateBtn();
-          try { offerResume(); } catch (e) { dlog('resume-offer-fail', (e && e.message) || e); }
-          // 断更提示：新句窗口已改为按进度游标推进（见 buildQueue），欠下的句子
-          // 不会因日历前移而被跳过，所以这里只如实说明现状，不再声称"已调整计划"。
+          let offered = false;
+          try { offered = offerResume() === true; } catch (e) { dlog('resume-offer-fail', (e && e.message) || e); }
+          /* 断更提示：新句窗口已改为按进度游标推进（见 buildQueue），欠下的句子
+             不会因日历前移而被跳过，所以这里只如实说明现状，不再声称"已调整计划"。
+             与底部那条提示同屏只冒一条（走查 #5）：条上那颗点了就开跑，这句只是解释昨天为什么
+             排这些 —— 两条一起出，眼睛先被字多的那句抓走，而动作在条上。 */
           const lastDay = prog.lastDay;
-          if (lastDay) {
+          if (lastDay && !offered) {
             const gap = Math.round((startOfToday() - new Date(lastDay + 'T00:00:00').getTime()) / 864e5);
             if (gap > 2) {
               showAbToast(`欢迎回来。上次读到这里，今天先排 ${todayPlan(true).queue.length} 句（${ROOT2 && ROOT2.plan ? ROOT2.plan.todayMinutes : 15} 分钟），剩下的不用补`);
