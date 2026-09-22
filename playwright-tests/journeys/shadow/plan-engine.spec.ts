@@ -48,10 +48,10 @@ declare const ShadowPlan: {
     daily: Record<string, Record<string, number>>;
     eventsSeen: number;
   };
-  countGraduated: (st: any) => number;
+  countPassed: (st: any) => number;
   estimateDays: (state: any, minutes: number, opts: any) => {
-    graduatedNow: number; total: number; done: boolean; days: number | null;
-    doneAt: number | null; atHorizon: { days: number; graduated: number; at: number } | null;
+    passedNow: number; total: number; done: boolean; days: number | null;
+    doneAt: number | null; atHorizon: { days: number; passed: number; at: number } | null;
     capped: boolean; empty: boolean;
   };
 };
@@ -310,15 +310,15 @@ test.describe('plan engine · time budget', () => {
       });
       return ShadowPlan.assemble(st, {
         now: Date.parse('2026-09-20T09:00:00'), todayMinutes: mins, rate: 1,
-        secNew: 25, secReview: 8, secQuiz: 6,
+        secNew: 25, secReview: 8,
         wordsOf: (i: number) => (i >= 0 && i < 60 ? ['w' + i + 'a', 'w' + i + 'b'] : []),
         totalSents: 60, boundaryHour: 4,
       });
     }, [minutes, FIXTURE] as [number, string]);
 
   test('一个短日子装不下全部到期词时，必须说清漏了多少', async ({ page }) => {
-    // 两步制后每句只留一题（句时 + 1×每题），原来 10 分钟装不下 40 句、现在装得下 ——
-    // 这条守的不是"10 分钟"这个数，是「装不下的部分要报出来」，所以按新成本收紧到 5 分钟。
+    // D10 后一句只算通读时间（8 秒），5 分钟 = 300 秒最多装 37 句 —— 40 句到期仍然装不下。
+    // 这条守的不是"10 分钟"或"5 分钟"这个数，是「装不下的部分要报出来」。
     const got = await run(page, 5);
     expect(got.queue.length).toBeGreaterThan(0);
     expect(got.queue.length).toBeLessThan(40);   // 40 句到期，5 分钟装不下
@@ -343,11 +343,12 @@ test.describe('plan engine · time budget', () => {
     expect(loose.queue.some(q => q.pool === 'C')).toBe(true);
   });
 
-  test('quiz slots and reading time add up to exactly what the budget reports', async ({ page }) => {
+  test('预算里只有通读时间：做题不占一分钟（D10）', async ({ page }) => {
     const got = await run(page, 20);
     const read = got.queue.reduce((a, q) => a + q.sec, 0);
-    // 两步制：一句只预留一题（原来是 ②③ 两题），所以 usedSec = 句时 + 题数 × 每题
-    expect((got.stats as Record<string, number>).usedSec).toBe(read + got.items.length * 6);
+    // D10 前是 usedSec = 句时 + 题数 × 每题；现在题目照出（一句一题），但【不占预算】。
+    // 他原话：「这个时间用通读时间算，不加挖空选词了」。别把 6 秒加回去 —— 那会让工期数字又变吓人。
+    expect((got.stats as Record<string, number>).usedSec).toBe(read);
     expect(got.items.every(x => x.pass === 2)).toBe(true);
     expect(got.items.filter(x => x.s !== 'ex').length).toBe(got.queue.length);
     expect(got.items.filter(x => x.pass === 3).length).toBe(0);
@@ -627,7 +628,7 @@ test.describe('estimateDays', () => {
     return ShadowPlan.estimateDays(st, a.minutes, {
       totalSents: 60, wordsOf: (i: number) => ['w' + (i * 2), 'w' + (i * 2 + 1)],
       totalWords: 120, now: Date.UTC(2026, 8, 21), boundaryHour: 4, plan: null,
-      maxDays: a.maxDays || 1095, accuracy: a.accuracy,
+      maxDays: a.maxDays, accuracy: a.accuracy,   // 不传就走引擎默认（1095）：默认值只许有一份
     });
   }, { minutes, ...extra });
 
@@ -635,7 +636,7 @@ test.describe('estimateDays', () => {
     test.info().setTimeout(currentTimeout() * 6);
     await page.goto(`${baseURL}/index.html`);
     const r = await est(page, 30);
-    expect(r.graduatedNow).toBe(0);
+    expect(r.passedNow).toBe(0);
     expect(r.total).toBe(120);
     expect(typeof r.capped).toBe('boolean');
     if (r.done) { expect(r.days).toBeGreaterThan(0); expect(r.doneAt).toBeGreaterThan(0); }
@@ -661,7 +662,10 @@ test.describe('estimateDays', () => {
   test('封顶分支：maxDays 太小 → capped=true 且 done=false，days 必须是 null', async ({ page, baseURL }) => {
     test.info().setTimeout(currentTimeout() * 6);
     await page.goto(`${baseURL}/index.html`);
-    const r = await est(page, 15, { maxDays: 5 });
+    // D10 之后通读口径下 15 分钟一天排 36 句 = 72 个词，上限给到 5 天已经不算"太小"，
+    // 所以压到 0 天（只留第 0 天那 72 个词，120 个词的表到不了）。
+    // 这条同时守着一个引擎坑：`o.maxDays || 1095` 会把合法的 0 吃掉，那样封顶分支永远走不到。
+    const r = await est(page, 15, { maxDays: 0 });
     expect(r.done).toBe(false);
     expect(r.capped).toBe(true);
     expect(r.days).toBe(null);
@@ -673,10 +677,31 @@ test.describe('estimateDays', () => {
     await page.goto(`${baseURL}/index.html`);
     const r = await est(page, 60, { maxDays: 1095 });
     expect(r.atHorizon).not.toBe(null);
-    const h = r.atHorizon as { days: number; graduated: number; at: number };
+    const h = r.atHorizon as { days: number; passed: number; at: number };
     expect(h.days).toBe(365);
-    expect(h.graduated).toBeGreaterThan(0);
-    if (r.done) expect(h.graduated).toBeLessThanOrEqual(r.total);
+    expect(h.passed).toBeGreaterThan(0);
+    if (r.done) expect(h.passed).toBeLessThanOrEqual(r.total);
+  });
+
+  // D10（他 2026-09-22）：「这个时间用通读时间算，不加挖空选词了，我希望是快速刷词」。
+  // 旧口径把「过完」数成毕业（reps≥20 且 ② 答对过），15 分钟档在界面上就说成了
+  // 「一年只过完 48 个词」—— 与他每天真读进去几十个词的体感差一个量级，压力全来自这里。
+  test('「过完」数的是通读到过几个词：② 答错、没毕业，也算过完了一遍', async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+    const out = await page.evaluate(() => {
+      const at = Date.UTC(2026, 8, 21);
+      const st = ShadowPlan.replay([
+        ShadowPlan.mkContact('alpha', 0, at, '2026-09-21'),
+        ShadowPlan.mkQuiz('alpha', 0, 'mc4zh', false, at, '2026-09-21'),
+        ShadowPlan.mkContact('beta', 1, at, '2026-09-21'),
+      ], { boundaryHour: 4 });
+      const grad = (s: any) => Object.keys(s.words).filter((k) => s.words[k].stage === 'graduated').length;
+      return { passed: ShadowPlan.countPassed(st), graduated: grad(st), alphaStage: st.words['alpha'].stage };
+    });
+    expect(out.alphaStage).toBe('seen');          // 读到过一次、② 还答错了 → 离毕业远得很
+    expect(out.graduated).toBe(0);
+    expect(out.passed).toBe(2);                   // 但这两个词都算「过完了一遍」
   });
 
   // 附录 B 第 2 条（规格 §7 第 6 条）：分母是入参，界面那行「全部 X 个词」实时跟它走。

@@ -509,10 +509,10 @@ test.describe('two passes', () => {
      那颗 .ps-start 只在「还没有计划」时才存在，计划已建就会点到永远等不到的按钮。
      可见性一律用 Playwright 的 :visible —— 任务栏和播放条都是 position:fixed，
      offsetParent 恒为 null，拿它判可见会把两颗都在屏幕上的按钮读成"不存在"。 */
-  /* 底栏口径 2026-09-21 定稿（他原话：「播放条的所有功能都放在通栏任务条上」）：
-     播放条整条隐藏，它那一排控件搬进任务条的第二行；② 做题态第二行也去掉。
+  /* 底栏口径：2026-09-21 他先定「播放条的所有功能都放在通栏任务条上」，2026-09-22 又改一次
+     「所有操作按钮一行展示，最重要的在最右、依次往左排」。以最后一句为准：一条通栏、一行按钮。
      所以断言一律以 #taskBar 为家 —— 别再拿 #audiobar 的可见性当依据。 */
-  test('任务模式底栏只有一条：① 两行全在通栏上、② 做题态收成一行，翻句/退出/回看各只一颗', async ({ page }) => {
+  test('任务模式底栏只有一条、**一行**：所有操作按钮同一行，下一句在最右、退出在最左', async ({ page }) => {
     test.setTimeout(currentTimeout());   // hook 给了 12 分钟；这条本地 5 秒内该完
     // ① 通读：播放条整条不显示，它的功能全部住在任务条里
     await expect(page.locator('#audiobar')).not.toBeVisible();
@@ -529,6 +529,37 @@ test.describe('two passes', () => {
     await expect(page.locator('#rateCycle')).toBeVisible();
     await expect(page.locator('#btnLoop')).toBeVisible();
     await expect(page.locator('#btnAB')).toBeVisible();
+
+    /* 他 2026-09-22：「底部工具条是乱的，所有操作按钮一行展示。最重要的操作按钮在最右侧，依次往左排。」
+       所以量三件事：① 播放那一组已经搬进按钮堆里（不再是第二行）；② 所有可见按钮的垂直中心在同一行；
+       ③ 从右往左的次序是 下一句 → 再来 → 上一句 → 播放 → 退出。 */
+    const geo = await page.evaluate(() => {
+      const ids = ['tbExit', 'btnPlay', 'btnLoop', 'rateCycle', 'tbPrev', 'tbAgain', 'tbNext'];
+      const r: Record<string, { x: number; y: number }> = {};
+      ids.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const b = el.getBoundingClientRect();
+        r[id] = { x: b.left, y: b.top + b.height / 2 };
+      });
+      const ys = Object.values(r).map((v) => v.y);
+      const ab = document.querySelector('.tb-play .ab-right') as HTMLElement | null;
+      return {
+        r,
+        inBtns: !!document.getElementById('tbPlay')?.closest('.tb-btns'),
+        spread: ys.length ? Math.max(...ys) - Math.min(...ys) : 999,
+        abRightShown: !!ab && getComputedStyle(ab).display !== 'none',
+      };
+    });
+    expect(geo.inBtns, '播放控件必须住在按钮行里（#tbPlay 在 .tb-btns 内），不许再单独占一行').toBe(true);
+    expect(geo.abRightShown, '「读到第 N 句」那格在一行里没有位置，必须藏掉').toBe(false);
+    expect(geo.spread, '所有操作按钮的垂直中心必须落在同一行').toBeLessThan(6);
+    const order = ['tbNext', 'tbAgain', 'tbPrev', 'btnPlay', 'tbExit'].map((k) => geo.r[k].x);
+    expect(order, '从右往左：下一句 → 再来 → 上一句 → 播放 → 退出').toEqual([...order].sort((a, b) => b - a));
+    // 退出那颗只有图标，名字靠悬浮提示（他：鼠标悬浮状态需要有提示「退出任务模式」）
+    await expect(page.locator('#tbExit')).toHaveAttribute('title', '退出任务模式');
+    expect(await page.evaluate(() =>
+      getComputedStyle(document.querySelector('#tbExit .lbl') as Element).display)).toBe('none');
 
     // ② 做题态：第二行整行消失（原型 :283-284 底部只有任务条一条；:382 那一步已随两步制删除）
     await page.evaluate(() => { TASK.setPass(2); TASK.next(); });
@@ -564,6 +595,52 @@ test.describe('two passes', () => {
     expect(fits.gap).toBeGreaterThanOrEqual(fits.bar);
     expect(fits.gap).toBeLessThanOrEqual(fits.bar + 40);
     expect(fits.bar + 88).toBeLessThan(fits.inner - fits.top);   // 底部合计里那条播放条确实是没了
+  });
+
+  /* 2026-09-22 全量走查（work/task_mode_audit.mjs + 代码审计）抓到的四个真问题，各钉一条。
+     规格见 docs/superpowers/specs/2026-09-22-任务模式走查.md。 */
+  test('走查修复：② 里点「继续任务」不拍回 ①、键盘 → 真的记进度、倍速不把句数平方、0 点日界线真的生效', async ({ page }) => {
+    test.setTimeout(currentTimeout());
+
+    // (1) 键盘 → 必须等于屏幕上那颗「下一句」。以前它直接 step(1)：能刷完整篇而 0/24 一动不动
+    const num = () => page.evaluate(() => ((document.getElementById('tbTitle') as HTMLElement).textContent || '').match(/\d+\s*\/\s*\d+/)?.[0]);
+    const before = await num();
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(() => num()).not.toBe(before);
+
+    // (2) 已经在任务模式里，今日面板那颗写着「继续任务」—— 再点一次不许把流程拍回 ①、
+    //     也不许让挂着的题卡变成四颗哑按钮（旧实现重拍批次 + pass=1，选项点了没反应）
+    await page.evaluate(() => { TASK.todayPlan(true).queue.forEach((x: any) => TASK.readDone(x.i)); TASK.setPass(2); TASK.next(); });
+    await expect.poll(() => page.evaluate(() => TASK.pass())).toBe(2);
+    const optsBefore = await page.evaluate(() => document.querySelectorAll('#taskCard .qz-opt').length);
+    await page.evaluate(() => TASK.enterTaskMode());
+    expect(await page.evaluate(() => TASK.pass())).toBe(2);
+    if (optsBefore) {
+      expect(await page.evaluate(() => document.querySelectorAll('#taskCard .qz-opt').length)).toBe(optsBefore);
+      // 出题后焦点要进卡：整块换 innerHTML 的卡片不主动接手，键盘就只能靠 1–4
+      expect(await page.evaluate(() => !!(document.activeElement && document.activeElement.closest('#taskCard')))).toBe(true);
+    }
+
+    // (3) 倍速只许除一次。旧写法 host 传 secNew()（已除过）又传 rate，引擎再除一遍 → 1.5× 排 2.25 倍句子
+    const rateLoad = await page.evaluate(() => {
+      const set = (window as unknown as { setRate: (r: number) => void }).setRate;
+      set(1); const one = TASK.todayPlan(true).queue.length;
+      set(1.5); const fast = TASK.todayPlan(true).queue.length;
+      set(1); return { one, fast };
+    });
+    expect(rateLoad.one).toBeGreaterThan(0);
+    expect(rateLoad.fast).toBeLessThanOrEqual(Math.ceil(rateLoad.one * 1.6));   // 平方会到 2.25 倍
+
+    // (4) 「几点算换一天」选 0 点得真的生效：以前宿主写 `boundaryHour || 4`，0 被吞回 4 点，
+    //     而另一批读原始值的地方按 0 点算 —— 凌晨开工时两套账分叉
+    const bd = await page.evaluate(() => {
+      TASK.setBoundary(0);
+      const got = TASK.todayPlan(true).stats.day;
+      const want = ShadowPlan.dayKey(Date.now(), 0);
+      TASK.setBoundary(4);
+      return { got, want };
+    });
+    expect(bd.got).toBe(bd.want);
   });
 
   test('刷新时任务没做完：底部那行变成续读条，点「接着做」进任务模式', async ({ page, baseURL }) => {

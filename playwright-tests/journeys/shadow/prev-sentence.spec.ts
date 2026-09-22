@@ -78,7 +78,9 @@ test.describe('Play bar previous sentence rewinds one sentence', () => {
             return orig.apply(w, arguments as unknown as [string]);
           };
         });
-        await page.getByTitle('上一句').click();
+        // 点名播放条那一颗：任务条上也有一颗 title 同为「上一句」的按钮（2026-09-22 底栏一行化时
+        // 给它补了悬浮提示），非任务模式下它是隐藏的，但 getByTitle 数的是 DOM —— 不加作用域就是二义。
+        await page.locator('#audiobar button[title="上一句"]').click();
         await expect
           .poll(async () => page.evaluate((): number => idx), { timeout: 3000 })
           .toBe(5);

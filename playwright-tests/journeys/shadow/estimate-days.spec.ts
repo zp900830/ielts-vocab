@@ -13,8 +13,8 @@ import { currentTimeout } from '../../utils/timeouts';
 
 interface EtaRes {
   days: number | null; done: boolean; doneAt: number | null; capped: boolean; empty: boolean;
-  graduatedNow: number; total: number;
-  atHorizon: { days: number; graduated: number; at: number } | null;
+  passedNow: number; total: number;
+  atHorizon: { days: number; passed: number; at: number } | null;
 }
 
 declare const TASK: {
@@ -70,8 +70,10 @@ test.describe('走完全部词要多久 · 四处同源', () => {
     const d15 = Number(await daysOf(eta));
     expect(d15).toBeGreaterThan(0);
     // 假设交代那一行小字（规格 §4.1 / §9.2：一行，不做展开面板）
-    await expect(page.locator('#psEtaAssume')).toContainText('25 秒');
-    await expect(page.locator('#psEtaAssume')).toContainText('8 成');
+    // D10 后这句必须说清「只按通读算」：他嫌旧口径压力大，做题时间不再进工期。
+    await expect(page.locator('#psEtaAssume')).toContainText('通读');
+    await expect(page.locator('#psEtaAssume')).toContainText('秒');
+    await expect(page.locator('#psEtaAssume')).not.toContainText('答对');
 
     const callsBefore = await page.evaluate(() => TASK.etaCalls.n);
     await page.locator('#psMin .ps-opt[data-v="60"]').click();
@@ -79,7 +81,7 @@ test.describe('走完全部词要多久 · 四处同源', () => {
     const d60 = Number(await daysOf(eta));
     expect(d60).toBeLessThanOrEqual(d15);            // 单调性（规格 §7.1）
 
-    // 同一档再点一次：命中缓存，不许再跑一遍几百个模拟日（15 分钟档 = 637 个模拟日）
+    // 同一档再点一次：命中缓存，不许再跑一遍几百个模拟日（15 分钟档 D10 后 = 354 个模拟日）
     await page.locator('#psMin .ps-opt[data-v="15"]').click();
     await settled(eta);
     await page.locator('#psMin .ps-opt[data-v="60"]').click();
@@ -102,6 +104,14 @@ test.describe('走完全部词要多久 · 四处同源', () => {
     // 与引擎直调同源：界面那个数必须就是 estimateDays 的返回值，不是第二套算式
     const eng = await page.evaluate(() => TASK.etaFor(15).then((r) => r.days));
     expect(d15).toBe(eng);
+
+    // D10：一年之内就能全过完的档，不许再挂一句「到 … 能过完约 N 个词」—— 那是把同一件事说两遍
+    // （15 分钟档现在 354 天全过完，比一年还短）。换 10 分钟档（542 天）里程碑才有话可说。
+    expect(at15).not.toContain('能过完约');
+    await page.locator('[onclick="TASK.setMinutes(10)"]').click();
+    expect(await settled(eta)).toMatch(/能过完约 \d+ 个词/);
+    await page.locator('[onclick="TASK.setMinutes(15)"]').click();
+    await settled(eta);
 
     await page.locator('[onclick="TASK.setMinutes(60)"]').click();
     await settled(eta);
