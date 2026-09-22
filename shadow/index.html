@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-CN" translate="no">
   <head>
+    <script>
+      /* 以不带尾斜杠的路径进来（如 /shadow）时，浏览器把这一页当"文件"，
+         所有相对路径都会上浮一级：config.js、js/plan-engine.js、data/*.json 一齐 404
+         （2026-09-23 PC 实测「词汇数据 HTTP 404」；边缘不做补斜杠跳转）。
+         所以页面自己补斜杠：query 与 hash 原样带上，在任何相对资源请求之前跳走。 */
+      (function () {
+        var p = location.pathname;
+        if (p.slice(-1) === '/' || /\.html?$/.test(p)) return;
+        location.replace(p + '/' + location.search + location.hash);
+      })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark">
@@ -1157,6 +1168,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-note b { font-weight: 700; }
   .tp-note .sm { display: block; margin-top: 2px; }
   .tp-note.sm { background: transparent; border: none; padding: 10px 0 0; }
+  /* 「已毕业 N / 全部 · 到某年某月」这行是绿框**外面**的脚注：不能借 .ps-eta 的负 margin
+     （2026-09-23 手机实测：-6px 把它拽到绿框底边上压着）。字号字色跟设置屏那行脚注对齐。 */
+  .tp-note.sm.eta-foot { padding: 8px 2px 0; font-size: 11px; color: var(--muted); opacity: .85;
+    font-variant-numeric: tabular-nums; }
   .sync-state { color: var(--coral-deep, #c0492f); font-weight: 600; }
   /* 常驻同步提示条：贴在任务栏上方，失败时一直挂着，点一下重试。
      层级必须在两条底栏【之下】（.audiobar 120 / .task-bar 200）：它是被动状态 pill，
@@ -1293,7 +1308,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .task-bar .tb-sub { font-size: 11px; color: #56625b; line-height: 1.4; min-width: 0;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .task-bar .tb-btns { display: flex; gap: 6px; flex: none; align-items: center; justify-content: flex-end; }
-  .task-bar .tb-btn { border: none; border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: filter .15s; }
+  .task-bar .tb-btn { border: none; border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: filter .15s;
+    align-items: center; justify-content: center; }
   .task-bar .tb-btn.again { background: var(--card); color: var(--text); border: 1px solid var(--border); }
   .task-bar .tb-btn.next { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
   .task-bar .tb-btn:active { filter: brightness(.92); }
@@ -1311,6 +1327,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.task-mode .task-bar[data-state="exit"] #tbNext,
   body.task-mode .task-bar[data-state="exit"] .tb-play,
   body.task-mode .task-bar[data-state="exit"] .tb-close { display: none !important; }
+  /* 确认态只问一件事，位置条让位（他 2026-09-23：这个弹窗也不需要进度条）。
+     两颗按钮给足横向 padding：「退出」只有两个字，不加就会变成 52×44 的竖椭圆。 */
+  body.task-mode .task-bar[data-state="exit"] .tb-seek { display: none; }
+  body.task-mode .task-bar[data-state="exit"] #tbStay,
+  body.task-mode .task-bar[data-state="exit"] #tbQuit { padding: 8px 18px; min-width: 64px; }
   .task-bar .tb-btn.quit { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
   /* 一行摆得下摆不下，全看窄屏这几颗收得多狠：
      ① 通读态下翻句三颗退成纯图标（② 态那两颗是「回看句子 / 跳过这题」的文字按钮，不能收，收了就看不见字）。 */
@@ -1320,8 +1341,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .task-bar .tb-play { gap: 2px; }
     .task-bar .tb-play .ab-left { gap: 2px; }
     .task-bar .tb-play .btn { padding: 4px 7px; }
+    body.task-mode .task-bar[data-state="read"] #tbPrev,
     body.task-mode .task-bar[data-state="read"] #tbAgain,
-    body.task-mode .task-bar[data-state="read"] #tbNext { font-size: 0; padding: 6px 10px; }
+    body.task-mode .task-bar[data-state="read"] #tbNext { font-size: 0; padding: 6px 0; width: 44px; }
+    body.task-mode .task-bar[data-state="read"] #tbPrev i,
     body.task-mode .task-bar[data-state="read"] #tbAgain i,
     body.task-mode .task-bar[data-state="read"] #tbNext i { font-size: 16px; }
     /* 窄屏放不下「读到第 N 句」，而任务条已经在说 0/24 —— 与其截成"读到…"不如不说。
@@ -1455,7 +1478,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .ps-eta { margin: 0 0 12px; padding: 8px 12px; font-size: 12.5px; line-height: 1.45; color: var(--muted);
     background: var(--card); border: 1px solid var(--border); border-radius: 10px; font-variant-numeric: tabular-nums; }
   .ps-eta b { color: var(--text); font-weight: 700; }
-  .ps-eta.sm { margin-top: -6px; padding: 0 12px 8px; border-top: 0; font-size: 11px; opacity: .8; }
+  /* 这行小字是自己一张卡（上面那张 eta 卡有完整的边和圆角，拼不成一张），
+     所以 padding 必须上下对称 —— 旧写法 padding-top:0 + border-top:0 是照"拼接footer"抄的，
+     文字会贴在卡的上沿（2026-09-23 手机实测）。 */
+  .ps-eta.sm { margin-top: -6px; padding: 7px 12px; font-size: 11px; opacity: .8; }
   .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 12px rgba(16,180,135,.3); }
   .ps-start:active { filter: brightness(.92); }
   /* 调整计划 */
@@ -6103,7 +6129,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         </div>
         <div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>还剩 ${leftN} 句 · 覆盖 ${tp.words.length} 个词</b>
           <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}${baowenNote(tp.stats)}</span></div>
-        <div class="tp-note sm ps-eta" id="todayEta" data-days="">算一下…</div>
+        <div class="tp-note sm eta-foot" id="todayEta" data-days="">算一下…</div>
         <div class="tp-actions"><button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始 · 先通读这一批'}</button>
           ${taskMode ? '<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>' : ''}</div>`;
       }
