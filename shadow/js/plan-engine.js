@@ -554,12 +554,23 @@
       opts.push(label);
     }
     if (opts.length < 4) return null;
-    const seed = String(o.sent) + '|' + String(o.word);
-    const shuffled = opts.map(function (x, i2) { return { x: x, k: hash32(seed + i2) % 997 }; })
-      .sort(function (a, b) { return a.k - b.k; })
-      .map(function (v) { return v.x; });
+    const bySeed = function (s) {
+      return opts.map(function (x, i2) { return { x: x, k: hash32(s + i2) % 997 }; })
+        .sort(function (a, b) { return a.k - b.k; })
+        .map(function (v) { return v.x; });
+    };
+    const base = bySeed(String(o.sent) + '|' + String(o.word));
+    let order = base;
+    /* o.salt：换一种排法，但只换排法 —— 候选池、三道闸、答案本体一个都不动。
+       目前唯一的用处是 ② 的遍内补考（同一个人对同一排四个词是有视觉记忆的，
+       位置本身会替他把答案递到手边）。换种子有 1/24 的概率恰好洗回原样，
+       等于没换，所以撞上就整体左旋一格 —— 仍是这四个词，仍是确定性输出。 */
+    if (o.salt) {
+      order = bySeed(String(o.sent) + '|' + String(o.word) + '|' + o.salt);
+      if (order.join('\u0000') === base.join('\u0000')) order = order.slice(1).concat(order[0]);
+    }
     return { kind: o.kind, s: o.sent, w: String(o.word).toLowerCase(),
-             prompt: o.sentZh || '', opts: shuffled, answer: answer };
+             prompt: o.sentZh || '', opts: order, answer: answer };
   }
   /* 【界面已无入口】③「看英文选中文」整步删除（2026-09-22 两步制）。这个方向的出题留着，
      一是 blankQuiz 与它共用 fourChoice，二是它的单测就是那台机器的判据回归。
@@ -631,6 +642,7 @@
     }
     const q = fourChoice({
       kind: 'mc4zh', sent: o.sent, word: word, answer: word, sentZh: o.sentZh, pool: pool,
+      salt: o.salt,
       accept: function (cand) {
         const senses = parseSenses(cand.m);
         if (!senses.length) return false;

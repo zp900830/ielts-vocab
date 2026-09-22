@@ -514,6 +514,39 @@ test.describe('quiz builder', () => {
     expect(got[0]).toBe(got[1]);
   });
 
+  /* 补考换序（他 2026-09-22 拍：补考不许和原题长一模一样，否则考的是"记得哪个位置"）。
+     salt 只许动排法：候选池、三道闸、答案本体都不许跟着变；不传 salt 的老路径一个字不许动。
+     "顺序一定不同"不能靠运气 —— 换种子有 1/24 的概率恰好洗回原样，所以引擎撞上就左旋一格；
+     下面那 60 个 (句,词) 组合就是在验这条保证有没有漏网的。 */
+  test('② 的 salt 只换排法：同一批四个词、顺序必不同、不传 salt 的排布不许变', async ({ page }) => {
+    const got = await page.evaluate((f) => {
+      const J = (a: string[]) => a.slice().sort().join('|');
+      const base = ShadowPlan.blankQuiz(f);
+      const plain = ShadowPlan.blankQuiz(Object.assign({}, f, { salt: '' }));
+      const salted = ShadowPlan.blankQuiz(Object.assign({}, f, { salt: 'retake' }));
+      const bad: string[] = [];
+      for (let n = 0; n < 60; n++) {
+        const b = ShadowPlan.blankQuiz(Object.assign({}, f, { sent: n }));
+        const s = ShadowPlan.blankQuiz(Object.assign({}, f, { sent: n, salt: 'retake' }));
+        if (!b || !s) { bad.push('null:' + n); continue; }
+        if (b.opts.join('|') === s.opts.join('|')) bad.push('same-order:' + n);
+        if (J(b.opts) !== J(s.opts)) bad.push('changed-set:' + n);
+      }
+      return {
+        base: base && base.opts.join('|'), plain: plain && plain.opts.join('|'),
+        salted: salted && salted.opts.join('|'), saltedSorted: salted && J(salted.opts),
+        baseSorted: base && J(base.opts), bad,
+        answerSame: !!base && !!salted && base.answer === salted.answer,
+      };
+    }, BLANK_FIXTURE as any);
+    expect(got.base).toBeTruthy();
+    expect(got.plain).toBe(got.base);                       // 空 salt ≡ 不传：既有排布没被打扰
+    expect(got.salted).not.toBe(got.base);                  // 补考看得见不同的排法
+    expect(got.saltedSorted).toBe(got.baseSorted);          // 但还是那四个词
+    expect(got.answerSame).toBe(true);
+    expect(got.bad).toEqual([]);
+  });
+
   test('② 组与同段都不够三个时，用整本同词性的词补第三档（仍受词性闸与双解闸管）', async ({ page }) => {
     const got = await page.evaluate((f) => ({
       noBook: ShadowPlan.blankQuiz(Object.assign({}, f, {

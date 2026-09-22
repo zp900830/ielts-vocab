@@ -396,11 +396,13 @@ test.describe('two passes', () => {
       // 批次里同一「词 + 句」出现两次的话，下面的判重会误判 —— 这条用例只锁补考，不锁那种批次
       const dupes = snap.filter(x => x.w === first.w && String(x.s) === String(first.s)).length;
       const baseN = TASK.quizTotal();
+      const origOpts = first.opts.slice();
       TASK.answerQuiz((first.opts.find(o => o !== first.answer) || 'x') as string);   // 第一题故意答错
       const nAfterWrong = TASK.quizTotal();
       const goInCard = document.querySelectorAll('.qz-go').length;
       const labels: string[] = [];
       let served = 0, retakeAt = 0, guard = 0;
+      let retakeOpts: string[] = [];
       TASK.nextQuiz();
       while (guard++ < 400 && !TASK.finished()) {
         const q = TASK.currentQuiz();
@@ -409,7 +411,7 @@ test.describe('two passes', () => {
         // 原题在进循环前已经答过这一次了，所以再碰到同一「词 + 句」就是那道补考 —— 它再答错一次，
         // 用来验证「补考只补一次」。别的题一律答对，保证整遍只多出那一道题。
         const isRetake = q.w === first.w && q.s === first.s;
-        if (isRetake) retakeAt = served;
+        if (isRetake) { retakeAt = served; retakeOpts = q.opts.slice(); }
         TASK.answerQuiz((isRetake ? q.opts.find(o => o !== q.answer) : q.answer) as string);
         labels.push((document.getElementById('tbNext')!.textContent || '').trim());
         TASK.nextQuiz();
@@ -418,6 +420,7 @@ test.describe('two passes', () => {
       const forFirst = evs.filter(e => e.w === first.w && e.s === first.s).length;
       const sub = document.querySelector('.pass-summary .sub');
       return { skip: false, dupes, baseN, nAfterWrong, goInCard, served, retakeAt,
+               origOpts, retakeOpts,
                nEnd: TASK.quizTotal(), finished: TASK.finished(), labels,
                wrong: TASK.quizWrong(), answered: TASK.quizDone(), events: evs.length, forFirst,
                summarySub: (sub && sub.textContent) || '' };
@@ -428,6 +431,10 @@ test.describe('two passes', () => {
     expect(got.nAfterWrong, '补考进同一份清单：分母 +1').toBe(got.baseN + 1);
     expect(got.nEnd, '补考再错也不再补：整遍最多只多这一道题').toBe(got.baseN + 1);
     expect(got.retakeAt, '补考排在整遍（含自己）的最末尾').toBe(got.served);
+    // 补考不许和原题长一模一样：还是那四个词，但排法必须不同（他 2026-09-22 拍的第二条）
+    expect(got.retakeOpts.length, '补考那道确实出出来了').toBe(4);
+    expect(got.retakeOpts.slice().sort().join('|'), '换的是排法，不是候选池').toBe(got.origOpts.slice().sort().join('|'));
+    expect(got.retakeOpts.join('|'), '顺序与原题相同 = 补考在考"记得哪个位置"，不是考词').not.toBe(got.origOpts.join('|'));
     expect(got.finished, '补考只一轮，收工路径照样到得了').toBe(true);
     expect(got.forFirst, '原题 + 补考，各一道事件，没有第二条记账路径').toBe(2);
     expect(got.events).toBe(got.answered);
