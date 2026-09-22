@@ -71,10 +71,21 @@ const barInfo = (page) => page.evaluate(() => {
     return { text: (e.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 60), clipped: e.scrollWidth > e.clientWidth + 1 }; };
   const card = document.getElementById('taskCard');
   const cr = card && !card.hidden ? card.getBoundingClientRect() : null;
+  /* #tbEta 已删（0922 第三次改口：条上只留进度 / 还剩 / 本次三个数），换成量 #tbProg 那根填条。
+     填条用 width:xx% 表示进度，量它的像素宽 —— 0% 时看不到进度条 == 画了个空槽。 */
+  const pr = document.getElementById('tbProg');
+  const prBox = pr ? pr.getBoundingClientRect() : null;
+  const slot = document.querySelector('.tb-prog');
+  const slotBox = slot ? slot.getBoundingClientRect() : null;
   return {
     state: bar.dataset.state, h: Math.round(r.height), top: Math.round(r.top),
     varH: cs.getPropertyValue('--task-bar-h').trim(), varCardB: cs.getPropertyValue('--task-card-b').trim(),
-    title: ov('#tbTitle'), sub: ov('#tbSub'), eta: ov('#tbEta'),
+    title: ov('#tbTitle'), sub: ov('#tbSub'), clock: ov('#tbClock'),
+    progW: prBox ? Math.round(prBox.width) : null,
+    slotW: slotBox ? Math.round(slotBox.width) : null,
+    btnRow: (() => { const b = document.querySelector('.tb-btns');
+      if (!b) return null; const vis = [...b.querySelectorAll('button')].filter((e) => e.getBoundingClientRect().height > 0);
+      return vis.map((e) => e.id).join(','); })(),
     cardGap: cr ? Math.round(r.top - cr.bottom) : null,
     cardOverflow: cr ? cr.top < 44 : false,
   };
@@ -111,24 +122,57 @@ async function probeMenus(page, tag) {
 }
 
 const contrastProbe = (page) => page.evaluate(() => {
-  const ratio = (fg, bg) => { const p = (c) => (c.match(/\d+(\.\d+)?/g) || [0, 0, 0]).slice(0, 3).map(Number);
-    const L = (c) => { const a = p(c).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
-      return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2]; };
-    return +((Math.max(L(fg), L(bg)) + 0.05) / (Math.min(L(fg), L(bg)) + 0.05)).toFixed(2); };
+  const parse = (s) => { const m = /rgba?\(([^)]+)\)/.exec(s || ''); if (!m) return null;
+    const p = m[1].split(',').map((x) => parseFloat(x));
+    return [p[0] || 0, p[1] || 0, p[2] || 0, p.length > 3 ? p[3] : 1]; };
+  const parseAll = (s) => { const out = []; const re = /rgba?\([^)]+\)/g; let m;
+    while ((m = re.exec(s || ''))) { const c = parse(m[0]); if (c) out.push(c); } return out; };
+  const over = (fg, bg) => { const a = fg[3];
+    return [fg[0] * a + bg[0] * (1 - a), fg[1] * a + bg[1] * (1 - a), fg[2] * a + bg[2] * (1 - a), 1]; };
+  const lum = (c) => { const a = c.slice(0, 3).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+    return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2]; };
+  const ratio = (fg, bg) => +(((Math.max(lum(fg), lum(bg)) + 0.05) / (Math.min(lum(fg), lum(bg)) + 0.05)).toFixed(2));
+  /* 底栏 2026-09-22 起是「浮空玻璃卡」：background 是一条【半透明】linear-gradient，
+     background-color 恒为 rgba(0,0,0,0)。旧写法一路向上找第一个不透明 background-color，
+     等于把玻璃那几层 .65/.25/.15 当不存在，量出来的是页面白底 —— 比屏幕上真实观感偏乐观。
+     这里把「元素 → 底色」之间所有半透明层按由外向内叠回去，渐变取中间那一档。 */
+  const backdrop = (el) => {
+    const layers = []; let host = el, base = null;
+    while (host) {
+      const cs = getComputedStyle(host);
+      const grads = parseAll(cs.backgroundImage);
+      if (grads.length) layers.push(grads);
+      const solid = parse(cs.backgroundColor);
+      if (solid && solid[3] >= 0.999) { base = solid; break; }
+      if (solid && solid[3] > 0) layers.push([solid]);
+      host = host.parentElement;
+    }
+    let acc = base || [255, 255, 255, 1];
+    for (let i = layers.length - 1; i >= 0; i--) {
+      const stops = layers[i];
+      acc = over(stops[Math.floor(stops.length / 2)] || stops[0], acc);
+    }
+    return acc;
+  };
   const out = {};
   [['#tbNext', '下一句'], ['#tbAgain', '再来'], ['#tbPrev', '上一句'], ['#btnPlay', '▶'], ['#tbExit', '退出'],
-   ['#rateCycle', '倍速'], ['#btnLoop', '循环'], ['#tbSub', '副标题'], ['#tbEta', '工期行']].forEach(([sel, name]) => {
+   ['#rateCycle', '倍速'], ['#btnLoop', '循环'], ['#tbTitle', '主行'], ['#tbSub', '还剩'], ['#tbClock', '本次']].forEach(([sel, name]) => {
     const el = document.querySelector(sel); if (!el) return;
     const cs = getComputedStyle(el);
-    if (+parseFloat(cs.fontSize) === 0) return;              // 窄屏纯图标态：字号 0，量出来的"颜色"是图标的
-    if (cs.backgroundImage !== 'none') {                     // 渐变底（下一句那颗）取不到 background-color，
-      out[name] = { ratio: 99, size: cs.fontSize, gradient: true }; return;   // 拿父级白底去比只会得 1:1 假红
-    }
-    let bg = cs.backgroundColor; let host = el;
-    while ((bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent') && host.parentElement) {
-      host = host.parentElement; bg = getComputedStyle(host).backgroundColor;
-    }
-    out[name] = { ratio: ratio(cs.color, bg), size: cs.fontSize, weight: cs.fontWeight };
+    if (parseFloat(cs.fontSize) === 0) return;              // 窄屏纯图标态：字号 0，量出来的"颜色"是图标的
+    const fg = parse(cs.color); if (!fg || fg[3] === 0) return;
+    const parent = backdrop(el.parentElement || el);
+    const own = parseAll(cs.backgroundImage);
+    const cands = own.length ? own : [parse(cs.backgroundColor) || [0, 0, 0, 0]];
+    let worst = Infinity;
+    cands.forEach((c) => { const b = c[3] >= 0.999 ? c : over(c, parent); worst = Math.min(worst, ratio(fg, b)); });
+    /* 判据按 WCAG 2.1 的实际分档：大号字（≥24px，或 ≥18.66px 且加粗）只要求 3:1。
+       旧写法用「字号 != 11px」当免检金牌，既不按字重也不按大小，两头都不准。 */
+    const px = parseFloat(cs.fontSize);
+    const large = px >= 24 || (px >= 18.66 && parseInt(cs.fontWeight, 10) >= 700);
+    const need = large ? 3 : 4.5;
+    out[name] = { ratio: worst, size: cs.fontSize, weight: cs.fontWeight, need, pass: worst >= need,
+      via: own.length ? 'gradient' : 'solid' };
   });
   return out;
 });
@@ -156,7 +200,41 @@ async function run() {
 
     await probeMenus(page, T + ' ①');
     const c = await contrastProbe(page);
-    Object.entries(c).forEach(([k, v]) => { if (v.ratio < 4.5 && v.size !== '11px') add(T + ' 对比度', v.ratio < 3 ? 'P1' : 'P2', `${k} ${v.ratio}:1（字号 ${v.size}）`); });
+    Object.entries(c).forEach(([k, v]) => { if (!v.pass) add(T + ' 对比度', v.ratio < 3 ? 'P1' : 'P2',
+      `${k} ${v.ratio}:1 < ${v.need}:1（字号 ${v.size}/${v.weight}${v.via === 'gradient' ? '，渐变底按最不亮那一档算' : ''}）`); });
+    /* 条上三个数：填条画没画出来（0% 时看不见 == 只有一条空槽），本次读数为啥还没出现 */
+    /* 校准：0 句进展时填条本来就该是 0px，那是"还没读"而不是"坏了"。
+       第一版没带这个前提，进任务模式第一件事就报一条 P2 假红。 */
+    const progDone = await page.evaluate(() => { const t = document.getElementById('tbTitle').innerText;
+      const m = /(\d+)\s*\/\s*(\d+)/.exec(t); return m ? { n: +m[1], N: +m[2] } : null; });
+    if (bi.slotW && bi.progW === 0 && progDone && progDone.n > 0) add(T + ' 底栏', 'P2',
+      `已经读了 ${progDone.n}/${progDone.N} 句，填条却还是 0px（槽宽 ${bi.slotW}px）—— 画了个空槽`);
+    if (!bi.clock) add(T + ' 底栏', 'P3', '「本次」读数还没出现（前 20 秒本来就该是空的，超过 20 秒才要查）');
+
+    /* 点 ✕ 先问一句（2026-09-22 他新增的口径）：确认态是个【真状态】，最怕两件事 ——
+       ① 进去出不来（继续做没把状态切回去），② 问一句的工夫把进度弄丢。 */
+    const ex = await page.evaluate(() => {
+      const bar = document.getElementById('taskBar');
+      const vis = () => [...bar.querySelectorAll('button')].filter((e) => e.getBoundingClientRect().height > 0)
+        .map((e) => e.id).join(',');
+      const before = { state: bar.dataset.state, h: Math.round(bar.getBoundingClientRect().height), btns: vis(),
+        title: document.getElementById('tbTitle').innerText.trim() };
+      TASK.requestExit();
+      const ask = { state: bar.dataset.state, h: Math.round(bar.getBoundingClientRect().height), btns: vis(),
+        title: document.getElementById('tbTitle').innerText.trim(),
+        /* 确认态里 ✕ 和那排播放控件应当收起；✕ 自己还留着 = 两条退出入口同时在场，容易点错 */
+        closeStill: !!document.getElementById('tbExit').getBoundingClientRect().height };
+      TASK.cancelExit();
+      const after = { state: bar.dataset.state, h: Math.round(bar.getBoundingClientRect().height), btns: vis(),
+        title: document.getElementById('tbTitle').innerText.trim() };
+      return { before, ask, after };
+    });
+    if (ex.ask.state !== 'exit') add(T + ' 退出确认', 'P1', `点 ✕ 没进确认态（state=${ex.ask.state}）`);
+    if (ex.after.state !== ex.before.state) add(T + ' 退出确认', 'P1', `按「继续做」没回到 ${ex.before.state}，实际 ${ex.after.state} —— 问一句就把人甩出状态机了`);
+    if (ex.after.btns !== ex.before.btns) add(T + ' 退出确认', 'P2', `「继续做」之后条上按钮和之前不一样：[${ex.before.btns}] → [${ex.after.btns}]`);
+    if (ex.after.title !== ex.before.title) add(T + ' 退出确认', 'P1', `问一句的工夫进度行变了：「${ex.before.title}」→「${ex.after.title}」`);
+    if (Math.abs(ex.ask.h - ex.before.h) > 10) add(T + ' 退出确认', 'P2', `确认态把条子供高 ${ex.before.h}px → ${ex.ask.h}px，正文会跟着抖一下`);
+    if (ex.ask.closeStill) add(T + ' 退出确认', 'P3', `确认态里 ✕ 还在（${ex.ask.btns}）—— 与「退出」并存的第二个出口`);
 
     /* 键盘：任务模式里能不能不靠手点完一天 */
     const k0 = await keyboardProbe(page);
@@ -204,9 +282,12 @@ async function run() {
       return { gap, task: bar.height > 0, shown: cs.display !== 'none' };
     });
     if (hint && !hint.skipped) {
-      if (hint.gap < 0) add(T + ' 同步提示', 'P1', `同步条压住底栏 ${-hint.gap}px`);
-      else if (hint.gap > 40) add(T + ' 同步提示', 'P2', `${hint.task ? '任务模式里' : '非任务模式'}同步条浮在离底栏 ${hint.gap}px 的地方（写死了播放条那 62px）`);
-      else add(T + ' 同步提示', 'P3', `同步条离底栏 ${hint.gap}px`);
+      /* setSyncHint / placeSyncHint 都在 IIFE 里、没导出，探针只能手工把 hidden 翻开 ——
+         量到的就是【CSS 兜底值】，JS 真正贴的那个 bottom 根本进不来。
+         所以 gap 大只说明"兜底值偏保守"，不能报成产品缺陷（上一版把它报成 P2，是探针在骗人）。
+         唯一还能放心判的是负数：那连兜底值都在压住底栏，JS 只会更糟。 */
+      if (hint.gap < 0) add(T + ' 同步提示', 'P1', `同步条压住底栏 ${-hint.gap}px（CSS 兜底值就已经压住，JS 贴过之后只会更低）`);
+      else add(T + ' 同步提示', 'P3', `CSS 兜底位置离底栏 ${hint.gap}px —— 探针够不到 placeSyncHint（没导出），JS 贴完的真实位置未测`);
     }
 
     /* 刷新 → 续读条。必须放在「做完今天」之前：那一天做完了就没有未完成任务可续，
@@ -243,16 +324,20 @@ async function run() {
     await page.evaluate(() => TASK.enterTaskMode()).catch(() => {});
     await page.waitForTimeout(500);
     const big = await barInfo(page);
-    ['title', 'sub', 'eta'].forEach((k) => { if (big[k] && big[k].clipped)
+    ['title', 'sub', 'clock'].forEach((k) => { if (big[k] && big[k].clipped)
       add(T + ' 文案', 'P2', `${k} 被截断：「${big[k].text}」`); });
     add(T + ' 底栏', big.h > 120 ? 'P2' : 'P3', `60 分钟档任务条高 ${big.h}px / state=${big.state}`);
 
     /* 深色模式 */
-    await page.evaluate(() => { const b = document.getElementById('themeBtn') || document.querySelector('[onclick*="dark"],[onclick*="theme"]');
-      if (b) b.click(); });
+    const darkOn = await page.evaluate(() => {
+      const b = document.getElementById('btnDark') || document.querySelector('[onclick*="ark"]');
+      if (b) b.click(); else if (typeof toggleDark === 'function') toggleDark();
+      return document.body.classList.contains('dark');
+    });
+    if (!darkOn) { add(T + ' 深色对比度', 'P1', '切不到深色模式 —— 下面这一节【没测到】，别再当测过了'); }
     await page.waitForTimeout(300);
     const dark = await contrastProbe(page);
-    Object.entries(dark).forEach(([k, v]) => { if (v.ratio < 4.5) add(T + ' 深色对比度', v.ratio < 3 ? 'P1' : 'P2', `${k} ${v.ratio}:1`); });
+    Object.entries(dark).forEach(([k, v]) => { if (!v.pass) add(T + ' 深色对比度', v.ratio < 3 ? 'P1' : 'P2', `${k} ${v.ratio}:1 < ${v.need}:1（字号 ${v.size}/${v.weight}）`); });
 
     if (page.__errs.length) add(T + ' 报错', 'P1', `JS 报错 ${page.__errs.length} 条：${page.__errs.slice(0, 3).join(' | ')}`);
     await ctx.close();
