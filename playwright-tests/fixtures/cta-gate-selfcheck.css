@@ -1,0 +1,15 @@
+/* / 这条文件只给 cta-and-popups.spec.ts 的「源码级门禁」当自检夹具用，产品不加载它。
+   存在的理由：门禁必须证明两件事 —— ① 遇到坏写法会响；② 遇到好写法不响。
+   只测①会误伤，只测②是假绿。见 shadow 站 2026-09-22 那次「闸门以为跑了其实没跑」的教训。 */
+:root{
+  --grad: linear-gradient(135deg,#2bd4a4,#0fae7e);
+  --accent: #0c9c74;
+  --soft: rgba(16,180,135,.08);
+  --brand: #0071e3;
+}
+/* 该被抓到的两条：薄荷绿实底 + 白字 */
+.bad-a { background: var(--grad); color: #fff; }
+.bad-b { background-color: var(--accent); color: rgb(255,255,255); }
+/* 不该被抓到的两条：蓝色实底（--accent 在 admin 站就是这个蓝）；以及只有一层淡绿底纹 */
+.ok-a { background: var(--brand); color: #fff; }
+.ok-b { background: var(--soft); color: #fff; }

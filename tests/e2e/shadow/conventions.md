@@ -70,9 +70,13 @@
   那是功能丢失不是美观问题，别再用例把它锁成"合理现状"。
 - **② 做题态整条播放行消失**（`body.task-mode.quiz-mode .audiobar{display:none}`），底部只剩通栏任务条一条。
   （2026-09-22 两步制：原「③ 选义」那一步整删，做题态只剩 ② —— 口径与布局不变，别把它当成漏做。）
-- 翻句与退出都在通栏上：`#tbPrev`（上一句）/ `#tbNext`（下一句）/ `#tbExit`（退出）/ `#tbAgain`（① 再来、② 回看句子）。
-  这四颗的显隐**只由 CSS 选择器决定**（`body.task-mode` + `.task-bar[data-state="read"]`），不写进 JS ——
-  写进 JS 的话渲染顺序一变就漏关。续读条是 `data-state="resume"` 且**没有** `task-mode`，`#tbExit`/`#tbPrev` 两颗都不许露脸。
+- 翻句与退出都在这张卡上：`#tbPrev`（上一句）/ `#tbNext`（下一句）/ `#tbExit`（右上角关闭）/
+  `#tbAgain`（① 再来、② 回看句子）/ `#tbStay`+`#tbQuit`（点关闭之后才露脸的那一对）。
+  它们的显隐**只由 CSS 选择器决定**（`body.task-mode` + `.task-bar[data-state="…"]`），不写进 JS ——
+  写进 JS 的话渲染顺序一变就漏关。续读条是 `data-state="resume"` 且**没有** `task-mode`，
+  `#tbExit`/`#tbPrev`/`#tbStay`/`#tbQuit` 四颗都不许露脸。
+- 「我在哪一句」全站只有 `.sent.playing` 一个真值。**不要再给任务模式加第二套当前句标记**（描边那套已删）：
+  两套标记必然不同步，实测就是「上一句不动、下一句把进度记到没在读的那句头上」。
 - **任务模式里播放条的四套动画必须整体失效**：收起/展开（`.ab-collapse`/`.ab-expand`）、滚动收成 mini
   （`body.scrolled .audiobar`）、闲置淡出（`fade-nav`）。这四套都是给「独立的、浮在内容上的播放条」写的，
   任务模式里它已经贴在任务条上方变成一条通栏，再收起/展开就会在任务条上跳出一条新栏，形高也不再是那条 41px。

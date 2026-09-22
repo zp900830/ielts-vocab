@@ -530,36 +530,50 @@ test.describe('two passes', () => {
     await expect(page.locator('#btnLoop')).toBeVisible();
     await expect(page.locator('#btnAB')).toBeVisible();
 
-    /* 他 2026-09-22：「底部工具条是乱的，所有操作按钮一行展示。最重要的操作按钮在最右侧，依次往左排。」
-       所以量三件事：① 播放那一组已经搬进按钮堆里（不再是第二行）；② 所有可见按钮的垂直中心在同一行；
-       ③ 从右往左的次序是 下一句 → 再来 → 上一句 → 播放 → 退出。 */
+    /* 他 2026-09-22 第二次改口（覆盖上一条口径）：「文字双行展示位于任务条左侧（核心信息在上、
+       辅助信息下）；所有按钮位于任务条右侧；关闭按钮位于任务条右上方」。所以量四件事：
+       ① 播放那一组住在按钮堆里；② 操作按钮垂直中心同一行；③ 从右往左 下一句→再来→上一句→播放；
+       ④ 关闭在右上角 —— 它在按钮排的【上方】且贴右缘，不再跟它们抢同一行。 */
     const geo = await page.evaluate(() => {
       const ids = ['tbExit', 'btnPlay', 'btnLoop', 'rateCycle', 'tbPrev', 'tbAgain', 'tbNext'];
-      const r: Record<string, { x: number; y: number }> = {};
+      const r: Record<string, { x: number; y: number; top: number; right: number }> = {};
       ids.forEach((id) => {
         const el = document.getElementById(id);
         if (!el) return;
         const b = el.getBoundingClientRect();
-        r[id] = { x: b.left, y: b.top + b.height / 2 };
+        r[id] = { x: b.left, y: b.top + b.height / 2, top: b.top, right: b.right };
       });
-      const ys = Object.values(r).map((v) => v.y);
+      const row = ['btnPlay', 'btnLoop', 'rateCycle', 'tbPrev', 'tbAgain', 'tbNext'].map((k) => r[k].y);
       const ab = document.querySelector('.tb-play .ab-right') as HTMLElement | null;
+      const bar = document.getElementById('taskBar')!.getBoundingClientRect();
+      const txt = document.querySelector('.tb-text')!.getBoundingClientRect();
       return {
         r,
         inBtns: !!document.getElementById('tbPlay')?.closest('.tb-btns'),
-        spread: ys.length ? Math.max(...ys) - Math.min(...ys) : 999,
+        spread: Math.max(...row) - Math.min(...row),
         abRightShown: !!ab && getComputedStyle(ab).display !== 'none',
+        // 文字在左、按钮在右：文字块整体不许越过按钮排的左缘
+        textLeftOfBtns: txt.right <= r.tbNext.x + 1,
+        textTwoLines: document.querySelectorAll('.tb-text > *').length >= 2
+          && (document.querySelector('.tb-title')!.getBoundingClientRect().top
+              < document.querySelector('.tb-line2')!.getBoundingClientRect().top),
+        exitAbove: r.tbExit.top < Math.min(...row),
+        exitRight: bar.right - r.tbExit.right < 12,
       };
     });
     expect(geo.inBtns, '播放控件必须住在按钮行里（#tbPlay 在 .tb-btns 内），不许再单独占一行').toBe(true);
-    expect(geo.abRightShown, '「读到第 N 句」那格在一行里没有位置，必须藏掉').toBe(false);
+    expect(geo.abRightShown, '「读到第 N 句」那格在按钮排里没有位置，必须藏掉').toBe(false);
     expect(geo.spread, '所有操作按钮的垂直中心必须落在同一行').toBeLessThan(6);
-    const order = ['tbNext', 'tbAgain', 'tbPrev', 'btnPlay', 'tbExit'].map((k) => geo.r[k].x);
-    expect(order, '从右往左：下一句 → 再来 → 上一句 → 播放 → 退出').toEqual([...order].sort((a, b) => b - a));
-    // 退出那颗只有图标，名字靠悬浮提示（他：鼠标悬浮状态需要有提示「退出任务模式」）
+    expect(geo.textTwoLines, '文字必须双行：核心在上、辅助在下').toBe(true);
+    expect(geo.textLeftOfBtns, '文字靠左、按钮靠右：两者不许挤同一行的同一块地方').toBe(true);
+    expect(geo.exitAbove, '关闭在任务条右上方，必须在按钮排的上面').toBe(true);
+    expect(geo.exitRight, '关闭贴右上角').toBe(true);
+    const order = ['tbNext', 'tbAgain', 'tbPrev', 'btnPlay'].map((k) => geo.r[k].x);
+    expect(order, '从右往左：下一句 → 再来 → 上一句 → 播放').toEqual([...order].sort((a, b) => b - a));
+    // 关闭这颗只留图标，名字由悬浮提示与 aria-label 说（他：鼠标悬浮要提示「退出任务模式」）
     await expect(page.locator('#tbExit')).toHaveAttribute('title', '退出任务模式');
-    expect(await page.evaluate(() =>
-      getComputedStyle(document.querySelector('#tbExit .lbl') as Element).display)).toBe('none');
+    await expect(page.locator('#tbExit')).toHaveAttribute('aria-label', '退出任务模式');
+    expect((await page.locator('#tbExit').innerText()).trim(), '关闭不许再占宽度写文字').toBe('');
 
     // ② 做题态：第二行整行消失（原型 :283-284 底部只有任务条一条；:382 那一步已随两步制删除）
     await page.evaluate(() => { TASK.setPass(2); TASK.next(); });
@@ -595,6 +609,81 @@ test.describe('two passes', () => {
     expect(fits.gap).toBeGreaterThanOrEqual(fits.bar);
     expect(fits.gap).toBeLessThanOrEqual(fits.bar + 40);
     expect(fits.bar + 88).toBeLessThan(fits.inner - fits.top);   // 底部合计里那条播放条确实是没了
+  });
+
+  /* 2026-09-22 第二次改口后的四条锁（规格：docs/superpowers/specs/2026-09-22-任务模式底栏第二版.md）。
+     前两条守的是他当场报的那个 bug：「只能跟着下一句走，上一句没反应」。 */
+  /* 这四条不写 test.setTimeout：beforeEach 已经给了 currentTimeout()*6。
+     上一版照抄邻居那条把超时压回 2 分钟，结果并发跑时被饿死在第一个 click 上 —— 假红。 */
+  test('当前句只有一套高亮，且「上一句」与「下一句」对称：往回再往前，回到原句而不是跳过', async ({ page }) => {
+    // 全站不再有第二套「当前句」标记（描边那套已删，高亮回归常规模式的浅绿底纹）
+    expect(await page.locator('.sent.task-current').count()).toBe(0);
+    const playingIdx = () => page.evaluate(() => {
+      const all = Array.from(document.querySelectorAll('.sent'));
+      const on = all.findIndex((e) => e.classList.contains('playing'));
+      return { on, n: all.filter((e) => e.classList.contains('playing')).length };
+    });
+    const first = await playingIdx();
+    expect(first.n, '同一时刻只能有一句被标成当前').toBe(1);
+
+    await page.locator('#tbNext').click();
+    const after = await playingIdx();
+    expect(after.on, '下一句要把高亮带走').not.toBe(first.on);
+
+    // 往回：高亮必须跟着回来（旧实现只搬正文高亮，队列位置留在原句）
+    await page.locator('#tbPrev').click();
+    await expect.poll(async () => (await playingIdx()).on).toBe(after.on - 1);
+    // 再往前：回到刚才那句，而不是跳到它后面第二句 —— 这一条只有队列位置真的对齐了才成立
+    const doneBefore = await page.evaluate(() => document.getElementById('tbTitle')!.textContent);
+    await page.locator('#tbNext').click();
+    await expect.poll(async () => (await playingIdx()).on).toBe(after.on);
+    expect(await page.evaluate(() => document.getElementById('tbTitle')!.textContent)).toBe(doneBefore);
+  });
+
+  test('点 ✕ 先问一句：不退出、换成「继续做 / 退出」，两条出口都算数', async ({ page }) => {
+    await page.locator('#tbExit').click();
+    expect(await page.evaluate(() => document.getElementById('taskBar')!.dataset.state)).toBe('exit');
+    expect(await page.evaluate(() => document.body.classList.contains('task-mode')), '问一句的时候还在任务模式里').toBe(true);
+    await expect(page.locator('#tbStay')).toBeVisible();
+    await expect(page.locator('#tbQuit')).toBeVisible();
+    await expect(page.locator('#tbNext'), '问句这一态要把正文那排操作让出来').not.toBeVisible();
+    await page.locator('#tbStay').click();
+    expect(await page.evaluate(() => document.getElementById('taskBar')!.dataset.state)).toBe('read');
+    expect(await page.evaluate(() => document.body.classList.contains('task-mode'))).toBe(true);
+    await page.locator('#tbExit').click();
+    await page.locator('#tbQuit').click();
+    expect(await page.evaluate(() => document.body.classList.contains('task-mode')), '点「退出」才真的退出').toBe(false);
+  });
+
+  test('② 做题态也报「还剩几分钟」，且这个数来自他自己刚才的速度而不是编的', async ({ page }) => {
+    await page.evaluate(() => { TASK.todayPlan(true).queue.forEach((x: any) => TASK.readDone(x.i)); TASK.setPass(2); TASK.next(); });
+    await expect.poll(() => page.evaluate(() => document.body.classList.contains('quiz-mode'))).toBe(true);
+    // 一题没答完：只报题数，不许凭空给一个分钟数
+    const sub = () => page.evaluate(() => document.getElementById('tbSub')!.textContent || '');
+    expect(await sub()).toMatch(/^还剩 \d+ 题/);
+    expect(await sub(), '没有样本时不许编一个"约几分钟"').not.toMatch(/还剩 ~/);
+    const q = await page.evaluate(() => { const x = TASK.currentQuiz(); return x ? x.answer : null; });
+    expect(q, '这条用例要有题可答').toBeTruthy();
+    await page.evaluate((a) => TASK.answerQuiz(a), q as string);
+    await expect.poll(async () => (await sub()).includes('按你刚才的速度')).toBe(true);
+    expect(await sub()).toMatch(/还剩 ~[^\d]*\d/);
+  });
+
+  test('底栏与播放条同一套玻璃；「本次多久」上了界面', async ({ page }) => {
+    await page.evaluate(() => (TASK as any).setSessionStartForTest(Date.now() - 5 * 60000));
+    const look = await page.evaluate(() => {
+      const cs = (id: string) => getComputedStyle(document.getElementById(id)!);
+      return {
+        barBlur: cs('taskBar').backdropFilter, cardRadius: cs('taskBar').borderRadius,
+        barBlur2: cs('audiobar').backdropFilter, cardRadius2: cs('audiobar').borderRadius,
+        clock: document.getElementById('tbClock')!.textContent || '',
+        sub: document.getElementById('tbSub')!.textContent || '',
+      };
+    });
+    expect(look.barBlur, '任务条必须与播放条同款模糊玻璃').not.toBe('none');
+    expect(look.cardRadius).toBe(look.cardRadius2);
+    expect(look.clock, '本次多久挂在辅行右端的小表上（他 2026-09-22：条上只留三个数）').toMatch(/本次 \d+/);
+    expect(look.sub, '「还剩」和「本次」不许挤在一起 —— 一边一个端').not.toMatch(/本次/);
   });
 
   /* 2026-09-22 全量走查（work/task_mode_audit.mjs + 代码审计）抓到的四个真问题，各钉一条。

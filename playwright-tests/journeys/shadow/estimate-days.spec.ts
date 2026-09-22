@@ -160,28 +160,26 @@ test.describe('走完全部词要多久 · 四处同源', () => {
     expect(t2).toMatch(/最近两周你实际只做了 \d+ 天/);
   });
 
-  test('任务进行中：通栏上有那行短形态，且连点下一句不许重算', async ({ page, baseURL }) => {
+  /* 2026-09-22 晚他改口：底栏「文字一堆没耐心看」→ 条上只留进度 / 还剩多久 / 本次多久三个数，
+     工期那一小截从条上撤掉（设置屏 / 计划页 / 今日面板三处仍在，见上面三条用例）。
+     这条用例因此改成守两件事：① 条上确实不再有第四个数；② 连点「下一句」一次都不许多跑模拟。 */
+  test('任务进行中：底栏不再挂工期，且连点下一句不许重算', async ({ page, baseURL }) => {
     test.setTimeout(currentTimeout() * 12);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(30); });
     await page.reload();
     await expect(page.locator('.sent').first()).toBeVisible();
     await page.evaluate(() => TASK.enterTaskMode());
     await expect(page.locator('#taskBar')).toBeVisible();
-    const eta = page.locator('#tbEta');
-    const txt = await settled(eta);
+    expect(await page.locator('#tbEta').count()).toBe(0);
+    const barTxt = await page.locator('#taskBar').innerText();
+    expect(barTxt).not.toMatch(/全部过完|过完约/);
+    // 三个数各就各位：主行进度、辅行还剩、辅行右端本次（本次前 20 秒静默，所以只查前两个）
+    await expect(page.locator('#tbTitle')).toContainText(/\d+\/\d+/);
+    await expect(page.locator('#tbSub')).toContainText(/还剩|读完了/);
     const before = await page.evaluate(() => TASK.etaCalls.n);   // 之前那次可能是开面板留下的，从进任务模式之后数
-    expect(txt).toContain('全部过完约');
-    // 那行已经有「今日进度 n/N」和「这批还剩」，第三个数只留最短形态
-    expect(txt).not.toContain('需要');
-    expect(txt).not.toContain('天）');
-    const dBar = await daysOf(eta);
-    expect(Number(dBar)).toBeGreaterThan(0);
-
     for (let i = 0; i < 5; i++) await page.evaluate(() => TASK.next());
     // 0.3-0.9 秒的全量模拟绝不许挂在按键上
     expect(await page.evaluate(() => TASK.etaCalls.n)).toBe(before);   // 连点下一句一次都不许多算
-    await expect(page.locator('#tbTitle')).toBeVisible();
-    await expect(page.locator('#tbSub')).toBeVisible();
   });
 
   test('内部词与假精确：界面里不许出现轮 / 势头 / 1095+', async ({ page }) => {
