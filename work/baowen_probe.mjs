@@ -105,8 +105,11 @@ function runCell(group, capLabel, minutes, patch, problems) {
     group, cap: capLabel, minutes,
     done: r.done, days: r.days, capped: r.capped, empty: r.empty,
     doneAt: r.doneAt ? new Date(r.doneAt).toISOString().slice(0, 10) : '—',
-    year1: r.atHorizon ? r.atHorizon.graduated : null,
-    graduatedNow: r.graduatedNow, total: r.total,
+    /* 2026-09-22 D10 之后 estimateDays 返回的是 passed/passedNow（「被通读到过一次」），
+       不再是 graduated/graduatedNow（「毕业」）。原探针读的是后一对，字段没了会静默打 null ——
+       读数缺了不报错，比报错坏。这里显式读 present 的字段并留个名，免得又被当成 0。 */
+    year1: r.atHorizon ? r.atHorizon.passed : null,
+    passedNow: r.passedNow, total: r.total,
     ms1: a.ms, ms2: b.ms, deterministic,
   };
 }

@@ -4759,8 +4759,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const day = ShadowPlan.dayKey(Date.now(), ROOT2.plan.boundaryHour);
         const now = Date.now();
         wordsOfSent(i).forEach(w => {
-          const st = ROOT2.state.words[w];
-          if (st && st.stage === 'graduated') return;
+          /* 毕业词以前在这里被挡掉（`stage === 'graduated'` 就 return）。那一刀是
+             "毕业 = 永不再见"的另一半：引擎把到期的毕业词排回队列了，可读到的时候不记账，
+             due 就永远不顺延，同一句会被天天重排、保温配额全浪费在它身上。
+             现在照记 —— 引擎里 reps 续加、stage 不回落、due 顺延 14 天。 */
           push2(ShadowPlan.mkContact(w, i, now, day));
         });
       }
@@ -6041,10 +6043,24 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           </div>
         </div>
         <div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>还剩 ${leftN} 句 · 覆盖 ${tp.words.length} 个词</b>
-          <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}</span></div>
+          <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}${baowenNote(tp.stats)}</span></div>
         <div class="tp-note sm ps-eta" id="todayEta" data-days="">算一下…</div>
         <div class="tp-actions"><button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始 · 先通读这一批'}</button>
           ${taskMode ? '<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>' : ''}</div>`;
+      }
+
+      /* 保温那一格的话（Task 3：只报负载、不报终点）。三个数全部从引擎的 stats 取 ——
+         界面不许自己数队列、也不许自己写「15 分钟」这个门槛（一份逻辑一份实现）。
+         刻意**不提「14 天」**：稳态约 232 个毕业词/天到期，配额一天只带得动十几个，
+         一个词平均约 300 天才轮到一次；说"14 天回访"是空头许诺（实测 §8.3 第 2 条）。 */
+      function baowenNote(st) {
+        /* 先判档位再判负载：cap=0 是"这一档根本不保温"这条口径本身，
+           不先判它，遇到"今天正好有毕业词被别的句顺带读到了"（riding，不吃配额）
+           就会把那一句说成"今天 K 个词是回炉保温"，把"不保温"这档显示成在保温。 */
+        if (!st.baowenCap) return ` · 每天不到 ${ShadowPlan.BAOWEN_MIN_MINUTES} 分钟不安排保温，先只顾新词`;
+        if (st.retentionWords) return ` · ${st.retentionWords} 个词是回炉保温`;
+        if (st.retentionDropped) return ' · 毕业词太多排不下，先顾完手头的词';
+        return '';
       }
 
       function renderPlanView() {
