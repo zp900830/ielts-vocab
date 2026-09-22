@@ -50,8 +50,23 @@ Navigate to `{E2E_BASE_URL}/index.html`.
 
 选完把倍速/循环/A-B 拨回默认，别把状态带给后面的用例。
 
+## Case 5. 同步失败的常驻提示挂着时，弹层末项仍要点得到
+
+先让提示条**由应用自己显形**：桩一个「上传必被拒」的云端 → 记两笔进度 → `TASK.cloudPush()` → `#syncHint` 出现。
+**不许改成 `el.hidden = false` 强撑** —— 那样落的是 CSS 的 `bottom`，而真路径 `setSyncHint()` 会调 `placeSyncHint()`
+用 `getBoundingClientRect` 现量底栏顶边重写 `bottom`（390 任务模式实测两者差 51px），量到的不是用户看到的位置。
+
+**Verify:**
+- `#syncHint` 可见且身上有话（断言这一步，否则后面全绿也是假通过）；
+- 依次点开 循环次数 / 倍速 / A-B 选段 / 书签，**真点每颗的最外侧那一项**，点得到才算过；
+- 全程结束后 `#syncHint` 仍然可见 —— 让路的是它的**绘制层级**，不是把它藏掉。
+
+档位：390 常规、390 任务、1280 任务三档各跑一遍。2026-09-24 未修版实测三档全红（390 末项上沿 656 / 提示条下沿 706；1280 任务 循环末项 796.7 / 提示条下沿 825，`elementFromPoint` 判给 `#syncHint`）。
+
+**为什么以前偶发红而不是长红**：提示条和这四类弹层用的是同一条带（底栏顶边上方 8px 起），只要同步失败那几秒用户恰好点开弹层就撞上；平时提示条不在，所以量不出来。上一轮把它记成「CSS 里那 `+62px` 凭空抬高」，实测量下来不是根因 —— 层级 595 压在栏上才是。
+
 ## 已知不在本用例口径内
 句子上的 A/B 角标、`#loopCount` 那颗 9px 小徽标也是白字压色底（3.49:1 / 更低），但它们是状态标记不是按钮，已单独报给他拍板，2026-09-22 未动。
 
 ## Verify 汇总
-`playwright-tests/journeys/shadow/cta-and-popups.spec.ts`（5 条）。量测口径来自 `work/round_f_probe.mjs`，它带 `--base` 反向验证：喂 `git show HEAD` 复原的旧页面必须报越界（实测旧版越界 27 处、溢出 3 处）。
+`playwright-tests/journeys/shadow/cta-and-popups.spec.ts`（8 条）。量测口径来自 `work/round_f_probe.mjs`，它带 `--base` 反向验证：喂 `git show HEAD` 复原的旧页面必须报越界（实测旧版越界 27 处、溢出 3 处）。Case 5 的三档现状数来自 `work/round_h_probe.mjs` / `work/round_h2_probe.mjs`（后者专门量了"降层级"与"摘掉提示条"两种改法，结论是前者就够）。

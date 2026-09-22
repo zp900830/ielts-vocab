@@ -19,8 +19,12 @@ import path from 'path';
 
 declare const TASK: {
   resetV2(): void; initPlan(n: number): void; enterTaskMode(): void; exitTaskMode(): void;
+  todayPlan(force?: boolean): { queue: { i: number }[] };
+  readDone(i: number): void;
+  cloudPush(): Promise<{ sent?: number; error?: string; offline?: boolean }>;
 };
 declare function addMark(): void;
+declare const window: { __supaReject?: boolean };
 
 /* ---------------- 源码级：把 CSS 里的"绿底 + 白字"规则抓出来 ---------------- */
 
@@ -247,9 +251,99 @@ test.describe('播放条小弹层 · 不许伸出屏幕', () => {
     await page.evaluate(() => { try { TASK.exitTaskMode(); TASK.resetV2(); } catch (e) {} });
   });
 
-  /* 已知未修（别在这里加断言，先修 CSS 再说）：这条锁偶发红，量到的不是弹层伸出屏幕，
-     而是常驻的「连不上云端」药丸压在弹层最下面那一档上 —— 390 档实测药丸下沿与末项上沿
-     同为 671px，底栏高度取整差 1px 就压上去。根因与"为什么改 z-index 没用"写在
-     shadow/index.html 的 .sync-hint 注释里。曾在此加过一条强制显形药丸的断言，
-     反向验证（把 595 改回 110）它不响 —— 量不到的锁比没锁更坏，已撤。 */
+  /* 这一族（同步药丸压弹层）单独走查在下一条 describe —— 上面四颗弹层是在"没有药丸"的
+     干净页上量的，而偶发红灯只有药丸挂着时才出现。别在这里加断言把两件事混成一条。 */
+});
+
+/* ---------------- 常驻同步药丸 · 不许压在弹层末项上 ---------------- */
+
+/* 桩只要够让「上传被拒」真的发生：药丸由 app 自己显形。
+   ⚠️ 不要改成 `el.hidden = false` 强行显形 —— 那样落的是 CSS 的 bottom，
+   而真路径 setSyncHint() 会调 placeSyncHint() 用 getBoundingClientRect 现量底栏顶边重写
+   bottom（390 任务模式实测两者差 51px）。强行显形量到的不是用户看到的那个位置；
+   上一轮那条被撤掉的锁就是栽在这儿（反向验证时它不响，因为它量的东西根本没在屏上）。 */
+const REJECTING_CLOUD = `
+window.__supaReject = true;
+window.supabase = { createClient: function () { return {
+  auth: {
+    getSession: function () { return Promise.resolve({ data: { session: { user: { id: 'u-lock', email: 'lock@local' } } } }); },
+    onAuthStateChange: function () { return { data: { subscription: { unsubscribe: function () {} } } }; }
+  },
+  from: function () { var q = {};
+    q.upsert = function () { return Promise.resolve({ error: { message: 'rls denied' } }); };
+    q.select = function () { return q; }; q.eq = function () { return q; }; q.order = function () { return q; };
+    q.range = function () { return Promise.resolve({ data: [], error: null }); }; return q; }
+}; } };`;
+
+/** 让药丸挂着：记两笔进度 → 上传被拒 → app 自己把提示条立起来。
+ *  必须断言它真的显形 —— 药丸不在屏上时后面那四颗弹层量得再绿也是假通过。 */
+const raiseSyncHint = async (page: import('@playwright/test').Page) => {
+  await page.evaluate(async () => {
+    window.__supaReject = true;
+    TASK.initPlan(10);
+    TASK.todayPlan(true).queue.slice(0, 2).forEach((x) => TASK.readDone(x.i));
+    await TASK.cloudPush();
+  });
+  await expect(page.locator('#syncHint')).toBeVisible();
+  return page.evaluate(() => {
+    const el = document.getElementById('syncHint')!;
+    return { bottom: +el.getBoundingClientRect().bottom.toFixed(1), text: el.textContent || '' };
+  });
+};
+
+const popupsUnderHint = async (page: import('@playwright/test').Page) => {
+  const hint = await raiseSyncHint(page);
+  expect(hint.text, '药丸上没有话，等于没量到状态').not.toBe('');
+  await expect(page.locator('.today-panel.open')).toHaveCount(0);
+  await page.evaluate(() => { try { addMark(); } catch (e) {} });
+  for (const p of POPUPS) {
+    const m = await measurePopup(page, p);   // 点不到就 throw，且会点名是谁压着
+    expect(m.items, `${p.name} 弹层里没有可点的项，等于没量`).toBeGreaterThan(0);
+  }
+  await page.evaluate(() => {
+    try { pickRate(1); } catch (e) {}
+    try { setLoopCount(0); } catch (e) {}
+    try { abCancel(); } catch (e) {}
+  });
+  await expect(page.locator('#syncHint')).toBeVisible();   // 修完药丸还在：不许靠藏掉它来让路
+  return hint;
+};
+
+test.describe('常驻同步药丸 · 手机档', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test.beforeEach(async ({ page, baseURL }, testInfo) => {
+    testInfo.setTimeout(currentTimeout() * 4);
+    await page.route('**/supabase-js@2*', (r) => r.fulfill({ status: 200, contentType: 'application/javascript', body: REJECTING_CLOUD }));
+    await page.goto(`${baseURL}/index.html`);
+    await expect(page.locator('.sent').first()).toBeVisible();
+  });
+
+  test('390 常规模式：药丸挂着，四类弹层末项全点得到', async ({ page }) => {
+    const hint = await popupsUnderHint(page);
+    // 药丸确实压在弹层那一条带上（不是"本来就不重叠、所以量不出什么"）：
+    // 390 实测弹层末项上沿 656、药丸下沿 706 —— 未修版被 #syncHint 吃掉命中
+    expect(hint.bottom).toBeGreaterThan(600);
+  });
+
+  test('390 任务模式：药丸与弹层抢同一条带，让位的是被动状态不是控件', async ({ page }) => {
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.enterTaskMode(); });
+    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'read');
+    const hint = await popupsUnderHint(page);
+    expect(hint.bottom).toBeGreaterThan(600);
+  });
+});
+
+test.describe('常驻同步药丸 · 桌面档', () => {
+  test.use({ viewport: { width: 1280, height: 900 } });
+
+  test('1280 任务模式：桌面也压得住（未修实测 循环末项 796.7 / 药丸下沿 825）', async ({ page, baseURL }) => {
+    await page.route('**/supabase-js@2*', (r) => r.fulfill({ status: 200, contentType: 'application/javascript', body: REJECTING_CLOUD }));
+    await page.goto(`${baseURL}/index.html`);
+    await expect(page.locator('.sent').first()).toBeVisible();
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.enterTaskMode(); });
+    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'read');
+    await popupsUnderHint(page);
+    await page.evaluate(() => { try { TASK.exitTaskMode(); TASK.resetV2(); } catch (e) {} });
+  });
 });

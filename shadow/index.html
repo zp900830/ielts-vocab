@@ -1159,17 +1159,21 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-note.sm { background: transparent; border: none; padding: 10px 0 0; }
   .sync-state { color: var(--coral-deep, #c0492f); font-weight: 600; }
   /* 常驻同步提示条：贴在任务栏上方，失败时一直挂着，点一下重试。
-     ⚠️ 已知没修的问题（2026-09-23 记档，别当成弹层锁在骗人）：这条的 bottom 里那个 `+ 62px`
-     是给播放条让位的，可任务模式下 `.audiobar` 是 `display:none`（1335 行），这 62px 就成了
-     一段凭空抬高的高度 —— 药丸正好落进弹层展开的那条带子里。390 档实测药丸下沿 671px、
-     倍速末项上沿 671px：**贴到同一个像素**，底栏高度取整差 1px 就压上去。
-     现象是「同步失败的那几秒里，手机上弹层最下面那档点不到」，偶发红灯就是它。
-     单纯改 z-index 是无效的：这条挂在 `.nav-menu` 里，父级自带层叠上下文，595 出不了那个上下文
-     （实测把 595 改成 110，末项该被压还是被压）。要修得先把这条挪出 `.nav-menu`、或让 bottom
-     在任务模式下不吃那 62px —— 那是独立一轮的事，本轮（进度条）没动它。 */
+     层级必须在两条底栏【之下】（.audiobar 120 / .task-bar 200）：它是被动状态 pill，
+     不是用户主动叫出来的界面。原来给 595，于是同步一失败，药丸就吃掉「底栏上方那 8px 起」
+     这一带 —— 而那正是循环／倍速／A-B／书签四类弹层展开的地方（弹层 bottom:100%+8px，
+     两者抢的是同一条带）。2026-09-24 实测未修版：390 两档弹层末项上沿 656、药丸下沿 706，
+     1280 任务模式循环末项 796.7 / 药丸下沿 825 —— elementFromPoint 直接判给 #syncHint，
+     末项点不动。降到 110 后同一量测口径全部让位给弹层（药丸本身照旧显形、照旧可点）。
+     ⚠️ 上一轮这条注释写过"改 z-index 没用"，那是错的：当时探针打的父级链
+     「#syncHint < .nav-menu」里的 nav-menu 是 <body> 的状态 class，不是某个容器 ——
+     药丸根本没有中间层叠上下文挡着，z-index 直接生效。别照着旧结论再推一遍。
+     落点由 JS 现量：setSyncHint() → placeSyncHint() 用 getBoundingClientRect 把 bottom
+     重写成"真正在屏幕上的那条栏顶边再往上 8px"，所以下面这条 calc 只是 JS 之前的兜底，
+     刻意偏保守（多让一段，宁可高一点也不要压住栏上的按钮）。 */
   .sync-hint { position: fixed; left: 50%; transform: translateX(-50%);
     bottom: calc(var(--task-bar-h, 62px) + 8px + 62px + env(safe-area-inset-bottom, 0px));
-    z-index: 595; max-width: calc(100vw - 28px); padding: 6px 13px; border-radius: 999px; cursor: pointer;
+    z-index: 110; max-width: calc(100vw - 28px); padding: 6px 13px; border-radius: 999px; cursor: pointer;
     font-size: 12px; font-weight: 600; color: var(--coral-deep, #c0492f);
     background: rgba(255,241,236,.96); border: 1px solid rgba(192,73,47,.28);
     box-shadow: 0 3px 12px rgba(30,60,48,.12); }
@@ -4673,7 +4677,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       /* 这条药丸是 fixed 居中的，它落脚的地方正是底栏。CSS 里那个 `--task-bar-h + 8 + 62`
          的 62 是【播放条收起时】的高度：一展开就不够、任务模式里播放条又不显示 —— 实测它会
          压在「收起播放条」和 A-B 那颗退出上，点不动（两条用例各卡满 12 分钟超时）。
-         所以量真正在屏幕上的底栏顶边，别猜；底栏长高时（窄屏任务条是三行）还得再量一次。 */
+         所以量真正在屏幕上的底栏顶边，别猜；底栏长高时（窄屏任务条是三行）还得再量一次。
+         ⚠️ 但"量准落点"只解决它该站在哪，不解决它压不压得到东西 —— 后者是层级的事，
+         见 .sync-hint 那条注释（2026-09-24 把 z-index 降到两条栏之下才真的让开）。 */
       function placeSyncHint(el) {
         el = el || document.getElementById('syncHint');
         if (!el || el.hidden) return;
