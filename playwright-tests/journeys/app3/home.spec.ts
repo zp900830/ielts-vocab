@@ -82,7 +82,9 @@ test.describe('3.0 首页', () => {
     await expect(c0).toHaveAttribute('data-stage', 'reading');
     await expect(c0.locator('.a-stage')).toHaveText('通读中');
     expect(await pctOf(page), '20/24 × 40% 四舍五入 = 33').toBe(33);
-    expect(await pctOf(page), 'M1 只实现第一项，熟练度不得超过 40').toBeLessThanOrEqual(40);
+    /* 熟练度三项（§9.2）T7 已全实现：通读 ×40 + ② 正确率 ×35 + 精读 ×25。
+       此刻 ② 与精读都还是 0，所以只剩第一项在动，33 ≤ 40 是「只通读」这一档的上界。 */
+    expect(await pctOf(page), '只通读、没做题没精读时，分数只由第一项给，不得超过 40').toBeLessThanOrEqual(40);
 
     // —— 读满 24 句 → 「② 可答题」（§9.4：通读满还没做题，`已学完` 留给通读+② 各一遍）——
     await page.evaluate(() => {

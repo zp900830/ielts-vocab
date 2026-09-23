@@ -4,6 +4,7 @@
 // 数据用 stub 而不用真课文（和 shell.spec / home.spec 同一理由）：真课文一页 1833 句 +
 // 3242 词，整套并行时会压出 shadow 用例偶发红。这里要的是「有 [[词:形式]] 标记的真句子」，
 // 引擎据此才能排句 —— 六篇句数刻意不等，才能锁住「按篇」而不是「全局」。
+import fs from 'node:fs';
 import { test, expect } from '../../fixtures';
 
 declare const TASK: {
@@ -24,7 +25,10 @@ declare const TASK: {
   state(): { daily: Record<string, unknown> };
   events(): unknown[];
   openArticleQuiz(a: number): void;
-  seedArticleForTest(a: number, o: { quizOk?: number; quizNo?: number; reps?: number }): void;
+  seedArticleForTest(a: number, o: { quizOk?: number; quizNo?: number; reps?: number; pass2?: boolean }): void;
+  repsOf(a: number): number;
+  articlePass2Done(a: number): boolean;
+  exportBackup(): void;
 };
 declare const APP3: { currentBlank(): number; openBlank(bi: number): void };
 declare const ShadowPlan: {
@@ -362,24 +366,21 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await expect(page.locator('#tbTitle')).toContainText('今天完成');
     await expect(page.locator('#tbSub')).toContainText('句');
 
-    // 刷新前：repsByArticle 必须已经记到这一篇上（证明 bumpArticleRep + recompute2 copy-back 都跑了）
-    const repsBefore = await page.evaluate(() => {
-      const d = TASK.state().daily;
-      return Object.keys(d).reduce((s, k) => s + ((d[k].repsByArticle && d[k].repsByArticle[0]) || 0), 0);
-    });
+    // 刷新前：精读次数必须已经记到这一篇上（证明走了 taskSentenceFinished → bumpArticleRep）
+    const repsBefore = await page.evaluate(() => TASK.repsOf(0));
     expect(repsBefore, '① 只放真一句，精读次数就该 > 0；还是 0 说明没走 taskSentenceFinished').toBeGreaterThan(0);
+    // I2：这份账住 3.0 自己的 key，**不在**共享的 ielts.shadow.v2 里（否则开 /shadow/ 就被抹）
+    const shared = await page.evaluate(() => localStorage.getItem('ielts.shadow.v2') || '');
+    expect(shared.includes('repsByArticle'), '共享 blob 里不该再有 repsByArticle').toBe(false);
+    expect(await page.evaluate(() => !!localStorage.getItem('ielts.app3.article')), '3.0 自己的按篇 key 必须落盘').toBe(true);
 
-    // 存档：刷新后 daily 一字不差，且 repsByArticle 原样还在
+    // 存档：刷新后 daily 一字不差，且精读次数原样还在
     const before = await page.evaluate(() => TASK.state().daily);
     await page.reload();
     await page.waitForFunction(() => { try { return !!(TASK.state() && TASK.state().daily); } catch (e) { return false; } });
     const after = await page.evaluate(() => TASK.state().daily);
     expect(after).toEqual(before);
-    const repsAfter = await page.evaluate(() => {
-      const d = TASK.state().daily;
-      return Object.keys(d).reduce((s, k) => s + ((d[k].repsByArticle && d[k].repsByArticle[0]) || 0), 0);
-    });
-    expect(repsAfter, 'repsByArticle 必须随 daily 过 reload').toBe(repsBefore);
+    expect(await page.evaluate(() => TASK.repsOf(0)), '精读次数必须随自己的 key 过 reload').toBe(repsBefore);
   });
 
   /* §9.2 第二、三项各自的回归锁：只动一项输入，断言 progress 等于把公式算出来的数。
@@ -483,5 +484,214 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await page.locator('#passCard .pass-summary .go').click();
     await expect(page.locator('#passCard')).toBeHidden();
     await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
+  });
+});
+
+/* 终审 B1（§2.3 / §13.1 / §14.2）：没计划的新用户点卡片，过去是静默无反应（if (!plan) return）。
+   现在要：照进这一篇的任务模式（正文可读、自由跟读），任务条那一格换空状态 +「去设置」，
+   点它进 v2.0 设置屏，建完计划回到这一篇换成真任务条。 */
+test.describe('3.0 §2.3 没计划也能进任务模式', () => {
+  test('新用户点卡片 → 自由跟读 + 空状态任务条 →「去设置」建计划 → 真任务条回来', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    // 全新用户：清掉真值根与 3.0 按篇账，刷新让首页读到「没计划」
+    await page.evaluate(() => {
+      localStorage.removeItem('ielts.shadow.v2');
+      localStorage.removeItem('ielts.app3.article');
+    });
+    await page.reload();
+    await expect(page.locator('#homeBanner .b-go')).toContainText('设置');
+
+    // 点第一张卡：不再静默无反应 —— 进任务模式、正文可见
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('body')).toHaveClass(/task-mode/);
+    await expect(page.locator('#art')).toBeVisible();
+    expect(await page.locator('#art .sent').count(), '正文必须渲出来').toBeGreaterThan(0);
+
+    // 任务条那一格是空状态（§2.3）
+    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'noplan');
+    await expect(page.locator('#tbTitle')).toContainText('还没有学习计划');
+    await expect(page.locator('#tbSub')).toContainText('去设置每天读多久');
+    await expect(page.locator('#tbNext')).toContainText('去设置');
+    // 自由跟读：播放条控件搬进任务条了，那颗 ▶ 也在
+    await expect(page.locator('#taskBar .tb-play')).toBeVisible();
+    await expect(page.locator('#taskBar #btnPlay')).toBeVisible();
+
+    // 点「去设置」→ 出设置屏（复用影子跟读的 renderSetup）
+    await page.locator('#tbNext').click();
+    await expect(page.locator('body')).not.toHaveClass(/task-mode/);
+    await expect(page.locator('#setupSheet .ps-start')).toBeVisible();
+
+    // 建计划 → 回到那一篇，换成真任务条
+    await page.locator('#setupSheet .ps-opt').nth(2).click();      // 15 分钟
+    await page.locator('#setupSheet .ps-start').click();
+    await expect(page.locator('body')).toHaveClass(/task-mode/);
+    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'read');
+    await expect(page.locator('#tbTitle')).toContainText('① 通读');
+  });
+});
+
+/* 终审 I1（§9.4）：卡片的「已学完」= 通读一遍 + 这一篇的 ② 批次答过一遍，
+   不是「答对全篇每一句」（一遍 ② 只考当天队列那几十题，后者永远到不了）。 */
+test.describe('3.0 §9.4 已学完判据', () => {
+  test('通读一遍 + ② 批次答过一遍 → 卡片「已学完」（不要求答对全篇）', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.evaluate(() => {
+      Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
+    });
+    await page.reload();
+    await expect(page.locator('.art-card').first()).toHaveAttribute('data-stage', 'read');
+
+    // 入口 2 直达 ②，答完整批（含补考段）
+    await page.locator('.art-card[data-stage="read"] .a-quiz').click();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    await page.evaluate(() => {
+      for (let g = 0; g < 300; g++) {
+        const q = TASK.currentQuiz();
+        if (!q) break;
+        TASK.answerQuiz(q.answer);
+        TASK.nextQuiz();
+      }
+    });
+    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
+    expect(await page.evaluate(() => TASK.articlePass2Done(0)), '② 批次走完必须按篇记凭据').toBe(true);
+
+    // 收工态「回首页」→ 首页立即重渲（I2），卡片变「已学完」
+    await page.locator('#tbAgain').click();
+    await expect(page.locator('body')).not.toHaveClass(/task-mode/);
+    await expect(page.locator('.art-card').first()).toHaveAttribute('data-stage', 'done');
+    await expect(page.locator('.art-card').first().locator('.a-stage')).toHaveText('已学完');
+  });
+});
+
+/* 终审 I2：repsByArticle 过去塞在共享的 ielts.shadow.v2 里，而 /shadow/ 的 recompute2 没有
+   回搬分支 —— 一开影子跟读就被抹。现在搬到 3.0 自己的 key，开 /shadow/ 也动不了它。 */
+test.describe('3.0 按篇账不随共享 blob 走', () => {
+  test('精读次数住自己的 key：开一次 /shadow/ 也抹不掉，reload 还在', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.evaluate(() => TASK.seedArticleForTest(0, { reps: 3 }));
+    expect(await page.evaluate(() => TASK.repsOf(0))).toBe(3);
+    // 共享 blob 里不许再有这份账（它只该住 ielts.app3.article）
+    expect(await page.evaluate(() => (localStorage.getItem('ielts.shadow.v2') || '').includes('repsByArticle'))).toBe(false);
+
+    // 备份：3.0 自己的 key 必须随 exportBackup 一起走（换设备才带得走精读次数）
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      page.evaluate(() => TASK.exportBackup()),
+    ]);
+    const payload = JSON.parse(fs.readFileSync((await download.path()) as string, 'utf8'));
+    expect(Object.keys(payload.data), '备份必须含 ielts.app3.article').toContain('ielts.app3.article');
+
+    /* 逼影子跟读走一次 recompute2：把 eventsSeen 改错，它的 loadRoot 就会从事件流重放 daily。
+       这正是过去抹掉 repsByArticle 的那条码路。 */
+    await page.evaluate(() => {
+      const v = JSON.parse(localStorage.getItem('ielts.shadow.v2') || '{}');
+      v.state = v.state || {}; v.state.eventsSeen = -1;
+      localStorage.setItem('ielts.shadow.v2', JSON.stringify(v));
+    });
+    await page.goto(`${rootUrl}/shadow/index.html`);
+    await page.waitForFunction(() => document.querySelectorAll('.sent').length > 0);
+
+    // 回 3.0：按篇账还在（同源共享 localStorage，影子跟读重写了 v2 也动不到这个 key）
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.waitForFunction(() => { try { return !!(TASK.state() && TASK.state().daily); } catch (e) { return false; } });
+    expect(await page.evaluate(() => TASK.repsOf(0)), '/shadow/ 不许抹掉 3.0 的按篇账').toBe(3);
+  });
+});
+
+/* 终审顺手项：§4.4 空按被遮词形给宽（不是固定 3.2em）。
+   夹具里四个名词长度差得远（cat / banana / elephant / hippopotamus），长词的空必须明显更宽。 */
+const LONGWORDS = [
+  { w: 'cat', m: 'n. 猫' },
+  { w: 'banana', m: 'n. 香蕉' },
+  { w: 'elephant', m: 'n. 大象' },
+  { w: 'hippopotamus', m: 'n. 河马' },
+];
+const SIXLONG: Record<string, string> = (() => {
+  const vocab: Record<string, { m: string }> = {};
+  LONGWORDS.forEach((x) => { vocab[x.w] = { m: x.m }; });
+  const mk = (title: string, ai: number, n: number) => ({
+    title,
+    zh: title,
+    subheads: [''],
+    paragraphs: [Array.from({ length: n }, (_, i) => {
+      const w = LONGWORDS[(ai + i) % LONGWORDS.length].w;
+      return `Sentence ${i} about [[${w}:${w}]].`;
+    })],
+    sentZh: [Array.from({ length: n }, (_, i) => `第 ${i} 句。`)],
+    paraZh: [''],
+  });
+  const titles = ['地球与生命', '校园与文化', '衣食住行', '社会与规则', '历史与发明', '身体与时间'];
+  return {
+    'sections.json': JSON.stringify(titles.map((t, i) => mk(t, i, i === 0 ? 8 : 2))),
+    'vocab.json': JSON.stringify(vocab),
+    'chapters.json': '[]',
+  };
+})();
+
+test.describe('3.0 终审顺手项', () => {
+  test('§4.4 空按被遮词形给宽：长词的空比短词明显宽', async ({ page }) => {
+    await stubData(page, SIXLONG);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    await page.evaluate(() => TASK.setPass(2));
+    const vals = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('#art .sent .qz-blank'))
+        .map((el) => (el as HTMLElement).getBoundingClientRect().width));
+    expect(vals.length, '夹具要挖出多个空').toBeGreaterThan(1);
+    const min = Math.min(...vals), max = Math.max(...vals);
+    expect(max, '长词的空必须比短词明显宽（固定 3.2em 时二者相等）').toBeGreaterThan(min * 1.5);
+  });
+
+  test('Global Constraint：.a-quiz / .tt-back / .b-go 触区 ≥44px', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    // .b-go：横幅那颗
+    const goH = await page.locator('#homeBanner .b-go').evaluate((el) => el.getBoundingClientRect().height);
+    expect(goH, '.b-go 触区').toBeGreaterThanOrEqual(44);
+    // .tt-back：先进任务模式（还没读，队列非空才进得去）
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskTop')).toBeVisible();
+    const backH = await page.locator('#taskTop .tt-back').evaluate((el) => el.getBoundingClientRect().height);
+    expect(backH, '.tt-back 触区').toBeGreaterThanOrEqual(44);
+    await page.locator('#taskTop .tt-back').click();
+    await expect(page.locator('body')).not.toHaveClass(/task-mode/);
+    // .a-quiz：通读满后卡片才出「答题」
+    await page.evaluate(() => {
+      Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
+    });
+    await page.reload();
+    const quizH = await page.locator('.art-card .a-quiz').first().evaluate((el) => el.getBoundingClientRect().height);
+    expect(quizH, '.a-quiz 触区').toBeGreaterThanOrEqual(44);
+  });
+
+  test('② / 收工态 #tbNext 的 title/aria 与可见文字一致（不再说「下一句」）', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    await page.evaluate(() => TASK.setPass(2));
+    const nxt = page.locator('#tbNext');
+    await expect(nxt).toHaveAttribute('aria-label', '跳过这题');
+    // 答完整批 → 收工态：可见「看词本」，title/aria 也必须说「看词本」
+    await page.evaluate(() => {
+      for (let g = 0; g < 300; g++) {
+        const q = TASK.currentQuiz();
+        if (!q) break;
+        TASK.answerQuiz(q.answer);
+        TASK.nextQuiz();
+      }
+    });
+    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
+    await expect(nxt).toContainText('看词本');
+    await expect(nxt).toHaveAttribute('aria-label', '看词本');
   });
 });

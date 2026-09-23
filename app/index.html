@@ -1369,6 +1369,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.task-mode .audiobar { display: none !important; }
   .tb-play { display: none; align-items: center; gap: 6px; min-width: 0; }
   body.task-mode .task-bar[data-state="read"] .tb-play { display: flex; }
+  /* §2.3：没计划也能进任务模式（自由跟读）。这一态里播放条控件照样搬进来、照常能用，
+     所以 .tb-play 要露脸；下面那颗 ▶ 单独解禁（它在任务模式里被按掉了，但自由态没有
+     「放这一句」那颗键替它，留着它才有得放）。 */
+  body.task-mode .task-bar[data-state="noplan"] .tb-play { display: flex; }
+  body.task-mode .task-bar[data-state="noplan"] #btnPlay { display: inline-flex !important; }
   .tb-play .ab-left { flex: 0 0 auto; min-width: 0; display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; }
   .tb-play .ab-left > .btn { opacity: 1; max-width: none; animation: none; }
   /* ▶ 在任务模式里没有存在的理由（他 2026-09-23：「播放按钮得删掉，不点不放」）：
@@ -1420,8 +1425,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     background: transparent; color: var(--muted); font-size: 11.5px; cursor: pointer; }
   .qz-mini:hover { color: var(--text); border-color: var(--muted); }
   /* 文内挖空：空是 .sent 里的内联元素，不另起容器。三态：未答 / 答对 / 答错。
-     宽度按被遮词形给（沿用 maskSplit 口径），下划线就是「这里少了一个词」的信号。 */
-  .sent .qz-blank { display: inline-block; min-width: 3.2em; padding: 0 .18em;
+     宽度按被遮词形给（§4.4，沿用 maskSplit 口径）：maskArticle 量出被遮的 .w 实际宽度写进
+     inline min-width，这里只留一个兜底下限（量不到时别塌成一条线）。下划线就是「少了一个词」的信号。 */
+  .sent .qz-blank { display: inline-block; min-width: 1.2em; padding: 0 .18em;
     border-bottom: 2px solid var(--task-new); color: var(--task-new); font-weight: 700;
     letter-spacing: .04em; text-align: center; cursor: pointer; border-radius: 3px; }
   .sent .qz-blank:focus-visible { outline: 2px solid var(--task-new); outline-offset: 2px; }
@@ -1527,7 +1533,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body > .topbar, body > #audiobar, body > .layout, body > #edgeTab { display: none; }
   /* 任务模式必须把正文放出来：#art（正文）与 #panel（词库抽屉）都在 .layout 里。
      只恢复 .layout 本身，#panel 基样式是 visibility:hidden，仍要靠 body.panel-open 才现身，
-     所以这里不会把词库抽屉顺带弹出来。topbar/audiobar 不恢复：3.0 的任务模式顶栏由 T5 定。 */
+     所以这里不会把词库抽屉顺带弹出来。topbar/audiobar 不恢复：3.0 的任务模式顶栏是 .task-top（见下，T5 已交付）。 */
   body.task-mode > .layout { display: block; }
   /* T5 定的任务模式外壳：首页让位，正文（.layout）就是屏幕主角。
      任务模式已有自己的顶栏（.task-top，见下），整块 #appShell 仍要收掉 ——
@@ -1538,7 +1544,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.task-mode .task-top { display: flex; align-items: center; gap: 12px;
     position: sticky; top: 0; z-index: 150; padding: 8px 16px;
     background: var(--card); border-bottom: 1px solid var(--border); }
-  .task-top .tt-back { flex: none; min-height: 40px; padding: 0 14px; border: 1px solid var(--border);
+  .task-top .tt-back { flex: none; min-height: 44px; padding: 0 14px; border: 1px solid var(--border);
     border-radius: 999px; background: transparent; color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; }
   .task-top .tt-back:hover { background: var(--accent-soft); color: var(--accent-text); }
   .task-top .tt-title { min-width: 0; font-size: 15px; font-weight: 700; color: var(--text);
@@ -1586,7 +1592,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .art-card[data-stage="quiz"] .a-stage,
   .art-card[data-stage="done"] .a-stage { background: var(--accent); color: var(--cta-ink); }
   /* 入口 2（§4.4）：通读已完成的篇目多一颗「答题」直入 ② */
-  .art-card .a-quiz { display: block; width: 100%; margin-top: 10px; min-height: 34px;
+  .art-card .a-quiz { display: block; width: 100%; margin-top: 10px; min-height: 44px;
     border: 1px solid var(--accent-line); border-radius: 10px; cursor: pointer;
     background: var(--accent-soft); color: var(--accent-text); font-weight: 700; font-size: 13px; }
   .art-card .a-quiz:hover { background: var(--accent); color: var(--cta-ink); }
@@ -1605,7 +1611,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .home-banner .hb-text { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
   .home-banner .hb-main { font-size: 14px; font-weight: 600; color: var(--text); }
   .home-banner .hb-sum { font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .home-banner .b-go { flex: none; min-height: 38px; padding: 0 16px; border: none; border-radius: 999px;
+  .home-banner .b-go { flex: none; min-height: 44px; padding: 0 16px; border: none; border-radius: 999px;
     background: var(--grad); color: var(--cta-ink); font-size: 13px; font-weight: 700; cursor: pointer;
     box-shadow: var(--grad-shadow); white-space: nowrap; }
   .home-banner .b-go:active { filter: brightness(.92); }
@@ -1640,7 +1646,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         <button class="nav-item" data-route="listen">随身听</button>
         <button class="nav-item" data-route="me">我的</button>
       </nav>
-      <main id="appView" role="main"></main>
+      <main id="appView"></main>
     </div>
 
     <header class="topbar" role="banner">
@@ -3036,19 +3042,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     } finally { cloudSignup._busy = false; }
     }
     async function cloudLogout() {
-    console.log('[CLOUD] cloudLogout called');
     let signedOut = false;
     const cleanup = CLOUD.client().auth.onAuthStateChange((ev, sess) => {
-        console.log('[CLOUD] Auth state change:', ev, sess ? sess.user?.email : 'no session');
         if (ev === 'SIGNED_OUT') {
             signedOut = true;
         }
     });
-    console.log('[CLOUD] Calling signOut...');
-    try { await CLOUD.client().auth.signOut(); console.log('[CLOUD] signOut resolved'); } catch (e) { console.log('[CLOUD] SignOut error:', e); }
-    console.log('[CLOUD] SignOut completed, waiting for SIGNED_OUT event...');
+    try { await CLOUD.client().auth.signOut(); } catch (e) {}
     for (let i = 0; i < 50 && !signedOut; i++) { await new Promise(r => setTimeout(r, 50)); }
-    console.log('[CLOUD] Signed out event fired:', signedOut, 'clearing state...');
     CLOUD._on = false; CLOUD._userMail = '';
     CLOUD.setStatus('已退出登录，云端音色不可用。');
     if ((selVoiceURI || '').indexOf('cloud:') === 0) {
@@ -4773,6 +4774,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          只经 openArticle() 设、exitTaskMode() 清 —— 别在别处直接写。 */
       let currentArticle = null;
       let taskMode = false;  // 是否处于任务模式
+      /* §2.3：没计划也能进任务模式（自由跟读）。_noPlan = 这一趟是没有计划的「空状态任务模式」；
+         _pendingArticle = 在空状态里点了「去设置」的那一篇 —— 建完计划要回到它，换成真任务条。 */
+      let _noPlan = false, _pendingArticle = null;
       let taskPos = 0;       // 当前在 todayQueue 中的位置
       let sessionStart = 0;  // 本次任务模式开始时间
       let sessionReps = 0;   // 本次会话跟读次数
@@ -4799,6 +4803,64 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
       function saveProg() { safeStore(LS_PROG, JSON.stringify(prog)); }
 
+      /* ---- 3.0 外壳自己的按篇账（§7.6 精读次数 + §9.4 ② 批次是否走完一遍） ----
+         刻意**不放进共享的 ielts.shadow.v2**：那份真值根由 /app/ 与 /shadow/ 同源共用，
+         而影子跟读的 recompute2 只从事件流重放 daily，不认识 repsByArticle —— 一开 /shadow/，
+         push2 就会把这份按篇账整段抹掉（同源共享的必然）。所以单开一个只有 3.0 认的 key，
+         schema 与 v2 完全解耦（Global Constraint：不动 ielts.shadow.v2 的形状）。
+         形状：{ reps: { 'YYYY-MM-DD': { 篇号: 次数 } }, pass2: { 篇号: true } }。
+         reps 按天存、跨天求和（§9.2 用的是累计值）；pass2 是「这一篇的 ② 批次答过一遍」的凭据。 */
+      const LS_ARTICLE = 'ielts.app3.article';
+      let _articleStats = null;
+      function loadArticleStats() {
+        if (_articleStats) return _articleStats;
+        let o = null;
+        try { o = JSON.parse(localStorage.getItem(LS_ARTICLE) || 'null'); } catch (e) { o = null; }
+        if (!o || typeof o !== 'object') o = {};
+        if (!o.reps || typeof o.reps !== 'object') o.reps = {};
+        if (!o.pass2 || typeof o.pass2 !== 'object') o.pass2 = {};
+        _articleStats = o;
+        return _articleStats;
+      }
+      function saveArticleStats() { safeStore(LS_ARTICLE, JSON.stringify(loadArticleStats())); }
+      /* 迁移：修复前这份账长在共享 blob 的 daily[天].repsByArticle 里。第一次加载时搬过来，
+         之后不再回看（避免和影子跟读那边互相写）。M1 未上线，这里主要是给开发分支上的存档兜底。 */
+      function migrateArticleStats() {
+        const cur = loadArticleStats();
+        if (Object.keys(cur.reps).length) return;
+        const daily = (ROOT2 && ROOT2.state && ROOT2.state.daily) || {};
+        let moved = false;
+        Object.keys(daily).forEach(function (day) {
+          const rb = daily[day] && daily[day].repsByArticle;
+          if (rb && typeof rb === 'object') { cur.reps[day] = Object.assign({}, rb); moved = true; }
+        });
+        if (moved) saveArticleStats();
+      }
+      function repsOf(a) {                    // 这一篇的累计精读次数（跨天求和）
+        const cur = loadArticleStats();
+        let n = 0;
+        Object.keys(cur.reps).forEach(function (day) {
+          const rb = cur.reps[day];
+          if (rb && rb[a]) n += rb[a];
+        });
+        return n;
+      }
+      function articlePass2Done(a) { return !!loadArticleStats().pass2[a]; }
+      function bumpArticleRep(a) {            // 任务模式 ① 每放完一句 +1（随身听不计，见 taskSentenceFinished）
+        if (a == null || a < 0) return;
+        const cur = loadArticleStats();
+        const day = day2();
+        const byDay = cur.reps[day] || (cur.reps[day] = {});
+        byDay[a] = (byDay[a] || 0) + 1;
+        saveArticleStats();
+      }
+      function markArticlePass2(a) {          // 这一篇的 ② 批次走完一遍（finishPass(2)）
+        if (a == null || a < 0) return;
+        const cur = loadArticleStats();
+        if (cur.pass2[a]) return;
+        cur.pass2[a] = true;
+        saveArticleStats();
+      }
 
       /* ============ v2：单一事件根（真值只有一份） ============
          老的 prog.sentences 要撑到任务流程接上为止（计划 Task 7，两步制见 2026-09-22 规格），所以现在是
@@ -4827,16 +4889,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function persist2() { ROOT2.savedAt = Date.now(); safeStore(LS_V2, JSON.stringify(ROOT2)); }
       function recompute2() {
         const b = bdHour();
-        const prev = ROOT2.state;
         const st = ShadowPlan.replay(ROOT2.events, { boundaryHour: b, wordsOf: wordsOfSent, plan: ROOT2.plan });
-        /* 3.0 自有账（§7.6）：repsByArticle 不在事件流里（引擎不认识「篇」），而重放会从零
-           重建 daily —— 不搬回来，每 push2 一次就把按篇精读次数抹掉一次。这里按天原样搬回。 */
-        if (prev && prev.daily) {
-          Object.keys(prev.daily).forEach(function (day) {
-            const rb = prev.daily[day] && prev.daily[day].repsByArticle;
-            if (rb) (st.daily[day] || (st.daily[day] = {})).repsByArticle = rb;
-          });
-        }
+        /* 3.0 的按篇账（repsByArticle / pass2）现在住 LS_ARTICLE，不在这份事件根里 ——
+           重放只重建引擎认得的 daily，按篇账不再需要「搬回来」这一步（见 loadArticleStats）。 */
         st.legacy = ROOT2.state && ROOT2.state.legacy ? ROOT2.state.legacy : null;
         st.migratedAt = ROOT2.state && ROOT2.state.migratedAt ? ROOT2.state.migratedAt : 0;
         st.eventsSeen = ROOT2.events.length;
@@ -5042,6 +5097,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         indexWords();
         try { ROOT2 = JSON.parse(localStorage.getItem(LS_V2) || 'null'); } catch (e) { ROOT2 = null; }
         if (ROOT2 && ROOT2.state && ROOT2.state.v === 2 && Array.isArray(ROOT2.events)) {
+          // 迁移老账必须在 recompute2 之前：重放会从零重建 daily，把旧的 daily.repsByArticle 抹掉
+          migrateArticleStats();
           if (ROOT2.state.eventsSeen !== ROOT2.events.length) recompute2();
           syncLegacyPlan();
           return;
@@ -5430,7 +5487,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function finishPass(n) {
         renderPassSummary(n);
         if (n === 1) { pass = 2; resetQuizRun(); quizStart = Date.now(); maskArticle(); }
-        else { taskFinished = true; pass = 2; }
+        else {
+          taskFinished = true; pass = 2;
+          /* §9.4：这一篇的 ② 批次走完一遍 = 卡片「已学完」的凭据。按篇记，住 3.0 自己的 key
+             （不在共享 blob 里，否则开 /shadow/ 就没了）。重复进 ② 再走一遍不重复记。 */
+          markArticlePass2(currentArticle);
+        }
         _cachedPlan = null;
         updateTaskBar();
       }
@@ -5502,9 +5564,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             if (!target && String(el.dataset.w || '').toLowerCase() === w) target = el;
           });
           if (!target) return;
+          /* §4.4：空按**被遮词形**给宽，不用固定的 3.2em（长词会窄成一条、短词又太宽）。
+             被遮的就是正文里那个 .w（maskSplit 认定的 surface 正是它），直接量它的渲染宽度；
+             量不到（隐藏/字体未就绪）才退回 CSS 里的 1.2em 兜底。 */
+          const wordW = Math.round(target.getBoundingClientRect().width);
           const blank = document.createElement('span');
           blank.className = 'qz-blank';
           blank.dataset.bi = String(bi);
+          if (wordW > 0) blank.style.minWidth = (wordW + 2) + 'px';
           blank.setAttribute('role', 'button');
           blank.setAttribute('tabindex', '0');
           blank.setAttribute('aria-label', '挖空：点这里选词填回');
@@ -5918,8 +5985,31 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           });
         }
       }
+      /* §2.3 / §14.2：没计划时点卡片也能进这一篇 —— 正文可读、自由跟读照常（播放条控件
+         搬进任务条），任务条那一格换成空状态「还没有学习计划 · 去设置每天读多久」。
+         它不建队列、不记进度（没有计划就没有今天的账），只把「读文章」这件事先给到人。 */
+      function enterFreeTaskMode(opts) {
+        if (taskMode) { closePanel(); return; }
+        const o = opts || {};
+        if (o.article != null) currentArticle = o.article;
+        _noPlan = true; exitConfirm = false;
+        taskMode = true;
+        sessionStart = Date.now(); sessionReps = 0; startSessionClock();
+        document.body.classList.add('task-mode');
+        dockAudiobar(true);
+        const bar = document.getElementById('taskBar');
+        if (bar) bar.classList.add('show');
+        syncTaskBarHeight(); watchTaskBar();
+        /* 自由跟读的起点：把光标落到这一篇第一句，播放条那颗 ▶ 才有得放（openArticle 已 render 正文）。 */
+        idx = globalToLocal(chapterSentStart);
+        if (idx < 0) idx = 0;
+        try { paint(); } catch (e) {}
+        closePanel();
+        updateTaskBar();
+      }
       function enterTaskMode(opts) {
-        if (!plan) return;
+        // §2.3：没计划也能进任务模式 —— 不是静默无反应，而是自由跟读 + 任务条空状态。
+        if (!plan) { enterFreeTaskMode(opts); return; }
         /* 已经在任务模式里（今日面板那颗这时候写着「继续任务」）就只把面板收掉。
            不设这道闸会从这里整套重跑：pass 被拍回 ①、批次快照重拍、quizCursor 归零，
            而屏幕上② 的题卡还挂着 —— 它绑的是旧批次，新批次里没有 pass===2 的题，四颗选项全哑。 */
@@ -5964,7 +6054,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          直接走「换章渲染」的核心三步，不借 onChapterChange —— 那个会弹「已切换到」的 toast，
          而且 ch === currentChapter 时整段跳过，重进同一篇就渲不出正文。 */
       function openArticle(a, opts) {
-        if (!plan) return;
+        // §2.3：没计划也照进（enterTaskMode 会走自由跟读那一支）—— 卡片第一击不再静默无反应。
         currentArticle = a; _cachedPlan = null;
         currentChapter = a;
         chapterSentStart = computeChapterStart(a);
@@ -5982,8 +6072,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         openArticle(a, { article: a, startAtPass2: true });
       }
       function exitTaskMode() {
-        taskMode = false; exitConfirm = false; stopSessionClock();
+        taskMode = false; exitConfirm = false; _noPlan = false; stopSessionClock();
         // 回首页 = 回全局：横幅/绿点/今日账都按全量算，别把上一篇的 scope 留在缓存里。
+        // （_pendingArticle 不在这里清：空状态点「去设置」就是先退出、再建计划回到这一篇。）
         currentArticle = null; _cachedPlan = null;
         document.body.classList.remove('task-mode', 'quiz-mode');
         dockAudiobar(false);
@@ -5996,10 +6087,18 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         try { if (window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
       }
       /* 点 ✕ 先问一句（他 2026-09-22）。仍然零惩罚：不改排期、不生成欠账，
-         所以这句只报「进度已经记下」，不写「确定要放弃吗」那种挽留话术。 */
-      function requestExit() { if (!taskMode) return; exitConfirm = true; updateTaskBar(); }
+         所以这句只报「进度已经记下」，不写「确定要放弃吗」那种挽留话术。
+         自由跟读态（§2.3 没计划）没有进度可丢，✕ 直接退，不摆确认。 */
+      function requestExit() { if (!taskMode) return; if (_noPlan) { exitTaskMode(); return; } exitConfirm = true; updateTaskBar(); }
       function cancelExit() { exitConfirm = false; updateTaskBar(); }
       function confirmExit() { exitConfirm = false; exitTaskMode(); }
+      /* 空状态任务条的「去设置」：记住是哪一篇，退出任务模式，弹 v2.0 设置屏。
+         建完计划由 renderSetup 的 ps-start 回调把这一篇重新开成真任务模式（见下）。 */
+      function noPlanGoSetup() {
+        _pendingArticle = (currentArticle != null) ? currentArticle : null;
+        exitTaskMode();
+        openPanel();          // 没计划时 openPanel() 渲的就是 renderSetup
+      }
       /* 收工态两颗键的去处（§4.2）：「回首页」回列表挑下一篇，「看词本」跳单词本占位屏
          （真词本 M3 才做）。都先退出任务模式，别把 task-mode 的 chrome 带到别的屏。 */
       function exitToHome() { exitTaskMode(); if (location.hash !== '#/home') location.hash = '#/home'; }
@@ -6119,6 +6218,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function next() {
         const _bar = document.getElementById('taskBar');
         if (_bar && _bar.dataset.state === 'resume') { resumeTask(); return; }    // 续读条上的「接着做」
+        if (_bar && _bar.dataset.state === 'noplan') { noPlanGoSetup(); return; }  // 空状态：这颗是「去设置」
         if (_bar && _bar.dataset.state === 'done') { exitToWords(); return; }     // 收工态：这颗是「看词本」
         // 记录当前句完成，跳下一个；② 态下这个键是「下一题 / 跳过这题」
         if (!taskMode) return;
@@ -6234,6 +6334,16 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       /* ① 通读态那颗键的文案：这趟还没动过 →「放这一句」；动过之后整趟都叫「下一句」。
          只在 next()/enterTaskMode() 两处变，所以同步函数很轻 ——
          不重跑 updateTaskBar()（那个会重建今日队列，逐句跑不起）。 */
+      /* 推进键（#tbNext）文案的唯一出口：可见文字 / title / aria-label 三处必须同步 ——
+         ② 态与收工态曾只改 textContent，于是可见写「下一题 / 小结 / 看词本」，
+         读屏与悬浮提示却还念「下一句」（终审顺手项）。 */
+      function setTaskNext(text, title) {
+        const btn = document.getElementById('tbNext');
+        if (!btn) return;
+        btn.textContent = text;
+        btn.title = title || text;
+        btn.setAttribute('aria-label', title || text);
+      }
       function syncTaskNextLabel() {
         if (!taskMode) return;
         const bar = document.getElementById('taskBar');
@@ -6249,6 +6359,29 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           : '放这一句（放完自动记为已读，再点就是下一句）';
         btn.setAttribute('aria-label', label);
       }
+      /* 自由跟读态（§2.3 没计划）的任务条：主行说明现状，辅行指路，唯一那颗键去设置。
+         进度条归零；播放条控件由 updateTaskBar 之外的 .tb-play CSS 露出。 */
+      function renderNoPlanTaskBar() {
+        const bar = document.getElementById('taskBar');
+        if (!bar) return;
+        bar.dataset.state = 'noplan';
+        document.body.classList.remove('quiz-mode');
+        const titleEl = document.getElementById('tbTitle');
+        const subEl = document.getElementById('tbSub');
+        const againBtn = document.getElementById('tbAgain');
+        const clockEl = document.getElementById('tbClock');
+        const topTitle = document.getElementById('ttTitle');
+        if (topTitle) topTitle.textContent = (currentArticle != null && SECTIONS[currentArticle]) ? SECTIONS[currentArticle].title : '全部文章';
+        if (titleEl) titleEl.textContent = '还没有学习计划';
+        if (subEl) subEl.textContent = '去设置每天读多久';
+        if (againBtn) againBtn.style.display = 'none';
+        if (clockEl) clockEl.textContent = '';
+        const nextBtn = document.getElementById('tbNext');
+        if (nextBtn) nextBtn.dataset.label = '';
+        setTaskNext('去设置', '去设置每天读多久');
+        syncTaskSeek(false, 0);
+        syncTaskBarHeight(); syncCardBottom();
+      }
       /* 一条栏三种态，只换内容不藏控件（PRD §10.1）。
          今日进度这一个数字只活在任务栏；播放条标题回过去报「读到第几句」。 */
       function updateTaskBar(allDone) {
@@ -6259,7 +6392,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const againBtn = document.getElementById('tbAgain');
         const nextBtn = document.getElementById('tbNext');
         if (!taskMode && bar.dataset.state === 'resume') return;   // 续读条占着这一行，别把它刷成任务态
-        if (!ROOT2 || !ROOT2.plan) { bar.dataset.state = 'idle'; return; }
+        // §2.3：没计划却在任务模式里 = 自由跟读态，任务条换成空状态（有计划的正常分支在下面）
+        if (!ROOT2 || !ROOT2.plan) {
+          if (taskMode) renderNoPlanTaskBar();
+          else bar.dataset.state = 'idle';
+          return;
+        }
         todayPlan(true);   // 保证 todayQueue / plannedToday 用的是今天的计划（以前顺手取 todayMinutes 上屏，那个数现在不在条上说了）
         const d = ROOT2.state.daily[day2()] || {};
         /* 按篇（PRD §4.1 / §9.3）：进某一篇时，条上的 n/N 说的是「这一篇的进度」——
@@ -6310,7 +6448,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
              不在这里改 onclick，别的态才不会忘了改回来。 */
           againBtn.style.display = '';
           againBtn.innerHTML = '<i class="ri-home-4-line" aria-hidden="true"></i> 回首页';
-          nextBtn.textContent = '看词本';
+          againBtn.title = '回首页'; againBtn.setAttribute('aria-label', '回首页');
+          setTaskNext('看词本');
           setProg(1);
         } else if (pass >= 2) {
           titleEl.textContent = '② 挖空选择 ' + quizDoneN + '/' + quizN
@@ -6322,8 +6461,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
              「这题有问题」也搬进了浮窗（renderBlankPop），任务条上不再有它。 */
           againBtn.style.display = 'none';
           /* 这一颗是全页唯一的推进按钮（做题卡里那颗已删）。末题写「小结」不写「下一题」——
-             点下去就是把这一遍（含末尾的补考）收掉，说「下一题」是假承诺。 */
-          nextBtn.textContent = reveal ? (hasNextQuiz() ? '下一题' : '小结') : '跳过这题';
+             点下去就是把这一遍（含末尾的补考）收掉，说「下一题」是假承诺。
+             走 setTaskNext：title / aria-label 与可见文字一起改，别只改 textContent。 */
+          setTaskNext(reveal ? (hasNextQuiz() ? '下一题' : '小结') : '跳过这题');
           setProg(quizN ? quizDoneN / quizN : 1);
         } else {
           /* 分母是当天快照，不跟分子涨。分子可能超过它（今天多读了）—— 主行封顶写 36/36，
@@ -6552,6 +6692,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (p) p.classList.remove('open');
         if (scrim) { scrim.style.opacity = '0'; scrim.style.pointerEvents = 'none'; }
         _panelOpen = false;
+        /* 关掉设置屏 = 这次没从空状态建计划，别把「回到那一篇」留到下一次（ps-start 里会先取走）。 */
+        _pendingArticle = null;
       }
 
       let _view = 'today', _bookFilter = 'all';
@@ -6661,11 +6803,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         for (let i = 0; i < (opt.quizOk || 0); i++) push2(ShadowPlan.mkQuiz('seed_ok_' + i, s[i % s.length], 'mc4zh', true, now + i, day));
         for (let i = 0; i < (opt.quizNo || 0); i++) push2(ShadowPlan.mkQuiz('seed_no_' + i, s[i % s.length], 'mc4zh', false, now + i, day));
         if (opt.reps) {
-          const d = ROOT2.state.daily[day] || (ROOT2.state.daily[day] = {});
-          d.repsByArticle = d.repsByArticle || {};
-          d.repsByArticle[a] = (d.repsByArticle[a] || 0) + opt.reps;
-          persist2();
+          const cur = loadArticleStats();
+          const byDay = cur.reps[day] || (cur.reps[day] = {});
+          byDay[a] = (byDay[a] || 0) + opt.reps;
+          saveArticleStats();
         }
+        if (opt.pass2) markArticlePass2(a);
         _cachedPlan = null;
       }
       function etaSet(el, html, r) {
@@ -6741,7 +6884,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         document.getElementById('psStart').onclick = () => {
           initPlan(sel);
           buildQueue(); updateBtn();
+          /* §2.3：这份计划是从「没计划也进任务模式」的空状态里点出来的 → 回到那一篇，
+             换成真任务条（否则人建完计划还停在空状态上）。 */
+          const pending = _pendingArticle; _pendingArticle = null;
           showAbToast(`计划已建好：每天 ${sel} 分钟，今天先排 ${todayPlan(true).queue.length} 句`);
+          if (pending != null) { closePanel(); openArticle(pending); return; }
           _view = 'today'; renderToday(p);
         };
       }
@@ -6889,7 +7036,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          2026-09-24 实测：导出/恢复都绕开了 events/state/plan，备份出来是个空壳，
          恢复完还是旧状态。所以除了前缀，另给一份「点分隔」的显式白名单。 */
       const BACKUP_PREFIX = 'ielts-';
-      const BACKUP_EXTRA = ['ielts.shadow.v2'];
+      /* 点分隔的 key 不受 BACKUP_PREFIX（连字符）覆盖，逐个显式列出。LS_ARTICLE 是 3.0 的
+         按篇账（§7.6/§9.4），必须随备份走 —— 否则换设备后精读次数与「已学完」凭据全丢。 */
+      const BACKUP_EXTRA = ['ielts.shadow.v2', LS_ARTICLE];
       const isBackupKey = k => !!k && (k.startsWith(BACKUP_PREFIX) || BACKUP_EXTRA.includes(k));
       function collectBackup() {
         const data = {};
@@ -6943,6 +7092,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         try { localStorage.removeItem(LS_PLAN); localStorage.removeItem(LS_PROG); } catch (e) {}
         // v2 事件根必须一起清：只清老 key 的话，重载后 ROOT2 还在，进度等于没重置
         try { localStorage.removeItem(LS_V2); } catch (e) {}
+        // 3.0 的按篇账也要清：否则「已学完 / 精读次数」会跨过重置留下来
+        try { localStorage.removeItem(LS_ARTICLE); } catch (e) {}
+        _articleStats = null;
         ROOT2 = null; _cachedPlan = null;
         plan = null;
         prog = { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {} };
@@ -7023,20 +7175,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (!plan || !prog) return;
         recordRep(globalIdx);   // 耗时实测在 recordRep 里统一采样
       }
-      /* 3.0 自有账（§7.6）：任务模式里的「精读次数」按篇累加，随身听不计（那条走
-         onSentenceComplete，不经过这里）。落在 state.daily[天].repsByArticle[篇] ——
-         与 daily 一起落盘/上云状态；引擎不认识「篇」，所以 recompute2 要把它搬回来。
-         §9.2 用的是「累计值」：首页 articleStat 跨天求和。 */
-      function bumpArticleRep(globalIdx) {
-        if (!ROOT2 || !ROOT2.state) return;
-        const a = artOfSentGlobal(globalIdx);
-        if (a == null || a < 0) return;
-        const day = day2();
-        const d = ROOT2.state.daily[day] || (ROOT2.state.daily[day] = {});
-        d.repsByArticle = d.repsByArticle || {};
-        d.repsByArticle[a] = (d.repsByArticle[a] || 0) + 1;
-        persist2();
-      }
       /* 任务模式一步一停的落点（他 2026-09-23 拍板：「不点不放，点一句放一句」）。
          播放链每放完一句回来问一次；返回 true 就停在这句，下一句由任务条那颗键叫起来。
          以前这两件事全挂在点「下一句」上：链子自己往前滚的时候，听完的句子一句都不计完成，
@@ -7047,7 +7185,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (pass === 1 && plan && prog) {
           recordRep(globalIdx);
           sessionReps++;
-          bumpArticleRep(globalIdx);   // 精读次数只数任务模式的 ① 完成（§7.6）
+          bumpArticleRep(artOfSentGlobal(globalIdx));   // 精读次数只数任务模式的 ① 完成（§7.6），账住 LS_ARTICLE
           /* 他 2026-09-24 拍板：放完**不自动挪高亮** —— 高亮停在这句，下一句只由「下一句」那颗键叫起来
              （点了才挪高亮 + 同步开播）。所以这里不再 goToNextTask()。
              唯一例外是「这批一句没读的了」：那种情况照旧把 ② 端上来，否则那颗键会停在
@@ -7111,6 +7249,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         offerResume, resumeTask, skipResume, hideResumeOffer,
         initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
         etaFor, etaCalls, countStages, seedDailyForTest, seedArticleForTest,
+        // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
+        repsOf, articlePass2Done,
         /* 3.0 首页横幅（Task 4）只读出口：连续 / 已毕业 / 目标词 / 今天计划与完成，
            一处取齐，别在界面里另算（横幅「去设置」走 openPanel()，没计划时它就是 v2.0 设置屏）。 */
         todayStats: () => ({

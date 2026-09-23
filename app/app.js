@@ -68,23 +68,25 @@
     const quizOf = evs.length, quizOk = evs.filter(e => e.ok).length;
     const quizRate = quizOf ? quizOk / quizOf : 0;
     /* 精读次数（§7.6）：只数任务模式的完成（taskSentenceFinished 累加），随身听不计。
-       repsByArticle 是 3.0 外壳自己的账，按天落在 state.daily 里 —— 这里跨天求和成「累计值」。 */
-    let reps = 0;
-    const daily = st.daily || {};
-    Object.keys(daily).forEach((day) => {
-      const rb = daily[day] && daily[day].repsByArticle;
-      if (rb && rb[a]) reps += rb[a];
-    });
+       这份按篇账住 3.0 自己的 key（TASK.repsOf 跨天求和），不在共享的 ielts.shadow.v2 里 ——
+       否则一开 /shadow/ 就被它的 recompute2 抹掉（同源共享的必然，见 index.html 的 LS_ARTICLE）。 */
+    const reps = (typeof TASK !== 'undefined' && TASK.repsOf) ? TASK.repsOf(a) : 0;
+    /* §9.4 的「② 批次答过一遍」凭据：finishPass(2) 时按篇记一笔（TASK.articlePass2Done）。
+       它问的是「这一篇今天那批题走完了没有」，**不是**「全篇每句都答对」——一遍 ② 只考当天
+       队列那 ~20–40 题，拿它去比全篇句数（339）永远到不了「已学完」（终审 I1）。 */
+    const pass2Done = (typeof TASK !== 'undefined' && TASK.articlePass2Done) ? TASK.articlePass2Done(a) : false;
     const progress = total
       ? Math.round(Math.min(ever / total, 1) * 40 + quizRate * 35 + Math.min(reps / (total * 2), 1) * 25)
       : 0;
-    /* 当前阶段（§9.4）。「② 满一遍」按「每句至少答对一次」（quizOk ≥ 句数）判；
-       熟练 = 已学完 且 熟练度 ≥ 80%（§9.2 的 caveat）。 */
+    /* 当前阶段（§9.4）：通读满一遍 + 这一篇的 ② 批次答过一遍 = 已学完；
+       熟练 = 已学完 且 熟练度 ≥ 80%（§9.2 的 caveat）。
+       注意「② 一遍」用 pass2Done（finishPass(2) 的凭据），不用 quizOk ≥ 句数 —— 后者要求
+       答对全篇每一句，而一遍 ② 只覆盖当天队列那几十题，永远到不了「已学完」。 */
     let stage;
     if (ever === 0) stage = 'todo';
     else if (ever < total) stage = 'reading';
     else if (quizOf === 0) stage = 'read';
-    else if (quizOk < total) stage = 'quiz';
+    else if (!pass2Done) stage = 'quiz';
     else stage = 'done';
     if (stage === 'done' && progress >= 80) stage = 'pro';
     let lastAt = 0; scope.forEach((i) => { const s = st.sents[i]; if (s && s.lastReadAt > lastAt) lastAt = s.lastReadAt; });
