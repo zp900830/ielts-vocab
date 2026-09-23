@@ -2653,7 +2653,15 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     this._au = au;
     let done = false;
     let pausedAt = 0; // 记录暂停时间
-    const fail = e => { if (done) return; done = true; clearTimeout(timer); clearInterval(monitor); if (g === this._gen) this.stop(); fallback(e); };
+    /* 合成慢的时候界面上什么都不说，用户只会看到「等半天突然换了个人声」——
+       他 2026-09-23 报的「毫无缘由就换本地音色」，有一半是这个。先把「在合成」说出来。 */
+    const slowT = setTimeout(() => {
+    if (done || my !== speakToken) return;
+    if (this._slowT && Date.now() - this._slowT < 20000) return;
+    this._slowT = Date.now();
+    try { showAbToast('☁ 云端语音合成中…（网络慢时会多等一会儿，不会静默换成本地音色）'); } catch (e) {}
+    }, 1800);
+    const fail = e => { if (done) return; done = true; clearTimeout(timer); clearInterval(monitor); clearTimeout(slowT); if (g === this._gen) this.stop(); fallback(e); };
     const timer = setTimeout(() => fail(new Error('timeout')), 30000); // 30s 合成超时（延长到30s，给网络慢的情况更多时间）
 
     // 监控音频状态：检测暂停和卡住
@@ -2682,7 +2690,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }, 1000);
 
     this.synth(text, voiceId, rate, true).then(url => {
-    if (done || my !== speakToken) { clearTimeout(timer); clearInterval(monitor); return; }
+    if (done || my !== speakToken) { clearTimeout(timer); clearInterval(monitor); clearTimeout(slowT); return; }
+    clearTimeout(slowT);
     au.src = url;
     this._auUrl = url; // 标记当前播放的 blob URL，防止缓存回收时掐断
     au.onended = () => { if (done) return; done = true; clearTimeout(timer); clearInterval(monitor); errStreak = 0; cb(); };
@@ -3081,9 +3090,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     () => { if (my !== speakToken) return; errStreak = 0; if (cb) cb(); },
     err => {
     dlog('cloud-fallback', err && err.message);
-    if (!CLOUD._fbT || Date.now() - CLOUD._fbT > 30000) {
+    if (!CLOUD._fbT || Date.now() - CLOUD._fbT > 15000) {
     CLOUD._fbT = Date.now();
     CLOUD.setStatus('云端合成失败，已临时降级本地：' + CLOUD.friendlyErr(err && err.message));
+    /* 只往云菜单里写一句等于没说（那块要专门点开才看得见）。他 2026-09-23：
+       「放着放着就毫无缘由切换本地语音」—— 原因得当场说出来。 */
+    try { showAbToast('☁ 云端音色这一句没放出来，本句改用本地音色：' + CLOUD.friendlyErr(err && err.message)); } catch (e2) {}
     }
     speak(text, cb, { plain: true, exclude: selVoiceURI }, my);
     });
@@ -3372,6 +3384,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if ('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
     } catch (e) {}
     if (!playing) unlockScreen();
+    /* 任务模式 ① 那颗键的文案要跟着 playing 走（放这一句 ↔ 下一句），而 playing 的每次变化都会路过这里。
+       只挂一个轻量函数：它不在①态/不是任务模式时立刻返回。 */
+    try { if (typeof TASK !== 'undefined' && TASK.refreshNext) TASK.refreshNext(); } catch (e) {}
     }
     let launchedUpTo = -1; // 本轮已发射到的句子（去重：续播与预取不重复发射）
     function syncSeek(i) {
@@ -4934,6 +4949,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          队列是滚动的，读完的句子会被顶掉，不快照就会发现 ② 无题可出。 */
       let pass = 1, quizCursor = 0, quizWrongN = 0, quizAnsweredN = 0, taskFinished = false,
           exitConfirm = false, quizStart = 0;   // ② 的剩余时间按「本次真实答题速度」算，所以要记住 ② 是从哪一刻开始的
+      /* ① 那颗键翻不翻成「下一句」，只认「它自己点过没有」：换句/自动前进/上一句都清掉。
+         用 playing 判会把 prev() 也算进去（prev 会起播），而那一路的语义仍是「放这一句」。 */
+      let _nextPlayed = false;
           reveal = null, batchItems = [], DISP = [], SENT_ZH = [], PARA_ID = [];
       /* 本遍末尾的补考清单（走查 2026-09-22 #2：答错过的词这一遍里要再考一次，只一次）。
          存的是 batchItems 里那批 item 对象本体 —— 身份即「这个词在这一句」，同一句不会进两次。 */
@@ -5512,6 +5530,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          分开写两份的话，跨章切换（先换章、等 300ms 再定位）只会修好一边 —— 上一轮 prev() 就是栽在两份实现上。 */
       function revealTaskPos(found, autoPlay) {
         taskPos = found;
+        _nextPlayed = false;   // 换了一句 → 那颗键回到「放这一句」
         const globalIdx = todayQueue[found].i;
         /* 换了一句 = 单句循环要跟到新这句上（默认就是循环 3 次，锚在旧句等于悄悄失灵）；
            A-B 区间则整段作废（播到 B 点把人拽回上一句的区间，屏幕上已经不是那句）。
@@ -5562,6 +5581,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (!taskMode) { step(-1); return; }
         if (pass >= 2) { reviewSentence(); return; }   // ② 没有「上一句」这个动作，这颗本来也不显示
         step(-1);
+        _nextPlayed = false;   // 退回来是「再听一遍这句话」，那颗键回到「放这一句」
         if (idx >= 0) {
           const g = localToGlobal(idx);
           for (let qi = 0; qi < todayQueue.length; qi++) {
@@ -5614,6 +5634,18 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           return;
         }
         if (taskPos >= todayQueue.length) return;
+        /* ① 通读态这一颗有两种身份（他 2026-09-23）：还没点过 → 放这一句；点过 → 下一句。
+           判据与 syncTaskNextLabel() 共用 nextIsAdvance()，免得按钮写着「下一句」点下去却在重放。
+           走 taskSentenceFinished 而不是另写一套前进：记完成 + goToNextTask 只有这一份实现。 */
+        if (nextIsAdvance()) {
+          playing = false; speakToken++;
+          try { speechSynthesis.cancel(); } catch (e) {}
+          try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
+          taskSentenceFinished(todayQueue[taskPos].i);
+          try { savePos(); } catch (e) {}
+          paint();
+          return;
+        }
         /* 计数搬到「这一句真的放完了」那一刻（taskSentenceFinished）。挂在点击上会同时犯他报的两条错 ——
            没听完的句子被记成完成，听完却没点的那句永远不算。 */
         // 停止当前播放
@@ -5625,6 +5657,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
            用「上一句」退回去再点，会悄悄跳到队列里第一句还没听的，而不是你退回的那句 ——
            正是这条路径以前栽过的坑（队列位置和高亮不对齐）。 */
         revealTaskPos(taskPos, true);
+        /* 点过了 → 这一颗从现在起是「下一句」。revealTaskPos 里清过位，所以顺序必须是这样：
+           先落位再置位，最后手动刷一次文案（paint() 那一趟跑的时候位还没置上）。 */
+        _nextPlayed = true;
+        syncTaskNextLabel();
       }
 
       // ---- 时间估算 ----
@@ -5738,6 +5774,25 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         });
         _barRO.observe(bar);
       }
+      /* ① 通读态那颗键一颗担两义（他 2026-09-23 拍的口径）：还没放 →「放这一句」；
+         点过之后 →「下一句」（点一下把这句收尾、跳到队列里下一句）。
+         标签要跟着这个位变，而它只在 next()/revealTaskPos()/prev() 三处动，所以同步函数很轻 ——
+         不重跑 updateTaskBar()（那个会重建今日队列，逐句跑不起）。判据与 next() 那份是同一个函数。 */
+      function nextIsAdvance() { return !!(taskMode && _nextPlayed); }
+      function syncTaskNextLabel() {
+        if (!taskMode) return;
+        const bar = document.getElementById('taskBar');
+        if (!bar || bar.dataset.state !== 'read') return;
+        const btn = document.getElementById('tbNext');
+        if (!btn) return;
+        const on = nextIsAdvance();
+        const label = on ? '下一句' : '放这一句';
+        if (btn.dataset.label === label) return;
+        btn.dataset.label = label;
+        btn.innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> ' + label;
+        btn.title = on ? '下一句（收尾这一句，跳到队列里下一句）' : '放这一句（放完自动记为已读，再点放下一句）';
+        btn.setAttribute('aria-label', label);
+      }
       /* 一条栏三种态，只换内容不藏控件（PRD §10.1）。
          今日进度这一个数字只活在任务栏；播放条标题回过去报「读到第几句」。 */
       function updateTaskBar(allDone) {
@@ -5767,6 +5822,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
            主行 = 进度（大字 n/N + 一条进度条，不再用文字复述百分比，也不再报「今天多少分钟」）；
            辅行左 = 还剩多久（唯一一个能立刻行动的数）；辅行右 = 本次多久（小表，跟左边拉开两端摆）。
            「全部过完约某年某月」也撤了 —— 设置屏 / 计划页 / 今日面板三处都还在，底栏是第四个重复点。 */
+        /* 这一颗的文案每次都由下面各分支重写（② 是「下一题/小结/跳过这题」，① 是「放这一句/下一句」），
+           而 syncTaskNextLabel() 靠 dataset.label 防抖 —— 进分支前清掉，别让它拿着上一态的值跳过刷新。 */
+        nextBtn.dataset.label = '';
         bar.dataset.state = asking ? 'exit' : (fin ? 'done' : (pass >= 2 ? 'quiz' : 'read'));
         document.body.classList.toggle('quiz-mode', !!taskMode && !fin && !asking && pass >= 2);
         if (clockEl) clockEl.textContent = (asking || !spent) ? '' : '本次 ' + spent;
@@ -5798,12 +5856,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           againBtn.style.display = '';
           againBtn.innerHTML = '<i class="ri-repeat-line" aria-hidden="true"></i> 再来';
           /* 名字跟着口径改（他 2026-09-23：删掉播放键、点一句放一句）：这颗现在不"翻到下一句"，
-             而是"把这一句放一遍"，放完才记完成。写「下一句」会让人以为不点就停在原句。
+             而是"把这一句放一遍"，放完才记完成；正在放的时候改名「下一句」（收尾前进）。
              图标仍用 →：窄屏上这颗只显示图标（.lbl 那套 font-size:0），给个 ▶ 三角形就等于
              把他刚要求删掉的那颗播放键又画了回来。 */
-          nextBtn.innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> 放这一句';
-          nextBtn.title = '放这一句（放完自动记为已读，再点放下一句）';
-          nextBtn.setAttribute('aria-label', '放这一句');
+          syncTaskNextLabel();
           /* ① 通读态：这一根改成"位置条"，读的是屏幕上这句在队列里的第几格 —— 做完只读的 setProg 在这里换轨。
              已读句数没丢：主行「① 通读 12/36」一直在说它。 */
           syncTaskSeek(true);
@@ -6571,6 +6627,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         etaFor, etaCalls, countStages, seedDailyForTest,
         // 「本次已用多久」要跨过 20 秒静默期才可测，所以把会话起点交给测试拨一下
         setSessionStartForTest: (ts) => { sessionStart = ts; updateTaskBar(); },
+        // ① 那颗键在「放这一句 / 下一句」之间翻转只挂这里：全局 paint() 每次改 playing 都调一次
+        refreshNext: syncTaskNextLabel,
         // 「② 有没有题可出」这条不变式要全库扫才知道，所以把句号→目标词递出去给测试用
         sentWordsOf: (i) => wordsOfSent(i), sentTotal: () => SENT_RAW.length,
         pass: passNumber, setPass, currentQuiz, answerQuiz, nextQuiz, advance, finished: isFinished,

@@ -198,4 +198,31 @@ test.describe('任务模式 · 一步一停（2026-09-23 四条实测）', () =>
     const sp = await page.evaluate(() => (window as unknown as { __sp: { text: string }[] }).__sp);
     expect(sp.length, `同一句被提交了 ${sp.length} 次 = 又去换音色重播了`).toBe(1);
   });
+
+  /* ⑧ 他 2026-09-23 补的口径：那颗键点过之后要翻成「下一句」—— 第一下「放这一句」，
+     第二下不再是重放，而是把这句收尾、跳到队列里下一句。
+     反向也锁住：自动前进 / 「上一句」都得回到「放这一句」（退回来是"再听一遍这句话"，
+     不是"接着往下走"）。判据是 #tbNext 自己点过没有，不是 playing —— prev() 也会起播。 */
+  test('⑧ 点过「放这一句」之后那颗键翻成「下一句」，点一下收尾前进', async ({ page, baseURL }) => {
+    test.setTimeout(currentTimeout() * 8);
+    await openShadow(page, baseURL, 1280);   // 窄屏上这颗字被 font-size:0 收掉，只看得到图标
+    await page.evaluate(() => { TASK.hideResumeOffer(); TASK.enterTaskMode(); });
+    await expect(page.locator('#taskBar')).toBeVisible();
+    await installSpeakStub(page);
+    const next = page.locator('#tbNext');
+    const title = () => page.locator('#tbTitle').innerText();
+
+    await expect(next).toContainText('放这一句');
+    const t0 = await title();
+    await next.click();
+    await expect(next).toContainText('下一句');        // 点过 → 翻名
+    expect(await title(), '第一下只是"放"，不该已经前进').toBe(t0);
+
+    await next.click();                                // 第二下 = 收尾前进
+    await expect.poll(() => title()).not.toBe(t0);
+    await expect(next).toContainText('放这一句');       // 换了一句 → 回到"放"
+
+    await page.locator('#tbPrev').click();             // 退回来：仍是"放"，不是"继续往下走"
+    await expect(next).toContainText('放这一句');
+  });
 });
