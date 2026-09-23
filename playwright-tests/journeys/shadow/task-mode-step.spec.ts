@@ -136,11 +136,39 @@ test.describe('任务模式 · 一步一停（2026-09-23 四条实测）', () =>
         const cs = getComputedStyle(e);
         return cs.backgroundColor !== 'rgba(0, 0, 0, 0)' || cs.backgroundImage !== 'none';
       });
-      return { total: all.length, taskMarked: all.filter(e => e.classList.contains('task-new')).length,
+      return { total: all.length, taskMarked: all.filter(e =>
+          e.classList.contains('task-new') || e.classList.contains('task-review') || e.classList.contains('task-done')).length,
         painted: painted.length, paintedIsPlaying: painted.every(e => e.classList.contains('playing')) };
     });
     expect(n.taskMarked, '今天这批一句都没标 = 夹具空了，这条什么都没测').toBeGreaterThan(3);
     expect(n.painted, `带底色的句子有 ${n.painted} 句，应当只剩当前那 1 句`).toBe(1);
     expect(n.paintedIsPlaying, '带底色的那一句必须是当前句本身').toBe(true);
+  });
+
+  /* ⑥ 读完一句，它得从「今天这批」里退出去。以前 done 对新句额外要求 reps>=3，
+     而队列往前走只看「今天读过没有」—— 一步一停之后每句每天只记一次，两把尺不一致，
+     结果整批从头绿到尾，这条标记不再说"我读到哪儿"了。他 2026-09-23 报的「全都高亮」的另一半。 */
+  test('⑥ 放完一句，它就从「今天这批」的绿竖条里退出去（标记和队列同一把尺）', async ({ page, baseURL }) => {
+    test.setTimeout(currentTimeout() * 8);
+    await openShadow(page, baseURL);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    await page.evaluate(() => { TASK.hideResumeOffer(); TASK.enterTaskMode(); });
+    await expect(page.locator('#taskBar')).toBeVisible();
+    await installSpeakStub(page);
+    const pile = () => page.evaluate(() => {
+      const all = [...document.querySelectorAll('.sent')];
+      return { green: all.filter(e => e.classList.contains('task-new')).length,
+        grey: all.filter(e => e.classList.contains('task-done')).length };
+    });
+    const before = await pile();
+    expect(before.green, '开局这批应当全是"没读过的绿" = 夹具空了').toBeGreaterThan(3);
+    expect(before.grey, '开局不该已经有退出去的').toBe(0);
+
+    await page.locator('#tbNext').click();
+    await page.evaluate(() => (window as unknown as { __finish: () => void }).__finish());
+    await page.waitForTimeout(500);
+    const after = await pile();
+    expect(after.green, `放完一句后绿竖条还是 ${after.green}，一句都没退出去`).toBe(before.green - 1);
+    expect(after.grey, '退出去的那句应当变成"已读"那一档').toBe(1);
   });
 });
