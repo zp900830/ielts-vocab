@@ -693,7 +693,7 @@ test.describe('two passes', () => {
   /* 2026-09-23 口径改了（他：「不点不放，点一句放一句」）：那颗键改名「放这一句」，放的是屏幕上这一句，
      放完才记完成、才前进。旧口径是点一下 = 把当前这句记成完成 + 跳下一句 —— 于是「上一句」退回去
      再点，会悄悄跳过退回的那句。这条用例改量新契约，但守的还是原来那个坑：队列位置与高亮必须对齐。 */
-  test('当前句只有一套高亮，「放这一句」放的是这一句且高亮领先一句：播完才前进，「上一句」退得回去', async ({ page }) => {
+  test('当前句只有一套高亮，「放这一句」放的是这一句且高亮跟播放同一句：播完才前进，「上一句」退得回去', async ({ page }) => {
     // 全站不再有第二套「当前句」标记（描边那套已删，高亮回归常规模式的浅绿底纹）
     expect(await page.locator('.sent.task-current').count()).toBe(0);
     const playingIdx = () => page.evaluate(() => {
@@ -720,10 +720,11 @@ test.describe('two passes', () => {
     expect(first.n, '同一时刻只能有一句被标成当前').toBe(1);
 
     await page.locator('#tbNext').click();
-    /* 他 2026-09-23 拍板「一边放就一边移」：放的是第一句，但高亮/滚动先走到第二句。
-       所以这里同时锁两件：引擎里放的是 first，屏幕上高亮已经在 first+1。 */
+    /* 高亮必须和正在念的那句是同一句（他 2026-09-24 报的 bug：上一版让高亮领先一句，
+       屏幕上就成了「高亮在下一句、读的是上一句」）。这里两条一起锁：引擎里放的是 first，
+       屏幕上高亮的也是 first。 */
     expect(await lastSpoken(), '「放这一句」放的必须是这一句').toContain((await sentText(first.on)).slice(0, 10));
-    expect((await playingIdx()).on, '高亮要领先一句').toBe(first.on + 1);
+    expect((await playingIdx()).on, '高亮必须跟正在念的那句一致').toBe(first.on);
 
     const doneBefore = await title();
     await page.evaluate(() => (window as unknown as { __finish: () => void }).__finish());
