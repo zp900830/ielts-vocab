@@ -6386,7 +6386,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (p && _panelOpen) renderSetup(p);
       }
 
-      /* 「今天先不做」那把锁按天记；为什么一天只提一次见下面 offerResume 的注释 */
+      /* 底部这一行的两种态各有各的锁，别混成一把：
+         「今天先不做」那把按天记在 localStorage（下面 skipResume），提不提由下面 offerResume 的注释说了算。 */
       const RESUME_KEY = 'ielts.shadow.resumeDay';
       function hideResumeOffer() {
         const bar = document.getElementById('taskBar');
@@ -6395,13 +6396,17 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         syncTaskBarHeight();   // 卡收掉了，高度变量也得撤，否则播放条还按 88px 让位
       }
       /* 刷新时底部这一行本来是任务栏的位置，今天的活没干完（或干脆还没开干）就占用它。
-         不弹窗：弹窗每刷一次都要点掉一次，就成了新的打断源。一天只提一次，
-         说「今天先不做」就当天不再提（sessionStorage 管这一趟，localStorage 管今天）。
+         不弹窗：弹窗每刷一次都要点掉一次，就成了新的打断源。
          2026-09-22 走查 #5：以前只在「做了一半」时才提（doneN > 0 那道闸），
          全新的一天界面零提示，得自己去顶栏找面板 —— 现在一句没读也提，条上就是「今天 N 句」+ 开始。
-         两种提示各占一格「这一趟提过没有」：开跑那条提过，不算把「还没做完」那条也消耗掉了 ——
-         他早上点开看一眼就关掉、下午读了两句再回来，仍然要看得到续读条。
-         （这一锁只存最后一个值，够用：两种态由 doneN 分叉，读过句之后就不会再走「开跑」那支。） */
+         2026-09-23 他把"提几次"这件事拍死了：「每次都提（只要今天没完成）」。
+         原来这里还有一把 sessionStorage 锁，记「这一趟浏览器会话提过没有」，同一标签页第二次刷新就安静下来。
+         他因此报了一条"时好时坏"的 bug（「页面刷新有时候出现两个条，有时是一个播放器的条」）——
+         量过：两个条没重叠，多出来那条就是这张卡；也就是说这把锁省下的不是屏幕，是"一致性"，
+         而一致性对他更值钱。所以判据只剩两条，都在"今天的活"这一本账上：
+           还有没读完的（planned > doneN）  且  今天没按过「今天先不做」。
+         按下那颗仍然是按天的（skipResume 写 localStorage）—— 那是他主动说的"今天不做"，
+         不该下一刷就被追上来；除此之外网页自己不记"我提过了"。 */
       function offerResume() {
         const bar = document.getElementById('taskBar');
         if (!bar || taskMode || bar.classList.contains('show')) return false;
@@ -6410,10 +6415,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const planned = plannedToday(), doneN = d.sentDone || 0;
         if (!(planned > doneN)) return false;
         const fresh = doneN === 0;
-        const toldKey = day2() + (fresh ? ':start' : ':resume');
-        let gone = null, told = null;
-        try { gone = localStorage.getItem(RESUME_KEY); told = sessionStorage.getItem(RESUME_KEY + '.told'); } catch (e) {}
-        if (gone === day2() || told === toldKey) return false;
+        let gone = null;
+        try { gone = localStorage.getItem(RESUME_KEY); } catch (e) {}
+        if (gone === day2()) return false;
         bar.dataset.state = 'resume';
         document.getElementById('tbTitle').innerHTML = fresh
           ? '<i class="ri-play-circle-line" aria-hidden="true"></i> 今天 ' + planned + ' 句'
@@ -6430,7 +6434,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         bar.classList.add('show');
         document.body.classList.add('resume-offer');
         syncTaskBarHeight();
-        try { sessionStorage.setItem(RESUME_KEY + '.told', toldKey); } catch (e) {}
         return true;   // 调用方（init）拿它决定那条断更 toast 还弹不弹
       }
       function resumeTask() { hideResumeOffer(); enterTaskMode(); }

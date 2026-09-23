@@ -54,7 +54,6 @@ test.describe('任务模式 · 一步一停（2026-09-23 四条实测）', () =>
     await openShadow(page, baseURL);
     const geo = await page.evaluate(() => {
       localStorage.removeItem('ielts.shadow.resumeDay');
-      sessionStorage.removeItem('ielts.shadow.resumeDay.told');
       const offered = TASK.offerResume();
       const bar = document.getElementById('taskBar')!;
       const ab = document.querySelector('.audiobar')!;

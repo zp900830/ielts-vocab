@@ -878,6 +878,31 @@ test.describe('two passes', () => {
     await expect(page.locator('#taskBar')).toBeVisible();       // 换一天（清掉那把锁）就又提得起来
   });
 
+  /* 他 2026-09-23 拍的口径：「每次都提（只要今天没完成）」。
+     起因是他 iPad 上报「页面刷新有时候出现两个条，有时是一个播放器的条」—— 量下来不是重叠也不是 bug：
+     多出来那条是续读卡，而旧逻辑用 sessionStorage 记「这一趟提过没有」，于是同一标签页第二次刷新就只剩一条。
+     一次提一次不提，读起来就像时好时坏。判据换成只看今天的活做完没有：没做完就每趟刷新都提，
+     做完就不提。上面那条「今天先不做」的用例是这件事的另一半 —— 他主动按下的那颗，当天仍然算数。 */
+  test('只要今天没做完，同一趟里连着刷新也每次都提（不再"这趟提过了"就收声）', async ({ page, baseURL }) => {
+    test.setTimeout(currentTimeout());
+    await page.goto(`${baseURL}/index.html`);
+    await expect(page.locator('.sent').first()).toBeVisible();
+    await page.evaluate(() => {
+      localStorage.removeItem('ielts.shadow.resumeDay');   // 别拿上一轮残留的那把锁当前提
+      TASK.resetV2(); TASK.initPlan(20);
+      TASK.todayPlan(true).queue.slice(0, 2).forEach(x => TASK.readDone(x.i));
+    });
+    for (const n of [1, 2, 3]) {                            // 三趟刷新，趟趟都在
+      await page.reload();
+      await expect(page.locator('#taskBar'), `第 ${n} 次刷新就该提`).toBeVisible();
+      expect(await barState(page)).toBe('resume');
+    }
+    // 反向别踩：今天这批读完了就不该再提 —— 否则这条卡就成了赶不走的常驻栏
+    await page.evaluate(() => { TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i)); });
+    await page.reload();
+    await expect(page.locator('#taskBar')).not.toBeVisible();
+  });
+
   /* 走查 2026-09-22「下一批」#5 + #4：
      #5 全新的一天（一句没读）首屏也得给一条能点的提示 —— 以前被 `doneN > 0` 挡着，界面零提示；
      #4 顶栏那颗绿点的判据与条上那个 n/N 同源（都读 todayLeftN()），不再走旧句子账。 */
@@ -885,8 +910,11 @@ test.describe('two passes', () => {
     test.setTimeout(currentTimeout());
     await page.goto(`${baseURL}/index.html`);
     await expect(page.locator('.sent').first()).toBeVisible();
-    // beforeEach 那一趟已经提过一次「开跑」了（锁在 sessionStorage，管的是同一趟）：清掉它 = 换一趟开
-    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(20); sessionStorage.clear(); });
+    // 唯一能让它不提的是「今天先不做」那把按天的锁；上一轮万一留着，这里清掉，别拿残留当前提
+    await page.evaluate(() => {
+      localStorage.removeItem('ielts.shadow.resumeDay');
+      TASK.resetV2(); TASK.initPlan(20);
+    });
     await page.reload();
     await expect(page.locator('#taskBar')).toBeVisible();
     expect(await barState(page)).toBe('resume');
