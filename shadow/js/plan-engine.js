@@ -222,12 +222,18 @@
     const boundary = Number.isInteger(o.boundaryHour) ? o.boundaryHour : 4;
     const ws = (state && state.words) || {};
     const today = dayKey(now, boundary);
+    /* 3.0：按篇排。scope 给定时只从这些全局句号里挑；省略 = 全量（v2.0 行为，逐字不变）。
+       闸就设在这一层：三池（due/grow/fresh）只收 scope 内的句，下游 take / 兜底 / 队列
+       自然全在 scope 内，不需要在每一处 push 上重复判。 */
+    const scope = (o.scope instanceof Set) ? o.scope : null;
+    const inScope = (i) => !scope || scope.has(i);
 
     // 每个未毕业词只算一次：due 已过 → A；见过但没到期 → B；连一面都没见 → C
     const due = [], grow = [], fresh = [];
     let dueWords = 0;
     const inPool = {};
     for (let i = 0; i < total; i++) {
+      if (!inScope(i)) continue;
       const list = wordsOf(i);
       for (let j = 0; j < list.length; j++) {
         const w = list[j];
@@ -717,6 +723,62 @@
     return { events: events, state: state, report: report };
   }
 
+  /* ---- 3.0 按篇化：scope + 三张派生索引 ----
+     引擎不认识 SECTIONS（它是纯函数模块），所以篇章归属一律由调用方把 sections 传进来。 */
+
+  // 该篇的全局句号集合。sections[].paragraphs[].length 就是每段的句数，与 index.html 的
+  // computeChapterStart / chapterSentCount 同一套口径（跨章句号 = 前面所有篇的句数之和 + 本句在篇内的序号）。
+  function articleScope(sections, article) {
+    const out = new Set();
+    if (!Array.isArray(sections) || !sections[article]) return out;
+    let base = 0;
+    for (let a = 0; a < article; a++) {
+      for (const p of sections[a].paragraphs) base += p.length;
+    }
+    let n = 0;
+    for (const p of sections[article].paragraphs) n += p.length;
+    for (let k = 0; k < n; k++) out.add(base + k);
+    return out;
+  }
+
+  // 词 → 出现在哪几篇。真来源是课文里的 [[词:形式]] 标记，sections[].paragraphs[][] 里存的就是原始串。
+  function wordArticle(sections, word) {
+    const hits = new Set();
+    if (!Array.isArray(sections) || !word) return [];
+    const needle = '[[' + word + ':';
+    for (let a = 0; a < sections.length; a++) {
+      for (const p of sections[a].paragraphs) {
+        for (const raw of p) {
+          if (typeof raw === 'string' && raw.indexOf(needle) >= 0) { hits.add(a); break; }
+        }
+      }
+    }
+    return Array.from(hits).sort((x, y) => x - y);
+  }
+
+  // 只在 scope 内的句子里统计词（scope 为 null/省略 → 全量）。
+  // ⚠️ 引擎里**没有** countStages —— 那个函数长在 shadow/index.html 里（它还要 ALL_TARGET_WORDS
+  //    才能算 fresh）。所以这里从零数，**别去调 countStages**，否则 ReferenceError。
+  //    也不返回 fresh（引擎不知道目标词总数，fresh 由调用方拿总数减）。
+  function countStagesOf(state, scope, wordsOf) {
+    const c = { seen: 0, recognized: 0, owned: 0, graduated: 0, leech: 0 };
+    const ws = (state && state.words) || {};
+    let keys;
+    if (!scope || typeof wordsOf !== 'function') {
+      keys = Object.keys(ws);
+    } else {
+      const inScope = new Set();
+      scope.forEach(i => wordsOf(i).forEach(w => inScope.add(w)));
+      keys = Object.keys(ws).filter(k => inScope.has(k));
+    }
+    keys.forEach(k => {
+      const x = ws[k];
+      c[x.stage] = (c[x.stage] || 0) + 1;
+      if (x.leech) c.leech++;
+    });
+    return c;
+  }
+
   window.ShadowPlan = {
     DAY_MS, WORD_INTERVALS, GRADUATED_INTERVALS, STAGES, MASTER_REPS, LEECH_ERR,
     BAOWEN_CAP_SENTS, BAOWEN_MIN_MINUTES, resolveBaowenCap,
@@ -724,5 +786,6 @@
     eventId, mkContact, mkQuiz, mkPromote, newWord, stageOf, replay, wordState,
     assemble, recallQuiz, meaningQuiz, blankQuiz, judgeRecall, editDistance, parseSenses, hash32, migrate,
     countPassed, estimateDays,
+    articleScope, wordArticle, countStagesOf,
   };
 })();
