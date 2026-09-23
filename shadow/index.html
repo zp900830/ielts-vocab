@@ -5679,9 +5679,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
            用「上一句」退回去再点，会悄悄跳到队列里第一句还没听的，而不是你退回的那句 ——
            正是这条路径以前栽过的坑（队列位置和高亮不对齐）。 */
         revealTaskPos(taskPos, true);
-        peekNextTaskSent();   // 一边放就一边移：高亮先到下一句，正在念的这句留在原地
-        /* 点过了 → 这一趟从此都叫「下一句」。revealTaskPos 里把 _nextPlayed 清过，所以顺序必须是这样：
-           先落位再置位，最后手动刷一次文案（paint() 那一趟跑的时候位还没置上）。 */
+        /* 高亮只跟"正在念的那一句"走（他 2026-09-24 实测报的 bug：上一版让高亮领先一句，
+           屏幕上就成了"高亮在下一句、读的是上一句"——音频和高亮必须同一句）。
+           收尾前进仍由 taskSentenceFinished → goToNextTask 负责，放完自然挪到下一句。 */
         _nextPlayed = true; _tabStarted = true;
         syncTaskNextLabel();
       }
@@ -5774,22 +5774,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         btn.title = on ? '下一句（还没放的先放起来；正在放的收尾，跳到队列里下一句）'
           : '放这一句（放完自动记为已读，再点就是下一句）';
         btn.setAttribute('aria-label', label);
-      }
-      /* 他 2026-09-23 拍板：「一边放就一边移」—— 点下「放这一句」的瞬间，高亮/滚动先走到下一句，
-         正在念的那句留在原地（音频链锚在 i 上，不看 idx）。只提前高亮，taskPos 绝不提前动：
-         它一提前，收尾记的是哪句、上一句退到哪、队列位置全乱。
-         下一句在别的章时不提前滚 —— 跨章要换 DOM，留给放完时的 goToNextTask 走那条 300ms 的老路。 */
-      function peekNextTaskSent() {
-        if (!taskMode || pass >= 2) return;
-        let next = -1;
-        for (let qi = taskPos + 1; qi < todayQueue.length; qi++) {
-          if (!readToday2(todayQueue[qi].i)) { next = qi; break; }
-        }
-        if (next < 0) return;
-        const li = globalToLocal(todayQueue[next].i);
-        if (li < 0 || li >= sents.length) return;
-        idx = li;
-        paint();
       }
       /* 一条栏三种态，只换内容不藏控件（PRD §10.1）。
          今日进度这一个数字只活在任务栏；播放条标题回过去报「读到第几句」。 */
@@ -6190,10 +6174,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function renderSetup(p) {
         const MINS = [5, 10, 15, 20, 30, 45, 60];
         let sel = 15;
+        /* 视觉上去掉「每天」那一行（标题已经说了「每天有多少分钟」），
+           但组名不能丢 —— 换成 role=group + aria-label，读屏照样念得出这组是什么。 */
         p.innerHTML = `<div class="plan-setup">
           <h3>每天有多少分钟</h3>
           <p class="ps-sub">共 ${SENT_RAW.length} 句 · ${ALL_TARGET_WORDS} 个目标词。句数和题数由分钟数算出来。</p>
-          <div class="ps-group"><label>每天</label><div class="ps-opts" id="psMin">
+          <div class="ps-group"><div class="ps-opts" id="psMin" role="group" aria-label="每天多少分钟">
             ${MINS.map(m => `<button class="ps-opt${m === sel ? ' sel' : ''}" data-v="${m}">${m} 分钟</button>`).join('')}
           </div></div>
           <div class="ps-sum" id="psSum"></div>
