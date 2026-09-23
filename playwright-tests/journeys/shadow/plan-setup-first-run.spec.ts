@@ -61,7 +61,7 @@ test.describe('Plan setup: the first-run screen asks only about minutes', () => 
         await expect(page.locator('#psMin .ps-opt.sel')).toHaveText('15 分钟');
 
         // 已删的「总天数 → 每天句数」除法链与「慢/正常/快」三档不许回来。
-        // 源码里 TASK.adjustPlan() 仍被导出，所以这条断言是防复活的唯一闸。
+        // 旧版那颗「调整学习计划」浮层（含 TASK.adjustPlan）已连函数带导出一起删掉，这条断言继续防它复活。
         const panelText = (await page.locator('#todayPanel').textContent()) || '';
         ['总天数', '新句速度', '慢', '快'].forEach((banned) => {
           expect(panelText).not.toContain(banned);

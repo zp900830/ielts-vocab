@@ -60,13 +60,13 @@ test.describe('Plan page: three knobs each take effect, persist, and echo after 
         await expect(page.locator('.ps-group').nth(1).locator('.ps-opt')).toHaveCount(6);
         await expect(page.locator('.ps-group').nth(2).locator('.ps-opt')).toHaveCount(2);
         const btexts = await page.locator('.ps-group').nth(1).locator('.ps-opt').allInnerTexts();
-        ['0 点', '2 点', '3 点', '凌晨 4 点', '5 点', '6 点'].forEach((b) =>
+        ['0 点', '2 点', '3 点', '4 点', '5 点', '6 点'].forEach((b) =>
           expect(btexts).toContain(b));
         for (let i = 0; i < 3; i++) {
           await expect(page.locator('.ps-group').nth(i).locator('.ps-opt.sel')).toHaveCount(1);
         }
         await expect(page.locator('.ps-group').nth(0).locator('.ps-opt.sel')).toHaveText('15 分钟');
-        await expect(page.locator('.ps-group').nth(1).locator('.ps-opt.sel')).toHaveText('凌晨 4 点');
+        await expect(page.locator('.ps-group').nth(1).locator('.ps-opt.sel')).toHaveText('4 点');
         await expect(page.locator('.ps-group').nth(2).locator('.ps-opt.sel')).toHaveText('正常见新词');
       });
 
@@ -116,7 +116,7 @@ test.describe('Plan page: three knobs each take effect, persist, and echo after 
         const leftN = Number((note.match(/还剩\s*(\d+)\s*句/) || [0, '0'])[1]);
         expect(quizzes).toBeGreaterThanOrEqual(leftN);
         await page.getByRole('button', { name: '计划', exact: true }).click();
-        await page.getByRole('button', { name: '凌晨 4 点', exact: true }).click();
+        await page.getByRole('button', { name: '4 点', exact: true }).click();
         expect((await readPlan()).boundaryHour).toBe(4);
       });
 
@@ -144,7 +144,7 @@ test.describe('Plan page: three knobs each take effect, persist, and echo after 
         await page.getByRole('button', { name: '今日学习任务' }).click();
         await page.getByRole('button', { name: '计划', exact: true }).click();
         await expect(page.locator('.ps-group').nth(0).locator('.ps-opt.sel')).toHaveText('5 分钟');
-        await expect(page.locator('.ps-group').nth(1).locator('.ps-opt.sel')).toHaveText('凌晨 4 点');
+        await expect(page.locator('.ps-group').nth(1).locator('.ps-opt.sel')).toHaveText('4 点');
         await expect(page.locator('.ps-group').nth(2).locator('.ps-opt.sel')).toHaveText('正常见新词');
         // 未登录时不许报「还有 N 条没传上去」这种空许诺
         await expect(page.locator('.sync-state')).toHaveText('');
