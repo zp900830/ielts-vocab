@@ -1026,4 +1026,28 @@ test.describe('按篇化：scope 与三张派生索引（3.0 M1）', () => {
     expect(got.oneGrad).toBe(1);
     expect(got.sum, '六篇已毕业数之和必须等于全局那 1 个').toBe(1);
   });
+
+  /* 审阅修复 1/5：scope 给了却没给 wordsOf 时，绝不能静默数全局 —— 那会让 app/ 调用方
+     拿到「看着对、其实全表」的数。无 scope 的全局统计是合法用途，必须照常。 */
+  test('countStagesOf：无 scope 数全局；有 scope 无 wordsOf 必须抛错，不许静默数全局', async ({ page }) => {
+    const got = await page.evaluate(() => {
+      const st = ShadowPlan.emptyState();
+      st.words['volcano'] = ShadowPlan.newWord();
+      (st.words['volcano'] as { stage: string }).stage = 'graduated';
+      st.words['__not_in_any_article__'] = ShadowPlan.newWord();
+      (st.words['__not_in_any_article__'] as { stage: string }).stage = 'graduated';
+      const global = ShadowPlan.countStagesOf(st, null);
+      let threw = '';
+      try {
+        // 故意漏掉第三个参数：这条就是在锁「scope 给了但漏了 wordsOf 必须抛」
+        ShadowPlan.countStagesOf(st, ShadowPlan.articleScope(SECTIONS, 0));
+      } catch (e) { threw = String((e as Error).message || e); }
+      const scoped = ShadowPlan.countStagesOf(st, ShadowPlan.articleScope(SECTIONS, 0),
+        (i: number) => TASK.sentWordsOf(i));
+      return { globalGrad: global.graduated, threw, scopedGrad: scoped.graduated };
+    });
+    expect(got.globalGrad).toBe(2);          // 无 scope → 全表，合法用途照常
+    expect(got.threw).toContain('wordsOf');  // 有 scope 没 wordsOf → 大声报错，不返回"看着对"的数
+    expect(got.scopedGrad).toBe(1);          // 有 wordsOf → 只数本篇（volcano），那个假词不算
+  });
 });

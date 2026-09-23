@@ -760,13 +760,18 @@
   // ⚠️ 引擎里**没有** countStages —— 那个函数长在 shadow/index.html 里（它还要 ALL_TARGET_WORDS
   //    才能算 fresh）。所以这里从零数，**别去调 countStages**，否则 ReferenceError。
   //    也不返回 fresh（引擎不知道目标词总数，fresh 由调用方拿总数减）。
+  //    scope 给了就必须给 wordsOf：纯函数不认识 SECTIONS，没有映射就只能数全表，
+  //    那会静默返回「看着对、其实全表」的数。宁可当场抛错，也不让调用方把错的数带上界面。
   function countStagesOf(state, scope, wordsOf) {
     const c = { seen: 0, recognized: 0, owned: 0, graduated: 0, leech: 0 };
     const ws = (state && state.words) || {};
     let keys;
-    if (!scope || typeof wordsOf !== 'function') {
-      keys = Object.keys(ws);
+    if (!scope) {
+      keys = Object.keys(ws);                       // 无 scope = 全量统计，合法用途
     } else {
+      if (typeof wordsOf !== 'function') {
+        throw new Error('countStagesOf: 给了 scope 就必须给 wordsOf（否则只能数全表，会静默算错）');
+      }
       const inScope = new Set();
       scope.forEach(i => wordsOf(i).forEach(w => inScope.add(w)));
       keys = Object.keys(ws).filter(k => inScope.has(k));
