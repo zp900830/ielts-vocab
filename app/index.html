@@ -1512,6 +1512,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      只恢复 .layout 本身，#panel 基样式是 visibility:hidden，仍要靠 body.panel-open 才现身，
      所以这里不会把词库抽屉顺带弹出来。topbar/audiobar 不恢复：3.0 的任务模式顶栏由 T5 定。 */
   body.task-mode > .layout { display: block; }
+  /* T5 定的任务模式外壳：首页让位，正文（.layout）就是屏幕主角。
+     3.0 任务模式还没有自己的顶栏（返回首页靠任务条的 ✕），所以整块 #appShell 收掉 ——
+     不然后面 min-height:100vh 的首页会把正文压到首屏之外（T2 遗留的现场）。 */
+  body.task-mode #appShell { display: none; }
   #appShell { display: flex; min-height: 100vh; }
   .sidenav { flex: none; width: 220px; padding: 16px 12px; border-right: 1px solid var(--border);
     display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; }
@@ -4716,6 +4720,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       let plan = null;       // { startDate, totalDays, dailyMinutes, newPerDay, paused }
       let prog = null;       // { sentences: {idx: {reps, phase, nextDue, lastRead}}, daily: {}, streak }
       let todayQueue = [];   // 今日任务句索引数组（按章分组排序）
+      /* 3.0 按篇（PRD §9.3）：当前在学哪一篇（全局篇号）；null = 全部文章（v2.0 行为）。
+         它决定 todayPlan() 喂给 assemble 的 scope，以及任务条 n/N 的分母是哪一篇。
+         只经 openArticle() 设、exitTaskMode() 清 —— 别在别处直接写。 */
+      let currentArticle = null;
       let taskMode = false;  // 是否处于任务模式
       let taskPos = 0;       // 当前在 todayQueue 中的位置
       let sessionStart = 0;  // 本次任务模式开始时间
@@ -4750,7 +4758,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       const LS_V2 = 'ielts.shadow.v2';
       const MIG_KEY = 'ielts.shadow.migNotice';
       let ROOT2 = null;
-      let WORDS_BY_SENT = null, ALL_TARGET_WORDS = 0, _cachedPlan = null, _cachedDay = '';
+      let WORDS_BY_SENT = null, ALL_TARGET_WORDS = 0, _cachedPlan = null, _cachedDay = '', _cachedArticle = undefined;
       const STAGE_LABEL = { all: '全部', seen: '已见面', recognized: '文中可辨',
                             owned: '义项直连', graduated: '已毕业', leech: '重点词' };
 
@@ -5016,7 +5024,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (!ROOT2) loadRoot();
         const b = bdHour();
         const d = ShadowPlan.dayKey(Date.now(), b);
-        if (!force && _cachedPlan && _cachedDay === d) return _cachedPlan;
+        /* 按篇排（PRD §9.3）：在学某一篇时只把这一篇的全局句号喂给引擎。
+           缓存键必须带上 currentArticle —— 换篇不清缓存的话，切到第二篇还会拿到第一篇的队列。 */
+        const scope = currentArticle == null ? null : ShadowPlan.articleScope(SECTIONS, currentArticle);
+        if (!force && _cachedPlan && _cachedDay === d && _cachedArticle === currentArticle) return _cachedPlan;
         _cachedPlan = ShadowPlan.assemble(ROOT2.state, {
           now: Date.now(), todayMinutes: ROOT2.plan ? ROOT2.plan.todayMinutes : 0, rate: rate || 1,
           /* 这里喂的是【1× 基准】(avgNew/avgReview)，倍速交给引擎的 rate 去除 —— 只许除一次。
@@ -5024,8 +5035,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
              secNew()/secReview() 是给"一句约 N 秒"这种展示用的，别拿它们喂引擎。 */
           secNew: avgNew, secReview: avgReview, wordsOf: wordsOfSent,
           totalSents: SENT_RAW.length, boundaryHour: b, plan: ROOT2.plan,
+          scope: scope,
         });
-        _cachedDay = d;
+        _cachedDay = d; _cachedArticle = currentArticle;
         return _cachedPlan;
       }
       function readToday2(i) {
@@ -5079,6 +5091,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          所以每天第一次算的时候钉住它；改分钟数时再放开重算。 */
       function plannedToday() {
         if (!ROOT2 || !ROOT2.plan) return 0;
+        /* 按篇模式：这一篇的句数就是承诺。**不写进 ROOT2.planned** —— 那个快照是按「天」
+           存的全局账，被按篇的值写进去，回首页后全局的「今天还剩几句」就永久串味了。 */
+        if (currentArticle != null) return ShadowPlan.articleScope(SECTIONS, currentArticle).size;
         const day = day2();
         const left = todayPlan().queue.filter(q => !readToday2(q.i)).length;
         const live = ((ROOT2.state.daily[day] || {}).sentDone || 0) + left;
@@ -5347,6 +5362,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
       function syncQueueFromPlan() {
         if (!ROOT2 || !ROOT2.plan) return;
+        // todayPlan() 已按 currentArticle 收窄（见 todayPlan 的 scope），所以这里天然是按篇队列。
         todayQueue = todayPlan().queue.map(q => ({ i: q.i, type: q.pool === 'C' ? 'new' : 'review' }));
       }
       function revealNote(q) {
@@ -5540,6 +5556,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const totalSents = SENT_RAW.length;
         const newSentences = [];
         const reviewSentences = [];
+        /* 3.0 按篇（PRD §9.3）：在学某一篇时队列只收这一篇的句，别的篇的到期/新句留到点进那篇再排。
+           enterTaskMode 里 syncQueueFromPlan() 会用 todayPlan() 覆盖这份队列，但 buildQueue 在
+           开页/建计划/改分钟数时也会跑，漏了这道闸就会让首页与面板看到跨篇的账。 */
+        const scope = currentArticle == null ? null : ShadowPlan.articleScope(SECTIONS, currentArticle);
+        const inScope = (i) => !scope || scope.has(i);
 
         // 新句窗口按「已开过的句子数」推进，不按日历天数。
         // 原来 startNew = dayIndex() * newPerDay：断更 N 天后窗口直接前移 N 格，
@@ -5547,10 +5568,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         // 现在游标停在原地，欠的句子留在今天的队列里 —— 顺延，不吞内容。
         if (!plan.paused) {
           let started = 0;
-          for (let i = 0; i < totalSents; i++) if (sentState(i).reps > 0) started++;
+          for (let i = 0; i < totalSents; i++) if (inScope(i) && sentState(i).reps > 0) started++;
           const startNew = Math.min(started, totalSents);
           const endNew = Math.min(startNew + plan.newPerDay, totalSents);
           for (let i = startNew; i < endNew; i++) {
+            if (!inScope(i)) continue;
             const st = sentState(i);
             if (st.reps < PHASE_THRESHOLDS.learning) newSentences.push(i);
           }
@@ -5558,6 +5580,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
 
         // 到期复习句
         for (let i = 0; i < totalSents; i++) {
+          if (!inScope(i)) continue;
           const st = sentState(i);
           if (st.reps > 0 && st.reps < PHASE_THRESHOLDS.mastered && st.nextDue <= now) {
             if (!newSentences.includes(i)) reviewSentences.push(i);
@@ -5565,6 +5588,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         }
         // mastered 抽查（每 14 天到期）
         for (let i = 0; i < totalSents; i++) {
+          if (!inScope(i)) continue;
           const st = sentState(i);
           if (st.phase === 'mastered' && st.nextDue <= now) {
             if (!reviewSentences.includes(i)) reviewSentences.push(i);
@@ -5666,8 +5690,26 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         // 跳到第一个未完成句
         goToNextTask(false);
       }
+      /* 3.0（Task 5）：点首页卡片进这一篇的任务模式。
+         两件事：正文只留这一篇（currentChapter = a），队列按篇收窄（currentArticle = a）。
+         直接走「换章渲染」的核心三步，不借 onChapterChange —— 那个会弹「已切换到」的 toast，
+         而且 ch === currentChapter 时整段跳过，重进同一篇就渲不出正文。 */
+      function openArticle(a) {
+        if (!plan) return;
+        currentArticle = a; _cachedPlan = null;
+        currentChapter = a;
+        chapterSentStart = computeChapterStart(a);
+        idx = -1; _paintIdx = -2;
+        render();
+        enterTaskMode();
+        // 这一篇今天没排到句（enterTaskMode 会弹提示并原样退回）→ 别把按篇的 scope 留在缓存里，
+        // 否则回首页后横幅/绿点会按这一篇算。
+        if (!taskMode) { currentArticle = null; _cachedPlan = null; }
+      }
       function exitTaskMode() {
         taskMode = false; exitConfirm = false; stopSessionClock();
+        // 回首页 = 回全局：横幅/绿点/今日账都按全量算，别把上一篇的 scope 留在缓存里。
+        currentArticle = null; _cachedPlan = null;
         document.body.classList.remove('task-mode', 'quiz-mode');
         dockAudiobar(false);
         const bar = document.getElementById('taskBar');
@@ -5936,9 +5978,20 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (!ROOT2 || !ROOT2.plan) { bar.dataset.state = 'idle'; return; }
         todayPlan(true);   // 保证 todayQueue / plannedToday 用的是今天的计划（以前顺手取 todayMinutes 上屏，那个数现在不在条上说了）
         const d = ROOT2.state.daily[day2()] || {};
-        const doneN = d.sentDone || 0;
-        const planned = plannedToday();
-        const leftN = todayLeftN();   // 这条减法只住在 todayLeftN() 里：绿点与首屏提示读同一个函数
+        /* 按篇（PRD §4.1 / §9.3）：进某一篇时，条上的 n/N 说的是「这一篇的进度」——
+           分母 = 这一篇的句数，分子 = 这一篇里读过的句数（与首页卡片 articleStat 同口径）。
+           currentArticle 为空（首页 / 全局续读）时，仍旧是 v2.0 的今日账。 */
+        const artScope = currentArticle == null ? null : ShadowPlan.articleScope(SECTIONS, currentArticle);
+        let doneN, planned, leftN;
+        if (artScope) {
+          let ever = 0;
+          artScope.forEach(i => { const s = ROOT2.state.sents[i]; if (s && s.lastReadAt > 0) ever++; });
+          doneN = ever; planned = artScope.size; leftN = Math.max(0, planned - doneN);
+        } else {
+          doneN = d.sentDone || 0;
+          planned = plannedToday();
+          leftN = todayLeftN();   // 这条减法只住在 todayLeftN() 里：绿点与首屏提示读同一个函数
+        }
         const quizN = quizList().length;
         const fin = taskFinished || allDone === true;
         const asking = !!taskMode && exitConfirm;
@@ -6717,7 +6770,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
 
       // ---- 公开 API ----
       return {
-        init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode,
+        init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode, openArticle,
         again, prev, next, requestExit, cancelExit, confirmExit, pauseNew, resetPlan, onSentenceComplete,
         taskSentenceFinished,
         exportBackup, importBackup,

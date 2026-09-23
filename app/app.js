@@ -16,7 +16,10 @@
   }
   document.addEventListener('click', (e) => {
     const b = e.target.closest('.nav-item');
-    if (b) { location.hash = '#/' + b.dataset.route; }
+    if (b) { location.hash = '#/' + b.dataset.route; return; }
+    // 卡片是 renderHome 每次重渲的，所以走事件代理而不是逐张绑。
+    const card = e.target.closest('.art-card');
+    if (card && card.dataset.a != null) openArticle(Number(card.dataset.a));
   });
 
   /* ---- 3.0 首页：六张文章卡片（M1 Task 3） ----
@@ -48,7 +51,8 @@
     const stage = ever === 0 ? 'todo' : (ever >= total ? 'read' : 'reading');
     let lastAt = 0; scope.forEach((i) => { const s = st.sents[i]; if (s && s.lastReadAt > lastAt) lastAt = s.lastReadAt; });
     // `total` = 句数（进度分母）；`wordTotal` = 词数（掌握分母，与 c.graduated 同单位）
-    return { progress, stage, grad: c.graduated, total, lastAt, wordTotal: words.size };
+    // `ever` = 这一篇里读过的句数 —— 横幅「还剩 N 句」与卡片进度共用这一份派生，别各算各的。
+    return { progress, stage, grad: c.graduated, total, lastAt, wordTotal: words.size, ever };
   }
   function renderHome(view) {
     // 数据未就绪时先占位：initApp 拉完数据会再调一次 route()（见 app/index.html）。
@@ -113,7 +117,11 @@
         main = extra > 0 ? `今天的量读完了 · 多读了 ${extra} 句` : '今天的量读完了';
       } else {
         const a = nextArticle();
-        main = `继续学《${esc(SECTIONS[a].title)}》· 还剩 ${Math.max(1, s.planned - s.done)} 句`;
+        /* T4：文章名与「还剩」必须读同一篇。以前名字取 nextArticle()、句数取全局 todayStats，
+           于是会写「继续学《第一篇》· 还剩 [全局] 句」。改成这一篇自己还没读过的句数
+           （total - ever），与卡片进度同一个派生量。 */
+        const x = articleStat(a);
+        main = `继续学《${esc(SECTIONS[a].title)}》· 还剩 ${Math.max(1, x.total - x.ever)} 句`;
       }
       go = '继续学';
     }
@@ -127,6 +135,15 @@
     };
   }
   window.APP3 = Object.assign(window.APP3, { renderBanner });
+
+  /* 点文章卡片 → 进这一篇的任务模式（M1 Task 5）。
+     真正的切换在 TASK 里（只有它拿得到队列、currentChapter 与正文渲染），外壳这层
+     只把「点了哪一篇」递过去 —— 这样 currentArticle 与队列仍只有一份实现。 */
+  function openArticle(a) {
+    if (typeof TASK === 'undefined' || !TASK.openArticle) return;
+    TASK.openArticle(a);
+  }
+  window.APP3 = Object.assign(window.APP3, { openArticle });
 
   window.APP3 = Object.assign(window.APP3, { route, current: () => cur });
   window.addEventListener('hashchange', route);
