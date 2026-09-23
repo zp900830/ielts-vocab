@@ -6634,7 +6634,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         }
         return c;
       }
-      function seedDailyForTest(back) {      // 唯一允许的测试后门：函数名带 ForTest，免得被当成产品代码接走
+      function seedDailyForTest(back) {      // 测试后门（命名带 ForTest，免得被当成产品代码接走）
         if (!ROOT2) return;
         const bd = bdHour();
         const k = ShadowPlan.dayKey(Date.now() - back * 864e5, bdHour());
@@ -6648,6 +6648,25 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           savePlan();
         }
         _etaMemo.clear(); persist2();
+      }
+      /* 测试后门：给某一篇塞入已知数量的 quiz 事件（对/错）与精读次数，用来把 §9.2 的
+         第二项（② 正确率 ×35）与第三项（精读重复度 ×25）拉到确定值上做回归断言。
+         走的是和真实答题同一种账（push2(mkQuiz)），不另造一套派生。 */
+      function seedArticleForTest(a, o) {
+        if (!ROOT2) return;
+        const s = Array.from(ShadowPlan.articleScope(SECTIONS, a));
+        if (!s.length) return;
+        const opt = o || {};
+        const day = day2(), now = Date.now();
+        for (let i = 0; i < (opt.quizOk || 0); i++) push2(ShadowPlan.mkQuiz('seed_ok_' + i, s[i % s.length], 'mc4zh', true, now + i, day));
+        for (let i = 0; i < (opt.quizNo || 0); i++) push2(ShadowPlan.mkQuiz('seed_no_' + i, s[i % s.length], 'mc4zh', false, now + i, day));
+        if (opt.reps) {
+          const d = ROOT2.state.daily[day] || (ROOT2.state.daily[day] = {});
+          d.repsByArticle = d.repsByArticle || {};
+          d.repsByArticle[a] = (d.repsByArticle[a] || 0) + opt.reps;
+          persist2();
+        }
+        _cachedPlan = null;
       }
       function etaSet(el, html, r) {
         if (!el || !el.isConnected) return;
@@ -7091,7 +7110,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
         offerResume, resumeTask, skipResume, hideResumeOffer,
         initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
-        etaFor, etaCalls, countStages, seedDailyForTest,
+        etaFor, etaCalls, countStages, seedDailyForTest, seedArticleForTest,
         /* 3.0 首页横幅（Task 4）只读出口：连续 / 已毕业 / 目标词 / 今天计划与完成，
            一处取齐，别在界面里另算（横幅「去设置」走 openPanel()，没计划时它就是 v2.0 设置屏）。 */
         todayStats: () => ({

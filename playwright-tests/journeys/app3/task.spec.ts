@@ -24,6 +24,7 @@ declare const TASK: {
   state(): { daily: Record<string, unknown> };
   events(): unknown[];
   openArticleQuiz(a: number): void;
+  seedArticleForTest(a: number, o: { quizOk?: number; quizNo?: number; reps?: number }): void;
 };
 declare const APP3: { currentBlank(): number; openBlank(bi: number): void };
 declare const ShadowPlan: {
@@ -70,6 +71,19 @@ async function freshPlan(page: import('@playwright/test').Page) {
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
 }
+
+/* 把朗读引擎换成录音笔：__spoken 记交给了引擎几句，__finish() 手动兑现「这句播完了」。
+   headless 里 speechSynthesis 根本不发声，不这么做 taskSentenceFinished（→ bumpArticleRep）
+   永远不会被叫到（和 shadow/task-mode-step.spec.ts 同一套 stub）。 */
+async function installSpeakStub(page: import('@playwright/test').Page) {
+  await page.evaluate(() => {
+    const w = window as unknown as { speak: (t: string, cb?: () => void) => void; __cbs: (() => void)[] };
+    w.__cbs = [];
+    w.speak = function (t: string, cb?: () => void) { if (cb) w.__cbs.push(cb); };
+  });
+}
+const finishSpeak = (page: import('@playwright/test').Page) =>
+  page.evaluate(() => { const w = window as unknown as { __cbs: (() => void)[] }; const cb = w.__cbs.shift(); if (cb) cb(); });
 
 test.describe('3.0 文章任务模式（按篇队列）', () => {
   test('点卡片 → 任务模式，n/N 是这一篇的句数（不是全局）', async ({ page }) => {
@@ -310,20 +324,25 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
 
   /* ===== Task 7：收工态 + 两条入口 + 存档回归 =====
      入口 1 走真路径（① 完成 → 小结 → ② 答完）；收工态两颗键「回首页 / 看词本」；
-     刷新后 daily 不丢（repsByArticle 随 daily 落盘）。 */
+     刷新后 daily 不丢，且 repsByArticle 真的落盘、过了 reload 还在（§7.6 的精读次数）。 */
   test('入口 1 收工态：① 走完 → 答题 → 收工「回首页 + 看词本」，刷新 daily 不丢', async ({ page }) => {
     await stubData(page, SIXQ);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toBeVisible();
-    // ① 真路径：stub 朗读引擎，把这一篇标成读完，点两下「下一句」触发 finishPass(1)
+
+    /* ① 真路径（不是 readDone 伪造）：点「放这一句」→ 兑现 speak 回调 → 走
+       taskSentenceFinished → recordRep + bumpArticleRep，精读次数真的记一笔。 */
+    await installSpeakStub(page);
+    await page.locator('#tbNext').click();
+    await finishSpeak(page);
+    // 这一句读完后，后面的读Done会各调一次 push2→recompute2 —— 若没有 copy-back，这一笔就被抹了
     await page.evaluate(() => {
-      (window as unknown as { speak: (t: string, cb?: () => void) => void }).speak = () => {};
-      Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
+      TASK.queue.map((x) => x.i).forEach((i) => TASK.readDone(i));
     });
-    await page.evaluate(() => { TASK.next(); TASK.next(); });
-    // 入口 1 的小结按钮（§4.4：提示「答题」）
+    // 再点一下「下一句」：没有未读 → finishPass(1) → 小结
+    await page.evaluate(() => TASK.next());
     await expect(page.locator('#passCard .pass-summary .go')).toContainText('答题');
 
     await page.locator('#passCard .pass-summary .go').click();
@@ -343,11 +362,47 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await expect(page.locator('#tbTitle')).toContainText('今天完成');
     await expect(page.locator('#tbSub')).toContainText('句');
 
-    // 存档：刷新后 daily 一字不差
+    // 刷新前：repsByArticle 必须已经记到这一篇上（证明 bumpArticleRep + recompute2 copy-back 都跑了）
+    const repsBefore = await page.evaluate(() => {
+      const d = TASK.state().daily;
+      return Object.keys(d).reduce((s, k) => s + ((d[k].repsByArticle && d[k].repsByArticle[0]) || 0), 0);
+    });
+    expect(repsBefore, '① 只放真一句，精读次数就该 > 0；还是 0 说明没走 taskSentenceFinished').toBeGreaterThan(0);
+
+    // 存档：刷新后 daily 一字不差，且 repsByArticle 原样还在
     const before = await page.evaluate(() => TASK.state().daily);
     await page.reload();
     await page.waitForFunction(() => { try { return !!(TASK.state() && TASK.state().daily); } catch (e) { return false; } });
-    expect(await page.evaluate(() => TASK.state().daily)).toEqual(before);
+    const after = await page.evaluate(() => TASK.state().daily);
+    expect(after).toEqual(before);
+    const repsAfter = await page.evaluate(() => {
+      const d = TASK.state().daily;
+      return Object.keys(d).reduce((s, k) => s + ((d[k].repsByArticle && d[k].repsByArticle[0]) || 0), 0);
+    });
+    expect(repsAfter, 'repsByArticle 必须随 daily 过 reload').toBe(repsBefore);
+  });
+
+  /* §9.2 第二、三项各自的回归锁：只动一项输入，断言 progress 等于把公式算出来的数。
+     算术写在断言里，谁改了权重或输入来源，这两条就 RED。 */
+  test('熟练度公式：② 正确率（×35）与精读重复度（×25）各自单独动数（§9.2）', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    // 第 0 篇 8 句：通读满 → 第一项 = 40（后面两项的基准）
+    const phase = async (seed: { quizOk: number; quizNo: number; reps: number }, expected: string) => {
+      await page.evaluate((sd) => {
+        TASK.resetV2(); TASK.initPlan(15);
+        Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i: number) => TASK.readDone(i));
+        TASK.seedArticleForTest(0, sd);
+      }, seed);
+      await page.reload();
+      await expect(page.locator('.art-card').first().locator('.a-pct')).toHaveText(expected);
+    };
+    /* 只动第二项：8 题 4 对 4 错 → quizRate = 4/8 = 0.5
+       progress = round(8/8×40 + 0.5×35 + 0×25) = round(40 + 17.5) = round(57.5) = 58 */
+    await phase({ quizOk: 4, quizNo: 4, reps: 0 }, '58%');
+    /* 只动第三项：quiz 清零，精读 8 次（= 句数）→ min(8/(8×2),1) = 0.5
+       progress = round(8/8×40 + 0×35 + 0.5×25) = round(40 + 12.5) = round(52.5) = 53 */
+    await phase({ quizOk: 0, quizNo: 0, reps: 8 }, '53%');
   });
 
   // 收工态两颗键各自去哪：看词本 → #/words 占位屏；回首页 → 首页六张卡片。
