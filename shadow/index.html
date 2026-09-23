@@ -2073,6 +2073,21 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       for (let i = 0; i < ch; i++) n += chapterSentCount(i);
       return n;
     }
+    // 书签 / A-B / 续读位一律以「全局句号」为坐标（第几章第几句 + 全文 n/N 都要能算出来），
+    // 下面三个是全局句号与当前视图本地下标（sents 下标）的互转。artOfSentGlobal 那份在 TASK 里，
+    // 单章视图下不能复用 artOfSent（它只覆盖已渲染的那一章）。
+    function totalSentCount() { return computeChapterStart(SECTIONS.length); }
+    function chapterOfGlobal(gi) {
+      let n = 0;
+      for (let i = 0; i < SECTIONS.length; i++) { n += chapterSentCount(i); if (gi < n) return i; }
+      return SECTIONS.length - 1;
+    }
+    function localToGlobal(l) { return (currentChapter >= 0 && l >= 0) ? chapterSentStart + l : l; }
+    function globalToLocal(g) {
+      if (g < 0 || currentChapter < 0) return g;
+      const l = g - chapterSentStart;
+      return (l >= 0 && l < sents.length) ? l : -1;
+    }
     function render() {
     const art = document.getElementById('art');
     const filtered = (currentChapter >= 0) ? [SECTIONS[currentChapter]] : SECTIONS;
@@ -3714,9 +3729,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     function getABLoops() { try { return JSON.parse(localStorage.getItem('ielts-ab-loops') || '[]'); } catch (e) { return []; } }
     function setABLoops(loops) { safeStore('ielts-ab-loops', JSON.stringify(loops || [])); }
     function loopName(a, b) {
-    const ai = artOfSent[a], bi = artOfSent[b];
-    if (ai !== undefined && ai === bi) {   // 同一章内： compact 形式，避免与下方范围行重复啰嗦
-    const [s0] = segRange(ai);
+    const ai = chapterOfGlobal(a), bi = chapterOfGlobal(b);
+    if (ai === bi) {   // 同一章内： compact 形式，避免与下方范围行重复啰嗦
+    const s0 = computeChapterStart(ai);
     return `第${ai + 1}章 · 第${a - s0 + 1}–${b - s0 + 1}句`;
     }
     return `${markLabel(a)} — ${markLabel(b)}`;
@@ -4361,16 +4376,15 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     } catch (e) { try { dlog('mark-pull-fail', (e && e.message) || e); } catch (err) {} }
     }
     function markLabel(i) {
-    const ai = artOfSent[i];
-    if (ai === undefined) return `全文第${i + 1}句`;
-    const [s0, e0] = segRange(ai);
-    return `第${ai + 1}章 · 第${i - s0 + 1}句`;
+    i = Math.max(0, Math.min(totalSentCount() - 1, i));
+    const ch = chapterOfGlobal(i);
+    return `第${ch + 1}章 · 第${i - computeChapterStart(ch) + 1}句`;
     }
     function markSub(i, ts) {
-    return `全文 ${i + 1}/${sents.length}` + (ts ? ` · ${ts}` : '');
+    return `全文 ${i + 1}/${totalSentCount()}` + (ts ? ` · ${ts}` : '');
     }
     function addMark() {
-    const at = idx >= 0 ? idx : 0;
+    const at = localToGlobal(idx >= 0 ? idx : 0);
     const d = new Date();
     const ts = `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
     const m = getMarks().filter(x => x && x.i !== at);
@@ -4381,6 +4395,15 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     // 书签设为 A-B 点：免滚动找句。A：待选/闲置时直定A并进入选B，循环中改A并跳到新A；
     // B：待选B时落定启动，循环中改B，闲置/待选A时提示先选A
     function abMarkPick(i, which) {
+    // 书签是全局句号，abStart/abEnd 是本地下标；跨章先切章再重放一次本函数
+    if (globalToLocal(i) < 0) {
+    const ch = chapterOfGlobal(i), sel = document.getElementById('chapSel');
+    if (sel) sel.value = String(ch);
+    onChapterChange(String(ch));
+    setTimeout(() => abMarkPick(i, which), 320);
+    return;
+    }
+    i = globalToLocal(i);
     i = Math.max(0, Math.min(sents.length - 1, i));
     if (which === 'A') {
     if (abMode === 3) {
@@ -4406,10 +4429,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     function renderMarks() {
     const list = document.getElementById('markList');
     if (!list) return;
-    const m = getMarks().filter(x => x && Number.isInteger(x.i) && x.i >= 0 && x.i < sents.length);
+    const m = getMarks().filter(x => x && Number.isInteger(x.i) && x.i >= 0 && x.i < totalSentCount());
     list.innerHTML = m.length ? m.map(x => {
-    const aOn = (abMode === 2 || abMode === 3) && x.i === abStart;
-    const bOn = abMode === 3 && x.i === abEnd;
+    const aOn = (abMode === 2 || abMode === 3) && abStart >= 0 && localToGlobal(abStart) === x.i;
+    const bOn = abMode === 3 && abEnd >= 0 && localToGlobal(abEnd) === x.i;
     return `<div class="mitem"><div class="mmain"><div class="mt">${esc(markLabel(x.i))}</div><div class="ms">${esc(markSub(x.i, x.t))}</div></div>` +
       `<div class="mbtns"><button class="btn play go" onclick="jumpMark(${x.i})">直达</button>` +
       `<button class="btn ab${aOn ? ' ab-on' : ''}" onclick="abMarkPick(${x.i},'A')" title="设为A-B起点">A</button>` +
@@ -4417,7 +4440,18 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     `<button class="btn del" onclick="delMark(${x.i})">删</button></div></div>`; }).join('')
     : '<div style="font-size:12px;color:var(--muted)">还没有书签，先点“记下当前位置”。</div>';
     }
-    function jumpMark(i) { toggleMarkPop(false); if (abMode === 3) abCancel(true); playFrom(Math.max(0, Math.min(sents.length - 1, i))); }
+    function jumpMark(i) {
+    toggleMarkPop(false);
+    if (abMode === 3) abCancel(true);
+    i = Math.max(0, Math.min(totalSentCount() - 1, i));
+    const local = globalToLocal(i);
+    if (local >= 0 && local < sents.length) { playFrom(local); return; }
+    // 书签落在别的章：先切章，切完（render 是异步的）再定位
+    const ch = chapterOfGlobal(i), sel = document.getElementById('chapSel');
+    if (sel) sel.value = String(ch);
+    onChapterChange(String(ch));
+    setTimeout(() => { const nl = globalToLocal(i); if (nl >= 0 && sents[nl]) playFrom(nl); }, 300);
+    }
     window.addEventListener('pagehide', savePos);
     // idx<0 时存档会把「还没定位到任何句子」写掉真实续读位（冷启动即切走标签页就会遇到）
     document.addEventListener('visibilitychange', () => { if (document.hidden && idx >= 0) savePos(); });

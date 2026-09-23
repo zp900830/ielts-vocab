@@ -158,6 +158,9 @@ const contrastProbe = (page) => page.evaluate(() => {
   [['#tbNext', '下一句'], ['#tbAgain', '再来'], ['#tbPrev', '上一句'], ['#btnPlay', '▶'], ['#tbExit', '退出'],
    ['#rateCycle', '倍速'], ['#btnLoop', '循环'], ['#tbTitle', '主行'], ['#tbSub', '还剩'], ['#tbClock', '本次']].forEach(([sel, name]) => {
     const el = document.querySelector(sel); if (!el) return;
+    /* 隐藏态不量：任务模式里 #btnPlay 是 display:none !important（那颗键被「放这一句」取代），
+       getComputedStyle 照样返回非零 fontSize/color，于是每次都误报一条 P1 对比度。 */
+    if (!el.getClientRects().length) return;
     const cs = getComputedStyle(el);
     if (parseFloat(cs.fontSize) === 0) return;              // 窄屏纯图标态：字号 0，量出来的"颜色"是图标的
     const fg = parse(cs.color); if (!fg || fg[3] === 0) return;
@@ -240,8 +243,10 @@ async function run() {
     const k0 = await keyboardProbe(page);
     await page.keyboard.press('Space'); await page.waitForTimeout(120);
     await page.keyboard.press('ArrowRight'); await page.waitForTimeout(200);
-    const k1 = await page.evaluate(() => ({ idx: (typeof idx !== 'undefined' ? idx : null) }));
-    if (k1.idx === k0.before.idx) add(T + ' 键盘', 'P2', '→ / Space 在任务模式里没有任何作用（只能上手点）');
+    const k1 = await page.evaluate(() => ({ idx: (typeof idx !== 'undefined' ? idx : null), playing: (typeof playing !== 'undefined' ? playing : null) }));
+    /* ① 通读态的 → 等价于「放这一句」：它只把当前这句放起来，推进发生在放完之后
+       （taskSentenceFinished），所以这里不能只盯 idx —— 只盯 idx 会误报「键盘没作用」。 */
+    if (k1.idx === k0.before.idx && k1.playing !== true) add(T + ' 键盘', 'P2', '→ / Space 在任务模式里没有任何反应（放不出声）');
     await page.evaluate(() => { TASK.setPass(2); TASK.next(); });
     await page.waitForTimeout(500);
     const kb = await page.evaluate(() => { const n = document.querySelectorAll('.task-card button, .qz-opt, .opt').length;
@@ -307,9 +312,20 @@ async function run() {
     else add(T + ' 续读条', resume.bodyTask ? 'P2' : 'P3', `续读条高 ${resume.h}px / ${resume.btns} 颗 / body.task-mode=${resume.bodyTask}`);
 
 
-    /* 做完今天 → done 态（用 5 分钟档，循环几轮就空了） */
+    /* 做完今天 → done 态（用 5 分钟档）。走 task-flow.spec「①→② rolls through」那条路：
+       先给今天队列里每个词记一次接触，再把 ② 的题全答对，直到引擎自己报 finished。
+       原写法是连点 60 次 next() + readDone(0..59)：next() 在 ① 态只重放当前句，
+       readDone 要的是全局句号（0..59 大多不在今天队列里），taskFinished 于是永远是 false ——
+       报出来的 state=read 是探针没走完，不是界面没进 done。 */
     await enter(page, 5);
-    await page.evaluate(() => { for (let i = 0; i < 60; i++) { try { TASK.next(); } catch (e) {} try { TASK.readDone(i); } catch (e) {} } });
+    await page.evaluate(() => {
+      TASK.todayPlan(true).queue.forEach((x) => TASK.readDone(x.i));
+      for (let g = 0; g < 300; g++) {
+        const q = TASK.currentQuiz();
+        if (!q) { if (TASK.pass() === 1) TASK.setPass(2); else break; continue; }
+        TASK.answerQuiz(q.answer); TASK.nextQuiz();
+      }
+    });
     await page.waitForTimeout(400);
     const done = await page.evaluate(() => {
       const bar = document.getElementById('taskBar');
