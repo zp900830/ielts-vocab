@@ -3417,11 +3417,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     // 播到哪亮哪，句间只剩引擎换句的自然间隔（不断句感的关键）
     if (my !== speakToken || !playing) return;
     if (i >= sents.length) {
-    playing = false;
-    // 预取越界（playFrom 播末句时会连发 i+1/i+2）也落到这里。原先写 idx=0 再存档，
-    // 等于「播到最后一句 → 进度倒回第 1 句」；改为把续读位留在真正播完的那一句。
-    if (idx >= 0) { try { savePos(); } catch (e) {} }
-    idx = -1; paint();
+    /* 越界只可能是预取（fire3 连发 i+1/i+2）跑到末尾 —— **绝不能碰正在念的那句的状态**。
+       以前这里写 `playing = false; idx = -1; paint()`，于是点倒数第 1/2 句时，
+       这句自己的预取反手把高亮和 playing 一起掐了（2026-09-24 实测：
+       playFrom(len-1) → playing=false、idx=-1、高亮消失，整段链子当场断）。
+       真正的「整章播完」由 completion 回调里那条 `i + 1 >= sents.length` 负责，那里才该收尾。 */
     return;
     }
     if (i < 0 || i <= launchedUpTo) return;
@@ -4679,14 +4679,46 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         st.eventsSeen = ROOT2.events.length;
         ROOT2.state = st;
       }
+      /* 事件流上限。两条纪律，顺序不能反：
+         ① 先做「重放意义上的无操作」合并 —— 引擎重放时按 w|s|day 去重 contact、
+            每天只认最后一条 dayplan（见 plan-engine.js 的 credited / touchDaily），
+            这些重复删掉**不改变任何派生状态**，也就不必重算；
+         ② 合并完还超，才掐最旧的，并如实把损失认下来（recompute2 按截断后的日志重算）。
+         5000 条约一个半月（~3 条/句 × 36 句/天）；一把抬到 20000，先别让正常用户撞上，
+         真撞上还有 safeStore 的 QuotaExceeded 兜着。 */
+      const EVENTS_CAP = 20000;
+      function compactEvents(events) {
+        const seenContact = Object.create(null), lastDayplan = Object.create(null);
+        // dayplan 在重放里是**赋值**，后者覆盖前者 —— 每天只留最后一条
+        for (const e of events) if (e && e.type === 'dayplan') lastDayplan[e.day] = e;
+        const out = [];
+        for (const e of events) {
+          if (e && e.type === 'contact') {
+            /* contact 留**第一条**：reps / due / lastContactAt 都只在 engine 的
+               credited guard 里写一次（第一条），后面的重复对重放是空操作。
+               留最后一条会改 due（差一个 ts 的毫秒数）—— 这正是第一版压缩被对照实验抓到的错。 */
+            const key = (e.w || '') + '|' + (e.s == null ? '' : e.s) + '|' + ShadowPlan.dayKey(e.ts || 0, bdHour());
+            if (seenContact[key]) continue;
+            seenContact[key] = 1;
+          } else if (e && e.type === 'dayplan') {
+            if (lastDayplan[e.day] !== e) continue;
+          }
+          out.push(e);
+        }
+        return out;
+      }
       function push2(ev) {
         ev.id = ShadowPlan.eventId(ev);
         ROOT2.events.push(ev);
-        if (ROOT2.events.length > 5000) {
-          const cut = ROOT2.events.length - 5000;
-          ROOT2.events.splice(0, cut);
-          // 上传游标是下标，掐头之后必须一起往前挪，否则会把没传的当成已传
-          ROOT2.uploaded = Math.max(0, (ROOT2.uploaded || 0) - cut);
+        if (ROOT2.events.length > EVENTS_CAP) {
+          const before = ROOT2.events.length;
+          let next = compactEvents(ROOT2.events);
+          if (next.length > EVENTS_CAP) next = next.slice(next.length - EVENTS_CAP);   // 合并完还超：掐最旧的
+          ROOT2.events = next;
+          /* 上传游标是**下标**，而合并会把中间元素挪位 —— 不能再按下标平移。
+             直接归零重推：服务端有 (user_id,event_id) 主键 + ignoreDuplicates，重推幂等；
+             紧接着的 cloudPull 会按「服务端已经有谁」把游标重算准。 */
+          if (ROOT2.events.length !== before) ROOT2.uploaded = 0;
         }
         recompute2(); _cachedPlan = null; persist2();
         queueEventUpload();
@@ -4748,16 +4780,28 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         try {
           const sess = (await c.auth.getSession()).data.session;
           if (!sess) return { got: 0, newEvents: 0 };
-          const res = await c.from('shadow_events')
-            .select('event_id,ts,type,payload').eq('user_id', sess.user.id)
-            .order('ts', { ascending: true }).range(0, 1999);
-          if (res.error || !Array.isArray(res.data)) return { got: 0, newEvents: 0 };
+          /* 分页补拉：以前写死 .range(0, 1999)，第二台设备永远只拿到**最老的** 2000 条，
+             之后的事件再也到不了（实测 §12 里"多设备一致"这条就不成立了）。
+             按 ts 升序每页 1000 条，拉到不满一页为止；中途某页失败就用手上已有的，
+             别把整次补拉作废。上限 40 万条只是防异常数据把循环拖死的止损。 */
+          const PAGE = 1000, rows = [];
+          for (let from = 0; from < 400000; from += PAGE) {
+            const res = await c.from('shadow_events')
+              .select('event_id,ts,type,payload').eq('user_id', sess.user.id)
+              .order('ts', { ascending: true }).range(from, from + PAGE - 1);
+            if (res.error || !Array.isArray(res.data)) {
+              if (!rows.length) return { got: 0, newEvents: 0 };
+              break;
+            }
+            rows.push(...res.data);
+            if (res.data.length < PAGE) break;
+          }
           const have = {};
           ROOT2.events.forEach(e => { have[e.id || ShadowPlan.eventId(e)] = 1; });
           const onServer = {};                      // 服务端到底有哪几条，只有这份清单说了才算
-          res.data.forEach(r => { if (r && r.event_id) onServer[r.event_id] = 1; });
+          rows.forEach(r => { if (r && r.event_id) onServer[r.event_id] = 1; });
           let added = 0;
-          res.data.forEach(row => {
+          rows.forEach(row => {
             if (!row || have[row.event_id]) return;
             ROOT2.events.push(Object.assign({}, row.payload, { id: row.event_id, ts: row.ts }));
             added++;
@@ -4774,7 +4818,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           while (cur < ROOT2.events.length && onServer[ROOT2.events[cur].id || ShadowPlan.eventId(ROOT2.events[cur])]) cur++;
           ROOT2.uploaded = cur;
           persist2();
-          return { got: res.data.length, newEvents: added };
+          return { got: rows.length, newEvents: added };
         } catch (e) {
           dlog('events-pull-fail', (e && e.message) || e);
           return { got: 0, newEvents: 0 };
@@ -6195,7 +6239,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const MINS = [5, 10, 15, 20, 30, 45, 60];
         let sel = 15;
         /* 视觉上去掉「每天」那一行（标题已经说了「每天有多少分钟」），
-           但组名不能丢 —— 换成 role=group + aria-label，读屏照样念得出这组是什么。 */
+           但组名不能丢 —— 换成 role=group + aria-label，读屏照样念得出这组是什么。
+           ⚠️ 注释别写进下面这个模板字符串里：会被当正文渲染出来（踩过两次）。 */
         p.innerHTML = `<div class="plan-setup">
           <h3>每天有多少分钟</h3>
           <p class="ps-sub">共 ${SENT_RAW.length} 句 · ${ALL_TARGET_WORDS} 个目标词。句数和题数由分钟数算出来。</p>
@@ -6206,6 +6251,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           <div class="ps-eta" id="psEta" data-days="">算一下…</div>
           <div class="ps-eta sm" id="psEtaAssume">（只按通读时间估算：一句约 ${Math.round(secNew())} 秒，做题不占每天的分钟数）</div>
           <button class="ps-start" id="psStart">开始这个计划</button>
+          <div class="ps-adjust"><button class="btn" onclick="TASK.importBackup()">导入备份恢复</button></div>
+          <input type="file" id="importFile" accept="application/json,.json" style="display:none">
         </div>`;
         const refresh = () => {
           // D10：预算只计通读，所以句数 = 分钟×60 ÷ 一句秒数；题数与句数一样（一句一题，但不占时间）
@@ -6374,13 +6421,18 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const p = document.getElementById('todayPanel');
         if (p && _panelOpen) renderToday(p);
       }
-      /* ---- 本地备份：计划与进度只存在 localStorage，清缓存或换设备即归零 ---- */
+      /* ---- 本地备份：计划与进度只存在 localStorage，清缓存或换设备即归零 ----
+         ⚠️ 真值根 `ielts.shadow.v2` 用的是**点**分隔，`startsWith('ielts-')` 匹配不到它 ——
+         2026-09-24 实测：导出/恢复都绕开了 events/state/plan，备份出来是个空壳，
+         恢复完还是旧状态。所以除了前缀，另给一份「点分隔」的显式白名单。 */
       const BACKUP_PREFIX = 'ielts-';
+      const BACKUP_EXTRA = ['ielts.shadow.v2'];
+      const isBackupKey = k => !!k && (k.startsWith(BACKUP_PREFIX) || BACKUP_EXTRA.includes(k));
       function collectBackup() {
         const data = {};
         for (let i = 0; i < localStorage.length; i++) {
           const k = localStorage.key(i);
-          if (k && k.startsWith(BACKUP_PREFIX)) data[k] = localStorage.getItem(k);
+          if (isBackupKey(k)) data[k] = localStorage.getItem(k);
         }
         return data;
       }
@@ -6412,7 +6464,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             showAbToast('导入失败：这不是影子跟读导出的备份文件'); return;
           }
           if (!confirm(`导入将覆盖当前全部跟读数据（计划、进度、书签、播放位）。\n备份导出时间：${o.exportedAt || '未知'}\n确定继续吗？`)) return;
-          const keys = Object.keys(o.data).filter(k => k.startsWith(BACKUP_PREFIX));
+          const keys = Object.keys(o.data).filter(isBackupKey);
           if (!keys.length) { showAbToast('导入失败：备份里没有可恢复的数据'); return; }
           try {
             keys.forEach(k => localStorage.setItem(k, o.data[k]));
@@ -6581,6 +6633,36 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         offerResume, resumeTask, skipResume, hideResumeOffer,
         initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
         etaFor, etaCalls, countStages, seedDailyForTest,
+        // 事件流「安全合并」的对照实验：先冻住派生状态 → 合并 → 重放 → 再比。
+        // 测试断言两次 state 深相等（合并不许动账），并断言确实真掉了重复条。
+        compactProbeForTest: () => {
+          // 深排序后再 stringify：重放会按事件顺序重建对象，键序会变 —— 直接 stringify 会把
+          // 「值相同、键序不同」误判成"丢了账"（第一版就栽在这儿）。只比内容，不比键序。
+          const canon = v => {
+            if (Array.isArray(v)) return v.map(canon);
+            if (v && typeof v === 'object') {
+              const r = {};
+              Object.keys(v).sort().forEach(k => { r[k] = canon(v[k]); });
+              return r;
+            }
+            return v;
+          };
+          const snap = st => {
+            /* sents[].lastReadAt 只经 ShadowPlan.dayKey 被读过（readToday2），
+               精确毫秒数不参与任何判断 —— 合并留下同一 w|s|day 的第一条，
+               它的 ts 比最后一条早几毫秒，同一天内等价。快照按「天」归一，
+               否则会把 3ms 的差报成"丢了账"（第二版对照实验就是这么红的）。 */
+            const sents = {};
+            Object.keys(st.sents || {}).sort().forEach(k => {
+              sents[k] = { d: ShadowPlan.dayKey((st.sents[k] || {}).lastReadAt || 0, bdHour()) };
+            });
+            return JSON.stringify(canon({ words: st.words, daily: st.daily, sents }));
+          };
+          const before = snap(ROOT2.state), n0 = ROOT2.events.length;
+          ROOT2.events = compactEvents(ROOT2.events);
+          recompute2();
+          return { before, after: snap(ROOT2.state), eventsBefore: n0, eventsAfter: ROOT2.events.length };
+        },
         // 「今天这批的分母是不是被分子抬起来了」只有引擎自己知道 —— 给测试读一次真值。
         // 2026-09-24：plannedToday() 曾经返回 Math.max(快照, sentDone)，读超了就永远显示 N/N。
         plannedForTest: () => plannedToday(),

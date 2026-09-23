@@ -153,9 +153,14 @@
           slot.lastContactAt = ev.ts || 0;
           slot.lastContactDay = day;
           if (!slot.firstSeenAt) slot.firstSeenAt = ev.ts || 0;
+          /* due 必须跟着 reps 一起落在 guard 里面。原先它写在 guard 外面，
+             于是「同一天把同一句再读一遍」虽然不加 reps，却把 due 又往后推了一截 ——
+             既让排期漂移，也让「同 w|s|day 的重复 contact 对重放是空操作」这条不成立
+             （事件流的安全合并、以及任何按这个前提做的压缩，都会因此改账）。
+             一次接触 = 一天一次，这是 §5.1 的口径。 */
+          slot.due = (ev.ts || 0) + wordInterval(slot.reps) * DAY_MS;
         }
         slot.stage = stageOf(slot);
-        slot.due = (ev.ts || 0) + wordInterval(slot.reps) * DAY_MS;
         if (slot.stage !== before) touchDaily(st, day).promote = (touchDaily(st, day).promote || 0) + 1;
       } else if (ev.type === 'quiz') {
         if (!ev.w) continue;
