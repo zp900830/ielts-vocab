@@ -171,4 +171,32 @@ test.describe('任务模式 · 一步一停（2026-09-23 四条实测）', () =>
     expect(after.green, `放完一句后绿竖条还是 ${after.green}，一句都没退出去`).toBe(before.green - 1);
     expect(after.grey, '退出去的那句应当变成"已读"那一档').toBe(1);
   });
+
+  /* ⑦ iPad / iOS 的 Chromium 常态：SpeechSynthesisUtterance 只报 onstart，**不报 onend**。
+     以前这句会被当成"失败"，于是换一副音色把同一句再念一遍，条上那个数一动不动 ——
+     他 2026-09-23 报的「点放这一句永远不变，发个声就卡住」。修法：onstart 已经发生过就等于放过了，
+     直接往前，不再重试。这条用例不靠真语音，直接把引擎换成"只报开始"。 */
+  test('⑦ 引擎只报开始不报结束时（iPad 的常态）：同一句只念一遍，看门狗到点要推进度', async ({ page, baseURL }) => {
+    test.setTimeout(currentTimeout() * 8);
+    await openShadow(page, baseURL);
+    await page.evaluate(() => {
+      const proto = Object.getPrototypeOf(speechSynthesis);
+      const w = window as unknown as { __sp: { text: string; voice: string }[] };
+      w.__sp = [];
+      proto.speak = function (u: SpeechSynthesisUtterance) {
+        w.__sp.push({ text: (u.text || '').slice(0, 24), voice: u.voice ? u.voice.name : '-' });
+        setTimeout(() => { if (u.onstart) u.onstart({} as SpeechSynthesisEvent); }, 30);
+        // onend 永不 —— 这就是 iOS 上观察到的形状
+      };
+    });
+    await page.evaluate(() => { TASK.hideResumeOffer(); TASK.enterTaskMode(); });
+    await expect(page.locator('#taskBar')).toBeVisible();
+    const before = await page.locator('#tbTitle').innerText();
+    await page.locator('#tbNext').click();
+    // 看门狗下限 8 秒，所以这里必须等过 8 秒才看得到推进；等不到就是真卡住
+    await expect.poll(() => page.locator('#tbTitle').innerText(), { timeout: 20000, intervals: [1000, 2000] })
+      .not.toBe(before);
+    const sp = await page.evaluate(() => (window as unknown as { __sp: { text: string }[] }).__sp);
+    expect(sp.length, `同一句被提交了 ${sp.length} 次 = 又去换音色重播了`).toBe(1);
+  });
 });
