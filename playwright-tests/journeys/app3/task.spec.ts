@@ -10,6 +10,7 @@ declare const TASK: {
   resetV2(): void;
   initPlan(minutes: number): void;
   enterTaskMode(): void;
+  readDone(i: number): void;
   queue: { i: number }[];
   hasPlan: boolean;
 };
@@ -101,13 +102,49 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await freshPlan(page);
+    const main = page.locator('#homeBanner .hb-main');
+    // 先等横幅落地（数据是异步拉的）——不等就 evaluate 读 SECTIONS 会偶发 undefined。
+    await expect(main).toContainText('继续学');
     const info = await page.evaluate(() => ({
       title: SECTIONS[0].title,
       size: ShadowPlan.articleScope(SECTIONS, 0).size,
     }));
-    const main = page.locator('#homeBanner .hb-main');
-    await expect(main).toContainText('继续学');
     await expect(main).toContainText(`《${info.title}》`);
     await expect(main, '「还剩」的 N 必须与文章名同属一篇').toContainText(`还剩 ${info.size} 句`);
+  });
+
+  // 审阅 I1：任务模式没有顶栏，光一颗 ✕ 不说明「退出 = 回首页选下一篇」。
+  test('任务模式顶栏：文章标题 + 返回首页，点了回首页（I1）', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('body')).toHaveClass(/task-mode/);
+
+    const top = page.locator('#taskTop');
+    await expect(top).toBeVisible();
+    await expect(top.locator('.tt-back')).toContainText('返回首页');
+    await expect(top.locator('#ttTitle')).toHaveText('地球与生命');
+
+    await top.locator('.tt-back').click();
+    await expect(page.locator('body')).not.toHaveClass(/task-mode/);
+    await expect(page.locator('#taskTop')).toBeHidden();
+    await expect(page.locator('.art-card')).toHaveCount(6);
+  });
+
+  // 审阅 I2：退出后首页卡片/横幅还停在进任务模式前的进度，要等点导航或刷新才更新。
+  test('退出任务模式后首页立即刷新，不用刷新页面（I2）', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('body')).toHaveClass(/task-mode/);
+    // 读前 6 句（12 句的一篇）：熟练度 = round(6/12 × 40) = 20
+    await page.evaluate(() => {
+      Array.from(ShadowPlan.articleScope(SECTIONS, 0)).slice(0, 6).forEach((i) => TASK.readDone(i));
+    });
+    await page.locator('#taskTop .tt-back').click();
+    await expect(page.locator('body')).not.toHaveClass(/task-mode/);
+    await expect(page.locator('.art-card').first().locator('.a-pct')).toHaveText('20%');
   });
 });

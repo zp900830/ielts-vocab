@@ -1516,6 +1516,16 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      3.0 任务模式还没有自己的顶栏（返回首页靠任务条的 ✕），所以整块 #appShell 收掉 ——
      不然后面 min-height:100vh 的首页会把正文压到首屏之外（T2 遗留的现场）。 */
   body.task-mode #appShell { display: none; }
+  /* 任务模式顶栏（审阅 I1）：sticky 在正文上方，退出即随 body.task-mode 一起收掉。 */
+  .task-top { display: none; }
+  body.task-mode .task-top { display: flex; align-items: center; gap: 12px;
+    position: sticky; top: 0; z-index: 150; padding: 8px 16px;
+    background: var(--card); border-bottom: 1px solid var(--border); }
+  .task-top .tt-back { flex: none; min-height: 40px; padding: 0 14px; border: 1px solid var(--border);
+    border-radius: 999px; background: transparent; color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; }
+  .task-top .tt-back:hover { background: var(--accent-soft); color: var(--accent-text); }
+  .task-top .tt-title { min-width: 0; font-size: 15px; font-weight: 700; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   #appShell { display: flex; min-height: 100vh; }
   .sidenav { flex: none; width: 220px; padding: 16px 12px; border-right: 1px solid var(--border);
     display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; }
@@ -1766,6 +1776,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     </div>
     <!-- ② 做题卡片 / 遍间小结：一条卡片换内容，不新开弹窗（PRD §10.1） -->
     <div class="task-card" id="taskCard" role="group" aria-label="当前题目" hidden></div>
+
+    <!-- 3.0 任务模式顶栏（M1 Task 5 审阅 I1）：告诉用户「你在学哪一篇」+「退出就是回首页」。
+         一颗 ✕ 不说明退出会回哪儿，而 M1 的闭环是「首页选文章 → 学完 → 回首页选下一篇」。
+         PRD §4.1 的卷/段筛选是 M2+，这里先只放这两样。默认 display:none，body.task-mode 才现身。 -->
+    <header class="task-top" id="taskTop">
+      <button class="tt-back" type="button" onclick="TASK.exitTaskMode()" aria-label="返回首页">← 返回首页</button>
+      <div class="tt-title" id="ttTitle"></div>
+    </header>
 
     <div class="layout">
       <main id="main"><article id="art"><div id="abRegion" class="ab-region" style="display:none" aria-hidden="true"><button class="ab-cancel" onclick="abCancel()" title="取消循环" aria-label="取消循环">×</button></div></article></main>
@@ -5716,6 +5734,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (bar) { bar.classList.remove('show'); bar.dataset.state = 'idle'; }
         hideCard(); updateMarkers();
         try { paint(); } catch (e) {}   // 播放条标题在任务模式里让给了任务栏，退出时要拿回来
+        /* 审阅 I2：退出后首页卡片/横幅要立刻反映本次进度。renderHome 只在 hashchange/DOMContentLoaded
+           跑，退任务模式不动 hash —— 不在这里补一次 route()，就要等一次导航或刷新才更新。 */
+        try { if (window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
       }
       /* 点 ✕ 先问一句（他 2026-09-22）。仍然零惩罚：不改排期、不生成欠账，
          所以这句只报「进度已经记下」，不写「确定要放弃吗」那种挽留话术。 */
@@ -5992,6 +6013,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           planned = plannedToday();
           leftN = todayLeftN();   // 这条减法只住在 todayLeftN() 里：绿点与首屏提示读同一个函数
         }
+        // 任务模式顶栏的标题（审阅 I1）：在学哪一篇。全部文章（直接进任务模式）时说「全部文章」。
+        const topTitle = document.getElementById('ttTitle');
+        if (topTitle) topTitle.textContent = (artScope && SECTIONS[currentArticle]) ? SECTIONS[currentArticle].title : '全部文章';
         const quizN = quizList().length;
         const fin = taskFinished || allDone === true;
         const asking = !!taskMode && exitConfirm;
