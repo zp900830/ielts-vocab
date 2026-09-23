@@ -693,7 +693,7 @@ test.describe('two passes', () => {
   /* 2026-09-23 口径改了（他：「不点不放，点一句放一句」）：那颗键改名「放这一句」，放的是屏幕上这一句，
      放完才记完成、才前进。旧口径是点一下 = 把当前这句记成完成 + 跳下一句 —— 于是「上一句」退回去
      再点，会悄悄跳过退回的那句。这条用例改量新契约，但守的还是原来那个坑：队列位置与高亮必须对齐。 */
-  test('当前句只有一套高亮，且「放这一句」放的是这一句：播完才前进，「上一句」退得回去', async ({ page }) => {
+  test('当前句只有一套高亮，「放这一句」放的是这一句且高亮领先一句：播完才前进，「上一句」退得回去', async ({ page }) => {
     // 全站不再有第二套「当前句」标记（描边那套已删，高亮回归常规模式的浅绿底纹）
     expect(await page.locator('.sent.task-current').count()).toBe(0);
     const playingIdx = () => page.evaluate(() => {
@@ -702,13 +702,17 @@ test.describe('two passes', () => {
       return { on, n: all.filter((e) => e.classList.contains('playing')).length };
     });
     const title = () => page.evaluate(() => document.getElementById('tbTitle')!.textContent);
-    // 把朗读引擎换成录音笔：__finish() 手动兑现「这一句放完了」，否则 headless 里永远等不到
+    const sentText = (i: number) =>
+      page.evaluate((k) => (document.querySelectorAll('.sent')[k] as HTMLElement).innerText, i);
+    const lastSpoken = () =>
+      page.evaluate(() => { const a = (window as unknown as { __spoken: string[] }).__spoken; return a[a.length - 1] || ''; });
+    // 把朗读引擎换成录音笔：__spoken 记放的是哪一句，__finish() 手动兑现「这一句放完了」
     await page.evaluate(() => {
       const w = window as unknown as {
-        speak: (t: string, cb?: () => void) => void; __cbs: (() => void)[]; __finish: () => void;
+        speak: (t: string, cb?: () => void) => void; __spoken: string[]; __cbs: (() => void)[]; __finish: () => void;
       };
-      w.__cbs = [];
-      w.speak = function (_t: string, cb?: () => void) { if (cb) w.__cbs.push(cb); };
+      w.__spoken = []; w.__cbs = [];
+      w.speak = function (t: string, cb?: () => void) { w.__spoken.push(String(t)); if (cb) w.__cbs.push(cb); };
       w.__finish = () => { const cb = w.__cbs.shift(); if (cb) cb(); };
     });
 
@@ -716,11 +720,14 @@ test.describe('two passes', () => {
     expect(first.n, '同一时刻只能有一句被标成当前').toBe(1);
 
     await page.locator('#tbNext').click();
-    expect((await playingIdx()).on, '「放这一句」放的就是这一句，高亮不许提前跑').toBe(first.on);
+    /* 他 2026-09-23 拍板「一边放就一边移」：放的是第一句，但高亮/滚动先走到第二句。
+       所以这里同时锁两件：引擎里放的是 first，屏幕上高亮已经在 first+1。 */
+    expect(await lastSpoken(), '「放这一句」放的必须是这一句').toContain((await sentText(first.on)).slice(0, 10));
+    expect((await playingIdx()).on, '高亮要领先一句').toBe(first.on + 1);
 
     const doneBefore = await title();
     await page.evaluate(() => (window as unknown as { __finish: () => void }).__finish());
-    await expect.poll(async () => (await playingIdx()).on).not.toBe(first.on);   // 放完才前进
+    await expect.poll(async () => (await playingIdx()).on).not.toBe(first.on);   // 放完队列前进
     expect(await title(), '放完这一句，条上那个数要动').not.toBe(doneBefore);
 
     // 往回：高亮必须跟着回来（旧实现只搬正文高亮，队列位置留在原句）
@@ -729,7 +736,7 @@ test.describe('two passes', () => {
     await expect.poll(async () => (await playingIdx()).on).toBe(fwd - 1);
     // 退回后再点：放的必须是你退回的那句，而不是跳到它后面没听过的 —— 这一条只有队列位置真的对齐了才成立
     await page.locator('#tbNext').click();
-    expect((await playingIdx()).on, '退回后点「放这一句」要放退回的这句').toBe(fwd - 1);
+    expect(await lastSpoken(), '退回后点「放这一句」要放退回的这句').toContain((await sentText(fwd - 1)).slice(0, 10));
   });
 
   test('点 ✕ 先问一句：不退出、换成「继续做 / 退出」，两条出口都算数', async ({ page }) => {
