@@ -13,6 +13,9 @@ Verifies that A/B buttons in bookmark popup rows highlight with `ab-on` class wh
 
 ### Setup 1. Clear bookmarks
 Navigate to `{E2E_BASE_URL}/index.html`.
+**Wait for the text to render:** until the page has more than 50 elements with class `sent` (≤15s).
+The bookmark list is filtered by `x.i < sents.length`, so writing indices 10/30/50 before the
+article exists makes the popup render 0 rows — this is the whole reason the wait is here.
 Remove `ielts-marks` from `localStorage`.
 **Verify:** `getMarks()` returns `[]`.
 
