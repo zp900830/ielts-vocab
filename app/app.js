@@ -18,8 +18,54 @@
     const b = e.target.closest('.nav-item');
     if (b) { location.hash = '#/' + b.dataset.route; }
   });
+
+  /* ---- 3.0 首页：六张文章卡片（M1 Task 3） ----
+     ROOT2 是 TASK IIFE 的内部状态，外壳读不到，只能经 TASK.state() / TASK.sentWordsOf 拿。
+     熟练度这里**只算第一项**（通读完成度 × 40%）；② 正确率与精读次数在 Task 5/6 补，
+     统一由 Task 7 收口 —— 别提前把另两项塞进来。 */
+  function rel(ts) {                       // 相对时间，复用影子跟读口径
+    if (!ts) return '还没学过';
+    const d = Math.floor((Date.now() - ts) / 864e5);
+    return d <= 0 ? '今天' : d === 1 ? '昨天' : d + ' 天前';
+  }
+  function articleStat(a) {
+    const st = (typeof TASK !== 'undefined' && TASK.state()) || window.ShadowPlan.emptyState();
+    const wordsOf = (typeof TASK !== 'undefined' && TASK.sentWordsOf) || function () { return []; };
+    const scope = window.ShadowPlan.articleScope(SECTIONS, a);
+    const total = scope.size;
+    let ever = 0;
+    scope.forEach((i) => { const s = st.sents[i]; if (s && s.lastReadAt > 0) ever++; });
+    const c = window.ShadowPlan.countStagesOf(st, scope, wordsOf);
+    // ② 正确率 / 精读次数：走事件流（M1 先只算通读完成度，② 与精读在 Task 5/6 补）
+    const progress = total ? Math.round(Math.min(ever / total, 1) * 40) : 0;   // 只算 40% 那项
+    const stage = ever === 0 ? 'todo' : (ever >= total ? 'read' : 'reading');
+    let lastAt = 0; scope.forEach((i) => { const s = st.sents[i]; if (s && s.lastReadAt > lastAt) lastAt = s.lastReadAt; });
+    return { progress, stage, grad: c.graduated, total, lastAt, wordsOfArticle: scope.size };
+  }
+  function renderHome(view) {
+    // 数据未就绪时先占位：initApp 拉完数据会再调一次 route()（见 app/index.html）。
+    if (typeof dataReady === 'undefined' || !dataReady) {
+      view.innerHTML = '<p class="sm">正在载入…</p>';
+      return;
+    }
+    const cards = SECTIONS.map((s, a) => {
+      const x = articleStat(a);
+      return `<button class="art-card" data-a="${a}" data-stage="${x.stage}">
+        <div class="a-title">${esc(s.title)}</div>
+        <div class="a-en">${esc((TIT_EN[s.title] || '').replace(/^\s*·\s*/, ''))}</div>
+        <div class="a-bar"><i style="width:${x.progress}%"></i></div>
+        <div class="a-meta"><span class="a-pct">${x.progress}%</span>
+          <span>已毕业 ${x.grad} / ${x.wordsOfArticle} 词</span>
+          <span>${rel(x.lastAt)}</span></div>
+      </button>`;
+    }).join('');
+    view.innerHTML = `<div class="home-banner" id="homeBanner"></div><div class="art-grid">${cards}</div>`;
+    // ⚠️ renderBanner 由 Task 4 定义；只跑 Task 3 时它还不存在 —— 必须守卫。
+    if (window.APP3.renderBanner) window.APP3.renderBanner(document.getElementById('homeBanner'));
+  }
+  window.APP3 = Object.assign(window.APP3 || {}, { renderHome, articleStat });
+  window.APP3 = Object.assign(window.APP3, { route, current: () => cur });
   window.addEventListener('hashchange', route);
-  window.APP3 = Object.assign(window.APP3 || {}, { route, current: () => cur });
   document.addEventListener('DOMContentLoaded', route);
   route();
 })();
