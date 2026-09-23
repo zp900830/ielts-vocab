@@ -28,19 +28,27 @@
     const d = Math.floor((Date.now() - ts) / 864e5);
     return d <= 0 ? '今天' : d === 1 ? '昨天' : d + ' 天前';
   }
+  // 当前阶段的文案（§3.3 / §9.4）。M1 只有三档可达：未开始 / 通读中 / 已学完
+  // （② 未上线，通读满即终态；`熟练` ≥80% 要等 Task 7 补齐另两项权重后才会出现）。
+  const STAGE_LABEL = { todo: '未开始', reading: '通读中', read: '已学完', pro: '熟练' };
   function articleStat(a) {
     const st = (typeof TASK !== 'undefined' && TASK.state()) || window.ShadowPlan.emptyState();
     const wordsOf = (typeof TASK !== 'undefined' && TASK.sentWordsOf) || function () { return []; };
     const scope = window.ShadowPlan.articleScope(SECTIONS, a);
     const total = scope.size;
     let ever = 0;
-    scope.forEach((i) => { const s = st.sents[i]; if (s && s.lastReadAt > 0) ever++; });
+    const words = new Set();   // 该篇出现过的**不同目标词**（去重）——「已毕业 X / Y 词」的 Y
+    scope.forEach((i) => {
+      const s = st.sents[i]; if (s && s.lastReadAt > 0) ever++;
+      wordsOf(i).forEach((w) => words.add(w));
+    });
     const c = window.ShadowPlan.countStagesOf(st, scope, wordsOf);
     // ② 正确率 / 精读次数：走事件流（M1 先只算通读完成度，② 与精读在 Task 5/6 补）
     const progress = total ? Math.round(Math.min(ever / total, 1) * 40) : 0;   // 只算 40% 那项
     const stage = ever === 0 ? 'todo' : (ever >= total ? 'read' : 'reading');
     let lastAt = 0; scope.forEach((i) => { const s = st.sents[i]; if (s && s.lastReadAt > lastAt) lastAt = s.lastReadAt; });
-    return { progress, stage, grad: c.graduated, total, lastAt, wordsOfArticle: scope.size };
+    // `total` = 句数（进度分母）；`wordTotal` = 词数（掌握分母，与 c.graduated 同单位）
+    return { progress, stage, grad: c.graduated, total, lastAt, wordTotal: words.size };
   }
   function renderHome(view) {
     // 数据未就绪时先占位：initApp 拉完数据会再调一次 route()（见 app/index.html）。
@@ -51,11 +59,12 @@
     const cards = SECTIONS.map((s, a) => {
       const x = articleStat(a);
       return `<button class="art-card" data-a="${a}" data-stage="${x.stage}">
-        <div class="a-title">${esc(s.title)}</div>
+        <div class="a-head"><div class="a-title">${esc(s.title)}</div>
+          <span class="a-stage">${STAGE_LABEL[x.stage] || '未开始'}</span></div>
         <div class="a-en">${esc((TIT_EN[s.title] || '').replace(/^\s*·\s*/, ''))}</div>
         <div class="a-bar"><i style="width:${x.progress}%"></i></div>
         <div class="a-meta"><span class="a-pct">${x.progress}%</span>
-          <span>已毕业 ${x.grad} / ${x.wordsOfArticle} 词</span>
+          <span>已毕业 ${x.grad} / ${x.wordTotal} 词</span>
           <span>${rel(x.lastAt)}</span></div>
       </button>`;
     }).join('');

@@ -7,6 +7,7 @@ declare const TASK: {
   resetV2(): void;
   initPlan(minutes: number): void;
   readDone(i: number): void;
+  sentWordsOf(i: number): string[];
 };
 declare const ShadowPlan: {
   articleScope(sections: unknown, article: number): Set<number>;
@@ -17,19 +18,21 @@ const rootUrl = process.env.E2E_ROOT_URL || '';
 
 /* 把三份重 JSON 换成 6 篇的小壳：既让首页拿到 6 张卡片，又不再多渲一页 1833 句 + 3242 词
    （和 shell.spec.ts 同一理由：整套并行时那份额外负载会压出 shadow 用例偶发红）。
-   第 0 篇给 24 句（> 20），这样造 20 句进度后正好落在「通读中」而不是「已学完」。 */
+   第 0 篇 24 句、30 个不同目标词（前 6 句各多一个词）—— 句数 ≠ 词数，锁住「已毕业 X / Y 词」
+   的 Y 是**词数**而不是句数（Finding 1）；24 句也让「读 20 句」正好落在「通读中」而非「已学完」。 */
 const SIX: Record<string, string> = (() => {
-  const mk = (title: string, n: number) => ({
+  const mk = (title: string, n: number, extra: number) => ({
     title,
     zh: title,
     subheads: [''],
-    paragraphs: [Array.from({ length: n }, (_, i) => `Sentence ${i} about [[word${i}:word${i}]].`)],
+    paragraphs: [Array.from({ length: n }, (_, i) =>
+      `Sentence ${i} about [[w${i}:w${i}]].${i < extra ? ` Plus [[x${i}:x${i}]].` : ''}`)],
     sentZh: [Array.from({ length: n }, (_, i) => `第 ${i} 句。`)],
     paraZh: [''],
   });
   const titles = ['地球与生命', '校园与文化', '衣食住行', '社会与规则', '历史与发明', '身体与时间'];
   return {
-    'sections.json': JSON.stringify(titles.map((t, i) => mk(t, i === 0 ? 24 : 2))),
+    'sections.json': JSON.stringify(titles.map((t, i) => mk(t, i === 0 ? 24 : 2, i === 0 ? 6 : 0))),
     'vocab.json': '{}',
     'chapters.json': '[]',
   };
@@ -43,23 +46,52 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
   }
 }
 
+const pctOf = (page: import('@playwright/test').Page) =>
+  page.locator('.art-card').first().locator('.a-pct').innerText().then(t => Number(t.replace('%', '')));
+
 test.describe('3.0 首页', () => {
   test('六张卡片 + 四档状态 + 卡片数据', async ({ page }) => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await expect(page.locator('.art-card')).toHaveCount(6);
     await expect(page.locator('.art-card .a-title').first()).toHaveText('地球与生命');
-    // 全新用户：六张全是「未开始」
+
+    // —— 全新用户：六张全是「未开始」（灰胶囊 + 0%） ——
     expect(await page.locator('.art-card[data-stage="todo"]').count()).toBe(6);
-    // 造点进度 → 第一篇变「通读中」，且熟练度 > 0
+    const c0 = page.locator('.art-card').first();
+    await expect(c0.locator('.a-stage')).toHaveText('未开始');
+    await expect(c0.locator('.a-pct')).toHaveText('0%');
+
+    // —— 单词掌握的分母是「词数」不是「句数」（Finding 1 回归锁）——
+    const { sentences, words } = await page.evaluate(() => {
+      const s = ShadowPlan.articleScope(SECTIONS, 0);
+      const set = new Set<string>();
+      s.forEach((i) => TASK.sentWordsOf(i).forEach((w) => set.add(w)));
+      return { sentences: s.size, words: set.size };
+    });
+    expect(words, '夹具必须让「词数 ≠ 句数」，否则锁不住 Finding 1').toBeGreaterThan(sentences);
+    await expect(c0.locator('.a-meta')).toContainText(`已毕业 0 / ${words} 词`);
+
+    // —— 读前 20 句 → 通读中；熟练度 = round(20/24×40) = 33，落在 (0, 40] ——
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
       const s = ShadowPlan.articleScope(SECTIONS, 0);
       Array.from(s).slice(0, 20).forEach((i: number) => TASK.readDone(i));
     });
     await page.reload();
-    const c0 = page.locator('.art-card').first();
     await expect(c0).toHaveAttribute('data-stage', 'reading');
-    expect(Number(await c0.locator('.a-pct').innerText().then(t => t.replace('%', '')))).toBeGreaterThan(0);
+    await expect(c0.locator('.a-stage')).toHaveText('通读中');
+    expect(await pctOf(page), '20/24 × 40% 四舍五入 = 33').toBe(33);
+    expect(await pctOf(page), 'M1 只实现第一项，熟练度不得超过 40').toBeLessThanOrEqual(40);
+
+    // —— 读满 24 句 → 已学完（M1 无 ②，通读满即终态）；熟练度封顶 40 ——
+    await page.evaluate(() => {
+      const s = ShadowPlan.articleScope(SECTIONS, 0);
+      Array.from(s).slice(20).forEach((i: number) => TASK.readDone(i));
+    });
+    await page.reload();
+    await expect(c0).toHaveAttribute('data-stage', 'read');
+    await expect(c0.locator('.a-stage')).toHaveText('已学完');
+    expect(await pctOf(page), '通读满 → 40%（② / 精读两项 Task 7 才补）').toBe(40);
   });
 });
