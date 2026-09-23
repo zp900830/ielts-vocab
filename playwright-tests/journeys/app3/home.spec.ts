@@ -94,4 +94,23 @@ test.describe('3.0 首页', () => {
     await expect(c0.locator('.a-stage')).toHaveText('已学完');
     expect(await pctOf(page), '通读满 → 40%（② / 精读两项 Task 7 才补）').toBe(40);
   });
+
+  // Task 4：顶部「今天该做什么」横幅 + 没计划的空状态（§2.3 / §3.5）。
+  // 复用影子跟读现成的 renderSetup（设置屏），落在 #setupSheet 容器里；建完计划横幅改口「继续学」。
+  test('没计划 → 横幅给「去设置」；有计划 → 给「继续学」', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.evaluate(() => localStorage.removeItem('ielts.shadow.v2'));
+    await page.reload();
+    await expect(page.locator('#homeBanner .b-go')).toContainText('设置');
+    // 点它 → 出设置屏（复用影子跟读的 renderSetup，套在 #setupSheet 里）
+    await page.locator('#homeBanner .b-go').click();
+    await expect(page.locator('#setupSheet .ps-start')).toBeVisible();
+    await page.locator('#setupSheet .ps-opt').nth(2).click();      // 15 分钟
+    await page.locator('#setupSheet .ps-start').click();
+    await expect(page.locator('#homeBanner .b-go')).toContainText('继续学');
+    // 建完计划横幅补一条连续/毕业摘要（§3.5 第四类）
+    await expect(page.locator('#homeBanner .hb-sum')).toContainText('连续');
+    await expect(page.locator('#homeBanner .hb-sum')).toContainText('已毕业');
+  });
 });

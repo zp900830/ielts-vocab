@@ -1560,6 +1560,21 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .art-card[data-stage="pro"] .a-bar i { background: linear-gradient(90deg, #f0c24b, #d99a1f); }
   @media (max-width: 1023px) { .art-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 700px) { .art-grid { grid-template-columns: 1fr; } }
+  /* ============ 3.0 顶部「今天该做什么」横幅（M1 Task 4，§3.5） ============ */
+  .home-banner { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 16px; margin-bottom: 16px; border: 1px solid var(--accent-line);
+    border-radius: 16px; background: var(--accent-soft); }
+  .home-banner .hb-text { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .home-banner .hb-main { font-size: 14px; font-weight: 600; color: var(--text); }
+  .home-banner .hb-sum { font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .home-banner .b-go { flex: none; min-height: 38px; padding: 0 16px; border: none; border-radius: 999px;
+    background: var(--grad); color: var(--cta-ink); font-size: 13px; font-weight: 700; cursor: pointer;
+    box-shadow: var(--grad-shadow); white-space: nowrap; }
+  .home-banner .b-go:active { filter: brightness(.92); }
+  @media (max-width: 700px) {
+    .home-banner { flex-direction: column; align-items: stretch; }
+    .home-banner .b-go { min-height: 44px; }
+  }
     </style>
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -1706,7 +1721,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <button id="backToPlay" class="back-to-play" onclick="scrollToPlaying()" style="display:none" aria-label="回到播放位置"><i class="ri-arrow-up-line" aria-hidden="true"></i> 回到播放位置</button>
 
     <!-- 每日学习任务面板 -->
-    <div class="today-panel" id="todayPanel" role="dialog" aria-modal="true" aria-label="今日学习任务" tabindex="-1"></div>
+    <!-- 每日学习任务面板。3.0 首页横幅「去设置」直接复用它：没计划时 openPanel() 渲的就是
+         v2.0 设置屏（renderSetup）。外面套一层 #setupSheet 是 3.0 的语义容器（§2.3 / §3.5），
+         样式仍走 .today-panel，renderSetup 的全局 getElementById 也只认这一份，不会撞 id。 -->
+    <div id="setupSheet">
+      <div class="today-panel" id="todayPanel" role="dialog" aria-modal="true" aria-label="今日学习任务" tabindex="-1"></div>
+    </div>
     <div id="todayScrim" style="position:fixed;inset:0;z-index:590;background:rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .2s" onclick="TASK.closePanel()"></div>
     <!-- 常驻同步提示：不是弹窗，失败了就在原地挂着，点一下重试（PRD 原则 6 §12） -->
     <div id="syncHint" class="sync-hint" role="status" aria-live="polite" hidden onclick="TASK.retrySync()"></div>
@@ -6711,6 +6731,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         offerResume, resumeTask, skipResume, hideResumeOffer,
         initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
         etaFor, etaCalls, countStages, seedDailyForTest,
+        /* 3.0 首页横幅（Task 4）只读出口：连续 / 已毕业 / 目标词 / 今天计划与完成，
+           一处取齐，别在界面里另算（横幅「去设置」走 openPanel()，没计划时它就是 v2.0 设置屏）。 */
+        todayStats: () => ({
+          streak: streak2(), graduated: countStages().graduated, targetWords: ALL_TARGET_WORDS,
+          planned: plannedToday(),
+          done: (ROOT2 && ROOT2.state && ROOT2.state.daily && ROOT2.state.daily[day2()] || {}).sentDone || 0,
+        }),
         // 事件流「安全合并」的对照实验：先冻住派生状态 → 合并 → 重放 → 再比。
         // 测试断言两次 state 深相等（合并不许动账），并断言确实真掉了重复条。
         compactProbeForTest: () => {

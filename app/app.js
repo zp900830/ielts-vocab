@@ -73,6 +73,61 @@
     if (window.APP3.renderBanner) window.APP3.renderBanner(document.getElementById('homeBanner'));
   }
   window.APP3 = Object.assign(window.APP3 || {}, { renderHome, articleStat });
+
+  /* ---- 3.0 顶部「今天该做什么」横幅（M1 Task 4，§3.5）----
+     四类：没计划 / 有计划没做完 / 有计划做完 / 连续+毕业摘要（后两者叠加）。
+     数字一律经 TASK 出口取（todayStats / articleStat），界面不自己数账。 */
+  let _bannerEl = null, _setupWired = false;
+  // 该继续哪一篇：第一篇没「已学完」的；全读完就回到第一篇（M1 按篇队列 Task 5 才落地）。
+  function nextArticle() {
+    for (let a = 0; a < SECTIONS.length; a++) if (articleStat(a).stage !== 'read') return a;
+    return 0;
+  }
+  function openSetup() {
+    if (typeof TASK === 'undefined' || !TASK.openPanel) return;
+    TASK.openPanel();          // 没计划时 openPanel() 渲的就是 v2.0 设置屏（renderSetup 进 #todayPanel）
+    const panel = document.getElementById('todayPanel');
+    if (!panel) return;
+    if (!_setupWired) {
+      _setupWired = true;
+      // 建完计划后 renderSetup 会把面板换成「今天」视图 —— 关掉它，把横幅改口成「继续学」。
+      panel.addEventListener('click', (e) => {
+        if (!e.target.closest('.ps-start')) return;
+        setTimeout(() => { if (TASK.closePanel) TASK.closePanel(); if (_bannerEl && _bannerEl.isConnected) renderBanner(_bannerEl); }, 0);
+      });
+    }
+  }
+  function renderBanner(el) {
+    if (!el) return;
+    _bannerEl = el;
+    const hasPlan = !!(typeof TASK !== 'undefined' && TASK.hasPlan);
+    let main, go, sum = '';
+    if (!hasPlan) {
+      main = '还没有学习计划';
+      go = '设置你每天的学习时间';
+    } else {
+      const s = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats() : { streak: 0, graduated: 0, targetWords: 0, planned: 0, done: 0 };
+      sum = `连续 ${s.streak} 天 · 已毕业 ${s.graduated} / ${s.targetWords} 词`;
+      if (s.planned > 0 && s.done >= s.planned) {
+        const extra = s.done - s.planned;
+        main = extra > 0 ? `今天的量读完了 · 多读了 ${extra} 句` : '今天的量读完了';
+      } else {
+        const a = nextArticle();
+        main = `继续学《${esc(SECTIONS[a].title)}》· 还剩 ${Math.max(1, s.planned - s.done)} 句`;
+      }
+      go = '继续学';
+    }
+    el.innerHTML = `<div class="hb-text"><span class="hb-main">${main}</span>` +
+      (sum ? `<span class="hb-sum">${sum}</span>` : '') +
+      `</div><button class="b-go" type="button">${go}</button>`;
+    el.querySelector('.b-go').onclick = () => {
+      if (!hasPlan) return openSetup();
+      if (window.APP3.openArticle) return window.APP3.openArticle(nextArticle());
+      if (typeof TASK !== 'undefined' && TASK.enterTaskMode) TASK.enterTaskMode();
+    };
+  }
+  window.APP3 = Object.assign(window.APP3, { renderBanner });
+
   window.APP3 = Object.assign(window.APP3, { route, current: () => cur });
   window.addEventListener('hashchange', route);
   document.addEventListener('DOMContentLoaded', route);
