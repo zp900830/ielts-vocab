@@ -910,6 +910,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     opacity: 0; visibility: hidden; transform: translateY(-8px); pointer-events: none;
     transition: opacity .2s ease, transform .2s ease, visibility .2s; }
   body.nav-menu.menu-open .topbar-right { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+  /* 面板打开时顶栏整层要抬到右侧浮标之上：.topbar 是 z-index:100 的层叠上下文，
+     面板写在里面是 160 也出不去这个 100，而 #edgeTab 是根上的 fixed z-index:110 ——
+     实测 390 上「词库」那颗正好压在面板右下角，被盖住的按钮点不到（elementFromPoint 返回 edgeTab）。
+     只在 menu-open 期间抬，关掉就还原，不影响顶栏平时与正文的叠放关系。 */
+  body.nav-menu.menu-open .topbar { z-index: 170; }
   /* 量宽时关掉过渡：顶栏的 padding/height 带 0.3s 动画，滚动那一瞬间量到的是「动画中间值」，
      会把已经放不下的顶栏误判成放得下，于是汉堡自己消失、面板再也打不开。 */
   body.nav-measure .topbar, body.nav-measure .topbar * { transition: none !important; }
@@ -1111,6 +1116,19 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .sent.task-new { border-left: 3px solid var(--task-new); padding-left: 8px; margin-left: -11px; background: var(--task-bg); border-radius: 4px; }
   .sent.task-review { border-left: 3px solid var(--task-review); padding-left: 8px; margin-left: -11px; border-radius: 4px; }
   .sent.task-done { border-left: 3px solid var(--task-done); padding-left: 8px; margin-left: -11px; opacity: .6; border-radius: 4px; }
+  /* 他 2026-09-23：「高亮错误，现在全都高亮」。量过 —— 进任务模式后今天这批 36 句每句都带
+     6% 绿底 + 3px 绿竖条，而「正在读哪句」全站只有一句、底色还比它们更淡，36 句连成一片绿，
+     反而找不着该读哪句。竖条是这里唯一在说「这是今天这批」的东西，留着；
+     底色撤掉 —— 顺便让 待读/复习/已读 三档统一成"只有竖条"这一种语言，底色这件事整个让给当前句。
+     只改任务模式，常规阅读模式一个字不动。 */
+  /* 只清「还没轮到」的那批。必须带 :not(.playing)：当前句同时挂着 task-new 和 playing 两个类，
+     而这条选择器（body.task-mode + 两个类）特异度比 .sent.playing（两个类）高，
+     不排掉就会把唯一该亮的那句一起抹平 —— 实测改完第一版"有底色的句数 = 0"，正是踩了这个。 */
+  body.task-mode .sent.task-new:not(.playing) { background: transparent; }
+  /* 第二半：当前句必须赢过队列染色。.sent.task-new 写在 .sent.playing 后面、特异度又相同，
+     于是它那条 background 简写把当前句的渐变底色整条盖掉 —— 当前句和另外 35 句长得一模一样，
+     这才是「全都高亮、找不出在读哪句」的根。光撤别人的底色不够，还得把它自己的还回来。 */
+  body.task-mode .sent.playing { background: linear-gradient(transparent 62%, var(--hl) 62%); }
   /* 任务模式不再另设「当前句」标记（原来这里是一条 2px 绿描边）。
      他 2026-09-22：高亮跟常规模式一样就行，不要描边。更要紧的是两套标记必然不同步 ——
      描边只由队列移动驱动，而「上一句」走的是全局翻句路径，于是屏幕上会同时有两句被标成当前。

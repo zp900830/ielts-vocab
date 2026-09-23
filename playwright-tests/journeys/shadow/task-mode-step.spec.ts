@@ -120,4 +120,27 @@ test.describe('任务模式 · 一步一停（2026-09-23 四条实测）', () =>
     await expect(page.locator('#taskCard')).toBeVisible({ timeout: 5000 });
     expect(await page.evaluate(() => TASK.quizTotal())).toBeGreaterThan(0);
   });
+
+  /* ⑤ 他 2026-09-23 追报：「高亮错误，现在全都高亮」。量过 —— 今天这批 36 句每句都染 6% 绿底，
+     而「正在读哪句」全站只有一句，36 句连成一片就把那一句淹掉了。
+     这条锁的是"底色只属于当前句"这个不变式：队列那批靠左边那道竖条说话，不靠底色。
+     注意 :not(.playing) —— 少了它，清底色的规则会连当前句一起抹平（第一版就是这么错的）。 */
+  test('⑤ 任务模式里带底色的只有当前那一句，今天这批不再整片染绿', async ({ page, baseURL }) => {
+    test.setTimeout(currentTimeout() * 6);
+    await openShadow(page, baseURL);
+    await page.evaluate(() => { TASK.hideResumeOffer(); TASK.enterTaskMode(); });
+    await expect(page.locator('#taskBar')).toBeVisible();
+    const n = await page.evaluate(() => {
+      const all = [...document.querySelectorAll('.sent')];
+      const painted = all.filter((e) => {
+        const cs = getComputedStyle(e);
+        return cs.backgroundColor !== 'rgba(0, 0, 0, 0)' || cs.backgroundImage !== 'none';
+      });
+      return { total: all.length, taskMarked: all.filter(e => e.classList.contains('task-new')).length,
+        painted: painted.length, paintedIsPlaying: painted.every(e => e.classList.contains('playing')) };
+    });
+    expect(n.taskMarked, '今天这批一句都没标 = 夹具空了，这条什么都没测').toBeGreaterThan(3);
+    expect(n.painted, `带底色的句子有 ${n.painted} 句，应当只剩当前那 1 句`).toBe(1);
+    expect(n.paintedIsPlaying, '带底色的那一句必须是当前句本身').toBe(true);
+  });
 });

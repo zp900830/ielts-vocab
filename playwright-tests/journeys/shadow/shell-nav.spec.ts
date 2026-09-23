@@ -97,6 +97,43 @@ test.describe('topbar collapse · 汉堡收纳', () => {
     expect(box!.y).toBeGreaterThanOrEqual(bar.y + bar.height - 1);
   });
 
+  /* 右侧那颗「词库」浮标以前压在展开的菜单面板上面：.topbar 是 z-index:100 的层叠上下文，
+     面板写在里面标到 160 也出不去这个 100，而 #edgeTab 是根上的 fixed z-index:110。
+     后果不只是难看 —— 被盖住的那截面板按钮 elementFromPoint 返回的是 edgeTab，点了开的是词库。 */
+  test('菜单展开时「词库」浮标不许盖在面板上（盖住的按钮会点不到）', async ({ page, baseURL }) => {
+    budget();
+    await openAt(page, baseURL, WIDE);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await waitsFor(page)(true);
+    await page.locator('#btnMenu').click();
+    await expect(page.locator('.topbar-right')).toBeVisible();
+    const geo = await page.evaluate(() => {
+      const tab = document.getElementById('edgeTab') as HTMLElement;
+      const panel = document.querySelector('.topbar-right') as HTMLElement;
+      const t = tab.getBoundingClientRect(), p = panel.getBoundingClientRect();
+      const overlap = !(t.right <= p.left || p.right <= t.left || t.bottom <= p.top || p.bottom <= t.top);
+      let hit: string | null = null;
+      if (overlap) {
+        const x = Math.max(t.left, p.left) + 3, y = Math.max(t.top, p.top) + 3;
+        const el = document.elementFromPoint(x, y);
+        hit = el ? (el.id || el.tagName.toLowerCase()) : 'null';
+        // 面板里被别的东西盖住、点不到的按钮。只看确实落在面板矩形内的那些 ——
+        // 登录/注册 两颗被排到面板外面（另一个问题，别拿这条用例替它背书）。
+        const blocked = [...panel.querySelectorAll('button')].filter((b) => {
+          const r = b.getBoundingClientRect();
+          if (r.width === 0 || r.top < p.top - 1 || r.bottom > p.bottom + 1) return false;
+          const c = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+          return !(c === b || b.contains(c!) || (c && c.contains(b)));
+        }).map((b) => b.id || (b.textContent || '').trim().slice(0, 8));
+        return { overlap, hit, blocked, tabTop: Math.round(t.top), panelBottom: Math.round(p.bottom) };
+      }
+      return { overlap, hit, blocked: [], tabTop: 0, panelBottom: 0 };
+    });
+    expect(geo.overlap, '390 上「词库」浮标与面板确实有重叠区（没有就是这条用例什么都没测）').toBe(true);
+    expect(geo.hit, '重叠处命中的必须是面板里的东西，不是词库浮标').not.toBe('edgeTab');
+    expect(geo.blocked, '面板里被别的东西盖住、点不到的按钮').toEqual([]);
+  });
+
   test('滚动收缩态下面板照样打得开（body.scrolled 不许把它压没）', async ({ page, baseURL }) => {
     budget();
     await openAt(page, baseURL, TIGHT);
