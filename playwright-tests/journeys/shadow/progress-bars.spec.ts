@@ -288,4 +288,26 @@ test.describe('影子跟读全站进度条（任务条可拖 / 播放条可达 /
     test('⑦ 任务条几何：热区 ≥26、气泡不伸出屏幕、底栏不被撑高',
       { tag: ['@regression', '@shadow'] }, async ({ page }) => { await taskBarGeometry(page); });
   });
+
+  /* 气泡宽度必须与「已经显示过多少次」无关。2026-09-24 实测（1902 视口）：hover 几十次之后
+     气泡塌成一条竖线，整句英文一字一行。根因是 showTip 直接读 tip.scrollWidth 当"自然宽度"，
+     而 tip.style.width 还留着上一次写进去的 px —— 带显式宽度、内容又折行的元素，
+     scrollWidth 恒等于那个宽度，于是每显示一次少 2px（边框/取整），几十次就到底了。
+     修法：量之前先把 width 收回 max-content。这条锁的就是"反复 hover 宽度不许变窄"。 */
+  test('⑧ 任务条气泡：反复 hover，宽度不许越量越窄',
+    { tag: ['@regression', '@shadow'] }, async ({ page }) => {
+      await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.enterTaskMode(); });
+      await expect(page.locator('#taskBar')).toBeVisible();
+      const box = (await page.locator('#tbSeek').boundingBox())!;
+      const widths: number[] = [];
+      for (let i = 0; i < 24; i++) {
+        await page.mouse.move(box.x + box.width * (0.2 + 0.6 * ((i % 5) / 5)), box.y + box.height / 2);
+        await page.waitForTimeout(40);
+        widths.push(await page.evaluate(() => document.getElementById('tbTip')!.offsetWidth));
+      }
+      const uniq = [...new Set(widths)];
+      expect(Math.min(...widths), `气泡最窄只有 ${Math.min(...widths)}px —— 又回到了"越 hover 越窄"那个反馈环`)
+        .toBeGreaterThanOrEqual(200);
+      expect(uniq, `24 次 hover 里宽度变了：${uniq.join(', ')}`).toHaveLength(1);
+    });
 });
