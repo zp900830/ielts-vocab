@@ -199,11 +199,11 @@ test.describe('任务模式 · 一步一停（2026-09-23 四条实测）', () =>
     expect(sp.length, `同一句被提交了 ${sp.length} 次 = 又去换音色重播了`).toBe(1);
   });
 
-  /* ⑧ 他 2026-09-23 补的口径：那颗键点过之后要翻成「下一句」—— 第一下「放这一句」，
-     第二下不再是重放，而是把这句收尾、跳到队列里下一句。
-     反向也锁住：自动前进 / 「上一句」都得回到「放这一句」（退回来是"再听一遍这句话"，
-     不是"接着往下走"）。判据是 #tbNext 自己点过没有，不是 playing —— prev() 也会起播。 */
-  test('⑧ 点过「放这一句」之后那颗键翻成「下一句」，点一下收尾前进', async ({ page, baseURL }) => {
+  /* ⑧ 他 2026-09-23 的口径，当天又改了一次：那颗键进任务模式先写「放这一句」
+     （刚进来就写「下一句」等于让人以为已经放过了），点过之后**整趟都写「下一句」** ——
+     他追报「现在像是两个按钮一直切来切去」，所以文案不再按句来回翻。
+     点下去的动作按当前这句走：还没放的先放起来；正在放的收尾、跳到队列里下一句。 */
+  test('⑧ 那颗键进模式先「放这一句」，点过之后整趟都是「下一句」', async ({ page, baseURL }) => {
     test.setTimeout(currentTimeout() * 8);
     await openShadow(page, baseURL, 1280);   // 窄屏上这颗字被 font-size:0 收掉，只看得到图标
     await page.evaluate(() => { TASK.hideResumeOffer(); TASK.enterTaskMode(); });
@@ -214,15 +214,19 @@ test.describe('任务模式 · 一步一停（2026-09-23 四条实测）', () =>
 
     await expect(next).toContainText('放这一句');
     const t0 = await title();
-    await next.click();
-    await expect(next).toContainText('下一句');        // 点过 → 翻名
+    await next.click();                                // 第一下：放
+    await expect(next).toContainText('下一句');
     expect(await title(), '第一下只是"放"，不该已经前进').toBe(t0);
 
-    await next.click();                                // 第二下 = 收尾前进
-    await expect.poll(() => title()).not.toBe(t0);
-    await expect(next).toContainText('放这一句');       // 换了一句 → 回到"放"
+    await page.evaluate(() => (window as unknown as { __finish: () => void }).__finish());
+    await expect.poll(() => title()).not.toBe(t0);      // 放完自动前进
+    await expect(next).toContainText('下一句');          // 文案整趟不再翻回「放这一句」
 
-    await page.locator('#tbPrev').click();             // 退回来：仍是"放"，不是"继续往下走"
-    await expect(next).toContainText('放这一句');
+    const t1 = await title();
+    await next.click();                                // 这句还没放 → 先放起来，不许前进
+    expect(await title(), '还没放的这句：点「下一句」应当先放起来').toBe(t1);
+    await next.click();                                // 正在放 → 收尾前进
+    await expect.poll(() => title()).not.toBe(t1);
+    await expect(next).toContainText('下一句');
   });
 });

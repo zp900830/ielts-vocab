@@ -2515,6 +2515,17 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     this.cache.set(key, url);
     },
+    /* 作废一条缓存（内存 + IndexedDB 两份都要）：`<audio>` 报 audio-error 时用。
+       只删不 revoke 的话内存那份还会继续命中坏 URL；只 revoke 不删则缓存里留着死链。 */
+    _invalidate(key) {
+    try { const u = this.cache.get(key); if (u) { URL.revokeObjectURL(u); this.cache.delete(key); } } catch (e) {}
+    try {
+    this._db().then(db => {
+    if (!db) return;
+    try { db.transaction('clips', 'readwrite').objectStore('clips').delete(key); } catch (e) {}
+    });
+    } catch (e) {}
+    },
     _dbp: null,
     _db() {
     if (!this._dbp) {
@@ -2689,13 +2700,38 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     }, 1000);
 
+    /* 缓存坐标，必须与 synth() 里那行 key 逐字一致 */
+    const clipKey = 'r2|' + voiceId + '|' + Number(rate).toFixed(2) + '|' + text;
+    let retried = false;
+    const loadInto = u0 => {
+    if (done || my !== speakToken) return;
+    au.src = u0;
+    this._auUrl = u0; // 标记当前播放的 blob URL，防止缓存回收时掐断
+    };
+    /* blob 被回收/解坏时 <audio> 直接报 error。以前这里一律掉到本地音色 ——
+       可坏掉的那条缓存（内存 + IndexedDB 两份）还在，同一句会反复失败、反复提示。
+       先作废这条缓存、重合成一次；第二次还坏才降级（他 2026-09-23 报的 audio-error）。 */
+    const onAudioErr = () => {
+    if (done || my !== speakToken) return;
+    if (!retried) {
+    retried = true;
+    dlog('cloud-audio-retry', text.slice(0, 20));
+    try { this._invalidate(clipKey); } catch (e) {}
+    this.synth(text, voiceId, rate, true).then(url2 => {
+    if (done || my !== speakToken) return;
+    loadInto(url2);
+    au.play().catch(() => fail(new Error('play-rejected')));
+    }).catch(fail);
+    return;
+    }
+    fail(new Error('audio-error'));
+    };
     this.synth(text, voiceId, rate, true).then(url => {
     if (done || my !== speakToken) { clearTimeout(timer); clearInterval(monitor); clearTimeout(slowT); return; }
     clearTimeout(slowT);
-    au.src = url;
-    this._auUrl = url; // 标记当前播放的 blob URL，防止缓存回收时掐断
+    loadInto(url);
     au.onended = () => { if (done) return; done = true; clearTimeout(timer); clearInterval(monitor); errStreak = 0; cb(); };
-    au.onerror = () => fail(new Error('audio-error'));
+    au.onerror = onAudioErr;
     au.onpause = () => {
     // 监听暂停事件
     if (!done && !au.ended && playing) {
@@ -3090,6 +3126,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     () => { if (my !== speakToken) return; errStreak = 0; if (cb) cb(); },
     err => {
     dlog('cloud-fallback', err && err.message);
+    /* 这句已经被新播放顶掉了（切句 / 暂停 / 上一句 / 已经开始下一句）→ 它的失败跟屏幕上这句无关：
+       既不提示也不降级，否则会把陈旧错误说成「当前这句没放出来」，还白切一次本地音色。 */
+    if (my !== speakToken) return;
     if (!CLOUD._fbT || Date.now() - CLOUD._fbT > 15000) {
     CLOUD._fbT = Date.now();
     CLOUD.setStatus('云端合成失败，已临时降级本地：' + CLOUD.friendlyErr(err && err.message));
@@ -4949,13 +4988,15 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          队列是滚动的，读完的句子会被顶掉，不快照就会发现 ② 无题可出。 */
       let pass = 1, quizCursor = 0, quizWrongN = 0, quizAnsweredN = 0, taskFinished = false,
           exitConfirm = false, quizStart = 0;   // ② 的剩余时间按「本次真实答题速度」算，所以要记住 ② 是从哪一刻开始的
-      /* ① 那颗键翻不翻成「下一句」，只认「它自己点过没有」：换句/自动前进/上一句都清掉。
-         用 playing 判会把 prev() 也算进去（prev 会起播），而那一路的语义仍是「放这一句」。 */
-      let _nextPlayed = false;
           reveal = null, batchItems = [], DISP = [], SENT_ZH = [], PARA_ID = [];
       /* 本遍末尾的补考清单（走查 2026-09-22 #2：答错过的词这一遍里要再考一次，只一次）。
          存的是 batchItems 里那批 item 对象本体 —— 身份即「这个词在这一句」，同一句不会进两次。 */
       let retakeItems = [], retakeServedN = 0, retakeOkN = 0;
+      /* ① 那颗键一颗担两义（他 2026-09-23 拍的口径 + 当天第二次改口）：
+         进任务模式先显示「放这一句」（刚进来就写「下一句」等于让人以为已经放过了）；
+         点过之后**整趟都叫「下一句」**，不再按句来回翻 —— 他追报「像两个按钮一直切来切去」。
+         `_tabStarted` = 这趟已经放过一句了（决定文案）；`_nextPlayed` = 当前这句点过没有（决定点下去是放还是前进）。 */
+      let _tabStarted = false, _nextPlayed = false;
 
       function indexLayout() {
         DISP = []; SENT_ZH = []; PARA_ID = [];
@@ -5483,6 +5524,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         // 批次快照：② 考的就是这一批读过的句子，不是队列此刻还剩下什么
         batchItems = todayPlan(true).items.map(x => Object.assign({}, x));
         pass = 1; resetQuizRun(); taskFinished = false;
+        _tabStarted = false; _nextPlayed = false;   // 那颗键每一趟都从「放这一句」起步
         if (!todayQueue.length) { showAbToast('今天没有排到的句子 —— 把每天的分钟数调大一点试试'); return; }
         hideResumeOffer();
         taskMode = true;
@@ -5657,9 +5699,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
            用「上一句」退回去再点，会悄悄跳到队列里第一句还没听的，而不是你退回的那句 ——
            正是这条路径以前栽过的坑（队列位置和高亮不对齐）。 */
         revealTaskPos(taskPos, true);
-        /* 点过了 → 这一颗从现在起是「下一句」。revealTaskPos 里清过位，所以顺序必须是这样：
+        /* 点过了 → 这一趟从此都叫「下一句」。revealTaskPos 里把 _nextPlayed 清过，所以顺序必须是这样：
            先落位再置位，最后手动刷一次文案（paint() 那一趟跑的时候位还没置上）。 */
-        _nextPlayed = true;
+        _nextPlayed = true; _tabStarted = true;
         syncTaskNextLabel();
       }
 
@@ -5778,19 +5820,20 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          点过之后 →「下一句」（点一下把这句收尾、跳到队列里下一句）。
          标签要跟着这个位变，而它只在 next()/revealTaskPos()/prev() 三处动，所以同步函数很轻 ——
          不重跑 updateTaskBar()（那个会重建今日队列，逐句跑不起）。判据与 next() 那份是同一个函数。 */
-      function nextIsAdvance() { return !!(taskMode && _nextPlayed); }
+      function nextIsAdvance() { return !!(taskMode && _tabStarted && _nextPlayed); }
       function syncTaskNextLabel() {
         if (!taskMode) return;
         const bar = document.getElementById('taskBar');
         if (!bar || bar.dataset.state !== 'read') return;
         const btn = document.getElementById('tbNext');
         if (!btn) return;
-        const on = nextIsAdvance();
+        const on = _tabStarted;               // 文案只看「这趟放过一句没有」：点过之后整趟都叫「下一句」
         const label = on ? '下一句' : '放这一句';
         if (btn.dataset.label === label) return;
         btn.dataset.label = label;
         btn.innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> ' + label;
-        btn.title = on ? '下一句（收尾这一句，跳到队列里下一句）' : '放这一句（放完自动记为已读，再点放下一句）';
+        btn.title = on ? '下一句（还没放的先放起来；正在放的收尾，跳到队列里下一句）'
+          : '放这一句（放完自动记为已读，再点就是下一句）';
         btn.setAttribute('aria-label', label);
       }
       /* 一条栏三种态，只换内容不藏控件（PRD §10.1）。
