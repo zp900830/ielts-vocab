@@ -12,7 +12,7 @@ const budget = () => test.setTimeout(Math.min(currentTimeout() * 8, 45000)); // 
    2026-09-21 那条间歇红就是这个形状（未修版 410 次红 1 次，带探针的 550 次 0 红）：
    负载决定「覆写」和「重建」谁先到，改产品代码也判不了真假。
    宽度则量过：真实内容下 ≤1000px 一定放不下、≥1440px 一定放得下，与音色名/章节名长短无关
-   （复测：node work/nav_probe.mjs --sweep）。 */
+   （复测：node work/nav_probe.mjs --sweep；2026-09-23 摘掉「阅读训练」那颗后重量过一遍，区间没变）。 */
 const WIDE = 1600;   // 放得下：整排工具保持一行铺开
 const TIGHT = 900;   // 放不下：整排收进汉堡
 
@@ -29,9 +29,10 @@ async function openAt(page: import('@playwright/test').Page, baseURL: string, wi
 
 const state = (page: import('@playwright/test').Page) => page.evaluate(() => ({
   navMenu: document.body.classList.contains('nav-menu'),
-  inPanel: !!document.querySelector('.topbar-right .app-link'),
+  // 收纳后工具栏改挂成浮层面板（position:absolute）；铺开时它就是顶栏行内的一段
+  panelMode: getComputedStyle(document.querySelector('.topbar-right')!).position === 'absolute',
   burgerShown: getComputedStyle(document.getElementById('btnMenu')).display !== 'none',
-  barH: Math.round(document.querySelector('.topbar').getBoundingClientRect().height),
+  barH: Math.round(document.querySelector('.topbar')!.getBoundingClientRect().height),
 }));
 
 const waitsFor = (page: import('@playwright/test').Page) => (want: boolean) =>
@@ -46,10 +47,10 @@ test.describe('topbar collapse · 汉堡收纳', () => {
     await waitsFor(page)(false);
     const s = await state(page);
     expect(s.burgerShown).toBe(false);
-    expect(s.inPanel).toBe(false);
+    expect(s.panelMode).toBe(false);
   });
 
-  test('放不下就自动收进汉堡，阅读训练那颗也一起进去；宽度还回去就重新铺开', async ({ page, baseURL }) => {
+  test('放不下就自动收进汉堡，整排工具改挂面板；宽度还回去就重新铺开', async ({ page, baseURL }) => {
     budget();
     await openAt(page, baseURL, WIDE);
     await waitsFor(page)(false);            // 前提：宽屏本来就放得下
@@ -57,14 +58,26 @@ test.describe('topbar collapse · 汉堡收纳', () => {
     await waitsFor(page)(true);             // 挤不下 → 自动收
     const s = await state(page);
     expect(s.burgerShown).toBe(true);
-    expect(s.inPanel).toBe(true);
+    expect(s.panelMode).toBe(true);
     expect(s.barH).toBeLessThan(64);        // 收纳后顶栏仍只有一行
     await page.locator('#btnMenu').click();
     await expect(page.locator('.topbar-right')).toBeVisible();
-    await expect(page.locator('.topbar-right .app-link')).toHaveAttribute('href', '../index.html');
+    await expect(page.locator('.topbar-right #btnDark')).toBeVisible();
     await page.setViewportSize({ width: WIDE, height: 900 });
     await waitsFor(page)(false);            // 反向：放得下了要自己摊回去，不能一收定终身
-    expect((await state(page)).inPanel).toBe(false);
+    expect((await state(page)).panelMode).toBe(false);
+  });
+
+  /* 两个应用各自独立：影子跟读里不许再出现跳回阅读训练的入口（他明确说没这个诉求）。
+     只认「往上跳一级」的 href —— 测试环境把 shadow/ 当根目录服务，写死 ../index.html 会假绿。 */
+  test('页面上没有任何跳去阅读训练的链接', async ({ page, baseURL }) => {
+    budget();
+    await openAt(page, baseURL, WIDE);
+    await expect(page.locator('.app-link')).toHaveCount(0);
+    const upward = await page.evaluate(() => [...document.querySelectorAll('a[href]')]
+      .map(a => a.getAttribute('href')!)
+      .filter(h => h.startsWith('../')));
+    expect(upward).toEqual([]);
   });
 
   test('窄屏一律走汉堡，面板里的按钮点得到', async ({ page, baseURL }) => {

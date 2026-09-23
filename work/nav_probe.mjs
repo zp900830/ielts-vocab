@@ -106,7 +106,7 @@ const HOOK = () => {
 const FINAL = () => ({
   navMenu: document.body.classList.contains('nav-menu'),
   burgerShown: getComputedStyle(document.getElementById('btnMenu')).display !== 'none',
-  inPanel: !!document.querySelector('.topbar-right .app-link'),
+  inPanel: getComputedStyle(document.querySelector('.topbar-right')).position === 'absolute',
   barH: Math.round(document.querySelector('.topbar').getBoundingClientRect().height),
   scrollY: Math.round(window.scrollY),
   fonts: document.fonts ? document.fonts.status : 'n/a',

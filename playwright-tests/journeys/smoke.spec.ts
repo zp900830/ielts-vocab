@@ -41,6 +41,13 @@ test.describe('Smoke tests for non-shadow pages', () => {
     await accentBtn.click();
     await expect(accentBtn).toHaveText('🇺🇸 美音');
 
+    // 两个应用各自独立：阅读这边不许再出现跳去影子跟读的入口（他明确说没这个诉求）
+    await expect(page.locator('#shadowLink')).toHaveCount(0);
+    const toShadow = await page.evaluate(() => [...document.querySelectorAll('a[href]')]
+      .map(a => a.getAttribute('href')!)
+      .filter(h => h.includes('shadow')));
+    expect(toShadow).toEqual([]);
+
     expect(errors).toEqual([]);
   });
 

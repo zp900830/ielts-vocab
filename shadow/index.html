@@ -1530,7 +1530,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
           <option value="-1">📚 全部文章</option>
         </select>
       </div>
-      <a class="btn app-link" href="../index.html" title="去情境阅读训练（读故事、做测验、背词复习）" aria-label="切换到情境阅读训练"><i class="ri-book-open-line" aria-hidden="true"></i><span class="only-mobile"> 阅读训练</span></a>
       <button class="btn" id="btnToday" onclick="TASK.togglePanel()" title="今日学习任务" aria-label="今日学习任务"><i class="ri-calendar-check-line" aria-hidden="true"></i><span class="only-mobile"> 今日</span><span class="today-dot"></span></button>
       <nav class="topbar-right" aria-label="工具栏">
         <div class="ctrl">
@@ -2683,7 +2682,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     function toggleMenu() { document.body.classList.toggle('menu-open'); }
 
     /* ---- 顶栏放不下就收进汉堡（CSS 侧见 body.nav-menu） ----
-       量宽之前先把收纳类摘掉、把「阅读训练」放回行内，才能量到它到底会不会折成两行；
+       量宽之前先把收纳类摘掉，才能量到这一行到底会不会折成两排；
        加删在同一个任务里完成，中间不产帧，所以不会闪。 */
     function navRowWraps() {
       const bar = document.querySelector('.topbar');
@@ -2696,14 +2695,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       const contentH = bar.clientHeight - (parseFloat(cs.paddingTop) || 0) - (parseFloat(cs.paddingBottom) || 0);
       const tallest = Math.max.apply(null, kids.map(el => el.offsetHeight));
       return contentH > tallest + 2;
-    }
-    function placeAppLink(inPanel) {
-      const a = document.querySelector('.topbar .app-link');
-      const panel = document.querySelector('.topbar-right');
-      const today = document.getElementById('btnToday');
-      if (!a || !panel) return;
-      if (inPanel) { if (a.parentElement !== panel) panel.insertBefore(a, panel.firstChild); }
-      else if (a.parentElement === panel) panel.parentElement.insertBefore(a, today);
     }
     function syncNavMode() {
       const b = document.body;
@@ -2719,12 +2710,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       // 量之前先按「铺开」摆一次：nav-menu 开着时这一行只剩标题+汉堡，永远量不出真实宽度。
       // 加删在同一个任务里完成、且期间关掉过渡（CSS 见 body.nav-measure），所以既不闪也不会带动画重启。
       b.classList.add('nav-measure');
-      b.classList.remove('nav-menu'); placeAppLink(false);
+      b.classList.remove('nav-menu');
       const want = narrow || navRowWraps();
       b.classList.remove('nav-measure');
-      if (want) { b.classList.add('nav-menu'); placeAppLink(true); return; }
+      if (want) { b.classList.add('nav-menu'); return; }
       if (b.classList.contains('nav-menu')) b.classList.remove('menu-open');
-      placeAppLink(false);
     }
     let _navRaf = 0;
     function requestNavSync() {
