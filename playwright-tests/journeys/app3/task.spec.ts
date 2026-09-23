@@ -13,12 +13,17 @@ declare const TASK: {
   setPass(n: number): void;
   readDone(i: number): void;
   next(): void;
+  answerQuiz(choice: string): boolean;
+  nextQuiz(): void;
   quizTotal(): number;
   quizDone(): number;
   pass(): number;
   currentQuiz(): { opts: string[]; answer: string } | null;
   queue: { i: number }[];
   hasPlan: boolean;
+  state(): { daily: Record<string, unknown> };
+  events(): unknown[];
+  openArticleQuiz(a: number): void;
 };
 declare const APP3: { currentBlank(): number; openBlank(bi: number): void };
 declare const ShadowPlan: {
@@ -301,6 +306,103 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await expect(page.locator('#art .qz-blank.qa-done')).toHaveCount(total);
     expect(await page.evaluate(() => TASK.quizDone()), '每个空恰好答一次，没有重复事件').toBe(total);
     await expect(page.locator('#blankPop')).toBeHidden();
+  });
+
+  /* ===== Task 7：收工态 + 两条入口 + 存档回归 =====
+     入口 1 走真路径（① 完成 → 小结 → ② 答完）；收工态两颗键「回首页 / 看词本」；
+     刷新后 daily 不丢（repsByArticle 随 daily 落盘）。 */
+  test('入口 1 收工态：① 走完 → 答题 → 收工「回首页 + 看词本」，刷新 daily 不丢', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    // ① 真路径：stub 朗读引擎，把这一篇标成读完，点两下「下一句」触发 finishPass(1)
+    await page.evaluate(() => {
+      (window as unknown as { speak: (t: string, cb?: () => void) => void }).speak = () => {};
+      Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
+    });
+    await page.evaluate(() => { TASK.next(); TASK.next(); });
+    // 入口 1 的小结按钮（§4.4：提示「答题」）
+    await expect(page.locator('#passCard .pass-summary .go')).toContainText('答题');
+
+    await page.locator('#passCard .pass-summary .go').click();
+    // 答完整批（含末尾补考段）
+    await page.evaluate(() => {
+      for (let g = 0; g < 300; g++) {
+        const q = TASK.currentQuiz();
+        if (!q) break;
+        TASK.answerQuiz(q.answer);
+        TASK.nextQuiz();
+      }
+    });
+    // 收工态：两颗键换成「回首页 / 看词本」，今天完成的摘要还在
+    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
+    await expect(page.locator('#tbAgain')).toContainText('回首页');
+    await expect(page.locator('#tbNext')).toContainText('看词本');
+    await expect(page.locator('#tbTitle')).toContainText('今天完成');
+    await expect(page.locator('#tbSub')).toContainText('句');
+
+    // 存档：刷新后 daily 一字不差
+    const before = await page.evaluate(() => TASK.state().daily);
+    await page.reload();
+    await page.waitForFunction(() => { try { return !!(TASK.state() && TASK.state().daily); } catch (e) { return false; } });
+    expect(await page.evaluate(() => TASK.state().daily)).toEqual(before);
+  });
+
+  // 收工态两颗键各自去哪：看词本 → #/words 占位屏；回首页 → 首页六张卡片。
+  test('收工态：看词本 → #/words；回首页 → 首页', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    // 直接进该篇任务模式并切到 ②，答完这批 → 收工态
+    const finishQuiz = async () => {
+      await page.locator('.art-card').first().click();
+      await expect(page.locator('#taskBar')).toBeVisible();
+      await page.evaluate(() => {
+        TASK.setPass(2);
+        for (let g = 0; g < 300; g++) {
+          const q = TASK.currentQuiz();
+          if (!q) break;
+          TASK.answerQuiz(q.answer);
+          TASK.nextQuiz();
+        }
+      });
+      await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
+    };
+    await finishQuiz();
+    await page.locator('#tbNext').click();
+    await expect(page).toHaveURL(/#\/words/);
+    await expect(page.locator('#appView')).toContainText('单词本');
+
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await finishQuiz();
+    await page.locator('#tbAgain').click();
+    await expect(page.locator('body')).not.toHaveClass(/task-mode/);
+    await expect(page.locator('.art-card')).toHaveCount(6);
+  });
+
+  /* 入口 2（§4.4）：通读已完成的篇目，首页卡片多一颗「答题」，点了直达 ② —— 不必先跑 ①。
+     批次与「① 后进 ②」同源（都取当天 assemble 的 items 快照）。 */
+  test('入口 2：通读完成的卡片有「答题」，点了直达 ②（不要求先跑 ①）', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    // 只通读、不做题 → 该篇「② 可答题」（data-stage="read"）
+    await page.evaluate(() => {
+      Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
+    });
+    await page.reload();
+    const quizBtn = page.locator('.art-card[data-stage="read"] .a-quiz');
+    await expect(quizBtn).toHaveCount(1);
+    await expect(quizBtn).toContainText('答题');
+
+    await quizBtn.click();
+    // 直达 ②：已在任务模式、正文已挖空、点空弹四选一
+    await expect(page.locator('body')).toHaveClass(/task-mode/);
+    expect(await page.locator('#art .sent .qz-blank').count(), '直达 ② 必须立刻挖空').toBeGreaterThan(0);
+    await page.locator('#art .qz-blank').first().click();
+    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
   });
 
   // 审阅 Important 3：入口 1（① 走完 → 小结 → 开始答题）没有 E2E，补一条走真路径的。

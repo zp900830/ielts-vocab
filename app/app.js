@@ -18,22 +18,36 @@
     const b = e.target.closest('.nav-item');
     if (b) { location.hash = '#/' + b.dataset.route; return; }
     // 卡片是 renderHome 每次重渲的，所以走事件代理而不是逐张绑。
+    // 入口 2 的「答题」按钮长在卡片里，必须先于卡片判定 —— 否则会被 openArticle 接走（§4.4）。
+    const quiz = e.target.closest('.a-quiz');
+    if (quiz && quiz.dataset.a != null) { openQuiz(Number(quiz.dataset.a)); return; }
     const card = e.target.closest('.art-card');
     if (card && card.dataset.a != null) openArticle(Number(card.dataset.a));
+  });
+  // 卡片改成 div + role="button"（里面要放「答题」真按钮，按钮不能套按钮），
+  // 所以 Enter / Space 的激活要自己补回来。
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+    const t = e.target;
+    if (!t || !t.closest) return;
+    if (t.closest('.a-quiz')) return;               // 真按钮自己会派发 click
+    const card = t.closest('.art-card');
+    if (!card || card.dataset.a == null) return;
+    e.preventDefault();
+    openArticle(Number(card.dataset.a));
   });
 
   /* ---- 3.0 首页：六张文章卡片（M1 Task 3） ----
      ROOT2 是 TASK IIFE 的内部状态，外壳读不到，只能经 TASK.state() / TASK.sentWordsOf 拿。
-     熟练度这里**只算第一项**（通读完成度 × 40%）；② 正确率与精读次数在 Task 5/6 补，
-     统一由 Task 7 收口 —— 别提前把另两项塞进来。 */
+     熟练度按 §9.2 三项收口（Task 7）：通读完成度 ×40 + ② 正确率 ×35 + 精读重复度 ×25。 */
   function rel(ts) {                       // 相对时间，复用影子跟读口径
     if (!ts) return '还没学过';
     const d = Math.floor((Date.now() - ts) / 864e5);
     return d <= 0 ? '今天' : d === 1 ? '昨天' : d + ' 天前';
   }
-  // 当前阶段的文案（§3.3 / §9.4）。M1 只有三档可达：未开始 / 通读中 / 已学完
-  // （② 未上线，通读满即终态；`熟练` ≥80% 要等 Task 7 补齐另两项权重后才会出现）。
-  const STAGE_LABEL = { todo: '未开始', reading: '通读中', read: '已学完', pro: '熟练' };
+  // 当前阶段的文案（§3.3 / §9.4）。通读满还没做题 = 「② 可答题」；`已学完` 留给"通读 + ② 各一遍"。
+  const STAGE_LABEL = { todo: '未开始', reading: '通读中', read: '② 可答题',
+                        quiz: '② 做题', done: '已学完', pro: '熟练' };
   function articleStat(a) {
     const st = (typeof TASK !== 'undefined' && TASK.state()) || window.ShadowPlan.emptyState();
     const wordsOf = (typeof TASK !== 'undefined' && TASK.sentWordsOf) || function () { return []; };
@@ -46,13 +60,38 @@
       wordsOf(i).forEach((w) => words.add(w));
     });
     const c = window.ShadowPlan.countStagesOf(st, scope, wordsOf);
-    // ② 正确率 / 精读次数：走事件流（M1 先只算通读完成度，② 与精读在 Task 5/6 补）
-    const progress = total ? Math.round(Math.min(ever / total, 1) * 40) : 0;   // 只算 40% 那项
-    const stage = ever === 0 ? 'todo' : (ever >= total ? 'read' : 'reading');
+    /* ② 正确率走**引擎的 quiz 事件**（type:'quiz'、按本篇全局句号过滤），不是 UI 游标：
+       补考会往同一个空再记一条事件，§9.2 的分母就是「quiz 总数」（题数，不是不同的空数
+       —— T6 台账里那条口径）。'ex' 例句题的 s 是字符串，进不了 scope，天然不计。 */
+    const evs = ((typeof TASK !== 'undefined' && TASK.events) ? TASK.events() : [])
+      .filter(e => e.type === 'quiz' && scope.has(e.s));
+    const quizOf = evs.length, quizOk = evs.filter(e => e.ok).length;
+    const quizRate = quizOf ? quizOk / quizOf : 0;
+    /* 精读次数（§7.6）：只数任务模式的完成（taskSentenceFinished 累加），随身听不计。
+       repsByArticle 是 3.0 外壳自己的账，按天落在 state.daily 里 —— 这里跨天求和成「累计值」。 */
+    let reps = 0;
+    const daily = st.daily || {};
+    Object.keys(daily).forEach((day) => {
+      const rb = daily[day] && daily[day].repsByArticle;
+      if (rb && rb[a]) reps += rb[a];
+    });
+    const progress = total
+      ? Math.round(Math.min(ever / total, 1) * 40 + quizRate * 35 + Math.min(reps / (total * 2), 1) * 25)
+      : 0;
+    /* 当前阶段（§9.4）。「② 满一遍」按「每句至少答对一次」（quizOk ≥ 句数）判；
+       熟练 = 已学完 且 熟练度 ≥ 80%（§9.2 的 caveat）。 */
+    let stage;
+    if (ever === 0) stage = 'todo';
+    else if (ever < total) stage = 'reading';
+    else if (quizOf === 0) stage = 'read';
+    else if (quizOk < total) stage = 'quiz';
+    else stage = 'done';
+    if (stage === 'done' && progress >= 80) stage = 'pro';
     let lastAt = 0; scope.forEach((i) => { const s = st.sents[i]; if (s && s.lastReadAt > lastAt) lastAt = s.lastReadAt; });
     // `total` = 句数（进度分母）；`wordTotal` = 词数（掌握分母，与 c.graduated 同单位）
     // `ever` = 这一篇里读过的句数 —— 横幅「还剩 N 句」与卡片进度共用这一份派生，别各算各的。
-    return { progress, stage, grad: c.graduated, total, lastAt, wordTotal: words.size, ever };
+    return { progress, stage, grad: c.graduated, total, lastAt, wordTotal: words.size, ever,
+      quizReady: total > 0 && ever >= total };
   }
   function renderHome(view) {
     // 数据未就绪时先占位：initApp 拉完数据会再调一次 route()（见 app/index.html）。
@@ -62,7 +101,9 @@
     }
     const cards = SECTIONS.map((s, a) => {
       const x = articleStat(a);
-      return `<button class="art-card" data-a="${a}" data-stage="${x.stage}">
+      // 卡片用 div 而不是 button：通读完成后里面要放一颗真的「答题」按钮（按钮不能套按钮）。
+      // role/tabindex 保住键盘可达，Enter/Space 的激活在上面的 keydown 代理里补。
+      return `<div class="art-card" data-a="${a}" data-stage="${x.stage}" role="button" tabindex="0">
         <div class="a-head"><div class="a-title">${esc(s.title)}</div>
           <span class="a-stage">${STAGE_LABEL[x.stage] || '未开始'}</span></div>
         <div class="a-en">${esc((TIT_EN[s.title] || '').replace(/^\s*·\s*/, ''))}</div>
@@ -70,7 +111,8 @@
         <div class="a-meta"><span class="a-pct">${x.progress}%</span>
           <span>已毕业 ${x.grad} / ${x.wordTotal} 词</span>
           <span>${rel(x.lastAt)}</span></div>
-      </button>`;
+        ${x.quizReady ? `<button class="a-quiz" data-a="${a}" type="button">答题</button>` : ''}
+      </div>`;
     }).join('');
     view.innerHTML = `<div class="home-banner" id="homeBanner"></div><div class="art-grid">${cards}</div>`;
     // ⚠️ renderBanner 由 Task 4 定义；只跑 Task 3 时它还不存在 —— 必须守卫。
@@ -82,9 +124,9 @@
      四类：没计划 / 有计划没做完 / 有计划做完 / 连续+毕业摘要（后两者叠加）。
      数字一律经 TASK 出口取（todayStats / articleStat），界面不自己数账。 */
   let _bannerEl = null, _setupWired = false;
-  // 该继续哪一篇：第一篇没「已学完」的；全读完就回到第一篇（M1 按篇队列 Task 5 才落地）。
+  // 该继续哪一篇：第一篇「还没通读完」的；全读满就回到第一篇（§9.4：通读满是 read/quiz/done/pro，都跳过）。
   function nextArticle() {
-    for (let a = 0; a < SECTIONS.length; a++) if (articleStat(a).stage !== 'read') return a;
+    for (let a = 0; a < SECTIONS.length; a++) { const x = articleStat(a); if (x.ever < x.total) return a; }
     return 0;
   }
   function openSetup() {
@@ -143,7 +185,13 @@
     if (typeof TASK === 'undefined' || !TASK.openArticle) return;
     TASK.openArticle(a);
   }
-  window.APP3 = Object.assign(window.APP3, { openArticle });
+  /* 入口 2（§4.4）：首页卡片「答题」→ 直达该篇 ②。批次由 TASK.openArticleQuiz 现建，
+     与「① 后进 ②」同源 —— 不要求先跑一遍 ①。 */
+  function openQuiz(a) {
+    if (typeof TASK === 'undefined' || !TASK.openArticleQuiz) return;
+    TASK.openArticleQuiz(a);
+  }
+  window.APP3 = Object.assign(window.APP3, { openArticle, openQuiz });
 
   /* ---- ② 文内挖空 + 浮窗（M1 Task 6）----
      实现全在 TASK 里（只有它拿得到 quizList / 正文 .sent / 游标），外壳这层只把它挂到

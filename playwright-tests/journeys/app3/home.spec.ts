@@ -19,7 +19,7 @@ const rootUrl = process.env.E2E_ROOT_URL || '';
 /* 把三份重 JSON 换成 6 篇的小壳：既让首页拿到 6 张卡片，又不再多渲一页 1833 句 + 3242 词
    （和 shell.spec.ts 同一理由：整套并行时那份额外负载会压出 shadow 用例偶发红）。
    第 0 篇 24 句、30 个不同目标词（前 6 句各多一个词）—— 句数 ≠ 词数，锁住「已毕业 X / Y 词」
-   的 Y 是**词数**而不是句数（Finding 1）；24 句也让「读 20 句」正好落在「通读中」而非「已学完」。 */
+   的 Y 是**词数**而不是句数（Finding 1）；24 句也让「读 20 句」正好落在「通读中」而非终态。 */
 const SIX: Record<string, string> = (() => {
   const mk = (title: string, n: number, extra: number) => ({
     title,
@@ -84,15 +84,15 @@ test.describe('3.0 首页', () => {
     expect(await pctOf(page), '20/24 × 40% 四舍五入 = 33').toBe(33);
     expect(await pctOf(page), 'M1 只实现第一项，熟练度不得超过 40').toBeLessThanOrEqual(40);
 
-    // —— 读满 24 句 → 已学完（M1 无 ②，通读满即终态）；熟练度封顶 40 ——
+    // —— 读满 24 句 → 「② 可答题」（§9.4：通读满还没做题，`已学完` 留给通读+② 各一遍）——
     await page.evaluate(() => {
       const s = ShadowPlan.articleScope(SECTIONS, 0);
       Array.from(s).slice(20).forEach((i: number) => TASK.readDone(i));
     });
     await page.reload();
     await expect(c0).toHaveAttribute('data-stage', 'read');
-    await expect(c0.locator('.a-stage')).toHaveText('已学完');
-    expect(await pctOf(page), '通读满 → 40%（② / 精读两项 Task 7 才补）').toBe(40);
+    await expect(c0.locator('.a-stage')).toHaveText('② 可答题');
+    expect(await pctOf(page), '通读满 → 40%（② / 精读两项都还是 0）').toBe(40);
   });
 
   // Task 4：顶部「今天该做什么」横幅 + 没计划的空状态（§2.3 / §3.5）。
