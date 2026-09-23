@@ -1150,20 +1150,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-head h3 { font-size: 16px; font-weight: 700; }
   .tp-close { border: none; background: transparent; font-size: 20px; cursor: pointer; color: var(--muted); padding: 4px 8px; border-radius: 8px; }
   .tp-close:hover { background: rgba(0,0,0,.06); }
-  .tp-day { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
   /* 轨道底色以前直接吃 --border（浅色 #e5dfd6 / 深色 #33302b），压在 --card 白/深灰上几乎看不出来 ——
      看不出轨道就看不出"读到哪儿了"。给两档都拉开一点，再叠一条内高光让它像凹进去的槽。 */
   .tp-prog { height: 6px; background: rgba(11,84,64,.14); border-radius: 3px; overflow: hidden; margin-bottom: 16px;
     box-shadow: inset 0 1px 2px rgba(0,0,0,.08); }
   body.dark .tp-prog { background: rgba(255,255,255,.16); box-shadow: inset 0 1px 2px rgba(0,0,0,.45); }
   .tp-prog-fill { height: 100%; background: linear-gradient(90deg, var(--task-new), #2bd4a4); border-radius: 3px; transition: width .3s ease; }
-  .tp-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .tp-row:last-child { border-bottom: none; }
-  .tp-icon { font-size: 18px; flex: none; width: 28px; text-align: center; }
-  .tp-info { flex: 1; min-width: 0; }
-  .tp-label { font-size: 13px; font-weight: 600; }
-  .tp-sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
-  .tp-time { font-size: 13px; font-weight: 600; color: var(--task-new); white-space: nowrap; }
   .tp-actions { display: flex; gap: 8px; margin-top: 16px; }
   .tp-actions .btn { flex: 1; justify-content: center; min-height: 40px; font-size: 13px; }
   .tp-actions .btn.primary { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); border: none; font-weight: 600; box-shadow: 0 3px 10px rgba(16,180,135,.25); }
@@ -1180,8 +1172,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-num { display: flex; align-items: baseline; gap: 3px; font-size: 26px; font-weight: 800; line-height: 1.1; color: var(--text); font-variant-numeric: tabular-nums; }
   .tp-num .unit { font-size: 11.5px; font-weight: 600; color: var(--muted); font-variant-numeric: normal; }
   .tp-col .tp-prog { margin: 8px 0 6px; }
+  /* 标签列 narrow 时不许折行：手机上「连续」曾被拆成「连」「续」两行，右边的值也跟着折两行。
+     标签 nowrap 固定宽度，值允许折（右对齐）。 */
   .tp-kv { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--muted); padding: 3px 0; }
-  .tp-kv b { font-size: 12px; font-weight: 700; color: var(--text); text-align: right; font-variant-numeric: tabular-nums; }
+  .tp-kv > span { flex: none; white-space: nowrap; }
+  .tp-kv b { font-size: 12px; font-weight: 700; color: var(--text); text-align: right; font-variant-numeric: tabular-nums; min-width: 0; }
   .tp-note { margin-top: 12px; padding: 9px 11px; background: var(--accent-soft, rgba(16,180,135,.07)); border: 1px solid var(--accent-line, rgba(16,180,135,.18)); border-radius: 11px; font-size: 12.5px; line-height: 1.6; }
   .tp-note b { font-weight: 700; }
   .tp-note .sm { display: block; margin-top: 2px; }
@@ -1217,10 +1212,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .pill { min-height: 30px; padding: 4px 11px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--text); font-size: 12px; cursor: pointer; }
   .pill.on { background: var(--task-new); color: var(--cta-ink); border-color: var(--task-new); font-weight: 600; }
   .tp-book { max-height: 44vh; overflow-y: auto; border: 1px solid var(--border); border-radius: 12px; }
-  .tp-book-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--border); }
+  /* 词与状态贴在一起说同一个词，别让 1fr 把状态推到中缝：auto / 1fr / auto ——
+     状态紧跟词后、右端只留「重学」。 */
+  .tp-book-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--border); }
   .tp-book-row:last-child { border-bottom: none; }
   .tp-book-row .bw { font-size: 13.5px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .tp-book-row .bs { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .tp-book-row .bs { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .tp-book-row .bx { min-height: 28px; padding: 3px 10px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--muted); font-size: 11.5px; cursor: pointer; }
   .tp-book-row .bx:hover { color: var(--task-new); border-color: var(--task-new); }
   .tp-book p.sm { padding: 14px 12px; text-align: center; }
@@ -1230,18 +1227,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .pill { color: var(--text); }
   body.dark .pill.on { color: #062d22; }
   body.dark .sync-state { color: #f0a08c; }
-  .tp-stats { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--border); }
-  .tp-stats h4 { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
-  .tp-cycle { display: flex; align-items: center; gap: 14px; padding: 12px 14px; background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: 12px; }
-  .tp-cycle-num { flex: none; display: flex; align-items: baseline; gap: 3px; color: var(--accent-text); }
-  .tp-cycle-num .big { font-size: 34px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
-  .tp-cycle-num .unit { font-size: 14px; font-weight: 600; }
-  .tp-cycle-info { flex: 1; min-width: 0; }
-  .tp-cycle-label { font-size: 12px; color: var(--text); font-weight: 600; }
-  .tp-stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .tp-stat { text-align: center; padding: 8px 4px; background: var(--card); border-radius: 8px; }
-  .tp-stat .v { font-size: 18px; font-weight: 700; color: var(--accent-text); }
-  .tp-stat .k { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
   .tp-week { display: flex; gap: 4px; align-items: flex-end; height: 48px; margin-top: 10px; }
   .tp-week-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
   .tp-week-fill { width: 100%; background: linear-gradient(180deg, var(--task-new), #0fae7e); border-radius: 3px 3px 0 0; min-height: 2px; transition: height .3s; }
@@ -1478,9 +1463,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .ps-opt { border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer; background: transparent; transition: all .15s; }
   .ps-opt:hover { border-color: var(--task-new); color: var(--task-new); }
   .ps-opt.sel { background: var(--task-new); color: var(--cta-ink); border-color: var(--task-new); }
-  .ps-slider { width: 100%; accent-color: var(--task-new); }
-  .ps-slider-value { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 13px; color: var(--muted); }
-  .ps-slider-value #psDaysVal { font-weight: 700; color: var(--task-new); font-variant-numeric: tabular-nums; }
   /* 计划小结：标签—数值结构化，轮数只在这里出现一次并放大 */
   .ps-sum { margin: 14px 0 12px; padding: 2px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
   .ps-sum-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 12px; color: var(--muted); }
@@ -1502,24 +1484,22 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 调整计划 */
   .ps-adjust { display: flex; gap: 6px; margin-top: 12px; }
   .ps-adjust .btn { flex: 1; justify-content: center; font-size: 12px; min-height: 36px; }
-  /* 完成庆祝 */
-  .tp-done { text-align: center; padding: 20px 0; }
-  .tp-done .emoji { font-size: 40px; margin-bottom: 10px; }
-  .tp-done h3 { font-size: 17px; margin-bottom: 6px; }
-  .tp-done p { font-size: 13px; color: var(--muted); }
+  /* 破坏性操作不该跟「导出/导入」长得一模一样：降成一行小字链接，眼睛一眼能分开。
+     确认那一步仍由 resetPlan() 的原生 confirm 兜着（文案在函数里）。 */
+  .ps-adjust .link-danger { flex: 1; min-height: 32px; border: none; background: transparent; cursor: pointer;
+    color: var(--coral-deep, #c0492f); font-size: 11.5px; text-decoration: underline; text-underline-offset: 3px; }
+  .ps-adjust .link-danger:hover { color: var(--coral, #d9694e); }
   /* 暗色模式补充覆盖 */
   body.dark .tp-close:hover { background: rgba(255,255,255,.08); }
   body.dark .ps-opt { color: var(--text); }
   body.dark .ps-opt.sel { color: var(--cta-ink); }
   body.dark .ps-sum-row.warn, body.dark .ps-sum-row.warn b { color: #f0a08c; }
-  body.dark .today-panel .tp-head h3, body.dark .today-panel .plan-setup h3, body.dark .today-panel .tp-done h3 { color: var(--text); }
-  body.dark .today-panel .tp-label { color: var(--text); }
+  body.dark .today-panel .tp-head h3, body.dark .today-panel .plan-setup h3 { color: var(--text); }
   body.dark .task-bar .tb-title { color: var(--text); }
   body.dark .sent.task-new { background: rgba(52,211,153,.07); }
   body.dark .sent.task-done { opacity: .5; }
   @media (max-width: 700px) {
     .today-panel { width: calc(100vw - 24px); padding: 16px; border-radius: 16px; max-height: 75vh; }
-    .tp-stat-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .task-bar { padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)); }
     .task-bar .tb-btn { padding: 8px 14px; font-size: 12px; }
   }
@@ -5748,48 +5728,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         while (n < a.length - 1 && a[n + 1] <= days) n++;
         return n;
       }
-      // 新句是硬支出（每句 secNew 秒），剩下的时间才折算成复习（每句 secReview 秒）；
-      // 两者都是「1× 基准 ÷ 当前倍速」，所以调到 1.5× 后同样的每日分钟数能读更多句；
-      // 时间容量能支撑的轮数与 SRS 排期允许的轮数取小，再反推每天的复习量与实际所需分钟。
-      function planCapacity(days, min, perDayOverride) {
-        const total = SENT_RAW.length;
-        const perDay = perDayOverride || newPerDayOf(days);
-        const budget = min * 60;
-        const newSec = perDay * secNew();
-        // 若计划期内第一遍都铺不满全部句子，复习就只能覆盖已学的那部分，按平均已学比例打折
-        const coverage = Math.min(1, perDay * days / total);
-        const learnFrac = (coverage + 1) / 2;
-        const byTime = (perDay + Math.max(0, (budget - newSec) / secReview()) * learnFrac) * days / total;
-        const cycles = Math.max(0, Math.min(byTime, repsBySchedule(days)));
-        const repsPerDay = cycles * total / days;
-        const reviewPerDay = Math.max(0, Math.floor(repsPerDay - perDay));
-        const needMin = Math.ceil((newSec + reviewPerDay * secReview()) / 60);
-        return {
-          total, perDay, reviewPerDay, cycles,
-          horizon: days,                    // 本次估算使用的天数
-          schedMax: repsBySchedule(days),   // 该天数下排期允许的最大轮数
-          newMin: Math.ceil(newSec / 60),   // 仅新句就需要的时间
-          needMin,                          // 按该轮数走完一天需要的时间
-          tight: newSec > budget,           // 当日时间预算连新句都装不下
-          srsLimited: cycles < byTime,      // 瓶颈是排期而不是时间
-        };
-      }
-      function fmtCycles(c) {
-        if (!isFinite(c) || c <= 0) return '0轮';
-        return (c >= 10 ? String(Math.round(c)) : (Math.round(c * 10) / 10).toFixed(1)) + '轮';
-      }
-      // 计划小结：结构化「标签—数值」，轮数只在这里放大显示一次
-      function planSummary(cap, optMins) {
-        let html = `<div class="ps-sum-row big"><span>预计完成</span><b>${fmtCycles(cap.cycles)}</b></div>`
-          + `<div class="ps-sum-row"><span>每天新句</span><b>${cap.perDay} 句</b></div>`
-          + `<div class="ps-sum-row"><span>每天大约</span><b>${cap.needMin} 分钟${rate !== 1 ? ` · ${rate}×` : ''}</b></div>`;
-        if (cap.tight) {
-          const fit = (optMins || []).find(m => m >= cap.newMin);
-          html += `<div class="ps-sum-row warn"><span>⚠️ 时间不够</span><b>${fit ? `请选 ${fit} 分钟以上` : '请拉长总天数'}</b></div>`;
-        }
-        return html;
-      }
-
       // ---- UI 更新 ----
       let _barRO = null;
       /* 条子现在多高，就把 --task-bar-h 写成多高；条子收起来就把这个变量撤掉，让 CSS 兜底值接管。
@@ -6297,7 +6235,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         p.dataset.view = _view;
         const tabs = [['today', '今天'], ['plan', '计划'], ['book', '词本']]
           .map(v => `<button class="tp-tab${_view === v[0] ? ' on' : ''}" data-view="${v[0]}" onclick="TASK.setView('${v[0]}')">${v[1]}</button>`).join('');
-        p.innerHTML = `<div class="tp-head"><h3>${_view === 'today' ? '今天' : _view === 'plan' ? '计划' : '词本'}</h3>
+        /* 标题写死一句「今日学习任务」：以前它跟着当前 tab 走（今天/计划/词本），
+           于是同一行里「今天」出现两次（h3 一次、下面 tab 一次），纯重复。
+           现在 h3 跟 dialogs 的 aria-label 同源，tab 负责说「现在在哪一屏」。
+           顶栏那颗按钮的 aria-label 也是这句，plan-adjust 用例按名字点它。 */
+        p.innerHTML = `<div class="tp-head"><h3>今日学习任务</h3>
           <button class="tp-close" onclick="TASK.closePanel()" aria-label="关闭面板">✕</button></div>
           <div class="tp-tabs">${tabs}</div>` +
           (_view === 'plan' ? renderPlanView() : _view === 'book' ? renderBookView() : renderTodayView());
@@ -6322,15 +6264,16 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         // 「还剩」= 队列里没读的那几句的预留成本（句时 + ② 一题），
         // 不是「预算减已用」—— 后者刚开局就报 12 秒，说的是钱不是活
         const leftSec = left.reduce((a, q) => a + q.sec + qz, 0);
-        const grade = done >= 3 ? (done * 2 >= n ? '今天算扎实' : '今天只是地板')
+        /* 「地板」是内部三层的说法，学生看不懂 —— 三档改成说人话：还没起步 / 读得偏少 / 读够了。 */
+        const grade = done >= 3 ? (done * 2 >= n ? '今天读够了' : '今天读得偏少')
                                 : `还差 ${Math.max(1, 3 - done)} 句`;
         return `<div class="tp-cols">
           <div class="tp-col tp-col-today"><h4>今天 · ${ROOT2.plan.todayMinutes} 分钟</h4>
             <div class="tp-num">${done}<span class="unit"> / ${n} 句</span></div>
             <div class="tp-prog"><div class="tp-prog-fill" style="width:${pct}%"></div></div>
-            <div class="tp-kv"><span>连续</span><b>${streak2()} 天${floorDayCount() ? ` · 含 ${floorDayCount()} 个地板日` : ''}</b></div>
+            <div class="tp-kv"><span>连续</span><b>${streak2()} 天${floorDayCount() ? `（${floorDayCount()} 天偏少）` : ''}</b></div>
             <div class="tp-kv"><span>完成度</span><b>${grade}</b></div>
-            <div class="tp-kv"><span>还剩</span><b>${fmtTime(leftSec)}</b></div>
+            <div class="tp-kv"><span>预计还要</span><b>${fmtTime(leftSec)}</b></div>
           </div>
           <div class="tp-col tp-col-words"><h4>词汇</h4>
             <div class="tp-num">${d.promote || 0}<span class="unit"> 个词今天晋升</span></div>
@@ -6342,7 +6285,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         <div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>还剩 ${leftN} 句 · 覆盖 ${tp.words.length} 个词</b>
           <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}${baowenNote(tp.stats)}</span></div>
         <div class="tp-note sm eta-foot" id="todayEta" data-days="">算一下…</div>
-        <div class="tp-actions"><button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始 · 先通读这一批'}</button>
+        <div class="tp-actions"><button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始今天的任务'}</button>
           ${taskMode ? '<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>' : ''}</div>`;
       }
 
@@ -6362,7 +6305,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
 
       function renderPlanView() {
         const MINS = [5, 10, 15, 20, 30, 45, 60];
-        const BOUND = [[0, '0 点'], [2, '2 点'], [3, '3 点'], [4, '凌晨 4 点'], [5, '5 点'], [6, '6 点']];
+        /* 六颗统一成「N 点」：旧标签里只有 4 点写成「凌晨 4 点」，一颗特殊写法看着像笔误。 */
+        const BOUND = [[0, '0 点'], [2, '2 点'], [3, '3 点'], [4, '4 点'], [5, '5 点'], [6, '6 点']];
         const row = (label, opts, cur, fn) => `<div class="ps-group"><label>${label}</label>
           <div class="ps-opts">${opts.map(o => `<button class="ps-opt${String(o[0]) === String(cur) ? ' sel' : ''}" data-v="${o[0]}" onclick="${fn}(${o[0]})">${o[1]}</button>`).join('')}</div></div>`;
         return row('每天有多少分钟', MINS.map(m => [m, m + ' 分钟']), ROOT2.plan.todayMinutes, 'TASK.setMinutes') +
@@ -6377,7 +6321,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           <div class="ps-adjust"><button class="btn" onclick="TASK.exportBackup()">导出进度备份</button>
             <button class="btn" onclick="TASK.importBackup()">导入备份恢复</button></div>
           <input type="file" id="importFile" accept="application/json,.json" style="display:none">
-          <div class="ps-adjust"><button class="btn" onclick="TASK.resetPlan()">清空重来</button></div>`;
+          <div class="ps-adjust"><button class="link-danger" onclick="TASK.resetPlan()">清空重来</button></div>`;
       }
 
       function setMinutes(m) {
@@ -6396,7 +6340,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
 
       function renderBookView() {
         const c = countStages();
-        const filters = [['all', '全部'], ['seen', '已见面'], ['recognized', '文中可辨'],
+        /* 「全部」不是一个总数：这里是【已经收进来的词】，跟别处「已毕业 0 / 3245」的 3245（目标词）
+           不是一个量纲。改叫「已收录」，别让两个数都被读成"我有多少词"。 */
+        const filters = [['all', '已收录'], ['seen', '已见面'], ['recognized', '文中可辨'],
                          ['owned', '义项直连'], ['graduated', '已毕业'], ['leech', '重点词']]
           .map(f => `<button class="pill${_bookFilter === f[0] ? ' on' : ''}" onclick="TASK.setBookFilter('${f[0]}')">${f[1]} ${f[0] === 'leech' ? c.leech : (f[0] === 'all' ? Object.keys(ROOT2.state.words).length : c[f[0]])}</button>`).join('');
         const rows = Object.keys(ROOT2.state.words)
@@ -6406,7 +6352,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           .map(k => {
             const w = ROOT2.state.words[k];
             return `<div class="tp-book-row"><span class="bw">${esc(k)}</span>
-              <span class="bs">${STAGE_LABEL[w.stage] || w.stage} · ${w.reps} 次接触${w.leech ? ' · 重点' : ''}</span>
+              <span class="bs">${STAGE_LABEL[w.stage] || w.stage} · 读过 ${w.reps} 次${w.leech ? ' · 重点' : ''}</span>
               <button class="bx" onclick="TASK.relearn('${esc(k)}')">重学</button></div>`;
           }).join('');
         return `<div class="tp-filters">${filters}</div>
@@ -6414,66 +6360,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           <p class="sm">这里不是背单词的入口，是查「我到底会没会」的地方。</p>`;
       }
 
-      function adjustPlan() {
-        const p = document.getElementById('todayPanel');
-        if (!p || !plan) return;
-        const remaining = SENT_RAW.length - Object.keys(prog.sentences).filter(k => prog.sentences[k].reps >= PHASE_THRESHOLDS.learning).length;
-        const perDayOfSpeed = (sp) => sp === 'slow' ? Math.max(10, Math.floor(plan.newPerDay / 2))
-          : sp === 'fast' ? Math.ceil(plan.newPerDay * 1.5)
-          : sp === 'pause' ? 0 : plan.newPerDay;
-        const SPD = ['normal', 'slow', 'fast', 'pause'];
-        const MINS = [30, 45, 60, 90];
-        let adjMin = plan.dailyMinutes, adjSpeed = plan.paused ? 'pause' : 'normal';
-        const leftDays = () => Math.max(1, plan.totalDays - dayIndex());
-        p.innerHTML = `<div class="plan-setup">
-          <div class="tp-head"><h3>调整学习计划</h3><button class="tp-close" onclick="TASK.openPanel()">✕</button></div>
-          <p class="ps-sub">剩余 ${remaining} 句未学完 · 还剩 ${leftDays()} 天 · 1 轮 = 全部句子通读一遍</p>
-          <div class="ps-group"><label>每日时间</label><div class="ps-opts" id="adjMin">
-            ${MINS.map(m => `<button class="ps-opt${m === plan.dailyMinutes ? ' sel' : ''}" data-v="${m}">${m}分钟</button>`).join('')}
-          </div></div>
-          <div class="ps-group"><label>新句速度</label><div class="ps-opts" id="adjSpeed">
-            ${SPD.map(sp => `<button class="ps-opt${(sp === 'pause') === !!plan.paused ? ' sel' : ''}" data-v="${sp}">${
-              sp === 'normal' ? `正常 ${perDayOfSpeed('normal')} 句/天`
-              : sp === 'slow' ? `放慢 ${perDayOfSpeed('slow')} 句/天`
-              : sp === 'fast' ? `加快 ${perDayOfSpeed('fast')} 句/天`
-              : '暂停新句'}</button>`).join('')}
-          </div></div>
-          <div class="ps-sum" id="adjSum"></div>
-          <div class="ps-adjust"><button class="btn primary" id="adjSave" style="flex:1;justify-content:center">保存调整</button></div>
-          <div class="ps-adjust" style="margin-top:8px"><button class="btn" id="adjReset" style="flex:1;justify-content:center;color:var(--coral-deep);border-color:var(--coral)">重置计划（清空进度）</button></div>
-        </div>`;
-        const refresh = () => {
-          const el = document.getElementById('adjSum');
-          if (!el) return;
-          const perDay = perDayOfSpeed(adjSpeed);
-          if (perDay <= 0) {
-            el.innerHTML = `<div class="ps-sum-row big"><span>预计完成</span><b>—</b></div>`
-              + `<div class="ps-sum-row"><span>每天新句</span><b>0 句（只复习）</b></div>`
-              + `<div class="ps-sum-row"><span>剩余天数</span><b>${leftDays()} 天</b></div>`;
-            return;
-          }
-          el.innerHTML = planSummary(planCapacity(leftDays(), adjMin, perDay), MINS);
-        };
-        refresh();
-        p.querySelectorAll('#adjMin .ps-opt').forEach(b => b.onclick = () => {
-          p.querySelectorAll('#adjMin .ps-opt').forEach(x => x.classList.remove('sel'));
-          b.classList.add('sel'); adjMin = parseInt(b.dataset.v); refresh();
-        });
-        p.querySelectorAll('#adjSpeed .ps-opt').forEach(b => b.onclick = () => {
-          p.querySelectorAll('#adjSpeed .ps-opt').forEach(x => x.classList.remove('sel'));
-          b.classList.add('sel'); adjSpeed = b.dataset.v; refresh();
-        });
-        document.getElementById('adjSave').onclick = () => {
-          plan.dailyMinutes = adjMin;
-          plan.paused = adjSpeed === 'pause';
-          if (adjSpeed === 'slow') plan.newPerDay = Math.max(10, Math.floor(plan.newPerDay / 2));
-          else if (adjSpeed === 'fast') plan.newPerDay = Math.ceil(plan.newPerDay * 1.5);
-          savePlan(); buildQueue(); updateBtn();
-          showAbToast('计划已调整');
-          renderToday(p);
-        };
-        document.getElementById('adjReset').onclick = () => { resetPlan(); };
-      }
       function pauseNew() {
         if (!plan) return;
         plan.paused = !plan.paused;
@@ -6672,7 +6558,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       // ---- 公开 API ----
       return {
         init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode,
-        again, prev, next, requestExit, cancelExit, confirmExit, adjustPlan, pauseNew, resetPlan, onSentenceComplete,
+        again, prev, next, requestExit, cancelExit, confirmExit, pauseNew, resetPlan, onSentenceComplete,
         taskSentenceFinished,
         exportBackup, importBackup,
         get active() { return taskMode; },
