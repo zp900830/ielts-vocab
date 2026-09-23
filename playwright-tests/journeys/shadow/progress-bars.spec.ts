@@ -181,7 +181,12 @@ test.describe('影子跟读全站进度条（任务条可拖 / 播放条可达 /
       await dragTrack(page, '#tbSeek', 0.2, 0.8);
       const now = Number(await bar.evaluate((el) => el.getAttribute('aria-valuenow')));
       expect(now, '拖到 80% 后 aria-valuenow 该跟着走').toBeGreaterThan(1);
-      expect(await bar.evaluate((el) => el.getAttribute('aria-valuetext'))).toContain(`共 ${n} 句`);
+      /* 值文本报「位置 + 还剩」，不再报「共 N 句」：那个 N 是队列长度，跟任务条上那个 n/N
+         （当天快照）不是一个量纲 —— 两个都写成「第 x/M 句」会被读成对不上（2026-09-24）。
+         队列长度本身仍从 aria-valuemax 读得到。 */
+      expect(await bar.evaluate((el) => el.getAttribute('aria-valuetext')))
+        .toMatch(new RegExp(`今天第 ${now} 句，还剩 \\d+ 句`));
+      expect(Number(await bar.evaluate((el) => el.getAttribute('aria-valuemax'))), '滑块上界 = 队列长度').toBe(n);
       expect(await playingIdx(page), '拖完当前句没换 = 拖动没接到播放上').not.toBe(before);
     });
 
