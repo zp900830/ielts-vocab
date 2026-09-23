@@ -1405,25 +1405,43 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   }
   /* 手机上这几颗的热区不用这里管：111 行那条 @media (max-width:700px) 已经给 .tb-btn 定了
      min-height:44px（390 宽下实测就是 44 高）；桌面用鼠标，不该为此把条子撑高。 */
-  /* ---- ② 做题卡片 + 遍间小结（PRD §6 §7 §10.1；两步制见 docs/superpowers/specs/2026-09-22-任务模式两步制.md） ---- */
-  .task-card { position: fixed; left: 50%; transform: translateX(-50%);
-    bottom: calc(var(--task-card-b, 132px) + env(safe-area-inset-bottom, 0px));
+  /* ---- ② 文内挖空 + 浮窗（PRD §4.4，2026-09-24 改口径：底部题卡作废）+ 遍间小结 ----
+     ② 的承载 UI 从「底部弹一张题卡」换成「空直接长在正文句子里 + 选择用浮窗」。
+     引擎（buildQuiz 四层闸门 / 四选一 / 补考 / 辨析干扰项）一个字没动，只换壳。
+     遍间小结仍是底部一张玻璃卡（它不属于 ② 的答题 UI），id/class 改叫 pass-card。 */
+  .pass-card { position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(var(--pass-card-b, 132px) + env(safe-area-inset-bottom, 0px));
     width: min(560px, calc(100vw - 20px)); z-index: 210; padding: 12px 14px 13px; border-radius: 16px;
     background: var(--glass-strong, rgba(255,255,255,.97)); -webkit-backdrop-filter: var(--blur, blur(22px)) saturate(170%); backdrop-filter: var(--blur, blur(22px)) saturate(170%);
     border: 1px solid var(--glass-line, rgba(255,255,255,.65)); box-shadow: var(--shadow-lg, 0 12px 40px rgba(30,60,48,.14)); }
-  .task-card[hidden] { display: none; }
-  body.dark .task-card { background: rgba(30,28,25,.97); border-color: #33302b; }
-  .qz-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .qz-tag { font-size: 12px; font-weight: 700; color: var(--task-new); }
-  .qz-head .sp { flex: 1; }
+  .pass-card[hidden] { display: none; }
+  body.dark .pass-card { background: rgba(30,28,25,.97); border-color: #33302b; }
   .qz-mini { min-height: 30px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px;
     background: transparent; color: var(--muted); font-size: 11.5px; cursor: pointer; }
   .qz-mini:hover { color: var(--text); border-color: var(--muted); }
-  .qz-sent { font-size: 15px; line-height: 1.75; font-family: var(--serif, Georgia, serif); }
-  .qz-sent .qz-blank { display: inline-block; min-width: 3.2em; border-bottom: 2px solid var(--task-new);
-    color: var(--task-new); font-weight: 700; letter-spacing: .04em; text-align: center; }
-  .qz-zh { font-size: 12.5px; color: var(--muted); margin-top: 5px; line-height: 1.6; }
-  .qz-zh u { text-decoration: underline; text-underline-offset: 3px; color: var(--text); font-weight: 600; }
+  /* 文内挖空：空是 .sent 里的内联元素，不另起容器。三态：未答 / 答对 / 答错。
+     宽度按被遮词形给（沿用 maskSplit 口径），下划线就是「这里少了一个词」的信号。 */
+  .sent .qz-blank { display: inline-block; min-width: 3.2em; padding: 0 .18em;
+    border-bottom: 2px solid var(--task-new); color: var(--task-new); font-weight: 700;
+    letter-spacing: .04em; text-align: center; cursor: pointer; border-radius: 3px; }
+  .sent .qz-blank:focus-visible { outline: 2px solid var(--task-new); outline-offset: 2px; }
+  .sent .qz-blank.qa-done { cursor: default; }
+  .sent .qz-blank.qa-ok { color: var(--task-new); border-bottom-color: var(--task-new); }
+  .sent .qz-blank.qa-no { color: var(--coral-deep, #c0492f); border-bottom-color: var(--coral, #d9694f); }
+  .sent .qz-blank .ans { font-style: normal; font-weight: 600; font-size: .82em; color: var(--muted); margin-left: .35em; }
+  /* 答错就地摊开的辨析表：跟句子同一段流，不再另起浮层 */
+  .qz-reveal { display: block; margin: 8px 0 2px; }
+  /* 浮窗答题卡：复用 .prog-tip 那套玻璃配方，但可点、由 JS 定位在空旁边（position:fixed） */
+  .blank-pop { position: fixed; z-index: 260; width: min(320px, calc(100vw - 16px)); padding: 12px 14px;
+    background: rgba(255,255,255,.92); -webkit-backdrop-filter: blur(32px) saturate(200%); backdrop-filter: blur(32px) saturate(200%);
+    border: 1px solid rgba(255,255,255,.85); border-radius: 16px; font-family: var(--serif);
+    box-shadow: 0 12px 32px rgba(17,36,28,.18), 0 4px 12px rgba(17,36,28,.08), inset 0 1px 0 rgba(255,255,255,.95); }
+  .blank-pop[hidden] { display: none; }
+  body.dark .blank-pop { background: rgba(30,28,25,.94); border-color: #33302b; }
+  .blank-pop .bp-hint { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.55; }
+  .blank-pop .bp-hint b { color: var(--ink2); }
+  .blank-pop .qz-opts { margin-top: 0; }
+  .blank-pop .qz-mini { margin-top: 9px; }
   .qz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 11px; }
   .qz-opt { min-height: 44px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 11px;
     background: var(--card); color: var(--text); font-size: 13.5px; font-weight: 600; cursor: pointer; text-align: left; }
@@ -1448,10 +1466,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; }
   @media (max-width: 700px) {
     .qz-opts { grid-template-columns: 1fr 1fr; gap: 6px; }
-    .qz-sent { font-size: 14px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .task-card, .tp-tab, .qz-opt { transition: none; }
+    .pass-card, .tp-tab, .qz-opt { transition: none; }
   }
   /* 计划设置弹窗 */
   .plan-setup { text-align: center; }
@@ -1513,7 +1530,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      所以这里不会把词库抽屉顺带弹出来。topbar/audiobar 不恢复：3.0 的任务模式顶栏由 T5 定。 */
   body.task-mode > .layout { display: block; }
   /* T5 定的任务模式外壳：首页让位，正文（.layout）就是屏幕主角。
-     3.0 任务模式还没有自己的顶栏（返回首页靠任务条的 ✕），所以整块 #appShell 收掉 ——
+     任务模式已有自己的顶栏（.task-top，见下），整块 #appShell 仍要收掉 ——
      不然后面 min-height:100vh 的首页会把正文压到首屏之外（T2 遗留的现场）。 */
   body.task-mode #appShell { display: none; }
   /* 任务模式顶栏（审阅 I1）：sticky 在正文上方，退出即随 body.task-mode 一起收掉。 */
@@ -1774,8 +1791,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       </div>
       </div>
     </div>
-    <!-- ② 做题卡片 / 遍间小结：一条卡片换内容，不新开弹窗（PRD §10.1） -->
-    <div class="task-card" id="taskCard" role="group" aria-label="当前题目" hidden></div>
+    <!-- ② 的答题 UI 已改成「文内挖空 + 浮窗」（PRD §4.4），这里只剩遍间小结那张卡。
+         底部题卡 #taskCard 及其 renderQuiz 分支已删；小结卡 id/class 改为 pass-card。 -->
+    <div class="pass-card" id="passCard" role="group" aria-label="遍间小结" hidden></div>
+    <!-- ② 浮窗答题卡：锚在被点的那个空旁边，4 个选项 + 「这题有问题」。定位由 JS 算。 -->
+    <div class="blank-pop" id="blankPop" role="dialog" aria-label="选出填回空格的词" hidden></div>
 
     <!-- 3.0 任务模式顶栏（M1 Task 5 审阅 I1）：告诉用户「你在学哪一篇」+「退出就是回首页」。
          一颗 ✕ 不说明退出会回哪儿，而 M1 的闭环是「首页选文章 → 学完 → 回首页选下一篇」。
@@ -2208,6 +2228,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     sents = [...document.querySelectorAll('.sent')];
     // 章节切换/重渲染后刷新任务标记
     try { TASK.updateMarkers(); } catch (e) {}
+    // ② 态重渲正文后要把空补回去（render 会重建整篇 .sent，挖空随之丢失）
+    try { if (TASK.maskArticle) TASK.maskArticle(); } catch (e) {}
     // 点击句子（非单词）直接从该句朗读；A-B 待选态则收为 A/B 标记
     // 待选态点中单词也算选中整句（移动端手指大，单词占满句子；此处 stopPropagation 阻止单词弹窗）
     sents.forEach((el, i) => {
@@ -4065,6 +4087,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     OVERLAY_WRAP_IDS.forEach(id => document.getElementById(id)?.classList.remove('open'));
     const tp = document.getElementById('todayPanel');
     if (tp && tp.classList.contains('open')) TASK.closePanel();
+    if (typeof TASK !== 'undefined' && TASK.closeBlankPop) { try { TASK.closeBlankPop(); } catch (e) {} }
     document.body.classList.remove('menu-open');
     }
     /* 顶栏/播放条这排开关的「按下没按下、菜单开没开」此前只写在 class 里，读屏软件拿不到。
@@ -4990,7 +5013,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         el = el || document.getElementById('syncHint');
         if (!el || el.hidden) return;
         const tops = [];
-        ['taskBar', 'audiobar', 'taskCard'].forEach(function (id) {
+        ['taskBar', 'audiobar', 'passCard'].forEach(function (id) {
           const b = document.getElementById(id);
           if (b && b.hidden) return;
           const r = b.getBoundingClientRect();
@@ -5151,6 +5174,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       /* 本遍末尾的补考清单（走查 2026-09-22 #2：答错过的词这一遍里要再考一次，只一次）。
          存的是 batchItems 里那批 item 对象本体 —— 身份即「这个词在这一句」，同一句不会进两次。 */
       let retakeItems = [], retakeServedN = 0, retakeOkN = 0;
+      /* ② 文内挖空的视图层（PRD §4.4）：引擎与游标不动，这里只把「题」映射到正文里的空。
+         _blankItems[bi] = item（按 quizList 顺序、同 (s,w) 只留一个 —— 补考是同一空的第二次问）；
+         _blankKey2bi    key → bi，点空/游标定位都靠它；
+         _blankEls[bi]   那个 <span class="qz-blank">；
+         _ans[bi]        这一空答过的结果 {ok,pick,answer}，重渲时用来恢复颜色。
+         全部只在 ② 态活着，resetQuizRun() 一趟清一次。 */
+      let _blankItems = [], _blankKey2bi = {}, _blankEls = {}, _ans = {}, _curBlank = -1;
       /* ① 那颗键一颗担两义（他 2026-09-23 定的名，2026-09-24 定的动作）：
          进任务模式先显示「放这一句」（刚进来就写「下一句」等于让人以为已经放过了）；
          点过之后**整趟都叫「下一句」**，不再按句来回翻 —— 他追报「像两个按钮一直切来切去」。
@@ -5295,17 +5325,23 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function resetQuizRun() {
         quizCursor = 0; quizWrongN = 0; quizAnsweredN = 0; reveal = null;
         retakeItems = []; retakeServedN = 0; retakeOkN = 0;
+        // 文内挖空的视图层也一起清：上一遍的空 / 颜色 / 浮窗不许带进这一遍。
+        _blankItems = []; _blankKey2bi = {}; _blankEls = {}; _ans = {}; _curBlank = -1;
+        closeBlankPop();
       }
       /* 「这一题之后还有没有题」要跳过出不了题的项（ensureCursor 干的活），
          光看数组长度会把末题写成「下一题」，点下去却弹出小结。 */
+      /* 文内挖空只承载「正文句」上的题；词卡例句题（s==='ex'）没有正文空位可挖，
+         M1 不承载它 —— 游标跳过，免得停在一条弹不出浮窗的死题上（见 buildBlanks）。 */
+      function hasInlineBlank(item) { return !!item && item.s !== 'ex' && !!buildQuiz(item); }
       function hasNextQuiz() {
         const list = quizList();
-        for (let n = quizCursor + 1; n < list.length; n++) if (buildQuiz(list[n])) return true;
+        for (let n = quizCursor + 1; n < list.length; n++) if (hasInlineBlank(list[n])) return true;
         return false;
       }
       function ensureCursor() {
         const list = quizList();
-        while (quizCursor < list.length && !buildQuiz(list[quizCursor])) quizCursor++;
+        while (quizCursor < list.length && !hasInlineBlank(list[quizCursor])) quizCursor++;
         return quizCursor < list.length ? buildQuiz(list[quizCursor]) : null;
       }
       function currentQuiz() { return ensureCursor(); }
@@ -5314,6 +5350,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function setPass(n) {
         pass = (n === 1 ? 1 : 2); resetQuizRun();
         quizStart = (pass === 2 ? Date.now() : 0);
+        if (pass === 2) maskArticle();
         renderQuiz(); updateTaskBar(); syncQueueFromPlan(); updateMarkers();
       }
       function answerQuiz(choice) {
@@ -5355,7 +5392,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
       function finishPass(n) {
         renderPassSummary(n);
-        if (n === 1) { pass = 2; resetQuizRun(); quizStart = Date.now(); }
+        if (n === 1) { pass = 2; resetQuizRun(); quizStart = Date.now(); maskArticle(); }
         else { taskFinished = true; pass = 2; }
         _cachedPlan = null;
         updateTaskBar();
@@ -5366,7 +5403,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (pass === 2) { if (!currentQuiz()) { finishPass(2); return; } renderQuiz(); updateTaskBar(); }
         else { goToNextTask(true); }
       }
-      function hideCard() { const el = document.getElementById('taskCard'); if (el) { el.hidden = true; el.innerHTML = ''; } }
+      function hideCard() { const el = document.getElementById('passCard'); if (el) { el.hidden = true; el.innerHTML = ''; } }
       function advance() {
         if (taskFinished) return;
         if (pass === 1) { goToNextTask(true); return; }
@@ -5374,9 +5411,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
       function syncCardBottom() {
         const bar = document.getElementById('taskBar'), ab = document.querySelector('.audiobar');
-        // 做题态播放条不再消失，所以做题卡永远要给两条都让位
+        // 小结卡（② 的题卡已删）永远要给任务条 + 播放条两条都让位
         const h = (bar ? bar.offsetHeight : 62) + (ab ? ab.offsetHeight + 8 : 64) + 10;
-        document.documentElement.style.setProperty('--task-card-b', h + 'px');
+        document.documentElement.style.setProperty('--pass-card-b', h + 'px');
       }
       function syncQueueFromPlan() {
         if (!ROOT2 || !ROOT2.plan) return;
@@ -5398,39 +5435,179 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         return String(sense || '').replace(/^\s*(n|v|vt|vi|adj|adv|prep|conj|pron|num|int|abbr|phrase)\.\s*/i, '')
           .split(/[；;]/)[0].trim();
       }
-      /* 提示（规格 §2 那句「通过提示确定唯一性」）：中文译文里把这个位置的意思划出来。
-         译文没直译到这个词（划不出来）时改在提示行里整条写出来，绝不静默丢掉这条提示。 */
-      function zhWithHint(zh, sense) {
-        const core = senseText(sense);
-        const at = core ? String(zh).indexOf(core) : -1;
-        if (at < 0) return esc(zh);
-        return esc(String(zh).slice(0, at)) + '<u>' + esc(core) + '</u>' + esc(String(zh).slice(at + core.length));
+      /* ② 文内挖空：把 quizList 里能出题的 (句,词) 映射成正文里的空。
+         一个 (句,词) 一个空 —— 补考是同一空的第二次问，不另长一个空。
+         'ex'（词卡例句）没有正文句可挖，M1 不承载（它本来就不是文章里的题）。 */
+      function blankKey(item) { return String(item.s) + '|' + String(item.w).toLowerCase(); }
+      function buildBlanks() {
+        _blankItems = []; _blankKey2bi = {}; _blankEls = {};
+        if (!taskMode || pass < 2) return;
+        quizList().forEach(function (item) {
+          if (!item || item.s === 'ex') return;
+          const key = blankKey(item);
+          if (key in _blankKey2bi) return;
+          if (!buildQuiz(item)) return;
+          _blankKey2bi[key] = _blankItems.length;
+          _blankItems.push(item);
+        });
       }
-      function renderQuiz() {
-        const el = document.getElementById('taskCard');
-        if (!el) return;
-        const item = quizList()[quizCursor];
+      /* 渲染进正文：每个空的 .w 换成 <span class="qz-blank">。render() 之后调用（章节重渲后也要补一次）。 */
+      function maskArticle() {
+        if (!taskMode || pass < 2) return;
+        buildBlanks();
+        _blankItems.forEach(function (item, bi) {
+          const local = globalToLocal(item.s);
+          const sentEl = (local >= 0 && sents[local]) ? sents[local] : null;
+          if (!sentEl) return;
+          const w = String(item.w).toLowerCase();
+          let target = null;
+          sentEl.querySelectorAll('.w').forEach(function (el) {
+            if (!target && String(el.dataset.w || '').toLowerCase() === w) target = el;
+          });
+          if (!target) return;
+          const blank = document.createElement('span');
+          blank.className = 'qz-blank';
+          blank.dataset.bi = String(bi);
+          blank.setAttribute('role', 'button');
+          blank.setAttribute('tabindex', '0');
+          blank.setAttribute('aria-label', '挖空：点这里选词填回');
+          blank.onclick = function (e) { try { e.stopPropagation(); } catch (err) {} openBlank(bi); };
+          blank.onkeydown = function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); openBlank(bi); }
+          };
+          const gloss = target.nextElementSibling;   // 行内词义（.gl）挂在词后，会把音标/词义漏给答案
+          target.replaceWith(blank);
+          if (gloss && gloss.classList && gloss.classList.contains('gl')) gloss.remove();
+          _blankEls[bi] = blank;
+          if (_ans[bi]) applyBlankState(bi, item);   // 正文重渲后把答过的颜色补回来
+        });
+      }
+      /* 点空 / 下一题 都落到这里：把引擎游标对到这一题，弹浮窗。 */
+      function openBlank(bi) {
+        if (!taskMode || pass < 2) return;
+        const item = _blankItems[bi];
+        if (!item) return;
         const q = buildQuiz(item);
-        if (!taskMode || pass < 2 || !q) { hideCard(); return; }
-        const b = q.blank || maskSplit(q.text || '', q.w);
+        if (!q) return;
+        const idx = quizList().indexOf(item);
+        if (idx >= 0) quizCursor = idx;
+        reveal = null;                       // 重新打开 = 允许再答一次（answerQuiz 遇 reveal 会拒答）
+        _curBlank = bi;
+        renderBlankPop(bi, q);
+        updateTaskBar();
+      }
+      function closeBlankPop() {
+        const pop = document.getElementById('blankPop');
+        if (pop) { pop.hidden = true; pop.innerHTML = ''; }
+        _curBlank = -1;
+      }
+      function renderBlankPop(bi, q) {
+        const pop = document.getElementById('blankPop');
+        if (!pop) return;
         const core = senseText(q.sense);
-        // 空格按被遮的那个词形给长度（D6：遮的是句子里的实际词形）
-        const sentLine = `${esc(b.before)}<span class="qz-blank" aria-label="这里少了一个词">${'_'.repeat(Math.min(14, Math.max(3, b.mid.length)))}</span>${esc(b.after)}`;
-        const body = `<div class="qz-sent">${sentLine}</div>
-            <div class="qz-zh">${zhWithHint(q.prompt, q.sense)}</div>
-            <div class="qz-hint">选出填回空格的那个词（按 1–4 也能选）· 这个位置的意思：<b class="qz-sense">${esc(core || q.sense || '')}</b></div>
-            <div class="qz-opts" role="group" aria-label="四个候选单词">${q.opts.map((o, i) => {
-              const cls = reveal ? (o === q.answer ? ' right' : (reveal.pick === o ? ' wrong' : '')) : '';
-              return `<button class="qz-opt${cls}" aria-label="选项 ${i + 1}，共 ${q.opts.length} 个，${esc(o)}" onclick="TASK.pickOpt(${i})"><span class="n">${i + 1}</span>${esc(o)}</button>`;
-            }).join('')}</div>${reveal ? revealNote(q) : ''}`;
-        el.innerHTML = `<div class="qz-head"><span class="qz-tag">② 挖空选择</span><span class="sp"></span>
-            <button class="qz-mini" onclick="TASK.flagQuiz()">这题有问题</button></div>${body}`;
-        el.hidden = false;
-        /* 焦点进卡：卡片是整块换 innerHTML 的，不主动接手的话焦点还在正文里，键盘只能用 1–4；
-           preventScroll 免得焦点一进来就把正文滚走。 */
-        const first = el.querySelector('.qz-opt');
+        pop.innerHTML = `<div class="bp-hint">选出填回空格的词（按 1–4 也能选）· 这里的意思：<b>${esc(core || q.sense || '')}</b></div>
+          <div class="qz-opts" role="group" aria-label="四个候选单词">${q.opts.map((o, i) =>
+            `<button class="qz-opt" type="button" data-i="${i}" aria-label="选项 ${i + 1}，共 ${q.opts.length} 个，${esc(o)}"><span class="n">${i + 1}</span>${esc(o)}</button>`).join('')}</div>
+          <button class="qz-mini" type="button" onclick="TASK.flagQuiz()">这题有问题</button>`;
+        pop.querySelectorAll('.qz-opt').forEach(function (b) {
+          b.onclick = function (e) { e.stopPropagation(); pickOpt(Number(b.dataset.i)); };
+        });
+        pop.hidden = false;
+        positionBlankPop(_blankEls[bi]);
+        const first = pop.querySelector('.qz-opt');
         if (first) first.focus({ preventScroll: true });
-        syncCardBottom();
+      }
+      /* 锚在空上方；上方放不下就翻到下方；左右夹在屏幕内（390 宽也不越界）。 */
+      function positionBlankPop(blankEl) {
+        const pop = document.getElementById('blankPop');
+        if (!pop || !blankEl) return;
+        pop.style.visibility = 'hidden';
+        pop.style.left = '0px'; pop.style.top = '0px';
+        const pr = pop.getBoundingClientRect();
+        const r = blankEl.getBoundingClientRect();
+        let left = r.left + r.width / 2 - pr.width / 2;
+        left = Math.max(8, Math.min(left, innerWidth - pr.width - 8));
+        let top = r.top - pr.height - 10;
+        if (top < 8) top = r.bottom + 10;
+        top = Math.max(8, Math.min(top, innerHeight - pr.height - 8));
+        pop.style.left = Math.round(left) + 'px';
+        pop.style.top = Math.round(top) + 'px';
+        pop.style.visibility = '';
+      }
+      /* 浮窗锚在空上：正文一滚 / 一缩放就得重新量，否则它会悬在半空。
+         rAF 节流 —— scroll 高频，布局测量收敛到每帧一次。 */
+      let _popRaf = 0;
+      function reflowBlankPop() {
+        if (_curBlank < 0 || !_blankEls[_curBlank]) return;
+        const pop = document.getElementById('blankPop');
+        if (!pop || pop.hidden) return;
+        if (_popRaf) return;
+        _popRaf = requestAnimationFrame(function () { _popRaf = 0; positionBlankPop(_blankEls[_curBlank]); });
+      }
+      window.addEventListener('scroll', reflowBlankPop, { passive: true });
+      window.addEventListener('resize', reflowBlankPop);
+      function resetBlank(bi) {
+        const el = _blankEls[bi];
+        if (el) { el.classList.remove('qa-done', 'qa-ok', 'qa-no'); el.textContent = ''; }
+      }
+      /* 空的三态落 DOM：对=绿；错=红 + 正确答案；答错再把辨析表摊在句子下面。 */
+      function applyBlankState(bi, item) {
+        const st = _ans[bi], el = _blankEls[bi];
+        if (!st || !el) return;
+        el.classList.add('qa-done');
+        el.classList.toggle('qa-ok', !!st.ok);
+        el.classList.toggle('qa-no', !st.ok);
+        el.innerHTML = esc(st.pick) + (st.ok ? '' : '<i class="ans">' + esc(st.answer) + '</i>');
+        if (!st.ok) showRevealNote(bi, item);
+      }
+      function fillBlank(bi, item, q) {
+        _ans[bi] = { ok: !!(reveal && reveal.ok), pick: (reveal && reveal.pick) || '', answer: q.answer };
+        applyBlankState(bi, item);
+      }
+      function showRevealNote(bi, item) {
+        if (!reveal) return;                    // 正文重渲时 reveal 已清，摊不出内容就别留一个空盒子
+        const el = _blankEls[bi];
+        const sent = el && el.closest('.sent');
+        if (!sent) return;
+        const q = buildQuiz(item);
+        if (!q) return;
+        const next = sent.nextElementSibling;
+        const anchor = (next && next.classList && next.classList.contains('sent-zh')) ? next : sent;
+        const old = anchor.nextElementSibling;
+        if (old && old.classList && old.classList.contains('qz-reveal')) old.remove();
+        const box = document.createElement('span');
+        box.className = 'qz-reveal';
+        box.innerHTML = revealNote(q);
+        anchor.insertAdjacentElement('afterend', box);
+      }
+      /* 任务条那颗键在 ② 态 = 下一题：游标往前走（补考段也在清单里），滚到下一个空 + 弹浮窗；
+         没有下一题就收进小结。 */
+      function nextBlank() { closeBlankPop(); nextQuiz(); }
+      /* 当前题对应正文里的哪个空（测试与键盘定位用）。没题/没空返回 -1。 */
+      function currentBlank() {
+        const item = quizList()[quizCursor];
+        if (!item) return -1;
+        const bi = _blankKey2bi[blankKey(item)];
+        return bi === undefined ? -1 : bi;
+      }
+      /* 把 ② 的 UI 同步到当前游标：答过就填空 + 收浮窗；否则滚到那个空 + 弹浮窗。 */
+      function renderQuiz() {
+        if (!taskMode || pass < 2) { closeBlankPop(); return; }
+        const q = ensureCursor();
+        const item = quizList()[quizCursor];
+        if (!item || !q) { closeBlankPop(); return; }
+        const bi = _blankKey2bi[blankKey(item)];
+        if (bi === undefined) { closeBlankPop(); return; }   // 'ex' 等没有正文空位的题：不弹
+        if (reveal && reveal.s === item.s && String(reveal.q && reveal.q.w).toLowerCase() === String(item.w).toLowerCase()) {
+          fillBlank(bi, item, q);
+          closeBlankPop();
+          return;
+        }
+        if (item.retake) resetBlank(bi);       // 补考：把上一次的红字收掉，重新问
+        _curBlank = bi;
+        renderBlankPop(bi, q);
+        const el = _blankEls[bi];
+        if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
       }
       function pickOpt(i) {
         const q = currentQuiz();
@@ -5445,7 +5622,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (local >= 0 && sents[local]) { sents[local].scrollIntoView({ block: 'center', behavior: 'smooth' }); playFrom(local); }
       }
       function renderPassSummary(n) {
-        const el = document.getElementById('taskCard');
+        const el = document.getElementById('passCard');
         if (!el || !ROOT2) return;
         const d = ROOT2.state.daily[day2()] || {};
         const nums = n === 1 ? [[doneToday(), '句读完了'], [todayPlan(true).words.length, '个词今天见过'], [d.promote || 0, '个词往前走了一步']]
@@ -5861,7 +6038,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (!taskMode) return;
         if (pass >= 2) {
           if (!quizList().length) { finishPass(pass); return; }
-          nextQuiz();
+          nextBlank();
           return;
         }
         if (taskPos >= todayQueue.length) return;
@@ -6050,8 +6227,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           /* ② 这一行原来是提示语（「选出填回空格的那个词」），现在让给「还剩几分钟」——
              他 2026-09-22：显示。四选一没什么要教的，而「还要多久收工」正是这一步唯一想知道的数。 */
           subEl.textContent = quizPaceLeft(Math.max(0, quizN - quizCursor));
-          againBtn.style.display = '';
-          againBtn.textContent = '回看句子';
+          /* 「回看句子」已移除（PRD §4.4）：句子就在眼前，不需要"回看"。
+             「这题有问题」也搬进了浮窗（renderBlankPop），任务条上不再有它。 */
+          againBtn.style.display = 'none';
           /* 这一颗是全页唯一的推进按钮（做题卡里那颗已删）。末题写「小结」不写「下一题」——
              点下去就是把这一遍（含末尾的补考）收掉，说「下一题」是假承诺。 */
           nextBtn.textContent = reveal ? (hasNextQuiz() ? '下一题' : '小结') : '跳过这题';
@@ -6858,16 +7036,21 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         pickOpt, flagQuiz, reviewSentence, summaryContinue: startSummaryContinue,
         blankQuizFor: (s, w, from) => buildQuiz({ s: s, w: w, from: from }),   // 出题判据唯一的对外入口：给测试与「问题题」复核用，别另写一份
         quizTotal: () => quizList().length, quizDone: quizDoneCount, quizWrong: quizWrongCount,
+        // ② 文内挖空 + 浮窗（M1 Task 6）：外壳/测试经 APP3 调用，实现留在这里（见 app.js）。
+        maskArticle, openBlank, nextBlank, currentBlank, closeBlankPop,
         get view() { return _view; }
       };
     })();
 
-    /* ② 挖空选择的 1–4 数字键（PRD §6 键盘/无障碍）。两步制后做题卡没有输入框了，不再需要防抢键 */
+    /* ② 文内挖空的 1–4 数字键（PRD §6 键盘/无障碍）。浮窗没开就不认数字键 ——
+       否则会答到正文里那个看不见的"当前题"（底部题卡已删，题只活在浮窗里）。 */
     document.addEventListener('keydown', e => {
       try {
         if (!TASK.active || TASK.pass() < 2) return;
         const tag = (document.activeElement && document.activeElement.tagName) || '';
         if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+        const pop = document.getElementById('blankPop');
+        if (!pop || pop.hidden) return;             // 浮窗关着：Esc 与数字键都不归这里管
         const i = '1234'.indexOf(e.key);
         if (i < 0) return;
         const q = TASK.currentQuiz();

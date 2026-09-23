@@ -145,6 +145,17 @@
   }
   window.APP3 = Object.assign(window.APP3, { openArticle });
 
+  /* ---- ② 文内挖空 + 浮窗（M1 Task 6）----
+     实现全在 TASK 里（只有它拿得到 quizList / 正文 .sent / 游标），外壳这层只把它挂到
+     APP3 上，给外部与 Playwright 一个稳定出口，别在第二处重写一套。 */
+  window.APP3 = Object.assign(window.APP3, {
+    maskArticle: () => TASK.maskArticle(),
+    openBlank: (bi) => TASK.openBlank(bi),
+    nextBlank: () => TASK.nextBlank(),
+    currentBlank: () => TASK.currentBlank(),
+    closeBlankPop: () => TASK.closeBlankPop(),
+  });
+
   window.APP3 = Object.assign(window.APP3, { route, current: () => cur });
   window.addEventListener('hashchange', route);
   document.addEventListener('DOMContentLoaded', route);

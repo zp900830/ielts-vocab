@@ -10,10 +10,12 @@ declare const TASK: {
   resetV2(): void;
   initPlan(minutes: number): void;
   enterTaskMode(): void;
+  setPass(n: number): void;
   readDone(i: number): void;
   queue: { i: number }[];
   hasPlan: boolean;
 };
+declare const APP3: { currentBlank(): number };
 declare const ShadowPlan: {
   articleScope(sections: unknown, article: number): Set<number>;
 };
@@ -146,5 +148,73 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
     await page.locator('#taskTop .tt-back').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
     await expect(page.locator('.art-card').first().locator('.a-pct')).toHaveText('20%');
+  });
+});
+
+/* ② 文内挖空要用真四选一：引擎（buildQuiz）凑满 4 个候选才出题，所以这几篇的词必须配
+   vocab 卡，且义项互不重叠（n. 苹果 / n. 香蕉 …）—— 否则 blankQuiz 过不了词性/双解闸。
+   四个词轮着出现，同段就有 3 个同词性干扰项，四选一必然凑得齐。 */
+const QWORDS = ['apple', 'banana', 'cherry', 'date'];
+const QSENSES = ['苹果', '香蕉', '樱桃', '枣'];
+const SIXQ: Record<string, string> = (() => {
+  const vocab: Record<string, { m: string }> = {};
+  QWORDS.forEach((w, i) => { vocab[w] = { m: 'n. ' + QSENSES[i] }; });
+  const mk = (title: string, ai: number, n: number) => ({
+    title,
+    zh: title,
+    subheads: [''],
+    paragraphs: [Array.from({ length: n }, (_, i) => {
+      const w = QWORDS[(ai + i) % QWORDS.length];
+      return `Sentence ${i} about [[${w}:${w}]].`;
+    })],
+    sentZh: [Array.from({ length: n }, (_, i) => `第 ${i} 句。`)],
+    paraZh: [''],
+  });
+  const titles = ['地球与生命', '校园与文化', '衣食住行', '社会与规则', '历史与发明', '身体与时间'];
+  return {
+    'sections.json': JSON.stringify(titles.map((t, i) => mk(t, i, i === 0 ? 8 : 2))),
+    'vocab.json': JSON.stringify(vocab),
+    'chapters.json': '[]',
+  };
+})();
+
+test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () => {
+  test('② 挖空长在正文里，点空弹浮窗，下一题定位到下一个空', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    await page.evaluate(() => TASK.setPass(2));
+
+    // 空是正文里的内联元素，且**不存在**底部题卡
+    expect(await page.locator('#art .sent .qz-blank').count()).toBeGreaterThan(0);
+    expect(await page.locator('#taskCard').count(), '底部题卡必须不存在').toBe(0);
+
+    await page.locator('#art .qz-blank').first().click();
+    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
+    await page.locator('#blankPop .qz-opt').first().click();
+    await expect(page.locator('#art .qz-blank').first()).toHaveClass(/qa-done/);
+    await expect(page.locator('#blankPop')).toBeHidden();
+
+    const before = await page.evaluate(() => APP3.currentBlank());
+    await page.locator('#tbNext').click();
+    expect(await page.evaluate(() => APP3.currentBlank())).not.toBe(before);
+  });
+
+  test('390px 宽下浮窗锚在空旁边、不越出屏幕', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    await page.evaluate(() => TASK.setPass(2));
+    await page.locator('#art .qz-blank').first().click();
+    await expect(page.locator('#blankPop')).toBeVisible();
+    const box = await page.locator('#blankPop').boundingBox();
+    expect(box, '浮窗必须有几何位置').not.toBeNull();
+    expect(box!.x).toBeGreaterThanOrEqual(0);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(390);
   });
 });
