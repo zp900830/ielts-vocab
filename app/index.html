@@ -1508,6 +1508,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      这里只把它们藏起来，让新外壳成为唯一的可见界面；T3–T7 再逐步吸收。
      注意：body.dark / body.task-mode 两套状态 class 机制必须原样保留 —— 运行时依赖它们。 */
   body > .topbar, body > #audiobar, body > .layout, body > #edgeTab { display: none; }
+  /* 任务模式必须把正文放出来：#art（正文）与 #panel（词库抽屉）都在 .layout 里。
+     只恢复 .layout 本身，#panel 基样式是 visibility:hidden，仍要靠 body.panel-open 才现身，
+     所以这里不会把词库抽屉顺带弹出来。topbar/audiobar 不恢复：3.0 的任务模式顶栏由 T5 定。 */
+  body.task-mode > .layout { display: block; }
   #appShell { display: flex; min-height: 100vh; }
   .sidenav { flex: none; width: 220px; padding: 16px 12px; border-right: 1px solid var(--border);
     display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; }
@@ -1516,6 +1520,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     background: transparent; font-size: 14px; color: var(--text); cursor: pointer; }
   .nav-item.on { background: var(--accent-soft, rgba(16,180,135,.07)); color: var(--accent-text); font-weight: 600; }
   #appView { flex: 1; min-width: 0; padding: 20px 24px 88px; }
+  /* 平板档（PRD §10.2）：701–1023px 侧栏收窄到 180px */
+  @media (min-width: 701px) and (max-width: 1023px) {
+    .sidenav { width: 180px; }
+  }
   @media (max-width: 700px) {
     #appShell { flex-direction: column-reverse; }
     /* top:auto 必须写：基样式 .sidenav 是 sticky + top:0，只改成 fixed + bottom:0 会变成
