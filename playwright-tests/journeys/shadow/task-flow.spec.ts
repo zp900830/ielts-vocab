@@ -58,19 +58,23 @@ test.describe('task mode · UI invariants', () => {
     test.setTimeout(currentTimeout() * 8);
     await startPlanAndTaskMode(page, baseURL);
     await expect(page.locator('#audiobar')).not.toBeVisible();
-    // 播放/循环/A-B/书签/倍速 这五颗现在住在任务条第二行里 —— 用 closest 确认真的搬进来了，不是只"碰巧可见"
+    // 循环/A-B/书签/倍速 这四颗现在住在任务条第二行里 —— 用 closest 确认真的搬进来了，不是只"碰巧可见"
     const inBar = (id: string) => page.evaluate((i) =>
       document.getElementById(i)!.closest('#taskBar') !== null, id);
-    for (const id of ['btnPlay', 'btnLoop', 'btnAB', 'markBtn', 'rateCycle']) {
+    for (const id of ['btnLoop', 'btnAB', 'markBtn', 'rateCycle']) {
       await expect(page.locator('#' + id)).toBeVisible();
       expect(await inBar(id)).toBe(true);
     }
-    await expect(page.locator('#btnPlay')).toBeEnabled();
+    /* ▶ 在任务模式里撤掉了（他 2026-09-23：「播放按钮得删掉，不点不放」）。
+       仍然要求它被搬进了任务条 —— 退出模式时靠这一搬回到播放条，别退化成"消失了找不回来"。 */
+    await expect(page.locator('#btnPlay')).not.toBeVisible();
+    expect(await inBar('btnPlay')).toBe(true);
     await expect(page.locator('#rateCycle')).toBeEnabled();   // 倍速旧版被整条藏掉、全页无第二个入口，这条守它别再丢
-    // 原型 :250：上一句 / 下一句 同一条通栏右侧，不再拆在两条栏上
+    // 原型 :250：上一句 / 放这一句 同一条通栏右侧，不再拆在两条栏上
     await expect(page.locator('#tbPrev')).toBeVisible();
     await expect(page.locator('#tbNext')).toBeVisible();
-    await expect(page.locator('button:visible', { hasText: '下一句' })).toHaveCount(1);
+    await expect(page.locator('button:visible', { hasText: '放这一句' })).toHaveCount(1);
+    await expect(page.locator('button:visible', { hasText: '下一句' })).toHaveCount(0);
     await expect(page.locator('button:visible', { hasText: '上一句' })).toHaveCount(1);
     // 搬过来的这一排里，翻句两颗与进度条仍然不显示（否则通栏上会出现两颗同名按钮）
     await expect(page.locator('#tbPlay .btn.ab-step:visible')).toHaveCount(0);
@@ -585,11 +589,11 @@ test.describe('two passes', () => {
     test.setTimeout(currentTimeout());   // hook 给了 12 分钟；这条本地 5 秒内该完
     // ① 通读：播放条整条不显示，它的功能全部住在任务条里
     await expect(page.locator('#audiobar')).not.toBeVisible();
-    await expect(page.locator('#btnPlay')).toBeVisible();
+    await expect(page.locator('#btnPlay')).not.toBeVisible();   // 2026-09-23：任务模式里 ▶ 撤掉了
     expect(await page.evaluate(() => document.getElementById('btnPlay')!.closest('#taskBar') !== null)).toBe(true);
     await expect(page.locator('.ab-left > .btn.ab-step:visible')).toHaveCount(0);
     await expect(page.locator('.ab-left > .btn.ab-step-fwd')).toHaveCount(1);       // 让出去的那颗还在 DOM 里，只是不显示
-    await expect(page.locator('button:visible', { hasText: '下一句' })).toHaveCount(1);
+    await expect(page.locator('button:visible', { hasText: '放这一句' })).toHaveCount(1);
     await expect(page.locator('button:visible', { hasText: '上一句' })).toHaveCount(1);
     await expect(page.locator('#tbPrev')).toBeVisible();
     await expect(page.locator('#tbNext')).toBeVisible();
@@ -612,7 +616,9 @@ test.describe('two passes', () => {
         const b = el.getBoundingClientRect();
         r[id] = { x: b.left, y: b.top + b.height / 2, top: b.top, right: b.right };
       });
-      const row = ['btnPlay', 'btnLoop', 'rateCycle', 'tbPrev', 'tbAgain', 'tbNext'].map((k) => r[k].y);
+      /* btnPlay 不在这一排里量：任务模式撤掉了它（display:none → 量出来是 0×0 的方框，
+         会把"同一行"和"从右往左"两把尺子一起带歪）。它仍在 DOM 里、仍住在 #tbPlay，上面已单独验过。 */
+      const row = ['btnLoop', 'rateCycle', 'tbPrev', 'tbAgain', 'tbNext'].map((k) => r[k].y);
       const ab = document.querySelector('.tb-play .ab-right') as HTMLElement | null;
       const bar = document.getElementById('taskBar')!.getBoundingClientRect();
       const txt = document.querySelector('.tb-text')!.getBoundingClientRect();
@@ -637,8 +643,8 @@ test.describe('two passes', () => {
     expect(geo.textLeftOfBtns, '文字靠左、按钮靠右：两者不许挤同一行的同一块地方').toBe(true);
     expect(geo.exitAbove, '关闭在任务条右上方，必须在按钮排的上面').toBe(true);
     expect(geo.exitRight, '关闭贴右上角').toBe(true);
-    const order = ['tbNext', 'tbAgain', 'tbPrev', 'btnPlay'].map((k) => geo.r[k].x);
-    expect(order, '从右往左：下一句 → 再来 → 上一句 → 播放').toEqual([...order].sort((a, b) => b - a));
+    const order = ['tbNext', 'tbAgain', 'tbPrev'].map((k) => geo.r[k].x);
+    expect(order, '从右往左：放这一句 → 再来 → 上一句').toEqual([...order].sort((a, b) => b - a));
     // 关闭这颗只留图标，名字由悬浮提示与 aria-label 说（他：鼠标悬浮要提示「退出任务模式」）
     await expect(page.locator('#tbExit')).toHaveAttribute('title', '退出任务模式');
     await expect(page.locator('#tbExit')).toHaveAttribute('aria-label', '退出任务模式');
@@ -684,7 +690,10 @@ test.describe('two passes', () => {
      前两条守的是他当场报的那个 bug：「只能跟着下一句走，上一句没反应」。 */
   /* 这四条不写 test.setTimeout：beforeEach 已经给了 currentTimeout()*6。
      上一版照抄邻居那条把超时压回 2 分钟，结果并发跑时被饿死在第一个 click 上 —— 假红。 */
-  test('当前句只有一套高亮，且「上一句」与「下一句」对称：往回再往前，回到原句而不是跳过', async ({ page }) => {
+  /* 2026-09-23 口径改了（他：「不点不放，点一句放一句」）：那颗键改名「放这一句」，放的是屏幕上这一句，
+     放完才记完成、才前进。旧口径是点一下 = 把当前这句记成完成 + 跳下一句 —— 于是「上一句」退回去
+     再点，会悄悄跳过退回的那句。这条用例改量新契约，但守的还是原来那个坑：队列位置与高亮必须对齐。 */
+  test('当前句只有一套高亮，且「放这一句」放的是这一句：播完才前进，「上一句」退得回去', async ({ page }) => {
     // 全站不再有第二套「当前句」标记（描边那套已删，高亮回归常规模式的浅绿底纹）
     expect(await page.locator('.sent.task-current').count()).toBe(0);
     const playingIdx = () => page.evaluate(() => {
@@ -692,21 +701,35 @@ test.describe('two passes', () => {
       const on = all.findIndex((e) => e.classList.contains('playing'));
       return { on, n: all.filter((e) => e.classList.contains('playing')).length };
     });
+    const title = () => page.evaluate(() => document.getElementById('tbTitle')!.textContent);
+    // 把朗读引擎换成录音笔：__finish() 手动兑现「这一句放完了」，否则 headless 里永远等不到
+    await page.evaluate(() => {
+      const w = window as unknown as {
+        speak: (t: string, cb?: () => void) => void; __cbs: (() => void)[]; __finish: () => void;
+      };
+      w.__cbs = [];
+      w.speak = function (_t: string, cb?: () => void) { if (cb) w.__cbs.push(cb); };
+      w.__finish = () => { const cb = w.__cbs.shift(); if (cb) cb(); };
+    });
+
     const first = await playingIdx();
     expect(first.n, '同一时刻只能有一句被标成当前').toBe(1);
 
     await page.locator('#tbNext').click();
-    const after = await playingIdx();
-    expect(after.on, '下一句要把高亮带走').not.toBe(first.on);
+    expect((await playingIdx()).on, '「放这一句」放的就是这一句，高亮不许提前跑').toBe(first.on);
+
+    const doneBefore = await title();
+    await page.evaluate(() => (window as unknown as { __finish: () => void }).__finish());
+    await expect.poll(async () => (await playingIdx()).on).not.toBe(first.on);   // 放完才前进
+    expect(await title(), '放完这一句，条上那个数要动').not.toBe(doneBefore);
 
     // 往回：高亮必须跟着回来（旧实现只搬正文高亮，队列位置留在原句）
+    const fwd = (await playingIdx()).on;
     await page.locator('#tbPrev').click();
-    await expect.poll(async () => (await playingIdx()).on).toBe(after.on - 1);
-    // 再往前：回到刚才那句，而不是跳到它后面第二句 —— 这一条只有队列位置真的对齐了才成立
-    const doneBefore = await page.evaluate(() => document.getElementById('tbTitle')!.textContent);
+    await expect.poll(async () => (await playingIdx()).on).toBe(fwd - 1);
+    // 退回后再点：放的必须是你退回的那句，而不是跳到它后面没听过的 —— 这一条只有队列位置真的对齐了才成立
     await page.locator('#tbNext').click();
-    await expect.poll(async () => (await playingIdx()).on).toBe(after.on);
-    expect(await page.evaluate(() => document.getElementById('tbTitle')!.textContent)).toBe(doneBefore);
+    expect((await playingIdx()).on, '退回后点「放这一句」要放退回的这句').toBe(fwd - 1);
   });
 
   test('点 ✕ 先问一句：不退出、换成「继续做 / 退出」，两条出口都算数', async ({ page }) => {
@@ -760,10 +783,21 @@ test.describe('two passes', () => {
   test('走查修复：② 里点「继续任务」不拍回 ①、键盘 → 真的记进度、倍速不把句数平方、0 点日界线真的生效', async ({ page }) => {
     test.setTimeout(currentTimeout());
 
-    // (1) 键盘 → 必须等于屏幕上那颗「下一句」。以前它直接 step(1)：能刷完整篇而 0/24 一动不动
+    /* (1) 键盘 → 必须等于屏幕上那颗「放这一句」。以前它直接 step(1)：能刷完整篇而 0/24 一动不动。
+       2026-09-23 起计数搬到「这一句放完了」那一刻，所以这里要手动兑现一次"放完"才看得到数在动 ——
+       守的还是原来那件事：键盘这条路不许绕过记账。 */
     const num = () => page.evaluate(() => ((document.getElementById('tbTitle') as HTMLElement).textContent || '').match(/\d+\s*\/\s*\d+/)?.[0]);
+    await page.evaluate(() => {
+      const w = window as unknown as {
+        speak: (t: string, cb?: () => void) => void; __cbs: (() => void)[]; __finish: () => void;
+      };
+      w.__cbs = [];
+      w.speak = function (_t: string, cb?: () => void) { if (cb) w.__cbs.push(cb); };
+      w.__finish = () => { const cb = w.__cbs.shift(); if (cb) cb(); };
+    });
     const before = await num();
     await page.keyboard.press('ArrowRight');
+    await page.evaluate(() => (window as unknown as { __finish: () => void }).__finish());
     await expect.poll(() => num()).not.toBe(before);
 
     // (2) 已经在任务模式里，今日面板那颗写着「继续任务」—— 再点一次不许把流程拍回 ①、
