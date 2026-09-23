@@ -5179,8 +5179,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          _blankKey2bi    key → bi，点空/游标定位都靠它；
          _blankEls[bi]   那个 <span class="qz-blank">；
          _ans[bi]        这一空答过的结果 {ok,pick,answer}，重渲时用来恢复颜色。
+         _served         这一遍**处理过**的题（答过 / 明确跳过，按对象身份）—— 「下一题」只在
+                         没处理过的题里找：乱序点空不会漏掉中间未答的空，也不会把答过的题
+                         再问一遍（重复问 = 第二条 quiz 事件 + tries 翻倍，会被引擎当成补考）。
          全部只在 ② 态活着，resetQuizRun() 一趟清一次。 */
       let _blankItems = [], _blankKey2bi = {}, _blankEls = {}, _ans = {}, _curBlank = -1;
+      let _served = new Set(), _popReadonly = false;
       /* ① 那颗键一颗担两义（他 2026-09-23 定的名，2026-09-24 定的动作）：
          进任务模式先显示「放这一句」（刚进来就写「下一句」等于让人以为已经放过了）；
          点过之后**整趟都叫「下一句」**，不再按句来回翻 —— 他追报「像两个按钮一直切来切去」。
@@ -5325,8 +5329,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function resetQuizRun() {
         quizCursor = 0; quizWrongN = 0; quizAnsweredN = 0; reveal = null;
         retakeItems = []; retakeServedN = 0; retakeOkN = 0;
-        // 文内挖空的视图层也一起清：上一遍的空 / 颜色 / 浮窗不许带进这一遍。
+        // 文内挖空的视图层也一起清：上一遍的空 / 颜色 / 浮窗 / 已呈现集合不许带进这一遍。
         _blankItems = []; _blankKey2bi = {}; _blankEls = {}; _ans = {}; _curBlank = -1;
+        _served = new Set(); _popReadonly = false;
         closeBlankPop();
       }
       /* 「这一题之后还有没有题」要跳过出不了题的项（ensureCursor 干的活），
@@ -5334,11 +5339,26 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       /* 文内挖空只承载「正文句」上的题；词卡例句题（s==='ex'）没有正文空位可挖，
          M1 不承载它 —— 游标跳过，免得停在一条弹不出浮窗的死题上（见 buildBlanks）。 */
       function hasInlineBlank(item) { return !!item && item.s !== 'ex' && !!buildQuiz(item); }
-      function hasNextQuiz() {
-        const list = quizList();
-        for (let n = quizCursor + 1; n < list.length; n++) if (hasInlineBlank(list[n])) return true;
-        return false;
+      /* ② 的分母 = **答得出的题**，不是 quizList 原始长度：'ex' 题数进去就会永远走不到 N/N。
+         补考题是 mc4zh 拷贝、有正文空位，天然算在内（它们出现时 quizList() 已把它们拼在末尾）。 */
+      function inlineQuizTotal() {
+        let n = 0;
+        quizList().forEach(function (item) { if (hasInlineBlank(item)) n++; });
+        return n;
       }
+      /* 「下一个还没处理过的题」：从 from+1 往后找，找不到再从头回卷找（把乱序点空时跳过的补回来）。
+         返回 quizList() 下标，找不到返回 -1。 */
+      function nextUnservedIndex(from) {
+        const list = quizList();
+        for (let i = from + 1; i < list.length; i++) {
+          if (hasInlineBlank(list[i]) && !_served.has(list[i])) return i;
+        }
+        for (let i = 0; i < list.length; i++) {
+          if (hasInlineBlank(list[i]) && !_served.has(list[i])) return i;
+        }
+        return -1;
+      }
+      function hasNextQuiz() { return nextUnservedIndex(-1) >= 0; }
       function ensureCursor() {
         const list = quizList();
         while (quizCursor < list.length && !hasInlineBlank(list[quizCursor])) quizCursor++;
@@ -5373,6 +5393,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           retakeItems.push(Object.assign({}, item, { retake: true, built: undefined }));
         }
         reveal = { q: q, s: item.s, ok: ok, pick: choice };
+        _served.add(item);   // 答过 = 这题处理完了：下一题不再落回它（补考是另一条新对象）
         renderQuiz(); updateTaskBar();
         return ok;
       }
@@ -5388,7 +5409,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (!q) return;
         push2({ type: 'flag', w: q.w, s: item.s, kind: q.kind, opts: q.opts || null, ts: Date.now(), day: day2() });
         showAbToast('已记下：这题有问题 —— 它会停止出现，等裁决后再放回');
-        nextQuiz();
+        nextBlank();
       }
       function finishPass(n) {
         renderPassSummary(n);
@@ -5407,7 +5428,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function advance() {
         if (taskFinished) return;
         if (pass === 1) { goToNextTask(true); return; }
-        if (reveal) nextQuiz();
+        if (reveal) nextBlank();
       }
       function syncCardBottom() {
         const bar = document.getElementById('taskBar'), ab = document.querySelector('.audiobar');
@@ -5482,7 +5503,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           if (_ans[bi]) applyBlankState(bi, item);   // 正文重渲后把答过的颜色补回来
         });
       }
-      /* 点空 / 下一题 都落到这里：把引擎游标对到这一题，弹浮窗。 */
+      /* 点空：未答过 → 呈现这题、弹浮窗；已答过 → 只回看结果，不再记第二条事件 / tries 翻倍。 */
       function openBlank(bi) {
         if (!taskMode || pass < 2) return;
         const item = _blankItems[bi];
@@ -5490,31 +5511,38 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const q = buildQuiz(item);
         if (!q) return;
         const idx = quizList().indexOf(item);
-        if (idx >= 0) quizCursor = idx;
-        reveal = null;                       // 重新打开 = 允许再答一次（answerQuiz 遇 reveal 会拒答）
+        if (idx < 0) return;
+        quizCursor = idx;
+        reveal = null;
         _curBlank = bi;
+        if (_ans[bi]) { renderBlankPop(bi, q, true); updateTaskBar(); return; }
         renderBlankPop(bi, q);
         updateTaskBar();
       }
       function closeBlankPop() {
         const pop = document.getElementById('blankPop');
         if (pop) { pop.hidden = true; pop.innerHTML = ''; }
-        _curBlank = -1;
+        _curBlank = -1; _popReadonly = false;
       }
-      function renderBlankPop(bi, q) {
+      function renderBlankPop(bi, q, readonly) {
         const pop = document.getElementById('blankPop');
         if (!pop) return;
+        _popReadonly = !!readonly;
+        const st = readonly ? _ans[bi] : null;
         const core = senseText(q.sense);
-        pop.innerHTML = `<div class="bp-hint">选出填回空格的词（按 1–4 也能选）· 这里的意思：<b>${esc(core || q.sense || '')}</b></div>
-          <div class="qz-opts" role="group" aria-label="四个候选单词">${q.opts.map((o, i) =>
-            `<button class="qz-opt" type="button" data-i="${i}" aria-label="选项 ${i + 1}，共 ${q.opts.length} 个，${esc(o)}"><span class="n">${i + 1}</span>${esc(o)}</button>`).join('')}</div>
-          <button class="qz-mini" type="button" onclick="TASK.flagQuiz()">这题有问题</button>`;
-        pop.querySelectorAll('.qz-opt').forEach(function (b) {
-          b.onclick = function (e) { e.stopPropagation(); pickOpt(Number(b.dataset.i)); };
-        });
+        pop.innerHTML = `<div class="bp-hint">${readonly ? '这题你已经答过' : '选出填回空格的词（按 1–4 也能选）'} · 这里的意思：<b>${esc(core || q.sense || '')}</b></div>
+          <div class="qz-opts" role="group" aria-label="四个候选单词">${q.opts.map((o, i) => {
+            const cls = st ? (o === q.answer ? ' right' : (st.pick === o ? ' wrong' : '')) : '';
+            return `<button class="qz-opt${cls}" type="button" data-i="${i}"${readonly ? ' disabled' : ''} aria-label="选项 ${i + 1}，共 ${q.opts.length} 个，${esc(o)}"><span class="n">${i + 1}</span>${esc(o)}</button>`;
+          }).join('')}</div>` + (readonly ? '' : '<button class="qz-mini" type="button" onclick="TASK.flagQuiz()">这题有问题</button>');
+        if (!readonly) {
+          pop.querySelectorAll('.qz-opt').forEach(function (b) {
+            b.onclick = function (e) { e.stopPropagation(); pickOpt(Number(b.dataset.i)); };
+          });
+        }
         pop.hidden = false;
         positionBlankPop(_blankEls[bi]);
-        const first = pop.querySelector('.qz-opt');
+        const first = pop.querySelector('.qz-opt:not([disabled])');
         if (first) first.focus({ preventScroll: true });
       }
       /* 锚在空上方；上方放不下就翻到下方；左右夹在屏幕内（390 宽也不越界）。 */
@@ -5580,9 +5608,21 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         box.innerHTML = revealNote(q);
         anchor.insertAdjacentElement('afterend', box);
       }
-      /* 任务条那颗键在 ② 态 = 下一题：游标往前走（补考段也在清单里），滚到下一个空 + 弹浮窗；
-         没有下一题就收进小结。 */
-      function nextBlank() { closeBlankPop(); nextQuiz(); }
+      /* 任务条那颗键在 ② 态 = 「下一个未答的空」：在还没处理过的题里按序找（找不到回卷，
+         把乱序点空时跳过的补回来），滚到那个空 + 弹浮窗；一个都没有才收进小结。
+         离开当前题即视为「跳过这题」——记进 _served，它就不再回头。
+         补考段是 quizList() 末尾的新对象，天然还没处理过，所以不会被跳过。 */
+      function nextBlank() {
+        closeBlankPop();
+        reveal = null;
+        const cur = quizList()[quizCursor];
+        if (hasInlineBlank(cur)) _served.add(cur);   // 跳过 / 离开 = 处理完了
+        const next = nextUnservedIndex(quizCursor);
+        if (next < 0) { finishPass(pass); return; }
+        quizCursor = next;
+        renderQuiz();
+        updateTaskBar();
+      }
       /* 当前题对应正文里的哪个空（测试与键盘定位用）。没题/没空返回 -1。 */
       function currentBlank() {
         const item = quizList()[quizCursor];
@@ -5610,6 +5650,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
       }
       function pickOpt(i) {
+        if (_popReadonly) return;              // 回看态：选项只展示，不再记一次
         const q = currentQuiz();
         if (!q || !q.opts || !q.opts[i]) return;
         answerQuiz(q.opts[i]);
@@ -6193,7 +6234,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         // 任务模式顶栏的标题（审阅 I1）：在学哪一篇。全部文章（直接进任务模式）时说「全部文章」。
         const topTitle = document.getElementById('ttTitle');
         if (topTitle) topTitle.textContent = (artScope && SECTIONS[currentArticle]) ? SECTIONS[currentArticle].title : '全部文章';
-        const quizN = quizList().length;
+        const quizN = inlineQuizTotal();   // 分母只数答得出的题（'ex' 无正文空位，不计入）
+        const quizDoneN = Math.min(_served.size, quizN);
         const fin = taskFinished || allDone === true;
         const asking = !!taskMode && exitConfirm;
         const spent = sessionSpent();
@@ -6222,18 +6264,18 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           nextBtn.textContent = '看词本';
           setProg(1);
         } else if (pass >= 2) {
-          titleEl.textContent = '② 挖空选择 ' + Math.min(quizCursor + 1, quizN) + '/' + quizN
+          titleEl.textContent = '② 挖空选择 ' + quizDoneN + '/' + quizN
             + (quizWrongN ? ' · 错 ' + quizWrongN : '');
           /* ② 这一行原来是提示语（「选出填回空格的那个词」），现在让给「还剩几分钟」——
              他 2026-09-22：显示。四选一没什么要教的，而「还要多久收工」正是这一步唯一想知道的数。 */
-          subEl.textContent = quizPaceLeft(Math.max(0, quizN - quizCursor));
+          subEl.textContent = quizPaceLeft(Math.max(0, quizN - quizDoneN));
           /* 「回看句子」已移除（PRD §4.4）：句子就在眼前，不需要"回看"。
              「这题有问题」也搬进了浮窗（renderBlankPop），任务条上不再有它。 */
           againBtn.style.display = 'none';
           /* 这一颗是全页唯一的推进按钮（做题卡里那颗已删）。末题写「小结」不写「下一题」——
              点下去就是把这一遍（含末尾的补考）收掉，说「下一题」是假承诺。 */
           nextBtn.textContent = reveal ? (hasNextQuiz() ? '下一题' : '小结') : '跳过这题';
-          setProg(quizN ? quizCursor / quizN : 1);
+          setProg(quizN ? quizDoneN / quizN : 1);
         } else {
           /* 分母是当天快照，不跟分子涨。分子可能超过它（今天多读了）—— 主行封顶写 36/36，
              不写 40/36 这种看着像出错的数；多出来的在副行如实说。 */

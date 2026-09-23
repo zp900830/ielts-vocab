@@ -12,12 +12,20 @@ declare const TASK: {
   enterTaskMode(): void;
   setPass(n: number): void;
   readDone(i: number): void;
+  next(): void;
+  quizTotal(): number;
+  quizDone(): number;
+  pass(): number;
+  currentQuiz(): { opts: string[]; answer: string } | null;
   queue: { i: number }[];
   hasPlan: boolean;
 };
-declare const APP3: { currentBlank(): number };
+declare const APP3: { currentBlank(): number; openBlank(bi: number): void };
 declare const ShadowPlan: {
   articleScope(sections: unknown, article: number): Set<number>;
+  assemble(state: unknown, opts: unknown): {
+    items: { w: string; pool: string; s: number | string; kind?: string; pass?: number; from?: number | string }[];
+  };
 };
 declare const SECTIONS: { title: string; paragraphs: string[][] }[];
 
@@ -216,5 +224,107 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     expect(box, '浮窗必须有几何位置').not.toBeNull();
     expect(box!.x).toBeGreaterThanOrEqual(0);
     expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+  });
+
+  // 审阅 Important 1：② 的分母数了答不了的题（词卡例句题 s==='ex' 没有正文空位可挖）。
+  test('② 的分母只数答得出的题：词卡例句题不计入，也不占进度', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    // 往引擎排出的批次里塞一条没有正文空位的 'ex' 题（模拟真实会出现的词卡例句题）
+    await page.evaluate(() => {
+      const orig = ShadowPlan.assemble;
+      ShadowPlan.assemble = function (state, opts) {
+        const r = orig(state, opts);
+        if (r && r.items && r.items.length) {
+          const f = r.items[0];
+          r.items.push({ kind: 'quiz', pass: 2, s: 'ex', w: f.w, pool: f.pool, from: f.s });
+        }
+        return r;
+      };
+    });
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    await page.evaluate(() => TASK.setPass(2));
+    const raw = await page.evaluate(() => TASK.quizTotal());
+    const blanks = await page.locator('#art .sent .qz-blank').count();
+    const n = await page.evaluate(() =>
+      Number(document.getElementById('tbTitle')!.textContent!.match(/\/\s*(\d+)/)![1]));
+    expect(raw, '夹具里必须真有一条答不了的题，否则这条测不到东西').toBeGreaterThan(blanks);
+    expect(n, '② 的分母 = 真能挖出来的空数，不是 quizList 原始长度').toBe(blanks);
+  });
+
+  // 审阅 Important 2：乱序点空后，「下一题」必须去找下一个未答的空，既不重问也不漏。
+  test('下一题 = 下一个未答的空：乱序点空不漏、不重问', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    await page.evaluate(() => TASK.setPass(2));
+
+    const total = await page.locator('#art .qz-blank').count();
+    expect(total, '夹具要有多于一个空，乱序才有意义').toBeGreaterThan(2);
+    // 答对（答错会生成补考，而补考本就是「同一空再问一次」，会把这条断言搅浑）
+    const answerCorrectly = async () => {
+      const idx = await page.evaluate(() => {
+        const q = TASK.currentQuiz()!;
+        return q.opts.indexOf(q.answer);
+      });
+      await page.locator('#blankPop .qz-opt').nth(idx).click();
+    };
+
+    // 乱序：先答第 3 个空（跳过前两个）
+    await page.evaluate(() => APP3.openBlank(3));
+    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
+    await answerCorrectly();
+    await expect(page.locator('#art .qz-blank[data-bi="3"]')).toHaveClass(/qa-done/);
+    expect(await page.evaluate(() => TASK.quizDone())).toBe(1);
+
+    // 下一题去找下一个未答的空，不会落回刚答过的第 3 个
+    const after = await page.evaluate(() => { TASK.next(); return APP3.currentBlank(); });
+    expect(after, '下一题不能落回刚答过的空').not.toBe(3);
+    expect(await page.evaluate(() => TASK.quizDone()), '重问会多记一条 quiz 事件').toBe(1);
+
+    // 点一个已答过的空：只回看（选项禁用），不再记事件
+    await page.evaluate(() => APP3.openBlank(3));
+    expect(await page.evaluate(() => TASK.quizDone()), '回看态不许再记一次').toBe(1);
+    await expect(page.locator('#blankPop .qz-opt[disabled]')).toHaveCount(4);
+
+    // 一路「下一题 + 答对」直到没有空：每个空恰好答一次，一个都不落下
+    for (let guard = 0; guard < total + 5; guard++) {
+      await page.evaluate(() => TASK.next());
+      const open = await page.locator('#blankPop .qz-opt:not([disabled])').count();
+      if (open === 0) break;
+      await answerCorrectly();
+    }
+    await expect(page.locator('#art .qz-blank.qa-done')).toHaveCount(total);
+    expect(await page.evaluate(() => TASK.quizDone()), '每个空恰好答一次，没有重复事件').toBe(total);
+    await expect(page.locator('#blankPop')).toBeHidden();
+  });
+
+  // 审阅 Important 3：入口 1（① 走完 → 小结 → 开始答题）没有 E2E，补一条走真路径的。
+  test('入口 1：① 走完 → 小结「开始答题」→ 正文立刻挖空（§13.1）', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    // headless 不发声：换掉朗读引擎（顶层的 speak 就是 window.speak），再手动把这一篇标成读完
+    await page.evaluate(() => {
+      (window as unknown as { speak: (t: string, cb?: () => void) => void }).speak = () => {};
+      Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
+    });
+    // ① 态点两下「下一句」：第一下放这一句，第二下没有未读 → finishPass(1) → 小结
+    await page.evaluate(() => TASK.next());
+    await page.evaluate(() => TASK.next());
+    await expect(page.locator('#passCard')).toBeVisible();
+    await expect(page.locator('#passCard .pass-summary .go')).toContainText('开始');
+    // 小结出现时正文已经挖空
+    expect(await page.locator('#art .sent .qz-blank').count()).toBeGreaterThan(0);
+    // 点「开始答题」→ 小结收掉、浮窗弹出
+    await page.locator('#passCard .pass-summary .go').click();
+    await expect(page.locator('#passCard')).toBeHidden();
+    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
   });
 });
