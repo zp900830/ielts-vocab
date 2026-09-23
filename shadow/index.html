@@ -4274,6 +4274,18 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
     } catch (e) {}
     }
+    /* 书签坐标 2026-09-23 从「本地下标」改成「全局句号」—— 不兼容变更：旧记录没法判读，留着只会跳到错句。
+       他确认书签不多，直接清账，只清一次：本地在这里清空，云端在启动那次 pull 里跳过合并并推空
+       （先清再合并等于把旧的又并回来）。标记落在 localStorage 上，用例都是 goto 完才种书签，不受影响。 */
+    const MARKS_SCHEMA = 'global-idx-v1';
+    let _marksPurgedThisLoad = false;
+    try {
+    if (localStorage.getItem('ielts-marks-schema') !== MARKS_SCHEMA) {
+    localStorage.removeItem('ielts-marks');
+    localStorage.setItem('ielts-marks-schema', MARKS_SCHEMA);
+    _marksPurgedThisLoad = true;
+    }
+    } catch (e) {}
     function getMarks() { try { return JSON.parse(localStorage.getItem('ielts-marks') || '[]'); } catch (e) { return []; } }
     function setMarks(m) {
     const arr = m || [];
@@ -4316,9 +4328,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (!c) return;
     const { data: { session } } = await c.auth.getSession();
     if (!session) return;
+    /* 旧坐标的一次性清账：本地上面那份已经清空了，云端那批旧记录也不能合并进来（等于白清），
+       改成跳过书签合并 + 推空覆盖。只跳过书签这一段，下面的进度同步照跑（跟书签坐标是两件事）。 */
+    const droppedLegacyMarks = _marksPurgedThisLoad;
+    _marksPurgedThisLoad = false;
     const { data, error } = await c.from('user_data').select('marks,pos,updated_at').eq('user_id', session.user.id).maybeSingle();
     if (error || !data) return;
-    if (Array.isArray(data.marks)) {
+    if (Array.isArray(data.marks) && !droppedLegacyMarks) {
     _markSyncing = true;
     try {
     const byI = new Map();
@@ -4332,6 +4348,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     setMarks(merged); renderMarks();
     } finally { _markSyncing = false; }
     }
+    if (droppedLegacyMarks) { try { await cloudPushMarks(); } catch (e) {} }
     // 进度同步：云端 pos 更新才覆盖本地（播放中不抢，避免把正在听的拽走；停播后本地 savePos 时间戳更新，下次 push 自然赢回）
     try {
     const cp = data.pos;
