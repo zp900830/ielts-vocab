@@ -4942,8 +4942,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const live = ((ROOT2.state.daily[day] || {}).sentDone || 0) + left;
         ROOT2.planned = ROOT2.planned || {};
         if (!ROOT2.planned[day]) { ROOT2.planned[day] = live; persist2(); }
-        // 只兜住「已经读了的不能比计划的还多」，不跟队列一起涨 —— 涨的就是那个 6/31
-        return Math.max(ROOT2.planned[day], ((ROOT2.state.daily[day] || {}).sentDone || 0));
+        /* 分母 = 当天快照，**不跟分子涨**。原来这行是 `Math.max(快照, sentDone)`，
+           本意只是「已经读了的不能比计划的还多」，实际却让分子一超过快照、分母就跟着抬
+           —— 条上于是永远显示 N/N（2026-09-24 他实测：读完 229 句后条上写「229/229」，
+           而队列里还压着没读的句，跟 seek 条的气泡对不上）。
+           多读的量不丢，由调用方按 `sentDone - planned` 如实报出来。 */
+        return ROOT2.planned[day];
       }
       /* 今天还剩几句没读完 —— 这个数全项目只在这里算一次，三处读它：任务条的「还剩」、
          顶栏「今日」那颗绿点、首屏那条提示。
@@ -5832,9 +5836,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           nextBtn.textContent = reveal ? (hasNextQuiz() ? '下一题' : '小结') : '跳过这题';
           setProg(quizN ? quizCursor / quizN : 1);
         } else {
-          titleEl.textContent = `① 通读 ${doneN}/${planned}`;
+          /* 分母是当天快照，不跟分子涨。分子可能超过它（今天多读了）—— 主行封顶写 36/36，
+             不写 40/36 这种看着像出错的数；多出来的在副行如实说。 */
+          const extra = Math.max(0, doneN - planned);
+          titleEl.textContent = `① 通读 ${Math.min(doneN, planned)}/${planned}`;
           /* secNew() 已经把倍速除掉一次了，这里再除一遍就是平方（同一天在引擎里抓到的那个坑的第二个现场）。 */
-          subEl.textContent = leftN ? `还剩 ~${fmtTime(leftN * secNew())}` : '这批读完了，接着出这一批的词';
+          subEl.textContent = leftN ? `还剩 ~${fmtTime(leftN * secNew())}`
+            : (extra ? `今天的量读完了 · 多读了 ${extra} 句` : '这批读完了，接着出这一批的词');
           againBtn.style.display = '';
           againBtn.innerHTML = '<i class="ri-repeat-line" aria-hidden="true"></i> 再来';
           /* 名字跟着口径改（他 2026-09-23：删掉播放键、点一句放一句）：这颗现在不"翻到下一句"，
@@ -5884,13 +5892,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         el.classList.toggle('off', !live);
         el.setAttribute('role', live ? 'slider' : 'progressbar');
         el.setAttribute('tabindex', live ? '0' : '-1');
-        el.setAttribute('aria-label', live ? '在这一批里跳到第几句' : '今天这批的进度');
+        el.setAttribute('aria-label', live ? '跳到今天第几句' : '今天这批的进度');
         if (live) {
-          el.title = '这一批里第几句 —— 按住拖动，或用 ← → 跳句';
+          el.title = '跳到今天第几句 —— 按住拖动，或用 ← → 跳句';
           el.setAttribute('aria-valuemin', '1');
           el.setAttribute('aria-valuemax', String(n));
           el.setAttribute('aria-valuenow', String(k + 1));
-          el.setAttribute('aria-valuetext', '第 ' + (k + 1) + ' 句，共 ' + n + ' 句');
+          el.setAttribute('aria-valuetext', '今天第 ' + (k + 1) + ' 句，还剩 ' + (n - k) + ' 句');
         } else {
           el.removeAttribute('title');
           el.removeAttribute('aria-valuetext');
@@ -5924,7 +5932,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           if (!tip || !todayQueue[k]) return;
           const g = todayQueue[k].i;
           const sec = SECTIONS[artOfSentGlobal(g)];
-          tip.innerHTML = '<div class="tip-idx">这批里第 ' + (k + 1) + '/' + nOf() + ' 句 · '
+          /* 只报「位置 + 还剩」，不再报「共 N 句」：那个 N 是队列长度，跟任务条上那个 n/N
+             （当天快照）不是一个量纲。两个都写成「第 x/M 句」会被读成对不上
+             —— 2026-09-24 他实测报过「条上 229/229，气泡却 24/68」。 */
+          tip.innerHTML = '<div class="tip-idx">今天第 ' + (k + 1) + ' 句 · 还剩 ' + (nOf() - k) + ' 句 · '
             + (todayQueue[k].type === 'new' ? '新句' : '复习')
             + (sec ? ' · ' + esc(sec.title) : '') + '</div><div>' + esc(plainEN(SENT_RAW[g] || '')) + '</div>';
           tip.style.display = 'block';
@@ -6557,6 +6568,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         offerResume, resumeTask, skipResume, hideResumeOffer,
         initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
         etaFor, etaCalls, countStages, seedDailyForTest,
+        // 「今天这批的分母是不是被分子抬起来了」只有引擎自己知道 —— 给测试读一次真值。
+        // 2026-09-24：plannedToday() 曾经返回 Math.max(快照, sentDone)，读超了就永远显示 N/N。
+        plannedForTest: () => plannedToday(),
         // 「本次已用多久」要跨过 20 秒静默期才可测，所以把会话起点交给测试拨一下
         setSessionStartForTest: (ts) => { sessionStart = ts; updateTaskBar(); },
         // ① 那颗键在「放这一句 / 下一句」之间翻转只挂这里：全局 paint() 每次改 playing 都调一次

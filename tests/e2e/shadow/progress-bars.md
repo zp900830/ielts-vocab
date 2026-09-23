@@ -42,7 +42,7 @@ Navigate to `{E2E_BASE_URL}/index.html`，**等到 `.sent` 数量 > 5 才算开�
 **Verify:**
 - `#tbSeek` 存在、`aria-hidden` **不是** `"true"`、`role="slider"`、`tabindex="0"`
 - `aria-valuemax` 等于 `TASK.queue.length`；含伪元素外扩热区 ≥24px；`#tbKnob` 静止可见
-- 从 20% 拖到 80%：`aria-valuenow` 前移、`aria-valuetext` 含「共 N 句」、当前句真的换了
+- 从 20% 拖到 80%：`aria-valuenow` 前移、`aria-valuetext` 形如「今天第 N 句，还剩 M 句」、`aria-valuemax` = 队列长度、当前句真的换了
 
 ## Case 3. 任务条：键盘 ← → / Home / End 能挪句
 

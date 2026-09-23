@@ -22,6 +22,7 @@ declare const TASK: {
   state(): { words: Record<string, { stage: string; reps: number; due: number; ctx: object; ok3: number }>; daily: Record<string, Record<string, number>> };
   events(): { type: string; w?: string; s?: number | string; ok?: boolean }[];
   readDone(i: number): void; relearn(w: string): void;
+  plannedForTest(): number;
   openPanel(): void; setView(v: string): void;
   pass(): number; setPass(n: number): void; advance(): void; finished(): boolean;
   currentQuiz(): BlankQ | null; answerQuiz(choice: string): boolean; nextQuiz(): void;
@@ -513,17 +514,34 @@ test.describe('two passes', () => {
     }
   });
 
+  /* 分母 = 当天目标，不是「我已经读了多少」。队列会滚动补句、可以一直读下去，
+     所以读超了也不许把分母抬起来 —— 一抬，条上就永远显示 N/N（100%），
+     跟 seek 条上「还剩几句」直接打架（2026-09-24 他实测：条上 229/229，气泡却 24/68）。
+     ⚠️ 旧写法只点 next()、从不兑现「这句放完了」，sentDone 压根没动 —— 所以这条一直是假绿，
+     拦不住 plannedToday() 里那行 Math.max(快照, sentDone)。现在真读真记再读分母，
+     并且直接问引擎要真值（plannedForTest）—— UI 上"读超快照"这一刻结构上到不了
+     （队列成员是当天那批的子集，读完当天那批就翻 ② 了），锁在源头才锁得住。 */
   test('the 今日 denominator never grows while reading', async ({ page }) => {
-    const dens = await page.evaluate(() => {
-      TASK.initPlan(15); TASK.enterTaskMode();
-      const out: string[] = [];
-      for (let i = 0; i < 10; i++) {
-        document.getElementById('tbNext').click();
-        out.push((document.getElementById('tbTitle').textContent.trim().match(/(\d+)\/(\d+)/) || [])[2]);
+    const got = await page.evaluate(() => {
+      const tbNext = document.getElementById('tbNext') as HTMLButtonElement;
+      const den = () => (document.getElementById('tbTitle')!.textContent!.trim().match(/(\d+)\/(\d+)/) || [])[2];
+      const first = TASK.plannedForTest();
+      const seen = [first];
+      const titles: string[] = [];
+      for (let r = 0; r < 4; r++) {
+        /* 每轮读到只剩 5 句没读：读空会翻 ②（那时标题里的 n/N 是题数），
+           留几句既让 sentDone 往前走，又一直留在 ① 态量通读分母。 */
+        const q = TASK.todayPlan(true).queue;
+        q.slice(0, Math.max(1, q.length - 5)).forEach((x) => TASK.readDone(x.i));
+        tbNext.click();
+        seen.push(TASK.plannedForTest());
+        if (document.getElementById('taskBar')!.dataset.state === 'read') titles.push(den());
       }
-      return Array.from(new Set(out));
+      return { first, seen: Array.from(new Set(seen)), titles: Array.from(new Set(titles)), read: TASK.state() };
     });
-    expect(dens.length).toBe(1);      // 队列会滚动补句，分母跟着涨就是「目标被偷偷抬高」
+    expect(got.seen, `分母从 ${got.first} 涨到了 ${got.seen.join(' → ')}（读超了也不许抬分母）`)
+      .toEqual([got.first]);
+    expect(got.titles, `① 态条上的分母也跟着涨了：${got.titles.join(' → ')}`).toEqual([String(got.first)]);
   });
 
   test('② marks the picked wrong option red and the right one green', async ({ page }) => {
