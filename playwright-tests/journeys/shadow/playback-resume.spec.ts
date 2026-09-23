@@ -14,7 +14,7 @@ declare let idx: number;
 declare const sents: HTMLElement[];
 declare let playing: boolean;
 declare let speakToken: number;
-declare const launch: (i: number, my: number, immediate?: boolean) => void;
+declare function playFrom(i: number): void;
 declare const chapterSentStart: number;
 declare const currentChapter: number;
 
@@ -83,14 +83,21 @@ test.describe('Playback resumes from saved position after reload', () => {
       await test.step('Step 3: End of chapter keeps the resume point', async () => {
         const r = await page.evaluate(async () => {
           const wait = (ms: number) => new Promise(res => setTimeout(res, ms));
+          /* 走**真实**的整章收尾：末句的 completion（onend）→ 回调里那条 `i + 1 >= sents.length`。
+             不能再用 `launch(sents.length)` 来模拟 —— 2026-09-24 那条越界分支已改成
+             「越界只可能是预取，绝不许碰正在念的那句的状态」，否则点倒数第 1/2 句时，
+             这句自己的预取会把高亮和 playing 一起掐掉（实测 P1，见 playback-chain ⑤）。 */
+          const w = window as unknown as { speak: (t: string, cb?: () => void) => void };
+          const cbs: (() => void)[] = [];
+          w.speak = (_t: string, cb?: () => void) => { if (cb) cbs.push(cb); };
           playing = false; speakToken++;
-          await wait(60);
+          await wait(40);
           const last = sents.length - 1;
-          idx = last;
-          playing = true;
-          launch(sents.length, speakToken, true);
-          await wait(60);
-          playing = false; speakToken++;
+          playFrom(last);
+          await wait(40);
+          const cb = cbs[cbs.length - 1];
+          if (cb) cb();                       // 末句真的放完了
+          await wait(40);
           return {
             last,
             start: chapterSentStart,
@@ -99,7 +106,7 @@ test.describe('Playback resumes from saved position after reload', () => {
             pos: JSON.parse(localStorage.getItem('ielts-pos') || '{}'),
           };
         });
-        expect(r.idxAfter).toBe(-1);
+        expect(r.idxAfter, '整章播完要给 idx 收尾成 -1').toBe(-1);
         // 默认视图是「全部文章」（currentChapter < 0），此时 savePos 只写全局句号 i；
         // 选了章节才会写 chapter/chapterI。两种模式下都不能把续读位倒回 0。
         expect(r.pos.i).toBe(r.chapter >= 0 ? r.start + r.last : r.last);
