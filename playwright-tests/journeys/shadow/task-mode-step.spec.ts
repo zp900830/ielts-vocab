@@ -199,34 +199,36 @@ test.describe('任务模式 · 一步一停（2026-09-23 四条实测）', () =>
     expect(sp.length, `同一句被提交了 ${sp.length} 次 = 又去换音色重播了`).toBe(1);
   });
 
-  /* ⑧ 他 2026-09-23 的口径，当天又改了一次：那颗键进任务模式先写「放这一句」
-     （刚进来就写「下一句」等于让人以为已经放过了），点过之后**整趟都写「下一句」** ——
-     他追报「现在像是两个按钮一直切来切去」，所以文案不再按句来回翻。
-     点下去的动作按当前这句走：还没放的先放起来；正在放的收尾、跳到队列里下一句。 */
-  test('⑧ 那颗键进模式先「放这一句」，点过之后整趟都是「下一句」', async ({ page, baseURL }) => {
+  /* ⑧ 他 2026-09-24 第三次改口径（这次是定稿）：那颗键进模式先写「放这一句」，
+     点过之后整趟都叫「下一句」。动作按「这趟动过没有」分：
+       没动过 → 放屏幕上这句（高亮不跑）；
+       动过   → 高亮挪到「当前位置往后第一条没读的」，**并同步开播那一句**。
+     而且**放完不自动挪高亮** —— 高亮停在这句，下一句只由这颗键叫起来。 */
+  test('⑧ 放完高亮停在原句；点「下一句」才把高亮挪过去并同步开播', async ({ page, baseURL }) => {
     test.setTimeout(currentTimeout() * 8);
     await openShadow(page, baseURL, 1280);   // 窄屏上这颗字被 font-size:0 收掉，只看得到图标
     await page.evaluate(() => { TASK.hideResumeOffer(); TASK.enterTaskMode(); });
     await expect(page.locator('#taskBar')).toBeVisible();
     await installSpeakStub(page);
     const next = page.locator('#tbNext');
-    const title = () => page.locator('#tbTitle').innerText();
+    const hi = () => page.evaluate(() =>
+      [...document.querySelectorAll('.sent')].findIndex((e) => e.classList.contains('playing')));
 
     await expect(next).toContainText('放这一句');
-    const t0 = await title();
-    await next.click();                                // 第一下：放
+    const first = await hi();
+    await next.click();                                    // 第一下：放这一句
     await expect(next).toContainText('下一句');
-    expect(await title(), '第一下只是"放"，不该已经前进').toBe(t0);
+    expect(await hi(), '第一下只是"放"，高亮不许跑').toBe(first);
 
     await page.evaluate(() => (window as unknown as { __finish: () => void }).__finish());
-    await expect.poll(() => title()).not.toBe(t0);      // 放完自动前进
-    await expect(next).toContainText('下一句');          // 文案整趟不再翻回「放这一句」
+    await page.waitForTimeout(250);
+    expect(await hi(), '放完高亮必须停在这句（他明确不要自动挪）').toBe(first);
 
-    const t1 = await title();
-    await next.click();                                // 这句还没放 → 先放起来，不许前进
-    expect(await title(), '还没放的这句：点「下一句」应当先放起来').toBe(t1);
-    await next.click();                                // 正在放 → 收尾前进
-    await expect.poll(() => title()).not.toBe(t1);
-    await expect(next).toContainText('下一句');
+    await next.click();                                    // 「下一句」：挪高亮 + 同步开播
+    await expect.poll(hi).toBe(first + 1);
+
+    await page.evaluate(() => (window as unknown as { __finish: () => void }).__finish());
+    await page.waitForTimeout(250);
+    expect(await hi(), '第二句放完也停在它自己身上').toBe(first + 1);
   });
 });

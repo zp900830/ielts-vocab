@@ -711,7 +711,7 @@ test.describe('two passes', () => {
   /* 2026-09-23 口径改了（他：「不点不放，点一句放一句」）：那颗键改名「放这一句」，放的是屏幕上这一句，
      放完才记完成、才前进。旧口径是点一下 = 把当前这句记成完成 + 跳下一句 —— 于是「上一句」退回去
      再点，会悄悄跳过退回的那句。这条用例改量新契约，但守的还是原来那个坑：队列位置与高亮必须对齐。 */
-  test('当前句只有一套高亮，「放这一句」放的是这一句且高亮跟播放同一句：播完才前进，「上一句」退得回去', async ({ page }) => {
+  test('当前句只有一套高亮：放的是这一句、放完停在原句，点「下一句」才挪高亮并同步开播', async ({ page }) => {
     // 全站不再有第二套「当前句」标记（描边那套已删，高亮回归常规模式的浅绿底纹）
     expect(await page.locator('.sent.task-current').count()).toBe(0);
     const playingIdx = () => page.evaluate(() => {
@@ -738,24 +738,30 @@ test.describe('two passes', () => {
     expect(first.n, '同一时刻只能有一句被标成当前').toBe(1);
 
     await page.locator('#tbNext').click();
-    /* 高亮必须和正在念的那句是同一句（他 2026-09-24 报的 bug：上一版让高亮领先一句，
-       屏幕上就成了「高亮在下一句、读的是上一句」）。这里两条一起锁：引擎里放的是 first，
-       屏幕上高亮的也是 first。 */
+    /* 第一下是「放这一句」：引擎里放的是 first，高亮也在 first
+       （他 2026-09-24：高亮必须跟正在念的那句同一句）。 */
     expect(await lastSpoken(), '「放这一句」放的必须是这一句').toContain((await sentText(first.on)).slice(0, 10));
     expect((await playingIdx()).on, '高亮必须跟正在念的那句一致').toBe(first.on);
 
     const doneBefore = await title();
     await page.evaluate(() => (window as unknown as { __finish: () => void }).__finish());
-    await expect.poll(async () => (await playingIdx()).on).not.toBe(first.on);   // 放完队列前进
-    expect(await title(), '放完这一句，条上那个数要动').not.toBe(doneBefore);
+    /* 放完**不自动挪高亮**（他 2026-09-24 拍板）：高亮停在这句，只有条上那个数往前走。
+       只有条上那个数动着、高亮不动，才说明"完成记下了"和"下一步等指令"是两件事。 */
+    await expect.poll(title).not.toBe(doneBefore);
+    expect((await playingIdx()).on, '放完高亮必须停在这句（不许自动挪）').toBe(first.on);
+
+    /* 「下一句」才把高亮挪到下一句，并且**同步开播**那一句 —— 高亮挪到哪句就念哪句。 */
+    await page.locator('#tbNext').click();
+    await expect.poll(async () => (await playingIdx()).on).toBe(first.on + 1);
+    expect(await lastSpoken(), '高亮挪到哪句就得念哪句').toContain((await sentText(first.on + 1)).slice(0, 10));
 
     // 往回：高亮必须跟着回来（旧实现只搬正文高亮，队列位置留在原句）
     const fwd = (await playingIdx()).on;
     await page.locator('#tbPrev').click();
     await expect.poll(async () => (await playingIdx()).on).toBe(fwd - 1);
-    // 退回后再点：放的必须是你退回的那句，而不是跳到它后面没听过的 —— 这一条只有队列位置真的对齐了才成立
+    // 退回后再点「下一句」：从退回处往后找第一条没读的往前挪 —— 队列位置没跟着退回去就会跳错句
     await page.locator('#tbNext').click();
-    expect(await lastSpoken(), '退回后点「放这一句」要放退回的这句').toContain((await sentText(fwd - 1)).slice(0, 10));
+    await expect.poll(async () => (await playingIdx()).on).not.toBe(fwd - 1);
   });
 
   test('点 ✕ 先问一句：不退出、换成「继续做 / 退出」，两条出口都算数', async ({ page }) => {

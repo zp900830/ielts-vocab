@@ -4976,11 +4976,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       /* 本遍末尾的补考清单（走查 2026-09-22 #2：答错过的词这一遍里要再考一次，只一次）。
          存的是 batchItems 里那批 item 对象本体 —— 身份即「这个词在这一句」，同一句不会进两次。 */
       let retakeItems = [], retakeServedN = 0, retakeOkN = 0;
-      /* ① 那颗键一颗担两义（他 2026-09-23 拍的口径 + 当天第二次改口）：
+      /* ① 那颗键一颗担两义（他 2026-09-23 定的名，2026-09-24 定的动作）：
          进任务模式先显示「放这一句」（刚进来就写「下一句」等于让人以为已经放过了）；
          点过之后**整趟都叫「下一句」**，不再按句来回翻 —— 他追报「像两个按钮一直切来切去」。
-         `_tabStarted` = 这趟已经放过一句了（决定文案）；`_nextPlayed` = 当前这句点过没有（决定点下去是放还是前进）。 */
-      let _tabStarted = false, _nextPlayed = false;
+         `_tabStarted` = 这趟已经放过一句了：它同时决定**文案**（放这一句 / 下一句）与
+         **动作**（放屏幕上这句 / 挪到下一句并开播）。不需要第二个位 —— 放完不再自动挪高亮，
+         所以"当前这句点过没有"跟"这趟动过没有"是同一件事。 */
+      let _tabStarted = false;
 
       function indexLayout() {
         DISP = []; SENT_ZH = []; PARA_ID = [];
@@ -5508,7 +5510,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         // 批次快照：② 考的就是这一批读过的句子，不是队列此刻还剩下什么
         batchItems = todayPlan(true).items.map(x => Object.assign({}, x));
         pass = 1; resetQuizRun(); taskFinished = false;
-        _tabStarted = false; _nextPlayed = false;   // 那颗键每一趟都从「放这一句」起步
+        _tabStarted = false;                       // 那颗键每一趟都从「放这一句」起步
         if (!todayQueue.length) { showAbToast('今天没有排到的句子 —— 把每天的分钟数调大一点试试'); return; }
         hideResumeOffer();
         taskMode = true;
@@ -5556,7 +5558,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          分开写两份的话，跨章切换（先换章、等 300ms 再定位）只会修好一边 —— 上一轮 prev() 就是栽在两份实现上。 */
       function revealTaskPos(found, autoPlay) {
         taskPos = found;
-        _nextPlayed = false;   // 换了一句 → 那颗键回到「放这一句」
         const globalIdx = todayQueue[found].i;
         /* 换了一句 = 单句循环要跟到新这句上（默认就是循环 3 次，锚在旧句等于悄悄失灵）；
            A-B 区间则整段作废（播到 B 点把人拽回上一句的区间，屏幕上已经不是那句）。
@@ -5607,7 +5608,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (!taskMode) { step(-1); return; }
         if (pass >= 2) { reviewSentence(); return; }   // ② 没有「上一句」这个动作，这颗本来也不显示
         step(-1);
-        _nextPlayed = false;   // 退回来是「再听一遍这句话」，那颗键回到「放这一句」
         if (idx >= 0) {
           const g = localToGlobal(idx);
           for (let qi = 0; qi < todayQueue.length; qi++) {
@@ -5660,33 +5660,37 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           return;
         }
         if (taskPos >= todayQueue.length) return;
-        /* ① 通读态这一颗有两种身份（他 2026-09-23）：还没点过 → 放这一句；点过 → 下一句。
-           判据与 syncTaskNextLabel() 共用 nextIsAdvance()，免得按钮写着「下一句」点下去却在重放。
-           走 taskSentenceFinished 而不是另写一套前进：记完成 + goToNextTask 只有这一份实现。 */
-        if (nextIsAdvance()) {
-          playing = false; speakToken++;
-          try { speechSynthesis.cancel(); } catch (e) {}
-          try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
-          taskSentenceFinished(todayQueue[taskPos].i);
-          try { savePos(); } catch (e) {}
-          paint();
-          return;
-        }
-        /* 计数搬到「这一句真的放完了」那一刻（taskSentenceFinished）。挂在点击上会同时犯他报的两条错 ——
-           没听完的句子被记成完成，听完却没点的那句永远不算。 */
-        // 停止当前播放
+        /* 这一颗在 ① 态有两种身份（他 2026-09-23 定的名，2026-09-24 定的动作）：
+           这趟还没放过 → 「放这一句」；放过之后 → 「下一句」。
+           两种都先把正在念的收掉；完成计数仍挂在「这句真的放完了」那一刻
+           （taskSentenceFinished），不挂在点击上 —— 点一下就记完成等于没读就打卡。 */
         playing = false; speakToken++;
         try { speechSynthesis.cancel(); } catch (e) {}
         try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
-        paint();
-        /* 放的是「屏幕上这一句」，不是「往后跳一格」。写成 goToNextTask 的话，
-           用「上一句」退回去再点，会悄悄跳到队列里第一句还没听的，而不是你退回的那句 ——
-           正是这条路径以前栽过的坑（队列位置和高亮不对齐）。 */
-        revealTaskPos(taskPos, true);
-        /* 高亮只跟"正在念的那一句"走（他 2026-09-24 实测报的 bug：上一版让高亮领先一句，
-           屏幕上就成了"高亮在下一句、读的是上一句"——音频和高亮必须同一句）。
-           收尾前进仍由 taskSentenceFinished → goToNextTask 负责，放完自然挪到下一句。 */
-        _nextPlayed = true; _tabStarted = true;
+        if (!_tabStarted) {
+          /* 这一趟的第一下：放「屏幕上这一句」，不往后跳。
+             写成 goToNextTask 的话，用「上一句」退回去再点会悄悄跳到队列里第一句还没听的，
+             而不是你退回的那句 —— 这条路径以前栽过。 */
+          paint();
+          revealTaskPos(taskPos, true);
+          _tabStarted = true;
+          syncTaskNextLabel();
+          return;
+        }
+        /* 「下一句」（他 2026-09-24 拍板）：从当前位置往后找第一条没读的，**高亮挪过去 + 同步开播**；
+           放完就停在那句，不再自动往下走（放完自动挪高亮是他明确不要的）。
+           往后没有就回卷找一条，再没有 = 这批读完了 → 把 ② 端上来。 */
+        let found = -1;
+        for (let qi = taskPos + 1; qi < todayQueue.length; qi++) {
+          if (!readToday2(todayQueue[qi].i)) { found = qi; break; }
+        }
+        if (found < 0) {
+          for (let qi = 0; qi <= taskPos && qi < todayQueue.length; qi++) {
+            if (!readToday2(todayQueue[qi].i)) { found = qi; break; }
+          }
+        }
+        if (found < 0) { finishPass(1); return; }
+        revealTaskPos(found, true);
         syncTaskNextLabel();
       }
 
@@ -5759,11 +5763,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         });
         _barRO.observe(bar);
       }
-      /* ① 通读态那颗键一颗担两义（他 2026-09-23 拍的口径）：还没放 →「放这一句」；
-         点过之后 →「下一句」（点一下把这句收尾、跳到队列里下一句）。
-         标签要跟着这个位变，而它只在 next()/revealTaskPos()/prev() 三处动，所以同步函数很轻 ——
-         不重跑 updateTaskBar()（那个会重建今日队列，逐句跑不起）。判据与 next() 那份是同一个函数。 */
-      function nextIsAdvance() { return !!(taskMode && _tabStarted && _nextPlayed); }
+      /* ① 通读态那颗键的文案：这趟还没动过 →「放这一句」；动过之后整趟都叫「下一句」。
+         只在 next()/enterTaskMode() 两处变，所以同步函数很轻 ——
+         不重跑 updateTaskBar()（那个会重建今日队列，逐句跑不起）。 */
       function syncTaskNextLabel() {
         if (!taskMode) return;
         const bar = document.getElementById('taskBar');
@@ -6516,9 +6518,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (pass === 1 && plan && prog) {
           recordRep(globalIdx);
           sessionReps++;
-          /* 前进走的是同一处实现（goToNextTask）：它自己认得「队列里没有没读的了」这件事，
-             那种情况下它直接 finishPass(1) 把 ② 端上来 —— 不再另数一遍还剩几句，数两遍就会有两套答案。 */
-          goToNextTask(false);
+          /* 他 2026-09-24 拍板：放完**不自动挪高亮** —— 高亮停在这句，下一句只由「下一句」那颗键叫起来
+             （点了才挪高亮 + 同步开播）。所以这里不再 goToNextTask()。
+             唯一例外是「这批一句没读的了」：那种情况照旧把 ② 端上来，否则那颗键会停在
+             一个"没有下一句可点"的死角（task-mode-step ④ 锁的就是它）。 */
+          if (!todayQueue.some(q => !readToday2(q.i))) { finishPass(1); return true; }
+          try { updateTaskBar(); } catch (e) {}
+          try { savePos(); } catch (e) {}
         }
         return true;
       }
