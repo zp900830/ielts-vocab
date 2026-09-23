@@ -5943,7 +5943,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           const bar = document.getElementById('taskBar');
           const er = el.getBoundingClientRect();
           const br = bar ? bar.getBoundingClientRect() : er;
-          const w = Math.min(tip.scrollWidth || er.width, br.width - 28);
+          /* 量「自然宽度」必须先把 width 收回 max-content：以前直接读 tip.scrollWidth，
+             而它的 width 还是上一次写进去的 px —— 带显式宽度、内容又折行的元素，
+             scrollWidth 恒等于那个宽度，于是每显示一次就少 2px（边框/取整），
+             几十次之后气泡塌成一条竖线（2026-09-24 他实测 1902 视口下整句英文一字一行）。
+             收回 max-content 后这次量到的就与上一次无关了；再夹上「不窄于 220 / 不宽于条宽-28」。 */
+          tip.style.width = 'max-content';
+          const natural = tip.offsetWidth || er.width;
+          const w = Math.min(Math.max(natural, 220), Math.max(220, br.width - 28));
           const anchor = (clientX == null ? er.left + er.width / 2 : clientX) - er.left;
           const lo = br.left + 14 - er.left, hi = Math.max(lo, br.right - 14 - er.left - w);
           tip.style.width = w + 'px';
