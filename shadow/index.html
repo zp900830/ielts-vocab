@@ -3109,6 +3109,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     const failOnce = () => {
     if (finished) return; finished = true; clearWd(); speechInProgress = false;
     if (my !== speakToken) return; // 陈旧链的看门狗：暂停/切句后不再记错、不重试、不报警（否则暂停中也会弹无声alert）
+    /* 已经 onstart 过的这一句走到这里，只剩两种可能：引擎没报 onend（Chromium 在 iOS/iPadOS 上是常态），
+       或者报了个错。两种都算「这句放过了」，直接往前 —— 绝不许再换音色重播。
+       下面那条重试是给「一次都没出声」准备的；对已经出声的句子重试 = 同一句念两遍，
+       而任务模式一步一停把全部进度押在这个回调上，重试期间条上那个数一动不动 ——
+       他 2026-09-23 在 iPad 上报的「发个声就卡住、按钮永远不变」就是这个形状
+       （实测复现：一句念完等 12 秒 → 换 Serena 把同一句又念一遍 → 再等 12 秒才前进）。 */
+    if (started) { errStreak = 0; cb(); return; }
     if (!plain) { speak(text, cb, { plain: true, exclude: triedURI }, my); return; } // 换掉坏音色重试
     if (!everStarted && NEED_GESTURE) {
     // iOS: cancel后speaking可能仍返回true（已知bug），延迟检查
@@ -3145,10 +3152,16 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     idx = opts.sent; paint(); syncSeek(opts.sent);
     try { mediaMeta(plainEN(sentRaw(opts.sent)).slice(0, 80)); } catch (e) {}
     }
-    // 第二层看门狗：onstart 后 onend 不触发（Chrome/Safari 已知卡死 bug）。
+    // 第二层看门狗：onstart 后 onend 不触发（Chrome/Safari 已知卡死 bug，iOS/iPadOS 上是不报的常态）。
     // 时长上限必须随倍速缩放：慢速(0.75x)时朗读慢 33%，旧的 8s/60ms每字会在句子仍正常朗读时
-    // 误判超时→cancel 重播，就是"放着放着就停"的根因。按 ~100ms/字 ÷ 倍速估算并留足余量。
-    const endTimeout = Math.max(12000, Math.ceil(text.length * 100 / (rate || 1)));
+    // 误判超时→cancel 重播，就是"放着放着就停"的根因。
+    /* 2026-09-23 重新量过再定这个数：macOS Chrome 本地音色 Daniel，117 字符那句真念 6.7 秒，
+       六句实测落在 50~57 ms/字。旧的「100ms/字 + 12 秒地板」差不多是真实时长的两倍 ——
+       引擎不报 onend 时（iPad 就是这种），每句念完还要白等 5 秒以上，那就是他看到的"卡住"。
+       现在按 80ms/字（对实测值留 1.4 倍余量）、地板降到 8 秒。
+       敢往下调是因为上面 `started` 那条已经把"误判 → cancel 换音色重播"这条路堵死了：
+       现在误判的代价只是早一点前进，不再是把同一句念两遍。 */
+    const endTimeout = Math.max(8000, Math.ceil(text.length * 80 / (rate || 1)));
     wd = setTimeout(() => { dlog('end-watchdog-fire', 'tok=' + my); if (!finished) failOnce(); }, endTimeout);
     };
     u.onend = () => { if (finished) return; finished = true; clearWd(); errStreak = 0; dlog('onend', 'tok=' + my); speechInProgress = false; cb(); };
