@@ -3,7 +3,7 @@
 | 字段 | 内容 |
 |------|------|
 | 产品名称 | 雅思词汇真经（IELTS Vocab Story & Shadowing） |
-| 版本 | v1.0.0（2026-09-17 切 tag；此后持续迭代，未另切版本 —— 以 `git log` 与本文件为准） |
+| 版本 | **v2.0.0**（2026-09-24 切 tag `v2.0`，见 `VERSION`；v1.0.0 为 2026-09-17） |
 | 状态 | Released · 迭代中（任务模式 / 间隔引擎 / 保温 已上线） |
 | 维护模式 | 单人维护 · 多 AI Agent 协作 |
 | 线上地址 | https://ielts-vocab.bond/ （主站）<br>https://ielts-vocab.bond/shadow/ （跟读）<br>https://zp900830.github.io/ielts-vocab/ （国际备用） |
@@ -1180,7 +1180,10 @@ main（生产）
 
 ### 13.5 版本标记
 
-`VERSION` 文件：`VERSION=1.0.0, TAG=v1.0, RELEASE_DATE=2026-09-17`
+`VERSION` 文件：`VERSION=2.0.0, TAG=v2.0, RELEASE_DATE=2026-09-24`
+
+历次：`v1.0.0`（2026-09-17）→ `v2.0.0`（2026-09-24，学习计划/任务模式/间隔引擎/核心链路 P1 修复）。
+`VERSION` 不在发布白名单里，纯仓库标记；线上以 `main` 为准。
 
 ---
 
