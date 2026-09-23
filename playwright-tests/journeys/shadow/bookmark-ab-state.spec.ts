@@ -34,6 +34,15 @@ test.describe('Bookmark popup A-B button state', () => {
 
     await test.step('Setup 1: Clear bookmarks', async () => {
       await page.goto(`${baseURL}/index.html`);
+      /* 必须等正文渲出来再动书签。renderMarks() 的第一道过滤是 `x.i < sents.length`
+         （sents 就是 document.querySelectorAll('.sent')，在正文渲好那一刻才填上）——
+         数据 JSON 还没回来时它是空数组，三条书签全被滤掉，弹层渲成 0 条。
+         这条用例原先只 goto 完就往 localStorage 里写 10/30/50，于是全量门禁里隔几次红一次
+         （2026-09-23 量到：连跑两次全量，这条红两次；单独跑它自己反倒不复现，因为每轮是干净 profile）。
+         等的是"够 51 句"而不是"第一句可见"：本用例种下的最大下标是 50，
+         只等第一句仍然可能被过滤掉。其它稳的用例（task-flow 等 8 次 goto / 8 次等待）都有这一步。 */
+      await expect.poll(() => page.locator('.sent').count(), { timeout: 15000 })
+        .toBeGreaterThan(50);
       await page.evaluate(() => localStorage.removeItem('ielts-marks'));
       expect(await page.evaluate(() => getMarks().length)).toBe(0);
     });

@@ -29,6 +29,11 @@ test.describe('Bookmark cloud sync: pull, push, and merge', () => {
 
     await test.step('Setup 1: Clear local bookmarks', async () => {
       await page.goto(`${baseURL}/index.html`);
+      /* 同一件事，见 bookmark-ab-state.spec.ts 里那段注释：书签的读写全都以下标为坐标，
+         而正文是异步渲的（sents 在渲染那一刻才填上）。这条用例 Step 3 直接取 sents[50]，
+         没等够就只能拿到 undefined，打上去的书签下标与预期不符 —— 全量里隔几次红一次的来源。 */
+      await expect.poll(() => page.locator('.sent').count(), { timeout: 15000 })
+        .toBeGreaterThan(50);
       await page.evaluate(() => localStorage.removeItem('ielts-marks'));
       expect(await page.evaluate(() => getMarks().length)).toBe(0);
     });
