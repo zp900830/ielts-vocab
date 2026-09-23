@@ -5891,8 +5891,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           for (const item of todayQueue) {
             const s = sentState(item.i);
             const doneToday = s.lastRead >= st;
-            if (item.type === 'new' && s.reps >= PHASE_THRESHOLDS.learning && doneToday) taskSet.set(item.i, 'done');
-            else if (item.type === 'review' && doneToday) taskSet.set(item.i, 'done');
+            /* 判据跟队列对齐：goToNextTask 找「下一句没读的」用的是 readToday2 = 今天读过没有，
+               可这里以前对「新句」额外要求 reps >= 3（learning 门槛）才算 done。
+               一步一停之后每句每天只记一次，于是刚读完的那句永远不退色 —— 36 句从头绿到尾，
+               这条标记就不再说「我读到哪儿」了。复习句本来就用的是 doneToday，两档现在同一把尺。
+               只改显示：reps / learning 那些账一个字没动，毕业判据不从这里读。 */
+            if (doneToday) taskSet.set(item.i, 'done');
             else taskSet.set(item.i, item.type);
           }
         }
