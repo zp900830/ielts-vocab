@@ -883,6 +883,11 @@
     // 音色选择器（③ 挪进来）：重渲后 #voicePop 是新元素，要重新渲染 + 重新绑事件代理。
     try { if (typeof renderVoicePop === 'function') renderVoicePop(); } catch (e) {}
     wireVoicePop();
+    // §10.4：重渲把原焦点节点摘掉（activeElement 掉到 body）—— 浮窗若还开着，把焦点收回浮窗。
+    if (!pop.hidden && (document.activeElement === document.body || !pop.contains(document.activeElement))) {
+      pop.tabIndex = -1;
+      try { pop.focus(); } catch (e) {}
+    }
   }
   // 浮窗开在用户卡正上方（桌面 300px 宽；手机通栏 bottom-sheet），高度夹在卡片上沿以内。
   function positionMePop() {
@@ -902,15 +907,22 @@
     if (!pop) return;
     renderMePop();
     pop.hidden = false;
+    pop.setAttribute('aria-modal', 'true');
     positionMePop();
     const card = document.getElementById('meCard');
     if (card) card.setAttribute('aria-expanded', 'true');
+    // §10.4：打开即把焦点送进浮窗（键盘用户不必从头 Tab 到它）。
+    pop.tabIndex = -1;
+    try { pop.focus(); } catch (e) {}
   }
   function closeMePop() {
     const pop = document.getElementById('mePop');
+    const wasOpen = !!pop && !pop.hidden;
     if (pop) pop.hidden = true;
     const card = document.getElementById('meCard');
     if (card) card.setAttribute('aria-expanded', 'false');
+    // §10.4：关闭把焦点归还触发它的「我的」一行，别让键盘焦点掉到 body。
+    if (wasOpen && card) { try { card.focus(); } catch (e) {} }
   }
   function toggleMePop() {
     const pop = document.getElementById('mePop');
@@ -951,6 +963,20 @@
       e.preventDefault();
       e.stopPropagation();
       meLogin();
+    });
+    // §10.4：Tab 在浮窗内收敛，别让键盘焦点逃到背景里的侧栏/正文。
+    pop.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const nodes = Array.prototype.filter.call(
+        pop.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'),
+        (el) => !el.disabled && el.offsetParent !== null);
+      if (!nodes.length) return;
+      const first = nodes[0], last = nodes[nodes.length - 1];
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === pop)) {
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault(); first.focus();
+      }
     });
   }
   window.APP3 = Object.assign(window.APP3, { renderMePop, openMePop, closeMePop, toggleMePop, meLogin, meLogout, meSignup, updateMeCard });

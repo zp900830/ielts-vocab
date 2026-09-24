@@ -182,3 +182,31 @@ test.describe('M5 · 账号（§8.1 账号信息 / §10.4 键盘可达）', () =
     expect(await page.evaluate(() => (window as unknown as { __calls: unknown[][] }).__calls[0][0])).toBe('logout');
   });
 });
+
+test.describe('M5 · 浮窗无障碍（§10.4）', () => {
+  test('打开即聚焦、aria-modal、Esc 关闭归还焦点、Tab 不逃逸；重渲后焦点仍在浮窗内', async ({ page }) => {
+    await stubData(page, EMPTY);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    const card = page.locator('#meCard');
+    await card.click();
+    const pop = page.locator('#mePop');
+    await expect(pop).toBeVisible();
+
+    expect(await pop.getAttribute('aria-modal'), '模态语义').toBe('true');
+    expect(await page.evaluate(() => document.getElementById('mePop')!.contains(document.activeElement)), '打开即把焦点送进浮窗').toBe(true);
+
+    // Tab 一圈都留在浮窗内
+    for (let i = 0; i < 14; i++) await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => document.getElementById('mePop')!.contains(document.activeElement)), 'Tab 不逃到侧栏').toBe(true);
+
+    // 重渲（点主题）后焦点仍在浮窗内
+    await pop.locator('[data-me-theme]').click();
+    expect(await page.evaluate(() => document.getElementById('mePop')!.contains(document.activeElement)), '重渲后焦点不丢').toBe(true);
+
+    // Esc 关闭并归还焦点
+    await page.keyboard.press('Escape');
+    await expect(pop).toBeHidden();
+    expect(await page.evaluate(() => document.activeElement?.id), '焦点归还「我的」').toBe('meCard');
+  });
+});
