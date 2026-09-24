@@ -53,9 +53,11 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
 const waitTask = (page: import('@playwright/test').Page) =>
   page.waitForFunction(() => { try { return typeof TASK !== 'undefined' && !!TASK.state; } catch (e) { return false; } });
 const openMe = async (page: import('@playwright/test').Page) => {
+  const pop = page.locator('#mePop');
   await page.locator('#meCard').click();
-  await expect(page.locator('#mePop')).toBeVisible();
-  return page.locator('#mePop');
+  if (!(await pop.isVisible())) await page.locator('#meCard').click(); // 已开时点一下 = 收掉，补一下
+  await expect(pop).toBeVisible();
+  return pop;
 };
 
 test.describe('M5 · 导出/导入（§8.1 数据管理）', () => {
@@ -208,5 +210,24 @@ test.describe('M5 · 浮窗无障碍（§10.4）', () => {
     await page.keyboard.press('Escape');
     await expect(pop).toBeHidden();
     expect(await page.evaluate(() => document.activeElement?.id), '焦点归还「我的」').toBe('meCard');
+  });
+});
+
+test.describe('M5 · 触摸目标（§10.4）', () => {
+  test('浮窗内所有可点控件 ≥44px（桌面 + 手机；含计划旋钮与登录表单）', async ({ page }) => {
+    await stubData(page, SIX);
+    for (const vp of [{ width: 1280, height: 900 }, { width: 390, height: 800 }]) {
+      await page.setViewportSize(vp);
+      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await waitTask(page);
+      await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+      const pop = await openMe(page);
+      for (const sel of ['#btnAccent', '#voiceBtn', '[data-me-theme]', '[data-me-export]', '[data-me-import]', '.mp-cta', '.mp-row .ps-opt', '#meEmail', '[data-me-login]']) {
+        const t = pop.locator(sel).first();
+        await expect(t).toBeVisible();
+        const h = await t.evaluate((el) => el.getBoundingClientRect().height);
+        expect(h, `${vp.width}px ${sel} 触摸目标`).toBeGreaterThanOrEqual(44);
+      }
+    }
   });
 });

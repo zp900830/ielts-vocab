@@ -1712,6 +1712,17 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .mp-row .ps-opts { justify-content: flex-end; flex-wrap: wrap; }
   .mp-row .ps-opt { padding: 5px 10px; font-size: 12px; }
   .mp-row .tr-msw { padding: 4px 8px 4px 4px; }
+  /* M5（§10.4）：浮窗内所有可点控件触摸目标 ≥44px。scope 在 .me-pop ——
+     文章内那套紧凑控件（.r-badges 等）另有口径，不跟着变高。 */
+  .me-pop .accent-btn,
+  .me-pop .voice-btn,
+  .me-pop .tr-msw,
+  .me-pop .mp-login-form input,
+  .me-pop .mp-login-form .row button,
+  .me-pop .mp-logout,
+  .me-pop .mp-row .ps-opt { min-height: 44px; }
+  .me-pop .tr-msw { align-items: center; }
+  .me-pop .accent-btn { display: inline-flex; align-items: center; }
   .mp-foot { margin-top: 12px; }
   .mp-logout { width: 100%; min-height: 40px; border: 1px solid var(--border); border-radius: 999px;
     background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; }
