@@ -4,6 +4,7 @@
 
 import { test, expect } from '../../fixtures';
 import { currentTimeout } from '../../utils/timeouts';
+import { waitShadowReady } from '../../utils/app-ready';
 import { shadowLocators as shadow } from '../../locators/shadow-locators';
 
 const ENV = process.env.E2E_ENVIRONMENT || 'local';
@@ -34,6 +35,8 @@ test.describe('Playback resumes from saved position after reload', () => {
 
     await test.step('Setup 1: Save a known position', async () => {
       await page.goto(`${baseURL}/index.html`);
+      // goto 在 load 就返回，sents 还没渲染时 playFrom(50) 会静默空转、不落盘。
+      await waitShadowReady(page);
       await page.evaluate(() => {
         (
           window as unknown as { playFrom: (i: number) => void; togglePlay: () => void }
