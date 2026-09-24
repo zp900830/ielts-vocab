@@ -37,6 +37,8 @@ const FILES = [
   // 3.0 新站点：外壳 + 路由（引擎与数据直接读 /shadow/ 那份，不复制）
   'app/index.html',
   'app/app.js',
+  // 3.0 PWA：真实 service worker 文件（scope /app/）。缺它则 SW 注册 404、离线兜底失效。
+  'app/sw.js',
 ];
 
 const warn = [];
