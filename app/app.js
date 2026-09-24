@@ -41,6 +41,8 @@
     const me = e.target.closest('#meCard');
     if (me) { toggleMePop(); return; }
     // 单词本：加载更多（增量渲染，M3）。筛选/展开/在 T2/T3 追加。
+    const wf = e.target.closest('.wb-filter');
+    if (wf) { location.hash = '#/words/' + wf.dataset.f; return; }
     const wm = e.target.closest('.wb-more');
     if (wm) { _wordsShown += W_BATCH; window.APP3.route(); return; }
     const b = e.target.closest('.nav-item');
@@ -468,7 +470,8 @@
     if (go) {
       const tip = go.closest('.st-tip');
       const kind = tip ? tip.dataset.tip : go.dataset.go;
-      if (kind === 'leech' || kind === 'words') { location.hash = '#/words'; return; }
+      if (kind === 'leech') { location.hash = '#/words/todo'; return; }
+      if (kind === 'words') { location.hash = '#/words'; return; }
       if (kind === 'listen') { location.hash = '#/listen'; return; }
       const a = tip && tip.dataset.a != null ? Number(tip.dataset.a) : 0;
       openHomeHighlight(a);

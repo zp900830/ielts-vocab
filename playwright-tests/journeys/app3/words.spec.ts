@@ -117,4 +117,65 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
     await page.locator('.wb-more').click();
     await expect.poll(() => page.locator('.wb-row').count(), { message: '加载更多要真的追加' }).toBeGreaterThan(first);
   });
+
+  test('四档筛选各自真的改变结果集，且计数与 state 同源', async ({ page }) => {
+    await stubData(page, WORDS);
+    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await waitShadowReady(page);
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(15);
+      const st = TASK.state();
+      const mk = (o: Record<string, unknown>) => Object.assign(ShadowPlan.newWord(), o);
+      st.words['atmosphere'] = mk({ stage: 'graduated', reps: 12, ok3: 1, leech: false });
+      st.words['oxygen'] = mk({ stage: 'seen', reps: 1, ok3: 0, leech: false });
+      st.words['library'] = mk({ stage: 'owned', reps: 5, ok3: 1, leech: false });
+      APP3.route();
+    });
+
+    // 期望集从 state 现算（真断言，不写死字面量）
+    const exp = await page.evaluate(() => {
+      const st = TASK.state();
+      const all = Object.keys(VOCAB);
+      const bucket = (w: string) => { const s = st.words[w]; if (!s) return 'fresh'; if (s.leech) return 'leech'; return s.stage; };
+      return {
+        all: all.length,
+        todo: all.filter((w) => { const b = bucket(w); return b === 'seen' || b === 'recognized' || b === 'leech'; }),
+        learning: all.filter((w) => bucket(w) === 'owned'),
+        mastered: all.filter((w) => bucket(w) === 'graduated'),
+        universe: all.slice().sort(),
+      };
+    });
+    await expect(page.locator('.wb-filter[data-f="all"] .wf-n')).toHaveText(String(exp.all));
+    await expect(page.locator('.wb-filter[data-f="todo"] .wf-n')).toHaveText(String(exp.todo.length));
+    await expect(page.locator('.wb-filter[data-f="learning"] .wf-n')).toHaveText(String(exp.learning.length));
+    await expect(page.locator('.wb-filter[data-f="mastered"] .wf-n')).toHaveText(String(exp.mastered.length));
+
+    const shownWords = async () => (await page.locator('.wb-row .wr-word').allInnerTexts()).sort();
+    const want: Record<string, string[]> = { all: exp.universe, todo: exp.todo, learning: exp.learning, mastered: exp.mastered };
+    for (const f of ['all', 'todo', 'learning', 'mastered']) {
+      await page.locator(`.wb-filter[data-f="${f}"]`).click();
+      await expect(page).toHaveURL(new RegExp('#/words/' + f));
+      await expect(page.locator(`.wb-filter[data-f="${f}"]`)).toHaveAttribute('aria-pressed', 'true');
+      expect(await shownWords(), `筛选 ${f} 的结果集`).toEqual([...want[f]].sort());
+    }
+    // 三档之和 = 有状态的词且不重复：todo 1 + learning 1 + mastered 1 = 3
+    expect(exp.todo.length + exp.learning.length + exp.mastered.length, '夹具要真造出三档').toBe(3);
+  });
+
+  test('M2 待加强的「去复习」落到单词本「待掌握」筛选视图', async ({ page }) => {
+    await stubData(page, WORDS);
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await waitShadowReady(page);
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(15);
+      const st = TASK.state();
+      st.words['oxygen'] = Object.assign(ShadowPlan.newWord(), { stage: 'seen', reps: 1, leech: true, due: Date.now() - 1000 });
+      APP3.route();
+    });
+    await expect(page.locator('.st-tip[data-tip="leech"]')).toBeVisible();
+    await page.locator('.st-tip[data-tip="leech"] .tip-go').click();
+    await expect(page).toHaveURL(/#\/words\/todo/);
+    await expect(page.locator('.wb-filter[data-f="todo"]')).toHaveAttribute('aria-pressed', 'true');
+    expect((await page.locator('.wb-row .wr-word').allInnerTexts()).sort()).toEqual(['oxygen']);
+  });
 });
