@@ -1566,9 +1566,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* —— 一级页面顶栏：主站 #topbar 原样尺寸 —— */
   .shell-top { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.42);
     -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%);
-    border-bottom: 1px solid rgba(231,238,233,.7); padding: 10px 18px;
+    border-bottom: 1px solid rgba(231,238,233,.7); padding: 10px 24px;
     display: flex; justify-content: center; }
-  .topbar-in { width: 100%; max-width: 860px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  /* 一级页面顶栏与 #appView 的内容框对齐（#appView 左右各 24px 内边距），不另设 max-width。 */
+  .topbar-in { width: 100%; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
   .topbar-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
   /* 主站顶栏英音/美音、夜间胶囊 */
   .accent-btn { flex: none; border: 1px solid var(--iel-accent-line); background: #fff; color: var(--iel-accent-deep);
@@ -1581,7 +1582,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .task-top { display: none; }
   body.task-mode .task-top { display: block; }
   .reader-head { position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
-    width: min(860px, calc(100% - 28px)); z-index: 105; display: flex; align-items: center; gap: 5px;
+    width: min(1084px, calc(100% - 36px)); z-index: 105; display: flex; align-items: center; gap: 5px;
     padding: 6px 14px 6px 6px;
     background: rgba(255,255,255,.42); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
     border: 1px solid rgba(255,255,255,.5); border-radius: 999px; box-shadow: 0 3px 14px rgba(30,60,48,.08);
@@ -1613,7 +1614,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .nav-arrow:hover:not(:disabled) { background: var(--iel-accent-soft); }
   .nav-arrow:disabled { opacity: .35; cursor: default; }
   /* —— 文章内：主站 .r-badges（译文拨杆 / 行内词义拨杆 / 口音 / 音色 / 帮助 / 目标词）—— */
-  .task-top .r-badges { width: min(860px, calc(100% - 28px)); margin: 0 auto 14px; padding-top: 64px; }
+  /* 与正文等宽（用户 2026-09-24 修正）：对齐 .layout 的内容框 —— min(1120,100%) − 36px。 */
+  .task-top .r-badges { width: min(1084px, calc(100% - 36px)); margin: 0 auto 14px; padding-top: 64px; }
   .r-badges { position: relative; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .tr-msw { display: inline-flex; align-items: center; gap: 7px; flex: none; border: 1px solid var(--iel-mark-line);
     background: #fff; border-radius: 999px; padding: 5px 12px 5px 5px; font-size: 12.5px; font-weight: 500;
@@ -1670,13 +1672,15 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .sn-logo { display: none; }
     .nav-item { flex: 1; text-align: center; font-size: 11px; }
     #appView { padding: 16px 16px 88px; }
-    /* 文章内头部：主站手机档尺寸 */
-    .reader-head { top: 8px; gap: 4px; padding: 5px 10px 5px 5px; }
+    /* 文章内头部：主站手机档尺寸；窄屏按 .layout 的 16px 内边距对齐（100% − 32px） */
+    .reader-head { top: 8px; gap: 4px; padding: 5px 10px 5px 5px; width: calc(100% - 32px); }
     .tr-msw { padding: 4px 11px 4px 4px; font-size: 11.5px; }
     .tr-msw .knob { width: 25px; height: 15px; }
     .tr-msw .knob::after { width: 11px; height: 11px; }
     .tr-msw.on .knob::after { left: 12px; }
-    .task-top .r-badges { padding-top: 58px; }
+    .task-top .r-badges { padding-top: 58px; width: calc(100% - 32px); }
+    /* 一级页面顶栏按 #appView 的 16px 内边距对齐 */
+    .shell-top { padding: 10px 16px; }
   }
   /* ============ 3.0 首页文章卡片（M1 Task 3） ============ */
   .art-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }

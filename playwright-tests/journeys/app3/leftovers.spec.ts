@@ -145,6 +145,28 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
     await expect(page.locator('body')).toHaveClass(/task-mode/);
     expect(await page.locator('#btnDark').isVisible(), '进文章后不该再有夜间开关').toBe(false);
   });
+
+  // 用户 2026-09-24 修正：头部要和文章等宽（对齐 .layout 的内容框，不是主站的 860px）。
+  test('文章内头部与正文内容框左右边缘对齐（<2px）', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await enterTask(page);
+    const m = await page.evaluate(() => {
+      const rh = document.getElementById('readerHead')!.getBoundingClientRect();
+      const badges = document.getElementById('taskBadges')!.getBoundingClientRect();
+      const lay = document.querySelector('.layout') as HTMLElement;
+      const ls = getComputedStyle(lay);
+      const lr = lay.getBoundingClientRect();
+      return {
+        rhL: rh.left, rhR: rh.right, bL: badges.left, bR: badges.right,
+        contentL: lr.left + parseFloat(ls.paddingLeft),
+        contentR: lr.right - parseFloat(ls.paddingRight),
+      };
+    });
+    expect(Math.abs(m.rhL - m.contentL), '标题胶囊左缘').toBeLessThan(2);
+    expect(Math.abs(m.rhR - m.contentR), '标题胶囊右缘').toBeLessThan(2);
+    expect(Math.abs(m.bL - m.contentL), '控件排左缘').toBeLessThan(2);
+    expect(Math.abs(m.bR - m.contentR), '控件排右缘').toBeLessThan(2);
+  });
 });
 
 /* ===================== W2 · 深色全覆盖（PRD §10.1） ===================== */
