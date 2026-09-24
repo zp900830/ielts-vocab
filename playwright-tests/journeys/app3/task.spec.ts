@@ -176,7 +176,9 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
 
     await top.locator('.tt-back').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
-    await expect(page.locator('#taskTop')).toBeHidden();
+    // W1 后顶栏常驻（外壳态与任务态共用一条）：退出任务模式只是把「返回首页/篇名」收掉，顶栏本身留着。
+    await expect(page.locator('#taskTop')).toBeVisible();
+    await expect(page.locator('#taskTop .tt-back')).toBeHidden();
     await expect(page.locator('.art-card')).toHaveCount(6);
   });
 

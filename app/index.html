@@ -17,6 +17,13 @@
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#faf8f4">
     <meta name="google" content="notranslate">
+    <!-- W6 · PWA（PRD §2.5）：继承主站那套 —— manifest 走 data-URI，service worker 由脚本内联生成。
+         与主站一致，不需要往构建白名单加运行时文件。 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="雅思背单词 3.0">
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoi6ZuF5oCd6IOM5Y2V6K+NIDMuMCIsInNob3J0X25hbWUiOiLpm4XmgJ3og4zljZXor40iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZmFmOGY0IiwidGhlbWVfY29sb3IiOiIjZmFmOGY0Iiwic3RhcnRfdXJsIjoiLi8iLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJyUzRSUzQ3JlY3Qgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnIHJ4PScyMicgZmlsbD0nJTIzMTBiNDg3Jy8lM0UlM0N0ZXh0IHg9JzUwJyB5PSc2OCcgZm9udC1zaXplPSc1MicgdGV4dC1hbmNob3I9J21pZGRsZScgZmlsbD0nJTIzZmZmJyBmb250LWZhbWlseT0nc2VyaWYnJTNFVyUzQy90ZXh0JTNFJTNDL3N2ZyUzRSIsInNpemVzIjoiYW55IiwidHlwZSI6ImltYWdlL3N2Zyt4bWwiLCJwdXJwb3NlIjoiYW55IG1hc2thYmxlIn1dfQ==">
     <title>雅思词汇影子跟读 · IELTS Vocabulary Shadowing</title>
     <style>
   /* ============ 设计令牌（对齐 雅思词汇真经项目：薄荷绿 + 衬线故事体 + 毛玻璃） ============ */
@@ -48,6 +55,7 @@
     --t: .25s ease; --t-fast: .15s ease;
     --ease-smooth: cubic-bezier(.32,.72,.24,1); --t-morph: .45s;
     --ease-bar: cubic-bezier(.32,.9,.28,1); --t-bar: .32s; /* 播放条 morph 专用：更快起手、柔着陆 */
+    --top-h: 61px; /* 3.0 常驻顶栏高度：侧栏/内容区从它下面开始（W1） */
     }
   /* 夜间模式 */
   body.dark {
@@ -1539,19 +1547,32 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      任务模式已有自己的顶栏（.task-top，见下），整块 #appShell 仍要收掉 ——
      不然后面 min-height:100vh 的首页会把正文压到首屏之外（T2 遗留的现场）。 */
   body.task-mode #appShell { display: none; }
-  /* 任务模式顶栏（审阅 I1）：sticky 在正文上方，退出即随 body.task-mode 一起收掉。 */
-  .task-top { display: none; }
-  body.task-mode .task-top { display: flex; align-items: center; gap: 12px;
+  /* 3.0 顶栏（W1，PRD §4.3 / §8.1）：常驻一条，外壳态与任务态共用。
+     旧 header.topbar 被 `body > .topbar{display:none}` 连根藏掉后，这一条就是那些开关唯一的家。
+     外壳态 = 品牌 + 夜间；任务态 = 返回首页 + 篇名 + 译文/词义/口音+音色 + 夜间。 */
+  .task-top { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px;
     position: sticky; top: 0; z-index: 150; padding: 8px 16px;
     background: var(--card); border-bottom: 1px solid var(--border); }
+  .task-top .tt-brand { flex: 1 1 auto; min-width: 0; font-size: 15px; font-weight: 700; color: var(--accent-text); }
+  .task-top .tt-brand b { color: var(--muted); font-weight: 600; }
   .task-top .tt-back { flex: none; min-height: 44px; padding: 0 14px; border: 1px solid var(--border);
     border-radius: 999px; background: transparent; color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; }
   .task-top .tt-back:hover { background: var(--accent-soft); color: var(--accent-text); }
-  .task-top .tt-title { min-width: 0; font-size: 15px; font-weight: 700; color: var(--text);
+  .task-top .tt-title { min-width: 0; flex: 1 1 auto; font-size: 15px; font-weight: 700; color: var(--text);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #appShell { display: flex; min-height: 100vh; }
+  /* 顶栏控件：外观沿用 .btn / .voice-sel，但触区统一抬到 44px（PRD §10.4） */
+  .task-top .tt-ctrl { display: flex; align-items: center; gap: 8px; flex: none; }
+  .task-top .btn { min-height: 44px; }
+  /* 外壳态没有文章：译文/词义/口音+音色 不显示（它们在任务态才点得动）；
+     夜间开关两态都在（§8.1）。 */
+  body:not(.task-mode) .task-top .tt-back,
+  body:not(.task-mode) .task-top .tt-title,
+  body:not(.task-mode) .task-top .tt-ctrl { display: none; }
+  body.task-mode .task-top .tt-brand { display: none; }
+  #appShell { display: flex; min-height: calc(100vh - var(--top-h)); }
   .sidenav { flex: none; width: 220px; padding: 16px 12px; border-right: 1px solid var(--border);
-    display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; }
+    display: flex; flex-direction: column; gap: 4px; position: sticky; top: var(--top-h);
+    height: calc(100vh - var(--top-h)); }
   .nav-brand { font-weight: 700; padding: 6px 10px 14px; color: var(--accent-text); }
   .nav-item { min-height: 44px; text-align: left; padding: 0 12px; border: none; border-radius: 12px;
     background: transparent; font-size: 14px; color: var(--text); cursor: pointer; }
@@ -1619,6 +1640,34 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .home-banner { flex-direction: column; align-items: stretch; }
     .home-banner .b-go { min-height: 44px; }
   }
+  /* ============ 3.0 外壳深色覆盖（W2，PRD §10.1） ============
+     外壳与 M1 新页面统一到影子跟读的暖黑 token（--bg/--card/--border/--text/--accent-soft…），
+     只把几处写死的浅色值换掉（.a-bar / .a-stage 等）。全部复用既有 token，不新造色。 */
+  body.dark .sidenav { background: var(--bg); border-right-color: var(--border); }
+  body.dark .nav-brand { color: var(--accent-text); }
+  body.dark .nav-item { color: var(--text); }
+  body.dark .nav-item.on { background: var(--accent-soft); color: var(--accent-text); }
+  body.dark #appView { color: var(--text); }
+  body.dark .art-card { background: var(--card); border-color: var(--border); }
+  body.dark .art-card .a-bar { background: var(--hl); }
+  body.dark .art-card[data-stage="todo"] .a-bar { background: transparent; border-color: var(--border); }
+  body.dark .art-card .a-stage { background: rgba(255,255,255,.06); color: var(--muted); }
+  body.dark .art-card[data-stage="reading"] .a-stage { background: var(--accent-soft); color: var(--accent-text); }
+  body.dark .art-card[data-stage="read"] .a-stage,
+  body.dark .art-card[data-stage="quiz"] .a-stage,
+  body.dark .art-card[data-stage="done"] .a-stage { background: var(--accent); color: var(--cta-ink); }
+  body.dark .art-card[data-stage="pro"] .a-stage { background: var(--note-soft); color: var(--note); }
+  body.dark .art-card .a-quiz { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-text); }
+  body.dark .home-banner { background: var(--accent-soft); border-color: var(--accent-line); }
+  body.dark .task-top { background: var(--card); border-bottom-color: var(--border); }
+  body.dark .task-top .tt-back { border-color: var(--border); color: var(--text); }
+  body.dark .task-top .tt-brand { color: var(--accent-text); }
+  /* ② 的空与浮窗：空的三态、浮窗里的选项在暖黑上要够亮 */
+  body.dark .sent .qz-blank.qa-no { color: #f0a08c; border-bottom-color: #f0a08c; }
+  body.dark .qz-opt { background: var(--card); border-color: var(--border); color: var(--text); }
+  body.dark .qz-opt.right { background: var(--task-bg); border-color: var(--task-new); color: var(--task-new); }
+  body.dark .qz-opt.wrong { background: rgba(240,160,140,.12); border-color: #f0a08c; color: #f0a08c; }
+  body.dark .qz-note { background: rgba(52,211,153,.07); border-color: rgba(52,211,153,.16); }
     </style>
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -1634,12 +1683,31 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
 
     <a href="#art" class="sr-only sr-only-focusable">跳到正文</a>
 
+    <!-- 3.0 唯一的顶栏（W1，PRD §4.3 / §8.1）：常驻一条，外壳态与任务态共用。
+         必须排在 #appShell 之前，否则 sticky 只会在滚过它之后才吸顶（会先落在页面底部）。
+         外壳态左侧是品牌、右侧只有夜间；任务态左侧换成「返回首页 + 篇名」，右侧补上译文/词义/口音+音色。 -->
+    <header class="task-top" id="taskTop">
+      <span class="tt-brand">雅思背单词 <b>3.0</b></span>
+      <button class="tt-back" type="button" onclick="TASK.exitTaskMode()" aria-label="返回首页">← 返回首页</button>
+      <div class="tt-title" id="ttTitle"></div>
+      <!-- 这几个开关从被藏掉的 header.topbar 搬进来（节点/id/事件全不动，只换家）——见 §4.3。 -->
+      <div class="tt-ctrl ctrl">
+        <button class="btn active" id="btnZh" title="显示/隐藏每句下方的中文全句翻译" aria-label="显示或隐藏中文全句翻译"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏全句译文</button>
+        <button class="btn active" id="btnGloss" title="显示/隐藏英文句内行间的单词词义与音标" aria-label="显示或隐藏行内单词词义"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏行内词义</button>
+      </div>
+      <div class="tt-ctrl ctrl voice-ctrl">
+        <button class="btn active" id="btnAccent" onclick="toggleAccent()" title="点击切换英式/美式" aria-label="切换英式美式发音">🇬🇧 英式</button>
+        <select class="voice-sel" id="voiceSel" title="选择朗读音色（云端/Edge/本机）" aria-label="选择朗读音色"></select>
+      </div>
+      <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式" aria-label="切换夜间模式"><i class="ri-moon-line" aria-hidden="true"></i><span class="only-mobile"> 夜间模式</span></button>
+    </header>
+
     <!-- 3.0 外壳（M1）：左侧导航 5 项 + #appView 内容区，路由见 app.js。
          旧版顶栏 / 播放条 / 正文布局先留在 DOM 里（运行时大量 getElementById 依赖它们），
          本任务只把它们藏起来，由 T3–T7 逐步吸收。 -->
     <div id="appShell">
       <nav class="sidenav" aria-label="主导航">
-        <div class="nav-brand">雅思背单词 <span>3.0</span></div>
+        <!-- 品牌已挪到常驻顶栏（W1），这里不再重复一份 -->
         <button class="nav-item on" data-route="home">首页</button>
         <button class="nav-item" data-route="stats">学习数据</button>
         <button class="nav-item" data-route="words">单词本</button>
@@ -1658,15 +1726,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       </div>
       <button class="btn" id="btnToday" onclick="TASK.togglePanel()" title="今日学习任务" aria-label="今日学习任务"><i class="ri-calendar-check-line" aria-hidden="true"></i><span class="only-mobile"> 今日</span><span class="today-dot"></span></button>
       <nav class="topbar-right" aria-label="工具栏">
-        <div class="ctrl">
-          <button class="btn active" id="btnZh" title="显示/隐藏每句下方的中文全句翻译" aria-label="显示或隐藏中文全句翻译"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏全句译文</button>
-          <button class="btn active" id="btnGloss" title="显示/隐藏英文句内行间的单词词义与音标" aria-label="显示或隐藏行内单词词义"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏行内词义</button>
-        </div>
-        <div class="ctrl voice-ctrl">
-          <button class="btn active" id="btnAccent" onclick="toggleAccent()" title="点击切换英式/美式" aria-label="切换英式美式发音">🇬🇧 英式</button>
-          <select class="voice-sel" id="voiceSel" title="选择朗读音色（云端/Edge/本机）" aria-label="选择朗读音色"></select>
-        </div>
-        <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式" aria-label="切换夜间模式"><i class="ri-moon-line" aria-hidden="true"></i><span class="only-mobile"> 夜间模式</span></button>
         <div class="cloud-wrap" id="cloudWrap">
           <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn" id="btnCloud" onclick="toggleCloudWrap(event)" title="登录后可用 Azure 云端自然语音" aria-label="云端语音登录状态"><i class="ri-cloud-line" aria-hidden="true"></i> 未登录</button>
@@ -1809,14 +1868,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <div class="pass-card" id="passCard" role="group" aria-label="遍间小结" hidden></div>
     <!-- ② 浮窗答题卡：锚在被点的那个空旁边，4 个选项 + 「这题有问题」。定位由 JS 算。 -->
     <div class="blank-pop" id="blankPop" role="dialog" aria-label="选出填回空格的词" hidden></div>
-
-    <!-- 3.0 任务模式顶栏（M1 Task 5 审阅 I1）：告诉用户「你在学哪一篇」+「退出就是回首页」。
-         一颗 ✕ 不说明退出会回哪儿，而 M1 的闭环是「首页选文章 → 学完 → 回首页选下一篇」。
-         PRD §4.1 的卷/段筛选是 M2+，这里先只放这两样。默认 display:none，body.task-mode 才现身。 -->
-    <header class="task-top" id="taskTop">
-      <button class="tt-back" type="button" onclick="TASK.exitTaskMode()" aria-label="返回首页">← 返回首页</button>
-      <div class="tt-title" id="ttTitle"></div>
-    </header>
 
     <div class="layout">
       <main id="main"><article id="art"><div id="abRegion" class="ab-region" style="display:none" aria-hidden="true"><button class="ab-cancel" onclick="abCancel()" title="取消循环" aria-label="取消循环">×</button></div></article></main>
@@ -7324,6 +7375,48 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     });
 
     initApp(); loadVoices();
+
+    /* ============ W6 · PWA（PRD §2.5）：service worker ============
+       继承主站那套：manifest 走 data-URI（见 <head>），SW 由脚本内联成 Blob 再注册 —— 不往
+       构建白名单加运行时文件。scope 取当前目录（/app/），SW 只管 3.0 自己。
+       注册失败（如个别浏览器不支持 blob 协议的脚本）静默降级，绝不抛未捕获错误。 */
+    const App3PWA = (function () {
+      const state = { manifest: null, attempted: false, ok: false, error: null };
+      try {
+        const link = document.querySelector('link[rel="manifest"]');
+        state.manifest = link ? link.getAttribute('href') : null;
+      } catch (e) {}
+      async function init() {
+        if (!('serviceWorker' in navigator)) return;
+        state.attempted = true;
+        try {
+          const scopePath = location.pathname.replace(/\/[^/]*$/, '/') || '/';
+          const swCode = `
+const CACHE_NAME = 'ielts-app3-v1';
+self.addEventListener('install', e => { self.skipWaiting(); });
+self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
+self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+    if (res && res.status === 200) { const c = res.clone(); caches.open(CACHE_NAME).then(cc => cc.put(e.request, c)); }
+    return res;
+  }).catch(() => r)));
+});
+`;
+          const blob = new Blob([swCode], { type: 'application/javascript' });
+          const swUrl = URL.createObjectURL(blob);
+          const reg = await navigator.serviceWorker.register(swUrl, { scope: scopePath });
+          state.ok = true; state.scope = reg && reg.scope;
+          try { console.log('[APP3] Service Worker registered', state.scope); } catch (e) {}
+        } catch (e) {
+          state.error = (e && e.message) || String(e);
+          try { console.log('[APP3] Service Worker registration skipped:', state.error); } catch (err) {}
+        }
+      }
+      return { state, init };
+    })();
+    try { window.APP3 = Object.assign(window.APP3 || {}, { pwa: App3PWA.state }); } catch (e) {}
+    try { App3PWA.init(); } catch (e) {}
     function mobileBtnIcons() { // 移动端播放条：确保图标在窄屏下正常显示，不再替换文字
     const btns = document.querySelectorAll('.audiobar .btn');
     btns.forEach(btn => {
