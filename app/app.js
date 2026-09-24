@@ -205,6 +205,7 @@
     }
     const ov = statsOverview();
     const wd = statsWords();
+    const ls = statsListen();
     const tips = statsTips();
     /* §5（2026-09-24 用户加）：一块「今天」——今日读了几句 / 今日学习时长 / 今天还剩多少。
        数字全部经 TASK.todayProgress() 取（与任务条辅行同一份派生），界面不自己数账。 */
@@ -256,10 +257,17 @@
       </section>
       <section class="st-block" data-block="listen" aria-labelledby="stH5">
         <h2 id="stH5">随身听</h2>
-        <div class="st-empty" data-empty="listen">
-          <p>随身听还没用过 → 去试试</p>
-          <button class="st-go" type="button" data-go="listen">去随身听</button>
+        <div class="st-nums" data-cols="3">
+          <div class="st-num" data-k="listen-sents"><b>${ls.sents}</b><span>累计收听句数</span></div>
+          <div class="st-num" data-k="listen-min"><b>${ls.minutes}</b><span>累计收听时长（分钟）</span></div>
+          <div class="st-num" data-k="listen-last"><b>${ls.lastAt ? rel(ls.lastAt) : '—'}</b><span>最近收听</span></div>
         </div>
+        <ul class="st-listen-arts" aria-label="各篇收听情况">${SECTIONS.map((s, a) => {
+          const n = ls.byArticle[a] || 0, at = ls.last[a] || 0;
+          return `<li class="st-la" data-a="${a}"><span class="sla-t">《${esc(s.title)}》</span>
+            <span class="sla-n">收听 ${n} 句</span><span class="sla-at">${at ? rel(at) : '还没听过'}</span></li>`;
+        }).join('')}</ul>
+        <button class="st-go" type="button" data-go="listen">去随身听</button>
       </section>
       <section class="st-block" data-block="focus" aria-labelledby="stH6">
         <h2 id="stH6">哪些内容还需要加强？</h2>
@@ -293,6 +301,17 @@
     return { learned: learned, grad: c.graduated, leech: c.leech, rate: total ? Math.round(c.graduated / total * 100) : 0, total: total };
   }
   window.APP3 = Object.assign(window.APP3, { statsWords });
+  /* §5.7 随身听块：真数据（收听句数 / 收听时长 / 最近收听），与 TASK.listenStat 同源。
+     不显示「收听掌握度」这类伪造指标 —— 听得多 ≠ 会，掌握看 §5.5 词状态。 */
+  function statsListen() {
+    const s = (typeof TASK !== 'undefined' && TASK.listenStat)
+      ? TASK.listenStat() : { totalSents: 0, totalMs: 0, byArticle: {}, last: {} };
+    let lastAt = 0;
+    Object.keys(s.last || {}).forEach((a) => { if (s.last[a] > lastAt) lastAt = s.last[a]; });
+    return { sents: s.totalSents, minutes: Math.round(s.totalMs / 60000), lastAt: lastAt,
+             byArticle: s.byArticle || {}, last: s.last || {} };
+  }
+  window.APP3 = Object.assign(window.APP3, { statsListen });
   /* §5.6 学习趋势：近 14 天（含今天）的日账。柱 = 每日学习次数，线 = 每日分钟数。
      不引图表库 —— 14 个点手绘够了。 */
   function statsDays() {

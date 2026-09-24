@@ -180,4 +180,24 @@ test.describe('3.0 随身听（M4，PRD §7）', () => {
     expect(after.stat.totalMs, '收听时长要动').toBeGreaterThan(0);
     expect(after.stat.last[0], '最近收听要更新').toBeGreaterThan(0);
   });
+
+  test('学习数据页随身听块读到的是真收听数据（不是占位）', async ({ page }) => {
+    await stubData(page, TWO);
+    await gotoListen(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    await installSpeakStub(page);
+    await page.locator('.ls-play').click();
+    await page.evaluate(() => TASK.listenSetTickForTest(Date.now() - 60000));
+    await finishSpeak(page);
+    const want = await page.evaluate(() => Math.round(TASK.listenStat().totalMs / 60000));
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await waitShadowReady(page);
+    await page.waitForFunction(() => {
+      const v = document.getElementById('appView');
+      return !!(v && v.querySelector('.st-block[data-block="listen"]'));
+    });
+    await expect(page.locator('.st-empty[data-empty="listen"]'), '空态占位必须已被真数据取代').toHaveCount(0);
+    await expect(page.locator('.st-block[data-block="listen"] .st-num[data-k="listen-min"] b')).toHaveText(String(want));
+    await expect(page.locator('.st-block[data-block="listen"] .st-num[data-k="listen-sents"] b')).not.toHaveText('0');
+  });
 });

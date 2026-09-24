@@ -17,6 +17,7 @@ declare const TASK: {
   };
   todayStats(): { streak: number; graduated: number; targetWords: number };
   countStages(): { graduated: number; leech: number };
+  listenStat(): { totalSents: number; totalMs: number; byArticle: Record<string, number>; last: Record<string, number> };
 };
 declare const ShadowPlan: {
   articleScope(sections: unknown, a: number): Set<number>;
@@ -240,18 +241,23 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     expect(await page.evaluate(() => typeof (window as unknown as { echarts?: unknown }).echarts)).toBe('undefined');
   });
 
-  test('随身听空态占位：文案正确、不含伪造数字、按钮落点正确', async ({ page }) => {
+  test('随身听块：显示真数据（收听句数/时长/最近收听），不再有空态占位（§5.7）', async ({ page }) => {
     await stubData(page, SIX);
     await gotoStats(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await reloadStats(page);
-    const box = page.locator('.st-empty[data-empty="listen"]');
-    await expect(box).toBeVisible();
-    await expect(box.locator('p')).toHaveText('随身听还没用过 → 去试试');
-    expect(await box.innerText(), '随身听 M2 不得显示伪造指标（§5.7）').not.toMatch(/\d/);
-    // 「去随身听」落到随身听入口
-    await box.locator('.st-go').click();
-    await expect(page).toHaveURL(/#\/listen/);
+    // M2 的空态占位被 M4 的真数据彻底取代
+    await expect(page.locator('.st-empty[data-empty="listen"]')).toHaveCount(0);
+    const block = page.locator('.st-block[data-block="listen"]');
+    await expect(block).toBeVisible();
+    const expected = await page.evaluate(() => {
+      const s = TASK.listenStat();
+      return { sents: s.totalSents, min: Math.round(s.totalMs / 60000) };
+    });
+    await expect(block.locator('.st-num[data-k="listen-sents"] b')).toHaveText(String(expected.sents));
+    await expect(block.locator('.st-num[data-k="listen-min"] b')).toHaveText(String(expected.min));
+    // §5.7：不得出现「收听掌握度」这类伪造指标
+    expect(await block.innerText()).not.toContain('收听掌握度');
   });
 
   test('待加强：2–3 条建议，每条按钮落到正确入口', async ({ page }) => {
