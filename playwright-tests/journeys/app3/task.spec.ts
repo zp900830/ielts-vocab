@@ -183,6 +183,22 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
     await expect(page.locator('.art-card')).toHaveCount(6);
   });
 
+  // 2026-09-24 用户：任务条那颗 ✕ 去掉，退出走头部「返回」；退出零惩罚，所以不再摆二次确认。
+  test('任务条没有 ✕ 了；退出走头部「返回」，直接退不摆二次确认', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    expect(await page.locator('#tbExit').count(), '✕ 已删').toBe(0);
+    expect(await page.locator('#tbStay').count(), '「继续做」已删').toBe(0);
+    expect(await page.locator('#tbQuit').count(), '「退出」确认键已删').toBe(0);
+    // 头部「返回」→ 直接退出，中途不出现 data-state=exit 的确认态
+    await page.locator('#taskTop .reader-head .back').click();
+    await expect(page.locator('body')).not.toHaveClass(/task-mode/);
+    expect(await page.locator('#taskBar').getAttribute('data-state')).not.toBe('exit');
+  });
+
   // 审阅 I2：退出后首页卡片/横幅还停在进任务模式前的进度，要等点导航或刷新才更新。
   test('退出任务模式后首页立即刷新，不用刷新页面（I2）', async ({ page }) => {
     await stubData(page, SIX);

@@ -184,7 +184,7 @@
     }
     el.innerHTML = `<div class="hb-text"><span class="hb-main">${main}</span>` +
       (sum ? `<span class="hb-sum">${sum}</span>` : '') +
-      `</div><button class="b-go" type="button">${go}</button>`;
+      `</div><button class="b-go" type="button"><i class="ri-play-fill" aria-hidden="true"></i>${go}</button>`;
     el.querySelector('.b-go').onclick = () => {
       if (!hasPlan) return openSetup();
       if (goWords) { location.hash = '#/words'; return; }

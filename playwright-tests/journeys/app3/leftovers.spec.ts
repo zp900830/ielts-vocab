@@ -93,7 +93,7 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
       await expect(page.locator(sel), `${sel} 必须在文章内可见`).toBeVisible();
       await expect(page.locator(`${sel} .knob`), `${sel} 必须是主站那种 iOS 拨杆`).toBeVisible();
     }
-    for (const sel of ['#btnAccent', '#voiceSel']) {
+    for (const sel of ['#btnAccent', '#voiceBtn']) {
       await expect(page.locator(sel), `${sel} 必须在文章内可见`).toBeVisible();
     }
     // 主题（含夜间）已收进「我的」浮窗（用户 2026-09-24）：文章内、外壳顶栏都没有 #btnDark
@@ -172,6 +172,32 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
     expect(Math.abs(m.rhR - m.contentR), '标题胶囊右缘').toBeLessThan(2);
     expect(Math.abs(m.bL - m.contentL), '控件排左缘').toBeLessThan(2);
     expect(Math.abs(m.bR - m.contentR), '控件排右缘').toBeLessThan(2);
+  });
+
+  // 2026-09-24 用户：换掉原生 <select> 音色下拉（移动端巨大、样式对不上）→ 自定义玻璃浮层。
+  test('音色选择器是自定义浮层（无原生 select），选中的音色照旧存进 ielts-voice', async ({ page }) => {
+    // headless 里 speechSynthesis 没音色 → 先塞两个假音色，选择器才有内容
+    await page.addInitScript(() => {
+      const fake = [
+        { voiceURI: 'fake-gb-1', name: 'Daniel', lang: 'en-GB', default: false, localService: true },
+        { voiceURI: 'fake-us-1', name: 'Samantha', lang: 'en-US', default: false, localService: true },
+      ];
+      try { Object.defineProperty(window.speechSynthesis, 'getVoices', { value: () => fake, configurable: true }); } catch (e) {}
+    });
+    await stubData(page, SIXQ);
+    await enterTask(page);
+
+    expect(await page.locator('select#voiceSel').count(), '原生 select 已换掉').toBe(0);
+    await page.locator('#voiceBtn').click();
+    const pop = page.locator('#voicePop');
+    await expect(pop).toBeVisible();
+    expect(await pop.locator('.vp-group').count(), '要有分组标题').toBeGreaterThan(0);
+    const first = pop.locator('.vp-item').first();
+    await expect(first.locator('.vp-play'), '每项要带试听').toBeVisible();
+    const uri = await first.getAttribute('data-voice-uri');
+    await first.click();
+    await expect(pop, '选完收起来').toBeHidden();
+    expect(await page.evaluate(() => localStorage.getItem('ielts-voice')), '选中要存进 ielts-voice').toBe(uri);
   });
 });
 
