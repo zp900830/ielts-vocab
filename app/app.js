@@ -188,6 +188,10 @@
           <div class="st-num" data-k="rate"><b>${wd.rate}%</b><span>掌握率</span></div>
         </div>
       </section>
+      <section class="st-block" data-block="trend" aria-labelledby="stH4">
+        <h2 id="stH4">我的学习是否持续？</h2>
+        ${renderStatsTrend()}
+      </section>
     </div>`;
   }
   window.APP3 = Object.assign(window.APP3, { renderStats });
@@ -214,6 +218,46 @@
     return { learned: learned, grad: c.graduated, leech: c.leech, rate: total ? Math.round(c.graduated / total * 100) : 0, total: total };
   }
   window.APP3 = Object.assign(window.APP3, { statsWords });
+  /* §5.6 学习趋势：近 14 天（含今天）的日账。柱 = 每日学习次数，线 = 每日分钟数。
+     不引图表库 —— 14 个点手绘够了。 */
+  function statsDays() {
+    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    const cfg = (typeof TASK !== 'undefined' && TASK.planConfig) ? TASK.planConfig() : null;
+    const b = (cfg && Number.isInteger(cfg.boundary)) ? cfg.boundary : 4;
+    const daily = (st && st.daily) || {};
+    const out = [];
+    for (let k = 13; k >= 0; k--) {
+      const key = window.ShadowPlan.dayKey(Date.now() - k * window.ShadowPlan.DAY_MS, b);
+      const d = daily[key] || {};
+      out.push({ key: key, sentDone: d.sentDone || 0, quizDone: d.quizDone || 0, minutes: d.minutes || 0 });
+    }
+    return out;
+  }
+  function renderStatsTrend() {
+    const days = statsDays();
+    const maxAct = Math.max(1, days.reduce((m, d) => Math.max(m, d.sentDone + d.quizDone), 0));
+    const maxMin = Math.max(1, days.reduce((m, d) => Math.max(m, d.minutes), 0));
+    const bars = days.map((d) => {
+      const v = d.sentDone + d.quizDone;
+      const h = v ? Math.max(4, Math.round(v / maxAct * 100)) : 0;
+      return `<span class="tr-bar${v ? ' has' : ''}" style="height:${h}%" data-day="${d.key}" title="${d.key}：${v} 次"></span>`;
+    }).join('');
+    const W = 280, H = 60, n = days.length;
+    const pt = (i) => ({ x: Math.round(i / (n - 1) * W), y: Math.round(H - days[i].minutes / maxMin * H) });
+    const pts = days.map((_, i) => { const p = pt(i); return p.x + ',' + p.y; }).join(' ');
+    const a0 = pt(0), a1 = pt(n - 1);
+    const label = '近 14 天学习趋势：' + days.map((d) => `${d.key.slice(5)} 学 ${d.sentDone + d.quizDone} 次、${d.minutes} 分钟`).join('；');
+    return `<div class="tr-wrap" role="img" aria-label="${esc(label)}">
+      <div class="tr-bars">${bars}</div>
+      <svg class="tr-line" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+        <polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <circle cx="${a0.x}" cy="${a0.y}" r="3" fill="currentColor"/>
+        <circle cx="${a1.x}" cy="${a1.y}" r="3" fill="currentColor"/>
+      </svg>
+      <div class="tr-legend"><span>柱 = 每日学习次数</span><span>线 = 每日学习时长</span></div>
+    </div>`;
+  }
+  window.APP3 = Object.assign(window.APP3, { statsDays });
   // §5.4：数据页点文章小卡 → 回首页并把那张卡片高亮（不新开屏/新浮层，§2.4 护栏）。
   function openHomeHighlight(a) {
     _hlArticle = a;

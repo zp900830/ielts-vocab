@@ -161,4 +161,27 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     expect(await num('rate')).toBe(expected.rate);
     expect(expected.learned, '夹具要真造出词状态').toBeGreaterThan(0);
   });
+
+  test('学习趋势：14 天柱状 + SVG 折线，有文本替代，无图表库', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(15);
+      const s = ShadowPlan.articleScope(SECTIONS, 0);
+      Array.from(s).slice(0, 5).forEach((i) => TASK.readDone(i));
+      TASK.seedDailyForTest(1); TASK.seedDailyForTest(2);   // 造出跨天日账（必须在 readDone 之后），柱/线才有形状
+    });
+    await page.reload();
+
+    const wrap = page.locator('.tr-wrap');
+    await expect(wrap).toBeVisible();
+    expect(await page.locator('.tr-bar').count(), '近 14 天 = 14 根柱').toBe(14);
+    expect(await page.locator('.tr-wrap svg.tr-line polyline').count(), '一条折线').toBe(1);
+    // 文本替代：role=img + aria-label
+    await expect(wrap).toHaveAttribute('role', 'img');
+    expect(await wrap.getAttribute('aria-label')).toContain('近 14 天');
+    // 无图表库（回归锁：有人引 Chart.js / ECharts 就红）
+    expect(await page.evaluate(() => typeof (window as unknown as { Chart?: unknown }).Chart)).toBe('undefined');
+    expect(await page.evaluate(() => typeof (window as unknown as { echarts?: unknown }).echarts)).toBe('undefined');
+  });
 });
