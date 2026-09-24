@@ -2024,6 +2024,55 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 深色（§10.1）：页面底与顶栏的写死浅色值换成暖黑 token；卡片/文字本就走 token 会自动跟随。 */
   body.dark.listen-page, body.dark.listen-mode { background: var(--bg); }
   body.dark .listen-top { background: rgba(28,26,23,.92); }
+
+  /* ============ 3.0 随身听悬浮球（切 tab 续播；照搬主站 index.html #lsFab 的交互） ============
+     随身听在播/暂停时离开 #/listen，右下角浮出这颗玻璃胶囊：封面（点击回随身听）+ 暂停/继续 + 停止。
+     与底部 TabBar、任务条互斥定位由 JS 现量（positionListenMini），CSS 只给兜底值。 */
+  #lsMini { position: fixed; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: 24px; z-index: 250;
+    display: flex; align-items: center; gap: 8px; padding: 8px 9px; border-radius: 999px;
+    background: linear-gradient(135deg, rgba(255,255,255,.82), rgba(255,255,255,.5));
+    -webkit-backdrop-filter: blur(24px) saturate(190%); backdrop-filter: blur(24px) saturate(190%);
+    border: 1px solid rgba(255,255,255,.9);
+    box-shadow: 0 18px 44px rgba(30,90,70,.22), 0 2px 6px rgba(30,90,70,.1), inset 0 1px 0 rgba(255,255,255,.95);
+    opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(14px) scale(.92);
+    transition: opacity .28s ease, transform .3s cubic-bezier(.32,.72,.35,1), visibility .28s; }
+  #lsMini.on { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0) scale(1); }
+  /* 深色（§10.1）：白玻璃换成暖黑玻璃，别在暗底上留一块亮斑 */
+  body.dark #lsMini { background: linear-gradient(135deg, rgba(30,28,25,.94), rgba(30,28,25,.72));
+    border-color: #33302b;
+    box-shadow: 0 18px 44px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.06); }
+  .ls-mini-cover { position: relative; width: 62px; height: 62px; border-radius: 50%; border: none; padding: 0;
+    cursor: pointer; flex: none; background: var(--grad) center/cover no-repeat; color: var(--cta-ink);
+    box-shadow: 0 5px 16px rgba(16,180,135,.42), 0 0 0 3px rgba(255,255,255,.65),
+      inset 0 2px 5px rgba(255,255,255,.38); display: flex; align-items: center; justify-content: center; }
+  .ls-mini-cover::before { content: ""; position: absolute; inset: 5px; border-radius: 50%;
+    border: 1.5px dashed rgba(255,255,255,.55); animation: ls-mini-spin 9s linear infinite; }
+  #lsMini.playing .ls-mini-cover::before { animation-duration: 3.2s; }
+  @keyframes ls-mini-spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .ls-mini-cover::before { animation: none; } }
+  .ls-mini-vol { font-size: 10.5px; opacity: .92; position: absolute; top: 6px; left: 0; right: 0;
+    text-align: center; font-variant-numeric: tabular-nums; }
+  .ls-mini-letter { font-family: Georgia, 'Songti SC', serif; font-size: 22px; font-weight: 700; line-height: 1;
+    margin-top: 6px; text-shadow: 0 1px 2px rgba(6,84,62,.3); }
+  .ls-mini-btn { width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(255,255,255,.95);
+    background: rgba(255,255,255,.92); color: var(--ink2); cursor: pointer; display: flex; align-items: center;
+    justify-content: center; font-size: 17px;
+    box-shadow: 0 4px 12px rgba(30,90,70,.14), inset 0 1px 0 #fff;
+    transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast), transform var(--t-fast); }
+  .ls-mini-btn:hover { background: #fff; border-color: var(--accent); color: var(--accent-text); transform: translateY(-1px); }
+  .ls-mini-btn:active { transform: translateY(0); }
+  #lsMiniPlay { background: var(--grad); border: none; color: var(--cta-ink);
+    box-shadow: 0 6px 18px rgba(16,180,135,.42), inset 0 1px 0 rgba(255,255,255,.35); }
+  #lsMiniPlay:hover { background: var(--grad); color: var(--cta-ink); filter: brightness(1.05); }
+  #lsMini :focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 2px; }
+  @media (max-width: 700px) {
+    #lsMini { padding: 5px 6px; gap: 5px; }
+    .ls-mini-cover { width: 44px; height: 44px; }
+    .ls-mini-cover::before { inset: 4px; }
+    .ls-mini-vol { font-size: 9px; top: 3px; }
+    .ls-mini-letter { font-size: 15px; margin-top: 4px; }
+    .ls-mini-btn { width: 44px; height: 44px; font-size: 15px; }
+  }
     </style>
 
     <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
@@ -4059,6 +4108,8 @@ let listenOn = false;
     try { if (typeof TASK !== 'undefined' && TASK.refreshNext) TASK.refreshNext(); } catch (e) {}
     /* 随身听卡片：播放状态变化就地刷新（只改文本/属性，不重建 DOM）。 */
     try { if (window.APP3 && window.APP3.updateListenCard) window.APP3.updateListenCard(); } catch (e) {}
+    /* 随身听悬浮球（切 tab 续播）：与卡片同一处刷新。 */
+    try { if (window.APP3 && window.APP3.updateListenFab) window.APP3.updateListenFab(); } catch (e) {}
     }
     let launchedUpTo = -1; // 本轮已发射到的句子（去重：续播与预取不重复发射）
     function syncSeek(i) {
@@ -5405,6 +5456,7 @@ let listenOn = false;
         return {
           a: _listenArticle, idx: idx, total: sents.length, playing: playing,
           loop: loopMode ? loopCount : 0, rate: rate, ab: abMode, expanded: _listenExpanded,
+          ctx: _listenCtx,
           text: idx >= 0 ? plainEN(sentRaw(idx)) : (sents.length ? plainEN(sentRaw(0)) : ''),
         };
       }
@@ -5430,6 +5482,31 @@ let listenOn = false;
         if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
         listenFlush();
         currentArticle = null; _cachedPlan = null;
+        try { paint(); } catch (e) {}
+      }
+      /* 离开随身听路由（切 tab）：播放不中断，交给外壳的悬浮球继续控制（照搬主站
+         switchView 里 closeListenPanel 的口径）。只有「从没起播过」才真正收掉上下文。
+         _listenCtx/listenOn 保持为 true —— 续播账（§7.6）与篇末自动切下一篇都还要走。 */
+      function listenLeave() {
+        if (!_listenCtx) return;
+        if (playing || idx >= 0) {
+          _listenExpanded = false;
+          document.body.classList.remove('listen-page', 'listen-mode');
+          try { paint(); } catch (e) {}
+          return;
+        }
+        listenClose();
+      }
+      /* 进阅读/任务模式：主站在阅读页会把随身听 pause 掉避免双声；/app/ 的任务模式与随身听
+         共用同一条播放链，只 pause 会把 listenOn 带进任务账（完播会被记成收听而不是精读），
+         所以这里收掉上下文但不碰 currentArticle（openArticle 刚设好，别被 listenClose 抹掉）。 */
+      function listenStopForTask() {
+        if (!_listenCtx) return;
+        _listenCtx = false; _listenExpanded = false;
+        listenOn = false;
+        document.body.classList.remove('listen-page', 'listen-mode');
+        if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
+        listenFlush();
         try { paint(); } catch (e) {}
       }
       function listenToggle() { if (playing) togglePlay(); else playFrom(idx >= 0 ? idx : 0); }
@@ -6752,6 +6829,8 @@ let listenOn = false;
         updateTaskBar();
       }
       function enterTaskMode(opts) {
+        // 进阅读/任务模式先把随身听收掉（避免双声 + 别让 listenOn 污染任务账）。
+        try { listenStopForTask(); } catch (e) {}
         // §2.3：没计划也能进任务模式 —— 不是静默无反应，而是自由跟读 + 任务条空状态。
         if (!plan) { enterFreeTaskMode(opts); return; }
         /* 已经在任务模式里（今日面板那颗这时候写着「继续任务」）就只把面板收掉。
@@ -8052,6 +8131,7 @@ let listenOn = false;
         listenOpen, listenClose, listenToggle, listenStep, listenSeek,
         listenCycleLoop, listenCycleRate, listenMark, listenAB,
         listenExpand, listenCollapse, listenNextArticle,
+        listenLeave, listenMiniStop: listenClose,
         listenState, listenStat, listenLast, listenTick, listenFlush, listenSetTickForTest,
         get listenArticle() { return _listenArticle; },
         again, prev, next, pauseNew, resetPlan, onSentenceComplete,
