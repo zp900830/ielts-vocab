@@ -17,8 +17,9 @@
     const raw = (location.hash || '#/home').replace(/^#\//, '').split('/');
     const h = raw[0];
     cur = ROUTES.includes(h) ? h : 'home';
-    // 离开随身听 → 收掉随身听上下文（停播 + 归还正文），别把展开态/播放状态带出去（M4 §7.3）。
-    if (cur !== 'listen') { try { if (typeof TASK !== 'undefined' && TASK.listenClose) TASK.listenClose(); } catch (e) {} }
+    // 离开随身听 → 播放不中断，交给右下角悬浮球继续控制（照搬主站 switchView 的口径）。
+    // 只有「从没起播过」才会真正收掉随身听上下文（listenLeave 内部判断）。
+    if (cur !== 'listen') { try { if (typeof TASK !== 'undefined' && TASK.listenLeave) TASK.listenLeave(); } catch (e) {} }
     if (cur !== 'home') _hlArticle = null;
     document.querySelectorAll('.sidenav .nav-item').forEach(b =>
       b.classList.toggle('on', b.dataset.route === cur));
@@ -960,8 +961,81 @@
   updateMeCard();
   setTimeout(updateMeCard, 1500);   // CLOUD.boot 异步恢复登录态：稍后把卡上昵称补一次
 
+  /* ---- 3.0 随身听悬浮球（切 tab 续播）----
+     照搬主站 index.html 的 #lsFab：随身听在播/暂停时离开 #/listen → 右下角浮出玻璃胶囊，
+     封面点回随身听、暂停/继续、停止。出现/消失判据与主站一致：
+     有篇目 && (playing || 暂停态) && 不在随身听页 && 不在展开态 && 不在任务模式（阅读页等价物）。 */
+  function ensureListenMini() {
+    let el = document.getElementById('lsMini');
+    if (el) return el;
+    el = document.createElement('div');
+    el.id = 'lsMini';
+    el.setAttribute('role', 'group');
+    el.setAttribute('aria-label', '随身听悬浮控制');
+    el.innerHTML =
+      '<button class="ls-mini-btn" id="lsMiniPlay" type="button" aria-label="播放"><i class="ri-play-fill" aria-hidden="true"></i></button>' +
+      '<button class="ls-mini-btn" id="lsMiniStop" type="button" aria-label="停止播放"><i class="ri-stop-fill" aria-hidden="true"></i></button>' +
+      '<button class="ls-mini-cover" id="lsMiniCover" type="button" aria-label="回到随身听" title="回到随身听">' +
+        '<span class="ls-mini-vol" id="lsMiniVol"></span>' +
+        '<span class="ls-mini-letter" id="lsMiniLetter">🎧</span>' +
+      '</button>';
+    document.body.appendChild(el);
+    el.querySelector('#lsMiniCover').addEventListener('click', () => { location.hash = '#/listen'; });
+    el.querySelector('#lsMiniPlay').addEventListener('click', () => { try { TASK.listenToggle(); } catch (e) {} updateListenFab(); });
+    el.querySelector('#lsMiniStop').addEventListener('click', () => { try { TASK.listenMiniStop(); } catch (e) {} updateListenFab(); });
+    return el;
+  }
+  // 与底部 TabBar / 「今天 N 句」任务条互斥定位：谁在屏幕上，就浮到谁上面（都不许压住）。
+  function positionListenMini() {
+    const el = document.getElementById('lsMini');
+    if (!el) return;
+    const mobile = window.matchMedia('(max-width: 700px)').matches;
+    const nav = document.querySelector('.sidenav');
+    let bottom = mobile ? ((nav ? nav.offsetHeight : 56) + 12) : 24;
+    const bar = document.getElementById('taskBar');
+    if (bar && bar.classList.contains('show') && getComputedStyle(bar).display !== 'none') {
+      bottom = Math.max(bottom, 12 + bar.offsetHeight + 12);
+    }
+    el.style.bottom = bottom + 'px';
+  }
+  function listenMiniActive() {
+    if (typeof TASK === 'undefined' || !TASK.listenState) return false;
+    let st = null;
+    try { st = TASK.listenState(); } catch (e) { return false; }
+    if (!st || !st.ctx) return false;
+    if (cur === 'listen') return false;              // 随身听页：卡片本身就是控制面
+    if (st.expanded) return false;                   // 展开全屏：底部播放条在管
+    if (document.body.classList.contains('task-mode')) return false;   // 阅读页等价物
+    return !!(st.playing || st.idx >= 0);            // 在播或暂停（有续播位）都保留
+  }
+  function updateListenFab() {
+    const el = ensureListenMini();
+    positionListenMini();
+    const on = listenMiniActive();
+    el.classList.toggle('on', on);
+    if (!on) return;
+    let st = null;
+    try { st = TASK.listenState(); } catch (e) { return; }
+    el.classList.toggle('playing', !!st.playing);
+    const play = document.getElementById('lsMiniPlay');
+    if (play) {
+      play.innerHTML = st.playing ? '<i class="ri-pause-fill" aria-hidden="true"></i>' : '<i class="ri-play-fill" aria-hidden="true"></i>';
+      play.setAttribute('aria-label', st.playing ? '暂停' : '播放');
+    }
+    const a = (st.a != null) ? st.a : 0;
+    const vol = document.getElementById('lsMiniVol');
+    if (vol) vol.textContent = '第 ' + listenVolNo(a, st.idx >= 0 ? st.idx : 0) + ' 卷';
+    const title = (SECTIONS[a] && SECTIONS[a].title) || '';
+    const letter = document.getElementById('lsMiniLetter');
+    if (letter) letter.textContent = title.trim().charAt(0).toUpperCase() || '🎧';
+    const cover = document.getElementById('lsMiniCover');
+    if (cover) cover.title = title ? ('回到随身听 · 《' + title + '》') : '回到随身听';
+  }
+  window.addEventListener('resize', () => { try { positionListenMini(); } catch (e) {} });
+  window.APP3 = Object.assign(window.APP3, { updateListenFab });
+
   window.APP3 = Object.assign(window.APP3, { route, current: () => cur });
-  window.addEventListener('hashchange', route);
-  document.addEventListener('DOMContentLoaded', route);
+  window.addEventListener('hashchange', () => { route(); try { updateListenFab(); } catch (e) {} });
+  document.addEventListener('DOMContentLoaded', () => { route(); try { updateListenFab(); } catch (e) {} });
   route();
 })();
