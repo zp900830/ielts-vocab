@@ -149,10 +149,37 @@
       </div>`;
       return;
     }
-    view.innerHTML = '<div class="stats-page"><h1>学习数据</h1></div>';
+    const ov = statsOverview();
+    view.innerHTML = `<div class="stats-page">
+      <h1>学习数据</h1>
+      <section class="st-block" data-block="overview" aria-labelledby="stH1">
+        <h2 id="stH1">我最近学得怎么样？</h2>
+        <div class="st-nums" data-cols="5">
+          <div class="st-num" data-k="days"><b>${ov.days}</b><span>累计学习天数</span></div>
+          <div class="st-num" data-k="minutes"><b>${ov.minutes}</b><span>累计学习时长（分钟）</span></div>
+          <div class="st-num" data-k="streak"><b>${ov.streak}</b><span>连续学习天数</span></div>
+          <div class="st-num" data-k="arts"><b>${ov.arts}</b><span>完成文章数</span></div>
+          <div class="st-num" data-k="acts"><b>${ov.acts}</b><span>总学习次数</span></div>
+        </div>
+      </section>
+    </div>`;
   }
   window.APP3 = Object.assign(window.APP3, { renderStats });
-  // 数据页的点击（按钮是每次重渲的，走事件代理，只绑一次）
+
+  /* §5.3 学习总览：累计天数 / 累计时长 / 连续天数 / 完成文章数 / 总学习次数。
+     全部从日账与 articleStat 现算，不落盘。 */
+  function statsOverview() {
+    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    const daily = (st && st.daily) || {};
+    const keys = Object.keys(daily);
+    let minutes = 0, acts = 0;
+    keys.forEach((k) => { const d = daily[k] || {}; minutes += d.minutes || 0; acts += (d.sentDone || 0) + (d.quizDone || 0); });
+    const ts = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats() : { streak: 0 };
+    let arts = 0;
+    for (let a = 0; a < SECTIONS.length; a++) { const s = articleStat(a).stage; if (s === 'done' || s === 'pro') arts++; }
+    return { days: keys.length, minutes: minutes, streak: ts.streak, arts: arts, acts: acts };
+  }
+  window.APP3 = Object.assign(window.APP3, { statsOverview });
   document.addEventListener('click', (e) => {
     if (e.target.closest('.st-open-me')) { openMePop(); return; }
   });

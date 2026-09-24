@@ -1835,6 +1835,15 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .st-empty-start .st-open-me { width: 100%; min-height: 46px; border: none; border-radius: 999px;
     background: var(--grad); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer;
     box-shadow: var(--grad-shadow); }
+  .st-nums { display: grid; gap: 10px; }
+  .st-nums[data-cols="5"] { grid-template-columns: repeat(5, 1fr); }
+  .st-nums[data-cols="4"] { grid-template-columns: repeat(4, 1fr); }
+  .st-num { padding: 12px 10px; border: 1px solid var(--border); border-radius: 14px; background: var(--card);
+    text-align: center; box-shadow: var(--shadow); }
+  .st-num b { display: block; font-size: 20px; font-weight: 800; color: var(--accent-text); font-variant-numeric: tabular-nums; }
+  .st-num span { font-size: 11px; color: var(--muted); }
+  @media (max-width: 1023px) { .st-nums[data-cols="5"] { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 700px) { .st-nums[data-cols="5"], .st-nums[data-cols="4"] { grid-template-columns: repeat(2, 1fr); } }
   /* ============ 3.0 外壳深色覆盖（W2，PRD §10.1） ============
      外壳与 M1 新页面统一到影子跟读的暖黑 token（--bg/--card/--border/--text/--accent-soft…），
      只把几处写死的浅色值换掉（.a-bar / .a-stage 等）。全部复用既有 token，不新造色。 */
