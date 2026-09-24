@@ -1,21 +1,25 @@
-/* 3.0 外壳路由。#/home 与文章任务模式有内容；#/stats|#/words|#/listen 给「建设中」占位。
+/* 3.0 外壳路由。#/home（六张卡片）与 #/stats（学习数据页）有内容；#/words|#/listen 给「建设中」占位。
    「我的」不再是路由（用户 2026-09-24）：改成左下角常驻用户卡 + 向上弹出的浮窗，见文件末尾。 */
 (function () {
   const ROUTES = ['home', 'stats', 'words', 'listen'];
   const TODO_META = {
-    stats: ['学习数据', 'ri-bar-chart-2-line'],
+    // M2 起「学习数据」已是真页（renderStats）；占位只剩单词本 / 随身听。
     words: ['单词本', 'ri-book-2-line'],
     listen: ['随身听', 'ri-headphone-line'],
   };
   let cur = 'home';
+  let _hlArticle = null;   // 数据页点文章小卡 → 回首页要高亮的那一篇（§5.4）
   function route() {
     const h = (location.hash || '#/home').replace(/^#\//, '').split('/')[0];
     cur = ROUTES.includes(h) ? h : 'home';
+    if (cur !== 'home') _hlArticle = null;
     document.querySelectorAll('.sidenav .nav-item').forEach(b =>
       b.classList.toggle('on', b.dataset.route === cur));
     const view = document.getElementById('appView');
     if (cur === 'home' && window.APP3 && window.APP3.renderHome) { updateMeCard(); return window.APP3.renderHome(view); }
     if (cur === 'home') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    if (cur === 'stats' && window.APP3 && window.APP3.renderStats) return window.APP3.renderStats(view);
+    if (cur === 'stats') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
     // W5-1：占位屏给像样的版式（居中、灰字、标题层级 + 图标），不再是裸 <h3>+<p>。
     const meta = TODO_META[cur];
     view.innerHTML = `<div class="app-todo"><div class="at-ico" aria-hidden="true"><i class="${meta[1]}"></i></div>` +
@@ -127,8 +131,208 @@
     view.innerHTML = `<div class="home-banner" id="homeBanner"></div><div class="art-grid">${cards}</div>`;
     // ⚠️ renderBanner 由 Task 4 定义；只跑 Task 3 时它还不存在 —— 必须守卫。
     if (window.APP3.renderBanner) window.APP3.renderBanner(document.getElementById('homeBanner'));
+    // §5.4：数据页点了文章小卡 → 回首页把对应卡片高亮一下（不新开屏）。
+    // 一次性提示：套上就清掉 _hlArticle，别让后续重渲（如进出任务模式时 exitTaskMode 会再调 route）
+    // 又把同一张卡片套回来（评审 Minor：残留高亮）。
+    if (_hlArticle != null) {
+      const hl = _hlArticle; _hlArticle = null;
+      const card = view.querySelector('.art-card[data-a="' + hl + '"]');
+      if (card) { card.classList.add('hl'); try { card.scrollIntoView({ block: 'center' }); } catch (e) {} }
+    }
   }
   window.APP3 = Object.assign(window.APP3 || {}, { renderHome, articleStat });
+
+  /* ---- 3.0 学习数据页（M2，PRD §5）----
+     四问四块（每块标题即问题）+ 单词掌握 + 随身听（M2 空态占位，M4 接真数据）+ 待加强。
+     所有数字从既有 ROOT2 state 派生（§9.4），不新增存储字段。 */
+  function renderStats(view) {
+    if (typeof dataReady === 'undefined' || !dataReady) { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    const hasPlan = !!(typeof TASK !== 'undefined' && TASK.hasPlan);
+    if (!hasPlan) {
+      // §5.2（2026-09-24 用户改口径）：一句话 + 一个按钮，点了打开「我的」浮窗；不内嵌计划表单。
+      view.innerHTML = `<div class="st-empty-start">
+        <h1>开始你的学习计划</h1>
+        <p>学习数据会在你建立计划后出现在这里。每天读多久、几点换一天、新词开关都在「我的」里。</p>
+        <button class="st-open-me" type="button">打开「我的」</button>
+      </div>`;
+      return;
+    }
+    const ov = statsOverview();
+    const wd = statsWords();
+    const tips = statsTips();
+    view.innerHTML = `<div class="stats-page">
+      <h1>学习数据</h1>
+      <section class="st-block" data-block="overview" aria-labelledby="stH1">
+        <h2 id="stH1">我最近学得怎么样？</h2>
+        <div class="st-nums" data-cols="5">
+          <div class="st-num" data-k="days"><b>${ov.days}</b><span>累计学习天数</span></div>
+          <div class="st-num" data-k="minutes"><b>${ov.minutes}</b><span>累计学习时长（分钟）</span></div>
+          <div class="st-num" data-k="streak"><b>${ov.streak}</b><span>连续学习天数</span></div>
+          <div class="st-num" data-k="arts"><b>${ov.arts}</b><span>完成文章数</span></div>
+          <div class="st-num" data-k="acts"><b>${ov.acts}</b><span>总学习次数</span></div>
+        </div>
+      </section>
+      <section class="st-block" data-block="articles" aria-labelledby="stH2">
+        <h2 id="stH2">我的文章掌握到了什么程度？</h2>
+        <div class="st-arts">${SECTIONS.map((s, a) => {
+          const x = articleStat(a);
+          return `<button class="st-art" data-a="${a}" type="button" aria-label="《${esc(s.title)}》熟练度 ${x.progress}%，回首页看这张卡片">
+            <span class="sa-head"><span class="sa-title">${esc(s.title)}</span><span class="sa-pct">${x.progress}%</span></span>
+            <span class="sa-bar"><i style="width:${x.progress}%"></i></span>
+            <span class="sa-meta">${STAGE_LABEL[x.stage] || '未开始'}</span>
+          </button>`;
+        }).join('')}</div>
+      </section>
+      <section class="st-block" data-block="words" aria-labelledby="stH3">
+        <h2 id="stH3">我的单词掌握到了什么程度？</h2>
+        <div class="st-nums" data-cols="4">
+          <div class="st-num" data-k="learned"><b>${wd.learned}</b><span>已学习单词</span></div>
+          <div class="st-num" data-k="grad"><b>${wd.grad}</b><span>已掌握（已毕业）</span></div>
+          <div class="st-num" data-k="leech"><b>${wd.leech}</b><span>待巩固（重点词）</span></div>
+          <div class="st-num" data-k="rate"><b>${wd.rate}%</b><span>掌握率</span></div>
+        </div>
+      </section>
+      <section class="st-block" data-block="trend" aria-labelledby="stH4">
+        <h2 id="stH4">我的学习是否持续？</h2>
+        ${renderStatsTrend()}
+      </section>
+      <section class="st-block" data-block="listen" aria-labelledby="stH5">
+        <h2 id="stH5">随身听</h2>
+        <div class="st-empty" data-empty="listen">
+          <p>随身听还没用过 → 去试试</p>
+          <button class="st-go" type="button" data-go="listen">去随身听</button>
+        </div>
+      </section>
+      <section class="st-block" data-block="focus" aria-labelledby="stH6">
+        <h2 id="stH6">哪些内容还需要加强？</h2>
+        <ul class="st-tips">${tips.map((t) => `<li class="st-tip" data-tip="${t.kind}"${t.a != null ? ` data-a="${t.a}"` : ''}>
+          <span class="tip-text">${t.text}</span>
+          <button class="tip-go" type="button">${t.go}</button></li>`).join('')}</ul>
+      </section>
+    </div>`;
+  }
+  window.APP3 = Object.assign(window.APP3, { renderStats });
+  /* §5.3 学习总览：累计天数 / 累计时长 / 连续天数 / 完成文章数 / 总学习次数。
+     全部从日账与 articleStat 现算，不落盘。 */
+  function statsOverview() {
+    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    const daily = (st && st.daily) || {};
+    const keys = Object.keys(daily);
+    let minutes = 0, acts = 0;
+    keys.forEach((k) => { const d = daily[k] || {}; minutes += d.minutes || 0; acts += (d.sentDone || 0) + (d.quizDone || 0); });
+    const ts = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats() : { streak: 0 };
+    let arts = 0;
+    for (let a = 0; a < SECTIONS.length; a++) { const s = articleStat(a).stage; if (s === 'done' || s === 'pro') arts++; }
+    return { days: keys.length, minutes: minutes, streak: ts.streak, arts: arts, acts: acts };
+  }
+  window.APP3 = Object.assign(window.APP3, { statsOverview });
+  /* §5.5 单词掌握：已学习 / 已毕业 / 重点词 / 掌握率（已毕业 ÷ 目标词总数）。 */
+  function statsWords() {
+    const c = (typeof TASK !== 'undefined' && TASK.countStages) ? TASK.countStages() : { graduated: 0, leech: 0 };
+    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    const learned = (st && st.words) ? Object.keys(st.words).length : 0;
+    const total = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats().targetWords : 0;
+    return { learned: learned, grad: c.graduated, leech: c.leech, rate: total ? Math.round(c.graduated / total * 100) : 0, total: total };
+  }
+  window.APP3 = Object.assign(window.APP3, { statsWords });
+  /* §5.6 学习趋势：近 14 天（含今天）的日账。柱 = 每日学习次数，线 = 每日分钟数。
+     不引图表库 —— 14 个点手绘够了。 */
+  function statsDays() {
+    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    const cfg = (typeof TASK !== 'undefined' && TASK.planConfig) ? TASK.planConfig() : null;
+    const b = (cfg && Number.isInteger(cfg.boundary)) ? cfg.boundary : 4;
+    const daily = (st && st.daily) || {};
+    const out = [];
+    for (let k = 13; k >= 0; k--) {
+      const key = window.ShadowPlan.dayKey(Date.now() - k * window.ShadowPlan.DAY_MS, b);
+      const d = daily[key] || {};
+      out.push({ key: key, sentDone: d.sentDone || 0, quizDone: d.quizDone || 0, minutes: d.minutes || 0 });
+    }
+    return out;
+  }
+  function renderStatsTrend() {
+    const days = statsDays();
+    const maxAct = Math.max(1, days.reduce((m, d) => Math.max(m, d.sentDone + d.quizDone), 0));
+    const maxMin = Math.max(1, days.reduce((m, d) => Math.max(m, d.minutes), 0));
+    const bars = days.map((d) => {
+      const v = d.sentDone + d.quizDone;
+      const h = v ? Math.max(4, Math.round(v / maxAct * 100)) : 0;
+      return `<span class="tr-bar${v ? ' has' : ''}" style="height:${h}%" data-day="${d.key}" title="${d.key}：${v} 次"></span>`;
+    }).join('');
+    const W = 280, H = 60, n = days.length;
+    const pt = (i) => ({ x: Math.round(i / (n - 1) * W), y: Math.round(H - days[i].minutes / maxMin * H) });
+    const pts = days.map((_, i) => { const p = pt(i); return p.x + ',' + p.y; }).join(' ');
+    /* 两个端点用 CSS 圆点，不用 SVG <circle>：SVG 走 preserveAspectRatio="none" 横向拉伸
+       去对齐柱状图宽度，<circle> 在宽屏会被拉成椭圆（评审 Minor）。圆点 top% = 端点 y/H。 */
+    const dot = (i) => `<span class="tr-dot" style="left:${i === 0 ? 0 : 100}%;top:${Math.round(pt(i).y / H * 100)}%"></span>`;
+    const label = '近 14 天学习趋势：' + days.map((d) => `${d.key.slice(5)} 学 ${d.sentDone + d.quizDone} 次、${d.minutes} 分钟`).join('；');
+    return `<div class="tr-wrap" role="img" aria-label="${esc(label)}">
+      <div class="tr-bars">${bars}</div>
+      <div class="tr-linewrap">
+        <svg class="tr-line" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+          <polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>${dot(0)}${dot(n - 1)}
+      </div>
+      <div class="tr-legend"><span>柱 = 每日学习次数</span><span>线 = 每日学习时长</span></div>
+    </div>`;
+  }
+  window.APP3 = Object.assign(window.APP3, { statsDays });
+  /* §5.8「待加强」：2–3 条具体可点的建议（行动导向，不是数据堆砌）。
+     A 已开始但没读完 / B 重点词今天到期 / C 久没学；不足 2 条时补「没开始的篇目」/「单词本」。 */
+  function statsTips() {
+    const tips = [];
+    const now = Date.now();
+    for (let a = 0; a < SECTIONS.length; a++) {
+      const x = articleStat(a);
+      if (x.ever > 0 && x.ever < x.total) {
+        tips.push({ kind: 'continue', a: a, text: `《${esc(SECTIONS[a].title)}》还差 ${x.total - x.ever} 句读完`, go: '继续' });
+        break;
+      }
+    }
+    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    let leechDue = 0;
+    if (st && st.words) Object.keys(st.words).forEach((k) => { const w = st.words[k]; if (w && w.leech && (w.due || 0) <= now) leechDue++; });
+    if (leechDue > 0) tips.push({ kind: 'leech', text: `有 ${leechDue} 个重点词今天到期`, go: '去复习' });
+    let stale = null;
+    for (let a = 0; a < SECTIONS.length; a++) {
+      const x = articleStat(a);
+      if (x.lastAt > 0) {
+        const d = Math.floor((now - x.lastAt) / 864e5);
+        if (d >= 2 && (!stale || x.lastAt < stale.lastAt)) stale = { a: a, days: d, lastAt: x.lastAt };
+      }
+    }
+    if (stale) tips.push({ kind: 'stale', a: stale.a, text: `已经 ${stale.days} 天没学《${esc(SECTIONS[stale.a].title)}》了`, go: '回去看看' });
+    if (tips.length < 2) {
+      let firstNew = -1, nNew = 0;
+      for (let a = 0; a < SECTIONS.length; a++) { if (articleStat(a).ever === 0) { nNew++; if (firstNew < 0) firstNew = a; } }
+      if (nNew > 0) tips.push({ kind: 'start', a: firstNew, text: `还有 ${nNew} 篇没开始`, go: '去首页' });
+      if (tips.length < 2) tips.push({ kind: 'words', text: '去单词本按文章复习单词', go: '看词本' });
+    }
+    return tips.slice(0, 3);
+  }
+  window.APP3 = Object.assign(window.APP3, { statsTips });
+  // §5.4：数据页点文章小卡 → 回首页并把那张卡片高亮（不新开屏/新浮层，§2.4 护栏）。
+  function openHomeHighlight(a) {
+    _hlArticle = a;
+    if (location.hash === '#/home' || !location.hash) window.APP3.route();
+    else location.hash = '#/home';
+  }
+  window.APP3 = Object.assign(window.APP3, { openHomeHighlight });
+  // 数据页的点击（按钮是每次重渲的，走事件代理，只绑一次）
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.st-open-me')) { openMePop(); return; }
+    const art = e.target.closest('.st-art');
+    if (art && art.dataset.a != null) { openHomeHighlight(Number(art.dataset.a)); return; }
+    const go = e.target.closest('.st-go, .tip-go');
+    if (go) {
+      const tip = go.closest('.st-tip');
+      const kind = tip ? tip.dataset.tip : go.dataset.go;
+      if (kind === 'leech' || kind === 'words') { location.hash = '#/words'; return; }
+      if (kind === 'listen') { location.hash = '#/listen'; return; }
+      const a = tip && tip.dataset.a != null ? Number(tip.dataset.a) : 0;
+      openHomeHighlight(a);
+    }
+  });
 
   /* ---- 3.0 顶部「今天该做什么」横幅（M1 Task 4，§3.5）----
      四类：没计划 / 有计划没做完 / 有计划做完 / 连续+毕业摘要（后两者叠加）。
@@ -377,7 +581,7 @@
     const pop = document.getElementById('mePop');
     if (!pop || pop.hidden) return;
     if (!e.target.isConnected) return;   // 已被重渲摘下的节点，别当成「点外面」
-    if (e.target.closest('#mePop') || e.target.closest('#meCard')) return;
+    if (e.target.closest('#mePop') || e.target.closest('#meCard') || e.target.closest('.st-open-me')) return;
     closeMePop();
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMePop(); });

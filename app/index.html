@@ -1816,7 +1816,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   @media (max-width: 700px) {
     .home-banner .b-go { min-height: 44px; }
   }
-  /* W5-1：后续里程碑的占位屏（学习数据 / 单词本 / 随身听 / 我的）——
+  /* W5-1：后续里程碑的占位屏（M2 起只剩单词本 / 随身听）——
      居中、灰字、带标题层级与图标，不再是一枚裸 <h3> + <p>。 */
   .app-todo { max-width: 440px; margin: 16vh auto 0; text-align: center; padding: 0 20px; }
   .app-todo .at-ico { display: inline-flex; align-items: center; justify-content: center; width: 54px; height: 54px;
@@ -1824,6 +1824,61 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .app-todo h3 { font-size: 18px; font-weight: 700; color: var(--text); margin: 0 0 8px; }
   .app-todo p { color: var(--muted); font-size: 13px; line-height: 1.7; margin: 0; }
   body.dark .app-todo .at-ico { background: var(--accent-soft); color: var(--accent-text); }
+  /* ============ 3.0 学习数据页（M2，PRD §5） ============ */
+  .stats-page { max-width: 880px; }
+  .stats-page > h1 { font-size: 22px; font-weight: 800; color: var(--text); margin: 2px 0 16px; }
+  .st-block { margin-bottom: 22px; }
+  .st-block > h2 { font-size: 15px; font-weight: 700; color: var(--text); margin: 0 0 10px; }
+  .st-empty-start { max-width: 420px; margin: 12vh auto 0; text-align: center; padding: 0 20px; }
+  .st-empty-start h1 { font-size: 22px; font-weight: 800; margin: 0 0 10px; color: var(--text); }
+  .st-empty-start p { font-size: 13.5px; color: var(--muted); line-height: 1.7; margin: 0 0 18px; }
+  .st-empty-start .st-open-me { width: 100%; min-height: 46px; border: none; border-radius: 999px;
+    background: var(--grad); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer;
+    box-shadow: var(--grad-shadow); }
+  .st-nums { display: grid; gap: 10px; }
+  .st-nums[data-cols="5"] { grid-template-columns: repeat(5, 1fr); }
+  .st-nums[data-cols="4"] { grid-template-columns: repeat(4, 1fr); }
+  .st-num { padding: 12px 10px; border: 1px solid var(--border); border-radius: 14px; background: var(--card);
+    text-align: center; box-shadow: var(--shadow); }
+  .st-num b { display: block; font-size: 20px; font-weight: 800; color: var(--accent-text); font-variant-numeric: tabular-nums; }
+  .st-num span { font-size: 11px; color: var(--muted); }
+  @media (max-width: 1023px) { .st-nums[data-cols="5"] { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 700px) { .st-nums[data-cols="5"], .st-nums[data-cols="4"] { grid-template-columns: repeat(2, 1fr); } }
+  .st-arts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .st-art { display: block; width: 100%; min-height: 44px; text-align: left; padding: 10px 12px;
+    border: 1px solid var(--border); border-radius: 14px; background: var(--card); cursor: pointer;
+    font: inherit; color: inherit; box-shadow: var(--shadow); }
+  .st-art:hover { border-color: var(--accent-line); }
+  .st-art .sa-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .st-art .sa-title { font-size: 13.5px; font-weight: 700; }
+  .st-art .sa-pct { font-size: 13px; font-weight: 800; color: var(--accent-text); }
+  .st-art .sa-bar { display: block; height: 5px; margin: 7px 0 5px; border-radius: 3px; background: rgba(11,84,64,.14); overflow: hidden; }
+  .st-art .sa-bar i { display: block; height: 100%; background: var(--grad); }
+  .st-art .sa-meta { font-size: 10.5px; color: var(--muted); }
+  .art-card.hl { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .tr-wrap { padding: 12px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); box-shadow: var(--shadow); }
+  .tr-bars { display: flex; align-items: flex-end; gap: 3px; height: 72px; }
+  .tr-bar { flex: 1; min-height: 2px; background: var(--accent-soft); border-radius: 2px 2px 0 0; }
+  .tr-bar.has { background: var(--accent); }
+  .tr-linewrap { position: relative; height: 44px; margin-top: 8px; overflow: visible; }
+  .tr-line { display: block; width: 100%; height: 100%; color: var(--note); }
+  .tr-dot { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--note); transform: translate(-50%, -50%); }
+  .tr-legend { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; font-size: 10.5px; color: var(--muted); }
+  .st-empty { padding: 14px 16px; border: 1px dashed var(--border); border-radius: 14px; background: var(--card);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .st-empty p { margin: 0; font-size: 13px; color: var(--muted); }
+  .st-tips { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .st-tip { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px;
+    border: 1px solid var(--border); border-radius: 14px; background: var(--card); box-shadow: var(--shadow); }
+  .st-tip .tip-text { font-size: 13px; color: var(--text); }
+  .st-go, .st-tip .tip-go { flex: none; min-height: 44px; padding: 0 16px; border: none; border-radius: 999px;
+    background: var(--grad); color: var(--cta-ink); font-size: 13px; font-weight: 700; cursor: pointer;
+    box-shadow: var(--grad-shadow); }
+  /* 深色（PRD §10.1）：数据页的卡片/文字都用 token（--card/--border/--text），会自动跟随 body.dark；
+     只有进度条轨道是写死的浅色 rgba，必须显式换掉，否则浅绿压暖黑会发脏。 */
+  body.dark .st-art .sa-bar { background: var(--hl); }
+  @media (max-width: 1023px) { .st-arts { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .st-arts { grid-template-columns: 1fr; } }
   /* ============ 3.0 外壳深色覆盖（W2，PRD §10.1） ============
      外壳与 M1 新页面统一到影子跟读的暖黑 token（--bg/--card/--border/--text/--accent-soft…），
      只把几处写死的浅色值换掉（.a-bar / .a-stage 等）。全部复用既有 token，不新造色。 */
@@ -5480,6 +5535,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         prog = prog || { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {}, pace: {} };
         saveProg();
         push2({ type: 'dayplan', day: ShadowPlan.dayKey(Date.now(), 4), minutes: m, ts: Date.now() });
+        /* M2（评审 blocker）：建计划是「没计划 → 有计划」的唯一入口，建完必须重路由当前一级页面 ——
+           否则停在学习数据页的人会一直看到「未开始」态、首页横幅也不翻面（ps-start 只重渲了面板）。
+           与 exitTaskMode 同款出口：hash 没变，route() 不补这一下就要等一次导航/刷新。 */
+        try { if (window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
       }
       function resetV2() { localStorage.removeItem(LS_V2); ROOT2 = null; _cachedPlan = null; loadRoot(); }
       function todayPlan(force) {
@@ -7737,10 +7796,20 @@ self.addEventListener('install', e => { self.skipWaiting(); });
 self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
-  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
-    if (res && res.status === 200) { const c = res.clone(); caches.open(CACHE_NAME).then(cc => cc.put(e.request, c)); }
+  /* 缓存只做「加速」：任何 cache 读写失败都必须退回直连网络，绝不能让 respondWith 变成
+     rejected —— 那会让 /app/app.js 这类 defer 脚本直接加载失败、#appView 永远空着
+     （2026-09-24 M2 评审：高并发下实测偶发）。 */
+  e.respondWith((async () => {
+    try { const hit = await caches.match(e.request); if (hit) return hit; } catch (_) {}
+    const res = await fetch(e.request);
+    try {
+      if (res && res.status === 200) {
+        const c = res.clone();
+        caches.open(CACHE_NAME).then(cc => cc.put(e.request, c)).catch(() => {});
+      }
+    } catch (_) {}
     return res;
-  }).catch(() => r)));
+  })());
 });
 `;
           const blob = new Blob([swCode], { type: 'application/javascript' });
