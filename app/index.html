@@ -1838,12 +1838,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .st-nums { display: grid; gap: 10px; }
   .st-nums[data-cols="5"] { grid-template-columns: repeat(5, 1fr); }
   .st-nums[data-cols="4"] { grid-template-columns: repeat(4, 1fr); }
+  .st-nums[data-cols="3"] { grid-template-columns: repeat(3, 1fr); }
   .st-num { padding: 12px 10px; border: 1px solid var(--border); border-radius: 14px; background: var(--card);
     text-align: center; box-shadow: var(--shadow); }
   .st-num b { display: block; font-size: 20px; font-weight: 800; color: var(--accent-text); font-variant-numeric: tabular-nums; }
   .st-num span { font-size: 11px; color: var(--muted); }
   @media (max-width: 1023px) { .st-nums[data-cols="5"] { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 700px) { .st-nums[data-cols="5"], .st-nums[data-cols="4"] { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .st-nums[data-cols="5"], .st-nums[data-cols="4"], .st-nums[data-cols="3"] { grid-template-columns: repeat(2, 1fr); } }
   .st-arts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .st-art { display: block; width: 100%; min-height: 44px; text-align: left; padding: 10px 12px;
     border: 1px solid var(--border); border-radius: 14px; background: var(--card); cursor: pointer;
@@ -5639,6 +5640,32 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const d = ROOT2.state.daily[day2()] || {};
         return Math.max(0, plannedToday() - (d.sentDone || 0));
       }
+      /* 「今天」这一栏的分母：**当天全局快照**，与在不在某一篇无关。
+         与 plannedToday() 的区别：那个在按篇模式下返回本篇句数（任务条主行的分母），
+         这个永远读当天快照，给辅行的「今天 N/M 句」与数据页的「今天」块用 —— 两个量纲，
+         所以各带各的标签（2026-09-24 用户拍板，不许并排两个没标签的数字）。
+         快照没定（深链直接进任务模式、没经过首页横幅）时，按全局口径算一次钉住：
+         临时放下 currentArticle，todayPlan()/plannedToday() 才按全量算 —— 就是首页那条路先算的数。 */
+      function plannedDay() {
+        if (!ROOT2 || !ROOT2.plan) return 0;
+        const day = day2();
+        ROOT2.planned = ROOT2.planned || {};
+        if (ROOT2.planned[day]) return ROOT2.planned[day];
+        const savedArt = currentArticle;
+        currentArticle = null; _cachedPlan = null;
+        const v = plannedToday();          // 内部会把快照写进 ROOT2.planned[day]
+        currentArticle = savedArt; _cachedPlan = null;
+        return v;
+      }
+      /* 「今天」三个数（任务条辅行 / 数据页「今天」块共用同一份派生，不各算各的）：
+         读了 / 计划 / 还剩 / 时长。分子 = daily.sentDone（今天碰过的不同句数），
+         分母 = plannedDay()（当天快照，不随队列滚动漂）。 */
+      function todayProgress() {
+        const d = (ROOT2 && ROOT2.state && ROOT2.state.daily && ROOT2.state.daily[day2()]) || {};
+        const done = d.sentDone || 0;
+        const planned = plannedDay();
+        return { done: done, planned: planned, left: Math.max(0, planned - done), minutes: d.minutes || 0 };
+      }
 
       function today() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
       function dayIndex() { if (!plan) return 0; const s = new Date(plan.startDate + 'T00:00:00'); const n = new Date(today() + 'T00:00:00'); return Math.max(0, Math.round((n - s) / 864e5)); }
@@ -6848,15 +6875,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
            §9.3/§9.4 通读完成度定义在「有没有碰过」上（读完一遍就永久算数），改成"今天读过"
            会让刷新/跨天后任务条退回未读，与卡片和「已学完」判据打架。所以保留 lifetime。 */
         const artScope = currentArticle == null ? null : ShadowPlan.articleScope(SECTIONS, currentArticle);
-        let doneN, planned, leftN;
+        let doneN, planned;
         if (artScope) {
           let ever = 0;
           artScope.forEach(i => { const s = ROOT2.state.sents[i]; if (s && s.lastReadAt > 0) ever++; });
-          doneN = ever; planned = artScope.size; leftN = Math.max(0, planned - doneN);
+          doneN = ever; planned = artScope.size;
         } else {
           doneN = d.sentDone || 0;
           planned = plannedToday();
-          leftN = todayLeftN();   // 这条减法只住在 todayLeftN() 里：绿点与首屏提示读同一个函数
         }
         // 文章内头部（W1 重做）：标题 + 英文副标 + 篇号胶囊 + 上/下篇箭头。
         renderTaskTop(artScope ? currentArticle : null);
@@ -6905,13 +6931,20 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           setTaskNext(reveal ? (hasNextQuiz() ? '下一题' : '小结') : '跳过这题');
           setProg(quizN ? quizDoneN / quizN : 1);
         } else {
-          /* 分母是当天快照，不跟分子涨。分子可能超过它（今天多读了）—— 主行封顶写 36/36，
-             不写 40/36 这种看着像出错的数；多出来的在副行如实说。 */
-          const extra = Math.max(0, doneN - planned);
-          titleEl.textContent = `通读 ${Math.min(doneN, planned)}/${planned}`;
-          /* secNew() 已经把倍速除掉一次了，这里再除一遍就是平方（同一天在引擎里抓到的那个坑的第二个现场）。 */
-          subEl.textContent = leftN ? `还剩 ~${fmtTime(leftN * secNew())}`
-            : (extra ? `今天的量读完了 · 多读了 ${extra} 句` : '这批读完了，接着出这一批的词');
+          /* 口径必须写在脸上（2026-09-24 用户拍板）：主行的分母是**这一篇**的句数（与首页卡片同源），
+             辅行的分母是**今天**的计划句数 —— 两个不同的量同时出现在一条任务条上，
+             所以两处各自带标签，不许并排两个没标签的数字（他实测「通读 337/339」旁边挂着
+             队列的「今天第 75 句」，看着像对不上，根因就在这）。
+             分母不跟分子涨：分子可能超过它（今天多读了）—— 主行封顶写 N/N，
+             不写 40/36 这种看着像出错的数；多出来的在辅行如实说。 */
+          const tp = todayProgress();
+          titleEl.textContent = artScope
+            ? `通读 · 本篇 ${Math.min(doneN, planned)}/${planned}`
+            : `通读 · 今天 ${Math.min(doneN, planned)}/${planned}`;
+          /* 辅行 = 今日进度（用户明确要这个，用来知道今天快读完了），不再是「还剩 ~N 秒」。
+             done 是今天碰过的不同句数；planned 走 plannedDay()（当天全局快照，不随队列滚动漂）。 */
+          subEl.textContent = `今天 ${Math.min(tp.done, tp.planned)}/${tp.planned} 句`
+            + (tp.done > tp.planned ? ` · 多读了 ${tp.done - tp.planned} 句` : '');
           againBtn.style.display = '';
           againBtn.innerHTML = '<i class="ri-repeat-line" aria-hidden="true"></i> 再来';
           /* 名字跟着口径改（他 2026-09-23：删掉播放键、点一句放一句）：这颗现在不"翻到下一句"，
@@ -6920,7 +6953,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
              把他刚要求删掉的那颗播放键又画了回来。 */
           syncTaskNextLabel();
           /* ① 通读态：这一根改成"位置条"，读的是屏幕上这句在队列里的第几格 —— 做完只读的 setProg 在这里换轨。
-             已读句数没丢：主行「通读 12/36」一直在说它。 */
+             已读句数没丢：主行「通读 · 本篇 12/36」一直在说它。 */
           syncTaskSeek(true);
         }
         /* 播放条那一格的说法归播放条：任务模式里它被搬进按钮行、暂时看不见，但 paint() 和这条
@@ -7000,11 +7033,16 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const showTip = (k, clientX) => {
           if (!tip || !todayQueue[k]) return;
           const g = todayQueue[k].i;
-          const sec = SECTIONS[artOfSentGlobal(g)];
-          /* 只报「位置 + 还剩」，不再报「共 N 句」：那个 N 是队列长度，跟任务条上那个 n/N
-             （当天快照）不是一个量纲。两个都写成「第 x/M 句」会被读成对不上
-             —— 2026-09-24 他实测报过「条上 229/229，气泡却 24/68」。 */
-          tip.innerHTML = '<div class="tip-idx">今天第 ' + (k + 1) + ' 句 · 还剩 ' + (nOf() - k) + ' 句 · '
+          const art = artOfSentGlobal(g);
+          const sec = SECTIONS[art];
+          /* 气泡报「本篇」口径（2026-09-24 用户拍板）：与主行「通读 · 本篇 n/N」同一量纲 ——
+             「第 N 句」是这句在本篇里的位置，「本篇还剩 M 句」是它后面还没排到的。
+             以前报的是队列的「今天第 N 句 · 还剩 M 句」，跟主行并排像对不上
+             （他实测「条上 337/339，气泡却今天第 75 句 · 还剩 38 句」）—— 队列长度本身
+             仍能从滑块的 aria-valuemax 读到，气泡只负责把本篇的位置说清楚。 */
+          const scopeArr = Array.from(ShadowPlan.articleScope(SECTIONS, art));
+          const pos = scopeArr.indexOf(g) + 1;
+          tip.innerHTML = '<div class="tip-idx">第 ' + pos + ' 句 · 本篇还剩 ' + Math.max(0, scopeArr.length - pos) + ' 句 · '
             + (todayQueue[k].type === 'new' ? '新句' : '复习')
             + (sec ? ' · ' + esc(sec.title) : '') + '</div><div>' + esc(plainEN(SENT_RAW[g] || '')) + '</div>';
           tip.style.display = 'block';
@@ -7708,6 +7746,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           planned: plannedToday(),
           done: (ROOT2 && ROOT2.state && ROOT2.state.daily && ROOT2.state.daily[day2()] || {}).sentDone || 0,
         }),
+        /* 「今天」三个数的唯一出口（任务条辅行 + 数据页「今天」块都读它，不各算各的）。
+           注意分母是 plannedDay()（当天全局快照），与 todayStats().planned（按篇模式下 = 本篇句数）不同量纲。 */
+        todayProgress,
         // 事件流「安全合并」的对照实验：先冻住派生状态 → 合并 → 重放 → 再比。
         // 测试断言两次 state 深相等（合并不许动账），并断言确实真掉了重复条。
         compactProbeForTest: () => {
