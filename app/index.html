@@ -1816,7 +1816,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   @media (max-width: 700px) {
     .home-banner .b-go { min-height: 44px; }
   }
-  /* W5-1：后续里程碑的占位屏（学习数据 / 单词本 / 随身听 / 我的）——
+  /* W5-1：后续里程碑的占位屏（M2 起只剩单词本 / 随身听）——
      居中、灰字、带标题层级与图标，不再是一枚裸 <h3> + <p>。 */
   .app-todo { max-width: 440px; margin: 16vh auto 0; text-align: center; padding: 0 20px; }
   .app-todo .at-ico { display: inline-flex; align-items: center; justify-content: center; width: 54px; height: 54px;
@@ -1860,7 +1860,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tr-bars { display: flex; align-items: flex-end; gap: 3px; height: 72px; }
   .tr-bar { flex: 1; min-height: 2px; background: var(--accent-soft); border-radius: 2px 2px 0 0; }
   .tr-bar.has { background: var(--accent); }
-  .tr-line { display: block; width: 100%; height: 44px; margin-top: 8px; color: var(--note); }
+  .tr-linewrap { position: relative; height: 44px; margin-top: 8px; overflow: visible; }
+  .tr-line { display: block; width: 100%; height: 100%; color: var(--note); }
+  .tr-dot { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--note); transform: translate(-50%, -50%); }
   .tr-legend { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; font-size: 10.5px; color: var(--muted); }
   .st-empty { padding: 14px 16px; border: 1px dashed var(--border); border-radius: 14px; background: var(--card);
     display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
@@ -5533,6 +5535,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         prog = prog || { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {}, pace: {} };
         saveProg();
         push2({ type: 'dayplan', day: ShadowPlan.dayKey(Date.now(), 4), minutes: m, ts: Date.now() });
+        /* M2（评审 blocker）：建计划是「没计划 → 有计划」的唯一入口，建完必须重路由当前一级页面 ——
+           否则停在学习数据页的人会一直看到「未开始」态、首页横幅也不翻面（ps-start 只重渲了面板）。
+           与 exitTaskMode 同款出口：hash 没变，route() 不补这一下就要等一次导航/刷新。 */
+        try { if (window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
       }
       function resetV2() { localStorage.removeItem(LS_V2); ROOT2 = null; _cachedPlan = null; loadRoot(); }
       function todayPlan(force) {
@@ -7790,10 +7796,20 @@ self.addEventListener('install', e => { self.skipWaiting(); });
 self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
-  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
-    if (res && res.status === 200) { const c = res.clone(); caches.open(CACHE_NAME).then(cc => cc.put(e.request, c)); }
+  /* 缓存只做「加速」：任何 cache 读写失败都必须退回直连网络，绝不能让 respondWith 变成
+     rejected —— 那会让 /app/app.js 这类 defer 脚本直接加载失败、#appView 永远空着
+     （2026-09-24 M2 评审：高并发下实测偶发）。 */
+  e.respondWith((async () => {
+    try { const hit = await caches.match(e.request); if (hit) return hit; } catch (_) {}
+    const res = await fetch(e.request);
+    try {
+      if (res && res.status === 200) {
+        const c = res.clone();
+        caches.open(CACHE_NAME).then(cc => cc.put(e.request, c)).catch(() => {});
+      }
+    } catch (_) {}
     return res;
-  }).catch(() => r)));
+  })());
 });
 `;
           const blob = new Blob([swCode], { type: 'application/javascript' });

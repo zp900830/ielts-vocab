@@ -1,4 +1,4 @@
-/* 3.0 外壳路由。#/home 与文章任务模式有内容；#/stats|#/words|#/listen 给「建设中」占位。
+/* 3.0 外壳路由。#/home（六张卡片）与 #/stats（学习数据页）有内容；#/words|#/listen 给「建设中」占位。
    「我的」不再是路由（用户 2026-09-24）：改成左下角常驻用户卡 + 向上弹出的浮窗，见文件末尾。 */
 (function () {
   const ROUTES = ['home', 'stats', 'words', 'listen'];
@@ -132,8 +132,11 @@
     // ⚠️ renderBanner 由 Task 4 定义；只跑 Task 3 时它还不存在 —— 必须守卫。
     if (window.APP3.renderBanner) window.APP3.renderBanner(document.getElementById('homeBanner'));
     // §5.4：数据页点了文章小卡 → 回首页把对应卡片高亮一下（不新开屏）。
+    // 一次性提示：套上就清掉 _hlArticle，别让后续重渲（如进出任务模式时 exitTaskMode 会再调 route）
+    // 又把同一张卡片套回来（评审 Minor：残留高亮）。
     if (_hlArticle != null) {
-      const card = view.querySelector('.art-card[data-a="' + _hlArticle + '"]');
+      const hl = _hlArticle; _hlArticle = null;
+      const card = view.querySelector('.art-card[data-a="' + hl + '"]');
       if (card) { card.classList.add('hl'); try { card.scrollIntoView({ block: 'center' }); } catch (e) {} }
     }
   }
@@ -259,15 +262,17 @@
     const W = 280, H = 60, n = days.length;
     const pt = (i) => ({ x: Math.round(i / (n - 1) * W), y: Math.round(H - days[i].minutes / maxMin * H) });
     const pts = days.map((_, i) => { const p = pt(i); return p.x + ',' + p.y; }).join(' ');
-    const a0 = pt(0), a1 = pt(n - 1);
+    /* 两个端点用 CSS 圆点，不用 SVG <circle>：SVG 走 preserveAspectRatio="none" 横向拉伸
+       去对齐柱状图宽度，<circle> 在宽屏会被拉成椭圆（评审 Minor）。圆点 top% = 端点 y/H。 */
+    const dot = (i) => `<span class="tr-dot" style="left:${i === 0 ? 0 : 100}%;top:${Math.round(pt(i).y / H * 100)}%"></span>`;
     const label = '近 14 天学习趋势：' + days.map((d) => `${d.key.slice(5)} 学 ${d.sentDone + d.quizDone} 次、${d.minutes} 分钟`).join('；');
     return `<div class="tr-wrap" role="img" aria-label="${esc(label)}">
       <div class="tr-bars">${bars}</div>
-      <svg class="tr-line" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
-        <polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-        <circle cx="${a0.x}" cy="${a0.y}" r="3" fill="currentColor"/>
-        <circle cx="${a1.x}" cy="${a1.y}" r="3" fill="currentColor"/>
-      </svg>
+      <div class="tr-linewrap">
+        <svg class="tr-line" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+          <polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>${dot(0)}${dot(n - 1)}
+      </div>
       <div class="tr-legend"><span>柱 = 每日学习次数</span><span>线 = 每日学习时长</span></div>
     </div>`;
   }

@@ -1,6 +1,7 @@
 // 3.0 M2：学习数据页（PRD §5）。服务器归 global-setup.ts 起停（仓库根 8932）；
 // /app/ 在仓库根，所以和 shell.spec.ts / home.spec.ts 一样用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
+import { waitShadowReady } from '../../utils/app-ready';
 
 declare const TASK: {
   hasPlan: boolean;
@@ -56,12 +57,47 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
   }
 }
 
+/* 应用就绪闸门（评审 Important①）。三层：
+   ① waitShadowReady：dataReady + sents 已渲（utils/app-ready 的条件等待，与 playback-resume 同一把闸）；
+   ② 等 #appView 真的渲出学习数据页（.stats-page 或有计划前的 .st-empty-start）——
+      只等 ① 不够（dataReady/sents 由**内联脚本**设置，renderStats 却在 defer 的 app.js 里），
+      高并发下 #appView 会停在「正在载入…」/空，5s 的 locator 自动等待会偶发红；
+   ③ 有界重载重试：8932 那台 python http.server 偶发丢 /app/app.js（defer 脚本没执行 →
+      #appView 永远空），重载一次基本必好。3 次仍不成就真失败，不吞错。 */
+async function waitStatsReady(page: import('@playwright/test').Page) {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      await waitShadowReady(page);
+      await page.waitForFunction(() => {
+        const w = window as unknown as { APP3?: { renderStats?: unknown } };
+        if (!(w.APP3 && typeof w.APP3.renderStats === 'function')) return false;
+        const v = document.getElementById('appView');
+        return !!(v && (v.querySelector('.stats-page') || v.querySelector('.st-empty-start')));
+      }, undefined, { timeout: 20000 });
+      return;
+    } catch (e) {
+      if (attempt >= 2) throw e;
+      await page.reload();
+    }
+  }
+}
+
+async function gotoStats(page: import('@playwright/test').Page) {
+  await page.goto(`${rootUrl}/app/index.html#/stats`);
+  await waitStatsReady(page);
+}
+/* reload 之后同样要过闸（defer 的 app.js 可能还没跑，5s 的 locator 自动等待不够）。 */
+async function reloadStats(page: import('@playwright/test').Page) {
+  await page.reload();
+  await waitStatsReady(page);
+}
+
 test.describe('3.0 学习数据页（M2，PRD §5）', () => {
   test('未开始：一句话 + 一个按钮，点了打开「我的」浮窗，不内嵌计划表单', async ({ page }) => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/app/index.html#/stats`);
     await page.evaluate(() => localStorage.removeItem('ielts.shadow.v2'));
-    await page.reload();
+    await reloadStats(page);
 
     const start = page.locator('.st-empty-start');
     await expect(start).toBeVisible();
@@ -77,16 +113,40 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     expect(await page.locator('#appView .ps-start').count(), '点按钮也不许内嵌表单').toBe(0);
   });
 
-  test('进行中：学习总览 5 个数与 state 同源', async ({ page }) => {
+  /* 评审 blocker 的回归锁：从空态「我的 → 设置学习计划 → 开始这个计划」建完计划，
+     学习数据页必须**自己翻面**成进行中数据视图，不靠刷新/导航。修前：initPlan 不 route，
+     #appView 一直停在 .st-empty-start（hasPlan 已 true）。 */
+  test('空态建计划后：学习数据页自己切到进行中视图（blocker 回归锁）', async ({ page }) => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.evaluate(() => localStorage.removeItem('ielts.shadow.v2'));
+    await reloadStats(page);
+    await expect(page.locator('.st-empty-start')).toBeVisible();
+    expect(await page.evaluate(() => TASK.hasPlan), '起点必须没计划').toBe(false);
+
+    // 空态按钮 →「我的」浮窗 → CTA「设置学习计划」→ 设置屏
+    await page.locator('.st-open-me').click();
+    await expect(page.locator('#mePop')).toBeVisible();
+    await page.locator('#mePop .mp-cta').click();
+    await expect(page.locator('#setupSheet .ps-start')).toBeVisible();
+
+    // 建计划：这一刻起 hasPlan 变 true，页面必须跟着翻
+    await page.locator('#setupSheet .ps-start').click();
+    expect(await page.evaluate(() => TASK.hasPlan), '建完计划 hasPlan 应为 true').toBe(true);
+    await expect(page.locator('.st-empty-start'), '空态必须消失，不许停在未开始').toHaveCount(0);
+    await expect(page.locator('.st-block[data-block="overview"]'), '数据块必须自己出现').toBeVisible();
+  });
+
+  test('进行中：学习总览 5 个数与 state 同源', async ({ page }) => {
+    await stubData(page, SIX);
+    await gotoStats(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
       const s = ShadowPlan.articleScope(SECTIONS, 0);
       Array.from(s).slice(0, 5).forEach((i) => TASK.readDone(i));  // 今天读 5 句
       TASK.seedDailyForTest(1);                                   // 昨天：sentDone 5、minutes 15（必须在 readDone 之后）
     });
-    await page.reload();
+    await reloadStats(page);
 
     await expect(page.locator('.st-block[data-block="overview"]')).toBeVisible();
     const expected = await page.evaluate(() => {
@@ -111,13 +171,13 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
 
   test('文章学习：6 篇小卡数字与首页卡片同源；点小卡 → 回首页并高亮', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await gotoStats(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
       const s = ShadowPlan.articleScope(SECTIONS, 0);
       Array.from(s).slice(0, 20).forEach((i) => TASK.readDone(i));
     });
-    await page.reload();
+    await reloadStats(page);
 
     await expect(page.locator('.st-art')).toHaveCount(6);
     // 与 APP3.articleStat 同源（真断言，不写死字面量）
@@ -138,14 +198,14 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
 
   test('单词掌握：4 个数与 countStages/state 同源', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await gotoStats(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
       const s = ShadowPlan.articleScope(SECTIONS, 0);
       Array.from(s).slice(0, 8).forEach((i) => TASK.readDone(i));
       TASK.seedArticleForTest(0, { quizOk: 2 });     // 造点词状态，别让 4 个数全 0
     });
-    await page.reload();
+    await reloadStats(page);
 
     const expected = await page.evaluate(() => {
       const c = TASK.countStages();
@@ -164,19 +224,21 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
 
   test('学习趋势：14 天柱状 + SVG 折线，有文本替代，无图表库', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await gotoStats(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
       const s = ShadowPlan.articleScope(SECTIONS, 0);
       Array.from(s).slice(0, 5).forEach((i) => TASK.readDone(i));
       TASK.seedDailyForTest(1); TASK.seedDailyForTest(2);   // 造出跨天日账（必须在 readDone 之后），柱/线才有形状
     });
-    await page.reload();
+    await reloadStats(page);
 
     const wrap = page.locator('.tr-wrap');
     await expect(wrap).toBeVisible();
     expect(await page.locator('.tr-bar').count(), '近 14 天 = 14 根柱').toBe(14);
     expect(await page.locator('.tr-wrap svg.tr-line polyline').count(), '一条折线').toBe(1);
+    // 两个端点：CSS 圆点（不是会被拉伸的 SVG <circle>，评审 Minor）
+    expect(await page.locator('.tr-wrap .tr-dot').count(), '折线两个端点').toBe(2);
     // 文本替代：role=img + aria-label
     await expect(wrap).toHaveAttribute('role', 'img');
     expect(await wrap.getAttribute('aria-label')).toContain('近 14 天');
@@ -185,20 +247,23 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     expect(await page.evaluate(() => typeof (window as unknown as { echarts?: unknown }).echarts)).toBe('undefined');
   });
 
-  test('随身听空态占位：文案正确且不含伪造数字', async ({ page }) => {
+  test('随身听空态占位：文案正确、不含伪造数字、按钮落点正确', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await gotoStats(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
-    await page.reload();
+    await reloadStats(page);
     const box = page.locator('.st-empty[data-empty="listen"]');
     await expect(box).toBeVisible();
     await expect(box.locator('p')).toHaveText('随身听还没用过 → 去试试');
     expect(await box.innerText(), '随身听 M2 不得显示伪造指标（§5.7）').not.toMatch(/\d/);
+    // 「去随身听」落到随身听入口
+    await box.locator('.st-go').click();
+    await expect(page).toHaveURL(/#\/listen/);
   });
 
   test('待加强：2–3 条建议，每条按钮落到正确入口', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await gotoStats(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
       const arr = Array.from(ShadowPlan.articleScope(SECTIONS, 0));
@@ -230,16 +295,38 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     await expect(page.locator('.art-card[data-a="0"]')).toHaveClass(/hl/);
   });
 
+  /* 评审 Minor：兜底建议（start / words）与 .st-art 触摸目标过去没锁。 */
+  test('兜底建议落点 + 小卡触摸目标 ≥44px', async ({ page }) => {
+    await stubData(page, SIX);
+    await gotoStats(page);
+    // 全新计划、零活动 → 只有兜底两条：start（还有 6 篇没开始）+ words（去单词本）
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); APP3.route(); });
+    await expect(page.locator('.st-tip[data-tip="start"]')).toContainText('没开始');
+    await expect(page.locator('.st-tip[data-tip="words"]')).toContainText('单词本');
+    expect(await page.locator('.st-tip').count(), '兜底也应有 2 条可点建议').toBe(2);
+    // .st-art 的 min-height 是触摸目标下限
+    const mh = await page.locator('.st-art').first().evaluate((el) => getComputedStyle(el).minHeight);
+    expect(mh, '.st-art 的 min-height ≥44px（触摸目标）').toBe('44px');
+    // start → 回首页并高亮第一篇未开始（a=0）
+    await page.locator('.st-tip[data-tip="start"] .tip-go').click();
+    await expect(page).toHaveURL(/#\/home/);
+    await expect(page.locator('.art-card[data-a="0"]')).toHaveClass(/hl/);
+    // words → 单词本
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.locator('.st-tip[data-tip="words"] .tip-go').click();
+    await expect(page).toHaveURL(/#\/words/);
+  });
+
   test('深色模式：数据页关键块不是浅色那套（PRD §10.1）', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await gotoStats(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
       const s = ShadowPlan.articleScope(SECTIONS, 0);
       Array.from(s).slice(0, 5).forEach((i) => TASK.readDone(i));
       TASK.seedDailyForTest(1);
     });
-    await page.reload();
+    await reloadStats(page);
     await expect(page.locator('.st-num').first()).toBeVisible();
 
     const light = await page.locator('.st-num').first().evaluate((el) => getComputedStyle(el).backgroundColor);
@@ -254,13 +341,13 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
 
   test('无障碍：语义标题层级 + 触摸目标 ≥44px', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await gotoStats(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
       const s = ShadowPlan.articleScope(SECTIONS, 0);
       Array.from(s).slice(0, 5).forEach((i) => TASK.readDone(i));
     });
-    await page.reload();
+    await reloadStats(page);
     await expect(page.locator('.stats-page > h1')).toHaveCount(1);
     await expect(page.locator('.st-block > h2')).toHaveCount(6);
     const h = await page.locator('.st-tip .tip-go').first().evaluate((el) => el.getBoundingClientRect().height);
