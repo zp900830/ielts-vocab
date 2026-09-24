@@ -200,4 +200,29 @@ test.describe('3.0 随身听（M4，PRD §7）', () => {
     await expect(page.locator('.st-block[data-block="listen"] .st-num[data-k="listen-min"] b')).toHaveText(String(want));
     await expect(page.locator('.st-block[data-block="listen"] .st-num[data-k="listen-sents"] b')).not.toHaveText('0');
   });
+
+  test('§7.5 首页联动：默认播「最近在学的那篇」；听过之后首页卡片「最近学习」跟着更新', async ({ page }) => {
+    await stubData(page, TWO);
+    await gotoListen(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    await installSpeakStub(page);
+    // 只听第 1 篇（第 0 篇完全没动）→ 第 1 篇成为「最近在学的那篇」
+    await page.evaluate(() => TASK.listenOpen(1));
+    await page.locator('.ls-play').click();
+    await finishSpeak(page);
+
+    // 首页：第 1 篇卡片「最近学习」应显示「今天」（读数 = max(精读 lastReadAt, 收听 last)）
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitShadowReady(page);
+    await expect(page.locator('.art-card[data-a="1"]')).toContainText('今天');
+    await expect(page.locator('.art-card[data-a="0"]')).toContainText('还没学过');
+
+    // 回随身听（刷新 → 默认篇按「最近在学」现算，不是沿用上一趟的 _listenArticle）
+    await page.goto(`${rootUrl}/app/index.html#/listen`);
+    await waitShadowReady(page);
+    await page.reload();
+    await waitShadowReady(page);
+    await page.waitForFunction(() => !!document.querySelector('.ls-art'));
+    await expect(page.locator('.ls-art')).toContainText('校园与文化');
+  });
 });
