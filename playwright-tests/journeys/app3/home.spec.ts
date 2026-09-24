@@ -2,6 +2,7 @@
 // 服务器归 global-setup.ts 起停（仓库根 8932）；8931 那台服务的是 shadow/ 树，
 // 而 /app/ 在仓库根，所以和 shell.spec.ts / smoke.spec.ts 一样用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
+import { waitShadowReady } from '../../utils/app-ready';
 
 declare const TASK: {
   resetV2(): void;
@@ -13,8 +14,22 @@ declare const ShadowPlan: {
   articleScope(sections: unknown, article: number): Set<number>;
 };
 declare const SECTIONS: unknown[];
+declare const APP3: { renderHome?: unknown };
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
+
+/* M6 抖动根治：首页卡片由 **defer 的 app.js** 里的 renderHome 渲，而 appReady 类闸门只等
+   内联脚本的 dataReady/sents。全量并行、静态服务器被拖慢时，5s 的 locator 自动等待会撞上
+   「app.js 还没执行 / #appView 还是空」→ toHaveCount(6) 偶发红（实测 14× 0 elements）。
+   条件等待到 renderHome 就位 + 卡片真的渲出来（20s 上限，不是 sleep）。 */
+async function waitHomeReady(page: import('@playwright/test').Page) {
+  await waitShadowReady(page);
+  await page.waitForFunction(() => {
+    if (!(window as unknown as { APP3?: { renderHome?: unknown } }).APP3 ||
+        typeof (window as unknown as { APP3: { renderHome?: unknown } }).APP3.renderHome !== 'function') return false;
+    return document.querySelectorAll('.art-card').length > 0;
+  }, undefined, { timeout: 20000 });
+}
 
 /* 把三份重 JSON 换成 6 篇的小壳：既让首页拿到 6 张卡片，又不再多渲一页 1833 句 + 3242 词
    （和 shell.spec.ts 同一理由：整套并行时那份额外负载会压出 shadow 用例偶发红）。
@@ -53,6 +68,7 @@ test.describe('3.0 首页', () => {
   test('六张卡片 + 四档状态 + 卡片数据', async ({ page }) => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitHomeReady(page);
     await expect(page.locator('.art-card')).toHaveCount(6);
     await expect(page.locator('.art-card .a-title').first()).toHaveText('地球与生命');
 
@@ -79,6 +95,7 @@ test.describe('3.0 首页', () => {
       Array.from(s).slice(0, 20).forEach((i: number) => TASK.readDone(i));
     });
     await page.reload();
+    await waitHomeReady(page);
     await expect(c0).toHaveAttribute('data-stage', 'reading');
     await expect(c0.locator('.a-stage')).toHaveText('通读中');
     expect(await pctOf(page), '20/24 × 40% 四舍五入 = 33').toBe(33);
@@ -92,6 +109,7 @@ test.describe('3.0 首页', () => {
       Array.from(s).slice(20).forEach((i: number) => TASK.readDone(i));
     });
     await page.reload();
+    await waitHomeReady(page);
     await expect(c0).toHaveAttribute('data-stage', 'read');
     /* 2026-09-24 用户：卡片胶囊里的圈号去掉 —— 锁两件事：阶段语义文字还在（「可答题」），
        且不再出现任何圈号徽标（回归锁）。 */
@@ -107,6 +125,7 @@ test.describe('3.0 首页', () => {
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await page.evaluate(() => localStorage.removeItem('ielts.shadow.v2'));
     await page.reload();
+    await waitHomeReady(page);
     await expect(page.locator('#homeBanner .b-go')).toContainText('设置');
     // 点它 → 出设置屏（复用影子跟读的 renderSetup，套在 #setupSheet 里）
     await page.locator('#homeBanner .b-go').click();

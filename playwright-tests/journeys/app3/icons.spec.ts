@@ -51,7 +51,10 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
     await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); });
     await expect(page.locator('.sidenav .me-card .me-avatar i'), '已登录默认头像').toHaveClass(/\bri-user-3-fill\b/);
 
-    // 量字形：等 4.5.0 的 CSS 落地后，每个 ::before 必须真有 content（名字不存在 = none）
+    // 量字形：等 4.5.0 的 CSS 落地后，每个 ::before 必须真有 content（名字不存在 = none）。
+    // M6 抖动排查：这条依赖 CDN（fastly.jsdelivr.net）的 CSS/woff2，全量并行 + 网络抖动时
+    // 15s 偶发不够（实测 1/6 视红）。条件等待本身没问题，只是给足上限；源级锁在第一条，
+    // 就算 CDN 一时挂掉也不会让「版本引用」这件事失守。
     await page.waitForFunction(() => {
       const els = document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card .me-avatar i');
       if (els.length !== 5) return false;
@@ -59,7 +62,7 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
         const c = getComputedStyle(el, '::before').content;
         return !!c && c !== 'none' && c !== 'normal';
       });
-    }, null, { timeout: 15000 });
+    }, null, { timeout: 30000 });
     const contents = await page.evaluate(() =>
       Array.from(document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card .me-avatar i')).map((el) => getComputedStyle(el, '::before').content));
     for (const c of contents) expect(c, `::before content 全量：${JSON.stringify(contents)}`).not.toMatch(/^(none|normal)$/);

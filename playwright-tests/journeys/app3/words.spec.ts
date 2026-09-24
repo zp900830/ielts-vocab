@@ -207,8 +207,9 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
     await expect(d.locator('.wd-src')).toContainText('第 1 卷');
     await expect(d.locator('.wd-src')).toContainText('第 1 句');
     await expect(d.locator('.wd-play')).toBeVisible();
-    // §6.4：原文语境永远排第一，例句其次
-    const heads = await d.locator('.wd-block h4').allInnerTexts();
+    // §6.4：原文语境永远排第一，例句其次。M6：详情块标题从 h4 提到 h2（h1「单词本」→ h2，
+    // 不再跳级；axe heading-order 要求逐级递增），断言同步改选择器。
+    const heads = await d.locator('.wd-block h2').allInnerTexts();
     expect(heads[0]).toContain('原文语境');
     expect(heads[1]).toContain('例句');
     await expect(d.locator('.wd-ex')).toContainText('relaxed atmosphere');

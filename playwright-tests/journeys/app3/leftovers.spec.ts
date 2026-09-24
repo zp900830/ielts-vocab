@@ -360,4 +360,31 @@ test.describe('3.0 W6 PWA', () => {
       await context.setOffline(false);
     }
   });
+
+  /* M6：连缓存都没命中时也不许白屏。旧 SW 在「无网 + 无缓存」时只能 reject，浏览器给一张
+     错误页（白屏）。现在导航请求兜一张极简离线页（带重试）。反向验证：把 app/sw.js 里那段
+     `req.mode === 'navigate'` 兜底删掉，本条必红（reload 抛网络错误）。 */
+  test('断网且缓存被清空：导航请求兜到离线页，不白屏', async ({ page, context }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.waitForFunction(async () => {
+      try { const reg = await navigator.serviceWorker.getRegistration(); return !!(reg && reg.active); }
+      catch (e) { return false; }
+    });
+    await page.reload();   // 被 SW 接管的一轮，app.js / index.html 进缓存
+    await page.waitForFunction(() => {
+      const w = window as unknown as { APP3?: { route?: unknown } };
+      return !!(w.APP3 && typeof w.APP3.route === 'function');
+    });
+    // 清掉所有缓存 → 制造「无网 + 无缓存」；SW 仍被本页 scope 控制着
+    await page.evaluate(async () => { const ks = await caches.keys(); await Promise.all(ks.map((k) => caches.delete(k))); });
+    await context.setOffline(true);
+    try {
+      await page.reload();
+      await expect(page.locator('body')).toContainText('当前离线');
+      await expect(page.getByRole('button', { name: '重试' })).toBeVisible();
+    } finally {
+      await context.setOffline(false);
+    }
+  });
 });
