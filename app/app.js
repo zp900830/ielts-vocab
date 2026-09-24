@@ -155,6 +155,7 @@
       return;
     }
     const ov = statsOverview();
+    const wd = statsWords();
     view.innerHTML = `<div class="stats-page">
       <h1>学习数据</h1>
       <section class="st-block" data-block="overview" aria-labelledby="stH1">
@@ -178,10 +179,18 @@
           </button>`;
         }).join('')}</div>
       </section>
+      <section class="st-block" data-block="words" aria-labelledby="stH3">
+        <h2 id="stH3">我的单词掌握到了什么程度？</h2>
+        <div class="st-nums" data-cols="4">
+          <div class="st-num" data-k="learned"><b>${wd.learned}</b><span>已学习单词</span></div>
+          <div class="st-num" data-k="grad"><b>${wd.grad}</b><span>已掌握（已毕业）</span></div>
+          <div class="st-num" data-k="leech"><b>${wd.leech}</b><span>待巩固（重点词）</span></div>
+          <div class="st-num" data-k="rate"><b>${wd.rate}%</b><span>掌握率</span></div>
+        </div>
+      </section>
     </div>`;
   }
   window.APP3 = Object.assign(window.APP3, { renderStats });
-
   /* §5.3 学习总览：累计天数 / 累计时长 / 连续天数 / 完成文章数 / 总学习次数。
      全部从日账与 articleStat 现算，不落盘。 */
   function statsOverview() {
@@ -196,6 +205,15 @@
     return { days: keys.length, minutes: minutes, streak: ts.streak, arts: arts, acts: acts };
   }
   window.APP3 = Object.assign(window.APP3, { statsOverview });
+  /* §5.5 单词掌握：已学习 / 已毕业 / 重点词 / 掌握率（已毕业 ÷ 目标词总数）。 */
+  function statsWords() {
+    const c = (typeof TASK !== 'undefined' && TASK.countStages) ? TASK.countStages() : { graduated: 0, leech: 0 };
+    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    const learned = (st && st.words) ? Object.keys(st.words).length : 0;
+    const total = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats().targetWords : 0;
+    return { learned: learned, grad: c.graduated, leech: c.leech, rate: total ? Math.round(c.graduated / total * 100) : 0, total: total };
+  }
+  window.APP3 = Object.assign(window.APP3, { statsWords });
   // §5.4：数据页点文章小卡 → 回首页并把那张卡片高亮（不新开屏/新浮层，§2.4 护栏）。
   function openHomeHighlight(a) {
     _hlArticle = a;

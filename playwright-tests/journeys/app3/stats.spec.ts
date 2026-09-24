@@ -135,4 +135,30 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     await expect(page).toHaveURL(/#\/home/);
     await expect(page.locator('.art-card[data-a="0"]')).toHaveClass(/hl/);
   });
+
+  test('单词掌握：4 个数与 countStages/state 同源', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(15);
+      const s = ShadowPlan.articleScope(SECTIONS, 0);
+      Array.from(s).slice(0, 8).forEach((i) => TASK.readDone(i));
+      TASK.seedArticleForTest(0, { quizOk: 2 });     // 造点词状态，别让 4 个数全 0
+    });
+    await page.reload();
+
+    const expected = await page.evaluate(() => {
+      const c = TASK.countStages();
+      const st = TASK.state();
+      const learned = Object.keys(st.words || {}).length;
+      const total = TASK.todayStats().targetWords;
+      return { learned, grad: c.graduated, leech: c.leech, rate: total ? Math.round((c.graduated / total) * 100) : 0 };
+    });
+    const num = (k: string) => page.locator(`.st-num[data-k="${k}"] b`).innerText().then((t) => Number(t.replace('%', '')));
+    expect(await num('learned')).toBe(expected.learned);
+    expect(await num('grad')).toBe(expected.grad);
+    expect(await num('leech')).toBe(expected.leech);
+    expect(await num('rate')).toBe(expected.rate);
+    expect(expected.learned, '夹具要真造出词状态').toBeGreaterThan(0);
+  });
 });
