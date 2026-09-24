@@ -6586,7 +6586,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         openArticle(a, { article: a, startAtPass2: true });
       }
       // M3：单词本词详情的「▶ 播放这句」。a = 文章号，gi = 该句的全局句号。
-      function playSentence(a, gi) { openArticle(a, { playGlobal: gi }); }
+      // 带 article 一并传：今天这一篇若排不出句，enterTaskMode 会用它兜底建批，保证真进任务模式（§6.5）。
+      function playSentence(a, gi) { openArticle(a, { article: a, playGlobal: gi }); }
       function exitTaskMode() {
         taskMode = false; _noPlan = false; stopSessionClock();
         // 回首页 = 回全局：横幅/绿点/今日账都按全量算，别把上一篇的 scope 留在缓存里。
