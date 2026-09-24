@@ -1,0 +1,99 @@
+// 3.0 M4：随身听（PRD §7）。服务器归 global-setup.ts 起停（仓库根 8932）：
+// /app/ 在仓库根，和 shell/home/stats/words 一样用 E2E_ROOT_URL，不走 baseURL。
+import { test, expect } from '../../fixtures';
+import { waitShadowReady } from '../../utils/app-ready';
+
+declare const TASK: {
+  hasPlan: boolean;
+  resetV2(): void;
+  initPlan(minutes: number): void;
+  readDone(i: number): void;
+  state(): { daily: Record<string, unknown>; words: Record<string, unknown>; sents: Record<number, { lastReadAt: number }> };
+  listenState(): { a: number; idx: number; total: number; playing: boolean; loop: number; rate: number; expanded: boolean; text: string };
+  listenArticle: number | null;
+  listenStat(): { totalSents: number; totalMs: number; byArticle: Record<string, number>; last: Record<string, number> };
+  listenLast(a: number): number;
+  listenOpen(a: number): void;
+  listenExpand(): void;
+  listenCollapse(): void;
+  listenSeek(local: number): void;
+  listenSetTickForTest(ts: number): void;
+  repsOf(a: number): number;
+  article: number | null;
+};
+declare const ShadowPlan: { articleScope(sections: unknown, a: number): Set<number>; newWord(): Record<string, unknown>; dayKey(ts: number, b: number): string; DAY_MS: number };
+declare const SECTIONS: Array<{ title: string; subheads: string[] }>;
+declare const APP3: { route(): void; articleStat(a: number): { progress: number; lastAt: number; ever: number; total: number }; renderListen?: unknown };
+declare const dataReady: boolean;
+
+const rootUrl = process.env.E2E_ROOT_URL || '';
+
+/* 两篇小课文：篇 0 = 4 句，篇 1 = 2 句；句号全局连续（0–3 / 4–5）。 */
+const TWO: Record<string, string> = (() => {
+  const mk = (title: string, lines: string[]) => ({
+    title, zh: title, subheads: ['第一卷'],
+    paragraphs: [lines],
+    sentZh: [lines.map((_, i) => `第 ${i + 1} 句译文。`)],
+    paraZh: [''],
+  });
+  const sections = [
+    mk('地球与生命', ['The [[atmosphere:atmosphere]] protects life.', 'We need [[oxygen:oxygen]] to live.',
+      'The [[atmosphere:atmosphere]] keeps us warm.', 'Plants give us [[oxygen:oxygen]].']),
+    mk('校园与文化', ['A [[library:library]] is quiet.', 'The [[library:library]] opens late.']),
+  ];
+  const vocab = { atmosphere: { m: 'n. 大气' }, oxygen: { m: 'n. 氧气' }, library: { m: 'n. 图书馆' } };
+  return { 'sections.json': JSON.stringify(sections), 'vocab.json': JSON.stringify(vocab), 'chapters.json': '[]' };
+})();
+
+async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
+  for (const [name, body] of Object.entries(payloads)) {
+    await page.route(`**/shadow/data/${name}*`, (r) =>
+      r.fulfill({ status: 200, contentType: 'application/json', body }));
+  }
+}
+
+/* 把朗读引擎换成录音笔：__cbs 记交给引擎的回调，__finish() 手动兑现「这句播完了」。
+   headless 里 speechSynthesis 不发声（和 task.spec.ts 同一套 stub）。 */
+async function installSpeakStub(page: import('@playwright/test').Page) {
+  await page.evaluate(() => {
+    const w = window as unknown as { speak: (t: string, cb?: () => void) => void; __cbs: (() => void)[] };
+    w.__cbs = [];
+    w.speak = function (t: string, cb?: () => void) { if (cb) w.__cbs.push(cb); };
+  });
+}
+const finishSpeak = (page: import('@playwright/test').Page) =>
+  page.evaluate(() => { const w = window as unknown as { __cbs: (() => void)[] }; const cb = w.__cbs.shift(); if (cb) cb(); });
+
+async function gotoListen(page: import('@playwright/test').Page) {
+  await page.goto(`${rootUrl}/app/index.html#/listen`);
+  await waitShadowReady(page);
+  await page.waitForFunction(() => {
+    const w = window as unknown as { APP3?: { renderListen?: unknown } };
+    const v = document.getElementById('appView');
+    return !!(w.APP3 && typeof w.APP3.renderListen === 'function' && v && v.querySelector('.listen-page'));
+  }, undefined, { timeout: 20000 });
+}
+
+test.describe('3.0 随身听（M4，PRD §7）', () => {
+  test('播放卡片默认态：篇名/卷名/位置 + ◄ ▶⏸ ► + 位置条；且能起播', async ({ page }) => {
+    await stubData(page, TWO);
+    await gotoListen(page);
+
+    // 默认篇 = 最近在学的那篇（无历史 → 第 1 篇）
+    await expect(page.locator('.listen-page > h1')).toHaveText('随身听');
+    await expect(page.locator('.ls-art')).toContainText('地球与生命');
+    await expect(page.locator('.ls-vol')).toContainText('第 1 卷');
+    await expect(page.locator('.ls-info')).toContainText('第 1 / 4 句');
+    await expect(page.locator('.ls-info')).toContainText('还剩 3 句');
+    for (const sel of ['.ls-prev', '.ls-play', '.ls-next', '.ls-expand']) {
+      await expect(page.locator(sel)).toBeVisible();
+    }
+    await expect(page.locator('.ls-seek')).toHaveAttribute('max', '4');
+
+    // 起播：点 ▶ → playing 变 true（同一套播放链）
+    await installSpeakStub(page);
+    await page.locator('.ls-play').click();
+    await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(true);
+    await expect(page.locator('.ls-play')).toHaveAttribute('aria-label', '暂停');
+  });
+});

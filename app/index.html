@@ -1991,6 +1991,30 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .qz-opt.right { background: var(--task-bg); border-color: var(--task-new); color: var(--task-new); }
   body.dark .qz-opt.wrong { background: rgba(240,160,140,.12); border-color: #f0a08c; color: #f0a08c; }
   body.dark .qz-note { background: rgba(52,211,153,.07); border-color: rgba(52,211,153,.16); }
+  /* ============ 3.0 随身听（M4，PRD §7） ============ */
+  body.listen-page { background-color: #faf8f4; }
+  .listen-page { max-width: 560px; margin: 0 auto; }
+  .listen-page > h1 { font-size: 22px; font-weight: 800; color: var(--text); margin: 2px 0 14px; }
+  .ls-card { border: 1px solid var(--border); border-radius: 22px; background: var(--card);
+    box-shadow: 0 12px 40px rgba(11,84,64,.10); padding: 18px; }
+  .ls-cover { display: flex; flex-direction: column; gap: 6px; width: 100%; min-height: 130px;
+    text-align: left; padding: 18px 16px; border: 1px solid var(--border); border-radius: 16px;
+    background: var(--accent-soft); color: inherit; font: inherit; cursor: pointer; }
+  .ls-art { font-size: 17px; font-weight: 800; color: var(--accent-text); }
+  .ls-vol { font-size: 11.5px; color: var(--muted); }
+  .ls-now { font-family: Georgia, 'Songti SC', serif; font-size: 14.5px; line-height: 1.7; color: var(--text); }
+  .ls-controls { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 16px 0 10px; }
+  .ls-prev, .ls-next { min-width: 44px; min-height: 44px; border: 1px solid var(--border); border-radius: 999px;
+    background: var(--card); color: var(--text); font: inherit; font-size: 15px; cursor: pointer; }
+  .ls-play { min-width: 64px; min-height: 48px; border: none; border-radius: 999px; background: var(--grad);
+    color: var(--cta-ink); font: inherit; font-size: 16px; cursor: pointer; box-shadow: var(--grad-shadow); }
+  .ls-seek { width: 100%; min-height: 44px; margin: 0; accent-color: var(--accent); }
+  .ls-info { margin: 2px 0 12px; font-size: 12.5px; color: var(--muted); text-align: center; }
+  .ls-tools { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .ls-tools button { min-height: 44px; padding: 0 14px; border: 1px solid var(--border); border-radius: 999px;
+    background: var(--card); color: var(--text); font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+  .ls-expand { display: block; width: 100%; min-height: 44px; margin-top: 14px; border: 1px dashed var(--border);
+    border-radius: 14px; background: var(--card); color: var(--accent-text); font: inherit; font-weight: 700; cursor: pointer; }
     </style>
 
     <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
@@ -4014,6 +4038,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     /* 任务模式 ① 那颗键的文案要跟着 playing 走（放这一句 ↔ 下一句），而 playing 的每次变化都会路过这里。
        只挂一个轻量函数：它不在①态/不是任务模式时立刻返回。 */
     try { if (typeof TASK !== 'undefined' && TASK.refreshNext) TASK.refreshNext(); } catch (e) {}
+    /* 随身听卡片：播放状态变化就地刷新（只改文本/属性，不重建 DOM）。 */
+    try { if (window.APP3 && window.APP3.updateListenCard) window.APP3.updateListenCard(); } catch (e) {}
     }
     let launchedUpTo = -1; // 本轮已发射到的句子（去重：续播与预取不重复发射）
     function syncSeek(i) {
@@ -5324,6 +5350,72 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         cur.pass2[a] = true;
         saveArticleStats();
       }
+
+      /* ---- 随身听（M4，PRD §7）----
+         复用同一套播放链（speak/launch/playFrom/audiobar），这里只维护「随身听上下文」：
+         当前篇、卡片/展开态、以及 §7.6 的独立收听账（账住 LS_ARTICLE.listen）。
+         §7.6：收听**不碰精读** —— 不推 contact（不写 state.sents / repsByArticle），只记收听账；
+         否则口袋连播会把 §9.4 的 everRead（→ 通读完成度 ×40%）刷穿。 */
+      let _listenCtx = false;     // 是否在随身听上下文（卡片或展开）
+      let _listenArticle = null;  // 当前随身听篇
+      let _listenExpanded = false;
+      let _listenTick = 0;        // 上一笔记时（ms）
+      const LISTEN_MAX_MS = 10 * 60 * 1000;  // 单笔时长上限，防后台挂机刷时长
+
+      function listenState() {
+        return {
+          a: _listenArticle, idx: idx, total: sents.length, playing: playing,
+          loop: loopMode ? loopCount : 0, rate: rate, ab: abMode, expanded: _listenExpanded,
+          text: idx >= 0 ? plainEN(sentRaw(idx)) : (sents.length ? plainEN(sentRaw(0)) : ''),
+        };
+      }
+      function listenOpen(a) {
+        _listenCtx = true;
+        document.body.classList.add('listen-page');
+        if (a == null) a = (_listenArticle != null) ? _listenArticle : 0;
+        if (_listenArticle !== a || currentChapter !== a) {
+          _listenArticle = a; currentArticle = a; currentChapter = a;
+          chapterSentStart = computeChapterStart(a);
+          idx = -1; _paintIdx = -2;
+          render();
+        }
+        _listenTick = _listenTick || Date.now();
+        paint();
+      }
+      function listenClose() {
+        if (!_listenCtx) return;
+        _listenCtx = false; _listenExpanded = false;
+        document.body.classList.remove('listen-page', 'listen-mode');
+        if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
+        listenFlush();
+        currentArticle = null; _cachedPlan = null;
+        try { paint(); } catch (e) {}
+      }
+      function listenToggle() { if (playing) togglePlay(); else playFrom(idx >= 0 ? idx : 0); }
+      function listenStep(d) {
+        const n = SECTIONS.length;
+        const a = ((_listenArticle + d) % n + n) % n;
+        _listenArticle = a; currentArticle = a; currentChapter = a;
+        chapterSentStart = computeChapterStart(a);
+        idx = -1; _paintIdx = -2; render();
+        _listenTick = Date.now();
+        if (playing) playFrom(0); else paint();
+      }
+      function listenSeek(local) { playFrom(Math.max(0, Math.min(sents.length - 1, local))); }
+      /* 卡片四个附加按钮：接既有播放器，不复制一套。AB 需要正文可见 → 先展开。 */
+      function listenCycleLoop() {
+        const seq = [0, 2, 3, 5];
+        setLoopCount(seq[(seq.indexOf(loopMode ? loopCount : 0) + 1) % seq.length]);
+        try { paint(); } catch (e) {}
+      }
+      function listenCycleRate() {
+        const seq = [0.75, 1, 1.25, 1.5];
+        setRate(seq[(seq.indexOf(rate) + 1) % seq.length]);
+        try { paint(); } catch (e) {}
+      }
+      function listenMark() { try { addMark(); } catch (e) {} }
+      function listenAB() { if (!_listenExpanded && typeof listenExpand === 'function') listenExpand(); try { toggleAB(); } catch (e) {} }
+      function listenFlush() { /* Task 3 落账；Task 1 先留空壳，避免 Task 1 引用未定义 */ }
 
       /* ============ v2：单一事件根（真值只有一份） ============
          老的 prog.sentences 要撑到任务流程接上为止（计划 Task 7，两步制见 2026-09-22 规格），所以现在是
@@ -7791,6 +7883,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       // ---- 公开 API ----
       return {
         init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode, openArticle, openArticleQuiz, playSentence,
+        listenOpen, listenClose, listenToggle, listenStep, listenSeek,
+        listenCycleLoop, listenCycleRate, listenMark, listenAB,
+        listenState, get listenArticle() { return _listenArticle; },
         again, prev, next, pauseNew, resetPlan, onSentenceComplete,
         taskSentenceFinished,
         exportBackup, importBackup,

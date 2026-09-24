@@ -1,12 +1,8 @@
-/* 3.0 外壳路由。#/home（六张卡片）/ #/stats（学习数据页）/ #/words（单词本）都是真页；
-   #/listen 给「建设中」占位（M4 交付）。
+/* 3.0 外壳路由。#/home（六张卡片）/ #/stats（学习数据页）/ #/words（单词本）/ #/listen（随身听）
+   四个一级页都是真页（M4 起随身听落地）。
    「我的」不再是路由（用户 2026-09-24）：改成左下角常驻用户卡 + 向上弹出的浮窗，见文件末尾。 */
 (function () {
   const ROUTES = ['home', 'stats', 'words', 'listen'];
-  const TODO_META = {
-    // M2 起「学习数据」已是真页（renderStats），M3 起「单词本」也是真页（renderWords）；占位只剩「随身听」。
-    listen: ['随身听', 'ri-headphone-line'],
-  };
   let cur = 'home';
   let _hlArticle = null;   // 数据页点文章小卡 → 回首页要高亮的那一篇（§5.4）
   /* ---- 3.0 单词本（M3，PRD §6）---- */
@@ -21,6 +17,8 @@
     const raw = (location.hash || '#/home').replace(/^#\//, '').split('/');
     const h = raw[0];
     cur = ROUTES.includes(h) ? h : 'home';
+    // 离开随身听 → 收掉随身听上下文（停播 + 归还正文），别把展开态/播放状态带出去（M4 §7.3）。
+    if (cur !== 'listen') { try { if (typeof TASK !== 'undefined' && TASK.listenClose) TASK.listenClose(); } catch (e) {} }
     if (cur !== 'home') _hlArticle = null;
     document.querySelectorAll('.sidenav .nav-item').forEach(b =>
       b.classList.toggle('on', b.dataset.route === cur));
@@ -31,10 +29,10 @@
     if (cur === 'stats') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
     if (cur === 'words' && window.APP3 && window.APP3.renderWords) return window.APP3.renderWords(view, raw[1] || 'all');
     if (cur === 'words') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
-    // W5-1：占位屏给像样的版式（居中、灰字、标题层级 + 图标），不再是裸 <h3>+<p>。
-    const meta = TODO_META[cur];
-    view.innerHTML = `<div class="app-todo"><div class="at-ico" aria-hidden="true"><i class="${meta[1]}"></i></div>` +
-      `<h3>${meta[0]}</h3><p>这一屏在 3.0 的后续里程碑里交付 —— 先挑一篇文章，从头学到收工。</p></div>`;
+    if (cur === 'listen' && window.APP3 && window.APP3.renderListen) return window.APP3.renderListen(view);
+    if (cur === 'listen') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    // cur 只可能是 ROUTES 成员，这里只作兜底：回首页。
+    return window.APP3.renderHome(view);
   }
   document.addEventListener('click', (e) => {
     // 左下角用户卡：点它开/关「我的」浮窗（不是切页）。浮窗自己的按钮在 wireMePop 里代理。
@@ -51,6 +49,23 @@
     if (wrow) { toggleWordRow(wrow); return; }
     const wm = e.target.closest('.wb-more');
     if (wm) { _wordsShown += W_BATCH; window.APP3.route(); return; }
+    // 随身听卡片（M4，每次重渲的节点，走事件代理）
+    const lsPlay = e.target.closest('.ls-play');
+    if (lsPlay) { TASK.listenToggle(); return; }
+    const lsPrev = e.target.closest('.ls-prev');
+    if (lsPrev) { TASK.listenStep(-1); return; }
+    const lsNext = e.target.closest('.ls-next');
+    if (lsNext) { TASK.listenStep(1); return; }
+    const lsExp = e.target.closest('.ls-expand, .ls-cover');
+    if (lsExp) { TASK.listenExpand(); return; }
+    const lsLoop = e.target.closest('.ls-loop');
+    if (lsLoop) { TASK.listenCycleLoop(); return; }
+    const lsRate = e.target.closest('.ls-rate');
+    if (lsRate) { TASK.listenCycleRate(); return; }
+    const lsMark = e.target.closest('.ls-mark');
+    if (lsMark) { TASK.listenMark(); return; }
+    const lsAB = e.target.closest('.ls-ab');
+    if (lsAB) { TASK.listenAB(); return; }
     const b = e.target.closest('.nav-item');
     if (b) { location.hash = '#/' + b.dataset.route; return; }
     // 卡片是 renderHome 每次重渲的，所以走事件代理而不是逐张绑。
@@ -60,6 +75,11 @@
     if (quiz && quiz.dataset.a != null) { openQuiz(Number(quiz.dataset.a)); return; }
     const card = e.target.closest('.art-card');
     if (card && card.dataset.a != null) openArticle(Number(card.dataset.a));
+  });
+  // 随身听位置条（M4 §7.2）：<input type=range> 拖完才 seek（input 事件，不走 click 代理）。
+  document.addEventListener('input', (e) => {
+    const sk = e.target && e.target.closest ? e.target.closest('.ls-seek') : null;
+    if (sk && typeof TASK !== 'undefined' && TASK.listenSeek) TASK.listenSeek(Number(sk.value) - 1);
   });
   // W5-4：卡片不再是 role=button 的 div —— 打开正文交给内部的真按钮 .a-open，
   // Enter/Space 由浏览器原生派发 click，这里不再需要自己补键盘激活。
@@ -118,6 +138,10 @@
     else stage = 'done';
     if (stage === 'done' && progress >= 80) stage = 'pro';
     let lastAt = 0; scope.forEach((i) => { const s = st.sents[i]; if (s && s.lastReadAt > lastAt) lastAt = s.lastReadAt; });
+    /* §7.5：首页卡片「最近学习」也读随身听的最近收听（max(精读 lastReadAt, 收听 last)）。
+       听不改 everRead/progress（§7.6），只让「最近」真实反映你刚听过。 */
+    const llast = (typeof TASK !== 'undefined' && TASK.listenLast) ? TASK.listenLast(a) : 0;
+    if (llast > lastAt) lastAt = llast;
     /* W8：`ever` 读的是 `lastReadAt > 0`（这辈子碰过这句，不是"今天读没读"），与 §9.4 的
        `everRead` 定义和任务条 ① 的分子同源；§9.3/§9.4 把通读完成度定义在"有没有碰过"上，
        改成"今天读过"会让跨天后卡片退回未读，与「已学完」判据打架。保留 lifetime。 */
@@ -360,6 +384,90 @@
     TASK.playSentence(a, gi);
   }
   window.APP3 = Object.assign(window.APP3, { playSentence });
+
+  /* ---- 3.0 随身听（M4，PRD §7）---- */
+  // 该篇「最近收听」时间戳（账住 TASK 的 LS_ARTICLE.listen；Task 1 尚未实现时返回 0）。
+  function listenLast(a) {
+    return (typeof TASK !== 'undefined' && TASK.listenLast) ? TASK.listenLast(a) : 0;
+  }
+  // 默认播哪篇：最近在学的那篇（= 首页「最近学习」最大的那篇）；全没动过 → 第 1 篇。
+  function listenDefaultArticle() {
+    let best = 0, bestAt = -1;
+    for (let a = 0; a < SECTIONS.length; a++) {
+      const at = articleStat(a).lastAt || 0;   // articleStat 已含收听 last（§7.5）
+      if (at > bestAt) { bestAt = at; best = a; }
+    }
+    return best;
+  }
+  // 篇内本地下标 → 段号 → 「卷」号（复用单词本的 volNo，同一判据）。
+  function listenVolNo(a, idxLocal) {
+    const paras = (SECTIONS[a] && SECTIONS[a].paragraphs) || [];
+    let n = 0, pi = 0;
+    for (let p = 0; p < paras.length; p++) {
+      if (idxLocal < n + paras[p].length) { pi = p; break; }
+      n += paras[p].length;
+    }
+    return (typeof volNo === 'function') ? volNo(a, pi) : 1;
+  }
+  function renderListen(view) {
+    if (typeof dataReady === 'undefined' || !dataReady) { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    const ctx = (typeof TASK !== 'undefined' && TASK.listenState) ? TASK.listenState() : null;
+    const a = (ctx && ctx.a != null) ? ctx.a : listenDefaultArticle();
+    if (typeof TASK !== 'undefined' && TASK.listenOpen) TASK.listenOpen(a);
+    view.innerHTML = `<div class="listen-page">
+      <h1>随身听</h1>
+      <div class="ls-card">
+        <button class="ls-cover" type="button" aria-label="展开《${esc(SECTIONS[a].title)}》全文阅读">
+          <span class="ls-art">《${esc(SECTIONS[a].title)}》</span>
+          <span class="ls-vol">第 ${listenVolNo(a, 0)} 卷</span>
+          <span class="ls-now">—</span>
+        </button>
+        <div class="ls-controls" role="group" aria-label="随身听播放控制">
+          <button class="ls-prev" type="button" aria-label="上一篇">◄</button>
+          <button class="ls-play" type="button" aria-label="播放">▶</button>
+          <button class="ls-next" type="button" aria-label="下一篇">►</button>
+        </div>
+        <input class="ls-seek" type="range" min="1" max="1" value="1" step="1" aria-label="句级位置条">
+        <p class="ls-info">—</p>
+        <div class="ls-tools" role="group" aria-label="随身听附加控制">
+          <button class="ls-loop" type="button" aria-label="单句循环遍数">循环关</button>
+          <button class="ls-ab" type="button" aria-label="AB 复读">AB</button>
+          <button class="ls-rate" type="button" aria-label="朗读倍速">1x</button>
+          <button class="ls-mark" type="button" aria-label="记下当前位置">书签</button>
+        </div>
+        <button class="ls-expand" type="button">点击展开全文阅读</button>
+      </div>
+    </div>`;
+    updateListenCard();
+  }
+  // 就地刷新卡片（paint() 每次状态变化都调）：只改文本/属性，不重建 DOM，别抢焦点。
+  function updateListenCard() {
+    if (cur !== 'listen') return;
+    const card = document.querySelector('.ls-card');
+    if (!card) return;
+    const ctx = (typeof TASK !== 'undefined' && TASK.listenState) ? TASK.listenState() : null;
+    if (!ctx) return;
+    const a = ctx.a != null ? ctx.a : 0;
+    const total = Math.max(1, ctx.total || 0);
+    const at = ctx.idx >= 0 ? ctx.idx : 0;
+    const now = card.querySelector('.ls-now');
+    if (now) now.textContent = ctx.idx >= 0 ? ctx.text : ('开始听《' + SECTIONS[a].title + '》');
+    const play = card.querySelector('.ls-play');
+    if (play) { play.textContent = ctx.playing ? '⏸' : '▶'; play.setAttribute('aria-label', ctx.playing ? '暂停' : '播放'); }
+    const seek = card.querySelector('.ls-seek');
+    if (seek) { seek.max = String(total); seek.value = String(at + 1); }
+    const info = card.querySelector('.ls-info');
+    if (info) info.textContent = `第 ${at + 1} / ${total} 句 · 还剩 ${Math.max(0, total - at - 1)} 句`;
+    const loop = card.querySelector('.ls-loop');
+    if (loop) loop.textContent = ctx.loop ? `循环 ${ctx.loop} 遍` : '循环关';
+    const rate = card.querySelector('.ls-rate');
+    if (rate) rate.textContent = `${ctx.rate}x`;
+    const art = card.querySelector('.ls-art');
+    if (art) art.textContent = `《${SECTIONS[a].title}》`;
+    const vol = card.querySelector('.ls-vol');
+    if (vol) vol.textContent = `第 ${listenVolNo(a, at)} 卷`;
+  }
+  window.APP3 = Object.assign(window.APP3, { renderListen, updateListenCard });
 
   /* ---- 3.0 单词本（M3，PRD §6）----
      宇宙 = 文章标记里出现过的全部目标词（真实数据 3245）。索引一次建好、按 SECTIONS 缓存。 */
