@@ -96,8 +96,8 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
     for (const sel of ['#btnAccent', '#voiceSel']) {
       await expect(page.locator(sel), `${sel} 必须在文章内可见`).toBeVisible();
     }
-    // 修正 1：夜间开关只在 #shellTop（一级页面），文章内不再有它
-    expect(await page.locator('#btnDark').isVisible(), '文章内不该有夜间开关').toBe(false);
+    // 主题（含夜间）已收进「我的」浮窗（用户 2026-09-24）：文章内、外壳顶栏都没有 #btnDark
+    expect(await page.locator('#btnDark').count(), '夜间按钮已从顶栏去掉').toBe(0);
 
     // 全句译文拨杆：点一下正文译文真的藏起来，aria-checked 跟着翻
     const zh = page.locator('#art .sent-zh').first();
@@ -121,29 +121,35 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
     await expect(accent).toContainText('美式');
   });
 
-  test('夜间开关在一级页面：点一下 body.dark 切换且新头部跟着变；进文章后收走', async ({ page }) => {
+  test('主题在「我的」浮窗里：点用户卡弹浮窗 → 切主题 body.dark 真的变；顶栏不再有它', async ({ page }) => {
     await stubData(page, SIXQ);
     await page.goto(`${rootUrl}/app/index.html#/home`);
-    await expect(page.locator('#shellTop')).toBeVisible();
-    const darkBtn = page.locator('#btnDark');
-    await expect(darkBtn, '夜间开关必须在一级页面').toBeVisible();
+    // 一级页面顶栏那条（原 #shellTop）与 #btnDark 已去掉：主题只活在「我的」浮窗里
+    expect(await page.locator('#shellTop').count(), '一级页面顶栏已去掉').toBe(0);
+    expect(await page.locator('#btnDark').count(), '顶栏的夜间按钮已去掉').toBe(0);
 
-    const topBgLight = await page.locator('#shellTop').evaluate((el) => getComputedStyle(el).backgroundColor);
-    await darkBtn.click();
-    await expect(page.locator('body')).toHaveClass(/dark/);
-    const topBgDark = await page.locator('#shellTop').evaluate((el) => getComputedStyle(el).backgroundColor);
-    expect(topBgDark, '一级页面顶栏在深色下必须换成暖黑 token').not.toBe(topBgLight);
-    await darkBtn.click();
-    await expect(page.locator('body')).not.toHaveClass(/dark/);
+    // 点左下角用户卡 → 向上弹「我的」浮窗，里面有主题拨杆
+    await page.locator('#meCard').click();
+    const pop = page.locator('#mePop');
+    await expect(pop).toBeVisible();
+    const theme = pop.locator('[data-me-theme]');
+    await expect(theme, '浮窗里必须有主题开关').toBeVisible();
 
-    // 进文章 → 夜间开关随 #shellTop 一起收走（修正 1）
+    const wasDark = await page.evaluate(() => document.body.classList.contains('dark'));
+    await theme.click();
+    expect(await page.evaluate(() => document.body.classList.contains('dark')), '切主题后 body.dark 必须翻转').toBe(!wasDark);
+    await page.locator('#mePop [data-me-theme]').click();
+    expect(await page.evaluate(() => document.body.classList.contains('dark')), '再切一次翻回来').toBe(wasDark);
+
+    // 进文章 → 用户卡随 #appShell 一起收走，文章内没有主题开关
     await waitAppReady(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await page.reload();
     await waitAppReady(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('body')).toHaveClass(/task-mode/);
-    expect(await page.locator('#btnDark').isVisible(), '进文章后不该再有夜间开关').toBe(false);
+    expect(await page.locator('#meCard').isVisible(), '文章内不该有用户卡').toBe(false);
+    expect(await page.locator('#btnDark').count()).toBe(0);
   });
 
   // 用户 2026-09-24 修正：头部要和文章等宽（对齐 .layout 的内容框，不是主站的 860px）。
@@ -188,7 +194,8 @@ test.describe('3.0 W2 深色全覆盖', () => {
         artCard: bg('.art-card'),
         aStage: bg('.art-card .a-stage'),
         banner: bg('.home-banner'),
-        shellTop: bg('.shell-top'),
+        meCard: bg('.me-card'),
+        mePop: bg('.me-pop'),
         readerHead: bg('.reader-head'),
         trMsw: bg('.tr-msw'),
       };
@@ -200,7 +207,8 @@ test.describe('3.0 W2 深色全覆盖', () => {
     const dark = await snapshot();
 
     // 新头部（旧代码里这些节点根本不存在 / 或深浅一致）—— 这几条是「旧代码必红」的锁
-    expect(dark.shellTop, '一级页面顶栏底色必须随深色换').not.toBe(light.shellTop);
+    expect(dark.meCard, '用户卡底色必须随深色换').not.toBe(light.meCard);
+    expect(dark.mePop, '「我的」浮窗底色必须随深色换').not.toBe(light.mePop);
     expect(dark.readerHead, '文章内玻璃胶囊底色必须随深色换').not.toBe(light.readerHead);
     expect(dark.trMsw, '译文拨杆底色必须随深色换').not.toBe(light.trMsw);
     expect(dark.sidenav, '侧栏底色必须随深色换，不能靠透明蹭 body').not.toBe(light.sidenav);

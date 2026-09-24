@@ -1576,20 +1576,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      任务模式已有自己的顶栏（.task-top，见下），整块 #appShell 仍要收掉 ——
      不然后面 min-height:100vh 的首页会把正文压到首屏之外（T2 遗留的现场）。 */
   body.task-mode #appShell { display: none; }
-  /* ============ 3.0 头部（W1 重做）：照抄主站（情景训练 index.html）的组件与尺寸 ============
-     一级页面（首页/数据/词本/随身听/我的）= 主站 #topbar（半透明 + blur + 发丝描边 + 内容 860 居中）；
+  /* ============ 3.0 头部（W1 重做 / 2026-09-24 再调）============
      文章内 = 主站 .reader-head（fixed 玻璃胶囊，滚动收缩）+ .r-badges（iOS 拨杆等）。
-     夜间开关只在 #shellTop（一级页面），进文章后不再有它（用户 2026-09-24 修正 1）。 */
-  .app-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-  /* —— 一级页面顶栏：主站 #topbar 原样尺寸 —— */
-  .shell-top { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.42);
-    -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%);
-    border-bottom: 1px solid rgba(231,238,233,.7); padding: 10px 24px;
-    display: flex; justify-content: center; }
-  /* 一级页面顶栏与 #appView 的内容框对齐（#appView 左右各 24px 内边距），不另设 max-width。 */
-  .topbar-in { width: 100%; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-  .topbar-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
-  /* 主站顶栏英音/美音、夜间胶囊 */
+     一级页面顶栏（原 #shellTop / .app-col）在深色开关挪进「我的」浮窗后已无内容，整条去掉；
+     一级页面不再有顶栏，深色开关只在 #mePop 里（用户 2026-09-24）。 */
+  /* 主站英音/美音、夜间胶囊（文章内 #btnAccent 仍用） */
   .accent-btn { flex: none; border: 1px solid var(--iel-accent-line); background: #fff; color: var(--iel-accent-deep);
     border-radius: 999px; padding: 6px 13px; font-size: 12.5px; font-weight: 600; white-space: nowrap; cursor: pointer;
     position: relative; transition: background var(--iel-t-fast), border-color var(--iel-t-fast); }
@@ -1678,6 +1669,56 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     background: transparent; font-size: 14px; color: var(--text); cursor: pointer; }
   .nav-item i { font-size: 19px; line-height: 1; flex: none; width: 19px; text-align: center; }
   .nav-item.on { background: var(--accent-soft, rgba(16,180,135,.07)); color: var(--accent-text); font-weight: 600; }
+  /* ---- 左下角常驻用户卡（桌面侧栏底部）/ 第 5 个 Tab（手机）---- */
+  .me-card { display: flex; align-items: center; gap: 10px; width: 100%; margin-top: auto;
+    padding: 8px; border: 1px solid var(--border); border-radius: 12px; background: var(--card);
+    color: var(--text); cursor: pointer; text-align: left; }
+  .me-card:hover { border-color: var(--accent-line); background: var(--accent-soft); }
+  .me-avatar { flex: none; width: 34px; height: 34px; border-radius: 9px; background: var(--grad);
+    color: var(--cta-ink); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .me-meta { min-width: 0; display: flex; align-items: center; gap: 6px; }
+  .me-name { font-size: 13.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .me-tag { flex: none; font-size: 10px; font-weight: 700; line-height: 1.6; padding: 0 6px;
+    border-radius: 999px; background: var(--note-soft); color: var(--note); }
+  /* ---- 「我的」浮窗（点用户卡向上弹；主题/计划/账号/数据都在这里）---- */
+  .me-pop { position: fixed; z-index: 400; width: 300px; max-height: calc(100vh - 24px); overflow-y: auto;
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    box-shadow: var(--shadow-lg); padding: 14px; }
+  .me-pop[hidden] { display: none; }
+  .mp-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .mp-avatar { flex: none; width: 42px; height: 42px; border-radius: 12px; background: var(--grad);
+    color: var(--cta-ink); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .mp-id { min-width: 0; flex: 1; }
+  .mp-name { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mp-sub { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mp-badge { flex: none; font-size: 10.5px; font-weight: 700; line-height: 1.7; padding: 0 8px;
+    border-radius: 999px; background: var(--accent-soft); color: var(--accent-text); }
+  .mp-cta { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: var(--grad);
+    color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: var(--grad-shadow); }
+  .mp-cta:active { filter: brightness(.94); }
+  .mp-card { margin-top: 12px; padding: 10px 12px; border: 1px solid var(--accent-line); border-radius: 12px;
+    background: var(--accent-soft); }
+  .mp-nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; text-align: center; }
+  .mp-nums b { display: block; font-size: 18px; font-weight: 800; color: var(--accent-text); font-variant-numeric: tabular-nums; }
+  .mp-nums span { font-size: 10.5px; color: var(--muted); }
+  .mp-status { margin-top: 8px; font-size: 11.5px; color: var(--muted); text-align: center; }
+  .mp-list { margin-top: 12px; border-top: 1px solid var(--border); }
+  .mp-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 0;
+    border-bottom: 1px solid var(--border); }
+  .mp-row > .mp-label { font-size: 13px; font-weight: 600; color: var(--text); flex: none; }
+  .mp-row .ps-opts { justify-content: flex-end; flex-wrap: wrap; }
+  .mp-row .ps-opt { padding: 5px 10px; font-size: 12px; }
+  .mp-row .tr-msw { padding: 4px 8px 4px 4px; }
+  .mp-foot { margin-top: 12px; }
+  .mp-logout { width: 100%; min-height: 40px; border: 1px solid var(--border); border-radius: 999px;
+    background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; }
+  .mp-logout:hover { color: var(--coral-deep); border-color: var(--coral); }
+  .mp-login-form { display: flex; flex-direction: column; gap: 6px; }
+  .mp-login-form input { width: 100%; min-height: 38px; border: 1px solid var(--border); border-radius: 10px;
+    padding: 0 10px; font-size: 13px; background: #fff; color: var(--text); }
+  .mp-login-form .row { display: flex; gap: 6px; }
+  .mp-login-form .row button { flex: 1; min-height: 38px; border: 1px solid var(--accent-line); border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent-text); font-size: 13px; font-weight: 700; cursor: pointer; }
   #appView { flex: 1; min-width: 0; padding: 20px 24px 88px; }
   /* 平板档（PRD §10.2）：701–1023px 侧栏收窄到 180px */
   @media (min-width: 701px) and (max-width: 1023px) {
@@ -1695,6 +1736,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .nav-item { flex: 1; flex-direction: column; justify-content: center; gap: 2px; text-align: center;
       font-size: 11px; padding: 0 4px; }
     .nav-item i { font-size: 20px; width: auto; }
+    /* 用户卡在手机 = 第 5 个 Tab（头像 + 「我的」），点它弹浮窗；不塞进浮窗里点不到 */
+    .me-card { flex: 1; flex-direction: column; justify-content: center; gap: 2px; margin-top: 0;
+      padding: 0 4px; border: none; background: transparent; }
+    .me-card:hover { background: transparent; }
+    .me-avatar { width: 22px; height: 22px; border-radius: 6px; font-size: 15px; }
+    .me-meta { flex-direction: column; gap: 0; }
+    .me-name { font-size: 11px; font-weight: 500; }
+    .me-tag { display: none; }
     #appView { padding: 16px 16px 88px; }
     /* 文章内头部：主站手机档尺寸；窄屏按 .layout 的 16px 内边距对齐（100% − 32px） */
     .reader-head { top: 8px; gap: 4px; padding: 5px 10px 5px 5px; width: calc(100% - 32px); }
@@ -1703,8 +1752,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .tr-msw .knob::after { width: 11px; height: 11px; }
     .tr-msw.on .knob::after { left: 12px; }
     .task-top .r-badges { padding-top: 58px; width: calc(100% - 32px); }
-    /* 一级页面顶栏按 #appView 的 16px 内边距对齐 */
-    .shell-top { padding: 10px 16px; }
   }
   /* ============ 3.0 首页文章卡片（M1 Task 3） ============ */
   .art-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
@@ -1774,6 +1821,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .sn-name { color: var(--text); }
   body.dark .nav-item { color: var(--text); }
   body.dark .nav-item.on { background: var(--accent-soft); color: var(--accent-text); }
+  body.dark .me-card { background: var(--card); border-color: var(--border); }
+  body.dark .me-card:hover { background: var(--accent-soft); }
+  body.dark .me-pop { background: var(--card); border-color: var(--border); }
+  body.dark .mp-login-form input { background: var(--bg); border-color: var(--border); color: var(--text); }
   body.dark #appView { color: var(--text); }
   body.dark .art-card { background: var(--card); border-color: var(--border); }
   body.dark .art-card .a-bar { background: var(--hl); }
@@ -1787,7 +1838,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .art-card .a-quiz { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-text); }
   body.dark .home-banner { background: var(--accent-soft); border-color: var(--accent-line); }
   /* 新头部（W1 重做）：一级页面顶栏 + 文章内玻璃胶囊/拨杆，全部换暖黑 token */
-  body.dark .shell-top { background: rgba(28,26,23,.72); border-bottom-color: var(--border); }
   body.dark .accent-btn { background: var(--card); border-color: var(--border); color: var(--text); }
   body.dark .accent-btn:hover { background: rgba(16,180,135,.12); }
   body.dark .reader-head { background: rgba(30,28,25,.72); border-color: rgba(255,255,255,.08);
@@ -1862,19 +1912,18 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         <button class="nav-item" data-route="stats"><i class="ri-bar-chart-2-line" aria-hidden="true"></i><span>学习数据</span></button>
         <button class="nav-item" data-route="words"><i class="ri-book-2-line" aria-hidden="true"></i><span>单词本</span></button>
         <button class="nav-item" data-route="listen"><i class="ri-headphone-line" aria-hidden="true"></i><span>随身听</span></button>
-        <button class="nav-item" data-route="me"><i class="ri-user-3-line" aria-hidden="true"></i><span>我的</span></button>
+        <!-- 左下角常驻用户卡（桌面）/ 第 5 个 Tab（手机）。点它向上弹「我的」浮窗，不再是切页。 -->
+        <button class="me-card" id="meCard" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="mePop">
+          <span class="me-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>
+          <span class="me-meta"><span class="me-name" id="meName">未登录</span><span class="me-tag">免费</span></span>
+        </button>
       </nav>
-      <div class="app-col">
-        <nav class="shell-top" id="shellTop" aria-label="工具栏">
-          <div class="topbar-in">
-            <div class="topbar-actions">
-              <button class="accent-btn" id="btnDark" onclick="toggleDark()" title="切换深色/浅色模式" aria-label="切换深色模式">🌙</button>
-            </div>
-          </div>
-        </nav>
-        <main id="appView"></main>
-      </div>
+      <main id="appView"></main>
     </div>
+
+    <!-- 「我的」浮窗（用户 2026-09-24）：点左下角用户卡向上弹出；主题（深浅色）/计划/账号/数据都在这里。
+         深色切换从一级页面顶栏挪进来后，那条顶栏已无内容，一并去掉（原 #shellTop / .app-col 已删）。 -->
+    <div class="me-pop" id="mePop" role="dialog" aria-label="我的" hidden></div>
 
     <header class="topbar" role="banner">
       <h1><i class="ri-book-open-line" aria-hidden="true"></i> 雅思词汇 · 影子跟读</h1>
@@ -3223,14 +3272,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (abMode === 3) abCancel(true);
     playFrom(s + n - 1);
     }
-    async function cloudLogin() {
+    async function cloudLogin(src) {
     if (cloudLogin._busy) return; cloudLogin._busy = true;
     try {
     if (!CLOUD.configured()) { alert('云端语音未配置：管理员尚未设置 Supabase。'); return; }
     const c = CLOUD.client();
     if (!c) { alert('网络不可用，登录组件加载失败，请刷新重试。'); return; }
-    const em = document.getElementById('cloudEmail').value.trim();
-    const pw = document.getElementById('cloudPass').value;
+    const em = document.getElementById((src && src.email) || 'cloudEmail').value.trim();
+    const pw = document.getElementById((src && src.pass) || 'cloudPass').value;
     if (!em || !pw) { alert('请填写邮箱和密码'); return; }
     const { error } = await c.auth.signInWithPassword({ email: em, password: pw });
     if (error) { alert('登录失败：' + error.message); return; }
@@ -3241,14 +3290,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     await CLOUD.checkStatus();
     } finally { cloudLogin._busy = false; }
     }
-    async function cloudSignup() {
+    async function cloudSignup(src) {
     if (cloudSignup._busy) return; cloudSignup._busy = true;
     try {
     if (!CLOUD.configured()) { alert('云端语音未配置：管理员尚未设置 Supabase。'); return; }
     const c = CLOUD.client();
     if (!c) { alert('网络不可用，登录组件加载失败，请刷新重试。'); return; }
-    const em = document.getElementById('cloudEmail').value.trim();
-    const pw = document.getElementById('cloudPass').value;
+    const em = document.getElementById((src && src.email) || 'cloudEmail').value.trim();
+    const pw = document.getElementById((src && src.pass) || 'cloudPass').value;
     if (!em || !pw) { alert('请填写邮箱和密码'); return; }
     const { error } = await c.auth.signUp({ email: em, password: pw });
     if (error) { alert('注册失败：' + error.message); return; }
@@ -7331,8 +7380,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         setTimeout(() => URL.revokeObjectURL(a.href), 4000);
         showAbToast(`已导出 ${Object.keys(data).length} 项本地数据，请妥善保存文件`);
       }
-      function importBackup() {
-        const f = document.getElementById('importFile');
+      function importBackup(id) {
+        const f = document.getElementById(id || 'importFile');
         if (!f) return;
         f.onchange = async () => {
           const file = f.files && f.files[0];
@@ -7510,6 +7559,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         get active() { return taskMode; },
         get hasPlan() { return !!plan; },
         get article() { return currentArticle; },   // W1：文章内头部要按当前篇填标题/箭头
+        // 「我的」浮窗（2026-09-24）读计划旋钮的当前值；没计划时返回 null。
+        planConfig: () => (ROOT2 && ROOT2.plan) ? {
+          minutes: ROOT2.plan.todayMinutes, boundary: ROOT2.plan.boundaryHour,
+          pausedNew: !!ROOT2.plan.pausedNew, startDate: ROOT2.plan.startDate,
+        } : null,
         get queue() { return todayQueue; },
         get progress() { return prog; },
         recordRep, buildQueue, updateMarkers, updateBtn,

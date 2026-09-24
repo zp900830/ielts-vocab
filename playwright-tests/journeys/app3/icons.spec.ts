@@ -17,7 +17,7 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
   }
 }
 
-const NAV_ICONS = ['ri-home-5-line', 'ri-bar-chart-2-line', 'ri-book-2-line', 'ri-headphone-line', 'ri-user-3-line'];
+const NAV_ICONS = ['ri-home-5-line', 'ri-bar-chart-2-line', 'ri-book-2-line', 'ri-headphone-line'];
 
 test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
   test('源码级：三站图标样式表都指向 4.5.0，不再引用 4.2.0', () => {
@@ -30,7 +30,7 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
     }
   });
 
-  test('/app/ 导航五颗图标在 4.5.0 字体里真的渲得出', async ({ page }) => {
+  test('/app/ 导航四颗 + 用户卡头像在 4.5.0 字体里真的渲得出', async ({ page }) => {
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/app/index.html#/home`);
 
@@ -38,16 +38,17 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
     const href = await page.locator('link[rel="stylesheet"][href*="remixicon"]').getAttribute('href');
     expect(href, '图标样式表版本').toContain('remixicon@4.5.0');
 
-    // 五个导航项各一颗图标，class 与 PRD §2.2 一致
+    // 四个导航项各一颗图标，class 与 PRD §2.2 一致；左下角用户卡有一颗默认头像图标
     const items = page.locator('.sidenav .nav-item');
-    await expect(items).toHaveCount(5);
+    await expect(items).toHaveCount(4);
     for (let i = 0; i < NAV_ICONS.length; i++) {
       await expect(items.nth(i).locator('i'), `第 ${i + 1} 个导航项的图标`).toHaveClass(new RegExp(`\\b${NAV_ICONS[i]}\\b`));
     }
+    await expect(page.locator('.sidenav .me-card .me-avatar i'), '用户卡默认头像').toHaveClass(/\bri-user-3-fill\b/);
 
     // 量字形：等 4.5.0 的 CSS 落地后，每个 ::before 必须真有 content（名字不存在 = none）
     await page.waitForFunction(() => {
-      const els = document.querySelectorAll('.sidenav .nav-item i');
+      const els = document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card i');
       if (els.length !== 5) return false;
       return Array.from(els).every((el) => {
         const c = getComputedStyle(el, '::before').content;
@@ -55,7 +56,7 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
       });
     }, null, { timeout: 15000 });
     const contents = await page.evaluate(() =>
-      Array.from(document.querySelectorAll('.sidenav .nav-item i')).map((el) => getComputedStyle(el, '::before').content));
+      Array.from(document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card i')).map((el) => getComputedStyle(el, '::before').content));
     for (const c of contents) expect(c, `::before content 全量：${JSON.stringify(contents)}`).not.toMatch(/^(none|normal)$/);
 
     // 字体文件本身加载成功（woff2 可达）

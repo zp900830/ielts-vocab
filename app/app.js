@@ -1,11 +1,11 @@
-/* 3.0 外壳路由。M1 只有 #/home 与文章任务模式有内容，其余四屏先给「建设中」占位。 */
+/* 3.0 外壳路由。#/home 与文章任务模式有内容；#/stats|#/words|#/listen 给「建设中」占位。
+   「我的」不再是路由（用户 2026-09-24）：改成左下角常驻用户卡 + 向上弹出的浮窗，见文件末尾。 */
 (function () {
-  const ROUTES = ['home', 'stats', 'words', 'listen', 'me'];
+  const ROUTES = ['home', 'stats', 'words', 'listen'];
   const TODO_META = {
     stats: ['学习数据', 'ri-bar-chart-2-line'],
     words: ['单词本', 'ri-book-2-line'],
     listen: ['随身听', 'ri-headphone-line'],
-    me: ['我的', 'ri-user-3-line'],
   };
   let cur = 'home';
   function route() {
@@ -14,7 +14,7 @@
     document.querySelectorAll('.sidenav .nav-item').forEach(b =>
       b.classList.toggle('on', b.dataset.route === cur));
     const view = document.getElementById('appView');
-    if (cur === 'home' && window.APP3 && window.APP3.renderHome) return window.APP3.renderHome(view);
+    if (cur === 'home' && window.APP3 && window.APP3.renderHome) { updateMeCard(); return window.APP3.renderHome(view); }
     if (cur === 'home') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
     // W5-1：占位屏给像样的版式（居中、灰字、标题层级 + 图标），不再是裸 <h3>+<p>。
     const meta = TODO_META[cur];
@@ -22,6 +22,9 @@
       `<h3>${meta[0]}</h3><p>这一屏在 3.0 的后续里程碑里交付 —— 先挑一篇文章，从头学到收工。</p></div>`;
   }
   document.addEventListener('click', (e) => {
+    // 左下角用户卡：点它开/关「我的」浮窗（不是切页）。浮窗自己的按钮在 wireMePop 里代理。
+    const me = e.target.closest('#meCard');
+    if (me) { toggleMePop(); return; }
     const b = e.target.closest('.nav-item');
     if (b) { location.hash = '#/' + b.dataset.route; return; }
     // 卡片是 renderHome 每次重渲的，所以走事件代理而不是逐张绑。
@@ -216,6 +219,152 @@
     currentBlank: () => TASK.currentBlank(),
     closeBlankPop: () => TASK.closeBlankPop(),
   });
+
+  /* ---- 左下角用户卡 + 「我的」浮窗（用户 2026-09-24）----
+     「我的」从一级导航拿出来：桌面侧栏底部常驻一张用户卡，点它向上弹浮窗；手机端这张卡
+     就是 TabBar 的第 5 格。浮窗内容按 PRD §8.1：账号 / 学习摘要 / 当前状态 / 数据管理 /
+     主题（深浅色）/ 计划设置。深色开关从一级页面顶栏挪到这里（顶栏随之去掉）。 */
+  function meAccount() {
+    const mail = (typeof CLOUD !== 'undefined' && CLOUD._userMail) || '';
+    return { mail, logged: !!mail, nickname: mail ? mail.split('@')[0] : '我的' };
+  }
+  function updateMeCard() {
+    const el = document.getElementById('meName');
+    if (el) el.textContent = meAccount().nickname;
+  }
+  function renderMePop() {
+    const pop = document.getElementById('mePop');
+    if (!pop) return;
+    updateMeCard();
+    const acc = meAccount();
+    const s = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats() : { streak: 0, graduated: 0, targetWords: 0 };
+    const state = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    const days = state && state.daily ? Object.keys(state.daily).length : 0;
+    const cfg = (typeof TASK !== 'undefined' && TASK.planConfig) ? TASK.planConfig() : null;
+    const hasPlan = !!(typeof TASK !== 'undefined' && TASK.hasPlan);
+    const a = nextArticle();
+    const focus = a >= 0 ? a : 0;
+    const title = SECTIONS[focus] ? SECTIONS[focus].title : '';
+    const planDay = cfg && cfg.startDate ? Math.floor((Date.now() - Date.parse(cfg.startDate)) / 864e5) + 1 : 1;
+    const dark = document.body.classList.contains('dark');
+    const MINS = [5, 10, 15, 20, 30, 45, 60];
+    const BOUND = [[0, '0点'], [2, '2点'], [3, '3点'], [4, '4点'], [5, '5点'], [6, '6点']];
+    pop.innerHTML = `
+      <div class="mp-head">
+        <span class="mp-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>
+        <div class="mp-id"><div class="mp-name">${esc(acc.logged ? acc.nickname : '未登录')}</div>
+          <div class="mp-sub">${esc(acc.logged ? acc.mail : '登录后跨设备同步')}</div></div>
+        <span class="mp-badge">免费</span>
+      </div>
+      <button class="mp-cta" type="button" data-me-cta>${hasPlan ? `继续学《${esc(title)}》` : '设置学习计划'}</button>
+      <div class="mp-card">
+        <div class="mp-nums">
+          <div><b>${days}</b><span>累计天数</span></div>
+          <div><b>${s.streak}</b><span>连续天数</span></div>
+          <div><b>${s.graduated}</b><span>已毕业词</span></div>
+        </div>
+        <div class="mp-status">${hasPlan ? `正在学《${esc(title)}》· 第 ${planDay} 天` : '还没有学习计划'}</div>
+      </div>
+      <div class="mp-list">
+        <div class="mp-row"><span class="mp-label">深色模式</span>
+          <button class="tr-msw${dark ? ' on' : ''}" type="button" role="switch" aria-checked="${dark}" data-me-theme aria-label="深色模式"><span class="knob" aria-hidden="true"></span></button></div>
+        ${cfg ? `
+        <div class="mp-row"><span class="mp-label">每天分钟数</span><div class="ps-opts">
+          ${MINS.map(m => `<button class="ps-opt${m === cfg.minutes ? ' sel' : ''}" data-me-min="${m}">${m}</button>`).join('')}</div></div>
+        <div class="mp-row"><span class="mp-label">几点换一天</span><div class="ps-opts">
+          ${BOUND.map(o => `<button class="ps-opt${String(o[0]) === String(cfg.boundary) ? ' sel' : ''}" data-me-bound="${o[0]}">${o[1]}</button>`).join('')}</div></div>
+        <div class="mp-row"><span class="mp-label">新词</span><div class="ps-opts">
+          <button class="ps-opt${cfg.pausedNew ? '' : ' sel'}" data-me-new="0">正常</button>
+          <button class="ps-opt${cfg.pausedNew ? ' sel' : ''}" data-me-new="1">只复习</button></div></div>` : ''}
+        <div class="mp-row"><span class="mp-label">数据</span><div class="ps-opts">
+          <button class="ps-opt" data-me-export>导出备份</button>
+          <button class="ps-opt" data-me-import>导入恢复</button></div></div>
+      </div>
+      <div class="mp-foot">${acc.logged
+        ? `<button class="mp-logout" type="button" data-me-logout>退出登录</button>`
+        : `<div class="mp-login-form">
+             <input id="meEmail" type="email" placeholder="邮箱" autocomplete="email" aria-label="邮箱">
+             <input id="mePass" type="password" placeholder="密码" autocomplete="current-password" aria-label="密码">
+             <div class="row"><button type="button" data-me-login>登录</button><button type="button" data-me-signup>注册</button></div>
+           </div>`}</div>
+      <input type="file" id="meImportFile" accept="application/json,.json" style="display:none">`;
+  }
+  // 浮窗开在用户卡正上方（桌面 300px 宽；手机通栏 bottom-sheet），高度夹在卡片上沿以内。
+  function positionMePop() {
+    const pop = document.getElementById('mePop');
+    const card = document.getElementById('meCard');
+    if (!pop || !card) return;
+    const r = card.getBoundingClientRect();
+    const mobile = window.matchMedia('(max-width: 700px)').matches;
+    if (mobile) { pop.style.left = '8px'; pop.style.width = Math.max(200, window.innerWidth - 16) + 'px'; }
+    else { pop.style.left = Math.max(8, r.left) + 'px'; pop.style.width = '300px'; }
+    pop.style.top = 'auto';
+    pop.style.bottom = Math.max(8, window.innerHeight - r.top + 8) + 'px';
+    pop.style.maxHeight = Math.max(220, r.top - 16) + 'px';
+  }
+  function openMePop() {
+    const pop = document.getElementById('mePop');
+    if (!pop) return;
+    renderMePop();
+    pop.hidden = false;
+    positionMePop();
+    const card = document.getElementById('meCard');
+    if (card) card.setAttribute('aria-expanded', 'true');
+  }
+  function closeMePop() {
+    const pop = document.getElementById('mePop');
+    if (pop) pop.hidden = true;
+    const card = document.getElementById('meCard');
+    if (card) card.setAttribute('aria-expanded', 'false');
+  }
+  function toggleMePop() {
+    const pop = document.getElementById('mePop');
+    if (pop && !pop.hidden) closeMePop(); else openMePop();
+  }
+  async function meLogin() { try { if (typeof cloudLogin === 'function') await cloudLogin({ email: 'meEmail', pass: 'mePass' }); } catch (e) {} renderMePop(); positionMePop(); }
+  async function meSignup() { try { if (typeof cloudSignup === 'function') await cloudSignup({ email: 'meEmail', pass: 'mePass' }); } catch (e) {} }
+  async function meLogout() { try { if (typeof cloudLogout === 'function') await cloudLogout(); } catch (e) {} renderMePop(); positionMePop(); }
+  // 浮窗 innerHTML 每次重渲，逐颗绑会漏 → 用事件代理，只绑一次。
+  function wireMePop() {
+    const pop = document.getElementById('mePop');
+    if (!pop || pop._wired) return;
+    pop._wired = true;
+    pop.addEventListener('click', (e) => {
+      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-bound],[data-me-new],[data-me-export],[data-me-import],[data-me-login],[data-me-signup],[data-me-logout]');
+      if (!t) return;
+      // 有些按钮点完会 renderMePop() 重渲（主题/分钟/日界/新词）—— 重渲会把 e.target 从 DOM 摘下来，
+      // 事件继续冒泡到 document 的「点外面收掉」监听时，target 已不在 #mePop 里，会被误判成点外面。
+      // 所以这里先 stopPropagation，别让 document 那道再看到它。
+      e.stopPropagation();
+      if (t.hasAttribute('data-me-cta')) {
+        closeMePop();
+        if (typeof TASK !== 'undefined' && TASK.hasPlan) { const n = nextArticle(); openArticle(n >= 0 ? n : 0); }
+        else openSetup();
+      } else if (t.hasAttribute('data-me-theme')) { if (typeof toggleDark === 'function') toggleDark(); renderMePop(); }
+      else if (t.hasAttribute('data-me-min')) { TASK.setMinutes(Number(t.dataset.meMin)); renderMePop(); positionMePop(); }
+      else if (t.hasAttribute('data-me-bound')) { TASK.setBoundary(Number(t.dataset.meBound)); renderMePop(); }
+      else if (t.hasAttribute('data-me-new')) { TASK.setPauseNew(t.dataset.meNew === '1'); renderMePop(); }
+      else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }
+      else if (t.hasAttribute('data-me-import')) { TASK.importBackup('meImportFile'); }
+      else if (t.hasAttribute('data-me-login')) { meLogin(); }
+      else if (t.hasAttribute('data-me-signup')) { meSignup(); }
+      else if (t.hasAttribute('data-me-logout')) { meLogout(); }
+    });
+  }
+  window.APP3 = Object.assign(window.APP3, { renderMePop, openMePop, closeMePop, toggleMePop, meLogin, meLogout });
+  // 点浮窗外面收掉；Esc 也收。
+  document.addEventListener('click', (e) => {
+    const pop = document.getElementById('mePop');
+    if (!pop || pop.hidden) return;
+    if (!e.target.isConnected) return;   // 已被重渲摘下的节点，别当成「点外面」
+    if (e.target.closest('#mePop') || e.target.closest('#meCard')) return;
+    closeMePop();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMePop(); });
+  window.addEventListener('resize', () => { const pop = document.getElementById('mePop'); if (pop && !pop.hidden) positionMePop(); });
+  wireMePop();
+  updateMeCard();
+  setTimeout(updateMeCard, 1500);   // CLOUD.boot 异步恢复登录态：稍后把卡上昵称补一次
 
   window.APP3 = Object.assign(window.APP3, { route, current: () => cur });
   window.addEventListener('hashchange', route);
