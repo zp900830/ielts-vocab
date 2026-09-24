@@ -6568,6 +6568,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         idx = -1; _paintIdx = -2;
         render();
         enterTaskMode(opts);
+        /* M3 §6.5：单词本「▶ 播放这句」——进这一篇后直接落到指定全局句并起播。 */
+        if (opts && opts.playGlobal != null) {
+          const local = globalToLocal(opts.playGlobal);
+          if (local >= 0) {
+            try { playFrom(local); const el = sents[local]; if (el) el.scrollIntoView({ block: 'center' }); } catch (e) {}
+          }
+        }
         // 这一篇今天没排到句（enterTaskMode 会弹提示并原样退回）→ 别把按篇的 scope 留在缓存里，
         // 否则回首页后横幅/绿点会按这一篇算。
         if (!taskMode) { currentArticle = null; _cachedPlan = null; }
@@ -6578,6 +6585,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function openArticleQuiz(a) {
         openArticle(a, { article: a, startAtPass2: true });
       }
+      // M3：单词本词详情的「▶ 播放这句」。a = 文章号，gi = 该句的全局句号。
+      function playSentence(a, gi) { openArticle(a, { playGlobal: gi }); }
       function exitTaskMode() {
         taskMode = false; _noPlan = false; stopSessionClock();
         // 回首页 = 回全局：横幅/绿点/今日账都按全量算，别把上一篇的 scope 留在缓存里。
@@ -7779,7 +7788,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
 
       // ---- 公开 API ----
       return {
-        init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode, openArticle, openArticleQuiz,
+        init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode, openArticle, openArticleQuiz, playSentence,
         again, prev, next, pauseNew, resetPlan, onSentenceComplete,
         taskSentenceFinished,
         exportBackup, importBackup,

@@ -45,6 +45,8 @@
     if (wf) { location.hash = '#/words/' + wf.dataset.f; return; }
     const wrel = e.target.closest('.wd-relearn');
     if (wrel) { try { if (TASK.relearn) TASK.relearn(wrel.dataset.relearn); } catch (err) {} window.APP3.route(); return; }
+    const wplay = e.target.closest('.wd-play');
+    if (wplay) { playSentence(Number(wplay.dataset.a), Number(wplay.dataset.gi)); return; }
     const wrow = e.target.closest('.wb-row');
     if (wrow) { toggleWordRow(wrow); return; }
     const wm = e.target.closest('.wb-more');
@@ -350,6 +352,14 @@
     else location.hash = '#/home';
   }
   window.APP3 = Object.assign(window.APP3, { openHomeHighlight });
+
+  // §6.5：词详情 → 回首页 → 进该篇任务模式 → 定位该句并播放。
+  function playSentence(a, gi) {
+    if (typeof TASK === 'undefined' || !TASK.playSentence) return;
+    if (location.hash !== '#/home') location.hash = '#/home';
+    TASK.playSentence(a, gi);
+  }
+  window.APP3 = Object.assign(window.APP3, { playSentence });
 
   /* ---- 3.0 单词本（M3，PRD §6）----
      宇宙 = 文章标记里出现过的全部目标词（真实数据 3245）。索引一次建好、按 SECTIONS 缓存。 */

@@ -222,4 +222,26 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
     await expect(row).toHaveAttribute('aria-expanded', 'false');
     await expect(page.locator('.wb-detail')).toHaveCount(0);
   });
+
+  test('词详情「▶ 播放这句」→ 回首页并进该篇任务模式、定位该句并播放', async ({ page }) => {
+    await stubData(page, WORDS);
+    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await waitShadowReady(page);
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(15);
+      const st = TASK.state();
+      st.words['atmosphere'] = Object.assign(ShadowPlan.newWord(), { stage: 'seen', reps: 1 });
+      APP3.route();
+    });
+    await page.locator('.wb-row[data-w="atmosphere"]').click();
+    await page.locator('.wd-play').click();
+    // 目标：回首页 + 进任务模式 + 该句高亮在播
+    await expect(page).toHaveURL(/#\/home/);
+    await expect(page.locator('body')).toHaveClass(/task-mode/);
+    await expect.poll(() => page.evaluate(() => {
+      const el = document.querySelector('#art .sent.playing');
+      return el ? el.textContent : '';
+    }), { message: '播放的必须是含该词的原文句' }).toContain('atmosphere');
+    expect(await page.evaluate(() => TASK.article), '进的必须是该词所属那一篇').toBe(0);
+  });
 });
