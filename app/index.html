@@ -6116,8 +6116,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const d = ROOT2.state.daily[day2()] || {};
         const nums = n === 1 ? [[doneToday(), '句读完了'], [todayPlan(true).words.length, '个词今天见过'], [d.promote || 0, '个词往前走了一步']]
                              : [[quizAnsweredN, '题答了'], [quizWrongN, '题答错（不倒退）'], [d.promote || 0, '个词累计晋升']];
-        const title = n === 1 ? '① 通读完成' : '② 挖空选择完成';
-        const label = n === 1 ? '开始 ② 答题' : '今天完成';
+        /* 2026-09-24 用户：圈号 ①/② 全部去掉 —— 小结标题写成「通读完成 / 挖空选择完成」，
+           阶段仍从文字读得出，不靠一个圈。 */
+        const title = n === 1 ? '通读完成' : '挖空选择完成';
+        const label = n === 1 ? '开始答题' : '今天完成';
         /* 补考的账只在这句里说一次：任务条不加、也不另起一格（条上是三个数，见 updateTaskBar）。
            措辞不用「欠 / 待补」—— 补考是本遍里做完的事，不是留给明天的账。 */
         const sub = n === 1 ? '这一遍读完了，下一遍是这一批句子的词'

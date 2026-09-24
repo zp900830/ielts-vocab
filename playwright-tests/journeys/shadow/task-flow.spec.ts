@@ -274,11 +274,17 @@ test.describe('two passes', () => {
     expect(got.p).toBe(1);
     expect(got.q).toBe(null);
     expect(got.bar).toBe('read');
+    /* 2026-09-24 用户：任务条主行的圈号去掉 —— 阶段语义（「通读」）必须自己扛住，圈号不许再出现。 */
+    await expect(page.locator('#tbTitle')).toContainText('通读');
+    await expect(page.locator('#tbTitle')).not.toContainText(/[①②③④⑤]/);
   });
 
   test('② masks exactly the target word and is a four-choice with one right answer', async ({ page }) => {
     await page.evaluate(() => { TASK.todayPlan(true).queue.forEach(x => TASK.readDone(x.i)); TASK.setPass(2); });
     await expect(page.locator('.qz-opts')).toBeVisible();
+    /* ② 态任务条主行同样不许有圈号。 */
+    await expect(page.locator('#tbTitle')).toContainText('挖空选择');
+    await expect(page.locator('#tbTitle')).not.toContainText(/[①②③④⑤]/);
     const got = await page.evaluate(() => {
       const q = TASK.currentQuiz();
       return { w: q.w, kind: q.kind, opts: q.opts, answer: q.answer, sense: q.sense,
@@ -587,7 +593,10 @@ test.describe('two passes', () => {
     const txt = await card.innerText();
     expect((txt.match(/\d+/g) || []).length).toBeLessThanOrEqual(5);
     expect(/欠|待补|积压|轮/.test(txt)).toBe(false);
-    expect(await page.locator('.pass-summary .go').innerText()).toContain('②');
+    /* 2026-09-24 用户：小结按钮的圈号去掉 —— 阶段名（「挖空选择」）自己扛语义，圈号不许再出现。 */
+    const go = await page.locator('.pass-summary .go').innerText();
+    expect(go).toContain('挖空选择');
+    expect(go).not.toMatch(/[①②③④⑤]/);
   });
 
   /* 底栏口径 2026-09-21 已换（见文件头）：旧注释写的是「他拍的板：播放条别整条藏」，
@@ -692,6 +701,9 @@ test.describe('two passes', () => {
     expect(nums.onBar).toBe(1);
     expect(nums.onCard).toBe(0);
     expect(nums.tag).not.toMatch(/\d+\s*\/\s*\d+/);
+    /* 2026-09-24 用户：做题卡头的圈号去掉 —— 卡头仍写阶段名「挖空选择」，但不带圈号。 */
+    expect(nums.tag).toContain('挖空选择');
+    expect(nums.tag).not.toMatch(/[①②③④⑤]/);
     // 做题卡只给任务条一条让位：--task-card-b ≈ 任务条高（旧口径要多让一条播放条 = 88px）
     const fits = await page.evaluate(() => {
       const px = (v: string) => parseFloat(v) || 0;

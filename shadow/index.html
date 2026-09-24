@@ -1392,7 +1392,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 进度条：任务模式里不给位置，同一能力由「快速跳转」那颗承担（弹窗输章节+句号）；
      翻句两颗归任务条，所以这一排里把它们藏掉，避免同屏两颗同名按钮。
      「读到第 N 句 · 章节名」也藏掉：一行里挤九颗按钮，它是最占宽度又最重复的一块
-     —— 句序号任务条已经在说（① 通读 0/16），章节名正文顶上就是。 */
+     —— 句序号任务条已经在说（通读 0/16），章节名正文顶上就是。 */
   .tb-play .ab-seek,
   .tb-play .ab-step,
   .tb-play .btn.play .lbl { display: none; }
@@ -5302,7 +5302,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
               const cls = reveal ? (o === q.answer ? ' right' : (reveal.pick === o ? ' wrong' : '')) : '';
               return `<button class="qz-opt${cls}" aria-label="选项 ${i + 1}，共 ${q.opts.length} 个，${esc(o)}" onclick="TASK.pickOpt(${i})"><span class="n">${i + 1}</span>${esc(o)}</button>`;
             }).join('')}</div>${reveal ? revealNote(q) : ''}`;
-        el.innerHTML = `<div class="qz-head"><span class="qz-tag">② 挖空选择</span><span class="sp"></span>
+        el.innerHTML = `<div class="qz-head"><span class="qz-tag">挖空选择</span><span class="sp"></span>
             <button class="qz-mini" onclick="TASK.flagQuiz()">这题有问题</button></div>${body}`;
         el.hidden = false;
         /* 焦点进卡：卡片是整块换 innerHTML 的，不主动接手的话焦点还在正文里，键盘只能用 1–4；
@@ -5329,8 +5329,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const d = ROOT2.state.daily[day2()] || {};
         const nums = n === 1 ? [[doneToday(), '句读完了'], [todayPlan(true).words.length, '个词今天见过'], [d.promote || 0, '个词往前走了一步']]
                              : [[quizAnsweredN, '题答了'], [quizWrongN, '题答错（不倒退）'], [d.promote || 0, '个词累计晋升']];
-        const title = n === 1 ? '① 通读完成' : '② 挖空选择完成';
-        const label = n === 1 ? '开始 ② 挖空选择' : '今天完成';
+        const title = n === 1 ? '通读完成' : '挖空选择完成';
+        const label = n === 1 ? '开始挖空选择' : '今天完成';
         /* 补考的账只在这句里说一次：任务条不加、也不另起一格（条上是三个数，见 updateTaskBar）。
            措辞不用「欠 / 待补」—— 补考是本遍里做完的事，不是留给明天的账。 */
         const sub = n === 1 ? '这一遍读完了，下一遍是这一批句子的词'
@@ -5881,7 +5881,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           nextBtn.textContent = '看词本';
           setProg(1);
         } else if (pass >= 2) {
-          titleEl.textContent = '② 挖空选择 ' + Math.min(quizCursor + 1, quizN) + '/' + quizN
+          titleEl.textContent = '挖空选择 ' + Math.min(quizCursor + 1, quizN) + '/' + quizN
             + (quizWrongN ? ' · 错 ' + quizWrongN : '');
           /* ② 这一行原来是提示语（「选出填回空格的那个词」），现在让给「还剩几分钟」——
              他 2026-09-22：显示。四选一没什么要教的，而「还要多久收工」正是这一步唯一想知道的数。 */
@@ -5896,7 +5896,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           /* 分母是当天快照，不跟分子涨。分子可能超过它（今天多读了）—— 主行封顶写 36/36，
              不写 40/36 这种看着像出错的数；多出来的在副行如实说。 */
           const extra = Math.max(0, doneN - planned);
-          titleEl.textContent = `① 通读 ${Math.min(doneN, planned)}/${planned}`;
+          titleEl.textContent = `通读 ${Math.min(doneN, planned)}/${planned}`;
           /* secNew() 已经把倍速除掉一次了，这里再除一遍就是平方（同一天在引擎里抓到的那个坑的第二个现场）。 */
           subEl.textContent = leftN ? `还剩 ~${fmtTime(leftN * secNew())}`
             : (extra ? `今天的量读完了 · 多读了 ${extra} 句` : '这批读完了，接着出这一批的词');
@@ -5908,7 +5908,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
              把他刚要求删掉的那颗播放键又画了回来。 */
           syncTaskNextLabel();
           /* ① 通读态：这一根改成"位置条"，读的是屏幕上这句在队列里的第几格 —— 做完只读的 setProg 在这里换轨。
-             已读句数没丢：主行「① 通读 12/36」一直在说它。 */
+             已读句数没丢：主行「通读 12/36」一直在说它。 */
           syncTaskSeek(true);
         }
         /* 播放条那一格的说法归播放条：任务模式里它被搬进按钮行、暂时看不见，但 paint() 和这条

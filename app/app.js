@@ -46,9 +46,10 @@
     const d = Math.floor((Date.now() - ts) / 864e5);
     return d <= 0 ? '今天' : d === 1 ? '昨天' : d + ' 天前';
   }
-  // 当前阶段的文案（§3.3 / §9.4）。通读满还没做题 = 「② 可答题」；`已学完` 留给"通读 + ② 各一遍"。
-  const STAGE_LABEL = { todo: '未开始', reading: '通读中', read: '② 可答题',
-                        quiz: '② 做题', done: '已学完', pro: '熟练' };
+  // 当前阶段的文案（§3.3 / §9.4）。通读满还没做题 = 「可答题」；`已学完` 留给"通读 + ② 各一遍"。
+  // 2026-09-24 用户：圈号 ①/② 全部去掉 —— 阶段靠文字读，别只剩一个圈。
+  const STAGE_LABEL = { todo: '未开始', reading: '通读中', read: '可答题',
+                        quiz: '做题中', done: '已学完', pro: '熟练' };
   function articleStat(a) {
     const st = (typeof TASK !== 'undefined' && TASK.state()) || window.ShadowPlan.emptyState();
     const wordsOf = (typeof TASK !== 'undefined' && TASK.sentWordsOf) || function () { return []; };

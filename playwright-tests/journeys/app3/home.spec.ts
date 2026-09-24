@@ -86,14 +86,17 @@ test.describe('3.0 首页', () => {
        此刻 ② 与精读都还是 0，所以只剩第一项在动，33 ≤ 40 是「只通读」这一档的上界。 */
     expect(await pctOf(page), '只通读、没做题没精读时，分数只由第一项给，不得超过 40').toBeLessThanOrEqual(40);
 
-    // —— 读满 24 句 → 「② 可答题」（§9.4：通读满还没做题，`已学完` 留给通读+② 各一遍）——
+    // —— 读满 24 句 → 「可答题」（§9.4：通读满还没做题，`已学完` 留给通读+② 各一遍）——
     await page.evaluate(() => {
       const s = ShadowPlan.articleScope(SECTIONS, 0);
       Array.from(s).slice(20).forEach((i: number) => TASK.readDone(i));
     });
     await page.reload();
     await expect(c0).toHaveAttribute('data-stage', 'read');
-    await expect(c0.locator('.a-stage')).toHaveText('② 可答题');
+    /* 2026-09-24 用户：卡片胶囊里的圈号去掉 —— 锁两件事：阶段语义文字还在（「可答题」），
+       且不再出现任何圈号徽标（回归锁）。 */
+    await expect(c0.locator('.a-stage')).toHaveText('可答题');
+    await expect(c0.locator('.a-stage')).not.toContainText(/[①②③④⑤]/);
     expect(await pctOf(page), '通读满 → 40%（② / 精读两项都还是 0）').toBe(40);
   });
 
