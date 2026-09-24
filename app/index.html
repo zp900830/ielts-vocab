@@ -1314,6 +1314,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     background: radial-gradient(160px 28px at 16% 0%, rgba(255,255,255,.55), transparent 72%),
       linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)); }
   .task-bar.show { display: flex; }
+  /* M6 N1：续读条（body.resume-offer，一级页面刷新时那条「今天 N 句」）在桌面要【让开左侧栏】，
+     否则它 left:24/right:24 的玻璃条会横跨侧栏、盖住侧栏底部那颗「我的」（实测 #meCard 被 #tbTitle 截获）。
+     任务模式里 #appShell 已隐藏、没有侧栏，所以只在 resume-offer 态收 left。
+     同时把浮条高度追加进 #appView 的 padding-bottom —— 手机档尤其需要，见下方 700px 档。 */
+  body.resume-offer .task-bar { left: calc(220px + 24px); }
+  body.resume-offer #appView { padding-bottom: calc(88px + var(--task-bar-h, 62px)); }
   body.dark .task-bar { background: linear-gradient(145deg, rgba(30,28,25,.92), rgba(30,28,25,.78) 42%, rgba(30,28,25,.62));
     border-color: #33302b;
     box-shadow: 0 24px 64px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.05), inset 0 -1px 0 rgba(0,0,0,.32); }
@@ -1446,6 +1452,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      宽屏才让文字在左、按钮在右 —— 390px 上二者并排会把文字挤没（上一轮实测过）。 */
   @media (max-width: 700px) {
     .task-bar { left: 12px; right: 12px; padding: 8px 10px 8px 12px; }
+    /* M6 N1：手机档 TabBar 占底部 57px（z-index 300），续读条要抬到它上面去，别再被 TabBar 压住
+       （实测续读条 bottom:832 落在 TabBar 787–844 里，整条下半截被盖）。 */
+    body.resume-offer .task-bar { left: 12px; right: 12px; bottom: calc(57px + 12px + env(safe-area-inset-bottom, 0px)); }
     .tb-body { flex-direction: column; align-items: stretch; gap: 6px; padding-right: 26px; }
     .tb-text { flex: none; }
     .tb-btns { justify-content: flex-end; }
@@ -1759,6 +1768,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 平板档（PRD §10.2）：701–1023px 侧栏收窄到 180px */
   @media (min-width: 701px) and (max-width: 1023px) {
     .sidenav { width: 180px; }
+    body.resume-offer .task-bar { left: calc(180px + 24px); }   /* M6 N1：平板侧栏收窄到 180 */
   }
   @media (max-width: 700px) {
     #appShell { flex-direction: column-reverse; }
