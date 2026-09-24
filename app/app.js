@@ -3,7 +3,7 @@
 (function () {
   const ROUTES = ['home', 'stats', 'words', 'listen'];
   const TODO_META = {
-    stats: ['学习数据', 'ri-bar-chart-2-line'],
+    // M2 起「学习数据」已是真页（renderStats）；占位只剩单词本 / 随身听。
     words: ['单词本', 'ri-book-2-line'],
     listen: ['随身听', 'ri-headphone-line'],
   };
