@@ -17,6 +17,13 @@
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#faf8f4">
     <meta name="google" content="notranslate">
+    <!-- W6 · PWA（PRD §2.5）：继承主站那套 —— manifest 走 data-URI，service worker 由脚本内联生成。
+         与主站一致，不需要往构建白名单加运行时文件。 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="雅思背单词 3.0">
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoi6ZuF5oCd6IOM5Y2V6K+NIDMuMCIsInNob3J0X25hbWUiOiLpm4XmgJ3og4zljZXor40iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZmFmOGY0IiwidGhlbWVfY29sb3IiOiIjZmFmOGY0Iiwic3RhcnRfdXJsIjoiLi8iLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJyUzRSUzQ3JlY3Qgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnIHJ4PScyMicgZmlsbD0nJTIzMTBiNDg3Jy8lM0UlM0N0ZXh0IHg9JzUwJyB5PSc2OCcgZm9udC1zaXplPSc1MicgdGV4dC1hbmNob3I9J21pZGRsZScgZmlsbD0nJTIzZmZmJyBmb250LWZhbWlseT0nc2VyaWYnJTNFVyUzQy90ZXh0JTNFJTNDL3N2ZyUzRSIsInNpemVzIjoiYW55IiwidHlwZSI6ImltYWdlL3N2Zyt4bWwiLCJwdXJwb3NlIjoiYW55IG1hc2thYmxlIn1dfQ==">
     <title>雅思词汇影子跟读 · IELTS Vocabulary Shadowing</title>
     <style>
   /* ============ 设计令牌（对齐 雅思词汇真经项目：薄荷绿 + 衬线故事体 + 毛玻璃） ============ */
@@ -29,12 +36,17 @@
     --border: #e5dfd6; --green: #0c9c74;
     --coral: #e07a5f; --coral-deep: #c9564a;
     --note: #c08a2e; --note-soft: rgba(192,138,46,.08); --note-line: #e7cf9a;
-    --grad: linear-gradient(135deg, #2bd4a4, #0fae7e);
+    /* 中调薄荷绿渐变（2026-09-24 用户：上一版压得太黑，改回中调）。
+       白字要过 AA 正文 4.5 —— 最亮那档最浅只能到 #0b8663（4.56:1），再浅就掉到 4.3 以下；
+       最暗 #0a7050（6.10:1）。图标门槛 3 两档都远超。实测数字见报告。 */
+    --grad: linear-gradient(135deg, #0b8663, #0a7050);
     --grad-shadow: 0 3px 10px rgba(16,180,135,.25);
-    /* 压在绿底上的字色。以前这些按钮一律 color:#fff，白字压 #2bd4a4 实测 1.90:1
-       （AA 正文要 4.5:1，纯图标也要 3:1）—— 全应用同一颗，所以一处定值、逐颗换上。
-       选深墨而不是把绿压暗：绿的亮度要到 0.183 以下才容得下白字，那就不是这支薄荷绿了。 */
-    --cta-ink: #04231b;
+    /* 压在绿底上的字色（2026-09-24 用户拍板：改回白字/白图标）。 */
+    --cta-ink: #fff;
+    /* 深墨字专用：选中态胶囊（.ps-opt.sel / .pill.on）的底色是更亮的 --task-new #10b487，
+       白字压它只有 2.66:1（过不了 AA），而 --task-new 在深色模式还得当亮字用（不能压暗）。
+       所以这几处非主按钮的选中态保留深墨 —— 与主按钮的白字并存，是分开的两颗 token。 */
+    --cta-ink-dark: #04231b;
     /* 绿「字」专用的一档。--accent #0c9c74 当字用实测只有 3.49:1（压白底）、压 --accent-soft
        的浅薄荷只有 3.06:1，AA 正文要 4.5 —— 上一轮只管了「绿底浅字」那半边，这半边是它镜像。
        不能直接把 --accent 调暗：#btnAB.ab-active、.ab-on 那几颗是「深墨字压 --accent 底」，
@@ -48,6 +60,18 @@
     --t: .25s ease; --t-fast: .15s ease;
     --ease-smooth: cubic-bezier(.32,.72,.24,1); --t-morph: .45s;
     --ease-bar: cubic-bezier(.32,.9,.28,1); --t-bar: .32s; /* 播放条 morph 专用：更快起手、柔着陆 */
+    /* 主站（情景训练）组件令牌别名：让照抄来的 .reader-head/.r-badges/.tr-msw 等直接可用。
+       引用的是 /app/ 自己的 token，所以 body.dark 一改，它们自动跟着变深。 */
+    --iel-blur: blur(22px) saturate(170%);
+    --iel-t: var(--t); --iel-t-fast: var(--t-fast);
+    --iel-line: var(--border);
+    --iel-accent: var(--accent-bright); --iel-accent-deep: var(--accent);
+    --iel-accent-soft: var(--accent-soft); --iel-accent-line: var(--accent-line);
+    --iel-ink1: var(--text); --iel-ink2: var(--ink2); --iel-mark-line: var(--hl-line);
+    --iel-glass-strong: var(--glass-strong);
+    --iel-radius-sm: 12px; --iel-shadow: var(--shadow);
+    --iel-tint: rgba(16,180,135,.07); --iel-tint-hover: rgba(16,180,135,.12);
+    --iel-chip: #eef5f0; --iel-chip-hover: #dff0e7; --iel-cta-ink: var(--cta-ink);
     }
   /* 夜间模式 */
   body.dark {
@@ -57,13 +81,13 @@
     --border: #33302b; --green: #10b487;
     --coral: #e07a5f; --coral-deep: #c9564a;
     --note: #d9a441; --note-soft: rgba(217,164,65,.12); --note-line: rgba(217,164,65,.28);
-    --grad: linear-gradient(135deg, #2bd4a4, #0fae7e);
+    --grad: linear-gradient(135deg, #0b8663, #0a7050);
     --grad-shadow: 0 3px 10px rgba(16,180,135,.3);
     --accent-text: var(--accent);   /* 深色底上绿字本来就够（#10b487 压 #252220 实测 5.95:1），这一档只给浅色用 */
     --shadow: 0 2px 12px rgba(0,0,0,.25); --shadow-lg: 0 12px 40px rgba(0,0,0,.4);
     --glass: rgba(30,28,25,.94); --glass-strong: rgba(30,28,25,.97);
     }
-  body.dark { background-color: #1c1a17; }
+  body.dark { background-color: #1c1a17; background-image: none; }
   html.dark { background-color: #1c1a17; background-image: none; } /* 桌面暗色：清除基样式浅色渐变，杜绝回弹/覆盖层露出米白 */
   body.dark .topbar { background: transparent; border-bottom-color: #33302b; }
   body.dark .topbar::before {
@@ -71,7 +95,6 @@
     box-shadow: inset 0 1px 0 rgba(255,255,255,.05), inset 0 -1px 0 rgba(0,0,0,.32); }
   body.dark .btn { background: #252220; border-color: #33302b; color: #e2ddd5; }
   body.dark .btn:hover { background: rgba(16,180,135,.12); }
-  body.dark .voice-sel { background: #252220; border-color: #33302b; color: #e2ddd5; }
   body.dark aside { background: linear-gradient(150deg, rgba(30,28,25,.96), rgba(26,24,21,.88)); border-color: #33302b; }
   body.dark aside .item:hover { background: rgba(16,180,135,.08); }
   body.dark .pop { background: rgba(30,28,25,.97); border-color: #33302b; }
@@ -111,18 +134,27 @@
   body.dark.scrolled .audiobar.expanded .ab-collapse,
   body.dark:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse { background: rgba(30,28,25,.6); }
   body.dark.scrolled .audiobar .ab-expand:hover, body.dark .audiobar.force-mini .ab-expand:hover,
-  body.dark .audiobar .ab-collapse:hover { background: var(--accent); color: var(--cta-ink);
+  body.dark .audiobar .ab-collapse:hover { background: var(--accent); color: var(--cta-ink-dark);
     box-shadow: 0 4px 14px rgba(16,180,135,.5); }
   body.dark #seekRail { background: #3a453f; }
   html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth;
-    background-color: #faf8f4;
+    background-color: #f8fdfa;
     background-image:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(210,225,218,.25) 0%, transparent 70%),
-    linear-gradient(180deg, #faf8f4 0%, #f7f4ef 100%);
+    linear-gradient(180deg, rgba(93,190,157,.08) 0%, rgba(93,190,157,.03) 60%, rgba(93,190,157,0) 100%),
+    linear-gradient(170deg, #f8fdfa 0%, #ffffff 40%, #ffffff 100%);
     background-attachment: fixed; }
-  body { font-family: var(--sans); background: transparent; color: var(--text);
+  /* ② 右侧内容区用主站首页配色（薄荷调底）；左侧导航保持自己那套（.sidenav 显式给底色）。
+     ④ 任务模式（沉浸式阅读）回到影子跟读原来那套暖白 #faf8f4。 */
+  body { font-family: var(--sans); color: var(--text);
+    background-color: #f8fdfa;
+    background-image:
+    linear-gradient(180deg, rgba(93,190,157,.08) 0%, rgba(93,190,157,.03) 60%, rgba(93,190,157,0) 100%),
+    linear-gradient(170deg, #f8fdfa 0%, #ffffff 40%, #ffffff 100%);
+    background-attachment: fixed;
     line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility; overflow-x: hidden; }
+  body.task-mode { background-color: #faf8f4; background-image: none; min-height: 100vh; }
+  body.dark.task-mode { background-color: #1c1a17; }
   ::selection { background: var(--accent-soft); }
   :focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 2px; }
 
@@ -177,7 +209,7 @@
   #btnMenu { display: none; } /* 仅移动端显示的汉堡菜单按钮 */
   .only-mobile { display: none; } /* 仅移动端显示的行内标签 */
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-  .sr-only-focusable:focus { position: static; width: auto; height: auto; padding: 8px 16px; margin: 0; overflow: visible; clip: auto; white-space: normal; background: var(--accent); color: var(--cta-ink); z-index: 9999; }
+  .sr-only-focusable:focus { position: static; width: auto; height: auto; padding: 8px 16px; margin: 0; overflow: visible; clip: auto; white-space: normal; background: var(--accent); color: var(--cta-ink-dark); z-index: 9999; }
   .ctrl { display: flex; align-items: center; gap: 8px; font-size: 13px;
     transition: opacity .3s ease, max-width var(--t-morph) var(--ease-smooth),
       max-height var(--t-morph) var(--ease-smooth); }
@@ -274,13 +306,34 @@
   body.dark .cmp-card { border-color: #33302b; }
   body.dark .cmp-card .nb-table td, body.dark .cmp-card .nb-table th { border-color: #33302b; }
   body.dark .cmp-card .nb-table th, body.dark .cmp-card .nb-tl { background: rgba(16,180,135,.1); }
-  /* 音色下拉：与顶栏其余按钮一致的 pill 胶囊样式（13px 字＋999px 圆角；移动端面板内仍用 16px/44px 大触区） */
-  .voice-sel { border: 1px solid var(--accent-line); background-color: #fff; color: var(--accent-text);
-    border-radius: 999px; font-size: 13px; font-weight: 500; padding: 7px 14px; padding-right: 32px;
-    max-width: 220px; min-height: 34px; cursor: pointer;
+  /* 音色选择：自定义按钮 + 玻璃浮层（换掉原生 <select>，2026-09-24）。
+     尺寸/配色与文章头那排 .accent-btn/.tr-msw 一致（12.5px、999px 圆角、玻璃浮层）。 */
+  .voice-pick { position: relative; flex: none; }
+  .voice-btn { display: inline-flex; align-items: center; gap: 6px; max-width: 190px; min-height: 34px;
+    border: 1px solid var(--accent-line); border-radius: 999px; background: #fff; color: var(--accent-text);
+    font-size: 12.5px; font-weight: 500; padding: 6px 12px; cursor: pointer;
     transition: background var(--t-fast), border-color var(--t-fast); }
-  .voice-sel:hover { background: var(--accent-soft); border-color: var(--accent-bright); }
-  .voice-sel:focus { border-color: var(--accent-bright); outline: none; }
+  .voice-btn:hover { background: var(--accent-soft); border-color: var(--accent-bright); }
+  .voice-btn .vb-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .voice-btn i { font-size: 14px; line-height: 1; flex: none; }
+  .voice-pop { position: fixed; z-index: 300; width: min(320px, calc(100vw - 16px)); overflow-y: auto;
+    padding: 8px; background: var(--glass-strong); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
+    border: 1px solid var(--accent-line); border-radius: 16px; box-shadow: var(--shadow-lg); }
+  .voice-pop[hidden] { display: none; }
+  .voice-pop .vp-group { font-size: 11px; font-weight: 700; color: var(--muted); padding: 8px 8px 4px; letter-spacing: .02em; }
+  .voice-pop .vp-item { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 40px;
+    padding: 6px 8px; border-radius: 10px; cursor: pointer; font-size: 13px; color: var(--text); }
+  .voice-pop .vp-item:hover { background: var(--accent-soft); }
+  .voice-pop .vp-item.sel { background: var(--accent-soft); color: var(--accent-text); font-weight: 600; }
+  .voice-pop .vp-item[data-ghost] { opacity: .6; cursor: default; }
+  .voice-pop .vp-name { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .voice-pop .vp-play { flex: none; width: 30px; height: 30px; border: 1px solid var(--accent-line); border-radius: 50%;
+    background: #fff; color: var(--accent-text); display: inline-flex; align-items: center; justify-content: center;
+    font-size: 14px; cursor: pointer; }
+  .voice-pop .vp-play:hover { background: var(--accent-soft); }
+  body.dark .voice-btn { background: var(--card); border-color: var(--border); color: var(--accent-text); }
+  body.dark .voice-pop { background: var(--glass-strong); border-color: var(--border); }
+  body.dark .voice-pop .vp-play { background: var(--card); border-color: var(--border); }
 
   /* ============ 正文（衬线故事体卡片） ============ */
   article { font-size: 18.5px; position: relative; }
@@ -344,13 +397,13 @@
     background: var(--accent-soft); border-radius: 999px; padding: 4px 10px; font-weight: 600;
     cursor: pointer; transition: font-size .2s ease-in .12s, padding .2s ease-in .12s,
       max-width .2s ease-in .12s, opacity .2s ease-in .12s; } /* reverse: bar 展开后标题延迟淡入 */
-  .ab-title:hover { background: var(--accent); color: var(--cta-ink); }
+  .ab-title:hover { background: var(--accent); color: var(--cta-ink-dark); }
   .jump-btn { display: none; }
   .ab-seek { flex: 1; min-width: 0; }
   .ab-btn { font-size: 12px; padding: 4px 10px; min-height: 30px;
     transition: font-size .4s ease, padding .4s ease, min-height .4s ease; }
   #btnAB { font-weight: 700; letter-spacing: -0.5px; min-width: 4.2em; text-align: center; } /* 二字标签(AB/设A/设B)定宽锁死，不随状态撑宽，与左右按钮同尺寸 */
-  #btnAB.ab-active { background: var(--accent); color: var(--cta-ink); border-color: var(--accent); }
+  #btnAB.ab-active { background: var(--accent); color: var(--cta-ink-dark); border-color: var(--accent); }
   #btnAB.ab-arm { border: 1px dashed var(--accent); color: var(--accent-text); background: var(--accent-soft);
     animation: abArmPulse 1.2s ease-in-out infinite; }
   @keyframes abArmPulse { 50% { opacity: .55; } }
@@ -364,7 +417,7 @@
   /* 11px 的字母按 AA 要 4.5:1。白字压 --accent 只有 3.49（深色下更低到 2.66），压 --coral-deep 4.27 ——
      两颗都是上一轮「绿底浅字」漏掉的另一半：那轮只查了带字的按钮，角标的字写在 ::after 上。
      A 换深墨（4.78 浅 / 6.26 深，跟主按钮同一支墨）；B 是红底，白字留着、把红压暗一档到 #b8483c（5.21）。 */
-  .sent.ab-a::after { content: 'A'; background: var(--accent); color: var(--cta-ink);
+  .sent.ab-a::after { content: 'A'; background: var(--accent); color: var(--cta-ink-dark);
     box-shadow: 0 1px 5px rgba(12,156,116,.5); }
   .sent.ab-b::after { content: 'B'; background: #b8483c; color: #fff;
     box-shadow: 0 1px 5px rgba(201,86,74,.5); }
@@ -395,7 +448,7 @@
     bottom: calc(128px + env(safe-area-inset-bottom, 0px)); z-index: 131;
     display: none; align-items: center; max-width: calc(100vw - 28px);
     padding: 7px 14px; border: 0; border-radius: 999px; background: var(--accent);
-    color: var(--cta-ink); font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;
+    color: var(--cta-ink-dark); font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;
     box-shadow: 0 4px 14px rgba(0,0,0,.22); }
   #abLive.on { display: inline-flex; }
   /* 单句重复 / 倍速：同一套下拉菜单交互（桌面悬浮+点击，移动点击） */
@@ -562,7 +615,7 @@
   #markList .mbtns .btn { flex: 1; padding: 6px 4px; min-height: 34px; font-size: 12px; }
   #markList .mbtns .go { flex: 2; }
   /* 书签行 A/B 状态：该条是当前循环起/终点时点亮 */
-  #markList .mbtns .btn.ab.ab-on { background: var(--accent); color: var(--cta-ink); border-color: var(--accent); }
+  #markList .mbtns .btn.ab.ab-on { background: var(--accent); color: var(--cta-ink-dark); border-color: var(--accent); }
   /* 拖动时浮在条子上方的那枚玻璃气泡。播放条与任务条共用一套配方（.prog-tip 是第二个现场），
      所以位置/尺寸相关的都留在这里，任务条那根只在 JS 里算 left —— 别在第二处重抄一遍毛玻璃。 */
   #seekTip, .prog-tip { position: absolute; left: 0; bottom: calc(100% + 14px); transform: translateX(-50%);
@@ -786,7 +839,7 @@
   body.scrolled .audiobar:not(.expanded) .ab-expand:hover,
   .audiobar.force-mini .ab-expand:hover,
   body.scrolled .audiobar.expanded .ab-collapse:hover,
-  body:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse:hover { opacity: 1; background: var(--accent); color: var(--cta-ink);
+  body:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse:hover { opacity: 1; background: var(--accent); color: var(--cta-ink-dark);
     transform: translateX(-50%) scale(1.18); box-shadow: 0 4px 14px rgba(12,156,116,.45); }
   body.scrolled .audiobar:not(.expanded) .ab-expand:active,
   .audiobar.force-mini .ab-expand:active,
@@ -868,7 +921,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.scrolled .topbar:hover .topbar-right { max-width: 1400px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
   body.scrolled .topbar:hover .ctrl { max-width: 360px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
   body.scrolled .topbar:hover .topbar-right > .btn { max-width: 260px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
-  body.scrolled .topbar:hover .topbar-right > #btnDark { font-size: 13px; padding: 7px 14px; min-height: 34px; }
   body.dark.scrolled .topbar, body.dark.scrolled .topbar:hover { border-bottom-color: #33302b; }
   body.scrolled .topbar:hover .ctrl .btn { font-size: 13px; padding: 7px 14px; min-height: 34px; }
   }
@@ -883,7 +935,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.scrolled.show-nav .topbar-right { max-width: 1400px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
   body.scrolled.show-nav .topbar .ctrl { max-width: 360px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
   body.scrolled.show-nav .topbar-right > .btn { max-width: 260px; max-height: 60px; opacity: 1; overflow: visible; pointer-events: auto; }
-  body.scrolled.show-nav .topbar-right > #btnDark { font-size: 13px; padding: 7px 14px; min-height: 34px; }
   body.dark.scrolled.show-nav .topbar { border-bottom-color: #33302b; }
   body.scrolled.show-nav .topbar .ctrl .btn { font-size: 13px; padding: 7px 14px; min-height: 34px; }
 
@@ -934,7 +985,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* ============ 移动端（借鉴词汇真经：去矩形块感——顶栏精简、播放条单行、词库抽屉化） ============ */
   @media (max-width: 700px) {
     /* iOS 不支持 background-attachment:fixed，改固定层绘制（否则背景整块发白） */
-    html { background: none; background-color: #faf8f4; }
+    html { background: none; background-color: #f8fdfa; }
     html.dark { background-color: #1c1a17; }
     body { overscroll-behavior-y: contain; }
     body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -958,15 +1009,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .topbar-right > .btn { width: 100%; }
     .topbar-right > #btnCloud { max-width: none; } /* 盖掉旧单行顶栏的 110px 限宽，菜单里整行 */
     .topbar-right .ctrl { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .topbar-right .voice-ctrl { display: flex; flex-direction: column; align-items: stretch; gap: 8px; } /* 口音＋音色上下叠（不用 grid：原生 select 在 grid 轨道里个别版本会算错行高顶到下一行） */
-    .topbar-right .voice-sel { width: 100%; max-width: none; height: 44px; min-height: 0; line-height: 28px; overflow: hidden;
-      -webkit-appearance: none; appearance: none; /* 去原生外观：真机按系统 metrics 绘制会超出 CSS 盒压住下一行，自绘箭头后完全按盒子排 */
-      padding-right: 34px;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%238a938e' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 14px center; }
-    body.dark .topbar-right .voice-sel { background-color: #252220;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%238a938e' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 14px center; }
+    .topbar-right .voice-ctrl { display: flex; flex-direction: column; align-items: stretch; gap: 8px; } /* 口音＋音色上下叠 */
     /* loop/倍速小菜单：选项行按 44px 触区 */
     .loop-menu, .rate-menu { min-width: 120px; }
     .loop-menu button, .rate-menu button { min-height: 44px; padding: 12px 16px; font-size: 15px; }
@@ -983,7 +1026,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     body.scrolled.show-nav .topbar h1 { font-size: 14px; }
     .ctrl { font-size: 12px; gap: 5px; flex: none; }
     .btn { padding: 6px 10px; font-size: 12px; min-height: 30px; white-space: nowrap; flex: none; }
-    .voice-sel { max-width: 150px; font-size: 16px; touch-action: manipulation; }
     .chapter-sel { max-width: 42vw; font-size: 12px; padding: 4px 12px; padding-right: 26px; }
     #btnCloud { flex: none; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
     /* 布局：左侧预留章节圆点空间 */
@@ -1158,7 +1200,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-prog-fill { height: 100%; background: linear-gradient(90deg, var(--task-new), #2bd4a4); border-radius: 3px; transition: width .3s ease; }
   .tp-actions { display: flex; gap: 8px; margin-top: 16px; }
   .tp-actions .btn { flex: 1; justify-content: center; min-height: 40px; font-size: 13px; }
-  .tp-actions .btn.primary { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); border: none; font-weight: 600; box-shadow: 0 3px 10px rgba(16,180,135,.25); }
+  .tp-actions .btn.primary { background: linear-gradient(135deg,#0b8663,#0a7050); color: var(--cta-ink); border: none; font-weight: 600; box-shadow: 0 3px 10px rgba(16,180,135,.25); }
   /* ---- v2 面板：三视图标签 + 两栏并列（PRD §9.2 / §10.2） ---- */
   .sm { font-size: 11.5px; color: var(--muted); }
   .tp-tabs { display: flex; gap: 4px; margin: -6px -4px 14px; padding: 0 4px; border-bottom: 1px solid var(--border); }
@@ -1210,7 +1252,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 词本：状态过滤器 + 词行 */
   .tp-filters { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
   .pill { min-height: 30px; padding: 4px 11px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--text); font-size: 12px; cursor: pointer; }
-  .pill.on { background: var(--task-new); color: var(--cta-ink); border-color: var(--task-new); font-weight: 600; }
+  .pill.on { background: var(--task-new); color: var(--cta-ink-dark); border-color: var(--task-new); font-weight: 600; }
   .tp-book { max-height: 44vh; overflow-y: auto; border: 1px solid var(--border); border-radius: 12px; }
   /* 词与状态贴在一起说同一个词，别让 1fr 把状态推到中缝：auto / 1fr / auto ——
      状态紧跟词后、右端只留「重学」。 */
@@ -1255,20 +1297,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     border-color: #33302b;
     box-shadow: 0 24px 64px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.05), inset 0 -1px 0 rgba(0,0,0,.32); }
   body.dark .task-bar::before { opacity: .35; }
-  /* 关闭在卡片右上角，正文整块给它让出一格（窄屏文字独占一行时也要让，否则第一行会钻到 ✕ 底下） */
-  .tb-close { position: absolute; top: 5px; right: 5px; z-index: 1; width: 26px; height: 26px;
-    display: none; align-items: center; justify-content: center; padding: 0;
-    border: none; border-radius: 50%; background: transparent; color: #4a554f;
-    font-size: 15px; line-height: 1; cursor: pointer; }
-  .tb-close:hover { background: rgba(0,0,0,.07); color: var(--text); }
-  .tb-close:active { filter: brightness(.9); }
-  /* 深色那两条必须带上 #taskBar：下面有一条 `#taskBar .tb-play .btn, #taskBar .tb-close{color:#4a554f}`，
-     它带 id、特异度 (1,1,0) 压过 `body.dark .tb-close` 的 (0,2,1) —— 于是 ✕ 在深色玻璃上还是深灰，
-     探针实测 2.2:1。旁边那颗播放按钮的深色规则早就带上了 id，这一条漏了。 */
-  body.dark .tb-close, body.dark #taskBar .tb-close { color: #cfc7ba; }
-  body.dark .tb-close:hover, body.dark #taskBar .tb-close:hover { background: rgba(255,255,255,.10); color: #fff; }
-  body.task-mode .task-bar .tb-close { display: flex; }
-  .tb-body { display: flex; align-items: center; gap: 12px; padding-right: 28px; min-width: 0; }
+  /* ✕ 已删（2026-09-24）：退出统一走头部「返回首页」，这条栏不再留右上角关闭位。 */
+  .tb-body { display: flex; align-items: center; gap: 12px; min-width: 0; }
   .tb-text { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
   .tb-line1 { display: flex; align-items: center; gap: 10px; min-width: 0; }
   .tb-line2 { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
@@ -1307,7 +1337,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .tb-clock { color: #9aa39b; }
   /* 核心行只放「今天读完没读完」这一件事；剩余时间 / 工期 / 本次时长是辅助行。
      以前三句平铺一行靠 flex-wrap 折，折点随文案长度漂移，也分不出主次。 */
-  .task-bar .tb-title { font-size: 13.5px; font-weight: 700; line-height: 1.35; min-width: 0;
+  .task-bar .tb-title { font-size: 16px; font-weight: 800; line-height: 1.35; min-width: 0;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .task-bar .tb-sub { font-size: 11px; color: #56625b; line-height: 1.4; min-width: 0;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1315,30 +1345,17 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .task-bar .tb-btn { border: none; border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: filter .15s;
     align-items: center; justify-content: center; }
   .task-bar .tb-btn.again { background: var(--card); color: var(--text); border: 1px solid var(--border); }
-  .task-bar .tb-btn.next { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
+  .task-bar .tb-btn.next { background: linear-gradient(135deg,#0b8663,#0a7050); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
   .task-bar .tb-btn:active { filter: brightness(.92); }
   body.dark .task-bar .tb-btn.again { background: #252220; color: #e2ddd5; border-color: #33302b; }
   /* 「上一句」只在 ① 通读态出现（② 与完成态没有"上一句"这个动作），全交给选择器不写进 JS，
      免得渲染顺序一变就漏关。续读条是 data-state=resume 且没有 task-mode，一颗都不许露脸。 */
-  #tbPrev, #tbStay, #tbQuit { display: none; }
+  #tbPrev { display: none; }
   body.task-mode .task-bar[data-state="read"] #tbPrev { display: inline-flex; }
-  /* 点 ✕ 不立刻退出（他 2026-09-22：点击后提示是否要退出）。确认态复用同一条栏、只换内容：
-     正文问一句，按钮排换成「继续做 / 退出」，不弹层、不新增控件。仍然零惩罚、不生成欠账。 */
-  body.task-mode .task-bar[data-state="exit"] #tbStay,
-  body.task-mode .task-bar[data-state="exit"] #tbQuit { display: inline-flex; }
-  body.task-mode .task-bar[data-state="exit"] #tbPrev,
-  body.task-mode .task-bar[data-state="exit"] #tbAgain,
-  body.task-mode .task-bar[data-state="exit"] #tbNext,
-  body.task-mode .task-bar[data-state="exit"] .tb-play,
-  body.task-mode .task-bar[data-state="exit"] .tb-close { display: none !important; }
-  /* 确认态只问一件事，位置条让位（他 2026-09-23：这个弹窗也不需要进度条）。
-     两颗按钮给足横向 padding：「退出」只有两个字，不加就会变成 52×44 的竖椭圆。 */
-  body.task-mode .task-bar[data-state="exit"] .tb-seek { display: none; }
-  body.task-mode .task-bar[data-state="exit"] #tbStay,
-  body.task-mode .task-bar[data-state="exit"] #tbQuit { padding: 8px 18px; min-width: 64px; }
-  .task-bar .tb-btn.quit { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
+  .task-bar .tb-btn.quit { background: var(--grad); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
   /* 一行摆得下摆不下，全看窄屏这几颗收得多狠：
-     ① 通读态下翻句三颗退成纯图标（② 态那两颗是「回看句子 / 跳过这题」的文字按钮，不能收，收了就看不见字）。 */
+     ① 通读态下翻句三颗退成纯图标（② 态只有 #tbNext 一颗文字按钮「跳过这题 / 下一题 / 小结」，
+     「回看句子」已按 §4.4 删除，不再有第二颗文字按钮）。 */
   @media (max-width: 560px) {
     .task-bar #tbPrev .lbl { display: none; }
     .task-bar .tb-btn { padding: 6px 11px; }
@@ -1374,6 +1391,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      「放这一句」那颗键替它，留着它才有得放）。 */
   body.task-mode .task-bar[data-state="noplan"] .tb-play { display: flex; }
   body.task-mode .task-bar[data-state="noplan"] #btnPlay { display: inline-flex !important; }
+  /* W7-2：免费态（无计划）里任务条那颗 #tbNext 是「去设置」，没有 ① 的「上一句/下一句」，
+     所以把播放条搬来的 .ab-step 两颗解禁 —— 免费态本来就该能自由跟读、自由翻句
+     （过去这两颗被下面那条「翻句归任务条」的规则一并藏掉，免费态于是只能靠快速跳转）。 */
+  body.task-mode .task-bar[data-state="noplan"] .tb-play .ab-step { display: inline-flex; }
   .tb-play .ab-left { flex: 0 0 auto; min-width: 0; display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; }
   .tb-play .ab-left > .btn { opacity: 1; max-width: none; animation: none; }
   /* ▶ 在任务模式里没有存在的理由（他 2026-09-23：「播放按钮得删掉，不点不放」）：
@@ -1397,7 +1418,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 底栏这几行小字/图标原来吃 --muted，实测 3.5:1 —— 12px 字号按 WCAG AA 要 4.5:1。
      只在这条栏里加深，不动全局 --muted（全站都在用，改了影响面太大）。
      这条栏现在是半透明玻璃，比原来的白底更吃对比度 —— 改完必须用探针复量，别只信纸面值。 */
-  #taskBar .tb-play .btn, #taskBar .tb-close { color: #4a554f; }
+  #taskBar .tb-play .btn { color: #4a554f; }
   body.dark .task-bar .tb-sub, body.dark .task-bar .tb-eta { color: #bdb5a8; }
   body.dark #taskBar .tb-play .btn { color: #cfc7ba; }
   /* 窄屏：文字独占上面两行、按钮整排落在下面一行（同一张卡片里）。
@@ -1429,7 +1450,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      inline min-width，这里只留一个兜底下限（量不到时别塌成一条线）。下划线就是「少了一个词」的信号。 */
   .sent .qz-blank { display: inline-block; min-width: 1.2em; padding: 0 .18em;
     border-bottom: 2px solid var(--task-new); color: var(--task-new); font-weight: 700;
-    letter-spacing: .04em; text-align: center; cursor: pointer; border-radius: 3px; }
+    letter-spacing: .04em; text-align: center; cursor: pointer; border-radius: 3px;
+    line-height: inherit; vertical-align: baseline; }
   .sent .qz-blank:focus-visible { outline: 2px solid var(--task-new); outline-offset: 2px; }
   .sent .qz-blank.qa-done { cursor: default; }
   .sent .qz-blank.qa-ok { color: var(--task-new); border-bottom-color: var(--task-new); }
@@ -1443,6 +1465,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     border: 1px solid rgba(255,255,255,.85); border-radius: 16px; font-family: var(--serif);
     box-shadow: 0 12px 32px rgba(17,36,28,.18), 0 4px 12px rgba(17,36,28,.08), inset 0 1px 0 rgba(255,255,255,.95); }
   .blank-pop[hidden] { display: none; }
+  /* W5-8：浮窗朝向那个空的小箭头 —— 同一套玻璃语言里，浮层要指明它锚的是谁。
+     .below = 浮窗在空的下方（箭头朝上）；.above = 在上方（箭头朝下），由 positionBlankPop 翻转。 */
+  .blank-pop::after { content: ''; position: absolute; left: 50%; margin-left: -6px;
+    border: 6px solid transparent; }
+  .blank-pop.below::after { top: -12px; border-bottom-color: rgba(255,255,255,.92); }
+  .blank-pop.above::after { bottom: -12px; border-top-color: rgba(255,255,255,.92); }
+  body.dark .blank-pop.below::after { border-bottom-color: rgba(30,28,25,.94); }
+  body.dark .blank-pop.above::after { border-top-color: rgba(30,28,25,.94); }
   body.dark .blank-pop { background: rgba(30,28,25,.94); border-color: #33302b; }
   .blank-pop .bp-hint { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.55; }
   .blank-pop .bp-hint b { color: var(--ink2); }
@@ -1469,7 +1499,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .pass-summary .nums b { display: block; font-size: 20px; font-weight: 800; color: var(--accent-text); font-variant-numeric: tabular-nums; }
   .pass-summary .nums span { font-size: 10.5px; color: var(--muted); }
   .pass-summary .go { margin-top: 11px; width: 100%; min-height: 44px; border: none; border-radius: 999px;
-    background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; }
+    background: linear-gradient(135deg,#0b8663,#0a7050); color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; }
   @media (max-width: 700px) {
     .qz-opts { grid-template-columns: 1fr 1fr; gap: 6px; }
   }
@@ -1485,7 +1515,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .ps-opts { display: flex; gap: 6px; flex-wrap: wrap; }
   .ps-opt { border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer; background: transparent; transition: all .15s; }
   .ps-opt:hover { border-color: var(--task-new); color: var(--task-new); }
-  .ps-opt.sel { background: var(--task-new); color: var(--cta-ink); border-color: var(--task-new); }
+  .ps-opt.sel { background: var(--task-new); color: var(--cta-ink-dark); border-color: var(--task-new); }
   /* 计划小结：标签—数值结构化，轮数只在这里出现一次并放大 */
   .ps-sum { margin: 14px 0 12px; padding: 2px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
   .ps-sum-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 12px; color: var(--muted); }
@@ -1502,7 +1532,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      所以 padding 必须上下对称 —— 旧写法 padding-top:0 + border-top:0 是照"拼接footer"抄的，
      文字会贴在卡的上沿（2026-09-23 手机实测）。 */
   .ps-eta.sm { margin-top: -6px; padding: 7px 12px; font-size: 11px; opacity: .8; }
-  .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 12px rgba(16,180,135,.3); }
+  .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: linear-gradient(135deg,#0b8663,#0a7050); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 12px rgba(16,180,135,.3); }
   .ps-start:active { filter: brightness(.92); }
   /* 调整计划 */
   .ps-adjust { display: flex; gap: 6px; margin-top: 12px; }
@@ -1515,7 +1545,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 暗色模式补充覆盖 */
   body.dark .tp-close:hover { background: rgba(255,255,255,.08); }
   body.dark .ps-opt { color: var(--text); }
-  body.dark .ps-opt.sel { color: var(--cta-ink); }
+  body.dark .ps-opt.sel { color: var(--cta-ink-dark); }
   body.dark .ps-sum-row.warn, body.dark .ps-sum-row.warn b { color: #f0a08c; }
   body.dark .today-panel .tp-head h3, body.dark .today-panel .plan-setup h3 { color: var(--text); }
   body.dark .task-bar .tb-title { color: var(--text); }
@@ -1539,23 +1569,155 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      任务模式已有自己的顶栏（.task-top，见下），整块 #appShell 仍要收掉 ——
      不然后面 min-height:100vh 的首页会把正文压到首屏之外（T2 遗留的现场）。 */
   body.task-mode #appShell { display: none; }
-  /* 任务模式顶栏（审阅 I1）：sticky 在正文上方，退出即随 body.task-mode 一起收掉。 */
+  /* ============ 3.0 头部（W1 重做 / 2026-09-24 再调）============
+     文章内 = 主站 .reader-head（fixed 玻璃胶囊，滚动收缩）+ .r-badges（iOS 拨杆等）。
+     一级页面没有顶栏：深色开关、口音、音色都收在「我的」浮窗（#mePop）里（用户 2026-09-24）。 */
+  /* 主站英音/美音胶囊：口音开关现在只在「我的」浮窗里（#mePop 的 #btnAccent） */
+  .accent-btn { flex: none; border: 1px solid var(--iel-accent-line); background: #fff; color: var(--iel-accent-deep);
+    border-radius: 999px; padding: 6px 13px; font-size: 12.5px; font-weight: 600; white-space: nowrap; cursor: pointer;
+    position: relative; transition: background var(--iel-t-fast), border-color var(--iel-t-fast); }
+  .accent-btn::after { content: ""; position: absolute; inset: -5px 0; border-radius: 999px; }
+  .accent-btn:hover { background: var(--iel-accent-soft); border-color: var(--iel-accent); }
+  /* —— 文章内：主站 .reader-head（fixed 玻璃胶囊 + 滚动收缩）—— */
   .task-top { display: none; }
-  body.task-mode .task-top { display: flex; align-items: center; gap: 12px;
-    position: sticky; top: 0; z-index: 150; padding: 8px 16px;
-    background: var(--card); border-bottom: 1px solid var(--border); }
-  .task-top .tt-back { flex: none; min-height: 44px; padding: 0 14px; border: 1px solid var(--border);
-    border-radius: 999px; background: transparent; color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; }
-  .task-top .tt-back:hover { background: var(--accent-soft); color: var(--accent-text); }
-  .task-top .tt-title { min-width: 0; font-size: 15px; font-weight: 700; color: var(--text);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  body.task-mode .task-top { display: block; }
+  .reader-head { position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+    width: min(1084px, calc(100% - 36px)); z-index: 105; display: flex; align-items: center; gap: 5px;
+    padding: 6px 14px 6px 6px;
+    background: rgba(255,255,255,.42); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
+    border: 1px solid rgba(255,255,255,.5); border-radius: 999px; box-shadow: 0 3px 14px rgba(30,60,48,.08);
+    pointer-events: none; transition: padding var(--iel-t), top var(--iel-t); }
+  .reader-head .r-title { pointer-events: none; transition: font-size var(--iel-t); }
+  .reader-head.shrunk { top: 6px; padding: 2px 12px 2px 2px; background: rgba(255,255,255,.55); }
+  .reader-head.shrunk .r-title { font-size: 12.5px; }
+  .reader-head.shrunk .r-title .tcn { font-size: 10.5px; margin-left: 5px; }
+  .reader-head.shrunk .r-pos { font-size: 10px; padding: 1px 5px; margin-left: 6px; }
+  .reader-head.shrunk .back { width: 26px; height: 26px; font-size: 14px; }
+  .reader-head.shrunk .back::after { content: ""; position: absolute; inset: -9px; }
+  .back { pointer-events: auto; border: 1px solid var(--iel-line); background: #fff; border-radius: 50%;
+    width: 30px; height: 30px; padding: 0; font-size: 15px; line-height: 1; color: var(--iel-ink2);
+    flex: none; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;
+    transition: width var(--iel-t), height var(--iel-t), font-size var(--iel-t); }
+  .back::after { content: ""; position: absolute; inset: -7px; border-radius: 50%; }
+  .back:hover { border-color: var(--iel-accent); color: var(--iel-accent-deep); background: #fff; }
+  .r-title { font-size: 15.5px; font-weight: 700; line-height: 1.3; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; flex: 1; min-width: 0; color: var(--text); }
+  .r-title .tcn { font-size: 12px; font-weight: 400; color: var(--iel-ink2); margin-left: 7px; }
+  .r-title .r-pos { font-size: 11px; font-weight: 600; color: var(--iel-accent-deep); background: var(--iel-accent-soft);
+    border-radius: 999px; padding: 1px 7px; margin-left: 8px; vertical-align: 1px; font-variant-numeric: tabular-nums; }
+  .r-nav { display: flex; gap: 8px; flex: none; pointer-events: auto; }
+  .nav-arrow { pointer-events: auto; border: none; background: transparent; border-radius: 999px; height: 26px;
+    padding: 0 12px; font-size: 12px; line-height: 1; color: var(--iel-accent-deep); flex: none; display: flex;
+    align-items: center; justify-content: center; cursor: pointer; white-space: nowrap; position: relative;
+    transition: background var(--iel-t-fast), color var(--iel-t-fast); }
+  .nav-arrow::after { content: ""; position: absolute; inset: -8px 0; border-radius: 999px; }
+  .nav-arrow:hover:not(:disabled) { background: var(--iel-accent-soft); }
+  .nav-arrow:disabled { opacity: .35; cursor: default; }
+  /* —— 文章内：主站 .r-badges（译文拨杆 / 行内词义拨杆 / 口音 / 音色 / 帮助 / 目标词）—— */
+  /* 与正文等宽（用户 2026-09-24 修正）：对齐 .layout 的内容框 —— min(1120,100%) − 36px。 */
+  .task-top .r-badges { width: min(1084px, calc(100% - 36px)); margin: 0 auto 14px; padding-top: 64px; }
+  .r-badges { position: relative; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .tr-msw { display: inline-flex; align-items: center; gap: 7px; flex: none; border: 1px solid var(--iel-mark-line);
+    background: #fff; border-radius: 999px; padding: 5px 12px 5px 5px; font-size: 12.5px; font-weight: 500;
+    color: var(--iel-accent-deep); cursor: pointer; font-family: inherit; position: relative;
+    transition: background var(--iel-t-fast), border-color var(--iel-t-fast); }
+  .tr-msw::after { content: ""; position: absolute; inset: -7px 0; border-radius: 999px; }
+  .tr-msw .knob { width: 28px; height: 17px; border-radius: 999px; background: rgba(31,45,38,.18); position: relative;
+    flex: none; transition: background .25s; }
+  .tr-msw .knob::after { content: ""; position: absolute; top: 2px; left: 2px; width: 13px; height: 13px;
+    border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(31,45,38,.28); transition: left .25s; }
+  .tr-msw.on { border-color: var(--iel-accent); background: var(--iel-accent-soft); }
+  .tr-msw.on .knob { background: var(--iel-accent); }
+  .tr-msw.on .knob::after { left: 13px; }
+  .tr-help { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--iel-line); background: #fff;
+    color: var(--iel-ink2); font-size: 12px; font-weight: 600; line-height: 1; cursor: pointer; flex: none;
+    position: relative; transition: border-color var(--iel-t-fast), color var(--iel-t-fast), background var(--iel-t-fast); }
+  .tr-help::after { content: ""; position: absolute; inset: -8px; border-radius: 50%; }
+  .tr-help:hover { border-color: var(--iel-accent); color: var(--iel-accent-deep); background: var(--iel-tint); }
+  .r-badge { display: inline-block; font-size: 12px; padding: 2px 10px; background: var(--iel-accent-soft);
+    color: var(--iel-accent-deep); border-radius: 999px; font-weight: 600; }
+  .r-badges .fav-badge { margin-left: auto; flex: none; background: #fdf1dc; color: #b07a10; }
+  .tr-bubble { position: absolute; top: calc(100% + 10px); right: 0; width: min(330px, calc(100vw - 40px));
+    background: var(--iel-glass-strong); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
+    border: 1px solid var(--iel-accent-line); border-radius: var(--iel-radius-sm); padding: 10px 14px;
+    font-size: 12.5px; line-height: 1.75; color: var(--iel-ink2); box-shadow: var(--iel-shadow);
+    opacity: 0; visibility: hidden; transform: translateY(-4px);
+    transition: opacity var(--iel-t-fast), transform var(--iel-t-fast), visibility var(--iel-t-fast); z-index: 60; }
+  .tr-bubble.show { opacity: 1; visibility: visible; transform: translateY(0); }
   #appShell { display: flex; min-height: 100vh; }
   .sidenav { flex: none; width: 220px; padding: 16px 12px; border-right: 1px solid var(--border);
+    background: #f2faf6;
     display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; }
-  .nav-brand { font-weight: 700; padding: 6px 10px 14px; color: var(--accent-text); }
-  .nav-item { min-height: 44px; text-align: left; padding: 0 12px; border: none; border-radius: 12px;
+  /* 侧栏品牌（照抄主站 .sn-logo）：一级页面才露脸 */
+  .sn-logo { display: flex; align-items: center; gap: 10px; padding: 2px 8px 20px; color: var(--text); }
+  .sn-logo .sn-mark { width: 34px; height: 34px; flex: none; border-radius: 9px; background: var(--grad);
+    color: var(--cta-ink); box-shadow: var(--grad-shadow), inset 0 1px 0 rgba(255,255,255,.28);
+    display: flex; align-items: center; justify-content: center; }
+  .sn-logo .sn-mark i { font-size: 18px; line-height: 1; }
+  .sn-name { font-weight: 700; font-size: 13.5px; line-height: 1.4; letter-spacing: .2px; white-space: nowrap; }
+  /* 导航项：图标 + 文字（PRD §2.2 五颗），对齐/间距照主站侧栏 .sn-nav 的观感 */
+  .nav-item { display: flex; align-items: center; gap: 10px; min-height: 44px; text-align: left;
+    padding: 0 12px; border: none; border-radius: 12px;
     background: transparent; font-size: 14px; color: var(--text); cursor: pointer; }
+  .nav-item i { font-size: 19px; line-height: 1; flex: none; width: 19px; text-align: center; }
   .nav-item.on { background: var(--accent-soft, rgba(16,180,135,.07)); color: var(--accent-text); font-weight: 600; }
+  /* ---- 侧栏底部：一条分割线 + 一行「我的」（2026-09-24 用户：不要卡片）----
+     未登录显示「登录」按钮，已登录显示头像 + 账号；内容由 updateMeCard() 渲染。 */
+  .me-card { display: flex; align-items: center; gap: 10px; width: 100%; margin-top: auto;
+    padding: 12px 8px 2px; border: none; border-top: 1px solid var(--border); border-radius: 0;
+    background: transparent; color: var(--text); cursor: pointer; text-align: left; }
+  .me-card:hover { color: var(--accent-text); }
+  .me-card:hover .me-name { color: var(--accent-text); }
+  .me-login { font-size: 13.5px; font-weight: 700; color: var(--accent-text); }
+  .me-avatar { flex: none; width: 30px; height: 30px; border-radius: 8px; background: var(--grad);
+    color: var(--cta-ink); display: flex; align-items: center; justify-content: center; font-size: 17px; }
+  .me-meta { min-width: 0; display: flex; align-items: center; gap: 6px; }
+  .me-name { font-size: 13.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .me-tag { flex: none; font-size: 10px; font-weight: 700; line-height: 1.6; padding: 0 6px;
+    border-radius: 999px; background: var(--note-soft); color: var(--note); }
+  /* ---- 「我的」浮窗（点用户卡向上弹；主题/计划/账号/数据都在这里）---- */
+  .me-pop { position: fixed; z-index: 400; width: 300px; max-height: calc(100vh - 24px); overflow-y: auto;
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    box-shadow: var(--shadow-lg); padding: 14px; }
+  .me-pop[hidden] { display: none; }
+  .mp-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .mp-avatar { flex: none; width: 42px; height: 42px; border-radius: 12px; background: var(--grad);
+    color: var(--cta-ink); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .mp-id { min-width: 0; flex: 1; }
+  .mp-name { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mp-sub { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mp-badge { flex: none; font-size: 10.5px; font-weight: 700; line-height: 1.7; padding: 0 8px;
+    border-radius: 999px; background: var(--accent-soft); color: var(--accent-text); }
+  .mp-cta { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: var(--grad);
+    color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: var(--grad-shadow); }
+  .mp-cta:active { filter: brightness(.94); }
+  .mp-card { margin-top: 12px; padding: 10px 12px; border: 1px solid var(--accent-line); border-radius: 12px;
+    background: var(--accent-soft); }
+  .mp-nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; text-align: center; }
+  .mp-nums b { display: block; font-size: 18px; font-weight: 800; color: var(--accent-text); font-variant-numeric: tabular-nums; }
+  .mp-nums span { font-size: 10.5px; color: var(--muted); }
+  .mp-status { margin-top: 8px; font-size: 11.5px; color: var(--muted); text-align: center; }
+  .mp-list { margin-top: 12px; border-top: 1px solid var(--border); }
+  .mp-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 0;
+    border-bottom: 1px solid var(--border); }
+  .mp-row > .mp-label { font-size: 13px; font-weight: 600; color: var(--text); flex: none; }
+  .mp-row .ps-opts { justify-content: flex-end; flex-wrap: wrap; }
+  .mp-row .ps-opt { padding: 5px 10px; font-size: 12px; }
+  .mp-row .tr-msw { padding: 4px 8px 4px 4px; }
+  .mp-foot { margin-top: 12px; }
+  .mp-logout { width: 100%; min-height: 40px; border: 1px solid var(--border); border-radius: 999px;
+    background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; }
+  .mp-logout:hover { color: var(--coral-deep); border-color: var(--coral); }
+  .mp-login-form { display: flex; flex-direction: column; gap: 6px; }
+  .mp-login-form input { width: 100%; min-height: 38px; border: 1px solid var(--border); border-radius: 10px;
+    padding: 0 10px; font-size: 13px; background: #fff; color: var(--text); }
+  .mp-login-form .row { display: flex; gap: 6px; }
+  .mp-login-form .row button { flex: 1; min-height: 38px; border: 1px solid var(--accent-line); border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent-text); font-size: 13px; font-weight: 700; cursor: pointer; }
+  /* ② 右侧内容区照主站首页那套 token（冷薄荷：线 #e7eee9 / 墨 #2b3a34 / 次墨 #63706a）；
+     只作用于 #appView 内的卡片/横幅，左侧导航（.sidenav）保持自己那套暖色不变。
+     深色由 body.dark 那套管，所以这里限定 body:not(.dark)。 */
+  body:not(.dark) #appView { --border: #e7eee9; --text: #2b3a34; --muted: #63706a; --ink2: #63706a; --card: #fff; }
   #appView { flex: 1; min-width: 0; padding: 20px 24px 88px; }
   /* 平板档（PRD §10.2）：701–1023px 侧栏收窄到 180px */
   @media (min-width: 701px) and (max-width: 1023px) {
@@ -1568,34 +1730,58 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .sidenav { width: auto; height: auto; position: fixed; top: auto; left: 0; right: 0; bottom: 0; z-index: 300;
       flex-direction: row; border-right: none; border-top: 1px solid var(--border);
       padding: 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px)); }
-    .nav-brand { display: none; }
-    .nav-item { flex: 1; text-align: center; font-size: 11px; }
+    .sn-logo { display: none; }
+    /* 手机 TabBar：图标在上、文字在下 */
+    .nav-item { flex: 1; flex-direction: column; justify-content: center; gap: 2px; text-align: center;
+      font-size: 11px; padding: 0 4px; }
+    .nav-item i { font-size: 20px; width: auto; }
+    /* 「我的」在手机 = 第 5 个 Tab（未登录「登录」/ 已登录头像+「我的」），点它弹浮窗；不塞进浮窗里点不到 */
+    .me-card { flex: 1; flex-direction: column; justify-content: center; gap: 2px; margin-top: 0;
+      padding: 0 4px; border: none; border-top: none; background: transparent; }
+    .me-card:hover { background: transparent; }
+    .me-avatar { width: 22px; height: 22px; border-radius: 6px; font-size: 15px; }
+    .me-meta { flex-direction: column; gap: 0; }
+    .me-name { font-size: 11px; font-weight: 500; }
+    .me-login { font-size: 11px; }
+    .me-tag { display: none; }
     #appView { padding: 16px 16px 88px; }
+    /* 文章内头部：主站手机档尺寸；窄屏按 .layout 的 16px 内边距对齐（100% − 32px） */
+    .reader-head { top: 8px; gap: 4px; padding: 5px 10px 5px 5px; width: calc(100% - 32px); }
+    .tr-msw { padding: 4px 11px 4px 4px; font-size: 11.5px; }
+    .tr-msw .knob { width: 25px; height: 15px; }
+    .tr-msw .knob::after { width: 11px; height: 11px; }
+    .tr-msw.on .knob::after { left: 12px; }
+    .task-top .r-badges { padding-top: 58px; width: calc(100% - 32px); }
   }
   /* ============ 3.0 首页文章卡片（M1 Task 3） ============ */
   .art-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  .art-card { text-align: left; padding: 14px 16px; border: 1px solid var(--border); border-radius: 16px;
-    background: var(--card); cursor: pointer; }
+  /* W5-4：卡片本身是**容器**（无 role/button），内部只放真按钮 —— 打开正文的 .a-open 与
+     直达 ② 的 .a-quiz 是同级兄弟，不再出现「真按钮套在 role=button 的 div 里」。 */
+  .art-card { text-align: left; border: 1px solid var(--border); border-radius: 16px;
+    background: var(--card); overflow: hidden; box-shadow: var(--shadow); }
+  .art-card .a-open { display: block; width: 100%; padding: 14px 16px; background: none; border: 0;
+    font: inherit; color: inherit; text-align: left; cursor: pointer; }
+  .art-card .a-open:hover .a-title { color: var(--accent-text); }
   .art-card .a-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .art-card .a-title { font-size: 17px; font-weight: 700; }
-  .art-card .a-en { font-size: 11.5px; color: var(--muted); margin: 2px 0 10px; }
-  .art-card .a-bar { height: 6px; border-radius: 3px; background: rgba(11,84,64,.14); overflow: hidden; }
-  .art-card .a-bar i { display: block; height: 100%; background: linear-gradient(90deg, #2bd4a4, #0fae7e); }
+  .art-card .a-en { display: block; font-size: 11.5px; color: var(--muted); margin: 2px 0 10px; }
+  .art-card .a-bar { display: block; height: 6px; border-radius: 3px; background: rgba(11,84,64,.14); overflow: hidden; }
+  .art-card .a-bar i { display: block; height: 100%; background: linear-gradient(90deg, #0b8663, #0a7050); }
   .art-card .a-meta { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px;
     font-size: 11px; color: var(--muted); }
-  .art-card .a-pct { font-weight: 700; color: var(--accent-text); }
+  .art-card .a-pct { font-size: 15px; font-weight: 800; color: var(--accent-text); }
   /* 当前阶段胶囊（§3.3 / §9.4）：四档各自可辨 */
   .art-card .a-stage { flex: none; font-size: 10.5px; font-weight: 700; line-height: 1.7;
     padding: 0 8px; border-radius: 999px; background: rgba(0,0,0,.05); color: var(--muted); }
   .art-card[data-stage="reading"] .a-stage { background: var(--accent-soft); color: var(--accent-text); }
   .art-card[data-stage="read"] .a-stage,
   .art-card[data-stage="quiz"] .a-stage,
-  .art-card[data-stage="done"] .a-stage { background: var(--accent); color: var(--cta-ink); }
+  .art-card[data-stage="done"] .a-stage { background: var(--accent); color: var(--cta-ink-dark); }
   /* 入口 2（§4.4）：通读已完成的篇目多一颗「答题」直入 ② */
-  .art-card .a-quiz { display: block; width: 100%; margin-top: 10px; min-height: 44px;
+  .art-card .a-quiz { display: block; width: calc(100% - 32px); margin: 0 16px 14px; min-height: 44px;
     border: 1px solid var(--accent-line); border-radius: 10px; cursor: pointer;
     background: var(--accent-soft); color: var(--accent-text); font-weight: 700; font-size: 13px; }
-  .art-card .a-quiz:hover { background: var(--accent); color: var(--cta-ink); }
+  .art-card .a-quiz:hover { background: var(--accent); color: var(--cta-ink-dark); }
   /* 未开始：灰底 + 虚线进度条 + 半透明标题 */
   .art-card[data-stage="todo"] { opacity: .62; }
   .art-card[data-stage="todo"] .a-bar { background: transparent; border: 1px dashed var(--border); }
@@ -1604,29 +1790,89 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .art-card[data-stage="pro"] .a-bar i { background: linear-gradient(90deg, #f0c24b, #d99a1f); }
   @media (max-width: 1023px) { .art-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 700px) { .art-grid { grid-template-columns: 1fr; } }
-  /* ============ 3.0 顶部「今天该做什么」横幅（M1 Task 4，§3.5） ============ */
-  .home-banner { display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    padding: 12px 16px; margin-bottom: 16px; border: 1px solid var(--accent-line);
+  /* ============ 3.0 顶部「今天该做什么」横幅（M1 Task 4，§3.5） ============
+     2026-09-24 排版朝参考 B 靠：文字在上、主按钮通栏胶囊在下（数字/层级更清楚）。 */
+  .home-banner { display: flex; flex-direction: column; align-items: stretch; gap: 10px;
+    padding: 14px 16px; margin-bottom: 16px; border: 1px solid var(--accent-line);
     border-radius: 16px; background: var(--accent-soft); }
-  .home-banner .hb-text { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-  .home-banner .hb-main { font-size: 14px; font-weight: 600; color: var(--text); }
-  .home-banner .hb-sum { font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .home-banner .b-go { flex: none; min-height: 44px; padding: 0 16px; border: none; border-radius: 999px;
-    background: var(--grad); color: var(--cta-ink); font-size: 13px; font-weight: 700; cursor: pointer;
+  .home-banner .hb-text { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .home-banner .hb-main { font-size: 15.5px; font-weight: 700; color: var(--text); }
+  .home-banner .hb-sum { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .home-banner .b-go { display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    width: 100%; min-height: 46px; padding: 0 16px; border: none; border-radius: 999px;
+    background: var(--grad); color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer;
     box-shadow: var(--grad-shadow); white-space: nowrap; }
   .home-banner .b-go:active { filter: brightness(.92); }
   @media (max-width: 700px) {
-    .home-banner { flex-direction: column; align-items: stretch; }
     .home-banner .b-go { min-height: 44px; }
   }
+  /* W5-1：后续里程碑的占位屏（学习数据 / 单词本 / 随身听 / 我的）——
+     居中、灰字、带标题层级与图标，不再是一枚裸 <h3> + <p>。 */
+  .app-todo { max-width: 440px; margin: 16vh auto 0; text-align: center; padding: 0 20px; }
+  .app-todo .at-ico { display: inline-flex; align-items: center; justify-content: center; width: 54px; height: 54px;
+    margin-bottom: 14px; border-radius: 16px; background: var(--accent-soft); color: var(--accent-text); font-size: 26px; }
+  .app-todo h3 { font-size: 18px; font-weight: 700; color: var(--text); margin: 0 0 8px; }
+  .app-todo p { color: var(--muted); font-size: 13px; line-height: 1.7; margin: 0; }
+  body.dark .app-todo .at-ico { background: var(--accent-soft); color: var(--accent-text); }
+  /* ============ 3.0 外壳深色覆盖（W2，PRD §10.1） ============
+     外壳与 M1 新页面统一到影子跟读的暖黑 token（--bg/--card/--border/--text/--accent-soft…），
+     只把几处写死的浅色值换掉（.a-bar / .a-stage 等）。全部复用既有 token，不新造色。 */
+  body.dark .sidenav { background: var(--bg); border-right-color: var(--border); }
+  body.dark .sn-logo { color: var(--text); }
+  body.dark .sn-name { color: var(--text); }
+  body.dark .nav-item { color: var(--text); }
+  body.dark .nav-item.on { background: var(--accent-soft); color: var(--accent-text); }
+  body.dark .me-card { background: transparent; border-top-color: var(--border); }
+  body.dark .me-card:hover { background: transparent; }
+  body.dark .me-pop { background: var(--card); border-color: var(--border); }
+  body.dark .mp-login-form input { background: var(--bg); border-color: var(--border); color: var(--text); }
+  body.dark #appView { color: var(--text); }
+  body.dark .art-card { background: var(--card); border-color: var(--border); }
+  body.dark .art-card .a-bar { background: var(--hl); }
+  body.dark .art-card[data-stage="todo"] .a-bar { background: transparent; border-color: var(--border); }
+  body.dark .art-card .a-stage { background: rgba(255,255,255,.06); color: var(--muted); }
+  body.dark .art-card[data-stage="reading"] .a-stage { background: var(--accent-soft); color: var(--accent-text); }
+  body.dark .art-card[data-stage="read"] .a-stage,
+  body.dark .art-card[data-stage="quiz"] .a-stage,
+  body.dark .art-card[data-stage="done"] .a-stage { background: var(--accent); color: var(--cta-ink-dark); }
+  body.dark .art-card[data-stage="pro"] .a-stage { background: var(--note-soft); color: var(--note); }
+  body.dark .art-card .a-quiz { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-text); }
+  body.dark .home-banner { background: var(--accent-soft); border-color: var(--accent-line); }
+  /* 新头部（W1 重做）：一级页面顶栏 + 文章内玻璃胶囊/拨杆，全部换暖黑 token */
+  body.dark .accent-btn { background: var(--card); border-color: var(--border); color: var(--text); }
+  body.dark .accent-btn:hover { background: rgba(16,180,135,.12); }
+  body.dark .reader-head { background: rgba(30,28,25,.72); border-color: rgba(255,255,255,.08);
+    box-shadow: 0 3px 14px rgba(0,0,0,.35); }
+  body.dark .reader-head.shrunk { background: rgba(30,28,25,.85); }
+  body.dark .back { background: var(--card); border-color: var(--border); color: var(--text); }
+  body.dark .back:hover { background: var(--card); }
+  body.dark .r-title { color: var(--text); }
+  body.dark .nav-arrow { color: var(--accent-text); }
+  body.dark .tr-msw { background: var(--card); border-color: var(--border); color: var(--accent-text); }
+  body.dark .tr-msw.on { background: var(--accent-soft); border-color: var(--accent); }
+  body.dark .tr-msw .knob { background: rgba(255,255,255,.2); }
+  body.dark .tr-msw .knob::after { background: #e2ddd5; }
+  body.dark .tr-msw.on .knob { background: var(--accent); }
+  body.dark .tr-msw.on .knob::after { background: #fff; }
+  body.dark .tr-help { background: var(--card); border-color: var(--border); color: var(--muted); }
+  body.dark .r-badge.fav-badge { background: rgba(217,164,65,.14); color: var(--note); }
+  /* ② 的空与浮窗：空的三态、浮窗里的选项在暖黑上要够亮 */
+  body.dark .sent .qz-blank.qa-no { color: #f0a08c; border-bottom-color: #f0a08c; }
+  body.dark .qz-opt { background: var(--card); border-color: var(--border); color: var(--text); }
+  body.dark .qz-opt.right { background: var(--task-bg); border-color: var(--task-new); color: var(--task-new); }
+  body.dark .qz-opt.wrong { background: rgba(240,160,140,.12); border-color: #f0a08c; color: #f0a08c; }
+  body.dark .qz-note { background: rgba(52,211,153,.07); border-color: rgba(52,211,153,.16); }
     </style>
 
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <!-- 实测：把下面这行图标字体样式表改成非阻塞加载后，顶栏收纳会开始等第三方字体 ——
          4 秒内没落地就判「放得下」，汉堡不出现（并行跑套件时复现）。首屏那 3–5 倍的收益
-         要等「顶栏测量不依赖远端图标字体」之后再来拿，所以这里保持阻塞加载。 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+         要等「顶栏测量不依赖远端图标字体」之后再来拿，所以这里保持阻塞加载。
+         2026-09-24：图标源统一到主站那套（remixicon@4.5.0 + fastly.jsdelivr.net，含 woff2 preload）——
+         三站同一版本，`ri-*` 才不会一处有、一处是空白豆腐块。 -->
+    <link rel="preload" href="https://fastly.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css">
 
     <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20color=%22%23000%22%20d=%22M0%200h16v16H0V0zm16%200H0v16h16V0zm-7-5h7v2h-7V2zm0%205h7v2h-7V2zm0%205h7v2h-7V2%22/%3E%3C/svg%22">
   </head>
@@ -1634,20 +1880,48 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
 
     <a href="#art" class="sr-only sr-only-focusable">跳到正文</a>
 
-    <!-- 3.0 外壳（M1）：左侧导航 5 项 + #appView 内容区，路由见 app.js。
-         旧版顶栏 / 播放条 / 正文布局先留在 DOM 里（运行时大量 getElementById 依赖它们），
-         本任务只把它们藏起来，由 T3–T7 逐步吸收。 -->
+    <!-- 3.0 文章内头部（W1 重做，照抄主站情景训练 index.html 的 .reader-head + .r-badges）。
+         只在任务模式现身；深色/口音/音色都不在这里（收在「我的」浮窗里）。
+         .reader-head 是 fixed 玻璃胶囊、随滚动加 .shrunk（缩放逻辑见脚本尾部）。 -->
+    <header class="task-top" id="taskTop">
+      <div class="reader-head" id="readerHead">
+        <button class="back" id="ttBack" type="button" onclick="TASK.exitTaskMode()" title="返回首页" aria-label="返回首页"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
+        <div class="r-title" id="ttTitle"><span class="tt-zh"></span><span class="tcn"></span><span class="r-pos"></span></div>
+        <div class="r-nav">
+          <button class="nav-arrow" id="ttPrev" type="button" aria-label="上一篇">上一篇</button>
+          <button class="nav-arrow" id="ttNext" type="button" aria-label="下一篇">下一篇</button>
+        </div>
+      </div>
+      <!-- 口音/音色已按用户口径挪进「我的」浮窗（③ 2026-09-24），这里只留译文/词义/帮助/目标词。 -->
+      <div class="r-badges" id="taskBadges">
+        <button class="tr-msw on" id="btnZh" type="button" role="switch" aria-checked="true" title="显示/隐藏每句下方的中文全句翻译"><span class="knob" aria-hidden="true"></span>全句译文</button>
+        <button class="tr-msw on" id="btnGloss" type="button" role="switch" aria-checked="true" title="显示/隐藏英文句内行间的单词词义与音标"><span class="knob" aria-hidden="true"></span>行内词义</button>
+        <button class="tr-help" id="ttHelp" type="button" aria-label="使用说明">?</button>
+        <span class="r-badge fav-badge" id="ttWords" title="本篇目标词数"></span>
+        <div class="tr-bubble" id="ttBubble" role="tooltip">点「全句译文」显示/隐藏每句下方的中文翻译；点「行内词义」显示/隐藏句内小字词义。口音与音色在「我的」里切换（侧栏左下角）。</div>
+      </div>
+    </header>
+
+    <!-- 3.0 外壳（M1）：左侧导航 4 项 + 底部「我的」一行 + #appView，路由见 app.js。 -->
     <div id="appShell">
       <nav class="sidenav" aria-label="主导航">
-        <div class="nav-brand">雅思背单词 <span>3.0</span></div>
-        <button class="nav-item on" data-route="home">首页</button>
-        <button class="nav-item" data-route="stats">学习数据</button>
-        <button class="nav-item" data-route="words">单词本</button>
-        <button class="nav-item" data-route="listen">随身听</button>
-        <button class="nav-item" data-route="me">我的</button>
+        <div class="sn-logo"><span class="sn-mark"><i class="ri-book-open-fill" aria-hidden="true"></i></span><span class="sn-name">雅思背单词 3.0</span></div>
+        <button class="nav-item on" data-route="home"><i class="ri-home-5-line" aria-hidden="true"></i><span>首页</span></button>
+        <button class="nav-item" data-route="stats"><i class="ri-bar-chart-2-line" aria-hidden="true"></i><span>学习数据</span></button>
+        <button class="nav-item" data-route="words"><i class="ri-book-2-line" aria-hidden="true"></i><span>单词本</span></button>
+        <button class="nav-item" data-route="listen"><i class="ri-headphone-line" aria-hidden="true"></i><span>随身听</span></button>
+        <!-- 侧栏底部：一条分割线 + 一行「我的」（2026-09-24 用户：不要卡片，用分割线）。
+             未登录显示「登录」按钮，已登录显示头像 + 账号；内容由 app.js 的 updateMeCard() 渲染。
+             点它向上弹「我的」浮窗（口音/音色/主题/计划/账号/数据都在里面）。 -->
+        <button class="me-card" id="meCard" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="mePop">
+          <span class="me-login">登录</span>
+        </button>
       </nav>
       <main id="appView"></main>
     </div>
+
+    <!-- 「我的」浮窗（用户 2026-09-24）：点底部那一行向上弹出；主题（深浅色）/口音/音色/计划/账号/数据都在这里。 -->
+    <div class="me-pop" id="mePop" role="dialog" aria-label="我的" hidden></div>
 
     <header class="topbar" role="banner">
       <h1><i class="ri-book-open-line" aria-hidden="true"></i> 雅思词汇 · 影子跟读</h1>
@@ -1658,15 +1932,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       </div>
       <button class="btn" id="btnToday" onclick="TASK.togglePanel()" title="今日学习任务" aria-label="今日学习任务"><i class="ri-calendar-check-line" aria-hidden="true"></i><span class="only-mobile"> 今日</span><span class="today-dot"></span></button>
       <nav class="topbar-right" aria-label="工具栏">
-        <div class="ctrl">
-          <button class="btn active" id="btnZh" title="显示/隐藏每句下方的中文全句翻译" aria-label="显示或隐藏中文全句翻译"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏全句译文</button>
-          <button class="btn active" id="btnGloss" title="显示/隐藏英文句内行间的单词词义与音标" aria-label="显示或隐藏行内单词词义"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏行内词义</button>
-        </div>
-        <div class="ctrl voice-ctrl">
-          <button class="btn active" id="btnAccent" onclick="toggleAccent()" title="点击切换英式/美式" aria-label="切换英式美式发音">🇬🇧 英式</button>
-          <select class="voice-sel" id="voiceSel" title="选择朗读音色（云端/Edge/本机）" aria-label="选择朗读音色"></select>
-        </div>
-        <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式" aria-label="切换夜间模式"><i class="ri-moon-line" aria-hidden="true"></i><span class="only-mobile"> 夜间模式</span></button>
         <div class="cloud-wrap" id="cloudWrap">
           <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn" id="btnCloud" onclick="toggleCloudWrap(event)" title="登录后可用 Azure 云端自然语音" aria-label="云端语音登录状态"><i class="ri-cloud-line" aria-hidden="true"></i> 未登录</button>
@@ -1774,11 +2039,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <div id="todayScrim" style="position:fixed;inset:0;z-index:590;background:rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .2s" onclick="TASK.closePanel()"></div>
     <!-- 常驻同步提示：不是弹窗，失败了就在原地挂着，点一下重试（PRD 原则 6 §12） -->
     <div id="syncHint" class="sync-hint" role="status" aria-live="polite" hidden onclick="TASK.retrySync()"></div>
+    <!-- W3（PRD §10.4）：② 答题对错的读屏播报。全页只有 #abToast / #syncHint 有 aria-live，
+         对/错反馈过去是静默的。这里单开一个视觉隐藏的 polite 播报区（不用 assertive，避免打断朗读），
+         每次答题由 answerQuiz 写入「对了」/「正确的那一个是 X」。 -->
+    <div id="quizLive" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
     <!-- 任务模式底部操作栏：一张玻璃卡。他 2026-09-22 第二次改口定稿——
          文字双行靠左（核心在上、辅助在下）、所有按钮靠右、关闭在右上角、样式跟播放条一致。
          按钮从左到右 = 重要度从低到高：播放那一组（循环 / AB / 倍速 / 书签 / ▶） → 上一句 → 再来 → 下一句 -->
     <div class="task-bar" id="taskBar" data-state="idle">
-      <button class="tb-close" id="tbExit" onclick="TASK.requestExit()" title="退出任务模式" aria-label="退出任务模式"><i class="ri-close-line" aria-hidden="true"></i></button>
       <div class="tb-body">
       <div class="tb-text">
         <!-- 他 2026-09-22：「底部按钮上方那些文字一堆，都没耐心看」→ 条上只留三个数：
@@ -1798,9 +2066,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         <button class="tb-btn again" id="tbPrev" onclick="TASK.prev()" title="上一句" aria-label="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i><span class="lbl"> 上一句</span></button>
         <button class="tb-btn again" id="tbAgain" onclick="TASK.again()" title="再来一遍这句" aria-label="再来一遍这句"><i class="ri-repeat-line" aria-hidden="true"></i> 再来</button>
         <button class="tb-btn next" id="tbNext" onclick="TASK.next()" title="下一句" aria-label="下一句"><i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句</button>
-        <!-- 点 ✕ 之后才露脸的一对：同一条栏换内容，不弹层、不新开弹窗 -->
-        <button class="tb-btn again" id="tbStay" onclick="TASK.cancelExit()" title="留在任务模式继续做" aria-label="继续做">继续做</button>
-        <button class="tb-btn quit" id="tbQuit" onclick="TASK.confirmExit()" title="确认退出任务模式" aria-label="确认退出">退出</button>
       </div>
       </div>
     </div>
@@ -1809,14 +2074,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <div class="pass-card" id="passCard" role="group" aria-label="遍间小结" hidden></div>
     <!-- ② 浮窗答题卡：锚在被点的那个空旁边，4 个选项 + 「这题有问题」。定位由 JS 算。 -->
     <div class="blank-pop" id="blankPop" role="dialog" aria-label="选出填回空格的词" hidden></div>
-
-    <!-- 3.0 任务模式顶栏（M1 Task 5 审阅 I1）：告诉用户「你在学哪一篇」+「退出就是回首页」。
-         一颗 ✕ 不说明退出会回哪儿，而 M1 的闭环是「首页选文章 → 学完 → 回首页选下一篇」。
-         PRD §4.1 的卷/段筛选是 M2+，这里先只放这两样。默认 display:none，body.task-mode 才现身。 -->
-    <header class="task-top" id="taskTop">
-      <button class="tt-back" type="button" onclick="TASK.exitTaskMode()" aria-label="返回首页">← 返回首页</button>
-      <div class="tt-title" id="ttTitle"></div>
-    </header>
 
     <div class="layout">
       <main id="main"><article id="art"><div id="abRegion" class="ab-region" style="display:none" aria-hidden="true"><button class="ab-cancel" onclick="abCancel()" title="取消循环" aria-label="取消循环">×</button></div></article></main>
@@ -2939,7 +3196,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       const ro = new ResizeObserver(requestNavSync);
       const bar = document.querySelector('.topbar');
       if (bar) ro.observe(bar);
-      ['chapSel', 'voiceSel', 'btnCloud', 'btnZh', 'btnGloss'].forEach(id => {
+      ['chapSel', 'voiceBtn', 'btnCloud', 'btnZh', 'btnGloss'].forEach(id => {
         const el = document.getElementById(id);
         if (el) ro.observe(el);
       });
@@ -3009,14 +3266,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (abMode === 3) abCancel(true);
     playFrom(s + n - 1);
     }
-    async function cloudLogin() {
+    async function cloudLogin(src) {
     if (cloudLogin._busy) return; cloudLogin._busy = true;
     try {
     if (!CLOUD.configured()) { alert('云端语音未配置：管理员尚未设置 Supabase。'); return; }
     const c = CLOUD.client();
     if (!c) { alert('网络不可用，登录组件加载失败，请刷新重试。'); return; }
-    const em = document.getElementById('cloudEmail').value.trim();
-    const pw = document.getElementById('cloudPass').value;
+    const em = document.getElementById((src && src.email) || 'cloudEmail').value.trim();
+    const pw = document.getElementById((src && src.pass) || 'cloudPass').value;
     if (!em || !pw) { alert('请填写邮箱和密码'); return; }
     const { error } = await c.auth.signInWithPassword({ email: em, password: pw });
     if (error) { alert('登录失败：' + error.message); return; }
@@ -3027,14 +3284,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     await CLOUD.checkStatus();
     } finally { cloudLogin._busy = false; }
     }
-    async function cloudSignup() {
+    async function cloudSignup(src) {
     if (cloudSignup._busy) return; cloudSignup._busy = true;
     try {
     if (!CLOUD.configured()) { alert('云端语音未配置：管理员尚未设置 Supabase。'); return; }
     const c = CLOUD.client();
     if (!c) { alert('网络不可用，登录组件加载失败，请刷新重试。'); return; }
-    const em = document.getElementById('cloudEmail').value.trim();
-    const pw = document.getElementById('cloudPass').value;
+    const em = document.getElementById((src && src.email) || 'cloudEmail').value.trim();
+    const pw = document.getElementById((src && src.pass) || 'cloudPass').value;
     if (!em || !pw) { alert('请填写邮箱和密码'); return; }
     const { error } = await c.auth.signUp({ email: em, password: pw });
     if (error) { alert('注册失败：' + error.message); return; }
@@ -3110,9 +3367,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     } catch (e) {}
     const all = enVoices();
     const pool = all.length ? all : (HAS_SPEECH ? speechSynthesis.getVoices() : []);
-    const sel0 = document.getElementById('voiceSel');
     if (!pool.length) {
-    if (sel0) sel0.innerHTML = '<option>当前环境不支持语音朗读</option>';
+    const lb0 = document.getElementById('voiceLabel');
+    if (lb0) lb0.textContent = '当前环境不支持语音朗读';
     return;
     }
     const ok = pool.filter(v => tierOf(v) >= 1);
@@ -3140,37 +3397,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     V['en-US'] = flat.find(v => v.voiceURI === selVoiceURI) || flat.find(v => v.voiceURI === gv)
     || flat.filter(v => v.lang === 'en-US')[0] || flat.find(accentMatch) || flat[0] || null;
     if (!V[accent]) V[accent] = flat.find(accentMatch) || flat[0];
-    // 下拉框：三组分组展示（每组≤4）
-    const sel = document.getElementById('voiceSel');
-    if (!sel) return;
-    sel.innerHTML = groups.map(g =>
-    `<optgroup label="${escAttr(g.label)}">` + g.list.map(v =>
-      `<option value="${escAttr(v.voiceURI)}" title="${escAttr(v.name)} — ${escAttr(v.lang)}">${esc(voiceLabel(v))}</option>`).join('')
-    + '</optgroup>').join('');
-    const ghost = selVoiceURI && !flat.some(v => v.voiceURI === selVoiceURI)
-    ? `<option value="${escAttr(selVoiceURI)}">${isCloudURI(selVoiceURI) ? '上次云音色（未登录）' : '上次音色（暂时不可用）'}</option>` : '';
-    sel.innerHTML = ghost + sel.innerHTML;
-    let pick = flat.find(v => v.voiceURI === selVoiceURI) || flat.find(v => v.voiceURI === gv) || V[accent] || flat[0];
-    // 用户已有明确选择则纹丝不动；只有从未选过才落默认
+    /* 自定义选择器（2026-09-24）：分组 + 星级 + 试听。选中的音色照旧存进 ielts-voice ——
+       解析/降级逻辑（resolveVoice / goodVoice / 幽灵项）一字未动，只换了承载 UI。 */
     if (!selVoiceURI) {
-    if (pick) { sel.value = pick.voiceURI; selVoiceURI = pick.voiceURI; }
-    } else if (flat.some(v => v.voiceURI === selVoiceURI) || isCloudURI(selVoiceURI)) {
-    sel.value = selVoiceURI;
-    } else {
-    sel.value = selVoiceURI; // 幽灵选项保持选中态
+    const pick = flat.find(v => v.voiceURI === gv) || V[accent] || flat[0];
+    if (pick) selVoiceURI = pick.voiceURI;
     }
-    if (!sel.onchange) sel.onchange = () => {
-    if (isCloudURI(sel.value) && !(typeof CLOUD !== 'undefined' && CLOUD._on)) {
-    toggleCloudWrap();
-    alert('☁ 云端语音需先登录（与词汇真经站同一账号）。');
-    if (V[accent]) sel.value = V[accent].voiceURI || '';
-    return;
-    }
-    selVoiceURI = sel.value;
-    try { localStorage.setItem('ielts-voice', selVoiceURI); } catch(e) {}
-    // 播放中切换语音：静默保存，下一句自动生效，不打断播放链
-    if (!playing) speakAside(isCloudURI(selVoiceURI) ? 'Hello! Cloud voice ready.' : 'Hello! Let us learn English together.');
-    };
+    renderVoicePop();
     try { if (typeof CLOUD !== 'undefined' && CLOUD._on) {
     const cb = document.getElementById('btnCloud');
     if (cb && !CLOUD._userMail) cb.innerHTML = '<i class="ri-cloud-line" aria-hidden="true"></i> 已连接';
@@ -3179,6 +3412,102 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (ab) { ab.textContent = accent === 'en-GB' ? '🇬🇧 英式' : '🇺🇸 美式'; ab.classList.add('active'); }
     }
     try { if (HAS_SPEECH && 'onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices; } catch (e) {}
+
+    /* ---- 音色选择器（自定义玻璃浮层，2026-09-24）---- */
+    function syncVoiceUI() {
+    const flat = (V.groups || []).flatMap(g => g.list);
+    const cur = flat.find(v => v.voiceURI === selVoiceURI) || null;
+    const label = document.getElementById('voiceLabel');
+    if (label) label.textContent = cur ? voiceLabel(cur)
+    : (selVoiceURI ? (isCloudURI(selVoiceURI) ? '☁ 云端音色' : '音色') : '音色');
+    const pop = document.getElementById('voicePop');
+    if (pop) pop.querySelectorAll('[data-voice-uri]').forEach(b => {
+    const on = b.dataset.voiceUri === selVoiceURI;
+    b.classList.toggle('sel', on); b.setAttribute('aria-selected', String(on));
+    });
+    }
+    function renderVoicePop() {
+    const pop = document.getElementById('voicePop');
+    if (!pop) return;
+    const groups = V.groups || [];
+    const flat = groups.flatMap(g => g.list);
+    const ghost = (selVoiceURI && !flat.some(v => v.voiceURI === selVoiceURI))
+    ? `<div class="vp-item sel" data-voice-uri="${escAttr(selVoiceURI)}" data-ghost="1" role="option" aria-selected="true">`
+      + `<span class="vp-name">${isCloudURI(selVoiceURI) ? '上次云音色（未登录）' : '上次音色（暂时不可用）'}</span></div>` : '';
+    pop.innerHTML = ghost + groups.map(g =>
+    `<div class="vp-group">${esc(g.label)}</div>` + g.list.map(v =>
+      `<div class="vp-item${v.voiceURI === selVoiceURI ? ' sel' : ''}" role="option" aria-selected="${v.voiceURI === selVoiceURI}" data-voice-uri="${escAttr(v.voiceURI)}">`
+      + `<span class="vp-name">${esc(voiceLabel(v))}</span>`
+      + `<button class="vp-play" type="button" data-voice-play="${escAttr(v.voiceURI)}" title="试听" aria-label="试听 ${escAttr(voiceLabel(v))}"><i class="ri-play-fill" aria-hidden="true"></i></button>`
+      + `</div>`).join('')).join('');
+    syncVoiceUI();
+    }
+    function positionVoicePop() {
+    const pop = document.getElementById('voicePop'), btn = document.getElementById('voiceBtn');
+    if (!pop || !btn) return;
+    const r = btn.getBoundingClientRect();
+    const w = Math.min(320, window.innerWidth - 16);
+    pop.style.width = w + 'px';
+    pop.style.left = Math.min(Math.max(8, r.left), Math.max(8, window.innerWidth - w - 8)) + 'px';
+    const below = window.innerHeight - r.bottom - 8, above = r.top - 8;
+    pop.style.maxHeight = Math.max(200, Math.min(360, Math.max(below, above))) + 'px';
+    if (below >= Math.min(240, above)) { pop.style.top = (r.bottom + 6) + 'px'; pop.style.bottom = 'auto'; }
+    else { pop.style.bottom = (window.innerHeight - r.top + 6) + 'px'; pop.style.top = 'auto'; }
+    }
+    function openVoicePop() {
+    const pop = document.getElementById('voicePop');
+    if (!pop) return;
+    renderVoicePop(); pop.hidden = false; positionVoicePop();
+    const b = document.getElementById('voiceBtn'); if (b) b.setAttribute('aria-expanded', 'true');
+    }
+    function closeVoicePop() {
+    const pop = document.getElementById('voicePop'); if (pop) pop.hidden = true;
+    const b = document.getElementById('voiceBtn'); if (b) b.setAttribute('aria-expanded', 'false');
+    }
+    function toggleVoicePop(e) {
+    if (e) e.stopPropagation();
+    const pop = document.getElementById('voicePop'); if (!pop) return;
+    if (pop.hidden) openVoicePop(); else closeVoicePop();
+    }
+    function pickVoice(uri, keepOpen) {
+    if (isCloudURI(uri) && !(typeof CLOUD !== 'undefined' && CLOUD._on)) {
+    toggleCloudWrap();
+    alert('☁ 云端语音需先登录（与词汇真经站同一账号）。');
+    return;
+    }
+    selVoiceURI = uri;
+    try { localStorage.setItem('ielts-voice', selVoiceURI); } catch (e) {}
+    syncVoiceUI();
+    if (!keepOpen) closeVoicePop();
+    try { if (!playing) speakAside(isCloudURI(selVoiceURI) ? 'Hello! Cloud voice ready.' : 'Hello! Let us learn English together.'); } catch (e) {}
+    }
+    /* 音色浮层的事件代理：浮窗（#mePop）每次重渲都会换掉 #voicePop 这个节点，所以
+       wireVoicePop 做成可重复调用的函数（app.js 的 renderMePop 渲完会再叫一次）。 */
+    function wireVoicePop() {
+    const pop = document.getElementById('voicePop');
+    if (pop && !pop._wired) {
+    pop._wired = true;
+    pop.addEventListener('click', (e) => {
+    const play = e.target.closest('[data-voice-play]');
+    if (play) { e.stopPropagation(); pickVoice(play.dataset.voicePlay, true); return; }
+    const item = e.target.closest('[data-voice-uri]');
+    if (!item || item.hasAttribute('data-ghost')) return;
+    e.stopPropagation();
+    pickVoice(item.dataset.voiceUri, false);
+    });
+    }
+    }
+    // 点浮层外面 / Esc / 改窗口大小：只绑一次（回调里每次现查 #voicePop，重渲也管用）。
+    document.addEventListener('click', (e) => {
+    const p = document.getElementById('voicePop');
+    if (!p || p.hidden) return;
+    if (!e.target.isConnected) return;
+    if (e.target.closest('#voicePop') || e.target.closest('#voicePick')) return;
+    closeVoicePop();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVoicePop(); });
+    window.addEventListener('resize', () => { const p = document.getElementById('voicePop'); if (p && !p.hidden) positionVoicePop(); });
+    wireVoicePop();
 
     let errStreak = 0, everStarted = false, speechInProgress = false; // speechInProgress：防止多 utterance 叠加
     let _cloudIntentionalPause = false; // 标记是否主动暂停云端音频
@@ -4003,8 +4332,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (best) {
     selVoiceURI = best.voiceURI;
     try { localStorage.setItem('ielts-voice', selVoiceURI); } catch(e) {}
-    const sel = document.getElementById('voiceSel');
-    if (sel) sel.value = selVoiceURI;
+    syncVoiceUI();
     }
     refreshGloss();
     if (playing) playFrom(idx); // 换音色立即在新队列生效
@@ -4031,7 +4359,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     document.querySelectorAll('.rate-menu [data-mrate]').forEach(b =>
     b.classList.toggle('active', parseFloat(b.dataset.mrate) === r));
     const c = document.getElementById('rateCycle');
-    if (c) c.innerHTML = `<i class="ri-time-s-line" aria-hidden="true"></i> ${r}x`;
+    if (c) c.innerHTML = `<i class="ri-speed-line" aria-hidden="true"></i> ${r}x`;
     if (idx >= 0) paint(); // 刷新时长估算
     }
 
@@ -4124,7 +4452,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (t) { openPop(t); return; }
     if (!_inPath(e, '.pop') && !_inPath(e, 'aside')) closeModal(pop);
     const _cp = document.getElementById('cloudWrap');
-    if (_cp && _cp.style.display === 'block' && !_inPath(e, '.cpop') && !_inPath(e, '#btnCloud') && !_inPath(e, '#voiceSel')) closeModal(_cp);
+    if (_cp && _cp.style.display === 'block' && !_inPath(e, '.cpop') && !_inPath(e, '#btnCloud') && !_inPath(e, '#voicePick')) closeModal(_cp);
     const _jp = document.getElementById('jumpPop');
     if (_jp && _jp.style.display === 'block' && !_inPath(e, '.jpop') && !_inPath(e, '#abTitle') && !_inPath(e, '.jump-btn')) closeModal(_jp);
     const _mp = document.getElementById('markWrap');
@@ -4173,16 +4501,18 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     function readPrefs() { try { const raw = localStorage.getItem(PREFS_KEY); return raw ? JSON.parse(raw) : {}; } catch (e) { return {}; } }
     function writePrefs(p) { safeStore(PREFS_KEY, JSON.stringify(p)); }
     function savePref(k, v) { const p = readPrefs(); p[k] = v; writePrefs(p); }
-    /* ============ 翻译开关（章译+句译+段译） ============ */
+    /* ============ 翻译开关（章译+句译+段译） ============
+       3.0（W1 修正 3）：按钮改成主站那种 iOS 拨杆（.tr-msw），所以这里只切 .on 与 aria-checked，
+       不再改 innerHTML（拨杆里的 .knob 不能被子串覆盖）。 */
     function updateZhBtn() {
     const hidden = document.body.classList.contains('hide-zh');
     const btn = document.getElementById('btnZh');
-    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示全句译文' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏全句译文'; btn.classList.toggle('active', !hidden); }
+    if (btn) { btn.classList.toggle('on', !hidden); btn.setAttribute('aria-checked', String(!hidden)); }
     }
     function updateGlossBtn() {
     const hidden = document.body.classList.contains('hide-gl');
     const btn = document.getElementById('btnGloss');
-    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示行内词义' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏行内词义'; btn.classList.toggle('active', !hidden); }
+    if (btn) { btn.classList.toggle('on', !hidden); btn.setAttribute('aria-checked', String(!hidden)); }
     }
     document.getElementById('btnZh').onclick = function() {
     document.body.classList.toggle('hide-zh');
@@ -4197,14 +4527,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     savePref('hideGl', hidden);
     };
 
-    /* 夜间模式 */
+    /* 夜间模式：开关现在只在「我的」浮窗里（#mePop 的 [data-me-theme]），顶栏那颗已删 */
     function updateDarkUI(isDark) {
     document.body.classList.toggle('dark', isDark);
     document.documentElement.classList.toggle('dark', isDark);
     const themeMeta = document.querySelector('meta[name="theme-color"]');
     if (themeMeta) themeMeta.setAttribute('content', isDark ? '#1c1a17' : '#faf8f4');
-    const btn = document.getElementById('btnDark');
-    if (btn) btn.innerHTML = (isDark ? '<i class="ri-sun-line" aria-hidden="true"></i>' : '<i class="ri-moon-line" aria-hidden="true"></i>') + '<span class="only-mobile"> 夜间模式</span>';
     }
     function toggleDark() {
     const isDark = !document.body.classList.contains('dark');
@@ -4824,17 +5152,23 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
       function saveArticleStats() { safeStore(LS_ARTICLE, JSON.stringify(loadArticleStats())); }
       /* 迁移：修复前这份账长在共享 blob 的 daily[天].repsByArticle 里。第一次加载时搬过来，
-         之后不再回看（避免和影子跟读那边互相写）。M1 未上线，这里主要是给开发分支上的存档兜底。 */
+         之后不再回看（避免和影子跟读那边互相写）。M1 未上线，这里主要是给开发分支上的存档兜底。
+         W7-3：搬完顺手把旧字段从 v2 blob 里删掉（只删这一个字段，schema 其它部分一字不动）——
+         否则它会一直躺在共享 blob 里，直到某次 /shadow/ 的 recompute2 才碰巧抹掉。 */
       function migrateArticleStats() {
         const cur = loadArticleStats();
         if (Object.keys(cur.reps).length) return;
         const daily = (ROOT2 && ROOT2.state && ROOT2.state.daily) || {};
-        let moved = false;
+        let moved = false, cleaned = false;
         Object.keys(daily).forEach(function (day) {
           const rb = daily[day] && daily[day].repsByArticle;
-          if (rb && typeof rb === 'object') { cur.reps[day] = Object.assign({}, rb); moved = true; }
+          if (rb && typeof rb === 'object') {
+            cur.reps[day] = Object.assign({}, rb); moved = true;
+            delete daily[day].repsByArticle; cleaned = true;
+          }
         });
         if (moved) saveArticleStats();
+        if (cleaned) persist2();
       }
       function repsOf(a) {                    // 这一篇的累计精读次数（跨天求和）
         const cur = loadArticleStats();
@@ -5123,6 +5457,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
       function initPlan(minutes) {
         const m = Math.max(1, Math.min(180, Math.round(Number(minutes) || 15)));
+        /* W7-4：任何一次建计划都让「从空状态点去设置」的那一篇作废 —— 否则经过导入 / 重置
+           等非 ps-start 的路径之后，残留的 _pendingArticle 会在下一次建计划时把人拽回旧文章。
+           ps-start 会先于本函数把 pending 取走，所以这里清掉不会弄丢正常的「回到那一篇」。 */
+        _pendingArticle = null;
         ROOT2 = ROOT2 || {};
         ROOT2.plan = { todayMinutes: m, boundaryHour: 4, startDate: ShadowPlan.dayKey(Date.now(), 4),
                        endDate: null, pausedNew: false, totalDays: 30 };
@@ -5242,7 +5580,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          ② 出题的是「这一批刚读过的那几句」，所以批次必须在 ① 开始时快照：
          队列是滚动的，读完的句子会被顶掉，不快照就会发现 ② 无题可出。 */
       let pass = 1, quizCursor = 0, quizWrongN = 0, quizAnsweredN = 0, taskFinished = false,
-          exitConfirm = false, quizStart = 0;   // ② 的剩余时间按「本次真实答题速度」算，所以要记住 ② 是从哪一刻开始的
+          quizStart = 0;   // ② 的剩余时间按「本次真实答题速度」算，所以要记住 ② 是从哪一刻开始的
           reveal = null, batchItems = [], DISP = [], SENT_ZH = [], PARA_ID = [];
       /* 本遍末尾的补考清单（走查 2026-09-22 #2：答错过的词这一遍里要再考一次，只一次）。
          存的是 batchItems 里那批 item 对象本体 —— 身份即「这个词在这一句」，同一句不会进两次。 */
@@ -5450,7 +5788,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const item = quizList()[quizCursor];
         const q = buildQuiz(item);
         if (!q || reveal) return false;
-        // 「回看句子」可能还在播；答题先把声音收掉，否则下一题还压着上一句的朗读
+        // 答题先把声音收掉，否则下一题还压着上一句的朗读（「回看句子」已按 §4.4 删除）
         try { playing = false; speakToken++; speechSynthesis.cancel(); } catch (e) {}
         const ok = String(choice).trim().toLowerCase() === String(q.answer).trim().toLowerCase();
         push2(ShadowPlan.mkQuiz(q.w, item.s, q.kind, ok, Date.now(), day2()));
@@ -5467,6 +5805,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         }
         reveal = { q: q, s: item.s, ok: ok, pick: choice };
         _served.add(item);   // 答过 = 这题处理完了：下一题不再落回它（补考是另一条新对象）
+        /* W3：把对/错直接送进视觉隐藏的 polite 播报区（读屏才听得到；视觉反馈仍是空格里的绿/红字）。 */
+        const live = document.getElementById('quizLive');
+        if (live) live.textContent = ok ? '对了' : '正确的那一个是 ' + q.answer;
         renderQuiz(); updateTaskBar();
         return ok;
       }
@@ -5628,7 +5969,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const first = pop.querySelector('.qz-opt:not([disabled])');
         if (first) first.focus({ preventScroll: true });
       }
-      /* 锚在空上方；上方放不下就翻到下方；左右夹在屏幕内（390 宽也不越界）。 */
+      /* 锚在空上方；上方放不下就翻到下方；左右夹在屏幕内（390 宽也不越界）。
+         W5-5：底部有固定的任务条 / 小结卡，浮窗翻到下方时必须避让，绝不压住「下一题」。
+         W5-8：按翻转方向加 .below/.above，CSS 据此画朝向那个空的小箭头。 */
       function positionBlankPop(blankEl) {
         const pop = document.getElementById('blankPop');
         if (!pop || !blankEl) return;
@@ -5636,11 +5979,28 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         pop.style.left = '0px'; pop.style.top = '0px';
         const pr = pop.getBoundingClientRect();
         const r = blankEl.getBoundingClientRect();
+        const M = 8, GAP = 10;
+        // 浮窗可落到的底界：取底部固定层（任务条 / 小结卡）里最高的那条上缘
+        let bottomLimit = innerHeight;
+        const bar = document.getElementById('taskBar');
+        if (bar && bar.classList.contains('show')) {
+          const b = bar.getBoundingClientRect();
+          if (b && b.height > 0) bottomLimit = Math.min(bottomLimit, b.top);
+        }
+        const card = document.getElementById('passCard');
+        if (card && !card.hidden) {
+          const c = card.getBoundingClientRect();
+          if (c && c.height > 0) bottomLimit = Math.min(bottomLimit, c.top);
+        }
         let left = r.left + r.width / 2 - pr.width / 2;
-        left = Math.max(8, Math.min(left, innerWidth - pr.width - 8));
-        let top = r.top - pr.height - 10;
-        if (top < 8) top = r.bottom + 10;
-        top = Math.max(8, Math.min(top, innerHeight - pr.height - 8));
+        left = Math.max(M, Math.min(left, innerWidth - pr.width - M));
+        const maxTop = Math.max(M, bottomLimit - pr.height - GAP);
+        let top = r.top - pr.height - GAP;                 // 优先上方
+        let below = false;
+        if (top < M) { top = r.bottom + GAP; below = true; }   // 上方放不下 → 翻到下方
+        top = Math.max(M, Math.min(top, maxTop));          // 夹住高度，不盖住底部固定层
+        pop.classList.toggle('below', below);
+        pop.classList.toggle('above', !below);
         pop.style.left = Math.round(left) + 'px';
         pop.style.top = Math.round(top) + 'px';
         pop.style.visibility = '';
@@ -5738,13 +6098,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (!q || !q.opts || !q.opts[i]) return;
         answerQuiz(q.opts[i]);
       }
-      function reviewSentence() {
-        const item = quizList()[quizCursor];
-        if (!item) return;
-        if (item.s === 'ex') { showAbToast('这句是词卡上的例句 —— 看卡片就行'); return; }
-        const local = globalToLocal(item.s);
-        if (local >= 0 && sents[local]) { sents[local].scrollIntoView({ block: 'center', behavior: 'smooth' }); playFrom(local); }
-      }
+      /* W5-6：原「回看句子」动作（reviewSentence）按 PRD §4.4 删除 —— ② 的句子就在眼前，
+         不需要"回看"；那颗节点（#tbPrev）本身保留，它在 ① 态是「上一句」。 */
       function renderPassSummary(n) {
         const el = document.getElementById('passCard');
         if (!el || !ROOT2) return;
@@ -5875,23 +6230,17 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const totalSents = SENT_RAW.length;
         const newSentences = [];
         const reviewSentences = [];
-        /* 3.0 按篇（PRD §9.3）：在学某一篇时队列只收这一篇的句，别的篇的到期/新句留到点进那篇再排。
-           enterTaskMode 里 syncQueueFromPlan() 会用 todayPlan() 覆盖这份队列，但 buildQueue 在
-           开页/建计划/改分钟数时也会跑，漏了这道闸就会让首页与面板看到跨篇的账。 */
-        const scope = currentArticle == null ? null : ShadowPlan.articleScope(SECTIONS, currentArticle);
-        const inScope = (i) => !scope || scope.has(i);
-
-        // 新句窗口按「已开过的句子数」推进，不按日历天数。
-        // 原来 startNew = dayIndex() * newPerDay：断更 N 天后窗口直接前移 N 格，
-        // 那 N 天的句子既不再进新句窗口、也因 reps=0 不会转成复习，被永久跳过。
-        // 现在游标停在原地，欠的句子留在今天的队列里 —— 顺延，不吞内容。
+        /* W4（M2 风险）：这里过去有一道半吊子的按篇闸 —— `scope / inScope`：它把「已开句数」
+           当成**全局**下标去开新句窗口，于是对第 2 篇往后的篇目恒算出 0 句新句（死窗口），
+           而任务模式真正的按篇队列由 `syncQueueFromPlan()` → `todayPlan()` → `assemble({scope})`
+           决定（PRD §9.3）—— enterTaskMode 也是在 buildQueue() 之后立刻用它覆盖 todayQueue。
+           所以这里恢复成 v2.0 的**全局**新句窗口：一处口径只留一处，按篇逻辑别再长回来。 */
         if (!plan.paused) {
           let started = 0;
-          for (let i = 0; i < totalSents; i++) if (inScope(i) && sentState(i).reps > 0) started++;
+          for (let i = 0; i < totalSents; i++) if (sentState(i).reps > 0) started++;
           const startNew = Math.min(started, totalSents);
           const endNew = Math.min(startNew + plan.newPerDay, totalSents);
           for (let i = startNew; i < endNew; i++) {
-            if (!inScope(i)) continue;
             const st = sentState(i);
             if (st.reps < PHASE_THRESHOLDS.learning) newSentences.push(i);
           }
@@ -5899,7 +6248,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
 
         // 到期复习句
         for (let i = 0; i < totalSents; i++) {
-          if (!inScope(i)) continue;
           const st = sentState(i);
           if (st.reps > 0 && st.reps < PHASE_THRESHOLDS.mastered && st.nextDue <= now) {
             if (!newSentences.includes(i)) reviewSentences.push(i);
@@ -5907,7 +6255,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         }
         // mastered 抽查（每 14 天到期）
         for (let i = 0; i < totalSents; i++) {
-          if (!inScope(i)) continue;
           const st = sentState(i);
           if (st.phase === 'mastered' && st.nextDue <= now) {
             if (!reviewSentences.includes(i)) reviewSentences.push(i);
@@ -5992,7 +6339,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         if (taskMode) { closePanel(); return; }
         const o = opts || {};
         if (o.article != null) currentArticle = o.article;
-        _noPlan = true; exitConfirm = false;
+        _noPlan = true;
         taskMode = true;
         sessionStart = Date.now(); sessionReps = 0; startSessionClock();
         document.body.classList.add('task-mode');
@@ -6038,7 +6385,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         hideResumeOffer();
         taskMode = true;
         sessionStart = Date.now();
-        sessionReps = 0; exitConfirm = false; startSessionClock();
+        sessionReps = 0; startSessionClock();
         document.body.classList.add('task-mode');
         dockAudiobar(true);
         document.getElementById('taskBar').classList.add('show');
@@ -6072,7 +6419,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         openArticle(a, { article: a, startAtPass2: true });
       }
       function exitTaskMode() {
-        taskMode = false; exitConfirm = false; _noPlan = false; stopSessionClock();
+        taskMode = false; _noPlan = false; stopSessionClock();
         // 回首页 = 回全局：横幅/绿点/今日账都按全量算，别把上一篇的 scope 留在缓存里。
         // （_pendingArticle 不在这里清：空状态点「去设置」就是先退出、再建计划回到这一篇。）
         currentArticle = null; _cachedPlan = null;
@@ -6086,12 +6433,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
            跑，退任务模式不动 hash —— 不在这里补一次 route()，就要等一次导航或刷新才更新。 */
         try { if (window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
       }
-      /* 点 ✕ 先问一句（他 2026-09-22）。仍然零惩罚：不改排期、不生成欠账，
-         所以这句只报「进度已经记下」，不写「确定要放弃吗」那种挽留话术。
-         自由跟读态（§2.3 没计划）没有进度可丢，✕ 直接退，不摆确认。 */
-      function requestExit() { if (!taskMode) return; if (_noPlan) { exitTaskMode(); return; } exitConfirm = true; updateTaskBar(); }
-      function cancelExit() { exitConfirm = false; updateTaskBar(); }
-      function confirmExit() { exitConfirm = false; exitTaskMode(); }
+      /* 退出任务模式（2026-09-24 用户改口径）：底部任务条那颗 ✕ 已删，退出统一走头部那条「返回首页」
+         （`#ttBack` → `TASK.exitTaskMode()`）。退出是零惩罚的（PRD §8.1：不改排期、不生成欠账），
+         所以「返回」直接退、不摆二次确认；`requestExit/cancelExit/confirmExit` 与 #tbStay/#tbQuit 一并删掉。 */
       /* 空状态任务条的「去设置」：记住是哪一篇，退出任务模式，弹 v2.0 设置屏。
          建完计划由 renderSetup 的 ps-start 回调把这一篇重新开成真任务模式（见下）。 */
       function noPlanGoSetup() {
@@ -6171,7 +6515,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          于是再按「下一句」，记的是那句并没在读的句子的进度。翻完句要把队列位置对齐到屏幕上这句。 */
       function prev() {
         if (!taskMode) { step(-1); return; }
-        if (pass >= 2) { reviewSentence(); return; }   // ② 没有「上一句」这个动作，这颗本来也不显示
+        if (pass >= 2) return;   // ② 没有「上一句」这个动作，这颗本来也不显示（「回看句子」已删，§4.4）
         step(-1);
         if (idx >= 0) {
           const g = localToGlobal(idx);
@@ -6207,9 +6551,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const _bar = document.getElementById('taskBar');
         if (_bar && _bar.dataset.state === 'resume') { skipResume(); return; }   // 续读条上的「今天先不做」
         if (_bar && _bar.dataset.state === 'done') { exitToHome(); return; }     // 收工态：这颗是「回首页」
-        // ①：重播当前句；②：回看这句（重听不算答错，也不记接触）
+        // ①：重播当前句；②：没有可重播的动作（「回看句子」已删，§4.4），这颗在 ② 态本就藏起来
         if (!taskMode) return;
-        if (pass >= 2) { reviewSentence(); return; }
+        if (pass >= 2) return;
         if (taskPos >= todayQueue.length) return;
         const globalIdx = todayQueue[taskPos].i;
         const localIdx = globalToLocal(globalIdx);
@@ -6359,6 +6703,33 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           : '放这一句（放完自动记为已读，再点就是下一句）';
         btn.setAttribute('aria-label', label);
       }
+      /* 文章内头部（W1 重做）：把主站 .reader-head / .r-badges 的内容按当前篇填上 ——
+         中文标题 + 英文副标 + 篇号胶囊；上/下篇箭头切文章；目标词数进 fav-badge。 */
+      const _artWordCount = {};
+      function articleWordCount(a) {
+        if (_artWordCount[a] != null) return _artWordCount[a];
+        const set = new Set();
+        try { ShadowPlan.articleScope(SECTIONS, a).forEach(i => wordsOfSent(i).forEach(w => set.add(w))); } catch (e) {}
+        return (_artWordCount[a] = set.size);
+      }
+      function gotoArticle(a) {
+        if (a < 0 || a >= SECTIONS.length || !SECTIONS[a]) return;
+        if (taskMode) exitTaskMode();     // 换篇要重排队列：openArticle 在 taskMode 里会早退
+        openArticle(a);
+      }
+      function renderTaskTop(a) {
+        const titleEl = document.querySelector('#ttTitle .tt-zh');
+        const tcnEl = document.querySelector('#ttTitle .tcn');
+        const posEl = document.querySelector('#ttTitle .r-pos');
+        if (titleEl) titleEl.textContent = (a != null && SECTIONS[a]) ? SECTIONS[a].title : '全部文章';
+        if (tcnEl) tcnEl.textContent = (a != null && SECTIONS[a] && TIT_EN[SECTIONS[a].title]) ? TIT_EN[SECTIONS[a].title] : '';
+        if (posEl) posEl.textContent = (a != null) ? `第 ${a + 1}/${SECTIONS.length} 篇` : '';
+        const prev = document.getElementById('ttPrev'), next = document.getElementById('ttNext');
+        if (prev) { prev.disabled = !(a != null && a > 0); prev.onclick = (a != null && a > 0) ? function () { gotoArticle(a - 1); } : null; }
+        if (next) { next.disabled = !(a != null && a < SECTIONS.length - 1); next.onclick = (a != null && a < SECTIONS.length - 1) ? function () { gotoArticle(a + 1); } : null; }
+        const wb = document.getElementById('ttWords');
+        if (wb) wb.textContent = (a != null) ? `目标词 ${articleWordCount(a)}` : '';
+      }
       /* 自由跟读态（§2.3 没计划）的任务条：主行说明现状，辅行指路，唯一那颗键去设置。
          进度条归零；播放条控件由 updateTaskBar 之外的 .tb-play CSS 露出。 */
       function renderNoPlanTaskBar() {
@@ -6370,8 +6741,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const subEl = document.getElementById('tbSub');
         const againBtn = document.getElementById('tbAgain');
         const clockEl = document.getElementById('tbClock');
-        const topTitle = document.getElementById('ttTitle');
-        if (topTitle) topTitle.textContent = (currentArticle != null && SECTIONS[currentArticle]) ? SECTIONS[currentArticle].title : '全部文章';
+        renderTaskTop(currentArticle);
         if (titleEl) titleEl.textContent = '还没有学习计划';
         if (subEl) subEl.textContent = '去设置每天读多久';
         if (againBtn) againBtn.style.display = 'none';
@@ -6402,7 +6772,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const d = ROOT2.state.daily[day2()] || {};
         /* 按篇（PRD §4.1 / §9.3）：进某一篇时，条上的 n/N 说的是「这一篇的进度」——
            分母 = 这一篇的句数，分子 = 这一篇里读过的句数（与首页卡片 articleStat 同口径）。
-           currentArticle 为空（首页 / 全局续读）时，仍旧是 v2.0 的今日账。 */
+           W8：分子用 **lifetime**（`lastReadAt > 0` = 这辈子碰过这句，不是"今天读没读"），
+           与 §9.4 的 `everRead` 和首页卡片完全一致；副行「还剩」也是同一份派生。判断依据：
+           §9.3/§9.4 通读完成度定义在「有没有碰过」上（读完一遍就永久算数），改成"今天读过"
+           会让刷新/跨天后任务条退回未读，与卡片和「已学完」判据打架。所以保留 lifetime。 */
         const artScope = currentArticle == null ? null : ShadowPlan.articleScope(SECTIONS, currentArticle);
         let doneN, planned, leftN;
         if (artScope) {
@@ -6414,13 +6787,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           planned = plannedToday();
           leftN = todayLeftN();   // 这条减法只住在 todayLeftN() 里：绿点与首屏提示读同一个函数
         }
-        // 任务模式顶栏的标题（审阅 I1）：在学哪一篇。全部文章（直接进任务模式）时说「全部文章」。
-        const topTitle = document.getElementById('ttTitle');
-        if (topTitle) topTitle.textContent = (artScope && SECTIONS[currentArticle]) ? SECTIONS[currentArticle].title : '全部文章';
+        // 文章内头部（W1 重做）：标题 + 英文副标 + 篇号胶囊 + 上/下篇箭头。
+        renderTaskTop(artScope ? currentArticle : null);
         const quizN = inlineQuizTotal();   // 分母只数答得出的题（'ex' 无正文空位，不计入）
         const quizDoneN = Math.min(_served.size, quizN);
         const fin = taskFinished || allDone === true;
-        const asking = !!taskMode && exitConfirm;
         const spent = sessionSpent();
         const clockEl = document.getElementById('tbClock');
         /* 条上填充归一根人管：setProg 只报比例，role / aria / 滑块露不露由 syncTaskSeek 定 ——
@@ -6434,13 +6805,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         /* 这一颗的文案每次都由下面各分支重写（② 是「下一题/小结/跳过这题」，① 是「放这一句/下一句」），
            而 syncTaskNextLabel() 靠 dataset.label 防抖 —— 进分支前清掉，别让它拿着上一态的值跳过刷新。 */
         nextBtn.dataset.label = '';
-        bar.dataset.state = asking ? 'exit' : (fin ? 'done' : (pass >= 2 ? 'quiz' : 'read'));
-        document.body.classList.toggle('quiz-mode', !!taskMode && !fin && !asking && pass >= 2);
-        if (clockEl) clockEl.textContent = (asking || !spent) ? '' : '本次 ' + spent;
-        if (asking) {
-          titleEl.textContent = '要退出任务模式吗？';
-          subEl.textContent = '今天的进度已经记下了，退出不会欠下什么';
-        } else if (fin) {
+        bar.dataset.state = fin ? 'done' : (pass >= 2 ? 'quiz' : 'read');
+        document.body.classList.toggle('quiz-mode', !!taskMode && !fin && pass >= 2);
+        if (clockEl) clockEl.textContent = !spent ? '' : '本次 ' + spent;
+        if (fin) {
           titleEl.innerHTML = '<i class="ri-trophy-line" aria-hidden="true"></i> 今天完成';
           subEl.textContent = `${doneN} 句 · ${d.promote || 0} 个词往前走了`;
           /* 收工态（§4.2）：两颗键换成「回首页」+「看词本」。看词本落在 #tbNext
@@ -6679,8 +7047,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const p = document.getElementById('todayPanel');
         const scrim = document.getElementById('todayScrim');
         if (!p) return;
+        /* W7-4：noPlanGoSetup 刚设过 _pendingArticle 时 plan 必为空，此时别清。
+           反过来，只要这里渲的是「今天」视图（plan 已存在），就说明不在设置流程里 ——
+           把任何残留的 _pendingArticle 清掉，别让它跨过导入/重置等路径活到下一次建计划。 */
         if (!plan) { renderSetup(p); }
-        else { renderToday(p); }
+        else { _pendingArticle = null; renderToday(p); }
         p.classList.add('open');
         scrim.style.opacity = '1'; scrim.style.pointerEvents = 'auto';
         _panelOpen = true;
@@ -6882,11 +7253,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           refresh();
         }));
         document.getElementById('psStart').onclick = () => {
+          /* W7-4：先取走「从空状态点去设置」的那一篇，再建计划 —— initPlan 会把残留清掉，
+             顺序反了就把这一篇弄丢了。 */
+          const pending = _pendingArticle; _pendingArticle = null;
           initPlan(sel);
           buildQueue(); updateBtn();
           /* §2.3：这份计划是从「没计划也进任务模式」的空状态里点出来的 → 回到那一篇，
              换成真任务条（否则人建完计划还停在空状态上）。 */
-          const pending = _pendingArticle; _pendingArticle = null;
           showAbToast(`计划已建好：每天 ${sel} 分钟，今天先排 ${todayPlan(true).queue.length} 句`);
           if (pending != null) { closePanel(); openArticle(pending); return; }
           _view = 'today'; renderToday(p);
@@ -7063,8 +7436,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         setTimeout(() => URL.revokeObjectURL(a.href), 4000);
         showAbToast(`已导出 ${Object.keys(data).length} 项本地数据，请妥善保存文件`);
       }
-      function importBackup() {
-        const f = document.getElementById('importFile');
+      function importBackup(id) {
+        const f = document.getElementById(id || 'importFile');
         if (!f) return;
         f.onchange = async () => {
           const file = f.files && f.files[0];
@@ -7236,11 +7609,17 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       // ---- 公开 API ----
       return {
         init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode, openArticle, openArticleQuiz,
-        again, prev, next, requestExit, cancelExit, confirmExit, pauseNew, resetPlan, onSentenceComplete,
+        again, prev, next, pauseNew, resetPlan, onSentenceComplete,
         taskSentenceFinished,
         exportBackup, importBackup,
         get active() { return taskMode; },
         get hasPlan() { return !!plan; },
+        get article() { return currentArticle; },   // W1：文章内头部要按当前篇填标题/箭头
+        // 「我的」浮窗（2026-09-24）读计划旋钮的当前值；没计划时返回 null。
+        planConfig: () => (ROOT2 && ROOT2.plan) ? {
+          minutes: ROOT2.plan.todayMinutes, boundary: ROOT2.plan.boundaryHour,
+          pausedNew: !!ROOT2.plan.pausedNew, startDate: ROOT2.plan.startDate,
+        } : null,
         get queue() { return todayQueue; },
         get progress() { return prog; },
         recordRep, buildQueue, updateMarkers, updateBtn,
@@ -7298,7 +7677,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         // 「② 有没有题可出」这条不变式要全库扫才知道，所以把句号→目标词递出去给测试用
         sentWordsOf: (i) => wordsOfSent(i), sentTotal: () => SENT_RAW.length,
         pass: passNumber, setPass, currentQuiz, answerQuiz, nextQuiz, advance, finished: isFinished,
-        pickOpt, flagQuiz, reviewSentence, summaryContinue: startSummaryContinue,
+        pickOpt, flagQuiz, summaryContinue: startSummaryContinue,
         blankQuizFor: (s, w, from) => buildQuiz({ s: s, w: w, from: from }),   // 出题判据唯一的对外入口：给测试与「问题题」复核用，别另写一份
         quizTotal: () => quizList().length, quizDone: quizDoneCount, quizWrong: quizWrongCount,
         // ② 文内挖空 + 浮窗（M1 Task 6）：外壳/测试经 APP3 调用，实现留在这里（见 app.js）。
@@ -7324,6 +7703,62 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     });
 
     initApp(); loadVoices();
+
+    /* ============ W6 · PWA（PRD §2.5）：service worker ============
+       继承主站那套：manifest 走 data-URI（见 <head>），SW 由脚本内联成 Blob 再注册 —— 不往
+       构建白名单加运行时文件。scope 取当前目录（/app/），SW 只管 3.0 自己。
+       注册失败（如个别浏览器不支持 blob 协议的脚本）静默降级，绝不抛未捕获错误。 */
+    const App3PWA = (function () {
+      const state = { manifest: null, attempted: false, ok: false, error: null };
+      try {
+        const link = document.querySelector('link[rel="manifest"]');
+        state.manifest = link ? link.getAttribute('href') : null;
+      } catch (e) {}
+      async function init() {
+        if (!('serviceWorker' in navigator)) return;
+        state.attempted = true;
+        try {
+          const scopePath = location.pathname.replace(/\/[^/]*$/, '/') || '/';
+          const swCode = `
+const CACHE_NAME = 'ielts-app3-v1';
+self.addEventListener('install', e => { self.skipWaiting(); });
+self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
+self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+    if (res && res.status === 200) { const c = res.clone(); caches.open(CACHE_NAME).then(cc => cc.put(e.request, c)); }
+    return res;
+  }).catch(() => r)));
+});
+`;
+          const blob = new Blob([swCode], { type: 'application/javascript' });
+          const swUrl = URL.createObjectURL(blob);
+          const reg = await navigator.serviceWorker.register(swUrl, { scope: scopePath });
+          state.ok = true; state.scope = reg && reg.scope;
+          try { console.log('[APP3] Service Worker registered', state.scope); } catch (e) {}
+        } catch (e) {
+          state.error = (e && e.message) || String(e);
+          try { console.log('[APP3] Service Worker registration skipped:', state.error); } catch (err) {}
+        }
+      }
+      return { state, init };
+    })();
+    try { window.APP3 = Object.assign(window.APP3 || {}, { pwa: App3PWA.state }); } catch (e) {}
+    try { App3PWA.init(); } catch (e) {}
+
+    /* 文章内头部（W1 重做）：主站 .reader-head 的滚动收缩（滚过 40px 加 .shrunk）+
+       「?」帮助气泡。逻辑与主站 index.html 的 onScrollRH / helpBtn 同一套。 */
+    (function () {
+      const rh = document.getElementById('readerHead');
+      if (rh) {
+        const onScroll = () => rh.classList.toggle('shrunk', window.scrollY > 40);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
+      const help = document.getElementById('ttHelp'), bubble = document.getElementById('ttBubble');
+      if (help && bubble) help.onclick = () => bubble.classList.toggle('show');
+    })();
+
     function mobileBtnIcons() { // 移动端播放条：确保图标在窄屏下正常显示，不再替换文字
     const btns = document.querySelectorAll('.audiobar .btn');
     btns.forEach(btn => {

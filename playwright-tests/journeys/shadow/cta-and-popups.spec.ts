@@ -28,8 +28,6 @@ declare const window: { __supaReject?: boolean };
 
 /* ---------------- 源码级：把 CSS 里的"绿底 + 白字"规则抓出来 ---------------- */
 
-const WHITE_INK = /(?:^|[;\s])color:\s*(?:#fff\b|#ffffff\b|white\b|rgb\(255,\s*255,\s*255\))/i;
-
 const parseColor = (t: string): [number, number, number, number] | null => {
   let m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(t);
   if (m) { let h = m[1]; if (h.length === 3) h = h.split('').map((c) => c + c).join('');
@@ -45,6 +43,24 @@ const isGreenFill = (c: [number, number, number, number]) => {
   const r = c[0] * k + 255 * (1 - k), g = c[1] * k + 255 * (1 - k), b = c[2] * k + 255 * (1 - k);
   return g > 110 && g - r > 25 && g - b > 25;
 };
+
+/* 2026-09-24：白字回到绿底上（用户拍板），所以源码级不再「见绿底+白字就响」，改成量对比度。
+   C1b：产品写的是 `color:var(--cta-ink)`（不是字面量 #fff），所以 color 也要把 var() 解析成真实值再判，
+   否则这道闸门只在自己测自己（对四个产品文件全返回 []）。阈值取 4.5（正文门槛）——
+   因为源码级拿不到字号，宁可从严；`.bad-c` 就是「白字压 --accent（3.49）」这条复发警报。 */
+const overWhite = (c: [number, number, number, number]): [number, number, number, number] => {
+  const a = Math.min(1, Math.max(0, c[3]));
+  return [c[0] * a + 255 * (1 - a), c[1] * a + 255 * (1 - a), c[2] * a + 255 * (1 - a), 1];
+};
+const relLum = (c: number[]) => {
+  const f = (v: number) => { const x = v / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); };
+  return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
+};
+const contrast = (a: number[], b: number[]) => {
+  const A = relLum(a), B = relLum(b);
+  return (Math.max(A, B) + 0.05) / (Math.min(A, B) + 0.05);
+};
+const SOURCE_MIN = 4.5;   // 源码级底线：正文门槛（拿不到字号，从严）
 
 const scanCssSource = (file: string) => {
   const html = fs.readFileSync(file, 'utf-8');
@@ -66,12 +82,23 @@ const scanCssSource = (file: string) => {
   };
   const hits: string[] = [];
   [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].forEach(([, rawSel, decl]) => {
-    const bg = new RegExp(`background(?:-color)?\\s*:[^;]*`, 'i').exec(decl);
-    if (!bg || !WHITE_INK.test(decl)) return;
-    const flat = resolve(bg[0]);
+    const bgM = /background(?:-color)?\s*:\s*([^;]*)/i.exec(decl);
+    if (!bgM) return;
+    const colM = /(?:^|[;\s])color\s*:\s*([^;]*)/i.exec(decl);
+    if (!colM) return;
+    // color 也要解析 var()（产品写的是 var(--cta-ink)）→ 只有「近白且不透明」的字才进本门禁
+    const ink = parseColor(resolve(colM[1]).trim());
+    if (!ink) return;
+    if (!(ink[3] >= 0.5 && ink[0] >= 235 && ink[1] >= 235 && ink[2] >= 235)) return;
+    const flat = resolve(bgM[1]);
     const colors = [...flat.matchAll(/#[0-9a-f]{3}\b|#[0-9a-f]{6}\b|rgba?\([^)]+\)/gi)]
       .map((m) => parseColor(m[0])).filter(Boolean) as [number, number, number, number][];
-    if (colors.some(isGreenFill)) hits.push(rawSel.trim().replace(/\s+/g, ' ').slice(-70));
+    const greens = colors.filter(isGreenFill);
+    if (!greens.length) return;
+    /* 白字压每一档绿：取最差（最亮那档）的对比度，低于底线才算「过亮的绿」。
+       渐变要逐档量 —— 亮端正是压不住白字的那一端。 */
+    const worst = Math.min(...greens.map((g) => contrast([255, 255, 255], overWhite(g))));
+    if (worst < SOURCE_MIN) hits.push(rawSel.trim().replace(/\s+/g, ' ').slice(-70));
   });
   return hits;
 };
@@ -174,11 +201,11 @@ async function measurePopup(page: import('@playwright/test').Page, p: { name: st
 test.describe('绿底按钮的字色 · 全站对比度', () => {
   const root = path.resolve(process.cwd(), '..');
 
-  test('源码里不许再有「绿底 + 白字」这条规则（含看不见的热态和弹层）', () => {
+  test('源码里不许再有「白字压过亮的绿」（含看不见的热态和弹层，三站都查）', () => {
     // 先自检这道闸门本身：坏写法必须响、好写法必须不响
     const fx = scanCssSource(path.join(root, 'playwright-tests/fixtures/cta-gate-selfcheck.css'));
-    expect(fx.sort()).toEqual(['.bad-a', '.bad-b']);
-    const report = ['shadow/index.html', 'index.html', 'admin/index.html']
+    expect(fx.sort()).toEqual(['.bad-a', '.bad-b', '.bad-c']);
+    const report = ['shadow/index.html', 'index.html', 'app/index.html', 'admin/index.html']
       .map((f) => [f, scanCssSource(path.join(root, f))] as const)
       .filter(([, h]) => h.length > 0);
     expect(report, report.map(([f, h]) => `${f}: ${h.join(' | ')}`).join('\n')).toEqual([]);
@@ -196,16 +223,17 @@ test.describe('绿底按钮的字色 · 全站对比度', () => {
     expect(r.seen, '一处绿底有字的控件都没捞到 = 扫描没跑到东西，不算通过').toBeGreaterThan(0);
   });
 
-  test('任务模式那颗「下一句」：绿底没改暗、字换成深墨', async ({ page }) => {
+  test('任务模式那颗「下一句」：绿底压深、字改回白（反向验证的锚）', async ({ page }) => {
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.enterTaskMode(); });
     await expect(page.locator('#tbNext')).toBeVisible();
     const one = await page.evaluate(() => {
       const el = document.getElementById('tbNext') as HTMLElement;
       const cs = getComputedStyle(el);
-      return { color: cs.color, bg: cs.backgroundImage.slice(0, 70) };
+      return { color: cs.color, bg: cs.backgroundImage.slice(0, 90) };
     });
-    expect(one.color).toBe('rgb(4, 35, 27)');          // --cta-ink
-    expect(one.bg).toContain('43, 212, 164');          // #2bd4a4 —— 薄荷绿本身一颗都没压暗
+    expect(one.color).toBe('rgb(255, 255, 255)');      // --cta-ink 回到 #fff
+    expect(one.bg).toContain('11, 134, 99');           // #0b8663 —— 三站统一的中调薄荷最亮档（配白字 4.56:1）
+    expect(one.bg).not.toContain('43, 212, 164');      // 不再是 #2bd4a4（白字只有 1.90）
     const r = await sweepLive(page);
     expect(r.bad, JSON.stringify(r.bad)).toEqual([]);
     expect(r.seen).toBeGreaterThan(0);

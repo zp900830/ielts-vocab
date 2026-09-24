@@ -1,15 +1,26 @@
 /* / 这条文件只给 cta-and-popups.spec.ts 的「源码级门禁」当自检夹具用，产品不加载它。
    存在的理由：门禁必须证明两件事 —— ① 遇到坏写法会响；② 遇到好写法不响。
-   只测①会误伤，只测②是假绿。见 shadow 站 2026-09-22 那次「闸门以为跑了其实没跑」的教训。 */
+   只测①会误伤，只测②是假绿。见 shadow 站 2026-09-22 那次「闸门以为跑了其实没跑」的教训。
+
+   2026-09-24 更新：
+   - 主按钮字色改回白、绿底压深；源码级门禁改成「白字压不够深的绿」才响（对比度 < 4.5）。
+   - C1b：门禁现在会把 color 里的 var(--token) 也解析成真实值再判 —— 所以这里用
+     `color: var(--cta-ink)`（=白）来造 `.bad-c`：它复现的正是「白字漏在 --accent 底色上（3.49）」那次回归。 */
 :root{
-  --grad: linear-gradient(135deg,#2bd4a4,#0fae7e);
-  --accent: #0c9c74;
+  --grad: linear-gradient(135deg,#0b8663,#0a7050);   /* 中调薄荷（与产品同值）：白字 4.56，好例子 */
+  --grad-bright: linear-gradient(135deg,#2bd4a4,#0fae7e);   /* 旧值：白字 1.90，坏例子 */
+  --accent: #0c9c74;                                 /* 白字 3.49 —— 不够深，配白字是坏例子 */
+  --cta-ink: #fff;                                   /* 主按钮白字（产品里那支） */
+  --cta-ink-dark: #04231b;                           /* 非主按钮深墨 */
   --soft: rgba(16,180,135,.08);
   --brand: #0071e3;
 }
-/* 该被抓到的两条：薄荷绿实底 + 白字 */
-.bad-a { background: var(--grad); color: #fff; }
-.bad-b { background-color: var(--accent); color: rgb(255,255,255); }
-/* 不该被抓到的两条：蓝色实底（--accent 在 admin 站就是这个蓝）；以及只有一层淡绿底纹 */
+/* 该被抓到的三条：白字压「过亮 / 不够深」的绿 */
+.bad-a { background: var(--grad-bright); color: #fff; }        /* 1.90 */
+.bad-b { background: #2bd4a4; color: rgb(255,255,255); }        /* 1.90 */
+.bad-c { background: var(--accent); color: var(--cta-ink); }    /* 3.49 < 4.5 —— C1 复发的警报 */
+/* 不该被抓到的四条：白字压中调薄荷渐变（≥4.5）；深墨压 accent；蓝底；淡绿底纹 */
 .ok-a { background: var(--brand); color: #fff; }
 .ok-b { background: var(--soft); color: #fff; }
+.ok-c { background: var(--grad); color: #fff; }                 /* 4.56 */
+.ok-d { background: var(--accent); color: var(--cta-ink-dark); } /* 深墨 → 不判白字 */

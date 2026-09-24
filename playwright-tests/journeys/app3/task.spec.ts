@@ -171,13 +171,45 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
 
     const top = page.locator('#taskTop');
     await expect(top).toBeVisible();
-    await expect(top.locator('.tt-back')).toContainText('返回首页');
-    await expect(top.locator('#ttTitle')).toHaveText('地球与生命');
+    // W1 重做：头部照抄主站 .reader-head —— 返回是 .back 圆钮，标题是 .r-title 里的 .tt-zh
+    await expect(top.locator('.reader-head .back')).toBeVisible();
+    await expect(top.locator('#ttTitle .tt-zh')).toHaveText('地球与生命');
+    await expect(top.locator('#ttTitle .r-pos')).toContainText('第 1/6 篇');
 
-    await top.locator('.tt-back').click();
+    await top.locator('.reader-head .back').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
+    // 文章内头部只在任务模式现身（一级页面头部是 #shellTop，见 leftovers.spec.ts）
     await expect(page.locator('#taskTop')).toBeHidden();
     await expect(page.locator('.art-card')).toHaveCount(6);
+  });
+
+  // 2026-09-24 用户：任务条那颗 ✕ 去掉，退出走头部「返回」；退出零惩罚，所以不再摆二次确认。
+  test('任务条没有 ✕ 了；退出走头部「返回」，直接退不摆二次确认', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    expect(await page.locator('#tbExit').count(), '✕ 已删').toBe(0);
+    expect(await page.locator('#tbStay').count(), '「继续做」已删').toBe(0);
+    expect(await page.locator('#tbQuit').count(), '「退出」确认键已删').toBe(0);
+    // 头部「返回」→ 直接退出，中途不出现 data-state=exit 的确认态
+    await page.locator('#taskTop .reader-head .back').click();
+    await expect(page.locator('body')).not.toHaveClass(/task-mode/);
+    expect(await page.locator('#taskBar').getAttribute('data-state')).not.toBe('exit');
+  });
+
+  // ④ 任务模式（沉浸式阅读）用原背景色（暖白 #faf8f4），不是首页那套主站薄荷底。
+  test('任务模式底色回到暖白，和首页薄荷底不一样', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    const homeBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('body')).toHaveClass(/task-mode/);
+    const taskBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+    expect(taskBg, `任务模式底色 ${taskBg} 应与首页 ${homeBg} 不同`).not.toBe(homeBg);
+    expect(taskBg, '任务模式回到影子跟读那套暖白').toBe('rgb(250, 248, 244)');
   });
 
   // 审阅 I2：退出后首页卡片/横幅还停在进任务模式前的进度，要等点导航或刷新才更新。
@@ -191,7 +223,7 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
     await page.evaluate(() => {
       Array.from(ShadowPlan.articleScope(SECTIONS, 0)).slice(0, 6).forEach((i) => TASK.readDone(i));
     });
-    await page.locator('#taskTop .tt-back').click();
+    await page.locator('#taskTop .reader-head .back').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
     await expect(page.locator('.art-card').first().locator('.a-pct')).toHaveText('20%');
   });
@@ -256,7 +288,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toBeVisible();
     await page.evaluate(() => TASK.setPass(2));
-    await page.locator('#art .qz-blank').first().click();
+    // setPass(2) 会 renderQuiz → 自动弹出当前题的浮窗（不必再点空；点空反而被浮窗挡住）
     await expect(page.locator('#blankPop')).toBeVisible();
     const box = await page.locator('#blankPop').boundingBox();
     expect(box, '浮窗必须有几何位置').not.toBeNull();
@@ -665,19 +697,26 @@ test.describe('3.0 终审顺手项', () => {
     expect(max, '长词的空必须比短词明显宽（固定 3.2em 时二者相等）').toBeGreaterThan(min * 1.5);
   });
 
-  test('Global Constraint：.a-quiz / .tt-back / .b-go 触区 ≥44px', async ({ page }) => {
+  test('Global Constraint：.a-quiz / .b-go 触区 ≥44px（头部照抄主站，用 hit-slop 扩热区）', async ({ page }) => {
     await stubData(page, SIXQ);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await freshPlan(page);
     // .b-go：横幅那颗
     const goH = await page.locator('#homeBanner .b-go').evaluate((el) => el.getBoundingClientRect().height);
     expect(goH, '.b-go 触区').toBeGreaterThanOrEqual(44);
-    // .tt-back：先进任务模式（还没读，队列非空才进得去）
+    /* 文章内头部（W1 重做）：.back 照抄主站视觉尺寸（30px），触区靠 ::after 外扩（不撑大视觉）。
+       M3：把「有效触区 = 视觉盒 + ::after 每边 inset」量出来断言 ≥44（PRD §10.4），不再只断言「它在」。 */
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskTop')).toBeVisible();
-    const backH = await page.locator('#taskTop .tt-back').evaluate((el) => el.getBoundingClientRect().height);
-    expect(backH, '.tt-back 触区').toBeGreaterThanOrEqual(44);
-    await page.locator('#taskTop .tt-back').click();
+    const backHit = await page.locator('#taskTop .reader-head .back').evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      const a = getComputedStyle(el, '::after');
+      const slop = Math.max(Math.abs(parseFloat(a.top) || 0), Math.abs(parseFloat(a.left) || 0));
+      return { w: r.width, h: r.height, slop, hitW: r.width + 2 * slop, hitH: r.height + 2 * slop };
+    });
+    expect(backHit.hitW, `back 有效触区宽 ${JSON.stringify(backHit)}`).toBeGreaterThanOrEqual(44);
+    expect(backHit.hitH, `back 有效触区高 ${JSON.stringify(backHit)}`).toBeGreaterThanOrEqual(44);
+    await page.locator('#taskTop .reader-head .back').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
     // .a-quiz：通读满后卡片才出「答题」
     await page.evaluate(() => {
