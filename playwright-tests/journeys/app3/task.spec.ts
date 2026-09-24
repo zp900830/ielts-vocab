@@ -14,6 +14,7 @@ declare const TASK: {
   setPass(n: number): void;
   readDone(i: number): void;
   next(): void;
+  finished(): boolean;
   answerQuiz(choice: string): boolean;
   nextQuiz(): void;
   quizTotal(): number;
@@ -103,6 +104,22 @@ async function installSpeakStub(page: import('@playwright/test').Page) {
 }
 const finishSpeak = (page: import('@playwright/test').Page) =>
   page.evaluate(() => { const w = window as unknown as { __cbs: (() => void)[] }; const cb = w.__cbs.shift(); if (cb) cb(); });
+
+/* 在 ② 的浮窗里点「正确」/「错误」的那个选项（不碰游标、不推进）。 */
+async function answerCorrectlyInPop(page: import('@playwright/test').Page) {
+  const idx = await page.evaluate(() => {
+    const q = TASK.currentQuiz()!;
+    return q.opts.indexOf(q.answer);
+  });
+  await page.locator('#blankPop .qz-opt').nth(idx).click();
+}
+async function answerWronglyInPop(page: import('@playwright/test').Page) {
+  const idx = await page.evaluate(() => {
+    const q = TASK.currentQuiz()!;
+    return q.opts.findIndex((o) => o !== q.answer);
+  });
+  await page.locator('#blankPop .qz-opt').nth(idx).click();
+}
 
 test.describe('3.0 文章任务模式（按篇队列）', () => {
   test('点卡片 → 任务模式，n/N 是这一篇的句数（不是全局）', async ({ page }) => {
@@ -375,6 +392,200 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await expect(page.locator('#art .qz-blank.qa-done')).toHaveCount(total);
     expect(await page.evaluate(() => TASK.quizDone()), '每个空恰好答一次，没有重复事件').toBe(total);
     await expect(page.locator('#blankPop')).toBeHidden();
+  });
+
+  /* ===== 答完自动下一题（2026-09-24 用户：「回答完就自动下一题吧」）=====
+     选完一个选项 → 先让人看清对/错（并让读屏把 #quizLive 念完）→ 自动去下一题。
+     「下一题」按钮保留（键盘 / 想多看一眼 / 自动化），且与自动推进不打架（不跳两题）。 */
+  test.describe('② 答完自动下一题', () => {
+    test('答完不点任何东西：反馈先可见，随后自动到下一题', async ({ page }) => {
+      await stubData(page, SIXQ);
+      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await freshPlan(page);
+      await page.locator('.art-card').first().click();
+      await expect(page.locator('#taskBar')).toBeVisible();
+      await page.evaluate(() => TASK.setPass(2));
+
+      const first = await page.evaluate(() => APP3.currentBlank());
+      await answerCorrectlyInPop(page);
+
+      // 反馈看得见：浮窗收掉、答过的空立刻呈现对/错；播报区写入文字
+      await expect(page.locator('#blankPop')).toBeHidden();
+      await expect(page.locator(`#art .qz-blank[data-bi="${first}"]`)).toHaveClass(/qa-ok/);
+      await expect(page.locator('#quizLive')).not.toHaveText('');
+
+      // 不是一闪而过：立即查还在原题（自动推进有可见停留）
+      expect(await page.evaluate(() => APP3.currentBlank()), '反馈必须停留一瞬，不能答完就跳').toBe(first);
+
+      // 不点任何东西 → 自动到下一题（换空 + 浮窗重新弹出）
+      await expect
+        .poll(() => page.evaluate(() => APP3.currentBlank()), { timeout: 6000 })
+        .not.toBe(first);
+      await expect(page.locator('#blankPop')).toBeVisible();
+      await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
+    });
+
+    test('答错也先给反馈：红字 + 正确答案，停留更久后自动推进', async ({ page }) => {
+      await stubData(page, SIXQ);
+      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await freshPlan(page);
+      await page.locator('.art-card').first().click();
+      await expect(page.locator('#taskBar')).toBeVisible();
+      await page.evaluate(() => TASK.setPass(2));
+
+      const first = await page.evaluate(() => APP3.currentBlank());
+      const answer = await page.evaluate(() => TASK.currentQuiz()!.answer);
+      await answerWronglyInPop(page);
+
+      // 答错：空变红、摊出正确的那一个；播报区说「正确的那一个是 X」
+      await expect(page.locator(`#art .qz-blank[data-bi="${first}"]`)).toHaveClass(/qa-no/);
+      await expect(page.locator('#quizLive')).toContainText('正确的那一个是');
+      await expect(page.locator('#quizLive')).toContainText(answer);
+
+      // 答错的停留必须够看清正确答案：立刻仍在原题，且比答对的停留久（≥1.5s 还在）
+      expect(await page.evaluate(() => APP3.currentBlank())).toBe(first);
+      await page.waitForTimeout(1500);
+      expect(await page.evaluate(() => APP3.currentBlank()), '答错不能 1.5s 内就跳走，得让人看清答案').toBe(first);
+
+      await expect
+        .poll(() => page.evaluate(() => APP3.currentBlank()), { timeout: 6000 })
+        .not.toBe(first);
+    });
+
+    test('最后一题答完 → 自动进收工态（不留空白）', async ({ page }) => {
+      await stubData(page, SIXQ);
+      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await freshPlan(page);
+      await page.locator('.art-card').first().click();
+      await expect(page.locator('#taskBar')).toBeVisible();
+      await page.evaluate(() => TASK.setPass(2));
+
+      const total = await page.locator('#art .qz-blank').count();
+      expect(total, '夹具要有多于一题，才能把「最后一题」单独留出来').toBeGreaterThan(1);
+      // 程序化答到只剩最后一题（不等自动定时器）
+      await page.evaluate((n) => {
+        for (let g = 0; g < 500; g++) {
+          const done = document.querySelectorAll('#art .qz-blank.qa-done').length;
+          if (done >= n - 1) break;
+          const q = TASK.currentQuiz();
+          if (!q) break;
+          TASK.answerQuiz(q.answer);
+          TASK.next();
+        }
+      }, total);
+      await expect(page.locator('#art .qz-blank.qa-done')).toHaveCount(total - 1);
+
+      // 最后一题用 UI 答对，然后什么都不点：自动推进 → 收工态
+      await answerCorrectlyInPop(page);
+      await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done', { timeout: 6000 });
+      await expect(page.locator('#tbNext')).toContainText('看词本');
+      await expect(page.locator('#tbTitle')).toContainText('今天完成');
+    });
+
+    test('手动「下一题」与自动推进不打架：不跳两题', async ({ page }) => {
+      await stubData(page, SIXQ);
+      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await freshPlan(page);
+      await page.locator('.art-card').first().click();
+      await expect(page.locator('#taskBar')).toBeVisible();
+      await page.evaluate(() => TASK.setPass(2));
+
+      const first = await page.evaluate(() => APP3.currentBlank());
+      await answerCorrectlyInPop(page);
+      await expect(page.locator('#blankPop')).toBeHidden();
+
+      // 反馈出现后立刻手动推进（抢在自动定时器之前）
+      await page.locator('#tbNext').click();
+      const second = await page.evaluate(() => APP3.currentBlank());
+      expect(second, '手动推进必须换到下一个空').not.toBe(first);
+
+      // 等过自动延迟：仍停在 second —— 手动那次已取消定时器，不许再跳一格
+      await page.waitForTimeout(4000);
+      expect(await page.evaluate(() => APP3.currentBlank()), '手动推进后自动定时器必须被取消').toBe(second);
+    });
+
+    test('乱序点空 + 自动推进：不漏、不重问', async ({ page }) => {
+      await stubData(page, SIXQ);
+      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await freshPlan(page);
+      await page.locator('.art-card').first().click();
+      await expect(page.locator('#taskBar')).toBeVisible();
+      await page.evaluate(() => TASK.setPass(2));
+
+      const total = await page.locator('#art .qz-blank').count();
+      expect(total, '夹具要多于一个空，乱序才有意义').toBeGreaterThan(2);
+
+      // 抢答第 3 个空（跳过前两个）
+      await page.evaluate(() => APP3.openBlank(3));
+      await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
+      await answerCorrectlyInPop(page);
+      expect(await page.evaluate(() => TASK.quizDone())).toBe(1);
+
+      // 自动推进：既不落回刚答过的第 3 个（重问），也不越过未答的空
+      await expect
+        .poll(() => page.evaluate(() => APP3.currentBlank()), { timeout: 6000 })
+        .not.toBe(3);
+      expect(await page.evaluate(() => TASK.quizDone()), '自动推进不许重问第 3 个空').toBe(1);
+
+      // 再把剩下的答完（走 nextBlank 的回卷路径，把跳过的前两个补回来）
+      await page.evaluate(() => {
+        for (let g = 0; g < 500; g++) {
+          if (TASK.finished()) break;      // 收工后 currentQuiz 仍是末题：不 break 会把最后一题再答一遍
+          const q = TASK.currentQuiz();
+          if (!q) break;
+          TASK.answerQuiz(q.answer);
+          TASK.next();
+        }
+      });
+      await expect(page.locator('#art .qz-blank.qa-done')).toHaveCount(total);
+      expect(await page.evaluate(() => TASK.quizDone()), '每个空恰好答一次，没有重复事件').toBe(total);
+    });
+
+    test('prefers-reduced-motion 下自动推进照常工作（不因无障碍偏好失灵）', async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await stubData(page, SIXQ);
+      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await freshPlan(page);
+      await page.locator('.art-card').first().click();
+      await expect(page.locator('#taskBar')).toBeVisible();
+      await page.evaluate(() => TASK.setPass(2));
+
+      const first = await page.evaluate(() => APP3.currentBlank());
+      await answerCorrectlyInPop(page);
+      await expect
+        .poll(() => page.evaluate(() => APP3.currentBlank()), { timeout: 6000 })
+        .not.toBe(first);
+    });
+
+    test('自动推进不抢焦点（polite 播报不被截断），手动推进仍送焦', async ({ page }) => {
+      await stubData(page, SIXQ);
+      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await freshPlan(page);
+      await page.locator('.art-card').first().click();
+      await expect(page.locator('#taskBar')).toBeVisible();
+      await page.evaluate(() => TASK.setPass(2));
+
+      const first = await page.evaluate(() => APP3.currentBlank());
+      await answerCorrectlyInPop(page);
+      await expect
+        .poll(() => page.evaluate(() => APP3.currentBlank()), { timeout: 6000 })
+        .not.toBe(first);
+      const focusInPop = await page.evaluate(() => {
+        const pop = document.getElementById('blankPop');
+        return !!(pop && pop.contains(document.activeElement));
+      });
+      expect(focusInPop, '自动推进不许把焦点抢进新题：polite 播报会被读屏截断').toBe(false);
+      await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
+
+      // 对照：手动「下一题」仍按老规矩把焦点送进浮窗（键盘用户可达）
+      await page.locator('#tbNext').click();
+      const manualFocus = await page.evaluate(() => {
+        const pop = document.getElementById('blankPop');
+        const a = document.activeElement;
+        return !!(pop && a && pop.contains(a) && (a as HTMLElement).classList.contains('qz-opt'));
+      });
+      expect(manualFocus, '手动推进仍要送焦到选项').toBe(true);
+    });
   });
 
   /* ===== Task 7：收工态 + 两条入口 + 存档回归 =====

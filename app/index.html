@@ -6079,6 +6079,12 @@ let listenOn = false;
          全部只在 ② 态活着，resetQuizRun() 一趟清一次。 */
       let _blankItems = [], _blankKey2bi = {}, _blankEls = {}, _ans = {}, _curBlank = -1;
       let _served = new Set(), _popReadonly = false;
+      /* 答完自动下一题（2026-09-24 用户：「回答完就自动下一题吧」）。
+         _autoNextT 是唯一的定时器句柄：手动「下一题」/ 跳题 / 离开 / 重置都必须 clearAutoNext()，
+         否则同一个 reveal 会被推进两次（手动一次、定时一次 = 跳两题）。
+         _suppressPopFocus 只在自动推进那一帧为 true：让 renderBlankPop 不抢焦点 ——
+         #quizLive 的 polite 播报还在队列里时把焦点拽到新题选项上，读屏会把它截断。 */
+      let _autoNextT = 0, _suppressPopFocus = false;
       /* ① 那颗键一颗担两义（他 2026-09-23 定的名，2026-09-24 定的动作）：
          进任务模式先显示「放这一句」（刚进来就写「下一句」等于让人以为已经放过了）；
          点过之后**整趟都叫「下一句」**，不再按句来回翻 —— 他追报「像两个按钮一直切来切去」。
@@ -6218,9 +6224,36 @@ let listenOn = false;
         const base = batchItems.filter(x => x.pass === pass);
         return (pass >= 2 && retakeItems.length) ? base.concat(retakeItems) : base;
       }
+      /* 自动推进的定时器与停留时长。
+         clearAutoNext 是唯一的取消入口：任何「人为换到别处」的动作都得先把它叫停。 */
+      function clearAutoNext() {
+        if (_autoNextT) { clearTimeout(_autoNextT); _autoNextT = 0; }
+      }
+      /* 自动推进前的停留 = 「视觉下限」与「读屏念完这句的保守估算」取较大者。
+         没有 API 能问读屏念完没有，只能按文字长度估：中文约每字 90ms 再留 300ms 起播余量。
+         答对只要看清绿色（1s）；答错还要看清正确答案 + 就地摊开的辨析（2.2s 起）。 */
+      function autoAdvanceDelay(ok, answer) {
+        const msg = ok ? '对了' : ('正确的那一个是 ' + String(answer == null ? '' : answer));
+        const speakMs = 300 + msg.length * 90;
+        return Math.max(ok ? 1000 : 2200, speakMs);
+      }
+      function scheduleAutoNext(ok, answer) {
+        clearAutoNext();
+        if (!taskMode || pass < 2 || taskFinished) return;
+        _autoNextT = setTimeout(function () {
+          _autoNextT = 0;
+          if (!taskMode || pass < 2 || taskFinished || !reveal) return;   // 已手动推进 / 已离开：不重复推
+          _suppressPopFocus = true;
+          try { nextBlank(); } finally { _suppressPopFocus = false; }
+        }, autoAdvanceDelay(ok, answer));
+      }
+      function prefersReducedMotion() {
+        try { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) { return false; }
+      }
       /* 一趟 ② 的全部计数器。进模式 / setPass / ①→② 三处都要重置，
          少清一样（比如补考清单）就会把上一遍错过的词带进这一遍。 */
       function resetQuizRun() {
+        clearAutoNext();
         quizCursor = 0; quizWrongN = 0; quizAnsweredN = 0; reveal = null;
         retakeItems = []; retakeServedN = 0; retakeOkN = 0;
         // 文内挖空的视图层也一起清：上一遍的空 / 颜色 / 浮窗 / 已呈现集合不许带进这一遍。
@@ -6292,11 +6325,13 @@ let listenOn = false;
         const live = document.getElementById('quizLive');
         if (live) live.textContent = ok ? '对了' : '正确的那一个是 ' + q.answer;
         renderQuiz(); updateTaskBar();
+        scheduleAutoNext(ok, q.answer);   // 反馈先落地，再按对/错的不同停留自动推进
         return ok;
       }
       /* 推进只有一处实现：任务条那颗（唯一的推进按钮）、键盘 → 、「这题有问题」都调这里。
          补考题挂在 quizList() 末尾，所以这里不必知道补考存在 —— 游标自然走进那一段。 */
       function nextQuiz() {
+        clearAutoNext();   // 手动/程序化推进 = 撤掉待触发的自动推进，绝不推两次
         reveal = null; quizCursor++;
         if (!currentQuiz()) finishPass(pass);
         else { renderQuiz(); updateTaskBar(); }
@@ -6413,6 +6448,7 @@ let listenOn = false;
       /* 点空：未答过 → 呈现这题、弹浮窗；已答过 → 只回看结果，不再记第二条事件 / tries 翻倍。 */
       function openBlank(bi) {
         if (!taskMode || pass < 2) return;
+        clearAutoNext();   // 用户自己点去另一个空 = 手动改道，取消待触发的自动推进
         const item = _blankItems[bi];
         if (!item) return;
         const q = buildQuiz(item);
@@ -6450,7 +6486,7 @@ let listenOn = false;
         pop.hidden = false;
         positionBlankPop(_blankEls[bi]);
         const first = pop.querySelector('.qz-opt:not([disabled])');
-        if (first) first.focus({ preventScroll: true });
+        if (first && !_suppressPopFocus) first.focus({ preventScroll: true });
       }
       /* 锚在空上方；上方放不下就翻到下方；左右夹在屏幕内（390 宽也不越界）。
          W5-5：底部有固定的任务条 / 小结卡，浮窗翻到下方时必须避让，绝不压住「下一题」。
@@ -6539,6 +6575,7 @@ let listenOn = false;
          离开当前题即视为「跳过这题」——记进 _served，它就不再回头。
          补考段是 quizList() 末尾的新对象，天然还没处理过，所以不会被跳过。 */
       function nextBlank() {
+        clearAutoNext();
         closeBlankPop();
         reveal = null;
         const cur = quizList()[quizCursor];
@@ -6573,7 +6610,8 @@ let listenOn = false;
         _curBlank = bi;
         renderBlankPop(bi, q);
         const el = _blankEls[bi];
-        if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        // 自动推进也会滚：reduced-motion 口径下不用平滑滚动（新动效不许破例）
+        if (el) el.scrollIntoView({ block: 'center', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
       }
       function pickOpt(i) {
         if (_popReadonly) return;              // 回看态：选项只展示，不再记一次
@@ -6917,6 +6955,7 @@ let listenOn = false;
       function playSentence(a, gi) { openArticle(a, { article: a, playGlobal: gi }); }
       function exitTaskMode() {
         taskMode = false; _noPlan = false; stopSessionClock();
+        clearAutoNext();   // 离开任务模式：别让待触发的自动推进在别的屏上叫 nextBlank
         // 回首页 = 回全局：横幅/绿点/今日账都按全量算，别把上一篇的 scope 留在缓存里。
         // （_pendingArticle 不在这里清：空状态点「去设置」就是先退出、再建计划回到这一篇。）
         currentArticle = null; _cachedPlan = null;
