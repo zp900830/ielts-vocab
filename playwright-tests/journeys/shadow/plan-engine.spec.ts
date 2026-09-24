@@ -54,7 +54,14 @@ declare const ShadowPlan: {
     doneAt: number | null; atHorizon: { days: number; passed: number; at: number } | null;
     capped: boolean; empty: boolean;
   };
+  articleScope(sections: unknown, article: number): Set<number>;
+  wordArticle(sections: unknown, word: string): number[];
+  countStagesOf(state: unknown, scope: Set<number> | null, wordsOf?: (i: number) => string[]):
+    { seen: number; recognized: number; owned: number; graduated: number; leech: number };
 };
+
+// 影子跟读页的顶层数据（经典脚本的全局绑定，不在 window 上但 evaluate 里按名字可引用）
+declare const SECTIONS: { paragraphs: string[][] }[];
 
 const ENV = process.env.E2E_ENVIRONMENT || 'local';
 
@@ -955,5 +962,92 @@ test.describe('plan engine · 保温（毕业后回池）', () => {
     expect(got.reps).toBe(got.before.reps + 1);             // 但这一遍读是实打实的接触，进账
     expect(got.due - got.at).toBe(14 * 864e5);              // 顺延到下一次回访，不再天天占位
     expect(got.interval).toBe(14);
+  });
+});
+
+/* ---------- Task 1：引擎按篇化（3.0 M1） ----------
+   出处：docs/superpowers/specs/2026-09-24-3.0-article-first-PRD.md §9.3（按篇队列）/ §9.5（三张派生索引）。
+   assemble 加 scope 是本次唯一的引擎改动，不带 scope 时行为与 v2.0 逐字一致 —— 老用例不受影响。 */
+test.describe('按篇化：scope 与三张派生索引（3.0 M1）', () => {
+  test.skip(!['local', 'preview'].includes(ENV), `not allowed in "${ENV}"`);
+  test.beforeEach(async ({ page, baseURL }) => {
+    test.info().setTimeout(currentTimeout() * 6);
+    await page.goto(`${baseURL}/index.html`);
+  });
+
+  test('不带 scope 时 assemble 与 v2.0 逐字一致', async ({ page }) => {
+    const got = await page.evaluate(() => {
+      const st = ShadowPlan.emptyState();
+      // 造 3 句、每句 1 个词都读到过 —— 只比「带/不带 scope」的相对差
+      for (let i = 0; i < 3; i++) st.words['w' + i] = ShadowPlan.newWord();
+      const base = { now: Date.now(), todayMinutes: 15, rate: 1, secNew: 25, secReview: 8,
+                     wordsOf: (i: number) => ['w' + i], totalSents: 100, boundaryHour: 4,
+                     plan: { todayMinutes: 15, boundaryHour: 4, pausedNew: false } };
+      const a = ShadowPlan.assemble(st, base);
+      const b = ShadowPlan.assemble(st, Object.assign({}, base, { scope: null }));
+      return { qa: a.queue.map((x: { i: number }) => x.i), qb: b.queue.map((x: { i: number }) => x.i) };
+    });
+    expect(got.qa).toEqual(got.qb);
+  });
+
+  test('scope 收窄后只排该篇的句', async ({ page }) => {
+    const got = await page.evaluate(() => {
+      const st = ShadowPlan.emptyState();
+      const scope = ShadowPlan.articleScope(SECTIONS, 0);
+      const inScope = Array.from(scope);
+      const out = ShadowPlan.assemble(st, { now: Date.now(), todayMinutes: 60, rate: 1,
+        // 影子跟读页里有现成的句子→词映射（正文 [[词:形式]] 标记的真实来源），直接用它，
+        // 别自己造映射。它由 TASK.sentWordsOf 暴露（wordsOfSent 是 TASK IIFE 的内部函数，不在 window 上）。
+        secNew: 25, secReview: 8, wordsOf: (i: number) => TASK.sentWordsOf(i),
+        totalSents: 1833, boundaryHour: 4,
+        plan: { todayMinutes: 60, boundaryHour: 4, pausedNew: false }, scope });
+      return { inScope: inScope.length, queued: out.queue.map((x: { i: number }) => x.i) };
+    });
+    expect(got.queued.length, '收窄后一句都没排 = 这条什么都没测').toBeGreaterThan(0);
+    expect(got.queued.every((i: number) => i < got.inScope), '排出了 scope 外的句').toBe(true);
+  });
+
+  test('wordArticle / countStagesOf 与全局对得上', async ({ page }) => {
+    const got = await page.evaluate(() => {
+      const w = 'volcano';
+      const arts = ShadowPlan.wordArticle(SECTIONS, w);
+      const st = ShadowPlan.emptyState();
+      st.words[w] = ShadowPlan.newWord();
+      (st.words[w] as { stage: string }).stage = 'graduated';
+      // 按篇统计必须把「句子→词」映射一起喂进去（countStagesOf 是纯函数，不认识 SECTIONS）。
+      // 不喂的话它只能数全局 —— 那「六篇之和 = 全局」这条不变式就测不到东西。
+      const wordsOf = (i: number) => TASK.sentWordsOf(i);
+      const one = ShadowPlan.countStagesOf(st, ShadowPlan.articleScope(SECTIONS, arts[0]), wordsOf);
+      let sum = 0;
+      for (let a = 0; a < SECTIONS.length; a++) sum += ShadowPlan.countStagesOf(st, ShadowPlan.articleScope(SECTIONS, a), wordsOf).graduated;
+      return { arts, oneGrad: one.graduated, sum };
+    });
+    expect(got.arts.length, '一个目标词应当至少归属一篇').toBeGreaterThan(0);
+    expect(got.oneGrad).toBe(1);
+    expect(got.sum, '六篇已毕业数之和必须等于全局那 1 个').toBe(1);
+  });
+
+  /* 审阅修复 1/5：scope 给了却没给 wordsOf 时，绝不能静默数全局 —— 那会让 app/ 调用方
+     拿到「看着对、其实全表」的数。无 scope 的全局统计是合法用途，必须照常。 */
+  test('countStagesOf：无 scope 数全局；有 scope 无 wordsOf 必须抛错，不许静默数全局', async ({ page }) => {
+    const got = await page.evaluate(() => {
+      const st = ShadowPlan.emptyState();
+      st.words['volcano'] = ShadowPlan.newWord();
+      (st.words['volcano'] as { stage: string }).stage = 'graduated';
+      st.words['__not_in_any_article__'] = ShadowPlan.newWord();
+      (st.words['__not_in_any_article__'] as { stage: string }).stage = 'graduated';
+      const global = ShadowPlan.countStagesOf(st, null);
+      let threw = '';
+      try {
+        // 故意漏掉第三个参数：这条就是在锁「scope 给了但漏了 wordsOf 必须抛」
+        ShadowPlan.countStagesOf(st, ShadowPlan.articleScope(SECTIONS, 0));
+      } catch (e) { threw = String((e as Error).message || e); }
+      const scoped = ShadowPlan.countStagesOf(st, ShadowPlan.articleScope(SECTIONS, 0),
+        (i: number) => TASK.sentWordsOf(i));
+      return { globalGrad: global.graduated, threw, scopedGrad: scoped.graduated };
+    });
+    expect(got.globalGrad).toBe(2);          // 无 scope → 全表，合法用途照常
+    expect(got.threw).toContain('wordsOf');  // 有 scope 没 wordsOf → 大声报错，不返回"看着对"的数
+    expect(got.scopedGrad).toBe(1);          // 有 wordsOf → 只数本篇（volcano），那个假词不算
   });
 });

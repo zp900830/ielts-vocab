@@ -34,6 +34,9 @@ const FILES = [
   'shadow/data/chapters.json',
   'shadow/data/sections.json',
   'shadow/data/vocab.json',
+  // 3.0 新站点：外壳 + 路由（引擎与数据直接读 /shadow/ 那份，不复制）
+  'app/index.html',
+  'app/app.js',
 ];
 
 const warn = [];
@@ -79,6 +82,7 @@ function main() {
   }
   writeConfig(path.join(OUT), url, key);
   writeConfig(path.join(OUT, 'shadow'), url, key);
+  writeConfig(path.join(OUT, 'app'), url, key);
 
   // 防「白名单漏文件」：扫已复制的 HTML，凡是引用本站相对路径的 json/js/html，必须在 dist 里
   const missing = [];
