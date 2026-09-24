@@ -87,7 +87,7 @@
     --shadow: 0 2px 12px rgba(0,0,0,.25); --shadow-lg: 0 12px 40px rgba(0,0,0,.4);
     --glass: rgba(30,28,25,.94); --glass-strong: rgba(30,28,25,.97);
     }
-  body.dark { background-color: #1c1a17; }
+  body.dark { background-color: #1c1a17; background-image: none; }
   html.dark { background-color: #1c1a17; background-image: none; } /* 桌面暗色：清除基样式浅色渐变，杜绝回弹/覆盖层露出米白 */
   body.dark .topbar { background: transparent; border-bottom-color: #33302b; }
   body.dark .topbar::before {
@@ -139,14 +139,23 @@
     box-shadow: 0 4px 14px rgba(16,180,135,.5); }
   body.dark #seekRail { background: #3a453f; }
   html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth;
-    background-color: #f2faf6;
+    background-color: #f8fdfa;
     background-image:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(45,180,135,.10) 0%, transparent 70%),
-    linear-gradient(180deg, #f2faf6 0%, #eef7f2 100%);
+    linear-gradient(180deg, rgba(93,190,157,.08) 0%, rgba(93,190,157,.03) 60%, rgba(93,190,157,0) 100%),
+    linear-gradient(170deg, #f8fdfa 0%, #ffffff 40%, #ffffff 100%);
     background-attachment: fixed; }
-  body { font-family: var(--sans); background: transparent; color: var(--text);
+  /* ② 右侧内容区用主站首页配色（薄荷调底）；左侧导航保持自己那套（.sidenav 显式给底色）。
+     ④ 任务模式（沉浸式阅读）回到影子跟读原来那套暖白 #faf8f4。 */
+  body { font-family: var(--sans); color: var(--text);
+    background-color: #f8fdfa;
+    background-image:
+    linear-gradient(180deg, rgba(93,190,157,.08) 0%, rgba(93,190,157,.03) 60%, rgba(93,190,157,0) 100%),
+    linear-gradient(170deg, #f8fdfa 0%, #ffffff 40%, #ffffff 100%);
+    background-attachment: fixed;
     line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility; overflow-x: hidden; }
+  body.task-mode { background-color: #faf8f4; background-image: none; min-height: 100vh; }
+  body.dark.task-mode { background-color: #1c1a17; }
   ::selection { background: var(--accent-soft); }
   :focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 2px; }
 
@@ -979,7 +988,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* ============ 移动端（借鉴词汇真经：去矩形块感——顶栏精简、播放条单行、词库抽屉化） ============ */
   @media (max-width: 700px) {
     /* iOS 不支持 background-attachment:fixed，改固定层绘制（否则背景整块发白） */
-    html { background: none; background-color: #f2faf6; }
+    html { background: none; background-color: #f8fdfa; }
     html.dark { background-color: #1c1a17; }
     body { overscroll-behavior-y: contain; }
     body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -1650,6 +1659,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tr-bubble.show { opacity: 1; visibility: visible; transform: translateY(0); }
   #appShell { display: flex; min-height: 100vh; }
   .sidenav { flex: none; width: 220px; padding: 16px 12px; border-right: 1px solid var(--border);
+    background: #f2faf6;
     display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; }
   /* 侧栏品牌（照抄主站 .sn-logo）：一级页面才露脸 */
   .sn-logo { display: flex; align-items: center; gap: 10px; padding: 2px 8px 20px; color: var(--text); }
@@ -1664,13 +1674,16 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     background: transparent; font-size: 14px; color: var(--text); cursor: pointer; }
   .nav-item i { font-size: 19px; line-height: 1; flex: none; width: 19px; text-align: center; }
   .nav-item.on { background: var(--accent-soft, rgba(16,180,135,.07)); color: var(--accent-text); font-weight: 600; }
-  /* ---- 左下角常驻用户卡（桌面侧栏底部）/ 第 5 个 Tab（手机）---- */
+  /* ---- 侧栏底部：一条分割线 + 一行「我的」（2026-09-24 用户：不要卡片）----
+     未登录显示「登录」按钮，已登录显示头像 + 账号；内容由 updateMeCard() 渲染。 */
   .me-card { display: flex; align-items: center; gap: 10px; width: 100%; margin-top: auto;
-    padding: 8px; border: 1px solid var(--border); border-radius: 12px; background: var(--card);
-    color: var(--text); cursor: pointer; text-align: left; }
-  .me-card:hover { border-color: var(--accent-line); background: var(--accent-soft); }
-  .me-avatar { flex: none; width: 34px; height: 34px; border-radius: 9px; background: var(--grad);
-    color: var(--cta-ink); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    padding: 12px 8px 2px; border: none; border-top: 1px solid var(--border); border-radius: 0;
+    background: transparent; color: var(--text); cursor: pointer; text-align: left; }
+  .me-card:hover { color: var(--accent-text); }
+  .me-card:hover .me-name { color: var(--accent-text); }
+  .me-login { font-size: 13.5px; font-weight: 700; color: var(--accent-text); }
+  .me-avatar { flex: none; width: 30px; height: 30px; border-radius: 8px; background: var(--grad);
+    color: var(--cta-ink); display: flex; align-items: center; justify-content: center; font-size: 17px; }
   .me-meta { min-width: 0; display: flex; align-items: center; gap: 6px; }
   .me-name { font-size: 13.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .me-tag { flex: none; font-size: 10px; font-weight: 700; line-height: 1.6; padding: 0 6px;
@@ -1714,6 +1727,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .mp-login-form .row { display: flex; gap: 6px; }
   .mp-login-form .row button { flex: 1; min-height: 38px; border: 1px solid var(--accent-line); border-radius: 999px;
     background: var(--accent-soft); color: var(--accent-text); font-size: 13px; font-weight: 700; cursor: pointer; }
+  /* ② 右侧内容区照主站首页那套 token（冷薄荷：线 #e7eee9 / 墨 #2b3a34 / 次墨 #63706a）；
+     只作用于 #appView 内的卡片/横幅，左侧导航（.sidenav）保持自己那套暖色不变。
+     深色由 body.dark 那套管，所以这里限定 body:not(.dark)。 */
+  body:not(.dark) #appView { --border: #e7eee9; --text: #2b3a34; --muted: #63706a; --ink2: #63706a; --card: #fff; }
   #appView { flex: 1; min-width: 0; padding: 20px 24px 88px; }
   /* 平板档（PRD §10.2）：701–1023px 侧栏收窄到 180px */
   @media (min-width: 701px) and (max-width: 1023px) {
@@ -1731,13 +1748,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .nav-item { flex: 1; flex-direction: column; justify-content: center; gap: 2px; text-align: center;
       font-size: 11px; padding: 0 4px; }
     .nav-item i { font-size: 20px; width: auto; }
-    /* 用户卡在手机 = 第 5 个 Tab（头像 + 「我的」），点它弹浮窗；不塞进浮窗里点不到 */
+    /* 「我的」在手机 = 第 5 个 Tab（未登录「登录」/ 已登录头像+「我的」），点它弹浮窗；不塞进浮窗里点不到 */
     .me-card { flex: 1; flex-direction: column; justify-content: center; gap: 2px; margin-top: 0;
-      padding: 0 4px; border: none; background: transparent; }
+      padding: 0 4px; border: none; border-top: none; background: transparent; }
     .me-card:hover { background: transparent; }
     .me-avatar { width: 22px; height: 22px; border-radius: 6px; font-size: 15px; }
     .me-meta { flex-direction: column; gap: 0; }
     .me-name { font-size: 11px; font-weight: 500; }
+    .me-login { font-size: 11px; }
     .me-tag { display: none; }
     #appView { padding: 16px 16px 88px; }
     /* 文章内头部：主站手机档尺寸；窄屏按 .layout 的 16px 内边距对齐（100% − 32px） */
@@ -1817,8 +1835,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .sn-name { color: var(--text); }
   body.dark .nav-item { color: var(--text); }
   body.dark .nav-item.on { background: var(--accent-soft); color: var(--accent-text); }
-  body.dark .me-card { background: var(--card); border-color: var(--border); }
-  body.dark .me-card:hover { background: var(--accent-soft); }
+  body.dark .me-card { background: transparent; border-top-color: var(--border); }
+  body.dark .me-card:hover { background: transparent; }
   body.dark .me-pop { background: var(--card); border-color: var(--border); }
   body.dark .mp-login-form input { background: var(--bg); border-color: var(--border); color: var(--text); }
   body.dark #appView { color: var(--text); }
@@ -1887,22 +1905,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
           <button class="nav-arrow" id="ttNext" type="button" aria-label="下一篇">下一篇</button>
         </div>
       </div>
-      <!-- 译文/词义改用主站那种 iOS 拨杆（修正 3）；口音/音色沿用主站按钮尺寸（修正 2）。 -->
+      <!-- 口音/音色已按用户口径挪进「我的」浮窗（③ 2026-09-24），这里只留译文/词义/帮助/目标词。 -->
       <div class="r-badges" id="taskBadges">
         <button class="tr-msw on" id="btnZh" type="button" role="switch" aria-checked="true" title="显示/隐藏每句下方的中文全句翻译"><span class="knob" aria-hidden="true"></span>全句译文</button>
         <button class="tr-msw on" id="btnGloss" type="button" role="switch" aria-checked="true" title="显示/隐藏英文句内行间的单词词义与音标"><span class="knob" aria-hidden="true"></span>行内词义</button>
-        <button class="accent-btn" id="btnAccent" type="button" onclick="toggleAccent()" title="点击切换英式/美式" aria-label="切换英式美式发音">🇬🇧 英式</button>
-        <!-- 音色选择：自定义玻璃浮层（2026-09-24 用户换掉原生 <select>：移动端巨大、样式对不上）。
-             只换承载 UI，解析/降级逻辑与 ielts-voice 存储都不动。 -->
-        <div class="voice-pick" id="voicePick">
-          <button class="voice-btn" id="voiceBtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="选择朗读音色" onclick="toggleVoicePop(event)">
-            <span class="vb-label" id="voiceLabel">音色</span><i class="ri-arrow-down-s-line" aria-hidden="true"></i>
-          </button>
-          <div class="voice-pop" id="voicePop" role="listbox" aria-label="选择朗读音色" hidden></div>
-        </div>
         <button class="tr-help" id="ttHelp" type="button" aria-label="使用说明">?</button>
         <span class="r-badge fav-badge" id="ttWords" title="本篇目标词数"></span>
-        <div class="tr-bubble" id="ttBubble" role="tooltip">点「全句译文」显示/隐藏每句下方的中文翻译；点「行内词义」显示/隐藏句内小字词义；「英式/美式」切换发音口音；右侧下拉选朗读音色。</div>
+        <div class="tr-bubble" id="ttBubble" role="tooltip">点「全句译文」显示/隐藏每句下方的中文翻译；点「行内词义」显示/隐藏句内小字词义。口音与音色在「我的」里切换（侧栏左下角）。</div>
       </div>
     </header>
 
@@ -1915,10 +1924,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         <button class="nav-item" data-route="stats"><i class="ri-bar-chart-2-line" aria-hidden="true"></i><span>学习数据</span></button>
         <button class="nav-item" data-route="words"><i class="ri-book-2-line" aria-hidden="true"></i><span>单词本</span></button>
         <button class="nav-item" data-route="listen"><i class="ri-headphone-line" aria-hidden="true"></i><span>随身听</span></button>
-        <!-- 左下角常驻用户卡（桌面）/ 第 5 个 Tab（手机）。点它向上弹「我的」浮窗，不再是切页。 -->
+        <!-- 侧栏底部：一条分割线 + 一行「我的」（2026-09-24 用户：不要卡片，用分割线）。
+             未登录显示「登录」按钮，已登录显示头像 + 账号；内容由 app.js 的 updateMeCard() 渲染。
+             点它向上弹「我的」浮窗（口音/音色/主题/计划/账号/数据都在里面）。 -->
         <button class="me-card" id="meCard" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="mePop">
-          <span class="me-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>
-          <span class="me-meta"><span class="me-name" id="meName">未登录</span><span class="me-tag">免费</span></span>
+          <span class="me-login">登录</span>
         </button>
       </nav>
       <main id="appView"></main>
@@ -3486,7 +3496,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (!keepOpen) closeVoicePop();
     try { if (!playing) speakAside(isCloudURI(selVoiceURI) ? 'Hello! Cloud voice ready.' : 'Hello! Let us learn English together.'); } catch (e) {}
     }
-    (function wireVoicePop() {
+    /* 音色浮层的事件代理：浮窗（#mePop）每次重渲都会换掉 #voicePop 这个节点，所以
+       wireVoicePop 做成可重复调用的函数（app.js 的 renderMePop 渲完会再叫一次）。 */
+    function wireVoicePop() {
     const pop = document.getElementById('voicePop');
     if (pop && !pop._wired) {
     pop._wired = true;
@@ -3499,6 +3511,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     pickVoice(item.dataset.voiceUri, false);
     });
     }
+    }
+    // 点浮层外面 / Esc / 改窗口大小：只绑一次（回调里每次现查 #voicePop，重渲也管用）。
     document.addEventListener('click', (e) => {
     const p = document.getElementById('voicePop');
     if (!p || p.hidden) return;
@@ -3508,7 +3522,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVoicePop(); });
     window.addEventListener('resize', () => { const p = document.getElementById('voicePop'); if (p && !p.hidden) positionVoicePop(); });
-    })();
+    wireVoicePop();
 
     let errStreak = 0, everStarted = false, speechInProgress = false; // speechInProgress：防止多 utterance 叠加
     let _cloudIntentionalPause = false; // 标记是否主动暂停云端音频

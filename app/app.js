@@ -229,8 +229,15 @@
     return { mail, logged: !!mail, nickname: mail ? mail.split('@')[0] : '我的' };
   }
   function updateMeCard() {
-    const el = document.getElementById('meName');
-    if (el) el.textContent = meAccount().nickname;
+    const card = document.getElementById('meCard');
+    if (!card) return;
+    const acc = meAccount();
+    // 2026-09-24：未登录显示「登录」按钮（不是头像）；已登录显示头像 + 账号。
+    card.innerHTML = acc.logged
+      ? `<span class="me-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>`
+        + `<span class="me-meta"><span class="me-name">${esc(acc.nickname)}</span><span class="me-tag">免费</span></span>`
+      : `<span class="me-login">登录</span>`;
+    card.setAttribute('aria-label', acc.logged ? `我的 · ${acc.nickname}` : '登录 / 我的');
   }
   function renderMePop() {
     const pop = document.getElementById('mePop');
@@ -266,6 +273,15 @@
         <div class="mp-status">${hasPlan ? `正在学《${esc(title)}》· 第 ${planDay} 天` : '还没有学习计划'}</div>
       </div>
       <div class="mp-list">
+        <div class="mp-row"><span class="mp-label">口音</span>
+          <button class="accent-btn" id="btnAccent" type="button" onclick="toggleAccent()" title="点击切换英式/美式" aria-label="切换英式美式发音">${accent === 'en-GB' ? '🇬🇧 英式' : '🇺🇸 美式'}</button></div>
+        <div class="mp-row"><span class="mp-label">音色</span>
+          <div class="voice-pick" id="voicePick">
+            <button class="voice-btn" id="voiceBtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="选择朗读音色" onclick="toggleVoicePop(event)">
+              <span class="vb-label" id="voiceLabel">音色</span><i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+            </button>
+            <div class="voice-pop" id="voicePop" role="listbox" aria-label="选择朗读音色" hidden></div>
+          </div></div>
         <div class="mp-row"><span class="mp-label">深色模式</span>
           <button class="tr-msw${dark ? ' on' : ''}" type="button" role="switch" aria-checked="${dark}" data-me-theme aria-label="深色模式"><span class="knob" aria-hidden="true"></span></button></div>
         ${cfg ? `
@@ -288,6 +304,9 @@
              <div class="row"><button type="button" data-me-login>登录</button><button type="button" data-me-signup>注册</button></div>
            </div>`}</div>
       <input type="file" id="meImportFile" accept="application/json,.json" style="display:none">`;
+    // 音色选择器（③ 挪进来）：重渲后 #voicePop 是新元素，要重新渲染 + 重新绑事件代理。
+    try { if (typeof renderVoicePop === 'function') renderVoicePop(); } catch (e) {}
+    wireVoicePop();
   }
   // 浮窗开在用户卡正上方（桌面 300px 宽；手机通栏 bottom-sheet），高度夹在卡片上沿以内。
   function positionMePop() {
@@ -351,7 +370,7 @@
       else if (t.hasAttribute('data-me-logout')) { meLogout(); }
     });
   }
-  window.APP3 = Object.assign(window.APP3, { renderMePop, openMePop, closeMePop, toggleMePop, meLogin, meLogout });
+  window.APP3 = Object.assign(window.APP3, { renderMePop, openMePop, closeMePop, toggleMePop, meLogin, meLogout, updateMeCard });
   // 点浮窗外面收掉；Esc 也收。
   document.addEventListener('click', (e) => {
     const pop = document.getElementById('mePop');

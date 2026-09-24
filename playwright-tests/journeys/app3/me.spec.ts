@@ -5,6 +5,8 @@
 import { test, expect } from '../../fixtures';
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
+declare const CLOUD: { _userMail: string };
+declare const APP3: { updateMeCard(): void };
 const EMPTY: Record<string, string> = { 'sections.json': '[]', 'vocab.json': '{}', 'chapters.json': '[]' };
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
@@ -12,30 +14,36 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
   }
 }
 
-test.describe('3.0 「我的」用户卡 + 浮窗（PRD §2.2 / §8.1）', () => {
-  test('点左下角卡片 → 浮窗出现且含主题开关；未登录时头像有默认图', async ({ page }) => {
+test.describe('3.0 「我的」一行 + 浮窗（PRD §2.2 / §8.1）', () => {
+  test('未登录显示「登录」按钮；点它弹浮窗（含主题/口音/音色）；已登录显示头像+账号', async ({ page }) => {
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/app/index.html#/home`);
 
-    // 未登录：卡上是默认头像（Remix Icon）+ 小标签
-    await expect(page.locator('#meCard .me-avatar i'), '未登录也要有默认头像').toHaveClass(/\bri-user-3-fill\b/);
-    await expect(page.locator('#meCard .me-tag')).toHaveText('免费');
+    // ① 未登录：「我的」那一行是一颗「登录」按钮（不是头像）
+    await expect(page.locator('#meCard .me-login'), '未登录显示登录按钮').toHaveText('登录');
+    expect(await page.locator('#meCard .me-avatar').count(), '未登录不显示头像').toBe(0);
     await expect(page.locator('#mePop'), '浮窗初始是关的').toBeHidden();
+    // ③ 口音/音色只活在「我的」里：浮窗没开时，页面上不该有它们
+    expect(await page.locator('#btnAccent').count(), '口音只在我的里').toBe(0);
+    expect(await page.locator('#voiceBtn').count(), '音色只在我的里').toBe(0);
 
-    // 点卡片 → 向上弹浮窗
+    // 点它 → 向上弹浮窗
     await page.locator('#meCard').click();
     const pop = page.locator('#mePop');
     await expect(pop).toBeVisible();
-    await expect(pop.locator('.mp-avatar i'), '浮窗里也是默认头像').toHaveClass(/\bri-user-3-fill\b/);
+    await expect(pop.locator('.mp-avatar i'), '浮窗里是默认头像').toHaveClass(/\bri-user-3-fill\b/);
     await expect(pop.locator('[data-me-theme]'), '浮窗里必须有主题开关').toBeVisible();
+    // ③ 口音 + 音色都只在「我的」里
+    await expect(pop.locator('#btnAccent'), '口音切换在浮窗里').toBeVisible();
+    await expect(pop.locator('#voiceBtn'), '音色选择器在浮窗里').toBeVisible();
 
-    // 浮窗开在用户卡正上方（向上弹，不是盖住整页的居中弹层）
+    // 浮窗开在「我的」那一行正上方（向上弹）
     const geo = await page.evaluate(() => {
       const c = document.getElementById('meCard')!.getBoundingClientRect();
       const p = document.getElementById('mePop')!.getBoundingClientRect();
       return { cardTop: c.top, popBottom: p.bottom };
     });
-    expect(geo.popBottom, '浮窗底边应贴着用户卡上沿（向上弹）').toBeLessThanOrEqual(geo.cardTop + 1);
+    expect(geo.popBottom, '浮窗底边应贴着「我的」上沿（向上弹）').toBeLessThanOrEqual(geo.cardTop + 1);
 
     // 切主题 → body.dark 真的翻转
     const wasDark = await page.evaluate(() => document.body.classList.contains('dark'));
@@ -51,6 +59,12 @@ test.describe('3.0 「我的」用户卡 + 浮窗（PRD §2.2 / §8.1）', () =>
     // 点浮窗外收掉
     await page.locator('body').click({ position: { x: 4, y: 4 } });
     await expect(pop).toBeHidden();
+
+    // 已登录：「我的」那一行变成头像 + 账号（昵称/邮箱前缀）
+    await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); });
+    await expect(page.locator('#meCard .me-avatar i'), '已登录显示默认头像').toHaveClass(/\bri-user-3-fill\b/);
+    await expect(page.locator('#meCard .me-name'), '已登录显示账号').toHaveText('alice');
+    expect(await page.locator('#meCard .me-login').count(), '已登录不再显示登录按钮').toBe(0);
   });
 
   test('手机端：用户卡是 TabBar 第 5 格，点它弹浮窗（不塞进浮窗里点不到）', async ({ page }) => {

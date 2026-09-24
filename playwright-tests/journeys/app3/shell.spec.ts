@@ -46,15 +46,15 @@ const TINY: Record<string, string> = {
 };
 
 test.describe('3.0 外壳', () => {
-  test('左侧导航 4 项 + 左下角用户卡，文案与顺序正确，深链选中态正确，三档断点宽度正确', async ({ page }) => {
+  test('左侧导航 4 项 + 底部「我的」一行（分割线），文案与顺序正确，深链选中态正确，三档断点宽度正确', async ({ page }) => {
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/app/index.html`);
     await expect(page.locator('.sidenav .nav-item')).toHaveCount(4);
     expect(await page.locator('.sidenav .nav-item').allInnerTexts())
       .toEqual(['首页', '学习数据', '单词本', '随身听']);
-    // 「我的」不再是 nav-item：改成左下角常驻用户卡（用户 2026-09-24）
+    // 「我的」不再是 nav-item，也不是卡片：一条分割线 + 一行（未登录显示「登录」按钮）
     await expect(page.locator('.sidenav .me-card')).toBeVisible();
-    await expect(page.locator('.sidenav .me-card .me-avatar i')).toBeVisible();
+    await expect(page.locator('.sidenav .me-card .me-login')).toHaveText('登录');
 
     // 深链：#/stats 应把「学习数据」标成当前项
     await page.goto(`${rootUrl}/app/index.html#/stats`);

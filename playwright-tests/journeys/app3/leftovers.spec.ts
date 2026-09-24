@@ -93,9 +93,9 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
       await expect(page.locator(sel), `${sel} 必须在文章内可见`).toBeVisible();
       await expect(page.locator(`${sel} .knob`), `${sel} 必须是主站那种 iOS 拨杆`).toBeVisible();
     }
-    for (const sel of ['#btnAccent', '#voiceBtn']) {
-      await expect(page.locator(sel), `${sel} 必须在文章内可见`).toBeVisible();
-    }
+    // ③ 口音/音色已按用户口径挪进「我的」浮窗：文章头（.r-badges）不再有它们
+    expect(await page.locator('#taskBadges #btnAccent').count(), '文章头不该有口音开关').toBe(0);
+    expect(await page.locator('#taskBadges #voiceBtn').count(), '文章头不该有音色选择').toBe(0);
     // 主题（含夜间）已收进「我的」浮窗（用户 2026-09-24）：文章内、外壳顶栏都没有 #btnDark
     expect(await page.locator('#btnDark').count(), '夜间按钮已从顶栏去掉').toBe(0);
 
@@ -113,12 +113,6 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
     // 行内词义拨杆：body.hide-gl 跟着切
     await page.locator('#btnGloss').click();
     await expect(page.locator('body')).toHaveClass(/hide-gl/);
-
-    // 口音：英式 ↔ 美式，按钮文案跟着变
-    const accent = page.locator('#btnAccent');
-    await expect(accent).toContainText('英式');
-    await accent.click();
-    await expect(accent).toContainText('美式');
   });
 
   test('主题在「我的」浮窗里：点用户卡弹浮窗 → 切主题 body.dark 真的变；顶栏不再有它', async ({ page }) => {
@@ -185,10 +179,14 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
       try { Object.defineProperty(window.speechSynthesis, 'getVoices', { value: () => fake, configurable: true }); } catch (e) {}
     });
     await stubData(page, SIXQ);
-    await enterTask(page);
+    // ③ 音色选择器已挪进「我的」浮窗：在一级页面开浮窗再点
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.locator('#meCard').click();
+    const mePop = page.locator('#mePop');
+    await expect(mePop).toBeVisible();
 
     expect(await page.locator('select#voiceSel').count(), '原生 select 已换掉').toBe(0);
-    await page.locator('#voiceBtn').click();
+    await mePop.locator('#voiceBtn').click();
     const pop = page.locator('#voicePop');
     await expect(pop).toBeVisible();
     expect(await pop.locator('.vp-group').count(), '要有分组标题').toBeGreaterThan(0);
@@ -220,7 +218,6 @@ test.describe('3.0 W2 深色全覆盖', () => {
         artCard: bg('.art-card'),
         aStage: bg('.art-card .a-stage'),
         banner: bg('.home-banner'),
-        meCard: bg('.me-card'),
         mePop: bg('.me-pop'),
         readerHead: bg('.reader-head'),
         trMsw: bg('.tr-msw'),
@@ -233,7 +230,6 @@ test.describe('3.0 W2 深色全覆盖', () => {
     const dark = await snapshot();
 
     // 新头部（旧代码里这些节点根本不存在 / 或深浅一致）—— 这几条是「旧代码必红」的锁
-    expect(dark.meCard, '用户卡底色必须随深色换').not.toBe(light.meCard);
     expect(dark.mePop, '「我的」浮窗底色必须随深色换').not.toBe(light.mePop);
     expect(dark.readerHead, '文章内玻璃胶囊底色必须随深色换').not.toBe(light.readerHead);
     expect(dark.trMsw, '译文拨杆底色必须随深色换').not.toBe(light.trMsw);

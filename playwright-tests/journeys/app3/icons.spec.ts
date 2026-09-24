@@ -9,6 +9,8 @@ import path from 'node:path';
 import { test, expect } from '../../fixtures';
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
+declare const CLOUD: { _userMail: string };
+declare const APP3: { updateMeCard(): void };
 
 const EMPTY: Record<string, string> = { 'sections.json': '[]', 'vocab.json': '{}', 'chapters.json': '[]' };
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
@@ -30,7 +32,7 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
     }
   });
 
-  test('/app/ 导航四颗 + 用户卡头像在 4.5.0 字体里真的渲得出', async ({ page }) => {
+  test('/app/ 导航四颗 + 已登录头像在 4.5.0 字体里真的渲得出', async ({ page }) => {
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/app/index.html#/home`);
 
@@ -38,17 +40,20 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
     const href = await page.locator('link[rel="stylesheet"][href*="remixicon"]').getAttribute('href');
     expect(href, '图标样式表版本').toContain('remixicon@4.5.0');
 
-    // 四个导航项各一颗图标，class 与 PRD §2.2 一致；左下角用户卡有一颗默认头像图标
+    // 四个导航项各一颗图标，class 与 PRD §2.2 一致
     const items = page.locator('.sidenav .nav-item');
     await expect(items).toHaveCount(4);
     for (let i = 0; i < NAV_ICONS.length; i++) {
       await expect(items.nth(i).locator('i'), `第 ${i + 1} 个导航项的图标`).toHaveClass(new RegExp(`\\b${NAV_ICONS[i]}\\b`));
     }
-    await expect(page.locator('.sidenav .me-card .me-avatar i'), '用户卡默认头像').toHaveClass(/\bri-user-3-fill\b/);
+    // 未登录「我的」显示「登录」按钮（无头像）；已登录才显示默认头像图标
+    await expect(page.locator('.sidenav .me-card .me-login'), '未登录显示登录按钮').toHaveText('登录');
+    await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); });
+    await expect(page.locator('.sidenav .me-card .me-avatar i'), '已登录默认头像').toHaveClass(/\bri-user-3-fill\b/);
 
     // 量字形：等 4.5.0 的 CSS 落地后，每个 ::before 必须真有 content（名字不存在 = none）
     await page.waitForFunction(() => {
-      const els = document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card i');
+      const els = document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card .me-avatar i');
       if (els.length !== 5) return false;
       return Array.from(els).every((el) => {
         const c = getComputedStyle(el, '::before').content;
@@ -56,7 +61,7 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
       });
     }, null, { timeout: 15000 });
     const contents = await page.evaluate(() =>
-      Array.from(document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card i')).map((el) => getComputedStyle(el, '::before').content));
+      Array.from(document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card .me-avatar i')).map((el) => getComputedStyle(el, '::before').content));
     for (const c of contents) expect(c, `::before content 全量：${JSON.stringify(contents)}`).not.toMatch(/^(none|normal)$/);
 
     // 字体文件本身加载成功（woff2 可达）

@@ -199,6 +199,19 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
     expect(await page.locator('#taskBar').getAttribute('data-state')).not.toBe('exit');
   });
 
+  // ④ 任务模式（沉浸式阅读）用原背景色（暖白 #faf8f4），不是首页那套主站薄荷底。
+  test('任务模式底色回到暖白，和首页薄荷底不一样', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    const homeBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('body')).toHaveClass(/task-mode/);
+    const taskBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+    expect(taskBg, `任务模式底色 ${taskBg} 应与首页 ${homeBg} 不同`).not.toBe(homeBg);
+    expect(taskBg, '任务模式回到影子跟读那套暖白').toBe('rgb(250, 248, 244)');
+  });
+
   // 审阅 I2：退出后首页卡片/横幅还停在进任务模式前的进度，要等点导航或刷新才更新。
   test('退出任务模式后首页立即刷新，不用刷新页面（I2）', async ({ page }) => {
     await stubData(page, SIX);
@@ -275,7 +288,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toBeVisible();
     await page.evaluate(() => TASK.setPass(2));
-    await page.locator('#art .qz-blank').first().click();
+    // setPass(2) 会 renderQuiz → 自动弹出当前题的浮窗（不必再点空；点空反而被浮窗挡住）
     await expect(page.locator('#blankPop')).toBeVisible();
     const box = await page.locator('#blankPop').boundingBox();
     expect(box, '浮窗必须有几何位置').not.toBeNull();
