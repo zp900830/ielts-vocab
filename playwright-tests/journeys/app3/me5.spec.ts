@@ -231,3 +231,53 @@ test.describe('M5 · 触摸目标（§10.4）', () => {
     }
   });
 });
+
+test.describe('M5 · 形态与边界（§8.1 / §8.2 / §10.1）', () => {
+  test('手机端：浮窗是底部抽屉，§8.1 各区块都在且可达', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    const pop = await openMe(page);
+    const geo = await page.evaluate(() => {
+      const p = document.getElementById('mePop')!.getBoundingClientRect();
+      const c = document.getElementById('meCard')!.getBoundingClientRect();
+      return { bottom: p.bottom, cardTop: c.top, left: p.left, right: p.right, vw: innerWidth };
+    });
+    expect(geo.bottom, '抽屉底边贴 TabBar').toBeLessThanOrEqual(geo.cardTop + 1);
+    expect(geo.left, '贴左边').toBeLessThan(16);
+    expect(geo.right, '不溢出右边').toBeLessThanOrEqual(geo.vw);
+    for (const sel of ['.mp-head', '.mp-nums', '.mp-status', '#btnAccent', '#voiceBtn', '[data-me-theme]', '[data-me-export]', '[data-me-import]', '.mp-row .ps-opt']) {
+      await expect(pop.locator(sel).first(), `${sel} 在抽屉里`).toBeVisible();
+    }
+  });
+
+  test('深色：浮窗不是白底、文字可读（§10.1）', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    const pop = await openMe(page);
+    const light = await pop.evaluate((el) => getComputedStyle(el).backgroundColor);
+    await page.evaluate(() => document.body.classList.add('dark'));
+    const dark = await pop.evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(dark).not.toBe(light);
+    expect(dark).not.toBe('rgb(255, 255, 255)');
+    for (const sel of ['.mp-name', '.mp-sub', '.mp-row .mp-label']) {
+      const c = await pop.locator(sel).first().evaluate((el) => getComputedStyle(el).color);
+      expect(c, `${sel} 深色可读`).not.toBe('rgb(0, 0, 0)');
+    }
+  });
+
+  test('§8.2 负向锁：我的里没有帮助/关于/产品说明/性能/设置大杂烩等无关入口', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    const pop = await openMe(page);
+    const text = await pop.innerText();
+    expect(text, '§8.2 明确不放的，一条都不许有').not.toMatch(
+      /使用方法|帮助中心|帮助|关于产品|关于我们|产品说明|性能与错误|意见反馈|检查更新|隐私政策|版本号/);
+    expect(await pop.locator('a[href]').count(), '我的里没有外链入口').toBe(0);
+  });
+});
