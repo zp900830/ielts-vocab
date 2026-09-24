@@ -184,4 +184,49 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     expect(await page.evaluate(() => typeof (window as unknown as { Chart?: unknown }).Chart)).toBe('undefined');
     expect(await page.evaluate(() => typeof (window as unknown as { echarts?: unknown }).echarts)).toBe('undefined');
   });
+
+  test('随身听空态占位：文案正确且不含伪造数字', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    await page.reload();
+    const box = page.locator('.st-empty[data-empty="listen"]');
+    await expect(box).toBeVisible();
+    await expect(box.locator('p')).toHaveText('随身听还没用过 → 去试试');
+    expect(await box.innerText(), '随身听 M2 不得显示伪造指标（§5.7）').not.toMatch(/\d/);
+  });
+
+  test('待加强：2–3 条建议，每条按钮落到正确入口', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(15);
+      const arr = Array.from(ShadowPlan.articleScope(SECTIONS, 0));
+      arr.slice(0, 3).forEach((i) => TASK.readDone(i));      // 已开始但没读完 → continue
+      const st = TASK.state();
+      const old = Date.now() - 3 * 864e5;
+      arr.slice(0, 3).forEach((i) => { st.sents[i].lastReadAt = old; });   // 3 天没学 → stale
+      st.words['__leech__'] = Object.assign(ShadowPlan.newWord(), { stage: 'seen', reps: 1, leech: true, due: Date.now() - 1000 });  // 重点词到期 → leech
+      APP3.route();
+    });
+
+    await expect(page.locator('.st-tip')).toHaveCount(3);
+    await expect(page.locator('.st-tip[data-tip="continue"]')).toContainText('还差');
+    await expect(page.locator('.st-tip[data-tip="leech"]')).toContainText('重点词');
+    await expect(page.locator('.st-tip[data-tip="stale"]')).toContainText('天没学');
+
+    // leech → 单词本
+    await page.locator('.st-tip[data-tip="leech"] .tip-go').click();
+    await expect(page).toHaveURL(/#\/words/);
+    // continue → 回首页并高亮第 0 篇
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.locator('.st-tip[data-tip="continue"] .tip-go').click();
+    await expect(page).toHaveURL(/#\/home/);
+    await expect(page.locator('.art-card[data-a="0"]')).toHaveClass(/hl/);
+    // stale → 回首页并高亮第 0 篇
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.locator('.st-tip[data-tip="stale"] .tip-go').click();
+    await expect(page).toHaveURL(/#\/home/);
+    await expect(page.locator('.art-card[data-a="0"]')).toHaveClass(/hl/);
+  });
 });

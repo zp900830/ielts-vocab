@@ -1862,6 +1862,16 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tr-bar.has { background: var(--accent); }
   .tr-line { display: block; width: 100%; height: 44px; margin-top: 8px; color: var(--note); }
   .tr-legend { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; font-size: 10.5px; color: var(--muted); }
+  .st-empty { padding: 14px 16px; border: 1px dashed var(--border); border-radius: 14px; background: var(--card);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .st-empty p { margin: 0; font-size: 13px; color: var(--muted); }
+  .st-tips { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .st-tip { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px;
+    border: 1px solid var(--border); border-radius: 14px; background: var(--card); box-shadow: var(--shadow); }
+  .st-tip .tip-text { font-size: 13px; color: var(--text); }
+  .st-go, .st-tip .tip-go { flex: none; min-height: 44px; padding: 0 16px; border: none; border-radius: 999px;
+    background: var(--grad); color: var(--cta-ink); font-size: 13px; font-weight: 700; cursor: pointer;
+    box-shadow: var(--grad-shadow); }
   @media (max-width: 1023px) { .st-arts { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 700px) { .st-arts { grid-template-columns: 1fr; } }
   /* ============ 3.0 外壳深色覆盖（W2，PRD §10.1） ============

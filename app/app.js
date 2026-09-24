@@ -156,6 +156,7 @@
     }
     const ov = statsOverview();
     const wd = statsWords();
+    const tips = statsTips();
     view.innerHTML = `<div class="stats-page">
       <h1>学习数据</h1>
       <section class="st-block" data-block="overview" aria-labelledby="stH1">
@@ -191,6 +192,19 @@
       <section class="st-block" data-block="trend" aria-labelledby="stH4">
         <h2 id="stH4">我的学习是否持续？</h2>
         ${renderStatsTrend()}
+      </section>
+      <section class="st-block" data-block="listen" aria-labelledby="stH5">
+        <h2 id="stH5">随身听</h2>
+        <div class="st-empty" data-empty="listen">
+          <p>随身听还没用过 → 去试试</p>
+          <button class="st-go" type="button" data-go="listen">去随身听</button>
+        </div>
+      </section>
+      <section class="st-block" data-block="focus" aria-labelledby="stH6">
+        <h2 id="stH6">哪些内容还需要加强？</h2>
+        <ul class="st-tips">${tips.map((t) => `<li class="st-tip" data-tip="${t.kind}"${t.a != null ? ` data-a="${t.a}"` : ''}>
+          <span class="tip-text">${t.text}</span>
+          <button class="tip-go" type="button">${t.go}</button></li>`).join('')}</ul>
       </section>
     </div>`;
   }
@@ -258,6 +272,40 @@
     </div>`;
   }
   window.APP3 = Object.assign(window.APP3, { statsDays });
+  /* §5.8「待加强」：2–3 条具体可点的建议（行动导向，不是数据堆砌）。
+     A 已开始但没读完 / B 重点词今天到期 / C 久没学；不足 2 条时补「没开始的篇目」/「单词本」。 */
+  function statsTips() {
+    const tips = [];
+    const now = Date.now();
+    for (let a = 0; a < SECTIONS.length; a++) {
+      const x = articleStat(a);
+      if (x.ever > 0 && x.ever < x.total) {
+        tips.push({ kind: 'continue', a: a, text: `《${esc(SECTIONS[a].title)}》还差 ${x.total - x.ever} 句读完`, go: '继续' });
+        break;
+      }
+    }
+    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    let leechDue = 0;
+    if (st && st.words) Object.keys(st.words).forEach((k) => { const w = st.words[k]; if (w && w.leech && (w.due || 0) <= now) leechDue++; });
+    if (leechDue > 0) tips.push({ kind: 'leech', text: `有 ${leechDue} 个重点词今天到期`, go: '去复习' });
+    let stale = null;
+    for (let a = 0; a < SECTIONS.length; a++) {
+      const x = articleStat(a);
+      if (x.lastAt > 0) {
+        const d = Math.floor((now - x.lastAt) / 864e5);
+        if (d >= 2 && (!stale || x.lastAt < stale.lastAt)) stale = { a: a, days: d, lastAt: x.lastAt };
+      }
+    }
+    if (stale) tips.push({ kind: 'stale', a: stale.a, text: `已经 ${stale.days} 天没学《${esc(SECTIONS[stale.a].title)}》了`, go: '回去看看' });
+    if (tips.length < 2) {
+      let firstNew = -1, nNew = 0;
+      for (let a = 0; a < SECTIONS.length; a++) { if (articleStat(a).ever === 0) { nNew++; if (firstNew < 0) firstNew = a; } }
+      if (nNew > 0) tips.push({ kind: 'start', a: firstNew, text: `还有 ${nNew} 篇没开始`, go: '去首页' });
+      if (tips.length < 2) tips.push({ kind: 'words', text: '去单词本按文章复习单词', go: '看词本' });
+    }
+    return tips.slice(0, 3);
+  }
+  window.APP3 = Object.assign(window.APP3, { statsTips });
   // §5.4：数据页点文章小卡 → 回首页并把那张卡片高亮（不新开屏/新浮层，§2.4 护栏）。
   function openHomeHighlight(a) {
     _hlArticle = a;
