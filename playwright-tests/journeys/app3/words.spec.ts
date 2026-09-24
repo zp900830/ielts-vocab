@@ -178,4 +178,48 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
     await expect(page.locator('.wb-filter[data-f="todo"]')).toHaveAttribute('aria-pressed', 'true');
     expect((await page.locator('.wb-row .wr-word').allInnerTexts()).sort()).toEqual(['oxygen']);
   });
+
+  test('点词行展开详情：原文语境在前、例句其次，含状态路径与接触/答对', async ({ page }) => {
+    await stubData(page, WORDS);
+    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await waitShadowReady(page);
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(15);
+      const st = TASK.state();
+      st.words['atmosphere'] = Object.assign(ShadowPlan.newWord(),
+        { stage: 'graduated', reps: 12, ok3: 3, err: 0, leech: false, lastContactAt: Date.now() });
+      APP3.route();
+    });
+
+    const row = page.locator('.wb-row[data-w="atmosphere"]');
+    await expect(row).toHaveAttribute('aria-expanded', 'false');
+    await row.click();
+    await expect(row).toHaveAttribute('aria-expanded', 'true');
+    const d = page.locator('.wb-detail');
+    await expect(d).toBeVisible();
+    // 音标 + 释义
+    await expect(d.locator('.wd-phon')).toHaveText('/ˈætməsfɪr/');
+    await expect(d.locator('.wd-mean')).toContainText('大气');
+    // 原文语境：句子（目标词高亮）+ 《文章》卷/句号 + 播放
+    await expect(d.locator('.wd-ctx')).toContainText('protects life');
+    await expect(d.locator('.wd-ctx .wd-hl')).toHaveText('atmosphere');
+    await expect(d.locator('.wd-src')).toContainText('《地球与生命》');
+    await expect(d.locator('.wd-src')).toContainText('第 1 卷');
+    await expect(d.locator('.wd-src')).toContainText('第 1 句');
+    await expect(d.locator('.wd-play')).toBeVisible();
+    // §6.4：原文语境永远排第一，例句其次
+    const heads = await d.locator('.wd-block h4').allInnerTexts();
+    expect(heads[0]).toContain('原文语境');
+    expect(heads[1]).toContain('例句');
+    await expect(d.locator('.wd-ex')).toContainText('relaxed atmosphere');
+    // 学习状态：路径 + 接触/答对
+    await expect(d.locator('.wd-path .wd-step.on')).toHaveText('已毕业');
+    await expect(d.locator('.wd-stat')).toContainText('接触 12 次');
+    await expect(d.locator('.wd-stat')).toContainText('答对 3 次');
+
+    // 再点一次收起
+    await row.click();
+    await expect(row).toHaveAttribute('aria-expanded', 'false');
+    await expect(page.locator('.wb-detail')).toHaveCount(0);
+  });
 });

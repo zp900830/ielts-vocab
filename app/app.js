@@ -43,6 +43,10 @@
     // 单词本：加载更多（增量渲染，M3）。筛选/展开/在 T2/T3 追加。
     const wf = e.target.closest('.wb-filter');
     if (wf) { location.hash = '#/words/' + wf.dataset.f; return; }
+    const wrel = e.target.closest('.wd-relearn');
+    if (wrel) { try { if (TASK.relearn) TASK.relearn(wrel.dataset.relearn); } catch (err) {} window.APP3.route(); return; }
+    const wrow = e.target.closest('.wb-row');
+    if (wrow) { toggleWordRow(wrow); return; }
     const wm = e.target.closest('.wb-more');
     if (wm) { _wordsShown += W_BATCH; window.APP3.route(); return; }
     const b = e.target.closest('.nav-item');
@@ -460,6 +464,67 @@
     </div>`;
   }
   window.APP3 = Object.assign(window.APP3, { renderWords });
+
+  // 原文句里把目标词高亮（其它 [[词:形式]] 只留形式），其余文本转义
+  function sentenceHtml(raw, word) {
+    const re = /\[\[([^\]:]+):([^\]]+)\]\]/g;
+    let out = '', last = 0, m;
+    while ((m = re.exec(raw))) {
+      out += esc(raw.slice(last, m.index));
+      out += (String(m[1]).toLowerCase() === String(word).toLowerCase())
+        ? '<b class="wd-hl">' + esc(m[2]) + '</b>' : esc(m[2]);
+      last = re.lastIndex;
+    }
+    return out + esc(raw.slice(last));
+  }
+  function wordDetailHtml(w) {
+    const e = wordIndex()[w];
+    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    const x = wbStatus(w, st);
+    const v = (typeof VOCAB !== 'undefined' && VOCAB[w]) || {};
+    const p = String(v.p || v.us || v.uk || '').replace(/^\//, '').replace(/\/$/, '');
+    const gi0 = e ? e.sents[0] : 0;
+    const pos0 = sentPos(gi0);
+    const a0 = pos0.a;
+    const raw0 = (SECTIONS[a0] && SECTIONS[a0].paragraphs[pos0.pi] && SECTIONS[a0].paragraphs[pos0.pi][pos0.ti]) || '';
+    const steps = ['seen', 'recognized', 'owned', 'graduated'].map((k) =>
+      `<span class="wd-step${x.stage === k ? ' on' : ''}">${WORD_STAGE_LABEL[k]}</span>`)
+      .join('<i class="wd-arrow" aria-hidden="true">→</i>');
+    const ex = v.ex ? `<div class="wd-block"><h4>📝 例句 / 其他语境</h4>
+        <p class="wd-ex">${esc(v.ex)}</p>${v.exZh ? `<p class="wd-exzh">${esc(v.exZh)}</p>` : ''}</div>` : '';
+    return `<div class="wb-detail" role="region" aria-label="${esc(w)} 详情">
+      <div class="wd-top"><span class="wd-word">${esc(w)}</span>
+        <span class="wd-stage${x.leech ? ' leech' : ''}">${x.leech ? '重点词' : (WORD_STAGE_LABEL[x.stage] || '未见面')}</span>
+        <button class="wd-relearn" type="button" data-relearn="${esc(w)}">重学</button></div>
+      ${p ? `<div class="wd-phon">/${esc(p)}/</div>` : ''}
+      <div class="wd-mean">${esc(v.m || '（词库中无此词条）')}</div>
+      <div class="wd-block"><h4>📖 原文语境</h4>
+        <p class="wd-ctx">${sentenceHtml(raw0, w)}</p>
+        <p class="wd-src">—— 《${esc(SECTIONS[a0].title)}》第 ${volNo(a0, pos0.pi)} 卷 · 第 ${sentNoInVol(a0, pos0.pi, pos0.ti)} 句</p>
+        <button class="wd-play" type="button" data-a="${a0}" data-gi="${gi0}">▶ 播放这句</button></div>
+      ${ex}
+      <div class="wd-block"><h4>学习状态</h4>
+        <div class="wd-path">${steps}</div>
+        <p class="wd-stat">接触 ${x.s ? (x.s.reps || 0) : 0} 次 · ② 答对 ${x.s ? (x.s.ok3 || 0) : 0} 次 · ${x.s && x.s.err ? '错误 ' + x.s.err + ' 次' : '无错误'}</p></div>
+    </div>`;
+  }
+  function toggleWordRow(row) {
+    const item = row.closest('.wb-item');
+    if (!item) return;
+    const wasOpen = item.classList.contains('open');
+    const list = row.closest('.wb-list');
+    if (list) list.querySelectorAll('.wb-item.open').forEach((li) => {
+      li.classList.remove('open');
+      const dd = li.querySelector('.wb-detail'); if (dd) dd.remove();
+      const bb = li.querySelector('.wb-row'); if (bb) bb.setAttribute('aria-expanded', 'false');
+    });
+    if (wasOpen) return;
+    item.classList.add('open');
+    row.setAttribute('aria-expanded', 'true');
+    const wrap = document.createElement('div');
+    wrap.innerHTML = wordDetailHtml(row.dataset.w);
+    item.appendChild(wrap.firstElementChild);
+  }
 
   // 数据页的点击（按钮是每次重渲的，走事件代理，只绑一次）
   document.addEventListener('click', (e) => {
