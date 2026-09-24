@@ -46,6 +46,23 @@ const isGreenFill = (c: [number, number, number, number]) => {
   return g > 110 && g - r > 25 && g - b > 25;
 };
 
+/* 2026-09-24：白字回到绿底上（用户拍板），所以源码级不再「见绿底+白字就响」，
+   改成量对比度 —— 只有白字压「过亮的绿」才响。源码级拿不到字号/图标，故用最松的那条底线 3:1
+   （图标底线）；live 级（sweepLive）仍按字号/图标逐元素严格判 3 或 4.5。 */
+const overWhite = (c: [number, number, number, number]): [number, number, number, number] => {
+  const a = Math.min(1, Math.max(0, c[3]));
+  return [c[0] * a + 255 * (1 - a), c[1] * a + 255 * (1 - a), c[2] * a + 255 * (1 - a), 1];
+};
+const relLum = (c: number[]) => {
+  const f = (v: number) => { const x = v / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); };
+  return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
+};
+const contrast = (a: number[], b: number[]) => {
+  const A = relLum(a), B = relLum(b);
+  return (Math.max(A, B) + 0.05) / (Math.min(A, B) + 0.05);
+};
+const SOURCE_MIN = 3;   // 源码级粗筛底线（图标 3:1）
+
 const scanCssSource = (file: string) => {
   const html = fs.readFileSync(file, 'utf-8');
   // HTML 只扫 <style> 里那些；.css 文件（自检夹具）本身就是样式表，整份扫
@@ -71,7 +88,12 @@ const scanCssSource = (file: string) => {
     const flat = resolve(bg[0]);
     const colors = [...flat.matchAll(/#[0-9a-f]{3}\b|#[0-9a-f]{6}\b|rgba?\([^)]+\)/gi)]
       .map((m) => parseColor(m[0])).filter(Boolean) as [number, number, number, number][];
-    if (colors.some(isGreenFill)) hits.push(rawSel.trim().replace(/\s+/g, ' ').slice(-70));
+    const greens = colors.filter(isGreenFill);
+    if (!greens.length) return;
+    /* 白字压每一档绿：取最差（最亮那档）的对比度，低于底线才算「过亮的绿」。
+       渐变要逐档量 —— 亮端 #2bd4a4 正是压不住白字的那一端。 */
+    const worst = Math.min(...greens.map((g) => contrast([255, 255, 255], overWhite(g))));
+    if (worst < SOURCE_MIN) hits.push(rawSel.trim().replace(/\s+/g, ' ').slice(-70));
   });
   return hits;
 };
@@ -174,11 +196,11 @@ async function measurePopup(page: import('@playwright/test').Page, p: { name: st
 test.describe('绿底按钮的字色 · 全站对比度', () => {
   const root = path.resolve(process.cwd(), '..');
 
-  test('源码里不许再有「绿底 + 白字」这条规则（含看不见的热态和弹层）', () => {
+  test('源码里不许再有「白字压过亮的绿」（含看不见的热态和弹层，三站都查）', () => {
     // 先自检这道闸门本身：坏写法必须响、好写法必须不响
     const fx = scanCssSource(path.join(root, 'playwright-tests/fixtures/cta-gate-selfcheck.css'));
     expect(fx.sort()).toEqual(['.bad-a', '.bad-b']);
-    const report = ['shadow/index.html', 'index.html', 'admin/index.html']
+    const report = ['shadow/index.html', 'index.html', 'app/index.html', 'admin/index.html']
       .map((f) => [f, scanCssSource(path.join(root, f))] as const)
       .filter(([, h]) => h.length > 0);
     expect(report, report.map(([f, h]) => `${f}: ${h.join(' | ')}`).join('\n')).toEqual([]);
@@ -196,16 +218,17 @@ test.describe('绿底按钮的字色 · 全站对比度', () => {
     expect(r.seen, '一处绿底有字的控件都没捞到 = 扫描没跑到东西，不算通过').toBeGreaterThan(0);
   });
 
-  test('任务模式那颗「下一句」：绿底没改暗、字换成深墨', async ({ page }) => {
+  test('任务模式那颗「下一句」：绿底压深、字改回白（反向验证的锚）', async ({ page }) => {
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.enterTaskMode(); });
     await expect(page.locator('#tbNext')).toBeVisible();
     const one = await page.evaluate(() => {
       const el = document.getElementById('tbNext') as HTMLElement;
       const cs = getComputedStyle(el);
-      return { color: cs.color, bg: cs.backgroundImage.slice(0, 70) };
+      return { color: cs.color, bg: cs.backgroundImage.slice(0, 90) };
     });
-    expect(one.color).toBe('rgb(4, 35, 27)');          // --cta-ink
-    expect(one.bg).toContain('43, 212, 164');          // #2bd4a4 —— 薄荷绿本身一颗都没压暗
+    expect(one.color).toBe('rgb(255, 255, 255)');      // --cta-ink 回到 #fff
+    expect(one.bg).toContain('10, 131, 96');           // #0a8360 —— 压深后的最亮档（配白字 4.74:1）
+    expect(one.bg).not.toContain('43, 212, 164');      // 不再是 #2bd4a4（白字只有 1.90）
     const r = await sweepLive(page);
     expect(r.bad, JSON.stringify(r.bad)).toEqual([]);
     expect(r.seen).toBeGreaterThan(0);

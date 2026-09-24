@@ -36,12 +36,16 @@
     --border: #e5dfd6; --green: #0c9c74;
     --coral: #e07a5f; --coral-deep: #c9564a;
     --note: #c08a2e; --note-soft: rgba(192,138,46,.08); --note-line: #e7cf9a;
-    --grad: linear-gradient(135deg, #2bd4a4, #0fae7e);
+    --grad: linear-gradient(135deg, #0a8360, #075e46);
     --grad-shadow: 0 3px 10px rgba(16,180,135,.25);
-    /* 压在绿底上的字色。以前这些按钮一律 color:#fff，白字压 #2bd4a4 实测 1.90:1
-       （AA 正文要 4.5:1，纯图标也要 3:1）—— 全应用同一颗，所以一处定值、逐颗换上。
-       选深墨而不是把绿压暗：绿的亮度要到 0.183 以下才容得下白字，那就不是这支薄荷绿了。 */
-    --cta-ink: #04231b;
+    /* 压在绿底上的字色（2026-09-24 用户拍板：改回白字/白图标，绿底压深来兜对比度）。
+       压深后 --grad 最亮那档 #0a8360 配白字 4.74:1（AA 正文过），最暗 #075e46 7.78:1；
+       旧的 #2bd4a4 只有 1.90，所以那档整支换掉，不是把字改深。 */
+    --cta-ink: #fff;
+    /* 深墨字专用：选中态胶囊（.ps-opt.sel / .pill.on）的底色是更亮的 --task-new #10b487，
+       白字压它只有 2.66:1（过不了 AA），而 --task-new 在深色模式还得当亮字用（不能压暗）。
+       所以这几处非主按钮的选中态保留深墨 —— 与主按钮的白字并存，是分开的两颗 token。 */
+    --cta-ink-dark: #04231b;
     /* 绿「字」专用的一档。--accent #0c9c74 当字用实测只有 3.49:1（压白底）、压 --accent-soft
        的浅薄荷只有 3.06:1，AA 正文要 4.5 —— 上一轮只管了「绿底浅字」那半边，这半边是它镜像。
        不能直接把 --accent 调暗：#btnAB.ab-active、.ab-on 那几颗是「深墨字压 --accent 底」，
@@ -76,7 +80,7 @@
     --border: #33302b; --green: #10b487;
     --coral: #e07a5f; --coral-deep: #c9564a;
     --note: #d9a441; --note-soft: rgba(217,164,65,.12); --note-line: rgba(217,164,65,.28);
-    --grad: linear-gradient(135deg, #2bd4a4, #0fae7e);
+    --grad: linear-gradient(135deg, #0a8360, #075e46);
     --grad-shadow: 0 3px 10px rgba(16,180,135,.3);
     --accent-text: var(--accent);   /* 深色底上绿字本来就够（#10b487 压 #252220 实测 5.95:1），这一档只给浅色用 */
     --shadow: 0 2px 12px rgba(0,0,0,.25); --shadow-lg: 0 12px 40px rgba(0,0,0,.4);
@@ -1177,7 +1181,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-prog-fill { height: 100%; background: linear-gradient(90deg, var(--task-new), #2bd4a4); border-radius: 3px; transition: width .3s ease; }
   .tp-actions { display: flex; gap: 8px; margin-top: 16px; }
   .tp-actions .btn { flex: 1; justify-content: center; min-height: 40px; font-size: 13px; }
-  .tp-actions .btn.primary { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); border: none; font-weight: 600; box-shadow: 0 3px 10px rgba(16,180,135,.25); }
+  .tp-actions .btn.primary { background: linear-gradient(135deg,#0a8360,#075e46); color: var(--cta-ink); border: none; font-weight: 600; box-shadow: 0 3px 10px rgba(16,180,135,.25); }
   /* ---- v2 面板：三视图标签 + 两栏并列（PRD §9.2 / §10.2） ---- */
   .sm { font-size: 11.5px; color: var(--muted); }
   .tp-tabs { display: flex; gap: 4px; margin: -6px -4px 14px; padding: 0 4px; border-bottom: 1px solid var(--border); }
@@ -1229,7 +1233,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 词本：状态过滤器 + 词行 */
   .tp-filters { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
   .pill { min-height: 30px; padding: 4px 11px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--text); font-size: 12px; cursor: pointer; }
-  .pill.on { background: var(--task-new); color: var(--cta-ink); border-color: var(--task-new); font-weight: 600; }
+  .pill.on { background: var(--task-new); color: var(--cta-ink-dark); border-color: var(--task-new); font-weight: 600; }
   .tp-book { max-height: 44vh; overflow-y: auto; border: 1px solid var(--border); border-radius: 12px; }
   /* 词与状态贴在一起说同一个词，别让 1fr 把状态推到中缝：auto / 1fr / auto ——
      状态紧跟词后、右端只留「重学」。 */
@@ -1334,7 +1338,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .task-bar .tb-btn { border: none; border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: filter .15s;
     align-items: center; justify-content: center; }
   .task-bar .tb-btn.again { background: var(--card); color: var(--text); border: 1px solid var(--border); }
-  .task-bar .tb-btn.next { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
+  .task-bar .tb-btn.next { background: linear-gradient(135deg,#0a8360,#075e46); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
   .task-bar .tb-btn:active { filter: brightness(.92); }
   body.dark .task-bar .tb-btn.again { background: #252220; color: #e2ddd5; border-color: #33302b; }
   /* 「上一句」只在 ① 通读态出现（② 与完成态没有"上一句"这个动作），全交给选择器不写进 JS，
@@ -1355,7 +1359,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.task-mode .task-bar[data-state="exit"] .tb-seek { display: none; }
   body.task-mode .task-bar[data-state="exit"] #tbStay,
   body.task-mode .task-bar[data-state="exit"] #tbQuit { padding: 8px 18px; min-width: 64px; }
-  .task-bar .tb-btn.quit { background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
+  .task-bar .tb-btn.quit { background: linear-gradient(135deg,#0a8360,#075e46); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
   /* 一行摆得下摆不下，全看窄屏这几颗收得多狠：
      ① 通读态下翻句三颗退成纯图标（② 态那两颗是「回看句子 / 跳过这题」的文字按钮，不能收，收了就看不见字）。 */
   @media (max-width: 560px) {
@@ -1488,7 +1492,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .pass-summary .nums b { display: block; font-size: 20px; font-weight: 800; color: var(--accent-text); font-variant-numeric: tabular-nums; }
   .pass-summary .nums span { font-size: 10.5px; color: var(--muted); }
   .pass-summary .go { margin-top: 11px; width: 100%; min-height: 44px; border: none; border-radius: 999px;
-    background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; }
+    background: linear-gradient(135deg,#0a8360,#075e46); color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; }
   @media (max-width: 700px) {
     .qz-opts { grid-template-columns: 1fr 1fr; gap: 6px; }
   }
@@ -1504,7 +1508,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .ps-opts { display: flex; gap: 6px; flex-wrap: wrap; }
   .ps-opt { border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer; background: transparent; transition: all .15s; }
   .ps-opt:hover { border-color: var(--task-new); color: var(--task-new); }
-  .ps-opt.sel { background: var(--task-new); color: var(--cta-ink); border-color: var(--task-new); }
+  .ps-opt.sel { background: var(--task-new); color: var(--cta-ink-dark); border-color: var(--task-new); }
   /* 计划小结：标签—数值结构化，轮数只在这里出现一次并放大 */
   .ps-sum { margin: 14px 0 12px; padding: 2px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
   .ps-sum-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 12px; color: var(--muted); }
@@ -1521,7 +1525,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      所以 padding 必须上下对称 —— 旧写法 padding-top:0 + border-top:0 是照"拼接footer"抄的，
      文字会贴在卡的上沿（2026-09-23 手机实测）。 */
   .ps-eta.sm { margin-top: -6px; padding: 7px 12px; font-size: 11px; opacity: .8; }
-  .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: linear-gradient(135deg,#2bd4a4,#0fae7e); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 12px rgba(16,180,135,.3); }
+  .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: linear-gradient(135deg,#0a8360,#075e46); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 12px rgba(16,180,135,.3); }
   .ps-start:active { filter: brightness(.92); }
   /* 调整计划 */
   .ps-adjust { display: flex; gap: 6px; margin-top: 12px; }
@@ -1534,7 +1538,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 暗色模式补充覆盖 */
   body.dark .tp-close:hover { background: rgba(255,255,255,.08); }
   body.dark .ps-opt { color: var(--text); }
-  body.dark .ps-opt.sel { color: var(--cta-ink); }
+  body.dark .ps-opt.sel { color: var(--cta-ink-dark); }
   body.dark .ps-sum-row.warn, body.dark .ps-sum-row.warn b { color: #f0a08c; }
   body.dark .today-panel .tp-head h3, body.dark .today-panel .plan-setup h3 { color: var(--text); }
   body.dark .task-bar .tb-title { color: var(--text); }
