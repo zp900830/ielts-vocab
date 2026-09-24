@@ -265,6 +265,10 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await expect(page.locator('#taskBar')).toBeVisible();
     await page.evaluate(() => TASK.setPass(2));
 
+    // 2026-09-24：② 态那枚圈去掉后，阶段名「挖空选择」必须自己扛住语义（不是只剩「12/40」）。
+    await expect(page.locator('#tbTitle')).toContainText('挖空');
+    await expect(page.locator('#tbTitle')).not.toContainText(/[①②③④]/);
+
     // 空是正文里的内联元素，且**不存在**底部题卡
     expect(await page.locator('#art .sent .qz-blank').count()).toBeGreaterThan(0);
     expect(await page.locator('#taskCard').count(), '底部题卡必须不存在').toBe(0);
@@ -575,7 +579,10 @@ test.describe('3.0 §2.3 没计划也能进任务模式', () => {
     await page.locator('#setupSheet .ps-start').click();
     await expect(page.locator('body')).toHaveClass(/task-mode/);
     await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'read');
-    await expect(page.locator('#tbTitle')).toContainText('① 通读');
+    // 2026-09-24 用户：任务条那枚圈起来的阶段数字（①/②）去掉 —— 阶段靠文字仍读得出。
+    // 锁两件事：圈不在（回归锁）+ 阶段名还在（不许连字一起删/变成一坨数字）。
+    await expect(page.locator('#tbTitle')).toContainText('通读');
+    await expect(page.locator('#tbTitle')).not.toContainText(/[①②③④]/);
   });
 });
 
