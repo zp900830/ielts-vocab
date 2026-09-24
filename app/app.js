@@ -131,6 +131,11 @@
     view.innerHTML = `<div class="home-banner" id="homeBanner"></div><div class="art-grid">${cards}</div>`;
     // ⚠️ renderBanner 由 Task 4 定义；只跑 Task 3 时它还不存在 —— 必须守卫。
     if (window.APP3.renderBanner) window.APP3.renderBanner(document.getElementById('homeBanner'));
+    // §5.4：数据页点了文章小卡 → 回首页把对应卡片高亮一下（不新开屏）。
+    if (_hlArticle != null) {
+      const card = view.querySelector('.art-card[data-a="' + _hlArticle + '"]');
+      if (card) { card.classList.add('hl'); try { card.scrollIntoView({ block: 'center' }); } catch (e) {} }
+    }
   }
   window.APP3 = Object.assign(window.APP3 || {}, { renderHome, articleStat });
 
@@ -162,6 +167,17 @@
           <div class="st-num" data-k="acts"><b>${ov.acts}</b><span>总学习次数</span></div>
         </div>
       </section>
+      <section class="st-block" data-block="articles" aria-labelledby="stH2">
+        <h2 id="stH2">我的文章掌握到了什么程度？</h2>
+        <div class="st-arts">${SECTIONS.map((s, a) => {
+          const x = articleStat(a);
+          return `<button class="st-art" data-a="${a}" type="button" aria-label="《${esc(s.title)}》熟练度 ${x.progress}%，回首页看这张卡片">
+            <span class="sa-head"><span class="sa-title">${esc(s.title)}</span><span class="sa-pct">${x.progress}%</span></span>
+            <span class="sa-bar"><i style="width:${x.progress}%"></i></span>
+            <span class="sa-meta">${STAGE_LABEL[x.stage] || '未开始'}</span>
+          </button>`;
+        }).join('')}</div>
+      </section>
     </div>`;
   }
   window.APP3 = Object.assign(window.APP3, { renderStats });
@@ -180,8 +196,27 @@
     return { days: keys.length, minutes: minutes, streak: ts.streak, arts: arts, acts: acts };
   }
   window.APP3 = Object.assign(window.APP3, { statsOverview });
+  // §5.4：数据页点文章小卡 → 回首页并把那张卡片高亮（不新开屏/新浮层，§2.4 护栏）。
+  function openHomeHighlight(a) {
+    _hlArticle = a;
+    if (location.hash === '#/home' || !location.hash) window.APP3.route();
+    else location.hash = '#/home';
+  }
+  window.APP3 = Object.assign(window.APP3, { openHomeHighlight });
+  // 数据页的点击（按钮是每次重渲的，走事件代理，只绑一次）
   document.addEventListener('click', (e) => {
     if (e.target.closest('.st-open-me')) { openMePop(); return; }
+    const art = e.target.closest('.st-art');
+    if (art && art.dataset.a != null) { openHomeHighlight(Number(art.dataset.a)); return; }
+    const go = e.target.closest('.st-go, .tip-go');
+    if (go) {
+      const tip = go.closest('.st-tip');
+      const kind = tip ? tip.dataset.tip : go.dataset.go;
+      if (kind === 'leech' || kind === 'words') { location.hash = '#/words'; return; }
+      if (kind === 'listen') { location.hash = '#/listen'; return; }
+      const a = tip && tip.dataset.a != null ? Number(tip.dataset.a) : 0;
+      openHomeHighlight(a);
+    }
   });
 
   /* ---- 3.0 顶部「今天该做什么」横幅（M1 Task 4，§3.5）----

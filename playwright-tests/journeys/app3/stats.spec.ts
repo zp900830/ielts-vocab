@@ -108,4 +108,31 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     expect(expected.days, '夹具要真造出日账，否则这条什么都没测').toBeGreaterThanOrEqual(2);
     expect(expected.acts, '夹具要真造出学习次数').toBeGreaterThan(0);
   });
+
+  test('文章学习：6 篇小卡数字与首页卡片同源；点小卡 → 回首页并高亮', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(15);
+      const s = ShadowPlan.articleScope(SECTIONS, 0);
+      Array.from(s).slice(0, 20).forEach((i) => TASK.readDone(i));
+    });
+    await page.reload();
+
+    await expect(page.locator('.st-art')).toHaveCount(6);
+    // 与 APP3.articleStat 同源（真断言，不写死字面量）
+    const stats = await page.evaluate(() => Array.from({ length: SECTIONS.length }, (_, a) => APP3.articleStat(a).progress));
+    for (let a = 0; a < 6; a++) {
+      await expect(page.locator(`.st-art[data-a="${a}"] .sa-pct`), `第 ${a} 篇小卡百分比`).toHaveText(stats[a] + '%');
+    }
+    // 首页卡片同一个数：切到首页比对
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await expect(page.locator('.art-card[data-a="0"] .a-pct')).toHaveText(stats[0] + '%');
+
+    // 点第 0 篇小卡 → 回首页且该卡片被高亮
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.locator('.st-art[data-a="0"]').click();
+    await expect(page).toHaveURL(/#\/home/);
+    await expect(page.locator('.art-card[data-a="0"]')).toHaveClass(/hl/);
+  });
 });

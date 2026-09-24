@@ -1844,6 +1844,20 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .st-num span { font-size: 11px; color: var(--muted); }
   @media (max-width: 1023px) { .st-nums[data-cols="5"] { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 700px) { .st-nums[data-cols="5"], .st-nums[data-cols="4"] { grid-template-columns: repeat(2, 1fr); } }
+  .st-arts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .st-art { display: block; width: 100%; min-height: 44px; text-align: left; padding: 10px 12px;
+    border: 1px solid var(--border); border-radius: 14px; background: var(--card); cursor: pointer;
+    font: inherit; color: inherit; box-shadow: var(--shadow); }
+  .st-art:hover { border-color: var(--accent-line); }
+  .st-art .sa-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .st-art .sa-title { font-size: 13.5px; font-weight: 700; }
+  .st-art .sa-pct { font-size: 13px; font-weight: 800; color: var(--accent-text); }
+  .st-art .sa-bar { display: block; height: 5px; margin: 7px 0 5px; border-radius: 3px; background: rgba(11,84,64,.14); overflow: hidden; }
+  .st-art .sa-bar i { display: block; height: 100%; background: var(--grad); }
+  .st-art .sa-meta { font-size: 10.5px; color: var(--muted); }
+  .art-card.hl { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (max-width: 1023px) { .st-arts { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .st-arts { grid-template-columns: 1fr; } }
   /* ============ 3.0 外壳深色覆盖（W2，PRD §10.1） ============
      外壳与 M1 新页面统一到影子跟读的暖黑 token（--bg/--card/--border/--text/--accent-soft…），
      只把几处写死的浅色值换掉（.a-bar / .a-stage 等）。全部复用既有 token，不新造色。 */
