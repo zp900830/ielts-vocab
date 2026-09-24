@@ -160,8 +160,20 @@
     const ov = statsOverview();
     const wd = statsWords();
     const tips = statsTips();
+    /* §5（2026-09-24 用户加）：一块「今天」——今日读了几句 / 今日学习时长 / 今天还剩多少。
+       数字全部经 TASK.todayProgress() 取（与任务条辅行同一份派生），界面不自己数账。 */
+    const tp = (typeof TASK !== 'undefined' && TASK.todayProgress)
+      ? TASK.todayProgress() : { done: 0, planned: 0, left: 0, minutes: 0 };
     view.innerHTML = `<div class="stats-page">
       <h1>学习数据</h1>
+      <section class="st-block" data-block="today" aria-labelledby="stH0">
+        <h2 id="stH0">今天</h2>
+        <div class="st-nums" data-cols="3">
+          <div class="st-num" data-k="today-sent"><b>${tp.done}</b><span>今日已读句数</span></div>
+          <div class="st-num" data-k="today-min"><b>${tp.minutes}</b><span>今日学习时长（分钟）</span></div>
+          <div class="st-num" data-k="today-left"><b>${tp.left}</b><span>今天还剩句数</span></div>
+        </div>
+      </section>
       <section class="st-block" data-block="overview" aria-labelledby="stH1">
         <h2 id="stH1">我最近学得怎么样？</h2>
         <div class="st-nums" data-cols="5">

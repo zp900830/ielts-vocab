@@ -342,7 +342,7 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     });
     await reloadStats(page);
     await expect(page.locator('.stats-page > h1')).toHaveCount(1);
-    await expect(page.locator('.st-block > h2')).toHaveCount(6);
+    await expect(page.locator('.st-block > h2')).toHaveCount(7);   // 四问四块 + 今天 + 随身听 + 待加强
     const h = await page.locator('.st-tip .tip-go').first().evaluate((el) => el.getBoundingClientRect().height);
     expect(h, '触摸目标 ≥44px').toBeGreaterThanOrEqual(44);
   });
