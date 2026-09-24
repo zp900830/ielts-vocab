@@ -4387,51 +4387,18 @@ const ErrorTracker={
 ErrorTracker.restore();
 ErrorTracker.init();
 
-/* ================= 离线支持（Service Worker 注册） ================= */
-const OfflineSupport={
-  _registered:false,
-  async init(){
-    if(!("serviceWorker" in navigator)) return;
-    try{
-      /* 动态生成 Service Worker 脚本并注册 */
-      const scopePath=location.pathname.replace(/\/[^/]*$/,'/')||'/';
-      const swCode=`
- const CACHE_NAME="ielts-vocab-v${DATA_VER}";
- const STATIC_ASSETS=[${JSON.stringify(scopePath)}];
- self.addEventListener("install",e=>{
-   e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(STATIC_ASSETS)));
-   self.skipWaiting();
- });
- self.addEventListener("activate",e=>{
-   e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))));
-   self.clients.claim();
- });
- self.addEventListener("fetch",e=>{
-   if(e.request.method!=="GET") return;
-   e.respondWith(
-     caches.match(e.request).then(r=>{
-       const fetchPromise=fetch(e.request).then(res=>{
-         if(res&&res.status===200){
-           const clone=res.clone();
-           caches.open(CACHE_NAME).then(c=>c.put(e.request,clone));
-         }
-         return res;
-       }).catch(()=>r);
-       return r||fetchPromise;
-     })
-   );
- });
- `;
-      const blob=new Blob([swCode],{type:"application/javascript"});
-      const swUrl=URL.createObjectURL(blob);
-      const reg=await navigator.serviceWorker.register(swUrl,{scope:scopePath});
-      this._registered=true;
-      console.log("[IEL] Service Worker registered",reg.scope);
-    }catch(e){
-      console.log("[IEL] Service Worker registration failed (expected for blob/file://)",e.message);
-    }
-  }
-};
+/* ================= 离线支持（Service Worker）：2026-09-24 整段删除 =================
+   这里原本是 OfflineSupport：用 URL.createObjectURL(new Blob([...])) 内联一段 SW，
+   再 register(blobUrl,{scope:'/'})。两个致命问题：
+   1) 规范禁止用 blob: 注册 SW —— Chromium 直接拒绝（"The URL protocol of the script
+      is not supported"）→ 从未真正注册，所谓离线/缓存兜底一直是死代码，却对外宣称离线
+      （docs/2026-09-18-产品整改清单.md §8.3）。
+   2) 主站 index.html 在仓库根，若「修」成真实文件 /sw.js，作用域必然是 '/'，会连
+      /shadow/ 与 /app/ 一起接管 —— 正是 0915 P0#8「SW scope 污染同域其他项目」
+      （docs/2026-09-18-产品整改清单.md:501）。收窄 scope 需要 Service-Worker-Allowed
+      响应头，EdgeOne Pages 不支持。
+   主站数据缓存本就由 fetchCached()（Cache API + DATA_VER 版本号）负责，此 SW 无额外价值，
+   故整段删除而非重造。不要再加回根作用域 SW。详见 /tmp/sw-main-report.md。 */
 
 /* ================= 学习分析增强 ================= */
 const LearningAnalytics={
@@ -4618,8 +4585,7 @@ window.addEventListener("load",()=>{
   PerfMonitor.flush();
 });
 
-/* 离线支持：页面加载后初始化 */
-OfflineSupport.init();
+/* 离线支持 SW 已于 2026-09-24 删除（根作用域会越界接管 /shadow/、/app/），见上方说明 */
 
 /* DATA_READY 后记录数据加载完成时间 */
 const _origDataReady=DATA_READY;
