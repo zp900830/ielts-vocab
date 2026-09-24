@@ -36,12 +36,15 @@
     --border: #e5dfd6; --green: #0c9c74;
     --coral: #e07a5f; --coral-deep: #c9564a;
     --note: #c08a2e; --note-soft: rgba(192,138,46,.08); --note-line: #e7cf9a;
-    /* 中调薄荷绿渐变（2026-09-24 用户：上一版压得太黑，改回中调）。
-       白字要过 AA 正文 4.5 —— 最亮那档最浅只能到 #0b8663（4.56:1），再浅就掉到 4.3 以下；
-       最暗 #0a7050（6.10:1）。图标门槛 3 两档都远超。实测数字见报告。 */
-    --grad: linear-gradient(135deg, #0b8663, #0a7050);
-    --grad-shadow: 0 3px 10px rgba(16,180,135,.25);
-    /* 压在绿底上的字色（2026-09-24 用户拍板：改回白字/白图标）。 */
+    /* 2026-09-24（第二轮）：用户嫌中调薄荷「太重太辣眼」，主按钮改「轻渐变薄荷 + 通透感」。
+       --grad 从 #0b8663→#0a7050（白字 4.56~6.10）改浅到 #2e9c76→#0f7c5a（白字 3.42~5.18，三站同值）。
+       白字压浅薄荷过不了 AA 正文 4.5 —— 这是用户【已知情并接受】的取舍，硬底线锁在 3:1
+       （门禁 playwright-tests/journeys/app3/palette.spec.ts 的 WHITE_MIN、夹具 cta-gate-selfcheck.css、
+       PRD §10.1 都写明了）。通透感 = 顶部 1px 高光（inset）+ 底下那一圈柔光晕（--grad-shadow）。
+       参考图那颗「开始学习」按参考浅度只有 ≈2.0:1，落在 3.42 是因为 3:1 是底线，不是不像。 */
+    --grad: linear-gradient(135deg, #2e9c76, #0f7c5a);
+    --grad-shadow: 0 10px 24px -8px rgba(16,180,135,.5), inset 0 1px 0 rgba(255,255,255,.4);
+    /* 压在绿底上的字色（2026-09-24 用户拍板：白字/白图标，绿底落在过 3:1 的浅薄荷上）。 */
     --cta-ink: #fff;
     /* 深墨字专用：选中态胶囊（.ps-opt.sel / .pill.on）的底色是更亮的 --task-new #10b487，
        白字压它只有 2.66:1（过不了 AA），而 --task-new 在深色模式还得当亮字用（不能压暗）。
@@ -81,8 +84,8 @@
     --border: #33302b; --green: #10b487;
     --coral: #e07a5f; --coral-deep: #c9564a;
     --note: #d9a441; --note-soft: rgba(217,164,65,.12); --note-line: rgba(217,164,65,.28);
-    --grad: linear-gradient(135deg, #0b8663, #0a7050);
-    --grad-shadow: 0 3px 10px rgba(16,180,135,.3);
+    --grad: linear-gradient(135deg, #2e9c76, #0f7c5a);
+    --grad-shadow: 0 10px 26px -8px rgba(16,180,135,.55), inset 0 1px 0 rgba(255,255,255,.3);
     --accent-text: var(--accent);   /* 深色底上绿字本来就够（#10b487 压 #252220 实测 5.95:1），这一档只给浅色用 */
     --shadow: 0 2px 12px rgba(0,0,0,.25); --shadow-lg: 0 12px 40px rgba(0,0,0,.4);
     --glass: rgba(30,28,25,.94); --glass-strong: rgba(30,28,25,.97);
@@ -236,7 +239,7 @@
     font-size: 15px; padding: 7px 22px; box-shadow: var(--grad-shadow);
     transition: filter var(--t-fast), transform .12s ease; }
   .btn.play:active { transform: scale(.95); }
-  .btn.play:hover { filter: brightness(1.05); background: var(--grad); }
+  .btn.play:hover { filter: brightness(1.04); background: var(--grad); }
   .btn.loop-active { background: var(--accent-soft); border-color: var(--accent-bright); color: var(--accent-text); font-weight: 600; }
   .seg { color: var(--muted); font-size: 12px; min-width: 76px; text-align: center;
     background: var(--accent-soft); border-radius: 999px; padding: 4px 10px; font-weight: 600; }
@@ -1200,7 +1203,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-prog-fill { height: 100%; background: linear-gradient(90deg, var(--task-new), #2bd4a4); border-radius: 3px; transition: width .3s ease; }
   .tp-actions { display: flex; gap: 8px; margin-top: 16px; }
   .tp-actions .btn { flex: 1; justify-content: center; min-height: 40px; font-size: 13px; }
-  .tp-actions .btn.primary { background: linear-gradient(135deg,#0b8663,#0a7050); color: var(--cta-ink); border: none; font-weight: 600; box-shadow: 0 3px 10px rgba(16,180,135,.25); }
+  .tp-actions .btn.primary { background: var(--grad); color: var(--cta-ink); border: none; font-weight: 600; box-shadow: var(--grad-shadow); }
   /* ---- v2 面板：三视图标签 + 两栏并列（PRD §9.2 / §10.2） ---- */
   .sm { font-size: 11.5px; color: var(--muted); }
   .tp-tabs { display: flex; gap: 4px; margin: -6px -4px 14px; padding: 0 4px; border-bottom: 1px solid var(--border); }
@@ -1345,14 +1348,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .task-bar .tb-btn { border: none; border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: filter .15s;
     align-items: center; justify-content: center; }
   .task-bar .tb-btn.again { background: var(--card); color: var(--text); border: 1px solid var(--border); }
-  .task-bar .tb-btn.next { background: linear-gradient(135deg,#0b8663,#0a7050); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
+  .task-bar .tb-btn.next { background: var(--grad); color: var(--cta-ink); box-shadow: var(--grad-shadow); }
   .task-bar .tb-btn:active { filter: brightness(.92); }
   body.dark .task-bar .tb-btn.again { background: #252220; color: #e2ddd5; border-color: #33302b; }
   /* 「上一句」只在 ① 通读态出现（② 与完成态没有"上一句"这个动作），全交给选择器不写进 JS，
      免得渲染顺序一变就漏关。续读条是 data-state=resume 且没有 task-mode，一颗都不许露脸。 */
   #tbPrev { display: none; }
   body.task-mode .task-bar[data-state="read"] #tbPrev { display: inline-flex; }
-  .task-bar .tb-btn.quit { background: var(--grad); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
+  .task-bar .tb-btn.quit { background: var(--grad); color: var(--cta-ink); box-shadow: var(--grad-shadow); }
   /* 一行摆得下摆不下，全看窄屏这几颗收得多狠：
      ① 通读态下翻句三颗退成纯图标（② 态只有 #tbNext 一颗文字按钮「跳过这题 / 下一题 / 小结」，
      「回看句子」已按 §4.4 删除，不再有第二颗文字按钮）。 */
@@ -1499,7 +1502,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .pass-summary .nums b { display: block; font-size: 20px; font-weight: 800; color: var(--accent-text); font-variant-numeric: tabular-nums; }
   .pass-summary .nums span { font-size: 10.5px; color: var(--muted); }
   .pass-summary .go { margin-top: 11px; width: 100%; min-height: 44px; border: none; border-radius: 999px;
-    background: linear-gradient(135deg,#0b8663,#0a7050); color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; }
+    background: var(--grad); color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: var(--grad-shadow); }
   @media (max-width: 700px) {
     .qz-opts { grid-template-columns: 1fr 1fr; gap: 6px; }
   }
@@ -1532,7 +1535,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      所以 padding 必须上下对称 —— 旧写法 padding-top:0 + border-top:0 是照"拼接footer"抄的，
      文字会贴在卡的上沿（2026-09-23 手机实测）。 */
   .ps-eta.sm { margin-top: -6px; padding: 7px 12px; font-size: 11px; opacity: .8; }
-  .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: linear-gradient(135deg,#0b8663,#0a7050); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 12px rgba(16,180,135,.3); }
+  .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: var(--grad); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: var(--grad-shadow); }
   .ps-start:active { filter: brightness(.92); }
   /* 调整计划 */
   .ps-adjust { display: flex; gap: 6px; margin-top: 12px; }
@@ -1645,13 +1648,16 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     transition: opacity var(--iel-t-fast), transform var(--iel-t-fast), visibility var(--iel-t-fast); z-index: 60; }
   .tr-bubble.show { opacity: 1; visibility: visible; transform: translateY(0); }
   #appShell { display: flex; min-height: 100vh; }
-  .sidenav { flex: none; width: 220px; padding: 16px 12px; border-right: 1px solid var(--border);
-    background: #f2faf6;
+  /* 2026-09-24（第二轮）：用户要「偏灰的白」侧栏（#f6f6f4，二级任务页那档），且要与右侧薄荷底
+     (#f8fdfa) 搭配好看。灰白挨着薄荷容易「发脏」，所以把原先的暖米色描边（--border #e5dfd6）
+     换成一道更淡、更中性的竖向分隔线，让它读起来是刻意的分区、不是脏。纯色不透明，深色见 body.dark。 */
+  .sidenav { flex: none; width: 220px; padding: 16px 12px; border-right: 1px solid #e9e9e6;
+    background: #f6f6f4;
     display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; }
   /* 侧栏品牌（照抄主站 .sn-logo）：一级页面才露脸 */
   .sn-logo { display: flex; align-items: center; gap: 10px; padding: 2px 8px 20px; color: var(--text); }
   .sn-logo .sn-mark { width: 34px; height: 34px; flex: none; border-radius: 9px; background: var(--grad);
-    color: var(--cta-ink); box-shadow: var(--grad-shadow), inset 0 1px 0 rgba(255,255,255,.28);
+    color: var(--cta-ink); box-shadow: var(--grad-shadow);
     display: flex; align-items: center; justify-content: center; }
   .sn-logo .sn-mark i { font-size: 18px; line-height: 1; }
   .sn-name { font-weight: 700; font-size: 13.5px; line-height: 1.4; letter-spacing: .2px; white-space: nowrap; }
@@ -1689,7 +1695,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .mp-badge { flex: none; font-size: 10.5px; font-weight: 700; line-height: 1.7; padding: 0 8px;
     border-radius: 999px; background: var(--accent-soft); color: var(--accent-text); }
   .mp-cta { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: var(--grad);
-    color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: var(--grad-shadow); }
+    color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: var(--grad-shadow);
+    transition: filter var(--t-fast), box-shadow var(--t-fast); }
+  .mp-cta:hover { filter: brightness(1.04); box-shadow: 0 12px 28px -8px rgba(16,180,135,.6), inset 0 1px 0 rgba(255,255,255,.45); }
   .mp-cta:active { filter: brightness(.94); }
   .mp-card { margin-top: 12px; padding: 10px 12px; border: 1px solid var(--accent-line); border-radius: 12px;
     background: var(--accent-soft); }
@@ -1766,7 +1774,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .art-card .a-title { font-size: 17px; font-weight: 700; }
   .art-card .a-en { display: block; font-size: 11.5px; color: var(--muted); margin: 2px 0 10px; }
   .art-card .a-bar { display: block; height: 6px; border-radius: 3px; background: rgba(11,84,64,.14); overflow: hidden; }
-  .art-card .a-bar i { display: block; height: 100%; background: linear-gradient(90deg, #0b8663, #0a7050); }
+  .art-card .a-bar i { display: block; height: 100%; background: var(--grad); }
   .art-card .a-meta { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px;
     font-size: 11px; color: var(--muted); }
   .art-card .a-pct { font-size: 15px; font-weight: 800; color: var(--accent-text); }
@@ -1801,7 +1809,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .home-banner .b-go { display: inline-flex; align-items: center; justify-content: center; gap: 6px;
     width: 100%; min-height: 46px; padding: 0 16px; border: none; border-radius: 999px;
     background: var(--grad); color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer;
-    box-shadow: var(--grad-shadow); white-space: nowrap; }
+    box-shadow: var(--grad-shadow); white-space: nowrap;
+    transition: filter var(--t-fast), box-shadow var(--t-fast); }
+  .home-banner .b-go:hover { filter: brightness(1.04); box-shadow: 0 12px 28px -8px rgba(16,180,135,.6), inset 0 1px 0 rgba(255,255,255,.45); }
   .home-banner .b-go:active { filter: brightness(.92); }
   @media (max-width: 700px) {
     .home-banner .b-go { min-height: 44px; }
