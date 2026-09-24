@@ -29,11 +29,15 @@
     --border: #e5dfd6; --green: #0c9c74;
     --coral: #e07a5f; --coral-deep: #c9564a;
     --note: #c08a2e; --note-soft: rgba(192,138,46,.08); --note-line: #e7cf9a;
-    --grad: linear-gradient(135deg, #0b8663, #0a7050);
-    --grad-shadow: 0 3px 10px rgba(16,180,135,.25);
-    /* 压在绿底上的字色（2026-09-24 用户拍板：改回白字/白图标，绿底压深来兜对比度）。
-       三站同一支中调薄荷：--grad 最亮那档 #0b8663 配白字 4.56:1，最暗 #0a7050 6.10:1；
-       旧的 #2bd4a4 只有 1.90，所以那档整支换掉，不是把字改深。 */
+    /* 2026-09-24（第二轮）：用户嫌中调薄荷「太重太辣眼」，主按钮改「轻渐变薄荷 + 通透感」。
+       --grad 从 #0b8663→#0a7050（白字 4.56~6.10）改浅到 #2e9c76→#0f7c5a（白字 3.42~5.18，三站同值）。
+       白字压浅薄荷过不了 AA 正文 4.5 —— 这是用户【已知情并接受】的取舍，硬底线锁在 3:1
+       （门禁 playwright-tests/journeys/app3/palette.spec.ts 的 WHITE_MIN、夹具 cta-gate-selfcheck.css、
+       PRD §10.1 都写明了）。通透感 = 顶部 1px 高光（inset）+ 底下那一圈柔光晕（--grad-shadow）。
+       参考图那颗「开始学习」按参考浅度只有 ≈2.0:1，落在 3.42 是因为 3:1 是底线，不是不像。 */
+    --grad: linear-gradient(135deg, #2e9c76, #0f7c5a);
+    --grad-shadow: 0 10px 24px -8px rgba(16,180,135,.5), inset 0 1px 0 rgba(255,255,255,.4);
+    /* 压在绿底上的字色（2026-09-24 用户拍板：白字/白图标，绿底落在过 3:1 的浅薄荷上）。 */
     --cta-ink: #fff;
     /* 深墨字专用：选中态胶囊（.ps-opt.sel / .pill.on）的底色是更亮的 --task-new #10b487，
        白字压它只有 2.66:1（过不了 AA），而 --task-new 在深色模式还得当亮字用（不能压暗）。
@@ -61,8 +65,8 @@
     --border: #33302b; --green: #10b487;
     --coral: #e07a5f; --coral-deep: #c9564a;
     --note: #d9a441; --note-soft: rgba(217,164,65,.12); --note-line: rgba(217,164,65,.28);
-    --grad: linear-gradient(135deg, #0b8663, #0a7050);
-    --grad-shadow: 0 3px 10px rgba(16,180,135,.3);
+    --grad: linear-gradient(135deg, #2e9c76, #0f7c5a);
+    --grad-shadow: 0 10px 26px -8px rgba(16,180,135,.55), inset 0 1px 0 rgba(255,255,255,.3);
     --accent-text: var(--accent);   /* 深色底上绿字本来就够（#10b487 压 #252220 实测 5.95:1），这一档只给浅色用 */
     --shadow: 0 2px 12px rgba(0,0,0,.25); --shadow-lg: 0 12px 40px rgba(0,0,0,.4);
     --glass: rgba(30,28,25,.94); --glass-strong: rgba(30,28,25,.97);
@@ -208,7 +212,7 @@
     font-size: 15px; padding: 7px 22px; box-shadow: var(--grad-shadow);
     transition: filter var(--t-fast), transform .12s ease; }
   .btn.play:active { transform: scale(.95); }
-  .btn.play:hover { filter: brightness(1.05); background: var(--grad); }
+  .btn.play:hover { filter: brightness(1.04); background: var(--grad); }
   .btn.loop-active { background: var(--accent-soft); border-color: var(--accent-bright); color: var(--accent-text); font-weight: 600; }
   .seg { color: var(--muted); font-size: 12px; min-width: 76px; text-align: center;
     background: var(--accent-soft); border-radius: 999px; padding: 4px 10px; font-weight: 600; }
@@ -1162,7 +1166,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-prog-fill { height: 100%; background: linear-gradient(90deg, var(--task-new), #2bd4a4); border-radius: 3px; transition: width .3s ease; }
   .tp-actions { display: flex; gap: 8px; margin-top: 16px; }
   .tp-actions .btn { flex: 1; justify-content: center; min-height: 40px; font-size: 13px; }
-  .tp-actions .btn.primary { background: linear-gradient(135deg,#0b8663,#0a7050); color: var(--cta-ink); border: none; font-weight: 600; box-shadow: 0 3px 10px rgba(16,180,135,.25); }
+  .tp-actions .btn.primary { background: var(--grad); color: var(--cta-ink); border: none; font-weight: 600; box-shadow: var(--grad-shadow); }
   /* ---- v2 面板：三视图标签 + 两栏并列（PRD §9.2 / §10.2） ---- */
   .sm { font-size: 11.5px; color: var(--muted); }
   .tp-tabs { display: flex; gap: 4px; margin: -6px -4px 14px; padding: 0 4px; border-bottom: 1px solid var(--border); }
@@ -1319,7 +1323,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .task-bar .tb-btn { border: none; border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: filter .15s;
     align-items: center; justify-content: center; }
   .task-bar .tb-btn.again { background: var(--card); color: var(--text); border: 1px solid var(--border); }
-  .task-bar .tb-btn.next { background: linear-gradient(135deg,#0b8663,#0a7050); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
+  .task-bar .tb-btn.next { background: var(--grad); color: var(--cta-ink); box-shadow: var(--grad-shadow); }
   .task-bar .tb-btn:active { filter: brightness(.92); }
   body.dark .task-bar .tb-btn.again { background: #252220; color: #e2ddd5; border-color: #33302b; }
   /* 「上一句」只在 ① 通读态出现（② 与完成态没有"上一句"这个动作），全交给选择器不写进 JS，
@@ -1340,7 +1344,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.task-mode .task-bar[data-state="exit"] .tb-seek { display: none; }
   body.task-mode .task-bar[data-state="exit"] #tbStay,
   body.task-mode .task-bar[data-state="exit"] #tbQuit { padding: 8px 18px; min-width: 64px; }
-  .task-bar .tb-btn.quit { background: linear-gradient(135deg,#0b8663,#0a7050); color: var(--cta-ink); box-shadow: 0 2px 8px rgba(16,180,135,.3); }
+  .task-bar .tb-btn.quit { background: var(--grad); color: var(--cta-ink); box-shadow: var(--grad-shadow); }
   /* 一行摆得下摆不下，全看窄屏这几颗收得多狠：
      ① 通读态下翻句三颗退成纯图标（② 态那两颗是「回看句子 / 跳过这题」的文字按钮，不能收，收了就看不见字）。 */
   @media (max-width: 560px) {
@@ -1449,7 +1453,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .pass-summary .nums b { display: block; font-size: 20px; font-weight: 800; color: var(--accent-text); font-variant-numeric: tabular-nums; }
   .pass-summary .nums span { font-size: 10.5px; color: var(--muted); }
   .pass-summary .go { margin-top: 11px; width: 100%; min-height: 44px; border: none; border-radius: 999px;
-    background: linear-gradient(135deg,#0b8663,#0a7050); color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; }
+    background: var(--grad); color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: var(--grad-shadow); }
   @media (max-width: 700px) {
     .qz-opts { grid-template-columns: 1fr 1fr; gap: 6px; }
     .qz-sent { font-size: 14px; }
@@ -1483,7 +1487,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      所以 padding 必须上下对称 —— 旧写法 padding-top:0 + border-top:0 是照"拼接footer"抄的，
      文字会贴在卡的上沿（2026-09-23 手机实测）。 */
   .ps-eta.sm { margin-top: -6px; padding: 7px 12px; font-size: 11px; opacity: .8; }
-  .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: linear-gradient(135deg,#0b8663,#0a7050); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 12px rgba(16,180,135,.3); }
+  .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: var(--grad); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: var(--grad-shadow); }
   .ps-start:active { filter: brightness(.92); }
   /* 调整计划 */
   .ps-adjust { display: flex; gap: 6px; margin-top: 12px; }

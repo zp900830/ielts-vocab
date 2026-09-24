@@ -45,9 +45,12 @@ const isGreenFill = (c: [number, number, number, number]) => {
 };
 
 /* 2026-09-24：白字回到绿底上（用户拍板），所以源码级不再「见绿底+白字就响」，改成量对比度。
-   C1b：产品写的是 `color:var(--cta-ink)`（不是字面量 #fff），所以 color 也要把 var() 解析成真实值再判，
-   否则这道闸门只在自己测自己（对四个产品文件全返回 []）。阈值取 4.5（正文门槛）——
-   因为源码级拿不到字号，宁可从严；`.bad-c` 就是「白字压 --accent（3.49）」这条复发警报。 */
+    C1b：产品写的是 `color:var(--cta-ink)`（不是字面量 #fff），所以 color 也要把 var() 解析成真实值再判，
+    否则这道闸门只在自己测自己（对四个产品文件全返回 []）。
+    2026-09-24（第二轮）：主按钮改「轻渐变薄荷 + 通透感」（三站 --grad/#0b8663→#2e9c76），
+    白字压浅薄荷过不了 AA 正文 4.5 —— 这是用户【已知情并接受】的取舍。所以源码级门槛从 4.5
+    降到 3.0（WHITE_MIN，见 app3/palette.spec.ts）；3:1 是硬底线，白字压 ≈2.0 那档照样会红。
+    白字压 `--accent`（3.49）在新门槛下不再响 —— 那档是用户接受的同一族，已由浅薄荷主色取代。 */
 const overWhite = (c: [number, number, number, number]): [number, number, number, number] => {
   const a = Math.min(1, Math.max(0, c[3]));
   return [c[0] * a + 255 * (1 - a), c[1] * a + 255 * (1 - a), c[2] * a + 255 * (1 - a), 1];
@@ -60,7 +63,7 @@ const contrast = (a: number[], b: number[]) => {
   const A = relLum(a), B = relLum(b);
   return (Math.max(A, B) + 0.05) / (Math.min(A, B) + 0.05);
 };
-const SOURCE_MIN = 4.5;   // 源码级底线：正文门槛（拿不到字号，从严）
+const SOURCE_MIN = 3.0;   // 源码级底线：白字压主色的用户知情下限（AA 正文 4.5 已被主动放弃）
 
 const scanCssSource = (file: string) => {
   const html = fs.readFileSync(file, 'utf-8');
@@ -151,7 +154,10 @@ const sweepLive = (page: import('@playwright/test').Page) => page.evaluate(() =>
     seen++;
     const px = parseFloat(cs.fontSize);
     const large = px >= 24 || (px >= 18.66 && parseInt(cs.fontWeight, 10) >= 700);
-    const need = (isIcon || large) ? 3 : 4.5;
+    /* 近白的字压绿底 = 用户拍板的「浅薄荷 + 白字」那一族，门槛用 3:1（用户知情下限）；
+       其它字色（深墨等）仍按 AA：大字/图标 3、正文 4.5。 */
+    const isWhiteInk = fg[0] >= 235 && fg[1] >= 235 && fg[2] >= 235;
+    const need = isWhiteInk ? 3 : ((isIcon || large) ? 3 : 4.5);
     const worst = Math.min(...bgs.map((b) => ratio(fg, b)));
     if (worst < need) bad.push({ sel: el.id ? '#' + el.id : el.tagName.toLowerCase(), ratio: +worst.toFixed(2), need });
   });
@@ -204,7 +210,7 @@ test.describe('绿底按钮的字色 · 全站对比度', () => {
   test('源码里不许再有「白字压过亮的绿」（含看不见的热态和弹层，三站都查）', () => {
     // 先自检这道闸门本身：坏写法必须响、好写法必须不响
     const fx = scanCssSource(path.join(root, 'playwright-tests/fixtures/cta-gate-selfcheck.css'));
-    expect(fx.sort()).toEqual(['.bad-a', '.bad-b', '.bad-c']);
+    expect(fx.sort()).toEqual(['.bad-a', '.bad-b']);
     const report = ['shadow/index.html', 'index.html', 'app/index.html', 'admin/index.html']
       .map((f) => [f, scanCssSource(path.join(root, f))] as const)
       .filter(([, h]) => h.length > 0);
@@ -232,8 +238,9 @@ test.describe('绿底按钮的字色 · 全站对比度', () => {
       return { color: cs.color, bg: cs.backgroundImage.slice(0, 90) };
     });
     expect(one.color).toBe('rgb(255, 255, 255)');      // --cta-ink 回到 #fff
-    expect(one.bg).toContain('11, 134, 99');           // #0b8663 —— 三站统一的中调薄荷最亮档（配白字 4.56:1）
-    expect(one.bg).not.toContain('43, 212, 164');      // 不再是 #2bd4a4（白字只有 1.90）
+    expect(one.bg).toContain('46, 156, 118');           // #2e9c76 —— 三站统一的轻薄荷最亮档（白字 3.42:1，用户知情下限 3:1）
+    expect(one.bg).not.toContain('43, 212, 164');       // 不再是 #2bd4a4（白字只有 1.90）
+    expect(one.bg).not.toContain('11, 134, 99');        // 也不是旧的中调 #0b8663（白字 4.56，用户嫌太重）
     const r = await sweepLive(page);
     expect(r.bad, JSON.stringify(r.bad)).toEqual([]);
     expect(r.seen).toBeGreaterThan(0);
