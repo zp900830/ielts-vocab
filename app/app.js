@@ -1027,7 +1027,10 @@
     let bottom = mobile ? ((nav ? nav.offsetHeight : 56) + 12) : 24;
     const bar = document.getElementById('taskBar');
     if (bar && bar.classList.contains('show') && getComputedStyle(bar).display !== 'none') {
-      bottom = Math.max(bottom, 12 + bar.offsetHeight + 12);
+      /* 按条子【真实的顶边】让位，别写死 bottom:12 —— M6 N1 起手机续读条会抬到 TabBar 之上
+         （bottom 不再是 12），写死 12 会让悬浮球正好压在续读条上。 */
+      const r = bar.getBoundingClientRect();
+      if (r.height > 0) bottom = Math.max(bottom, (window.innerHeight - r.top) + 12);
     }
     el.style.bottom = bottom + 'px';
   }
