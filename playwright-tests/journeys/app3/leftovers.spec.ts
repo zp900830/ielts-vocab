@@ -245,8 +245,13 @@ test.describe('3.0 W2 深色全覆盖', () => {
 });
 
 /* ===================== W6 · PWA（PRD §2.5） ===================== */
+/* 2026-09-24 根因修复：SW 从 blob 内联脚本改为仓内真实文件 /app/sw.js。
+   旧 blob 形式在 Chromium 里 register 直接被拒（blob 协议不被支持），SW 从未注册 ——
+   M2 往 blob 代码里加的「缓存失败退回网络」是死代码，静态服务器偶发丢 /app/app.js 时无兜底 → 白屏。
+   这组锁：① 注册指向真实文件（非 blob）；② 文件真能取到且是 SW 源码；③ 真实浏览器里注册成功、
+   scope=/app/；④ 高重复加载 app.js 每次都能执行；⑤ 断网 reload 仍能靠缓存供上 app.js。 */
 test.describe('3.0 W6 PWA', () => {
-  test('/app/ 有 manifest 链接，且启动时注册 service worker（scope = /app/）', async ({ page }) => {
+  test('/app/ 有 manifest 链接，且启动时用真实文件 sw.js 注册（scope = /app/，不是 blob）', async ({ page }) => {
     // 注册在启动时发生，来不及在页面里 stub —— 用 addInitScript 在页面脚本前把 register 换掉
     await page.addInitScript(() => {
       (window as unknown as { __swCalls: unknown[] }).__swCalls = [];
@@ -273,11 +278,86 @@ test.describe('3.0 W6 PWA', () => {
     expect(json.display).toBe('standalone');
     expect(json.start_url).toBeTruthy();
 
-    // service worker 注册：被调用，且 scope 落在 /app/
+    // service worker 注册：被调用，URL 是真实文件 sw.js（不是 blob:），scope 落在 /app/
     await page.waitForFunction(() => ((window as unknown as { __swCalls?: unknown[] }).__swCalls || []).length > 0);
     const calls = await page.evaluate(() => (window as unknown as { __swCalls: { url: string; scope?: string }[] }).__swCalls);
     expect(calls.length, '启动时必须尝试注册 service worker').toBeGreaterThan(0);
+    expect(calls[0].url, '必须注册真实文件 sw.js，不能再是 blob:').not.toContain('blob:');
+    expect(calls[0].url, '注册 URL 必须指向 /app/sw.js').toMatch(/\/app\/sw\.js(\?|$)/);
     expect(calls[0].scope, 'service worker 的 scope 必须是 /app/').toContain('/app/');
     expect(errors, 'PWA 初始化不许抛出未捕获错误').toEqual([]);
+  });
+
+  test('/app/sw.js 是真实文件：能取到、是 SW 源码（非 blob）、network-first', async ({ request }) => {
+    const res = await request.get(`${rootUrl}/app/sw.js`);
+    expect(res.status(), '/app/sw.js 必须 200 —— 真实文件，不是脚本内联的 blob').toBe(200);
+    const body = await res.text();
+    expect(body.trim().startsWith('blob:'), '内容不能是一个 blob: URL 字符串').toBe(false);
+    expect(body.length, '必须是一整份 SW 源码，不是一个短 URL').toBeGreaterThan(200);
+    expect(body, '必须是真的 SW 源码').toContain("self.addEventListener('fetch'");
+    expect(body, '必须有缓存名（activate 清理旧缓存靠它）').toContain('CACHE_NAME');
+    expect(body, '必须有 fetch 失败退回 caches.match 的兜底').toMatch(/catch[\s\S]*caches\.match/);
+  });
+
+  test('真实浏览器里 SW 注册成功、已激活，scope = /app/，脚本是真实文件', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    // 条件等待：本页 scope 的注册已激活（不 sleep）
+    await page.waitForFunction(async () => {
+      try {
+        const reg = await navigator.serviceWorker.getRegistration();
+        return !!(reg && reg.active);
+      } catch (e) { return false; }
+    });
+    const info = await page.evaluate(async () => {
+      const reg = await navigator.serviceWorker.getRegistration();
+      return { scope: (reg && reg.scope) || '', scriptURL: (reg && reg.active && reg.active.scriptURL) || '' };
+    });
+    expect(info.scope, 'scope 必须落在 /app/').toContain('/app/');
+    expect(info.scriptURL, '脚本必须是真实文件 /app/sw.js').toMatch(/\/app\/sw\.js$/);
+  });
+
+  test('高重复加载 /app/：app.js 每次都真的执行（回归锁：旧 blob SW 曾让 app.js 拿不到）', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    // 先让真实 SW 激活，后面的 reload 才都在 SW 接管下
+    await page.waitForFunction(async () => {
+      try { const reg = await navigator.serviceWorker.getRegistration(); return !!(reg && reg.active); }
+      catch (e) { return false; }
+    });
+    const RELOADS = 15;
+    for (let i = 0; i < RELOADS; i++) {
+      await page.reload();
+      // APP3.route 由 defer 的 app.js 定义；app.js 拿不到就永远等 → 红灯。条件等待，不 sleep。
+      await page.waitForFunction(() => {
+        const w = window as unknown as { APP3?: { route?: unknown } };
+        return !!(w.APP3 && typeof w.APP3.route === 'function');
+      }, undefined, { timeout: 20000 });
+    }
+  });
+
+  test('断网后 reload：SW 仍从缓存供上 /app/app.js（network-first 的可靠兜底）', async ({ page, context }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.waitForFunction(async () => {
+      try { const reg = await navigator.serviceWorker.getRegistration(); return !!(reg && reg.active); }
+      catch (e) { return false; }
+    });
+    // 被接管的一轮：导航与 app.js 进缓存
+    await page.reload();
+    await page.waitForFunction(() => {
+      const w = window as unknown as { APP3?: { route?: unknown } };
+      return !!(w.APP3 && typeof w.APP3.route === 'function');
+    });
+    await context.setOffline(true);
+    try {
+      await page.reload();
+      await page.waitForFunction(() => {
+        const w = window as unknown as { APP3?: { route?: unknown } };
+        return !!(w.APP3 && typeof w.APP3.route === 'function');
+      }, undefined, { timeout: 20000 });
+    } finally {
+      await context.setOffline(false);
+    }
   });
 });

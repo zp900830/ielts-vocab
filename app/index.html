@@ -7776,9 +7776,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     initApp(); loadVoices();
 
     /* ============ W6 · PWA（PRD §2.5）：service worker ============
-       继承主站那套：manifest 走 data-URI（见 <head>），SW 由脚本内联成 Blob 再注册 —— 不往
-       构建白名单加运行时文件。scope 取当前目录（/app/），SW 只管 3.0 自己。
-       注册失败（如个别浏览器不支持 blob 协议的脚本）静默降级，绝不抛未捕获错误。 */
+       注册仓内**真实文件** /app/sw.js（scope /app/）。2026-09-24 根因修复：旧实现把 SW
+       内联成 Blob 再 register(blobUrl) —— Chromium 直接拒绝（blob 协议不被支持），SW 从未
+       注册，M2 加的「失败退回网络」是死代码；静态服务器偶发丢 /app/app.js 时页面就白屏。
+       策略与缓存名见 app/sw.js。manifest 仍走 data-URI（见 <head>）。
+       注册失败静默降级，绝不抛未捕获错误。 */
     const App3PWA = (function () {
       const state = { manifest: null, attempted: false, ok: false, error: null };
       try {
@@ -7790,30 +7792,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         state.attempted = true;
         try {
           const scopePath = location.pathname.replace(/\/[^/]*$/, '/') || '/';
-          const swCode = `
-const CACHE_NAME = 'ielts-app3-v1';
-self.addEventListener('install', e => { self.skipWaiting(); });
-self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
-self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  /* 缓存只做「加速」：任何 cache 读写失败都必须退回直连网络，绝不能让 respondWith 变成
-     rejected —— 那会让 /app/app.js 这类 defer 脚本直接加载失败、#appView 永远空着
-     （2026-09-24 M2 评审：高并发下实测偶发）。 */
-  e.respondWith((async () => {
-    try { const hit = await caches.match(e.request); if (hit) return hit; } catch (_) {}
-    const res = await fetch(e.request);
-    try {
-      if (res && res.status === 200) {
-        const c = res.clone();
-        caches.open(CACHE_NAME).then(cc => cc.put(e.request, c)).catch(() => {});
-      }
-    } catch (_) {}
-    return res;
-  })());
-});
-`;
-          const blob = new Blob([swCode], { type: 'application/javascript' });
-          const swUrl = URL.createObjectURL(blob);
+          const swUrl = new URL('sw.js', location.href).href;
           const reg = await navigator.serviceWorker.register(swUrl, { scope: scopePath });
           state.ok = true; state.scope = reg && reg.scope;
           try { console.log('[APP3] Service Worker registered', state.scope); } catch (e) {}

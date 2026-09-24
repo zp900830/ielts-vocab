@@ -57,29 +57,22 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
   }
 }
 
-/* 应用就绪闸门（评审 Important①）。三层：
+/* 应用就绪闸门（评审 Important①）。两层：
    ① waitShadowReady：dataReady + sents 已渲（utils/app-ready 的条件等待，与 playback-resume 同一把闸）；
    ② 等 #appView 真的渲出学习数据页（.stats-page 或有计划前的 .st-empty-start）——
       只等 ① 不够（dataReady/sents 由**内联脚本**设置，renderStats 却在 defer 的 app.js 里），
-      高并发下 #appView 会停在「正在载入…」/空，5s 的 locator 自动等待会偶发红；
-   ③ 有界重载重试：8932 那台 python http.server 偶发丢 /app/app.js（defer 脚本没执行 →
-      #appView 永远空），重载一次基本必好。3 次仍不成就真失败，不吞错。 */
+      高并发下 #appView 会停在「正在载入…」/空，5s 的 locator 自动等待会偶发红。
+   2026-09-24 根因修复后去掉 M2 的「有界重载重试」：那个重试是为绕开 blob-URL SW 不生效、
+   app.js 偶发丢而加的缓解，会把以后 app.js 的真故障一起吞掉。现在 SW 是真实文件
+   /app/sw.js（network-first + 缓存兜底），app.js 有可靠保障，不需要重试。 */
 async function waitStatsReady(page: import('@playwright/test').Page) {
-  for (let attempt = 0; ; attempt++) {
-    try {
-      await waitShadowReady(page);
-      await page.waitForFunction(() => {
-        const w = window as unknown as { APP3?: { renderStats?: unknown } };
-        if (!(w.APP3 && typeof w.APP3.renderStats === 'function')) return false;
-        const v = document.getElementById('appView');
-        return !!(v && (v.querySelector('.stats-page') || v.querySelector('.st-empty-start')));
-      }, undefined, { timeout: 20000 });
-      return;
-    } catch (e) {
-      if (attempt >= 2) throw e;
-      await page.reload();
-    }
-  }
+  await waitShadowReady(page);
+  await page.waitForFunction(() => {
+    const w = window as unknown as { APP3?: { renderStats?: unknown } };
+    if (!(w.APP3 && typeof w.APP3.renderStats === 'function')) return false;
+    const v = document.getElementById('appView');
+    return !!(v && (v.querySelector('.stats-page') || v.querySelector('.st-empty-start')));
+  }, undefined, { timeout: 20000 });
 }
 
 async function gotoStats(page: import('@playwright/test').Page) {
