@@ -28,8 +28,6 @@ declare const window: { __supaReject?: boolean };
 
 /* ---------------- 源码级：把 CSS 里的"绿底 + 白字"规则抓出来 ---------------- */
 
-const WHITE_INK = /(?:^|[;\s])color:\s*(?:#fff\b|#ffffff\b|white\b|rgb\(255,\s*255,\s*255\))/i;
-
 const parseColor = (t: string): [number, number, number, number] | null => {
   let m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(t);
   if (m) { let h = m[1]; if (h.length === 3) h = h.split('').map((c) => c + c).join('');
@@ -46,9 +44,10 @@ const isGreenFill = (c: [number, number, number, number]) => {
   return g > 110 && g - r > 25 && g - b > 25;
 };
 
-/* 2026-09-24：白字回到绿底上（用户拍板），所以源码级不再「见绿底+白字就响」，
-   改成量对比度 —— 只有白字压「过亮的绿」才响。源码级拿不到字号/图标，故用最松的那条底线 3:1
-   （图标底线）；live 级（sweepLive）仍按字号/图标逐元素严格判 3 或 4.5。 */
+/* 2026-09-24：白字回到绿底上（用户拍板），所以源码级不再「见绿底+白字就响」，改成量对比度。
+   C1b：产品写的是 `color:var(--cta-ink)`（不是字面量 #fff），所以 color 也要把 var() 解析成真实值再判，
+   否则这道闸门只在自己测自己（对四个产品文件全返回 []）。阈值取 4.5（正文门槛）——
+   因为源码级拿不到字号，宁可从严；`.bad-c` 就是「白字压 --accent（3.49）」这条复发警报。 */
 const overWhite = (c: [number, number, number, number]): [number, number, number, number] => {
   const a = Math.min(1, Math.max(0, c[3]));
   return [c[0] * a + 255 * (1 - a), c[1] * a + 255 * (1 - a), c[2] * a + 255 * (1 - a), 1];
@@ -61,7 +60,7 @@ const contrast = (a: number[], b: number[]) => {
   const A = relLum(a), B = relLum(b);
   return (Math.max(A, B) + 0.05) / (Math.min(A, B) + 0.05);
 };
-const SOURCE_MIN = 3;   // 源码级粗筛底线（图标 3:1）
+const SOURCE_MIN = 4.5;   // 源码级底线：正文门槛（拿不到字号，从严）
 
 const scanCssSource = (file: string) => {
   const html = fs.readFileSync(file, 'utf-8');
@@ -83,15 +82,21 @@ const scanCssSource = (file: string) => {
   };
   const hits: string[] = [];
   [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].forEach(([, rawSel, decl]) => {
-    const bg = new RegExp(`background(?:-color)?\\s*:[^;]*`, 'i').exec(decl);
-    if (!bg || !WHITE_INK.test(decl)) return;
-    const flat = resolve(bg[0]);
+    const bgM = /background(?:-color)?\s*:\s*([^;]*)/i.exec(decl);
+    if (!bgM) return;
+    const colM = /(?:^|[;\s])color\s*:\s*([^;]*)/i.exec(decl);
+    if (!colM) return;
+    // color 也要解析 var()（产品写的是 var(--cta-ink)）→ 只有「近白且不透明」的字才进本门禁
+    const ink = parseColor(resolve(colM[1]).trim());
+    if (!ink) return;
+    if (!(ink[3] >= 0.5 && ink[0] >= 235 && ink[1] >= 235 && ink[2] >= 235)) return;
+    const flat = resolve(bgM[1]);
     const colors = [...flat.matchAll(/#[0-9a-f]{3}\b|#[0-9a-f]{6}\b|rgba?\([^)]+\)/gi)]
       .map((m) => parseColor(m[0])).filter(Boolean) as [number, number, number, number][];
     const greens = colors.filter(isGreenFill);
     if (!greens.length) return;
     /* 白字压每一档绿：取最差（最亮那档）的对比度，低于底线才算「过亮的绿」。
-       渐变要逐档量 —— 亮端 #2bd4a4 正是压不住白字的那一端。 */
+       渐变要逐档量 —— 亮端正是压不住白字的那一端。 */
     const worst = Math.min(...greens.map((g) => contrast([255, 255, 255], overWhite(g))));
     if (worst < SOURCE_MIN) hits.push(rawSel.trim().replace(/\s+/g, ' ').slice(-70));
   });
@@ -199,7 +204,7 @@ test.describe('绿底按钮的字色 · 全站对比度', () => {
   test('源码里不许再有「白字压过亮的绿」（含看不见的热态和弹层，三站都查）', () => {
     // 先自检这道闸门本身：坏写法必须响、好写法必须不响
     const fx = scanCssSource(path.join(root, 'playwright-tests/fixtures/cta-gate-selfcheck.css'));
-    expect(fx.sort()).toEqual(['.bad-a', '.bad-b']);
+    expect(fx.sort()).toEqual(['.bad-a', '.bad-b', '.bad-c']);
     const report = ['shadow/index.html', 'index.html', 'app/index.html', 'admin/index.html']
       .map((f) => [f, scanCssSource(path.join(root, f))] as const)
       .filter(([, h]) => h.length > 0);
@@ -227,7 +232,7 @@ test.describe('绿底按钮的字色 · 全站对比度', () => {
       return { color: cs.color, bg: cs.backgroundImage.slice(0, 90) };
     });
     expect(one.color).toBe('rgb(255, 255, 255)');      // --cta-ink 回到 #fff
-    expect(one.bg).toContain('10, 131, 96');           // #0a8360 —— 压深后的最亮档（配白字 4.74:1）
+    expect(one.bg).toContain('11, 134, 99');           // #0b8663 —— 三站统一的中调薄荷最亮档（配白字 4.56:1）
     expect(one.bg).not.toContain('43, 212, 164');      // 不再是 #2bd4a4（白字只有 1.90）
     const r = await sweepLive(page);
     expect(r.bad, JSON.stringify(r.bad)).toEqual([]);

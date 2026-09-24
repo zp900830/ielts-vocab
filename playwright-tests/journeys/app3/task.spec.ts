@@ -704,11 +704,18 @@ test.describe('3.0 终审顺手项', () => {
     // .b-go：横幅那颗
     const goH = await page.locator('#homeBanner .b-go').evaluate((el) => el.getBoundingClientRect().height);
     expect(goH, '.b-go 触区').toBeGreaterThanOrEqual(44);
-    /* 文章内头部（W1 重做）：.back 照抄主站，30px 视觉 + ::after 外扩热区（不撑大视觉）。
-       所以这里只断言它在，不再断言 44px —— 主站的头部组件本就用 hit-slop 而不是放大视觉。 */
+    /* 文章内头部（W1 重做）：.back 照抄主站视觉尺寸（30px），触区靠 ::after 外扩（不撑大视觉）。
+       M3：把「有效触区 = 视觉盒 + ::after 每边 inset」量出来断言 ≥44（PRD §10.4），不再只断言「它在」。 */
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskTop')).toBeVisible();
-    await expect(page.locator('#taskTop .reader-head .back')).toBeVisible();
+    const backHit = await page.locator('#taskTop .reader-head .back').evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      const a = getComputedStyle(el, '::after');
+      const slop = Math.max(Math.abs(parseFloat(a.top) || 0), Math.abs(parseFloat(a.left) || 0));
+      return { w: r.width, h: r.height, slop, hitW: r.width + 2 * slop, hitH: r.height + 2 * slop };
+    });
+    expect(backHit.hitW, `back 有效触区宽 ${JSON.stringify(backHit)}`).toBeGreaterThanOrEqual(44);
+    expect(backHit.hitH, `back 有效触区高 ${JSON.stringify(backHit)}`).toBeGreaterThanOrEqual(44);
     await page.locator('#taskTop .reader-head .back').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
     // .a-quiz：通读满后卡片才出「答题」
