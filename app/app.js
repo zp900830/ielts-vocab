@@ -874,15 +874,20 @@
       </div>
       <div class="mp-foot">${acc.logged
         ? `<button class="mp-logout" type="button" data-me-logout>退出登录</button>`
-        : `<div class="mp-login-form">
+        : `<form class="mp-login-form" data-me-form>
              <input id="meEmail" type="email" placeholder="邮箱" autocomplete="email" aria-label="邮箱">
              <input id="mePass" type="password" placeholder="密码" autocomplete="current-password" aria-label="密码">
-             <div class="row"><button type="button" data-me-login>登录</button><button type="button" data-me-signup>注册</button></div>
-           </div>`}</div>
+             <div class="row"><button type="submit" data-me-login>登录</button><button type="button" data-me-signup>注册</button></div>
+           </form>`}</div>
       <input type="file" id="meImportFile" accept="application/json,.json" style="display:none">`;
     // 音色选择器（③ 挪进来）：重渲后 #voicePop 是新元素，要重新渲染 + 重新绑事件代理。
     try { if (typeof renderVoicePop === 'function') renderVoicePop(); } catch (e) {}
     wireVoicePop();
+    // §10.4：重渲把原焦点节点摘掉（activeElement 掉到 body）—— 浮窗若还开着，把焦点收回浮窗。
+    if (!pop.hidden && (document.activeElement === document.body || !pop.contains(document.activeElement))) {
+      pop.tabIndex = -1;
+      try { pop.focus(); } catch (e) {}
+    }
   }
   // 浮窗开在用户卡正上方（桌面 300px 宽；手机通栏 bottom-sheet），高度夹在卡片上沿以内。
   function positionMePop() {
@@ -902,15 +907,22 @@
     if (!pop) return;
     renderMePop();
     pop.hidden = false;
+    pop.setAttribute('aria-modal', 'true');
     positionMePop();
     const card = document.getElementById('meCard');
     if (card) card.setAttribute('aria-expanded', 'true');
+    // §10.4：打开即把焦点送进浮窗（键盘用户不必从头 Tab 到它）。
+    pop.tabIndex = -1;
+    try { pop.focus(); } catch (e) {}
   }
   function closeMePop() {
     const pop = document.getElementById('mePop');
+    const wasOpen = !!pop && !pop.hidden;
     if (pop) pop.hidden = true;
     const card = document.getElementById('meCard');
     if (card) card.setAttribute('aria-expanded', 'false');
+    // §10.4：关闭把焦点归还触发它的「我的」一行，别让键盘焦点掉到 body。
+    if (wasOpen && card) { try { card.focus(); } catch (e) {} }
   }
   function toggleMePop() {
     const pop = document.getElementById('mePop');
@@ -925,7 +937,7 @@
     if (!pop || pop._wired) return;
     pop._wired = true;
     pop.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-bound],[data-me-new],[data-me-export],[data-me-import],[data-me-login],[data-me-signup],[data-me-logout]');
+      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-bound],[data-me-new],[data-me-export],[data-me-import],[data-me-signup],[data-me-logout]');
       if (!t) return;
       // 有些按钮点完会 renderMePop() 重渲（主题/分钟/日界/新词）—— 重渲会把 e.target 从 DOM 摘下来，
       // 事件继续冒泡到 document 的「点外面收掉」监听时，target 已不在 #mePop 里，会被误判成点外面。
@@ -941,12 +953,33 @@
       else if (t.hasAttribute('data-me-new')) { TASK.setPauseNew(t.dataset.meNew === '1'); renderMePop(); }
       else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }
       else if (t.hasAttribute('data-me-import')) { TASK.importBackup('meImportFile'); }
-      else if (t.hasAttribute('data-me-login')) { meLogin(); }
       else if (t.hasAttribute('data-me-signup')) { meSignup(); }
       else if (t.hasAttribute('data-me-logout')) { meLogout(); }
     });
+    // 登录走 <form> 提交：点「登录」（type=submit）与在输入框里按 Enter 是同一条路（§10.4 键盘可达）。
+    pop.addEventListener('submit', (e) => {
+      const form = e.target.closest('[data-me-form]');
+      if (!form) return;
+      e.preventDefault();
+      e.stopPropagation();
+      meLogin();
+    });
+    // §10.4：Tab 在浮窗内收敛，别让键盘焦点逃到背景里的侧栏/正文。
+    pop.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const nodes = Array.prototype.filter.call(
+        pop.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'),
+        (el) => !el.disabled && el.offsetParent !== null);
+      if (!nodes.length) return;
+      const first = nodes[0], last = nodes[nodes.length - 1];
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === pop)) {
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault(); first.focus();
+      }
+    });
   }
-  window.APP3 = Object.assign(window.APP3, { renderMePop, openMePop, closeMePop, toggleMePop, meLogin, meLogout, updateMeCard });
+  window.APP3 = Object.assign(window.APP3, { renderMePop, openMePop, closeMePop, toggleMePop, meLogin, meLogout, meSignup, updateMeCard });
   // 点浮窗外面收掉；Esc 也收。
   document.addEventListener('click', (e) => {
     const pop = document.getElementById('mePop');

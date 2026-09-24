@@ -1712,6 +1712,17 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .mp-row .ps-opts { justify-content: flex-end; flex-wrap: wrap; }
   .mp-row .ps-opt { padding: 5px 10px; font-size: 12px; }
   .mp-row .tr-msw { padding: 4px 8px 4px 4px; }
+  /* M5（§10.4）：浮窗内所有可点控件触摸目标 ≥44px。scope 在 .me-pop ——
+     文章内那套紧凑控件（.r-badges 等）另有口径，不跟着变高。 */
+  .me-pop .accent-btn,
+  .me-pop .voice-btn,
+  .me-pop .tr-msw,
+  .me-pop .mp-login-form input,
+  .me-pop .mp-login-form .row button,
+  .me-pop .mp-logout,
+  .me-pop .mp-row .ps-opt { min-height: 44px; }
+  .me-pop .tr-msw { align-items: center; }
+  .me-pop .accent-btn { display: inline-flex; align-items: center; }
   .mp-foot { margin-top: 12px; }
   .mp-logout { width: 100%; min-height: 40px; border: 1px solid var(--border); border-radius: 999px;
     background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; }
@@ -7930,6 +7941,9 @@ let listenOn = false;
          按篇账（§7.6/§9.4），必须随备份走 —— 否则换设备后精读次数与「已学完」凭据全丢。 */
       const BACKUP_EXTRA = ['ielts.shadow.v2', LS_ARTICLE];
       const isBackupKey = k => !!k && (k.startsWith(BACKUP_PREFIX) || BACKUP_EXTRA.includes(k));
+      /* 这两个根必须是能 JSON.parse 的对象：坏值会让下次启动的引擎重放直接抛错（白屏）。
+         其余 ielts-* 是标量（音色 URI / 深色标记 / 倍速…），只要求是字符串。 */
+      const BACKUP_JSON_ROOTS = ['ielts.shadow.v2', LS_ARTICLE];
       function collectBackup() {
         const data = {};
         for (let i = 0; i < localStorage.length; i++) {
@@ -7938,9 +7952,48 @@ let listenOn = false;
         }
         return data;
       }
+      function validBackupValue(k, v) {
+        if (typeof v !== 'string') return false;
+        if (BACKUP_JSON_ROOTS.includes(k)) {
+          try { const o = JSON.parse(v); return !!o && typeof o === 'object'; } catch (e) { return false; }
+        }
+        return true;
+      }
+      /* 只校验、不落盘 —— 导入流程在 confirm 之前先跑它，坏备份根本不进写入阶段。 */
+      function parseBackup(o) {
+        if (!o || typeof o !== 'object' || Array.isArray(o)) return { ok: false, reason: '备份文件格式不对' };
+        if (o.app !== 'ielts-shadow' || !o.data || typeof o.data !== 'object' || Array.isArray(o.data)) {
+          return { ok: false, reason: '这不是影子跟读导出的备份文件' };
+        }
+        const keys = Object.keys(o.data).filter(isBackupKey);
+        if (!keys.length) return { ok: false, reason: '备份里没有可恢复的数据' };
+        for (const k of keys) {
+          if (!validBackupValue(k, o.data[k])) return { ok: false, reason: `备份里的「${k}」内容已损坏，已拒绝导入` };
+        }
+        return { ok: true, keys };
+      }
+      function backupPayload() {
+        return { app: 'ielts-shadow', backupVer: 1, exportedAt: new Date().toISOString(), data: collectBackup() };
+      }
+      /* 落盘：先快照整个备份域，任一步失败就把域内清空 + 按快照写回 —— 绝不半截覆盖。
+         返回 {ok} 或 {ok:false,reason,rolledBack}；不 reload、不 confirm（UX 由 importBackup 负责）。 */
+      function applyBackup(o, keys) {
+        const snapshot = collectBackup();
+        const wanted = keys || Object.keys(o.data).filter(isBackupKey);
+        try {
+          wanted.forEach(k => localStorage.setItem(k, o.data[k]));
+          Object.keys(collectBackup()).forEach(k => { if (!wanted.includes(k)) localStorage.removeItem(k); });
+        } catch (e) {
+          try {
+            Object.keys(collectBackup()).forEach(k => localStorage.removeItem(k));
+            Object.keys(snapshot).forEach(k => localStorage.setItem(k, snapshot[k]));
+          } catch (e2) {}
+          return { ok: false, reason: '导入失败：本地存储写入被拒绝（可能已满），已回滚', rolledBack: true };
+        }
+        return { ok: true };
+      }
       function exportBackup() {
-        const data = collectBackup();
-        const payload = { app: 'ielts-shadow', backupVer: 1, exportedAt: new Date().toISOString(), data };
+        const payload = backupPayload();
         const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
@@ -7951,7 +8004,7 @@ let listenOn = false;
         a.click();
         a.remove();
         setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-        showAbToast(`已导出 ${Object.keys(data).length} 项本地数据，请妥善保存文件`);
+        showAbToast(`已导出 ${Object.keys(payload.data).length} 项本地数据，请妥善保存文件`);
       }
       function importBackup(id) {
         const f = document.getElementById(id || 'importFile');
@@ -7962,16 +8015,11 @@ let listenOn = false;
           if (!file) return;
           let o;
           try { o = JSON.parse(await file.text()); } catch (e) { showAbToast('导入失败：文件不是有效 JSON'); return; }
-          if (!o || o.app !== 'ielts-shadow' || !o.data || typeof o.data !== 'object') {
-            showAbToast('导入失败：这不是影子跟读导出的备份文件'); return;
-          }
+          const parsed = parseBackup(o);
+          if (!parsed.ok) { showAbToast('导入失败：' + parsed.reason); return; }
           if (!confirm(`导入将覆盖当前全部跟读数据（计划、进度、书签、播放位）。\n备份导出时间：${o.exportedAt || '未知'}\n确定继续吗？`)) return;
-          const keys = Object.keys(o.data).filter(isBackupKey);
-          if (!keys.length) { showAbToast('导入失败：备份里没有可恢复的数据'); return; }
-          try {
-            keys.forEach(k => localStorage.setItem(k, o.data[k]));
-            Object.keys(collectBackup()).forEach(k => { if (!keys.includes(k)) localStorage.removeItem(k); });
-          } catch (e) { showAbToast('导入失败：本地存储写入被拒绝（可能已满）'); return; }
+          const r = applyBackup(o, parsed.keys);
+          if (!r.ok) { showAbToast(r.reason); return; }
           showAbToast('导入成功，正在重新加载');
           setTimeout(() => location.reload(), 400);
         };
@@ -8136,7 +8184,7 @@ let listenOn = false;
         get listenArticle() { return _listenArticle; },
         again, prev, next, pauseNew, resetPlan, onSentenceComplete,
         taskSentenceFinished,
-        exportBackup, importBackup,
+        exportBackup, importBackup, backupPayload, parseBackup, applyBackup,
         get active() { return taskMode; },
         get hasPlan() { return !!plan; },
         get article() { return currentArticle; },   // W1：文章内头部要按当前篇填标题/箭头
