@@ -17,6 +17,26 @@
 
 const CACHE_NAME = 'ielts-app3-runtime-v1';
 
+/* M6：离线兜底页。network-first + 缓存兜底能覆盖「访问过一次后断网」，但若导航请求既没网、
+   缓存又没命中（清了缓存 / 新部署还没进缓存），respondWith 只能 reject → 浏览器白屏。
+   导航类请求（req.mode === 'navigate'）给一张极简离线页，至少不是白屏、能重试。 */
+const OFFLINE_HTML = [
+  '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">',
+  '<meta name="viewport" content="width=device-width,initial-scale=1">',
+  '<title>离线 · 雅思背单词 3.0</title>',
+  '<style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;',
+  'background:#faf8f4;color:#2b3028;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}',
+  'main{text-align:center;padding:24px}h1{font-size:20px;margin:0 0 8px}',
+  'p{color:#6b665a;font-size:14px;line-height:1.7;margin:0 0 18px}',
+  'button{border:0;border-radius:999px;padding:12px 22px;font-size:15px;font-weight:700;',
+  'color:#fff;background:linear-gradient(135deg,#2e9c76,#0f7c5a);cursor:pointer}',
+  '@media (prefers-color-scheme:dark){body{background:#1c1a17;color:#e2ddd5}p{color:#a39b8e}}</style></head>',
+  '<body><main><h1>当前离线</h1>',
+  '<p>已访问过的内容仍可离线使用；新内容需要联网。<br>连上网后点下面重试。</p>',
+  '<button onclick="location.reload()">重试</button></main></body></html>',
+].join('');
+
+
 self.addEventListener('install', () => {
   self.skipWaiting();
 });
@@ -53,7 +73,10 @@ self.addEventListener('fetch', (e) => {
       try {
         const hit = await caches.match(req);
         if (hit) return hit;
-      } catch (_) { /* 缓存读失败 → 走下面的 throw */ }
+      } catch (_) { /* 缓存读失败 → 走下面的兜底/throw */ }
+      if (req.mode === 'navigate') {
+        return new Response(OFFLINE_HTML, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+      }
       throw err;   // 真离线且无缓存：让浏览器照常报网络失败
     }
   })());
