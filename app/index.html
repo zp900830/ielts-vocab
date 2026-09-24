@@ -1880,6 +1880,69 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .st-art .sa-bar { background: var(--hl); }
   @media (max-width: 1023px) { .st-arts { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 700px) { .st-arts { grid-template-columns: 1fr; } }
+  /* ============ 3.0 单词本（M3，PRD §6） ============ */
+  .words-page { max-width: 880px; }
+  .words-page > h1 { font-size: 22px; font-weight: 800; color: var(--text); margin: 2px 0 14px; }
+  .wb-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .wb-filter { min-height: 44px; padding: 0 16px; border: 1px solid var(--border); border-radius: 999px;
+    background: var(--card); color: var(--text); font: inherit; font-size: 13px; font-weight: 600;
+    cursor: pointer; box-shadow: var(--shadow); }
+  .wb-filter .wf-n { color: var(--muted); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .wb-filter[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-text); }
+  .wb-filter[aria-pressed="true"] .wf-n { color: var(--accent-text); }
+  .wb-hint { font-size: 11.5px; color: var(--muted); margin: 0 0 10px; }
+  .wb-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; }
+  .wb-row { display: block; width: 100%; min-height: 44px; text-align: left; padding: 10px 14px;
+    border: 1px solid var(--border); border-radius: 14px; background: var(--card); color: inherit;
+    font: inherit; cursor: pointer; box-shadow: var(--shadow); }
+  .wb-row:hover { border-color: var(--accent-line); }
+  .wb-item.open .wb-row { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+  .wr-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .wr-word { font-size: 15px; font-weight: 700; }
+  .wr-pill { flex: none; font-size: 10.5px; font-weight: 700; line-height: 1.8; padding: 0 9px;
+    border-radius: 999px; background: rgba(0,0,0,.05); color: var(--ink2); }
+  .wr-pill.s-seen, .wr-pill.s-recognized { background: var(--accent-soft); color: var(--accent-text); }
+  /* 实底胶囊一律「深墨字」：白字压 --accent #0c9c74 只有 3.49:1（过不了 AA 正文 4.5），
+     与首页卡片的「已学完」胶囊（.a-stage[data-stage=done]）同一支 --cta-ink-dark。 */
+  .wr-pill.s-owned, .wr-pill.leech { background: var(--note); color: var(--cta-ink-dark); }
+  .wr-pill.s-graduated { background: var(--accent); color: var(--cta-ink-dark); }
+  .wr-meta, .wr-meta2 { display: block; margin-top: 3px; font-size: 11px; color: var(--muted); }
+  .wb-more { display: block; width: 100%; min-height: 44px; margin-top: 12px; border: 1px dashed var(--border);
+    border-radius: 14px; background: var(--card); color: var(--accent-text); font: inherit; font-weight: 700;
+    cursor: pointer; }
+  body.dark .wb-row, body.dark .wb-filter, body.dark .wb-more { background: var(--card); border-color: var(--border); }
+  body.dark .wr-pill { background: rgba(255,255,255,.06); color: var(--ink2); }
+  body.dark .wr-pill.s-seen, body.dark .wr-pill.s-recognized { background: var(--accent-soft); color: var(--accent-text); }
+  body.dark .wr-pill.s-owned, body.dark .wr-pill.leech { background: var(--note); color: var(--cta-ink-dark); }
+  body.dark .wr-pill.s-graduated { background: var(--accent); color: var(--cta-ink-dark); }
+  @media (max-width: 700px) { .wb-filter { flex: 1 1 calc(50% - 8px); } }
+  .wb-detail { padding: 12px 14px 14px; border: 1px solid var(--border); border-top: none;
+    border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; background: var(--card); }
+  .wd-top { display: flex; align-items: center; gap: 8px; }
+  .wd-word { font-size: 17px; font-weight: 800; }
+  .wd-stage { font-size: 10.5px; font-weight: 700; line-height: 1.8; padding: 0 9px; border-radius: 999px;
+    background: rgba(0,0,0,.05); color: var(--ink2); }
+  .wd-stage.leech { background: var(--note); color: var(--cta-ink-dark); }
+  .wd-relearn { margin-left: auto; flex: none; min-height: 44px; padding: 0 14px; border: 1px solid var(--border);
+    border-radius: 999px; background: var(--card); color: var(--accent-text); font: inherit; font-weight: 700; cursor: pointer; }
+  .wd-phon { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+  .wd-mean { margin-top: 2px; font-size: 13.5px; color: var(--text); }
+  .wd-block { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); }
+  .wd-block h4 { margin: 0 0 6px; font-size: 12.5px; color: var(--accent-text); }
+  .wd-ctx { margin: 0; font-family: Georgia, 'Songti SC', serif; font-size: 14px; line-height: 1.7; color: var(--text); }
+  .wd-ctx .wd-hl { color: var(--accent-text); text-decoration: underline; }
+  .wd-src { margin: 6px 0 8px; font-size: 11.5px; color: var(--muted); }
+  .wd-play { min-height: 44px; padding: 0 16px; border: none; border-radius: 999px; background: var(--grad);
+    color: var(--cta-ink); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: var(--grad-shadow); }
+  .wd-ex { margin: 0; font-size: 13px; color: var(--text); }
+  .wd-exzh { margin: 3px 0 0; font-size: 12px; color: var(--muted); }
+  .wd-path { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .wd-step.on { color: var(--accent-text); font-weight: 700; }
+  .wd-arrow { color: var(--muted); font-style: normal; }
+  .wd-stat { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+  body.dark .wb-detail { background: var(--card); border-color: var(--border); }
+  body.dark .wd-stage { background: rgba(255,255,255,.06); color: var(--ink2); }
+  body.dark .wd-stage.leech { background: var(--note); color: var(--cta-ink-dark); }
   /* ============ 3.0 外壳深色覆盖（W2，PRD §10.1） ============
      外壳与 M1 新页面统一到影子跟读的暖黑 token（--bg/--card/--border/--text/--accent-soft…），
      只把几处写死的浅色值换掉（.a-bar / .a-stage 等）。全部复用既有 token，不新造色。 */
@@ -6506,6 +6569,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         idx = -1; _paintIdx = -2;
         render();
         enterTaskMode(opts);
+        /* M3 §6.5：单词本「▶ 播放这句」——进这一篇后直接落到指定全局句并起播。 */
+        if (opts && opts.playGlobal != null) {
+          const local = globalToLocal(opts.playGlobal);
+          if (local >= 0) {
+            try { playFrom(local); const el = sents[local]; if (el) el.scrollIntoView({ block: 'center' }); } catch (e) {}
+          }
+        }
         // 这一篇今天没排到句（enterTaskMode 会弹提示并原样退回）→ 别把按篇的 scope 留在缓存里，
         // 否则回首页后横幅/绿点会按这一篇算。
         if (!taskMode) { currentArticle = null; _cachedPlan = null; }
@@ -6516,6 +6586,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function openArticleQuiz(a) {
         openArticle(a, { article: a, startAtPass2: true });
       }
+      // M3：单词本词详情的「▶ 播放这句」。a = 文章号，gi = 该句的全局句号。
+      // 带 article 一并传：今天这一篇若排不出句，enterTaskMode 会用它兜底建批，保证真进任务模式（§6.5）。
+      function playSentence(a, gi) { openArticle(a, { article: a, playGlobal: gi }); }
       function exitTaskMode() {
         taskMode = false; _noPlan = false; stopSessionClock();
         // 回首页 = 回全局：横幅/绿点/今日账都按全量算，别把上一篇的 scope 留在缓存里。
@@ -7717,7 +7790,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
 
       // ---- 公开 API ----
       return {
-        init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode, openArticle, openArticleQuiz,
+        init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode, openArticle, openArticleQuiz, playSentence,
         again, prev, next, pauseNew, resetPlan, onSentenceComplete,
         taskSentenceFinished,
         exportBackup, importBackup,

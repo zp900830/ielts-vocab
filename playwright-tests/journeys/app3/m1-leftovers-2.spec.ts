@@ -146,10 +146,11 @@ test.describe('3.0 W4 buildQueue 不再对非首篇算出 0 句新句窗口', ()
 /* ============================== W5 · 观感类小项 ============================== */
 test.describe('3.0 W5 观感类小项', () => {
   // W5-1：占位屏不再是裸 <h3>+<p>
-  // M2（2026-09-24）起「学习数据」已是真页（journeys/app3/stats.spec.ts），占位只剩单词本 / 随身听。
-  test('W5-1 占位屏有版式：图标 + 居中 + 标题层级（单词本 / 随身听）', async ({ page }) => {
+  // M2（2026-09-24）起「学习数据」已是真页（stats.spec.ts），M3（2026-09-24）起「单词本」也已是真页
+  //（words.spec.ts），占位只剩「随身听」（M4 交付）。
+  test('W5-1 占位屏有版式：图标 + 居中 + 标题层级（随身听）', async ({ page }) => {
     await stubData(page, SIXQ);
-    const screens: Array<[string, string]> = [['words', '单词本'], ['listen', '随身听']];
+    const screens: Array<[string, string]> = [['listen', '随身听']];
     for (const [hash, title] of screens) {
       await page.goto(`${rootUrl}/app/index.html#/${hash}`);
       const todo = page.locator('#appView .app-todo');

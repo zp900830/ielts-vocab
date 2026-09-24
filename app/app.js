@@ -1,16 +1,25 @@
-/* 3.0 外壳路由。#/home（六张卡片）与 #/stats（学习数据页）有内容；#/words|#/listen 给「建设中」占位。
+/* 3.0 外壳路由。#/home（六张卡片）/ #/stats（学习数据页）/ #/words（单词本）都是真页；
+   #/listen 给「建设中」占位（M4 交付）。
    「我的」不再是路由（用户 2026-09-24）：改成左下角常驻用户卡 + 向上弹出的浮窗，见文件末尾。 */
 (function () {
   const ROUTES = ['home', 'stats', 'words', 'listen'];
   const TODO_META = {
-    // M2 起「学习数据」已是真页（renderStats）；占位只剩单词本 / 随身听。
-    words: ['单词本', 'ri-book-2-line'],
+    // M2 起「学习数据」已是真页（renderStats），M3 起「单词本」也是真页（renderWords）；占位只剩「随身听」。
     listen: ['随身听', 'ri-headphone-line'],
   };
   let cur = 'home';
   let _hlArticle = null;   // 数据页点文章小卡 → 回首页要高亮的那一篇（§5.4）
+  /* ---- 3.0 单词本（M3，PRD §6）---- */
+  const WB_FILTERS = ['all', 'todo', 'learning', 'mastered'];
+  const WB_FILTER_LABEL = { all: '全部', todo: '待掌握', learning: '学习中', mastered: '已掌握' };
+  const WORD_STAGE_LABEL = { fresh: '未见面', seen: '已见面', recognized: '文中可辨',
+                             owned: '义项直连', graduated: '已毕业' };
+  const W_BATCH = 60;              // 增量渲染每批行数
+  let _wordIndex = null, _wordIndexOrder = null, _wordIndexFor = null;
+  let _wordsShown = W_BATCH, _wordsFilter = null;
   function route() {
-    const h = (location.hash || '#/home').replace(/^#\//, '').split('/')[0];
+    const raw = (location.hash || '#/home').replace(/^#\//, '').split('/');
+    const h = raw[0];
     cur = ROUTES.includes(h) ? h : 'home';
     if (cur !== 'home') _hlArticle = null;
     document.querySelectorAll('.sidenav .nav-item').forEach(b =>
@@ -20,6 +29,8 @@
     if (cur === 'home') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
     if (cur === 'stats' && window.APP3 && window.APP3.renderStats) return window.APP3.renderStats(view);
     if (cur === 'stats') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    if (cur === 'words' && window.APP3 && window.APP3.renderWords) return window.APP3.renderWords(view, raw[1] || 'all');
+    if (cur === 'words') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
     // W5-1：占位屏给像样的版式（居中、灰字、标题层级 + 图标），不再是裸 <h3>+<p>。
     const meta = TODO_META[cur];
     view.innerHTML = `<div class="app-todo"><div class="at-ico" aria-hidden="true"><i class="${meta[1]}"></i></div>` +
@@ -29,6 +40,17 @@
     // 左下角用户卡：点它开/关「我的」浮窗（不是切页）。浮窗自己的按钮在 wireMePop 里代理。
     const me = e.target.closest('#meCard');
     if (me) { toggleMePop(); return; }
+    // 单词本：筛选 / 展开 / 重学 / 播放 / 加载更多（M3，都是每次重渲的节点，走事件代理）。
+    const wf = e.target.closest('.wb-filter');
+    if (wf) { location.hash = '#/words/' + wf.dataset.f; return; }
+    const wrel = e.target.closest('.wd-relearn');
+    if (wrel) { try { if (TASK.relearn) TASK.relearn(wrel.dataset.relearn); } catch (err) {} window.APP3.route(); return; }
+    const wplay = e.target.closest('.wd-play');
+    if (wplay) { playSentence(Number(wplay.dataset.a), Number(wplay.dataset.gi)); return; }
+    const wrow = e.target.closest('.wb-row');
+    if (wrow) { toggleWordRow(wrow); return; }
+    const wm = e.target.closest('.wb-more');
+    if (wm) { _wordsShown += W_BATCH; window.APP3.route(); return; }
     const b = e.target.closest('.nav-item');
     if (b) { location.hash = '#/' + b.dataset.route; return; }
     // 卡片是 renderHome 每次重渲的，所以走事件代理而不是逐张绑。
@@ -330,6 +352,189 @@
     else location.hash = '#/home';
   }
   window.APP3 = Object.assign(window.APP3, { openHomeHighlight });
+
+  // §6.5：词详情 → 回首页 → 进该篇任务模式 → 定位该句并播放。
+  function playSentence(a, gi) {
+    if (typeof TASK === 'undefined' || !TASK.playSentence) return;
+    if (location.hash !== '#/home') location.hash = '#/home';
+    TASK.playSentence(a, gi);
+  }
+  window.APP3 = Object.assign(window.APP3, { playSentence });
+
+  /* ---- 3.0 单词本（M3，PRD §6）----
+     宇宙 = 文章标记里出现过的全部目标词（真实数据 3245）。索引一次建好、按 SECTIONS 缓存。 */
+  function wordIndex() {
+    if (_wordIndex && _wordIndexFor === SECTIONS) return _wordIndex;
+    const idx = {}, order = [];
+    for (let a = 0; a < SECTIONS.length; a++) {
+      const scope = window.ShadowPlan.articleScope(SECTIONS, a);
+      scope.forEach((gi) => {
+        (TASK.sentWordsOf(gi) || []).forEach((w) => {
+          let e = idx[w];
+          if (!e) { e = idx[w] = { count: 0, sents: [] }; order.push(w); }
+          e.count++; e.sents.push(gi);
+        });
+      });
+    }
+    _wordIndex = idx; _wordIndexOrder = order; _wordIndexFor = SECTIONS;
+    return idx;
+  }
+  function wordIndexOrder() { wordIndex(); return _wordIndexOrder; }
+  // 全局句号 → {a, pi, ti}
+  function sentPos(gi) {
+    let n = 0;
+    for (let a = 0; a < SECTIONS.length; a++) {
+      const paras = SECTIONS[a].paragraphs;
+      for (let p = 0; p < paras.length; p++) {
+        if (gi < n + paras[p].length) return { a: a, pi: p, ti: gi - n };
+        n += paras[p].length;
+      }
+    }
+    return { a: 0, pi: 0, ti: 0 };
+  }
+  // 段所属「卷」号（subheads 非空处 = 每卷第一段；§6.2 的「第 N 卷」）
+  function volNo(a, pi) {
+    const sh = (SECTIONS[a] && SECTIONS[a].subheads) || [];
+    let v = 0;
+    for (let k = 0; k <= pi && k < sh.length; k++) if (sh[k]) v++;
+    return Math.max(1, v);
+  }
+  function volStartPara(a, pi) {
+    const sh = (SECTIONS[a] && SECTIONS[a].subheads) || [];
+    for (let k = Math.min(pi, sh.length - 1); k >= 0; k--) if (sh[k]) return k;
+    return 0;
+  }
+  // 句在「本卷内」的序号（§6.4 的「第 K 句」）
+  function sentNoInVol(a, pi, ti) {
+    const start = volStartPara(a, pi);
+    let n = 0;
+    for (let k = start; k < pi; k++) n += SECTIONS[a].paragraphs[k].length;
+    return n + ti + 1;
+  }
+  function wbStatus(w, st) {
+    const s = st && st.words ? st.words[w] : null;
+    if (!s) return { stage: 'fresh', leech: false, s: null };
+    return { stage: s.stage || 'fresh', leech: !!s.leech, s: s };
+  }
+  // 四档判据（§6.3，唯一出口：筛选、计数、测试断言同源）
+  function inFilter(w, st, filter) {
+    if (filter === 'all') return true;
+    const x = wbStatus(w, st);
+    if (filter === 'todo') return x.stage === 'seen' || x.stage === 'recognized' || x.leech;
+    if (filter === 'learning') return x.stage === 'owned';
+    if (filter === 'mastered') return x.stage === 'graduated';
+    return true;
+  }
+  function filterWords(filter, st) {
+    return wordIndexOrder().filter((w) => inFilter(w, st, filter));
+  }
+  function countBucket(filter, st) {
+    let n = 0;
+    const order = wordIndexOrder();
+    for (let i = 0; i < order.length; i++) if (inFilter(order[i], st, filter)) n++;
+    return n;
+  }
+  function rowHtml(w, st) {
+    const e = wordIndex()[w];
+    const pos = sentPos(e.sents[0]);
+    const a = pos.a;
+    const meta = `${esc(SECTIONS[a].title)} · 第 ${volNo(a, pos.pi)} 卷 · 出现 ${e.count} 次`;
+    const x = wbStatus(w, st);
+    const pill = x.leech ? '重点词' : (WORD_STAGE_LABEL[x.stage] || '未见面');
+    const pillCls = x.leech ? ' leech' : (' s-' + x.stage);
+    const relt = (x.s && x.s.lastContactAt) ? rel(x.s.lastContactAt) : '还没学过';
+    return `<li class="wb-item">
+      <button class="wb-row" type="button" data-w="${esc(w)}" aria-expanded="false">
+        <span class="wr-head"><span class="wr-word">${esc(w)}</span><span class="wr-pill${pillCls}">${pill}</span></span>
+        <span class="wr-meta">${meta}</span>
+        <span class="wr-meta2">${relt}</span>
+      </button>
+    </li>`;
+  }
+  function renderWords(view, filter) {
+    if (typeof dataReady === 'undefined' || !dataReady) { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    if (WB_FILTERS.indexOf(filter) < 0) filter = 'all';
+    if (_wordsFilter !== filter) { _wordsFilter = filter; _wordsShown = W_BATCH; }
+    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    const list = filterWords(filter, st);
+    const shown = Math.min(_wordsShown, list.length);
+    const filters = WB_FILTERS.map((f) =>
+      `<button class="wb-filter" type="button" data-f="${f}" aria-pressed="${f === filter ? 'true' : 'false'}">`
+      + `${WB_FILTER_LABEL[f]} <span class="wf-n">${countBucket(f, st)}</span></button>`).join('');
+    const rows = list.slice(0, shown).map((w) => rowHtml(w, st)).join('');
+    const more = shown < list.length
+      ? `<button class="wb-more" type="button">加载更多（还剩 ${list.length - shown} 个）</button>` : '';
+    view.innerHTML = `<div class="words-page">
+      <h1>单词本</h1>
+      <div class="wb-filters" role="group" aria-label="按掌握状态筛选">${filters}</div>
+      <p class="wb-hint">共 ${list.length} 个词${filter === 'all' ? '' : '（当前筛选）'} · 点词行看原文语境</p>
+      <ul class="wb-list" aria-label="单词列表">${rows}</ul>
+      ${more}
+    </div>`;
+  }
+  window.APP3 = Object.assign(window.APP3, { renderWords });
+
+  // 原文句里把目标词高亮（其它 [[词:形式]] 只留形式），其余文本转义
+  function sentenceHtml(raw, word) {
+    const re = /\[\[([^\]:]+):([^\]]+)\]\]/g;
+    let out = '', last = 0, m;
+    while ((m = re.exec(raw))) {
+      out += esc(raw.slice(last, m.index));
+      out += (String(m[1]).toLowerCase() === String(word).toLowerCase())
+        ? '<b class="wd-hl">' + esc(m[2]) + '</b>' : esc(m[2]);
+      last = re.lastIndex;
+    }
+    return out + esc(raw.slice(last));
+  }
+  function wordDetailHtml(w) {
+    const e = wordIndex()[w];
+    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    const x = wbStatus(w, st);
+    const v = (typeof VOCAB !== 'undefined' && VOCAB[w]) || {};
+    const p = String(v.p || v.us || v.uk || '').replace(/^\//, '').replace(/\/$/, '');
+    const gi0 = e ? e.sents[0] : 0;
+    const pos0 = sentPos(gi0);
+    const a0 = pos0.a;
+    const raw0 = (SECTIONS[a0] && SECTIONS[a0].paragraphs[pos0.pi] && SECTIONS[a0].paragraphs[pos0.pi][pos0.ti]) || '';
+    const steps = ['seen', 'recognized', 'owned', 'graduated'].map((k) =>
+      `<span class="wd-step${x.stage === k ? ' on' : ''}">${WORD_STAGE_LABEL[k]}</span>`)
+      .join('<i class="wd-arrow" aria-hidden="true">→</i>');
+    const ex = v.ex ? `<div class="wd-block"><h4>📝 例句 / 其他语境</h4>
+        <p class="wd-ex">${esc(v.ex)}</p>${v.exZh ? `<p class="wd-exzh">${esc(v.exZh)}</p>` : ''}</div>` : '';
+    return `<div class="wb-detail" role="region" aria-label="${esc(w)} 详情">
+      <div class="wd-top"><span class="wd-word">${esc(w)}</span>
+        <span class="wd-stage${x.leech ? ' leech' : ''}">${x.leech ? '重点词' : (WORD_STAGE_LABEL[x.stage] || '未见面')}</span>
+        <button class="wd-relearn" type="button" data-relearn="${esc(w)}">重学</button></div>
+      ${p ? `<div class="wd-phon">/${esc(p)}/</div>` : ''}
+      <div class="wd-mean">${esc(v.m || '（词库中无此词条）')}</div>
+      <div class="wd-block"><h4>📖 原文语境</h4>
+        <p class="wd-ctx">${sentenceHtml(raw0, w)}</p>
+        <p class="wd-src">—— 《${esc(SECTIONS[a0].title)}》第 ${volNo(a0, pos0.pi)} 卷 · 第 ${sentNoInVol(a0, pos0.pi, pos0.ti)} 句</p>
+        <button class="wd-play" type="button" data-a="${a0}" data-gi="${gi0}">▶ 播放这句</button></div>
+      ${ex}
+      <div class="wd-block"><h4>学习状态</h4>
+        <div class="wd-path">${steps}</div>
+        <p class="wd-stat">接触 ${x.s ? (x.s.reps || 0) : 0} 次 · ② 答对 ${x.s ? (x.s.ok3 || 0) : 0} 次 · ${x.s && x.s.err ? '错误 ' + x.s.err + ' 次' : '无错误'}</p></div>
+    </div>`;
+  }
+  function toggleWordRow(row) {
+    const item = row.closest('.wb-item');
+    if (!item) return;
+    const wasOpen = item.classList.contains('open');
+    const list = row.closest('.wb-list');
+    if (list) list.querySelectorAll('.wb-item.open').forEach((li) => {
+      li.classList.remove('open');
+      const dd = li.querySelector('.wb-detail'); if (dd) dd.remove();
+      const bb = li.querySelector('.wb-row'); if (bb) bb.setAttribute('aria-expanded', 'false');
+    });
+    if (wasOpen) return;
+    item.classList.add('open');
+    row.setAttribute('aria-expanded', 'true');
+    const wrap = document.createElement('div');
+    wrap.innerHTML = wordDetailHtml(row.dataset.w);
+    item.appendChild(wrap.firstElementChild);
+  }
+
   // 数据页的点击（按钮是每次重渲的，走事件代理，只绑一次）
   document.addEventListener('click', (e) => {
     if (e.target.closest('.st-open-me')) { openMePop(); return; }
@@ -339,7 +544,8 @@
     if (go) {
       const tip = go.closest('.st-tip');
       const kind = tip ? tip.dataset.tip : go.dataset.go;
-      if (kind === 'leech' || kind === 'words') { location.hash = '#/words'; return; }
+      if (kind === 'leech') { location.hash = '#/words/todo'; return; }
+      if (kind === 'words') { location.hash = '#/words'; return; }
       if (kind === 'listen') { location.hash = '#/listen'; return; }
       const a = tip && tip.dataset.a != null ? Number(tip.dataset.a) : 0;
       openHomeHighlight(a);
