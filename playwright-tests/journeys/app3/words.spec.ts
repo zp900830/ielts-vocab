@@ -234,14 +234,18 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
       APP3.route();
     });
     await page.locator('.wb-row[data-w="atmosphere"]').click();
+    // 词详情给的 gi = atmosphere 的**首次**出现句（全局 0）；夹具里它在第 0、2 句都出现 ——
+    // 只断言「含该词」会漏掉错跳到第 2 句，所以这里锁精确句序号。
+    const gi = Number(await page.locator('.wd-play').getAttribute('data-gi'));
+    expect(gi, '夹具里 atmosphere 首次出现在全局第 0 句').toBe(0);
     await page.locator('.wd-play').click();
-    // 目标：回首页 + 进任务模式 + 该句高亮在播
+    // 目标：回首页 + 进任务模式 + 精确落到该句并在播
     await expect(page).toHaveURL(/#\/home/);
     await expect(page.locator('body')).toHaveClass(/task-mode/);
     await expect.poll(() => page.evaluate(() => {
-      const el = document.querySelector('#art .sent.playing');
-      return el ? el.textContent : '';
-    }), { message: '播放的必须是含该词的原文句' }).toContain('atmosphere');
+      const arr = [...document.querySelectorAll('#art .sent')];
+      return arr.findIndex((e) => e.classList.contains('playing'));
+    }), { message: '必须精确落在 atmosphere 首次出现那一句（不是只含该词的任意句）' }).toBe(gi);
     expect(await page.evaluate(() => TASK.article), '进的必须是该词所属那一篇').toBe(0);
   });
 

@@ -1,4 +1,5 @@
-/* 3.0 外壳路由。#/home（六张卡片）与 #/stats（学习数据页）有内容；#/words|#/listen 给「建设中」占位。
+/* 3.0 外壳路由。#/home（六张卡片）/ #/stats（学习数据页）/ #/words（单词本）都是真页；
+   #/listen 给「建设中」占位（M4 交付）。
    「我的」不再是路由（用户 2026-09-24）：改成左下角常驻用户卡 + 向上弹出的浮窗，见文件末尾。 */
 (function () {
   const ROUTES = ['home', 'stats', 'words', 'listen'];
@@ -370,8 +371,7 @@
       scope.forEach((gi) => {
         (TASK.sentWordsOf(gi) || []).forEach((w) => {
           let e = idx[w];
-          if (!e) { e = idx[w] = { arts: [a], count: 0, sents: [] }; order.push(w); }
-          else if (e.arts[e.arts.length - 1] !== a) e.arts.push(a);
+          if (!e) { e = idx[w] = { count: 0, sents: [] }; order.push(w); }
           e.count++; e.sents.push(gi);
         });
       });

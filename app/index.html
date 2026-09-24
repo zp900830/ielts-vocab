@@ -1900,19 +1900,20 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .wr-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .wr-word { font-size: 15px; font-weight: 700; }
   .wr-pill { flex: none; font-size: 10.5px; font-weight: 700; line-height: 1.8; padding: 0 9px;
-    border-radius: 999px; background: rgba(0,0,0,.05); color: var(--muted); }
+    border-radius: 999px; background: rgba(0,0,0,.05); color: var(--ink2); }
   .wr-pill.s-seen, .wr-pill.s-recognized { background: var(--accent-soft); color: var(--accent-text); }
-  .wr-pill.s-owned { background: var(--note-soft); color: var(--note); }
-  .wr-pill.s-graduated { background: var(--accent); color: var(--cta-ink); }
-  .wr-pill.leech { background: var(--note-soft); color: var(--note); }
+  /* 实底胶囊一律「深墨字」：白字压 --accent #0c9c74 只有 3.49:1（过不了 AA 正文 4.5），
+     与首页卡片的「已学完」胶囊（.a-stage[data-stage=done]）同一支 --cta-ink-dark。 */
+  .wr-pill.s-owned, .wr-pill.leech { background: var(--note); color: var(--cta-ink-dark); }
+  .wr-pill.s-graduated { background: var(--accent); color: var(--cta-ink-dark); }
   .wr-meta, .wr-meta2 { display: block; margin-top: 3px; font-size: 11px; color: var(--muted); }
   .wb-more { display: block; width: 100%; min-height: 44px; margin-top: 12px; border: 1px dashed var(--border);
     border-radius: 14px; background: var(--card); color: var(--accent-text); font: inherit; font-weight: 700;
     cursor: pointer; }
   body.dark .wb-row, body.dark .wb-filter, body.dark .wb-more { background: var(--card); border-color: var(--border); }
-  body.dark .wr-pill { background: rgba(255,255,255,.06); color: var(--muted); }
+  body.dark .wr-pill { background: rgba(255,255,255,.06); color: var(--ink2); }
   body.dark .wr-pill.s-seen, body.dark .wr-pill.s-recognized { background: var(--accent-soft); color: var(--accent-text); }
-  body.dark .wr-pill.s-owned, body.dark .wr-pill.leech { background: var(--note-soft); color: var(--note); }
+  body.dark .wr-pill.s-owned, body.dark .wr-pill.leech { background: var(--note); color: var(--cta-ink-dark); }
   body.dark .wr-pill.s-graduated { background: var(--accent); color: var(--cta-ink-dark); }
   @media (max-width: 700px) { .wb-filter { flex: 1 1 calc(50% - 8px); } }
   .wb-detail { padding: 12px 14px 14px; border: 1px solid var(--border); border-top: none;
@@ -1920,8 +1921,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .wd-top { display: flex; align-items: center; gap: 8px; }
   .wd-word { font-size: 17px; font-weight: 800; }
   .wd-stage { font-size: 10.5px; font-weight: 700; line-height: 1.8; padding: 0 9px; border-radius: 999px;
-    background: rgba(0,0,0,.05); color: var(--muted); }
-  .wd-stage.leech { background: var(--note-soft); color: var(--note); }
+    background: rgba(0,0,0,.05); color: var(--ink2); }
+  .wd-stage.leech { background: var(--note); color: var(--cta-ink-dark); }
   .wd-relearn { margin-left: auto; flex: none; min-height: 44px; padding: 0 14px; border: 1px solid var(--border);
     border-radius: 999px; background: var(--card); color: var(--accent-text); font: inherit; font-weight: 700; cursor: pointer; }
   .wd-phon { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
@@ -1940,8 +1941,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .wd-arrow { color: var(--muted); font-style: normal; }
   .wd-stat { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
   body.dark .wb-detail { background: var(--card); border-color: var(--border); }
-  body.dark .wd-stage { background: rgba(255,255,255,.06); color: var(--muted); }
-  body.dark .wd-stage.leech { background: var(--note-soft); color: var(--note); }
+  body.dark .wd-stage { background: rgba(255,255,255,.06); color: var(--ink2); }
+  body.dark .wd-stage.leech { background: var(--note); color: var(--cta-ink-dark); }
   /* ============ 3.0 外壳深色覆盖（W2，PRD §10.1） ============
      外壳与 M1 新页面统一到影子跟读的暖黑 token（--bg/--card/--border/--text/--accent-soft…），
      只把几处写死的浅色值换掉（.a-bar / .a-stage 等）。全部复用既有 token，不新造色。 */
