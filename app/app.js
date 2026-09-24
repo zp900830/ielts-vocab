@@ -183,7 +183,7 @@
         ${x.quizReady ? `<button class="a-quiz" data-a="${a}" type="button">答题</button>` : ''}
       </article>`;
     }).join('');
-    view.innerHTML = `<div class="home-banner" id="homeBanner"></div><div class="art-grid">${cards}</div>`;
+    view.innerHTML = `<h1 class="sr-only">首页 · 六篇文章</h1><div class="home-banner" id="homeBanner"></div><div class="art-grid">${cards}</div>`;
     // ⚠️ renderBanner 由 Task 4 定义；只跑 Task 3 时它还不存在 —— 必须守卫。
     if (window.APP3.renderBanner) window.APP3.renderBanner(document.getElementById('homeBanner'));
     // §5.4：数据页点了文章小卡 → 回首页把对应卡片高亮一下（不新开屏）。
@@ -649,7 +649,7 @@
     const steps = ['seen', 'recognized', 'owned', 'graduated'].map((k) =>
       `<span class="wd-step${x.stage === k ? ' on' : ''}">${WORD_STAGE_LABEL[k]}</span>`)
       .join('<i class="wd-arrow" aria-hidden="true">→</i>');
-    const ex = v.ex ? `<div class="wd-block"><h4>📝 例句 / 其他语境</h4>
+    const ex = v.ex ? `<div class="wd-block"><h2>📝 例句 / 其他语境</h2>
         <p class="wd-ex">${esc(v.ex)}</p>${v.exZh ? `<p class="wd-exzh">${esc(v.exZh)}</p>` : ''}</div>` : '';
     return `<div class="wb-detail" role="region" aria-label="${esc(w)} 详情">
       <div class="wd-top"><span class="wd-word">${esc(w)}</span>
@@ -657,12 +657,12 @@
         <button class="wd-relearn" type="button" data-relearn="${esc(w)}">重学</button></div>
       ${p ? `<div class="wd-phon">/${esc(p)}/</div>` : ''}
       <div class="wd-mean">${esc(v.m || '（词库中无此词条）')}</div>
-      <div class="wd-block"><h4>📖 原文语境</h4>
+      <div class="wd-block"><h2>📖 原文语境</h2>
         <p class="wd-ctx">${sentenceHtml(raw0, w)}</p>
         <p class="wd-src">—— 《${esc(SECTIONS[a0].title)}》第 ${volNo(a0, pos0.pi)} 卷 · 第 ${sentNoInVol(a0, pos0.pi, pos0.ti)} 句</p>
         <button class="wd-play" type="button" data-a="${a0}" data-gi="${gi0}">▶ 播放这句</button></div>
       ${ex}
-      <div class="wd-block"><h4>学习状态</h4>
+      <div class="wd-block"><h2>学习状态</h2>
         <div class="wd-path">${steps}</div>
         <p class="wd-stat">接触 ${x.s ? (x.s.reps || 0) : 0} 次 · ② 答对 ${x.s ? (x.s.ok3 || 0) : 0} 次 · ${x.s && x.s.err ? '错误 ' + x.s.err + ' 次' : '无错误'}</p></div>
     </div>`;

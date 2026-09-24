@@ -30,7 +30,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     color-scheme: light dark;
-    --bg: #faf8f4; --card: #fff; --text: #2b3028; --muted: #7a7568; --ink2: #6b665a;
+    --bg: #faf8f4; --card: #fff; --text: #2b3028; --muted: #6b665a; --ink2: #6b665a;
     --accent: #0c9c74; --accent-bright: #10b487; --accent-soft: #e0f5ec;
     --accent-line: #bfe6d6; --hl: #c9f2e2; --hl-line: #8fd8bd;
     --border: #e5dfd6; --green: #0c9c74;
@@ -68,7 +68,10 @@
     --iel-blur: blur(22px) saturate(170%);
     --iel-t: var(--t); --iel-t-fast: var(--t-fast);
     --iel-line: var(--border);
-    --iel-accent: var(--accent-bright); --iel-accent-deep: var(--accent);
+    /* M6 a11y：--iel-accent-deep 只当「绿字」用（.r-pos/.tr-msw/.nav-arrow/.r-badge 等），
+       #0c9c74 压白/浅薄荷只有 3.06~3.49:1，过不了 AA 正文。指向 --accent-text（浅色 #0a7558，
+       深色自动变 --accent）后全部 ≥4.99:1，且不动 --accent（它仍当实底给深墨字用）。 */
+    --iel-accent: var(--accent-bright); --iel-accent-deep: var(--accent-text);
     --iel-accent-soft: var(--accent-soft); --iel-accent-line: var(--accent-line);
     --iel-ink1: var(--text); --iel-ink2: var(--ink2); --iel-mark-line: var(--hl-line);
     --iel-glass-strong: var(--glass-strong);
@@ -78,7 +81,7 @@
     }
   /* 夜间模式 */
   body.dark {
-    --bg: #1c1a17; --card: #252220; --text: #e2ddd5; --muted: #908a7e; --ink2: #a09a8e;
+    --bg: #1c1a17; --card: #252220; --text: #e2ddd5; --muted: #a39b8e; --ink2: #a09a8e;
     --accent: #10b487; --accent-bright: #2bd4a4; --accent-soft: rgba(16,180,135,.12);
     --accent-line: rgba(16,180,135,.22); --hl: rgba(43,212,164,.18); --hl-line: rgba(43,212,164,.3);
     --border: #33302b; --green: #10b487;
@@ -89,6 +92,17 @@
     --accent-text: var(--accent);   /* 深色底上绿字本来就够（#10b487 压 #252220 实测 5.95:1），这一档只给浅色用 */
     --shadow: 0 2px 12px rgba(0,0,0,.25); --shadow-lg: 0 12px 40px rgba(0,0,0,.4);
     --glass: rgba(30,28,25,.94); --glass-strong: rgba(30,28,25,.97);
+    /* M6 深色全覆盖：--iel-* 是「别名 token」，而 CSS 自定义属性里的 var() 在**声明它的元素**上
+       就算死了 —— 在 :root 声明一次，body.dark 改 --ink2/--accent-soft 也带不动它（实测 .tcn 在深色
+       仍是 #6b665a、.r-pos 的浅薄荷底也不跟着变深）。所以在 body.dark 里原样重声明一遍，
+       让深色下这些主站组件的令牌重新按深色基色求值。 */
+    --iel-accent: var(--accent-bright); --iel-accent-deep: var(--accent-text);
+    --iel-accent-soft: var(--accent-soft); --iel-accent-line: var(--accent-line);
+    --iel-ink1: var(--text); --iel-ink2: var(--ink2); --iel-mark-line: var(--hl-line);
+    --iel-glass-strong: var(--glass-strong);
+    --iel-line: var(--border);
+    --iel-tint: rgba(16,180,135,.07); --iel-tint-hover: rgba(16,180,135,.12);
+    --iel-chip: #24211e; --iel-chip-hover: #2c2824;
     }
   body.dark { background-color: #1c1a17; background-image: none; }
   html.dark { background-color: #1c1a17; background-image: none; } /* 桌面暗色：清除基样式浅色渐变，杜绝回弹/覆盖层露出米白 */
@@ -348,12 +362,12 @@
   .sent { border-radius: 6px; padding: 1px 4px; transition: background .2s; cursor: pointer; }
   .sent:hover { background: var(--accent-soft); }
   .sent.playing { background: linear-gradient(transparent 62%, var(--hl) 62%); border-radius: 3px; }
-  .w { color: #0d9d74; font-weight: 600; cursor: pointer;
+  .w { color: var(--accent-text); font-weight: 600; cursor: pointer;
     border-bottom: 2px solid rgba(13,157,116,.35); padding: 0 1px; border-radius: 2px; }
   .w:hover { background: rgba(13,157,116,.1); }
-  .gl { font-family: var(--sans); font-size: 12px; font-weight: 400; color: #8f8468;
+  .gl { font-family: var(--sans); font-size: 12px; font-weight: 400; color: var(--muted);
     margin-left: 2px; white-space: nowrap; }
-  .gl-p { color: #2b9d8f; }
+  .gl-p { color: #14756a; }
   body.hide-gl .gl { display: none; }
   body.hide-gl .w { color: var(--text); font-weight: 400;
     border-bottom: none; cursor: pointer; }
@@ -740,7 +754,7 @@
   aside .item:hover { background: #eaf5ef; }
   aside .item.sel { background: var(--accent-soft); }
   aside .item .wtop { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 8px; }
-  aside .item .wtop b { font-family: var(--serif); font-size: 16px; color: #0d9d74; }
+  aside .item .wtop b { font-family: var(--serif); font-size: 16px; color: var(--accent-text); }
   aside .item .ph { font-size: 12px; color: var(--muted); font-family: var(--serif); }
   aside .item .ph button { border: none; background: transparent; color: var(--accent-text);
     cursor: pointer; font-size: 12px; padding: 0 2px; }
@@ -1247,7 +1261,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .sync-hint { position: fixed; left: 50%; transform: translateX(-50%);
     bottom: calc(var(--task-bar-h, 62px) + 8px + 62px + env(safe-area-inset-bottom, 0px));
     z-index: 110; max-width: calc(100vw - 28px); padding: 6px 13px; border-radius: 999px; cursor: pointer;
-    font-size: 12px; font-weight: 600; color: var(--coral-deep, #c0492f);
+    font-size: 12px; font-weight: 600; color: #b3402f;   /* M6 a11y：#c9564a 压 #fff2ed 只有 3.9:1 */
     background: rgba(255,241,236,.96); border: 1px solid rgba(192,73,47,.28);
     box-shadow: 0 3px 12px rgba(30,60,48,.12); }
   .sync-hint[hidden] { display: none; }
@@ -1639,7 +1653,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tr-help:hover { border-color: var(--iel-accent); color: var(--iel-accent-deep); background: var(--iel-tint); }
   .r-badge { display: inline-block; font-size: 12px; padding: 2px 10px; background: var(--iel-accent-soft);
     color: var(--iel-accent-deep); border-radius: 999px; font-weight: 600; }
-  .r-badges .fav-badge { margin-left: auto; flex: none; background: #fdf1dc; color: #b07a10; }
+  .r-badges .fav-badge { margin-left: auto; flex: none; background: #fdf1dc; color: #8a5f0a; }   /* M6 a11y：#b07a10 只有 3.33:1 */
   .tr-bubble { position: absolute; top: calc(100% + 10px); right: 0; width: min(330px, calc(100vw - 40px));
     background: var(--iel-glass-strong); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
     border: 1px solid var(--iel-accent-line); border-radius: var(--iel-radius-sm); padding: 10px 14px;
@@ -1803,6 +1817,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .art-card .a-quiz:hover { background: var(--accent); color: var(--cta-ink-dark); }
   /* 未开始：灰底 + 虚线进度条 + 半透明标题 */
   .art-card[data-stage="todo"] { opacity: .62; }
+  /* M6 a11y：整卡 0.62 透明度会把文字实测压到 3.1:1（AA 要 4.5）。深色底更吃紧，抬到 .88（实测 ≈4.8）； */
+  body.dark .art-card[data-stage="todo"] { opacity: .88; }
   .art-card[data-stage="todo"] .a-bar { background: transparent; border: 1px dashed var(--border); }
   /* 熟练（≥80% 且已学完，§9.2）：金色条 + 金胶囊 */
   .art-card[data-stage="pro"] .a-stage { background: var(--note-soft); color: var(--note); }
@@ -1933,7 +1949,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .wd-phon { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
   .wd-mean { margin-top: 2px; font-size: 13.5px; color: var(--text); }
   .wd-block { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); }
-  .wd-block h4 { margin: 0 0 6px; font-size: 12.5px; color: var(--accent-text); }
+  .wd-block h2 { margin: 0 0 6px; font-size: 12.5px; color: var(--accent-text); }
   .wd-ctx { margin: 0; font-family: Georgia, 'Songti SC', serif; font-size: 14px; line-height: 1.7; color: var(--text); }
   .wd-ctx .wd-hl { color: var(--accent-text); text-decoration: underline; }
   .wd-src { margin: 6px 0 8px; font-size: 11.5px; color: var(--muted); }
@@ -1965,6 +1981,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .art-card .a-bar { background: var(--hl); }
   body.dark .art-card[data-stage="todo"] .a-bar { background: transparent; border-color: var(--border); }
   body.dark .art-card .a-stage { background: rgba(255,255,255,.06); color: var(--muted); }
+  /* 未开始卡整卡 .88 透明度，阶段胶囊这枚 10.5px 小字再提一档（--muted 实测 4.16，AA 要 4.5）。 */
+  body.dark .art-card[data-stage="todo"] .a-stage { color: var(--text); }
   body.dark .art-card[data-stage="reading"] .a-stage { background: var(--accent-soft); color: var(--accent-text); }
   body.dark .art-card[data-stage="read"] .a-stage,
   body.dark .art-card[data-stage="quiz"] .a-stage,
@@ -2106,6 +2124,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
          只在任务模式现身；深色/口音/音色都不在这里（收在「我的」浮窗里）。
          .reader-head 是 fixed 玻璃胶囊、随滚动加 .shrunk（缩放逻辑见脚本尾部）。 -->
     <header class="task-top" id="taskTop">
+      <h1 class="sr-only">文章任务模式</h1>
       <div class="reader-head" id="readerHead">
         <button class="back" id="ttBack" type="button" onclick="TASK.exitTaskMode()" title="返回首页" aria-label="返回首页"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
         <div class="r-title" id="ttTitle"><span class="tt-zh"></span><span class="tcn"></span><span class="r-pos"></span></div>
@@ -2263,7 +2282,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
          v2.0 设置屏（renderSetup）。外面套一层 #setupSheet 是 3.0 的语义容器（§2.3 / §3.5），
          样式仍走 .today-panel，renderSetup 的全局 getElementById 也只认这一份，不会撞 id。 -->
     <div id="setupSheet">
-      <div class="today-panel" id="todayPanel" role="dialog" aria-modal="true" aria-label="今日学习任务" tabindex="-1"></div>
+      <!-- M6 a11y：这枚 dialog 常驻 DOM。以前只靠 opacity:0 藏，读屏仍会把它当打开的模态框、
+           里面的 h3/h4 也照样进标题层级（axe：heading-order / page-has-heading-one）。
+           收起来时给它 hidden（display:none）—— 既移出无障碍树，也把里面的按钮移出 Tab 序。 -->
+      <div class="today-panel" id="todayPanel" role="dialog" aria-modal="true" aria-label="今日学习任务" tabindex="-1" hidden></div>
     </div>
     <div id="todayScrim" style="position:fixed;inset:0;z-index:590;background:rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .2s" onclick="TASK.closePanel()"></div>
     <!-- 常驻同步提示：不是弹窗，失败了就在原地挂着，点一下重试（PRD 原则 6 §12） -->
@@ -2275,7 +2297,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <!-- 任务模式底部操作栏：一张玻璃卡。他 2026-09-22 第二次改口定稿——
          文字双行靠左（核心在上、辅助在下）、所有按钮靠右、关闭在右上角、样式跟播放条一致。
          按钮从左到右 = 重要度从低到高：播放那一组（循环 / AB / 倍速 / 书签 / ▶） → 上一句 → 再来 → 下一句 -->
-    <div class="task-bar" id="taskBar" data-state="idle">
+    <!-- M6 a11y：底部任务条是一块独立控件区，给它一个带名的 landmark（role=region），
+         条上的进度/按钮才算「在 landmark 里」（axe best-practice region）。 -->
+    <div class="task-bar" id="taskBar" data-state="idle" role="region" aria-label="学习任务条">
       <div class="tb-body">
       <div class="tb-text">
         <!-- 他 2026-09-22：「底部按钮上方那些文字一堆，都没耐心看」→ 条上只留三个数：
@@ -2723,7 +2747,7 @@ let listenOn = false;
       ${s.paragraphs.map((p, pi) => `${s.subheads && s.subheads[pi] ? `<div class="sub">${esc(s.subheads[pi])}${titEN(s.subheads[pi])}</div>` : ''}<div class="para">${p.map((t, ti) => {
         const zh = s.sentZh && s.sentZh[pi] && s.sentZh[pi][ti]
         ? `<span class="sent-zh">${esc(s.sentZh[pi][ti])}</span>` : '';
-        return `<span class="sent" tabindex="0" role="button" aria-label="朗读该句">${wrapWords(t)}</span>${zh}${noteBar(t)}`;
+        return `<span class="sent">${wrapWords(t)}</span>${zh}${noteBar(t)}`;
       }).join(' ')}</div>${s.paraZh && s.paraZh[pi] ? `<div class="para-zh">💡 ${esc(s.paraZh[pi])}</div>` : ''}${compareAt(CMP, chIdx, pi)}`).join('')}
     </div>`;
     }).join('');
@@ -4680,7 +4704,9 @@ let listenOn = false;
        与其在八个开关各自的函数里补一行同步（漏一个就长期不一致），不如按当前 DOM 反推：
        以后加按钮只要沿用 .active / .open 两套约定就自动被覆盖。 */
     function syncToggleAria() {
-      ['btnZh', 'btnGloss', 'btnLoop'].forEach(function (id) {
+      /* M6 a11y：#btnZh/#btnGloss 是 role="switch"（只能配 aria-checked，见 updateZhBtn/updateGlossBtn），
+         再给它们加 aria-pressed 属「不支持的 ARIA 属性」（axe critical）—— 这两颗不在这张表里。 */
+      ['btnLoop'].forEach(function (id) {
         const e = document.getElementById(id);
         if (e) e.setAttribute('aria-pressed', e.classList.contains('active') ? 'true' : 'false');
       });
@@ -7620,6 +7646,7 @@ let listenOn = false;
         if (!plan) { renderSetup(p); }
         else { _pendingArticle = null; renderToday(p); }
         p.classList.add('open');
+        p.hidden = false;
         scrim.style.opacity = '1'; scrim.style.pointerEvents = 'auto';
         _panelOpen = true;
         p.focus();
@@ -7628,6 +7655,7 @@ let listenOn = false;
         const p = document.getElementById('todayPanel');
         const scrim = document.getElementById('todayScrim');
         if (p) p.classList.remove('open');
+        if (p) p.hidden = true;
         if (scrim) { scrim.style.opacity = '0'; scrim.style.pointerEvents = 'none'; }
         _panelOpen = false;
         /* 关掉设置屏 = 这次没从空状态建计划，别把「回到那一篇」留到下一次（ps-start 里会先取走）。 */
