@@ -398,7 +398,9 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     });
     // 再点一下「下一句」：没有未读 → finishPass(1) → 小结
     await page.evaluate(() => TASK.next());
+    /* 2026-09-24：小结标题/按钮里的圈号去掉 —— 阶段语义（「答题」）必须自己扛住，圈号不许再出现。 */
     await expect(page.locator('#passCard .pass-summary .go')).toContainText('答题');
+    await expect(page.locator('#passCard .pass-summary')).not.toContainText(/[①②③④⑤]/);
 
     await page.locator('#passCard .pass-summary .go').click();
     // 答完整批（含末尾补考段）
@@ -530,6 +532,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await page.evaluate(() => TASK.next());
     await expect(page.locator('#passCard')).toBeVisible();
     await expect(page.locator('#passCard .pass-summary .go')).toContainText('开始');
+    await expect(page.locator('#passCard .pass-summary')).not.toContainText(/[①②③④⑤]/);
     // 小结出现时正文已经挖空
     expect(await page.locator('#art .sent .qz-blank').count()).toBeGreaterThan(0);
     // 点「开始答题」→ 小结收掉、浮窗弹出
