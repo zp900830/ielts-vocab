@@ -76,8 +76,9 @@
     const card = e.target.closest('.art-card');
     if (card && card.dataset.a != null) openArticle(Number(card.dataset.a));
   });
-  // 随身听位置条（M4 §7.2）：<input type=range> 拖完才 seek（input 事件，不走 click 代理）。
-  document.addEventListener('input', (e) => {
+  // 随身听位置条（M4 §7.2）：<input type=range> 松手才 seek（change，不是 input）
+  // —— 拖动途中每条 input 都 playFrom 会把 TTS 反复 cancel 掉。
+  document.addEventListener('change', (e) => {
     const sk = e.target && e.target.closest ? e.target.closest('.ls-seek') : null;
     if (sk && typeof TASK !== 'undefined' && TASK.listenSeek) TASK.listenSeek(Number(sk.value) - 1);
   });

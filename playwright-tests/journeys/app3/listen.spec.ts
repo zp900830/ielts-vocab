@@ -236,6 +236,10 @@ test.describe('3.0 随身听（M4，PRD §7）', () => {
     expect(dark).not.toBe('rgb(255, 255, 255)');
     const color = await page.locator('.ls-now').evaluate((el) => getComputedStyle(el).color);
     expect(color).not.toBe('rgb(0, 0, 0)');
+    // 页面底：写死的暖白 #faf8f4 在深色下必须换成 token（否则整屏还是亮的）
+    const bodyBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+    expect(bodyBg, '深色下随身听页底不能还是写死的 #faf8f4').not.toBe('rgb(250, 248, 244)');
+    expect(bodyBg, '深色下页底不能是透明（token 没落到）').not.toBe('rgba(0, 0, 0, 0)');
   });
 
   test('无障碍：h1 唯一、控件可聚焦、位置条可键盘、触摸目标 ≥44px', async ({ page }) => {

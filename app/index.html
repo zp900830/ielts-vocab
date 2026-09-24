@@ -2021,6 +2021,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     background: var(--card); color: var(--text); font: inherit; cursor: pointer; }
   .listen-top .r-title { font-weight: 700; color: var(--text); }
   .listen-top .r-pos { margin-left: 8px; font-size: 12px; color: var(--muted); font-weight: 400; }
+  /* 深色（§10.1）：页面底与顶栏的写死浅色值换成暖黑 token；卡片/文字本就走 token 会自动跟随。 */
+  body.dark.listen-page, body.dark.listen-mode { background: var(--bg); }
+  body.dark .listen-top { background: rgba(28,26,23,.92); }
     </style>
 
     <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
