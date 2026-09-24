@@ -70,10 +70,25 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
   }
 }
 
+/* 等 app 真正就位：loadData 落地（SECTIONS 非空）+ TASK.init 跑过（ROOT2.state.daily 存在）。
+   page.reload() 在 load 事件就返回，而 initApp 的 loadData().then(TASK.init) 还在后面异步跑 ——
+   不等这一步，紧跟其后的 page.evaluate(readDone / seedArticleForTest / SECTIONS) 会落在
+   尚未初始化的页面上静默空转（全量并行时 loadData 变慢就偶发，单跑几乎撞不上）。 */
+async function waitAppReady(page: import('@playwright/test').Page) {
+  await page.waitForFunction(() => {
+    try {
+      return typeof SECTIONS !== 'undefined' && SECTIONS.length > 0
+        && typeof TASK !== 'undefined' && !!(TASK.state() && TASK.state().daily);
+    } catch (e) { return false; }
+  });
+}
+
 /* 造一份「刚建好、还没读」的 15 分钟计划，然后刷新让首页读到它。 */
 async function freshPlan(page: import('@playwright/test').Page) {
+  await waitAppReady(page);   // 首次加载也要就位，resetV2 的 indexWords 才拿得到真 SECTIONS
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
+  await waitAppReady(page);   // 刷新后必须等 init 完成，调用方紧接着的 evaluate 才不是空转
 }
 
 /* 把朗读引擎换成录音笔：__spoken 记交给了引擎几句，__finish() 手动兑现「这句播完了」。
@@ -390,6 +405,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await page.goto(`${rootUrl}/app/index.html#/home`);
     // 第 0 篇 8 句：通读满 → 第一项 = 40（后面两项的基准）
     const phase = async (seed: { quizOk: number; quizNo: number; reps: number }, expected: string) => {
+      await waitAppReady(page);   // goto/上一次 reload 之后 init 可能还没跑完，evaluate 会空转
       await page.evaluate((sd) => {
         TASK.resetV2(); TASK.initPlan(15);
         Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i: number) => TASK.readDone(i));
