@@ -1456,6 +1456,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
        （实测续读条 bottom:832 落在 TabBar 787–844 里，整条下半截被盖）。 */
     body.resume-offer .task-bar { left: 12px; right: 12px; bottom: calc(57px + 12px + env(safe-area-inset-bottom, 0px)); }
     .tb-body { flex-direction: column; align-items: stretch; gap: 6px; padding-right: 26px; }
+    /* M6 a11y：手机档 .tb-play 里那几颗（循环/AB/倍速/书签）视觉只有 30px，触区要 ≥44（PRD §10.4）。
+       条子高度由 --task-bar-h 现量，撑高不影响让位逻辑。宽度必须 !important：这些按钮被
+       mobileBtnIcons() 写了行内 `min-width:0; flex:0 0 auto`，普通声明压不过行内样式。
+       实测强行 44 宽后整排仍落在 366px 的条里（最右 202 < 378），不溢出屏幕。 */
+    body.task-mode .task-bar .tb-play .btn { min-height: 44px; min-width: 44px !important; }
     .tb-text { flex: none; }
     .tb-btns { justify-content: flex-end; }
   }
@@ -1640,7 +1645,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     padding: 0 12px; font-size: 12px; line-height: 1; color: var(--iel-accent-deep); flex: none; display: flex;
     align-items: center; justify-content: center; cursor: pointer; white-space: nowrap; position: relative;
     transition: background var(--iel-t-fast), color var(--iel-t-fast); }
-  .nav-arrow::after { content: ""; position: absolute; inset: -8px 0; border-radius: 999px; }
+  .nav-arrow::after { content: ""; position: absolute; inset: -9px 0; border-radius: 999px; }
   .nav-arrow:hover:not(:disabled) { background: var(--iel-accent-soft); }
   .nav-arrow:disabled { opacity: .35; cursor: default; }
   /* —— 文章内：主站 .r-badges（译文拨杆 / 行内词义拨杆 / 口音 / 音色 / 帮助 / 目标词）—— */
@@ -1651,7 +1656,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     background: #fff; border-radius: 999px; padding: 5px 12px 5px 5px; font-size: 12.5px; font-weight: 500;
     color: var(--iel-accent-deep); cursor: pointer; font-family: inherit; position: relative;
     transition: background var(--iel-t-fast), border-color var(--iel-t-fast); }
-  .tr-msw::after { content: ""; position: absolute; inset: -7px 0; border-radius: 999px; }
+  .tr-msw::after { content: ""; position: absolute; inset: -9px 0; border-radius: 999px; }
   .tr-msw .knob { width: 28px; height: 17px; border-radius: 999px; background: rgba(31,45,38,.18); position: relative;
     flex: none; transition: background .25s; }
   .tr-msw .knob::after { content: ""; position: absolute; top: 2px; left: 2px; width: 13px; height: 13px;
@@ -1662,7 +1667,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tr-help { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--iel-line); background: #fff;
     color: var(--iel-ink2); font-size: 12px; font-weight: 600; line-height: 1; cursor: pointer; flex: none;
     position: relative; transition: border-color var(--iel-t-fast), color var(--iel-t-fast), background var(--iel-t-fast); }
-  .tr-help::after { content: ""; position: absolute; inset: -8px; border-radius: 50%; }
+  .tr-help::after { content: ""; position: absolute; inset: -10px; border-radius: 50%; }
   .tr-help:hover { border-color: var(--iel-accent); color: var(--iel-accent-deep); background: var(--iel-tint); }
   .r-badge { display: inline-block; font-size: 12px; padding: 2px 10px; background: var(--iel-accent-soft);
     color: var(--iel-accent-deep); border-radius: 999px; font-weight: 600; }

@@ -82,4 +82,34 @@ test.describe('3.0 无障碍（axe，WCAG A/AA）', () => {
     const dark = await scan(page);
     expect(report(dark.violations), '任务模式① 深色').toBe('');
   });
+
+  /* 触区 ≥44px（PRD §10.4）：axe 不管这条，M6 补。手机档头部那排（.nav-arrow/.tr-msw/.tr-help）
+     视觉 24–26px、任务条播放条那排（循环/AB/倍速/书签）视觉 30px，靠 ::after hit-slop 与
+     移动档 min-height/min-width 补到 ≥44。反向验证：去掉这些补丁必红（实测 40/42/30）。 */
+  test('移动端任务模式：头部与任务条控件的有效触区 ≥44px', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await stubData(page);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    await page.reload();
+    await page.locator('.art-card .a-open').first().click();
+    await expect(page.locator('#taskTop')).toBeVisible();
+    await expect(page.locator('#art .sent').first()).toBeVisible();
+
+    const sels = ['#ttPrev', '#ttNext', '#btnZh', '#btnGloss', '#ttHelp',
+      '#btnLoop', '#btnAB', '#rateCycle', '#markBtn'];
+    for (const sel of sels) {
+      const m = await page.locator(sel).evaluate((el) => {
+        const r = (el as HTMLElement).getBoundingClientRect();
+        const a = getComputedStyle(el, '::after');
+        const parts = (a.inset || '0px').split(/\s+/).map((x) => Math.abs(parseFloat(x) || 0));
+        const tb = parts[0] || 0;
+        const lr = parts.length > 1 ? parts[1] : parts[0] || 0;
+        return { w: r.width + 2 * lr, h: r.height + 2 * tb };
+      });
+      expect(m.h, `${sel} 有效触区高`).toBeGreaterThanOrEqual(44);
+      expect(m.w, `${sel} 有效触区宽`).toBeGreaterThanOrEqual(44);
+    }
+  });
 });
