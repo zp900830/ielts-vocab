@@ -20,6 +20,8 @@ declare const TASK: {
 };
 declare const ShadowPlan: { articleScope(sections: unknown, article: number): Set<number> };
 declare const SECTIONS: unknown[];
+declare const CLOUD: { _userMail: string };
+declare const APP3: { updateMeCard(): void; renderMePop(): void };
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
 
@@ -136,5 +138,47 @@ test.describe('M5 · 导出/导入（§8.1 数据管理）', () => {
     await page.reload();
     await waitTask(page);
     expect(await page.evaluate(() => TASK.repsOf(0)), '导入后按篇账真的能读出来').toBe(4);
+  });
+});
+
+test.describe('M5 · 账号（§8.1 账号信息 / §10.4 键盘可达）', () => {
+  test('回车提交登录；注册/登出接线；已登录态显示邮箱+退出、无登录表单', async ({ page }) => {
+    await stubData(page, EMPTY);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    const pop = await openMe(page);
+
+    // 装录音笔：把 cloud* 换成记录调用
+    await page.evaluate(() => {
+      (window as unknown as { __calls: unknown[] }).__calls = [];
+      (window as unknown as { cloudLogin: unknown }).cloudLogin = (src: unknown) => { (window as unknown as { __calls: unknown[] }).__calls.push(['login', src]); };
+      (window as unknown as { cloudSignup: unknown }).cloudSignup = (src: unknown) => { (window as unknown as { __calls: unknown[] }).__calls.push(['signup', src]); };
+      (window as unknown as { cloudLogout: unknown }).cloudLogout = () => { (window as unknown as { __calls: unknown[] }).__calls.push(['logout']); };
+    });
+
+    // 输入回车 → 视为登录提交
+    await pop.locator('#meEmail').fill('bob@example.com');
+    await pop.locator('#mePass').fill('secret');
+    await pop.locator('#mePass').press('Enter');
+    await expect.poll(() => page.evaluate(() => (window as unknown as { __calls: unknown[] }).__calls.length)).toBeGreaterThan(0);
+    expect(await page.evaluate(() => (window as unknown as { __calls: unknown[] }).__calls[0])).toEqual(['login', { email: 'meEmail', pass: 'mePass' }]);
+
+    // 注册按钮 → cloudSignup
+    await page.evaluate(() => { (window as unknown as { __calls: unknown[] }).__calls = []; });
+    await pop.locator('[data-me-signup]').click();
+    await expect.poll(() => page.evaluate(() => (window as unknown as { __calls: unknown[] }).__calls.length)).toBeGreaterThan(0);
+    expect(await page.evaluate(() => (window as unknown as { __calls: unknown[][] }).__calls[0][0])).toBe('signup');
+
+    // 已登录态：头像 + 昵称 + 退出按钮；登录表单消失
+    await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); APP3.renderMePop(); });
+    await expect(pop.locator('.mp-logout')).toBeVisible();
+    await expect(pop.locator('.mp-login-form')).toHaveCount(0);
+    await expect(pop.locator('.mp-sub')).toHaveText('alice@example.com');
+
+    // 退出按钮 → cloudLogout
+    await page.evaluate(() => { (window as unknown as { __calls: unknown[] }).__calls = []; });
+    await pop.locator('[data-me-logout]').click();
+    await expect.poll(() => page.evaluate(() => (window as unknown as { __calls: unknown[] }).__calls.length)).toBeGreaterThan(0);
+    expect(await page.evaluate(() => (window as unknown as { __calls: unknown[][] }).__calls[0][0])).toBe('logout');
   });
 });
