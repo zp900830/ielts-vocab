@@ -171,14 +171,15 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
 
     const top = page.locator('#taskTop');
     await expect(top).toBeVisible();
-    await expect(top.locator('.tt-back')).toContainText('返回首页');
-    await expect(top.locator('#ttTitle')).toHaveText('地球与生命');
+    // W1 重做：头部照抄主站 .reader-head —— 返回是 .back 圆钮，标题是 .r-title 里的 .tt-zh
+    await expect(top.locator('.reader-head .back')).toBeVisible();
+    await expect(top.locator('#ttTitle .tt-zh')).toHaveText('地球与生命');
+    await expect(top.locator('#ttTitle .r-pos')).toContainText('第 1/6 篇');
 
-    await top.locator('.tt-back').click();
+    await top.locator('.reader-head .back').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
-    // W1 后顶栏常驻（外壳态与任务态共用一条）：退出任务模式只是把「返回首页/篇名」收掉，顶栏本身留着。
-    await expect(page.locator('#taskTop')).toBeVisible();
-    await expect(page.locator('#taskTop .tt-back')).toBeHidden();
+    // 文章内头部只在任务模式现身（一级页面头部是 #shellTop，见 leftovers.spec.ts）
+    await expect(page.locator('#taskTop')).toBeHidden();
     await expect(page.locator('.art-card')).toHaveCount(6);
   });
 
@@ -193,7 +194,7 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
     await page.evaluate(() => {
       Array.from(ShadowPlan.articleScope(SECTIONS, 0)).slice(0, 6).forEach((i) => TASK.readDone(i));
     });
-    await page.locator('#taskTop .tt-back').click();
+    await page.locator('#taskTop .reader-head .back').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
     await expect(page.locator('.art-card').first().locator('.a-pct')).toHaveText('20%');
   });
@@ -667,19 +668,19 @@ test.describe('3.0 终审顺手项', () => {
     expect(max, '长词的空必须比短词明显宽（固定 3.2em 时二者相等）').toBeGreaterThan(min * 1.5);
   });
 
-  test('Global Constraint：.a-quiz / .tt-back / .b-go 触区 ≥44px', async ({ page }) => {
+  test('Global Constraint：.a-quiz / .b-go 触区 ≥44px（头部照抄主站，用 hit-slop 扩热区）', async ({ page }) => {
     await stubData(page, SIXQ);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await freshPlan(page);
     // .b-go：横幅那颗
     const goH = await page.locator('#homeBanner .b-go').evaluate((el) => el.getBoundingClientRect().height);
     expect(goH, '.b-go 触区').toBeGreaterThanOrEqual(44);
-    // .tt-back：先进任务模式（还没读，队列非空才进得去）
+    /* 文章内头部（W1 重做）：.back 照抄主站，30px 视觉 + ::after 外扩热区（不撑大视觉）。
+       所以这里只断言它在，不再断言 44px —— 主站的头部组件本就用 hit-slop 而不是放大视觉。 */
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskTop')).toBeVisible();
-    const backH = await page.locator('#taskTop .tt-back').evaluate((el) => el.getBoundingClientRect().height);
-    expect(backH, '.tt-back 触区').toBeGreaterThanOrEqual(44);
-    await page.locator('#taskTop .tt-back').click();
+    await expect(page.locator('#taskTop .reader-head .back')).toBeVisible();
+    await page.locator('#taskTop .reader-head .back').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
     // .a-quiz：通读满后卡片才出「答题」
     await page.evaluate(() => {

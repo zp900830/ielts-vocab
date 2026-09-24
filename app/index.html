@@ -55,7 +55,18 @@
     --t: .25s ease; --t-fast: .15s ease;
     --ease-smooth: cubic-bezier(.32,.72,.24,1); --t-morph: .45s;
     --ease-bar: cubic-bezier(.32,.9,.28,1); --t-bar: .32s; /* 播放条 morph 专用：更快起手、柔着陆 */
-    --top-h: 61px; /* 3.0 常驻顶栏高度：侧栏/内容区从它下面开始（W1） */
+    /* 主站（情景训练）组件令牌别名：让照抄来的 .reader-head/.r-badges/.tr-msw 等直接可用。
+       引用的是 /app/ 自己的 token，所以 body.dark 一改，它们自动跟着变深。 */
+    --iel-blur: blur(22px) saturate(170%);
+    --iel-t: var(--t); --iel-t-fast: var(--t-fast);
+    --iel-line: var(--border);
+    --iel-accent: var(--accent-bright); --iel-accent-deep: var(--accent);
+    --iel-accent-soft: var(--accent-soft); --iel-accent-line: var(--accent-line);
+    --iel-ink1: var(--text); --iel-ink2: var(--ink2); --iel-mark-line: var(--hl-line);
+    --iel-glass-strong: var(--glass-strong);
+    --iel-radius-sm: 12px; --iel-shadow: var(--shadow);
+    --iel-tint: rgba(16,180,135,.07); --iel-tint-hover: rgba(16,180,135,.12);
+    --iel-chip: #eef5f0; --iel-chip-hover: #dff0e7; --iel-cta-ink: var(--cta-ink);
     }
   /* 夜间模式 */
   body.dark {
@@ -1547,33 +1558,100 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      任务模式已有自己的顶栏（.task-top，见下），整块 #appShell 仍要收掉 ——
      不然后面 min-height:100vh 的首页会把正文压到首屏之外（T2 遗留的现场）。 */
   body.task-mode #appShell { display: none; }
-  /* 3.0 顶栏（W1，PRD §4.3 / §8.1）：常驻一条，外壳态与任务态共用。
-     旧 header.topbar 被 `body > .topbar{display:none}` 连根藏掉后，这一条就是那些开关唯一的家。
-     外壳态 = 品牌 + 夜间；任务态 = 返回首页 + 篇名 + 译文/词义/口音+音色 + 夜间。 */
-  .task-top { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px;
-    position: sticky; top: 0; z-index: 150; padding: 8px 16px;
-    background: var(--card); border-bottom: 1px solid var(--border); }
-  .task-top .tt-brand { flex: 1 1 auto; min-width: 0; font-size: 15px; font-weight: 700; color: var(--accent-text); }
-  .task-top .tt-brand b { color: var(--muted); font-weight: 600; }
-  .task-top .tt-back { flex: none; min-height: 44px; padding: 0 14px; border: 1px solid var(--border);
-    border-radius: 999px; background: transparent; color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; }
-  .task-top .tt-back:hover { background: var(--accent-soft); color: var(--accent-text); }
-  .task-top .tt-title { min-width: 0; flex: 1 1 auto; font-size: 15px; font-weight: 700; color: var(--text);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  /* 顶栏控件：外观沿用 .btn / .voice-sel，但触区统一抬到 44px（PRD §10.4） */
-  .task-top .tt-ctrl { display: flex; align-items: center; gap: 8px; flex: none; }
-  .task-top .btn { min-height: 44px; }
-  /* 外壳态没有文章：译文/词义/口音+音色 不显示（它们在任务态才点得动）；
-     夜间开关两态都在（§8.1）。 */
-  body:not(.task-mode) .task-top .tt-back,
-  body:not(.task-mode) .task-top .tt-title,
-  body:not(.task-mode) .task-top .tt-ctrl { display: none; }
-  body.task-mode .task-top .tt-brand { display: none; }
-  #appShell { display: flex; min-height: calc(100vh - var(--top-h)); }
+  /* ============ 3.0 头部（W1 重做）：照抄主站（情景训练 index.html）的组件与尺寸 ============
+     一级页面（首页/数据/词本/随身听/我的）= 主站 #topbar（半透明 + blur + 发丝描边 + 内容 860 居中）；
+     文章内 = 主站 .reader-head（fixed 玻璃胶囊，滚动收缩）+ .r-badges（iOS 拨杆等）。
+     夜间开关只在 #shellTop（一级页面），进文章后不再有它（用户 2026-09-24 修正 1）。 */
+  .app-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  /* —— 一级页面顶栏：主站 #topbar 原样尺寸 —— */
+  .shell-top { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.42);
+    -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%);
+    border-bottom: 1px solid rgba(231,238,233,.7); padding: 10px 18px;
+    display: flex; justify-content: center; }
+  .topbar-in { width: 100%; max-width: 860px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .topbar-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+  /* 主站顶栏英音/美音、夜间胶囊 */
+  .accent-btn { flex: none; border: 1px solid var(--iel-accent-line); background: #fff; color: var(--iel-accent-deep);
+    border-radius: 999px; padding: 6px 13px; font-size: 12.5px; font-weight: 600; white-space: nowrap; cursor: pointer;
+    position: relative; transition: background var(--iel-t-fast), border-color var(--iel-t-fast); }
+  .accent-btn::after { content: ""; position: absolute; inset: -5px 0; border-radius: 999px; }
+  .accent-btn:hover { background: var(--iel-accent-soft); border-color: var(--iel-accent); }
+  #voiceSel { max-width: 190px; }
+  /* —— 文章内：主站 .reader-head（fixed 玻璃胶囊 + 滚动收缩）—— */
+  .task-top { display: none; }
+  body.task-mode .task-top { display: block; }
+  .reader-head { position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+    width: min(860px, calc(100% - 28px)); z-index: 105; display: flex; align-items: center; gap: 5px;
+    padding: 6px 14px 6px 6px;
+    background: rgba(255,255,255,.42); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
+    border: 1px solid rgba(255,255,255,.5); border-radius: 999px; box-shadow: 0 3px 14px rgba(30,60,48,.08);
+    pointer-events: none; transition: padding var(--iel-t), top var(--iel-t); }
+  .reader-head .r-title { pointer-events: none; transition: font-size var(--iel-t); }
+  .reader-head.shrunk { top: 6px; padding: 2px 12px 2px 2px; background: rgba(255,255,255,.55); }
+  .reader-head.shrunk .r-title { font-size: 12.5px; }
+  .reader-head.shrunk .r-title .tcn { font-size: 10.5px; margin-left: 5px; }
+  .reader-head.shrunk .r-pos { font-size: 10px; padding: 1px 5px; margin-left: 6px; }
+  .reader-head.shrunk .back { width: 26px; height: 26px; font-size: 14px; }
+  .reader-head.shrunk .back::after { content: ""; position: absolute; inset: -7px; }
+  .back { pointer-events: auto; border: 1px solid var(--iel-line); background: #fff; border-radius: 50%;
+    width: 30px; height: 30px; padding: 0; font-size: 15px; line-height: 1; color: var(--iel-ink2);
+    flex: none; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;
+    transition: width var(--iel-t), height var(--iel-t), font-size var(--iel-t); }
+  .back::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; }
+  .back:hover { border-color: var(--iel-accent); color: var(--iel-accent-deep); background: #fff; }
+  .r-title { font-size: 15.5px; font-weight: 700; line-height: 1.3; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; flex: 1; min-width: 0; color: var(--text); }
+  .r-title .tcn { font-size: 12px; font-weight: 400; color: var(--iel-ink2); margin-left: 7px; }
+  .r-title .r-pos { font-size: 11px; font-weight: 600; color: var(--iel-accent-deep); background: var(--iel-accent-soft);
+    border-radius: 999px; padding: 1px 7px; margin-left: 8px; vertical-align: 1px; font-variant-numeric: tabular-nums; }
+  .r-nav { display: flex; gap: 8px; flex: none; pointer-events: auto; }
+  .nav-arrow { pointer-events: auto; border: none; background: transparent; border-radius: 999px; height: 26px;
+    padding: 0 12px; font-size: 12px; line-height: 1; color: var(--iel-accent-deep); flex: none; display: flex;
+    align-items: center; justify-content: center; cursor: pointer; white-space: nowrap; position: relative;
+    transition: background var(--iel-t-fast), color var(--iel-t-fast); }
+  .nav-arrow::after { content: ""; position: absolute; inset: -8px 0; border-radius: 999px; }
+  .nav-arrow:hover:not(:disabled) { background: var(--iel-accent-soft); }
+  .nav-arrow:disabled { opacity: .35; cursor: default; }
+  /* —— 文章内：主站 .r-badges（译文拨杆 / 行内词义拨杆 / 口音 / 音色 / 帮助 / 目标词）—— */
+  .task-top .r-badges { width: min(860px, calc(100% - 28px)); margin: 0 auto 14px; padding-top: 64px; }
+  .r-badges { position: relative; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .tr-msw { display: inline-flex; align-items: center; gap: 7px; flex: none; border: 1px solid var(--iel-mark-line);
+    background: #fff; border-radius: 999px; padding: 5px 12px 5px 5px; font-size: 12.5px; font-weight: 500;
+    color: var(--iel-accent-deep); cursor: pointer; font-family: inherit; position: relative;
+    transition: background var(--iel-t-fast), border-color var(--iel-t-fast); }
+  .tr-msw::after { content: ""; position: absolute; inset: -7px 0; border-radius: 999px; }
+  .tr-msw .knob { width: 28px; height: 17px; border-radius: 999px; background: rgba(31,45,38,.18); position: relative;
+    flex: none; transition: background .25s; }
+  .tr-msw .knob::after { content: ""; position: absolute; top: 2px; left: 2px; width: 13px; height: 13px;
+    border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(31,45,38,.28); transition: left .25s; }
+  .tr-msw.on { border-color: var(--iel-accent); background: var(--iel-accent-soft); }
+  .tr-msw.on .knob { background: var(--iel-accent); }
+  .tr-msw.on .knob::after { left: 13px; }
+  .tr-help { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--iel-line); background: #fff;
+    color: var(--iel-ink2); font-size: 12px; font-weight: 600; line-height: 1; cursor: pointer; flex: none;
+    position: relative; transition: border-color var(--iel-t-fast), color var(--iel-t-fast), background var(--iel-t-fast); }
+  .tr-help::after { content: ""; position: absolute; inset: -8px; border-radius: 50%; }
+  .tr-help:hover { border-color: var(--iel-accent); color: var(--iel-accent-deep); background: var(--iel-tint); }
+  .r-badge { display: inline-block; font-size: 12px; padding: 2px 10px; background: var(--iel-accent-soft);
+    color: var(--iel-accent-deep); border-radius: 999px; font-weight: 600; }
+  .r-badges .fav-badge { margin-left: auto; flex: none; background: #fdf1dc; color: #b07a10; }
+  .tr-bubble { position: absolute; top: calc(100% + 10px); right: 0; width: min(330px, calc(100vw - 40px));
+    background: var(--iel-glass-strong); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
+    border: 1px solid var(--iel-accent-line); border-radius: var(--iel-radius-sm); padding: 10px 14px;
+    font-size: 12.5px; line-height: 1.75; color: var(--iel-ink2); box-shadow: var(--iel-shadow);
+    opacity: 0; visibility: hidden; transform: translateY(-4px);
+    transition: opacity var(--iel-t-fast), transform var(--iel-t-fast), visibility var(--iel-t-fast); z-index: 60; }
+  .tr-bubble.show { opacity: 1; visibility: visible; transform: translateY(0); }
+  #appShell { display: flex; min-height: 100vh; }
   .sidenav { flex: none; width: 220px; padding: 16px 12px; border-right: 1px solid var(--border);
-    display: flex; flex-direction: column; gap: 4px; position: sticky; top: var(--top-h);
-    height: calc(100vh - var(--top-h)); }
-  .nav-brand { font-weight: 700; padding: 6px 10px 14px; color: var(--accent-text); }
+    display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; }
+  /* 侧栏品牌（照抄主站 .sn-logo）：一级页面才露脸 */
+  .sn-logo { display: flex; align-items: center; gap: 10px; padding: 2px 8px 20px; color: var(--text); }
+  .sn-logo .sn-mark { width: 34px; height: 34px; flex: none; border-radius: 9px; background: var(--grad);
+    color: var(--cta-ink); box-shadow: var(--grad-shadow), inset 0 1px 0 rgba(255,255,255,.28);
+    display: flex; align-items: center; justify-content: center; }
+  .sn-logo .sn-mark i { font-size: 18px; line-height: 1; }
+  .sn-name { font-weight: 700; font-size: 13.5px; line-height: 1.4; letter-spacing: .2px; white-space: nowrap; }
   .nav-item { min-height: 44px; text-align: left; padding: 0 12px; border: none; border-radius: 12px;
     background: transparent; font-size: 14px; color: var(--text); cursor: pointer; }
   .nav-item.on { background: var(--accent-soft, rgba(16,180,135,.07)); color: var(--accent-text); font-weight: 600; }
@@ -1589,9 +1667,16 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .sidenav { width: auto; height: auto; position: fixed; top: auto; left: 0; right: 0; bottom: 0; z-index: 300;
       flex-direction: row; border-right: none; border-top: 1px solid var(--border);
       padding: 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px)); }
-    .nav-brand { display: none; }
+    .sn-logo { display: none; }
     .nav-item { flex: 1; text-align: center; font-size: 11px; }
     #appView { padding: 16px 16px 88px; }
+    /* 文章内头部：主站手机档尺寸 */
+    .reader-head { top: 8px; gap: 4px; padding: 5px 10px 5px 5px; }
+    .tr-msw { padding: 4px 11px 4px 4px; font-size: 11.5px; }
+    .tr-msw .knob { width: 25px; height: 15px; }
+    .tr-msw .knob::after { width: 11px; height: 11px; }
+    .tr-msw.on .knob::after { left: 12px; }
+    .task-top .r-badges { padding-top: 58px; }
   }
   /* ============ 3.0 首页文章卡片（M1 Task 3） ============ */
   .art-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
@@ -1644,7 +1729,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      外壳与 M1 新页面统一到影子跟读的暖黑 token（--bg/--card/--border/--text/--accent-soft…），
      只把几处写死的浅色值换掉（.a-bar / .a-stage 等）。全部复用既有 token，不新造色。 */
   body.dark .sidenav { background: var(--bg); border-right-color: var(--border); }
-  body.dark .nav-brand { color: var(--accent-text); }
+  body.dark .sn-logo { color: var(--text); }
+  body.dark .sn-name { color: var(--text); }
   body.dark .nav-item { color: var(--text); }
   body.dark .nav-item.on { background: var(--accent-soft); color: var(--accent-text); }
   body.dark #appView { color: var(--text); }
@@ -1659,9 +1745,25 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .art-card[data-stage="pro"] .a-stage { background: var(--note-soft); color: var(--note); }
   body.dark .art-card .a-quiz { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-text); }
   body.dark .home-banner { background: var(--accent-soft); border-color: var(--accent-line); }
-  body.dark .task-top { background: var(--card); border-bottom-color: var(--border); }
-  body.dark .task-top .tt-back { border-color: var(--border); color: var(--text); }
-  body.dark .task-top .tt-brand { color: var(--accent-text); }
+  /* 新头部（W1 重做）：一级页面顶栏 + 文章内玻璃胶囊/拨杆，全部换暖黑 token */
+  body.dark .shell-top { background: rgba(28,26,23,.72); border-bottom-color: var(--border); }
+  body.dark .accent-btn { background: var(--card); border-color: var(--border); color: var(--text); }
+  body.dark .accent-btn:hover { background: rgba(16,180,135,.12); }
+  body.dark .reader-head { background: rgba(30,28,25,.72); border-color: rgba(255,255,255,.08);
+    box-shadow: 0 3px 14px rgba(0,0,0,.35); }
+  body.dark .reader-head.shrunk { background: rgba(30,28,25,.85); }
+  body.dark .back { background: var(--card); border-color: var(--border); color: var(--text); }
+  body.dark .back:hover { background: var(--card); }
+  body.dark .r-title { color: var(--text); }
+  body.dark .nav-arrow { color: var(--accent-text); }
+  body.dark .tr-msw { background: var(--card); border-color: var(--border); color: var(--accent-text); }
+  body.dark .tr-msw.on { background: var(--accent-soft); border-color: var(--accent); }
+  body.dark .tr-msw .knob { background: rgba(255,255,255,.2); }
+  body.dark .tr-msw .knob::after { background: #e2ddd5; }
+  body.dark .tr-msw.on .knob { background: var(--accent); }
+  body.dark .tr-msw.on .knob::after { background: #fff; }
+  body.dark .tr-help { background: var(--card); border-color: var(--border); color: var(--muted); }
+  body.dark .r-badge.fav-badge { background: rgba(217,164,65,.14); color: var(--note); }
   /* ② 的空与浮窗：空的三态、浮窗里的选项在暖黑上要够亮 */
   body.dark .sent .qz-blank.qa-no { color: #f0a08c; border-bottom-color: #f0a08c; }
   body.dark .qz-opt { background: var(--card); border-color: var(--border); color: var(--text); }
@@ -1683,38 +1785,51 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
 
     <a href="#art" class="sr-only sr-only-focusable">跳到正文</a>
 
-    <!-- 3.0 唯一的顶栏（W1，PRD §4.3 / §8.1）：常驻一条，外壳态与任务态共用。
-         必须排在 #appShell 之前，否则 sticky 只会在滚过它之后才吸顶（会先落在页面底部）。
-         外壳态左侧是品牌、右侧只有夜间；任务态左侧换成「返回首页 + 篇名」，右侧补上译文/词义/口音+音色。 -->
+    <!-- 3.0 文章内头部（W1 重做，照抄主站情景训练 index.html 的 .reader-head + .r-badges）。
+         只在任务模式现身；夜间开关不在这里（修正 1：只在 #shellTop，一级页面）。
+         .reader-head 是 fixed 玻璃胶囊、随滚动加 .shrunk（缩放逻辑见脚本尾部）。 -->
     <header class="task-top" id="taskTop">
-      <span class="tt-brand">雅思背单词 <b>3.0</b></span>
-      <button class="tt-back" type="button" onclick="TASK.exitTaskMode()" aria-label="返回首页">← 返回首页</button>
-      <div class="tt-title" id="ttTitle"></div>
-      <!-- 这几个开关从被藏掉的 header.topbar 搬进来（节点/id/事件全不动，只换家）——见 §4.3。 -->
-      <div class="tt-ctrl ctrl">
-        <button class="btn active" id="btnZh" title="显示/隐藏每句下方的中文全句翻译" aria-label="显示或隐藏中文全句翻译"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏全句译文</button>
-        <button class="btn active" id="btnGloss" title="显示/隐藏英文句内行间的单词词义与音标" aria-label="显示或隐藏行内单词词义"><i class="ri-eye-line" aria-hidden="true"></i> 隐藏行内词义</button>
+      <div class="reader-head" id="readerHead">
+        <button class="back" id="ttBack" type="button" onclick="TASK.exitTaskMode()" title="返回首页" aria-label="返回首页"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
+        <div class="r-title" id="ttTitle"><span class="tt-zh"></span><span class="tcn"></span><span class="r-pos"></span></div>
+        <div class="r-nav">
+          <button class="nav-arrow" id="ttPrev" type="button" aria-label="上一篇">上一篇</button>
+          <button class="nav-arrow" id="ttNext" type="button" aria-label="下一篇">下一篇</button>
+        </div>
       </div>
-      <div class="tt-ctrl ctrl voice-ctrl">
-        <button class="btn active" id="btnAccent" onclick="toggleAccent()" title="点击切换英式/美式" aria-label="切换英式美式发音">🇬🇧 英式</button>
+      <!-- 译文/词义改用主站那种 iOS 拨杆（修正 3）；口音/音色沿用主站按钮尺寸（修正 2）。 -->
+      <div class="r-badges" id="taskBadges">
+        <button class="tr-msw on" id="btnZh" type="button" role="switch" aria-checked="true" title="显示/隐藏每句下方的中文全句翻译"><span class="knob" aria-hidden="true"></span>全句译文</button>
+        <button class="tr-msw on" id="btnGloss" type="button" role="switch" aria-checked="true" title="显示/隐藏英文句内行间的单词词义与音标"><span class="knob" aria-hidden="true"></span>行内词义</button>
+        <button class="accent-btn" id="btnAccent" type="button" onclick="toggleAccent()" title="点击切换英式/美式" aria-label="切换英式美式发音">🇬🇧 英式</button>
         <select class="voice-sel" id="voiceSel" title="选择朗读音色（云端/Edge/本机）" aria-label="选择朗读音色"></select>
+        <button class="tr-help" id="ttHelp" type="button" aria-label="使用说明">?</button>
+        <span class="r-badge fav-badge" id="ttWords" title="本篇目标词数"></span>
+        <div class="tr-bubble" id="ttBubble" role="tooltip">点「全句译文」显示/隐藏每句下方的中文翻译；点「行内词义」显示/隐藏句内小字词义；「英式/美式」切换发音口音；右侧下拉选朗读音色。</div>
       </div>
-      <button class="btn" id="btnDark" onclick="toggleDark()" title="夜间模式" aria-label="切换夜间模式"><i class="ri-moon-line" aria-hidden="true"></i><span class="only-mobile"> 夜间模式</span></button>
     </header>
 
-    <!-- 3.0 外壳（M1）：左侧导航 5 项 + #appView 内容区，路由见 app.js。
-         旧版顶栏 / 播放条 / 正文布局先留在 DOM 里（运行时大量 getElementById 依赖它们），
-         本任务只把它们藏起来，由 T3–T7 逐步吸收。 -->
+    <!-- 3.0 外壳（M1）：左侧导航 5 项 + 内容区（一级页面顶栏 + #appView），路由见 app.js。
+         一级页面顶栏照抄主站 #topbar；夜间开关只在这里（修正 1）。 -->
     <div id="appShell">
       <nav class="sidenav" aria-label="主导航">
-        <!-- 品牌已挪到常驻顶栏（W1），这里不再重复一份 -->
+        <div class="sn-logo"><span class="sn-mark"><i class="ri-book-open-fill" aria-hidden="true"></i></span><span class="sn-name">雅思背单词 3.0</span></div>
         <button class="nav-item on" data-route="home">首页</button>
         <button class="nav-item" data-route="stats">学习数据</button>
         <button class="nav-item" data-route="words">单词本</button>
         <button class="nav-item" data-route="listen">随身听</button>
         <button class="nav-item" data-route="me">我的</button>
       </nav>
-      <main id="appView"></main>
+      <div class="app-col">
+        <nav class="shell-top" id="shellTop" aria-label="工具栏">
+          <div class="topbar-in">
+            <div class="topbar-actions">
+              <button class="accent-btn" id="btnDark" onclick="toggleDark()" title="切换深色/浅色模式" aria-label="切换深色模式">🌙</button>
+            </div>
+          </div>
+        </nav>
+        <main id="appView"></main>
+      </div>
     </div>
 
     <header class="topbar" role="banner">
@@ -4224,16 +4339,18 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     function readPrefs() { try { const raw = localStorage.getItem(PREFS_KEY); return raw ? JSON.parse(raw) : {}; } catch (e) { return {}; } }
     function writePrefs(p) { safeStore(PREFS_KEY, JSON.stringify(p)); }
     function savePref(k, v) { const p = readPrefs(); p[k] = v; writePrefs(p); }
-    /* ============ 翻译开关（章译+句译+段译） ============ */
+    /* ============ 翻译开关（章译+句译+段译） ============
+       3.0（W1 修正 3）：按钮改成主站那种 iOS 拨杆（.tr-msw），所以这里只切 .on 与 aria-checked，
+       不再改 innerHTML（拨杆里的 .knob 不能被子串覆盖）。 */
     function updateZhBtn() {
     const hidden = document.body.classList.contains('hide-zh');
     const btn = document.getElementById('btnZh');
-    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示全句译文' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏全句译文'; btn.classList.toggle('active', !hidden); }
+    if (btn) { btn.classList.toggle('on', !hidden); btn.setAttribute('aria-checked', String(!hidden)); }
     }
     function updateGlossBtn() {
     const hidden = document.body.classList.contains('hide-gl');
     const btn = document.getElementById('btnGloss');
-    if (btn) { btn.innerHTML = hidden ? '<i class="ri-eye-off-line" aria-hidden="true"></i> 显示行内词义' : '<i class="ri-eye-line" aria-hidden="true"></i> 隐藏行内词义'; btn.classList.toggle('active', !hidden); }
+    if (btn) { btn.classList.toggle('on', !hidden); btn.setAttribute('aria-checked', String(!hidden)); }
     }
     document.getElementById('btnZh').onclick = function() {
     document.body.classList.toggle('hide-zh');
@@ -4248,14 +4365,14 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     savePref('hideGl', hidden);
     };
 
-    /* 夜间模式 */
+    /* 夜间模式（W1 修正 1：只在 #shellTop 一级页面；文章内没有它） */
     function updateDarkUI(isDark) {
     document.body.classList.toggle('dark', isDark);
     document.documentElement.classList.toggle('dark', isDark);
     const themeMeta = document.querySelector('meta[name="theme-color"]');
     if (themeMeta) themeMeta.setAttribute('content', isDark ? '#1c1a17' : '#faf8f4');
     const btn = document.getElementById('btnDark');
-    if (btn) btn.innerHTML = (isDark ? '<i class="ri-sun-line" aria-hidden="true"></i>' : '<i class="ri-moon-line" aria-hidden="true"></i>') + '<span class="only-mobile"> 夜间模式</span>';
+    if (btn) btn.textContent = isDark ? '☀️' : '🌙';   // 主站口径（index.html 的 darkBtn）
     }
     function toggleDark() {
     const isDark = !document.body.classList.contains('dark');
@@ -6410,6 +6527,33 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           : '放这一句（放完自动记为已读，再点就是下一句）';
         btn.setAttribute('aria-label', label);
       }
+      /* 文章内头部（W1 重做）：把主站 .reader-head / .r-badges 的内容按当前篇填上 ——
+         中文标题 + 英文副标 + 篇号胶囊；上/下篇箭头切文章；目标词数进 fav-badge。 */
+      const _artWordCount = {};
+      function articleWordCount(a) {
+        if (_artWordCount[a] != null) return _artWordCount[a];
+        const set = new Set();
+        try { ShadowPlan.articleScope(SECTIONS, a).forEach(i => wordsOfSent(i).forEach(w => set.add(w))); } catch (e) {}
+        return (_artWordCount[a] = set.size);
+      }
+      function gotoArticle(a) {
+        if (a < 0 || a >= SECTIONS.length || !SECTIONS[a]) return;
+        if (taskMode) exitTaskMode();     // 换篇要重排队列：openArticle 在 taskMode 里会早退
+        openArticle(a);
+      }
+      function renderTaskTop(a) {
+        const titleEl = document.querySelector('#ttTitle .tt-zh');
+        const tcnEl = document.querySelector('#ttTitle .tcn');
+        const posEl = document.querySelector('#ttTitle .r-pos');
+        if (titleEl) titleEl.textContent = (a != null && SECTIONS[a]) ? SECTIONS[a].title : '全部文章';
+        if (tcnEl) tcnEl.textContent = (a != null && SECTIONS[a] && TIT_EN[SECTIONS[a].title]) ? TIT_EN[SECTIONS[a].title] : '';
+        if (posEl) posEl.textContent = (a != null) ? `第 ${a + 1}/${SECTIONS.length} 篇` : '';
+        const prev = document.getElementById('ttPrev'), next = document.getElementById('ttNext');
+        if (prev) { prev.disabled = !(a != null && a > 0); prev.onclick = (a != null && a > 0) ? function () { gotoArticle(a - 1); } : null; }
+        if (next) { next.disabled = !(a != null && a < SECTIONS.length - 1); next.onclick = (a != null && a < SECTIONS.length - 1) ? function () { gotoArticle(a + 1); } : null; }
+        const wb = document.getElementById('ttWords');
+        if (wb) wb.textContent = (a != null) ? `目标词 ${articleWordCount(a)}` : '';
+      }
       /* 自由跟读态（§2.3 没计划）的任务条：主行说明现状，辅行指路，唯一那颗键去设置。
          进度条归零；播放条控件由 updateTaskBar 之外的 .tb-play CSS 露出。 */
       function renderNoPlanTaskBar() {
@@ -6421,8 +6565,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const subEl = document.getElementById('tbSub');
         const againBtn = document.getElementById('tbAgain');
         const clockEl = document.getElementById('tbClock');
-        const topTitle = document.getElementById('ttTitle');
-        if (topTitle) topTitle.textContent = (currentArticle != null && SECTIONS[currentArticle]) ? SECTIONS[currentArticle].title : '全部文章';
+        renderTaskTop(currentArticle);
         if (titleEl) titleEl.textContent = '还没有学习计划';
         if (subEl) subEl.textContent = '去设置每天读多久';
         if (againBtn) againBtn.style.display = 'none';
@@ -6465,9 +6608,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           planned = plannedToday();
           leftN = todayLeftN();   // 这条减法只住在 todayLeftN() 里：绿点与首屏提示读同一个函数
         }
-        // 任务模式顶栏的标题（审阅 I1）：在学哪一篇。全部文章（直接进任务模式）时说「全部文章」。
-        const topTitle = document.getElementById('ttTitle');
-        if (topTitle) topTitle.textContent = (artScope && SECTIONS[currentArticle]) ? SECTIONS[currentArticle].title : '全部文章';
+        // 文章内头部（W1 重做）：标题 + 英文副标 + 篇号胶囊 + 上/下篇箭头。
+        renderTaskTop(artScope ? currentArticle : null);
         const quizN = inlineQuizTotal();   // 分母只数答得出的题（'ex' 无正文空位，不计入）
         const quizDoneN = Math.min(_served.size, quizN);
         const fin = taskFinished || allDone === true;
@@ -7292,6 +7434,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         exportBackup, importBackup,
         get active() { return taskMode; },
         get hasPlan() { return !!plan; },
+        get article() { return currentArticle; },   // W1：文章内头部要按当前篇填标题/箭头
         get queue() { return todayQueue; },
         get progress() { return prog; },
         recordRep, buildQueue, updateMarkers, updateBtn,
@@ -7417,6 +7560,20 @@ self.addEventListener('fetch', e => {
     })();
     try { window.APP3 = Object.assign(window.APP3 || {}, { pwa: App3PWA.state }); } catch (e) {}
     try { App3PWA.init(); } catch (e) {}
+
+    /* 文章内头部（W1 重做）：主站 .reader-head 的滚动收缩（滚过 40px 加 .shrunk）+
+       「?」帮助气泡。逻辑与主站 index.html 的 onScrollRH / helpBtn 同一套。 */
+    (function () {
+      const rh = document.getElementById('readerHead');
+      if (rh) {
+        const onScroll = () => rh.classList.toggle('shrunk', window.scrollY > 40);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
+      const help = document.getElementById('ttHelp'), bubble = document.getElementById('ttBubble');
+      if (help && bubble) help.onclick = () => bubble.classList.toggle('show');
+    })();
+
     function mobileBtnIcons() { // 移动端播放条：确保图标在窄屏下正常显示，不再替换文字
     const btns = document.querySelectorAll('.audiobar .btn');
     btns.forEach(btn => {

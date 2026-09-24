@@ -82,58 +82,74 @@ async function enterTask(page: import('@playwright/test').Page) {
   await expect(page.locator('body')).toHaveClass(/task-mode/);
   await expect(page.locator('#taskBar')).toBeVisible();
 }
-
-/* ===================== W1 · 任务模式顶栏开关补齐 ===================== */
-test.describe('3.0 W1 顶栏开关真的可达（PRD §4.3 / §8.1）', () => {
-  test('译文/词义/口音/音色/夜间 都可见且点得动；译文开关真的显示/隐藏译文', async ({ page }) => {
+/* ===================== W1 · 文章内头部开关（W1 重做：照抄主站） ===================== */
+test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24 修正）', () => {
+  test('文章内：译文/词义是 iOS 拨杆、口音+音色可见可点；夜间开关不在文章内', async ({ page }) => {
     await stubData(page, SIXQ);
     await enterTask(page);
 
-    // 过去这些节点在 display:none 的 header.topbar 里（0×0），这条必红
-    for (const sel of ['#btnZh', '#btnGloss', '#btnAccent', '#voiceSel', '#btnDark']) {
-      await expect(page.locator(sel), `${sel} 必须在任务模式顶栏可见`).toBeVisible();
+    // 修正 2/3：主站 .tr-msw 那种 iOS 拨杆（带 .knob），不是自造的文字按钮
+    for (const sel of ['#btnZh', '#btnGloss']) {
+      await expect(page.locator(sel), `${sel} 必须在文章内可见`).toBeVisible();
+      await expect(page.locator(`${sel} .knob`), `${sel} 必须是主站那种 iOS 拨杆`).toBeVisible();
     }
+    for (const sel of ['#btnAccent', '#voiceSel']) {
+      await expect(page.locator(sel), `${sel} 必须在文章内可见`).toBeVisible();
+    }
+    // 修正 1：夜间开关只在 #shellTop（一级页面），文章内不再有它
+    expect(await page.locator('#btnDark').isVisible(), '文章内不该有夜间开关').toBe(false);
 
-    // 译文开关：点一下真的把正文里的中文译文藏起来，再点回来
+    // 全句译文拨杆：点一下正文译文真的藏起来，aria-checked 跟着翻
     const zh = page.locator('#art .sent-zh').first();
     await expect(zh).toBeVisible();
     await page.locator('#btnZh').click();
     await expect(page.locator('body')).toHaveClass(/hide-zh/);
     await expect(zh).toBeHidden();
+    await expect(page.locator('#btnZh')).toHaveAttribute('aria-checked', 'false');
     await page.locator('#btnZh').click();
-    await expect(page.locator('body')).not.toHaveClass(/hide-zh/);
     await expect(zh).toBeVisible();
+    await expect(page.locator('#btnZh')).toHaveAttribute('aria-checked', 'true');
 
-    // 行内词义开关：body.hide-gl 跟着切
+    // 行内词义拨杆：body.hide-gl 跟着切
     await page.locator('#btnGloss').click();
     await expect(page.locator('body')).toHaveClass(/hide-gl/);
 
-    // 口音开关：英式 ↔ 美式，按钮文案跟着变
+    // 口音：英式 ↔ 美式，按钮文案跟着变
     const accent = page.locator('#btnAccent');
     await expect(accent).toContainText('英式');
     await accent.click();
     await expect(accent).toContainText('美式');
   });
 
-  test('夜间开关在顶栏：点一下 body.dark 切换，且新外壳观感跟着变', async ({ page }) => {
+  test('夜间开关在一级页面：点一下 body.dark 切换且新头部跟着变；进文章后收走', async ({ page }) => {
     await stubData(page, SIXQ);
-    await enterTask(page);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await expect(page.locator('#shellTop')).toBeVisible();
+    const darkBtn = page.locator('#btnDark');
+    await expect(darkBtn, '夜间开关必须在一级页面').toBeVisible();
 
-    const topBgLight = await page.locator('#taskTop').evaluate((el) => getComputedStyle(el).backgroundColor);
-    await page.locator('#btnDark').click();
+    const topBgLight = await page.locator('#shellTop').evaluate((el) => getComputedStyle(el).backgroundColor);
+    await darkBtn.click();
     await expect(page.locator('body')).toHaveClass(/dark/);
-
-    const topBgDark = await page.locator('#taskTop').evaluate((el) => getComputedStyle(el).backgroundColor);
-    expect(topBgDark, '外壳顶栏在深色下必须换成暖黑 token，不能还是浅色那套').not.toBe(topBgLight);
-
-    await page.locator('#btnDark').click();
+    const topBgDark = await page.locator('#shellTop').evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(topBgDark, '一级页面顶栏在深色下必须换成暖黑 token').not.toBe(topBgLight);
+    await darkBtn.click();
     await expect(page.locator('body')).not.toHaveClass(/dark/);
+
+    // 进文章 → 夜间开关随 #shellTop 一起收走（修正 1）
+    await waitAppReady(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    await page.reload();
+    await waitAppReady(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('body')).toHaveClass(/task-mode/);
+    expect(await page.locator('#btnDark').isVisible(), '进文章后不该再有夜间开关').toBe(false);
   });
 });
 
 /* ===================== W2 · 深色全覆盖（PRD §10.1） ===================== */
 test.describe('3.0 W2 深色全覆盖', () => {
-  test('切 body.dark 后外壳关键元素的背景/文字色都不是浅色那套', async ({ page }) => {
+  test('切 body.dark 后新头部与外壳关键元素的背景色都换到暖黑', async ({ page }) => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await expect(page.locator('.art-card')).toHaveCount(6);
@@ -148,21 +164,25 @@ test.describe('3.0 W2 深色全覆盖', () => {
         sidenav: bg('.sidenav'),
         navOn: bg('.nav-item.on'),
         artCard: bg('.art-card'),
-        aBar: bg('.art-card .a-bar'),
         aStage: bg('.art-card .a-stage'),
         banner: bg('.home-banner'),
-        taskTop: bg('.task-top'),
+        shellTop: bg('.shell-top'),
+        readerHead: bg('.reader-head'),
+        trMsw: bg('.tr-msw'),
       };
     });
 
     const light = await snapshot();
     await page.evaluate(() => document.body.classList.add('dark'));
+
     const dark = await snapshot();
 
-    // 硬编码色（旧代码在深色下原样不动）—— 这三条是「旧代码必红」的锁
-    expect(dark.aStage, '阶段胶囊底色必须随深色换，不能沿用浅色硬编码').not.toBe(light.aStage);
+    // 新头部（旧代码里这些节点根本不存在 / 或深浅一致）—— 这几条是「旧代码必红」的锁
+    expect(dark.shellTop, '一级页面顶栏底色必须随深色换').not.toBe(light.shellTop);
+    expect(dark.readerHead, '文章内玻璃胶囊底色必须随深色换').not.toBe(light.readerHead);
+    expect(dark.trMsw, '译文拨杆底色必须随深色换').not.toBe(light.trMsw);
     expect(dark.sidenav, '侧栏底色必须随深色换，不能靠透明蹭 body').not.toBe(light.sidenav);
-    expect(dark.taskTop, '顶栏底色必须随深色换').not.toBe(light.taskTop);
+    expect(dark.aStage, '阶段胶囊底色必须随深色换').not.toBe(light.aStage);
     // 其余外壳元素也不许在深色下停在浅色那套
     for (const k of ['navOn', 'artCard', 'banner'] as const) {
       expect(dark[k], `${k} 在深色下必须与浅色不同`).not.toBe(light[k]);
