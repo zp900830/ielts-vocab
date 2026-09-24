@@ -96,4 +96,49 @@ test.describe('3.0 随身听（M4，PRD §7）', () => {
     await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(true);
     await expect(page.locator('.ls-play')).toHaveAttribute('aria-label', '暂停');
   });
+
+  test('点卡片展开全屏阅读：正文 + 播放条现身；关闭收回卡片（不是回首页）', async ({ page }) => {
+    await stubData(page, TWO);
+    await gotoListen(page);
+    await installSpeakStub(page);
+
+    await page.locator('.ls-cover').click();
+    await expect(page.locator('body')).toHaveClass(/listen-mode/);
+    await expect(page.locator('#art')).toBeVisible();
+    await expect(page.locator('#art .sent').first()).toBeVisible();
+    await expect(page.locator('#audiobar')).toBeVisible();
+    // 展开即起播：当前句高亮
+    await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(true);
+    await expect(page.locator('#art .sent.playing')).toHaveCount(1);
+
+    // 关闭 → 收回卡片，仍在 #/listen
+    await page.locator('#lsClose').click();
+    await expect(page.locator('body')).not.toHaveClass(/listen-mode/);
+    await expect(page).toHaveURL(/#\/listen/);
+    await expect(page.locator('.ls-card')).toBeVisible();
+  });
+
+  test('连续播放会推进：兑现一句 → 自动进下一句（不用手点）', async ({ page }) => {
+    await stubData(page, TWO);
+    await gotoListen(page);
+    await installSpeakStub(page);
+    await page.locator('.ls-play').click();
+    await expect.poll(() => page.evaluate(() => TASK.listenState().idx)).toBe(0);
+    await finishSpeak(page);
+    await expect.poll(() => page.evaluate(() => TASK.listenState().idx), '连播要自动推进').toBe(1);
+    await expect(page.locator('.ls-info')).toContainText('第 2 / 4 句');
+  });
+
+  test('篇末自动切下一篇（六篇循环）', async ({ page }) => {
+    await stubData(page, TWO);
+    await gotoListen(page);
+    await installSpeakStub(page);
+    // 直接跳到本片末句（第 4 句）再放完 → 应自动切到第 2 篇
+    await page.evaluate(() => TASK.listenSeek(3));
+    await expect.poll(() => page.evaluate(() => TASK.listenState().idx)).toBe(3);
+    await finishSpeak(page);
+    await expect.poll(() => page.evaluate(() => TASK.listenState().a), '篇末要切下一篇').toBe(1);
+    await expect.poll(() => page.evaluate(() => TASK.listenState().idx)).toBe(0);
+    await expect(page.locator('.ls-art')).toContainText('校园与文化');
+  });
 });

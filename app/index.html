@@ -2015,6 +2015,18 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     background: var(--card); color: var(--text); font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
   .ls-expand { display: block; width: 100%; min-height: 44px; margin-top: 14px; border: 1px dashed var(--border);
     border-radius: 14px; background: var(--card); color: var(--accent-text); font: inherit; font-weight: 700; cursor: pointer; }
+  /* 展开全屏阅读：复用任务模式那套（.layout 正文 + 底部 .audiobar），只是不挂任务条。 */
+  body.listen-mode { background: #faf8f4; }
+  body.listen-mode > .layout { display: block; }
+  body.listen-mode #appShell { display: none; }
+  body.listen-mode > #audiobar { display: flex; }
+  body.listen-mode .listen-top { display: block; }
+  .listen-top { position: sticky; top: 0; z-index: 40; display: none; align-items: center; gap: 10px;
+    padding: 10px 16px; background: rgba(250,248,244,.92); backdrop-filter: blur(12px); }
+  .listen-top .back { min-width: 44px; min-height: 44px; border: 1px solid var(--border); border-radius: 999px;
+    background: var(--card); color: var(--text); font: inherit; cursor: pointer; }
+  .listen-top .r-title { font-weight: 700; color: var(--text); }
+  .listen-top .r-pos { margin-left: 8px; font-size: 12px; color: var(--muted); font-weight: 400; }
     </style>
 
     <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
@@ -2053,6 +2065,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         <span class="r-badge fav-badge" id="ttWords" title="本篇目标词数"></span>
         <div class="tr-bubble" id="ttBubble" role="tooltip">点「全句译文」显示/隐藏每句下方的中文翻译；点「行内词义」显示/隐藏句内小字词义。口音与音色在「我的」里切换（侧栏左下角）。</div>
       </div>
+    </header>
+
+    <!-- 随身听展开态顶栏（M4 §7.3）：只有标题 + 返回卡片。复用任务模式那套 reader-head 观感，
+         但不挂任务模式的 #ttPrev/#ttNext（那两颗会跳进任务模式，随身听只要听）。 -->
+    <header class="listen-top" id="listenTop">
+      <button class="back" id="lsClose" type="button" onclick="TASK.listenCollapse()" aria-label="返回随身听">←</button>
+      <div class="r-title"><span class="tt-zh" id="lsTitle"></span><span class="r-pos" id="lsPos"></span></div>
     </header>
 
     <!-- 3.0 外壳（M1）：左侧导航 4 项 + 底部「我的」一行 + #appView，路由见 app.js。 -->
@@ -2329,6 +2348,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         }).catch(e => { try { dlog('init-fail', e && e.message); } catch (err) {} });
       }
 let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
+/* 随身听上下文开关（M4）：TASK 里 set，launch()（外层作用域）读它 —— 决定完播走
+   收听账（§7.6，不碰精读）还是任务模式/自由播放的接触账。 */
+let listenOn = false;
       let cur = null; // 当前弹窗词
       let currentChapter = -1; // -1 = 全部文章，0+ = 当前章节索引
       let chapterSentStart = 0; // 当前章节在全文句中的起始偏移
@@ -4070,8 +4092,20 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     } catch (e) {}
     speak(sentText(sents[i]), () => {
     if (!playing || my !== speakToken) return;
-    // 自由模式下播完一句也计入任务 reps（任务模式由手动按钮计数，不重复）
-    try { if (!TASK.active && TASK.hasPlan) { const gi = (currentChapter < 0) ? i : chapterSentStart + i; TASK.onSentenceComplete(gi); } } catch (e) {}
+    /* 自由/随身听模式：随身听记独立收听账（§7.6，不碰精读）；其余自由播放仍记接触（v2.0 口径）。
+       任务模式由手动按钮计数（taskSentenceFinished），这里不重复。 */
+    try {
+      if (!TASK.active) {
+        const gi = (currentChapter < 0) ? i : chapterSentStart + i;
+        if (listenOn) {
+          if (TASK.listenTick) TASK.listenTick(gi);
+          /* 连播：高亮跟到下一句。真播时 onstart 也会设 idx，这里先设是为了
+             「一句放完 → 下一句」在 headless（speak 被 stub、onstart 不触发）里也可验证。 */
+          idx = i + 1;
+          if (idx < sents.length) paint();
+        } else if (TASK.hasPlan) { TASK.onSentenceComplete(gi); }
+      }
+    } catch (e) {}
     // 单句循环模式：只有锚定句的 completion 才计数+重播（重置 launchedUpTo 允许重复发射同一句）；
     // 预取兄弟句/旧链残留 speak 的 completion 直接落到正常推进（launchedUpTo 去重，自然无害）
     if (loopMode && i === loopSent) {
@@ -4100,6 +4134,8 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     if (i + 1 >= sents.length) {
     // 末句播完才算播完：预取的 launch(len) 会提前触发结束分支，
     // 把最后几句连高亮带按钮状态一起掐掉（播到底部就停的根因）
+    /* 随身听：篇末自动切下一篇并续播（§7.4）；任务模式/普通阅读：停在末句。 */
+    if (listenOn) { try { TASK.listenNextArticle(); } catch (e) {} return; }
     playing = false;
     // 播完本章：把续读位记在末句。原先这里写 {i:0}，一是让用户重开时"回到开头"
     // 误以为进度丢了，二是整体替换存档会抹掉 savePos 维护的 chapter/chapterI 分章进度。
@@ -5371,6 +5407,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
       function listenOpen(a) {
         _listenCtx = true;
+        listenOn = true;
         document.body.classList.add('listen-page');
         if (a == null) a = (_listenArticle != null) ? _listenArticle : 0;
         if (_listenArticle !== a || currentChapter !== a) {
@@ -5385,6 +5422,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       function listenClose() {
         if (!_listenCtx) return;
         _listenCtx = false; _listenExpanded = false;
+        listenOn = false;
         document.body.classList.remove('listen-page', 'listen-mode');
         if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
         listenFlush();
@@ -5415,6 +5453,43 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       }
       function listenMark() { try { addMark(); } catch (e) {} }
       function listenAB() { if (!_listenExpanded && typeof listenExpand === 'function') listenExpand(); try { toggleAB(); } catch (e) {} }
+      /* 展开全屏阅读（§7.3）：正文 = 既有 #art（段→句 + 行内词义 + 当前句高亮），
+         播放条 = 既有底部 .audiobar。关闭 → 收回卡片（listenCollapse），不是回首页。 */
+      function listenExpand() {
+        if (!_listenCtx) listenOpen(_listenArticle != null ? _listenArticle : 0);
+        if (_listenArticle != null && currentChapter !== _listenArticle) {
+          currentChapter = _listenArticle; chapterSentStart = computeChapterStart(_listenArticle);
+          idx = -1; _paintIdx = -2; render();
+        }
+        _listenExpanded = true;
+        document.body.classList.add('listen-mode');
+        const t = document.getElementById('lsTitle'), p = document.getElementById('lsPos');
+        if (t) t.textContent = SECTIONS[_listenArticle] ? SECTIONS[_listenArticle].title : '';
+        if (p) p.textContent = `第 ${(_listenArticle || 0) + 1}/${SECTIONS.length} 篇`;
+        _listenTick = _listenTick || Date.now();
+        playFrom(idx >= 0 ? idx : 0);   // 展开即连播（§7.4）
+      }
+      function listenCollapse() {
+        _listenExpanded = false;
+        document.body.classList.remove('listen-mode');
+        if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
+        listenFlush();
+        try { paint(); } catch (e) {}
+        try { if (window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
+      }
+      /* §7.4 篇末自动切下一篇（六篇循环）——只由 launch 的完播分支在随身听上下文里调。 */
+      function listenNextArticle() {
+        const n = SECTIONS.length;
+        const a = (((_listenArticle || 0) + 1) % n + n) % n;
+        _listenArticle = a; currentArticle = a; currentChapter = a;
+        chapterSentStart = computeChapterStart(a);
+        idx = -1; _paintIdx = -2; render();
+        _listenTick = Date.now();
+        const t = document.getElementById('lsTitle'), p = document.getElementById('lsPos');
+        if (t) t.textContent = SECTIONS[a] ? SECTIONS[a].title : '';
+        if (p) p.textContent = `第 ${a + 1}/${SECTIONS.length} 篇`;
+        playFrom(0);
+      }
       function listenFlush() { /* Task 3 落账；Task 1 先留空壳，避免 Task 1 引用未定义 */ }
 
       /* ============ v2：单一事件根（真值只有一份） ============
@@ -7885,6 +7960,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode, openArticle, openArticleQuiz, playSentence,
         listenOpen, listenClose, listenToggle, listenStep, listenSeek,
         listenCycleLoop, listenCycleRate, listenMark, listenAB,
+        listenExpand, listenCollapse, listenNextArticle,
         listenState, get listenArticle() { return _listenArticle; },
         again, prev, next, pauseNew, resetPlan, onSentenceComplete,
         taskSentenceFinished,
