@@ -244,4 +244,58 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
     }), { message: '播放的必须是含该词的原文句' }).toContain('atmosphere');
     expect(await page.evaluate(() => TASK.article), '进的必须是该词所属那一篇').toBe(0);
   });
+
+  test('深色模式：单词本卡片/详情不是白底，深色下可读（PRD §10.1）', async ({ page }) => {
+    await stubData(page, WORDS);
+    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await waitShadowReady(page);
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(15);
+      const st = TASK.state();
+      st.words['atmosphere'] = Object.assign(ShadowPlan.newWord(), { stage: 'graduated', reps: 12, ok3: 1 });
+      APP3.route();
+    });
+    await page.locator('.wb-row[data-w="atmosphere"]').click();
+    const lightRow = await page.locator('.wb-row').first().evaluate((el) => getComputedStyle(el).backgroundColor);
+    const lightDet = await page.locator('.wb-detail').evaluate((el) => getComputedStyle(el).backgroundColor);
+    // .wr-pill 底是**写死的浅色** rgba(0,0,0,.05) —— 深色覆盖漏了它就会一直浅色（真正的漏点）
+    const lightPill = await page.locator('.wb-row[data-w="library"] .wr-pill').evaluate((el) => getComputedStyle(el).backgroundColor);
+    await page.evaluate(() => document.body.classList.add('dark'));
+    const darkRow = await page.locator('.wb-row').first().evaluate((el) => getComputedStyle(el).backgroundColor);
+    const darkDet = await page.locator('.wb-detail').evaluate((el) => getComputedStyle(el).backgroundColor);
+    const darkPill = await page.locator('.wb-row[data-w="library"] .wr-pill').evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(darkRow).not.toBe(lightRow);
+    expect(darkDet).not.toBe(lightDet);
+    expect(darkPill, '深色下状态胶囊底必须换掉写死的浅色').not.toBe(lightPill);
+    expect(darkPill).not.toBe('rgba(0, 0, 0, 0.05)');
+    expect(darkRow).not.toBe('rgb(255, 255, 255)');
+    expect(darkDet).not.toBe('rgb(255, 255, 255)');
+    const color = await page.locator('.wd-mean').evaluate((el) => getComputedStyle(el).color);
+    expect(color, '深色下正文不能还是黑字').not.toBe('rgb(0, 0, 0)');
+  });
+
+  test('无障碍：h1 唯一、筛选是 button+aria-pressed、行可聚焦可键盘、触摸目标 ≥44px', async ({ page }) => {
+    await stubData(page, BIG);
+    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await waitShadowReady(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); APP3.route(); });
+
+    await expect(page.locator('.words-page > h1')).toHaveCount(1);
+    await expect(page.locator('.wb-filter')).toHaveCount(4);
+    for (const f of ['all', 'todo', 'learning', 'mastered']) {
+      await expect(page.locator(`.wb-filter[data-f="${f}"]`)).toHaveAttribute('aria-pressed', /^(true|false)$/);
+    }
+    const row = page.locator('.wb-row').first();
+    await expect(row).toHaveAttribute('aria-expanded', 'false');
+    expect(await row.evaluate((el) => el.tagName)).toBe('BUTTON');
+    for (const sel of ['.wb-row', '.wb-filter', '.wb-more']) {
+      const h = await page.locator(sel).first().evaluate((el) => el.getBoundingClientRect().height);
+      expect(h, `${sel} 触摸目标 ≥44px`).toBeGreaterThanOrEqual(44);
+    }
+    // 键盘：聚焦到行，Enter 展开
+    await row.focus();
+    await page.keyboard.press('Enter');
+    await expect(row).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.locator('.wb-detail')).toBeVisible();
+  });
 });
