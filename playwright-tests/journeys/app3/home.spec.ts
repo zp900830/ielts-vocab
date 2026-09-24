@@ -111,8 +111,8 @@ test.describe('3.0 首页', () => {
     await page.locator('#setupSheet .ps-opt').nth(2).click();      // 15 分钟
     await page.locator('#setupSheet .ps-start').click();
     await expect(page.locator('#homeBanner .b-go')).toContainText('继续学');
-    // 建完计划横幅补一条连续/毕业摘要（§3.5 第四类）
-    await expect(page.locator('#homeBanner .hb-sum')).toContainText('连续');
+    // 建完计划横幅补一条摘要（§3.5 第四类）。W5-2：新建计划当天 streak=0，文案是「今天开始」不是「连续 0 天」
+    await expect(page.locator('#homeBanner .hb-sum')).toContainText('今天开始');
     await expect(page.locator('#homeBanner .hb-sum')).toContainText('已毕业');
   });
 });
