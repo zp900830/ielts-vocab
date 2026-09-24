@@ -1658,8 +1658,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     display: flex; align-items: center; justify-content: center; }
   .sn-logo .sn-mark i { font-size: 18px; line-height: 1; }
   .sn-name { font-weight: 700; font-size: 13.5px; line-height: 1.4; letter-spacing: .2px; white-space: nowrap; }
-  .nav-item { min-height: 44px; text-align: left; padding: 0 12px; border: none; border-radius: 12px;
+  /* 导航项：图标 + 文字（PRD §2.2 五颗），对齐/间距照主站侧栏 .sn-nav 的观感 */
+  .nav-item { display: flex; align-items: center; gap: 10px; min-height: 44px; text-align: left;
+    padding: 0 12px; border: none; border-radius: 12px;
     background: transparent; font-size: 14px; color: var(--text); cursor: pointer; }
+  .nav-item i { font-size: 19px; line-height: 1; flex: none; width: 19px; text-align: center; }
   .nav-item.on { background: var(--accent-soft, rgba(16,180,135,.07)); color: var(--accent-text); font-weight: 600; }
   #appView { flex: 1; min-width: 0; padding: 20px 24px 88px; }
   /* 平板档（PRD §10.2）：701–1023px 侧栏收窄到 180px */
@@ -1674,7 +1677,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       flex-direction: row; border-right: none; border-top: 1px solid var(--border);
       padding: 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px)); }
     .sn-logo { display: none; }
-    .nav-item { flex: 1; text-align: center; font-size: 11px; }
+    /* 手机 TabBar：图标在上、文字在下 */
+    .nav-item { flex: 1; flex-direction: column; justify-content: center; gap: 2px; text-align: center;
+      font-size: 11px; padding: 0 4px; }
+    .nav-item i { font-size: 20px; width: auto; }
     #appView { padding: 16px 16px 88px; }
     /* 文章内头部：主站手机档尺寸；窄屏按 .layout 的 16px 内边距对齐（100% − 32px） */
     .reader-head { top: 8px; gap: 4px; padding: 5px 10px 5px 5px; width: calc(100% - 32px); }
@@ -1780,12 +1786,15 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .qz-note { background: rgba(52,211,153,.07); border-color: rgba(52,211,153,.16); }
     </style>
 
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <!-- 实测：把下面这行图标字体样式表改成非阻塞加载后，顶栏收纳会开始等第三方字体 ——
          4 秒内没落地就判「放得下」，汉堡不出现（并行跑套件时复现）。首屏那 3–5 倍的收益
-         要等「顶栏测量不依赖远端图标字体」之后再来拿，所以这里保持阻塞加载。 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+         要等「顶栏测量不依赖远端图标字体」之后再来拿，所以这里保持阻塞加载。
+         2026-09-24：图标源统一到主站那套（remixicon@4.5.0 + fastly.jsdelivr.net，含 woff2 preload）——
+         三站同一版本，`ri-*` 才不会一处有、一处是空白豆腐块。 -->
+    <link rel="preload" href="https://fastly.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css">
 
     <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20color=%22%23000%22%20d=%22M0%200h16v16H0V0zm16%200H0v16h16V0zm-7-5h7v2h-7V2zm0%205h7v2h-7V2zm0%205h7v2h-7V2%22/%3E%3C/svg%22">
   </head>
@@ -1822,11 +1831,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <div id="appShell">
       <nav class="sidenav" aria-label="主导航">
         <div class="sn-logo"><span class="sn-mark"><i class="ri-book-open-fill" aria-hidden="true"></i></span><span class="sn-name">雅思背单词 3.0</span></div>
-        <button class="nav-item on" data-route="home">首页</button>
-        <button class="nav-item" data-route="stats">学习数据</button>
-        <button class="nav-item" data-route="words">单词本</button>
-        <button class="nav-item" data-route="listen">随身听</button>
-        <button class="nav-item" data-route="me">我的</button>
+        <button class="nav-item on" data-route="home"><i class="ri-home-5-line" aria-hidden="true"></i><span>首页</span></button>
+        <button class="nav-item" data-route="stats"><i class="ri-bar-chart-2-line" aria-hidden="true"></i><span>学习数据</span></button>
+        <button class="nav-item" data-route="words"><i class="ri-book-2-line" aria-hidden="true"></i><span>单词本</span></button>
+        <button class="nav-item" data-route="listen"><i class="ri-headphone-line" aria-hidden="true"></i><span>随身听</span></button>
+        <button class="nav-item" data-route="me"><i class="ri-user-3-line" aria-hidden="true"></i><span>我的</span></button>
       </nav>
       <div class="app-col">
         <nav class="shell-top" id="shellTop" aria-label="工具栏">
@@ -4205,7 +4214,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     document.querySelectorAll('.rate-menu [data-mrate]').forEach(b =>
     b.classList.toggle('active', parseFloat(b.dataset.mrate) === r));
     const c = document.getElementById('rateCycle');
-    if (c) c.innerHTML = `<i class="ri-time-s-line" aria-hidden="true"></i> ${r}x`;
+    if (c) c.innerHTML = `<i class="ri-speed-line" aria-hidden="true"></i> ${r}x`;
     if (idx >= 0) paint(); // 刷新时长估算
     }
 
