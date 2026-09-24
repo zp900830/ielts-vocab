@@ -3,8 +3,7 @@
 (function () {
   const ROUTES = ['home', 'stats', 'words', 'listen'];
   const TODO_META = {
-    // M2 起「学习数据」已是真页（renderStats）；占位只剩单词本 / 随身听。
-    words: ['单词本', 'ri-book-2-line'],
+    // M2 起「学习数据」已是真页（renderStats），M3 起「单词本」也是真页（renderWords）；占位只剩「随身听」。
     listen: ['随身听', 'ri-headphone-line'],
   };
   let cur = 'home';
@@ -40,7 +39,7 @@
     // 左下角用户卡：点它开/关「我的」浮窗（不是切页）。浮窗自己的按钮在 wireMePop 里代理。
     const me = e.target.closest('#meCard');
     if (me) { toggleMePop(); return; }
-    // 单词本：加载更多（增量渲染，M3）。筛选/展开/在 T2/T3 追加。
+    // 单词本：筛选 / 展开 / 重学 / 播放 / 加载更多（M3，都是每次重渲的节点，走事件代理）。
     const wf = e.target.closest('.wb-filter');
     if (wf) { location.hash = '#/words/' + wf.dataset.f; return; }
     const wrel = e.target.closest('.wd-relearn');
