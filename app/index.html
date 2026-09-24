@@ -5338,6 +5338,12 @@ let listenOn = false;
         if (!o || typeof o !== 'object') o = {};
         if (!o.reps || typeof o.reps !== 'object') o.reps = {};
         if (!o.pass2 || typeof o.pass2 !== 'object') o.pass2 = {};
+        /* §7.6 收听账：与 reps/pass2 同在 3.0 私有 key 里（不给共享 ielts.shadow.v2 加字段）。
+           sents[day][篇] = 收听句数；ms[day][篇] = 收听毫秒；last[篇] = 最近收听时间戳。 */
+        if (!o.listen || typeof o.listen !== 'object') o.listen = {};
+        if (!o.listen.sents || typeof o.listen.sents !== 'object') o.listen.sents = {};
+        if (!o.listen.ms || typeof o.listen.ms !== 'object') o.listen.ms = {};
+        if (!o.listen.last || typeof o.listen.last !== 'object') o.listen.last = {};
         _articleStats = o;
         return _articleStats;
       }
@@ -5490,7 +5496,48 @@ let listenOn = false;
         if (p) p.textContent = `第 ${a + 1}/${SECTIONS.length} 篇`;
         playFrom(0);
       }
-      function listenFlush() { /* Task 3 落账；Task 1 先留空壳，避免 Task 1 引用未定义 */ }
+      function listenFlush() {
+        if (!_listenCtx || _listenArticle == null || !_listenTick) return;
+        const now = Date.now();
+        const dt = Math.min(now - _listenTick, LISTEN_MAX_MS);
+        if (dt > 1000) {   // 不足 1 秒不值得记
+          const L = loadArticleStats().listen, day = day2();
+          const dm = L.ms[day] || (L.ms[day] = {});
+          dm[_listenArticle] = (dm[_listenArticle] || 0) + dt;
+          saveArticleStats();
+        }
+        _listenTick = now;
+      }
+      /* §7.6 收听账：一句一记（句数 +1；时长 = 距上一笔的毫秒，单笔封顶 LISTEN_MAX_MS）。
+         只进 LS_ARTICLE.listen，不碰 ROOT2/state.sents/repsByArticle —— 所以刷不动精读/熟练度。 */
+      function listenTick(gi) {
+        const a = artOfSentGlobal(gi);
+        const L = loadArticleStats().listen;
+        const now = Date.now();
+        const day = day2();
+        const ds = L.sents[day] || (L.sents[day] = {});
+        ds[a] = (ds[a] || 0) + 1;
+        const dt = _listenTick ? Math.min(now - _listenTick, LISTEN_MAX_MS) : 0;
+        if (dt > 0) { const dm = L.ms[day] || (L.ms[day] = {}); dm[a] = (dm[a] || 0) + dt; }
+        _listenTick = now;
+        L.last[a] = now;
+        saveArticleStats();
+      }
+      function listenStat() {
+        const L = loadArticleStats().listen;
+        let totalSents = 0, totalMs = 0; const byArticle = {};
+        Object.keys(L.sents).forEach(function (d) {
+          const row = L.sents[d] || {};
+          Object.keys(row).forEach(function (a) { totalSents += row[a]; byArticle[a] = (byArticle[a] || 0) + row[a]; });
+        });
+        Object.keys(L.ms).forEach(function (d) {
+          const row = L.ms[d] || {};
+          Object.keys(row).forEach(function (a) { totalMs += row[a]; });
+        });
+        return { totalSents: totalSents, totalMs: totalMs, byArticle: byArticle, last: L.last };
+      }
+      function listenLast(a) { return loadArticleStats().listen.last[a] || 0; }
+      function listenSetTickForTest(ts) { _listenTick = ts; }
 
       /* ============ v2：单一事件根（真值只有一份） ============
          老的 prog.sentences 要撑到任务流程接上为止（计划 Task 7，两步制见 2026-09-22 规格），所以现在是
@@ -7961,7 +8008,8 @@ let listenOn = false;
         listenOpen, listenClose, listenToggle, listenStep, listenSeek,
         listenCycleLoop, listenCycleRate, listenMark, listenAB,
         listenExpand, listenCollapse, listenNextArticle,
-        listenState, get listenArticle() { return _listenArticle; },
+        listenState, listenStat, listenLast, listenTick, listenFlush, listenSetTickForTest,
+        get listenArticle() { return _listenArticle; },
         again, prev, next, pauseNew, resetPlan, onSentenceComplete,
         taskSentenceFinished,
         exportBackup, importBackup,

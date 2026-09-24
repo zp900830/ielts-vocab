@@ -141,4 +141,43 @@ test.describe('3.0 随身听（M4，PRD §7）', () => {
     await expect.poll(() => page.evaluate(() => TASK.listenState().idx)).toBe(0);
     await expect(page.locator('.ls-art')).toContainText('校园与文化');
   });
+
+  /* §7.6 核心锁：听一段后——精读次数/熟练度一个字不许动，收听账要动。
+     夹具特意让「听的那几句」是**还没精读过的**句子：若收听误走了 contact（onSentenceComplete），
+     everRead/progress 会被抬起来，这条立刻红。 */
+  test('§7.6 分开记账：收听不改精读句数/熟练度，只改收听数据', async ({ page }) => {
+    await stubData(page, TWO);
+    await gotoListen(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    await page.evaluate(() => TASK.listenOpen(0));
+    const before = await page.evaluate(() => ({
+      reps: TASK.repsOf(0), prog: APP3.articleStat(0).progress, ever: APP3.articleStat(0).ever,
+      sentDone: (TASK.state().daily as Record<string, { sentDone?: number }>)[ShadowPlan.dayKey(Date.now(), 4)]?.sentDone || 0,
+      listen: TASK.listenStat().totalSents,
+    }));
+    expect(before.ever, '基线：这一篇还没精读过').toBe(0);
+    expect(before.listen).toBe(0);
+
+    // 听 3 句（stub 兑现完播）
+    await installSpeakStub(page);
+    await page.locator('.ls-play').click();
+    for (let k = 0; k < 3; k++) {
+      await page.evaluate(() => TASK.listenSetTickForTest(Date.now() - 90000));  // 每句前拨慢 90s → 3 句 ≈ 4.5 分钟
+      await finishSpeak(page);
+    }
+    const after = await page.evaluate(() => ({
+      reps: TASK.repsOf(0), prog: APP3.articleStat(0).progress, ever: APP3.articleStat(0).ever,
+      sentDone: (TASK.state().daily as Record<string, { sentDone?: number }>)[ShadowPlan.dayKey(Date.now(), 4)]?.sentDone || 0,
+      stat: TASK.listenStat(),
+    }));
+    // 精读口径：一个字不动
+    expect(after.reps, '精读次数不许被收听刷').toBe(before.reps);
+    expect(after.prog, '熟练度不许被收听刷').toBe(before.prog);
+    expect(after.ever, '通读句数不许被收听刷').toBe(before.ever);
+    expect(after.sentDone, '日账 sentDone 不许被收听刷').toBe(before.sentDone);
+    // 收听账：动了
+    expect(after.stat.totalSents, '收听句数要动').toBeGreaterThanOrEqual(3);
+    expect(after.stat.totalMs, '收听时长要动').toBeGreaterThan(0);
+    expect(after.stat.last[0], '最近收听要更新').toBeGreaterThan(0);
+  });
 });
