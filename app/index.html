@@ -5940,6 +5940,31 @@ let listenOn = false;
         const planned = plannedDay();
         return { done: done, planned: planned, left: Math.max(0, planned - done), minutes: d.minutes || 0 };
       }
+      /* 「今天的通读额度读满了没有」—— ② 入口（§4.4 入口 1）2026-09-24 改的触发判据。
+         旧判据是「本篇队列走完」：队列按篇装配、且排程是滚动的，一篇 339 句、当天额度 180 句时，
+         读完 180 句队列里还剩一大截没读 → 小结永远不出现，主按钮还一直写「下一句」把人往
+         「多读」上引（用户 2026-09-24 实测：本篇 337/339、今天 180/180，主按钮仍是「下一句」，
+         首页卡片也没有任何入口 —— 核心闭环断在这里）。
+         新判据只认「今天这一本账」，与在不在某一篇、文章读没读完都无关：当天快照（plannedDay）
+         定的 N 句读满就算今天的活干完。planned > 0 是必须的：没排到句（快照 0）不算读满，
+         否则空计划会被误判成完成。 */
+      function todayQuotaDone() {
+        if (!ROOT2 || !ROOT2.plan) return false;
+        const tp = todayProgress();
+        return tp.planned > 0 && tp.left <= 0;
+      }
+      /* 今天在哪一篇上读的（读得最多的那篇；一句没读返回 -1）。
+         首页卡片「答题」、数据页「今天」块与「待加强」三处指向的是同一个入口，共用这一份派生，
+         不许各自去猜「今天该答题的是哪一篇」。 */
+      function todayArticle() {
+        let best = -1, bestN = 0;
+        for (let a = 0; a < SECTIONS.length; a++) {
+          let n = 0;
+          ShadowPlan.articleScope(SECTIONS, a).forEach((i) => { if (readToday2(i)) n++; });
+          if (n > bestN) { bestN = n; best = a; }
+        }
+        return best;
+      }
 
       function today() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
       function dayIndex() { if (!plan) return 0; const s = new Date(plan.startDate + 'T00:00:00'); const n = new Date(today() + 'T00:00:00'); return Math.max(0, Math.round((n - s) / 864e5)); }
@@ -6953,6 +6978,15 @@ let listenOn = false;
           nextBlank();
           return;
         }
+        /* 今天额度读满（§4.4 入口 1 的新触发判据，2026-09-24）：这颗键此刻写「开始答题」，
+           点它 = 直接进 ②，不再找「下一句」把人留在多读上。**只在队列还有没读的句时走这一支** ——
+           队列已一句不剩的那条（M1 既有路径：本篇走完）仍走下面的 finishPass(1)，小结照旧端出来，
+           两条路都必须在。 */
+        if (todayQuotaDone() && todayQueue.some(q => !readToday2(q.i))) {
+          finishPass(1);           // 复用 §13.1 那条路：切 ② + 给正文挖空
+          startSummaryContinue();  // 「开始答题」的动作：收掉小结、进 ②
+          return;
+        }
         if (taskPos >= todayQueue.length) return;
         /* 这一颗在 ① 态有两种身份（他 2026-09-23 定的名，2026-09-24 定的动作）：
            这趟还没放过 → 「放这一句」；放过之后 → 「下一句」。
@@ -7076,6 +7110,17 @@ let listenOn = false;
         if (!bar || bar.dataset.state !== 'read') return;
         const btn = document.getElementById('tbNext');
         if (!btn) return;
+        /* 今天额度读满（§4.4 入口 1 的新触发判据，2026-09-24）：① 到此收工 —— 这颗键不再写
+           「下一句」把人往多读上引，改成进 ② 的动作。点它 → next() 里 todayQuotaDone() 那一支，
+           直接进 ②。（本篇队列已读完那条不在这里管：那条走 M1 的 finishPass(1) 小结。） */
+        if (todayQuotaDone()) {
+          if (btn.dataset.label === '开始答题') return;
+          btn.dataset.label = '开始答题';
+          btn.innerHTML = '<i class="ri-edit-2-line" aria-hidden="true"></i> 开始答题';
+          btn.title = '今天的通读额度读完了，进入挖空选择';
+          btn.setAttribute('aria-label', '开始答题');
+          return;
+        }
         const on = _tabStarted;               // 文案只看「这趟放过一句没有」：点过之后整趟都叫「下一句」
         const label = on ? '下一句' : '放这一句';
         if (btn.dataset.label === label) return;
@@ -7954,9 +7999,11 @@ let listenOn = false;
           bumpArticleRep(artOfSentGlobal(globalIdx));   // 精读次数只数任务模式的 ① 完成（§7.6），账住 LS_ARTICLE
           /* 他 2026-09-24 拍板：放完**不自动挪高亮** —— 高亮停在这句，下一句只由「下一句」那颗键叫起来
              （点了才挪高亮 + 同步开播）。所以这里不再 goToNextTask()。
-             唯一例外是「这批一句没读的了」：那种情况照旧把 ② 端上来，否则那颗键会停在
-             一个"没有下一句可点"的死角（task-mode-step ④ 锁的就是它）。 */
-          if (!todayQueue.some(q => !readToday2(q.i))) { finishPass(1); return true; }
+             例外是交棒 ②：两道闸任一成立就把小结端上来 ——
+             ① 今天额度读满（用户 2026-09-24 实测：本篇还剩一大截，但今天的 180/180 已完成）；
+             ② 本篇队列一句不剩（M1 既有路径；不从这里端 ②，那颗键会停在一个"没有下一句可点"的
+                死角，task-mode-step ④ 锁的就是它）。 */
+          if (todayQuotaDone() || !todayQueue.some(q => !readToday2(q.i))) { finishPass(1); return true; }
           try { updateTaskBar(); } catch (e) {}
           try { savePos(); } catch (e) {}
         }
@@ -8038,6 +8085,9 @@ let listenOn = false;
         /* 「今天」三个数的唯一出口（任务条辅行 + 数据页「今天」块都读它，不各算各的）。
            注意分母是 plannedDay()（当天全局快照），与 todayStats().planned（按篇模式下 = 本篇句数）不同量纲。 */
         todayProgress,
+        /* 今天额度是否读满 / 今天在哪一篇上读的：首页卡片「答题」与数据页「今天」块、
+           「待加强」都走这两个出口（§4.4 入口 1 的新判据，2026-09-24）。 */
+        todayQuotaDone, todayArticle,
         // 事件流「安全合并」的对照实验：先冻住派生状态 → 合并 → 重放 → 再比。
         // 测试断言两次 state 深相等（合并不许动账），并断言确实真掉了重复条。
         compactProbeForTest: () => {

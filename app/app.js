@@ -148,7 +148,14 @@
        改成"今天读过"会让跨天后卡片退回未读，与「已学完」判据打架。保留 lifetime。 */
     // W5-3：卡片胶囊与「答题」按钮口径一致 —— 只有「② 可答题（read）」与「② 做题（quiz）」
     // 才出「答题」入口；`已学完`/`熟练` 的卡片不再显示（免得与胶囊说的"已经完事儿了"打架）。
-    const quizReady = stage === 'read' || stage === 'quiz';
+    /* 2026-09-24 用户实测：今天把通读额度读满后（本篇 337/339、今天 180/180），回首页这张卡片
+       既没有「答题」入口、胶囊还写「通读中」—— 而这一篇并不能凭"全篇读完"才进 ②。所以补一条
+       **今天**口径的入口：今天额度读满 + 这一篇正是今天读的那篇 + 还没读完整篇 → 也给「答题」。
+       它与 §9.4 的 stage（lifetime 派生）互不干扰：stage 与胶囊一个字不改，只在它之上补一颗按钮。 */
+    const todayDone = (typeof TASK !== 'undefined' && TASK.todayQuotaDone) ? TASK.todayQuotaDone() : false;
+    const todayA = (typeof TASK !== 'undefined' && TASK.todayArticle) ? TASK.todayArticle() : -1;
+    const todayQuizReady = todayDone && todayA === a && ever > 0 && ever < total;
+    const quizReady = stage === 'read' || stage === 'quiz' || todayQuizReady;
     // `total` = 句数（进度分母）；`wordTotal` = 词数（掌握分母，与 c.graduated 同单位）
     // `ever` = 这一篇里读过的句数 —— 横幅「还剩 N 句」与卡片进度共用这一份派生，别各算各的。
     return { progress, stage, grad: c.graduated, total, lastAt, wordTotal: words.size, ever, quizReady };
@@ -212,6 +219,10 @@
        数字全部经 TASK.todayProgress() 取（与任务条辅行同一份派生），界面不自己数账。 */
     const tp = (typeof TASK !== 'undefined' && TASK.todayProgress)
       ? TASK.todayProgress() : { done: 0, planned: 0, left: 0, minutes: 0 };
+    /* 今天的通读额度读满后，「今天」块给一个与首页卡片同一入口的「去答题」（§4.4 入口 1/2）——
+       三处（卡片 / 今天块 / 待加强）指向同一篇、同一个 TASK.openArticleQuiz。 */
+    const tqDone = (typeof TASK !== 'undefined' && TASK.todayQuotaDone) ? TASK.todayQuotaDone() : false;
+    const tqArt = (typeof TASK !== 'undefined' && TASK.todayArticle) ? TASK.todayArticle() : -1;
     view.innerHTML = `<div class="stats-page">
       <h1>学习数据</h1>
       <section class="st-block" data-block="today" aria-labelledby="stH0">
@@ -221,6 +232,7 @@
           <div class="st-num" data-k="today-min"><b>${tp.minutes}</b><span>今日学习时长（分钟）</span></div>
           <div class="st-num" data-k="today-left"><b>${tp.left}</b><span>今天还剩句数</span></div>
         </div>
+        ${(tqDone && tqArt >= 0) ? `<button class="st-go" type="button" data-go="quiz" data-a="${tqArt}">去答题</button>` : ''}
       </section>
       <section class="st-block" data-block="overview" aria-labelledby="stH1">
         <h2 id="stH1">我最近学得怎么样？</h2>
@@ -360,11 +372,20 @@
   function statsTips() {
     const tips = [];
     const now = Date.now();
-    for (let a = 0; a < SECTIONS.length; a++) {
-      const x = articleStat(a);
-      if (x.ever > 0 && x.ever < x.total) {
-        tips.push({ kind: 'continue', a: a, text: `《${esc(SECTIONS[a].title)}》还差 ${x.total - x.ever} 句读完`, go: '继续' });
-        break;
+    /* 今天额度读满、且今天读的那篇还没读完 → 建议改成「去答题」，指向与首页卡片、「今天」块
+       同一个入口（TASK.openArticleQuiz）。没读满才维持原来的「继续读」。 */
+    const tqDone = (typeof TASK !== 'undefined' && TASK.todayQuotaDone) ? TASK.todayQuotaDone() : false;
+    const tqArt = (typeof TASK !== 'undefined' && TASK.todayArticle) ? TASK.todayArticle() : -1;
+    const tqStat = (tqDone && tqArt >= 0) ? articleStat(tqArt) : null;
+    if (tqStat && tqStat.ever > 0 && tqStat.ever < tqStat.total) {
+      tips.push({ kind: 'quiz', a: tqArt, text: `《${esc(SECTIONS[tqArt].title)}》今天的通读做完了，去答题`, go: '去答题' });
+    } else {
+      for (let a = 0; a < SECTIONS.length; a++) {
+        const x = articleStat(a);
+        if (x.ever > 0 && x.ever < x.total) {
+          tips.push({ kind: 'continue', a: a, text: `《${esc(SECTIONS[a].title)}》还差 ${x.total - x.ever} 句读完`, go: '继续' });
+          break;
+        }
       }
     }
     const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
@@ -675,7 +696,10 @@
       if (kind === 'leech') { location.hash = '#/words/todo'; return; }
       if (kind === 'words') { location.hash = '#/words'; return; }
       if (kind === 'listen') { location.hash = '#/listen'; return; }
-      const a = tip && tip.dataset.a != null ? Number(tip.dataset.a) : 0;
+      const a = tip && tip.dataset.a != null ? Number(tip.dataset.a)
+              : (go.dataset.a != null ? Number(go.dataset.a) : 0);
+      /* 「去答题」（今天块 / 待加强）与首页卡片「答题」同一入口：直达该篇 ②。 */
+      if (kind === 'quiz') { openQuiz(a); return; }
       openHomeHighlight(a);
     }
   });
