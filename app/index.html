@@ -1824,6 +1824,17 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .app-todo h3 { font-size: 18px; font-weight: 700; color: var(--text); margin: 0 0 8px; }
   .app-todo p { color: var(--muted); font-size: 13px; line-height: 1.7; margin: 0; }
   body.dark .app-todo .at-ico { background: var(--accent-soft); color: var(--accent-text); }
+  /* ============ 3.0 学习数据页（M2，PRD §5） ============ */
+  .stats-page { max-width: 880px; }
+  .stats-page > h1 { font-size: 22px; font-weight: 800; color: var(--text); margin: 2px 0 16px; }
+  .st-block { margin-bottom: 22px; }
+  .st-block > h2 { font-size: 15px; font-weight: 700; color: var(--text); margin: 0 0 10px; }
+  .st-empty-start { max-width: 420px; margin: 12vh auto 0; text-align: center; padding: 0 20px; }
+  .st-empty-start h1 { font-size: 22px; font-weight: 800; margin: 0 0 10px; color: var(--text); }
+  .st-empty-start p { font-size: 13.5px; color: var(--muted); line-height: 1.7; margin: 0 0 18px; }
+  .st-empty-start .st-open-me { width: 100%; min-height: 46px; border: none; border-radius: 999px;
+    background: var(--grad); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer;
+    box-shadow: var(--grad-shadow); }
   /* ============ 3.0 外壳深色覆盖（W2，PRD §10.1） ============
      外壳与 M1 新页面统一到影子跟读的暖黑 token（--bg/--card/--border/--text/--accent-soft…），
      只把几处写死的浅色值换掉（.a-bar / .a-stage 等）。全部复用既有 token，不新造色。 */

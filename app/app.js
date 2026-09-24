@@ -8,14 +8,18 @@
     listen: ['随身听', 'ri-headphone-line'],
   };
   let cur = 'home';
+  let _hlArticle = null;   // 数据页点文章小卡 → 回首页要高亮的那一篇（§5.4）
   function route() {
     const h = (location.hash || '#/home').replace(/^#\//, '').split('/')[0];
     cur = ROUTES.includes(h) ? h : 'home';
+    if (cur !== 'home') _hlArticle = null;
     document.querySelectorAll('.sidenav .nav-item').forEach(b =>
       b.classList.toggle('on', b.dataset.route === cur));
     const view = document.getElementById('appView');
     if (cur === 'home' && window.APP3 && window.APP3.renderHome) { updateMeCard(); return window.APP3.renderHome(view); }
     if (cur === 'home') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    if (cur === 'stats' && window.APP3 && window.APP3.renderStats) return window.APP3.renderStats(view);
+    if (cur === 'stats') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
     // W5-1：占位屏给像样的版式（居中、灰字、标题层级 + 图标），不再是裸 <h3>+<p>。
     const meta = TODO_META[cur];
     view.innerHTML = `<div class="app-todo"><div class="at-ico" aria-hidden="true"><i class="${meta[1]}"></i></div>` +
@@ -129,6 +133,29 @@
     if (window.APP3.renderBanner) window.APP3.renderBanner(document.getElementById('homeBanner'));
   }
   window.APP3 = Object.assign(window.APP3 || {}, { renderHome, articleStat });
+
+  /* ---- 3.0 学习数据页（M2，PRD §5）----
+     四问四块（每块标题即问题）+ 单词掌握 + 随身听（M2 空态占位，M4 接真数据）+ 待加强。
+     所有数字从既有 ROOT2 state 派生（§9.4），不新增存储字段。 */
+  function renderStats(view) {
+    if (typeof dataReady === 'undefined' || !dataReady) { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    const hasPlan = !!(typeof TASK !== 'undefined' && TASK.hasPlan);
+    if (!hasPlan) {
+      // §5.2（2026-09-24 用户改口径）：一句话 + 一个按钮，点了打开「我的」浮窗；不内嵌计划表单。
+      view.innerHTML = `<div class="st-empty-start">
+        <h1>开始你的学习计划</h1>
+        <p>学习数据会在你建立计划后出现在这里。每天读多久、几点换一天、新词开关都在「我的」里。</p>
+        <button class="st-open-me" type="button">打开「我的」</button>
+      </div>`;
+      return;
+    }
+    view.innerHTML = '<div class="stats-page"><h1>学习数据</h1></div>';
+  }
+  window.APP3 = Object.assign(window.APP3, { renderStats });
+  // 数据页的点击（按钮是每次重渲的，走事件代理，只绑一次）
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.st-open-me')) { openMePop(); return; }
+  });
 
   /* ---- 3.0 顶部「今天该做什么」横幅（M1 Task 4，§3.5）----
      四类：没计划 / 有计划没做完 / 有计划做完 / 连续+毕业摘要（后两者叠加）。
@@ -377,7 +404,7 @@
     const pop = document.getElementById('mePop');
     if (!pop || pop.hidden) return;
     if (!e.target.isConnected) return;   // 已被重渲摘下的节点，别当成「点外面」
-    if (e.target.closest('#mePop') || e.target.closest('#meCard')) return;
+    if (e.target.closest('#mePop') || e.target.closest('#meCard') || e.target.closest('.st-open-me')) return;
     closeMePop();
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMePop(); });
