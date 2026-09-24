@@ -189,7 +189,7 @@
   window.APP3 = Object.assign(window.APP3 || {}, { renderHome, articleStat });
 
   /* ---- 3.0 学习数据页（M2，PRD §5）----
-     四问四块（每块标题即问题）+ 单词掌握 + 随身听（M2 空态占位，M4 接真数据）+ 待加强。
+     四问四块（每块标题即问题）+ 单词掌握 + 随身听（M4 起接真数据，§5.7）+ 待加强。
      所有数字从既有 ROOT2 state 派生（§9.4），不新增存储字段。 */
   function renderStats(view) {
     if (typeof dataReady === 'undefined' || !dataReady) { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
@@ -454,7 +454,7 @@
           <button class="ls-rate" type="button" aria-label="朗读倍速">1x</button>
           <button class="ls-mark" type="button" aria-label="记下当前位置">书签</button>
         </div>
-        <button class="ls-expand" type="button">点击展开全文阅读</button>
+        <button class="ls-expand" type="button" aria-label="展开全文阅读">点击展开全文阅读</button>
       </div>
     </div>`;
     updateListenCard();

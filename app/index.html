@@ -1816,14 +1816,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   @media (max-width: 700px) {
     .home-banner .b-go { min-height: 44px; }
   }
-  /* W5-1：后续里程碑的占位屏（M2 起只剩单词本 / 随身听）——
-     居中、灰字、带标题层级与图标，不再是一枚裸 <h3> + <p>。 */
-  .app-todo { max-width: 440px; margin: 16vh auto 0; text-align: center; padding: 0 20px; }
-  .app-todo .at-ico { display: inline-flex; align-items: center; justify-content: center; width: 54px; height: 54px;
-    margin-bottom: 14px; border-radius: 16px; background: var(--accent-soft); color: var(--accent-text); font-size: 26px; }
-  .app-todo h3 { font-size: 18px; font-weight: 700; color: var(--text); margin: 0 0 8px; }
-  .app-todo p { color: var(--muted); font-size: 13px; line-height: 1.7; margin: 0; }
-  body.dark .app-todo .at-ico { background: var(--accent-soft); color: var(--accent-text); }
+   /* W5-1 的占位屏样式已随 M4 删掉 —— 四个一级页都是真页，不再有 .app-todo。 */
   /* ============ 3.0 学习数据页（M2，PRD §5） ============ */
   .stats-page { max-width: 880px; }
   .stats-page > h1 { font-size: 22px; font-weight: 800; color: var(--text); margin: 2px 0 16px; }
@@ -5459,7 +5452,7 @@ let listenOn = false;
         try { paint(); } catch (e) {}
       }
       function listenMark() { try { addMark(); } catch (e) {} }
-      function listenAB() { if (!_listenExpanded && typeof listenExpand === 'function') listenExpand(); try { toggleAB(); } catch (e) {} }
+      function listenAB() { if (!_listenExpanded) listenExpand(); try { toggleAB(); } catch (e) {} }
       /* 展开全屏阅读（§7.3）：正文 = 既有 #art（段→句 + 行内词义 + 当前句高亮），
          播放条 = 既有底部 .audiobar。关闭 → 收回卡片（listenCollapse），不是回首页。 */
       function listenExpand() {
@@ -6829,8 +6822,8 @@ let listenOn = false;
         exitTaskMode();
         openPanel();          // 没计划时 openPanel() 渲的就是 renderSetup
       }
-      /* 收工态两颗键的去处（§4.2）：「回首页」回列表挑下一篇，「看词本」跳单词本占位屏
-         （真词本 M3 才做）。都先退出任务模式，别把 task-mode 的 chrome 带到别的屏。 */
+      /* 收工态两颗键的去处（§4.2）：「回首页」回列表挑下一篇，「看词本」跳单词本（M3 起是真页）。
+         都先退出任务模式，别把 task-mode 的 chrome 带到别的屏。 */
       function exitToHome() { exitTaskMode(); if (location.hash !== '#/home') location.hash = '#/home'; }
       function exitToWords() { exitTaskMode(); location.hash = '#/words'; }
 

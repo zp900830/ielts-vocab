@@ -225,4 +225,33 @@ test.describe('3.0 随身听（M4，PRD §7）', () => {
     await page.waitForFunction(() => !!document.querySelector('.ls-art'));
     await expect(page.locator('.ls-art')).toContainText('校园与文化');
   });
+
+  test('深色模式：随身听卡片不是白底、文字可读（PRD §10.1）', async ({ page }) => {
+    await stubData(page, TWO);
+    await gotoListen(page);
+    const light = await page.locator('.ls-card').evaluate((el) => getComputedStyle(el).backgroundColor);
+    await page.evaluate(() => document.body.classList.add('dark'));
+    const dark = await page.locator('.ls-card').evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(dark).not.toBe(light);
+    expect(dark).not.toBe('rgb(255, 255, 255)');
+    const color = await page.locator('.ls-now').evaluate((el) => getComputedStyle(el).color);
+    expect(color).not.toBe('rgb(0, 0, 0)');
+  });
+
+  test('无障碍：h1 唯一、控件可聚焦、位置条可键盘、触摸目标 ≥44px', async ({ page }) => {
+    await stubData(page, TWO);
+    await gotoListen(page);
+    await expect(page.locator('.listen-page > h1')).toHaveCount(1);
+    const seek = page.locator('.ls-seek');
+    expect(await seek.evaluate((el) => el.tagName)).toBe('INPUT');
+    await seek.focus();
+    expect(await page.evaluate(() => document.activeElement === document.querySelector('.ls-seek'))).toBe(true);
+    for (const sel of ['.ls-prev', '.ls-play', '.ls-next', '.ls-expand', '.ls-loop', '.ls-rate']) {
+      const h = await page.locator(sel).evaluate((el) => el.getBoundingClientRect().height);
+      expect(h, `${sel} 触摸目标 ≥44px`).toBeGreaterThanOrEqual(44);
+    }
+    for (const sel of ['.ls-play', '.ls-next', '.ls-prev', '.ls-expand']) {
+      await expect(page.locator(sel)).toHaveAttribute('aria-label', /./);
+    }
+  });
 });
