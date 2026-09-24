@@ -146,15 +146,19 @@ test.describe('3.0 W4 buildQueue 不再对非首篇算出 0 句新句窗口', ()
 /* ============================== W5 · 观感类小项 ============================== */
 test.describe('3.0 W5 观感类小项', () => {
   // W5-1：占位屏不再是裸 <h3>+<p>
-  test('W5-1 四屏占位有版式：图标 + 居中 + 标题层级', async ({ page }) => {
+  // M2（2026-09-24）起「学习数据」已是真页（journeys/app3/stats.spec.ts），占位只剩单词本 / 随身听。
+  test('W5-1 占位屏有版式：图标 + 居中 + 标题层级（单词本 / 随身听）', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
-    const todo = page.locator('#appView .app-todo');
-    await expect(todo).toBeVisible();
-    await expect(todo.locator('.at-ico')).toBeVisible();
-    await expect(todo.locator('h3')).toHaveText('学习数据');
-    const align = await todo.evaluate((el) => getComputedStyle(el).textAlign);
-    expect(align, '占位屏必须居中，不再是默认左对齐').toBe('center');
+    const screens: Array<[string, string]> = [['words', '单词本'], ['listen', '随身听']];
+    for (const [hash, title] of screens) {
+      await page.goto(`${rootUrl}/app/index.html#/${hash}`);
+      const todo = page.locator('#appView .app-todo');
+      await expect(todo).toBeVisible();
+      await expect(todo.locator('.at-ico')).toBeVisible();
+      await expect(todo.locator('h3')).toHaveText(title);
+      const align = await todo.evaluate((el) => getComputedStyle(el).textAlign);
+      expect(align, '占位屏必须居中，不再是默认左对齐').toBe('center');
+    }
   });
 
   // W5-2：新建计划当天不写「连续 0 天」

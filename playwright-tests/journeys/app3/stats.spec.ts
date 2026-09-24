@@ -229,4 +229,41 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     await expect(page).toHaveURL(/#\/home/);
     await expect(page.locator('.art-card[data-a="0"]')).toHaveClass(/hl/);
   });
+
+  test('深色模式：数据页关键块不是浅色那套（PRD §10.1）', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(15);
+      const s = ShadowPlan.articleScope(SECTIONS, 0);
+      Array.from(s).slice(0, 5).forEach((i) => TASK.readDone(i));
+      TASK.seedDailyForTest(1);
+    });
+    await page.reload();
+    await expect(page.locator('.st-num').first()).toBeVisible();
+
+    const light = await page.locator('.st-num').first().evaluate((el) => getComputedStyle(el).backgroundColor);
+    await page.evaluate(() => document.body.classList.add('dark'));
+    const dark = await page.locator('.st-num').first().evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(dark, '深色下卡片底色必须变').not.toBe(light);
+    expect(dark, '深色下不能还是白底').not.toBe('rgb(255, 255, 255)');
+    // 进度条轨道是**写死的浅色 rgba**，深色下必须换成 token，否则浅绿压暖黑会发脏
+    const track = await page.locator('.st-art .sa-bar').first().evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(track, '深色下进度条轨道不能还是浅色那档 rgba(11,84,64,.14)').not.toBe('rgba(11, 84, 64, 0.14)');
+  });
+
+  test('无障碍：语义标题层级 + 触摸目标 ≥44px', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(15);
+      const s = ShadowPlan.articleScope(SECTIONS, 0);
+      Array.from(s).slice(0, 5).forEach((i) => TASK.readDone(i));
+    });
+    await page.reload();
+    await expect(page.locator('.stats-page > h1')).toHaveCount(1);
+    await expect(page.locator('.st-block > h2')).toHaveCount(6);
+    const h = await page.locator('.st-tip .tip-go').first().evaluate((el) => el.getBoundingClientRect().height);
+    expect(h, '触摸目标 ≥44px').toBeGreaterThanOrEqual(44);
+  });
 });

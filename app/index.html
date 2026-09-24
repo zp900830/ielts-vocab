@@ -1872,6 +1872,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .st-go, .st-tip .tip-go { flex: none; min-height: 44px; padding: 0 16px; border: none; border-radius: 999px;
     background: var(--grad); color: var(--cta-ink); font-size: 13px; font-weight: 700; cursor: pointer;
     box-shadow: var(--grad-shadow); }
+  /* 深色（PRD §10.1）：数据页的卡片/文字都用 token（--card/--border/--text），会自动跟随 body.dark；
+     只有进度条轨道是写死的浅色 rgba，必须显式换掉，否则浅绿压暖黑会发脏。 */
+  body.dark .st-art .sa-bar { background: var(--hl); }
   @media (max-width: 1023px) { .st-arts { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 700px) { .st-arts { grid-template-columns: 1fr; } }
   /* ============ 3.0 外壳深色覆盖（W2，PRD §10.1） ============
