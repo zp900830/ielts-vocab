@@ -51,7 +51,7 @@ test.describe('3.0 外壳', () => {
     await page.goto(`${rootUrl}/app/index.html`);
     await expect(page.locator('.sidenav .nav-item')).toHaveCount(4);
     expect(await page.locator('.sidenav .nav-item').allInnerTexts())
-      .toEqual(['首页', '学习数据', '单词本', '随身听']);
+      .toEqual(['首页', '随身听', '单词本', '学习数据']);
     // 「我的」不再是 nav-item，也不是卡片：一条分割线 + 一行（未登录显示「登录」按钮）
     await expect(page.locator('.sidenav .me-card')).toBeVisible();
     await expect(page.locator('.sidenav .me-card .me-login')).toHaveText('登录');

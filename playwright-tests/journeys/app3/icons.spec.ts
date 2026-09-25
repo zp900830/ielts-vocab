@@ -19,7 +19,7 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
   }
 }
 
-const NAV_ICONS = ['ri-home-5-line', 'ri-bar-chart-2-line', 'ri-book-2-line', 'ri-headphone-line'];
+const NAV_ICONS = ['ri-home-5-line', 'ri-headphone-line', 'ri-book-2-line', 'ri-bar-chart-2-line'];
 
 test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
   test('源码级：三站图标样式表都指向 4.5.0，不再引用 4.2.0', () => {
