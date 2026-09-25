@@ -867,8 +867,7 @@
         <div class="mp-row"><span class="mp-label">新词</span><div class="ps-opts">
           <button class="ps-opt${cfg.pausedNew ? '' : ' sel'}" data-me-new="0">正常</button>
           <button class="ps-opt${cfg.pausedNew ? ' sel' : ''}" data-me-new="1">只复习</button></div></div>
-        <div class="mp-row"><span class="mp-label">学习计划</span><div class="ps-opts">
-          <button class="ps-opt" type="button" data-me-reset-plan aria-label="重置学习计划，只重设计划、保留进度">重置</button></div></div>` : ''}
+        <div class="mp-row"><button class="link-danger" type="button" data-me-reset-plan aria-label="重置学习计划，只重设计划、保留进度">重置学习计划</button></div>` : ''}
         <div class="mp-row"><span class="mp-label">数据</span><div class="ps-opts">
           <button class="ps-opt" data-me-export>导出备份</button>
           <button class="ps-opt" data-me-import>导入恢复</button></div></div>

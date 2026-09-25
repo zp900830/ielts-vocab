@@ -137,4 +137,42 @@ test.describe('3.0 首页', () => {
     await expect(page.locator('#homeBanner .hb-sum')).toContainText('今天开始');
     await expect(page.locator('#homeBanner .hb-sum')).toContainText('已毕业');
   });
+
+  /* refine2 ②（2026-09-25 用户）：横幅从「文字在上、通栏按钮在下」改成**左文字块 / 右按钮**；
+     窄屏（≤700px）挤不下时退化成上下（按钮仍通栏、触摸 ≥44）。 */
+  test('横幅排版：宽屏左文字/右按钮，窄屏退化成上下', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitHomeReady(page);
+    const banner = page.locator('#homeBanner .b-go').locator('xpath=..');
+    await expect(banner).toBeVisible();
+
+    // 宽屏（桌面档）：row 排，文字块在左、按钮在右，两者垂直居中对齐
+    await page.setViewportSize({ width: 1280, height: 800 });
+    const wide = await banner.evaluate((el) => {
+      const txt = el.querySelector('.hb-text')!.getBoundingClientRect();
+      const btn = el.querySelector('.b-go')!.getBoundingClientRect();
+      return { dir: getComputedStyle(el).flexDirection, txtRight: txt.right, btnLeft: btn.left,
+               txtCy: txt.top + txt.height / 2, btnCy: btn.top + btn.height / 2 };
+    });
+    expect(wide.dir, '宽屏横幅应左右排（flex-direction: row）').toBe('row');
+    expect(wide.btnLeft, '按钮左沿应在文字块右沿之后（左文字 / 右按钮）').toBeGreaterThanOrEqual(wide.txtRight - 1);
+    expect(Math.abs(wide.txtCy - wide.btnCy), '左右两块的垂直中心应大致对齐').toBeLessThanOrEqual(2);
+
+    // 窄屏（手机档）：column 排，按钮落到文字块下方且通栏
+    await page.setViewportSize({ width: 390, height: 844 });
+    const narrow = await banner.evaluate((el) => {
+      const txt = el.querySelector('.hb-text')!.getBoundingClientRect();
+      const btn = el.querySelector('.b-go')!.getBoundingClientRect();
+      const cs = getComputedStyle(el);
+      const box = el.getBoundingClientRect();
+      const padx = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+      const bdx = parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth);
+      return { dir: cs.flexDirection, btnTop: btn.top, txtBottom: txt.bottom,
+               btnW: btn.width, inner: box.width - padx - bdx };
+    });
+    expect(narrow.dir, '窄屏横幅应退化成上下排（flex-direction: column）').toBe('column');
+    expect(narrow.btnTop, '窄屏按钮应在文字块下方').toBeGreaterThanOrEqual(narrow.txtBottom - 1);
+    expect(Math.abs(narrow.btnW - narrow.inner), '窄屏按钮应通栏').toBeLessThanOrEqual(1);
+  });
 });

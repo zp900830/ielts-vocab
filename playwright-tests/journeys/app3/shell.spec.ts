@@ -98,4 +98,39 @@ test.describe('3.0 外壳', () => {
     await expect(page.locator('#art')).toBeVisible();
     await expect(page.locator('#art .sent').first()).toBeVisible();
   });
+
+  /* refine2 ⑤（2026-09-25 用户）：侧栏原来是一块纯 #f6f6f4 实底，改成「往更白走一丢丢 +
+     一道极清渐变」（顶 #fcfcfb → 底还是 #f6f6f4）；深色同步换暖黑渐变。用 background-color
+     兜底 + background-image 叠渐变，这样深色仍能靠 background-color 与浅色区分（leftovers 的深色锁）。 */
+  test('侧栏比原 #f6f6f4 更白 + 一道极轻渐变；深色同步不破', async ({ page }) => {
+    await stubData(page, EMPTY);
+    await page.goto(`${rootUrl}/app/index.html`);
+    const nav = page.locator('.sidenav');
+    await expect(nav).toBeVisible();
+
+    const relLum = (rgb: number[]) => {
+      const c = rgb.map((v) => { const x = v / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); });
+      return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+    };
+    const stops = (img: string) => [...img.matchAll(/rgba?\((\d+),\s*(\d+),\s*(\d+)/g)]
+      .map((m) => [Number(m[1]), Number(m[2]), Number(m[3])]);
+    const f6 = relLum([0xf6, 0xf6, 0xf4]);
+
+    const lightImg = await nav.evaluate((el) => getComputedStyle(el).backgroundImage);
+    const lightBg = await nav.evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(lightImg, '侧栏应有一道渐变（不是纯色）').toContain('linear-gradient');
+    const ls = stops(lightImg);
+    expect(ls.length, '至少两个色标才算渐变').toBeGreaterThanOrEqual(2);
+    expect(relLum(ls[0]), `侧栏最亮端（rgb ${ls[0]}）必须比原 #f6f6f4 更亮`).toBeGreaterThan(f6);
+    expect(relLum(ls[ls.length - 1]), '渐变另一端不比原底色亮（读得出一道方向感）').toBeLessThanOrEqual(relLum(ls[0]));
+
+    // 深色：底色换成暖黑（仍能和浅色区分），且同步给一道暖黑渐变
+    await page.evaluate(() => document.body.classList.add('dark'));
+    const darkImg = await nav.evaluate((el) => getComputedStyle(el).backgroundImage);
+    const darkBg = await nav.evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(darkBg, '深色侧栏底色必须换掉（不能还是 #f6f6f4）').not.toBe(lightBg);
+    expect(darkImg, '深色侧栏也应有一道渐变').toContain('linear-gradient');
+    expect(darkImg, '深色渐变不能停在浅色那套').not.toBe(lightImg);
+    expect(relLum(stops(darkImg)[0]), '深色渐变最亮端也是暗的').toBeLessThan(0.1);
+  });
 });
