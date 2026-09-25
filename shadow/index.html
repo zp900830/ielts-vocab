@@ -29,15 +29,15 @@
     --border: #e5dfd6; --green: #0c9c74;
     --coral: #e07a5f; --coral-deep: #c9564a;
     --note: #c08a2e; --note-soft: rgba(192,138,46,.08); --note-line: #e7cf9a;
-    /* 2026-09-24（第二轮）：用户嫌中调薄荷「太重太辣眼」，主按钮改「轻渐变薄荷 + 通透感」。
-       --grad 从 #0b8663→#0a7050（白字 4.56~6.10）改浅到 #2e9c76→#0f7c5a（白字 3.42~5.18，三站同值）。
-       白字压浅薄荷过不了 AA 正文 4.5 —— 这是用户【已知情并接受】的取舍，硬底线锁在 3:1
-       （门禁 playwright-tests/journeys/app3/palette.spec.ts 的 WHITE_MIN、夹具 cta-gate-selfcheck.css、
-       PRD §10.1 都写明了）。通透感 = 顶部 1px 高光（inset）+ 底下那一圈柔光晕（--grad-shadow）。
-       参考图那颗「开始学习」按参考浅度只有 ≈2.0:1，落在 3.42 是因为 3:1 是底线，不是不像。 */
-    --grad: linear-gradient(135deg, #2e9c76, #0f7c5a);
-    --grad-shadow: 0 10px 24px -8px rgba(16,180,135,.5), inset 0 1px 0 rgba(255,255,255,.4);
-    /* 压在绿底上的字色（2026-09-24 用户拍板：白字/白图标，绿底落在过 3:1 的浅薄荷上）。 */
+    /* 2026-09-24（第三轮）：用户要求退回「深墨字」之前那一版 —— 轻薄荷渐变 + 白字/白图标 + 通透光晕。
+       --grad 回到 #2bd4a4→#0fae7e（三站同值），光晕回到 0 3px 10px rgba(16,180,135,.25)。
+       实测白字压最亮端 #2bd4a4 只有 1.90:1（最暗端 2.85:1），⚠️ 已知低于 WCAG AA 正文 4.5
+       （纯图标 3:1）—— 用户看过实测数字后仍选这支品牌色，知情接受。门禁因此不再按对比度判它，
+       改为锁定色值的回归锁（playwright-tests/journeys/app3/palette.spec.ts 的 LOCKED_GRAD、
+       夹具 cta-gate-selfcheck.css、PRD §10.1 都写明了），只防手滑改浅/改深。 */
+    --grad: linear-gradient(135deg, #2bd4a4, #0fae7e);
+    --grad-shadow: 0 3px 10px rgba(16,180,135,.25);
+    /* 压在绿底上的字色（2026-09-24 用户拍板：白字/白图标）。 */
     --cta-ink: #fff;
     /* 深墨字专用：选中态胶囊（.ps-opt.sel / .pill.on）的底色是更亮的 --task-new #10b487，
        白字压它只有 2.66:1（过不了 AA），而 --task-new 在深色模式还得当亮字用（不能压暗）。
@@ -65,8 +65,8 @@
     --border: #33302b; --green: #10b487;
     --coral: #e07a5f; --coral-deep: #c9564a;
     --note: #d9a441; --note-soft: rgba(217,164,65,.12); --note-line: rgba(217,164,65,.28);
-    --grad: linear-gradient(135deg, #2e9c76, #0f7c5a);
-    --grad-shadow: 0 10px 26px -8px rgba(16,180,135,.55), inset 0 1px 0 rgba(255,255,255,.3);
+    --grad: linear-gradient(135deg, #2bd4a4, #0fae7e);
+    --grad-shadow: 0 3px 10px rgba(16,180,135,.25);
     --accent-text: var(--accent);   /* 深色底上绿字本来就够（#10b487 压 #252220 实测 5.95:1），这一档只给浅色用 */
     --shadow: 0 2px 12px rgba(0,0,0,.25); --shadow-lg: 0 12px 40px rgba(0,0,0,.4);
     --glass: rgba(30,28,25,.94); --glass-strong: rgba(30,28,25,.97);

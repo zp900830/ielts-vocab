@@ -1,11 +1,9 @@
-// 2026-09-24（第二轮）用户：全局主色按钮「太重太辣眼」，改「轻渐变薄荷 + 通透感」。
-// 这条锁用「实测对比度数字」说话：把主按钮的渐变色标拆出来，逐个与白字算 WCAG 对比度。
-//   ① 最亮那档必须 ≥ WHITE_MIN = 3.0 —— 这是【用户已知情并接受】的取舍：
-//      白字压浅薄荷过不了 AA 正文 4.5（参考图那颗「开始学习」实测只有 ≈2.0:1），
-//      用户看过实测数字后仍选「浅薄荷 + 白字」。3:1 是「不会到看不清」的硬底线。
-//      下方「合成回归」那条探针就是下次有人手滑调太浅（≈2.0）时的警报。
-//   ② 最亮那档必须 ≤ 4.0 —— 锁「确实变轻了」：旧版 #0b8663 白字 4.56，在旧代码上这条必红（反向验证）。
-//   ③ 最暗那档 ≤ 6.6 —— 别再压得过黑（旧版 #0a7050 是 6.09）。
+// 2026-09-24（第三轮）用户拍板：主按钮退回「深墨字」之前那一版 —— 轻薄荷渐变 #2bd4a4→#0fae7e
+// + 白字/白图标 + 通透光晕。实测白字压最亮端 #2bd4a4 只有 1.90:1（最暗端 2.85:1），
+// ⚠️ 已知低于 WCAG AA 正文 4.5（纯图标也要 3:1）—— 用户看过实测数字后仍选定这支品牌色，
+// 知情接受。所以本门禁**不再按对比度判达标**（那是假达标），改成**锁定色值的回归锁**：
+// 把主按钮的渐变色标拆出来与 LOCKED_GRAD 精确比对，只防手滑改浅/改深或改掉字色。
+// 下方「色值锁自检」塞一颗漂移值，证明锁真的会响。
 // 服务器归 global-setup.ts 起停（仓库根 8932）；/app/ 在仓库根，用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
@@ -19,8 +17,10 @@ declare const ShadowPlan: { newWord(): Record<string, unknown> };
 declare const APP3: { route(): void };
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
-const WHITE_MIN = 3.0;          // 用户知情下限（白字压主色按钮）；AA 正文 4.5 在这里是被主动放弃的
-const WHITE_MAX_LIGHT = 4.0;    // 「确实变轻」的上界：旧版 4.56 超过它 → 反向验证必红
+// 锁定的品牌渐变（用户 2026-09-24 亲自选定；白字实测 1.90/2.85:1，已知低于 AA，用户知情接受）
+const LOCKED_GRAD = ['rgb(43, 212, 164)', 'rgb(15, 174, 126)'];  // #2bd4a4 → #0fae7e
+const LOCKED_INK = 'rgb(255, 255, 255)';                          // --cta-ink = #fff
+const isLockedGrad = (stops: string[]) => JSON.stringify(stops) === JSON.stringify(LOCKED_GRAD);
 const EMPTY: Record<string, string> = { 'sections.json': '[]', 'vocab.json': '{}', 'chapters.json': '[]' };
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
@@ -28,8 +28,9 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
   }
 }
 
-/* 量一颗控件：白字 vs 它 backgroundImage 里的每一档渐变色标（半透明先叠白纸），
-   返回 { color, ratios }。两个实页用例与「合成回归」探针共用同一套算法 —— 探针量的就是门禁量的。 */
+/* 量一颗控件：拆出它 backgroundImage 里的每一档渐变色标，返回 { color, stops, ratios }。
+   两个实页用例与「色值锁自检」探针共用同一套算法 —— 探针量的就是门禁量的。
+   ratios 只作诚实记录（白字压这两档实测 1.90/2.85），不再参与断言。 */
 function measureButton(el: Element) {
   const cs = getComputedStyle(el as HTMLElement);
   const parse = (s: string): number[] | null => {
@@ -46,26 +47,25 @@ function measureButton(el: Element) {
   const stops: number[][] = [];
   const re = /rgba?\([^)]+\)/g; let mm: RegExpExecArray | null;
   while ((mm = re.exec(cs.backgroundImage || ''))) { const c = parse(mm[0]); if (c) stops.push(c); }
-  return { color: cs.color, ratios: stops.map((s) => +ratio(fg, over(s, [255, 255, 255])).toFixed(2)) };
+  const rgb = (c: number[]) => `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+  return { color: cs.color, stops: stops.map(rgb), ratios: stops.map((s) => +ratio(fg, over(s, [255, 255, 255])).toFixed(2)) };
 }
 
-function assertLightMint(m: { color: string; ratios: number[] }, where: string) {
-  expect(m.color, `${where} 是白字`).toBe('rgb(255, 255, 255)');
-  expect(m.ratios.length, `${where} 渐变要至少两档，否则拆不出最亮/最暗`).toBeGreaterThanOrEqual(2);
-  const brightest = Math.min(...m.ratios);
-  const darkest = Math.max(...m.ratios);
-  expect(brightest, `${where} 最亮档要过用户下限 3:1（实测 ${m.ratios}）`).toBeGreaterThanOrEqual(WHITE_MIN);
-  expect(brightest, `${where} 要确实变轻：最亮档 ≤ ${WHITE_MAX_LIGHT}（旧版 4.56 在这条上必红；实测 ${m.ratios}）`).toBeLessThanOrEqual(WHITE_MAX_LIGHT);
-  expect(darkest, `${where} 最暗档别再压得过黑（实测 ${m.ratios}）`).toBeLessThanOrEqual(6.6);
+function assertLockedMint(m: { color: string; stops: string[]; ratios: number[] }, where: string) {
+  expect(m.color, `${where} 是白字（--cta-ink = #fff）`).toBe(LOCKED_INK);
+  expect(m.stops.length, `${where} 渐变要至少两档，否则拆不出两端`).toBeGreaterThanOrEqual(2);
+  /* 回归锁：精确匹配用户锁定的品牌色。白字压它实测 1.90/2.85:1，已知低于 AA —— 用户知情接受，
+     这里不再断言对比度达标（那是假达标），只保证没人把色值改浅/改深。 */
+  expect(m.stops, `${where} 主按钮渐变被改动（白字实测 ${m.ratios}）`).toEqual(LOCKED_GRAD);
 }
 
-test.describe('3.0 主按钮轻渐变薄荷（实测对比度）', () => {
-  test('首页主按钮：白字压浅薄荷每档 ≥3:1，且确实比旧版轻', async ({ page }) => {
+test.describe('3.0 主按钮轻渐变薄荷（锁定色值）', () => {
+  test('首页主按钮：白字 + 锁定的品牌渐变（防手滑改浅/改深）', async ({ page }) => {
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     const btn = page.locator('#homeBanner .b-go');
     await expect(btn).toBeVisible();
-    assertLightMint(await btn.evaluate(measureButton), '首页主按钮');
+    assertLockedMint(await btn.evaluate(measureButton), '首页主按钮');
   });
 
   test('「我的」浮窗主按钮同一套渐变（不是两套绿）', async ({ page }) => {
@@ -74,27 +74,25 @@ test.describe('3.0 主按钮轻渐变薄荷（实测对比度）', () => {
     await page.locator('#meCard').click();
     const cta = page.locator('#mePop .mp-cta');
     await expect(cta).toBeVisible();
-    assertLightMint(await cta.evaluate(measureButton), '「我的」主按钮');
+    assertLockedMint(await cta.evaluate(measureButton), '「我的」主按钮');
   });
 
-  /* 合成回归（下次有人手滑调太浅的警报）：塞一颗「白字 + 参考图那档浅薄荷」的探针，
-     用与上面实页用例【同一套】量法算 —— 它必须掉到 3:1 门槛之下，证明门槛真的会响。
-     2026-09-24（第二轮）用户原话的参考图那颗就是 ≈2.0:1；这条把「抄参考图」这件事钉成红灯。 */
-  test('合成回归：白字 + 参考图那档浅薄荷（≈2.0）会被 3:1 门槛拦下', async ({ page }) => {
+  /* 色值锁自检：塞一颗「旧参数」按钮（#2e9c76→#0f7c5a，上一版），用与实页用例【同一套】量法算 ——
+     锁必须把它判为不合规。这条替代了旧的「合成回归：白字 + 太浅薄荷会被 3:1 拦下」：那套对比度门槛
+     与用户新选定的 1.90:1 品牌色直接冲突，已删除；现在锁的是色值，不是对比度。 */
+  test('色值锁自检：漂移的渐变（旧的 #2e9c76 一版）必须被判不合规', async ({ page }) => {
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await page.evaluate(() => {
       const b = document.createElement('button');
-      b.id = '__too_light_probe';
+      b.id = '__drift_probe';
       b.textContent = '开始学习';
       b.style.color = '#fff';
-      b.style.background = 'linear-gradient(135deg, #57cba8, #4fc9a4)'; // 白字 ≈2.00 / 2.05
+      b.style.background = 'linear-gradient(135deg, #2e9c76, #0f7c5a)'; // 上一版（白字 3.42）
       document.body.appendChild(b);
     });
-    const m = await page.locator('#__too_light_probe').evaluate(measureButton);
-    const brightest = Math.min(...m.ratios);
-    expect(brightest, `参考图那档实测应 < 3:1 门槛（实测 ${m.ratios}）`).toBeLessThan(WHITE_MIN);
-    expect(brightest, `它正好≈2.0，别让探针漂走（实测 ${m.ratios}）`).toBeLessThan(2.2);
+    const m = await page.locator('#__drift_probe').evaluate(measureButton);
+    expect(isLockedGrad(m.stops), `漂移值不该被判合规（实测 ${m.stops}）`).toBe(false);
   });
 });
 

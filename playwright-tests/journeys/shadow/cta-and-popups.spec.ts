@@ -1,17 +1,14 @@
 // Hand-written alongside tests/e2e/shadow/cta-and-popups.md
-// 这一条锁的是他 2026-09-22 单独点出来的两件事，都是上一轮走查"发现了但没顺手修"的：
-//   ① 所有绿色主按钮的白字压绿底，实测对比度只有 1.90（AA 正文要 4.5:1）；
-//   ② A-B／循环／倍速那几个小弹层在手机上伸出屏幕外（常规模式右溢 39px，任务模式左溢 33.5px）。
-// 两条都是量出来的，所以这里的断言也只能是量出来的 —— 写一条"看起来改好了"的用例等于没锁。
+// 2026-09-24（第三轮）用户要求主按钮退回「深墨字」之前那一版 —— 轻薄荷渐变 #2bd4a4→#0fae7e + 白字。
+// 实测白字压最亮端只有 1.90:1，⚠️ 已知低于 WCAG AA，用户看过数字后仍选这支品牌色，知情接受。
+// 因此本门禁**不再按对比度判达标**（量了就必然红，那是假达标），改成**锁定色值的回归锁**：
+//   ① 源码级：三站主按钮的 --grad / --iel-grad 必须精确等于锁定值，--cta-ink 必须是 #fff；
+//   ② 实页级：屏幕上渐变绿底的控件，每一档绿必须是锁定值；#tbNext 另加白字锚。
+// 两道都只防"有人手滑改浅/改深/改字色"，不再假装 1.90 达标。源码那道配夹具自检
+// （fixtures/cta-gate-selfcheck.css，喂一个漂移值进去，锁必须响）。
 //
-// 为什么每件事留【源码级】+【实页级】两道：
-//   实页扫描只能看见此刻在屏幕上的控件（做题态、A-B 生效态、书签弹层要先进状态才显形），
-//   源码扫描把所有写过"绿底 + 白字"的规则一网打尽，含看不见的热态与弹层。
-//   少一道就是假绿。源码那道另配夹具自检（fixtures/cta-gate-selfcheck.css），
-//   因为它一开始把 admin 站的蓝色 --accent 误判成绿 —— 只断言"现在 0 命中"是量不到这种错的。
-//
-// 范围口径（不在本锁里，别误以为已修）：句子上的 A/B 角标、#loopCount 那颗小徽标也是白字压色底，
-// 但它们是状态标记不是按钮，已单独报给他拍板。
+// 范围口径：非主按钮（--cta-ink-dark 压 --accent/--task-new 的选中胶囊等）是另一族，不在本锁里；
+// 它们仍按 AA 由 app3/palette.spec.ts 的实底胶囊用例管。
 import { test, expect } from '../../fixtures';
 import { currentTimeout } from '../../utils/timeouts';
 import fs from 'fs';
@@ -26,140 +23,81 @@ declare const TASK: {
 declare function addMark(): void;
 declare const window: { __supaReject?: boolean };
 
-/* ---------------- 源码级：把 CSS 里的"绿底 + 白字"规则抓出来 ---------------- */
+/* ---------------- 源码级：把三站主按钮的渐变色值锁死 ---------------- */
 
-const parseColor = (t: string): [number, number, number, number] | null => {
-  let m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(t);
-  if (m) { let h = m[1]; if (h.length === 3) h = h.split('').map((c) => c + c).join('');
-    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16), 1]; }
-  m = /^rgba?\(([^)]+)\)$/i.exec(t);
-  if (m) { const p = m[1].split(/[,\s/]+/).filter(Boolean).map(parseFloat);
-    if (p.length >= 3) return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; }
-  return null;
-};
-// 半透明先叠到白纸上再判色相：rgba(16,180,135,.08) 那种浅绿底纹不是"绿底"，别误伤
-const isGreenFill = (c: [number, number, number, number]) => {
-  const k = c[3] > 1 ? 1 : c[3];
-  const r = c[0] * k + 255 * (1 - k), g = c[1] * k + 255 * (1 - k), b = c[2] * k + 255 * (1 - k);
-  return g > 110 && g - r > 25 && g - b > 25;
-};
+/* 锁定的品牌渐变（用户 2026-09-24 亲自选定；白字实测 1.90/2.85:1，已知低于 AA，用户知情接受）。
+   只防手滑改浅/改深/改字色 —— 不再量对比度。 */
+const LOCKED_GRAD = 'linear-gradient(135deg,#2bd4a4,#0fae7e)';   // #2bd4a4 → #0fae7e
+const LOCKED_INK = ['#fff', '#ffffff', 'rgb(255,255,255)'];
+const normGrad = (s: string) => s.toLowerCase().replace(/\s+/g, '');
 
-/* 2026-09-24：白字回到绿底上（用户拍板），所以源码级不再「见绿底+白字就响」，改成量对比度。
-    C1b：产品写的是 `color:var(--cta-ink)`（不是字面量 #fff），所以 color 也要把 var() 解析成真实值再判，
-    否则这道闸门只在自己测自己（对四个产品文件全返回 []）。
-    2026-09-24（第二轮）：主按钮改「轻渐变薄荷 + 通透感」（三站 --grad/#0b8663→#2e9c76），
-    白字压浅薄荷过不了 AA 正文 4.5 —— 这是用户【已知情并接受】的取舍。所以源码级门槛从 4.5
-    降到 3.0（WHITE_MIN，见 app3/palette.spec.ts）；3:1 是硬底线，白字压 ≈2.0 那档照样会红。
-    白字压 `--accent`（3.49）在新门槛下不再响 —— 那档是用户接受的同一族，已由浅薄荷主色取代。 */
-const overWhite = (c: [number, number, number, number]): [number, number, number, number] => {
-  const a = Math.min(1, Math.max(0, c[3]));
-  return [c[0] * a + 255 * (1 - a), c[1] * a + 255 * (1 - a), c[2] * a + 255 * (1 - a), 1];
-};
-const relLum = (c: number[]) => {
-  const f = (v: number) => { const x = v / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); };
-  return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
-};
-const contrast = (a: number[], b: number[]) => {
-  const A = relLum(a), B = relLum(b);
-  return (Math.max(A, B) + 0.05) / (Math.min(A, B) + 0.05);
-};
-const SOURCE_MIN = 3.0;   // 源码级底线：白字压主色的用户知情下限（AA 正文 4.5 已被主动放弃）
-
-const scanCssSource = (file: string) => {
+const scanGradLock = (file: string) => {
   const html = fs.readFileSync(file, 'utf-8');
   // HTML 只扫 <style> 里那些；.css 文件（自检夹具）本身就是样式表，整份扫
   const blocks = [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)].map((m) => m[1]);
-  // 注释里也写着 #2bd4a4 这类色值和"绿底"字样，不摘干净会把注释当成声明块的一部分
+  // 注释里也写着 #2bd4a4 这类色值，不摘干净会把注释当成声明
   const css = (blocks.length ? blocks.join('\n') : html).replace(/\/\*[\s\S]*?\*\//g, '');
-  // --accent 在跟读站是绿的、在 admin 站是苹果蓝：先按本文件自己写的取值解析，再判色相
-  const vars: Record<string, string> = {};
+  // 一个 token 可能声明多次（浅色 + body.dark）：全留下来逐个锁，别只锁第一档
+  const vars: Record<string, string[]> = {};
   [...css.matchAll(/(--[\w-]+)\s*:\s*([^;}]+)/g)].forEach((m) => {
-    if (!(m[1] in vars)) vars[m[1]] = m[2].trim();
+    (vars[m[1]] ||= []).push(m[2].trim());
   });
+  const first = (k: string) => vars[k]?.[0] ?? '';
   const resolve = (s: string, depth = 0): string => {
     if (depth > 4) return s;
     return s.replace(/var\((--[\w-]+)(?:\s*,\s*([^()]*))?\)/g, (_all, name, fallback) => {
-      const v = vars[name] ?? fallback ?? '';
-      return resolve(v, depth + 1);
+      return resolve(first(name) ?? fallback ?? '', depth + 1);
     });
   };
+  const gradKeys = ['--grad', '--iel-grad'].filter((k) => k in vars);
+  if (!gradKeys.length) return [];   // 该站没有薄荷主按钮渐变（admin 是蓝 --accent），不在本锁内
   const hits: string[] = [];
-  [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].forEach(([, rawSel, decl]) => {
-    const bgM = /background(?:-color)?\s*:\s*([^;]*)/i.exec(decl);
-    if (!bgM) return;
-    const colM = /(?:^|[;\s])color\s*:\s*([^;]*)/i.exec(decl);
-    if (!colM) return;
-    // color 也要解析 var()（产品写的是 var(--cta-ink)）→ 只有「近白且不透明」的字才进本门禁
-    const ink = parseColor(resolve(colM[1]).trim());
-    if (!ink) return;
-    if (!(ink[3] >= 0.5 && ink[0] >= 235 && ink[1] >= 235 && ink[2] >= 235)) return;
-    const flat = resolve(bgM[1]);
-    const colors = [...flat.matchAll(/#[0-9a-f]{3}\b|#[0-9a-f]{6}\b|rgba?\([^)]+\)/gi)]
-      .map((m) => parseColor(m[0])).filter(Boolean) as [number, number, number, number][];
-    const greens = colors.filter(isGreenFill);
-    if (!greens.length) return;
-    /* 白字压每一档绿：取最差（最亮那档）的对比度，低于底线才算「过亮的绿」。
-       渐变要逐档量 —— 亮端正是压不住白字的那一端。 */
-    const worst = Math.min(...greens.map((g) => contrast([255, 255, 255], overWhite(g))));
-    if (worst < SOURCE_MIN) hits.push(rawSel.trim().replace(/\s+/g, ' ').slice(-70));
-  });
+  for (const k of gradKeys) {
+    for (const v of vars[k]) {
+      if (normGrad(resolve(v)) !== normGrad(LOCKED_GRAD)) hits.push(`${k} 漂移（应锁定为 ${LOCKED_GRAD}，实为 ${v}）`);
+    }
+  }
+  const inkKeys = ['--cta-ink', '--iel-cta-ink'].filter((k) => k in vars);
+  for (const k of inkKeys) {
+    for (const v of vars[k]) {
+      const r = resolve(v).toLowerCase().replace(/\s+/g, '');
+      if (!LOCKED_INK.includes(r)) hits.push(`${k} 漂移（应锁定为 #fff，实为 ${r}）`);
+    }
+  }
   return hits;
 };
 
-/* ---------------- 实页级：把屏幕上"绿底 + 有字"的控件真量一遍 ---------------- */
+/* ---------------- 实页级：屏幕上渐变绿底的控件，色值必须锁定 ---------------- */
 
+/* 只认「linear-gradient 底 + 含绿色档」的控件（= 主按钮那一族），断言每一档绿都落在锁定的
+   #2bd4a4→#0fae7e 里。不再算对比度 —— 品牌色白字 1.90:1 已知低于 AA，用户知情接受。 */
 const sweepLive = (page: import('@playwright/test').Page) => page.evaluate(() => {
   const parse = (s: string) => { const m = /rgba?\(([^)]+)\)/.exec(s || ''); if (!m) return null;
     const p = m[1].split(/[,\s/]+/).filter(Boolean).map(parseFloat);
     return p.length >= 3 ? [p[0], p[1], p[2], p.length > 3 ? p[3] : 1] : null; };
-  const parseAll = (s: string) => { const out: number[][] = []; const re = /rgba?\([^)]+\)/g; let m;
-    while ((m = re.exec(s || ''))) { const c = parse(m[0]); if (c) out.push(c); } return out; };
-  const over = (fg: number[], bg: number[]) => [fg[0] * fg[3] + bg[0] * (1 - fg[3]),
-    fg[1] * fg[3] + bg[1] * (1 - fg[3]), fg[2] * fg[3] + bg[2] * (1 - fg[3]), 1];
-  const lum = (c: number[]) => { const a = c.slice(0, 3).map((v) => { const x = v / 255;
-    return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); });
-    return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2]; };
-  const ratio = (a: number[], b: number[]) => (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
   const isGreen = (c: number[]) => c[1] > 110 && c[1] - c[0] > 25 && c[1] - c[2] > 25;
-  /* 底色一路往上叠：玻璃条那几层是半透明渐变，不叠回去量到的是纸面白底，比屏幕上真实观感偏乐观。
-     渐变要每个色标单独配一次 —— 亮端 #2bd4a4 正是压不住白字的那一端。 */
-  const bgStack = (el: Element) => {
-    const layers: number[][][] = []; let host: Element | null = el; let base: number[] | null = null;
-    while (host) {
-      const cs = getComputedStyle(host);
-      const grads = parseAll(cs.backgroundImage); if (grads.length) layers.push(grads);
-      const solid = parse(cs.backgroundColor);
-      if (solid && solid[3] >= 0.999) { base = solid; break; }
-      if (solid && solid[3] > 0) layers.push([solid]);
-      host = host.parentElement;
-    }
-    const outs: number[][] = []; const acc = base || [255, 255, 255, 1];
-    const flat = (i: number, cur: number[]) => { if (i < 0) { outs.push(cur); return; }
-      layers[i].forEach((s) => flat(i - 1, over(s, cur))); };
-    flat(layers.length - 1, acc); return outs;
-  };
-  const bad: { sel: string; ratio: number; need: number }[] = [];
+  const LOCKED = [[43, 212, 164], [15, 174, 126]];   // #2bd4a4 / #0fae7e（用户锁定的品牌色）
+  const isLocked = (c: number[]) => LOCKED.some((l) =>
+    Math.abs(c[0] - l[0]) <= 2 && Math.abs(c[1] - l[1]) <= 2 && Math.abs(c[2] - l[2]) <= 2);
+  const bad: { sel: string; stops: string[] }[] = [];
   let seen = 0;
   document.querySelectorAll('*').forEach((el) => {
     const cs = getComputedStyle(el);
     if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) < 0.05) return;
     const r = el.getBoundingClientRect(); if (!r.width || !r.height) return;
-    // 渐变裁字的标题（-webkit-text-fill-color:transparent）字本身就是绿的，拿 color 那一路白去比是假阳性
+    // 渐变裁字的标题（-webkit-text-fill-color:transparent）不是按钮底，别误伤
     if (cs.webkitTextFillColor && /transparent|rgba?\([^)]*,\s*0(\.0+)?\s*\)/.test(cs.webkitTextFillColor)) return;
-    const fg = parse(cs.color); if (!fg || fg[3] < 0.5) return;
-    const bgs = bgStack(el).filter(isGreen); if (!bgs.length) return;
+    if (!/gradient/i.test(cs.backgroundImage || '')) return;   // 只锁渐变底；实底 --accent 是另一族
+    const stops: number[][] = []; const re = /rgba?\([^)]+\)/g; let m: RegExpExecArray | null;
+    while ((m = re.exec(cs.backgroundImage))) { const c = parse(m[0]); if (c) stops.push(c); }
+    const greens = stops.filter(isGreen); if (!greens.length) return;
     const txt = (el.textContent || '').trim();
     const isIcon = !txt && !!el.querySelector('i[class*="ri-"]');
     if (!txt && !isIcon) return;
     seen++;
-    const px = parseFloat(cs.fontSize);
-    const large = px >= 24 || (px >= 18.66 && parseInt(cs.fontWeight, 10) >= 700);
-    /* 近白的字压绿底 = 用户拍板的「浅薄荷 + 白字」那一族，门槛用 3:1（用户知情下限）；
-       其它字色（深墨等）仍按 AA：大字/图标 3、正文 4.5。 */
-    const isWhiteInk = fg[0] >= 235 && fg[1] >= 235 && fg[2] >= 235;
-    const need = isWhiteInk ? 3 : ((isIcon || large) ? 3 : 4.5);
-    const worst = Math.min(...bgs.map((b) => ratio(fg, b)));
-    if (worst < need) bad.push({ sel: el.id ? '#' + el.id : el.tagName.toLowerCase(), ratio: +worst.toFixed(2), need });
+    const rogue = greens.filter((g) => !isLocked(g));
+    if (rogue.length) bad.push({ sel: el.id ? '#' + el.id : el.tagName.toLowerCase(),
+      stops: greens.map((c) => `rgb(${c[0]}, ${c[1]}, ${c[2]})`) });
   });
   return { seen, bad };
 });
@@ -204,15 +142,18 @@ async function measurePopup(page: import('@playwright/test').Page, p: { name: st
   return geo;
 }
 
-test.describe('绿底按钮的字色 · 全站对比度', () => {
+test.describe('主按钮渐变色值锁 · 全站', () => {
   const root = path.resolve(process.cwd(), '..');
 
-  test('源码里不许再有「白字压过亮的绿」（含看不见的热态和弹层，三站都查）', () => {
-    // 先自检这道闸门本身：坏写法必须响、好写法必须不响
-    const fx = scanCssSource(path.join(root, 'playwright-tests/fixtures/cta-gate-selfcheck.css'));
-    expect(fx.sort()).toEqual(['.bad-a', '.bad-b']);
+  test('源码里三站主按钮渐变被锁死（含深色档；防手滑改浅/改深/改字色）', () => {
+    // 先自检这道闸门本身：夹具喂漂移值必须响
+    const fx = scanGradLock(path.join(root, 'playwright-tests/fixtures/cta-gate-selfcheck.css'));
+    expect(fx.length, `色值锁没抓到夹具里的漂移值：${JSON.stringify(fx)}`).toBeGreaterThan(0);
+    // 纯比较器两个方向都要对（锁定值相等、漂移值不等）
+    expect(normGrad(LOCKED_GRAD)).toBe('linear-gradient(135deg,#2bd4a4,#0fae7e)');
+    expect(normGrad('linear-gradient(135deg, #2e9c76, #0f7c5a)')).not.toBe(normGrad(LOCKED_GRAD));
     const report = ['shadow/index.html', 'index.html', 'app/index.html', 'admin/index.html']
-      .map((f) => [f, scanCssSource(path.join(root, f))] as const)
+      .map((f) => [f, scanGradLock(path.join(root, f))] as const)
       .filter(([, h]) => h.length > 0);
     expect(report, report.map(([f, h]) => `${f}: ${h.join(' | ')}`).join('\n')).toEqual([]);
   });
@@ -223,24 +164,24 @@ test.describe('绿底按钮的字色 · 全站对比度', () => {
     await expect(page.locator('.sent').first()).toBeVisible();
   });
 
-  test('屏幕上真的量一遍：首屏绿底控件的对比度全过 AA', async ({ page }) => {
+  test('屏幕上真的量一遍：首屏渐变绿底控件的色值全锁定', async ({ page }) => {
     const r = await sweepLive(page);
     expect(r.bad, JSON.stringify(r.bad)).toEqual([]);
-    expect(r.seen, '一处绿底有字的控件都没捞到 = 扫描没跑到东西，不算通过').toBeGreaterThan(0);
+    expect(r.seen, '一处渐变绿底控件都没捞到 = 扫描没跑到东西，不算通过').toBeGreaterThan(0);
   });
 
-  test('任务模式那颗「下一句」：绿底压深、字改回白（反向验证的锚）', async ({ page }) => {
+  test('任务模式那颗「下一句」：渐变锁定 + 字回到白（反向验证的锚）', async ({ page }) => {
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.enterTaskMode(); });
     await expect(page.locator('#tbNext')).toBeVisible();
     const one = await page.evaluate(() => {
       const el = document.getElementById('tbNext') as HTMLElement;
       const cs = getComputedStyle(el);
-      return { color: cs.color, bg: cs.backgroundImage.slice(0, 90) };
+      return { color: cs.color, bg: cs.backgroundImage.slice(0, 140) };
     });
     expect(one.color).toBe('rgb(255, 255, 255)');      // --cta-ink 回到 #fff
-    expect(one.bg).toContain('46, 156, 118');           // #2e9c76 —— 三站统一的轻薄荷最亮档（白字 3.42:1，用户知情下限 3:1）
-    expect(one.bg).not.toContain('43, 212, 164');       // 不再是 #2bd4a4（白字只有 1.90）
-    expect(one.bg).not.toContain('11, 134, 99');        // 也不是旧的中调 #0b8663（白字 4.56，用户嫌太重）
+    expect(one.bg).toContain('43, 212, 164');           // #2bd4a4 —— 锁定品牌渐变最亮端（白字 1.90，用户知情接受）
+    expect(one.bg).toContain('15, 174, 126');           // #0fae7e —— 最暗端
+    expect(one.bg).not.toContain('46, 156, 118');       // 不再是上一版 #2e9c76
     const r = await sweepLive(page);
     expect(r.bad, JSON.stringify(r.bad)).toEqual([]);
     expect(r.seen).toBeGreaterThan(0);

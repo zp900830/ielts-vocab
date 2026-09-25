@@ -26,14 +26,16 @@
   /* 圆角：嵌套小件 → 小 → 卡片 → 大弹层 */
   --iel-radius-xs:10px; --iel-radius-sm:12px; --iel-radius:16px; --iel-radius-lg:18px;
   /* 渐变与阴影 */
-  --iel-grad:linear-gradient(135deg,#2e9c76,#0f7c5a);
+  --iel-grad:linear-gradient(135deg,#2bd4a4,#0fae7e);
   --iel-shadow:0 2px 12px rgba(43,58,52,.06);
   --iel-shadow-lg:0 12px 40px rgba(30,60,48,.14);
-  --iel-grad-shadow:0 10px 24px -8px rgba(16,180,135,.5), inset 0 1px 0 rgba(255,255,255,.4);
+  --iel-grad-shadow:0 3px 10px rgba(16,180,135,.25);
   /* 绿底上的字色（2026-09-24 用户拍板白字/白图标；与 shadow/app 同一支，三站要一起改才不花）。
-     2026-09-24（第二轮）用户嫌中调薄荷太重太辣眼，三站改「轻渐变薄荷 + 通透感」：
-     #2e9c76→#0f7c5a（白字 3.42~5.18）。白字压浅薄荷过不了 AA 正文 4.5，
-     这是用户【已知情并接受】的取舍，硬底线锁在 3:1（见 app3/palette.spec.ts 与 PRD §10.1）。 */
+     2026-09-24（第三轮）用户要求退回「深墨字」之前那一版：轻薄荷渐变 #2bd4a4→#0fae7e
+     + 白字/白图标 + 通透光晕。实测白字压最亮端 #2bd4a4 只有 1.90:1（最暗端 2.85:1），
+     ⚠️ 已知低于 WCAG AA 正文 4.5（纯图标 3:1）—— 用户看过实测数字后仍选定这支品牌色，知情接受。
+     门禁不再按对比度判它，改为锁定色值的回归锁（app3/palette.spec.ts + shadow/cta-and-popups.spec.ts），
+     只防手滑改浅/改深；非主按钮（--iel-cta-ink-dark 那支）不受影响。 */
   --iel-cta-ink:#fff;
   /* 深墨字专用：跳转链接与句尾「译」钮的底色是更亮的 --iel-accent #10b487（白字只有 2.66:1），
      这两处非主按钮保留深墨。 */
