@@ -2148,16 +2148,19 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.listen-mode > .layout { display: block; }
   body.listen-mode #appShell { display: none; }
   body.listen-mode > #audiobar { display: flex; }
-  body.listen-mode .listen-top { display: block; }
-  .listen-top { position: sticky; top: 0; z-index: 40; display: none; align-items: center; gap: 10px;
-    padding: 10px 16px; background: rgba(250,248,244,.92); backdrop-filter: blur(12px); }
-  .listen-top .back { min-width: 44px; min-height: 44px; border: 1px solid var(--border); border-radius: 999px;
-    background: var(--card); color: var(--text); font: inherit; cursor: pointer; }
-  .listen-top .r-title { font-weight: 700; color: var(--text); }
-  .listen-top .r-pos { margin-left: 8px; font-size: 12px; color: var(--muted); font-weight: 400; }
+  /* refine3 ⑥（2026-09-25 用户「头部的标题条，与二级页面任务模式一样」）：
+     随身听展开阅读（二级页）的头部原先是一条通栏 sticky 条（标题 + 第 N/6 篇），
+     与正文框（min(1084px, 100% - 36px) 居中）不齐、控件层级也和任务模式头部两套。
+     现在照抄任务模式那套 .reader-head：同一容器宽度、同一 .r-title/.r-pos 标题层级、
+     同一枚 .back 返回控件（去掉这里对 .back/.r-title/.r-pos 的三条覆写，直接复用共用声明）。 */
+  body.listen-mode .listen-top { display: flex; }
+  .listen-top { position: sticky; top: 8px; z-index: 40; display: none; align-items: center; gap: 5px;
+    width: min(1084px, calc(100% - 36px)); margin: 0 auto; padding: 6px 14px 6px 6px;
+    background: rgba(255,255,255,.42); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
+    border: 1px solid rgba(255,255,255,.5); border-radius: 999px; box-shadow: 0 3px 14px rgba(30,60,48,.08); }
   /* 深色（§10.1）：页面底与顶栏的写死浅色值换成暖黑 token；卡片/文字本就走 token 会自动跟随。 */
   body.dark.listen-page, body.dark.listen-mode { background: var(--bg); }
-  body.dark .listen-top { background: rgba(28,26,23,.92); }
+  body.dark .listen-top { background: rgba(30,28,25,.72); border-color: rgba(255,255,255,.08); }
   /* E：深色下封面卡的浅色渐变会「提亮」暖黑，改回纯 --accent-soft。 */
   body.dark .ls-cover { background: var(--accent-soft); }
 
