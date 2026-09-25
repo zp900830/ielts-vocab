@@ -313,3 +313,21 @@ test.describe('M5 · 计划旋钮（去掉「几点换一天」，日界固定 4
     expect(legacy && legacy.boundary, '旧值被忽略，仍是 4').toBe(4);
   });
 });
+
+/* 2026-09-25 用户：「免费」标签是多余的。确认过全站无付费/会员语义（grep 无 会员/付费/订阅/VIP），
+   纯装饰，直接删干净（侧栏一行 + 浮窗头部 + CSS）。 */
+test.describe('M5 · 去掉「免费」标签', () => {
+  test('未登录/已登录下，用户卡与「我的」浮窗都不再出现「免费」', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    await expect(page.locator('#meCard')).not.toContainText('免费');
+    const pop = await openMe(page);
+    await expect(pop).not.toContainText('免费');
+    await expect(pop.locator('.mp-badge')).toHaveCount(0);
+
+    await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); APP3.renderMePop(); });
+    await expect(page.locator('#meCard')).not.toContainText('免费');
+    await expect(page.locator('.me-tag')).toHaveCount(0);
+  });
+});

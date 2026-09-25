@@ -811,7 +811,7 @@
     // 2026-09-24：未登录显示「登录」按钮（不是头像）；已登录显示头像 + 账号。
     card.innerHTML = acc.logged
       ? `<span class="me-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>`
-        + `<span class="me-meta"><span class="me-name">${esc(acc.nickname)}</span><span class="me-tag">免费</span></span>`
+        + `<span class="me-meta"><span class="me-name">${esc(acc.nickname)}</span></span>`
       : `<span class="me-login">登录</span>`;
     card.setAttribute('aria-label', acc.logged ? `我的 · ${acc.nickname}` : '登录 / 我的');
   }
@@ -836,7 +836,6 @@
         <span class="mp-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>
         <div class="mp-id"><div class="mp-name">${esc(acc.logged ? acc.nickname : '未登录')}</div>
           <div class="mp-sub">${esc(acc.logged ? acc.mail : '登录后跨设备同步')}</div></div>
-        <span class="mp-badge">免费</span>
       </div>
       <button class="mp-cta" type="button" data-me-cta>${hasPlan ? `继续学《${esc(title)}》` : '设置学习计划'}</button>
       <div class="mp-card">
