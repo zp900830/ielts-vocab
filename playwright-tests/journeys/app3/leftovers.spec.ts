@@ -178,6 +178,11 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
     await waitAppReady(page);
     await page.evaluate(() => { (TASK as unknown as { listenExpand(): void }).listenExpand(); });
     await expect(page.locator('body')).toHaveClass(/listen-mode/);
+    /* 展开入场动画（ls-page-in，0.32s）跑着的时候 scale(.99) 会让几何测量漂 4px ——
+       先把动画跳到终态再量（产品行为不变，只是别在动画中途量几何）。 */
+    await page.evaluate(() => {
+      document.getAnimations().forEach(function (a) { try { a.finish(); } catch (e) {} });
+    });
     await expect(page.locator('#listenTop')).toBeVisible();
     const m = await page.evaluate(() => {
       const lt = document.getElementById('listenTop')!.getBoundingClientRect();

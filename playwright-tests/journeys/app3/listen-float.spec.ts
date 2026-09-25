@@ -92,7 +92,8 @@ test.describe('3.0 随身听悬浮球（切 tab 续播）', () => {
     await stubData(page, TWO);
     await gotoListen(page);
     await startListening(page);
-    await expect(fab(page), '随身听页上不出现悬浮球（播放器本身就是控制面）').toBeHidden();
+    // 卡片页不显示悬浮球（卡片本身就是控制面，2026-09-25 用户再确认）；球只在别的页出现
+    await expect(fab(page), '随身听卡片页不出现悬浮球').toBeHidden();
 
     await switchTo(page, 'home');
     await expect(fab(page), '切走后应出现悬浮球').toBeVisible();
@@ -125,6 +126,7 @@ test.describe('3.0 随身听悬浮球（切 tab 续播）', () => {
     await expect(page).toHaveURL(/#\/listen/);
     await expect(page.locator('.ls-card')).toBeVisible();
     await expect.poll(() => playing(page), '回随身听页后仍要播着').toBe(true);
+    // 卡片页不显示球（卡片就是控制面）：回到随身听页球收起，但播放继续
     await expect(fab(page), '回到随身听页后悬浮球收起').toBeHidden();
   });
 
@@ -159,17 +161,18 @@ test.describe('3.0 随身听悬浮球（切 tab 续播）', () => {
 
   /* ---------- 消失 ---------- */
 
-  test('停在随身听页：#/listen 上不出现悬浮球', async ({ page }) => {
+  test('停在随身听页：#/listen 上不出现悬浮球（卡片就是控制面）', async ({ page }) => {
     await stubData(page, TWO);
     await gotoListen(page);
     await startListening(page);
-    await expect(fab(page)).toBeHidden();
-    // 反复回随身听再切走，回到随身听都应收起
+    await expect(fab(page), '卡片页不出现球（卡片是控制面）').toBeHidden();
+    // 反复切走再回来：别的页有球，回卡片页球收起，播放始终不断
     await switchTo(page, 'home');
     await expect(fab(page)).toBeVisible();
     await page.locator('.sidenav .nav-item[data-route="listen"]').click();
     await expect(page).toHaveURL(/#\/listen/);
     await expect(fab(page)).toBeHidden();
+    await expect.poll(() => playing(page), '回卡片页播放仍继续').toBe(true);
   });
 
   test('展开全屏（listen-mode）：不出现悬浮球', async ({ page }) => {

@@ -5,7 +5,7 @@
 //   ④ 「展开全文阅读」= 全屏弹窗播放文章（不离开 #/listen，可带动效收起）
 //   ⑤ 悬浮球只在「停止」时消失（暂停/切 tab 都仍在）
 //   ⑥ 展开弹窗 Esc 关闭（分层：普通浮层先关）
-//   ⑦ 收听计时跨场清零（停止/关闭/暂停/收起）
+//   ⑦ 收听计时清零（停止/关闭/暂停）；收起不停止不清零
 //   ⑧ 按篇账云同步合并语义 = 单调 max
 // 服务器归 global-setup.ts 起停（仓库根 8932）：/app/ 在仓库根，用 E2E_ROOT_URL。
 import { test, expect } from '../../fixtures';
@@ -167,7 +167,7 @@ test.describe('③ 未展开态没有 循环/AB/倍速/书签', () => {
 });
 
 test.describe('④ 展开 = 全屏弹窗（不离开 #/listen）', () => {
-  test('点展开：留在 #/listen、弹窗出现、可播放；不是任务模式', async ({ page }) => {
+  test('点展开：留在 #/listen、正文全屏、可播放；**不再有 HUD 大卡片**；顶栏是「收起」', async ({ page }) => {
     await stubData(page, TWO);
     await gotoListen(page);
     await installSpeakStub(page);
@@ -176,42 +176,43 @@ test.describe('④ 展开 = 全屏弹窗（不离开 #/listen）', () => {
     await expect(page, '不许跳出随身听路由').toHaveURL(/#\/listen/);
     await expect(page.locator('body')).toHaveClass(/listen-mode/);
     await expect(page.locator('body'), '不是路由跳进文章任务模式').not.toHaveClass(/task-mode/);
-    // 弹窗 HUD：上一篇/下一篇 + 篇名 + 中文名 + 状态胶囊 + 句子
-    await expect(page.locator('#listenHud')).toBeVisible();
-    await expect(page.locator('#listenHud .ls-title')).toContainText('地球与生命');
-    await expect(page.locator('#listenHud .ls-chip')).toContainText(/第 \d+\s*\/\s*\d+ 句/);
-    await expect(page.locator('#listenHud .ls-sen')).not.toBeEmpty();
+    // 2026-09-25 用户：HUD 大卡片删掉 —— 篇名在顶部条、当前句在正文高亮、控件在播放条
+    expect(await page.locator('#listenHud').count(), 'HUD 卡必须不存在').toBe(0);
+    await expect(page.locator('#lsTitle'), '顶部条报篇名').toContainText('地球与生命');
+    await expect(page.locator('#lsPos'), '顶部条报篇号').toContainText(/第 \d+\/\d+ 篇/);
     await expect(page.locator('#art .sent').first()).toBeVisible();   // §7.3 正文
     await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(true);
+    // 左上角 = 收起，不是返回（收起后播放继续，见 ⑦）
+    await expect(page.locator('#lsClose')).toHaveAttribute('aria-label', '收起');
+    // task-mode class 不许泄漏进听书态（用户截图实测过泄漏）
+    await expect(page.locator('#taskTop')).toBeHidden();
   });
 
-  test('收起：回到卡片、仍在 #/listen；有动效且 reduced-motion 下降级', async ({ page }) => {
+  test('收起：回到卡片、仍在 #/listen、**播放继续**；有动效且 reduced-motion 下降级', async ({ page }) => {
     await stubData(page, TWO);
     await gotoListen(page);
     await installSpeakStub(page);
 
-    const anim = await page.evaluate(() => {
-      // 未展开时 HUD 不上屏（display:none）
-      const hud = document.getElementById('listenHud')!;
-      return getComputedStyle(hud).animationName;
-    });
-    expect(anim === 'none' || anim === '', '未展开态 HUD 不应跑动效').toBeTruthy();
-
     await page.locator('.ls-expand').click();
     await expect(page.locator('body')).toHaveClass(/listen-mode/);
-    const opened = await page.evaluate(() => getComputedStyle(document.getElementById('listenHud')!).animationName);
-    expect(opened, '展开要有进入动效').not.toBe('none');
+    const opened = await page.evaluate(() =>
+      getComputedStyle(document.querySelector('body > .layout')!).animationName);
+    expect(opened, '展开要有进入动效（正文整块淡入）').not.toBe('none');
 
     await page.locator('#lsClose').click();
     await expect(page.locator('body')).not.toHaveClass(/listen-mode/);
     await expect(page).toHaveURL(/#\/listen/);
     await expect(page.locator('.ls-card')).toBeVisible();
+    // 口径（2026-09-25 用户）：收起不停止 —— 播放继续；卡片页是控制面，球不显示（见 listen-float 锁）
+    expect((await st(page)).playing, '收起后播放必须继续').toBe(true);
+    await expect(fab(page), '卡片页是控制面，不显示悬浮球').toBeHidden();
 
     // reduced-motion：动效压掉
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.locator('.ls-expand').click();
     await expect(page.locator('body')).toHaveClass(/listen-mode/);
-    const rm = await page.evaluate(() => getComputedStyle(document.getElementById('listenHud')!).animationName);
+    const rm = await page.evaluate(() =>
+      getComputedStyle(document.querySelector('body > .layout')!).animationName);
     expect(rm, 'reduced-motion 下压掉动画').toBe('none');
   });
 });
@@ -300,7 +301,7 @@ test.describe('⑥ 展开弹窗 Esc 关闭', () => {
 });
 
 test.describe('⑦ 收听计时跨场清零', () => {
-  test('停止 / 关闭 / 暂停 / 收起 四个退场口都把 _listenTick 归 0', async ({ page }) => {
+  test('停止 / 关闭 / 暂停 清零；收起（播放继续）不清零', async ({ page }) => {
     await stubData(page, TWO);
     await gotoListen(page);
     await installSpeakStub(page);
@@ -324,14 +325,18 @@ test.describe('⑦ 收听计时跨场清零', () => {
     await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(false);
     expect(await page.evaluate(() => TASK.listenTickMs), '暂停后清零').toBe(0);
 
-    // 收起（reduced-motion 下瞬时完成）
+    // 收起（reduced-motion 下瞬时完成）：播放继续 → 计时必须还在走，不许清零
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.locator('.ls-play').click();
     await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(true);
     await page.evaluate(() => TASK.listenExpand());
     await expect(page.locator('body')).toHaveClass(/listen-mode/);
     await page.evaluate(() => TASK.listenCollapse());
-    await expect.poll(() => page.evaluate(() => TASK.listenTickMs), '收起后清零').toBe(0);
+    await expect.poll(() => page.evaluate(() => TASK.listenTickMs), '收起不清零（播放还在继续，账要接着记）')
+      .toBeGreaterThan(0);
+    // 真正停止才归零
+    await page.evaluate(() => TASK.listenStop());
+    expect(await page.evaluate(() => TASK.listenTickMs), '停止后清零').toBe(0);
   });
 });
 
