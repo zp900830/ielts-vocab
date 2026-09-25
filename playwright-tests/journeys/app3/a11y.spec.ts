@@ -83,6 +83,9 @@ const AXE_UNCALCULABLE: { sel: string; why: string }[] = [
   { sel: '.sync-hint', why: '常驻同步 pill：底 rgba(255,241,236,.96) 半透明，axe 顺着摸到 body 渐变就放弃' },
   { sel: '.ls-prev', why: '纯图标按钮：axe 对「只含非文字内容」判不了 contrast（图标色另有 ≥3:1 要求，人工核）' },
   { sel: '.ls-next', why: '纯图标按钮：同上' },
+  { sel: '.ls-cover', why: '随身听封面卡：accent-soft→白的浅色渐变底，axe 判不了背景（--text 压浅渐变，人工核过）' },
+  { sel: '.ls-expand', why: '随身听「展开全文阅读」：--grad 渐变 CTA，白字 1.90:1 为用户知情取舍' },
+  { sel: '.blank-pop', why: '② 答题浮窗：玻璃浮层，底下正文 .sent.task-new 有高亮底，axe 判不了合成背景' },
 ];
 
 function luminance(rgb: number[]) {
@@ -264,7 +267,9 @@ test.describe('3.0 无障碍（axe，WCAG A/AA）', () => {
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await page.reload();
     await page.locator('.art-card .a-open').first().click();
-    await expect(page.locator('#taskTop')).toBeVisible();
+    // G（2026-09-25）：头部第二排撤掉后 #taskTop 只剩 position:fixed 的 #readerHead，自身高度为 0；
+    // 真正可见的是 #readerHead，断言它。
+    await expect(page.locator('#readerHead')).toBeVisible();
     await expect(page.locator('#art .sent').first()).toBeVisible();
 
     const sels = ['#ttPrev', '#ttNext', '#btnZh', '#btnGloss', '#ttHelp',

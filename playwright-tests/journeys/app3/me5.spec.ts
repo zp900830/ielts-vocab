@@ -281,3 +281,98 @@ test.describe('M5 · 形态与边界（§8.1 / §8.2 / §10.1）', () => {
     expect(await pop.locator('a[href]').count(), '我的里没有外链入口').toBe(0);
   });
 });
+
+/* 2026-09-25 用户：「几点换算一天的设置不要了（你直接给到 4 点）」。
+   删干净：控件 / 存储字段 / API 一起收；旧数据里残留的 boundaryHour 读时忽略、不崩。 */
+test.describe('M5 · 计划旋钮（去掉「几点换一天」，日界固定 4 点）', () => {
+  test('浮窗没有该旋钮；planConfig 固定 boundary=4；新计划不写 boundaryHour；旧值被忽略', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    const pop = await openMe(page);
+    expect(await pop.locator('[data-me-bound]').count(), '不再有「几点换一天」按钮').toBe(0);
+    expect(await pop.innerText()).not.toContain('几点换一天');
+    expect(await page.evaluate(() => typeof (TASK as unknown as { setBoundary?: unknown }).setBoundary),
+      'setBoundary API 一并删掉').toBe('undefined');
+
+    const cfg = await page.evaluate(() => TASK.planConfig());
+    expect(cfg && cfg.boundary, '日界固定 4 点').toBe(4);
+    const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('ielts.shadow.v2')!));
+    expect(stored.plan.boundaryHour, '新计划不再落 boundaryHour 字段').toBeUndefined();
+
+    // 旧数据残留：手写一个 boundaryHour=0，刷新后仍按 4 点算，且不崩。
+    await page.evaluate(() => {
+      const o = JSON.parse(localStorage.getItem('ielts.shadow.v2')!);
+      o.plan.boundaryHour = 0;
+      localStorage.setItem('ielts.shadow.v2', JSON.stringify(o));
+    });
+    await page.reload();
+    await waitTask(page);
+    const legacy = await page.evaluate(() => TASK.planConfig());
+    expect(legacy && legacy.boundary, '旧值被忽略，仍是 4').toBe(4);
+  });
+});
+
+/* 2026-09-25 用户：「免费」标签是多余的。确认过全站无付费/会员语义（grep 无 会员/付费/订阅/VIP），
+   纯装饰，直接删干净（侧栏一行 + 浮窗头部 + CSS）。 */
+test.describe('M5 · 去掉「免费」标签', () => {
+  test('未登录/已登录下，用户卡与「我的」浮窗都不再出现「免费」', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    await expect(page.locator('#meCard')).not.toContainText('免费');
+    const pop = await openMe(page);
+    await expect(pop).not.toContainText('免费');
+    await expect(pop.locator('.mp-badge')).toHaveCount(0);
+
+    await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); APP3.renderMePop(); });
+    await expect(page.locator('#meCard')).not.toContainText('免费');
+    await expect(page.locator('.me-tag')).toHaveCount(0);
+  });
+});
+
+/* 2026-09-25 用户：补上「重置学习计划」。语义（我的判断）：
+   只清计划配置与当天排程（分钟数/新词开关/开始日期），**进度/词状态/日账/streak 一律保留**
+   （§9 是核心资产，破坏性操作要二次确认并说清）。重置后可重新建计划，进度续上。 */
+test.describe('M5 · 重置学习计划', () => {
+  test('二次确认说清「会重置什么/不会动什么」；重置后计划没了、进度还在、可重新建', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.readDone(0); TASK.seedArticleForTest(0, { reps: 5 }); });
+    const before = await page.evaluate(() => ({
+      words: Object.keys(TASK.state()!.words).length,
+      days: Object.keys(TASK.state()!.daily).length,
+      streak: TASK.todayStats().streak,
+    }));
+    expect(before.words, '先造出词进度').toBeGreaterThan(0);
+
+    const pop = await openMe(page);
+    const btn = pop.locator('[data-me-reset-plan]');
+    await expect(btn, '浮窗里有「重置学习计划」').toBeVisible();
+    let msg = '';
+    page.once('dialog', async (d) => { msg = d.message(); await d.accept(); });
+    await btn.click();
+    expect(msg, '确认文案说清重置什么').toMatch(/重置/);
+    expect(msg, '确认文案说清不动什么').toMatch(/不会动|保留|不清/);
+    await expect.poll(() => page.evaluate(() => TASK.hasPlan)).toBe(false);
+
+    const after = await page.evaluate(() => ({
+      words: Object.keys(TASK.state()!.words).length,
+      days: Object.keys(TASK.state()!.daily).length,
+      streak: TASK.todayStats().streak,
+    }));
+    expect(after, '重置计划不清进度/词状态/日账/streak').toEqual(before);
+
+    // 能重新建：走真实设置入口（CTA → 设置屏 → 30 分钟 → 开始这个计划）
+    await pop.locator('[data-me-cta]').click();
+    const panel = page.locator('#todayPanel');
+    await expect(panel).toBeVisible();
+    await panel.locator('.ps-opt[data-v="30"]').click();
+    await panel.locator('#psStart').click();
+    await expect.poll(() => page.evaluate(() => TASK.hasPlan)).toBe(true);
+    expect((await page.evaluate(() => TASK.planConfig()))!.minutes, '重新选了 30 分钟').toBe(30);
+    expect(await page.evaluate(() => Object.keys(TASK.state()!.words).length), '重建后进度仍在').toBe(before.words);
+  });
+});

@@ -207,7 +207,7 @@
       // §5.2（2026-09-24 用户改口径）：一句话 + 一个按钮，点了打开「我的」浮窗；不内嵌计划表单。
       view.innerHTML = `<div class="st-empty-start">
         <h1>开始你的学习计划</h1>
-        <p>学习数据会在你建立计划后出现在这里。每天读多久、几点换一天、新词开关都在「我的」里。</p>
+        <p>学习数据会在你建立计划后出现在这里。每天读多久、新词开关都在「我的」里。</p>
         <button class="st-open-me" type="button">打开「我的」</button>
       </div>`;
       return;
@@ -460,24 +460,27 @@
       <h1>随身听</h1>
       <div class="ls-card">
         <button class="ls-cover" type="button" aria-label="展开《${esc(SECTIONS[a].title)}》全文阅读">
+          <span class="ls-disc" aria-hidden="true"><i class="ri-headphone-line"></i></span>
           <span class="ls-art">《${esc(SECTIONS[a].title)}》</span>
           <span class="ls-vol">第 ${listenVolNo(a, 0)} 卷</span>
           <span class="ls-now">—</span>
         </button>
-        <div class="ls-controls" role="group" aria-label="随身听播放控制">
-          <button class="ls-prev" type="button" aria-label="上一篇">◄</button>
-          <button class="ls-play" type="button" aria-label="播放">▶</button>
-          <button class="ls-next" type="button" aria-label="下一篇">►</button>
+        <div class="ls-main">
+          <div class="ls-controls" role="group" aria-label="随身听播放控制">
+            <button class="ls-prev" type="button" aria-label="上一篇">◄</button>
+            <button class="ls-play" type="button" aria-label="播放">▶</button>
+            <button class="ls-next" type="button" aria-label="下一篇">►</button>
+          </div>
+          <input class="ls-seek" type="range" min="1" max="1" value="1" step="1" aria-label="句级位置条">
+          <p class="ls-info">—</p>
+          <div class="ls-tools" role="group" aria-label="随身听附加控制">
+            <button class="ls-loop" type="button" aria-label="单句循环遍数">循环关</button>
+            <button class="ls-ab" type="button" aria-label="AB 复读">AB</button>
+            <button class="ls-rate" type="button" aria-label="朗读倍速">1x</button>
+            <button class="ls-mark" type="button" aria-label="记下当前位置">书签</button>
+          </div>
+          <button class="ls-expand" type="button" aria-label="展开全文阅读">点击展开全文阅读</button>
         </div>
-        <input class="ls-seek" type="range" min="1" max="1" value="1" step="1" aria-label="句级位置条">
-        <p class="ls-info">—</p>
-        <div class="ls-tools" role="group" aria-label="随身听附加控制">
-          <button class="ls-loop" type="button" aria-label="单句循环遍数">循环关</button>
-          <button class="ls-ab" type="button" aria-label="AB 复读">AB</button>
-          <button class="ls-rate" type="button" aria-label="朗读倍速">1x</button>
-          <button class="ls-mark" type="button" aria-label="记下当前位置">书签</button>
-        </div>
-        <button class="ls-expand" type="button" aria-label="展开全文阅读">点击展开全文阅读</button>
       </div>
     </div>`;
     updateListenCard();
@@ -811,7 +814,7 @@
     // 2026-09-24：未登录显示「登录」按钮（不是头像）；已登录显示头像 + 账号。
     card.innerHTML = acc.logged
       ? `<span class="me-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>`
-        + `<span class="me-meta"><span class="me-name">${esc(acc.nickname)}</span><span class="me-tag">免费</span></span>`
+        + `<span class="me-meta"><span class="me-name">${esc(acc.nickname)}</span></span>`
       : `<span class="me-login">登录</span>`;
     card.setAttribute('aria-label', acc.logged ? `我的 · ${acc.nickname}` : '登录 / 我的');
   }
@@ -831,13 +834,11 @@
     const planDay = cfg && cfg.startDate ? Math.floor((Date.now() - Date.parse(cfg.startDate)) / 864e5) + 1 : 1;
     const dark = document.body.classList.contains('dark');
     const MINS = [5, 10, 15, 20, 30, 45, 60];
-    const BOUND = [[0, '0点'], [2, '2点'], [3, '3点'], [4, '4点'], [5, '5点'], [6, '6点']];
     pop.innerHTML = `
       <div class="mp-head">
         <span class="mp-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>
         <div class="mp-id"><div class="mp-name">${esc(acc.logged ? acc.nickname : '未登录')}</div>
           <div class="mp-sub">${esc(acc.logged ? acc.mail : '登录后跨设备同步')}</div></div>
-        <span class="mp-badge">免费</span>
       </div>
       <button class="mp-cta" type="button" data-me-cta>${hasPlan ? `继续学《${esc(title)}》` : '设置学习计划'}</button>
       <div class="mp-card">
@@ -863,11 +864,11 @@
         ${cfg ? `
         <div class="mp-row"><span class="mp-label">每天分钟数</span><div class="ps-opts">
           ${MINS.map(m => `<button class="ps-opt${m === cfg.minutes ? ' sel' : ''}" data-me-min="${m}">${m}</button>`).join('')}</div></div>
-        <div class="mp-row"><span class="mp-label">几点换一天</span><div class="ps-opts">
-          ${BOUND.map(o => `<button class="ps-opt${String(o[0]) === String(cfg.boundary) ? ' sel' : ''}" data-me-bound="${o[0]}">${o[1]}</button>`).join('')}</div></div>
         <div class="mp-row"><span class="mp-label">新词</span><div class="ps-opts">
           <button class="ps-opt${cfg.pausedNew ? '' : ' sel'}" data-me-new="0">正常</button>
-          <button class="ps-opt${cfg.pausedNew ? ' sel' : ''}" data-me-new="1">只复习</button></div></div>` : ''}
+          <button class="ps-opt${cfg.pausedNew ? ' sel' : ''}" data-me-new="1">只复习</button></div></div>
+        <div class="mp-row"><span class="mp-label">学习计划</span><div class="ps-opts">
+          <button class="ps-opt" type="button" data-me-reset-plan aria-label="重置学习计划，只重设计划、保留进度">重置</button></div></div>` : ''}
         <div class="mp-row"><span class="mp-label">数据</span><div class="ps-opts">
           <button class="ps-opt" data-me-export>导出备份</button>
           <button class="ps-opt" data-me-import>导入恢复</button></div></div>
@@ -937,9 +938,9 @@
     if (!pop || pop._wired) return;
     pop._wired = true;
     pop.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-bound],[data-me-new],[data-me-export],[data-me-import],[data-me-signup],[data-me-logout]');
+      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-new],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-signup],[data-me-logout]');
       if (!t) return;
-      // 有些按钮点完会 renderMePop() 重渲（主题/分钟/日界/新词）—— 重渲会把 e.target 从 DOM 摘下来，
+      // 有些按钮点完会 renderMePop() 重渲（主题/分钟/新词）—— 重渲会把 e.target 从 DOM 摘下来，
       // 事件继续冒泡到 document 的「点外面收掉」监听时，target 已不在 #mePop 里，会被误判成点外面。
       // 所以这里先 stopPropagation，别让 document 那道再看到它。
       e.stopPropagation();
@@ -949,8 +950,8 @@
         else openSetup();
       } else if (t.hasAttribute('data-me-theme')) { if (typeof toggleDark === 'function') toggleDark(); renderMePop(); }
       else if (t.hasAttribute('data-me-min')) { TASK.setMinutes(Number(t.dataset.meMin)); renderMePop(); positionMePop(); }
-      else if (t.hasAttribute('data-me-bound')) { TASK.setBoundary(Number(t.dataset.meBound)); renderMePop(); }
       else if (t.hasAttribute('data-me-new')) { TASK.setPauseNew(t.dataset.meNew === '1'); renderMePop(); }
+      else if (t.hasAttribute('data-me-reset-plan')) { TASK.resetLearningPlan(); renderMePop(); positionMePop(); }
       else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }
       else if (t.hasAttribute('data-me-import')) { TASK.importBackup('meImportFile'); }
       else if (t.hasAttribute('data-me-signup')) { meSignup(); }
