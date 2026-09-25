@@ -39,6 +39,8 @@ const FILES = [
   'app/app.js',
   // 3.0 PWA：真实 service worker 文件（scope /app/）。缺它则 SW 注册 404、离线兜底失效。
   'app/sw.js',
+  // 3.0 PWA iOS 图标（2026-09-25）：iOS 只认 apple-touch-icon，manifest 的 data-URI 图标它不收。
+  'app/apple-touch-icon.png',
 ];
 
 const warn = [];

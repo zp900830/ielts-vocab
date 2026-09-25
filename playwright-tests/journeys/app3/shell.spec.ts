@@ -133,4 +133,37 @@ test.describe('3.0 外壳', () => {
     expect(darkImg, '深色渐变不能停在浅色那套').not.toBe(lightImg);
     expect(relLum(stops(darkImg)[0]), '深色渐变最亮端也是暗的').toBeLessThan(0.1);
   });
+
+  // 2026-09-25 用户：四个一级页面有的有大标题有的没有，切页上下跳 ——
+  // 现在四页共用 .pg-title，文案对应路由，且都是可见标题（不再有 sr-only 特例）。
+  test('四个一级页面都有同一样式的大标题（.pg-title），切页顶部高度不跳', async ({ page }) => {
+    // 用 TINY + 建计划：stats 无计划时走「开始你的学习计划」空态（另一种设计，不带 pg-title）
+    await stubData(page, TINY);
+    await page.goto(`${rootUrl}/app/index.html`);
+    await page.waitForFunction(() => document.querySelectorAll('#art .sent').length > 0);
+    await page.evaluate(() => { if (!TASK.hasPlan) { TASK.resetV2(); TASK.initPlan(15); } });
+    const cases: Array<[string, string]> = [
+      ['home', '首页'], ['listen', '随身听'], ['words', '单词本'], ['stats', '学习数据'],
+    ];
+    let lastTop = -1, lastStyle = '';
+    for (const [route, text] of cases) {
+      await page.goto(`${rootUrl}/app/index.html#/${route}`);
+      const h1 = page.locator('.pg-title');
+      await expect(h1).toHaveText(text);
+      await expect(h1).toBeVisible();
+      const m = await h1.evaluate((el) => {
+        const cs = getComputedStyle(el);
+        const r = el.getBoundingClientRect();
+        return { top: r.top, fs: cs.fontSize, mt: cs.marginTop, mb: cs.marginBottom };
+      });
+      expect(m.fs, '同一字号').toBe('22px');
+      if (lastStyle) {
+        expect(m.mt, '同上边距 → 切页顶部不跳').toBe(lastStyle.split('|')[0]);
+        expect(m.mb, '同下边距').toBe(lastStyle.split('|')[1]);
+      }
+      lastStyle = `${m.mt}|${m.mb}`;
+      if (lastTop >= 0) expect(Math.abs(m.top - lastTop), '标题顶位一致（±1px）').toBeLessThan(1.5);
+      lastTop = m.top;
+    }
+  });
 });

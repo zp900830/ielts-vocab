@@ -186,7 +186,7 @@
         ${x.quizReady ? `<button class="a-quiz" data-a="${a}" type="button">答题</button>` : ''}
       </article>`;
     }).join('');
-    view.innerHTML = `<h1 class="sr-only">首页 · 六篇文章</h1><div class="home-banner" id="homeBanner"></div><div class="art-grid">${cards}</div>`;
+    view.innerHTML = `<h1 class="pg-title">首页</h1><div class="home-banner" id="homeBanner"></div><div class="art-grid">${cards}</div>`;
     // ⚠️ renderBanner 由 Task 4 定义；只跑 Task 3 时它还不存在 —— 必须守卫。
     if (window.APP3.renderBanner) window.APP3.renderBanner(document.getElementById('homeBanner'));
     // §5.4：数据页点了文章小卡 → 回首页把对应卡片高亮一下（不新开屏）。
@@ -228,7 +228,7 @@
     const tqDone = (typeof TASK !== 'undefined' && TASK.todayQuotaDone) ? TASK.todayQuotaDone() : false;
     const tqArt = (typeof TASK !== 'undefined' && TASK.todayArticle) ? TASK.todayArticle() : -1;
     view.innerHTML = `<div class="stats-page">
-      <h1>学习数据</h1>
+      <h1 class="pg-title">学习数据</h1>
       <section class="st-block" data-block="today" aria-labelledby="stH0">
         <h2 id="stH0">今天</h2>
         <div class="st-nums" data-cols="3">
@@ -460,7 +460,7 @@
     const a = (ctx && ctx.a != null) ? ctx.a : listenDefaultArticle();
     if (typeof TASK !== 'undefined' && TASK.listenOpen) TASK.listenOpen(a);
     view.innerHTML = `<div class="listen-page">
-      <h1>随身听</h1>
+      <h1 class="pg-title">随身听</h1>
       <div class="ls-card">
         <button class="ls-cover" type="button" aria-label="展开《${esc(SECTIONS[a].title)}》全文阅读">
           <span class="ls-disc" aria-hidden="true"><i class="ri-headphone-line"></i></span>
@@ -621,7 +621,7 @@
     const more = shown < list.length
       ? `<button class="wb-more" type="button">加载更多（还剩 ${list.length - shown} 个）</button>` : '';
     view.innerHTML = `<div class="words-page">
-      <h1>单词本</h1>
+      <h1 class="pg-title">单词本</h1>
       <div class="wb-filters" role="group" aria-label="按掌握状态筛选">${filters}</div>
       <p class="wb-hint">共 ${list.length} 个词${filter === 'all' ? '' : '（当前筛选）'} · 点词行看原文语境</p>
       <ul class="wb-list" aria-label="单词列表">${rows}</ul>
