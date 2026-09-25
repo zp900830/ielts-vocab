@@ -374,9 +374,18 @@
      宽度口径与 .reader-head / .layout 内容框完全一致（min(1084px, 100% - 36px)）——
      它长在 .sec 的左右内边距里，用负外边距 + 补宽把这段内边距吐回去，正好对齐内容框。
      清淡、不抢正文：底色用既有的 --accent-line（浅 #bfe6d6 / 深 rgba(16,180,135,.22)），不另造色。 */
-  .today-range-line { display: block; height: 2px; border-radius: 1px; background: var(--accent-line);
+  .today-range-line { position: relative; display: block; height: 2px; border-radius: 1px; background: var(--accent-line);
     width: calc(100% + 2 * var(--sec-padx, 6px));
-    margin: 12px calc(-1 * var(--sec-padx, 6px)); pointer-events: none; }
+    margin: 14px calc(-1 * var(--sec-padx, 6px)); pointer-events: none; }
+  /* 线端小标签（2026-09-25 用户需求）：标明这根线是什么线 —— 起点线左端「今天任务 · 开始」、
+     终点线右端「今天任务 · 结束」。标签底色用页面底色 var(--bg) 把线「掐断」，线在标签处
+     断开一截，不遮挡正文；线本体宽度不变（宽度锁 ±2px 仍成立）。装饰性：随父线 aria-hidden。 */
+  .today-range-tag { position: absolute; top: 50%; transform: translateY(-50%);
+    font-family: var(--sans); font-size: 11px; font-weight: 600; line-height: 1;
+    color: var(--accent-text); background: var(--bg);
+    padding: 4px 8px; border-radius: 999px; letter-spacing: .04em; white-space: nowrap; }
+  .today-range-line[data-edge="start"] .today-range-tag { left: 0; }
+  .today-range-line[data-edge="end"] .today-range-tag { right: 0; }
   .w { color: var(--accent-text); font-weight: 600; cursor: pointer;
     border-bottom: 2px solid rgba(13,157,116,.35); padding: 0 1px; border-radius: 2px; }
   .w:hover { background: rgba(13,157,116,.1); }
@@ -7991,6 +8000,12 @@ let listenOn = false;
           el.setAttribute('aria-hidden', 'true');
           el.dataset.gi = String(gi);
           el.dataset.edge = edge;
+          /* 线端小标签：标明这根线是什么线（起点线左端 / 终点线右端）。
+             装饰性文字随父线 aria-hidden，不进无障碍树。 */
+          const tag = document.createElement('span');
+          tag.className = 'today-range-tag';
+          tag.textContent = edge === 'start' ? '今天任务 · 开始' : '今天任务 · 结束';
+          el.appendChild(tag);
           return el;
         };
         if (fLocal > 0) fEl.before(mkLine(first, 'start'));
