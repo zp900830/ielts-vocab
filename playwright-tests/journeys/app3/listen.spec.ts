@@ -258,4 +258,30 @@ test.describe('3.0 随身听（M4，PRD §7）', () => {
       await expect(page.locator(sel)).toHaveAttribute('aria-label', /./);
     }
   });
+
+  /* refine2 ④（2026-09-25 用户）：原来整条 --grad 实心绿大按钮太抢，改成 2.0 次级/文字按钮那套
+     弱化形态（不是主按钮实心）；唯一登记过的主按钮配色 #2bd4a4 + 白字不许动，这颗正是远离它。
+     行为不回退：点它仍进入展开全屏阅读（body.listen-mode）。 */
+  test('「点击展开全文阅读」= 弱化形态（非主按钮实心），仍能展开', async ({ page }) => {
+    await stubData(page, TWO);
+    await gotoListen(page);
+    const btn = page.locator('.ls-expand');
+    await expect(btn).toBeVisible();
+    await expect(btn).toHaveText(/点击展开全文阅读/);
+
+    const form = await btn.evaluate((el) => {
+      const cs = getComputedStyle(el);
+      return { bg: cs.backgroundColor, img: cs.backgroundImage, shadow: cs.boxShadow,
+               border: cs.borderTopWidth, weight: Number(cs.fontWeight) || 0 };
+    });
+    expect(form.img, '不再是 --grad 渐变实心主按钮（background-image 应为 none）').toBe('none');
+    expect(form.bg, '弱化：无实底（透明）').toMatch(/^rgba?\(0, 0, 0, 0\)$|transparent/);
+    expect(form.shadow, '弱化：无主按钮投影').toBe('none');
+    expect(form.border, '弱化：无描边').toBe('0px');
+    expect(form.weight, '弱化：字重不取主按钮的 700').toBeLessThan(700);
+
+    // 仍可点、仍能展开（行为锁）
+    await btn.click();
+    await expect(page.locator('body')).toHaveClass(/listen-mode/);
+  });
 });

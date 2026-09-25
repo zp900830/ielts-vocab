@@ -84,7 +84,6 @@ const AXE_UNCALCULABLE: { sel: string; why: string }[] = [
   { sel: '.ls-prev', why: '纯图标按钮：axe 对「只含非文字内容」判不了 contrast（图标色另有 ≥3:1 要求，人工核）' },
   { sel: '.ls-next', why: '纯图标按钮：同上' },
   { sel: '.ls-cover', why: '随身听封面卡：accent-soft→白的浅色渐变底，axe 判不了背景（--text 压浅渐变，人工核过）' },
-  { sel: '.ls-expand', why: '随身听「展开全文阅读」：--grad 渐变 CTA，白字 1.90:1 为用户知情取舍' },
   { sel: '.blank-pop', why: '② 答题浮窗：玻璃浮层，底下正文 .sent.task-new 有高亮底，axe 判不了合成背景' },
 ];
 
