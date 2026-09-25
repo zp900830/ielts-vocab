@@ -1845,11 +1845,17 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     border: 1px solid var(--accent-line); border-radius: 10px; cursor: pointer;
     background: var(--accent-soft); color: var(--accent-text); font-weight: 700; font-size: 13px; }
   .art-card .a-quiz:hover { background: var(--accent); color: var(--cta-ink-dark); }
-  /* 未开始：灰底 + 虚线进度条 + 半透明标题 */
-  .art-card[data-stage="todo"] { opacity: .62; }
-  /* M6 a11y：整卡 0.62 透明度会把文字实测压到 3.1:1（AA 要 4.5）。深色底更吃紧，抬到 .88（实测 ≈4.8）； */
-  body.dark .art-card[data-stage="todo"] { opacity: .88; }
-  .art-card[data-stage="todo"] .a-bar { background: transparent; border: 1px dashed var(--border); }
+  /* 未开始：只虚化【装饰】，不虚化【文字】。
+     M6 a11y 复审（2026-09-24）：原来整卡 opacity:.62，把卡内文字一起淡到实测 3.1:1（AA 正文要 4.5）；
+     又因整卡半透明、axe 顺着祖先摸到 body 的渐变底，判成 color-contrast incomplete ——
+     被「只看 violations」的门禁掩盖成 0 违规。现在把整卡透明度去掉，改为
+       · .a-title 降一档到 --muted（浅色 #appView 内 --muted=#63706a，压白实测 5.18:1；
+         深色 #a39b8e 压 #252220 实测 5.75:1）
+       · 进度条改用虚线 + 轻微透明，收起阴影
+     正文文字全程不透明：浅色四档实测 .a-title/.a-en 5.18、.a-pct 5.68、.a-stage 4.63，均过 AA。 */
+  .art-card[data-stage="todo"] { box-shadow: none; }
+  .art-card[data-stage="todo"] .a-title { color: var(--muted); }
+  .art-card[data-stage="todo"] .a-bar { opacity: .55; background: transparent; border: 1px dashed var(--border); }
   /* 熟练（≥80% 且已学完，§9.2）：金色条 + 金胶囊 */
   .art-card[data-stage="pro"] .a-stage { background: var(--note-soft); color: var(--note); }
   .art-card[data-stage="pro"] .a-bar i { background: linear-gradient(90deg, #f0c24b, #d99a1f); }
