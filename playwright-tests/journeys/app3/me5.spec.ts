@@ -76,6 +76,18 @@ test.describe('M5 · 导出/导入（§8.1 数据管理）', () => {
       mk({ app: 'ielts-shadow' }, '无 data');
       mk({ app: 'ielts-shadow', data: { 'ielts.shadow.v2': '{bad json' } }, '坏 v2 JSON');
       mk({ app: 'ielts-shadow', data: { 'nope': 'x' } }, '无可恢复数据');
+      // 加固（2026-09-25）：缺核心真值根 / v2 无事件流 / 按篇账损坏 —— 一律拒绝。
+      // 以前「任意一条合法键就放行」，极端构造文件能把本机进度整域清掉。
+      mk({ app: 'ielts-shadow', data: { 'ielts-dark': '1' } }, '只有杂项键、没有进度根');
+      mk({ app: 'ielts-shadow', data: { 'ielts.shadow.v2': '{"state":{},"noevents":1}' } }, 'v2 缺事件流');
+      mk({ app: 'ielts-shadow', data: {
+        'ielts.shadow.v2': JSON.stringify({ events: [] }),
+        'ielts.app3.article': '{bad json',
+      } }, '按篇账坏 JSON');
+      mk({ app: 'ielts-shadow', data: {
+        'ielts.shadow.v2': JSON.stringify({ events: [] }),
+        'ielts.app3.article': '{"reps":"notanobject"}',
+      } }, '按篇账 reps 不是对象');
       return out;
     });
     for (const c of cases) expect(c.r.ok, c.name).toBe(false);

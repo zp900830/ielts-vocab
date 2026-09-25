@@ -17,12 +17,14 @@
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#faf8f4">
     <meta name="google" content="notranslate">
-    <!-- W6 · PWA（PRD §2.5）：继承主站那套 —— manifest 走 data-URI，service worker 由脚本内联生成。
-         与主站一致，不需要往构建白名单加运行时文件。 -->
+    <!-- W6 · PWA（PRD §2.5）：manifest 走 data-URI，service worker 由脚本内联生成。
+         iOS 图标（2026-09-25 用户拍板修复）：iOS 不认 manifest/data-URI 图标，安装到主屏
+         只认 apple-touch-icon —— 用仓内真实 PNG（180×180，构建白名单里有 /app/apple-touch-icon.png）。 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="雅思背单词 3.0">
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoi6ZuF5oCd6IOM5Y2V6K+NIDMuMCIsInNob3J0X25hbWUiOiLpm4XmgJ3og4zljZXor40iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZmFmOGY0IiwidGhlbWVfY29sb3IiOiIjZmFmOGY0Iiwic3RhcnRfdXJsIjoiLi8iLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJyUzRSUzQ3JlY3Qgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnIHJ4PScyMicgZmlsbD0nJTIzMTBiNDg3Jy8lM0UlM0N0ZXh0IHg9JzUwJyB5PSc2OCcgZm9udC1zaXplPSc1MicgdGV4dC1hbmNob3I9J21pZGRsZScgZmlsbD0nJTIzZmZmJyBmb250LWZhbWlseT0nc2VyaWYnJTNFVyUzQy90ZXh0JTNFJTNDL3N2ZyUzRSIsInNpemVzIjoiYW55IiwidHlwZSI6ImltYWdlL3N2Zyt4bWwiLCJwdXJwb3NlIjoiYW55IG1hc2thYmxlIn1dfQ==">
     <title>雅思词汇影子跟读 · IELTS Vocabulary Shadowing</title>
     <style>
@@ -1943,7 +1945,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* ============ 3.0 学习数据页（M2，PRD §5） ============ */
   /* F（2026-09-25）：与首页同宽口径（#appView 全宽），不再锁 880；间距/圆角对齐首页卡片。 */
   .stats-page { max-width: none; }
-  .stats-page > h1 { font-size: 22px; font-weight: 800; color: var(--text); margin: 2px 0 16px; }
+  /* 一级页面统一大标题（2026-09-25 用户：四个页面有的有标题有的没有，切页上下跳）：
+     四页共用 .pg-title（app.js 里模板统一挂类），任何页面顶部高度一致。 */
+  .pg-title { font-size: 22px; font-weight: 800; color: var(--text); margin: 2px 0 16px; }
   .st-block { margin-bottom: 26px; }
   .st-block > h2 { font-size: 15px; font-weight: 700; color: var(--text); margin: 0 0 10px; }
   .st-empty-start { max-width: 420px; margin: 12vh auto 0; text-align: center; padding: 0 20px; }
@@ -2001,7 +2005,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* ============ 3.0 单词本（M3，PRD §6） ============ */
   /* F（2026-09-25）：与首页同宽口径（#appView 全宽），不再锁 880；桌面 2 列、平板/手机单列。 */
   .words-page { max-width: none; }
-  .words-page > h1 { font-size: 22px; font-weight: 800; color: var(--text); margin: 2px 0 16px; }
   .wb-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
   .wb-filter { min-height: 44px; padding: 0 16px; border: 1px solid var(--border); border-radius: 999px;
     background: var(--card); color: var(--text); font: inherit; font-size: 13px; font-weight: 600;
@@ -2121,7 +2124,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.listen-page { background-color: #faf8f4; }
   /* F（2026-09-25）：与首页同宽口径（#appView 全宽），不再锁 560 窄列。 */
   .listen-page { max-width: none; }
-  .listen-page > h1 { font-size: 22px; font-weight: 800; color: var(--text); margin: 2px 0 16px; }
   /* E（2026-09-25）：对齐首页卡片的实底 + 精修阴影（不再用会挡住 axe 判背景的玻璃渐变）；
      桌面做横向两栏（左封面卡 / 右控制区），把原来「窄列 + 大片空白」的版式补回来。 */
   .ls-card { border: 1px solid var(--border); border-radius: 22px;
@@ -3220,7 +3222,7 @@ let listenOn = false;
     this._userMail = (sess && sess.user && sess.user.email) || this._userMail;
     this.setStatus('正在连接云端语音…'); // 先立即刷新菜单（登录表单→退出按钮），别等网络查询
     this.checkStatus();
-    if (ev === 'SIGNED_IN') { try { cloudPullMarks(); } catch (e) {} } // 登录即拉书签，多端合并
+    if (ev === 'SIGNED_IN') { try { cloudPullMarks(); } catch (e) {} try { TASK.cloudPullArticleAccount(); } catch (e2) {} } // 登录即拉书签/按篇账，多端合并
     } else if (ev === 'SIGNED_OUT' || ev === 'USER_DELETED') {
     this._on = false; this._userMail = '';
     this.setStatus('已退出登录，云端音色不可用。');
@@ -3286,6 +3288,7 @@ let listenOn = false;
     this.setStatus('正在连接云端语音…');
     await this.checkStatus();
     try { cloudPullMarks(); } catch (e) {} // 启动即拉书签（有 session 才生效，无表/断网静默跳过）
+    try { TASK.cloudPullArticleAccount(); } catch (e) {} // 启动即拉按篇账（2026-09-25 云同步；失败静默，本地永远可用）
     },
     async checkStatus() {
     try {
@@ -4527,7 +4530,18 @@ let listenOn = false;
     }
     }
     function togglePlay() {
-    if (playing) { playing = false; _userScrolled = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} paint(); savePos(); }
+    if (playing) {
+      playing = false; _userScrolled = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
+      // 随身听上下文里暂停：先把已听的时长记一笔，再清零计时（TASK 出口，_listenTick 住在 TASK 闭包里），
+      // 否则隔了很久再继续，下一次 tick 会把整段暂停间隔算进收听时长（单笔封顶 10 分钟）
+      try {
+        if (document.body.classList.contains('listen-page')) {
+          if (TASK.listenFlush) TASK.listenFlush();
+          if (TASK.pauseListenTick) TASK.pauseListenTick();
+        }
+      } catch (e) {}
+      paint(); savePos();
+    }
     else playFrom(idx >= 0 ? idx : 0);
     }
     let loopMode = false;
@@ -4919,16 +4933,28 @@ let listenOn = false;
     _modalReturnFocus = null;
     }
     /* 浮层总关闭入口：新增浮层只改这一处，不要再往 Escape 分支里手写清单。
-       今日面板用 .open 类 + #todayScrim 内联样式，不走 openModal，必须在这里一并收。 */
+       今日面板用 .open 类 + #todayScrim 内联样式，不走 openModal，必须在这里一并收。
+       返回值（2026-09-25）：true = 关掉了至少一层 —— Esc 的「只关最上层」语义靠它：
+       普通浮层都关干净了才轮到随身听全屏弹窗（listen-mode），一次 Esc 不该两层全收。 */
     const OVERLAY_WRAP_IDS = ['cloudWrap', 'markWrap', 'abWrap', 'loopWrap', 'rateWrap'];
     function closeAllOverlays() {
-    closeModal(document.getElementById('pop'));
-    closeModal(document.getElementById('jumpPop'));
-    OVERLAY_WRAP_IDS.forEach(id => document.getElementById(id)?.classList.remove('open'));
+    let closedAny = false;
+    const popEl = document.getElementById('pop');
+    if (popEl && popEl.style.display === 'block') { closeModal(popEl); closedAny = true; }
+    const jumpEl = document.getElementById('jumpPop');
+    if (jumpEl && jumpEl.style.display === 'block') { closeModal(jumpEl); closedAny = true; }
+    OVERLAY_WRAP_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.classList.contains('open')) { el.classList.remove('open'); closedAny = true; }
+    });
     const tp = document.getElementById('todayPanel');
-    if (tp && tp.classList.contains('open')) TASK.closePanel();
-    if (typeof TASK !== 'undefined' && TASK.closeBlankPop) { try { TASK.closeBlankPop(); } catch (e) {} }
-    document.body.classList.remove('menu-open');
+    if (tp && tp.classList.contains('open')) { TASK.closePanel(); closedAny = true; }
+    if (typeof TASK !== 'undefined' && TASK.closeBlankPop) {
+      const bp = document.getElementById('blankPop');
+      if (bp && !bp.hidden) { try { TASK.closeBlankPop(); } catch (e) {} closedAny = true; }
+    }
+    if (document.body.classList.contains('menu-open')) { document.body.classList.remove('menu-open'); closedAny = true; }
+    return closedAny;
     }
     /* 顶栏/播放条这排开关的「按下没按下、菜单开没开」此前只写在 class 里，读屏软件拿不到。
        与其在八个开关各自的函数里补一行同步（漏一个就长期不一致），不如按当前 DOM 反推：
@@ -5148,7 +5174,7 @@ let listenOn = false;
     else if (e.key === 'Escape') e.target.blur();
     }
     // 输入框内按 Esc 也要能关弹窗（跳转弹窗打开时焦点在句号输入框里，否则 Esc 永远关不掉）
-    if (e.key === 'Escape') { e.target.blur(); closeAllOverlays(); }
+    if (e.key === 'Escape') { e.target.blur(); if (!closeAllOverlays() && document.body.classList.contains('listen-mode')) { try { TASK.listenCollapse(); } catch (err) {} } }
     return;
     }
     if (e.code === 'Space' && e.target.tagName === 'BUTTON') return; // 按钮聚焦时走原生空格点击，避免双重触发
@@ -5160,7 +5186,12 @@ let listenOn = false;
     if (e.key === 'ArrowRight') { e.preventDefault(); if (TASK.active) TASK.next(); else step(1); }
     // ← 与 → 必须对称：任务模式里两颗都要把队列位置一起带走，否则「上一句」只翻正文、进度还留在原句
     if (e.key === 'ArrowLeft') { e.preventDefault(); if (TASK.active) TASK.prev(); else step(-1); }
-    if (e.key === 'Escape') closeAllOverlays();
+    if (e.key === 'Escape') {
+      // 随身听全屏弹窗（listen-mode）：普通浮层都关干净了才轮到它（主站 Esc 分层口径）
+      if (!closeAllOverlays() && document.body.classList.contains('listen-mode')) {
+        try { TASK.listenCollapse(); } catch (err) {}
+      }
+    }
     });
 
     /* ============ 课文句子序号变更 → 本地进度顺移 ============
@@ -5662,7 +5693,10 @@ let listenOn = false;
         _articleStats = o;
         return _articleStats;
       }
-      function saveArticleStats() { safeStore(LS_ARTICLE, JSON.stringify(loadArticleStats())); }
+      function saveArticleStats() {
+        safeStore(LS_ARTICLE, JSON.stringify(loadArticleStats()));
+        queueArticleAccountPush();   // 按篇账变化 → debounce 上云（2026-09-25 用户拍板加同步）
+      }
       /* 迁移：修复前这份账长在共享 blob 的 daily[天].repsByArticle 里。第一次加载时搬过来，
          之后不再回看（避免和影子跟读那边互相写）。M1 未上线，这里主要是给开发分支上的存档兜底。
          W7-3：搬完顺手把旧字段从 v2 blob 里删掉（只删这一个字段，schema 其它部分一字不动）——
@@ -5708,6 +5742,126 @@ let listenOn = false;
         saveArticleStats();
       }
 
+      /* ---- 3.0 按篇账上云（2026-09-25 用户拍板：加上云同步，换设备不丢）----
+         独立通道：**不进 ROOT2.events**（未知类型会白占引擎事件流的压缩上限，
+         compactEvents 只认 contact/dayplan，塞进去会挤掉真事件），也不往 user_data 塞
+         （那要动 Supabase 表结构）。用同一张 shadow_events 表：type 固定 'article-account'，
+         payload = 按篇账全量快照。
+         合并语义是**单调 max**（reps/ms/sents 是累计数、last 是时间戳、pass2 是布尔），
+         拉回快照逐键取 max 就是正确合并 —— 不需要重放、不需要 update，幂等可重试。
+         event_id 只由内容指纹决定（不含 ts）：同内容重推 = 同 id，服务端 ignoreDuplicates
+         原样跳过，永远不会因为重复推而堆行。 */
+      let _articlePushT = null, _articlePushing = false, _articlePulling = false;
+      function articleAccountSnapshot() {
+        const o = loadArticleStats();
+        return {
+          reps: JSON.parse(JSON.stringify(o.reps)),
+          pass2: Object.assign({}, o.pass2),
+          listen: {
+            sents: JSON.parse(JSON.stringify(o.listen.sents)),
+            ms: JSON.parse(JSON.stringify(o.listen.ms)),
+            last: Object.assign({}, o.listen.last),
+          },
+        };
+      }
+      function mergeArticleAccount(remote) {
+        if (!remote || typeof remote !== 'object') return false;
+        const o = loadArticleStats();
+        let changed = false;
+        const reps = remote.reps || {};
+        Object.keys(reps).forEach(function (day) {
+          const row = reps[day];
+          if (!row || typeof row !== 'object') return;
+          const dst = o.reps[day] || (o.reps[day] = {});
+          Object.keys(row).forEach(function (a) {
+            const v = Number(row[a]);
+            if (Number.isFinite(v) && v > (dst[a] || 0)) { dst[a] = v; changed = true; }
+          });
+        });
+        Object.keys(remote.pass2 || {}).forEach(function (a) {
+          if (remote.pass2[a] && !o.pass2[a]) { o.pass2[a] = true; changed = true; }
+        });
+        const L = remote.listen || {};
+        ['sents', 'ms'].forEach(function (k) {
+          const days = L[k] || {};
+          Object.keys(days).forEach(function (day) {
+            const row = days[day];
+            if (!row || typeof row !== 'object') return;
+            const dst = o.listen[k][day] || (o.listen[k][day] = {});
+            Object.keys(row).forEach(function (a) {
+              const v = Number(row[a]);
+              if (Number.isFinite(v) && v > (dst[a] || 0)) { dst[a] = v; changed = true; }
+            });
+          });
+        });
+        Object.keys(L.last || {}).forEach(function (a) {
+          const v = Number(L.last[a]);
+          if (Number.isFinite(v) && v > (o.listen.last[a] || 0)) { o.listen.last[a] = v; changed = true; }
+        });
+        if (changed) saveArticleStats();
+        return changed;
+      }
+      function queueArticleAccountPush() {
+        clearTimeout(_articlePushT);
+        _articlePushT = setTimeout(function () { try { cloudPushArticleAccount(); } catch (e) {} }, 2500);
+      }
+      async function cloudPushArticleAccount() {
+        if (_articlePushing) return false;
+        _articlePushing = true;
+        try {
+          const c = (typeof CLOUD !== 'undefined') ? CLOUD.client() : null;
+          if (!c) return false;
+          const sess = (await c.auth.getSession()).data.session;
+          if (!sess) return false;
+          const snap = articleAccountSnapshot();
+          const ev = { type: 'article-account', ts: Date.now(), reps: snap.reps, pass2: snap.pass2, listen: snap.listen };
+          // event_id = 内容指纹（'aa-' 前缀防与引擎事件撞键）：同内容重推幂等，同毫秒不同内容也不撞
+          const s = JSON.stringify([snap.reps, snap.pass2, snap.listen]);
+          let h = 2166136261;
+          for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = (h * 16777619) >>> 0; }
+          const id = 'aa-' + h.toString(16);
+          const { error } = await c.from('shadow_events').upsert(
+            [{ user_id: sess.user.id, event_id: id, ts: ev.ts, type: ev.type, payload: ev }],
+            { onConflict: 'event_id,user_id', ignoreDuplicates: true });
+          if (error) { try { dlog('article-push-fail', error.message || error); } catch (e2) {} return false; }
+          return true;
+        } catch (e) {
+          try { dlog('article-push-fail', (e && e.message) || e); } catch (e2) {}
+          return false;
+        } finally { _articlePushing = false; }
+      }
+      async function cloudPullArticleAccount() {
+        if (_articlePulling) return false;
+        _articlePulling = true;
+        try {
+          const c = (typeof CLOUD !== 'undefined') ? CLOUD.client() : null;
+          if (!c) return false;
+          const sess = (await c.auth.getSession()).data.session;
+          if (!sess) return false;
+          /* 快照取最近 500 条就够：快照是全量，合并又是单调 max —— 旧快照的键迟早
+             被新快照包含；500 只是把极端历史数据的查询量兜住。 */
+          const res = await c.from('shadow_events').select('event_id,ts,payload')
+            .eq('user_id', sess.user.id).eq('type', 'article-account')
+            .order('ts', { ascending: false }).range(0, 499);
+          if (res.error || !Array.isArray(res.data)) return false;
+          let changed = false;
+          for (const row of res.data) {
+            const p = row && row.payload;
+            if (p && p.type === 'article-account') {
+              if (mergeArticleAccount({ reps: p.reps, pass2: p.pass2, listen: p.listen })) changed = true;
+            }
+          }
+          if (changed) {
+            try { if (location.hash === '#/stats' || location.hash === '#/listen') window.APP3.route(); } catch (e) {}
+            queueArticleAccountPush();   // 本机新进度顺势传上去
+          }
+          return changed;
+        } catch (e) {
+          try { dlog('article-pull-fail', (e && e.message) || e); } catch (e2) {}
+          return false;
+        } finally { _articlePulling = false; }
+      }
+
       /* ---- 随身听（M4，PRD §7）----
          复用同一套播放链（speak/launch/playFrom/audiobar），这里只维护「随身听上下文」：
          当前篇、卡片/展开态、以及 §7.6 的独立收听账（账住 LS_ARTICLE.listen）。
@@ -5746,7 +5900,10 @@ let listenOn = false;
           idx = -1; _paintIdx = -2;
           render();
         }
-        _listenTick = _listenTick || Date.now();
+        /* 收听计时**不起算**（2026-09-25 ⑦ 的另一半）：_listenTick 只由真正的播放动作
+           （listenArm / listenStep / listenNextArticle）和每笔 listenTick 续。这里若把它
+           抹成 now，停在卡片页不播、过几分钟再点播放，首笔会把这几分钟整段算进收听
+           时长（单笔封顶 10 分钟）—— 这正是用户报的「时长虚高」。 */
         paint();
       }
       function listenClose() {
@@ -5757,6 +5914,7 @@ let listenOn = false;
         document.body.classList.remove('listen-page', 'listen-mode', 'listen-closing');
         if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
         listenFlush();
+        _listenTick = 0;   // 跨场清零：不清的话下次起播会把隔场间隔算成收听时长（单笔封顶 10 分钟，虚高）
         currentArticle = null; _cachedPlan = null;
         try { paint(); } catch (e) {}
       }
@@ -5786,6 +5944,7 @@ let listenOn = false;
         document.body.classList.remove('listen-page', 'listen-mode', 'listen-closing');
         if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
         listenFlush();
+        _listenTick = 0;
         try { paint(); } catch (e) {}
       }
       function listenToggle() {
@@ -5803,6 +5962,7 @@ let listenOn = false;
         _listenArmed = false; _listenExpanded = false; _listenCtx = false; listenOn = false;
         if (_listenCollapseTimer) { clearTimeout(_listenCollapseTimer); _listenCollapseTimer = null; }
         document.body.classList.remove('listen-mode', 'listen-closing');
+        _listenTick = 0;
         try { paint(); } catch (e) {}
       }
       /* 重听本篇：回到本句 0 重播（主站 lsReplay 口径）。 */
@@ -5844,6 +6004,7 @@ let listenOn = false;
           document.body.classList.remove('listen-mode', 'listen-closing');
           if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
           listenFlush();
+          _listenTick = 0;   // 收起 = 本场结束：计时清零，续播从当下重新起算
           try { paint(); } catch (e) {}
           try { if (window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
         };
@@ -6117,6 +6278,8 @@ let listenOn = false;
       async function cloudSync() {
         await cloudPull();
         const r = await cloudPush();
+        try { await cloudPullArticleAccount(); } catch (e) {}   // 按篇账跟着走一遍（补传/换设备合并）
+        try { cloudPushArticleAccount(); } catch (e) {}
         try { renderToday(document.getElementById('todayPanel')); } catch (e) {}
         return r;
       }
@@ -8452,7 +8615,11 @@ let listenOn = false;
         }
         return true;
       }
-      /* 只校验、不落盘 —— 导入流程在 confirm 之前先跑它，坏备份根本不进写入阶段。 */
+      /* 只校验、不落盘 —— 导入流程在 confirm 之前先跑它，坏备份根本不进写入阶段。
+         加固（2026-09-25 用户拍板）：以前只要备份里有**任意一条**合法备份键就放行，
+         而 applyBackup 是「写入 wanted、清掉域内其余」—— 一份只带 ielts-dark:"1" 的
+         极端构造文件能把全部跟读进度清掉。现在：核心真值根 ielts.shadow.v2 **必须在场**、
+         必须能解析出 events 数组，否则整份拒绝；3.0 按篇账（LS_ARTICLE）在场时也做形状校验。 */
       function parseBackup(o) {
         if (!o || typeof o !== 'object' || Array.isArray(o)) return { ok: false, reason: '备份文件格式不对' };
         if (o.app !== 'ielts-shadow' || !o.data || typeof o.data !== 'object' || Array.isArray(o.data)) {
@@ -8462,6 +8629,21 @@ let listenOn = false;
         if (!keys.length) return { ok: false, reason: '备份里没有可恢复的数据' };
         for (const k of keys) {
           if (!validBackupValue(k, o.data[k])) return { ok: false, reason: `备份里的「${k}」内容已损坏，已拒绝导入` };
+        }
+        if (!keys.includes(LS_V2)) return { ok: false, reason: '备份里没有跟读进度数据，导入会清空本机进度，已拒绝' };
+        let v2 = null;
+        try { v2 = JSON.parse(o.data[LS_V2]); } catch (e) { v2 = null; }
+        if (!v2 || typeof v2 !== 'object' || !Array.isArray(v2.events)) {
+          return { ok: false, reason: '备份里的跟读进度已损坏（缺事件流），已拒绝导入' };
+        }
+        if (keys.includes(LS_ARTICLE)) {
+          let a = null;
+          try { a = JSON.parse(o.data[LS_ARTICLE]); } catch (e) { a = null; }
+          /* 只钉 reps（其余字段 loadArticleStats 的 normalizer 会补齐）；
+             手工构造的合法备份可能只带 reps，别误伤。 */
+          if (!a || typeof a !== 'object' || !a.reps || typeof a.reps !== 'object') {
+            return { ok: false, reason: '备份里的按篇数据已损坏，已拒绝导入' };
+          }
         }
         return { ok: true, keys };
       }
@@ -8641,6 +8823,8 @@ let listenOn = false;
         listenExpand, listenCollapse, listenNextArticle, updateListenHud,
         listenLeave, listenMiniStop: listenStop,
         listenState, listenStat, listenLast, listenTick, listenFlush, listenSetTickForTest,
+        get listenTickMs() { return _listenTick; },   // 测试锁：跨场清零（①②③④）读这根指针
+        pauseListenTick: function () { _listenTick = 0; },   // 暂停时把收听计时清零（togglePlay 调，见上）
         get listenArticle() { return _listenArticle; },
         again, prev, next, pauseNew, resetPlan, resetLearningPlan, onSentenceComplete,
         taskSentenceFinished,
@@ -8663,6 +8847,9 @@ let listenOn = false;
         etaFor, etaCalls, countStages, seedDailyForTest, seedArticleForTest,
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
         repsOf, articlePass2Done,
+        /* 按篇账云同步出口（2026-09-25 用户拍板）：CLOUD.boot / 登录态变化时由外壳调，
+           merge/snapshot 同时是测试入口（mergeArticleAccount 的 max 语义有锁）。 */
+        cloudPullArticleAccount, cloudPushArticleAccount, mergeArticleAccount, articleAccountSnapshot,
         /* 3.0 首页横幅（Task 4）只读出口：连续 / 已毕业 / 目标词 / 今天计划与完成，
            一处取齐，别在界面里另算（横幅「去设置」走 openPanel()，没计划时它就是 v2.0 设置屏）。 */
         todayStats: () => ({
