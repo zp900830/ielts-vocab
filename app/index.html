@@ -1061,6 +1061,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     #btnCloud { flex: none; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
     /* 布局：左侧预留章节圆点空间 */
     .layout { display: block; padding: 14px 16px; padding-bottom: calc(130px + env(safe-area-inset-bottom, 0px)); }
+    body.task-mode > .layout { padding-top: 84px; }   /* 手机档：两行头部（G），让开固定头 */
     :root { --sec-padx: 2px; }   /* 手机档 .sec 左右内边距收窄，横线口径跟着收（见 .today-range-line） */
     .sec { padding: 4px var(--sec-padx, 2px); margin-bottom: 20px; }
     article { font-size: 17.5px; }
@@ -1610,7 +1611,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 任务模式必须把正文放出来：#art（正文）与 #panel（词库抽屉）都在 .layout 里。
      只恢复 .layout 本身，#panel 基样式是 visibility:hidden，仍要靠 body.panel-open 才现身，
      所以这里不会把词库抽屉顺带弹出来。topbar/audiobar 不恢复：3.0 的任务模式顶栏是 .task-top（见下，T5 已交付）。 */
-  body.task-mode > .layout { display: block; }
+  body.task-mode > .layout { display: block; padding-top: 68px; }   /* G 2026-09-25：第二排撤掉后，正文要自己让开固定头部 */
   /* T5 定的任务模式外壳：首页让位，正文（.layout）就是屏幕主角。
      任务模式已有自己的顶栏（.task-top，见下），整块 #appShell 仍要收掉 ——
      不然后面 min-height:100vh 的首页会把正文压到首屏之外（T2 遗留的现场）。 */
@@ -1638,6 +1639,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .reader-head.shrunk .r-title { font-size: 12.5px; }
   .reader-head.shrunk .r-title .tcn { font-size: 10.5px; margin-left: 5px; }
   .reader-head.shrunk .r-pos { font-size: 10px; padding: 1px 5px; margin-left: 6px; }
+  .reader-head.shrunk .fav-badge { font-size: 10.5px; padding: 1px 7px; margin-left: 6px; }
   .reader-head.shrunk .back { width: 26px; height: 26px; font-size: 14px; }
   .reader-head.shrunk .back::after { content: ""; position: absolute; inset: -9px; }
   /* G：右侧两个拨杆 / 帮助 / 目标词胶囊随头部一起等比缩放，缩小后不错位。 */
@@ -1647,7 +1649,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .reader-head.shrunk .tr-msw .knob::after { width: 9px; height: 9px; }
   .reader-head.shrunk .tr-msw.on .knob::after { left: 11px; }
   .reader-head.shrunk .tr-help { width: 20px; height: 20px; font-size: 10px; }
-  .reader-head.shrunk .r-title .fav-badge { font-size: 10.5px; padding: 1px 7px; margin-left: 6px; }
   .reader-head.shrunk .nav-arrow { height: 22px; padding: 0 9px; font-size: 11px; }
   .back { pointer-events: auto; border: 1px solid var(--iel-line); background: #fff; border-radius: 50%;
     width: 30px; height: 30px; padding: 0; font-size: 15px; line-height: 1; color: var(--iel-ink2);
@@ -1656,7 +1657,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .back::after { content: ""; position: absolute; inset: -7px; border-radius: 50%; }
   .back:hover { border-color: var(--iel-accent); color: var(--iel-accent-deep); background: #fff; }
   .r-title { font-size: 15.5px; font-weight: 700; line-height: 1.3; white-space: nowrap; overflow: hidden;
-    text-overflow: ellipsis; flex: 1; min-width: 0; color: var(--text); }
+    text-overflow: ellipsis; flex: 0 1 auto; min-width: 0; color: var(--text); }
+  /* G：目标词胶囊是 .r-title 的兄弟（不嵌进标题的 overflow 区，否则 axe 会把标题文字误判成被遮挡）；
+     .r-spacer 吃掉剩余宽度，把右侧工具组推到「上一篇」跟前。 */
+  .r-spacer { flex: 1 1 auto; min-width: 8px; }
   .r-title .tcn { font-size: 12px; font-weight: 400; color: var(--iel-ink2); margin-left: 7px; }
   .r-title .r-pos { font-size: 11px; font-weight: 600; color: var(--iel-accent-deep); background: var(--iel-accent-soft);
     border-radius: 999px; padding: 1px 7px; margin-left: 8px; vertical-align: 1px; font-variant-numeric: tabular-nums; }
@@ -1689,8 +1693,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tr-help:hover { border-color: var(--iel-accent); color: var(--iel-accent-deep); background: var(--iel-tint); }
   .r-badge { display: inline-block; font-size: 12px; padding: 2px 10px; background: var(--iel-accent-soft);
     color: var(--iel-accent-deep); border-radius: 999px; font-weight: 600; }
-  /* 目标词胶囊（G）：挪进 .r-title、紧跟「第 N/6 篇」；与标题同一行随 .shrunk 一起缩。 */
-  .r-title .fav-badge { flex: none; margin-left: 8px; vertical-align: 1px; background: #fdf1dc; color: #8a5f0a; }   /* M6 a11y：#b07a10 只有 3.33:1 */
+  /* 目标词胶囊（G）：在 .r-title 之后、紧跟「第 N/6 篇」；与标题同一行随 .shrunk 一起缩。 */
+  .reader-head .fav-badge { flex: none; margin-left: 8px; background: #fdf1dc; color: #8a5f0a; }   /* M6 a11y：#b07a10 只有 3.33:1 */
   .tr-bubble { position: absolute; top: calc(100% + 10px); right: 0; width: min(330px, calc(100vw - 40px));
     background: var(--iel-glass-strong); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
     border: 1px solid var(--iel-accent-line); border-radius: var(--iel-radius-sm); padding: 10px 14px;
@@ -1811,18 +1815,27 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .me-name { font-size: 11px; font-weight: 500; }
     .me-login { font-size: 11px; }
     #appView { padding: 16px 16px 88px; }
-    /* 文章内头部（G 2026-09-25）：一行装下 返回 / 标题+目标词 / 两个拨杆 / 帮助 / 上下篇；
-       控件整体缩一档以适配 390px，随 .shrunk 再缩。窄屏按 .layout 的 16px 内边距对齐（100% − 32px）。 */
-    .reader-head { top: 8px; gap: 4px; padding: 5px 8px 5px 5px; width: calc(100% - 32px); }
+    /* 文章内头部（G 2026-09-25）：一行在 390px 装不下（标题被挤没、下一篇溢出），
+       手机档改两行 grid：上排 返回/标题/目标词，下排 拨杆+帮助 / 上下篇。
+       控件整体缩一档，随 .shrunk 再缩。窄屏按 .layout 的 16px 内边距对齐（100% − 32px）。 */
+    .reader-head { top: 8px; width: calc(100% - 32px); border-radius: 16px; padding: 6px 10px;
+      display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-areas: "back title words" "tools tools nav";
+      column-gap: 6px; row-gap: 4px; align-items: center; }
+    .reader-head .back { grid-area: back; }
+    .reader-head .r-title { grid-area: title; }
+    .reader-head .fav-badge { grid-area: words; font-size: 10px; padding: 1px 6px; margin-left: 0; }
+    .reader-head .r-spacer { display: none; }
+    .reader-head .r-badges { grid-area: tools; justify-content: flex-end; gap: 5px; }
+    .reader-head .r-nav { grid-area: nav; }
     .reader-head .r-title .tcn { display: none; }
-    .reader-head .r-title .fav-badge { font-size: 10px; padding: 1px 6px; margin-left: 6px; }
-    .reader-head .r-badges { gap: 5px; }
     .reader-head .tr-msw { padding: 3px 8px 3px 3px; font-size: 10.5px; gap: 4px; }
+    .reader-head .tr-msw::after { inset: -12px 0; }   /* 手机档拨杆压得更矮，热区加高到有效 ≥44 */
     .reader-head .tr-msw .knob { width: 22px; height: 14px; }
     .reader-head .tr-msw .knob::after { width: 10px; height: 10px; }
     .reader-head .tr-msw.on .knob::after { left: 10px; }
-    .reader-head .tr-help { width: 22px; height: 22px; font-size: 11px; }
-    .reader-head .nav-arrow { padding: 0 8px; font-size: 11px; height: 24px; }
+    .reader-head .tr-help { width: 24px; height: 24px; font-size: 11px; }
+    .reader-head .nav-arrow { padding: 0 8px; font-size: 11px; height: 26px; }
   }
   /* ============ 3.0 首页文章卡片（M1 Task 3） ============ */
   .art-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
@@ -2172,7 +2185,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       <h1 class="sr-only">文章任务模式</h1>
       <div class="reader-head" id="readerHead">
         <button class="back" id="ttBack" type="button" onclick="TASK.exitTaskMode()" title="返回首页" aria-label="返回首页"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
-        <div class="r-title" id="ttTitle"><span class="tt-zh"></span><span class="tcn"></span><span class="r-pos"></span><span class="r-badge fav-badge" id="ttWords" title="本篇目标词数"></span></div>
+        <div class="r-title" id="ttTitle"><span class="tt-zh"></span><span class="tcn"></span><span class="r-pos"></span></div>
+        <span class="r-badge fav-badge" id="ttWords" title="本篇目标词数"></span>
+        <div class="r-spacer" aria-hidden="true"></div>
         <!-- 右侧工具组（原第二排）：全句译文 / 行内词义 / 帮助。紧在 .r-nav（上一篇/下一篇）之前。 -->
         <div class="r-badges" id="taskBadges">
           <button class="tr-msw on" id="btnZh" type="button" role="switch" aria-checked="true" title="显示/隐藏每句下方的中文全句翻译"><span class="knob" aria-hidden="true"></span>全句译文</button>
@@ -6575,7 +6590,7 @@ let listenOn = false;
         pop.style.left = '0px'; pop.style.top = '0px';
         const pr = pop.getBoundingClientRect();
         const r = blankEl.getBoundingClientRect();
-        const M = 8, GAP = 10;
+        const M = 8, GAP = 14;   // GAP 必须 > 箭头高度 12px，否则 ::after 箭头会压住只有几像素高的 .qz-blank，点不中
         // 浮窗可落到的底界：取底部固定层（任务条 / 小结卡）里最高的那条上缘
         let bottomLimit = innerHeight;
         const bar = document.getElementById('taskBar');
@@ -6590,11 +6605,22 @@ let listenOn = false;
         }
         let left = r.left + r.width / 2 - pr.width / 2;
         left = Math.max(M, Math.min(left, innerWidth - pr.width - M));
-        const maxTop = Math.max(M, bottomLimit - pr.height - GAP);
-        let top = r.top - pr.height - GAP;                 // 优先上方
-        let below = false;
-        if (top < M) { top = r.bottom + GAP; below = true; }   // 上方放不下 → 翻到下方
-        top = Math.max(M, Math.min(top, maxTop));          // 夹住高度，不盖住底部固定层
+        const popH = pr.height;
+        const maxTop = Math.max(M, bottomLimit - popH - GAP);
+        const aboveTop = r.top - popH - GAP;
+        const belowTop = r.bottom + GAP;
+        const fitsAbove = aboveTop >= M;
+        const fitsBelow = belowTop <= maxTop;
+        /* 选边（2026-09-25 修：原来只判「上方是否越顶」就翻下方，下方再被 maxTop 夹回来会盖住空）：
+           上方放得下优先上方；否则下方放得下就下方；两边都放不下才取空间更大的一侧并夹住。
+           这样「下方」永远不会被夹回到空上面，浮窗不遮挡被锚定的空。 */
+        let below, top;
+        if (fitsAbove) { below = false; top = aboveTop; }
+        else if (fitsBelow) { below = true; top = belowTop; }
+        else {
+          below = r.top > innerHeight - r.bottom;
+          top = Math.max(M, Math.min(below ? belowTop : aboveTop, maxTop));
+        }
         pop.classList.toggle('below', below);
         pop.classList.toggle('above', !below);
         pop.style.left = Math.round(left) + 'px';

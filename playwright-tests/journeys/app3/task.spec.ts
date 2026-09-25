@@ -187,7 +187,8 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
     await expect(page.locator('body')).toHaveClass(/task-mode/);
 
     const top = page.locator('#taskTop');
-    await expect(top).toBeVisible();
+    // G（2026-09-25）：第二排撤掉后 #taskTop 自身零高（只含 fixed 的 #readerHead），断言可见的 #readerHead。
+    await expect(page.locator('#readerHead')).toBeVisible();
     // W1 重做：头部照抄主站 .reader-head —— 返回是 .back 圆钮，标题是 .r-title 里的 .tt-zh
     await expect(top.locator('.reader-head .back')).toBeVisible();
     await expect(top.locator('#ttTitle .tt-zh')).toHaveText('地球与生命');
@@ -928,7 +929,7 @@ test.describe('3.0 终审顺手项', () => {
     /* 文章内头部（W1 重做）：.back 照抄主站视觉尺寸（30px），触区靠 ::after 外扩（不撑大视觉）。
        M3：把「有效触区 = 视觉盒 + ::after 每边 inset」量出来断言 ≥44（PRD §10.4），不再只断言「它在」。 */
     await page.locator('.art-card').first().click();
-    await expect(page.locator('#taskTop')).toBeVisible();
+    await expect(page.locator('#readerHead')).toBeVisible();
     const backHit = await page.locator('#taskTop .reader-head .back').evaluate((el) => {
       const r = el.getBoundingClientRect();
       const a = getComputedStyle(el, '::after');
