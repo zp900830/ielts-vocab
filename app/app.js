@@ -3,6 +3,13 @@
    「我的」不再是路由（用户 2026-09-24）：改成左下角常驻用户卡 + 向上弹出的浮窗，见文件末尾。 */
 (function () {
   const ROUTES = ['home', 'stats', 'words', 'listen'];
+  /* refine3 ⑦：「正在载入…」占位统一出口。薄荷绿三点轻脉冲（纯 CSS，见 index.html 的 .iel-loading），
+     尊重 prefers-reduced-motion；role=status 让读屏知道在加载，而不是一片空白。 */
+  function loadingHtml() {
+    return '<div class="iel-loading" role="status" aria-live="polite">'
+      + '<span class="ld-dots" aria-hidden="true"><i></i><i></i><i></i></span>'
+      + '<span>正在载入…</span></div>';
+  }
   let cur = 'home';
   let _hlArticle = null;   // 数据页点文章小卡 → 回首页要高亮的那一篇（§5.4）
   /* ---- 3.0 单词本（M3，PRD §6）---- */
@@ -25,13 +32,13 @@
       b.classList.toggle('on', b.dataset.route === cur));
     const view = document.getElementById('appView');
     if (cur === 'home' && window.APP3 && window.APP3.renderHome) { updateMeCard(); return window.APP3.renderHome(view); }
-    if (cur === 'home') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    if (cur === 'home') { view.innerHTML = loadingHtml(); return; }
     if (cur === 'stats' && window.APP3 && window.APP3.renderStats) return window.APP3.renderStats(view);
-    if (cur === 'stats') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    if (cur === 'stats') { view.innerHTML = loadingHtml(); return; }
     if (cur === 'words' && window.APP3 && window.APP3.renderWords) return window.APP3.renderWords(view, raw[1] || 'all');
-    if (cur === 'words') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    if (cur === 'words') { view.innerHTML = loadingHtml(); return; }
     if (cur === 'listen' && window.APP3 && window.APP3.renderListen) return window.APP3.renderListen(view);
-    if (cur === 'listen') { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    if (cur === 'listen') { view.innerHTML = loadingHtml(); return; }
     // cur 只可能是 ROUTES 成员，这里只作兜底：回首页。
     return window.APP3.renderHome(view);
   }
@@ -164,7 +171,7 @@
   function renderHome(view) {
     // 数据未就绪时先占位：initApp 拉完数据会再调一次 route()（见 app/index.html）。
     if (typeof dataReady === 'undefined' || !dataReady) {
-      view.innerHTML = '<p class="sm">正在载入…</p>';
+      view.innerHTML = loadingHtml();
       return;
     }
     const cards = SECTIONS.map((s, a) => {
@@ -201,7 +208,7 @@
      四问四块（每块标题即问题）+ 单词掌握 + 随身听（M4 起接真数据，§5.7）+ 待加强。
      所有数字从既有 ROOT2 state 派生（§9.4），不新增存储字段。 */
   function renderStats(view) {
-    if (typeof dataReady === 'undefined' || !dataReady) { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    if (typeof dataReady === 'undefined' || !dataReady) { view.innerHTML = loadingHtml(); return; }
     const hasPlan = !!(typeof TASK !== 'undefined' && TASK.hasPlan);
     if (!hasPlan) {
       // §5.2（2026-09-24 用户改口径）：一句话 + 一个按钮，点了打开「我的」浮窗；不内嵌计划表单。
@@ -452,7 +459,7 @@
     return (typeof volNo === 'function') ? volNo(a, pi) : 1;
   }
   function renderListen(view) {
-    if (typeof dataReady === 'undefined' || !dataReady) { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    if (typeof dataReady === 'undefined' || !dataReady) { view.innerHTML = loadingHtml(); return; }
     const ctx = (typeof TASK !== 'undefined' && TASK.listenState) ? TASK.listenState() : null;
     const a = (ctx && ctx.a != null) ? ctx.a : listenDefaultArticle();
     if (typeof TASK !== 'undefined' && TASK.listenOpen) TASK.listenOpen(a);
@@ -605,7 +612,7 @@
     </li>`;
   }
   function renderWords(view, filter) {
-    if (typeof dataReady === 'undefined' || !dataReady) { view.innerHTML = '<p class="sm">正在载入…</p>'; return; }
+    if (typeof dataReady === 'undefined' || !dataReady) { view.innerHTML = loadingHtml(); return; }
     if (WB_FILTERS.indexOf(filter) < 0) filter = 'all';
     if (_wordsFilter !== filter) { _wordsFilter = filter; _wordsShown = W_BATCH; }
     const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;

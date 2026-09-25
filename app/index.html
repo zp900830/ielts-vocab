@@ -269,15 +269,12 @@
   .seg { color: var(--muted); font-size: 12px; min-width: 76px; text-align: center;
     background: var(--accent-soft); border-radius: 999px; padding: 4px 10px; font-weight: 600; }
 
-  /* ============ 数据加载动效（与雅思词汇真经项目一致） ============ */
+  /* ============ 数据加载动效（refine3 ⑦：改用项目自己的薄荷绿三点脉冲，见 .ld-dots） ============ */
   .boot { min-height: 60vh; display: flex; flex-direction: column; align-items: center;
     justify-content: center; gap: 10px; padding: 40px 20px; text-align: center; }
   .boot-logo { font-size: 44px; filter: grayscale(.1); }
-  .boot-txt { font-size: 15px; color: var(--ink2); display: flex; align-items: center; gap: 8px; }
+  .boot-txt { font-size: 15px; color: var(--ink2); display: flex; align-items: center; gap: 9px; }
   .boot-sub { font-size: 12.5px; color: var(--muted); }
-  .boot-spin { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent);
-    border-radius: 50%; animation: bootspin .8s linear infinite; }
-  @keyframes bootspin { to { transform: rotate(360deg); } }
   .boot-err { font-size: 14px; color: var(--coral); line-height: 1.8; }
   .boot-err button { margin-top: 10px; padding: 8px 22px; border: 1px solid var(--border); background: #fff;
     color: var(--accent-text); border-radius: 999px; font-size: 13.5px; font-family: inherit; cursor: pointer; }
@@ -1242,6 +1239,22 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tp-actions .btn.primary { background: var(--grad); color: var(--cta-ink); border: none; font-weight: 600; box-shadow: var(--grad-shadow); }
   /* ---- v2 面板：三视图标签 + 两栏并列（PRD §9.2 / §10.2） ---- */
   .sm { font-size: 11.5px; color: var(--muted); }
+  /* refine3 ⑦：「正在载入…」占位 + 启动屏共用。产品调性 loading —— 薄荷绿三点轻脉冲，
+     纯 CSS、不引库。reduced-motion 下压掉动画只留静点（不闪、不阻塞内容）。 */
+  .ld-dots { display: inline-flex; gap: 4px; flex: none; }
+  .ld-dots i { display: block; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); opacity: .35; animation: ielDot 1s var(--ease-smooth) infinite; }
+  .ld-dots i:nth-child(2) { animation-delay: .16s; }
+  .ld-dots i:nth-child(3) { animation-delay: .32s; }
+  @keyframes ielDot {
+    0%, 100% { opacity: .35; transform: translateY(0) scale(.9); }
+    50% { opacity: 1; transform: translateY(-3px) scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ld-dots i { animation: none; opacity: .6; transform: none; }
+  }
+  .iel-loading { display: inline-flex; align-items: center; gap: 9px; padding: 6px 0;
+    font-size: 12.5px; color: var(--muted); }
   .tp-tabs { display: flex; gap: 4px; margin: -6px -4px 14px; padding: 0 4px; border-bottom: 1px solid var(--border); }
   .tp-tab { flex: 1; min-height: 44px; border: none; background: transparent; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
   /* 选中的那颗 tab：--task-new #10b487 压在玻璃上只有 2.54:1（13px 小字要 4.5，连 3:1 的底线都没到）。
@@ -2486,7 +2499,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
-        if (art) art.innerHTML = '<div class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-txt">正在加载学习数据…<span class="boot-spin"></span></div><div class="boot-sub">正在获取文章与词汇数据</div></div>';
+        if (art) art.innerHTML = '<div class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-txt" role="status" aria-live="polite">正在加载学习数据<span class="ld-dots" aria-hidden="true"><i></i><i></i><i></i></span></div><div class="boot-sub">正在获取文章与词汇数据</div></div>';
         // 移动端弱网/Edge 压缩代理下偶发单次失败：每个文件最多试 3 次（间隔递增），单个挂掉能定位到文件名
         const sleep = ms => new Promise(r => setTimeout(r, ms));
         async function get(url, label) {
