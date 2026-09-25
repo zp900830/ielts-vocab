@@ -1902,9 +1902,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   }
    /* W5-1 的占位屏样式已随 M4 删掉 —— 四个一级页都是真页，不再有 .app-todo。 */
   /* ============ 3.0 学习数据页（M2，PRD §5） ============ */
-  .stats-page { max-width: 880px; }
+  /* F（2026-09-25）：与首页同宽口径（#appView 全宽），不再锁 880；间距/圆角对齐首页卡片。 */
+  .stats-page { max-width: none; }
   .stats-page > h1 { font-size: 22px; font-weight: 800; color: var(--text); margin: 2px 0 16px; }
-  .st-block { margin-bottom: 22px; }
+  .st-block { margin-bottom: 26px; }
   .st-block > h2 { font-size: 15px; font-weight: 700; color: var(--text); margin: 0 0 10px; }
   .st-empty-start { max-width: 420px; margin: 12vh auto 0; text-align: center; padding: 0 20px; }
   .st-empty-start h1 { font-size: 22px; font-weight: 800; margin: 0 0 10px; color: var(--text); }
@@ -1912,19 +1913,19 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .st-empty-start .st-open-me { width: 100%; min-height: 46px; border: none; border-radius: 999px;
     background: var(--grad); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer;
     box-shadow: var(--grad-shadow); }
-  .st-nums { display: grid; gap: 10px; }
+  .st-nums { display: grid; gap: 12px; }
   .st-nums[data-cols="5"] { grid-template-columns: repeat(5, 1fr); }
   .st-nums[data-cols="4"] { grid-template-columns: repeat(4, 1fr); }
   .st-nums[data-cols="3"] { grid-template-columns: repeat(3, 1fr); }
-  .st-num { padding: 12px 10px; border: 1px solid var(--border); border-radius: 14px; background: var(--card);
+  .st-num { padding: 14px 12px; border: 1px solid var(--border); border-radius: 16px; background: var(--card);
     text-align: center; box-shadow: var(--shadow); }
   .st-num b { display: block; font-size: 20px; font-weight: 800; color: var(--accent-text); font-variant-numeric: tabular-nums; }
   .st-num span { font-size: 11px; color: var(--muted); }
   @media (max-width: 1023px) { .st-nums[data-cols="5"] { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 700px) { .st-nums[data-cols="5"], .st-nums[data-cols="4"], .st-nums[data-cols="3"] { grid-template-columns: repeat(2, 1fr); } }
-  .st-arts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .st-art { display: block; width: 100%; min-height: 44px; text-align: left; padding: 10px 12px;
-    border: 1px solid var(--border); border-radius: 14px; background: var(--card); cursor: pointer;
+  .st-arts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .st-art { display: block; width: 100%; min-height: 44px; text-align: left; padding: 12px 14px;
+    border: 1px solid var(--border); border-radius: 16px; background: var(--card); cursor: pointer;
     font: inherit; color: inherit; box-shadow: var(--shadow); }
   .st-art:hover { border-color: var(--accent-line); }
   .st-art .sa-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
@@ -1934,7 +1935,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .st-art .sa-bar i { display: block; height: 100%; background: var(--grad); }
   .st-art .sa-meta { font-size: 10.5px; color: var(--muted); }
   .art-card.hl { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .tr-wrap { padding: 12px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); box-shadow: var(--shadow); }
+  .tr-wrap { padding: 14px; border: 1px solid var(--border); border-radius: 16px; background: var(--card); box-shadow: var(--shadow); }
   .tr-bars { display: flex; align-items: flex-end; gap: 3px; height: 72px; }
   .tr-bar { flex: 1; min-height: 2px; background: var(--accent-soft); border-radius: 2px 2px 0 0; }
   .tr-bar.has { background: var(--accent); }
@@ -1947,8 +1948,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .st-la .sla-t { flex: 1; min-width: 0; }
   .st-la .sla-n, .st-la .sla-at { color: var(--muted); font-variant-numeric: tabular-nums; }
   .st-tips { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .st-tip { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px;
-    border: 1px solid var(--border); border-radius: 14px; background: var(--card); box-shadow: var(--shadow); }
+  .st-tip { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px;
+    border: 1px solid var(--border); border-radius: 16px; background: var(--card); box-shadow: var(--shadow); }
   .st-tip .tip-text { font-size: 13px; color: var(--text); }
   .st-go, .st-tip .tip-go { flex: none; min-height: 44px; padding: 0 16px; border: none; border-radius: 999px;
     background: var(--grad); color: var(--cta-ink); font-size: 13px; font-weight: 700; cursor: pointer;
@@ -1959,9 +1960,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   @media (max-width: 1023px) { .st-arts { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 700px) { .st-arts { grid-template-columns: 1fr; } }
   /* ============ 3.0 单词本（M3，PRD §6） ============ */
-  .words-page { max-width: 880px; }
-  .words-page > h1 { font-size: 22px; font-weight: 800; color: var(--text); margin: 2px 0 14px; }
-  .wb-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  /* F（2026-09-25）：与首页同宽口径（#appView 全宽），不再锁 880；桌面 2 列、平板/手机单列。 */
+  .words-page { max-width: none; }
+  .words-page > h1 { font-size: 22px; font-weight: 800; color: var(--text); margin: 2px 0 16px; }
+  .wb-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
   .wb-filter { min-height: 44px; padding: 0 16px; border: 1px solid var(--border); border-radius: 999px;
     background: var(--card); color: var(--text); font: inherit; font-size: 13px; font-weight: 600;
     cursor: pointer; box-shadow: var(--shadow); }
@@ -1969,9 +1971,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .wb-filter[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-text); }
   .wb-filter[aria-pressed="true"] .wf-n { color: var(--accent-text); }
   .wb-hint { font-size: 11.5px; color: var(--muted); margin: 0 0 10px; }
-  .wb-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; }
-  .wb-row { display: block; width: 100%; min-height: 44px; text-align: left; padding: 10px 14px;
-    border: 1px solid var(--border); border-radius: 14px; background: var(--card); color: inherit;
+  .wb-list { list-style: none; display: grid; grid-template-columns: 1fr; gap: 10px; margin: 0; padding: 0; align-items: start; }
+  @media (min-width: 1024px) { .wb-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .wb-row { display: block; width: 100%; min-height: 44px; text-align: left; padding: 12px 16px;
+    border: 1px solid var(--border); border-radius: 16px; background: var(--card); color: inherit;
     font: inherit; cursor: pointer; box-shadow: var(--shadow); }
   .wb-row:hover { border-color: var(--accent-line); }
   .wb-item.open .wb-row { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
@@ -1986,7 +1989,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .wr-pill.s-graduated { background: var(--accent); color: var(--cta-ink-dark); }
   .wr-meta, .wr-meta2 { display: block; margin-top: 3px; font-size: 11px; color: var(--muted); }
   .wb-more { display: block; width: 100%; min-height: 44px; margin-top: 12px; border: 1px dashed var(--border);
-    border-radius: 14px; background: var(--card); color: var(--accent-text); font: inherit; font-weight: 700;
+    border-radius: 16px; background: var(--card); color: var(--accent-text); font: inherit; font-weight: 700;
     cursor: pointer; }
   body.dark .wb-row, body.dark .wb-filter, body.dark .wb-more { background: var(--card); border-color: var(--border); }
   body.dark .wr-pill { background: rgba(255,255,255,.06); color: var(--ink2); }
@@ -1995,7 +1998,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .wr-pill.s-graduated { background: var(--accent); color: var(--cta-ink-dark); }
   @media (max-width: 700px) { .wb-filter { flex: 1 1 calc(50% - 8px); } }
   .wb-detail { padding: 12px 14px 14px; border: 1px solid var(--border); border-top: none;
-    border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; background: var(--card); }
+    border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; background: var(--card); }
   .wd-top { display: flex; align-items: center; gap: 8px; }
   .wd-word { font-size: 17px; font-weight: 800; }
   .wd-stage { font-size: 10.5px; font-weight: 700; line-height: 1.8; padding: 0 9px; border-radius: 999px;
