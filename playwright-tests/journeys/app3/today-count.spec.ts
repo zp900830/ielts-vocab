@@ -150,8 +150,7 @@ test.describe('3.0 任务条/数据页的「今天」口径（主行·辅行·�
     await expect(tip, '气泡不再报本篇口径').not.toContainText('本篇');
   });
 
-  test('学习数据页「今天」块：读了几句 / 学习时长 / 还剩几句，都与 state 同源', async ({ page }) => {
-    await stubData(page, SIX);
+  test('学习数据页「今天」块：读了几句 / 学习时长 / 还剩几句，都与 state 同源', async ({ page }) => {    await stubData(page, SIX);
     await page.goto(`${rootUrl}/app/index.html#/stats`);
     await waitStatsReady(page);
     await page.evaluate(() => {
@@ -193,5 +192,55 @@ test.describe('3.0 任务条/数据页的「今天」口径（主行·辅行·�
     await expect(page.locator('#art .qz-blank').first()).toBeVisible();
     await page.locator('#art .qz-blank').first().click();
     await expect(page.locator('#blankPop')).toBeVisible();
+  });
+});
+
+/* 2026-09-25 链路排查：数据页「今日学习时长」以前读 dayplan 事件里的【计划分钟数】
+   （计划 15、实读 3 也显示 15 —— 假数）。现在读 LS_ARTICLE.read.ms（任务模式里放完一句/
+   答一题各记一笔间隔，按天累计）；还没有真实账时回退计划分钟数。 */
+test.describe('「今日学习时长」= 真实用时', () => {
+  test('read.ms 有账 → 显示真实分钟；无账 → 回退计划分钟数', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitAppReady(page);
+    await page.evaluate(() => {
+      const w = window as unknown as { __day: string };
+      TASK.resetV2(); TASK.initPlan(15);
+      // 天键（4AM 边界）不能本地拼（UTC 会串日）—— 从 ROOT2.planned 的快照键里拿，就是今天
+      const root = JSON.parse(localStorage.getItem('ielts.shadow.v2')!);
+      w.__day = Object.keys(root.planned)[0];
+    });
+    // 直接种真实账：今天真实读了 3 分钟（180s），计划 15 分钟
+    await page.evaluate(() => {
+      const w = window as unknown as { __day: string };
+      const raw = localStorage.getItem('ielts.app3.article');
+      const o = raw ? JSON.parse(raw) : { reps: {}, pass2: {}, listen: {}, read: {} };
+      o.read = { ms: { [w.__day]: 180000 } };
+      localStorage.setItem('ielts.app3.article', JSON.stringify(o));
+    });
+    await page.reload();
+    await waitAppReady(page);
+    const tp = await page.evaluate(() => TASK.todayProgress());
+    expect(tp.minutes, '有真实账 → 显示 3 分钟，不是计划的 15').toBe(3);
+    // 数据页同源：导航过去看「今天」块
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await waitStatsReady(page);
+    await expect(page.locator('.st-num[data-k="today-min"] b')).toHaveText('3');
+
+    // 无账的旧天：回退计划分钟数（升级后不显示 0，也不丢历史）
+    await page.evaluate(() => {
+      const raw = localStorage.getItem('ielts.app3.article');
+      const o = JSON.parse(raw!);
+      const w = window as unknown as { __day: string };
+      delete o.read.ms[w.__day];
+      localStorage.setItem('ielts.app3.article', JSON.stringify(o));
+    });
+    await page.reload();
+    await waitAppReady(page);
+    const tp2 = await page.evaluate(() => TASK.todayProgress());
+    expect(tp2.minutes, '无真实账 → 回退计划分钟数').toBeGreaterThan(0);
+    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await waitStatsReady(page);
+    await expect(page.locator('.st-num[data-k="today-min"] b')).not.toHaveText('0');
   });
 });

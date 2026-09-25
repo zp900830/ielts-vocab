@@ -5646,6 +5646,12 @@ let listenOn = false;
         if (!o.listen.sents || typeof o.listen.sents !== 'object') o.listen.sents = {};
         if (!o.listen.ms || typeof o.listen.ms !== 'object') o.listen.ms = {};
         if (!o.listen.last || typeof o.listen.last !== 'object') o.listen.last = {};
+        /* 通读真实用时账（2026-09-25 链路排查）：数据页「今日学习时长」以前读的是 dayplan 事件里
+           的【计划分钟数】—— 计划 15 分钟、实际读了 3 分钟也显示 15，是假数。现在任务模式里
+           每放完一句 / 每答一题记一笔间隔（封顶 10 分钟，防后台挂机），按天累计；
+           数据页取 round(ms/60000)。与收听账同住 LS_ARTICLE（3.0 私有 key）。 */
+        if (!o.read || typeof o.read !== 'object') o.read = {};
+        if (!o.read.ms || typeof o.read.ms !== 'object') o.read.ms = {};
         _articleStats = o;
         return _articleStats;
       }
@@ -5718,6 +5724,8 @@ let listenOn = false;
             ms: JSON.parse(JSON.stringify(o.listen.ms)),
             last: Object.assign({}, o.listen.last),
           },
+          /* 通读真实用时跟着一起走（同一张 shadow_events 表，同一套 max 合并） */
+          read: { ms: JSON.parse(JSON.stringify(o.read.ms)) },
         };
       }
       function mergeArticleAccount(remote) {
@@ -5754,6 +5762,13 @@ let listenOn = false;
           const v = Number(L.last[a]);
           if (Number.isFinite(v) && v > (o.listen.last[a] || 0)) { o.listen.last[a] = v; changed = true; }
         });
+        Object.keys(remote.read || {}).forEach(function (k) {
+          const days = remote.read[k] || {};
+          Object.keys(days).forEach(function (day) {
+            const v = Number(days[day]);
+            if (Number.isFinite(v) && v > (o.read.ms[day] || 0)) { o.read.ms[day] = v; changed = true; }
+          });
+        });
         if (changed) saveArticleStats();
         return changed;
       }
@@ -5772,7 +5787,7 @@ let listenOn = false;
           const snap = articleAccountSnapshot();
           const ev = { type: 'article-account', ts: Date.now(), reps: snap.reps, pass2: snap.pass2, listen: snap.listen };
           // event_id = 内容指纹（'aa-' 前缀防与引擎事件撞键）：同内容重推幂等，同毫秒不同内容也不撞
-          const s = JSON.stringify([snap.reps, snap.pass2, snap.listen]);
+          const s = JSON.stringify([snap.reps, snap.pass2, snap.listen, snap.read]);
           let h = 2166136261;
           for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = (h * 16777619) >>> 0; }
           const id = 'aa-' + h.toString(16);
@@ -6452,7 +6467,12 @@ let listenOn = false;
         const d = (ROOT2 && ROOT2.state && ROOT2.state.daily && ROOT2.state.daily[day2()]) || {};
         const done = d.sentDone || 0;
         const planned = plannedDay();
-        return { done: done, planned: planned, left: Math.max(0, planned - done), minutes: d.minutes || 0 };
+        /* 今日学习时长 = 真实用时（LS_ARTICLE.read.ms 按天累计；放完一句/答一题各记一笔间隔）。
+           还没用新版读过时回退到计划分钟数（旧天没有真实账，历史天也一样回退）——
+           分不清"真实"与"计划"的话，这个数字对用户就是假数（2026-09-25 链路排查）。 */
+        const actualMs = loadArticleStats().read.ms[day2()] || 0;
+        const minutes = actualMs > 0 ? Math.max(1, Math.round(actualMs / 60000)) : (d.minutes || 0);
+        return { done: done, planned: planned, left: Math.max(0, planned - done), minutes: minutes };
       }
       /* 「今天的通读额度读满了没有」—— ② 入口（§4.4 入口 1）2026-09-24 改的触发判据。
          旧判据是「本篇队列走完」：队列按篇装配、且排程是滚动的，一篇 339 句、当天额度 180 句时，
@@ -6732,6 +6752,7 @@ let listenOn = false;
         if (!q || reveal) return false;
         // 答题先把声音收掉，否则下一题还压着上一句的朗读（「回看句子」已按 §4.4 删除）
         try { playing = false; speakToken++; speechSynthesis.cancel(); } catch (e) {}
+        readMsTick();   // 真实用时：答题也是学习，这笔间隔照记
         const ok = String(choice).trim().toLowerCase() === String(q.answer).trim().toLowerCase();
         push2(ShadowPlan.mkQuiz(q.w, item.s, q.kind, ok, Date.now(), day2()));
         quizAnsweredN++;
@@ -7391,6 +7412,9 @@ let listenOn = false;
       // 带 article 一并传：今天这一篇若排不出句，enterTaskMode 会用它兜底建批，保证真进任务模式（§6.5）。
       function playSentence(a, gi) { openArticle(a, { article: a, playGlobal: gi }); }
       function exitTaskMode() {
+        // 真实用时收尾：先把最后一段间隔记完（readMsTick 里的 taskMode 守卫需要它仍为真），再退场
+        try { readMsTick(); } catch (e) {}
+        _readMsTick = 0;
         taskMode = false; _noPlan = false; stopSessionClock();
         clearAutoNext();   // 离开任务模式：别让待触发的自动推进在别的屏上叫 nextBlank
         // ② 的答题卡浮窗跟着退出一起收（2026-09-25 用户实测：答题页返回后答题卡还悬在别的页面上）
@@ -8717,9 +8741,29 @@ let listenOn = false;
          以前这两件事全挂在点「下一句」上：链子自己往前滚的时候，听完的句子一句都不计完成，
          ①→② 的交接也不触发 —— 条上写着「这批读完了，接着出这一批的词」，却永远不出题。
          循环遍数照当前设定跑完才算放完（上面那句的 loop 分支会先 return 回来几次）。 */
+      /* 通读真实用时记账（2026-09-25 链路排查）：每放完一句 / 每答一题记一笔到期的间隔。
+         起点在进任务模式 / 上一笔，封顶 10 分钟（防后台挂机把间隔灌满）。退出任务模式时
+         把尾巴记完再归零 —— 跟收听账 listenFlush 的做法对齐。 */
+      let _readMsTick = 0;
+      const READ_MS_MAX = 10 * 60 * 1000;
+      function readMsTick() {
+        if (!taskMode) return;
+        const now = Date.now();
+        if (_readMsTick) {
+          const dt = Math.min(now - _readMsTick, READ_MS_MAX);
+          if (dt > 1000) {
+            const cur = loadArticleStats();
+            const day = day2();
+            cur.read.ms[day] = (cur.read.ms[day] || 0) + dt;
+            saveArticleStats();
+          }
+        }
+        _readMsTick = now;
+      }
       function taskSentenceFinished(globalIdx) {
         if (!taskMode) return false;
         if (pass === 1 && plan && prog) {
+          readMsTick();   // 真实用时：放完这句到上一笔的间隔先记账
           recordRep(globalIdx);
           sessionReps++;
           bumpArticleRep(artOfSentGlobal(globalIdx));   // 精读次数只数任务模式的 ① 完成（§7.6），账住 LS_ARTICLE
@@ -8802,6 +8846,8 @@ let listenOn = false;
         etaFor, etaCalls, countStages, seedDailyForTest, seedArticleForTest,
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
         repsOf, articlePass2Done,
+        /* 真实用时账出口（2026-09-25 链路排查）：数据页「累计学习时长」按天读真实毫秒。 */
+        readMsByDay: function () { return loadArticleStats().read.ms; },
         /* 按篇账云同步出口（2026-09-25 用户拍板）：CLOUD.boot / 登录态变化时由外壳调，
            merge/snapshot 同时是测试入口（mergeArticleAccount 的 max 语义有锁）。 */
         cloudPullArticleAccount, cloudPushArticleAccount, mergeArticleAccount, articleAccountSnapshot,
