@@ -250,11 +250,11 @@ test.describe('3.0 随身听（M4，PRD §7）', () => {
     expect(await seek.evaluate((el) => el.tagName)).toBe('INPUT');
     await seek.focus();
     expect(await page.evaluate(() => document.activeElement === document.querySelector('.ls-seek'))).toBe(true);
-    for (const sel of ['.ls-prev', '.ls-play', '.ls-next', '.ls-expand', '.ls-loop', '.ls-rate']) {
+    for (const sel of ['.ls-prev', '.ls-play', '.ls-stop', '.ls-next', '.ls-expand']) {
       const h = await page.locator(sel).evaluate((el) => el.getBoundingClientRect().height);
       expect(h, `${sel} 触摸目标 ≥44px`).toBeGreaterThanOrEqual(44);
     }
-    for (const sel of ['.ls-play', '.ls-next', '.ls-prev', '.ls-expand']) {
+    for (const sel of ['.ls-play', '.ls-stop', '.ls-next', '.ls-prev', '.ls-expand']) {
       await expect(page.locator(sel)).toHaveAttribute('aria-label', /./);
     }
   });

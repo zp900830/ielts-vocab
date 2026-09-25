@@ -136,6 +136,25 @@ test.describe('文章内「今天任务区间」横线', () => {
       return !!n && n.nextElementSibling === el;
     }, last);
     expect(endAdjacent, '尾句线必须接在队列尾句之后').toBe(true);
+
+    // 线端小标签（2026-09-25 用户需求）：线要标明自己是什么线 —— 起点线左端
+    // 「今天任务 · 开始」、终点线右端「今天任务 · 结束」，随父线 aria-hidden。
+    const startTag = startLine.locator('.today-range-tag');
+    const endTag = endLine.locator('.today-range-tag');
+    await expect(startTag).toHaveText('今天任务 · 开始');
+    await expect(endTag).toHaveText('今天任务 · 结束');
+    expect(await startTag.evaluate((el) => el.closest('.today-range-line')!.getAttribute('aria-hidden')), '标签随父线装饰性').toBe('true');
+    // 位置锚点：开始标签贴线左端、结束标签贴线右端
+    const tagPos = await page.evaluate(() => {
+      const s = document.querySelector('.today-range-line[data-edge="start"] .today-range-tag') as HTMLElement;
+      const e = document.querySelector('.today-range-line[data-edge="end"] .today-range-tag') as HTMLElement;
+      const sl = document.querySelector('.today-range-line[data-edge="start"]') as HTMLElement;
+      const el2 = document.querySelector('.today-range-line[data-edge="end"]') as HTMLElement;
+      return { sLeft: s.offsetLeft, eRight: el2.offsetWidth - (e.offsetLeft + e.offsetWidth), lineW: sl.offsetWidth };
+    });
+    expect(tagPos.sLeft, '开始标签贴线左端').toBeLessThan(4);
+    expect(tagPos.eRight, '结束标签贴线右端').toBeLessThan(4);
+    expect(tagPos.lineW, '线本体宽度不因标签改变').toBeGreaterThan(0);
   });
 
   test('横线与正文内容框等宽、左右边缘对齐（±2px）', async ({ page }) => {
