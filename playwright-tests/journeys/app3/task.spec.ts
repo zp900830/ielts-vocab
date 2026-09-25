@@ -170,12 +170,14 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
     const main = page.locator('#homeBanner .hb-main');
     // 先等横幅落地（数据是异步拉的）——不等就 evaluate 读 SECTIONS 会偶发 undefined。
     await expect(main).toContainText('继续学');
+    /* refine3 ⑤：底部续读条删掉后，横幅的「还剩」改说**今天**这本账（todayProgress().left），
+       不再拿文章未读总量；文章名仍是「第一篇还没读完的」。两者都要与各自出口同源。 */
     const info = await page.evaluate(() => ({
       title: SECTIONS[0].title,
-      size: ShadowPlan.articleScope(SECTIONS, 0).size,
+      left: (TASK as unknown as { todayProgress(): { left: number } }).todayProgress().left,
     }));
     await expect(main).toContainText(`《${info.title}》`);
-    await expect(main, '「还剩」的 N 必须与文章名同属一篇').toContainText(`还剩 ${info.size} 句`);
+    await expect(main, '「今天还剩」的 N 必须与今天这本账（todayProgress）同源').toContainText(`今天还剩 ${info.left} 句`);
   });
 
   // 审阅 I1：任务模式没有顶栏，光一颗 ✕ 不说明「退出 = 回首页选下一篇」。
