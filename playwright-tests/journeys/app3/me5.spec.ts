@@ -375,4 +375,40 @@ test.describe('M5 · 重置学习计划', () => {
     expect((await page.evaluate(() => TASK.planConfig()))!.minutes, '重新选了 30 分钟').toBe(30);
     expect(await page.evaluate(() => Object.keys(TASK.state()!.words).length), '重建后进度仍在').toBe(before.words);
   });
+
+  /* refine2 ③（2026-09-25 用户）：重置不再配「学习计划」标题、不再是圆形描边胶囊，
+     改成 2.0 那套极弱化文字按钮（下面沿用 .link-danger 声明）；破坏性操作的二次确认保持不变。 */
+  test('重置 = 极弱化文字按钮（无标题、无底无框无影带下划线），点击仍二次确认', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    const pop = await openMe(page);
+    const btn = pop.locator('[data-me-reset-plan]');
+    await expect(btn, '重置学习计划键仍在且可见').toBeVisible();
+
+    // 去标题：这一行只靠按钮文案自报家门，不再有「学习计划」标签
+    const row = btn.locator('xpath=..');
+    await expect(row.locator('.mp-label'), '那一行不该再有「学习计划」标题').toHaveCount(0);
+    await expect(pop.getByText('学习计划', { exact: true }), '「学习计划」这个标题文字应已删').toHaveCount(0);
+
+    // 形态 = 弱化文字按钮：无实底 / 无描边 / 无阴影 / 带下划线；且不再是圆形描边胶囊
+    const form = await btn.evaluate((el) => {
+      const cs = getComputedStyle(el);
+      return { bg: cs.backgroundColor, bd: cs.borderTopWidth, shadow: cs.boxShadow,
+               deco: cs.textDecorationLine, cls: el.className };
+    });
+    expect(form.cls, '不再是 .ps-opt 圆形描边胶囊').not.toContain('ps-opt');
+    expect(form.bg, '文字按钮无实底').toMatch(/^rgba?\(0, 0, 0, 0\)$|transparent/);
+    expect(form.bd, '文字按钮无描边').toBe('0px');
+    expect(form.shadow, '文字按钮无阴影').toBe('none');
+    expect(form.deco, '文字按钮带下划线').toContain('underline');
+
+    // 破坏性操作：点击仍弹原生 confirm（不是直接执行）
+    let msg = '';
+    page.once('dialog', async (d) => { msg = d.message(); await d.accept(); });
+    await btn.click();
+    expect(msg, '点击仍要二次确认').toMatch(/重置/);
+    await expect.poll(() => page.evaluate(() => TASK.hasPlan)).toBe(false);
+  });
 });
