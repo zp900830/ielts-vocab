@@ -4,6 +4,7 @@
 
 import { test, expect } from '../../fixtures';
 import { currentTimeout } from '../../utils/timeouts';
+import { waitShadowReady } from '../../utils/app-ready';
 
 interface WordSlot { stage: string; reps: number; err: number; due: number; leech: boolean; ctx: Record<string, number> }
 
@@ -973,6 +974,11 @@ test.describe('按篇化：scope 与三张派生索引（3.0 M1）', () => {
   test.beforeEach(async ({ page, baseURL }) => {
     test.info().setTimeout(currentTimeout() * 6);
     await page.goto(`${baseURL}/index.html`);
+    /* 本 describe 的用例要读 SECTIONS / TASK.sentWordsOf —— 它们是 loadData() 异步
+       fetch 三份 JSON 之后才落地的（见 index.html 1714/1746/1748）。不等就取值会撞上
+       boot 屏，SECTIONS=[] / wordsOfSent 恒 [] 让断言偶发红。复用 playback-resume
+       同款的就绪闸门，不要用 sleep。 */
+    await waitShadowReady(page);
   });
 
   test('不带 scope 时 assemble 与 v2.0 逐字一致', async ({ page }) => {
