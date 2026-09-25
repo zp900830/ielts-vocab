@@ -207,7 +207,7 @@
       // §5.2（2026-09-24 用户改口径）：一句话 + 一个按钮，点了打开「我的」浮窗；不内嵌计划表单。
       view.innerHTML = `<div class="st-empty-start">
         <h1>开始你的学习计划</h1>
-        <p>学习数据会在你建立计划后出现在这里。每天读多久、几点换一天、新词开关都在「我的」里。</p>
+        <p>学习数据会在你建立计划后出现在这里。每天读多久、新词开关都在「我的」里。</p>
         <button class="st-open-me" type="button">打开「我的」</button>
       </div>`;
       return;
@@ -831,7 +831,6 @@
     const planDay = cfg && cfg.startDate ? Math.floor((Date.now() - Date.parse(cfg.startDate)) / 864e5) + 1 : 1;
     const dark = document.body.classList.contains('dark');
     const MINS = [5, 10, 15, 20, 30, 45, 60];
-    const BOUND = [[0, '0点'], [2, '2点'], [3, '3点'], [4, '4点'], [5, '5点'], [6, '6点']];
     pop.innerHTML = `
       <div class="mp-head">
         <span class="mp-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>
@@ -863,8 +862,6 @@
         ${cfg ? `
         <div class="mp-row"><span class="mp-label">每天分钟数</span><div class="ps-opts">
           ${MINS.map(m => `<button class="ps-opt${m === cfg.minutes ? ' sel' : ''}" data-me-min="${m}">${m}</button>`).join('')}</div></div>
-        <div class="mp-row"><span class="mp-label">几点换一天</span><div class="ps-opts">
-          ${BOUND.map(o => `<button class="ps-opt${String(o[0]) === String(cfg.boundary) ? ' sel' : ''}" data-me-bound="${o[0]}">${o[1]}</button>`).join('')}</div></div>
         <div class="mp-row"><span class="mp-label">新词</span><div class="ps-opts">
           <button class="ps-opt${cfg.pausedNew ? '' : ' sel'}" data-me-new="0">正常</button>
           <button class="ps-opt${cfg.pausedNew ? ' sel' : ''}" data-me-new="1">只复习</button></div></div>` : ''}
@@ -937,9 +934,9 @@
     if (!pop || pop._wired) return;
     pop._wired = true;
     pop.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-bound],[data-me-new],[data-me-export],[data-me-import],[data-me-signup],[data-me-logout]');
+      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-new],[data-me-export],[data-me-import],[data-me-signup],[data-me-logout]');
       if (!t) return;
-      // 有些按钮点完会 renderMePop() 重渲（主题/分钟/日界/新词）—— 重渲会把 e.target 从 DOM 摘下来，
+      // 有些按钮点完会 renderMePop() 重渲（主题/分钟/新词）—— 重渲会把 e.target 从 DOM 摘下来，
       // 事件继续冒泡到 document 的「点外面收掉」监听时，target 已不在 #mePop 里，会被误判成点外面。
       // 所以这里先 stopPropagation，别让 document 那道再看到它。
       e.stopPropagation();
@@ -949,7 +946,6 @@
         else openSetup();
       } else if (t.hasAttribute('data-me-theme')) { if (typeof toggleDark === 'function') toggleDark(); renderMePop(); }
       else if (t.hasAttribute('data-me-min')) { TASK.setMinutes(Number(t.dataset.meMin)); renderMePop(); positionMePop(); }
-      else if (t.hasAttribute('data-me-bound')) { TASK.setBoundary(Number(t.dataset.meBound)); renderMePop(); }
       else if (t.hasAttribute('data-me-new')) { TASK.setPauseNew(t.dataset.meNew === '1'); renderMePop(); }
       else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }
       else if (t.hasAttribute('data-me-import')) { TASK.importBackup('meImportFile'); }

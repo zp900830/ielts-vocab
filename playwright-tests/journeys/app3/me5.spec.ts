@@ -281,3 +281,35 @@ test.describe('M5 · 形态与边界（§8.1 / §8.2 / §10.1）', () => {
     expect(await pop.locator('a[href]').count(), '我的里没有外链入口').toBe(0);
   });
 });
+
+/* 2026-09-25 用户：「几点换算一天的设置不要了（你直接给到 4 点）」。
+   删干净：控件 / 存储字段 / API 一起收；旧数据里残留的 boundaryHour 读时忽略、不崩。 */
+test.describe('M5 · 计划旋钮（去掉「几点换一天」，日界固定 4 点）', () => {
+  test('浮窗没有该旋钮；planConfig 固定 boundary=4；新计划不写 boundaryHour；旧值被忽略', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    const pop = await openMe(page);
+    expect(await pop.locator('[data-me-bound]').count(), '不再有「几点换一天」按钮').toBe(0);
+    expect(await pop.innerText()).not.toContain('几点换一天');
+    expect(await page.evaluate(() => typeof (TASK as unknown as { setBoundary?: unknown }).setBoundary),
+      'setBoundary API 一并删掉').toBe('undefined');
+
+    const cfg = await page.evaluate(() => TASK.planConfig());
+    expect(cfg && cfg.boundary, '日界固定 4 点').toBe(4);
+    const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('ielts.shadow.v2')!));
+    expect(stored.plan.boundaryHour, '新计划不再落 boundaryHour 字段').toBeUndefined();
+
+    // 旧数据残留：手写一个 boundaryHour=0，刷新后仍按 4 点算，且不崩。
+    await page.evaluate(() => {
+      const o = JSON.parse(localStorage.getItem('ielts.shadow.v2')!);
+      o.plan.boundaryHour = 0;
+      localStorage.setItem('ielts.shadow.v2', JSON.stringify(o));
+    });
+    await page.reload();
+    await waitTask(page);
+    const legacy = await page.evaluate(() => TASK.planConfig());
+    expect(legacy && legacy.boundary, '旧值被忽略，仍是 4').toBe(4);
+  });
+});

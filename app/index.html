@@ -5952,7 +5952,7 @@ let listenOn = false;
            ps-start 会先于本函数把 pending 取走，所以这里清掉不会弄丢正常的「回到那一篇」。 */
         _pendingArticle = null;
         ROOT2 = ROOT2 || {};
-        ROOT2.plan = { todayMinutes: m, boundaryHour: 4, startDate: ShadowPlan.dayKey(Date.now(), 4),
+        ROOT2.plan = { todayMinutes: m, startDate: ShadowPlan.dayKey(Date.now(), 4),
                        endDate: null, pausedNew: false, totalDays: 30 };
         ROOT2.state = ShadowPlan.emptyState(); ROOT2.events = []; ROOT2.uploaded = 0; ROOT2.migratedAt = 0;
         ROOT2.planned = {};
@@ -5989,12 +5989,12 @@ let listenOn = false;
       function readToday2(i) {
         if (!ROOT2 || !ROOT2.plan) return false;
         const s = ROOT2.state.sents[i];
-        return !!(s && ShadowPlan.dayKey(s.lastReadAt, ROOT2.plan.boundaryHour) ===
-                  ShadowPlan.dayKey(Date.now(), ROOT2.plan.boundaryHour));
+        return !!(s && ShadowPlan.dayKey(s.lastReadAt, bdHour()) ===
+                  ShadowPlan.dayKey(Date.now(), bdHour()));
       }
       function readDone(i) {
         if (!ROOT2 || !ROOT2.plan) return;
-        const day = ShadowPlan.dayKey(Date.now(), ROOT2.plan.boundaryHour);
+        const day = ShadowPlan.dayKey(Date.now(), bdHour());
         const now = Date.now();
         wordsOfSent(i).forEach(w => {
           /* 毕业词以前在这里被挡掉（`stage === 'graduated'` 就 return）。那一刀是
@@ -6006,7 +6006,7 @@ let listenOn = false;
       }
       function relearn(w) {
         if (!ROOT2 || !ROOT2.state.words[w]) return;
-        push2({ type: 'relearn', w: w, day: ShadowPlan.dayKey(Date.now(), ROOT2.plan.boundaryHour), ts: Date.now() });
+        push2({ type: 'relearn', w: w, day: ShadowPlan.dayKey(Date.now(), bdHour()), ts: Date.now() });
       }
       function countStages() {
         const c = { fresh: 0, seen: 0, recognized: 0, owned: 0, graduated: 0, leech: 0 };
@@ -6017,7 +6017,7 @@ let listenOn = false;
       }
       function streak2() {
         if (!ROOT2 || !ROOT2.plan) return 0;
-        const b = ROOT2.plan.boundaryHour, today = ShadowPlan.dayKey(Date.now(), b);
+        const b = bdHour(), today = ShadowPlan.dayKey(Date.now(), b);
         let n = 0;
         for (let k = 0; k < 400; k++) {
           const key = ShadowPlan.dayKey(Date.now() - k * ShadowPlan.DAY_MS, b);
@@ -6171,10 +6171,10 @@ let listenOn = false;
         });
       }
       function day2() { return ShadowPlan.dayKey(Date.now(), bdHour()); }
-      /* 「几点算换一天」可以选 0 点，所以判默认值不能用 `boundaryHour || 4` —— 那会把合法的 0 吞回 4 点，
-         而另一批读原始值的地方按 0 点算，凌晨开工时两处账就分叉了（工期缓存键、色标、进度数字各算各的）。
-         全项目只有这一处知道默认值是 4。 */
-      function bdHour() { const h = ROOT2 && ROOT2.plan && ROOT2.plan.boundaryHour; return Number.isInteger(h) ? h : 4; }
+      /* 2026-09-25 用户：「几点换算一天的设置不要了（你直接给到 4 点）」。日界固定凌晨 4 点、
+         不再可调；bdHour() 是唯一出口。旧数据里残留的 plan.boundaryHour 一律忽略（见 planConfig
+         恒返 4），新计划也不再写这个字段 —— 不迁移、不崩，只是不再读它。 */
+      function bdHour() { return 4; }
       function plainOf(i) { return String(SENT_RAW[i] || '').replace(/\[\[([^\]:]+):([^\]]+)\]\]/g, '$2'); }
       function displayOf(i, w) { return (DISP[i] && DISP[i][w]) || w; }
       /* ② 的提示与判据都要「这个词在这一句里的意思」。行内小字已经会按上下文挑义项，
@@ -7768,7 +7768,7 @@ let listenOn = false;
          所以按「计划的指纹」缓存：改分钟 / 改日界 / 暂停新词 / 换一天 / 词表变了 才重算。 */
       function etaKey(m) {
         const p = (ROOT2 && ROOT2.plan) || {};
-        return [m, ALL_TARGET_WORDS, day2(), p.boundaryHour, p.pausedNew ? 1 : 0, rate].join('|');
+        return [m, ALL_TARGET_WORDS, day2(), p.pausedNew ? 1 : 0, rate].join('|');
       }
       function etaFor(minutes) {
         const key = etaKey(minutes);
@@ -7963,7 +7963,7 @@ let listenOn = false;
          是两件不同的事 —— 今天 100% 可能只因为今天只排了 3 句。 */
       function renderTodayView() {
         const tp = todayPlan(true);
-        const b = ROOT2.plan.boundaryHour, day = ShadowPlan.dayKey(Date.now(), b);
+        const b = bdHour(), day = ShadowPlan.dayKey(Date.now(), b);
         const d = ROOT2.state.daily[day] || {};
         const qz = 6 / (rate || 1);
         const left = tp.queue.filter(q => !readToday2(q.i));
@@ -8016,12 +8016,10 @@ let listenOn = false;
 
       function renderPlanView() {
         const MINS = [5, 10, 15, 20, 30, 45, 60];
-        /* 六颗统一成「N 点」：旧标签里只有 4 点写成「凌晨 4 点」，一颗特殊写法看着像笔误。 */
-        const BOUND = [[0, '0 点'], [2, '2 点'], [3, '3 点'], [4, '4 点'], [5, '5 点'], [6, '6 点']];
         const row = (label, opts, cur, fn) => `<div class="ps-group"><label>${label}</label>
           <div class="ps-opts">${opts.map(o => `<button class="ps-opt${String(o[0]) === String(cur) ? ' sel' : ''}" data-v="${o[0]}" onclick="${fn}(${o[0]})">${o[1]}</button>`).join('')}</div></div>`;
+        /* 2026-09-25：「几点算换一天」整行删除（日界固定凌晨 4 点，见 bdHour）。 */
         return row('每天有多少分钟', MINS.map(m => [m, m + ' 分钟']), ROOT2.plan.todayMinutes, 'TASK.setMinutes') +
-          row('几点算换一天', BOUND, ROOT2.plan.boundaryHour, 'TASK.setBoundary') +
           `<div class="ps-group"><label>新词</label><div class="ps-opts">
             <button class="ps-opt${ROOT2.plan.pausedNew ? '' : ' sel'}" onclick="TASK.setPauseNew(false)">正常见新词</button>
             <button class="ps-opt${ROOT2.plan.pausedNew ? ' sel' : ''}" onclick="TASK.setPauseNew(true)">只复习，先不见新词</button></div></div>
@@ -8040,7 +8038,6 @@ let listenOn = false;
         if (ROOT2.planned) ROOT2.planned[day2()] = 0;   // 预算变了，今天的句数承诺重算一次
         _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel'));
       }
-      function setBoundary(h) { ROOT2.plan.boundaryHour = h; recompute2(); _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel')); }
       function setPauseNew(v) { ROOT2.plan.pausedNew = !!v; _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel')); }
       function syncHintText() {
         // 只有真的登录了、且上传链已接上才报差额 —— 没登录时说「还有 N 条没传上去」是空许诺
@@ -8337,7 +8334,7 @@ let listenOn = false;
         get article() { return currentArticle; },   // W1：文章内头部要按当前篇填标题/箭头
         // 「我的」浮窗（2026-09-24）读计划旋钮的当前值；没计划时返回 null。
         planConfig: () => (ROOT2 && ROOT2.plan) ? {
-          minutes: ROOT2.plan.todayMinutes, boundary: ROOT2.plan.boundaryHour,
+          minutes: ROOT2.plan.todayMinutes, boundary: bdHour(),
           pausedNew: !!ROOT2.plan.pausedNew, startDate: ROOT2.plan.startDate,
         } : null,
         get queue() { return todayQueue; },
@@ -8346,7 +8343,7 @@ let listenOn = false;
         loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
         pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
         offerResume, resumeTask, skipResume, hideResumeOffer,
-        initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
+        initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setPauseNew,
         etaFor, etaCalls, countStages, seedDailyForTest, seedArticleForTest,
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
         repsOf, articlePass2Done,
