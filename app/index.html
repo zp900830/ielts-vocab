@@ -1714,9 +1714,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #appShell { display: flex; min-height: 100vh; }
   /* 2026-09-24（第二轮）：用户要「偏灰的白」侧栏（#f6f6f4，二级任务页那档），且要与右侧薄荷底
      (#f8fdfa) 搭配好看。灰白挨着薄荷容易「发脏」，所以把原先的暖米色描边（--border #e5dfd6）
-     换成一道更淡、更中性的竖向分隔线，让它读起来是刻意的分区、不是脏。纯色不透明，深色见 body.dark。 */
+     换成一道更淡、更中性的竖向分隔线，让它读起来是刻意的分区、不是脏。纯色不透明，深色见 body.dark。
+     2026-09-25（refine2 ⑤）：再往更白走一丢丢 + 一道极轻渐变（顶 #fcfcfb → 底仍是 #f6f6f4，量级很小）。
+     写法用 background-color 兜底 + background-image 叠渐变：深色仍能靠 background-color 区分，
+     leftovers 的「深色不许靠透明蹭 body」那条锁不被误伤。 */
   .sidenav { flex: none; width: 220px; padding: 16px 12px; border-right: 1px solid #e9e9e6;
-    background: #f6f6f4;
+    background-color: #f6f6f4;
+    background-image: linear-gradient(180deg, #fcfcfb 0%, rgba(246,246,244,0) 100%);
     display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; }
   /* 侧栏品牌（照抄主站 .sn-logo）：一级页面才露脸 */
   .sn-logo { display: flex; align-items: center; gap: 10px; padding: 2px 8px 20px; color: var(--text); }
@@ -2038,7 +2042,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* ============ 3.0 外壳深色覆盖（W2，PRD §10.1） ============
      外壳与 M1 新页面统一到影子跟读的暖黑 token（--bg/--card/--border/--text/--accent-soft…），
      只把几处写死的浅色值换掉（.a-bar / .a-stage 等）。全部复用既有 token，不新造色。 */
-  body.dark .sidenav { background: var(--bg); border-right-color: var(--border); }
+  body.dark .sidenav { background-color: var(--bg);
+    background-image: linear-gradient(180deg, #211f1c 0%, rgba(28,26,23,0) 100%); border-right-color: var(--border); }
   body.dark .sn-logo { color: var(--text); }
   body.dark .sn-name { color: var(--text); }
   body.dark .nav-item { color: var(--text); }
