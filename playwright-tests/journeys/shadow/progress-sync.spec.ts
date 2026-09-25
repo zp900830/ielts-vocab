@@ -4,6 +4,7 @@
 
 import { test, expect } from '../../fixtures';
 import { currentTimeout } from '../../utils/timeouts';
+import { waitShadowReady } from '../../utils/app-ready';
 
 const ENV = process.env.E2E_ENVIRONMENT || 'local';
 
@@ -68,6 +69,11 @@ test.describe('Progress cloud sync: pull, push, and latest-wins', () => {
       });
       expect(uid).toBe(FAKE_USER);
     });
+
+    /* 就绪闸门放在最后：必须先清完 localStorage（Setup 1）/装好假客户端，再等数据落地。
+       cloudPullMarks 的进度段有 `sents.length` 守卫（index.html:4400），数据没到就整段跳过，
+       Step 1 断言 pos.i=20 会偶发拿不到。复用 playback-resume 同款条件等待，不要 sleep。 */
+    await waitShadowReady(page);
   });
 
   test(
