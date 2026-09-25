@@ -1455,6 +1455,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      这一步唯一的动作就是「放这一句」，那颗键由 #tbNext 承担。播放条本体整条隐藏，
      但这颗是被搬进任务条的，只能单独按掉。退出任务模式时 DOM 搬回去，照常还在。 */
   body.task-mode #btnPlay { display: none !important; }
+  /* ② 新加的停止键只服务随身听展开态：任务模式把播放条控件 dock 进任务条时，别把它带进去。 */
+  body.task-mode #btnStop { display: none !important; }
   /* 循环 / AB / 倍速这几颗是 .btn 自带的绿字，12px 下对白底实测 3.49:1（AA 要 4.5）。
      只在任务条里把这支绿压深一档；深色模式反过来提亮。全站 .btn 不动。 */
   #taskBar .tb-play .btn:not(.play) { color: #0a7d5d; }
@@ -2132,22 +2134,31 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .ls-vol { font-size: 12px; color: var(--muted); }
   .ls-now { font-family: Georgia, 'Songti SC', serif; font-size: 15px; line-height: 1.8; color: var(--text); margin-top: 2px; }
   .ls-main { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-  .ls-controls { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 0; }
-  .ls-prev, .ls-next { min-width: 46px; min-height: 46px; border: 1px solid var(--border); border-radius: 999px;
-    background: var(--card); color: var(--text); font: inherit; font-size: 15px; cursor: pointer;
+  .ls-controls { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 0; }
+  /* ① 句级 ◀/▶：照搬主站播放条的 navbtn（箭头图标 + 「上一句/下一句」文字、白底细描边、
+     首尾禁用降透明）。原来这两颗是纯图标、且绑的切篇动作。 */
+  .ls-prev, .ls-next { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 14px;
+    border: 1px solid var(--border); border-radius: 999px; background: var(--card); color: var(--text);
+    font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
     box-shadow: 0 2px 10px rgba(30,90,70,.06);
-    transition: border-color var(--iel-t-fast), color var(--iel-t-fast), transform var(--iel-t-fast); }
-  .ls-prev:hover, .ls-next:hover { border-color: var(--accent); color: var(--accent-text); transform: translateY(-1px); }
-  .ls-play { min-width: 68px; min-height: 52px; border: none; border-radius: 999px; background: var(--grad);
-    color: var(--cta-ink); font: inherit; font-size: 17px; cursor: pointer; box-shadow: var(--grad-shadow); }
+    transition: border-color var(--iel-t-fast), color var(--iel-t-fast), background var(--iel-t-fast); }
+  .ls-prev i, .ls-next i { font-size: 16px; line-height: 1; }
+  .ls-prev:hover:not(:disabled), .ls-next:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-text); background: var(--accent-soft); }
+  .ls-prev:disabled, .ls-next:disabled { opacity: .45; cursor: default; }
+  .ls-play { display: inline-flex; align-items: center; gap: 5px; min-height: 48px; padding: 0 20px;
+    border: none; border-radius: 999px; background: var(--grad); color: var(--cta-ink);
+    font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: var(--grad-shadow); }
+  .ls-play i { font-size: 17px; line-height: 1; }
   .ls-play:hover { filter: brightness(1.04); }
+  /* ② 停止：主站播放条 ghost（白底 accent 描边 + 实心 stop 图标），与 ▶/⏸ 明显区分（暂停 ≠ 停止）。 */
+  .ls-stop { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 14px;
+    border: 1px solid var(--accent-line); border-radius: 999px; background: var(--card); color: var(--accent-text);
+    font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 10px rgba(30,90,70,.06);
+    transition: background var(--iel-t-fast), border-color var(--iel-t-fast), color var(--iel-t-fast); }
+  .ls-stop:hover { background: var(--accent-soft); border-color: var(--accent); }
+  .ls-stop i { font-size: 16px; line-height: 1; }
   .ls-seek { width: 100%; min-height: 32px; margin: 0; accent-color: var(--accent); }
   .ls-info { margin: 0; font-size: 12.5px; color: var(--muted); text-align: center; font-variant-numeric: tabular-nums; }
-  .ls-tools { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  .ls-tools button { min-height: 44px; padding: 0 16px; border: 1px solid var(--border); border-radius: 999px;
-    background: var(--card); color: var(--text); font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer;
-    box-shadow: 0 2px 10px rgba(30,90,70,.05); transition: border-color var(--iel-t-fast), color var(--iel-t-fast); }
-  .ls-tools button:hover { border-color: var(--accent); color: var(--accent-text); }
   /* 2026-09-25（refine2 ④）：原来整条 --grad 实心绿大按钮太抢，改成 2.0 那套弱化文字按钮
      （主站 index.html 的 .tr-play：无底无框、accent 字、字重 500）。全宽 + 44 触区是本页尺寸覆写。
      唯一登记过的主按钮配色 #2bd4a4 + 白字不动 —— 这颗改弱化正是远离它。 */
@@ -2156,6 +2167,55 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     font: inherit; font-weight: 500; font-size: 13px; cursor: pointer;
     transition: background var(--t-fast), color var(--t-fast); }
   .ls-expand:hover { background: var(--accent-soft); color: var(--accent); }
+  /* ④（2026-09-25）展开 = 全屏弹窗：顶部一张「正在听」HUD 卡，样式照搬主站 index.html 的 .ls-now
+     （上一篇/下一篇 · 篇名 · 中文名 · 状态胶囊 + 重听本篇 · 白卡放当前句），套 /app/ 令牌。
+     注意：/app/ 卡片封面里已有一个 .ls-now（正在播那句），所以 HUD 容器用 #listenHud、内部类
+     统一加 #listenHud 前缀，绝不撞名。 */
+  #listenHud { display: none; }
+  body.listen-mode #listenHud { display: block; position: sticky; top: 60px; z-index: 35;
+    margin: 0 0 16px; text-align: center;
+    padding: 22px 18px 18px; background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+    box-shadow: 0 10px 34px rgba(30,90,70,.12); }
+  #listenHud .ls-pos { font-size: 12px; color: var(--ink2); display: flex; align-items: center;
+    justify-content: center; gap: 10px; font-variant-numeric: tabular-nums; }
+  .ls-snav { border: 1px solid var(--border); background: var(--card); color: var(--text);
+    border-radius: 999px; padding: 5px 13px; font: inherit; font-size: 12.5px; white-space: nowrap; cursor: pointer;
+    transition: background var(--iel-t-fast), border-color var(--iel-t-fast), color var(--iel-t-fast); }
+  .ls-snav:hover:not(:disabled) { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-text); }
+  .ls-snav:disabled { opacity: .4; cursor: default; }
+  #listenHud .ls-title { font-family: Georgia, 'Songti SC', serif; font-size: 21px; font-weight: 700;
+    margin: 12px 0 2px; color: var(--text); }
+  #listenHud .ls-tcn { font-size: 13.5px; color: var(--muted); }
+  #listenHud .ls-chip { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 11.5px;
+    color: var(--accent-text); background: var(--accent-soft); border: 1px solid var(--accent-line);
+    border-radius: 999px; padding: 3px 11px; font-variant-numeric: tabular-nums; }
+  #listenHud .ls-chip button { border: none; background: transparent; color: var(--accent-text);
+    font: inherit; font-size: 11.5px; cursor: pointer; padding: 0; text-decoration: underline dotted; }
+  #listenHud .ls-sen-box { min-height: 96px; margin: 16px auto 0; max-width: 640px; padding: 14px 16px;
+    background: var(--accent-soft); border-radius: 12px; border: 1px solid var(--border); }
+  #listenHud .ls-sen { font-family: Georgia, 'Songti SC', serif; font-size: 16.5px; line-height: 1.8;
+    color: var(--text); text-align: left; }
+  @media (max-width: 700px) {
+    #listenHud { padding: 18px 12px 14px; }
+    #listenHud .ls-title { font-size: 18px; }
+    #listenHud .ls-sen { font-size: 15.5px; }
+    #listenHud .ls-sen-box { padding: 12px 12px; min-height: 88px; }
+    /* 卡片控制一排放下：◀ 上一句 / ▶ 播放 / ■ 停止 / 下一句 ▶（触区仍 ≥44px 高） */
+    .ls-controls { gap: 6px; }
+    .ls-prev, .ls-next, .ls-stop { padding: 0 8px; font-size: 12px; }
+    .ls-play { padding: 0 12px; font-size: 14px; }
+  }
+  /* ④ 弹窗进入/收起动效（reduced-motion 全压）。 */
+  @keyframes ls-hud-in { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+  @keyframes ls-bar-in { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  body.listen-mode #listenHud { animation: ls-hud-in .32s cubic-bezier(.32,.72,.35,1) both; }
+  body.listen-mode > #audiobar { animation: ls-bar-in .32s cubic-bezier(.32,.72,.35,1) both; }
+  body.listen-closing #listenHud { animation: ls-hud-in .26s cubic-bezier(.32,.72,.35,1) reverse both; }
+  body.listen-closing > #audiobar { animation: ls-bar-in .26s cubic-bezier(.32,.72,.35,1) reverse both; }
+  @media (prefers-reduced-motion: reduce) {
+    body.listen-mode #listenHud, body.listen-mode > #audiobar,
+    body.listen-closing #listenHud, body.listen-closing > #audiobar { animation: none; }
+  }
   /* 展开全屏阅读：复用任务模式那套（.layout 正文 + 底部 .audiobar），只是不挂任务条。 */
   body.listen-mode { background: #faf8f4; }
   body.listen-mode > .layout { display: block; }
@@ -2334,6 +2394,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       <nav class="ab-left" aria-label="播放控制">
         <button class="btn ab-step" onclick="step(-1)" title="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i> 上一句</button>
         <button class="btn play" id="btnPlay" onclick="togglePlay()" aria-label="播放或暂停"><i class="ri-play-fill" aria-hidden="true"></i><span class="lbl"> 播放</span></button>
+        <button class="btn" id="btnStop" onclick="TASK.listenStop()" title="停止（记住当前位置，下次继续）" aria-label="停止播放"><i class="ri-stop-fill" aria-hidden="true"></i><span class="lbl"> 停止</span></button>
         <button class="btn ab-step ab-step-fwd" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line" aria-hidden="true"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
           <div class="menu-bridge" aria-hidden="true"></div>
@@ -2457,6 +2518,19 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <div class="blank-pop" id="blankPop" role="dialog" aria-label="选出填回空格的词" hidden></div>
 
     <div class="layout">
+      <!-- ④ 随身听展开弹窗顶部 HUD（只在 body.listen-mode 上屏；样式照搬主站 .ls-now）：
+           上一篇/下一篇 · 篇名 · 中文名 · 状态胶囊 + 重听本篇 · 白卡当前句。下面才是 §7.3 的整篇正文 #art。 -->
+      <section id="listenHud" aria-label="随身听正在播放">
+        <div class="ls-pos">
+          <button class="ls-snav" id="lsArtPrev" type="button" onclick="TASK.listenStep(-1)" aria-label="上一篇" title="上一篇">‹ 上一篇</button>
+          <span id="lsArtPos">第 1/6 篇</span>
+          <button class="ls-snav" id="lsArtNext" type="button" onclick="TASK.listenStep(1)" aria-label="下一篇" title="下一篇">下一篇 ›</button>
+        </div>
+        <div class="ls-title" id="lsHudTitle"></div>
+        <div class="ls-tcn" id="lsHudTcn"></div>
+        <div class="ls-chip"><span id="lsHudChip"></span><button id="lsHudReplay" type="button" onclick="TASK.listenReplay()" title="从本篇开头重听"><i class="ri-refresh-line" aria-hidden="true"></i> 重听本篇</button></div>
+        <div class="ls-sen-box"><div class="ls-sen" id="lsHudSen"></div></div>
+      </section>
       <main id="main"><article id="art"><div id="abRegion" class="ab-region" style="display:none" aria-hidden="true"><button class="ab-cancel" onclick="abCancel()" title="取消循环" aria-label="取消循环">×</button></div></article></main>
       <aside id="panel">
         <div class="head">
@@ -4287,6 +4361,9 @@ let listenOn = false;
     try { if (typeof TASK !== 'undefined' && TASK.refreshNext) TASK.refreshNext(); } catch (e) {}
     /* 随身听卡片：播放状态变化就地刷新（只改文本/属性，不重建 DOM）。 */
     try { if (window.APP3 && window.APP3.updateListenCard) window.APP3.updateListenCard(); } catch (e) {}
+    /* 随身听展开弹窗 HUD：只在 listen-mode 下更新（函数内部早退）。updateListenHud 在 TASK IIFE 内，
+       外层 paint 拿不到裸标识符，必须经 TASK 出口调。 */
+    try { if (typeof TASK !== 'undefined' && TASK.updateListenHud) TASK.updateListenHud(); } catch (e) {}
     /* 随身听悬浮球（切 tab 续播）：与卡片同一处刷新。 */
     try { if (window.APP3 && window.APP3.updateListenFab) window.APP3.updateListenFab(); } catch (e) {}
     }
@@ -5630,16 +5707,24 @@ let listenOn = false;
       let _listenCtx = false;     // 是否在随身听上下文（卡片或展开）
       let _listenArticle = null;  // 当前随身听篇
       let _listenExpanded = false;
+      let _listenArmed = false;   // ⑤ 已起播、未停止（暂停仍为 true）→ 悬浮球/续播判据
       let _listenTick = 0;        // 上一笔记时（ms）
+      let _listenCollapseTimer = null;   // ④ 收起动效计时器（reduced-motion 下不走）
       const LISTEN_MAX_MS = 10 * 60 * 1000;  // 单笔时长上限，防后台挂机刷时长
 
       function listenState() {
         return {
           a: _listenArticle, idx: idx, total: sents.length, playing: playing,
           loop: loopMode ? loopCount : 0, rate: rate, ab: abMode, expanded: _listenExpanded,
-          ctx: _listenCtx,
+          ctx: _listenCtx, active: _listenArmed,
           text: idx >= 0 ? plainEN(sentRaw(idx)) : (sents.length ? plainEN(sentRaw(0)) : ''),
         };
+      }
+      /* ⑤ 起播/继续：把上下文、收听账、以及「已起播」都置上（暂停不清 active，只有 stop 清）。 */
+      function listenArm() {
+        _listenCtx = true; listenOn = true; _listenArmed = true;
+        document.body.classList.add('listen-page');
+        _listenTick = _listenTick || Date.now();
       }
       function listenOpen(a) {
         _listenCtx = true;
@@ -5657,22 +5742,25 @@ let listenOn = false;
       }
       function listenClose() {
         if (!_listenCtx) return;
-        _listenCtx = false; _listenExpanded = false;
+        _listenCtx = false; _listenExpanded = false; _listenArmed = false;
         listenOn = false;
-        document.body.classList.remove('listen-page', 'listen-mode');
+        if (_listenCollapseTimer) { clearTimeout(_listenCollapseTimer); _listenCollapseTimer = null; }
+        document.body.classList.remove('listen-page', 'listen-mode', 'listen-closing');
         if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
         listenFlush();
         currentArticle = null; _cachedPlan = null;
         try { paint(); } catch (e) {}
       }
       /* 离开随身听路由（切 tab）：播放不中断，交给外壳的悬浮球继续控制（照搬主站
-         switchView 里 closeListenPanel 的口径）。只有「从没起播过」才真正收掉上下文。
-         _listenCtx/listenOn 保持为 true —— 续播账（§7.6）与篇末自动切下一篇都还要走。 */
+         switchView 里 closeListenPanel 的口径）。只有「从没起播过 / 已停止」才真正收掉上下文。
+         _listenCtx/listenOn 保持为 true —— 续播账（§7.6）与篇末自动切下一篇都还要走。
+         ⑤（2026-09-25）：判据从 idx>=0 改成 _listenArmed（暂停算 active，停止不算）。 */
       function listenLeave() {
         if (!_listenCtx) return;
-        if (playing || idx >= 0) {
+        if (playing || _listenArmed) {
           _listenExpanded = false;
-          document.body.classList.remove('listen-page', 'listen-mode');
+          if (_listenCollapseTimer) { clearTimeout(_listenCollapseTimer); _listenCollapseTimer = null; }
+          document.body.classList.remove('listen-page', 'listen-mode', 'listen-closing');
           try { paint(); } catch (e) {}
           return;
         }
@@ -5683,60 +5771,102 @@ let listenOn = false;
          所以这里收掉上下文但不碰 currentArticle（openArticle 刚设好，别被 listenClose 抹掉）。 */
       function listenStopForTask() {
         if (!_listenCtx) return;
-        _listenCtx = false; _listenExpanded = false;
+        _listenCtx = false; _listenExpanded = false; _listenArmed = false;
         listenOn = false;
-        document.body.classList.remove('listen-page', 'listen-mode');
+        if (_listenCollapseTimer) { clearTimeout(_listenCollapseTimer); _listenCollapseTimer = null; }
+        document.body.classList.remove('listen-page', 'listen-mode', 'listen-closing');
         if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
         listenFlush();
         try { paint(); } catch (e) {}
       }
-      function listenToggle() { if (playing) togglePlay(); else playFrom(idx >= 0 ? idx : 0); }
+      function listenToggle() {
+        if (playing) { togglePlay(); return; }
+        listenArm();
+        playFrom(idx >= 0 ? idx : 0);
+      }
+      /* ① 句级上一句/下一句：与文章内 ←/→、播放条同一套 step 语义（不另造一套）。 */
+      function listenSentenceStep(d) { listenArm(); step(d); }
+      /* ② 停止（主站 LISTEN.stop 口径）：停媒体链 + 记位置 + 清 active；暂停 ≠ 停止。
+         与 pause 的区别：暂停保留 active（悬浮球在），停止清 active（悬浮球消失，⑤）。 */
+      function listenStop() {
+        listenFlush();
+        if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
+        _listenArmed = false; _listenExpanded = false; _listenCtx = false; listenOn = false;
+        if (_listenCollapseTimer) { clearTimeout(_listenCollapseTimer); _listenCollapseTimer = null; }
+        document.body.classList.remove('listen-mode', 'listen-closing');
+        try { paint(); } catch (e) {}
+      }
+      /* 重听本篇：回到本句 0 重播（主站 lsReplay 口径）。 */
+      function listenReplay() { listenArm(); playFrom(0); }
+      /* 切换随身听篇目（卡片/弹窗 HUD 上的上一篇·下一篇）。 */
       function listenStep(d) {
         const n = SECTIONS.length;
-        const a = ((_listenArticle + d) % n + n) % n;
+        const a = (((_listenArticle || 0) + d) % n + n) % n;
         _listenArticle = a; currentArticle = a; currentChapter = a;
         chapterSentStart = computeChapterStart(a);
         idx = -1; _paintIdx = -2; render();
         _listenTick = Date.now();
-        if (playing) playFrom(0); else paint();
+        if (playing) { playFrom(0); } else { paint(); }
+        updateListenHud();
       }
       function listenSeek(local) { playFrom(Math.max(0, Math.min(sents.length - 1, local))); }
-      /* 卡片四个附加按钮：接既有播放器，不复制一套。AB 需要正文可见 → 先展开。 */
-      function listenCycleLoop() {
-        const seq = [0, 2, 3, 5];
-        setLoopCount(seq[(seq.indexOf(loopMode ? loopCount : 0) + 1) % seq.length]);
-        try { paint(); } catch (e) {}
-      }
-      function listenCycleRate() {
-        const seq = [0.75, 1, 1.25, 1.5];
-        setRate(seq[(seq.indexOf(rate) + 1) % seq.length]);
-        try { paint(); } catch (e) {}
-      }
-      function listenMark() { try { addMark(); } catch (e) {} }
-      function listenAB() { if (!_listenExpanded) listenExpand(); try { toggleAB(); } catch (e) {} }
-      /* 展开全屏阅读（§7.3）：正文 = 既有 #art（段→句 + 行内词义 + 当前句高亮），
-         播放条 = 既有底部 .audiobar。关闭 → 收回卡片（listenCollapse），不是回首页。 */
+      /* ④ 展开全屏弹窗（§7.3）：正文 = 既有 #art（段→句 + 行内词义 + 当前句高亮），
+         顶部 HUD 卡（照搬主站 .ls-now）+ 底部全功能播放条 .audiobar。关闭 → 收回卡片
+         （listenCollapse，带动效），不是回首页 —— hash 始终停在 #/listen。 */
       function listenExpand() {
-        if (!_listenCtx) listenOpen(_listenArticle != null ? _listenArticle : 0);
+        if (_listenArticle == null) listenOpen(0);
+        listenArm();
         if (_listenArticle != null && currentChapter !== _listenArticle) {
           currentChapter = _listenArticle; chapterSentStart = computeChapterStart(_listenArticle);
           idx = -1; _paintIdx = -2; render();
         }
         _listenExpanded = true;
+        if (_listenCollapseTimer) { clearTimeout(_listenCollapseTimer); _listenCollapseTimer = null; }
+        document.body.classList.remove('listen-closing');
         document.body.classList.add('listen-mode');
-        const t = document.getElementById('lsTitle'), p = document.getElementById('lsPos');
-        if (t) t.textContent = SECTIONS[_listenArticle] ? SECTIONS[_listenArticle].title : '';
-        if (p) p.textContent = `第 ${(_listenArticle || 0) + 1}/${SECTIONS.length} 篇`;
-        _listenTick = _listenTick || Date.now();
+        updateListenHud();
         playFrom(idx >= 0 ? idx : 0);   // 展开即连播（§7.4）
       }
       function listenCollapse() {
         _listenExpanded = false;
-        document.body.classList.remove('listen-mode');
-        if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
-        listenFlush();
-        try { paint(); } catch (e) {}
-        try { if (window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
+        const reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+        const finish = function () {
+          if (_listenCollapseTimer) { clearTimeout(_listenCollapseTimer); _listenCollapseTimer = null; }
+          document.body.classList.remove('listen-mode', 'listen-closing');
+          if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
+          listenFlush();
+          try { paint(); } catch (e) {}
+          try { if (window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
+        };
+        if (reduce) { finish(); return; }
+        document.body.classList.add('listen-closing');
+        _listenCollapseTimer = setTimeout(finish, 260);
+      }
+      /* ④ 弹窗 HUD 内容（照样板：篇导航 / 篇名 / 中文名 / 状态胶囊 / 当前句）。 */
+      function updateListenHud() {
+        if (!_listenExpanded) return;
+        const a = (_listenArticle != null) ? _listenArticle : 0;
+        const sec = SECTIONS[a] || {};
+        const n = SECTIONS.length, total = Math.max(1, sents.length);
+        const at = idx >= 0 ? idx : 0;
+        const t = document.getElementById('lsHudTitle');
+        if (t) t.textContent = sec.title || '';
+        const zh = document.getElementById('lsHudTcn');
+        if (zh) zh.textContent = (typeof TIT_EN !== 'undefined' && TIT_EN[sec.title])
+          ? TIT_EN[sec.title] : (sec.tcn || sec.zh || sec.title || '');
+        const pos = document.getElementById('lsArtPos');
+        if (pos) pos.textContent = `第 ${a + 1}/${n} 篇 · 第 ${at + 1}/${total} 句`;
+        const chip = document.getElementById('lsHudChip');
+        if (chip) chip.textContent = `第 ${at + 1}/${total} 句 · ${playing ? '播放中' : (_listenArmed ? '已暂停' : '待播')}`;
+        const sen = document.getElementById('lsHudSen');
+        if (sen) sen.textContent = idx >= 0 ? plainEN(sentRaw(idx)) : '';
+        const pv = document.getElementById('lsArtPrev'), nx = document.getElementById('lsArtNext');
+        if (pv) pv.disabled = n <= 1;
+        if (nx) nx.disabled = n <= 1;
+        // §7.3 refine3 ⑥ 的二级页头部（reader-head）复用同一份标题/位置（锁在 leftovers.spec.ts）。
+        const lt = document.getElementById('lsTitle'), lp = document.getElementById('lsPos');
+        if (lt) lt.textContent = sec.title || '';
+        if (lp) lp.textContent = `第 ${a + 1}/${n} 篇`;
       }
       /* §7.4 篇末自动切下一篇（六篇循环）——只由 launch 的完播分支在随身听上下文里调。 */
       function listenNextArticle() {
@@ -5749,6 +5879,7 @@ let listenOn = false;
         const t = document.getElementById('lsTitle'), p = document.getElementById('lsPos');
         if (t) t.textContent = SECTIONS[a] ? SECTIONS[a].title : '';
         if (p) p.textContent = `第 ${a + 1}/${SECTIONS.length} 篇`;
+        updateListenHud();
         playFrom(0);
       }
       function listenFlush() {
@@ -8491,9 +8622,9 @@ let listenOn = false;
       return {
         init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode, openArticle, openArticleQuiz, playSentence,
         listenOpen, listenClose, listenToggle, listenStep, listenSeek,
-        listenCycleLoop, listenCycleRate, listenMark, listenAB,
-        listenExpand, listenCollapse, listenNextArticle,
-        listenLeave, listenMiniStop: listenClose,
+        listenSentenceStep, listenStop, listenReplay,
+        listenExpand, listenCollapse, listenNextArticle, updateListenHud,
+        listenLeave, listenMiniStop: listenStop,
         listenState, listenStat, listenLast, listenTick, listenFlush, listenSetTickForTest,
         get listenArticle() { return _listenArticle; },
         again, prev, next, pauseNew, resetPlan, resetLearningPlan, onSentenceComplete,

@@ -58,22 +58,18 @@
     const wm = e.target.closest('.wb-more');
     if (wm) { _wordsShown += W_BATCH; window.APP3.route(); return; }
     // 随身听卡片（M4，每次重渲的节点，走事件代理）
+    // 2026-09-25：◀/▶ 改为句级（listenSentenceStep，与文章内 ←/→、播放条同一套 step 语义）；
+    // ③ 未展开态移除 循环/AB/倍速/书签（只在展开态的全功能播放条里提供）；② 新增停止。
     const lsPlay = e.target.closest('.ls-play');
     if (lsPlay) { TASK.listenToggle(); return; }
     const lsPrev = e.target.closest('.ls-prev');
-    if (lsPrev) { TASK.listenStep(-1); return; }
+    if (lsPrev) { TASK.listenSentenceStep(-1); return; }
     const lsNext = e.target.closest('.ls-next');
-    if (lsNext) { TASK.listenStep(1); return; }
+    if (lsNext) { TASK.listenSentenceStep(1); return; }
+    const lsStop = e.target.closest('.ls-stop');
+    if (lsStop) { TASK.listenStop(); return; }
     const lsExp = e.target.closest('.ls-expand, .ls-cover');
     if (lsExp) { TASK.listenExpand(); return; }
-    const lsLoop = e.target.closest('.ls-loop');
-    if (lsLoop) { TASK.listenCycleLoop(); return; }
-    const lsRate = e.target.closest('.ls-rate');
-    if (lsRate) { TASK.listenCycleRate(); return; }
-    const lsMark = e.target.closest('.ls-mark');
-    if (lsMark) { TASK.listenMark(); return; }
-    const lsAB = e.target.closest('.ls-ab');
-    if (lsAB) { TASK.listenAB(); return; }
     const b = e.target.closest('.nav-item');
     if (b) { location.hash = '#/' + b.dataset.route; return; }
     // 卡片是 renderHome 每次重渲的，所以走事件代理而不是逐张绑。
@@ -474,18 +470,13 @@
         </button>
         <div class="ls-main">
           <div class="ls-controls" role="group" aria-label="随身听播放控制">
-            <button class="ls-prev" type="button" aria-label="上一篇">◄</button>
-            <button class="ls-play" type="button" aria-label="播放">▶</button>
-            <button class="ls-next" type="button" aria-label="下一篇">►</button>
+            <button class="ls-prev" type="button" aria-label="上一句" title="上一句"><i class="ri-play-reverse-fill" aria-hidden="true"></i><span>上一句</span></button>
+            <button class="ls-play" type="button" aria-label="播放"><i class="ri-play-fill" aria-hidden="true"></i><span>播放</span></button>
+            <button class="ls-stop" type="button" aria-label="停止播放" title="停止（记住当前位置，下次继续）"><i class="ri-stop-fill" aria-hidden="true"></i><span>停止</span></button>
+            <button class="ls-next" type="button" aria-label="下一句" title="下一句"><span>下一句</span><i class="ri-play-fill" aria-hidden="true"></i></button>
           </div>
           <input class="ls-seek" type="range" min="1" max="1" value="1" step="1" aria-label="句级位置条">
           <p class="ls-info">—</p>
-          <div class="ls-tools" role="group" aria-label="随身听附加控制">
-            <button class="ls-loop" type="button" aria-label="单句循环遍数">循环关</button>
-            <button class="ls-ab" type="button" aria-label="AB 复读">AB</button>
-            <button class="ls-rate" type="button" aria-label="朗读倍速">1x</button>
-            <button class="ls-mark" type="button" aria-label="记下当前位置">书签</button>
-          </div>
           <button class="ls-expand" type="button" aria-label="展开全文阅读">点击展开全文阅读</button>
         </div>
       </div>
@@ -505,15 +496,20 @@
     const now = card.querySelector('.ls-now');
     if (now) now.textContent = ctx.idx >= 0 ? ctx.text : ('开始听《' + SECTIONS[a].title + '》');
     const play = card.querySelector('.ls-play');
-    if (play) { play.textContent = ctx.playing ? '⏸' : '▶'; play.setAttribute('aria-label', ctx.playing ? '暂停' : '播放'); }
+    if (play) {
+      play.innerHTML = ctx.playing
+        ? '<i class="ri-pause-fill" aria-hidden="true"></i><span>暂停</span>'
+        : '<i class="ri-play-fill" aria-hidden="true"></i><span>播放</span>';
+      play.setAttribute('aria-label', ctx.playing ? '暂停' : '播放');
+    }
+    // 句级 ◀/▶ 的禁用态：与主站播放条一致（首句 ◀ 禁用 / 末句 ▶ 禁用；未起播 idx=-1 时 ◀ 禁用）
+    const prev = card.querySelector('.ls-prev'), next = card.querySelector('.ls-next');
+    if (prev) prev.disabled = at <= 0;
+    if (next) next.disabled = at >= total - 1;
     const seek = card.querySelector('.ls-seek');
     if (seek) { seek.max = String(total); seek.value = String(at + 1); }
     const info = card.querySelector('.ls-info');
     if (info) info.textContent = `第 ${at + 1} / ${total} 句 · 还剩 ${Math.max(0, total - at - 1)} 句`;
-    const loop = card.querySelector('.ls-loop');
-    if (loop) loop.textContent = ctx.loop ? `循环 ${ctx.loop} 遍` : '循环关';
-    const rate = card.querySelector('.ls-rate');
-    if (rate) rate.textContent = `${ctx.rate}x`;
     const art = card.querySelector('.ls-art');
     if (art) art.textContent = `《${SECTIONS[a].title}》`;
     const vol = card.querySelector('.ls-vol');
@@ -1056,7 +1052,9 @@
     if (cur === 'listen') return false;              // 随身听页：卡片本身就是控制面
     if (st.expanded) return false;                   // 展开全屏：底部播放条在管
     if (document.body.classList.contains('task-mode')) return false;   // 阅读页等价物
-    return !!(st.playing || st.idx >= 0);            // 在播或暂停（有续播位）都保留
+    // ⑤（2026-09-25）：照搬主站 playing||paused —— 暂停算 active（悬浮球留着），
+    // 只有「停止」把 active 清掉（媒体链停 + 复位），悬浮球才消失。
+    return !!(st.playing || st.active);
   }
   function updateListenFab() {
     const el = ensureListenMini();
