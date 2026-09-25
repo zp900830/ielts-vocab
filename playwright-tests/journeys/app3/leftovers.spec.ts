@@ -166,6 +166,40 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
     expect(Math.abs(m.rhR - m.contentR), '标题胶囊右缘').toBeLessThan(2);
   });
 
+  /* refine3 ⑥（2026-09-25 用户「头部的标题条，与二级页面任务模式一样」）：
+     随身听展开阅读（二级页）的头部原先是一条通栏 sticky 条，与正文框不齐；
+     现在照抄任务模式那套 reader-head：同容器宽（<2px）、同 .back、同 .r-pos 层级。 */
+  test('随身听展开（二级页）头部与任务模式同套：与正文等宽 <2px + 同一枚 .back / .r-pos', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitAppReady(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    await page.goto(`${rootUrl}/app/index.html#/listen`);
+    await waitAppReady(page);
+    await page.evaluate(() => { (TASK as unknown as { listenExpand(): void }).listenExpand(); });
+    await expect(page.locator('body')).toHaveClass(/listen-mode/);
+    await expect(page.locator('#listenTop')).toBeVisible();
+    const m = await page.evaluate(() => {
+      const lt = document.getElementById('listenTop')!.getBoundingClientRect();
+      const lay = document.querySelector('body > .layout') as HTMLElement;
+      const ls = getComputedStyle(lay); const lr = lay.getBoundingClientRect();
+      const cs = getComputedStyle(document.getElementById('listenTop')!);
+      return {
+        ltL: lt.left, ltR: lt.right,
+        contentL: lr.left + parseFloat(ls.paddingLeft),
+        contentR: lr.right - parseFloat(ls.paddingRight),
+        radius: cs.borderRadius,
+        backCls: document.getElementById('lsClose')!.className,
+        posCls: document.getElementById('lsPos')!.className,
+      };
+    });
+    expect(Math.abs(m.ltL - m.contentL), '二级页头部左缘').toBeLessThan(2);
+    expect(Math.abs(m.ltR - m.contentR), '二级页头部右缘').toBeLessThan(2);
+    expect(m.radius, '与任务模式头部同一套玻璃胶囊（999px）').toContain('999px');
+    expect(m.backCls, '同一枚 .back 返回控件').toContain('back');
+    expect(m.posCls, '同一 .r-pos 标题层级胶囊').toContain('r-pos');
+  });
+
   // 2026-09-24 用户：换掉原生 <select> 音色下拉（移动端巨大、样式对不上）→ 自定义玻璃浮层。
   test('音色选择器是自定义浮层（无原生 select），选中的音色照旧存进 ielts-voice', async ({ page }) => {
     // headless 里 speechSynthesis 没音色 → 先塞两个假音色，选择器才有内容

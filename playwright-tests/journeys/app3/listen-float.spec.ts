@@ -8,7 +8,6 @@ declare const TASK: {
   hasPlan: boolean;
   resetV2(): void;
   initPlan(minutes: number): void;
-  offerResume(): boolean;
   listenState(): { a: number; idx: number; total: number; playing: boolean; expanded: boolean; ctx: boolean; text: string };
   listenLeave(): void;
   listenMiniStop(): void;
@@ -206,25 +205,23 @@ test.describe('3.0 随身听悬浮球（切 tab 续播）', () => {
 
   /* ---------- 层级 / 几何 / 深色 / a11y ---------- */
 
-  test('移动端：悬浮球在 TabBar 与「今天 N 句」条之上，互不压住；触摸目标 ≥44px', async ({ page }) => {
+  /* refine3 ⑤：一级页面底部续读条已删，悬浮球现在只需让开底部 TabBar（任务模式里本就不挂球）。 */
+  test('移动端：悬浮球在 TabBar 之上，互不压住；一级页面不再有任务条；触摸目标 ≥44px', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await stubData(page, TWO);
     await gotoListen(page);
-    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.offerResume(); });
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await startListening(page);
     await switchTo(page, 'home');
     await expect(fab(page)).toBeVisible();
-    await expect(page.locator('#taskBar')).toBeVisible();
+    await expect(page.locator('#taskBar'), '一级页面不再挂续读条/任务条').not.toHaveClass(/show/);
     await fabSettled(page);
 
     const geo = await page.evaluate(() => {
       const f = document.getElementById('lsMini')!.getBoundingClientRect();
-      const bar = document.getElementById('taskBar')!.getBoundingClientRect();
       const nav = document.querySelector('.sidenav')!.getBoundingClientRect();
-      return { fBottom: f.bottom, fTop: f.top, barTop: bar.top, navTop: nav.top };
+      return { fBottom: f.bottom, navTop: nav.top };
     });
-    expect(geo.fBottom, `悬浮球底 ${geo.fBottom} 不许压住任务条顶 ${geo.barTop}`)
-      .toBeLessThanOrEqual(geo.barTop + 0.5);
     expect(geo.fBottom, `悬浮球底 ${geo.fBottom} 不许压住底部 TabBar 顶 ${geo.navTop}`)
       .toBeLessThanOrEqual(geo.navTop + 0.5);
 
