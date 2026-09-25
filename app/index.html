@@ -3228,8 +3228,8 @@ let listenOn = false;
     return false;
     }
     },
-    _enqueue(fn, ctl) {
-    return new Promise((res, rej) => { this._q.push({ fn, ctl, res, rej }); this._drain(); });
+    _enqueue(fn, ctl, key) {
+    return new Promise((res, rej) => { this._q.push({ fn, ctl, key, res, rej }); this._drain(); });
     },
     _drain() {
     if (this._busy || !this._q.length) return;
@@ -3328,10 +3328,12 @@ let listenOn = false;
     if (!b || !b.size) throw new Error('no audio');
     return b;
     },
-    async synth(text, voiceId, rate, isPlay) {
+    async synth(text, voiceId, rate, isPlay, fresh) {
     const key = 'r2|' + voiceId + '|' + Number(rate).toFixed(2) + '|' + text;
     if (this.cache.has(key)) return this.cache.get(key);
-    if (this._pend.has(key)) return this._pend.get(key);
+    // fresh：正式播放时若怀疑 _pend 里那条已被误杀，就丢弃它、重开一份全新合成
+    if (!fresh && this._pend.has(key)) return this._pend.get(key);
+    if (fresh) { try { this._pend.delete(key); } catch (e) {} }
     // 各自独立 AbortController：创建即绑定，排队等待时也能被取消；
     // 只有正式播放才登记为 _playCtl，预取不许覆盖（否则 stop 会取消错对象）
     const ctl = new AbortController();
@@ -3351,7 +3353,7 @@ let listenOn = false;
     if (ctl.signal.aborted) throw e;
     return await this._fetchTTS(text, voiceId, rate, ctl.signal);
     }
-    });
+    }, ctl, key);
     this._idbSet(key, blob);
     const u = URL.createObjectURL(blob);
     this._cacheSet(key, u);
@@ -3388,14 +3390,25 @@ let listenOn = false;
     if (p && p.catch) p.catch(() => {});
     } catch (e) {}
     },
-    stop() {
+    stop(keepKey) {
     this._gen = (this._gen || 0) + 1; // 新一代：过期 play 的 fail 不许再碰共享状态
     _cloudIntentionalPause = true; // 标记主动暂停
     try { if (this._playCtl) { this._playCtl.abort(); this._playCtl = null; } } catch (e) {}
-    // 清掉排队中的旧预取/旧合成：连点切句时它们不能堵住新句子（执行中的那个由 signal 中断）；
-    // 注意必须逐个 reject，否则 _enqueue 的 promise 永远不 settle，连带 _pend 缓存住死 promise
-    try { for (const job of this._q) { try { if (job.ctl) job.ctl.abort(); } catch (e) {} try { job.rej(new Error('stale')); } catch (e) {} } } catch (e) {}
-    try { this._q.length = 0; } catch (e) {}
+    /* 清掉排队中的旧预取/旧合成：连点切句时它们不能堵住新句子（执行中的那个由 signal 中断）；
+       注意必须逐个 reject，否则 _enqueue 的 promise 永远不 settle，连带 _pend 缓存住死 promise。
+       ⚠️ keepKey：play 起播前调 stop 时，即将播的这一句往往正是上一轮 launch 刚预取的队列项；
+       若把它一起 reject 成 'stale'，play 随后 synth 会复用 _pend 里那条刚被拒绝的 promise，
+       被当成"当句合成失败"降级本地（他 2026-09-24 报的「总是 stale、总换本地音色」就是这条）。
+       所以把与本次起播同 key 的那一项留下来，让 play 直接复用这份预取。 */
+    const kept = [];
+    try {
+    for (const job of this._q) {
+      if (keepKey && job.key === keepKey) { kept.push(job); continue; }
+      try { if (job.ctl) job.ctl.abort(); } catch (e) {}
+      try { job.rej(new Error('stale')); } catch (e) {}
+    }
+    } catch (e) {}
+    try { this._q = kept; } catch (e) {}
     try {
     if (this._au) {
     this._au.onended = null; this._au.onerror = null; this._au.onpause = null; this._au.pause();
@@ -3408,8 +3421,11 @@ let listenOn = false;
     this._auUrl = null; // 当前播放的 blob URL 不再受保护
     setTimeout(() => { _cloudIntentionalPause = false; }, 100); // 短暂延迟后重置
     },
-    play(text, voiceId, rate, my, cb, fallback) {
-    this.stop(); // 串行：任何新播放先停旧音频并清空旧队列（预取不再经过这里，只走 prefetch）
+    play(text, voiceId, rate, my, cb, fallback, fresh) {
+    /* 缓存坐标，必须与 synth() 里那行 key 逐字一致 */
+    const clipKey = 'r2|' + voiceId + '|' + Number(rate).toFixed(2) + '|' + text;
+    this.stop(clipKey); // 串行：停旧音频、清旧队列；但留下本句自己的预取（见 stop 的 keepKey）
+    if (fresh) { try { this._pend.delete(clipKey); } catch (e) {} }
     const g = this._gen; // 本次播放的代际：过期回调不许 stop 掉新播放
     const au = this._ensureAudio();
     this._au = au;
@@ -3451,8 +3467,6 @@ let listenOn = false;
     }
     }, 1000);
 
-    /* 缓存坐标，必须与 synth() 里那行 key 逐字一致 */
-    const clipKey = 'r2|' + voiceId + '|' + Number(rate).toFixed(2) + '|' + text;
     let retried = false;
     const loadInto = u0 => {
     if (done || my !== speakToken) return;
@@ -3468,7 +3482,7 @@ let listenOn = false;
     retried = true;
     dlog('cloud-audio-retry', text.slice(0, 20));
     try { this._invalidate(clipKey); } catch (e) {}
-    this.synth(text, voiceId, rate, true).then(url2 => {
+    this.synth(text, voiceId, rate, true, true).then(url2 => {
     if (done || my !== speakToken) return;
     loadInto(url2);
     au.play().catch(() => fail(new Error('play-rejected')));
@@ -3477,7 +3491,7 @@ let listenOn = false;
     }
     fail(new Error('audio-error'));
     };
-    this.synth(text, voiceId, rate, true).then(url => {
+    this.synth(text, voiceId, rate, true, fresh).then(url => {
     if (done || my !== speakToken) { clearTimeout(timer); clearInterval(monitor); clearTimeout(slowT); return; }
     clearTimeout(slowT);
     loadInto(url);
@@ -3838,7 +3852,16 @@ let listenOn = false;
     try { localStorage.setItem('ielts-voice', selVoiceURI); } catch (e) {}
     syncVoiceUI();
     if (!keepOpen) closeVoicePop();
-    try { if (!playing) speakAside(isCloudURI(selVoiceURI) ? 'Hello! Cloud voice ready.' : 'Hello! Let us learn English together.'); } catch (e) {}
+    /* 音色是全局设置，改完必须立刻生效（他 2026-09-25：「设置完能否立刻生效啊」）。
+       正在播 → 用新音色把当前句就地重播（本地↔云端切换、云音色之间切换都走 playFrom 的同一条链）；
+       没在播 → 照旧用一段 hello 试听新音色，下一次播放自然用新的。 */
+    try {
+    if (typeof playing !== 'undefined' && playing && typeof idx !== 'undefined' && idx >= 0) {
+    playFrom(idx);
+    } else {
+    speakAside(isCloudURI(selVoiceURI) ? 'Hello! Cloud voice ready.' : 'Hello! Let us learn English together.');
+    }
+    } catch (e) {}
     }
     /* 音色浮层的事件代理：浮窗（#mePop）每次重渲都会换掉 #voicePop 这个节点，所以
        wireVoicePop 做成可重复调用的函数（app.js 的 renderMePop 渲完会再叫一次）。 */
@@ -3940,13 +3963,21 @@ let listenOn = false;
     try { mediaMeta(plainEN(sentRaw(opts.sent)).slice(0, 80)); } catch (e) {}
     }
     const cid = selVoiceURI.slice(6);
-    CLOUD.play(text, cid, rate, my,
-    () => { if (my !== speakToken) return; errStreak = 0; if (cb) cb(); },
-    err => {
+    const okCb = () => { if (my !== speakToken) return; errStreak = 0; if (cb) cb(); };
+    let staleRetried = false;
+    const degrade = err => {
     dlog('cloud-fallback', err && err.message);
     /* 这句已经被新播放顶掉了（切句 / 暂停 / 上一句 / 已经开始下一句）→ 它的失败跟屏幕上这句无关：
        既不提示也不降级，否则会把陈旧错误说成「当前这句没放出来」，还白切一次本地音色。 */
     if (my !== speakToken) return;
+    /* stale = 这次合成请求被"起播前清旧队列"误杀（play 复用预取时那批旧 promise），不是云端放不出来。
+       它既不该弹「改用本地音色」，也不该真的降级本地 —— 重开一份全新合成再试一次即可。
+       这是 keepKey 修复之外的兜底：哪怕 stale 漏到当句，也只重试、不换音色。 */
+    if (/stale/i.test(String(err && err.message)) && !staleRetried) {
+    staleRetried = true;
+    CLOUD.play(text, cid, rate, my, okCb, degrade, true);
+    return;
+    }
     if (!CLOUD._fbT || Date.now() - CLOUD._fbT > 15000) {
     CLOUD._fbT = Date.now();
     CLOUD.setStatus('云端合成失败，已临时降级本地：' + CLOUD.friendlyErr(err && err.message));
@@ -3955,7 +3986,8 @@ let listenOn = false;
     try { showAbToast('☁ 云端音色这一句没放出来，本句改用本地音色：' + CLOUD.friendlyErr(err && err.message)); } catch (e2) {}
     }
     speak(text, cb, { plain: true, exclude: selVoiceURI }, my);
-    });
+    };
+    CLOUD.play(text, cid, rate, my, okCb, degrade);
     return;
     }
     if (!speak._nudge || Date.now() - speak._nudge > 15000) {
