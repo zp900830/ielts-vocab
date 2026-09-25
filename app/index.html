@@ -1885,22 +1885,24 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   @media (max-width: 1023px) { .art-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 700px) { .art-grid { grid-template-columns: 1fr; } }
   /* ============ 3.0 顶部「今天该做什么」横幅（M1 Task 4，§3.5） ============
-     2026-09-24 排版朝参考 B 靠：文字在上、主按钮通栏胶囊在下（数字/层级更清楚）。 */
-  .home-banner { display: flex; flex-direction: column; align-items: stretch; gap: 10px;
-    padding: 14px 16px; margin-bottom: 16px; border: 1px solid var(--accent-line);
+     2026-09-25（refine2 ②）：宽屏改**左文字块 / 右按钮**（原为上下堆叠）；
+     窄屏（≤700px，PRD §10.2 手机档）挤不下时退化回上下，按钮仍通栏。 */
+  .home-banner { display: flex; flex-direction: row; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 14px 16px; margin-bottom: 16px; border: 1px solid var(--accent-line);
     border-radius: 16px; background: var(--accent-soft); }
-  .home-banner .hb-text { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .home-banner .hb-text { min-width: 0; flex: 1 1 auto; display: flex; flex-direction: column; gap: 3px; }
   .home-banner .hb-main { font-size: 15.5px; font-weight: 700; color: var(--text); }
   .home-banner .hb-sum { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
   .home-banner .b-go { display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-    width: 100%; min-height: 46px; padding: 0 16px; border: none; border-radius: 999px;
+    flex: none; width: auto; min-height: 46px; padding: 0 18px; border: none; border-radius: 999px;
     background: var(--grad); color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer;
     box-shadow: var(--grad-shadow); white-space: nowrap;
     transition: filter var(--t-fast), box-shadow var(--t-fast); }
   .home-banner .b-go:hover { filter: brightness(1.04); box-shadow: 0 12px 28px -8px rgba(16,180,135,.6), inset 0 1px 0 rgba(255,255,255,.45); }
   .home-banner .b-go:active { filter: brightness(.92); }
   @media (max-width: 700px) {
-    .home-banner .b-go { min-height: 44px; }
+    .home-banner { flex-direction: column; align-items: stretch; }
+    .home-banner .b-go { width: 100%; min-height: 44px; }
   }
    /* W5-1 的占位屏样式已随 M4 删掉 —— 四个一级页都是真页，不再有 .app-todo。 */
   /* ============ 3.0 学习数据页（M2，PRD §5） ============ */
