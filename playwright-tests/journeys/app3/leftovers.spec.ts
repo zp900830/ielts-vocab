@@ -147,25 +147,23 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
   });
 
   // 用户 2026-09-24 修正：头部要和文章等宽（对齐 .layout 的内容框，不是主站的 860px）。
+  // 2026-09-25（G）：第二排（#taskBadges）已并进 .reader-head，这条只钉头部这一条。
   test('文章内头部与正文内容框左右边缘对齐（<2px）', async ({ page }) => {
     await stubData(page, SIXQ);
     await enterTask(page);
     const m = await page.evaluate(() => {
       const rh = document.getElementById('readerHead')!.getBoundingClientRect();
-      const badges = document.getElementById('taskBadges')!.getBoundingClientRect();
       const lay = document.querySelector('.layout') as HTMLElement;
       const ls = getComputedStyle(lay);
       const lr = lay.getBoundingClientRect();
       return {
-        rhL: rh.left, rhR: rh.right, bL: badges.left, bR: badges.right,
+        rhL: rh.left, rhR: rh.right,
         contentL: lr.left + parseFloat(ls.paddingLeft),
         contentR: lr.right - parseFloat(ls.paddingRight),
       };
     });
     expect(Math.abs(m.rhL - m.contentL), '标题胶囊左缘').toBeLessThan(2);
     expect(Math.abs(m.rhR - m.contentR), '标题胶囊右缘').toBeLessThan(2);
-    expect(Math.abs(m.bL - m.contentL), '控件排左缘').toBeLessThan(2);
-    expect(Math.abs(m.bR - m.contentR), '控件排右缘').toBeLessThan(2);
   });
 
   // 2026-09-24 用户：换掉原生 <select> 音色下拉（移动端巨大、样式对不上）→ 自定义玻璃浮层。

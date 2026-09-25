@@ -1640,6 +1640,15 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .reader-head.shrunk .r-pos { font-size: 10px; padding: 1px 5px; margin-left: 6px; }
   .reader-head.shrunk .back { width: 26px; height: 26px; font-size: 14px; }
   .reader-head.shrunk .back::after { content: ""; position: absolute; inset: -9px; }
+  /* G：右侧两个拨杆 / 帮助 / 目标词胶囊随头部一起等比缩放，缩小后不错位。 */
+  .reader-head.shrunk .r-badges { gap: 5px; }
+  .reader-head.shrunk .tr-msw { padding: 2px 9px 2px 2px; font-size: 10.5px; gap: 5px; }
+  .reader-head.shrunk .tr-msw .knob { width: 22px; height: 13px; }
+  .reader-head.shrunk .tr-msw .knob::after { width: 9px; height: 9px; }
+  .reader-head.shrunk .tr-msw.on .knob::after { left: 11px; }
+  .reader-head.shrunk .tr-help { width: 20px; height: 20px; font-size: 10px; }
+  .reader-head.shrunk .r-title .fav-badge { font-size: 10.5px; padding: 1px 7px; margin-left: 6px; }
+  .reader-head.shrunk .nav-arrow { height: 22px; padding: 0 9px; font-size: 11px; }
   .back { pointer-events: auto; border: 1px solid var(--iel-line); background: #fff; border-radius: 50%;
     width: 30px; height: 30px; padding: 0; font-size: 15px; line-height: 1; color: var(--iel-ink2);
     flex: none; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;
@@ -1659,10 +1668,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .nav-arrow::after { content: ""; position: absolute; inset: -9px 0; border-radius: 999px; }
   .nav-arrow:hover:not(:disabled) { background: var(--iel-accent-soft); }
   .nav-arrow:disabled { opacity: .35; cursor: default; }
-  /* —— 文章内：主站 .r-badges（译文拨杆 / 行内词义拨杆 / 口音 / 音色 / 帮助 / 目标词）—— */
-  /* 与正文等宽（用户 2026-09-24 修正）：对齐 .layout 的内容框 —— min(1120,100%) − 36px。 */
-  .task-top .r-badges { width: min(1084px, calc(100% - 36px)); margin: 0 auto 14px; padding-top: 64px; }
-  .r-badges { position: relative; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  /* —— 文章内右侧工具组（原第二排；2026-09-25 用户 G 挪进 .reader-head，紧在 .r-nav 之前）—— */
+  .r-badges { position: relative; display: flex; align-items: center; gap: 8px; flex: none; pointer-events: auto; }
   .tr-msw { display: inline-flex; align-items: center; gap: 7px; flex: none; border: 1px solid var(--iel-mark-line);
     background: #fff; border-radius: 999px; padding: 5px 12px 5px 5px; font-size: 12.5px; font-weight: 500;
     color: var(--iel-accent-deep); cursor: pointer; font-family: inherit; position: relative;
@@ -1682,7 +1689,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tr-help:hover { border-color: var(--iel-accent); color: var(--iel-accent-deep); background: var(--iel-tint); }
   .r-badge { display: inline-block; font-size: 12px; padding: 2px 10px; background: var(--iel-accent-soft);
     color: var(--iel-accent-deep); border-radius: 999px; font-weight: 600; }
-  .r-badges .fav-badge { margin-left: auto; flex: none; background: #fdf1dc; color: #8a5f0a; }   /* M6 a11y：#b07a10 只有 3.33:1 */
+  /* 目标词胶囊（G）：挪进 .r-title、紧跟「第 N/6 篇」；与标题同一行随 .shrunk 一起缩。 */
+  .r-title .fav-badge { flex: none; margin-left: 8px; vertical-align: 1px; background: #fdf1dc; color: #8a5f0a; }   /* M6 a11y：#b07a10 只有 3.33:1 */
   .tr-bubble { position: absolute; top: calc(100% + 10px); right: 0; width: min(330px, calc(100vw - 40px));
     background: var(--iel-glass-strong); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
     border: 1px solid var(--iel-accent-line); border-radius: var(--iel-radius-sm); padding: 10px 14px;
@@ -1803,13 +1811,18 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .me-name { font-size: 11px; font-weight: 500; }
     .me-login { font-size: 11px; }
     #appView { padding: 16px 16px 88px; }
-    /* 文章内头部：主站手机档尺寸；窄屏按 .layout 的 16px 内边距对齐（100% − 32px） */
-    .reader-head { top: 8px; gap: 4px; padding: 5px 10px 5px 5px; width: calc(100% - 32px); }
-    .tr-msw { padding: 4px 11px 4px 4px; font-size: 11.5px; }
-    .tr-msw .knob { width: 25px; height: 15px; }
-    .tr-msw .knob::after { width: 11px; height: 11px; }
-    .tr-msw.on .knob::after { left: 12px; }
-    .task-top .r-badges { padding-top: 58px; width: calc(100% - 32px); }
+    /* 文章内头部（G 2026-09-25）：一行装下 返回 / 标题+目标词 / 两个拨杆 / 帮助 / 上下篇；
+       控件整体缩一档以适配 390px，随 .shrunk 再缩。窄屏按 .layout 的 16px 内边距对齐（100% − 32px）。 */
+    .reader-head { top: 8px; gap: 4px; padding: 5px 8px 5px 5px; width: calc(100% - 32px); }
+    .reader-head .r-title .tcn { display: none; }
+    .reader-head .r-title .fav-badge { font-size: 10px; padding: 1px 6px; margin-left: 6px; }
+    .reader-head .r-badges { gap: 5px; }
+    .reader-head .tr-msw { padding: 3px 8px 3px 3px; font-size: 10.5px; gap: 4px; }
+    .reader-head .tr-msw .knob { width: 22px; height: 14px; }
+    .reader-head .tr-msw .knob::after { width: 10px; height: 10px; }
+    .reader-head .tr-msw.on .knob::after { left: 10px; }
+    .reader-head .tr-help { width: 22px; height: 22px; font-size: 11px; }
+    .reader-head .nav-arrow { padding: 0 8px; font-size: 11px; height: 24px; }
   }
   /* ============ 3.0 首页文章卡片（M1 Task 3） ============ */
   .art-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
@@ -2152,25 +2165,25 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <a href="#art" class="sr-only sr-only-focusable">跳到正文</a>
 
     <!-- 3.0 文章内头部（W1 重做，照抄主站情景训练 index.html 的 .reader-head + .r-badges）。
-         只在任务模式现身；深色/口音/音色都不在这里（收在「我的」浮窗里）。
-         .reader-head 是 fixed 玻璃胶囊、随滚动加 .shrunk（缩放逻辑见脚本尾部）。 -->
+         2026-09-25 用户（G）：目标词标签挪进左侧、紧跟「第 N/6 篇」；全句译文 / 行内词义两个 iOS
+         拨杆挪进右侧、紧在「上一篇」之前；原来下面那一行（#taskBadges 第二排）去掉，不再留两份。
+         整条随 .reader-head 的 .shrunk 一起等比例缩放。 -->
     <header class="task-top" id="taskTop">
       <h1 class="sr-only">文章任务模式</h1>
       <div class="reader-head" id="readerHead">
         <button class="back" id="ttBack" type="button" onclick="TASK.exitTaskMode()" title="返回首页" aria-label="返回首页"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
-        <div class="r-title" id="ttTitle"><span class="tt-zh"></span><span class="tcn"></span><span class="r-pos"></span></div>
+        <div class="r-title" id="ttTitle"><span class="tt-zh"></span><span class="tcn"></span><span class="r-pos"></span><span class="r-badge fav-badge" id="ttWords" title="本篇目标词数"></span></div>
+        <!-- 右侧工具组（原第二排）：全句译文 / 行内词义 / 帮助。紧在 .r-nav（上一篇/下一篇）之前。 -->
+        <div class="r-badges" id="taskBadges">
+          <button class="tr-msw on" id="btnZh" type="button" role="switch" aria-checked="true" title="显示/隐藏每句下方的中文全句翻译"><span class="knob" aria-hidden="true"></span>全句译文</button>
+          <button class="tr-msw on" id="btnGloss" type="button" role="switch" aria-checked="true" title="显示/隐藏英文句内行间的单词词义与音标"><span class="knob" aria-hidden="true"></span>行内词义</button>
+          <button class="tr-help" id="ttHelp" type="button" aria-label="使用说明">?</button>
+          <div class="tr-bubble" id="ttBubble" role="tooltip">点「全句译文」显示/隐藏每句下方的中文翻译；点「行内词义」显示/隐藏句内小字词义。口音与音色在「我的」里切换（侧栏左下角）。</div>
+        </div>
         <div class="r-nav">
           <button class="nav-arrow" id="ttPrev" type="button" aria-label="上一篇">上一篇</button>
           <button class="nav-arrow" id="ttNext" type="button" aria-label="下一篇">下一篇</button>
         </div>
-      </div>
-      <!-- 口音/音色已按用户口径挪进「我的」浮窗（③ 2026-09-24），这里只留译文/词义/帮助/目标词。 -->
-      <div class="r-badges" id="taskBadges">
-        <button class="tr-msw on" id="btnZh" type="button" role="switch" aria-checked="true" title="显示/隐藏每句下方的中文全句翻译"><span class="knob" aria-hidden="true"></span>全句译文</button>
-        <button class="tr-msw on" id="btnGloss" type="button" role="switch" aria-checked="true" title="显示/隐藏英文句内行间的单词词义与音标"><span class="knob" aria-hidden="true"></span>行内词义</button>
-        <button class="tr-help" id="ttHelp" type="button" aria-label="使用说明">?</button>
-        <span class="r-badge fav-badge" id="ttWords" title="本篇目标词数"></span>
-        <div class="tr-bubble" id="ttBubble" role="tooltip">点「全句译文」显示/隐藏每句下方的中文翻译；点「行内词义」显示/隐藏句内小字词义。口音与音色在「我的」里切换（侧栏左下角）。</div>
       </div>
     </header>
 
