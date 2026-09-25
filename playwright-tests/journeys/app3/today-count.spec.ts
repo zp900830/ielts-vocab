@@ -18,6 +18,7 @@ declare const TASK: {
   queue: { i: number }[];
   state(): { daily: Record<string, { sentDone?: number; minutes?: number }> };
   todayProgress(): { done: number; planned: number; left: number; minutes: number };
+  todayCoverWords(): number;
 };
 declare const ShadowPlan: {
   articleScope(sections: unknown, article: number): Set<number>;
@@ -120,11 +121,13 @@ test.describe('3.0 任务条/数据页的「今天」口径（主行·辅行·�
     await expect(page.locator('#tbTitle')).toHaveText(`通读 · 本篇 0/${art0}`);
   });
 
-  test('辅行带「今天」标签：与 TASK.todayProgress() 同源（不写死字面量）', async ({ page }) => {
+  test('辅行带「今天」标签：句数与 todayProgress() 同源、覆盖词数与 todayCoverWords() 同源（不写死字面量）', async ({ page }) => {
     await enterFirstArticle(page, SIX);
     const tp = await page.evaluate(() => TASK.todayProgress());
+    const cover = await page.evaluate(() => TASK.todayCoverWords());
     expect(tp.planned, '今天的分母要来自当天计划快照，夹具要真造出来').toBeGreaterThan(0);
-    await expect(page.locator('#tbSub')).toHaveText(`今天 ${tp.done}/${tp.planned} 句`);
+    expect(cover, '今天这批句子要真覆盖到目标词，否则这条锁不住覆盖数').toBeGreaterThan(0);
+    await expect(page.locator('#tbSub')).toHaveText(`今天 ${tp.done}/${tp.planned} 句 · 覆盖 ${cover} 词`);
   });
 
   test('气泡=本篇口径：报「第 N 句 · 本篇还剩 M 句」，不再报队列的「今天第 N 句」', async ({ page }) => {

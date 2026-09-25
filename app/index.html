@@ -7389,7 +7389,7 @@ let listenOn = false;
           else bar.dataset.state = 'idle';
           return;
         }
-        todayPlan(true);   // 保证 todayQueue / plannedToday 用的是今天的计划（以前顺手取 todayMinutes 上屏，那个数现在不在条上说了）
+        const dayPlan = todayPlan(true);   // 保证 todayQueue / plannedToday 用的是今天的计划（以前顺手取 todayMinutes 上屏，那个数现在不在条上说了）
         const d = ROOT2.state.daily[day2()] || {};
         /* 按篇（PRD §4.1 / §9.3）：进某一篇时，条上的 n/N 说的是「这一篇的进度」——
            分母 = 这一篇的句数，分子 = 这一篇里读过的句数（与首页卡片 articleStat 同口径）。
@@ -7465,8 +7465,11 @@ let listenOn = false;
             ? `通读 · 本篇 ${Math.min(doneN, planned)}/${planned}`
             : `通读 · 今天 ${Math.min(doneN, planned)}/${planned}`;
           /* 辅行 = 今日进度（用户明确要这个，用来知道今天快读完了），不再是「还剩 ~N 秒」。
-             done 是今天碰过的不同句数；planned 走 plannedDay()（当天全局快照，不随队列滚动漂）。 */
+             done 是今天碰过的不同句数；planned 走 plannedDay()（当天全局快照，不随队列滚动漂）。
+             2026-09-25 用户：再补今天这些句子覆盖了多少词 —— 与今日面板「覆盖 N 个词」同一份派生
+             （todayPlan().words，assemble 去重后的目标词集合），不各算一套。 */
           subEl.textContent = `今天 ${Math.min(tp.done, tp.planned)}/${tp.planned} 句`
+            + ` · 覆盖 ${dayPlan.words.length} 词`
             + (tp.done > tp.planned ? ` · 多读了 ${tp.done - tp.planned} 句` : '');
           againBtn.style.display = '';
           againBtn.innerHTML = '<i class="ri-repeat-line" aria-hidden="true"></i> 再来';
@@ -8380,6 +8383,8 @@ let listenOn = false;
         /* 「今天」三个数的唯一出口（任务条辅行 + 数据页「今天」块都读它，不各算各的）。
            注意分母是 plannedDay()（当天全局快照），与 todayStats().planned（按篇模式下 = 本篇句数）不同量纲。 */
         todayProgress,
+        /* 今天这批句子覆盖多少个目标词（去重）：任务条辅行与今日面板「覆盖 N 个词」同源。 */
+        todayCoverWords: () => (todayPlan().words || []).length,
         /* 今天额度是否读满 / 今天在哪一篇上读的：首页卡片「答题」与数据页「今天」块、
            「待加强」都走这两个出口（§4.4 入口 1 的新判据，2026-09-24）。 */
         todayQuotaDone, todayArticle,
