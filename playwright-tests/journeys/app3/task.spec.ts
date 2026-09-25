@@ -122,7 +122,7 @@ async function answerWronglyInPop(page: import('@playwright/test').Page) {
 }
 
 test.describe('3.0 文章任务模式（按篇队列）', () => {
-  test('点卡片 → 任务模式，n/N 是这一篇的句数（不是全局）', async ({ page }) => {
+  test('点卡片 → 任务模式，主行 n/N 是今天的计划句数（口径 A，不是这一篇）', async ({ page }) => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await freshPlan(page);
@@ -131,11 +131,13 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
     await expect(page.locator('#taskBar')).toBeVisible();
     const n = await page.evaluate(() =>
       Number(document.getElementById('tbTitle')!.textContent!.match(/\/\s*(\d+)/)![1]));
+    const tp = await page.evaluate(() => TASK.todayProgress());
+    expect(tp.planned, '今天的分母要真造出来').toBeGreaterThan(0);
+    expect(n, '任务条的 N 必须是今天计划的句数（口径 A）').toBe(tp.planned);
     const art0 = await page.evaluate(() => ShadowPlan.articleScope(SECTIONS, 0).size);
     const all = await page.evaluate(() =>
       SECTIONS.reduce((a, s) => a + s.paragraphs.reduce((x, p) => x + p.length, 0), 0));
-    expect(art0, '夹具要让第 0 篇句数 ≠ 全局句数，否则锁不住按篇').not.toBe(all);
-    expect(n, '任务条的 N 必须是第一篇的句数').toBe(art0);
+    expect(art0, '夹具要让第 0 篇句数 ≠ 全局句数，否则分不清今天/本篇').not.toBe(all);
   });
 
   test('按篇队列：排出来的句一句都不许出这一篇', async ({ page }) => {

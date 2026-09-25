@@ -1,11 +1,12 @@
 // 2026-09-24 用户实测：任务条主行「通读 337/339」（= 本篇：这一篇共 339 句 / 读到 337 句）
 // 与气泡「今天第 75 句 · 还剩 38 句」（= 今天的队列）并排，两个没标签的不同量看着像矛盾。
 //
-// 拍板的口径：主行与气泡统一到「本篇」，辅行与数据页另说「今天」，**每处都把口径写在脸上** ——
-// 不许出现两个没有标签的数字并排。下面五条各自独立成锁，谁也不遮谁。
+// 09-24 的口径是「主行/气泡=本篇、辅行=今天」；2026-09-25 用户在真机上把这一版看了之后改拍板
+// **口径 A**：主行与气泡统一到「今天」（条满 = 今天这批走完，正是正文里「今日任务结束线」），
+// lifetime 的「本篇 337/339」降到辅行当小字 —— 不再读成"快读完整篇"。每处口径仍写在脸上。
+// 下面四条各自独立成锁，谁也不遮谁。
 //
-// 反向验证：把 app/ 的改动 stash 掉后，主行/辅行/气泡/数据页四条必须红
-// （①→② 那条是既有行为的锁，不修也绿 —— 它钉的是"现在是好的"，不是"修了什么"）。
+// 反向验证：把 app/ 的改动 stash 掉后，主行/辅行/气泡/数据页四条必须红。
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 
@@ -112,41 +113,41 @@ async function waitStatsReady(page: import('@playwright/test').Page) {
 }
 
 test.describe('3.0 任务条/数据页的「今天」口径（主行·辅行·气泡·数据页）', () => {
-  test('主行带「本篇」标签：分母是这一篇的句数，不是全局', async ({ page }) => {
+  test('主行=今天口径：分母是今天计划的句数，不是这一篇的', async ({ page }) => {
     await enterFirstArticle(page, SIX);
+    const tp = await page.evaluate(() => TASK.todayProgress());
+    expect(tp.planned, '今天的分母要真造出来').toBeGreaterThan(0);
+    await expect(page.locator('#tbTitle')).toHaveText(`通读 · 今天 ${Math.min(tp.done, tp.planned)}/${tp.planned}`);
     const art0 = await page.evaluate(() => ShadowPlan.articleScope(SECTIONS, 0).size);
     const all = await page.evaluate(() =>
       SECTIONS.reduce((a, s) => a + s.paragraphs.reduce((x, p) => x + p.length, 0), 0));
-    expect(art0, '夹具要让第 0 篇句数 ≠ 全局句数，否则锁不住按篇').not.toBe(all);
-    await expect(page.locator('#tbTitle')).toHaveText(`通读 · 本篇 0/${art0}`);
+    expect(art0, '夹具要让第 0 篇句数 ≠ 全局句数，否则分不清今天/本篇').not.toBe(all);
+    await expect(page.locator('#tbTitle'), '主行不许再说本篇').not.toContainText('本篇');
   });
 
-  test('辅行带「今天」标签：句数与 todayProgress() 同源、覆盖词数与 todayCoverWords() 同源（不写死字面量）', async ({ page }) => {
+  test('辅行=本篇口径：句数与首页卡片同源、覆盖词数与 todayCoverWords() 同源（不写死字面量）', async ({ page }) => {
     await enterFirstArticle(page, SIX);
-    const tp = await page.evaluate(() => TASK.todayProgress());
+    const art0 = await page.evaluate(() => ShadowPlan.articleScope(SECTIONS, 0).size);
     const cover = await page.evaluate(() => TASK.todayCoverWords());
-    expect(tp.planned, '今天的分母要来自当天计划快照，夹具要真造出来').toBeGreaterThan(0);
+    expect(art0, '本篇的分母要来自按篇口径').toBeGreaterThan(0);
     expect(cover, '今天这批句子要真覆盖到目标词，否则这条锁不住覆盖数').toBeGreaterThan(0);
-    await expect(page.locator('#tbSub')).toHaveText(`今天 ${tp.done}/${tp.planned} 句 · 覆盖 ${cover} 词`);
+    await expect(page.locator('#tbSub')).toHaveText(`本篇 0/${art0} 句 · 覆盖 ${cover} 词`);
   });
 
-  test('气泡=本篇口径：报「第 N 句 · 本篇还剩 M 句」，不再报队列的「今天第 N 句」', async ({ page }) => {
+  test('气泡=今天口径：报「今天第 N 句 · 还剩 M 句」，不再报本篇', async ({ page }) => {
     await enterFirstArticle(page, SIX);
-    // 拖动/悬停到进度条最右端 = 队列最后一句；气泡要报它在**这一篇**里的位置与剩余。
+    // 拖动/悬停到进度条最右端 = 今天队列最后一句 = 今日任务结束线
     const expected = await page.evaluate(() => {
-      const scope = Array.from(ShadowPlan.articleScope(SECTIONS, 0));
       const q = TASK.queue;
-      const g = q[q.length - 1].i;
-      const pos = scope.indexOf(g) + 1;
-      return { pos: pos, rem: scope.length - pos, qn: q.length };
+      return { pos: q.length, qn: q.length };
     });
     expect(expected.qn, '队列要有不止一句，气泡才有位置可言').toBeGreaterThan(1);
     const box = await page.locator('#tbSeek').boundingBox();
     expect(box, '进度条要在屏上').not.toBeNull();
     await page.mouse.move(box!.x + box!.width - 1, box!.y + box!.height / 2);
     const tip = page.locator('#tbTip');
-    await expect(tip).toContainText(`第 ${expected.pos} 句 · 本篇还剩 ${expected.rem} 句`);
-    await expect(tip, '气泡不再报队列口径').not.toContainText('今天第');
+    await expect(tip).toContainText(`今天第 ${expected.pos} 句 · 还剩 0 句`);
+    await expect(tip, '气泡不再报本篇口径').not.toContainText('本篇');
   });
 
   test('学习数据页「今天」块：读了几句 / 学习时长 / 还剩几句，都与 state 同源', async ({ page }) => {
