@@ -460,24 +460,27 @@
       <h1>随身听</h1>
       <div class="ls-card">
         <button class="ls-cover" type="button" aria-label="展开《${esc(SECTIONS[a].title)}》全文阅读">
+          <span class="ls-disc" aria-hidden="true"><i class="ri-headphone-line"></i></span>
           <span class="ls-art">《${esc(SECTIONS[a].title)}》</span>
           <span class="ls-vol">第 ${listenVolNo(a, 0)} 卷</span>
           <span class="ls-now">—</span>
         </button>
-        <div class="ls-controls" role="group" aria-label="随身听播放控制">
-          <button class="ls-prev" type="button" aria-label="上一篇">◄</button>
-          <button class="ls-play" type="button" aria-label="播放">▶</button>
-          <button class="ls-next" type="button" aria-label="下一篇">►</button>
+        <div class="ls-main">
+          <div class="ls-controls" role="group" aria-label="随身听播放控制">
+            <button class="ls-prev" type="button" aria-label="上一篇">◄</button>
+            <button class="ls-play" type="button" aria-label="播放">▶</button>
+            <button class="ls-next" type="button" aria-label="下一篇">►</button>
+          </div>
+          <input class="ls-seek" type="range" min="1" max="1" value="1" step="1" aria-label="句级位置条">
+          <p class="ls-info">—</p>
+          <div class="ls-tools" role="group" aria-label="随身听附加控制">
+            <button class="ls-loop" type="button" aria-label="单句循环遍数">循环关</button>
+            <button class="ls-ab" type="button" aria-label="AB 复读">AB</button>
+            <button class="ls-rate" type="button" aria-label="朗读倍速">1x</button>
+            <button class="ls-mark" type="button" aria-label="记下当前位置">书签</button>
+          </div>
+          <button class="ls-expand" type="button" aria-label="展开全文阅读">点击展开全文阅读</button>
         </div>
-        <input class="ls-seek" type="range" min="1" max="1" value="1" step="1" aria-label="句级位置条">
-        <p class="ls-info">—</p>
-        <div class="ls-tools" role="group" aria-label="随身听附加控制">
-          <button class="ls-loop" type="button" aria-label="单句循环遍数">循环关</button>
-          <button class="ls-ab" type="button" aria-label="AB 复读">AB</button>
-          <button class="ls-rate" type="button" aria-label="朗读倍速">1x</button>
-          <button class="ls-mark" type="button" aria-label="记下当前位置">书签</button>
-        </div>
-        <button class="ls-expand" type="button" aria-label="展开全文阅读">点击展开全文阅读</button>
       </div>
     </div>`;
     updateListenCard();
