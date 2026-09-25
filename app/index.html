@@ -152,7 +152,7 @@
   body.dark .audiobar::before { opacity: .35; }
   body.dark.scrolled .audiobar, body.dark .audiobar.force-mini,
   body.dark.scrolled .audiobar.expanded { border-color: #33302b; }
-  body.dark #edgeTab, body.dark .back-to-play { border-color: #33302b; }
+  body.dark #edgeTab, body.dark .back-to-learn { border-color: #33302b; }
   body.dark.scrolled .audiobar:not(.expanded) .ab-expand,
   body.dark .audiobar.force-mini .ab-expand,
   body.dark.scrolled .audiobar.expanded .ab-collapse,
@@ -592,13 +592,15 @@
     border: 1px solid rgba(255,255,255,.65); border-right: none; border-radius: 12px 0 0 12px;
     padding: 14px 7px; cursor: pointer; box-shadow: var(--shadow); }
   #edgeTab:hover { background: var(--accent-soft); }
-  .back-to-play { position: fixed; right: 16px; bottom: calc(130px + env(safe-area-inset-bottom, 0px)); z-index: 115;
+  .back-to-learn { position: fixed; right: 16px; bottom: calc(130px + env(safe-area-inset-bottom, 0px)); z-index: 115;
     background: var(--glass-strong); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%);
     border: 1px solid rgba(255,255,255,.65); border-radius: 999px; padding: 8px 14px;
     font-size: 12px; font-weight: 600; color: var(--accent-text); cursor: pointer;
     box-shadow: var(--shadow); display: flex; align-items: center; gap: 4px;
     transition: opacity .2s, transform .2s; }
-  .back-to-play:hover { background: var(--accent-soft); }
+  .back-to-learn:hover { background: var(--accent-soft); }
+  /* 有效触区 ≥44px（PRD §10.4）：视觉 pill 只有 ~33px 高，用 ::after 外扩热区，不改观感。 */
+  .back-to-learn::after { content: ""; position: absolute; inset: -6px; border-radius: 999px; }
   @media (min-width: 701px) {
     body.panel-open #edgeTab { display: none; }
     }
@@ -1079,7 +1081,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     body.dark aside::before { background: rgba(255,255,255,.25); }
     .layout.panel-open aside { transform: translateY(0); visibility: visible; }
     .layout.panel-open #edgeTab { opacity: 0; pointer-events: none; }
-    .back-to-play { right: 12px; bottom: calc(100px + env(safe-area-inset-bottom, 0px)); font-size: 11px; padding: 6px 12px; }
+    .back-to-learn { right: 12px; bottom: calc(100px + env(safe-area-inset-bottom, 0px)); font-size: 11px; padding: 6px 12px; }
     aside .list { max-height: calc(62vh - 110px); -webkit-overflow-scrolling: touch; }
     .layout::after { content: ""; position: fixed; inset: 0; z-index: 180; background: rgba(0,0,0,.35);
       opacity: 0; pointer-events: none; transition: opacity var(--t-fast); }
@@ -1413,7 +1415,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   }
   /* 续读条（非任务模式）仍要让开底部那张卡：卡片自己浮在 12px，所以播放条要抬 12 + 卡高 + 8 */
   body.resume-offer .audiobar { bottom: calc(var(--task-bar-h, 62px) + 20px + env(safe-area-inset-bottom, 0px)); }
-  body.task-mode .back-to-play { bottom: calc(var(--task-bar-h, 62px) + 24px + env(safe-area-inset-bottom, 0px)); }
+  body.task-mode .back-to-learn { bottom: calc(var(--task-bar-h, 62px) + 24px + env(safe-area-inset-bottom, 0px)); }
   /* ---- 任务模式：底部只有**一条通栏、一行按钮**（2026-09-21 他拍的：播放条所有功能都放这条上；
      2026-09-22 又改一次：这条上不许再分行，所有操作按钮同一行，最重要的在最右、依次往左排） ----
      以前播放条整条压在任务栏上面，底部三层吃掉 18.6% 屏高（390×844 实测 157px），
@@ -2361,7 +2363,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     </div>
     <button id="edgeTab" onclick="togglePanel()" title="词库" aria-label="打开词库面板">词库</button>
     <div id="dbg"></div>
-    <button id="backToPlay" class="back-to-play" onclick="scrollToPlaying()" style="display:none" aria-label="回到播放位置"><i class="ri-arrow-up-line" aria-hidden="true"></i> 回到播放位置</button>
+    <!-- 唯一的「回到学习位置」悬浮键（2026-09-25 合并；旧「回到播放位置」#backToPlay 已删）：
+         ① 通读 = 高亮回到学习句并同步开播；② 挖空 = 滚回当前待答的空（不播音）。
+         显隐与动作都在 TASK.updateBackBtn() / TASK.backToLearn()（要 taskPos / currentBlank 才知道目标）。 -->
+    <button id="backToLearn" class="back-to-learn" onclick="TASK.backToLearn()" style="display:none" aria-label="回到学习位置" title="回到学习位置"><i class="ri-arrow-up-line" aria-hidden="true"></i> 回到学习位置</button>
 
     <!-- 每日学习任务面板 -->
     <!-- 每日学习任务面板。3.0 首页横幅「去设置」直接复用它：没计划时 openPanel() 渲的就是
@@ -2851,7 +2856,9 @@ let listenOn = false;
       // 区间外：静默无反应会被当成"点了没坏"。改为退出循环并跳播该句。
       else { abCancel(true); playFrom(i); }
       return;
-    } playFrom(i); };
+    } playFrom(i); /* 任务模式 ①：手动点句 = 「点偏了」—— 告诉 TASK 把「下一句」的起点挪到这句，
+                       好让「回到学习位置」有东西可回（taskPos 不动，仍记着正轨）。 */
+      try { if (typeof TASK !== 'undefined' && TASK.sentenceTapped) TASK.sentenceTapped(); } catch (err) {} };
     el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } };
     });
     // 单词键盘支持：Enter/Space 打开弹窗
@@ -2880,18 +2887,10 @@ let listenOn = false;
     _scrollTimer = setTimeout(() => { _userScrolled = false; }, 3000);
     paint();
     }
+    /* 「回到学习位置」的显隐跟视口走：② 没有 playing，滚动也要重算，所以放在 if 外面。 */
+    try { if (typeof TASK !== 'undefined' && TASK.updateBackBtn) TASK.updateBackBtn(); } catch (e) {}
     }, { passive: true });
-    
-    // 点击"回到播放位置"按钮
-    function scrollToPlaying() {
-    _userScrolled = false;
-    _programmaticScroll = true;
-    if (idx >= 0 && sents[idx]) {
-    sents[idx].scrollIntoView({ block: 'center', behavior: 'smooth' });
-    }
-    paint();
-    setTimeout(() => { _programmaticScroll = false; }, 1000);
-    }
+
     /* 音乐式进度条：每句一格阻尼，拖动吸附到最近句子 */
     let seekStart = 0, seekEnd = 0, seeking = false, _ticks = [];
     function sentRaw(i) {
@@ -4193,18 +4192,8 @@ let listenOn = false;
     setTimeout(() => { _programmaticScroll = false; }, 200);
     }
     }
-    // 显示/隐藏"回到播放位置"按钮
-    const backBtn = _getDom('backToPlay');
-    if (backBtn) {
-    if (playing && _userScrolled && idx >= 0 && sents[idx]) {
-    // 检查当前播放句是否在视口中
-    const rect = sents[idx].getBoundingClientRect();
-    const inView = rect.top >= 0 && rect.bottom <= window.innerHeight;
-    backBtn.style.display = inView ? 'none' : 'flex';
-    } else {
-    backBtn.style.display = 'none';
-    }
-    }
+    // 「回到学习位置」的显隐：目标（学习句 / 当前空）与是否在视口都要现算，统一交给 TASK。
+    try { if (typeof TASK !== 'undefined' && TASK.updateBackBtn) TASK.updateBackBtn(); } catch (e) {}
     const bp = _getDom('btnPlay');
     if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill" aria-hidden="true"></i><span class="lbl"> 暂停</span>' : '<i class="ri-play-fill" aria-hidden="true"></i><span class="lbl"> 播放</span>';
     // 更新章节标题
@@ -6742,6 +6731,7 @@ let listenOn = false;
         const el = _blankEls[bi];
         // 自动推进也会滚：reduced-motion 口径下不用平滑滚动（新动效不许破例）
         if (el) el.scrollIntoView({ block: 'center', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+        try { updateBackBtn(); } catch (e) {}
       }
       function pickOpt(i) {
         if (_popReadonly) return;              // 回看态：选项只展示，不再记一次
@@ -7220,8 +7210,12 @@ let listenOn = false;
         // ①：重播当前句；②：没有可重播的动作（「回看句子」已删，§4.4），这颗在 ② 态本就藏起来
         if (!taskMode) return;
         if (pass >= 2) return;
-        if (taskPos >= todayQueue.length) return;
-        const globalIdx = todayQueue[taskPos].i;
+        /* 「再来」重播的是**屏幕上这句**（高亮 idx），不是队列光标 taskPos ——
+           手动点偏别句后，「再来」该重播你点的那句（taskSeekK() = idx 在队列里的位置，
+           找不到才退回 taskPos）。 */
+        const base = taskSeekK();
+        if (base >= todayQueue.length) return;
+        const globalIdx = todayQueue[base].i;
         const localIdx = globalToLocal(globalIdx);
         if (localIdx >= 0) playFrom(localIdx);   // 不在这里记完成：记在「这一遍真的放完了」那一刻
       }
@@ -7259,20 +7253,23 @@ let listenOn = false;
              写成 goToNextTask 的话，用「上一句」退回去再点会悄悄跳到队列里第一句还没听的，
              而不是你退回的那句 —— 这条路径以前栽过。 */
           paint();
-          revealTaskPos(taskPos, true);
+          revealTaskPos(taskSeekK(), true);
           _tabStarted = true;
           syncTaskNextLabel();
           return;
         }
         /* 「下一句」（他 2026-09-24 拍板）：从当前位置往后找第一条没读的，**高亮挪过去 + 同步开播**；
            放完就停在那句，不再自动往下走（放完自动挪高亮是他明确不要的）。
-           往后没有就回卷找一条，再没有 = 这批读完了 → 把 ② 端上来。 */
+           往后没有就回卷找一条，再没有 = 这批读完了 → 把 ② 端上来。
+           「当前位置」= 屏幕上这句（taskSeekK()，手动点偏后跟着你点的走）；
+           点「回到学习位置」会把高亮拉回学习句，于是这里也自动回到学习那条线上（tok 与正轨同步）。 */
+        const base = taskSeekK();
         let found = -1;
-        for (let qi = taskPos + 1; qi < todayQueue.length; qi++) {
+        for (let qi = base + 1; qi < todayQueue.length; qi++) {
           if (!readToday2(todayQueue[qi].i)) { found = qi; break; }
         }
         if (found < 0) {
-          for (let qi = 0; qi <= taskPos && qi < todayQueue.length; qi++) {
+          for (let qi = 0; qi <= base && qi < todayQueue.length; qi++) {
             if (!readToday2(todayQueue[qi].i)) { found = qi; break; }
           }
         }
@@ -7559,6 +7556,7 @@ let listenOn = false;
         }
 
         syncTaskBarHeight(); syncCardBottom();
+        try { updateBackBtn(); } catch (e) {}
       }
 
       /* ---- 底栏那根位置条 ----
@@ -7572,6 +7570,77 @@ let listenOn = false;
         }
         return Math.max(0, Math.min(taskPos, Math.max(0, todayQueue.length - 1)));
       }
+
+      /* ---- 唯一的「回到学习位置」（2026-09-25 合并；旧「回到播放位置」已删） ----
+         只有这一条「回到某处」的控件。目标是「学习位置」：
+           ① 通读 = 学习句 todayQueue[taskPos]（taskPos 是正轨，手动点偏别句也不会被改写）；
+           ② 挖空 = 当前待答的那一题 currentBlank() 对应的正文空。
+         目标不存在（无计划 / 收工 / 续读条）就不出现 —— 宁可不显示，也不摆一颗点了没反应的键。 */
+      function learnTarget_() {
+        if (!taskMode || taskFinished) return null;
+        const bar = document.getElementById('taskBar');
+        const st = bar && bar.dataset.state;
+        if (st === 'done' || st === 'noplan' || st === 'resume' || st === 'idle') return null;
+        if (pass >= 2) {
+          const bi = currentBlank();
+          const el = bi >= 0 ? _blankEls[bi] : null;
+          return el ? { el: el, kind: 'quiz' } : null;
+        }
+        if (!todayQueue.length || taskPos >= todayQueue.length) return null;
+        const local = globalToLocal(todayQueue[taskPos].i);
+        const el = (local >= 0 && sents[local]) ? sents[local] : null;
+        return el ? { el: el, kind: 'read' } : null;
+      }
+      /* 遍间小结卡（①→② 之间）挂住时不算「有学习位置」：此刻点它会越过「开始答题」直接开题。 */
+      function passCardOpen_() {
+        const el = document.getElementById('passCard');
+        return !!(el && !el.hidden);
+      }
+      /* 显隐唯一的出口：paint()（播放/高亮变化）、scroll（② 没在播也要重算）、updateTaskBar。
+         ① 手动点偏（taskSeekK() !== taskPos）或学习句滚出视口 → 出现；
+         ② 当前空滚出视口 → 出现。始终「按需」出现，不做常驻却无事的键。 */
+      function updateBackBtn() {
+        const btn = document.getElementById('backToLearn');
+        if (!btn) return;
+        const t = learnTarget_();
+        let show = false;
+        if (t && !passCardOpen_()) {
+          const r = t.el.getBoundingClientRect();
+          const inView = r.height > 0 && r.top >= 0 && r.bottom <= window.innerHeight;
+          if (t.kind === 'quiz') show = !inView;
+          else show = (taskSeekK() !== taskPos) || !inView;
+        }
+        btn.hidden = !show;
+        btn.style.display = show ? 'inline-flex' : 'none';
+      }
+      /* 手动点正文句（任务模式 ①）：把这颗键叫出来；「下一句」的起点要跟着点的那句走（taskSeekK 取 idx）。
+         taskPos 不动 —— 它记着正轨，「回到学习位置」就靠它。 */
+      function sentenceTapped() {
+        if (!taskMode || pass !== 1) return;
+        _tabStarted = true;
+        try { syncTaskNextLabel(); } catch (e) {}
+        try { updateBackBtn(); } catch (e) {}
+      }
+      function backToLearn() {
+        if (!taskMode) return;
+        const t = learnTarget_();
+        if (!t) return;
+        if (t.kind === 'quiz') {
+          /* ②：滚回当前待答的空 + 重新弹浮窗。② 没有「正在念的句子」，所以不播音。 */
+          try { t.el.scrollIntoView({ block: 'center', behavior: prefersReducedMotion() ? 'auto' : 'smooth' }); } catch (e) {}
+          try { renderQuiz(); } catch (e) {}
+          try { updateBackBtn(); } catch (e) {}
+          return;
+        }
+        /* ①：回到学习句并**同步开播**。清掉「用户手动滚过」的标记，让 paint 的自动跟随把学习句滚回视口中央。 */
+        try { _userScrolled = false; _programmaticScroll = true; } catch (e) {}
+        revealTaskPos(taskPos, true);
+        setTimeout(function () {
+          try { _programmaticScroll = false; } catch (e) {}
+          try { updateBackBtn(); } catch (e) {}
+        }, 1000);
+      }
+
       function syncTaskSeek(drag, f) {
         const el = document.getElementById('tbSeek'); if (!el) return;
         if (el._dragging) return;                     // 拖动中别让 15 秒一次的刷新把手抢回去
@@ -8420,6 +8489,7 @@ let listenOn = false;
         get listenArticle() { return _listenArticle; },
         again, prev, next, pauseNew, resetPlan, resetLearningPlan, onSentenceComplete,
         taskSentenceFinished,
+        backToLearn, updateBackBtn, sentenceTapped,   // 「回到学习位置」唯一的键（2026-09-25 合并）
         exportBackup, importBackup, backupPayload, parseBackup, applyBackup,
         get active() { return taskMode; },
         get hasPlan() { return !!plan; },
