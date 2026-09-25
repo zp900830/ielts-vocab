@@ -302,7 +302,16 @@
     const daily = (st && st.daily) || {};
     const keys = Object.keys(daily);
     let minutes = 0, acts = 0;
-    keys.forEach((k) => { const d = daily[k] || {}; minutes += d.minutes || 0; acts += (d.sentDone || 0) + (d.quizDone || 0); });
+    /* 累计学习时长 = 真实用时（TASK.readMsByDay 出口，2026-09-25 链路排查：以前按计划分钟数
+       累加，计划 15 实读 3 也算 15，是假数）。有真实账的天用真实值，没有的旧天回退计划分钟数
+       （不然升级后老用户的累计会一夜清零，看着像丢数据）。 */
+    const real = (typeof TASK !== 'undefined' && TASK.readMsByDay) ? TASK.readMsByDay() : {};
+    keys.forEach((k) => {
+      const d = daily[k] || {};
+      const realDay = real[k];
+      minutes += (realDay != null && realDay > 0) ? Math.round(realDay / 60000) : (d.minutes || 0);
+      acts += (d.sentDone || 0) + (d.quizDone || 0);
+    });
     const ts = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats() : { streak: 0 };
     let arts = 0;
     for (let a = 0; a < SECTIONS.length; a++) { const s = articleStat(a).stage; if (s === 'done' || s === 'pro') arts++; }

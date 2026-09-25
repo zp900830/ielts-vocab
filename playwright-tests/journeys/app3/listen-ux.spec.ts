@@ -378,3 +378,25 @@ test.describe('⑧ 按篇账云同步：合并 = 单调 max', () => {
     expect(snap2.pass2[0], 'pass2 一旦 true 不回落').toBe(true);
   });
 });
+
+/* ⑨（2026-09-25 链路排查）：通读真实用时（read.ms）跟着按篇账一起上云/合并 —— 单调 max。
+   同一设备多次记累计、换设备拉回不丢。 */
+test.describe('⑨ 真实用时 read.ms 的云同步合并', () => {
+  test('远端快照取 max：本机小的被覆盖为大值，新天照并入', async ({ page }) => {
+    await stubData(page, TWO);
+    await gotoListen(page);
+    const D = '2026-09-25';
+    await page.evaluate((day) => {
+      TASK.mergeArticleAccount({ read: { ms: { [day]: 60000 } } });
+    }, D);
+    const s1 = await page.evaluate(() => TASK.articleAccountSnapshot());
+    expect(s1.read.ms[D]).toBe(60000);
+    // 远端同天更小 → 不冲掉；新天照并入
+    await page.evaluate((day) => {
+      TASK.mergeArticleAccount({ read: { ms: { [day]: 30000, '2026-09-24': 120000 } } });
+    }, D);
+    const s2 = await page.evaluate(() => TASK.articleAccountSnapshot());
+    expect(s2.read.ms[D], '本机 60000 > 远端 30000').toBe(60000);
+    expect(s2.read.ms['2026-09-24'], '新天照并入').toBe(120000);
+  });
+});
