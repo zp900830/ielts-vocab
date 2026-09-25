@@ -1049,7 +1049,7 @@
     let st = null;
     try { st = TASK.listenState(); } catch (e) { return false; }
     if (!st || !st.ctx) return false;
-    if (cur === 'listen') return false;              // 随身听页：卡片本身就是控制面
+    if (cur === 'listen') return false;              // 随身听页：卡片本身就是控制面（2026-09-25 用户再确认）
     if (st.expanded) return false;                   // 展开全屏：底部播放条在管
     if (document.body.classList.contains('task-mode')) return false;   // 阅读页等价物
     // ⑤（2026-09-25）：照搬主站 playing||paused —— 暂停算 active（悬浮球留着），

@@ -279,6 +279,44 @@ const SIXQ: Record<string, string> = (() => {
 })();
 
 test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () => {
+  // 2026-09-25 用户实测：② 答题页切去随身听后，答题卡浮窗和「挖空选择 0/112」任务条
+  // 还悬在听书页上。锁死：离开任务模式的每条路都要把这两样收干净。
+  test('② 态切去随身听：答题卡、答题任务条、quiz 态一起收（不再悬在听书页）', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toBeVisible();
+    await page.evaluate(() => TASK.setPass(2));
+    await page.locator('#art .qz-blank').first().click();
+    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);   // 答题卡开着
+
+    await page.evaluate(() => { location.hash = '#/listen'; });
+    await expect(page.locator('#appView .listen-page')).toBeVisible();
+    await expect(page.locator('#blankPop'), '答题卡必须跟着收走').toBeHidden();
+    expect(await page.locator('#blankPop .qz-opt').count(), '答题卡内容必须清空').toBe(0);
+    await expect(page.locator('#taskBar'), '答题任务条不许出现在听书页').not.toHaveClass(/show/);
+    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'idle');
+    await expect(page.locator('body')).not.toHaveClass(/task-mode/);
+    await expect(page.locator('body')).not.toHaveClass(/quiz-mode/);
+    // 听书态本身是好的：卡片在、悬浮球/播放链没有残留的 quiz 提示
+    await expect(page.locator('.ls-card')).toBeVisible();
+  });
+
+  test('② 态点「返回首页」：答题卡不悬在新页面上（exitTaskMode 一并收）', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await page.evaluate(() => TASK.setPass(2));
+    await page.locator('#art .qz-blank').first().click();
+    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
+
+    await page.evaluate(() => TASK.exitTaskMode());
+    await expect(page.locator('#appView .art-card').first()).toBeVisible();
+    await expect(page.locator('#blankPop'), '返回后答题卡不许还在').toBeHidden();
+    await expect(page.locator('#taskBar')).not.toHaveClass(/show/);
+  });
   test('② 挖空长在正文里，点空弹浮窗，下一题定位到下一个空', async ({ page }) => {
     await stubData(page, SIXQ);
     await page.goto(`${rootUrl}/app/index.html#/home`);

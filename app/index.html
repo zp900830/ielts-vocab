@@ -2178,54 +2178,20 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     font: inherit; font-weight: 500; font-size: 13px; cursor: pointer;
     transition: background var(--t-fast), color var(--t-fast); }
   .ls-expand:hover { background: var(--accent-soft); color: var(--accent); }
-  /* ④（2026-09-25）展开 = 全屏弹窗：顶部一张「正在听」HUD 卡，样式照搬主站 index.html 的 .ls-now
-     （上一篇/下一篇 · 篇名 · 中文名 · 状态胶囊 + 重听本篇 · 白卡放当前句），套 /app/ 令牌。
-     注意：/app/ 卡片封面里已有一个 .ls-now（正在播那句），所以 HUD 容器用 #listenHud、内部类
-     统一加 #listenHud 前缀，绝不撞名。 */
-  #listenHud { display: none; }
-  body.listen-mode #listenHud { display: block; position: sticky; top: 60px; z-index: 35;
-    margin: 0 0 16px; text-align: center;
-    padding: 22px 18px 18px; background: var(--card); border: 1px solid var(--border); border-radius: 18px;
-    box-shadow: 0 10px 34px rgba(30,90,70,.12); }
-  #listenHud .ls-pos { font-size: 12px; color: var(--ink2); display: flex; align-items: center;
-    justify-content: center; gap: 10px; font-variant-numeric: tabular-nums; }
-  .ls-snav { border: 1px solid var(--border); background: var(--card); color: var(--text);
-    border-radius: 999px; padding: 5px 13px; font: inherit; font-size: 12.5px; white-space: nowrap; cursor: pointer;
-    transition: background var(--iel-t-fast), border-color var(--iel-t-fast), color var(--iel-t-fast); }
-  .ls-snav:hover:not(:disabled) { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-text); }
-  .ls-snav:disabled { opacity: .4; cursor: default; }
-  #listenHud .ls-title { font-family: Georgia, 'Songti SC', serif; font-size: 21px; font-weight: 700;
-    margin: 12px 0 2px; color: var(--text); }
-  #listenHud .ls-tcn { font-size: 13.5px; color: var(--muted); }
-  #listenHud .ls-chip { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 11.5px;
-    color: var(--accent-text); background: var(--accent-soft); border: 1px solid var(--accent-line);
-    border-radius: 999px; padding: 3px 11px; font-variant-numeric: tabular-nums; }
-  #listenHud .ls-chip button { border: none; background: transparent; color: var(--accent-text);
-    font: inherit; font-size: 11.5px; cursor: pointer; padding: 0; text-decoration: underline dotted; }
-  #listenHud .ls-sen-box { min-height: 96px; margin: 16px auto 0; max-width: 640px; padding: 14px 16px;
-    background: var(--accent-soft); border-radius: 12px; border: 1px solid var(--border); }
-  #listenHud .ls-sen { font-family: Georgia, 'Songti SC', serif; font-size: 16.5px; line-height: 1.8;
-    color: var(--text); text-align: left; }
-  @media (max-width: 700px) {
-    #listenHud { padding: 18px 12px 14px; }
-    #listenHud .ls-title { font-size: 18px; }
-    #listenHud .ls-sen { font-size: 15.5px; }
-    #listenHud .ls-sen-box { padding: 12px 12px; min-height: 88px; }
-    /* 卡片控制一排放下：◀ 上一句 / ▶ 播放 / ■ 停止 / 下一句 ▶（触区仍 ≥44px 高） */
-    .ls-controls { gap: 6px; }
-    .ls-prev, .ls-next, .ls-stop { padding: 0 8px; font-size: 12px; }
-    .ls-play { padding: 0 12px; font-size: 14px; }
-  }
-  /* ④ 弹窗进入/收起动效（reduced-motion 全压）。 */
-  @keyframes ls-hud-in { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+  /* ④（2026-09-25 用户）展开 = 全屏弹窗：**不放大卡片** —— 篇名/篇号在顶部条、当前句在正文里
+     高亮、控件在底部播放条，HUD 大卡是重复信息，整块删掉。 */
+  /* ④ 弹窗进入/收起动效（2026-09-25 用户：展开要有动画）：正文整块淡入上移，收起时反向淡出；
+     底部播放条 ls-bar-in；悬浮球收起后重新出现靠自身 transition（scale .92→1）。
+     reduced-motion 全压。 */
+  @keyframes ls-page-in { from { opacity: 0; transform: translateY(16px) scale(.99); } to { opacity: 1; transform: none; } }
   @keyframes ls-bar-in { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
-  body.listen-mode #listenHud { animation: ls-hud-in .32s cubic-bezier(.32,.72,.35,1) both; }
+  body.listen-mode > .layout { animation: ls-page-in .32s cubic-bezier(.32,.72,.35,1) both; }
   body.listen-mode > #audiobar { animation: ls-bar-in .32s cubic-bezier(.32,.72,.35,1) both; }
-  body.listen-closing #listenHud { animation: ls-hud-in .26s cubic-bezier(.32,.72,.35,1) reverse both; }
+  body.listen-closing > .layout { animation: ls-page-in .26s cubic-bezier(.32,.72,.35,1) reverse both; }
   body.listen-closing > #audiobar { animation: ls-bar-in .26s cubic-bezier(.32,.72,.35,1) reverse both; }
   @media (prefers-reduced-motion: reduce) {
-    body.listen-mode #listenHud, body.listen-mode > #audiobar,
-    body.listen-closing #listenHud, body.listen-closing > #audiobar { animation: none; }
+    body.listen-mode > .layout, body.listen-mode > #audiobar,
+    body.listen-closing > .layout, body.listen-closing > #audiobar { animation: none; }
   }
   /* 展开全屏阅读：复用任务模式那套（.layout 正文 + 底部 .audiobar），只是不挂任务条。 */
   body.listen-mode { background: #faf8f4; }
@@ -2342,7 +2308,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <!-- 随身听展开态顶栏（M4 §7.3）：只有标题 + 返回卡片。复用任务模式那套 reader-head 观感，
          但不挂任务模式的 #ttPrev/#ttNext（那两颗会跳进任务模式，随身听只要听）。 -->
     <header class="listen-top" id="listenTop">
-      <button class="back" id="lsClose" type="button" onclick="TASK.listenCollapse()" aria-label="返回随身听">←</button>
+      <button class="back" id="lsClose" type="button" onclick="TASK.listenCollapse()" aria-label="收起" title="收起（播放继续）"><i class="ri-arrow-down-s-line" aria-hidden="true"></i></button>
       <div class="r-title"><span class="tt-zh" id="lsTitle"></span><span class="r-pos" id="lsPos"></span></div>
     </header>
 
@@ -2529,19 +2495,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <div class="blank-pop" id="blankPop" role="dialog" aria-label="选出填回空格的词" hidden></div>
 
     <div class="layout">
-      <!-- ④ 随身听展开弹窗顶部 HUD（只在 body.listen-mode 上屏；样式照搬主站 .ls-now）：
-           上一篇/下一篇 · 篇名 · 中文名 · 状态胶囊 + 重听本篇 · 白卡当前句。下面才是 §7.3 的整篇正文 #art。 -->
-      <section id="listenHud" aria-label="随身听正在播放">
-        <div class="ls-pos">
-          <button class="ls-snav" id="lsArtPrev" type="button" onclick="TASK.listenStep(-1)" aria-label="上一篇" title="上一篇">‹ 上一篇</button>
-          <span id="lsArtPos">第 1/6 篇</span>
-          <button class="ls-snav" id="lsArtNext" type="button" onclick="TASK.listenStep(1)" aria-label="下一篇" title="下一篇">下一篇 ›</button>
-        </div>
-        <div class="ls-title" id="lsHudTitle"></div>
-        <div class="ls-tcn" id="lsHudTcn"></div>
-        <div class="ls-chip"><span id="lsHudChip"></span><button id="lsHudReplay" type="button" onclick="TASK.listenReplay()" title="从本篇开头重听"><i class="ri-refresh-line" aria-hidden="true"></i> 重听本篇</button></div>
-        <div class="ls-sen-box"><div class="ls-sen" id="lsHudSen"></div></div>
-      </section>
+      <!-- ④ 随身听展开弹窗（2026-09-25 用户：原 HUD 大卡片删掉 —— 篇名/篇号在顶部条、
+           当前句在正文里高亮、控件在底部播放条，三处都已各有其位，中间那张卡是重复信息）。
+           展开动画：正文整块 ls-page-in 淡入上移；收起时反向淡出，底部播放条 ls-bar-in。 -->
       <main id="main"><article id="art"><div id="abRegion" class="ab-region" style="display:none" aria-hidden="true"><button class="ab-cancel" onclick="abCancel()" title="取消循环" aria-label="取消循环">×</button></div></article></main>
       <aside id="panel">
         <div class="head">
@@ -5890,6 +5846,10 @@ let listenOn = false;
         _listenTick = _listenTick || Date.now();
       }
       function listenOpen(a) {
+        /* 与任务模式互斥（2026-09-25 用户截图发现 task-mode 泄漏进听书态 —— 顶栏还是「返回」
+           那套）。听书是独立上下文，进来就走**完整的**任务模式退出（答题卡、任务条、quiz 态
+           一起收）—— 只摘 class 会留下 ② 的答题卡和答题任务条悬在听书页上（用户实测）。 */
+        if (taskMode) { exitTaskMode(); }   // exitTaskMode 内部会再 route() 一次（幂等），这里继续正常开门
         _listenCtx = true;
         listenOn = true;
         document.body.classList.add('listen-page');
@@ -5983,6 +5943,7 @@ let listenOn = false;
          顶部 HUD 卡（照搬主站 .ls-now）+ 底部全功能播放条 .audiobar。关闭 → 收回卡片
          （listenCollapse，带动效），不是回首页 —— hash 始终停在 #/listen。 */
       function listenExpand() {
+        if (taskMode) exitTaskMode();   // 与任务模式互斥：答题卡/任务条完整收掉（同 listenOpen）
         if (_listenArticle == null) listenOpen(0);
         listenArm();
         if (_listenArticle != null && currentChapter !== _listenArticle) {
@@ -5996,15 +5957,17 @@ let listenOn = false;
         updateListenHud();
         playFrom(idx >= 0 ? idx : 0);   // 展开即连播（§7.4）
       }
+      /* ④ 收起（2026-09-25 用户改口径）：收起**不停止** —— 播放继续、悬浮球在、收听账继续记；
+         只有「停止」才收掉上下文。左上角那颗是「收起」不是「返回」：展开态 ⇄ 卡片态是同一场收听
+         的两种形态。收起时把已听时长先记一笔（listenFlush，_listenTick 续到 now），
+         之后的句子照常继续记账，不清零。 */
       function listenCollapse() {
         _listenExpanded = false;
         const reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
         const finish = function () {
           if (_listenCollapseTimer) { clearTimeout(_listenCollapseTimer); _listenCollapseTimer = null; }
           document.body.classList.remove('listen-mode', 'listen-closing');
-          if (playing) { playing = false; speakToken++; try { speechSynthesis.cancel(); } catch (e) {} try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {} }
-          listenFlush();
-          _listenTick = 0;   // 收起 = 本场结束：计时清零，续播从当下重新起算
+          listenFlush();          // 播放在继续：只把已听的一段先记账，_listenTick 续到 now
           try { paint(); } catch (e) {}
           try { if (window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
         };
@@ -6012,31 +5975,14 @@ let listenOn = false;
         document.body.classList.add('listen-closing');
         _listenCollapseTimer = setTimeout(finish, 260);
       }
-      /* ④ 弹窗 HUD 内容（照样板：篇导航 / 篇名 / 中文名 / 状态胶囊 / 当前句）。 */
+      /* ④ HUD 内容（已撤，2026-09-25 用户删大卡片）：篇名/篇号在顶部条（#lsTitle/#lsPos）、
+           当前句在正文高亮、状态在播放条 —— 不再另有一张卡。这里只剩顶部条这行字的填充。 */
       function updateListenHud() {
-        if (!_listenExpanded) return;
         const a = (_listenArticle != null) ? _listenArticle : 0;
         const sec = SECTIONS[a] || {};
-        const n = SECTIONS.length, total = Math.max(1, sents.length);
-        const at = idx >= 0 ? idx : 0;
-        const t = document.getElementById('lsHudTitle');
-        if (t) t.textContent = sec.title || '';
-        const zh = document.getElementById('lsHudTcn');
-        if (zh) zh.textContent = (typeof TIT_EN !== 'undefined' && TIT_EN[sec.title])
-          ? TIT_EN[sec.title] : (sec.tcn || sec.zh || sec.title || '');
-        const pos = document.getElementById('lsArtPos');
-        if (pos) pos.textContent = `第 ${a + 1}/${n} 篇 · 第 ${at + 1}/${total} 句`;
-        const chip = document.getElementById('lsHudChip');
-        if (chip) chip.textContent = `第 ${at + 1}/${total} 句 · ${playing ? '播放中' : (_listenArmed ? '已暂停' : '待播')}`;
-        const sen = document.getElementById('lsHudSen');
-        if (sen) sen.textContent = idx >= 0 ? plainEN(sentRaw(idx)) : '';
-        const pv = document.getElementById('lsArtPrev'), nx = document.getElementById('lsArtNext');
-        if (pv) pv.disabled = n <= 1;
-        if (nx) nx.disabled = n <= 1;
-        // §7.3 refine3 ⑥ 的二级页头部（reader-head）复用同一份标题/位置（锁在 leftovers.spec.ts）。
         const lt = document.getElementById('lsTitle'), lp = document.getElementById('lsPos');
         if (lt) lt.textContent = sec.title || '';
-        if (lp) lp.textContent = `第 ${a + 1}/${n} 篇`;
+        if (lp) lp.textContent = `第 ${a + 1}/${SECTIONS.length} 篇`;
       }
       /* §7.4 篇末自动切下一篇（六篇循环）——只由 launch 的完播分支在随身听上下文里调。 */
       function listenNextArticle() {
@@ -7447,6 +7393,8 @@ let listenOn = false;
       function exitTaskMode() {
         taskMode = false; _noPlan = false; stopSessionClock();
         clearAutoNext();   // 离开任务模式：别让待触发的自动推进在别的屏上叫 nextBlank
+        // ② 的答题卡浮窗跟着退出一起收（2026-09-25 用户实测：答题页返回后答题卡还悬在别的页面上）
+        try { closeBlankPop(); } catch (e) {}
         // 回首页 = 回全局：横幅/绿点/今日账都按全量算，别把上一篇的 scope 留在缓存里。
         // （_pendingArticle 不在这里清：空状态点「去设置」就是先退出、再建计划回到这一篇。）
         currentArticle = null; _cachedPlan = null;
@@ -7775,8 +7723,12 @@ let listenOn = false;
         if (tcnEl) tcnEl.textContent = (a != null && SECTIONS[a] && TIT_EN[SECTIONS[a].title]) ? TIT_EN[SECTIONS[a].title] : '';
         if (posEl) posEl.textContent = (a != null) ? `第 ${a + 1}/${SECTIONS.length} 篇` : '';
         const prev = document.getElementById('ttPrev'), next = document.getElementById('ttNext');
-        if (prev) { prev.disabled = !(a != null && a > 0); prev.onclick = (a != null && a > 0) ? function () { gotoArticle(a - 1); } : null; }
-        if (next) { next.disabled = !(a != null && a < SECTIONS.length - 1); next.onclick = (a != null && a < SECTIONS.length - 1) ? function () { gotoArticle(a + 1); } : null; }
+        /* 随身听展开态（listen-mode）里这双箭头是**切篇继续听**（listenStep，口径 §7.4），
+           不许跳去任务模式把收听收掉（openArticle → enterTaskMode 会 listenStopForTask）。
+           任务模式里才是 gotoArticle（换篇重排队列）。 */
+        const inListen = document.body.classList.contains('listen-mode');
+        if (prev) { prev.disabled = !(a != null && a > 0); prev.onclick = (a != null && a > 0) ? function () { if (inListen) listenStep(-1); else gotoArticle(a - 1); } : null; }
+        if (next) { next.disabled = !(a != null && a < SECTIONS.length - 1); next.onclick = (a != null && a < SECTIONS.length - 1) ? function () { if (inListen) listenStep(1); else gotoArticle(a + 1); } : null; }
         const wb = document.getElementById('ttWords');
         if (wb) wb.textContent = (a != null) ? `目标词 ${articleWordCount(a)}` : '';
       }
