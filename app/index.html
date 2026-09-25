@@ -7575,20 +7575,28 @@ let listenOn = false;
           syncTaskNextLabel();
           return;
         }
-        /* 「下一句」（他 2026-09-24 拍板）：从当前位置往后找第一条没读的，**高亮挪过去 + 同步开播**；
-           放完就停在那句，不再自动往下走（放完自动挪高亮是他明确不要的）。
-           往后没有就回卷找一条，再没有 = 这批读完了 → 把 ② 端上来。
-           「当前位置」= 屏幕上这句（taskSeekK()，手动点偏后跟着你点的走）；
-           点「回到学习位置」会把高亮拉回学习句，于是这里也自动回到学习那条线上（tok 与正轨同步）。 */
-        const base = taskSeekK();
-        let found = -1;
-        for (let qi = base + 1; qi < todayQueue.length; qi++) {
-          if (!readToday2(todayQueue[qi].i)) { found = qi; break; }
+        /* ①→② 的闸先判（§13.1）：今天队列一句不剩就端 ② —— 不能被口径 A 的「走屏幕下一句」
+           绕过去（队列读完了但正文还有句子，用户会一路读到底也见不到小结/答题）。 */
+        if (!todayQueue.some(q => !readToday2(q.i))) { finishPass(1); return; }
+        /* 「下一句」（口径 A，2026-09-25 用户拍板）：永远去**屏幕上紧挨着的下一句** ——
+           哪怕它的词不在今天批次里也照常播、照常记接触（今天 N/M 照实涨），哪怕今天已读过也照去
+           （再读一遍本来就是复习）。手动点偏了也跟着屏幕走。原口径「往后找第一条没读的」会把
+           词不在今天队列里的句子整句跳过 —— 他实测从 hydrogen 句点下一句直接跳过 Leo 句，看着像 bug。
+           本篇走到头才回队列：往后找队列里第一句还没读的（跨章由 revealTaskPos 兜住），
+           队列也没有 → 端 ②。 */
+        const curLocal = idx;
+        if (curLocal >= 0 && curLocal + 1 < sents.length) {
+          const ni = curLocal + 1;
+          const g = localToGlobal(ni);
+          const qi = todayQueue.findIndex(q => q.i === g);
+          if (qi >= 0) taskPos = qi;   // 这句在队列里就把游标跟上；不在则游标原地（滑块/气泡仍可读）
+          try { if (loopMode) { loopSent = g; loopCurrent = 0; } if (abMode === 3) abCancel(true); } catch (e) {}
+          playFrom(ni);
+          return;
         }
-        if (found < 0) {
-          for (let qi = 0; qi <= base && qi < todayQueue.length; qi++) {
-            if (!readToday2(todayQueue[qi].i)) { found = qi; break; }
-          }
+        let found = -1;
+        for (let qi = 0; qi < todayQueue.length; qi++) {
+          if (!readToday2(todayQueue[qi].i)) { found = qi; break; }
         }
         if (found < 0) { finishPass(1); return; }
         revealTaskPos(found, true);

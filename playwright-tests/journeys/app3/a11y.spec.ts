@@ -113,6 +113,11 @@ async function contrastProblems(page: import('@playwright/test').Page, res: Scan
     for (const n of v.nodes as AxeNode[]) {
       const sel = n.target.map(String).join(' ');
       const reason = n.failureSummary || '';
+      /* axe 偶发对 html 根元素报 color-contrast incomplete（默认黑压深底 1.21:1）——
+         html 不渲染任何文本（所有文字都在 body 内、各有令牌色），纯合成误报。
+         注意不能用 AXE_UNCALCULABLE 登记它：那套是 closest() 语义，:root 会把整个页面豁免掉
+         （自检锁当场抓到）。这里只跳过目标本身是根元素的。 */
+      if (/^(:root|html)$/i.test(sel.trim())) continue;
       let info: {
         exempt: string[]; nonBodyPainted: boolean; color: string; bodyColor: string;
         fontSize: number; fontWeight: number;

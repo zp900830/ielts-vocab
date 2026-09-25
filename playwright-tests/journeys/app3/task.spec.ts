@@ -105,6 +105,43 @@ async function installSpeakStub(page: import('@playwright/test').Page) {
 const finishSpeak = (page: import('@playwright/test').Page) =>
   page.evaluate(() => { const w = window as unknown as { __cbs: (() => void)[] }; const cb = w.__cbs.shift(); if (cb) cb(); });
 
+const curIdx = (page: import('@playwright/test').Page) =>
+  page.evaluate(() => {
+    const p = document.querySelector('#art .sent.playing');
+    return p ? Array.from(document.querySelectorAll('#art .sent')).indexOf(p) : -1;
+  });
+
+/* 口径 A（2026-09-25 用户拍板）：任务模式里的「下一句」= 屏幕上紧挨着的下一句 ——
+   哪怕那句的词不在今天批次（被 assemble 排除、队列里没有它）也照去，不许整句跳过。
+   复现用户的局面：队列 = [0, 2, 3, …]（第 1 句的词今天已见过 → 不在批次），
+   站在第 0 句点「下一句」必须落到第 1 句，而不是按队列跳到第 2 句。 */
+test('口径 A：下一句=屏幕上紧邻的下一句（不在今天批次也照去）', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.readDone(1); });
+  await page.reload();
+  await waitAppReady(page);
+  await page.locator('.art-card').first().click();
+  await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'read');
+  await installSpeakStub(page);
+
+  // 进任务模式落在队列第一条没读的（= 文章第 0 句）
+  expect(await curIdx(page), '落在第 0 句').toBe(0);
+  // 队列确实跳过了第 1 句（它的词今天已见过）—— 这是 assemble 的口径，不动
+  const inQueue = await page.evaluate(() => TASK.queue.map((q: { i: number }) => q.i));
+  expect(inQueue, '夹具要真造出「第 1 句不在队列」').not.toContain(1);
+  expect(inQueue[0], '队列第一条 = 第 0 句').toBe(0);
+
+  await page.locator('#tbNext').click();          // 放这一句（第 0 句）
+  await finishSpeak(page);                        // 播完记完成
+  await page.locator('#tbNext').click();          // 下一句
+  expect(await curIdx(page), '必须落到屏幕上紧邻的第 1 句，不许按队列跳到第 2 句').toBe(1);
+  await finishSpeak(page);
+  await page.locator('#tbNext').click();          // 再下一句 → 第 2 句（它回到了队列正轨）
+  expect(await curIdx(page)).toBe(2);
+});
+
 /* 在 ② 的浮窗里点「正确」/「错误」的那个选项（不碰游标、不推进）。 */
 async function answerCorrectlyInPop(page: import('@playwright/test').Page) {
   const idx = await page.evaluate(() => {
