@@ -331,3 +331,48 @@ test.describe('M5 · 去掉「免费」标签', () => {
     await expect(page.locator('.me-tag')).toHaveCount(0);
   });
 });
+
+/* 2026-09-25 用户：补上「重置学习计划」。语义（我的判断）：
+   只清计划配置与当天排程（分钟数/新词开关/开始日期），**进度/词状态/日账/streak 一律保留**
+   （§9 是核心资产，破坏性操作要二次确认并说清）。重置后可重新建计划，进度续上。 */
+test.describe('M5 · 重置学习计划', () => {
+  test('二次确认说清「会重置什么/不会动什么」；重置后计划没了、进度还在、可重新建', async ({ page }) => {
+    await stubData(page, SIX);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.readDone(0); TASK.seedArticleForTest(0, { reps: 5 }); });
+    const before = await page.evaluate(() => ({
+      words: Object.keys(TASK.state()!.words).length,
+      days: Object.keys(TASK.state()!.daily).length,
+      streak: TASK.todayStats().streak,
+    }));
+    expect(before.words, '先造出词进度').toBeGreaterThan(0);
+
+    const pop = await openMe(page);
+    const btn = pop.locator('[data-me-reset-plan]');
+    await expect(btn, '浮窗里有「重置学习计划」').toBeVisible();
+    let msg = '';
+    page.once('dialog', async (d) => { msg = d.message(); await d.accept(); });
+    await btn.click();
+    expect(msg, '确认文案说清重置什么').toMatch(/重置/);
+    expect(msg, '确认文案说清不动什么').toMatch(/不会动|保留|不清/);
+    await expect.poll(() => page.evaluate(() => TASK.hasPlan)).toBe(false);
+
+    const after = await page.evaluate(() => ({
+      words: Object.keys(TASK.state()!.words).length,
+      days: Object.keys(TASK.state()!.daily).length,
+      streak: TASK.todayStats().streak,
+    }));
+    expect(after, '重置计划不清进度/词状态/日账/streak').toEqual(before);
+
+    // 能重新建：走真实设置入口（CTA → 设置屏 → 30 分钟 → 开始这个计划）
+    await pop.locator('[data-me-cta]').click();
+    const panel = page.locator('#todayPanel');
+    await expect(panel).toBeVisible();
+    await panel.locator('.ps-opt[data-v="30"]').click();
+    await panel.locator('#psStart').click();
+    await expect.poll(() => page.evaluate(() => TASK.hasPlan)).toBe(true);
+    expect((await page.evaluate(() => TASK.planConfig()))!.minutes, '重新选了 30 分钟').toBe(30);
+    expect(await page.evaluate(() => Object.keys(TASK.state()!.words).length), '重建后进度仍在').toBe(before.words);
+  });
+});

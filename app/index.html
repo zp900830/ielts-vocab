@@ -5947,10 +5947,17 @@ let listenOn = false;
            ps-start 会先于本函数把 pending 取走，所以这里清掉不会弄丢正常的「回到那一篇」。 */
         _pendingArticle = null;
         ROOT2 = ROOT2 || {};
+        /* 2026-09-25「重置学习计划」：重置后重建设置（pendingReplan）时，**只换计划、不碰进度**——
+           事件流 / 词状态 / 日账 / streak 全部留下（§9 核心资产）。首次建计划（没有 pendingReplan）
+           才从零开始。 */
+        const keepProgress = !!(ROOT2.pendingReplan && ROOT2.state && ROOT2.events && ROOT2.events.length);
+        if (ROOT2.pendingReplan) delete ROOT2.pendingReplan;
         ROOT2.plan = { todayMinutes: m, startDate: ShadowPlan.dayKey(Date.now(), 4),
                        endDate: null, pausedNew: false, totalDays: 30 };
-        ROOT2.state = ShadowPlan.emptyState(); ROOT2.events = []; ROOT2.uploaded = 0; ROOT2.migratedAt = 0;
         ROOT2.planned = {};
+        if (!keepProgress) {
+          ROOT2.state = ShadowPlan.emptyState(); ROOT2.events = []; ROOT2.uploaded = 0; ROOT2.migratedAt = 0;
+        }
         syncLegacyPlan(); savePlan();
         prog = prog || { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {}, pace: {} };
         saveProg();
@@ -8188,6 +8195,27 @@ let listenOn = false;
         const p = document.getElementById('todayPanel');
         if (p && _panelOpen) renderSetup(p);
       }
+      /* 「重置学习计划」（用户 2026-09-25：以前的学习计划重置的功能没做）。
+         与上面的 resetPlan()「清空重来」**不是一回事**：那支把进度连根清掉，这支只换计划。
+         二次确认写清「会重置什么 / 不会动什么」；重置后 pendingReplan 让下一次 initPlan
+         保住事件流 / 词状态 / 日账 / streak，只重设分钟数、新词开关、开始日期与今天排程。 */
+      function resetLearningPlan() {
+        if (!ROOT2 || !ROOT2.plan) return false;
+        if (!confirm('重置学习计划？\n\n会重置：每天分钟数、新词开关、开始日期与今天的排程。\n'
+          + '不会动：已学进度、单词状态、连续天数与学习数据。\n重置后可重新设置每天读多久。')) return false;
+        ROOT2.plan = null;
+        ROOT2.planned = {};
+        ROOT2.pendingReplan = true;      // 下次 initPlan：只换计划，进度照留
+        _cachedPlan = null; _cachedDay = ''; _cachedArticle = undefined;
+        todayQueue = [];
+        if (taskMode) exitTaskMode();
+        syncLegacyPlan();                // plan = null
+        try { localStorage.removeItem(LS_PLAN); } catch (e) {}
+        persist2();
+        showAbToast('学习计划已重置，进度已保留');
+        try { if (window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
+        return true;
+      }
 
       /* 底部这一行的两种态各有各的锁，别混成一把：
          「今天先不做」那把按天记在 localStorage（下面 skipResume），提不提由下面 offerResume 的注释说了算。 */
@@ -8321,7 +8349,7 @@ let listenOn = false;
         listenLeave, listenMiniStop: listenClose,
         listenState, listenStat, listenLast, listenTick, listenFlush, listenSetTickForTest,
         get listenArticle() { return _listenArticle; },
-        again, prev, next, pauseNew, resetPlan, onSentenceComplete,
+        again, prev, next, pauseNew, resetPlan, resetLearningPlan, onSentenceComplete,
         taskSentenceFinished,
         exportBackup, importBackup, backupPayload, parseBackup, applyBackup,
         get active() { return taskMode; },

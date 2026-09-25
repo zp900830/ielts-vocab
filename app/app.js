@@ -863,7 +863,9 @@
           ${MINS.map(m => `<button class="ps-opt${m === cfg.minutes ? ' sel' : ''}" data-me-min="${m}">${m}</button>`).join('')}</div></div>
         <div class="mp-row"><span class="mp-label">新词</span><div class="ps-opts">
           <button class="ps-opt${cfg.pausedNew ? '' : ' sel'}" data-me-new="0">正常</button>
-          <button class="ps-opt${cfg.pausedNew ? ' sel' : ''}" data-me-new="1">只复习</button></div></div>` : ''}
+          <button class="ps-opt${cfg.pausedNew ? ' sel' : ''}" data-me-new="1">只复习</button></div></div>
+        <div class="mp-row"><span class="mp-label">学习计划</span><div class="ps-opts">
+          <button class="ps-opt" type="button" data-me-reset-plan aria-label="重置学习计划，只重设计划、保留进度">重置</button></div></div>` : ''}
         <div class="mp-row"><span class="mp-label">数据</span><div class="ps-opts">
           <button class="ps-opt" data-me-export>导出备份</button>
           <button class="ps-opt" data-me-import>导入恢复</button></div></div>
@@ -933,7 +935,7 @@
     if (!pop || pop._wired) return;
     pop._wired = true;
     pop.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-new],[data-me-export],[data-me-import],[data-me-signup],[data-me-logout]');
+      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-new],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-signup],[data-me-logout]');
       if (!t) return;
       // 有些按钮点完会 renderMePop() 重渲（主题/分钟/新词）—— 重渲会把 e.target 从 DOM 摘下来，
       // 事件继续冒泡到 document 的「点外面收掉」监听时，target 已不在 #mePop 里，会被误判成点外面。
@@ -946,6 +948,7 @@
       } else if (t.hasAttribute('data-me-theme')) { if (typeof toggleDark === 'function') toggleDark(); renderMePop(); }
       else if (t.hasAttribute('data-me-min')) { TASK.setMinutes(Number(t.dataset.meMin)); renderMePop(); positionMePop(); }
       else if (t.hasAttribute('data-me-new')) { TASK.setPauseNew(t.dataset.meNew === '1'); renderMePop(); }
+      else if (t.hasAttribute('data-me-reset-plan')) { TASK.resetLearningPlan(); renderMePop(); positionMePop(); }
       else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }
       else if (t.hasAttribute('data-me-import')) { TASK.importBackup('meImportFile'); }
       else if (t.hasAttribute('data-me-signup')) { meSignup(); }
