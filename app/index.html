@@ -39,6 +39,10 @@
     --border: #e5dfd6; --green: #0c9c74;
     --coral: #e07a5f; --coral-deep: #c9564a;
     --note: #c08a2e; --note-soft: rgba(192,138,46,.08); --note-line: #e7cf9a;
+    /* 标签「琥珀」档（refine3 ④）：浅琥珀底 + 深琥珀字。色值沿用项目里既有的两颗
+       `.reader-head .fav-badge` 用色（#fdf1dc / #8a5f0a，实测字压底 ≈4.99:1，过 AA），
+       不再用「纯色实底 + 黑字」。深色见 body.dark。 */
+    --note-bg: #fdf1dc; --note-text: #8a5f0a;
     /* 2026-09-24（第三轮）：用户要求退回「深墨字」之前那一版 —— 轻薄荷渐变 + 白字/白图标 + 通透光晕。
        --grad 回到 #2bd4a4→#0fae7e（三站同值），光晕回到 0 3px 10px rgba(16,180,135,.25)。
        实测白字压最亮端 #2bd4a4 只有 1.90:1（最暗端 2.85:1），⚠️ 已知低于 WCAG AA 正文 4.5
@@ -49,14 +53,13 @@
     --grad-shadow: 0 3px 10px rgba(16,180,135,.25);
     /* 压在绿底上的字色（2026-09-24 用户拍板：白字/白图标）。 */
     --cta-ink: #fff;
-    /* 深墨字专用：选中态胶囊（.ps-opt.sel / .pill.on）的底色是更亮的 --task-new #10b487，
-       白字压它只有 2.66:1（过不了 AA），而 --task-new 在深色模式还得当亮字用（不能压暗）。
-       所以这几处非主按钮的选中态保留深墨 —— 与主按钮的白字并存，是分开的两颗 token。 */
+    /* 深墨字：refine3（③④）后非主按钮的选中态全部改走「浅底 + 同色深字」，
+       这支只剩两处结构性用色 —— 路径跳转焦点块（.sr-only-focusable:focus）与 A-B 的 A 角标
+       （.sent.ab-a::after）。新组件不要再拿它当"绿底黑字"用。 */
     --cta-ink-dark: #04231b;
-    /* 绿「字」专用的一档。--accent #0c9c74 当字用实测只有 3.49:1（压白底）、压 --accent-soft
-       的浅薄荷只有 3.06:1，AA 正文要 4.5 —— 上一轮只管了「绿底浅字」那半边，这半边是它镜像。
-       不能直接把 --accent 调暗：#btnAB.ab-active、.ab-on 那几颗是「深墨字压 --accent 底」，
-       墨字要 4.78 才够，底色一暗就掉到 3.25，等于修一族撞坏另一族。所以字与底分开两档。 */
+    /* 绿「字」专用的一档（refine3 起是所有浅底薄荷标签/选中态的深字）。--accent #0c9c74 当字用
+       实测只有 3.49:1（压白底）、压 --accent-soft 的浅薄荷只有 3.06:1，AA 正文要 4.5。
+       所以字与底分开两档：底仍用 --accent（主按钮渐变/强调），字用 --accent-text。 */
     --accent-text: #0a7558;
     --shadow: 0 2px 12px rgba(40,35,25,.06);
     --shadow-lg: 0 12px 40px rgba(40,35,25,.12);
@@ -90,6 +93,7 @@
     --border: #33302b; --green: #10b487;
     --coral: #e07a5f; --coral-deep: #c9564a;
     --note: #d9a441; --note-soft: rgba(217,164,65,.12); --note-line: rgba(217,164,65,.28);
+    --note-bg: rgba(217,164,65,.16); --note-text: #d9a441;
     --grad: linear-gradient(135deg, #2bd4a4, #0fae7e);
     --grad-shadow: 0 3px 10px rgba(16,180,135,.25);
     --accent-text: var(--accent);   /* 深色底上绿字本来就够（#10b487 压 #252220 实测 5.95:1），这一档只给浅色用 */
@@ -158,8 +162,8 @@
   body.dark.scrolled .audiobar.expanded .ab-collapse,
   body.dark:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse { background: rgba(30,28,25,.6); }
   body.dark.scrolled .audiobar .ab-expand:hover, body.dark .audiobar.force-mini .ab-expand:hover,
-  body.dark .audiobar .ab-collapse:hover { background: var(--accent); color: var(--cta-ink-dark);
-    box-shadow: 0 4px 14px rgba(16,180,135,.5); }
+  body.dark .audiobar .ab-collapse:hover { background: var(--accent-soft); color: var(--accent-text);
+    box-shadow: 0 4px 14px rgba(16,180,135,.35); }
   body.dark #seekRail { background: #3a453f; }
   html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth;
     background-color: #f8fdfa;
@@ -428,13 +432,13 @@
     background: var(--accent-soft); border-radius: 999px; padding: 4px 10px; font-weight: 600;
     cursor: pointer; transition: font-size .2s ease-in .12s, padding .2s ease-in .12s,
       max-width .2s ease-in .12s, opacity .2s ease-in .12s; } /* reverse: bar 展开后标题延迟淡入 */
-  .ab-title:hover { background: var(--accent); color: var(--cta-ink-dark); }
+  .ab-title:hover { background: var(--accent-soft); color: var(--accent-text); box-shadow: inset 0 0 0 1px var(--accent); }
   .jump-btn { display: none; }
   .ab-seek { flex: 1; min-width: 0; }
   .ab-btn { font-size: 12px; padding: 4px 10px; min-height: 30px;
     transition: font-size .4s ease, padding .4s ease, min-height .4s ease; }
   #btnAB { font-weight: 700; letter-spacing: -0.5px; min-width: 4.2em; text-align: center; } /* 二字标签(AB/设A/设B)定宽锁死，不随状态撑宽，与左右按钮同尺寸 */
-  #btnAB.ab-active { background: var(--accent); color: var(--cta-ink-dark); border-color: var(--accent); }
+  #btnAB.ab-active { background: var(--accent-soft); color: var(--accent-text); border-color: var(--accent); }
   #btnAB.ab-arm { border: 1px dashed var(--accent); color: var(--accent-text); background: var(--accent-soft);
     animation: abArmPulse 1.2s ease-in-out infinite; }
   @keyframes abArmPulse { 50% { opacity: .55; } }
@@ -478,9 +482,9 @@
   #abLive { position: fixed; left: 50%; transform: translateX(-50%);
     bottom: calc(128px + env(safe-area-inset-bottom, 0px)); z-index: 131;
     display: none; align-items: center; max-width: calc(100vw - 28px);
-    padding: 7px 14px; border: 0; border-radius: 999px; background: var(--accent);
-    color: var(--cta-ink-dark); font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;
-    box-shadow: 0 4px 14px rgba(0,0,0,.22); }
+    padding: 7px 14px; border: 1px solid var(--accent); border-radius: 999px; background: var(--accent-soft);
+    color: var(--accent-text); font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(0,0,0,.16); }
   #abLive.on { display: inline-flex; }
   /* 单句重复 / 倍速：同一套下拉菜单交互（桌面悬浮+点击，移动点击） */
   .loop-wrap, .rate-wrap { position: relative; flex: none;
@@ -648,7 +652,7 @@
   #markList .mbtns .btn { flex: 1; padding: 6px 4px; min-height: 34px; font-size: 12px; }
   #markList .mbtns .go { flex: 2; }
   /* 书签行 A/B 状态：该条是当前循环起/终点时点亮 */
-  #markList .mbtns .btn.ab.ab-on { background: var(--accent); color: var(--cta-ink-dark); border-color: var(--accent); }
+  #markList .mbtns .btn.ab.ab-on { background: var(--accent-soft); color: var(--accent-text); border-color: var(--accent); }
   /* 拖动时浮在条子上方的那枚玻璃气泡。播放条与任务条共用一套配方（.prog-tip 是第二个现场），
      所以位置/尺寸相关的都留在这里，任务条那根只在 JS 里算 left —— 别在第二处重抄一遍毛玻璃。 */
   #seekTip, .prog-tip { position: absolute; left: 0; bottom: calc(100% + 14px); transform: translateX(-50%);
@@ -872,8 +876,8 @@
   body.scrolled .audiobar:not(.expanded) .ab-expand:hover,
   .audiobar.force-mini .ab-expand:hover,
   body.scrolled .audiobar.expanded .ab-collapse:hover,
-  body:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse:hover { opacity: 1; background: var(--accent); color: var(--cta-ink-dark);
-    transform: translateX(-50%) scale(1.18); box-shadow: 0 4px 14px rgba(12,156,116,.45); }
+  body:not(.scrolled) .audiobar:not(.force-mini) .ab-collapse:hover { opacity: 1; background: var(--accent-soft); color: var(--accent-text);
+    transform: translateX(-50%) scale(1.18); box-shadow: 0 4px 14px rgba(12,156,116,.3); }
   body.scrolled .audiobar:not(.expanded) .ab-expand:active,
   .audiobar.force-mini .ab-expand:active,
   body.scrolled .audiobar.expanded .ab-collapse:active,
@@ -1287,7 +1291,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 词本：状态过滤器 + 词行 */
   .tp-filters { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
   .pill { min-height: 30px; padding: 4px 11px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--text); font-size: 12px; cursor: pointer; }
-  .pill.on { background: var(--task-new); color: var(--cta-ink-dark); border-color: var(--task-new); font-weight: 600; }
+  /* refine3 ③：非主按钮的选中态一律走「浅色底 + 同色深字」（与主站 .tr-msw.on/.r-badge/.wb-filter 同一支），
+     不再用深绿实心 + 黑字。 */
+  .pill.on { background: var(--accent-soft); color: var(--accent-text); border-color: var(--accent-line); font-weight: 600; }
   .tp-book { max-height: 44vh; overflow-y: auto; border: 1px solid var(--border); border-radius: 12px; }
   /* 词与状态贴在一起说同一个词，别让 1fr 把状态推到中缝：auto / 1fr / auto ——
      状态紧跟词后、右端只留「重学」。 */
@@ -1302,7 +1308,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .tp-tab.on { color: var(--task-new); }
   body.dark .tp-note { background: rgba(52,211,153,.07); border-color: rgba(52,211,153,.16); }
   body.dark .pill { color: var(--text); }
-  body.dark .pill.on { color: #062d22; }
+  body.dark .pill.on { color: var(--accent-text); }
   body.dark .sync-state { color: #f0a08c; }
   .tp-week { display: flex; gap: 4px; align-items: flex-end; height: 48px; margin-top: 10px; }
   .tp-week-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
@@ -1563,8 +1569,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .ps-group label { font-size: 12px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px; }
   .ps-opts { display: flex; gap: 6px; flex-wrap: wrap; }
   .ps-opt { border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer; background: transparent; transition: all .15s; }
-  .ps-opt:hover { border-color: var(--task-new); color: var(--task-new); }
-  .ps-opt.sel { background: var(--task-new); color: var(--cta-ink-dark); border-color: var(--task-new); }
+  .ps-opt:hover { border-color: var(--accent); color: var(--accent-text); }
+  /* refine3 ③：选中态从「深绿实心 + 黑字」改成浅薄荷底 + 深绿字（他截图的「每天分钟数 / 新词」那一排）。 */
+  .ps-opt.sel { background: var(--accent-soft); color: var(--accent-text); border-color: var(--accent-line); font-weight: 600; }
   /* 计划小结：标签—数值结构化，轮数只在这里出现一次并放大 */
   .ps-sum { margin: 14px 0 12px; padding: 2px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
   .ps-sum-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 12px; color: var(--muted); }
@@ -1601,7 +1608,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 暗色模式补充覆盖 */
   body.dark .tp-close:hover { background: rgba(255,255,255,.08); }
   body.dark .ps-opt { color: var(--text); }
-  body.dark .ps-opt.sel { color: var(--cta-ink-dark); }
+  body.dark .ps-opt.sel { color: var(--accent-text); }
   body.dark .ps-sum-row.warn, body.dark .ps-sum-row.warn b { color: #f0a08c; }
   body.dark .today-panel .tp-head h3, body.dark .today-panel .plan-setup h3 { color: var(--text); }
   body.dark .task-bar .tb-title { color: var(--text); }
@@ -1870,15 +1877,18 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 当前阶段胶囊（§3.3 / §9.4）：四档各自可辨 */
   .art-card .a-stage { flex: none; font-size: 10.5px; font-weight: 700; line-height: 1.7;
     padding: 0 8px; border-radius: 999px; background: rgba(0,0,0,.05); color: var(--muted); }
+  /* refine3 ④ 标签色板：灰(未开始) → 薄荷浅底深绿字(进行中) → 薄荷描边(已完成) → 浅琥珀(熟练)。
+     全部浅底 + 同色系深字，不再「纯色实底 + 黑字」。 */
   .art-card[data-stage="reading"] .a-stage { background: var(--accent-soft); color: var(--accent-text); }
   .art-card[data-stage="read"] .a-stage,
-  .art-card[data-stage="quiz"] .a-stage,
-  .art-card[data-stage="done"] .a-stage { background: var(--accent); color: var(--cta-ink-dark); }
+  .art-card[data-stage="quiz"] .a-stage { background: var(--accent-soft); color: var(--accent-text); }
+  .art-card[data-stage="done"] .a-stage { background: var(--accent-soft); color: var(--accent-text);
+    box-shadow: inset 0 0 0 1px var(--accent-text); }
   /* 入口 2（§4.4）：通读已完成的篇目多一颗「答题」直入 ② */
   .art-card .a-quiz { display: block; width: calc(100% - 32px); margin: 0 16px 14px; min-height: 44px;
     border: 1px solid var(--accent-line); border-radius: 10px; cursor: pointer;
     background: var(--accent-soft); color: var(--accent-text); font-weight: 700; font-size: 13px; }
-  .art-card .a-quiz:hover { background: var(--accent); color: var(--cta-ink-dark); }
+  .art-card .a-quiz:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-text); }
   /* 未开始：只虚化【装饰】，不虚化【文字】。
      M6 a11y 复审（2026-09-24）：原来整卡 opacity:.62，把卡内文字一起淡到实测 3.1:1（AA 正文要 4.5）；
      又因整卡半透明、axe 顺着祖先摸到 body 的渐变底，判成 color-contrast incomplete ——
@@ -1891,7 +1901,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .art-card[data-stage="todo"] .a-title { color: var(--muted); }
   .art-card[data-stage="todo"] .a-bar { opacity: .55; background: transparent; border: 1px dashed var(--border); }
   /* 熟练（≥80% 且已学完，§9.2）：金色条 + 金胶囊 */
-  .art-card[data-stage="pro"] .a-stage { background: var(--note-soft); color: var(--note); }
+  .art-card[data-stage="pro"] .a-stage { background: var(--note-bg); color: var(--note-text); }
   .art-card[data-stage="pro"] .a-bar i { background: linear-gradient(90deg, #f0c24b, #d99a1f); }
   @media (max-width: 1023px) { .art-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 700px) { .art-grid { grid-template-columns: 1fr; } }
@@ -1997,11 +2007,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .wr-word { font-size: 15px; font-weight: 700; }
   .wr-pill { flex: none; font-size: 10.5px; font-weight: 700; line-height: 1.8; padding: 0 9px;
     border-radius: 999px; background: rgba(0,0,0,.05); color: var(--ink2); }
+  /* refine3 ④ 标签色板（与首页 .a-stage 同一套）：灰 / 薄荷浅底 / 琥珀浅底 / 薄荷描边(完成)。
+     一律浅底 + 同色系深字，不再「纯色实底 + 黑字」。 */
   .wr-pill.s-seen, .wr-pill.s-recognized { background: var(--accent-soft); color: var(--accent-text); }
-  /* 实底胶囊一律「深墨字」：白字压 --accent #0c9c74 只有 3.49:1（过不了 AA 正文 4.5），
-     与首页卡片的「已学完」胶囊（.a-stage[data-stage=done]）同一支 --cta-ink-dark。 */
-  .wr-pill.s-owned, .wr-pill.leech { background: var(--note); color: var(--cta-ink-dark); }
-  .wr-pill.s-graduated { background: var(--accent); color: var(--cta-ink-dark); }
+  .wr-pill.s-owned, .wr-pill.leech { background: var(--note-bg); color: var(--note-text); }
+  .wr-pill.s-graduated { background: var(--accent-soft); color: var(--accent-text);
+    box-shadow: inset 0 0 0 1px var(--accent-text); }
   .wr-meta, .wr-meta2 { display: block; margin-top: 3px; font-size: 11px; color: var(--muted); }
   .wb-more { display: block; width: 100%; min-height: 44px; margin-top: 12px; border: 1px dashed var(--border);
     border-radius: 16px; background: var(--card); color: var(--accent-text); font: inherit; font-weight: 700;
@@ -2009,8 +2020,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .wb-row, body.dark .wb-filter, body.dark .wb-more { background: var(--card); border-color: var(--border); }
   body.dark .wr-pill { background: rgba(255,255,255,.06); color: var(--ink2); }
   body.dark .wr-pill.s-seen, body.dark .wr-pill.s-recognized { background: var(--accent-soft); color: var(--accent-text); }
-  body.dark .wr-pill.s-owned, body.dark .wr-pill.leech { background: var(--note); color: var(--cta-ink-dark); }
-  body.dark .wr-pill.s-graduated { background: var(--accent); color: var(--cta-ink-dark); }
+  body.dark .wr-pill.s-owned, body.dark .wr-pill.leech { background: var(--note-bg); color: var(--note-text); }
+  body.dark .wr-pill.s-graduated { background: var(--accent-soft); color: var(--accent-text);
+    box-shadow: inset 0 0 0 1px var(--accent-text); }
   @media (max-width: 700px) { .wb-filter { flex: 1 1 calc(50% - 8px); } }
   .wb-detail { padding: 12px 14px 14px; border: 1px solid var(--border); border-top: none;
     border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; background: var(--card); }
@@ -2018,7 +2030,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .wd-word { font-size: 17px; font-weight: 800; }
   .wd-stage { font-size: 10.5px; font-weight: 700; line-height: 1.8; padding: 0 9px; border-radius: 999px;
     background: rgba(0,0,0,.05); color: var(--ink2); }
-  .wd-stage.leech { background: var(--note); color: var(--cta-ink-dark); }
+  .wd-stage.leech { background: var(--note-bg); color: var(--note-text); }
   .wd-relearn { margin-left: auto; flex: none; min-height: 44px; padding: 0 14px; border: 1px solid var(--border);
     border-radius: 999px; background: var(--card); color: var(--accent-text); font: inherit; font-weight: 700; cursor: pointer; }
   .wd-phon { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
@@ -2038,7 +2050,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .wd-stat { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
   body.dark .wb-detail { background: var(--card); border-color: var(--border); }
   body.dark .wd-stage { background: rgba(255,255,255,.06); color: var(--ink2); }
-  body.dark .wd-stage.leech { background: var(--note); color: var(--cta-ink-dark); }
+  body.dark .wd-stage.leech { background: var(--note-bg); color: var(--note-text); }
   /* ============ 3.0 外壳深色覆盖（W2，PRD §10.1） ============
      外壳与 M1 新页面统一到影子跟读的暖黑 token（--bg/--card/--border/--text/--accent-soft…），
      只把几处写死的浅色值换掉（.a-bar / .a-stage 等）。全部复用既有 token，不新造色。 */
@@ -2061,9 +2073,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .art-card[data-stage="todo"] .a-stage { color: var(--text); }
   body.dark .art-card[data-stage="reading"] .a-stage { background: var(--accent-soft); color: var(--accent-text); }
   body.dark .art-card[data-stage="read"] .a-stage,
-  body.dark .art-card[data-stage="quiz"] .a-stage,
-  body.dark .art-card[data-stage="done"] .a-stage { background: var(--accent); color: var(--cta-ink-dark); }
-  body.dark .art-card[data-stage="pro"] .a-stage { background: var(--note-soft); color: var(--note); }
+  body.dark .art-card[data-stage="quiz"] .a-stage { background: var(--accent-soft); color: var(--accent-text); }
+  body.dark .art-card[data-stage="done"] .a-stage { background: var(--accent-soft); color: var(--accent-text);
+    box-shadow: inset 0 0 0 1px var(--accent-text); }
+  body.dark .art-card[data-stage="pro"] .a-stage { background: var(--note-bg); color: var(--note-text); }
   body.dark .art-card .a-quiz { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-text); }
   body.dark .home-banner { background: var(--accent-soft); border-color: var(--accent-line); }
   /* 新头部（W1 重做）：一级页面顶栏 + 文章内玻璃胶囊/拨杆，全部换暖黑 token */

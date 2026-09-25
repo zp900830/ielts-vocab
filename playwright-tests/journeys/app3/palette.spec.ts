@@ -168,4 +168,80 @@ test.describe('3.0 状态胶囊（实底）对比度 ≥ AA 正文 4.5', () => {
     const gradColor = await page.locator('.wb-row .wr-pill.s-graduated').evaluate((el) => getComputedStyle(el).color);
     expect(gradColor, '毕业胶囊必须是深墨字：白字压 --accent #0c9c74 只有 3.49:1').not.toBe('rgb(255, 255, 255)');
   });
+
+  /* refine3 ④：标签一律「浅底 + 同色深字」，不许再出现「纯色实底 + 黑字」。
+     反向：旧代码 .wr-pill.s-owned/leech/graduated 都是 --note/--accent 实底 + --cta-ink-dark，
+     背景暗、字近黑；本用例量「背景亮度必须够高（浅底）」+「字不是那支近黑」。 */
+  test('refine3 ④：义项直连/重点词/已毕业 一律浅底深字，背景不是实心深色、字不是近黑', async ({ page }) => {
+    await stubData(page, PILLS);
+    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await waitShadowReady(page);
+    await page.evaluate(() => {
+      TASK.resetV2(); TASK.initPlan(15);
+      const st = TASK.state();
+      const mk = (o: Record<string, unknown>) => Object.assign(ShadowPlan.newWord(), o);
+      st.words['gradw'] = mk({ stage: 'graduated', reps: 12, ok3: 1 });
+      st.words['ownedw'] = mk({ stage: 'owned', reps: 4, ok3: 1 });
+      st.words['leechw'] = mk({ stage: 'seen', reps: 1, leech: true });
+      APP3.route();
+    });
+    const lum = (rgb: number[]) => {
+      const f = (v: number) => { const x = v / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); };
+      return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
+    };
+    for (const sel of ['.wr-pill.s-owned', '.wr-pill.leech', '.wr-pill.s-graduated']) {
+      const m = await page.locator(`.wb-row ${sel}`).first().evaluate((el) => {
+        const cs = getComputedStyle(el as HTMLElement);
+        const nums = (s: string) => (s.match(/[\d.]+/g) || []).slice(0, 3).map(Number);
+        return { bg: nums(cs.backgroundColor), color: nums(cs.color) };
+      });
+      expect(lum(m.bg), `${sel} 必须是浅底（背景亮度 > 0.5），实测 bg=${m.bg}`).toBeGreaterThan(0.5);
+      expect(m.color, `${sel} 不许用近黑 #04231b`).not.toEqual([4, 35, 27]);
+    }
+  });
 });
+
+/* refine3 ③：非主按钮的操作组件（选中态胶囊）统一「浅底 + 同色深字」，
+   不再「深绿实心 + 黑字」。用户截图点名的是「我的」浮窗里「每天分钟数 / 新词」两排。
+   锁：背景是浅薄荷、字是深绿、对比 ≥4.5；字不是近黑。 */
+describeRefine3();
+
+function describeRefine3() {
+  const fixture: Record<string, string> = (() => {
+    const mk = (title: string, n: number) => ({
+      title, zh: title, subheads: [''],
+      paragraphs: [Array.from({ length: n }, (_, i) => `Sentence ${i} about [[w${i}:w${i}]].`)],
+      sentZh: [Array.from({ length: n }, (_, i) => `第 ${i} 句。`)],
+      paraZh: [''],
+    });
+    const titles = ['地球与生命', '校园与文化', '衣食住行', '社会与规则', '历史与发明', '身体与时间'];
+    const vocab: Record<string, { m: string }> = {};
+    for (let i = 0; i < 12; i++) vocab[`w${i}`] = { m: 'w' + i };
+    return { 'sections.json': JSON.stringify(titles.map((t, i) => mk(t, i === 0 ? 12 : 2))), 'vocab.json': JSON.stringify(vocab), 'chapters.json': '[]' };
+  })();
+
+  test('refine3 ③：「我的」选中态（每天分钟数 / 新词）浅底深绿字，不再是深绿实心 + 黑字', async ({ page }) => {
+    await stubData(page, fixture);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitShadowReady(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    await page.reload();
+    await waitShadowReady(page);
+    await page.locator('#meCard').click();
+    await expect(page.locator('#mePop')).toBeVisible();
+    const sel = page.locator('#mePop .ps-opt.sel').first();
+    await expect(sel).toBeVisible();
+    const m = await sel.evaluate((el) => {
+      const cs = getComputedStyle(el as HTMLElement);
+      const nums = (s: string) => (s.match(/[\d.]+/g) || []).slice(0, 3).map(Number);
+      const f = (v: number) => { const x = v / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); };
+      const lum = (c: number[]) => 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
+      const bg = nums(cs.backgroundColor), fg = nums(cs.color);
+      const ratio = (Math.max(lum(bg), lum(fg)) + 0.05) / (Math.min(lum(bg), lum(fg)) + 0.05);
+      return { bg, fg, ratio: +ratio.toFixed(2) };
+    });
+    expect(m.bg, '选中态必须是浅薄荷底（--accent-soft），不是 #10b487 实心').toEqual([224, 245, 236]);
+    expect(m.fg, '选中态字必须是深绿（--accent-text #0a7558）').toEqual([10, 117, 88]);
+    expect(m.ratio, `选中态对比度 ${m.ratio}:1`).toBeGreaterThanOrEqual(4.5);
+  });
+}
