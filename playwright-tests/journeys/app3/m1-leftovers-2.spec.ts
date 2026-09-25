@@ -57,18 +57,6 @@ const SIXQ: Record<string, string> = (() => {
   };
 })();
 
-/* M6 · N1 用夹具：单篇 70 个不同目标词 → 单词本首批只渲 60 行，必有「加载更多」(.wb-more)
-   作为页面最后一个可点控件。 */
-const MANY: Record<string, string> = (() => {
-  const n = 70;
-  const vocab: Record<string, { m: string }> = {};
-  for (let i = 0; i < n; i++) vocab[`nw${i}`] = { m: 'n. 词 ' + i };
-  const lines = Array.from({ length: n }, (_, i) => `Sentence ${i} with [[nw${i}:nw${i}]].`);
-  const sections = [{ title: '地球与生命', zh: '地球与生命', subheads: [''], paragraphs: [lines],
-    sentZh: [lines.map((_, i) => `第 ${i + 1} 句。`)], paraZh: [''] }];
-  return { 'sections.json': JSON.stringify(sections), 'vocab.json': JSON.stringify(vocab), 'chapters.json': '[]' };
-})();
-
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
     await page.route(`**/shadow/data/${name}*`, (r) =>
@@ -389,48 +377,36 @@ test.describe('3.0 W7 终审 5 条观察', () => {
     await expect(page.locator('.art-card')).toHaveCount(6);
   });
 
-  /* M6 · N1：手机端底部续读条不再盖住页面底部控件（M1 遗留清单 N1）。
-     续读条由 offerResume() 在 init 时调一次、不随路由；#appView 的 padding-bottom 之前固定 88px
-     没算浮条高度，/words 最后一个控件 .wb-more 被压（仍可点但视觉被盖）。
-     修法：body.resume-offer 时 ① 手机把浮条抬到 TabBar 之上 ② #appView 追加浮条高度
-     ③ 桌面让开左侧栏（顺带不再盖侧栏底部的「我的」）。反向验证：去掉 app/ 的这三条必红。 */
-  test('N1 续读条不再盖住底部控件（手机抬到 TabBar 上；桌面让开侧栏）', async ({ page }) => {
+  /* refine3 ⑤（2026-09-25 用户「底部的提示条去除吧」）：M6 · N1 那条一级页面底部续读条整块删除，
+     续学入口统一到首页顶部「继续学」横幅。反向验证：旧代码会挂 #taskBar[data-state=resume] 且
+     body.resume-offer，本用例必红。 */
+  test('refine3 ⑤：一级页面不再有底部续读条；入口在首页「继续学」横幅', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
-    await stubData(page, MANY);
+    await stubData(page, SIXQ);
     await page.goto(`${rootUrl}/app/index.html#/words`);
     await waitAppReady(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await page.reload();
     await waitAppReady(page);
-    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'resume');
-    await expect(page.locator('.wb-more')).toBeVisible();
 
-    // 滚到页面最底：最后一个控件要落在续读条之上
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    const geo = await page.evaluate(() => {
-      const r = (s: string) => document.querySelector(s)!.getBoundingClientRect();
-      return { more: r('.wb-more'), bar: r('#taskBar'), tab: r('.sidenav') };
-    });
-    expect(geo.bar.bottom, '手机续读条底边要抬到 TabBar 顶边之上').toBeLessThanOrEqual(geo.tab.top + 1);
-    expect(geo.more.bottom, '最后一个控件 bottom 不能落进续读条').toBeLessThanOrEqual(geo.bar.top + 1);
+    // 一级页面：任务条不露脸，也不再有 resume 态 / body.resume-offer
+    await expect(page.locator('#taskBar')).not.toHaveClass(/show/);
+    expect(await page.locator('#taskBar').getAttribute('data-state')).not.toBe('resume');
+    expect(await page.locator('body').getAttribute('class') || '').not.toContain('resume-offer');
+    // 相关 API 一并清掉（死代码清理的反向锁）
+    const staleApi = await page.evaluate(() => ['offerResume', 'skipResume', 'hideResumeOffer', 'resumeTask']
+      .filter((k) => typeof (TASK as unknown as Record<string, unknown>)[k] === 'function'));
+    expect(staleApi, '续读条相关 API 已删除').toEqual([]);
+    // 「今天先不做」那把按天锁也不再被写
+    expect(await page.evaluate(() => localStorage.getItem('ielts.shadow.resumeDay'))).toBeNull();
 
-    // 命中测试兜底：more 的中心点必须还是 more 自己（没被浮条截获）。
-    // 先收掉常驻 sync-hint（本地无云凭证时它会挂在同一片区域，不是被测对象）。
-    await page.evaluate(() => { const s = document.getElementById('syncHint'); if (s) s.hidden = true; });
-    const hit = await page.evaluate(() => {
-      const e = document.querySelector('.wb-more')!; const b = e.getBoundingClientRect();
-      const at = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2);
-      return !!(at && at.closest('.wb-more'));
-    });
-    expect(hit, '最后一个控件的中心点仍可点（不被浮条截获）').toBe(true);
-
-    // 桌面：续读条整体让开左侧栏，「我的」不再被盖
-    await page.setViewportSize({ width: 1200, height: 900 });
-    await page.waitForTimeout(200);
-    const d = await page.evaluate(() => {
-      const r = (s: string) => document.querySelector(s)!.getBoundingClientRect();
-      return { me: r('#meCard'), bar: r('#taskBar') };
-    });
-    expect(d.bar.left, '桌面续读条要整体落在侧栏右侧').toBeGreaterThanOrEqual(d.me.right - 1);
+    // 入口统一到首页「继续学」：横幅主行说「今天还剩 N 句」，点击直接进任务模式
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await expect(page.locator('#homeBanner .hb-main')).toContainText('继续学');
+    await expect(page.locator('#homeBanner .hb-main')).toContainText('今天还剩');
+    await expect(page.locator('#homeBanner .hb-sum')).toContainText('今天覆盖');
+    await page.locator('#homeBanner .b-go').click();
+    await expect(page.locator('body')).toHaveClass(/task-mode/);
+    await expect(page.locator('#taskBar')).toHaveClass(/show/);
   });
 });

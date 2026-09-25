@@ -1334,12 +1334,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     background: radial-gradient(160px 28px at 16% 0%, rgba(255,255,255,.55), transparent 72%),
       linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0)); }
   .task-bar.show { display: flex; }
-  /* M6 N1：续读条（body.resume-offer，一级页面刷新时那条「今天 N 句」）在桌面要【让开左侧栏】，
-     否则它 left:24/right:24 的玻璃条会横跨侧栏、盖住侧栏底部那颗「我的」（实测 #meCard 被 #tbTitle 截获）。
-     任务模式里 #appShell 已隐藏、没有侧栏，所以只在 resume-offer 态收 left。
-     同时把浮条高度追加进 #appView 的 padding-bottom —— 手机档尤其需要，见下方 700px 档。 */
-  body.resume-offer .task-bar { left: calc(220px + 24px); }
-  body.resume-offer #appView { padding-bottom: calc(88px + var(--task-bar-h, 62px)); }
+  /* refine3 ⑤（2026-09-25 用户）：删掉一级页面底部那条「今天 N 句」续读条（M6 N1 的 body.resume-offer）。
+     续学入口统一到首页顶部的「继续学」横幅；任务条从此只在任务模式里出现，那几条让位规则一并清掉。 */
   body.dark .task-bar { background: linear-gradient(145deg, rgba(30,28,25,.92), rgba(30,28,25,.78) 42%, rgba(30,28,25,.62));
     border-color: #33302b;
     box-shadow: 0 24px 64px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.05), inset 0 -1px 0 rgba(0,0,0,.32); }
@@ -1419,8 +1415,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
        选择器多带一层 .task-bar：下面 .tb-play .ab-right 那条会按顺序盖过来，光靠 .tb-play 压不住。 */
     .task-bar .tb-play .ab-right { display: none; }
   }
-  /* 续读条（非任务模式）仍要让开底部那张卡：卡片自己浮在 12px，所以播放条要抬 12 + 卡高 + 8 */
-  body.resume-offer .audiobar { bottom: calc(var(--task-bar-h, 62px) + 20px + env(safe-area-inset-bottom, 0px)); }
   body.task-mode .back-to-learn { bottom: calc(var(--task-bar-h, 62px) + 24px + env(safe-area-inset-bottom, 0px)); }
   /* ---- 任务模式：底部只有**一条通栏、一行按钮**（2026-09-21 他拍的：播放条所有功能都放这条上；
      2026-09-22 又改一次：这条上不许再分行，所有操作按钮同一行，最重要的在最右、依次往左排） ----
@@ -1472,9 +1466,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      宽屏才让文字在左、按钮在右 —— 390px 上二者并排会把文字挤没（上一轮实测过）。 */
   @media (max-width: 700px) {
     .task-bar { left: 12px; right: 12px; padding: 8px 10px 8px 12px; }
-    /* M6 N1：手机档 TabBar 占底部 57px（z-index 300），续读条要抬到它上面去，别再被 TabBar 压住
-       （实测续读条 bottom:832 落在 TabBar 787–844 里，整条下半截被盖）。 */
-    body.resume-offer .task-bar { left: 12px; right: 12px; bottom: calc(57px + 12px + env(safe-area-inset-bottom, 0px)); }
     .tb-body { flex-direction: column; align-items: stretch; gap: 6px; padding-right: 26px; }
     /* M6 a11y：手机档 .tb-play 里那几颗（循环/AB/倍速/书签）视觉只有 30px，触区要 ≥44（PRD §10.4）。
        条子高度由 --task-bar-h 现量，撑高不影响让位逻辑。宽度必须 !important：这些按钮被
@@ -1812,7 +1803,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 平板档（PRD §10.2）：701–1023px 侧栏收窄到 180px */
   @media (min-width: 701px) and (max-width: 1023px) {
     .sidenav { width: 180px; }
-    body.resume-offer .task-bar { left: calc(180px + 24px); }   /* M6 N1：平板侧栏收窄到 180 */
   }
   @media (max-width: 700px) {
     #appShell { flex-direction: column-reverse; }
@@ -7090,7 +7080,6 @@ let listenOn = false;
         pass = 1; resetQuizRun(); taskFinished = false;
         _tabStarted = false;                       // 那颗键每一趟都从「放这一句」起步
         if (!todayQueue.length && !fallback) { showAbToast('今天没有排到的句子 —— 把每天的分钟数调大一点试试'); return; }
-        hideResumeOffer();
         taskMode = true;
         sessionStart = Date.now();
         sessionReps = 0; startSessionClock();
@@ -7268,7 +7257,6 @@ let listenOn = false;
 
       function again() {
         const _bar = document.getElementById('taskBar');
-        if (_bar && _bar.dataset.state === 'resume') { skipResume(); return; }   // 续读条上的「今天先不做」
         if (_bar && _bar.dataset.state === 'done') { exitToHome(); return; }     // 收工态：这颗是「回首页」
         // ①：重播当前句；②：没有可重播的动作（「回看句子」已删，§4.4），这颗在 ② 态本就藏起来
         if (!taskMode) return;
@@ -7284,7 +7272,6 @@ let listenOn = false;
       }
       function next() {
         const _bar = document.getElementById('taskBar');
-        if (_bar && _bar.dataset.state === 'resume') { resumeTask(); return; }    // 续读条上的「接着做」
         if (_bar && _bar.dataset.state === 'noplan') { noPlanGoSetup(); return; }  // 空状态：这颗是「去设置」
         if (_bar && _bar.dataset.state === 'done') { exitToWords(); return; }     // 收工态：这颗是「看词本」
         // 记录当前句完成，跳下一个；② 态下这个键是「下一题 / 跳过这题」
@@ -7386,10 +7373,8 @@ let listenOn = false;
       // ---- UI 更新 ----
       let _barRO = null;
       /* 条子现在多高，就把 --task-bar-h 写成多高；条子收起来就把这个变量撤掉，让 CSS 兜底值接管。
-         两个方向都要写：以前这里挂着 `&& taskMode`，只有任务模式才量 —— 可吃这个变量的
-         `body.resume-offer .audiobar` 恰恰活在任务模式外（刷新时那张「今天 N 句」的续读卡），
-         于是它永远拿 62px 的兜底值，而那张卡实测 88px，播放条就被压住 18px（他 2026-09-23 图 1）。
-         反过来只设不清也会错：退出任务模式后留一个旧高度，常规模式的同步药丸会凭空浮高。 */
+         （refine3 ⑤ 起任务条只在任务模式里出现，这条高度变量的读者只剩任务模式内的让位元素。）
+         只设不清也会错：退出任务模式后留一个旧高度，常规模式的同步药丸会凭空浮高。 */
       function syncTaskBarHeight() {
         const bar = document.getElementById('taskBar');
         if (!bar) return;
@@ -7508,7 +7493,6 @@ let listenOn = false;
         const subEl = document.getElementById('tbSub');
         const againBtn = document.getElementById('tbAgain');
         const nextBtn = document.getElementById('tbNext');
-        if (!taskMode && bar.dataset.state === 'resume') return;   // 续读条占着这一行，别把它刷成任务态
         // §2.3：没计划却在任务模式里 = 自由跟读态，任务条换成空状态（有计划的正常分支在下面）
         if (!ROOT2 || !ROOT2.plan) {
           if (taskMode) renderNoPlanTaskBar();
@@ -8418,62 +8402,10 @@ let listenOn = false;
         return true;
       }
 
-      /* 底部这一行的两种态各有各的锁，别混成一把：
-         「今天先不做」那把按天记在 localStorage（下面 skipResume），提不提由下面 offerResume 的注释说了算。 */
-      const RESUME_KEY = 'ielts.shadow.resumeDay';
-      function hideResumeOffer() {
-        const bar = document.getElementById('taskBar');
-        if (bar && bar.dataset.state === 'resume') { bar.classList.remove('show'); bar.dataset.state = 'idle'; }
-        document.body.classList.remove('resume-offer');
-        syncTaskBarHeight();   // 卡收掉了，高度变量也得撤，否则播放条还按 88px 让位
-      }
-      /* 刷新时底部这一行本来是任务栏的位置，今天的活没干完（或干脆还没开干）就占用它。
-         不弹窗：弹窗每刷一次都要点掉一次，就成了新的打断源。
-         2026-09-22 走查 #5：以前只在「做了一半」时才提（doneN > 0 那道闸），
-         全新的一天界面零提示，得自己去顶栏找面板 —— 现在一句没读也提，条上就是「今天 N 句」+ 开始。
-         2026-09-23 他把"提几次"这件事拍死了：「每次都提（只要今天没完成）」。
-         原来这里还有一把 sessionStorage 锁，记「这一趟浏览器会话提过没有」，同一标签页第二次刷新就安静下来。
-         他因此报了一条"时好时坏"的 bug（「页面刷新有时候出现两个条，有时是一个播放器的条」）——
-         量过：两个条没重叠，多出来那条就是这张卡；也就是说这把锁省下的不是屏幕，是"一致性"，
-         而一致性对他更值钱。所以判据只剩两条，都在"今天的活"这一本账上：
-           还有没读完的（planned > doneN）  且  今天没按过「今天先不做」。
-         按下那颗仍然是按天的（skipResume 写 localStorage）—— 那是他主动说的"今天不做"，
-         不该下一刷就被追上来；除此之外网页自己不记"我提过了"。 */
-      function offerResume() {
-        const bar = document.getElementById('taskBar');
-        if (!bar || taskMode || bar.classList.contains('show')) return false;
-        if (!ROOT2 || !ROOT2.plan) return false;
-        const d = (ROOT2.state.daily || {})[day2()] || {};
-        const planned = plannedToday(), doneN = d.sentDone || 0;
-        if (!(planned > doneN)) return false;
-        const fresh = doneN === 0;
-        let gone = null;
-        try { gone = localStorage.getItem(RESUME_KEY); } catch (e) {}
-        if (gone === day2()) return false;
-        bar.dataset.state = 'resume';
-        document.getElementById('tbTitle').innerHTML = fresh
-          ? '<i class="ri-play-circle-line" aria-hidden="true"></i> 今天 ' + planned + ' 句'
-          : '<i class="ri-play-circle-line" aria-hidden="true"></i> 今天的任务还没做完';
-        // 开跑那一屏不给第二个数：N 句就是全部要做的，还剩多少等进了 ① 条上自然会说
-        // 「还剩」这一格调 todayLeftN() 而不是就地做减法：算式只许住在一处（上面那行 planned/doneN
-        // 是同一本账的另一半，减法多写一遍就是两份实现，本仓库反复栽在这上面）。
-        document.getElementById('tbSub').textContent = fresh
-          ? '' : `已读 ${doneN}/${planned} 句 · 还剩 ${todayLeftN()} 句`;
-        syncTaskSeek(false, planned ? doneN / planned : 0);   // 续读条在任务模式外，这一根只读不拖
-        const again = document.getElementById('tbAgain'), nxt = document.getElementById('tbNext');
-        if (again) { again.style.display = ''; again.textContent = '今天先不做'; }
-        if (nxt) nxt.innerHTML = '<i class="ri-arrow-right-line" aria-hidden="true"></i> ' + (fresh ? '开始' : '接着做');
-        bar.classList.add('show');
-        document.body.classList.add('resume-offer');
-        syncTaskBarHeight();
-        return true;   // 调用方（init）拿它决定那条断更 toast 还弹不弹
-      }
-      function resumeTask() { hideResumeOffer(); enterTaskMode(); }
-      function skipResume() {
-        try { localStorage.setItem(RESUME_KEY, day2()); } catch (e) {}
-        hideResumeOffer();
-        showAbToast('今天剩下的不补 —— 明天还是从这批里接着往下排');
-      }
+      /* refine3 ⑤（2026-09-25 用户「底部的提示条去除吧」）：
+         一级页面刷新时那条底部续读条（offerResume / skipResume / hideResumeOffer，以及按天的
+         RESUME_KEY 锁）整块删除 —— 续学入口统一到首页顶部的「继续学」横幅（app.js renderBanner）。
+         任务条从此只在任务模式里出现。 */
 
       // ---- 与播放链路集成 ----
       // 自由模式下读了任务句也计数
@@ -8512,14 +8444,12 @@ let listenOn = false;
         if (plan) {
           buildQueue();
           updateBtn();
-          let offered = false;
-          try { offered = offerResume() === true; } catch (e) { dlog('resume-offer-fail', (e && e.message) || e); }
           /* 断更提示：新句窗口已改为按进度游标推进（见 buildQueue），欠下的句子
              不会因日历前移而被跳过，所以这里只如实说明现状，不再声称"已调整计划"。
-             与底部那条提示同屏只冒一条（走查 #5）：条上那颗点了就开跑，这句只是解释昨天为什么
-             排这些 —— 两条一起出，眼睛先被字多的那句抓走，而动作在条上。 */
+             refine3 ⑤ 起底部续读条已删，这条 toast 就是断更后唯一的说明（首页「继续学」横幅
+             负责给入口），所以不再需要「续读条已占屏就不弹」那道互斥。 */
           const lastDay = prog.lastDay;
-          if (lastDay && !offered) {
+          if (lastDay) {
             const gap = Math.round((startOfToday() - new Date(lastDay + 'T00:00:00').getTime()) / 864e5);
             if (gap > 2) {
               showAbToast(`欢迎回来。上次读到这里，今天先排 ${todayPlan(true).queue.length} 句（${ROOT2 && ROOT2.plan ? ROOT2.plan.todayMinutes : 15} 分钟），剩下的不用补`);
@@ -8567,7 +8497,6 @@ let listenOn = false;
         recordRep, buildQueue, updateMarkers, updateBtn,
         loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
         pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
-        offerResume, resumeTask, skipResume, hideResumeOffer,
         initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setPauseNew,
         etaFor, etaCalls, countStages, seedDailyForTest, seedArticleForTest,
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数

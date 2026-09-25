@@ -741,9 +741,13 @@
       go = '设置你每天的学习时间';
     } else {
       const s = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats() : { streak: 0, graduated: 0, targetWords: 0, planned: 0, done: 0 };
+      /* refine3 ⑤：底部续读条删掉后，「今天还剩 N 句 / 今天覆盖 K 词」这两个原本只有它说的数
+         改由首页横幅承接（与任务条辅行、数据页「今天」块同源：TASK.todayProgress / todayCoverWords）。 */
+      const tp = (typeof TASK !== 'undefined' && TASK.todayProgress) ? TASK.todayProgress() : null;
+      const cover = (typeof TASK !== 'undefined' && TASK.todayCoverWords) ? TASK.todayCoverWords() : 0;
       /* W5-2：刚建计划当天 streak=0，写「连续 0 天」像中断，改口「今天开始」；有天数才报连续。 */
       sum = (s.streak > 0 ? `连续 ${s.streak} 天` : '今天开始') +
-            ` · 已毕业 ${s.graduated} / ${s.targetWords} 词`;
+            ` · 今天覆盖 ${cover} 词 · 已毕业 ${s.graduated} / ${s.targetWords} 词`;
       const nextA = nextArticle();
       if (s.planned > 0 && s.done >= s.planned) {
         const extra = s.done - s.planned;
@@ -757,7 +761,10 @@
            于是会写「继续学《第一篇》· 还剩 [全局] 句」。改成这一篇自己还没读过的句数
            （total - ever），与卡片进度同一个派生量。 */
         const x = articleStat(nextA);
-        main = `继续学《${esc(SECTIONS[nextA].title)}》· 还剩 ${Math.max(1, x.total - x.ever)} 句`;
+        /* 「还剩」用**今天**这本题的剩量（tp.left），不是文章未读总量 —— 续读条删掉后，
+           用户需要一眼看到「今天还要读几句」（与任务条辅行、数据页今天块同一个数）；
+           文章级未读（x.total - x.ever）留给卡片进度条。tp 取不到时退回文章口径。 */
+        main = `继续学《${esc(SECTIONS[nextA].title)}》· 今天还剩 ${tp ? tp.left : Math.max(1, x.total - x.ever)} 句`;
       }
       go = goWords ? '看词本' : '继续学';
     }
