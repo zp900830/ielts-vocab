@@ -6,9 +6,11 @@
   /* refine3 ⑦：「正在载入…」占位统一出口。薄荷绿三点轻脉冲（纯 CSS，见 index.html 的 .iel-loading），
      尊重 prefers-reduced-motion；role=status 让读屏知道在加载，而不是一片空白。 */
   function loadingHtml() {
+    /* 情感化 loading（2026-09-26 用户）：单词卡小精灵（会眨眼轻跳）+ 拟人文案；reduced-motion 降级为静止 */
     return '<div class="iel-loading" role="status" aria-live="polite">'
-      + '<span class="ld-dots" aria-hidden="true"><i></i><i></i><i></i></span>'
-      + '<span>正在载入…</span></div>';
+      + '<span class="ld-buddy" aria-hidden="true"><span class="ld-card"><i class="ld-eye l"></i><i class="ld-eye r"></i><i class="ld-cheek l"></i><i class="ld-cheek r"></i><i class="ld-mouth"></i></span><span class="ld-shadow"></span></span>'
+      + '<span class="ld-msg">单词卡马上就来</span>'
+      + '<span class="ld-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>';
   }
   let cur = 'home';
   let _hlArticle = null;   // 数据页点文章小卡 → 回首页要高亮的那一篇（§5.4）
@@ -486,7 +488,7 @@
           </div>
           <input class="ls-seek" type="range" min="1" max="1" value="1" step="1" aria-label="句级位置条">
           <p class="ls-info">—</p>
-          <button class="ls-expand" type="button" aria-label="展开全文阅读">点击展开全文阅读</button>
+          <button class="ls-expand" type="button" aria-label="展开全文阅读"><i class="ri-book-open-line" aria-hidden="true"></i><span>展开全文阅读</span></button>
         </div>
       </div>
     </div>`;

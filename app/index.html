@@ -271,10 +271,16 @@
   .seg { color: var(--muted); font-size: 12px; min-width: 76px; text-align: center;
     background: var(--accent-soft); border-radius: 999px; padding: 4px 10px; font-weight: 600; }
 
-  /* ============ 数据加载动效（refine3 ⑦：改用项目自己的薄荷绿三点脉冲，见 .ld-dots） ============ */
+  /* ============ 数据加载动效（refine3 ⑦ 薄荷三点脉冲；2026-09-26 换情感化单词卡小精灵 .ld-buddy） ============ */
   .boot { min-height: 60vh; display: flex; flex-direction: column; align-items: center;
     justify-content: center; gap: 10px; padding: 40px 20px; text-align: center; }
-  .boot-logo { font-size: 44px; filter: grayscale(.1); }
+  .boot-buddy { width: 48px; height: 56px; margin-bottom: 4px; }
+  .boot-buddy .ld-card { left: 6px; top: 2px; width: 36px; height: 40px; border-radius: 10px; }
+  .boot-buddy .ld-eye { top: 16px; width: 5px; height: 6px; }
+  .boot-buddy .ld-eye.l { left: 10px; } .boot-buddy .ld-eye.r { right: 10px; }
+  .boot-buddy .ld-cheek.l { left: 6px; } .boot-buddy .ld-cheek.r { right: 6px; }
+  .boot-buddy .ld-mouth { top: 23px; width: 9px; margin-left: -4.5px; }
+  .boot-buddy .ld-shadow { left: 12px; width: 24px; }
   .boot-txt { font-size: 15px; color: var(--ink2); display: flex; align-items: center; gap: 9px; }
   .boot-sub { font-size: 12.5px; color: var(--muted); }
   .boot-err { font-size: 14px; color: var(--coral); line-height: 1.8; }
@@ -1261,8 +1267,47 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     0%, 100% { opacity: .35; transform: translateY(0) scale(.9); }
     50% { opacity: 1; transform: translateY(-3px) scale(1); }
   }
+  /* ---- 情感化 loading 小伙伴（2026-09-26 用户）：一张薄荷单词卡小人 ——
+     会眨眼、轻轻蹦跳，落地时影子跟着呼吸。纯 CSS，无图片无库。
+     reduced-motion：蹦跳/眨眼全停，只留静止卡片 + 静点。 ---- */
+  .ld-buddy { position: relative; width: 34px; height: 40px; flex: none; }
+  .ld-card { position: absolute; left: 3px; top: 2px; width: 28px; height: 30px; border-radius: 8px;
+    background: var(--grad); box-shadow: 0 4px 12px rgba(16,180,135,.35), inset 0 1px 0 rgba(255,255,255,.4);
+    transform-origin: 50% 100%;
+    animation: ldHop 1.5s var(--ease-smooth) infinite; }
+  .ld-card::before { content: ""; position: absolute; inset: 5px 6px auto; height: 2px; border-radius: 1px;
+    background: rgba(255,255,255,.55); }   /* 卡片上的一行"字"，让它像单词卡 */
+  .ld-eye { position: absolute; top: 12px; width: 4px; height: 5px; border-radius: 2px;
+    background: #0b3b2e; animation: ldBlink 2.8s ease infinite; }
+  .ld-eye.l { left: 8px; } .ld-eye.r { right: 8px; }
+  .ld-cheek { position: absolute; top: 18px; width: 4px; height: 2px; border-radius: 1px;
+    background: rgba(11,59,46,.25); }
+  .ld-cheek.l { left: 4px; } .ld-cheek.r { right: 4px; }
+  .ld-mouth { position: absolute; left: 50%; top: 18px; width: 7px; height: 3.5px; margin-left: -3.5px;
+    border-radius: 0 0 4px 4px; background: #0b3b2e; opacity: .85; }
+  .ld-shadow { position: absolute; left: 7px; bottom: 0; width: 20px; height: 4px; border-radius: 50%;
+    background: rgba(11,84,64,.18); animation: ldShadow 1.5s var(--ease-smooth) infinite; }
+  @keyframes ldHop {
+    0%, 100% { transform: translateY(0) scale(1, 1); }
+    12% { transform: translateY(0) scale(1.06, .94); }      /* 起跳前压扁蓄力 */
+    45% { transform: translateY(-7px) scale(.96, 1.04); }   /* 跳到最高点拉长 */
+    78% { transform: translateY(0) scale(1.04, .96); }      /* 落地压扁 */
+    92% { transform: translateY(0) scale(1, 1); }
+  }
+  @keyframes ldShadow {
+    0%, 100% { transform: scale(1); opacity: .8; }
+    45% { transform: scale(.7); opacity: .45; }
+  }
+  @keyframes ldBlink {
+    0%, 91%, 100% { transform: scaleY(1); }
+    94%, 97% { transform: scaleY(.08); }
+  }
+  .ld-msg { font-size: 12.5px; color: var(--muted); }
   @media (prefers-reduced-motion: reduce) {
     .ld-dots i { animation: none; opacity: .6; transform: none; }
+    .ld-card { animation: none; }
+    .ld-shadow { animation: none; opacity: .5; }
+    .ld-eye { animation: none; }
   }
   .iel-loading { display: inline-flex; align-items: center; gap: 9px; padding: 6px 0;
     font-size: 12.5px; color: var(--muted); }
@@ -2178,25 +2223,35 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 2026-09-25（refine2 ④）：原来整条 --grad 实心绿大按钮太抢，改成 2.0 那套弱化文字按钮
      （主站 index.html 的 .tr-play：无底无框、accent 字、字重 500）。全宽 + 44 触区是本页尺寸覆写。
      唯一登记过的主按钮配色 #2bd4a4 + 白字不动 —— 这颗改弱化正是远离它。 */
-  .ls-expand { display: block; width: 100%; min-height: 44px; margin-top: 2px;
-    border: none; border-radius: 999px; background: transparent; color: var(--accent-text);
-    font: inherit; font-weight: 500; font-size: 13px; cursor: pointer;
-    transition: background var(--t-fast), color var(--t-fast); }
-  .ls-expand:hover { background: var(--accent-soft); color: var(--accent); }
+  .ls-expand { display: inline-flex; align-items: center; justify-content: center; gap: 7px; width: 100%; min-height: 44px; margin-top: 6px;
+    border: 1px solid var(--accent-line); border-radius: 999px; background: var(--accent-soft); color: var(--accent-text);
+    font: inherit; font-weight: 600; font-size: 13.5px; cursor: pointer;
+    transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast), transform var(--t-fast); }
+  .ls-expand i { font-size: 15px; }
+  .ls-expand:hover { background: var(--accent-line); color: var(--accent-text); }
+  .ls-expand:active { transform: scale(.98); }
   /* ④（2026-09-25 用户）展开 = 全屏弹窗：**不放大卡片** —— 篇名/篇号在顶部条、当前句在正文里
      高亮、控件在底部播放条，HUD 大卡是重复信息，整块删掉。 */
   /* ④ 弹窗进入/收起动效（2026-09-25 用户：展开要有动画）：正文整块淡入上移，收起时反向淡出；
      底部播放条 ls-bar-in；悬浮球收起后重新出现靠自身 transition（scale .92→1）。
      reduced-motion 全压。 */
-  @keyframes ls-page-in { from { opacity: 0; transform: translateY(16px) scale(.99); } to { opacity: 1; transform: none; } }
+  @keyframes lsPageIn {
+    from { opacity: 0; transform: translateY(76px) scale(.985); }
+    to { opacity: 1; transform: none; }
+  }
   @keyframes ls-bar-in { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
-  body.listen-mode > .layout { animation: ls-page-in .32s cubic-bezier(.32,.72,.35,1) both; }
-  body.listen-mode > #audiobar { animation: ls-bar-in .32s cubic-bezier(.32,.72,.35,1) both; }
-  body.listen-closing > .layout { animation: ls-page-in .26s cubic-bezier(.32,.72,.35,1) reverse both; }
-  body.listen-closing > #audiobar { animation: ls-bar-in .26s cubic-bezier(.32,.72,.35,1) reverse both; }
+  /* 展开弹窗动效（2026-09-26 用户改口径）：**从下到上滑入**（底片感），收起时**从上到下降落退场**
+     —— reverse 正好是反向路径。顶栏只做轻淡入，不抢戏。 */
+  body.listen-mode > .layout { animation: lsPageIn .38s cubic-bezier(.32,.72,.35,1) both; }
+  body.listen-mode > .listen-top { animation: lsBarIn .3s cubic-bezier(.32,.72,.35,1) both; }
+  body.listen-mode > #audiobar { animation: ls-bar-in .38s cubic-bezier(.32,.72,.35,1) both; }
+  body.listen-closing > .layout { animation: lsPageIn .3s cubic-bezier(.32,.72,.35,1) reverse both; }
+  body.listen-closing > .listen-top { animation: lsBarOut .26s ease both; }
+  body.listen-closing > #audiobar { animation: ls-bar-in .3s cubic-bezier(.32,.72,.35,1) reverse both; }
+  @keyframes lsBarOut { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(-14px); } }
   @media (prefers-reduced-motion: reduce) {
-    body.listen-mode > .layout, body.listen-mode > #audiobar,
-    body.listen-closing > .layout, body.listen-closing > #audiobar { animation: none; }
+    body.listen-mode > .layout, body.listen-mode > .listen-top, body.listen-mode > #audiobar,
+    body.listen-closing > .layout, body.listen-closing > .listen-top, body.listen-closing > #audiobar { animation: none; }
   }
   /* 展开全屏阅读：复用任务模式那套（.layout 正文 + 底部 .audiobar），只是不挂任务条。 */
   body.listen-mode { background: #faf8f4; }
@@ -2209,6 +2264,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      现在照抄任务模式那套 .reader-head：同一容器宽度、同一 .r-title/.r-pos 标题层级、
      同一枚 .back 返回控件（去掉这里对 .back/.r-title/.r-pos 的三条覆写，直接复用共用声明）。 */
   body.listen-mode .listen-top { display: flex; }
+  /* 收起键（2026-09-26 用户改样式）：不再是光杆圆形箭头 —— 带字胶囊「⌄ 收起」，
+     语义自明（收起不是返回），位置仍在顶栏左端。 */
+  .listen-top .back { width: auto; min-height: 32px; padding: 0 12px 0 8px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 2px;
+    background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-text);
+    font: inherit; font-weight: 600; font-size: 12.5px; }
+  .listen-top .back i { font-size: 15px; line-height: 1; }
+  .listen-top .back:hover { background: var(--accent-line); }
   .listen-top { position: sticky; top: 8px; z-index: 40; display: none; align-items: center; gap: 5px;
     width: min(1084px, calc(100% - 36px)); margin: 0 auto; padding: 6px 14px 6px 6px;
     background: rgba(255,255,255,.42); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
@@ -2313,7 +2376,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <!-- 随身听展开态顶栏（M4 §7.3）：只有标题 + 返回卡片。复用任务模式那套 reader-head 观感，
          但不挂任务模式的 #ttPrev/#ttNext（那两颗会跳进任务模式，随身听只要听）。 -->
     <header class="listen-top" id="listenTop">
-      <button class="back" id="lsClose" type="button" onclick="TASK.listenCollapse()" aria-label="收起" title="收起（播放继续）"><i class="ri-arrow-down-s-line" aria-hidden="true"></i></button>
+      <button class="ls-collapse" id="lsClose" type="button" onclick="TASK.listenCollapse()" aria-label="收起" title="收起（播放继续）"><i class="ri-arrow-down-s-line" aria-hidden="true"></i><span>收起</span></button>
       <div class="r-title"><span class="tt-zh" id="lsTitle"></span><span class="r-pos" id="lsPos"></span></div>
     </header>
 
@@ -2502,7 +2565,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <div class="layout">
       <!-- ④ 随身听展开弹窗（2026-09-25 用户：原 HUD 大卡片删掉 —— 篇名/篇号在顶部条、
            当前句在正文里高亮、控件在底部播放条，三处都已各有其位，中间那张卡是重复信息）。
-           展开动画：正文整块 ls-page-in 淡入上移；收起时反向淡出，底部播放条 ls-bar-in。 -->
+           展开动画：正文整块从下到上滑入（lsPageIn 76px）；收起时从上到下降落退场，底部播放条 ls-bar-in。 -->
       <main id="main"><article id="art"><div id="abRegion" class="ab-region" style="display:none" aria-hidden="true"><button class="ab-cancel" onclick="abCancel()" title="取消循环" aria-label="取消循环">×</button></div></article></main>
       <aside id="panel">
         <div class="head">
@@ -2545,7 +2608,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
-        if (art) art.innerHTML = '<div class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-txt" role="status" aria-live="polite">正在加载学习数据<span class="ld-dots" aria-hidden="true"><i></i><i></i><i></i></span></div><div class="boot-sub">正在获取文章与词汇数据</div></div>';
+        if (art) art.innerHTML = '<div class="boot"><span class="ld-buddy boot-buddy" aria-hidden="true"><span class="ld-card"><i class="ld-eye l"></i><i class="ld-eye r"></i><i class="ld-cheek l"></i><i class="ld-cheek r"></i><i class="ld-mouth"></i></span><span class="ld-shadow"></span></span><div class="boot-txt" role="status" aria-live="polite">正在加载学习数据<span class="ld-dots" aria-hidden="true"><i></i><i></i><i></i></span></div><div class="boot-sub">单词卡马上就来</div></div>';
         // 移动端弱网/Edge 压缩代理下偶发单次失败：每个文件最多试 3 次（间隔递增），单个挂掉能定位到文件名
         const sleep = ms => new Promise(r => setTimeout(r, ms));
         async function get(url, label) {
@@ -2572,7 +2635,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         } catch (err) {
           console.error('数据加载失败', err);
           const detail = esc((err && err.message) || '网络异常');
-          if (art) art.innerHTML = '<div class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-err">数据加载失败（' + detail + '），请检查网络后重试<button onclick="location.reload()">重新加载</button></div></div>';
+          if (art) art.innerHTML = '<div class="boot"><span class="ld-buddy boot-buddy" aria-hidden="true"><span class="ld-card"><i class="ld-eye l"></i><i class="ld-eye r"></i><i class="ld-cheek l"></i><i class="ld-cheek r"></i><i class="ld-mouth"></i></span><span class="ld-shadow"></span></span><div class="boot-err">数据加载失败（' + detail + '），请检查网络后重试<button onclick="location.reload()">重新加载</button></div></div>';
           throw err;
         }
       }
@@ -6029,7 +6092,7 @@ let listenOn = false;
         };
         if (reduce) { finish(); return; }
         document.body.classList.add('listen-closing');
-        _listenCollapseTimer = setTimeout(finish, 260);
+        _listenCollapseTimer = setTimeout(finish, 300);
       }
       /* ④ HUD 内容（已撤，2026-09-25 用户删大卡片）：篇名/篇号在顶部条（#lsTitle/#lsPos）、
            当前句在正文高亮、状态在播放条 —— 不再另有一张卡。这里只剩顶部条这行字的填充。 */
