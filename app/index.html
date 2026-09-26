@@ -643,6 +643,22 @@
   .ab-loop-item .ab-loop-range { font-size: 11px; color: var(--muted); }
   .ab-loop-item .ab-loop-btns { display: flex; gap: 4px; flex: none; align-self: center; }
   .ab-loop-item .btn { padding: 4px 8px; font-size: 12px; min-height: 28px; }
+  /* AB / 书签浮窗里的动作键与 loop-menu/rate-menu 的平铺菜单项统一（2026-09-26 用户：
+     「AB 循环和标记位置的浮窗里，按钮样式和其他的都不统一」）——不再拿主按钮 .btn.play 的
+     渐变实心塞进小浮窗。 */
+  .ab-menu-action { display: block; width: 100%; border: none; background: transparent; border-radius: 10px;
+    padding: 9px 10px; font: inherit; font-size: 12.5px; font-weight: 600; color: var(--accent-text);
+    cursor: pointer; text-align: center; transition: background var(--t-fast), color var(--t-fast); }
+  .ab-menu-action:hover { background: var(--accent-soft); }
+  .ab-menu-action.danger { color: var(--coral-deep, #c0492f); }
+  .ab-menu-action.danger:hover { background: rgba(192,73,47,.1); }
+  .ab-loop-item .ab-loop-act { border: none; background: transparent; border-radius: 9px; padding: 5px 9px;
+    font: inherit; font-size: 12px; font-weight: 600; color: var(--accent-text); cursor: pointer;
+    transition: background var(--t-fast); }
+  .ab-loop-item .ab-loop-act:hover { background: var(--accent-soft); }
+  .ab-loop-item .ab-loop-act.del { color: var(--coral-deep, #c0492f); }
+  .ab-loop-item .ab-loop-act.del:hover { background: rgba(192,73,47,.1); }
+  body.dark .ab-menu-action:hover, body.dark .ab-loop-item .ab-loop-act:hover { background: rgba(16,180,135,.14); }
   /* AB 循环列表：中文任意处可断行，菜单会被内容撑到 min-width 导致挤成一团；
      给列表定最小宽 + 名称单行省略，范围与按钮永不换行 */
   #abLoopList { min-width: 230px; }
@@ -667,6 +683,18 @@
   #markList .mbtns .go { flex: 2; }
   /* 书签行 A/B 状态：该条是当前循环起/终点时点亮 */
   #markList .mbtns .btn.ab.ab-on { background: var(--accent-soft); color: var(--accent-text); border-color: var(--accent); }
+  /* 书签行的动作键（2026-09-26 统一）：跟浮窗菜单项同一支 —— 平铺、hover 浅底、状态点亮，
+     不再用白底描边的 .btn（一列按钮两种长相）。 */
+  #markList .mbtns .mk-act { flex: 1; min-height: 32px; border: none; background: transparent; border-radius: 9px;
+    padding: 6px 4px; font: inherit; font-size: 12px; font-weight: 600; color: var(--accent-text);
+    cursor: pointer; transition: background var(--t-fast); }
+  #markList .mbtns .mk-act:hover { background: var(--accent-soft); }
+  #markList .mbtns .mk-act.go { flex: 2; }
+  #markList .mbtns .mk-act.ab { color: var(--muted); }
+  #markList .mbtns .mk-act.ab.ab-on { background: var(--accent-soft); color: var(--accent-text); }
+  #markList .mbtns .mk-act.del { color: var(--coral-deep, #c0492f); }
+  #markList .mbtns .mk-act.del:hover { background: rgba(192,73,47,.1); }
+  body.dark #markList .mbtns .mk-act:hover, body.dark #markList .mbtns .mk-act.ab.ab-on { background: rgba(16,180,135,.14); }
   /* 拖动时浮在条子上方的那枚玻璃气泡。播放条与任务条共用一套配方（.prog-tip 是第二个现场），
      所以位置/尺寸相关的都留在这里，任务条那根只在 JS 里算 left —— 别在第二处重抄一遍毛玻璃。 */
   #seekTip, .prog-tip { position: absolute; left: 0; bottom: calc(100% + 14px); transform: translateX(-50%);
@@ -2242,15 +2270,19 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     from { opacity: 0; transform: translateY(76px) scale(.985); }
     to { opacity: 1; transform: none; }
   }
-  @keyframes ls-bar-in { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @keyframes lsBarIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  /* ⚠️ 底部播放条**只用透明度**做入场：它是 `left:50% + translateX(-50%)` 居中的，
+     任何带 transform 的动画（哪怕终态写 none，fill-mode both 会永久生效）都会把居中 transform
+     覆盖掉 —— 2026-09-26 用户实测「播放条不居中」就是这个（偏右 156px）。 */
+  @keyframes lsBarFade { from { opacity: 0; } to { opacity: 1; } }
   /* 展开弹窗动效（2026-09-26 用户改口径）：**从下到上滑入**（底片感），收起时**从上到下降落退场**
      —— reverse 正好是反向路径。顶栏只做轻淡入，不抢戏。 */
   body.listen-mode > .layout { animation: lsPageIn .38s cubic-bezier(.32,.72,.35,1) both; }
   body.listen-mode > .listen-top { animation: lsBarIn .3s cubic-bezier(.32,.72,.35,1) both; }
-  body.listen-mode > #audiobar { animation: ls-bar-in .38s cubic-bezier(.32,.72,.35,1) both; }
+  body.listen-mode > #audiobar { animation: lsBarFade .34s ease both; }
   body.listen-closing > .layout { animation: lsPageIn .3s cubic-bezier(.32,.72,.35,1) reverse both; }
   body.listen-closing > .listen-top { animation: lsBarOut .26s ease both; }
-  body.listen-closing > #audiobar { animation: ls-bar-in .3s cubic-bezier(.32,.72,.35,1) reverse both; }
+  body.listen-closing > #audiobar { animation: lsBarFade .26s ease reverse both; }
   @keyframes lsBarOut { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(-14px); } }
   @media (prefers-reduced-motion: reduce) {
     body.listen-mode > .layout, body.listen-mode > .listen-top, body.listen-mode > #audiobar,
@@ -2267,14 +2299,17 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      现在照抄任务模式那套 .reader-head：同一容器宽度、同一 .r-title/.r-pos 标题层级、
      同一枚 .back 返回控件（去掉这里对 .back/.r-title/.r-pos 的三条覆写，直接复用共用声明）。 */
   body.listen-mode .listen-top { display: flex; }
-  /* 收起键（2026-09-26 用户改样式）：不再是光杆圆形箭头 —— 带字胶囊「⌄ 收起」，
-     语义自明（收起不是返回），位置仍在顶栏左端。 */
-  .listen-top .back { width: auto; min-height: 32px; padding: 0 12px 0 8px; border-radius: 999px;
-    display: inline-flex; align-items: center; gap: 2px;
-    background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-text);
-    font: inherit; font-weight: 600; font-size: 12.5px; }
-  .listen-top .back i { font-size: 15px; line-height: 1; }
-  .listen-top .back:hover { background: var(--accent-line); }
+  /* 收起键（2026-09-26 用户两轮反馈）：带字胶囊、**无边框无实底** —— 玻璃顶栏上叠一个白底描边
+     小盒太笨重（「太丑了」）。现在就是一枚轻量文字键：⌄ + 收起，hover 才出浅底。
+     ⚠️ 类名是 .ls-collapse（不再复用 .back）—— 样式必须挂在真类名上，
+     上一版挂在 .listen-top .back 上没生效，这颗键其实一直在吃浏览器默认按钮样式（灰底黑边）。 */
+  .listen-top .ls-collapse { width: auto; min-height: 30px; padding: 0 10px 0 4px; border: none;
+    display: inline-flex; align-items: center; gap: 1px;
+    background: transparent; color: var(--accent-text);
+    font: inherit; font-weight: 600; font-size: 12.5px; border-radius: 999px; cursor: pointer; }
+  .listen-top .ls-collapse i { font-size: 17px; line-height: 1; }
+  .listen-top .ls-collapse:hover { background: var(--accent-soft); }
+  body.dark .listen-top .ls-collapse:hover { background: rgba(16,180,135,.14); }
   .listen-top { position: sticky; top: 8px; z-index: 40; display: none; align-items: center; gap: 5px;
     width: min(1084px, calc(100% - 36px)); margin: 0 auto; padding: 6px 14px 6px 6px;
     background: rgba(255,255,255,.42); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
@@ -2458,7 +2493,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
           <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn ab-btn" id="btnAB" onclick="toggleABWrap(event)" title="AB循环" aria-label="设置 A-B 复读区间"><i class="ri-arrow-left-right-line" aria-hidden="true"></i><span class="ab-label">AB</span></button>
           <div class="ab-menu">
-            <button class="btn play" onclick="toggleAB(); abWrap.classList.remove('open')" id="abSetBtn">设置AB循环</button>
+            <button class="ab-menu-action" onclick="toggleAB(); abWrap.classList.remove('open')" id="abSetBtn">设置AB循环</button>
             <div id="abLoopList" style="margin-top:6px"></div>
           </div>
         </div>
@@ -2476,7 +2511,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
           <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn ab-btn" id="markBtn" onclick="toggleMarkWrap(event)" title="书签" aria-label="书签"><i class="ri-bookmark-line" aria-hidden="true"></i></button>
           <div class="ab-menu">
-            <button class="btn play" onclick="addMark()">记下当前位置</button>
+            <button class="ab-menu-action" onclick="addMark()">记下当前位置</button>
             <div id="markList" style="margin-top:6px"></div>
           </div>
         </div>
@@ -4853,7 +4888,7 @@ let listenOn = false;
       const localA = (currentChapter >= 0) ? x.start - chapterSentStart : x.start;
       const localB = (currentChapter >= 0) ? x.end - chapterSentStart : x.end;
       const a = Math.min(localA, localB), b = Math.max(localA, localB);
-      return `<div class="ab-loop-item"><div class="ab-loop-name"><span class="ab-loop-title">${esc(x.name || loopName(x.start, x.end))}</span><div class="ab-loop-range">第 ${a + 1}–${b + 1} 句</div></div><div class="ab-loop-btns"><button class="btn play" onclick="recallABLoop(${x.start}, ${x.end})">加载</button><button class="btn del" onclick="deleteABLoop(${x.start}, ${x.end})">删</button></div></div>`;
+      return `<div class="ab-loop-item"><div class="ab-loop-name"><span class="ab-loop-title">${esc(x.name || loopName(x.start, x.end))}</span><div class="ab-loop-range">第 ${a + 1}–${b + 1} 句</div></div><div class="ab-loop-btns"><button class="ab-loop-act" onclick="recallABLoop(${x.start}, ${x.end})">加载</button><button class="ab-loop-act del" onclick="deleteABLoop(${x.start}, ${x.end})">删</button></div></div>`;
     }).join('') : (all.length
       // 原先一律显示"还没有保存的 AB 循环"，切章后用户以为自己存的循环被删了
       ? `<div style="font-size:12px;color:var(--muted)">当前范围里没有可用的循环：已保存的 ${all.length} 个都在其它章，切到「全部文章」就能看到。</div>`
@@ -5562,10 +5597,10 @@ let listenOn = false;
     const aOn = (abMode === 2 || abMode === 3) && abStart >= 0 && localToGlobal(abStart) === x.i;
     const bOn = abMode === 3 && abEnd >= 0 && localToGlobal(abEnd) === x.i;
     return `<div class="mitem"><div class="mmain"><div class="mt">${esc(markLabel(x.i))}</div><div class="ms">${esc(markSub(x.i, x.t))}</div></div>` +
-      `<div class="mbtns"><button class="btn play go" onclick="jumpMark(${x.i})">直达</button>` +
-      `<button class="btn ab${aOn ? ' ab-on' : ''}" onclick="abMarkPick(${x.i},'A')" title="设为A-B起点">A</button>` +
-      `<button class="btn ab${bOn ? ' ab-on' : ''}" onclick="abMarkPick(${x.i},'B')" title="设为A-B终点">B</button>` +
-    `<button class="btn del" onclick="delMark(${x.i})">删</button></div></div>`; }).join('')
+      `<div class="mbtns"><button class="mk-act go" onclick="jumpMark(${x.i})">直达</button>` +
+      `<button class="mk-act ab${aOn ? ' ab-on' : ''}" onclick="abMarkPick(${x.i},'A')" title="设为A-B起点">A</button>` +
+      `<button class="mk-act ab${bOn ? ' ab-on' : ''}" onclick="abMarkPick(${x.i},'B')" title="设为A-B终点">B</button>` +
+    `<button class="mk-act del" onclick="delMark(${x.i})">删</button></div></div>`; }).join('')
     : '<div style="font-size:12px;color:var(--muted)">还没有书签，先点“记下当前位置”。</div>';
     }
     function jumpMark(i) {
@@ -7468,6 +7503,25 @@ let listenOn = false;
         closePanel();
         /* 入口 2：直接停在 ②（不跑 ①），批次上面已就位。 */
         if (o.startAtPass2) { setPass(2); return; }
+        /* 回到上次学习的位置（2026-09-26 用户：要记住进度，别每次从今日任务的头开始）：
+           存档位置（ielts-pos，savePos 每次起播/翻句都写）指向的就是**这一篇**时，
+           直接把高亮落到那句（队列游标也跟上，若它在队列里）—— 上次停在哪，就从哪继续。
+           位置不在这一篇 / 没存档 → 维持原口径：跳到今日队列第一个未读句。 */
+        try {
+          const saved = readPos();
+          if (Number.isInteger(saved.i) && artOfSentGlobal(saved.i) === currentArticle) {
+            const local = globalToLocal(saved.i);
+            if (local >= 0 && local < sents.length) {
+              const qi = todayQueue.findIndex(q => q.i === saved.i);
+              if (qi >= 0) taskPos = qi;
+              idx = local; _paintIdx = -2; paint(); syncSeek(local);
+              const el = sents[local];
+              if (el) setTimeout(() => { try { el.scrollIntoView({ block: 'center' }); } catch (e) {} }, 60);
+              updateTaskBar();
+              return;
+            }
+          }
+        } catch (e) {}
         // 跳到第一个未完成句
         goToNextTask(false);
       }
@@ -8512,7 +8566,9 @@ let listenOn = false;
           const cap = mk(24 * 60);
           const saturated = cap.queue.length <= probe.queue.length;
           const el = document.getElementById('psSum');
-          if (el) el.innerHTML = `<div class="ps-sum-row"><span>今天大约</span><b>${per} 句 · 覆盖 ${perW} 个目标学习词</b></div>`
+          /* 文案（2026-09-26 用户）：「目标学习词」→「目标词」—— 全项目一直就叫「目标词」
+             （头部徽章「目标词 574」、本屏副标题「3245 个目标词」），这里跟着统一，更精简。 */
+          if (el) el.innerHTML = `<div class="ps-sum-row"><span>今天大约</span><b>${per} 句 · 覆盖 ${perW} 个目标词</b></div>`
             + (saturated ? `<div class="ps-sum-note">这已是当前能排的最大量（今天可排内容共 ${per} 句）：再加时间也不会更多。</div>` : '');
           const eta = document.getElementById('psEta');
           if (eta) {
@@ -8961,6 +9017,17 @@ let listenOn = false;
         repsOf, articlePass2Done,
         /* 真实用时账出口（2026-09-25 链路排查）：数据页「累计学习时长」按天读真实毫秒。 */
         readMsByDay: function () { return loadArticleStats().read.ms; },
+        /* 上次学习位置（2026-09-26）：首页横幅要显示「上次读到第 X 句」——
+           见 enterTaskMode 的恢复逻辑（存档位置属于这一篇就落回去）。 */
+        savedPosForArticle: function (a) {
+          try {
+            const o = readPos();
+            if (!Number.isInteger(o.i)) return -1;
+            if (artOfSentGlobal(o.i) !== a) return -1;
+            const local = globalToLocal(o.i);
+            return (local >= 0 && local < sents.length) ? local : -1;
+          } catch (e) { return -1; }
+        },
         /* 按篇账云同步出口（2026-09-25 用户拍板）：CLOUD.boot / 登录态变化时由外壳调，
            merge/snapshot 同时是测试入口（mergeArticleAccount 的 max 语义有锁）。 */
         cloudPullArticleAccount, cloudPushArticleAccount, mergeArticleAccount, articleAccountSnapshot,
