@@ -262,23 +262,25 @@ test.describe('3.0 随身听（M4，PRD §7）', () => {
   /* refine2 ④（2026-09-25 用户）：原来整条 --grad 实心绿大按钮太抢，改成 2.0 次级/文字按钮那套
      弱化形态（不是主按钮实心）；唯一登记过的主按钮配色 #2bd4a4 + 白字不许动，这颗正是远离它。
      行为不回退：点它仍进入展开全屏阅读（body.listen-mode）。 */
-  test('「点击展开全文阅读」= 弱化形态（非主按钮实心），仍能展开', async ({ page }) => {
+  /* 2026-09-26 用户改样式：弱化文字按钮 → 薄荷软胶囊（icon + 展开全文阅读）——
+     仍不是主按钮实心（#2bd4a4+白字不许动），但要有清楚的「打开全文」的形。 */
+  test('「展开全文阅读」= 薄荷软胶囊（非主按钮实心），仍能展开', async ({ page }) => {
     await stubData(page, TWO);
     await gotoListen(page);
     const btn = page.locator('.ls-expand');
     await expect(btn).toBeVisible();
-    await expect(btn).toHaveText(/点击展开全文阅读/);
+    await expect(btn).toHaveText(/展开全文阅读/);
+    expect(await btn.locator('i').count(), '带一枚展开图标').toBeGreaterThan(0);
 
     const form = await btn.evaluate((el) => {
       const cs = getComputedStyle(el);
-      return { bg: cs.backgroundColor, img: cs.backgroundImage, shadow: cs.boxShadow,
+      return { bg: cs.backgroundColor, img: cs.backgroundImage,
                border: cs.borderTopWidth, weight: Number(cs.fontWeight) || 0 };
     });
-    expect(form.img, '不再是 --grad 渐变实心主按钮（background-image 应为 none）').toBe('none');
-    expect(form.bg, '弱化：无实底（透明）').toMatch(/^rgba?\(0, 0, 0, 0\)$|transparent/);
-    expect(form.shadow, '弱化：无主按钮投影').toBe('none');
-    expect(form.border, '弱化：无描边').toBe('0px');
-    expect(form.weight, '弱化：字重不取主按钮的 700').toBeLessThan(700);
+    expect(form.img, '不是 --grad 渐变实心主按钮（background-image 应为 none）').toBe('none');
+    expect(form.bg, '软胶囊有底色（不再是透明弱化）').not.toMatch(/^rgba?\(0, 0, 0, 0\)$|transparent/);
+    expect(form.border, '有描边（accent-line）').toBe('1px');
+    expect(form.weight, '字重 600（可读但不是主按钮）').toBe(600);
 
     // 仍可点、仍能展开（行为锁）
     await btn.click();
