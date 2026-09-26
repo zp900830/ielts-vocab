@@ -175,7 +175,7 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
 
     await expect(page.locator('.st-art')).toHaveCount(6);
     // 与 APP3.articleStat 同源（真断言，不写死字面量）
-    const stats = await page.evaluate(() => Array.from({ length: SECTIONS.length }, (_, a) => APP3.articleStat(a).progress));
+    const stats = await page.evaluate(() => Array.from({ length: SECTIONS.length }, (_, a) => APP3.articleStat(a).readPct));
     for (let a = 0; a < 6; a++) {
       await expect(page.locator(`.st-art[data-a="${a}"] .sa-pct`), `第 ${a} 篇小卡百分比`).toHaveText(stats[a] + '%');
     }

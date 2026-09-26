@@ -278,13 +278,13 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('body')).toHaveClass(/task-mode/);
-    // 读前 6 句（12 句的一篇）：熟练度 = round(6/12 × 40) = 20
+    // 读前 6 句（12 句的一篇）：卡片显示**通读完成度** = 6/12 = 50%
     await page.evaluate(() => {
       Array.from(ShadowPlan.articleScope(SECTIONS, 0)).slice(0, 6).forEach((i) => TASK.readDone(i));
     });
     await page.locator('#taskTop .reader-head .back').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
-    await expect(page.locator('.art-card').first().locator('.a-pct')).toHaveText('20%');
+    await expect(page.locator('.art-card').first().locator('.a-pct')).toHaveText('50%');
   });
 });
 
@@ -733,7 +733,9 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await stubData(page, SIXQ);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     // 第 0 篇 8 句：通读满 → 第一项 = 40（后面两项的基准）
-    const phase = async (seed: { quizOk: number; quizNo: number; reps: number }, expected: string) => {
+    /* 2026-09-26：卡片显示的是通读完成度（这里全读满 = 100%），融合熟练度改从
+       APP3.articleStat(0).progress 读 —— 公式（×35/×25 两项）照样逐项锁。 */
+    const phase = async (seed: { quizOk: number; quizNo: number; reps: number }, expected: number) => {
       await waitAppReady(page);   // goto/上一次 reload 之后 init 可能还没跑完，evaluate 会空转
       await page.evaluate((sd) => {
         TASK.resetV2(); TASK.initPlan(15);
@@ -741,14 +743,15 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
         TASK.seedArticleForTest(0, sd);
       }, seed);
       await page.reload();
-      await expect(page.locator('.art-card').first().locator('.a-pct')).toHaveText(expected);
+      await expect(page.locator('.art-card').first().locator('.a-pct'), '读满 → 显示 100%').toHaveText('100%');
+      expect(await page.evaluate(() => APP3.articleStat(0).progress), '融合熟练度（§9.2 三项）').toBe(expected);
     };
     /* 只动第二项：8 题 4 对 4 错 → quizRate = 4/8 = 0.5
        progress = round(8/8×40 + 0.5×35 + 0×25) = round(40 + 17.5) = round(57.5) = 58 */
-    await phase({ quizOk: 4, quizNo: 4, reps: 0 }, '58%');
+    await phase({ quizOk: 4, quizNo: 4, reps: 0 }, 58);
     /* 只动第三项：quiz 清零，精读 8 次（= 句数）→ min(8/(8×2),1) = 0.5
        progress = round(8/8×40 + 0×35 + 0.5×25) = round(40 + 12.5) = round(52.5) = 53 */
-    await phase({ quizOk: 0, quizNo: 0, reps: 8 }, '53%');
+    await phase({ quizOk: 0, quizNo: 0, reps: 8 }, 53);
   });
 
   // 收工态两颗键各自去哪：看词本 → #/words 占位屏；回首页 → 首页六张卡片。
@@ -807,6 +810,38 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
   });
 
   // 审阅 Important 3：入口 1（① 走完 → 小结 → 开始答题）没有 E2E，补一条走真路径的。
+  /* 2026-09-26 用户：「答题的位置也得记住啊。中途浏览器刷新了，不能让我再重新答。」
+     —— ② 的已答集合按（篇, 天）存 LS_ARTICLE，重进 ② 直接接着答。 */
+  test('② 答题进度持久化：答两题后刷新，重进 ② 不重答', async ({ page }) => {
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await freshPlan(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'read');
+    await page.evaluate(() => { TASK.setPass(2); });
+
+    const answerOne = () => page.evaluate(() => {
+      const q = TASK.currentQuiz();
+      if (!q) return false;
+      TASK.answerQuiz(q.opts[q.opts.indexOf(q.answer)]);
+      TASK.nextQuiz();
+      return true;
+    });
+    expect(await answerOne()).toBe(true);
+    expect(await answerOne()).toBe(true);
+    const before = await page.evaluate(() => document.getElementById('tbTitle')!.textContent);
+    expect(before, '答两题后条上是 2/N').toContain('2/');
+
+    // 刷新（等价于用户中途关掉标签页再进来）
+    await page.reload();
+    await waitAppReady(page);
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'read');
+    await page.evaluate(() => { TASK.setPass(2); });
+    const after = await page.evaluate(() => document.getElementById('tbTitle')!.textContent);
+    expect(after, '刷新后已答的两题不许重来（计数与游标都还原）').toBe(before);
+  });
+
   test('入口 1：① 走完 → 小结「开始答题」→ 正文立刻挖空（§13.1）', async ({ page }) => {
     await stubData(page, SIXQ);
     await page.goto(`${rootUrl}/app/index.html#/home`);
