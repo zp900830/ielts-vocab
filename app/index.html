@@ -1642,6 +1642,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .ps-sum-row.big b { font-size: 24px; color: var(--task-new); }
   .ps-sum-row.warn, .ps-sum-row.warn b { color: var(--coral-deep, #c0492f); }
   .ps-sum-row.warn b { font-size: 12.5px; }
+  /* 排到内容上限的说明（2026-09-26 用户「60/90/120 都是 400」）：数字相同要说清为什么 */
+  .ps-sum-note { padding: 2px 0 9px; font-size: 11.5px; line-height: 1.6; color: var(--muted);
+    border-top: 1px solid var(--border); }
   /* 「这一期还要多久」那一行：设置屏 / 计划页 / 今天面板 / 任务条共用，全部只读 estimateDays 的返回值 */
   .ps-eta { margin: 0 0 12px; padding: 8px 12px; font-size: 12.5px; line-height: 1.45; color: var(--muted);
     background: var(--card); border: 1px solid var(--border); border-radius: 10px; font-variant-numeric: tabular-nums; }
@@ -8474,15 +8477,17 @@ let listenOn = false;
         /* 视觉上去掉「每天」那一行（标题已经说了「每天有多少分钟」），
            但组名不能丢 —— 换成 role=group + aria-label，读屏照样念得出这组是什么。
            ⚠️ 注释别写进下面这个模板字符串里：会被当正文渲染出来（踩过两次）。 */
-        p.innerHTML = `<div class="plan-setup">
+        p.innerHTML = `<div class="tp-head"><h3>设置学习计划</h3>
+            <button class="tp-close" onclick="TASK.closePanel()" aria-label="关闭面板">✕</button></div>
+          <div class="plan-setup">
           <h3>每天有多少分钟</h3>
-          <p class="ps-sub">共 ${SENT_RAW.length} 句 · ${ALL_TARGET_WORDS} 个目标词。句数和题数由分钟数算出来。</p>
+          <p class="ps-sub">共 ${SENT_RAW.length} 句 · ${ALL_TARGET_WORDS} 个目标词。句数与覆盖词数由分钟数算出来。</p>
           <div class="ps-group"><div class="ps-opts" id="psMin" role="group" aria-label="每天多少分钟">
             ${MINS.map(m => `<button class="ps-opt${m === sel ? ' sel' : ''}" data-v="${m}">${m} 分钟</button>`).join('')}
           </div></div>
           <div class="ps-sum" id="psSum"></div>
           <div class="ps-eta" id="psEta" data-days="">算一下…</div>
-          <div class="ps-eta sm" id="psEtaAssume">（只按通读时间估算：新句约 ${Math.round(secNew())} 秒、复习句约 ${Math.round(secReview())} 秒，做题不占每天的分钟数）</div>
+          <div class="ps-eta sm" id="psEtaAssume">（只按通读时间估算：新句约 ${Math.round(secNew())} 秒、复习句约 ${Math.round(secReview())} 秒。做题不占每天的分钟数）</div>
           <button class="ps-start" id="psStart">开始这个计划</button>
           <div class="ps-adjust"><button class="btn" onclick="TASK.importBackup()">导入备份恢复</button></div>
           <input type="file" id="importFile" accept="application/json,.json" style="display:none">
@@ -8492,14 +8497,23 @@ let listenOn = false;
              以前按单一「一句约 8 秒」除法出数，30 分钟算出 222 句、60 分钟算出 444 句
              （2026-09-26 用户：「222、333、444 你是认真的么」）。装配出来的才是今天真会排到的量。 */
           const probeState = (ROOT2 && ROOT2.state) ? ROOT2.state : ShadowPlan.emptyState();
-          const probe = ShadowPlan.assemble(probeState, {
-            now: Date.now(), todayMinutes: sel, rate: rate || 1,
+          const mk = (mins) => ShadowPlan.assemble(probeState, {
+            now: Date.now(), todayMinutes: mins, rate: rate || 1,
             secNew: avgNew, secReview: avgReview, wordsOf: wordsOfSent,
             totalSents: SENT_RAW.length, boundaryHour: bdHour(), plan: (ROOT2 && ROOT2.plan) || null, scope: null,
           });
-          const per = probe.queue.length, perQ = probe.items.length;
+          const probe = mk(sel);
+          /* 口径（2026-09-26 用户）：报「多少句 · 覆盖多少目标学习词」，不报题数。
+             覆盖词 = 今天这批句子去重后的目标词（assemble 的 words 就是这个集合），与今日面板同源。 */
+          const per = probe.queue.length, perW = probe.words.length;
+          /* 排到内容上限的判定（2026-09-26 用户「60/90/120 都是 400」）：把预算开到一天 24 小时
+             再装配一次，若句数一样，说明今天可排的句已经排完 —— 再加时间也不会更多，明说，别让
+             三个档位显示同一个数却没有任何解释。 */
+          const cap = mk(24 * 60);
+          const saturated = cap.queue.length <= probe.queue.length;
           const el = document.getElementById('psSum');
-          if (el) el.innerHTML = `<div class="ps-sum-row"><span>今天大约</span><b>${per} 句 · ${perQ} 题</b></div>`;
+          if (el) el.innerHTML = `<div class="ps-sum-row"><span>今天大约</span><b>${per} 句 · 覆盖 ${perW} 个目标学习词</b></div>`
+            + (saturated ? `<div class="ps-sum-note">这已是当前能排的最大量（今天可排内容共 ${per} 句）：再加时间也不会更多。</div>` : '');
           const eta = document.getElementById('psEta');
           if (eta) {
             eta.textContent = '算一下…';
