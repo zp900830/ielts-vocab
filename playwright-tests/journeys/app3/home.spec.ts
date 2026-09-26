@@ -98,10 +98,11 @@ test.describe('3.0 首页', () => {
     await waitHomeReady(page);
     await expect(c0).toHaveAttribute('data-stage', 'reading');
     await expect(c0.locator('.a-stage')).toHaveText('通读中');
-    expect(await pctOf(page), '20/24 × 40% 四舍五入 = 33').toBe(33);
-    /* 熟练度三项（§9.2）T7 已全实现：通读 ×40 + ② 正确率 ×35 + 精读 ×25。
-       此刻 ② 与精读都还是 0，所以只剩第一项在动，33 ≤ 40 是「只通读」这一档的上界。 */
-    expect(await pctOf(page), '只通读、没做题没精读时，分数只由第一项给，不得超过 40').toBeLessThanOrEqual(40);
+    /* 2026-09-26 口径：卡片上显示的是**通读完成度**（碰过的句数 ÷ 本篇句数）——
+       与任务条「本篇 N/M」同一个可核对的数（读了 20/339 却显示 2% 就是这次改动的由来）。
+       融合熟练度（§9.2 三项）仍存在，只给阶段判据用；这里单独锁它 ≤40（此刻只有第一项在动）。 */
+    expect(await pctOf(page), '通读完成度 20/24 = 83%').toBe(83);
+    expect(await page.evaluate(() => APP3.articleStat(0).progress), '内部融合熟练度只由第一项给（≤40）').toBeLessThanOrEqual(40);
 
     // —— 读满 24 句 → 「可答题」（§9.4：通读满还没做题，`已学完` 留给通读+② 各一遍）——
     await page.evaluate(() => {
@@ -115,7 +116,8 @@ test.describe('3.0 首页', () => {
        且不再出现任何圈号徽标（回归锁）。 */
     await expect(c0.locator('.a-stage')).toHaveText('可答题');
     await expect(c0.locator('.a-stage')).not.toContainText(/[①②③④⑤]/);
-    expect(await pctOf(page), '通读满 → 40%（② / 精读两项都还是 0）').toBe(40);
+    expect(await pctOf(page), '通读满 → 100%').toBe(100);
+    expect(await page.evaluate(() => APP3.articleStat(0).progress), '融合熟练度此时 = 40（②/精读仍为 0）').toBe(40);
   });
 
   // Task 4：顶部「今天该做什么」横幅 + 没计划的空状态（§2.3 / §3.5）。

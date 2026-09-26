@@ -149,6 +149,13 @@
        听不改 everRead/progress（§7.6），只让「最近」真实反映你刚听过。 */
     const llast = (typeof TASK !== 'undefined' && TASK.listenLast) ? TASK.listenLast(a) : 0;
     if (llast > lastAt) lastAt = llast;
+    /* 展示口径（2026-09-26 用户「卡片上的进度对不上」）：卡片/数据页的百分比改用
+       **通读完成度**（碰过的句数 ÷ 本篇句数）—— 与任务条「本篇 N/M」、正文里读了几句
+       是同一个可核对的数。原来的 progress 是 §9.2 融合熟练度（通读×40+答题×35+重复×25），
+       读了 20/339 句只显示 2%，跟用户在别处看到的对不上，只留给阶段判据用。
+       同时带上「今天在这篇」的任务量（卡片要显示今日任务进度）。 */
+    const readPct = total ? Math.round(Math.min(ever / total, 1) * 100) : 0;
+    const td = (typeof TASK !== 'undefined' && TASK.todayOfArticle) ? TASK.todayOfArticle(a) : { planned: 0, done: 0 };
     /* W8：`ever` 读的是 `lastReadAt > 0`（这辈子碰过这句，不是"今天读没读"），与 §9.4 的
        `everRead` 定义和任务条 ① 的分子同源；§9.3/§9.4 把通读完成度定义在"有没有碰过"上，
        改成"今天读过"会让跨天后卡片退回未读，与「已学完」判据打架。保留 lifetime。 */
@@ -164,7 +171,8 @@
     const quizReady = stage === 'read' || stage === 'quiz' || todayQuizReady;
     // `total` = 句数（进度分母）；`wordTotal` = 词数（掌握分母，与 c.graduated 同单位）
     // `ever` = 这一篇里读过的句数 —— 横幅「还剩 N 句」与卡片进度共用这一份派生，别各算各的。
-    return { progress, stage, grad: c.graduated, total, lastAt, wordTotal: words.size, ever, quizReady };
+    return { progress, readPct, todayPlanned: td.planned, todayDone: td.done,
+             stage, grad: c.graduated, total, lastAt, wordTotal: words.size, ever, quizReady };
   }
   function renderHome(view) {
     // 数据未就绪时先占位：initApp 拉完数据会再调一次 route()（见 app/index.html）。
@@ -180,10 +188,11 @@
           <span class="a-head"><span class="a-title">${esc(s.title)}</span>
             <span class="a-stage">${STAGE_LABEL[x.stage] || '未开始'}</span></span>
           <span class="a-en">${esc((TIT_EN[s.title] || '').replace(/^\s*·\s*/, ''))}</span>
-          <span class="a-bar"><i style="width:${x.progress}%"></i></span>
-          <span class="a-meta"><span class="a-pct">${x.progress}%</span>
+          <span class="a-bar"><i style="width:${x.readPct}%"></i></span>
+          <span class="a-meta"><span class="a-pct">${x.readPct}%</span>
             <span>已毕业 ${x.grad} / ${x.wordTotal} 词</span>
             <span>${rel(x.lastAt)}</span></span>
+          ${x.todayPlanned > 0 ? `<span class="a-today" title="今天这篇排到的句数">今天 ${x.todayDone}/${x.todayPlanned} 句</span>` : ''}
         </button>
         ${x.quizReady ? `<button class="a-quiz" data-a="${a}" type="button">答题</button>` : ''}
       </article>`;
@@ -254,9 +263,9 @@
         <h2 id="stH2">我的文章掌握到了什么程度？</h2>
         <div class="st-arts">${SECTIONS.map((s, a) => {
           const x = articleStat(a);
-          return `<button class="st-art" data-a="${a}" type="button" aria-label="《${esc(s.title)}》熟练度 ${x.progress}%，回首页看这张卡片">
-            <span class="sa-head"><span class="sa-title">${esc(s.title)}</span><span class="sa-pct">${x.progress}%</span></span>
-            <span class="sa-bar"><i style="width:${x.progress}%"></i></span>
+          return `<button class="st-art" data-a="${a}" type="button" aria-label="《${esc(s.title)}》通读完成度 ${x.readPct}%，回首页看这张卡片">
+            <span class="sa-head"><span class="sa-title">${esc(s.title)}</span><span class="sa-pct">${x.readPct}%</span></span>
+            <span class="sa-bar"><i style="width:${x.readPct}%"></i></span>
             <span class="sa-meta">${STAGE_LABEL[x.stage] || '未开始'}</span>
           </button>`;
         }).join('')}</div>

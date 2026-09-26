@@ -1979,6 +1979,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .art-card .a-meta { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px;
     font-size: 11px; color: var(--muted); }
   .art-card .a-pct { font-size: 15px; font-weight: 800; color: var(--accent-text); }
+  /* 卡片上的「今天 N/M 句」（2026-09-26 用户）：文章进度条之外，必须看得到今日任务进度 */
+  .art-card .a-today { display: inline-flex; align-items: center; gap: 5px; margin-top: 7px;
+    font-size: 11px; font-weight: 600; color: var(--accent-text); background: var(--accent-soft);
+    border: 1px solid var(--accent-line); border-radius: 999px; padding: 2px 9px; }
+  body.dark .art-card .a-today { background: rgba(16,180,135,.14); border-color: rgba(43,212,164,.28); }
   /* 当前阶段胶囊（§3.3 / §9.4）：四档各自可辨 */
   .art-card .a-stage { flex: none; font-size: 10.5px; font-weight: 700; line-height: 1.7;
     padding: 0 8px; border-radius: 999px; background: rgba(0,0,0,.05); color: var(--muted); }
@@ -2650,7 +2655,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       /* 数据缓存版本：必须等于 shadow/data/ 三个 JSON 的内容哈希，由 scripts/validate_data.py 校验。
          不写它，iOS Safari 会按 Last-Modified 启发式缓存 —— 课文改了、词表没改，句序与词表就会错位。
          改了数据忘了 bump 会直接让门禁 FAIL，而不是静默服务旧数据。 */
-      const SHADOW_DATA_VER = "7bc5a006ff";
+      const SHADOW_DATA_VER = "7371e2209c";
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
@@ -5802,6 +5807,11 @@ let listenOn = false;
            数据页取 round(ms/60000)。与收听账同住 LS_ARTICLE（3.0 私有 key）。 */
         if (!o.read || typeof o.read !== 'object') o.read = {};
         if (!o.read.ms || typeof o.read.ms !== 'object') o.read.ms = {};
+        /* ② 答题进度（2026-09-26 用户：「中途浏览器刷新了，不能让我再重新答」）：
+           { 篇号: { day, served: [题 key], ok, wrong } } —— 按天存，隔天作废（明天是另一批题）。
+           刻意**不进云快照**（articleAccountSnapshot 只挑 reps/pass2/listen/read），
+           答题游标是本机会话态，不做多端合并。 */
+        if (!o.quiz || typeof o.quiz !== 'object') o.quiz = {};
         _articleStats = o;
         return _articleStats;
       }
@@ -6857,6 +6867,45 @@ let listenOn = false;
         _served = new Set(); _popReadonly = false;
         closeBlankPop();
       }
+      /* ---- ② 答题进度持久化（2026-09-26 用户：中途刷新不能让人重答）----
+         resetQuizRun 之后调用 restoreQuizRun()：同一天、同一篇的历史记录里，
+         「已处理过的题」按 blankKey 还原进 _served（因此不会被再问），游标落到第一道没答的题，
+        对/错计数一并还原。答一题 / 跳过一题就 quizRunSave()；整批走完 quizRunClear()。 */
+      function quizRunSave() {
+        if (!taskMode || currentArticle == null || pass < 2) return;
+        try {
+          const cur = loadArticleStats();
+          cur.quiz = cur.quiz || {};
+          const served = [];
+          _served.forEach(function (x) { try { const k = blankKey(x); if (k) served.push(k); } catch (e) {} });
+          cur.quiz[currentArticle] = { day: day2(), served: served, ok: quizAnsweredN, wrong: quizWrongN };
+          saveArticleStats();
+        } catch (e) {}
+      }
+      function quizRunRestore() {
+        if (!taskMode || currentArticle == null) return;
+        try {
+          const rec = (loadArticleStats().quiz || {})[currentArticle];
+          if (!rec || rec.day !== day2() || !Array.isArray(rec.served) || !rec.served.length) return;
+          const keys = new Set(rec.served);
+          let hit = 0;
+          quizList().forEach(function (x) {
+            if (keys.has(blankKey(x))) { _served.add(x); hit++; }
+          });
+          if (!hit) return;
+          quizAnsweredN = rec.ok || hit;
+          quizWrongN = rec.wrong || 0;
+          const nx = nextUnservedIndex(0);
+          quizCursor = nx < 0 ? 0 : nx;
+        } catch (e) {}
+      }
+      function quizRunClear() {
+        if (currentArticle == null) return;
+        try {
+          const cur = loadArticleStats();
+          if (cur.quiz && cur.quiz[currentArticle]) { delete cur.quiz[currentArticle]; saveArticleStats(); }
+        } catch (e) {}
+      }
       /* 「这一题之后还有没有题」要跳过出不了题的项（ensureCursor 干的活），
          光看数组长度会把末题写成「下一题」，点下去却弹出小结。 */
       /* 文内挖空只承载「正文句」上的题；词卡例句题（s==='ex'）没有正文空位可挖，
@@ -6892,7 +6941,7 @@ let listenOn = false;
          setPass(3) 这种历史调用一律折回 ②，不许再开出第三步。 */
       function setPass(n) {
         pass = (n === 1 ? 1 : 2); resetQuizRun();
-        quizStart = (pass === 2 ? Date.now() : 0);
+        if (pass === 2) { quizRunRestore(); quizStart = Date.now(); }
         if (pass === 2) maskArticle();
         renderQuiz(); updateTaskBar(); syncQueueFromPlan(); updateMarkers();
       }
@@ -6918,6 +6967,7 @@ let listenOn = false;
         }
         reveal = { q: q, s: item.s, ok: ok, pick: choice };
         _served.add(item);   // 答过 = 这题处理完了：下一题不再落回它（补考是另一条新对象）
+        quizRunSave();       // 答题进度落盘（刷新后不再重答）
         /* W3：把对/错直接送进视觉隐藏的 polite 播报区（读屏才听得到；视觉反馈仍是空格里的绿/红字）。 */
         const live = document.getElementById('quizLive');
         if (live) live.textContent = ok ? '对了' : '正确的那一个是 ' + q.answer;
@@ -6942,12 +6992,13 @@ let listenOn = false;
       }
       function finishPass(n) {
         renderPassSummary(n);
-        if (n === 1) { pass = 2; resetQuizRun(); quizStart = Date.now(); maskArticle(); }
+        if (n === 1) { pass = 2; resetQuizRun(); quizRunRestore(); quizStart = Date.now(); maskArticle(); }
         else {
           taskFinished = true; pass = 2;
           /* §9.4：这一篇的 ② 批次走完一遍 = 卡片「已学完」的凭据。按篇记，住 3.0 自己的 key
              （不在共享 blob 里，否则开 /shadow/ 就没了）。重复进 ② 再走一遍不重复记。 */
           markArticlePass2(currentArticle);
+          quizRunClear();   // 整批走完：答题进度记录作废（下一遍从 0 起）
         }
         _cachedPlan = null;
         updateTaskBar();
@@ -7188,6 +7239,7 @@ let listenOn = false;
         reveal = null;
         const cur = quizList()[quizCursor];
         if (hasInlineBlank(cur)) _served.add(cur);   // 跳过 / 离开 = 处理完了
+        quizRunSave();                               // 跳过也要落盘（刷新后不再重问）
         const next = nextUnservedIndex(quizCursor);
         if (next < 0) { finishPass(pass); return; }
         quizCursor = next;
@@ -9025,6 +9077,19 @@ let listenOn = false;
         repsOf, articlePass2Done,
         /* 真实用时账出口（2026-09-25 链路排查）：数据页「累计学习时长」按天读真实毫秒。 */
         readMsByDay: function () { return loadArticleStats().read.ms; },
+        /* 今天这一篇排到多少句 / 读过几句（2026-09-26 用户：卡片除了文章进度，必须显示今天任务进度）。
+           走今天的装配队列（home 上 currentArticle 为 null → 全局队列），按篇过滤。 */
+        todayOfArticle: function (a) {
+          try {
+            let planned = 0, done = 0;
+            todayPlan().queue.forEach(function (q) {
+              if (artOfSentGlobal(q.i) !== a) return;
+              planned++;
+              if (readToday2(q.i)) done++;
+            });
+            return { planned: planned, done: done };
+          } catch (e) { return { planned: 0, done: 0 }; }
+        },
         /* 上次学习位置（2026-09-26）：首页横幅要显示「上次读到第 X 句」——
            见 enterTaskMode 的恢复逻辑（存档位置属于这一篇就落回去）。 */
         savedPosForArticle: function (a) {
@@ -9054,6 +9119,20 @@ let listenOn = false;
         /* 今天额度是否读满 / 今天在哪一篇上读的：首页卡片「答题」与数据页「今天」块、
            「待加强」都走这两个出口（§4.4 入口 1 的新判据，2026-09-24）。 */
         todayQuotaDone, todayArticle,
+        /* 今天这一篇排到的句数 / 已读句数（2026-09-26 卡片「今天 N/M 句」那一行的唯一出口）：
+           口径 = 今天的全局装配队列里属于这一篇的项，done 只数今天读过的（readToday2）。 */
+        todayOfArticle: function (a) {
+          try {
+            if (!ROOT2 || !ROOT2.plan || a == null) return { planned: 0, done: 0 };
+            const saved = currentArticle;
+            currentArticle = null; _cachedPlan = null;        // 取「今天整批」再按篇筛
+            const q = todayPlan().queue.filter(function (x) { return artOfSentGlobal(x.i) === a; });
+            currentArticle = saved; _cachedPlan = null;
+            let done = 0;
+            q.forEach(function (x) { if (readToday2(x.i)) done++; });
+            return { planned: q.length, done: done };
+          } catch (e) { return { planned: 0, done: 0 }; }
+        },
         // 事件流「安全合并」的对照实验：先冻住派生状态 → 合并 → 重放 → 再比。
         // 测试断言两次 state 深相等（合并不许动账），并断言确实真掉了重复条。
         compactProbeForTest: () => {
