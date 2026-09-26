@@ -406,7 +406,7 @@ test.describe('⑨ 真实用时 read.ms 的云同步合并', () => {
    部分平台把 cancel 报成 onend，陈旧 end 不许推进链子（onend 已加代际守卫）。 */
 test.describe('⑩ 暂停不推进', () => {
   test('暂停后：高亮停在当前句，3 秒内不许自己走到下一句', async ({ page }) => {
-    test.setTimeout(30000);
+    test.setTimeout(60000);   // 真实引擎 + 外链字体（load 事件等全部子资源），网络抖动时 30s 会被 goto 吃光
     await stubData(page, TWO);
     await gotoListen(page);
     await page.locator('.ls-play').click();          // 真实引擎起播（headless 静音但不影响链路）
