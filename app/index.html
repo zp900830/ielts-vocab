@@ -1331,13 +1331,17 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     94%, 97% { transform: scaleY(.08); }
   }
   .ld-msg { font-size: 12.5px; color: var(--muted); }
+  .ld-line { display: inline-flex; align-items: center; gap: 8px; }
   @media (prefers-reduced-motion: reduce) {
     .ld-dots i { animation: none; opacity: .6; transform: none; }
     .ld-card { animation: none; }
     .ld-shadow { animation: none; opacity: .5; }
     .ld-eye { animation: none; }
   }
-  .iel-loading { display: inline-flex; align-items: center; gap: 9px; padding: 6px 0;
+  /* 加载占位（2026-09-26 用户）：整块**置于页面中间** —— 纵向也居中，小精灵在上、文字+三点在下。
+     以前是顶左的 inline-flex，看着像漏在角落的提示。 */
+  .iel-loading { display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; min-height: 56vh; padding: 24px; text-align: center;
     font-size: 12.5px; color: var(--muted); }
   .tp-tabs { display: flex; gap: 4px; margin: -6px -4px 14px; padding: 0 4px; border-bottom: 1px solid var(--border); }
   .tp-tab { flex: 1; min-height: 44px; border: none; background: transparent; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
@@ -1836,6 +1840,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     padding: 0 12px; border: none; border-radius: 12px;
     background: transparent; font-size: 14px; color: var(--text); cursor: pointer; }
   .nav-item i { font-size: 19px; line-height: 1; flex: none; width: 19px; text-align: center; }
+  /* 线性/面性成对（2026-09-26 用户）：默认线性，选中换成对应的面性 icon（纯 CSS，切换 .on 即生效） */
+  .nav-item .i-fill { display: none; }
+  .nav-item.on .i-line { display: none; }
+  .nav-item.on .i-fill { display: inline-block; }
   .nav-item.on { background: var(--accent-soft, rgba(16,180,135,.07)); color: var(--accent-text); font-weight: 600; }
   /* ---- 侧栏底部：一条分割线 + 一行「我的」（2026-09-24 用户：不要卡片）----
      未登录显示「登录」按钮，已登录显示头像 + 账号；内容由 updateMeCard() 渲染。 */
@@ -2422,10 +2430,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <div id="appShell">
       <nav class="sidenav" aria-label="主导航">
         <div class="sn-logo"><span class="sn-mark"><i class="ri-book-open-fill" aria-hidden="true"></i></span><span class="sn-name">雅思背单词 3.0</span></div>
-        <button class="nav-item on" data-route="home"><i class="ri-home-5-line" aria-hidden="true"></i><span>首页</span></button>
-        <button class="nav-item" data-route="listen"><i class="ri-headphone-line" aria-hidden="true"></i><span>随身听</span></button>
-        <button class="nav-item" data-route="words"><i class="ri-book-2-line" aria-hidden="true"></i><span>单词本</span></button>
-        <button class="nav-item" data-route="stats"><i class="ri-bar-chart-2-line" aria-hidden="true"></i><span>学习数据</span></button>
+        <button class="nav-item on" data-route="home"><i class="ri-home-5-line i-line" aria-hidden="true"></i><i class="ri-home-5-fill i-fill" aria-hidden="true"></i><span>首页</span></button>
+        <button class="nav-item" data-route="listen"><i class="ri-headphone-line i-line" aria-hidden="true"></i><i class="ri-headphone-fill i-fill" aria-hidden="true"></i><span>随身听</span></button>
+        <button class="nav-item" data-route="words"><i class="ri-book-2-line i-line" aria-hidden="true"></i><i class="ri-book-2-fill i-fill" aria-hidden="true"></i><span>单词本</span></button>
+        <button class="nav-item" data-route="stats"><i class="ri-bar-chart-2-line i-line" aria-hidden="true"></i><i class="ri-bar-chart-2-fill i-fill" aria-hidden="true"></i><span>学习数据</span></button>
         <!-- 侧栏底部：一条分割线 + 一行「我的」（2026-09-24 用户：不要卡片，用分割线）。
              未登录显示「登录」按钮，已登录显示头像 + 账号；内容由 app.js 的 updateMeCard() 渲染。
              点它向上弹「我的」浮窗（口音/音色/主题/计划/账号/数据都在里面）。 -->

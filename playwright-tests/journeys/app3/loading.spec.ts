@@ -33,3 +33,32 @@ test.describe('refine3 ⑦ 载入动画（薄荷绿三点脉冲）', () => {
     expect(anim2, 'reduced-motion 下不转').toBe('none');
   });
 });
+
+/* 2026-09-26 用户：「页面加载动效，置于页面中间」——占位整块（小精灵 + 文案）必须水平垂直居中，
+   不再是顶左的一条提示。 */
+test.describe('载入动效居中', () => {
+  test('占位块在内容区中央：纵向占大半屏、小精灵与文字都居中', async ({ page }) => {
+    for (const name of ['sections.json', 'vocab.json', 'chapters.json']) {
+      await page.route(`**/shadow/data/${name}*`, () => { /* 挂起请求，停在加载态 */ });
+    }
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    const ld = page.locator('#appView .iel-loading');
+    await expect(ld).toBeVisible();
+    const m = await ld.evaluate((el) => {
+      const cs = getComputedStyle(el);
+      const r = el.getBoundingClientRect();
+      const buddy = el.querySelector('.ld-buddy')!.getBoundingClientRect();
+      return {
+        dir: cs.flexDirection, align: cs.alignItems, justify: cs.justifyContent,
+        h: Math.round(r.height), viewH: window.innerHeight,
+        buddyCenter: Math.round(buddy.left + buddy.width / 2),
+        loaderCenter: Math.round(r.left + r.width / 2),
+      };
+    });
+    expect(m.dir, '纵向排布（小精灵在上、文字在下）').toBe('column');
+    expect(m.align, '横向居中').toBe('center');
+    expect(m.justify, '纵向居中').toBe('center');
+    expect(m.h, '占位块要占大半屏，视觉上才是"在页面中间"').toBeGreaterThan(m.viewH * 0.4);
+    expect(Math.abs(m.buddyCenter - m.loaderCenter), '小精灵水平居中（±2px）').toBeLessThan(2);
+  });
+});
