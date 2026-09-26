@@ -852,7 +852,8 @@
     const title = SECTIONS[focus] ? SECTIONS[focus].title : '';
     const planDay = cfg && cfg.startDate ? Math.floor((Date.now() - Date.parse(cfg.startDate)) / 864e5) + 1 : 1;
     const dark = document.body.classList.contains('dark');
-    const MINS = [5, 10, 15, 20, 30, 45, 60];
+    /* 档位（2026-09-26 用户）：加 90/120、去 10/20；选完立刻在下方给出工期（与设置屏同一份估算） */
+    const MINS = [5, 15, 30, 45, 60, 90, 120];
     pop.innerHTML = `
       <div class="mp-head">
         <span class="mp-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>
@@ -883,6 +884,7 @@
         ${cfg ? `
         <div class="mp-row"><span class="mp-label">每天分钟数</span><div class="ps-opts">
           ${MINS.map(m => `<button class="ps-opt${m === cfg.minutes ? ' sel' : ''}" data-me-min="${m}">${m}</button>`).join('')}</div></div>
+        <div class="mp-eta" id="mpEta" role="status">工期算一下…</div>
         <div class="mp-row"><span class="mp-label">新词</span><div class="ps-opts">
           <button class="ps-opt${cfg.pausedNew ? '' : ' sel'}" data-me-new="0">正常</button>
           <button class="ps-opt${cfg.pausedNew ? ' sel' : ''}" data-me-new="1">只复习</button></div></div>
@@ -902,13 +904,31 @@
     // 音色选择器（③ 挪进来）：重渲后 #voicePop 是新元素，要重新渲染 + 重新绑事件代理。
     try { if (typeof renderVoicePop === 'function') renderVoicePop(); } catch (e) {}
     wireVoicePop();
+    // 工期行（2026-09-26 用户）：换分钟数/重开浮窗都要刷新 —— 与设置屏同一份估算
+    refreshMeEta();
     // §10.4：重渲把原焦点节点摘掉（activeElement 掉到 body）—— 浮窗若还开着，把焦点收回浮窗。
     if (!pop.hidden && (document.activeElement === document.body || !pop.contains(document.activeElement))) {
       pop.tabIndex = -1;
       try { pop.focus(); } catch (e) {}
     }
   }
-  // 浮窗开在用户卡正上方（桌面 300px 宽；手机通栏 bottom-sheet），高度夹在卡片上沿以内。
+  /* 工期行（2026-09-26 用户拍板）：「我的」里改每天分钟数也要能看到「新词全部过完一遍（需要 N 天）」
+     —— 与设置屏/计划页同一份 estimateDays 估算（TASK.etaFor/etaText 出口）。 */
+  function refreshMeEta() {
+    const el = document.getElementById('mpEta');
+    if (!el) return;
+    const cfg = (typeof TASK !== 'undefined' && TASK.planConfig) ? TASK.planConfig() : null;
+    if (!cfg) { el.textContent = ''; el.hidden = true; return; }
+    const m = cfg.minutes;
+    el.hidden = false;
+    el.textContent = '工期算一下…';
+    TASK.etaFor(m).then((r) => {
+      if (!el.isConnected) return;
+      el.textContent = '按每天 ' + m + ' 分钟：新词全部过完一遍（需要 ' + (r && r.days ? r.days + ' 天' : '更久') + '）';
+    });
+  }
+  /* 浮窗开在用户卡正上方（桌面 360px 宽，2026-09-26 用户加宽；手机通栏 bottom-sheet），
+     高度夹在卡片上沿以内。 */
   function positionMePop() {
     const pop = document.getElementById('mePop');
     const card = document.getElementById('meCard');
@@ -916,7 +936,7 @@
     const r = card.getBoundingClientRect();
     const mobile = window.matchMedia('(max-width: 700px)').matches;
     if (mobile) { pop.style.left = '8px'; pop.style.width = Math.max(200, window.innerWidth - 16) + 'px'; }
-    else { pop.style.left = Math.max(8, r.left) + 'px'; pop.style.width = '300px'; }
+    else { pop.style.left = Math.max(8, r.left) + 'px'; pop.style.width = '360px'; }
     pop.style.top = 'auto';
     pop.style.bottom = Math.max(8, window.innerHeight - r.top + 8) + 'px';
     pop.style.maxHeight = Math.max(220, r.top - 16) + 'px';
@@ -967,7 +987,7 @@
         if (typeof TASK !== 'undefined' && TASK.hasPlan) { const n = nextArticle(); openArticle(n >= 0 ? n : 0); }
         else openSetup();
       } else if (t.hasAttribute('data-me-theme')) { if (typeof toggleDark === 'function') toggleDark(); renderMePop(); }
-      else if (t.hasAttribute('data-me-min')) { TASK.setMinutes(Number(t.dataset.meMin)); renderMePop(); positionMePop(); }
+      else if (t.hasAttribute('data-me-min')) { TASK.setMinutes(Number(t.dataset.meMin)); renderMePop(); positionMePop(); refreshMeEta(); }
       else if (t.hasAttribute('data-me-new')) { TASK.setPauseNew(t.dataset.meNew === '1'); renderMePop(); }
       else if (t.hasAttribute('data-me-reset-plan')) { TASK.resetLearningPlan(); renderMePop(); positionMePop(); }
       else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }

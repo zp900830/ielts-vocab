@@ -1735,7 +1735,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     opacity: 0; visibility: hidden; transform: translateY(-4px);
     transition: opacity var(--iel-t-fast), transform var(--iel-t-fast), visibility var(--iel-t-fast); z-index: 60; }
   .tr-bubble.show { opacity: 1; visibility: visible; transform: translateY(0); }
-  #appShell { display: flex; min-height: 100vh; }
+  #appShell { display: flex; min-height: 100vh; min-height: 100dvh; }   /* iPad Safari 工具栏遮挡，见 .sidenav 注释 */
   /* 2026-09-24（第二轮）：用户要「偏灰的白」侧栏（#f6f6f4，二级任务页那档），且要与右侧薄荷底
      (#f8fdfa) 搭配好看。灰白挨着薄荷容易「发脏」，所以把原先的暖米色描边（--border #e5dfd6）
      换成一道更淡、更中性的竖向分隔线，让它读起来是刻意的分区、不是脏。纯色不透明，深色见 body.dark。
@@ -1745,7 +1745,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .sidenav { flex: none; width: 220px; padding: 16px 12px; border-right: 1px solid #e9e9e6;
     background-color: #f6f6f4;
     background-image: linear-gradient(180deg, #fcfcfb 0%, rgba(246,246,244,0) 100%);
-    display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; }
+    display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; height: 100dvh; }
+  /* iPad Safari：100vh 含被工具栏挡住的那段，侧栏底部的「登录」会落在可视区外
+     （2026-09-26 用户报「要滚动才能看到登录入口」）—— 用 100dvh（动态视口）兜正；老引擎回退 100vh。 */
   /* 侧栏品牌（照抄主站 .sn-logo）：一级页面才露脸 */
   .sn-logo { display: flex; align-items: center; gap: 10px; padding: 2px 8px 20px; color: var(--text); }
   .sn-logo .sn-mark { width: 34px; height: 34px; flex: none; border-radius: 9px; background: var(--grad);
@@ -1772,9 +1774,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .me-meta { min-width: 0; display: flex; align-items: center; gap: 6px; }
   .me-name { font-size: 13.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   /* ---- 「我的」浮窗（点用户卡向上弹；主题/计划/账号/数据都在这里）---- */
-  .me-pop { position: fixed; z-index: 400; width: 300px; max-height: calc(100vh - 24px); overflow-y: auto;
+  .me-pop { position: fixed; z-index: 400; width: 360px; max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); overflow-y: auto;
     background: var(--card); border: 1px solid var(--border); border-radius: 16px;
     box-shadow: var(--shadow-lg); padding: 14px; }
+  /* 工期行（2026-09-26 用户）：分钟档位下面那条「新词全部过完一遍（需要 N 天）」 */
+  .mp-eta { font-size: 11.5px; color: var(--muted); margin: -4px 0 10px; padding: 7px 10px;
+    background: var(--accent-soft); border-radius: 10px; line-height: 1.5; }
   .me-pop[hidden] { display: none; }
   .mp-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
   .mp-avatar { flex: none; width: 42px; height: 42px; border-radius: 12px; background: var(--grad);
@@ -5635,8 +5640,11 @@ let listenOn = false;
       let taskPos = 0;       // 当前在 todayQueue 中的位置
       let sessionStart = 0;  // 本次任务模式开始时间
       let sessionReps = 0;   // 本次会话跟读次数
-      let avgNew = 25, avgReview = 8; // 每句平均耗时（秒，1× 基准），按实测校准并持久化
-      // 展示/估算用的秒数 = 1× 基准 ÷ 当前倍速：调到 1.5× 时每天耗时随之缩短
+      let avgNew = 25, avgReview = 8; // 每句平均耗时（秒，1× 基准）。排程口径固定用这对默认值：
+      /* 2026-09-26 用户「222、333、444 你是认真的么」：以前会把「相邻两次跟读的间隔」实测进
+         prog.pace 并喂给排程 —— 但那个间隔量的是用户点「下一句」的快慢，不是一句读完的真实
+         耗时（快速点过几篇就变成 5~8s/句，30 分钟被排进 200+ 句）。测量不成立，个人化排程
+         整条撤掉，回到 25/8 的设计值；估句子用时只用于展示（设置页那句「一句约 N 秒」）。 */
       function secNew() { return avgNew / (rate || 1); }
       function secReview() { return avgReview / (rate || 1); }
       let _panelOpen = false;
@@ -5653,8 +5661,7 @@ let listenOn = false;
         if (!prog.cycleSeen || typeof prog.cycleSeen !== 'object') prog.cycleSeen = {};
         if (!prog.pace || typeof prog.pace !== 'object') prog.pace = {};
         // 恢复实测节奏（存的是 1× 基准秒数），没测过就继续用默认值
-        if (typeof prog.pace.new === 'number' && prog.pace.new > 0) avgNew = prog.pace.new;
-        if (typeof prog.pace.review === 'number' && prog.pace.review > 0) avgReview = prog.pace.review;
+        // 2026-09-26：不再把点击间隔实测进排程（测的是点键速度，不是一句读完的耗时）——见 avgNew 声明处
       }
       function saveProg() { safeStore(LS_PROG, JSON.stringify(prog)); }
 
@@ -7169,22 +7176,9 @@ let listenOn = false;
         return 'new';
       }
 
-      // ---- 实测节奏：用相邻两次跟读的间隔估算每句耗时（折算回 1× 基准后落盘） ----
-      let _lastRepAt = 0;
-      function samplePace(type, now) {
-        if (!prog.pace || typeof prog.pace !== 'object') prog.pace = {};
-        const gap = (now - _lastRepAt) / 1000;
-        _lastRepAt = now;
-        // 只采信「连续跟读」的样本：太快是误触/引擎残留，太慢是中途停顿走神
-        if (gap < 2 || gap > 120) return;
-        const base = gap * (rate || 1);   // 实测秒数折算回 1 倍速基准
-        const w = 0.15;                   // 指数平滑，抗单句抖动
-        const round1 = v => Math.round(v * 10) / 10;
-        if (type === 'new') avgNew = round1(avgNew * (1 - w) + base * w);
-        else avgReview = round1(avgReview * (1 - w) + base * w);
-        prog.pace.new = avgNew; prog.pace.review = avgReview;
-        prog.pace.samples = (prog.pace.samples || 0) + 1;
-      }
+      /* 实测节奏（2026-09-26 撤）：用「相邻两次跟读的间隔」估每句耗时不成立 —— 那个间隔
+         量的是用户点「下一句」的快慢，快速点过几篇就把排程带飞（见 avgNew 声明处的注释）。
+         保留 prog.pace 数据字段不动（老存档兼容），samplePace 与喂排程的链路一并删除。 */
 
       // ---- 记录一次跟读 ----
       function recordRep(globalIdx) {
@@ -7225,8 +7219,6 @@ let listenOn = false;
             _cycleJustCompleted = prog.cycleCount;
           }
         }
-        // 实测节奏（放在 saveProg 前，一起落盘）
-        samplePace(s.reps <= PHASE_THRESHOLDS.learning ? 'new' : 'review', now);
         saveProg();
         // 更新 UI
         if (_cycleJustCompleted) {
@@ -8413,7 +8405,8 @@ let listenOn = false;
         });
       }
       function renderSetup(p) {
-        const MINS = [5, 10, 15, 20, 30, 45, 60];
+        /* 档位（2026-09-26 用户）：加 90/120、去 10/20 —— 档位之间要有真实差异，太碎没有意义 */
+        const MINS = [5, 15, 30, 45, 60, 90, 120];
         let sel = 15;
         /* 视觉上去掉「每天」那一行（标题已经说了「每天有多少分钟」），
            但组名不能丢 —— 换成 role=group + aria-label，读屏照样念得出这组是什么。
@@ -8426,16 +8419,24 @@ let listenOn = false;
           </div></div>
           <div class="ps-sum" id="psSum"></div>
           <div class="ps-eta" id="psEta" data-days="">算一下…</div>
-          <div class="ps-eta sm" id="psEtaAssume">（只按通读时间估算：一句约 ${Math.round(secNew())} 秒，做题不占每天的分钟数）</div>
+          <div class="ps-eta sm" id="psEtaAssume">（只按通读时间估算：新句约 ${Math.round(secNew())} 秒、复习句约 ${Math.round(secReview())} 秒，做题不占每天的分钟数）</div>
           <button class="ps-start" id="psStart">开始这个计划</button>
           <div class="ps-adjust"><button class="btn" onclick="TASK.importBackup()">导入备份恢复</button></div>
           <input type="file" id="importFile" accept="application/json,.json" style="display:none">
         </div>`;
         const refresh = () => {
-          // D10：预算只计通读，所以句数 = 分钟×60 ÷ 一句秒数；题数与句数一样（一句一题，但不占时间）
-          const per = Math.max(1, Math.round(sel * 60 / secNew()));
+          /* 「今天大约」必须用**引擎真实的装配**（三池混合：新句 25s / 复习句 8s）——
+             以前按单一「一句约 8 秒」除法出数，30 分钟算出 222 句、60 分钟算出 444 句
+             （2026-09-26 用户：「222、333、444 你是认真的么」）。装配出来的才是今天真会排到的量。 */
+          const probeState = (ROOT2 && ROOT2.state) ? ROOT2.state : ShadowPlan.emptyState();
+          const probe = ShadowPlan.assemble(probeState, {
+            now: Date.now(), todayMinutes: sel, rate: rate || 1,
+            secNew: avgNew, secReview: avgReview, wordsOf: wordsOfSent,
+            totalSents: SENT_RAW.length, boundaryHour: bdHour(), plan: (ROOT2 && ROOT2.plan) || null, scope: null,
+          });
+          const per = probe.queue.length, perQ = probe.items.length;
           const el = document.getElementById('psSum');
-          if (el) el.innerHTML = `<div class="ps-sum-row"><span>今天大约</span><b>${Math.min(per, SENT_RAW.length)} 句 · ${Math.min(per, SENT_RAW.length)} 题</b></div>`;
+          if (el) el.innerHTML = `<div class="ps-sum-row"><span>今天大约</span><b>${per} 句 · ${perQ} 题</b></div>`;
           const eta = document.getElementById('psEta');
           if (eta) {
             eta.textContent = '算一下…';
@@ -8540,7 +8541,8 @@ let listenOn = false;
       }
 
       function renderPlanView() {
-        const MINS = [5, 10, 15, 20, 30, 45, 60];
+        /* 档位与设置屏同一份（2026-09-26 用户）：加 90/120、去 10/20 */
+        const MINS = [5, 15, 30, 45, 60, 90, 120];
         const row = (label, opts, cur, fn) => `<div class="ps-group"><label>${label}</label>
           <div class="ps-opts">${opts.map(o => `<button class="ps-opt${String(o[0]) === String(cur) ? ' sel' : ''}" data-v="${o[0]}" onclick="${fn}(${o[0]})">${o[1]}</button>`).join('')}</div></div>`;
         /* 2026-09-25：「几点算换一天」整行删除（日界固定凌晨 4 点，见 bdHour）。 */
@@ -8877,7 +8879,7 @@ let listenOn = false;
         loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
         pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
         initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setPauseNew,
-        etaFor, etaCalls, countStages, seedDailyForTest, seedArticleForTest,
+        etaFor, etaCalls, etaText, etaMonth, countStages, seedDailyForTest, seedArticleForTest,
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
         repsOf, articlePass2Done,
         /* 真实用时账出口（2026-09-25 链路排查）：数据页「累计学习时长」按天读真实毫秒。 */
