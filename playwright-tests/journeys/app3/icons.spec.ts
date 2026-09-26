@@ -20,6 +20,7 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
 }
 
 const NAV_ICONS = ['ri-home-5-line', 'ri-headphone-line', 'ri-book-2-line', 'ri-bar-chart-2-line'];
+const NAV_ICONS_FILL = ['ri-home-5-fill', 'ri-headphone-fill', 'ri-book-2-fill', 'ri-bar-chart-2-fill'];
 
 test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
   test('源码级：三站图标样式表都指向 4.5.0，不再引用 4.2.0', () => {
@@ -40,12 +41,25 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
     const href = await page.locator('link[rel="stylesheet"][href*="remixicon"]').getAttribute('href');
     expect(href, '图标样式表版本').toContain('remixicon@4.5.0');
 
-    // 四个导航项各一颗图标，class 与 PRD §2.2 一致
+    // 四个导航项各一对图标（线性 + 面性，2026-09-26 用户：默认线性、选中面性）
     const items = page.locator('.sidenav .nav-item');
     await expect(items).toHaveCount(4);
     for (let i = 0; i < NAV_ICONS.length; i++) {
-      await expect(items.nth(i).locator('i'), `第 ${i + 1} 个导航项的图标`).toHaveClass(new RegExp(`\\b${NAV_ICONS[i]}\\b`));
+      const item = items.nth(i);
+      await expect(item.locator(`i.${NAV_ICONS[i]}`), `第 ${i + 1} 个导航项的线性图标`).toHaveCount(1);
+      await expect(item.locator(`i.${NAV_ICONS_FILL[i]}`), `第 ${i + 1} 个导航项的面性图标`).toHaveCount(1);
     }
+    // #/home 下：首页项是 .on → 显示面性、藏线性；其余项相反
+    const vis = await page.evaluate(() => Array.from(document.querySelectorAll('.sidenav .nav-item')).map((el) => ({
+      on: el.classList.contains('on'),
+      line: getComputedStyle(el.querySelector('.i-line')).display,
+      fill: getComputedStyle(el.querySelector('.i-fill')).display,
+    })));
+    for (const v of vis) {
+      if (v.on) { expect(v.fill, '选中项显示面性').not.toBe('none'); expect(v.line, '选中项藏线性').toBe('none'); }
+      else { expect(v.line, '未选中显示线性').not.toBe('none'); expect(v.fill, '未选中藏面性').toBe('none'); }
+    }
+    expect(vis.filter((v) => v.on).length, '恰好一项选中').toBe(1);
     // 未登录「我的」显示「登录」按钮（无头像）；已登录才显示默认头像图标
     await expect(page.locator('.sidenav .me-card .me-login'), '未登录显示登录按钮').toHaveText('登录');
     await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); });
@@ -57,7 +71,8 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
     // 就算 CDN 一时挂掉也不会让「版本引用」这件事失守。
     await page.waitForFunction(() => {
       const els = document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card .me-avatar i');
-      if (els.length !== 5) return false;
+      /* 4 个导航项 × 2（线性 + 面性）+ 1 个头像 = 9（2026-09-26 成对图标） */
+      if (els.length !== 9) return false;
       return Array.from(els).every((el) => {
         const c = getComputedStyle(el, '::before').content;
         return !!c && c !== 'none' && c !== 'normal';

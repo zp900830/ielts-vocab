@@ -9,8 +9,8 @@
     /* 情感化 loading（2026-09-26 用户）：单词卡小精灵（会眨眼轻跳）+ 拟人文案；reduced-motion 降级为静止 */
     return '<div class="iel-loading" role="status" aria-live="polite">'
       + '<span class="ld-buddy" aria-hidden="true"><span class="ld-card"><i class="ld-eye l"></i><i class="ld-eye r"></i><i class="ld-cheek l"></i><i class="ld-cheek r"></i><i class="ld-mouth"></i></span><span class="ld-shadow"></span></span>'
-      + '<span class="ld-msg">单词卡马上就来</span>'
-      + '<span class="ld-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>';
+      + '<span class="ld-line"><span class="ld-msg">单词卡马上就来</span>'
+      + '<span class="ld-dots" aria-hidden="true"><i></i><i></i><i></i></span></span></div>';
   }
   let cur = 'home';
   let _hlArticle = null;   // 数据页点文章小卡 → 回首页要高亮的那一篇（§5.4）
