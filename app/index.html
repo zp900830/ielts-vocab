@@ -3206,6 +3206,27 @@ let listenOn = false;
     return session || null;
     } catch (e) { return null; }
     },
+    /* 等 SDK 把存档会话恢复完：supabase v2 初始化完成后必发 INITIAL_SESSION（已登录带会话、
+       未登录带 null），拿它当「会话账查完了」的信号；5s 封顶防极端网络下挂死。 */
+    waitSession() {
+    const c = this.client();
+    if (!c) return Promise.resolve(null);
+    if (this._sessReady) return this._sessReady;
+    this._sessReady = new Promise((resolve) => {
+    let settled = false;
+    const fin = (s) => { if (settled) return; settled = true; try { sub && sub.unsubscribe(); } catch (e2) {} resolve(s || null); };
+    let sub = null;
+    try {
+    const r = c.auth.onAuthStateChange((ev, sess) => {
+    if (ev === 'INITIAL_SESSION' || ev === 'SIGNED_IN' || ev === 'SIGNED_OUT') fin(sess);
+    });
+    sub = r && r.data && r.data.subscription;
+    } catch (e) { fin(null); }
+    setTimeout(() => { try { sub && sub.unsubscribe(); } catch (e2) {} fin(null); }, 5000);
+    this.session().then((s) => { if (s) fin(s); }).catch(() => {});
+    });
+    return this._sessReady;
+    },
     setStatus(t) {
     const el = document.getElementById('cloudStatus');
     if (el) el.textContent = t;
@@ -3372,7 +3393,15 @@ let listenOn = false;
     });
     },
     async _fetchTTS(text, voiceId, rate, signal) {
-    const s = await this.session();
+    /* 开屏竞速（2026-09-25 用户报：刚进系统、已登录云端，第一句却弹「请先登录云端账号」并降级本地，
+       第二句才正常）：supabase-js 的会话恢复是异步的，第一句播放常赶在它 hydrate 之前 ——
+       session() 拿到空 ≠ 真没登录。第一次拿空时等一次 INITIAL_SESSION（封顶 5s）再判；
+       真没登录的用户会立刻拿到 INITIAL_SESSION(null)，不白等。 */
+    let s = await this.session();
+    if (!s && !this._sessWaited) {
+    this._sessWaited = true;
+    s = await this.waitSession();
+    }
     if (!s) throw new Error('unauthorized');
     const r = await fetch(this.URL + '/functions/v1/tts', {
     method: 'POST',
@@ -4141,7 +4170,12 @@ let listenOn = false;
     const endTimeout = Math.max(8000, Math.ceil(text.length * 80 / (rate || 1)));
     wd = setTimeout(() => { dlog('end-watchdog-fire', 'tok=' + my); if (!finished) failOnce(); }, endTimeout);
     };
-    u.onend = () => { if (finished) return; finished = true; clearWd(); errStreak = 0; dlog('onend', 'tok=' + my); speechInProgress = false; cb(); };
+    u.onend = () => { if (finished) return; finished = true; clearWd(); speechInProgress = false;
+    /* 陈旧 end 守卫（2026-09-25 用户报「暂停按钮功能上是下一句」）：暂停/切句都会 cancel 引擎，
+       部分平台把 cancel 报成 onend 而不是 onerror('canceled') —— 不看代际就会把「这句结束了」
+       说给已经死掉的链子，下一句被悄悄叫起来。pause 已 bump speakToken，这里必须同判。 */
+    if (my !== speakToken) { dlog('onend-stale', 'tok=' + my); return; }
+    errStreak = 0; dlog('onend', 'tok=' + my); cb(); };
     u.onerror = ev => {
     // cancel/interrupted 是主动打断（切句/暂停），绝不能当“播完”推进，否则多链互 cancel 疯转；
     // 且必须就地 finished + 清掉看门狗：被丢弃的排队句若留着定时器，几秒后会误判卡死并 cancel 掉新链正在播的句子

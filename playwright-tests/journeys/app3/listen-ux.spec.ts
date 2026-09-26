@@ -400,3 +400,22 @@ test.describe('⑨ 真实用时 read.ms 的云同步合并', () => {
     expect(s2.read.ms['2026-09-24'], '新天照并入').toBe(120000);
   });
 });
+
+/* ⑩（2026-09-25 用户报「暂停按钮功能上是下一句」）：暂停必须停在当前句 ——
+   高亮不动、不播下一句。走真实朗读引擎（不桩 speak）：暂停会 cancel 引擎，
+   部分平台把 cancel 报成 onend，陈旧 end 不许推进链子（onend 已加代际守卫）。 */
+test.describe('⑩ 暂停不推进', () => {
+  test('暂停后：高亮停在当前句，3 秒内不许自己走到下一句', async ({ page }) => {
+    test.setTimeout(30000);
+    await stubData(page, TWO);
+    await gotoListen(page);
+    await page.locator('.ls-play').click();          // 真实引擎起播（headless 静音但不影响链路）
+    await expect.poll(() => page.evaluate(() => TASK.listenState().idx), '起播后落在第 0 句').toBe(0);
+    await page.locator('.ls-play').click();          // 暂停
+    const idx = await page.evaluate(() => TASK.listenState().idx);
+    await page.waitForTimeout(3000);
+    const after = await page.evaluate(() => TASK.listenState());
+    expect(after.idx, '暂停后高亮不许走').toBe(idx);
+    expect(after.playing, '暂停后不许自己在播').toBe(false);
+  });
+});
