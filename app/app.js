@@ -79,6 +79,9 @@
     if (lsNext) { TASK.listenSentenceStep(1); return; }
     const lsStop = e.target.closest('.ls-stop');
     if (lsStop) { TASK.listenStop(); return; }
+    // 随身听范围切换（2026-09-28 用户加）：全部文章 ↔ 仅今日任务（循环）
+    const lsSrc = e.target.closest('.ls-src');
+    if (lsSrc) { try { TASK.listenSetSrc(TASK.listenSrc === 'today' ? 'all' : 'today'); } catch (err) {} return; }
     const lsExp = e.target.closest('.ls-expand, .ls-cover');
     if (lsExp) { TASK.listenExpand(); return; }
     const b = e.target.closest('.nav-item');
@@ -510,6 +513,7 @@
             <button class="ls-play" type="button" aria-label="播放"><i class="ri-play-fill" aria-hidden="true"></i><span>播放</span></button>
             <button class="ls-stop" type="button" aria-label="停止播放" title="停止（记住当前位置，下次继续）"><i class="ri-stop-fill" aria-hidden="true"></i><span>停止</span></button>
             <button class="ls-next" type="button" aria-label="下一句" title="下一句"><span>下一句</span><i class="ri-play-fill" aria-hidden="true"></i></button>
+            <button class="ls-src" type="button" aria-label="随身听范围" title="切换：全部文章 / 仅今日任务（循环）"><i class="ri-calendar-check-line" aria-hidden="true"></i><span>全部</span></button>
           </div>
           <input class="ls-seek" type="range" min="1" max="1" value="1" step="1" aria-label="句级位置条">
           <p class="ls-info">—</p>
@@ -529,6 +533,16 @@
     const a = ctx.a != null ? ctx.a : 0;
     const total = Math.max(1, ctx.total || 0);
     const at = ctx.idx >= 0 ? ctx.idx : 0;
+    // 仅今日任务态：位置条按当日列表走（第 k/N 句 · 循环），篇内 ◀/▶ 不禁用（播完自动循环，不断链）
+    const todayMode = ctx.src === 'today' && (ctx.todayTotal || 0) > 0;
+    const src = card.querySelector('.ls-src');
+    if (src) {
+      src.classList.toggle('on', todayMode);
+      src.innerHTML = todayMode
+        ? '<i class="ri-calendar-check-line" aria-hidden="true"></i><span>今日任务</span>'
+        : '<i class="ri-calendar-check-line" aria-hidden="true"></i><span>全部</span>';
+      src.setAttribute('aria-label', todayMode ? '随身听范围：仅今日任务（点按切回全部）' : '随身听范围：全部文章（点按切到仅今日任务）');
+    }
     const now = card.querySelector('.ls-now');
     if (now) now.textContent = ctx.idx >= 0 ? ctx.text : ('开始听《' + SECTIONS[a].title + '》');
     const play = card.querySelector('.ls-play');
@@ -540,12 +554,14 @@
     }
     // 句级 ◀/▶ 的禁用态：与主站播放条一致（首句 ◀ 禁用 / 末句 ▶ 禁用；未起播 idx=-1 时 ◀ 禁用）
     const prev = card.querySelector('.ls-prev'), next = card.querySelector('.ls-next');
-    if (prev) prev.disabled = at <= 0;
-    if (next) next.disabled = at >= total - 1;
+    if (prev) prev.disabled = todayMode ? ctx.todayTotal <= 1 : at <= 0;
+    if (next) next.disabled = todayMode ? ctx.todayTotal <= 1 : at >= total - 1;
     const seek = card.querySelector('.ls-seek');
-    if (seek) { seek.max = String(total); seek.value = String(at + 1); }
+    if (seek) { seek.max = String(todayMode ? ctx.todayTotal : total); seek.value = String(todayMode ? ctx.todayPos + 1 : at + 1); }
     const info = card.querySelector('.ls-info');
-    if (info) info.textContent = `第 ${at + 1} / ${total} 句 · 还剩 ${Math.max(0, total - at - 1)} 句`;
+    if (info) info.textContent = todayMode
+      ? `今日第 ${ctx.todayPos + 1} / ${ctx.todayTotal} 句 · 播完自动循环`
+      : `第 ${at + 1} / ${total} 句 · 还剩 ${Math.max(0, total - at - 1)} 句`;
     const art = card.querySelector('.ls-art');
     if (art) art.textContent = `《${SECTIONS[a].title}》`;
     const vol = card.querySelector('.ls-vol');

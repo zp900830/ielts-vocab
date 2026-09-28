@@ -2250,6 +2250,16 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .ls-prev i, .ls-next i { font-size: 16px; line-height: 1; }
   .ls-prev:hover:not(:disabled), .ls-next:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-text); background: var(--accent-soft); }
   .ls-prev:disabled, .ls-next:disabled { opacity: .45; cursor: default; }
+  /* 随身听范围切换（2026-09-28 用户加）：全部文章 ↔ 仅今日任务。照搬 ◀/▶ 的 navbtn，
+     选中态（.on）走 accent 底，与 loop 菜单 active 同一口径。 */
+  .ls-src { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 14px;
+    border: 1px solid var(--border); border-radius: 999px; background: var(--card); color: var(--text);
+    font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+    box-shadow: 0 2px 10px rgba(30,90,70,.06);
+    transition: border-color var(--iel-t-fast), color var(--iel-t-fast), background var(--iel-t-fast); }
+  .ls-src i { font-size: 16px; line-height: 1; }
+  .ls-src:hover { border-color: var(--accent); color: var(--accent-text); background: var(--accent-soft); }
+  .ls-src.on { border-color: var(--accent); color: var(--accent-text); background: var(--accent-soft); font-weight: 700; }
   .ls-play { display: inline-flex; align-items: center; gap: 5px; min-height: 48px; padding: 0 20px;
     border: none; border-radius: 999px; background: var(--grad); color: var(--cta-ink);
     font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: var(--grad-shadow); }
@@ -4540,6 +4550,15 @@ let listenOn = false;
           if (idx < sents.length) paint();
         } else if (TASK.hasPlan) { TASK.onSentenceComplete(gi); }
       }
+      /* 随身听「仅今日任务」：按当日列表逐句推进、播完自动从头循环（2026-09-28 用户加）。
+         推进实现住在 TASK 闭包里（今日列表变量在那），这里只经出口调 —— launch 与 TASK 工厂
+         不在同一作用域，直接读闭包变量会 ReferenceError，整条 completion 都会死掉。 */
+      if (!TASK.active && listenOn && TASK.listenSrc === 'today') {
+        try {
+          const gic = (currentChapter < 0) ? i : chapterSentStart + i;
+          if (TASK.listenTodayAdvance(gic)) return;
+        } catch (e) {}
+      }
     } catch (e) {}
     // 单句循环模式：只有锚定句的 completion 才计数+重播（重置 launchedUpTo 允许重复发射同一句）；
     // 预取兄弟句/旧链残留 speak 的 completion 直接落到正常推进（launchedUpTo 去重，自然无害）
@@ -4634,7 +4653,8 @@ let listenOn = false;
     // A-B循环同样只发单句链：预取会把 B+1、B+2 提前入队，回绕后它们插在 A 前面导致每轮多播两句
     // 任务模式同样只发这一句：链子上写的是「放完就停」，可预取出去的那两句已经在引擎里排着队，
     // 停是停住了、声音还要替你把下面两句念完 —— 那正是他要拆掉的连读。
-    const fire3 = () => { launch(i, my, true); if (!loopMode && abMode !== 3 && !TASK.active) { launch(i + 1, my, true); launch(i + 2, my, true); } };
+    const todaySingle = (typeof TASK !== 'undefined' && TASK.listenSrc === 'today' && listenOn && !TASK.active);
+    const fire3 = () => { launch(i, my, true); if (!loopMode && abMode !== 3 && !TASK.active && !todaySingle) { launch(i + 1, my, true); launch(i + 2, my, true); } };
     if (cloudMode) {
     launch(i, my, true); // 云端单播：只发一句，续播走 onend 单链
     } else if (hadQueue && !NEED_GESTURE) {
@@ -6015,6 +6035,12 @@ let listenOn = false;
          否则口袋连播会把 §9.4 的 everRead（→ 通读完成度 ×40%）刷穿。 */
       let _listenCtx = false;     // 是否在随身听上下文（卡片或展开）
       let _listenArticle = null;  // 当前随身听篇
+      /* 随身听范围（2026-09-28 用户加）：all = 全部文章（默认，老口径）；
+         today = 仅当日任务句子，当日列表播完自动从头循环。偏好持久化。 */
+      let _listenSrc = 'all';
+      let _listenToday = [];      // 当日任务全局句号（去重保序）
+      let _listenTodayPos = 0;
+      try { if (typeof readPrefs === 'function' && readPrefs().listenSrc === 'today') _listenSrc = 'today'; } catch (e) {}
       let _listenExpanded = false;
       let _listenArmed = false;   // ⑤ 已起播、未停止（暂停仍为 true）→ 悬浮球/续播判据
       let _listenTick = 0;        // 上一笔记时（ms）
@@ -6026,6 +6052,7 @@ let listenOn = false;
           a: _listenArticle, idx: idx, total: sents.length, playing: playing,
           loop: loopMode ? loopCount : 0, rate: rate, ab: abMode, expanded: _listenExpanded,
           ctx: _listenCtx, active: _listenArmed,
+          src: _listenSrc, todayPos: _listenTodayPos, todayTotal: _listenToday.length,
           text: idx >= 0 ? plainEN(sentRaw(idx)) : (sents.length ? plainEN(sentRaw(0)) : ''),
         };
       }
@@ -6099,6 +6126,12 @@ let listenOn = false;
       }
       function listenToggle() {
         if (playing) { togglePlay(); return; }
+        if (_listenSrc === 'today' && !taskMode) {
+          if (_listenArmed && _listenToday.length && idx >= 0) { listenArm(); playFrom(idx); return; }  // 暂停续播：原地继续
+          listenArm();
+          if (!listenTodayStart()) { _listenArmed = false; listenOn = false; try { paint(); } catch (e) {} }
+          return;
+        }
         listenArm();
         playFrom(idx >= 0 ? idx : 0);
       }
@@ -6116,7 +6149,7 @@ let listenOn = false;
         try { paint(); } catch (e) {}
       }
       /* 重听本篇：回到本句 0 重播（主站 lsReplay 口径）。 */
-      function listenReplay() { listenArm(); playFrom(0); }
+      function listenReplay() { listenArm(); if (_listenSrc === 'today' && !taskMode) { listenTodayStart(); return; } playFrom(0); }
       /* 切换随身听篇目（卡片/弹窗 HUD 上的上一篇·下一篇）。 */
       function listenStep(d) {
         const n = SECTIONS.length;
@@ -6145,7 +6178,8 @@ let listenOn = false;
         document.body.classList.remove('listen-closing');
         document.body.classList.add('listen-mode');
         updateListenHud();
-        playFrom(idx >= 0 ? idx : 0);   // 展开即连播（§7.4）
+        if (_listenSrc === 'today' && !taskMode && !(_listenArmed && idx >= 0)) listenTodayStart();
+        else playFrom(idx >= 0 ? idx : 0);   // 展开即连播（§7.4）
       }
       /* ④ 收起（2026-09-25 用户改口径）：收起**不停止** —— 播放继续、悬浮球在、收听账继续记；
          只有「停止」才收掉上下文。左上角那颗是「收起」不是「返回」：展开态 ⇄ 卡片态是同一场收听
@@ -6168,6 +6202,12 @@ let listenOn = false;
       /* ④ HUD 内容（已撤，2026-09-25 用户删大卡片）：篇名/篇号在顶部条（#lsTitle/#lsPos）、
            当前句在正文高亮、状态在播放条 —— 不再另有一张卡。这里只剩顶部条这行字的填充。 */
       function updateListenHud() {
+        if (_listenSrc === 'today' && listenOn && !taskMode && _listenToday.length) {
+          const t0 = document.getElementById('lsTitle'), p0 = document.getElementById('lsPos');
+          if (t0) t0.textContent = '今日任务 · 循环播放';
+          if (p0) p0.textContent = '第 ' + (_listenTodayPos + 1) + '/' + _listenToday.length + ' 句';
+          return;
+        }
         const a = (_listenArticle != null) ? _listenArticle : 0;
         const sec = SECTIONS[a] || {};
         const lt = document.getElementById('lsTitle'), lp = document.getElementById('lsPos');
@@ -6187,6 +6227,80 @@ let listenOn = false;
         if (p) p.textContent = `第 ${a + 1}/${SECTIONS.length} 篇`;
         updateListenHud();
         playFrom(0);
+      }
+      /* 仅今日任务队列（2026-09-28 用户加）：取今天装配队列的全局句号，去重保序。 */
+      function listenTodayBuild() {
+        _listenToday = []; _listenTodayPos = 0;
+        try {
+          let ids = [];
+          try { ids = (todayPlan(true).queue || []).map(function (q) { return q.i; }); } catch (e) {}
+          if (!ids.length) { try { ids = (todayQueue || []).map(function (q) { return q.i; }); } catch (e2) {} }
+          const seen = {};
+          ids.forEach(function (gi) { if (Number.isFinite(gi) && !seen[gi]) { seen[gi] = 1; _listenToday.push(gi); } });
+        } catch (e) {}
+        return _listenToday.length > 0;
+      }
+      /* 跨篇跳句：先切章渲染，再播本篇下标。篇章不同才 render，同篇直接播。 */
+      function listenPlayGlobal(gi) {
+        if (gi == null || !Number.isFinite(gi)) return false;
+        const a = artOfSentGlobal(gi);
+        if (a == null || a < 0 || a >= SECTIONS.length) return false;
+        if (a !== currentChapter) {
+          _listenArticle = a; currentArticle = a; currentChapter = a;
+          chapterSentStart = computeChapterStart(a);
+          idx = -1; _paintIdx = -2; render();
+          updateListenHud();
+        }
+        const local = gi - chapterSentStart;
+        if (local < 0 || local >= sents.length) return false;
+        _listenTick = Date.now();
+        playFrom(local);
+        return true;
+      }
+      function listenTodayStart() {
+        if (!listenTodayBuild()) {
+          try { showAbToast('还没有今日任务：先去「我的」设置每天读多久'); } catch (e) {}
+          return false;
+        }
+        listenArm();
+        _listenTodayPos = 0;
+        _listenTick = Date.now();
+        return listenPlayGlobal(_listenToday[0]);
+      }
+      function listenTodayNext() {
+        if (!_listenToday.length || !listenOn || taskMode) return false;
+        _listenTodayPos = (_listenTodayPos + 1) % _listenToday.length;
+        if (_listenTodayPos === 0) { try { showAbToast('今日任务播完一遍，继续循环'); } catch (e) {} }
+        _listenTick = Date.now();
+        return listenPlayGlobal(_listenToday[_listenTodayPos]);
+      }
+      /* launch 完播回调的今日推进出口（launch 与 TASK 工厂不在同一作用域，只能经这里进来）。
+         返回 true = 已接管（调用方直接 return）；false = 名单空了没接管，调用方走老路。 */
+      function listenTodayAdvance(gi) {
+        if (taskMode || !listenOn || _listenSrc !== 'today' || !_listenToday.length) return false;
+        try { const pp = _listenToday.indexOf(gi); if (pp >= 0) _listenTodayPos = pp; } catch (e) {}
+        if (!listenTodayNext()) { playing = false; try { paint(); } catch (e) {} }
+        return true;
+      }
+      /* 范围切换：all ↔ today。播中切换不断播 —— 今日续入就近位置，播完自然走新范围。 */
+      function listenSetSrc(src) {
+        src = (src === 'today') ? 'today' : 'all';
+        if (src === 'today') {
+          if (!plan) { try { showAbToast('还没有学习计划：先去「我的」设置每天读多久'); } catch (e) {} return _listenSrc; }
+          if (!listenTodayBuild()) { try { showAbToast('今天没有排到句子：把每天的分钟数调大一点试试'); } catch (e) {} return _listenSrc; }
+          if (playing && listenOn && !taskMode) {
+            try {
+              const gic = (currentChapter < 0) ? idx : chapterSentStart + idx;
+              const pp = _listenToday.indexOf(gic);
+              _listenTodayPos = (pp >= 0) ? pp : 0;
+            } catch (e) {}
+          } else { _listenTodayPos = 0; }
+        }
+        _listenSrc = src;
+        try { savePref('listenSrc', src); } catch (e) {}
+        try { updateListenHud(); } catch (e) {}
+        try { if (window.APP3 && window.APP3.updateListenCard) window.APP3.updateListenCard(); } catch (e) {}
+        return _listenSrc;
       }
       function listenFlush() {
         if (!_listenCtx || _listenArticle == null || !_listenTick) return;
@@ -7526,6 +7640,7 @@ let listenOn = false;
         _noPlan = true;
         taskMode = true;
         window.__taskEnterAt = Date.now();   // route() 靠它豁免「建立任务模式自带的那次 hashchange」
+        _tapCounted.clear();   // 新的一趟：点即+1 的防重账本清零
         sessionStart = Date.now(); sessionReps = 0; startSessionClock();
         document.body.classList.add('task-mode');
         dockAudiobar(true);
@@ -7571,6 +7686,7 @@ let listenOn = false;
         if (!todayQueue.length && !fallback) { showAbToast('今天没有排到的句子 —— 把每天的分钟数调大一点试试'); return; }
         taskMode = true;
         window.__taskEnterAt = Date.now();   // route() 靠它豁免「建立任务模式自带的那次 hashchange」
+        _tapCounted.clear();   // 新的一趟：点即+1 的防重账本清零
         sessionStart = Date.now();
         sessionReps = 0; startSessionClock();
         document.body.classList.add('task-mode');
@@ -7599,7 +7715,9 @@ let listenOn = false;
             }
           }
         } catch (e) {}
-        // 跳到第一个未完成句
+        // 落到第一个未完成句并直接开播（true）。以前是 false（只定位不播），
+        // 所以每次进来第一句恒无声，非要点一次「下一句」———— 用户 2026-09-28 报障。
+        // playGlobal 指定句仍由 openArticle 续播，这里只定位别抢。
         goToNextTask(false);
       }
       /* 3.0（Task 5）：点首页卡片进这一篇的任务模式。
@@ -7828,6 +7946,7 @@ let listenOn = false;
              写成 goToNextTask 的话，用「上一句」退回去再点会悄悄跳到队列里第一句还没听的，
              而不是你退回的那句 —— 这条路径以前栽过。 */
           paint();
+          try { const _k0 = taskSeekK(); if (todayQueue[_k0]) markSentenceRead(todayQueue[_k0].i); } catch (e) {}
           revealTaskPos(taskSeekK(), true);
           _tabStarted = true;
           syncTaskNextLabel();
@@ -7849,6 +7968,7 @@ let listenOn = false;
           const qi = todayQueue.findIndex(q => q.i === g);
           if (qi >= 0) taskPos = qi;   // 这句在队列里就把游标跟上；不在则游标原地（滑块/气泡仍可读）
           try { if (loopMode) { loopSent = g; loopCurrent = 0; } if (abMode === 3) abCancel(true); } catch (e) {}
+          markSentenceRead(g);
           playFrom(ni);
           return;
         }
@@ -7857,6 +7977,7 @@ let listenOn = false;
           if (!readToday2(todayQueue[qi].i)) { found = qi; break; }
         }
         if (found < 0) { finishPass(1); return; }
+        try { if (todayQueue[found]) markSentenceRead(todayQueue[found].i); } catch (e) {}
         revealTaskPos(found, true);
         syncTaskNextLabel();
       }
@@ -9021,13 +9142,27 @@ let listenOn = false;
         }
         _readMsTick = now;
       }
+      /* 点即+1（2026-09-28 用户改口径）：① 里点「下一句」那一下就记已读，不等播完 ——
+         点快了旧链会被新点击作废（speakToken++），播完回调永远不触发，账就漏了。
+         播完回调走同一把锁：已点过的不重复记，没点过的（纯听/自动播）照旧记。 */
+      const _tapCounted = new Set();
+      function tapKey_(gi) { try { return day2() + ':' + gi; } catch (e) { return 'x:' + gi; } }
+      function markSentenceRead(gi) {
+        if (!taskMode || pass !== 1 || !plan || !prog) return false;
+        const k = tapKey_(gi);
+        if (_tapCounted.has(k)) return false;
+        readMsTick();
+        recordRep(gi);
+        sessionReps++;
+        bumpArticleRep(artOfSentGlobal(gi));
+        _tapCounted.add(k);
+        if (_tapCounted.size > 5000) { const fst = _tapCounted.values().next().value; _tapCounted.delete(fst); }
+        return true;
+      }
       function taskSentenceFinished(globalIdx) {
         if (!taskMode) return false;
         if (pass === 1 && plan && prog) {
-          readMsTick();   // 真实用时：放完这句到上一笔的间隔先记账
-          recordRep(globalIdx);
-          sessionReps++;
-          bumpArticleRep(artOfSentGlobal(globalIdx));   // 精读次数只数任务模式的 ① 完成（§7.6），账住 LS_ARTICLE
+          markSentenceRead(globalIdx);   // 点过已记则内部跳过；纯听没点的在这里记
           /* 他 2026-09-24 拍板：放完**不自动挪高亮** —— 高亮停在这句，下一句只由「下一句」那颗键叫起来
              （点了才挪高亮 + 同步开播）。所以这里不再 goToNextTask()。
              例外是交棒 ②：两道闸任一成立就把小结端上来 ——
@@ -9081,6 +9216,7 @@ let listenOn = false;
         listenOpen, listenClose, listenToggle, listenStep, listenSeek,
         listenSentenceStep, listenStop, listenReplay,
         listenExpand, listenCollapse, listenNextArticle, updateListenHud,
+        listenSetSrc, get listenSrc() { return _listenSrc; }, listenTodayAdvance,
         listenLeave, listenMiniStop: listenStop,
         listenState, listenStat, listenLast, listenTick, listenFlush, listenSetTickForTest,
         get listenTickMs() { return _listenTick; },   // 测试锁：跨场清零（①②③④）读这根指针
