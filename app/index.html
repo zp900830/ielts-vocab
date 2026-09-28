@@ -3284,6 +3284,7 @@ let listenOn = false;
     DEFAULT: 'en-GB-SoniaNeural',
     _on: false, _client: null, cache: new Map(), _pend: new Map(),
     _q: [], _busy: false, _au: null, _auEl: null, _auUrl: null, _playCtl: null, _gen: 0,
+    _jobTimeout: 0,
     client() {
     if (!window.supabase) return null;
     if (!this.URL || !this.KEY) return null;
@@ -3439,7 +3440,16 @@ let listenOn = false;
     if (head.ctl && head.ctl.signal.aborted) { this._q.shift(); head.rej(new Error('stale')); this._drain(); return; }
     this._busy = true;
     const job = this._q.shift();
+    // 安全网：个别 fetch 不响应 abort/signal 时，队列不能永远卡住。
+    // synth() 已有 20s abort，这里留 25s 兜底（测试可经 _jobTimeout 改小）；超时就 reject 该 job、释放消费者。
+    const safetyT = setTimeout(() => {
+      this._busy = false;
+      try { if (job.ctl) job.ctl.abort(); } catch (e) {}
+      try { job.rej(new Error('timeout')); } catch (e) {}
+      setTimeout(() => this._drain(), 150);
+    }, this._jobTimeout || 25000);
     Promise.resolve().then(job.fn).then(job.res, job.rej).finally(() => {
+    clearTimeout(safetyT);
     this._busy = false;
     setTimeout(() => this._drain(), 150);
     });
