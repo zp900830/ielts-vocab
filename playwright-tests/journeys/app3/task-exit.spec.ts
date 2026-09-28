@@ -7,6 +7,11 @@ declare const TASK: {
   initPlan(minutes: number): void;
   exitTaskMode(): void;
   state(): { daily: Record<string, unknown> };
+  queue: { i: number }[];
+  progress: { sentences: Record<string, { reps: number }> };
+  listenSetSrc(s: string): string;
+  listenToggle(): void;
+  listenState(): { src: string; todayPos: number; todayTotal: number };
 };
 declare const setAccent: (a: string) => void;
 
@@ -144,4 +149,76 @@ test('切到别的页（hashchange → route）也退出任务模式并停播', 
   await fireStaleSpeak(page);
   expect(await pendingSpeaks(page), '退出后滞留的旧回调不许再续播').toBe(0);
   expect(await playBtnLabel(page), '播放键要回到「播放」').toContain('播放');
+});
+
+/* 2026-09-28 第三轮：① 进来第一句自动播；② 点「下一句」即+1（不等播完，防点快漏账）。 */
+const repsCount = (page: import('@playwright/test').Page) =>
+  page.evaluate(() => {
+    const s = TASK.progress.sentences || {};
+    return Object.keys(s).filter((k) => (s[k].reps || 0) > 0).length;
+  });
+const repsOf = (page: import('@playwright/test').Page, gi: number) =>
+  page.evaluate((g) => ((TASK.progress.sentences || {})[g] || { reps: 0 }).reps, gi);
+
+test('点“下一句”即+1：不等播完，且播完不重复记', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+  await installSpeakStub(page);
+  await page.locator('.art-card').first().click();
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+  const first = await page.evaluate(() => TASK.queue[0].i);
+  expect(await repsOf(page, first), '点之前未读').toBe(0);
+
+  await page.locator('#tbNext').click();         // 第一下：放这一句 + 点即+1
+  expect(await repsOf(page, first), '点一下就记，不等播完').toBeGreaterThan(0);
+
+  await fireStaleSpeak(page);                    // 兑现滞留的播完回调（入口自动播 + 刚点的）
+  await fireStaleSpeak(page);
+  expect(await repsOf(page, first), '播完不许重复记').toBe(1);
+  expect(await repsCount(page), '只记了点过的这一句').toBe(1);
+
+  await page.locator('#tbNext').click();         // 第二下：口径A去屏幕下一句 + 点即+1
+  expect(await repsCount(page), '第二下记到第二句').toBe(2);
+});
+
+/* 2026-09-28 新功能：随身听「仅今日任务」——按当日列表播，播完从头循环。 */
+async function installTextStub(page: import('@playwright/test').Page) {
+  await page.evaluate(() => {
+    const w = window as unknown as {
+      speak: (t: string, cb?: () => void) => void;
+      __cbs: (() => void)[]; __texts: string[];
+    };
+    w.__cbs = []; w.__texts = [];
+    w.speak = function (t: string, cb?: () => void) { w.__texts.push(t); if (cb) w.__cbs.push(cb); };
+  });
+}
+const spokenTexts = (page: import('@playwright/test').Page) =>
+  page.evaluate(() => (window as unknown as { __texts: string[] }).__texts.slice());
+
+test('随身听仅今日任务：按当日列表播完自动从头循环', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+  await page.goto(`${rootUrl}/app/index.html#/listen`);
+  await expect(page.locator('.ls-card')).toBeVisible();
+  await installTextStub(page);
+
+  expect(await page.evaluate(() => TASK.listenSetSrc('today')), '切到今日任务').toBe('today');
+  const total = (await page.evaluate(() => TASK.listenState())).todayTotal;
+  expect(total, '今日列表非空').toBeGreaterThan(0);
+
+  await page.evaluate(() => TASK.listenToggle());   // 起播
+  expect((await spokenTexts(page)).length, '起播发射第一句').toBe(1);
+  for (let k = 0; k < total; k++) await fireStaleSpeak(page);   // 播完当日整单
+  const texts = await spokenTexts(page);
+  expect(texts.length, '整单播完共发射 N+1 句').toBe(total + 1);
+  expect(new Set(texts.slice(0, total)).size, '当日列表去重保序').toBe(total);
+  expect(texts[total], '播完从头循环').toBe(texts[0]);
 });
