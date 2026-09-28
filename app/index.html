@@ -4956,7 +4956,12 @@ let listenOn = false;
     if (ab) { ab.textContent = a === 'en-GB' ? '🇬🇧 英式' : '🇺🇸 美式'; ab.classList.add('active'); }
     loadVoices();
     const best = bestOfAccent(a);
-    if (best) {
+    // 口音切换跟随换默认音色，但有一条红线（2026-09-28）：用户已选云音色、
+    // 云端当前不可用（未登录/状态未就绪）时，bestOfAccent 只能算出本地音色，
+    // 此时绝不改写选择——否则存下的云选择会被悄悄洗成本地，
+    // 表现为“全局切了云端语音，仍播本地语音”，且重登也回不来。
+    const keepCloudPick = isCloudURI(selVoiceURI) && !(typeof CLOUD !== 'undefined' && CLOUD._on);
+    if (best && !keepCloudPick) {
     selVoiceURI = best.voiceURI;
     try { localStorage.setItem('ielts-voice', selVoiceURI); } catch(e) {}
     syncVoiceUI();
@@ -7622,6 +7627,11 @@ let listenOn = false;
         try { readMsTick(); } catch (e) {}
         _readMsTick = 0;
         taskMode = false; _noPlan = false; stopSessionClock();
+        // 退出即停播（2026-09-28）：之前只清时钟，播放队列/云音频继续走，
+        // 表现为“回来了还在念”。与 taskSeekGo/listenClose 同一套收尾。
+        playing = false; speakToken++;
+        try { speechSynthesis.cancel(); } catch (e) {}
+        try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
         clearAutoNext();   // 离开任务模式：别让待触发的自动推进在别的屏上叫 nextBlank
         // ② 的答题卡浮窗跟着退出一起收（2026-09-25 用户实测：答题页返回后答题卡还悬在别的页面上）
         try { closeBlankPop(); } catch (e) {}
@@ -7690,6 +7700,12 @@ let listenOn = false;
             if (sel) { sel.value = String(ch); onChapterChange(String(ch)); }
             // 切换后延迟定位
             setTimeout(() => {
+              // 300ms 内用户已退出任务模式：只定位不自动播，别把人拽回播放链
+              if (!taskMode) {
+                const nl = globalToLocal(globalIdx);
+                if (nl >= 0 && sents[nl]) { idx = nl; paint(); }
+                return;
+              }
               const newLocal = globalToLocal(globalIdx);
               if (newLocal >= 0 && sents[newLocal]) {
                 if (autoPlay !== false) playFrom(newLocal);
@@ -8921,6 +8937,10 @@ let listenOn = false;
         prog = { sentences: {}, daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {} };
         todayQueue = [];
         taskMode = false; taskPos = 0; sessionStart = 0; sessionReps = 0;
+        // 重置即停播（2026-09-28）：与 exitTaskMode 同一道理，别留着旧播放链
+        playing = false; speakToken++;
+        try { speechSynthesis.cancel(); } catch (e) {}
+        try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
         document.body.classList.remove('task-mode');
         dockAudiobar(false);
         const bar = document.getElementById('taskBar');
