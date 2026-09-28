@@ -26,6 +26,15 @@
     const raw = (location.hash || '#/home').replace(/^#\//, '').split('/');
     const h = raw[0];
     cur = ROUTES.includes(h) ? h : 'home';
+    /* 一级页导航 = 离开任务模式（2026-09-28 用户报障：「我都返回了，不在任务模式了，还仍在播放」——
+       头部 #ttBack 那条已修，但点左侧导航 / 浏览器后退只改 hash 走这里，任务模式没退出、播放没停）。
+       exitTaskMode 内含停播三件套 + 收 chrome（index.html）。
+       时间窗豁免：词详情「播放这句」是先改 hash 再 enterTaskMode，紧随其后的这次 hashchange
+       是进入动作自带的、不是用户导航 —— __taskEnterAt 由 enterTaskMode/enterFreeTaskMode 盖章。 */
+    if (typeof TASK !== 'undefined' && TASK.active) {
+      const enteredAt = window.__taskEnterAt || 0;
+      if (Date.now() - enteredAt > 800) { try { TASK.exitTaskMode(); } catch (e) {} }
+    }
     // 离开随身听 → 播放不中断，交给右下角悬浮球继续控制（照搬主站 switchView 的口径）。
     // 只有「从没起播过」才会真正收掉随身听上下文（listenLeave 内部判断）。
     if (cur !== 'listen') { try { if (typeof TASK !== 'undefined' && TASK.listenLeave) TASK.listenLeave(); } catch (e) {} }
@@ -73,7 +82,14 @@
     const lsExp = e.target.closest('.ls-expand, .ls-cover');
     if (lsExp) { TASK.listenExpand(); return; }
     const b = e.target.closest('.nav-item');
-    if (b) { location.hash = '#/' + b.dataset.route; return; }
+    if (b) {
+      /* 点一级导航就是离开任务模式。这一层必须写在点击处而不是只靠 hashchange：
+         任务模式在 #/home 上建立，再点「首页」hash 不变 → 不触发 hashchange → route 根本不跑。
+         （route 里那层管的是切到别的页 / 浏览器后退；两层合起来才盖全。） */
+      if (typeof TASK !== 'undefined' && TASK.active) { try { TASK.exitTaskMode(); } catch (e) {} }
+      location.hash = '#/' + b.dataset.route;
+      return;
+    }
     // 卡片是 renderHome 每次重渲的，所以走事件代理而不是逐张绑。
     // 入口 2 的「答题」按钮与卡片里的 .a-open 是同级真按钮，必须先判「答题」——
     // 否则它会被卡片判定（.a-open 也在 .art-card 里）接走（§4.4）。

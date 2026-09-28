@@ -7525,6 +7525,7 @@ let listenOn = false;
         if (o.article != null) currentArticle = o.article;
         _noPlan = true;
         taskMode = true;
+        window.__taskEnterAt = Date.now();   // route() 靠它豁免「建立任务模式自带的那次 hashchange」
         sessionStart = Date.now(); sessionReps = 0; startSessionClock();
         document.body.classList.add('task-mode');
         dockAudiobar(true);
@@ -7569,6 +7570,7 @@ let listenOn = false;
         _tabStarted = false;                       // 那颗键每一趟都从「放这一句」起步
         if (!todayQueue.length && !fallback) { showAbToast('今天没有排到的句子 —— 把每天的分钟数调大一点试试'); return; }
         taskMode = true;
+        window.__taskEnterAt = Date.now();   // route() 靠它豁免「建立任务模式自带的那次 hashchange」
         sessionStart = Date.now();
         sessionReps = 0; startSessionClock();
         document.body.classList.add('task-mode');
