@@ -11,6 +11,7 @@ declare const TASK: {
   progress: { sentences: Record<string, { reps: number }> };
   listenSetSrc(s: string): string;
   listenToggle(): void;
+  onSentenceComplete(gi: number): void;
   listenState(): { src: string; todayPos: number; todayTotal: number };
 };
 declare const setAccent: (a: string) => void;
@@ -277,4 +278,23 @@ test('存档句已读完：重进落到第一条没读的，第一下不跳走',
   const texts = await spokenTexts(page);
   expect(texts.length, '第一下就发射').toBeGreaterThan(0);
   expect(texts[texts.length - 1], '放的是高亮的 s1').toContain('Sentence 1 about');
+});
+
+/* 2026-09-28 口径：任务外自由播放不记账。直接打唯一的自由记账入口，
+   断言 reps / 事件流 / 日账三本账一字不动。 */
+test('任务外自由播放不记账：onSentenceComplete 零写入', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+  const snap = () => page.evaluate(() => JSON.stringify({
+    sents: TASK.progress.sentences,
+    daily: TASK.state().daily,
+    nev: TASK.events().length,
+  }));
+  const before = await snap();
+  await page.evaluate(() => { TASK.onSentenceComplete(0); TASK.onSentenceComplete(1); });
+  expect(await snap(), '任务外记账入口必须零写入').toBe(before);
 });

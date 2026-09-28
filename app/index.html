@@ -4537,7 +4537,8 @@ let listenOn = false;
     } catch (e) {}
     speak(sentText(sents[i]), () => {
     if (!playing || my !== speakToken) return;
-    /* 自由/随身听模式：随身听记独立收听账（§7.6，不碰精读）；其余自由播放仍记接触（v2.0 口径）。
+    /* 自由/随身听模式：随身听记独立收听账（§7.6，不碰精读）；任务外的自由播放不再记接触
+       （2026-09-28 用户改口径：任务量只许任务内涨，v2.0「自由播放记接触」口径作废）。
        任务模式由手动按钮计数（taskSentenceFinished），这里不重复。 */
     try {
       if (!TASK.active) {
@@ -4548,7 +4549,7 @@ let listenOn = false;
              「一句放完 → 下一句」在 headless（speak 被 stub、onstart 不触发）里也可验证。 */
           idx = i + 1;
           if (idx < sents.length) paint();
-        } else if (TASK.hasPlan) { TASK.onSentenceComplete(gi); }
+        } /* 任务外自由播放：不记账（上条注释）。onSentenceComplete 保留为空实现，别删出口。 */
       }
       /* 随身听「仅今日任务」：按当日列表逐句推进、播完自动从头循环（2026-09-28 用户加）。
          推进实现住在 TASK 闭包里（今日列表变量在那），这里只经出口调 —— launch 与 TASK 工厂
@@ -9121,10 +9122,10 @@ let listenOn = false;
          任务条从此只在任务模式里出现。 */
 
       // ---- 与播放链路集成 ----
-      // 自由模式下读了任务句也计数
+      /* 任务外自由播放不再记账（2026-09-28 用户改口径）：函数体置空，只保留出口。
+         任务内记账唯一入口 = taskSentenceFinished；随身听 = listenTick。 */
       function onSentenceComplete(globalIdx) {
-        if (!plan || !prog) return;
-        recordRep(globalIdx);   // 耗时实测在 recordRep 里统一采样
+        return;
       }
       /* 任务模式一步一停的落点（他 2026-09-23 拍板：「不点不放，点一句放一句」）。
          播放链每放完一句回来问一次；返回 true 就停在这句，下一句由任务条那颗键叫起来。
