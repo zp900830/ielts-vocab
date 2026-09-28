@@ -106,3 +106,42 @@ test('口音切换：云端不可用时不洗掉已存的云音色选择', async
   expect(await page.evaluate(() => localStorage.getItem('ielts-voice')),
     '云端不可用时切口音不许改写云选择').toBe('cloud:kept-voice');
 });
+
+/* 2026-09-28 用户报障第二轮：「我都返回了，不在任务模式了，还仍在播放」——
+   头部 #ttBack 已修，但他实际走的是左侧导航 / 浏览器后退（只改 hash），
+   route() 与 .nav-item 点击此前都不碰任务模式。这里锁两条退出路径。 */
+async function enterTaskAndStartPlay(page: import('@playwright/test').Page) {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+  await page.locator('.art-card').first().click();
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+  await installSpeakStub(page);
+  await page.locator('#tbNext').click();          // 起播：旧链攒进 __cbs
+  expect(await pendingSpeaks(page), '起播后应有一句在播').toBeGreaterThan(0);
+}
+
+test('一级导航「首页」（hash 不变、不触发 hashchange）也退出任务模式并停播', async ({ page }) => {
+  await enterTaskAndStartPlay(page);
+  // 任务模式就在 #/home 上建立：再点「首页」hash 不变 → hashchange 不触发，只能靠点击处那层。
+  // （sidenav 在 task-mode 下被 CSS 藏了，用事件派发走同一条代理处理链。）
+  await page.locator('.nav-item[data-route="home"]').dispatchEvent('click');
+  await expect(page.locator('body'), '点导航后必须真退出任务模式').not.toHaveClass(/task-mode/);
+  await fireStaleSpeak(page);
+  expect(await pendingSpeaks(page), '退出后滞留的旧回调不许再续播').toBe(0);
+  expect(await playBtnLabel(page), '播放键要回到「播放」').toContain('播放');
+});
+
+test('切到别的页（hashchange → route）也退出任务模式并停播', async ({ page }) => {
+  await enterTaskAndStartPlay(page);
+  // route 里有 800ms 时间窗豁免「进入动作自带的 hashchange」，真实导航必须在窗外
+  await page.waitForTimeout(900);
+  await page.evaluate(() => { location.hash = '#/stats'; });   // 等价于浏览器后退/切页
+  await expect(page.locator('body'), '切页后必须真退出任务模式').not.toHaveClass(/task-mode/);
+  await fireStaleSpeak(page);
+  expect(await pendingSpeaks(page), '退出后滞留的旧回调不许再续播').toBe(0);
+  expect(await playBtnLabel(page), '播放键要回到「播放」').toContain('播放');
+});
