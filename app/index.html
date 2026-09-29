@@ -3322,7 +3322,11 @@ let listenOn = false;
     friendlyErr(m) {
     m = String(m || '');
     if (/forbidden/i.test(m)) return '云端语音需账号审批通过后使用';
-    if (/unauthorized|\b401\b/i.test(m)) return '请先登录云端账号';
+    /* 2026-09-28 实测教训：函数回 401 时 client 往往是有 session 的（token 过期/被拒、
+       账号无权限、Azure 订阅异常都走这里），一律报「请先登录」会把排查带偏。
+       只有 _fetchTTS 明确拿不到 session 时才抛 no-session，走「请先登录」那条。 */
+    if (/no-session/i.test(m)) return '请先登录云端账号';
+    if (/unauthorized|\b401\b/i.test(m)) return '云端拒绝：先退出重登一次，若仍失败请查账号审批与订阅状态';
     if (/未配置|503/.test(m)) return '云端语音暂未开放（管理员未配置）';
     if (/\b403\b/i.test(m)) return 'Azure 密钥无效或与区域不匹配，请联系管理员';
     if (/quota|\b429\b|rate.?limit/i.test(m)) return '请求频繁或配额用尽，请稍后再试';
@@ -3562,7 +3566,7 @@ let listenOn = false;
     this._sessWaited = true;
     s = await this.waitSession();
     }
-    if (!s) throw new Error('unauthorized');
+    if (!s) throw new Error('no-session'); // 真没登录才走这条；有 session 但服务端 401 走下面的 api 错误分支
     const r = await fetch(this.URL + '/functions/v1/tts', {
     method: 'POST',
     signal,

@@ -105,4 +105,23 @@ test.describe('3.0 云端音色：队列防死锁', () => {
     expect(r.fb, '首句应触发 fallback').toContain('timeout');
     expect(r.afterFb, '死锁解除后下一句也不应卡住').toContain('timeout');
   });
+
+  test('401 文案不误导：只有真没 session 才提示登录，有 session 被拒要指去重登/查审批订阅', async ({ page }) => {
+    // 2026-09-28 实测：Azure 订阅过期时函数回 401，旧文案一律报「请先登录」，排查被带偏两轮。
+    await stubData(page, SIXQ);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitAppReady(page);
+    const r = await page.evaluate(() => {
+      const cloud = CLOUD as any;
+      return {
+        noSession: cloud.friendlyErr('no-session'),
+        srv401: cloud.friendlyErr('api 401'),
+        srvUnauth: cloud.friendlyErr('{"error":"unauthorized"}'),
+      };
+    });
+    expect(r.noSession, '真没 session 才提示登录').toContain('请先登录');
+    expect(r.srv401, '服务端 401 不许再报请先登录').not.toContain('请先登录');
+    expect(r.srv401, '服务端 401 要指去重登/查审批订阅').toContain('重登');
+    expect(r.srvUnauth, '函数 unauthorized 同理').not.toContain('请先登录');
+  });
 });
