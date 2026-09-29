@@ -7883,7 +7883,8 @@ let listenOn = false;
       function taskLoginPrompt(kind) {
         try {
           showAbToast(kind === 'words' ? '登录后使用单词本' : kind === 'stats' ? '登录后查看学习数据'
-            : kind === 'today' ? '今日任务需登录后使用（随身听全部文章无需登录）' : '登录后阅读文章');
+            : kind === 'today' ? '今日任务需登录后使用（随身听全部文章无需登录）'
+            : kind === 'setup' ? '登录后设置学习时间' : '登录后阅读文章');
         } catch (e) {}
         /* 延迟一拍再弹浮窗：触发这次调用的多半是一次点击，被拦下的那次点击还在冒泡，
            同步打开会被文档级的"点外面收浮窗"反手关掉（卡片/切换键实测）。 */
@@ -8914,7 +8915,12 @@ let listenOn = false;
         /* W7-4：noPlanGoSetup 刚设过 _pendingArticle 时 plan 必为空，此时别清。
            反过来，只要这里渲的是「今天」视图（plan 已存在），就说明不在设置流程里 ——
            把任何残留的 _pendingArticle 清掉，别让它跨过导入/重置等路径活到下一次建计划。 */
-        if (!plan) { renderSetup(p); }
+        if (!plan) {
+          // 设置学习时间需登录（2026-09-30 用户）：所有建计划入口（横幅「去设置」/我的 CTA/
+          // 任务条空状态）都汇到这一条 if 上，在这里拦一次全覆盖。
+          if (typeof isLoggedIn === 'function' && !isLoggedIn()) { if (typeof taskLoginPrompt === 'function') taskLoginPrompt('setup'); return; }
+          renderSetup(p);
+        }
         else { _pendingArticle = null; renderToday(p); }
         p.classList.add('open');
         p.hidden = false;
@@ -9251,6 +9257,8 @@ let listenOn = false;
       }
 
       function setMinutes(m) {
+        // 改学习时间需登录（2026-09-30 用户）：建计划拦在 openPanel，改分钟拦在这里，两口全覆盖。
+        if (typeof isLoggedIn === 'function' && !isLoggedIn()) { if (typeof taskLoginPrompt === 'function') taskLoginPrompt('setup'); return; }
         ROOT2.plan.todayMinutes = Math.max(1, Math.min(180, m));
         if (ROOT2.planned) ROOT2.planned[day2()] = 0;   // 预算变了，今天的句数承诺重算一次
         _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel'));
@@ -9582,7 +9590,7 @@ let listenOn = false;
       // ---- 公开 API ----
       return {
         init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode, openArticle, openArticleQuiz, playSentence,
-        isLoggedIn, ensureLogin,
+        isLoggedIn, ensureLogin, taskLoginPrompt,
         listenOpen, listenClose, listenToggle, listenStep, listenSeek,
         listenSentenceStep, listenStop, listenReplay,
         listenExpand, listenCollapse, listenNextArticle, updateListenHud,
