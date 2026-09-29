@@ -3293,7 +3293,7 @@ let listenOn = false;
     ],
     DEFAULT: 'en-GB-SoniaNeural',
     _on: false, _client: null, cache: new Map(), _pend: new Map(),
-    _q: [], _busy: false, _au: null, _auEl: null, _auUrl: null, _playCtl: null, _gen: 0,
+    _q: [], _running: 0, _busy: false, _exec: null, _au: null, _auEl: null, _auUrl: null, _playCtl: null, _gen: 0,
     _jobTimeout: 0,
     client() {
     if (!window.supabase) return null;
@@ -3440,29 +3440,50 @@ let listenOn = false;
     return false;
     }
     },
-    _enqueue(fn, ctl, key) {
-    return new Promise((res, rej) => { this._q.push({ fn, ctl, key, res, rej }); this._drain(); });
+    _enqueue(fn, ctl, key, isPlay) {
+    return new Promise((res, rej) => {
+      const job = { fn, ctl, key, res, rej, isPlay: !!isPlay };
+      /* 播放永远插队头（同一时刻最多一个在播，stop 会先清队列）；预取追加队尾。 */
+      if (job.isPlay) this._q.unshift(job); else this._q.push(job);
+      this._drain();
+    });
     },
     _drain() {
-    if (this._busy || !this._q.length) return;
+    /* 双通道（2026-09-30）：正式播放与预取各占一个执行槽，最高 2 并发。
+       播放任务永远在队头（D1 入队时保证），所以播放一起播就先跑；预取占另一个槽。
+       _busy 保持"有活 true / 全闲 false"语义不动（老测试锁的就是它）。 */
+    if (!this._exec) this._exec = new Set();
+    while (this._running < 2 && this._q.length) {
     const head = this._q[0];
     // 已被取消的排队任务直接丢弃，不占网络槽位（连点切句时旧预取不能堵住新句子）
-    if (head.ctl && head.ctl.signal.aborted) { this._q.shift(); head.rej(new Error('stale')); this._drain(); return; }
-    this._busy = true;
+    if (head.ctl && head.ctl.signal.aborted) { this._q.shift(); try { head.rej(new Error('stale')); } catch (e) {} continue; }
     const job = this._q.shift();
+    this._running++;
+    this._busy = true;
+    try { this._exec.add(job); } catch (e) {}
     // 安全网：个别 fetch 不响应 abort/signal 时，队列不能永远卡住。
     // synth() 已有 20s abort，这里留 25s 兜底（测试可经 _jobTimeout 改小）；超时就 reject 该 job、释放消费者。
+    /* 释放只许发生一次：安全网和正常结束可能同时触发（超时后请求又回来了），
+       两次递减会把 _running 算成负的、把忙碌槽判成全闲。 */
+    let released = false;
+    const release = () => {
+      if (released) return; released = true;
+      this._running = Math.max(0, this._running - 1);
+      this._busy = this._running > 0;
+      try { this._exec.delete(job); } catch (e) {}
+    };
     const safetyT = setTimeout(() => {
-      this._busy = false;
       try { if (job.ctl) job.ctl.abort(); } catch (e) {}
       try { job.rej(new Error('timeout')); } catch (e) {}
+      release();
       setTimeout(() => this._drain(), 150);
     }, this._jobTimeout || 25000);
     Promise.resolve().then(job.fn).then(job.res, job.rej).finally(() => {
     clearTimeout(safetyT);
-    this._busy = false;
+    release();
     setTimeout(() => this._drain(), 150);
     });
+    }
     },
     _cacheSet(key, url) {
     if (this.cache.size >= 120) {
@@ -3582,7 +3603,7 @@ let listenOn = false;
     if (ctl.signal.aborted) throw e;
     return await this._fetchTTS(text, voiceId, rate, ctl.signal);
     }
-    }, ctl, key);
+    }, ctl, key, isPlay);
     this._idbSet(key, blob);
     const u = URL.createObjectURL(blob);
     this._cacheSet(key, u);
@@ -3623,6 +3644,18 @@ let listenOn = false;
     this._gen = (this._gen || 0) + 1; // 新一代：过期 play 的 fail 不许再碰共享状态
     _cloudIntentionalPause = true; // 标记主动暂停
     try { if (this._playCtl) { this._playCtl.abort(); this._playCtl = null; } } catch (e) {}
+    /* 正式播放优先（2026-09-28）：串行队列里正在执行的那笔预取（20s 上限）stop 清不掉，
+       新起播只能干等它 —— 切句/重播时"卡住"的根因之一。把它掐掉，让新播放立刻拿到槽位。
+       正式播放中的（isPlay）和本句自己的预取（keepKey，play 马上要复用）不碰。 */
+    try {
+      const exs = Array.from(this._exec || []);
+      for (const ex of exs) {
+        if (!ex || ex.isPlay) continue;
+        if (keepKey && ex.key === keepKey) continue;
+        try { if (ex.ctl) ex.ctl.abort(); } catch (e2) {}
+        try { ex.rej(new Error('stale')); } catch (e2) {}
+      }
+    } catch (e2) {}
     /* 清掉排队中的旧预取/旧合成：连点切句时它们不能堵住新句子（执行中的那个由 signal 中断）；
        注意必须逐个 reject，否则 _enqueue 的 promise 永远不 settle，连带 _pend 缓存住死 promise。
        ⚠️ keepKey：play 起播前调 stop 时，即将播的这一句往往正是上一轮 launch 刚预取的队列项；
@@ -4091,6 +4124,7 @@ let listenOn = false;
     speakAside(isCloudURI(selVoiceURI) ? 'Hello! Cloud voice ready.' : 'Hello! Let us learn English together.');
     }
     } catch (e) {}
+    try { warmupCloudAhead(); } catch (e) {}   // 新音色缓存全冷：立刻把后面 8 句预合成
     }
     /* 音色浮层的事件代理：浮窗（#mePop）每次重渲都会换掉 #voicePop 这个节点，所以
        wireVoicePop 做成可重复调用的函数（app.js 的 renderMePop 渲完会再叫一次）。 */
@@ -4622,6 +4656,22 @@ let listenOn = false;
     function isMobileDevice() {
     return NEED_GESTURE || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches)
     || /Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent || '');
+    }
+    /* 云预热（2026-09-28 用户要"提前多预合成几句"）：预取以前只在 launch（开播）里发生，
+       首句永远冷、切音色后全冷（voiceId 在缓存 key 里）。入口默读的那几秒 / 切完音色立刻
+       把后面 8 句丢进后台合成（去重天然：cache/_pend 命中直接返回），轮到播时大概率已就绪。
+       只预热不同步起播，无手势也能跑；iOS 后台节流也只是慢，不会错。 */
+    function warmupCloudAhead() {
+    try {
+    if (typeof CLOUD === 'undefined' || !CLOUD._on) return;
+    if (!isCloudURI(selVoiceURI)) return;
+    if (!sents.length) return;
+    const vid = selVoiceURI.slice(6);
+    const from = (idx >= 0) ? idx + 1 : 0;
+    for (let k = 0; k < 8 && from + k < sents.length; k++) {
+    try { CLOUD.prefetch(plainEN(sentRaw(from + k)), vid, rate); } catch (e) {}
+    }
+    } catch (e) {}
     }
     function playFrom(i) {
     if (!Number.isFinite(i) || i < 0 || i >= sents.length) { playing = false; idx = -1; paint(); return; }
@@ -6083,6 +6133,7 @@ let listenOn = false;
            抹成 now，停在卡片页不播、过几分钟再点播放，首笔会把这几分钟整段算进收听
            时长（单笔封顶 10 分钟）—— 这正是用户报的「时长虚高」。 */
         paint();
+        try { warmupCloudAhead(); } catch (e) {}   // 卡片看看也预热：点播时大概率已就绪
       }
       function listenClose() {
         if (!_listenCtx) return;
@@ -7749,6 +7800,7 @@ let listenOn = false;
         // 这一篇今天没排到句（enterTaskMode 会弹提示并原样退回）→ 别把按篇的 scope 留在缓存里，
         // 否则回首页后横幅/绿点会按这一篇算。
         if (!taskMode) { currentArticle = null; _cachedPlan = null; }
+        else { try { warmupCloudAhead(); } catch (e) {} }   // 落定即预热后面 8 句，用户默读时后台合成
       }
       /* 入口 2（PRD §4.4）：首页卡片「答题」直达这一篇的 ② —— 不要求先跑 ①。
          批次就在 enterTaskMode() 里快照（同一份 todayPlan(true).items，排空时用本篇句子兜底），
