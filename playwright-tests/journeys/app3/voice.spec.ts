@@ -144,14 +144,14 @@ test.describe('3.0 云端音色：起播不再被自己的清理误杀（refine3
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await waitAppReady(page);
     const r = await page.evaluate(async () => {
-      CLOUD._busy = true; // 卡住消费者，让两个 job 都停在队列里
+      CLOUD._running = 2; // 卡住消费者，让两个 job 都停在队列里（双通道用 _running 计数）
       const mk = (key: string) => CLOUD._enqueue(async () => 'ok', null, key);
       const out: Record<string, string> = { a: 'pending', b: 'pending' };
       mk('A').then(() => { out.a = 'ok'; }, (e: Error) => { out.a = e.message; });
       mk('B').then(() => { out.b = 'ok'; }, (e: Error) => { out.b = e.message; });
       await new Promise((res) => setTimeout(res, 0));
       CLOUD.stop('A');            // 只清别的，留下 A
-      CLOUD._busy = false; CLOUD._drain();
+      CLOUD._running = 0; CLOUD._busy = false; CLOUD._drain();
       await new Promise((res) => setTimeout(res, 200));
       return out;
     });

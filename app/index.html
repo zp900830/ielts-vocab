@@ -3293,7 +3293,7 @@ let listenOn = false;
     ],
     DEFAULT: 'en-GB-SoniaNeural',
     _on: false, _client: null, cache: new Map(), _pend: new Map(),
-    _q: [], _busy: false, _au: null, _auEl: null, _auUrl: null, _playCtl: null, _gen: 0, _execJob: null,
+    _q: [], _running: 0, _busy: false, _exec: null, _au: null, _auEl: null, _auUrl: null, _playCtl: null, _gen: 0,
     _jobTimeout: 0,
     client() {
     if (!window.supabase) return null;
@@ -3441,30 +3441,49 @@ let listenOn = false;
     }
     },
     _enqueue(fn, ctl, key, isPlay) {
-    return new Promise((res, rej) => { this._q.push({ fn, ctl, key, res, rej, isPlay: !!isPlay }); this._drain(); });
+    return new Promise((res, rej) => {
+      const job = { fn, ctl, key, res, rej, isPlay: !!isPlay };
+      /* 播放永远插队头（同一时刻最多一个在播，stop 会先清队列）；预取追加队尾。 */
+      if (job.isPlay) this._q.unshift(job); else this._q.push(job);
+      this._drain();
+    });
     },
     _drain() {
-    if (this._busy || !this._q.length) return;
+    /* 双通道（2026-09-30）：正式播放与预取各占一个执行槽，最高 2 并发。
+       播放任务永远在队头（D1 入队时保证），所以播放一起播就先跑；预取占另一个槽。
+       _busy 保持"有活 true / 全闲 false"语义不动（老测试锁的就是它）。 */
+    if (!this._exec) this._exec = new Set();
+    while (this._running < 2 && this._q.length) {
     const head = this._q[0];
     // 已被取消的排队任务直接丢弃，不占网络槽位（连点切句时旧预取不能堵住新句子）
-    if (head.ctl && head.ctl.signal.aborted) { this._q.shift(); head.rej(new Error('stale')); this._drain(); return; }
-    this._busy = true;
+    if (head.ctl && head.ctl.signal.aborted) { this._q.shift(); try { head.rej(new Error('stale')); } catch (e) {} continue; }
     const job = this._q.shift();
-    this._execJob = job;
+    this._running++;
+    this._busy = true;
+    try { this._exec.add(job); } catch (e) {}
     // 安全网：个别 fetch 不响应 abort/signal 时，队列不能永远卡住。
     // synth() 已有 20s abort，这里留 25s 兜底（测试可经 _jobTimeout 改小）；超时就 reject 该 job、释放消费者。
+    /* 释放只许发生一次：安全网和正常结束可能同时触发（超时后请求又回来了），
+       两次递减会把 _running 算成负的、把忙碌槽判成全闲。 */
+    let released = false;
+    const release = () => {
+      if (released) return; released = true;
+      this._running = Math.max(0, this._running - 1);
+      this._busy = this._running > 0;
+      try { this._exec.delete(job); } catch (e) {}
+    };
     const safetyT = setTimeout(() => {
-      this._busy = false;
       try { if (job.ctl) job.ctl.abort(); } catch (e) {}
       try { job.rej(new Error('timeout')); } catch (e) {}
+      release();
       setTimeout(() => this._drain(), 150);
     }, this._jobTimeout || 25000);
     Promise.resolve().then(job.fn).then(job.res, job.rej).finally(() => {
     clearTimeout(safetyT);
-    this._busy = false;
-    if (this._execJob === job) this._execJob = null;
+    release();
     setTimeout(() => this._drain(), 150);
     });
+    }
     },
     _cacheSet(key, url) {
     if (this.cache.size >= 120) {
@@ -3629,11 +3648,12 @@ let listenOn = false;
        新起播只能干等它 —— 切句/重播时"卡住"的根因之一。把它掐掉，让新播放立刻拿到槽位。
        正式播放中的（isPlay）和本句自己的预取（keepKey，play 马上要复用）不碰。 */
     try {
-      const ex = this._execJob;
-      if (ex && !ex.isPlay && (!keepKey || ex.key !== keepKey)) {
+      const exs = Array.from(this._exec || []);
+      for (const ex of exs) {
+        if (!ex || ex.isPlay) continue;
+        if (keepKey && ex.key === keepKey) continue;
         try { if (ex.ctl) ex.ctl.abort(); } catch (e2) {}
         try { ex.rej(new Error('stale')); } catch (e2) {}
-        this._execJob = null;
       }
     } catch (e2) {}
     /* 清掉排队中的旧预取/旧合成：连点切句时它们不能堵住新句子（执行中的那个由 signal 中断）；

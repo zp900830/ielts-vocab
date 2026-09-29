@@ -134,3 +134,29 @@ test('正式播放不等慢预取：stop 掐掉执行中的预取，新播放立
   expect(r.aborted, '慢预取应被掐掉，不许占着槽位').toBe(true);
   expect(r.done, '新播放不等慢预取，立刻播完').toEqual({ ok: true });
 });
+
+test('双通道：两个预取可并发，后发的快请求先完成', async ({ page }) => {
+  test.setTimeout(25000);
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await waitAppReady(page);
+  const order = await page.evaluate(async () => {
+    const w = window as unknown as { __order: string[] };
+    const cloud = CLOUD as any;
+    cloud._on = true;
+    w.__order = [];
+    cloud._fetchTTS = async (t: string) => {
+      // 慢请求 1200ms，快请求 100ms：串行必定慢先完成，双通道快先完成
+      await new Promise((res) => setTimeout(res, t.indexOf('slow-A') >= 0 ? 1200 : 100));
+      w.__order.push(t);
+      return new Blob(['x'], { type: 'audio/mpeg' });
+    };
+    cloud.prefetch('slow-A-prefetch', 'v', 1);
+    cloud.prefetch('fast-B-prefetch', 'v', 1);
+    await new Promise((res) => setTimeout(res, 3000));
+    return w.__order.slice();
+  });
+  expect(order.length, '两个预取都应完成').toBe(2);
+  expect(order[0], '快请求先完成（双通道并发）').toContain('fast-B');
+  expect(order[1], '慢请求后完成').toContain('slow-A');
+});
