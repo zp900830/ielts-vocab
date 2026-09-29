@@ -43,6 +43,9 @@ declare const TASK: {
   isLoggedIn(): boolean;
   listenSetSrc(s: string): string;
   listenToggle(): void;
+  openPanel(): void;
+  setMinutes(m: number): void;
+  planConfig(): { minutes: number } | null;
   state(): { daily: Record<string, unknown> };
 };
 declare const SECTIONS: unknown[];
@@ -73,6 +76,27 @@ test('未登录直进数据/单词本：锁定页 + 去登录按钮', async ({ p
   }
   await page.locator('#lockLoginBtn').click();
   await expect(page.locator('#mePop'), '去登录打开浮窗').toBeVisible();
+});
+
+test('未登录：设置学习时间（建计划/改分钟数）都要登录', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); });
+  expect(await page.evaluate(() => TASK.isLoggedIn()), '本文件必须保持未登录态').toBe(false);
+  // openPanel 没计划 = 设置屏入口（横幅/我的/任务条空状态全走它）→ 应被拦
+  await page.evaluate(() => TASK.openPanel());
+  await expect(page.locator('#todayPanel'), '设置屏不许开').toBeHidden();
+  await expect(page.locator('#mePop'), '弹登录浮窗').toBeVisible();
+  // 绕过 UI 直接建计划（API 级，门禁只拦界面入口），再造一份"有计划的未登录"样本
+  await page.evaluate(() => { TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+  expect(await page.evaluate(() => TASK.isLoggedIn()), '刷新后仍未登录').toBe(false);
+  const before = await page.evaluate(() => TASK.planConfig()!.minutes);
+  await page.evaluate(() => TASK.setMinutes(90));
+  const after = await page.evaluate(() => TASK.planConfig()!.minutes);
+  expect(after, '未登录不许改分钟数').toBe(before);
 });
 
 test('未登录随身听可用，但今日任务切不过去', async ({ page }) => {
