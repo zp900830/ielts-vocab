@@ -8676,7 +8676,7 @@ let listenOn = false;
          跟着漂到 +N；首句贴文章边界时旧规则又干脆不画，合起来就是用户看到的「读两句后
          才出现、向后延两条」。区间在当天该篇第一次画线时定下并存档 —— 这一刻必然早于本篇
          任何阅读（读句必须先进任务模式，进模式就会先画一次线）—— 之后读句/退出重进/② 批次
-         重同步都不动它；只有手动调起点、恢复引擎排程或跨天才改。按天按篇存
+         重同步都不动它；只有手动调起点、改回自动安排或跨天才改。按天按篇存
          （plan.todayRange = {day, byArt: {篇: [first, last]}}），换天自动作废。 */
       function pinArticleKey() {
         const a = (currentArticle != null) ? currentArticle : currentChapter;
@@ -8831,7 +8831,7 @@ let listenOn = false;
           '<div class="sp-row"><label for="spArt">篇目</label><select id="spArt">' + opts + '</select></div>' +
           '<div class="sp-row"><label for="spSent">第几句</label><input id="spSent" type="number" min="1" value="' + defN + '"></div>' +
           '<div class="sp-actions"><button class="btn" onclick="TASK.closeStartPicker()">取消</button>' +
-          '<button class="btn" onclick="TASK.clearManualStart()">恢复引擎排程</button>' +
+          '<button class="btn" onclick="TASK.clearManualStart()">改回自动安排</button>' +
           '<button class="btn primary" onclick="TASK.confirmStartPicker()">确定</button></div>';
         document.body.appendChild(mask);
         document.body.appendChild(pop);
@@ -8938,7 +8938,7 @@ let listenOn = false;
           try { syncQueueFromPlan(); } catch (e) {}
           try { paint(); updateTaskBar(); updateMarkers(); } catch (e) {}
         }
-        try { showAbToast('已恢复引擎排程'); } catch (e) {}
+        try { showAbToast('已改回自动安排'); } catch (e) {}
         return true;
       }
       function updateMarkers() {
