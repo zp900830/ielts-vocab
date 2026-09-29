@@ -394,7 +394,9 @@
     padding: 4px 8px; border-radius: 999px; letter-spacing: .04em; white-space: nowrap; }
   .today-range-line[data-edge="start"] .today-range-tag { left: 0; }
   .today-range-line[data-edge="end"] .today-range-tag { right: 0; }
-  .today-range-line[data-edge="start"] { cursor: pointer; }
+  /* 开始线是「点线设起点」的入口（2026-09-30 修：线本体原来 pointer-events:none，
+     330a3f6 挂的点击处理器从上线起就点不动）——只放开 start 这一条，结束线保持纯装饰。 */
+  .today-range-line[data-edge="start"] { cursor: pointer; pointer-events: auto; }
   /* 起点设置弹窗：居中卡片 + 遮罩，复用 .btn 按钮（键盘可达，无障碍走原生控件）。 */
   #startPickMask { position: fixed; inset: 0; background: rgba(20,25,22,.45); z-index: 90; }
   #startPickPop { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
@@ -402,6 +404,7 @@
     border-radius: 16px; padding: 18px; width: min(340px, calc(100vw - 48px));
     box-shadow: 0 12px 40px rgba(0,0,0,.25); }
   #startPickPop h3 { margin: 0 0 12px; font-size: 16px; }
+  #startPickPop .sp-warn { margin: 0 0 14px; font-size: 13.5px; line-height: 1.7; }
   #startPickPop .sp-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
   #startPickPop .sp-row label { flex: none; font-size: 14px; }
   #startPickPop .sp-row select, #startPickPop .sp-row input {
@@ -8668,20 +8671,62 @@ let listenOn = false;
          不另算一套。首句前、尾句后各一条；某条边正好是文章第 1 / 最后一句时不画那一条
          （没有可隔的内容，画了突兀 —— 「全篇即区间」时两条都不画）。每次先清旧线再画，
          章节/篇目重渲或换批后不残留。装饰性：aria-hidden，不进无障碍树。 */
+      /* 今日区间钉子（2026-09-30 用户报 bug）：线画的是「今天这段」的固定起止，不是
+         剩余队列的头尾 —— assemble 会跳过今天已见的词，读两句再重进队列首就后移，开始线
+         跟着漂到 +N；首句贴文章边界时旧规则又干脆不画，合起来就是用户看到的「读两句后
+         才出现、向后延两条」。区间在当天该篇第一次画线时定下并存档 —— 这一刻必然早于本篇
+         任何阅读（读句必须先进任务模式，进模式就会先画一次线）—— 之后读句/退出重进/② 批次
+         重同步都不动它；只有手动调起点、恢复引擎排程或跨天才改。按天按篇存
+         （plan.todayRange = {day, byArt: {篇: [first, last]}}），换天自动作废。 */
+      function pinArticleKey() {
+        const a = (currentArticle != null) ? currentArticle : currentChapter;
+        return String((typeof a === 'number' && a >= 0) ? a : 0);
+      }
+      function pinnedTodayRange() {
+        try {
+          const tr = ROOT2.plan.todayRange;
+          if (!tr || tr.day !== day2() || !tr.byArt) return null;
+          const v = tr.byArt[pinArticleKey()];
+          if (Array.isArray(v) && Number.isInteger(v[0]) && Number.isInteger(v[1]) && v[0] <= v[1]) return v;
+        } catch (e) {}
+        return null;
+      }
+      function pinTodayRange(first, last) {
+        try {
+          if (!ROOT2 || !ROOT2.plan) return;
+          if (!ROOT2.plan.todayRange || ROOT2.plan.todayRange.day !== day2()) {
+            ROOT2.plan.todayRange = { day: day2(), byArt: {} };
+          }
+          ROOT2.plan.todayRange.byArt[pinArticleKey()] = [first, last];
+          persist2();
+        } catch (e) {}
+      }
       function paintTodayRange() {
         document.querySelectorAll('.today-range-line').forEach(function (el) { el.remove(); });
         if (!ROOT2 || !ROOT2.plan || !taskMode || taskFinished || !todayQueue.length) return;
-        let first = Infinity, last = -Infinity;
-        for (let k = 0; k < todayQueue.length; k++) {
-          const gi = todayQueue[k].i;
-          if (gi < first) first = gi;
-          if (gi > last) last = gi;
+        let first, last;
+        const pinned = pinnedTodayRange();
+        if (pinned) { first = pinned[0]; last = pinned[1]; }
+        else {
+          /* 没钉子（当天该篇第一次画 / 刚建计划 / 刚清完）才现算并钉下。
+             有手动起点时直接钉手动窗口 [gi, gi+N-1]（引擎挑句可能不从 gi 起，
+             线必须落在用户指定的位置上）；否则钉引擎队列的 min/max。 */
+          const ms = manualStartToday();
+          if (ms) {
+            first = ms.gi;
+            last = Math.min(ms.gi + Math.max(1, globalPromiseN()) - 1, SENT_RAW.length - 1);
+          } else {
+            let f = Infinity, l = -Infinity;
+            for (let k = 0; k < todayQueue.length; k++) {
+              const gi = todayQueue[k].i;
+              if (gi < f) f = gi;
+              if (gi > l) l = gi;
+            }
+            if (!isFinite(f) || !isFinite(l) || f > l) return;
+            first = f; last = l;
+          }
+          pinTodayRange(first, last);
         }
-        if (!isFinite(first) || !isFinite(last)) return;
-        const fLocal = globalToLocal(first), lLocal = globalToLocal(last);
-        if (fLocal < 0 || lLocal < 0) return;
-        const fEl = sents[fLocal], lEl = sents[lLocal];
-        if (!fEl || !lEl) return;
         const mkLine = function (gi, edge) {
           const el = document.createElement('div');
           el.className = 'today-range-line';
@@ -8703,10 +8748,14 @@ let listenOn = false;
           }
           return el;
         };
-        if (fLocal > 0) fEl.before(mkLine(first, 'start'));
-        if (lLocal < sents.length - 1) {
+        /* 两条边各自判在不在本篇（手动起点能把区间拉到隔壁篇，那时只画落在本篇的这条）。
+           开始线一律画，哪怕贴文章第 1 句 —— 它是「点线设起点」的入口，贴边界不画等于
+           入口消失（旧规则只顾美观，正是这个 bug 的另一半）；结束线保留贴最后一句不画。 */
+        const fLocal = globalToLocal(first), lLocal = globalToLocal(last);
+        if (fLocal >= 0 && sents[fLocal]) sents[fLocal].before(mkLine(first, 'start'));
+        if (lLocal >= 0 && lLocal < sents.length - 1 && sents[lLocal]) {
           /* 尾句后面可能跟着它自己的译文块 / 词卡行，线要落到这些之后、下一句之前 */
-          let anchor = lEl;
+          let anchor = sents[lLocal];
           while (anchor.nextElementSibling &&
                  (anchor.nextElementSibling.classList.contains('sent-zh') ||
                   anchor.nextElementSibling.classList.contains('notebar'))) {
@@ -8749,7 +8798,8 @@ let listenOn = false;
         for (let i = m.gi; i < Math.min(m.gi + N, SENT_RAW.length); i++) rs.add(i);
         return rs.size ? rs : null;
       }
-      function openStartPicker() {
+      let _startPending = null;   // 确认步暂存 {a, n}（有今日进度时先问再改）
+      function openStartPicker(defAA, defNA) {
         closeStartPicker();
         if (!ROOT2 || !ROOT2.plan) { try { showAbToast('先去「我的」设置每天读多久，再定起点'); } catch (e) {} return; }
         let defA = (currentChapter >= 0) ? currentChapter : 0;
@@ -8759,6 +8809,7 @@ let listenOn = false;
         } catch (e) {}
         const ms = manualStartToday();
         if (ms) { try { defA = artOfSentGlobal(ms.gi); } catch (e) {} }
+        if (Number.isInteger(defAA)) defA = defAA;   // 确认步「返回」要还原用户填过的值
         let opts = '';
         try {
           for (let a = 0; a < SECTIONS.length; a++) {
@@ -8768,6 +8819,7 @@ let listenOn = false;
         } catch (e) {}
         let defN = 1;
         if (ms) { try { defN = ms.gi - computeChapterStart(artOfSentGlobal(ms.gi)) + 1; } catch (e) {} }
+        if (Number.isInteger(defNA)) defN = defNA;
         const mask = document.createElement('div');
         mask.id = 'startPickMask';
         mask.addEventListener('click', function () { closeStartPicker(); });
@@ -8789,9 +8841,12 @@ let listenOn = false;
         } catch (e) {}
       }
       function closeStartPicker() {
+        _startPending = null;
         try { const m = document.getElementById('startPickMask'); if (m) m.remove(); } catch (e) {}
         try { const w = document.getElementById('startPickPop'); if (w) w.remove(); } catch (e) {}
       }
+      /* 确定 → 今天还没读就直接改；已有进度（2026-09-30 用户要）先弹确认：
+         改起点会清掉今天的已读记录重算今日任务（排程历史/总进度/颜色不动）。 */
       function confirmStartPicker() {
         let a = 0, n = 1;
         try { a = parseInt((document.getElementById('spArt') || {}).value, 10); } catch (e) {}
@@ -8801,7 +8856,32 @@ let listenOn = false;
         try { cnt = chapterSentCount(a); } catch (e) {}
         if (!Number.isFinite(n) || n < 1) n = 1;
         if (n > cnt) n = cnt;
+        let done = 0;
+        try { done = todayProgress().done; } catch (e) {}
+        if (done > 0) { _startPending = { a: a, n: n }; renderStartConfirm(done); return; }
         setManualStart(computeChapterStart(a) + n - 1);
+      }
+      function renderStartConfirm(done) {
+        const pop = document.getElementById('startPickPop');
+        if (!pop) return;
+        pop.innerHTML = '<h3>今天已有进度，重新计算？</h3>' +
+          '<p class="sp-warn">今天已读 <b>' + done + '</b> 句。调整开始位置后会重新计算今日任务：' +
+          '今天的已读记录清零（N/M 回到 0），排程历史、总进度和颜色都不动。</p>' +
+          '<div class="sp-actions"><button class="btn" onclick="TASK.startConfirmBack()">返回</button>' +
+          '<button class="btn primary" onclick="TASK.startConfirmYes()">确认调整</button></div>';
+        try { const b = pop.querySelector('button.btn.primary'); if (b) b.focus(); } catch (e) {}
+      }
+      function startConfirmBack() {
+        const p = _startPending; _startPending = null;
+        openStartPicker(p ? p.a : undefined, p ? p.n : undefined);
+      }
+      function startConfirmYes() {
+        const p = _startPending; _startPending = null;
+        if (!p) { try { closeStartPicker(); } catch (e) {} return; }
+        let cnt = 1;
+        try { cnt = chapterSentCount(p.a); } catch (e) {}
+        const n = Math.max(1, Math.min(p.n, cnt));
+        setManualStart(computeChapterStart(p.a) + n - 1);
       }
       /* 今日统计重置：只删今天的 contact/quiz 事件（N/M、已读标记回零），relearn 不动、
          reps/排程历史不动。服务端残留行由 cloudPull 的 manualResetTs 守卫挡掉（见下）。 */
@@ -8829,6 +8909,13 @@ let listenOn = false;
         if (!ROOT2 || !ROOT2.plan) { try { showAbToast('先去「我的」设置每天读多久，再定起点'); } catch (e) {} return false; }
         gi = Math.max(0, Math.min(SENT_RAW.length - 1, gi | 0));
         ROOT2.plan.manualStart = { gi: gi, day: day2() };
+        /* 起点一改，旧钉全作废；目标篇按手动窗口 [gi, gi+N-1] 重新钉 —— 开始/结束两条线
+           一起平移到新位置（N 与引擎的 manualRange 同一个 globalPromiseN，口径不另算）。 */
+        try {
+          const _N = Math.max(1, globalPromiseN());
+          ROOT2.plan.todayRange = { day: day2(), byArt: {} };
+          ROOT2.plan.todayRange.byArt[String(artOfSentGlobal(gi))] = [gi, Math.min(gi + _N - 1, SENT_RAW.length - 1)];
+        } catch (e) { try { ROOT2.plan.todayRange = null; } catch (e2) {} }
         try { savePlan(); } catch (e) {}
         const dropped = resetTodayEvents();
         _cachedPlan = null; _cachedDay = ''; _cachedManual = '';
@@ -8844,7 +8931,7 @@ let listenOn = false;
         return true;
       }
       function clearManualStart() {
-        try { if (ROOT2 && ROOT2.plan) { ROOT2.plan.manualStart = null; savePlan(); } } catch (e) {}
+        try { if (ROOT2 && ROOT2.plan) { ROOT2.plan.manualStart = null; ROOT2.plan.todayRange = null; savePlan(); } } catch (e) {}
         _cachedPlan = null; _cachedDay = ''; _cachedManual = '';
         try { closeStartPicker(); } catch (e) {}
         if (taskMode) {
@@ -9622,7 +9709,7 @@ let listenOn = false;
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
         repsOf, articlePass2Done,
         roundInfo, startNewRound, seedRoundSeenForTest, setManualStart, clearManualStart,
-        openStartPicker, closeStartPicker, confirmStartPicker,
+        openStartPicker, closeStartPicker, confirmStartPicker, startConfirmBack, startConfirmYes,
         /* 真实用时账出口（2026-09-25 链路排查）：数据页「累计学习时长」按天读真实毫秒。 */
         readMsByDay: function () { return loadArticleStats().read.ms; },
         /* 今天这一篇排到多少句 / 读过几句（2026-09-26 用户：卡片除了文章进度，必须显示今天任务进度）。
