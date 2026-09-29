@@ -3327,11 +3327,12 @@ let listenOn = false;
     this._userMail = (sess && sess.user && sess.user.email) || this._userMail;
     this.setStatus('正在连接云端语音…'); // 先立即刷新菜单（登录表单→退出按钮），别等网络查询
     this.checkStatus();
-    if (ev === 'SIGNED_IN') { try { cloudPullMarks(); } catch (e) {} try { TASK.cloudPullArticleAccount(); } catch (e2) {} } // 登录即拉书签/按篇账，多端合并
+    if (ev === 'SIGNED_IN') { try { cloudPullMarks(); } catch (e) {} try { TASK.cloudPullArticleAccount(); } catch (e2) {} try { if (window.__routeLocked && window.APP3 && window.APP3.route) window.APP3.route(); } catch (e3) {} } // 登录即拉书签/按篇账，多端合并
     } else if (ev === 'SIGNED_OUT' || ev === 'USER_DELETED') {
     this._on = false; this._userMail = '';
     this.setStatus('已退出登录，云端音色不可用。');
     try { loadVoices(); } catch (e) {}
+    try { if (typeof TASK !== 'undefined' && !TASK.active && window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
     }
     });
     } catch (e) {}
@@ -6361,6 +6362,7 @@ let listenOn = false;
       /* 范围切换：all ↔ today。播中切换不断播 —— 今日续入就近位置，播完自然走新范围。 */
       function listenSetSrc(src) {
         src = (src === 'today') ? 'today' : 'all';
+        if (src === 'today' && !isLoggedIn()) { taskLoginPrompt('today'); return _listenSrc; }
         if (src === 'today') {
           if (!plan) { try { showAbToast('还没有学习计划：先去「我的」设置每天读多久'); } catch (e) {} return _listenSrc; }
           if (!listenTodayBuild()) { try { showAbToast('今天没有排到句子：把每天的分钟数调大一点试试'); } catch (e) {} return _listenSrc; }
@@ -7795,6 +7797,7 @@ let listenOn = false;
         updateTaskBar();
       }
       function enterTaskMode(opts) {
+        if (!isLoggedIn()) { taskLoginPrompt('read'); return false; }
         // 进阅读/任务模式先把随身听收掉（避免双声 + 别让 listenOn 污染任务账）。
         try { listenStopForTask(); } catch (e) {}
         // §2.3：没计划也能进任务模式 —— 不是静默无反应，而是自由跟读 + 任务条空状态。
@@ -7868,7 +7871,47 @@ let listenOn = false;
          两件事：正文只留这一篇（currentChapter = a），队列按篇收窄（currentArticle = a）。
          直接走「换章渲染」的核心三步，不借 onChapterChange —— 那个会弹「已切换到」的 toast，
          而且 ch === currentChapter 时整段跳过，重进同一篇就渲不出正文。 */
+      /* 登录门禁（2026-09-30 用户要：未登录不读文章/看数据/进单词本；随身听免登录可用，但不许今日任务）。
+         __e2eAuthBypass 是 E2E 专用后门（fixtures 自动注入），生产环境永远为空。
+         只认登录态（session），不认审批 —— 审批只 gate 云音色。 */
+      function isLoggedIn() {
+        try {
+          if (typeof window !== 'undefined' && window.__e2eAuthBypass) return true;
+          return !!(typeof CLOUD !== 'undefined' && CLOUD._userMail);
+        } catch (e) { return false; }
+      }
+      function taskLoginPrompt(kind) {
+        try {
+          showAbToast(kind === 'words' ? '登录后使用单词本' : kind === 'stats' ? '登录后查看学习数据'
+            : kind === 'today' ? '今日任务需登录后使用（随身听全部文章无需登录）' : '登录后阅读文章');
+        } catch (e) {}
+        /* 延迟一拍再弹浮窗：触发这次调用的多半是一次点击，被拦下的那次点击还在冒泡，
+           同步打开会被文档级的"点外面收浮窗"反手关掉（卡片/切换键实测）。 */
+        try { setTimeout(function () { try { if (window.APP3 && window.APP3.openMePop) window.APP3.openMePop(); } catch (e) {} }, 0); } catch (e) {}
+      }
+      /* 路由/直链冷启动用：先等存档会话恢复（5s 封顶，CLOUD.waitSession 自带），
+         有会话就地接好 _userMail（boot 干的事的子集，不重跑拉取），再判。 */
+      async function ensureLogin() {
+        if (isLoggedIn()) return true;
+        try {
+          if (typeof CLOUD !== 'undefined' && CLOUD.client) {
+            const c = CLOUD.client();
+            if (c) {
+              let sess = null;
+              try { sess = (await c.auth.getSession()).data.session; } catch (e) {}
+              if (!sess && CLOUD.waitSession) { try { sess = await CLOUD.waitSession(); } catch (e) {} }
+              if (sess && sess.user) {
+                try { CLOUD._userMail = sess.user.email || CLOUD._userMail; } catch (e) {}
+                try { CLOUD.checkStatus(); } catch (e) {}
+                return true;
+              }
+            }
+          }
+        } catch (e) {}
+        return false;
+      }
       function openArticle(a, opts) {
+        if (!isLoggedIn()) { taskLoginPrompt('read'); return; }
         // §2.3：没计划也照进（enterTaskMode 会走自由跟读那一支）—— 卡片第一击不再静默无反应。
         currentArticle = a; _cachedPlan = null;
         currentChapter = a;
@@ -9539,6 +9582,7 @@ let listenOn = false;
       // ---- 公开 API ----
       return {
         init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode, openArticle, openArticleQuiz, playSentence,
+        isLoggedIn, ensureLogin,
         listenOpen, listenClose, listenToggle, listenStep, listenSeek,
         listenSentenceStep, listenStop, listenReplay,
         listenExpand, listenCollapse, listenNextArticle, updateListenHud,

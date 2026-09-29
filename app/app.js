@@ -42,6 +42,26 @@
     document.querySelectorAll('.sidenav .nav-item').forEach(b =>
       b.classList.toggle('on', b.dataset.route === cur));
     const view = document.getElementById('appView');
+    /* 登录门禁（2026-09-30）：学习数据 / 单词本需登录。冷启动直链时先等存档会话恢复
+       （ensureLogin，5s 封顶），别把"会话还在恢复"误判成未登录；__routeLocked 记着锁的是哪页，
+       登录成功那一下（index.html 里 SIGNED_IN 分支）会自动重渲回来。 */
+    if ((cur === 'stats' || cur === 'words') && typeof TASK !== 'undefined' && TASK.ensureLogin) {
+      let logged = false;
+      try { logged = !!(TASK.isLoggedIn && TASK.isLoggedIn()); } catch (e) {}
+      if (!logged) {
+        view.innerHTML = loadingHtml();
+        window.__routeLocked = cur;
+        TASK.ensureLogin().then(function (ok) {
+          let h = 'home';
+          try { h = (location.hash || '#/home').replace(/^#\//, '').split('/')[0]; } catch (e) {}
+          if (h !== cur) { window.__routeLocked = ''; return; }
+          if (ok) { window.__routeLocked = ''; route(); return; }
+          renderLocked(view, cur);
+        }).catch(function () {});
+        return;
+      }
+      window.__routeLocked = '';
+    }
     if (cur === 'home' && window.APP3 && window.APP3.renderHome) { updateMeCard(); return window.APP3.renderHome(view); }
     if (cur === 'home') { view.innerHTML = loadingHtml(); return; }
     if (cur === 'stats' && window.APP3 && window.APP3.renderStats) return window.APP3.renderStats(view);
@@ -568,6 +588,35 @@
     if (vol) vol.textContent = `第 ${listenVolNo(a, at)} 卷`;
   }
   window.APP3 = Object.assign(window.APP3, { renderListen, updateListenCard });
+
+  /* 登录锁定页（2026-09-30）：未登录打开学习数据/单词本时显示。复用随身听卡片样式，
+     主按钮直达「我的」登录浮窗；随身听本身无需登录（见 ls-info 最后一句）。 */
+  function renderLocked(view, which) {
+    const isWords = which === 'words';
+    view.innerHTML = `<div class="listen-page">
+      <h1 class="pg-title">${isWords ? '单词本' : '学习数据'}</h1>
+      <div class="ls-card">
+        <button class="ls-cover" type="button" aria-label="登录后使用">
+          <span class="ls-disc" aria-hidden="true"><i class="ri-lock-line" aria-hidden="true"></i></span>
+          <span class="ls-art">${isWords ? '登录后使用单词本' : '登录后查看学习数据'}</span>
+          <span class="ls-vol">与词汇真经站同一账号</span>
+          <span class="ls-now">—</span>
+        </button>
+        <div class="ls-main">
+          <div class="ls-controls" role="group" aria-label="登录">
+            <button class="ls-play" type="button" id="lockLoginBtn"><i class="ri-login-box-line" aria-hidden="true"></i><span>去登录</span></button>
+          </div>
+          <p class="ls-info">登录后解锁文章、数据与单词本；随身听全部文章无需登录可直接用</p>
+        </div>
+      </div>
+    </div>`;
+    const b = view.querySelector('#lockLoginBtn');
+    if (b) b.addEventListener('click', () => {
+      // 延迟一拍：这次点击还在冒泡，同步打开会被"点外面收浮窗"反手关掉（见 taskLoginPrompt 同一注释）
+      setTimeout(() => { try { openMePop(); } catch (e) {} }, 0);
+    });
+  }
+  window.APP3 = Object.assign(window.APP3, { renderLocked });
 
   /* ---- 3.0 单词本（M3，PRD §6）----
      宇宙 = 文章标记里出现过的全部目标词（真实数据 3245）。索引一次建好、按 SECTIONS 缓存。 */

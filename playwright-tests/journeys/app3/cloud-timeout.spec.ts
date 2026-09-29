@@ -2,7 +2,7 @@
 // 真机偶发 fetch 不响应 AbortSignal（弱网 / 浏览器 bug），导致 _drain 的消费者 _busy
 // 永远不被释放，后续所有句子都排不进队列 → 用户看到「云端语音合成中…」一直转、没声音。
 // 修复：_drain 给每个 job 加 25s 安全网，超时就 reject 并释放消费者，保证队列能继续。
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../../fixtures';
 
 const rootUrl = 'http://127.0.0.1:8932';
 
