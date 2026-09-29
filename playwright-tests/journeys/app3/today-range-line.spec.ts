@@ -2,12 +2,13 @@
 // （首句前、尾句后）」，把「今天要读的这一段」框出来。
 //
 // 口径（与实现一一对应，不许各算一套）：
-//  · 区间 = 今天的队列（todayQueue，来自 todayPlan().queue —— 就是任务条给句子染
-//    task-new/task-review/task-done 的同一份数组；任务条辅行「今天 N/M 句」与首页横幅
-//    的计数也派生自同一份 todayPlan/todayProgress）。
-//  · 位置的边界取舍：某一条边正好是文章的第 1 句 / 最后一句时，那一条线不画 ——
-//    线的意义是「把今天这段与上下隔开」，顶端/底端没有可隔的东西，画了反而突兀；
-//    因此「全篇即区间」时不画线（下面有一条锁专门钉这个）。
+//  · 区间 = 今天这段的**固定起止**（plan.todayRange 按天按篇钉住，2026-09-30 用户报
+//    「开始线读两句后才出现、向后延两条」后改）：当天该篇第一次画线时定下（必然早于
+//    本篇任何阅读 —— 读句必须先进任务模式，进模式就先画一次），之后读句/退出重进/
+//    ② 批次重同步都不动它；只有手动调起点或跨天才改。旧口径「区间 = 实时剩余队列」
+//    会被 assemble 跳过已见词带偏（队列首后移 → 开始线跟着漂 +N）。
+//  · 位置的边界取舍：开始线一律画（哪怕贴文章第 1 句）—— 它是「点线设起点」的入口，
+//    贴边界不画等于入口消失；结束线保留贴文章最后一句不画（顶端/底端没有可隔的东西）。
 //  · 宽度 = 与 .reader-head / .layout 内容框同一口径（min(1084px, 100% − 36px)），±2px。
 //  · 无计划 / 自由跟读 / 已收工：不画线。
 //
@@ -191,36 +192,31 @@ test.describe('文章内「今天任务区间」横线', () => {
     await expect(page.locator('.today-range-line')).toHaveCount(0);
   });
 
-  test('区间变化后线跟着走，且不残留旧线', async ({ page }) => {
+  test('读两句后重进：开始/结束线钉在今日原区间，不随后续阅读漂移（2026-09-30 bug）', async ({ page }) => {
     await enterRangeArticle(page);
     const before = await page.evaluate(() => {
       const q = TASK.queue.map((x) => x.i);
-      return { first: q[0], last: q[q.length - 1] };
+      const g = [...document.querySelectorAll('.today-range-line')]
+        .map((el) => ({ e: (el as HTMLElement).dataset.edge, gi: (el as HTMLElement).dataset.gi }));
+      return { first: q[0], g };
     });
+    expect(before.g.map((x) => x.e).sort(), '两条线都在').toEqual(['end', 'start']);
 
-    // 多读一句（真记一条接触）→ 这个词今天已见 → 再进这一篇，队列重新装配后区间整体后移
+    // 读掉队列头两句（真记接触）→ 引擎队列重新装配后会跳过已读句（前提成立的证据）
     await page.evaluate(() => TASK.exitTaskMode());
     await page.evaluate((gi) => TASK.readDone(gi), before.first);
+    await page.evaluate((gi) => TASK.readDone(gi), before.first + 1);
     await page.evaluate(() => TASK.openArticle(0));
     await expect(page.locator('body')).toHaveClass(/task-mode/);
 
     const after = await page.evaluate(() => {
       const q = TASK.queue.map((x) => x.i);
-      return { first: q[0], last: q[q.length - 1] };
+      const g = [...document.querySelectorAll('.today-range-line')]
+        .map((el) => ({ e: (el as HTMLElement).dataset.edge, gi: (el as HTMLElement).dataset.gi }));
+      return { first: q[0], g };
     });
-    expect(after.first, '读掉首句后区间起点后移').toBeGreaterThan(before.first);
-    expect(after.last, '区间终点随之后移').toBeGreaterThan(before.last);
-
-    const gis = await page.$$eval('.today-range-line', (els) =>
-      els.map((e) => (e as HTMLElement).dataset.gi));
-    const edges = await page.$$eval('.today-range-line', (els) =>
-      els.map((e) => (e as HTMLElement).dataset.edge));
-    expect(gis).toContain(String(after.first));
-    expect(gis).toContain(String(after.last));
-    // 旧边界不残留
-    expect(gis).not.toContain(String(before.first));
-    expect(gis).not.toContain(String(before.last));
-    expect(edges.sort()).toEqual(['end', 'start']);
+    expect(after.first, '引擎队列确实跳过了已读句（前提）').toBeGreaterThan(before.first);
+    expect(after.g, '两条线钉住今日原区间，不许跟着队列首漂').toEqual(before.g);
   });
 
   test('装饰性：aria-hidden，不在无障碍树里', async ({ page }) => {
@@ -245,7 +241,7 @@ test.describe('文章内「今天任务区间」横线', () => {
     await expect(line).toBeVisible();
   });
 
-  test('全篇即区间：两条边都贴文章边界 → 不画线（避免顶端/底端突兀）', async ({ page }) => {
+  test('全篇即区间：开始线照画（设起点入口），结束线贴底不画', async ({ page }) => {
     await stubData(page, fullArticleFixture());
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await waitAppReady(page);
@@ -263,7 +259,52 @@ test.describe('文章内「今天任务区间」横线', () => {
     expect(info.qn, '15 分钟要装得下这 8 句').toBe(info.n);
     expect(info.first, '区间首句就是文章第 1 句').toBe(0);
     expect(info.last, '区间尾句就是文章最后一句').toBe(info.n - 1);
-    await expect(page.locator('.today-range-line')).toHaveCount(0);
+    const lines = page.locator('.today-range-line');
+    await expect(lines, '开始线贴第一句也照画（点线设起点的入口）').toHaveCount(1);
+    await expect(lines.first()).toHaveAttribute('data-edge', 'start');
+    await expect(lines.first()).toHaveAttribute('data-gi', '0');
+  });
+
+  test('点开始线设起点：今日有进度先出确认，确认后两线同移、今日记录清零', async ({ page }) => {
+    await enterRangeArticle(page);
+    expect((await page.evaluate(() => TASK.todayProgress())).done, '前置：今天已有进度').toBeGreaterThan(0);
+    const before = await page.evaluate(() => [...document.querySelectorAll('.today-range-line')]
+      .map((el) => (el as HTMLElement).dataset.gi));
+
+    // 第一次：出确认步 → 返回 → 线与进度都不动
+    await page.locator('.today-range-line[data-edge="start"]').click();
+    await expect(page.locator('#startPickPop')).toBeVisible();
+    await page.locator('#spSent').fill('5');
+    await page.locator('#startPickPop .sp-actions .btn.primary').click();
+    await expect(page.locator('#startPickPop'), '有进度必须先出重新计算确认').toContainText('重新计算');
+    await page.locator('#startPickPop .sp-actions .btn').first().click();   // 返回
+    await expect(page.locator('#spSent')).toBeVisible();                    // 回到表单
+    await page.locator('#startPickPop .sp-actions .btn').first().click();   // 取消关掉
+    await expect(page.locator('#startPickPop')).toHaveCount(0);
+    const unchanged = await page.evaluate(() => [...document.querySelectorAll('.today-range-line')]
+      .map((el) => (el as HTMLElement).dataset.gi));
+    expect(unchanged, '返回后线不动').toEqual(before);
+    expect((await page.evaluate(() => TASK.todayProgress())).done, '返回后进度不动').toBeGreaterThan(0);
+
+    // 第二次：确认调整 → 两线一起移动，今日记录清零
+    await page.locator('.today-range-line[data-edge="start"]').click();
+    await page.locator('#spSent').fill('5');
+    await page.locator('#startPickPop .sp-actions .btn.primary').click();
+    await expect(page.locator('#startPickPop')).toContainText('重新计算');
+    await page.locator('#startPickPop .sp-actions .btn.primary').click();   // 确认调整
+    await expect(page.locator('#startPickPop')).toHaveCount(0);
+    const moved = await page.evaluate(() => ({
+      lines: [...document.querySelectorAll('.today-range-line')]
+        .map((el) => ({ e: (el as HTMLElement).dataset.edge, gi: (el as HTMLElement).dataset.gi })),
+      q: TASK.queue.map((x) => x.i),
+      done: TASK.todayProgress().done,
+    }));
+    expect(moved.done, '今日记录已清').toBe(0);
+    expect(moved.q[0], '队列从新起点起').toBe(4);
+    const start = moved.lines.find((x) => x.e === 'start');
+    expect(start && start.gi, '开始线落到第 5 句（全局 4）').toBe('4');
+    const end = moved.lines.find((x) => x.e === 'end');
+    expect(end && end.gi, '结束线随起点一起平移（起点 + 队列长 - 1）').toBe(String(4 + moved.q.length - 1));
   });
 
   test('不破坏正文结构：句子 / 译文 / 段意数量不变', async ({ page }) => {
