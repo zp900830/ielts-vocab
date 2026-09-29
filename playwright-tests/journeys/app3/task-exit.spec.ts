@@ -12,6 +12,14 @@ declare const TASK: {
   listenSetSrc(s: string): string;
   listenToggle(): void;
   onSentenceComplete(gi: number): void;
+  roundInfo(): { round: number; done: number; total: number };
+  startNewRound(): number;
+  seedRoundSeenForTest(gis: number[]): number;
+  setManualStart(gi: number): boolean;
+  clearManualStart(): boolean;
+  openArticle(a: number): void;
+  openPanel(): void;
+  todayProgress(): { done: number; planned: number };
   listenState(): { src: string; todayPos: number; todayTotal: number };
 };
 declare const setAccent: (a: string) => void;
@@ -297,4 +305,106 @@ test('任务外自由播放不记账：onSentenceComplete 零写入', async ({ p
   const before = await snap();
   await page.evaluate(() => { TASK.onSentenceComplete(0); TASK.onSentenceComplete(1); });
   expect(await snap(), '任务外记账入口必须零写入').toBe(before);
+});
+
+/* 2026-09-30 黑白区分 + 新一轮 + 手动起点。 */
+
+/* 微型语料：整库只有 2 句（一轮 = 2），一次跑通"读完一轮→开新轮"。 */
+const TWO: Record<string, string> = (() => {
+  const mk = (title: string, lines: string[]) => ({
+    title, zh: title, subheads: [''],
+    paragraphs: [lines],
+    sentZh: [lines.map((_, i) => `第 ${i + 1} 句译文。`)],
+    paraZh: [''],
+  });
+  return {
+    'sections.json': JSON.stringify([
+      mk('地球与生命', ['The [[atmosphere:atmosphere]] protects life.', 'We need [[oxygen:oxygen]] to live.']),
+    ]),
+    'vocab.json': JSON.stringify({ atmosphere: { m: 'n. 大气' }, oxygen: { m: 'n. 氧气' } }),
+    'chapters.json': '[]',
+  };
+})();
+
+async function stubData2(page: import('@playwright/test').Page, payloads: Record<string, string>) {
+  for (const [name, body] of Object.entries(payloads)) {
+    await page.route(`**/shadow/data/${name}*`, (r) =>
+      r.fulfill({ status: 200, contentType: 'application/json', body }));
+  }
+}
+
+test('颜色跟播完走：未读灰，播完才黑', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+  await installSpeakStub(page);
+  await page.locator('.art-card').first().click();
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+  const cls = (li: number) => page.evaluate((i) => ({
+    known: !!document.querySelectorAll('#art .sent')[i]?.classList.contains('lw-known'),
+    unknown: !!document.querySelectorAll('#art .sent')[i]?.classList.contains('lw-unknown'),
+  }), li);
+  expect((await cls(0)).unknown, '没读过灰字').toBe(true);
+  await page.locator('#tbNext').click();            // 点：+1 但不变黑
+  expect((await cls(0)).unknown, '点了没播完还是灰').toBe(true);
+  expect((await cls(0)).known, '点了没播完不许黑').toBe(false);
+  await fireStaleSpeak(page);                       // 播完
+  expect((await cls(0)).known, '播完才黑').toBe(true);
+});
+
+test('读完一轮可开新轮：颜色全灰，轮次+1', async ({ page }) => {
+  await stubData2(page, TWO);
+  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+  expect(await page.evaluate(() => TASK.roundInfo()), '开局第 1 轮').toEqual({ round: 1, done: 0, total: 2 });
+  await installSpeakStub(page);
+  await page.locator('.art-card').first().click();
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+  await page.locator('#tbNext').click();
+  await fireStaleSpeak(page);
+  expect(await page.evaluate(() => TASK.roundInfo()), '读完第 1 句记 1').toEqual({ round: 1, done: 1, total: 2 });
+  // 第 2 句走测试缝记（UI 点读会触发 finishPass 翻到 ②，参实现注释）
+  await page.evaluate(() => TASK.seedRoundSeenForTest([1]));
+  expect(await page.evaluate(() => TASK.roundInfo()), '两句读完一轮').toEqual({ round: 1, done: 2, total: 2 });
+  await page.on('dialog', (d) => d.accept());
+  await page.evaluate(() => TASK.openPanel());
+  const btn = page.locator('#todayPanel button', { hasText: '开启新的一轮' });
+  await expect(btn, '读完一轮面板里有开新轮按钮').toBeVisible();
+  await btn.click();
+  expect(await page.evaluate(() => TASK.roundInfo()), '新轮计数清零').toEqual({ round: 2, done: 0, total: 2 });
+});
+
+test('手动起点：队列从指定句起，今日进度重置', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+  await installSpeakStub(page);
+  await page.locator('.art-card').first().click();
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+  await page.locator('#tbNext').click();
+  await fireStaleSpeak(page);                       // s0 读完，done=1
+  expect((await page.evaluate(() => TASK.todayProgress())).done, '读完一句 done=1').toBe(1);
+  // 第 1 篇第 2 句（全局 13）为起点
+  expect(await page.evaluate(() => TASK.setManualStart(13)), '设起点成功').toBe(true);
+  expect((await page.evaluate(() => TASK.todayProgress())).done, '今日进度已重置').toBe(0);
+  await page.evaluate(() => TASK.exitTaskMode());
+  await page.evaluate(() => TASK.openArticle(1));
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+  expect(await page.evaluate(() => TASK.queue[0].i), '队列从指定句起').toBe(13);
+  const gi = await page.evaluate(() =>
+    document.querySelector('.today-range-line[data-edge="start"]')?.getAttribute('data-gi'));
+  expect(gi, '开始线落到指定句').toBe('13');
+  await page.evaluate(() => TASK.exitTaskMode());
+  expect(await page.evaluate(() => TASK.clearManualStart()), '恢复引擎').toBe(true);
+  await page.evaluate(() => TASK.openArticle(0));
+  expect(await page.evaluate(() => TASK.queue[0].i), '恢复后引擎从头排').toBe(0);
 });

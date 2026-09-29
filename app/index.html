@@ -394,6 +394,20 @@
     padding: 4px 8px; border-radius: 999px; letter-spacing: .04em; white-space: nowrap; }
   .today-range-line[data-edge="start"] .today-range-tag { left: 0; }
   .today-range-line[data-edge="end"] .today-range-tag { right: 0; }
+  .today-range-line[data-edge="start"] { cursor: pointer; }
+  /* 起点设置弹窗：居中卡片 + 遮罩，复用 .btn 按钮（键盘可达，无障碍走原生控件）。 */
+  #startPickMask { position: fixed; inset: 0; background: rgba(20,25,22,.45); z-index: 90; }
+  #startPickPop { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    z-index: 91; background: var(--card); color: var(--text); border: 1px solid var(--border);
+    border-radius: 16px; padding: 18px; width: min(340px, calc(100vw - 48px));
+    box-shadow: 0 12px 40px rgba(0,0,0,.25); }
+  #startPickPop h3 { margin: 0 0 12px; font-size: 16px; }
+  #startPickPop .sp-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  #startPickPop .sp-row label { flex: none; font-size: 14px; }
+  #startPickPop .sp-row select, #startPickPop .sp-row input {
+    flex: 1; min-width: 0; font: inherit; font-size: 15px; padding: 8px 10px; min-height: 44px;
+    border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); }
+  #startPickPop .sp-actions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
   .w { color: var(--accent-text); font-weight: 600; cursor: pointer;
     border-bottom: 2px solid rgba(13,157,116,.35); padding: 0 1px; border-radius: 2px; }
   .w:hover { background: rgba(13,157,116,.1); }
@@ -1238,7 +1252,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 正文句子任务标记 */
   .sent.task-new { border-left: 3px solid var(--task-new); padding-left: 8px; margin-left: -11px; background: var(--task-bg); border-radius: 4px; }
   .sent.task-review { border-left: 3px solid var(--task-review); padding-left: 8px; margin-left: -11px; border-radius: 4px; }
-  .sent.task-done { border-left: 3px solid var(--task-done); padding-left: 8px; margin-left: -11px; opacity: .6; border-radius: 4px; }
+  .sent.task-done { border-left: 3px solid var(--task-done); padding-left: 8px; margin-left: -11px; border-radius: 4px; }
+  /* 已学点亮（2026-09-30 用户要黑白区分）：本轮跟读过黑字常态，未读灰字。
+     与 task-new/review/done 的左边框标记叠加显示；task-done 不再整句变暗（opacity 删掉），
+     否则"已学黑字"永远实现不了。 */
+  .sent.lw-unknown { color: var(--muted); }
+  .sent.lw-known { color: var(--text); }
   /* 他 2026-09-23：「高亮错误，现在全都高亮」。量过 —— 进任务模式后今天这批 36 句每句都带
      6% 绿底 + 3px 绿竖条，而「正在读哪句」全站只有一句、底色还比它们更淡，36 句连成一片绿，
      反而找不着该读哪句。竖条是这里唯一在说「这是今天这批」的东西，留着；
@@ -1710,7 +1729,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .today-panel .tp-head h3, body.dark .today-panel .plan-setup h3 { color: var(--text); }
   body.dark .task-bar .tb-title { color: var(--text); }
   body.dark .sent.task-new { background: rgba(52,211,153,.07); }
-  body.dark .sent.task-done { opacity: .5; }
+  body.dark .sent.task-done { }
   @media (max-width: 700px) {
     .today-panel { width: calc(100vw - 24px); padding: 16px; border-radius: 16px; max-height: 75vh; }
     .task-bar { padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)); }
@@ -5853,6 +5872,7 @@ let listenOn = false;
       function secReview() { return avgReview / (rate || 1); }
       let _panelOpen = false;
       let _cycleJustCompleted = 0; // 刚完成的循环数（用于庆祝提示）
+      let _roundToastFor = 0; // 本轮读完提示过第几轮（同轮只提示一次）
 
       // ---- 存储 ----
       function loadPlan() { try { plan = JSON.parse(localStorage.getItem(LS_PLAN) || 'null'); } catch (e) { plan = null; } }
@@ -6407,7 +6427,7 @@ let listenOn = false;
       const LS_V2 = 'ielts.shadow.v2';
       const MIG_KEY = 'ielts.shadow.migNotice';
       let ROOT2 = null;
-      let WORDS_BY_SENT = null, ALL_TARGET_WORDS = 0, _cachedPlan = null, _cachedDay = '', _cachedArticle = undefined;
+      let WORDS_BY_SENT = null, ALL_TARGET_WORDS = 0, _cachedPlan = null, _cachedDay = '', _cachedArticle = undefined, _cachedManual = '';
       const STAGE_LABEL = { all: '全部', seen: '已见面', recognized: '文中可辨',
                             owned: '义项直连', graduated: '已毕业', leech: '重点词' };
 
@@ -6555,11 +6575,21 @@ let listenOn = false;
           }
           const have = {};
           ROOT2.events.forEach(e => { have[e.id || ShadowPlan.eventId(e)] = 1; });
+          /* 手动起点重置过今日（2026-09-30）：服务端还躺着被清掉的那批今日事件，
+             拉回来等于白清。只拦"今天、本次重置之前"的 contact/quiz；之前的天和之后的新事件照常合并。 */
+          let _resetTs = 0;
+          try { _resetTs = (ROOT2.plan && ROOT2.plan.manualResetTs) || 0; } catch (e) {}
+          const _wiped = function (r) {
+            if (!_resetTs || !r) return false;
+            if (r.type !== 'contact' && r.type !== 'quiz') return false;
+            if (!(r.ts < _resetTs)) return false;
+            try { return ShadowPlan.dayKey(r.ts, bdHour()) === ShadowPlan.dayKey(Date.now(), bdHour()); } catch (e) { return false; }
+          };
           const onServer = {};                      // 服务端到底有哪几条，只有这份清单说了才算
-          rows.forEach(r => { if (r && r.event_id) onServer[r.event_id] = 1; });
+          rows.forEach(r => { if (r && r.event_id && !_wiped(r)) onServer[r.event_id] = 1; });
           let added = 0;
           rows.forEach(row => {
-            if (!row || have[row.event_id]) return;
+            if (!row || have[row.event_id] || _wiped(row)) return;
             ROOT2.events.push(Object.assign({}, row.payload, { id: row.event_id, ts: row.ts }));
             added++;
           });
@@ -6690,14 +6720,30 @@ let listenOn = false;
         try { if (window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
       }
       function resetV2() { localStorage.removeItem(LS_V2); ROOT2 = null; _cachedPlan = null; loadRoot(); }
-      function todayPlan(force) {
+      /* skipManual 内参（2026-09-30）：只给 globalPromiseN 算"今天本来的量"用——
+         不加它，manualRange→globalPromiseN→plannedToday→todayPlan 会无限递归。外部一律单参调用。 */
+      function todayPlan(force, skipManual) {
         if (!ROOT2) loadRoot();
         const b = bdHour();
         const d = ShadowPlan.dayKey(Date.now(), b);
         /* 按篇排（PRD §9.3）：在学某一篇时只把这一篇的全局句号喂给引擎。
            缓存键必须带上 currentArticle —— 换篇不清缓存的话，切到第二篇还会拿到第一篇的队列。 */
-        const scope = currentArticle == null ? null : ShadowPlan.articleScope(SECTIONS, currentArticle);
-        if (!force && _cachedPlan && _cachedDay === d && _cachedArticle === currentArticle) return _cachedPlan;
+        let scope = currentArticle == null ? null : ShadowPlan.articleScope(SECTIONS, currentArticle);
+        /* 手动起点（2026-09-30）：当天队列 = 起点往后 N 句的范围；与按篇 scope 取交集。
+           引擎在范围内照常按间隔挑，② 批次同源。缓存键带上手动起点，换起点即失效。 */
+        let _mkey = '';
+        try {
+          if (skipManual) throw { skip: 1 };
+          const _ms = manualStartToday();
+          if (_ms) {
+            const _rs = manualRange();
+            if (_rs) {
+              scope = scope ? new Set([...scope].filter(function (x) { return _rs.has(x); })) : _rs;
+              _mkey = _ms.gi + ':' + _rs.size;
+            }
+          }
+        } catch (e) { if (e && e.skip) { /* 跳过手动范围 */ } }
+        if (!force && _cachedPlan && _cachedDay === d && _cachedArticle === currentArticle && _cachedManual === _mkey) return _cachedPlan;
         _cachedPlan = ShadowPlan.assemble(ROOT2.state, {
           now: Date.now(), todayMinutes: ROOT2.plan ? ROOT2.plan.todayMinutes : 0, rate: rate || 1,
           /* 这里喂的是【1× 基准】(avgNew/avgReview)，倍速交给引擎的 rate 去除 —— 只许除一次。
@@ -6707,7 +6753,7 @@ let listenOn = false;
           totalSents: SENT_RAW.length, boundaryHour: b, plan: ROOT2.plan,
           scope: scope,
         });
-        _cachedDay = d; _cachedArticle = currentArticle;
+        _cachedDay = d; _cachedArticle = currentArticle; _cachedManual = _mkey;
         return _cachedPlan;
       }
       function readToday2(i) {
@@ -7579,6 +7625,42 @@ let listenOn = false;
         updateMarkers();
       }
 
+      /* 本轮进度与新一轮（2026-09-30 用户要）：颜色只认 roundSeen（本轮跟读过黑字），
+         开新轮只清颜色（roundSeen），reps/事件/排程一律保留。 */
+      function roundTotal() { try { return (typeof SENT_RAW !== 'undefined' && SENT_RAW.length) || 0; } catch (e) { return 0; } }
+      function roundDoneCount() {
+        const t = roundTotal();
+        let n = 0;
+        try {
+          const rs = (prog && prog.roundSeen) || {};
+          for (const k in rs) { const gi = Number(k); if (Number.isFinite(gi) && gi >= 0 && (t <= 0 || gi < t)) n++; }
+        } catch (e) {}
+        return n;
+      }
+      function roundInfo() {
+        return { round: (prog && typeof prog.round === 'number') ? prog.round : 1, done: roundDoneCount(), total: roundTotal() };
+      }
+      /* 测试缝：直接记一轮 Progress，不触发 finishPass 那套门（UI 点读 22 句太慢，且读空队列会翻到 ②）。
+         行为与播完记账一致（roundSeen + 存盘 + 刷色），只跳过门控与账目。 */
+      function seedRoundSeenForTest(gis) {
+        if (!prog) return 0;
+        if (!prog.roundSeen || typeof prog.roundSeen !== 'object') prog.roundSeen = {};
+        if (typeof prog.round !== 'number') prog.round = 1;
+        (gis || []).forEach(function (gi) { prog.roundSeen[gi] = 1; });
+        try { saveProg(); } catch (e) {}
+        try { updateMarkers(); } catch (e) {}
+        return roundDoneCount();
+      }
+      function startNewRound() {
+        if (!prog) return 0;
+        prog.round = (typeof prog.round === 'number' ? prog.round : 1) + 1;
+        prog.roundSeen = {};
+        try { saveProg(); } catch (e) {}
+        try { updateMarkers(); } catch (e) {}
+        try { if (_panelOpen) renderToday(document.getElementById('todayPanel')); } catch (e) {}
+        try { showAbToast('已开启新的一轮，颜色回到全灰重读一遍'); } catch (e) {}
+        return prog.round;
+      }
       // ---- 构建今日队列 ----
       function buildQueue() {
         if (!plan || !prog) { todayQueue = []; return; }
@@ -8568,6 +8650,13 @@ let listenOn = false;
           tag.className = 'today-range-tag';
           tag.textContent = edge === 'start' ? '今天任务 · 开始' : '今天任务 · 结束';
           el.appendChild(tag);
+          /* 点开始线设起点（2026-09-30）：线本身保持纯装饰（文字/aria-hidden 原样，
+             不挂聚焦元素，无障碍走今日面板里的按钮）；点击只是快捷入口。 */
+          if (edge === 'start') {
+            el.style.cursor = 'pointer';
+            el.setAttribute('title', '点击设置今日任务开始位置');
+            el.addEventListener('click', function (ev) { try { ev.stopPropagation(); } catch (e) {} openStartPicker(); });
+          }
           return el;
         };
         if (fLocal > 0) fEl.before(mkLine(first, 'start'));
@@ -8583,8 +8672,156 @@ let listenOn = false;
         }
       }
 
+      /* 手动起点（2026-09-30 用户要）：点任务开始线可指定"第 X 篇第 Y 句"为今日起点。
+         当天队列 = 起点往后 N 句（N = 全局每日承诺数），开始/结束两条线一起平移；
+         引擎（间隔排程）在范围内照常挑，② 批次同源，不另造一套。统计重置 = 清掉今天的
+         contact/quiz 事件（N/M 回零），reps/排程历史不动。 */
+      function manualStartToday() {
+        try {
+          const m = ROOT2 && ROOT2.plan && ROOT2.plan.manualStart;
+          if (!m || !Number.isInteger(m.gi)) return null;
+          if (m.day !== day2()) return null;
+          if (m.gi < 0 || m.gi >= SENT_RAW.length) return null;
+          return m;
+        } catch (e) { return null; }
+      }
+      /* 全局每日承诺数：plannedToday 在按篇上下文里返回的是本篇句数，这里要的是全天的量，
+         临时把 scope 摘掉算一次再恢复（缓存随手作废，下一次调用重算）。 */
+      function globalPromiseN() {
+        const cur = currentArticle;
+        try {
+          currentArticle = null; _cachedPlan = null;
+          const q = todayPlan(true, true).queue || [];
+          return Math.max(1, q.length);
+        } catch (e) { return 0; }
+        finally { currentArticle = cur; _cachedPlan = null; }
+      }
+      function manualRange() {
+        const m = manualStartToday();
+        if (!m) return null;
+        const N = globalPromiseN();
+        if (!N) return null;
+        const rs = new Set();
+        for (let i = m.gi; i < Math.min(m.gi + N, SENT_RAW.length); i++) rs.add(i);
+        return rs.size ? rs : null;
+      }
+      function openStartPicker() {
+        closeStartPicker();
+        if (!ROOT2 || !ROOT2.plan) { try { showAbToast('先去「我的」设置每天读多久，再定起点'); } catch (e) {} return; }
+        let defA = (currentChapter >= 0) ? currentChapter : 0;
+        try {
+          const q0 = (todayQueue && todayQueue.length && todayQueue[0].i);
+          if (Number.isInteger(q0)) defA = artOfSentGlobal(q0);
+        } catch (e) {}
+        const ms = manualStartToday();
+        if (ms) { try { defA = artOfSentGlobal(ms.gi); } catch (e) {} }
+        let opts = '';
+        try {
+          for (let a = 0; a < SECTIONS.length; a++) {
+            const n = chapterSentCount(a);
+            opts += '<option value="' + a + '"' + (a === defA ? ' selected' : '') + '>第' + (a + 1) + '篇 · ' + esc(SECTIONS[a].title) + '（' + n + '句）</option>';
+          }
+        } catch (e) {}
+        let defN = 1;
+        if (ms) { try { defN = ms.gi - computeChapterStart(artOfSentGlobal(ms.gi)) + 1; } catch (e) {} }
+        const mask = document.createElement('div');
+        mask.id = 'startPickMask';
+        mask.addEventListener('click', function () { closeStartPicker(); });
+        const pop = document.createElement('div');
+        pop.id = 'startPickPop';
+        pop.setAttribute('role', 'dialog');
+        pop.setAttribute('aria-label', '设置今日任务起点');
+        pop.innerHTML = '<h3>今日任务从哪开始</h3>' +
+          '<div class="sp-row"><label for="spArt">篇目</label><select id="spArt">' + opts + '</select></div>' +
+          '<div class="sp-row"><label for="spSent">第几句</label><input id="spSent" type="number" min="1" value="' + defN + '"></div>' +
+          '<div class="sp-actions"><button class="btn" onclick="TASK.closeStartPicker()">取消</button>' +
+          '<button class="btn" onclick="TASK.clearManualStart()">恢复引擎排程</button>' +
+          '<button class="btn primary" onclick="TASK.confirmStartPicker()">确定</button></div>';
+        document.body.appendChild(mask);
+        document.body.appendChild(pop);
+        try {
+          const first = document.getElementById('spArt');
+          if (first) first.focus();
+        } catch (e) {}
+      }
+      function closeStartPicker() {
+        try { const m = document.getElementById('startPickMask'); if (m) m.remove(); } catch (e) {}
+        try { const w = document.getElementById('startPickPop'); if (w) w.remove(); } catch (e) {}
+      }
+      function confirmStartPicker() {
+        let a = 0, n = 1;
+        try { a = parseInt((document.getElementById('spArt') || {}).value, 10); } catch (e) {}
+        try { n = parseInt((document.getElementById('spSent') || {}).value, 10); } catch (e) {}
+        if (!Number.isFinite(a) || a < 0 || a >= SECTIONS.length) a = 0;
+        let cnt = 1;
+        try { cnt = chapterSentCount(a); } catch (e) {}
+        if (!Number.isFinite(n) || n < 1) n = 1;
+        if (n > cnt) n = cnt;
+        setManualStart(computeChapterStart(a) + n - 1);
+      }
+      /* 今日统计重置：只删今天的 contact/quiz 事件（N/M、已读标记回零），relearn 不动、
+         reps/排程历史不动。服务端残留行由 cloudPull 的 manualResetTs 守卫挡掉（见下）。 */
+      function resetTodayEvents() {
+        if (!ROOT2 || !Array.isArray(ROOT2.events)) return 0;
+        const day = day2();
+        const isTodayEv = function (e) {
+          if (!e || (e.type !== 'contact' && e.type !== 'quiz')) return false;
+          if (e.day === day) return true;
+          try { return ShadowPlan.dayKey(e.ts || 0, bdHour()) === day; } catch (err) { return false; }
+        };
+        const before = ROOT2.events.length;
+        ROOT2.events = ROOT2.events.filter(function (e) { return !isTodayEv(e); });
+        const dropped = before - ROOT2.events.length;
+        try {
+          if (ROOT2.plan) { ROOT2.plan.manualResetTs = Date.now(); savePlan(); }
+        } catch (e) {}
+        ROOT2.uploaded = 0;
+        _tapCounted.clear();
+        recompute2(); _cachedPlan = null; _cachedDay = ''; _cachedManual = '';
+        try { persist2(); } catch (e) {}
+        return dropped;
+      }
+      function setManualStart(gi) {
+        if (!ROOT2 || !ROOT2.plan) { try { showAbToast('先去「我的」设置每天读多久，再定起点'); } catch (e) {} return false; }
+        gi = Math.max(0, Math.min(SENT_RAW.length - 1, gi | 0));
+        ROOT2.plan.manualStart = { gi: gi, day: day2() };
+        try { savePlan(); } catch (e) {}
+        const dropped = resetTodayEvents();
+        _cachedPlan = null; _cachedDay = ''; _cachedManual = '';
+        if (taskMode) {
+          try { syncQueueFromPlan(); } catch (e) {}
+          try { paint(); updateTaskBar(); updateMarkers(); } catch (e) {}
+        }
+        try { closeStartPicker(); } catch (e) {}
+        try {
+          const a = artOfSentGlobal(gi), l = gi - computeChapterStart(a);
+          showAbToast('今日起点：第' + (a + 1) + '篇第' + (l + 1) + '句，今日进度已重置' + (dropped ? '（清掉' + dropped + '条今日记录）' : ''));
+        } catch (e) {}
+        return true;
+      }
+      function clearManualStart() {
+        try { if (ROOT2 && ROOT2.plan) { ROOT2.plan.manualStart = null; savePlan(); } } catch (e) {}
+        _cachedPlan = null; _cachedDay = ''; _cachedManual = '';
+        try { closeStartPicker(); } catch (e) {}
+        if (taskMode) {
+          try { syncQueueFromPlan(); } catch (e) {}
+          try { paint(); updateTaskBar(); updateMarkers(); } catch (e) {}
+        }
+        try { showAbToast('已恢复引擎排程'); } catch (e) {}
+        return true;
+      }
       function updateMarkers() {
         paintTodayRange();
+        /* 已学点亮（2026-09-30）：本轮跟读过的黑字，未读灰字；与边框标记叠加。
+           读的是 roundSeen（本轮），不是 reps —— 开新轮颜色即重置，排程账不动。 */
+        try {
+          const _rs = (typeof prog !== 'undefined' && prog && prog.roundSeen) || {};
+          sents.forEach(function (el, localIdx) {
+            const _known = !!_rs[localToGlobal(localIdx)];
+            el.classList.toggle('lw-known', _known);
+            el.classList.toggle('lw-unknown', !_known);
+          });
+        } catch (e) {}
         if (!plan || !prog) return;
         const st = startOfToday();
         // 构建今日任务集合（全局索引）
@@ -8905,6 +9142,7 @@ let listenOn = false;
         const leftN = Math.max(0, n - done);
         const pct = n > 0 ? Math.round(done / n * 100) : 100;
         const c = countStages();
+        const ri = roundInfo();
         // 「还剩」= 队列里没读的那几句的预留成本（句时 + ② 一题），
         // 不是「预算减已用」—— 后者刚开局就报 12 秒，说的是钱不是活
         const leftSec = left.reduce((a, q) => a + q.sec + qz, 0);
@@ -8917,6 +9155,8 @@ let listenOn = false;
             <div class="tp-prog"><div class="tp-prog-fill" style="width:${pct}%"></div></div>
             <div class="tp-kv"><span>连续</span><b>${streak2()} 天${floorDayCount() ? `（${floorDayCount()} 天偏少）` : ''}</b></div>
             <div class="tp-kv"><span>完成度</span><b>${grade}</b></div>
+          <div class="tp-kv"><span>本轮</span><b>第 ${ri.round} 轮 · 已读 ${ri.done}/${ri.total} 句</b></div>
+          ${ri.total > 0 && ri.done >= ri.total ? '<div class="tp-actions"><button class="btn primary" onclick="if(confirm(\'全部读完一轮，开启新的一轮？颜色回到全灰重读一遍，排程与进度保留。\'))TASK.startNewRound()">开启新的一轮</button></div>' : ''}
             <div class="tp-kv"><span>预计还要</span><b>${fmtTime(leftSec)}</b></div>
           </div>
           <div class="tp-col tp-col-words"><h4>词汇</h4>
@@ -9233,7 +9473,20 @@ let listenOn = false;
           try {
             let _s = prog.sentences[globalIdx];
             if (!_s) { _s = { reps: 0, phase: 'new', nextDue: 0, lastRead: 0 }; prog.sentences[globalIdx] = _s; }
-            if (!(_s.lastRead >= startOfToday())) { _s.lastRead = Date.now(); saveProg(); }
+            if (!(_s.lastRead >= startOfToday())) { _s.lastRead = Date.now(); }
+            /* 本轮已学点亮（2026-09-30）：黑字只跟播完走 —— 点那下只记数（roundSeen 不动），
+               播完才点亮；着色与"新一轮"都读它，排程账不动。 */
+            if (!prog.roundSeen || typeof prog.roundSeen !== 'object') prog.roundSeen = {};
+            if (typeof prog.round !== 'number') prog.round = 1;
+            prog.roundSeen[globalIdx] = 1;
+            const _rt = (typeof SENT_RAW !== 'undefined' && SENT_RAW.length) || 0;
+            let _rc = 0;
+            for (const _k in prog.roundSeen) { const _g = Number(_k); if (Number.isFinite(_g) && _g >= 0 && (_rt <= 0 || _g < _rt)) _rc++; }
+            if (_rt > 0 && _rc >= _rt && _roundToastFor !== prog.round) {
+              _roundToastFor = prog.round;
+              showAbToast('本轮全部读完，可去今日面板开启新的一轮');
+            }
+            saveProg();
           } catch (e) {}
           try { updateMarkers(); } catch (e) {}
           /* 他 2026-09-24 拍板：放完**不自动挪高亮** —— 高亮停在这句，下一句只由「下一句」那颗键叫起来
@@ -9316,6 +9569,8 @@ let listenOn = false;
         etaFor, etaCalls, etaText, etaMonth, countStages, seedDailyForTest, seedArticleForTest,
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
         repsOf, articlePass2Done,
+        roundInfo, startNewRound, seedRoundSeenForTest, setManualStart, clearManualStart,
+        openStartPicker, closeStartPicker, confirmStartPicker,
         /* 真实用时账出口（2026-09-25 链路排查）：数据页「累计学习时长」按天读真实毫秒。 */
         readMsByDay: function () { return loadArticleStats().read.ms; },
         /* 今天这一篇排到多少句 / 读过几句（2026-09-26 用户：卡片除了文章进度，必须显示今天任务进度）。
