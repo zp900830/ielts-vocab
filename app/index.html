@@ -23,10 +23,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="语料库单词速记">
+    <meta name="apple-mobile-web-app-title" content="词汇真经单词速记">
     <link rel="apple-touch-icon" href="./apple-touch-icon.png">
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoi6ZuF5oCd6IOM5Y2V6K+NIDMuMCIsInNob3J0X25hbWUiOiLpm4XmgJ3og4zljZXor40iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZmFmOGY0IiwidGhlbWVfY29sb3IiOiIjZmFmOGY0Iiwic3RhcnRfdXJsIjoiLi8iLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJyUzRSUzQ3JlY3Qgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnIHJ4PScyMicgZmlsbD0nJTIzMTBiNDg3Jy8lM0UlM0N0ZXh0IHg9JzUwJyB5PSc2OCcgZm9udC1zaXplPSc1MicgdGV4dC1hbmNob3I9J21pZGRsZScgZmlsbD0nJTIzZmZmJyBmb250LWZhbWlseT0nc2VyaWYnJTNFVyUzQy90ZXh0JTNFJTNDL3N2ZyUzRSIsInNpemVzIjoiYW55IiwidHlwZSI6ImltYWdlL3N2Zyt4bWwiLCJwdXJwb3NlIjoiYW55IG1hc2thYmxlIn1dfQ==">
-    <title>语料库单词速记</title>
+    <title>词汇真经单词速记</title>
     <style>
   /* ============ 设计令牌（对齐 雅思词汇真经项目：薄荷绿 + 衬线故事体 + 毛玻璃） ============ */
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -2466,7 +2466,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <!-- 3.0 外壳（M1）：左侧导航 4 项 + 底部「我的」一行 + #appView，路由见 app.js。 -->
     <div id="appShell">
       <nav class="sidenav" aria-label="主导航">
-        <div class="sn-logo"><span class="sn-mark"><i class="ri-book-open-fill" aria-hidden="true"></i></span><span class="sn-name">语料库单词速记</span></div>
+        <div class="sn-logo"><span class="sn-mark"><i class="ri-book-open-fill" aria-hidden="true"></i></span><span class="sn-name">词汇真经单词速记</span></div>
         <button class="nav-item on" data-route="home"><i class="ri-home-5-line i-line" aria-hidden="true"></i><i class="ri-home-5-fill i-fill" aria-hidden="true"></i><span>首页</span></button>
         <button class="nav-item" data-route="listen"><i class="ri-headphone-line i-line" aria-hidden="true"></i><i class="ri-headphone-fill i-fill" aria-hidden="true"></i><span>随身听</span></button>
         <button class="nav-item" data-route="words"><i class="ri-book-2-line i-line" aria-hidden="true"></i><i class="ri-book-2-fill i-fill" aria-hidden="true"></i><span>单词本</span></button>
@@ -8676,7 +8676,7 @@ let listenOn = false;
          跟着漂到 +N；首句贴文章边界时旧规则又干脆不画，合起来就是用户看到的「读两句后
          才出现、向后延两条」。区间在当天该篇第一次画线时定下并存档 —— 这一刻必然早于本篇
          任何阅读（读句必须先进任务模式，进模式就会先画一次线）—— 之后读句/退出重进/② 批次
-         重同步都不动它；只有手动调起点、恢复引擎排程或跨天才改。按天按篇存
+         重同步都不动它；只有手动调起点、改回自动安排或跨天才改。按天按篇存
          （plan.todayRange = {day, byArt: {篇: [first, last]}}），换天自动作废。 */
       function pinArticleKey() {
         const a = (currentArticle != null) ? currentArticle : currentChapter;
@@ -8831,7 +8831,7 @@ let listenOn = false;
           '<div class="sp-row"><label for="spArt">篇目</label><select id="spArt">' + opts + '</select></div>' +
           '<div class="sp-row"><label for="spSent">第几句</label><input id="spSent" type="number" min="1" value="' + defN + '"></div>' +
           '<div class="sp-actions"><button class="btn" onclick="TASK.closeStartPicker()">取消</button>' +
-          '<button class="btn" onclick="TASK.clearManualStart()">恢复引擎排程</button>' +
+          '<button class="btn" onclick="TASK.clearManualStart()">改回自动安排</button>' +
           '<button class="btn primary" onclick="TASK.confirmStartPicker()">确定</button></div>';
         document.body.appendChild(mask);
         document.body.appendChild(pop);
@@ -8938,7 +8938,7 @@ let listenOn = false;
           try { syncQueueFromPlan(); } catch (e) {}
           try { paint(); updateTaskBar(); updateMarkers(); } catch (e) {}
         }
-        try { showAbToast('已恢复引擎排程'); } catch (e) {}
+        try { showAbToast('已改回自动安排'); } catch (e) {}
         return true;
       }
       function updateMarkers() {
