@@ -4537,7 +4537,8 @@ let listenOn = false;
     } catch (e) {}
     speak(sentText(sents[i]), () => {
     if (!playing || my !== speakToken) return;
-    /* 自由/随身听模式：随身听记独立收听账（§7.6，不碰精读）；其余自由播放仍记接触（v2.0 口径）。
+    /* 自由/随身听模式：随身听记独立收听账（§7.6，不碰精读）；任务外的自由播放不再记接触
+       （2026-09-28 用户改口径：任务量只许任务内涨，v2.0「自由播放记接触」口径作废）。
        任务模式由手动按钮计数（taskSentenceFinished），这里不重复。 */
     try {
       if (!TASK.active) {
@@ -4548,7 +4549,7 @@ let listenOn = false;
              「一句放完 → 下一句」在 headless（speak 被 stub、onstart 不触发）里也可验证。 */
           idx = i + 1;
           if (idx < sents.length) paint();
-        } else if (TASK.hasPlan) { TASK.onSentenceComplete(gi); }
+        } /* 任务外自由播放：不记账（上条注释）。onSentenceComplete 保留为空实现，别删出口。 */
       }
       /* 随身听「仅今日任务」：按当日列表逐句推进、播完自动从头循环（2026-09-28 用户加）。
          推进实现住在 TASK 闭包里（今日列表变量在那），这里只经出口调 —— launch 与 TASK 工厂
@@ -7471,13 +7472,15 @@ let listenOn = false;
          保留 prog.pace 数据字段不动（老存档兼容），samplePace 与喂排程的链路一并删除。 */
 
       // ---- 记录一次跟读 ----
-      function recordRep(globalIdx) {
+      /* opts.deferDim（2026-09-28）：点「下一句」即+1 时只记数（reps/接触/日账），不点 lastRead ——
+         lastRead 驱动变暗显示，点了就变暗等于没听就暗了；变暗只许发生在播完（taskSentenceFinished）。 */
+      function recordRep(globalIdx, opts) {
         if (!prog || !plan) return;
         const now = Date.now();
         let s = prog.sentences[globalIdx];
         if (!s) { s = { reps: 0, phase: 'new', nextDue: 0, lastRead: 0 }; prog.sentences[globalIdx] = s; }
         s.reps++;
-        s.lastRead = now;
+        if (!opts || !opts.deferDim) s.lastRead = now;   // 点即+1 只记数：变暗（lastRead）留到播完那一下
         s.phase = phaseOf(s.reps);
         try { readDone(globalIdx); } catch (e) {}   // 同一句读一遍 = 句里每个未毕业词各一次接触
         // 计算下次到期
@@ -7706,18 +7709,22 @@ let listenOn = false;
             const local = globalToLocal(saved.i);
             if (local >= 0 && local < sents.length) {
               const qi = todayQueue.findIndex(q => q.i === saved.i);
-              if (qi >= 0) taskPos = qi;
-              idx = local; _paintIdx = -2; paint(); syncSeek(local);
-              const el = sents[local];
-              if (el) setTimeout(() => { try { el.scrollIntoView({ block: 'center' }); } catch (e) {} }, 60);
-              updateTaskBar();
-              return;
+              if (qi >= 0) {
+                taskPos = qi;
+                idx = local; _paintIdx = -2; paint(); syncSeek(local);
+                const el = sents[local];
+                if (el) setTimeout(() => { try { el.scrollIntoView({ block: 'center' }); } catch (e) {} }, 60);
+                updateTaskBar();
+                return;
+              }
+              /* 存档句已读完（点即+1 后它已不在今天队列里）：停在这个旧位置，
+                 高亮/游标/队列三方就对不上了 —— 第一 下点必然跳走（用户 2026-09-28 报障）。
+                 不 return，落到下面的 goToNextTask：高亮 = 第一条没读的 = 学习位置。 */
             }
           }
         } catch (e) {}
-        // 落到第一个未完成句并直接开播（true）。以前是 false（只定位不播），
-        // 所以每次进来第一句恒无声，非要点一次「下一句」———— 用户 2026-09-28 报障。
-        // playGlobal 指定句仍由 openArticle 续播，这里只定位别抢。
+        // 跳到第一个未完成句（只定位不播）：第一下播放由用户按键触发，
+        // 入口自动播会跟「空格起播」「进任务先停随身听」两条既有契约打架（2026-09-28 已回滚）。
         goToNextTask(false);
       }
       /* 3.0（Task 5）：点首页卡片进这一篇的任务模式。
@@ -7854,7 +7861,7 @@ let listenOn = false;
         if (!taskMode || !todayQueue.length) return;
         k = Math.max(0, Math.min(todayQueue.length - 1, k));
         playing = false; speakToken++;
-        try { speechSynthesis.cancel(); } catch (e) {}
+        try { if (speechSynthesis.speaking || speechSynthesis.pending || speechSynthesis.paused) speechSynthesis.cancel(); } catch (e) {}
         try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
         paint();
         const g = todayQueue[k].i;
@@ -7939,7 +7946,9 @@ let listenOn = false;
            两种都先把正在念的收掉；完成计数仍挂在「这句真的放完了」那一刻
            （taskSentenceFinished），不挂在点击上 —— 点一下就记完成等于没读就打卡。 */
         playing = false; speakToken++;
-        try { speechSynthesis.cancel(); } catch (e) {}
+        /* 空引擎不 cancel（2026-09-28）：第一下点击时多半没在播，iOS 上对空引擎 cancel
+           会把引擎顶住、紧接着的 speak 被吞 → 第一句恒无声，第二下才好。有活才清。 */
+        try { if (speechSynthesis.speaking || speechSynthesis.pending || speechSynthesis.paused) speechSynthesis.cancel(); } catch (e) {}
         try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
         if (!_tabStarted) {
           /* 这一趟的第一下：放「屏幕上这一句」，不往后跳。
@@ -9113,10 +9122,10 @@ let listenOn = false;
          任务条从此只在任务模式里出现。 */
 
       // ---- 与播放链路集成 ----
-      // 自由模式下读了任务句也计数
+      /* 任务外自由播放不再记账（2026-09-28 用户改口径）：函数体置空，只保留出口。
+         任务内记账唯一入口 = taskSentenceFinished；随身听 = listenTick。 */
       function onSentenceComplete(globalIdx) {
-        if (!plan || !prog) return;
-        recordRep(globalIdx);   // 耗时实测在 recordRep 里统一采样
+        return;
       }
       /* 任务模式一步一停的落点（他 2026-09-23 拍板：「不点不放，点一句放一句」）。
          播放链每放完一句回来问一次；返回 true 就停在这句，下一句由任务条那颗键叫起来。
@@ -9152,7 +9161,7 @@ let listenOn = false;
         const k = tapKey_(gi);
         if (_tapCounted.has(k)) return false;
         readMsTick();
-        recordRep(gi);
+        recordRep(gi, { deferDim: true });
         sessionReps++;
         bumpArticleRep(artOfSentGlobal(gi));
         _tapCounted.add(k);
@@ -9162,7 +9171,15 @@ let listenOn = false;
       function taskSentenceFinished(globalIdx) {
         if (!taskMode) return false;
         if (pass === 1 && plan && prog) {
-          markSentenceRead(globalIdx);   // 点过已记则内部跳过；纯听没点的在这里记
+          markSentenceRead(globalIdx);   // 点过已记则内部跳过（deferDim：只记数）；纯听没点的在这里全记
+          /* 播完变暗（2026-09-28 用户诉求：点了只+1+高亮+播，变暗等播完）：点那下没写 lastRead，
+             这里落 lastRead 并刷标记。纯听的在上面已全记，这里只是补刷一次显示。 */
+          try {
+            let _s = prog.sentences[globalIdx];
+            if (!_s) { _s = { reps: 0, phase: 'new', nextDue: 0, lastRead: 0 }; prog.sentences[globalIdx] = _s; }
+            if (!(_s.lastRead >= startOfToday())) { _s.lastRead = Date.now(); saveProg(); }
+          } catch (e) {}
+          try { updateMarkers(); } catch (e) {}
           /* 他 2026-09-24 拍板：放完**不自动挪高亮** —— 高亮停在这句，下一句只由「下一句」那颗键叫起来
              （点了才挪高亮 + 同步开播）。所以这里不再 goToNextTask()。
              例外是交棒 ②：两道闸任一成立就把小结端上来 ——

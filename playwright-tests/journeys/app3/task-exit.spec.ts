@@ -11,6 +11,7 @@ declare const TASK: {
   progress: { sentences: Record<string, { reps: number }> };
   listenSetSrc(s: string): string;
   listenToggle(): void;
+  onSentenceComplete(gi: number): void;
   listenState(): { src: string; todayPos: number; todayTotal: number };
 };
 declare const setAccent: (a: string) => void;
@@ -221,4 +222,79 @@ test('随身听仅今日任务：按当日列表播完自动从头循环', async
   expect(texts.length, '整单播完共发射 N+1 句').toBe(total + 1);
   expect(new Set(texts.slice(0, total)).size, '当日列表去重保序').toBe(total);
   expect(texts[total], '播完从头循环').toBe(texts[0]);
+});
+
+/* 2026-09-28 第四轮：① 存档句已读完时入口落到第一条没读的（游标/高亮/队列三方对齐，
+   第一 下不许跳走）；② 点只+1+高亮+播，变暗等播完。 */
+const hlIndex = (page: import('@playwright/test').Page) =>
+  page.evaluate(() => Array.from(document.querySelectorAll('#art .sent')).findIndex((el) => el.classList.contains('playing')));
+const hasTaskDone = (page: import('@playwright/test').Page, local: number) =>
+  page.evaluate((li) => {
+    const el = document.querySelectorAll('#art .sent')[li];
+    return !!(el && el.classList.contains('task-done'));
+  }, local);
+
+test('点只+1+高亮+播：变暗等播完那一下', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+  await installSpeakStub(page);
+  await page.locator('.art-card').first().click();
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+
+  await page.locator('#tbNext').click();            // 第一下：放这一句 + 点即+1
+  expect(await hlIndex(page), '点了就高亮').toBe(0);
+  expect(await hasTaskDone(page, 0), '没播完不许变暗').toBe(false);
+
+  await fireStaleSpeak(page);                       // 播完
+  expect(await hasTaskDone(page, 0), '播完才变暗').toBe(true);
+  expect(await hlIndex(page), '播完高亮停在原句').toBe(0);
+});
+
+test('存档句已读完：重进落到第一条没读的，第一下不跳走', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+  await installSpeakStub(page);
+  await page.locator('.art-card').first().click();
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+
+  await page.locator('#tbNext').click();            // 读 s0（点即+1 + 起播）
+  await fireStaleSpeak(page);                       // s0 播完（落 lastRead + 变暗）
+  await page.evaluate(() => TASK.exitTaskMode());
+
+  await page.locator('.art-card').first().click();  // 重进：存档 s0 已读完
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+  expect(await hlIndex(page), '高亮 = 第一条没读的 s1，不是存档 s0').toBe(1);
+
+  await installTextStub(page);
+  await page.locator('#tbNext').click();            // 第一下：放的就是高亮这句，不许跳走
+  const texts = await spokenTexts(page);
+  expect(texts.length, '第一下就发射').toBeGreaterThan(0);
+  expect(texts[texts.length - 1], '放的是高亮的 s1').toContain('Sentence 1 about');
+});
+
+/* 2026-09-28 口径：任务外自由播放不记账。直接打唯一的自由记账入口，
+   断言 reps / 事件流 / 日账三本账一字不动。 */
+test('任务外自由播放不记账：onSentenceComplete 零写入', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+  const snap = () => page.evaluate(() => JSON.stringify({
+    sents: TASK.progress.sentences,
+    daily: TASK.state().daily,
+    nev: TASK.events().length,
+  }));
+  const before = await snap();
+  await page.evaluate(() => { TASK.onSentenceComplete(0); TASK.onSentenceComplete(1); });
+  expect(await snap(), '任务外记账入口必须零写入').toBe(before);
 });
