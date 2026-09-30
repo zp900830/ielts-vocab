@@ -23,7 +23,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     color-scheme: light dark;
-    --bg: #faf8f4; --card: #fff; --text: #2b3028; --muted: #7a7568; --ink2: #6b665a;
+    --bg: #faf8f4; --card: #fff; --text: #2b3028; --muted: #6f695c; --ink2: #6b665a;
     --accent: #0c9c74; --accent-bright: #10b487; --accent-soft: #e0f5ec;
     --accent-line: #bfe6d6; --hl: #c9f2e2; --hl-line: #8fd8bd;
     --border: #e5dfd6; --green: #0c9c74;
@@ -59,7 +59,7 @@
     }
   /* 夜间模式 */
   body.dark {
-    --bg: #1c1a17; --card: #252220; --text: #e2ddd5; --muted: #908a7e; --ink2: #a09a8e;
+    --bg: #1c1a17; --card: #252220; --text: #e2ddd5; --muted: #9b958a; --ink2: #a09a8e;
     --accent: #10b487; --accent-bright: #2bd4a4; --accent-soft: rgba(16,180,135,.12);
     --accent-line: rgba(16,180,135,.22); --hl: rgba(43,212,164,.18); --hl-line: rgba(43,212,164,.3);
     --border: #33302b; --green: #10b487;
@@ -296,12 +296,19 @@
   .sec h2 { display: inline-block; font-size: 14px; color: #065f46; font-weight: 600;
     letter-spacing: .06em; margin-bottom: 12px; background: var(--accent-soft);
     border-radius: 999px; padding: 4px 14px; }
-  .sec .para { margin-bottom: 6px; font-family: var(--serif); line-height: 2.05; text-align: justify; }
+  .sec .para { margin-bottom: 6px; font-family: var(--serif); line-height: 2.05; text-align: justify;
+    /* 2026-09-30：默认全文 1833 句一次布局 ~244ms。视口外段落跳过布局/绘制（DOM 保留，
+       站内搜索/书签/句号坐标都不动）；Playwright 点按会自动滚入视口触发渲染。
+       已知：axe 测 color-contrast 会误报被跳过段落的底色（合成的是错层），真机绘制无影响；
+       复测时临时注释掉本行即可（ settled 全渲染 = 0 违规）。 */
+    content-visibility: auto; contain-intrinsic-size: auto 320px; }
   .sent { border-radius: 6px; padding: 1px 4px; transition: background .2s; cursor: pointer; }
   .sent:hover { background: var(--accent-soft); }
   .sent.playing { background: linear-gradient(transparent 62%, var(--hl) 62%); border-radius: 3px; }
   .w { color: #0d9d74; font-weight: 600; cursor: pointer;
     border-bottom: 2px solid rgba(13,157,116,.35); padding: 0 1px; border-radius: 2px; }
+  /* 暗色暖底上品牌绿 #0d9d74 只有 ~4.0（axe）：只在暗色提亮字色，边框/hover 装饰不动 */
+  body.dark .w { color: #34bd8f; }
   .w:hover { background: rgba(13,157,116,.1); }
   .gl { font-family: var(--sans); font-size: 12px; font-weight: 400; color: #8f8468;
     margin-left: 2px; white-space: nowrap; }
@@ -1486,7 +1493,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 这行小字是自己一张卡（上面那张 eta 卡有完整的边和圆角，拼不成一张），
      所以 padding 必须上下对称 —— 旧写法 padding-top:0 + border-top:0 是照"拼接footer"抄的，
      文字会贴在卡的上沿（2026-09-23 手机实测）。 */
-  .ps-eta.sm { margin-top: -6px; padding: 7px 12px; font-size: 11px; opacity: .8; }
+  /* 11px 脚注字号已是下限：opacity:.8 会把 --muted 在暗色面板上压到 3.5（axe），
+     去掉透明度、仍靠字号与 muted 色保持次要感 */
+  .ps-eta.sm { margin-top: -6px; padding: 7px 12px; font-size: 11px; }
   .ps-start { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: var(--grad); color: var(--cta-ink); font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: var(--grad-shadow); }
   .ps-start:active { filter: brightness(.92); }
   /* 调整计划 */
@@ -1737,22 +1746,46 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         }
         throw lastErr;
         }
-        try {
-          const [s, v, c] = await Promise.all([
-            get('data/sections.json?v=' + SHADOW_DATA_VER, '文章数据'),
-            get('data/vocab.json?v=' + SHADOW_DATA_VER, '词汇数据'),
-            get('data/chapters.json?v=' + SHADOW_DATA_VER, '章节数据')
-          ]);
-          SECTIONS = s; VOCAB = v; CHAPTERS = c;
-          SENT_RAW.length = 0;
-          SECTIONS.forEach(sec => sec.paragraphs.forEach(p => p.forEach(t => SENT_RAW.push(t))));
-          dataReady = true;
-        } catch (err) {
+        const ver = SHADOW_DATA_VER;
+        const pSec = get('data/sections.json?v=' + ver, '文章数据');
+        const pVoc = get('data/vocab.json?v=' + ver, '词汇数据');
+        const pCh = get('data/chapters.json?v=' + ver, '章节数据');
+        function bootFail(err) {
           console.error('数据加载失败', err);
           const detail = esc((err && err.message) || '网络异常');
           if (art) art.innerHTML = '<div class="boot"><div class="boot-logo"><i class="ri-book-open-fill" aria-hidden="true"></i></div><div class="boot-err">数据加载失败（' + detail + '），请检查网络后重试<button onclick="location.reload()">重新加载</button></div></div>';
           throw err;
         }
+        try {
+          // 2026-09-30 两阶段加载：LCP（正文 DIV.para）只等文章数据（~200ms），不再被
+          // 514KB 的 vocab.json（~600ms+）拖住。三个请求同时发出，只是消费分先后：
+          // render()/loadPos()/applyPrefs()/选章下拉只读 SECTIONS，可以先跑；
+          // 行内注释/辨析卡/词表/TASK 必须等词表，到齐后 render() 重跑一次 hydrate。
+          SECTIONS = await pSec;
+        } catch (err) {
+          bootFail(err);
+        }
+        SENT_RAW.length = 0;
+        SECTIONS.forEach(sec => sec.paragraphs.forEach(p => p.forEach(t => SENT_RAW.push(t))));
+        dataReady = true;
+        // 课文增删过句子时，先把本地存的句子序号顺移到位，再渲染/读进度（只读 SECTIONS，可先行）
+        try { applySentShifts(); } catch (e) { try { dlog('sent-shift-fail', (e && e.message) || e); } catch (err) {} }
+        populateChapterSelect();
+        render(); bindSeek(); loadPos(); applyPrefs();
+        try {
+          const res = await Promise.all([pSec, pVoc, pCh]);
+          VOCAB = res[1]; CHAPTERS = res[2];
+        } catch (err) {
+          // 文章已上屏：词表/章节失败不再整页报错 —— 记日志并降级（查词弹窗有无词条 fallback，
+          // 词表为空）。刷新页面会整体重试。
+          console.error('词汇/章节数据加载失败（正文可用，查词与词表降级）', err);
+          try { dlog('vocab-load-fail', (err && err.message) || err); } catch (e) {}
+          return;
+        }
+        render(); renderList();   // hydrate：补行内注释/辨析卡/词表（一次性，播放前发生）
+        // hydrate 重建了正文 DOM：一阶段 loadPos 里 setTimeout 抓到的 el 已经脱离文档，
+        // 滚不动 —— 用新 DOM 再定位一次（幂等：读同一份存档、画同一处高亮、滚同一句）。
+        loadPos();
       }
       function applyPrefs() {
         const p = readPrefs();
@@ -1762,13 +1795,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         if (p.hideGl) { document.body.classList.add('hide-gl'); updateGlossBtn(); }
       }
       function initApp() {
+        // 数据与首屏由 loadData 两阶段完成（先文章正文，后词表 hydrate）；这里只做任务系统收尾。
         loadData().then(() => {
-          populateChapterSelect();
           const sel = document.getElementById('chapSel');
           if (sel) sel.value = String(currentChapter);
-          // 课文增删过句子时，先把本地存的句子序号顺移到位，再渲染/读进度/起任务
-          try { applySentShifts(); } catch (e) { try { dlog('sent-shift-fail', (e && e.message) || e); } catch (err) {} }
-          render(); renderList(); bindSeek(); loadPos(); applyPrefs();
           // 初始化每日学习任务系统
           try { TASK.init(); TASK.updateMarkers(); } catch (e) {}
           // 渲染完成后补拉一次云进度：boot() 的拉取可能跑在渲染前（sents 为空时云进度被跳过），
@@ -2129,9 +2159,16 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     /* ============ 播放条句子圆点 ============ */
     let artOfSent = [], dotsArt = -1;
     const plainEN = t => t.replace(/\[\[[^\]:]+:([^\]]+)\]\]/g, '$1');
+    /* 用户主动滚动的判据：只认真实输入手势（滚轮/触摸/按键），不认滚动事件本身 ——
+       2026-09-30：两阶段加载的 hydrate 重绘会因回流产生滚动事件，旧判据把它当用户滚动，
+       播放中会莫名冒出「回到播放位置」（seek-drag 回归）。手势时间戳窗口外的滚动一律当程序触发。 */
+    let _userInputAt = 0;
+    ['wheel', 'touchstart', 'touchmove', 'keydown'].forEach(function (ev) {
+    window.addEventListener(ev, function () { _userInputAt = Date.now(); }, { passive: true });
+    });
     window.addEventListener('scroll', () => {
-    // 检测用户手动滚动（播放中且非程序触发的滚动）
-    if (playing && !_programmaticScroll) {
+    // 检测用户手动滚动（播放中、非程序触发、且近 1.2s 内有真实输入手势）
+    if (playing && !_programmaticScroll && Date.now() - _userInputAt < 1200) {
     _userScrolled = true;
     clearTimeout(_scrollTimer);
     _scrollTimer = setTimeout(() => { _userScrolled = false; }, 3000);
@@ -4294,6 +4331,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     function savePos() {
     try {
+      /* idx<0 = 还没定位到任何句子。此时写存档 = 把「空位置」盖掉真实续读位 ——
+         冷启动尚未 loadPos 就刷新/切走标签页（pagehide）时旧页 idx=-1 正好撞上。
+         守卫收口在这里而不是各调用点，任何路径触发都不会写坏。 */
+      if (idx >= 0) {
       const o = readPos();
       const now = Date.now();
       if (currentChapter >= 0) {
@@ -4306,9 +4347,11 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       // 保留章节私有进度，不删除 o.chapter / o.chapterI
       }
       writePos(o);
+      }
     } catch (e) {}
     try { queueMarkPush(); } catch (e) {} // 进度与书签同一次 debounce 推云，多端同步最新播放位置
     }
+    let _restoreRun = 0;   // 续读定位的代次：hydrate 重渲染会再调一次 loadPos，新链作废旧链
     function loadPos() {
     try {
       const o = readPos();
@@ -4325,7 +4368,23 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       if (targetI >= 0 && targetI < sents.length) {
       idx = targetI; paint(); syncSeek(idx);
       const el = sents[idx];
-      if (el) setTimeout(() => el.scrollIntoView({ block: 'center' }), 60);
+      // content-visibility 下视口外段落是估算高度，一次 scrollIntoView 可能落偏：
+      // 落定后验一下，偏了就再滚（最多 3 次，每次等 300ms 让布局收敛；用户一动手就停）。
+      const my = idx, run = ++_restoreRun;
+      const fix = (left, lastTop) => {
+        try {
+          if (left <= 0 || run !== _restoreRun || idx !== my || _userScrolled || playing) return;
+          const cur = sents[idx];
+          if (!cur || !cur.isConnected) return;
+          const r = cur.getBoundingClientRect();
+          const inView = r.top >= 0 && r.bottom <= window.innerHeight;
+          const stable = typeof lastTop === 'number' && Math.abs(r.top - lastTop) <= 8;
+          if (inView && stable) return;
+          cur.scrollIntoView({ block: 'center' });
+          setTimeout(() => fix(left - 1, r.top), 300);
+        } catch (e) {}
+      };
+      if (el) setTimeout(() => { try { el.scrollIntoView({ block: 'center' }); } catch (e) {} setTimeout(() => fix(4), 300); }, 60);
       }
     } catch (e) {}
     }
@@ -4524,9 +4583,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     onChapterChange(String(ch));
     setTimeout(() => { const nl = globalToLocal(i); if (nl >= 0 && sents[nl]) playFrom(nl); }, 300);
     }
+    // idx<0 的写坏保护已收口在 savePos 内部（冷启动未定位就刷新/切走时旧页 idx=-1）
     window.addEventListener('pagehide', savePos);
-    // idx<0 时存档会把「还没定位到任何句子」写掉真实续读位（冷启动即切走标签页就会遇到）
-    document.addEventListener('visibilitychange', () => { if (document.hidden && idx >= 0) savePos(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) savePos(); });
 
     /* 用户无操作5s自动收回播放条+导航透明度降低 */
     let idleTimer = null;
@@ -6159,13 +6218,25 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const p = (ROOT2 && ROOT2.plan) || {};
         return [m, ALL_TARGET_WORDS, day2(), p.boundaryHour, p.pausedNew ? 1 : 0, rate].join('|');
       }
+      /* 2026-09-30：368ms 全量模拟不许再抢关键路径 —— 三处调用方画的都是「算一下…」占位，
+         resolve 快慢只影响占位时长，不影响正确性。requestIdleCallback 让浏览器先做完解析/布局/
+         绘制；timeout 2000 兜底不饿死（estimate-days 用例 settled 预算 20s）；无 ric 的浏览器回退。 */
+      function idleRun(fn) {
+        try {
+          if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+            window.requestIdleCallback(function () { fn(); }, { timeout: 2000 });
+            return;
+          }
+        } catch (e) {}
+        setTimeout(fn, 0);
+      }
       function etaFor(minutes) {
         const key = etaKey(minutes);
         if (_etaMemo.has(key)) return Promise.resolve(_etaMemo.get(key));
         if (_etaPending.has(key)) return _etaPending.get(key);      // 同时在算同一档：只跑一遍
         const p = (ROOT2 && ROOT2.plan) || {};
         const run = new Promise(function (resolve) {
-          setTimeout(function () {                                  // 让浏览器先把「算一下…」画出去
+          idleRun(function () {
             etaCalls.n++;
             const val = ShadowPlan.estimateDays(ROOT2 && ROOT2.state, minutes, {
               totalSents: SENT_RAW.length, wordsOf: wordsOfSent, totalWords: ALL_TARGET_WORDS,
@@ -6176,7 +6247,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
             if (_etaMemo.size > 24) _etaMemo.clear();
             _etaMemo.set(key, val);
             resolve(val);
-          }, 0);
+          });
         });
         _etaPending.set(key, run);
         return run;

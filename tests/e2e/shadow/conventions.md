@@ -93,6 +93,16 @@
 ## Markers
 - Phase: `@regression`; polarity: `@positive` unless stated; area: `@shadow`.
 
+## syncToggleAria initial-load race (discovered 2026-09-30, author 探索译文/词义开关)
+- `syncToggleAria()` 只在 `window load` 和「任意 click 后 setTimeout 0」两处跑，而 `applyPrefs()`
+  在 `loadData().then(...)` 里、通常**晚于** load —— 所以带 `hideZh/hideGl` 偏好刷新回来时：
+  load 那次 sync 算的是「还没恢复偏好」的 `.active=true` → `aria-pressed="true"`，随后
+  `applyPrefs` 翻成隐藏态却不再 sync → **aria-pressed 与真实状态相反，直到下一次点击才自愈**。
+  实测：`{"hideZh":true}` 刷新后按钮文案=显示全句译文、`body.hide-zh` 在、`aria-pressed="true"`。
+- 用例纪律：**刷新恢复那一步不要断言 `aria-pressed`**（那是已知缺口，另案给 a11y 审计）；
+  点击后那一步断言它没问题（click-sync 保证正确）。
+- `btnDark` 不在 syncToggleAria 名单里（它没有 aria-pressed，aria-label 恒定），夜间模式用例不受此影响。
+
 ## Headless / no-audio environments (discovered 2026-09-12)
 - Speech never sounds, but the chain still advances via watchdog retries: button text, `.playing` highlight and `ielts-pos` all update normally. Assert UI state, never audibility.
 - After ~12s of continuous silent playback the app raises the no-audio guidance `alert`. Pause before that in tests, or expect and dismiss it. The alert text always starts with `语音播不出来`.
