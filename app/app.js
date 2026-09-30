@@ -74,9 +74,12 @@
     return window.APP3.renderHome(view);
   }
   document.addEventListener('click', (e) => {
-    // 左下角用户卡：点它开/关「我的」浮窗（不是切页）。浮窗自己的按钮在 wireMePop 里代理。
+    // 左下角用户卡（手机端第 5 格）：未登录 → 开统一登录弹窗；已登录 → 开/关「我的」浮窗（不是切页）。
     const me = e.target.closest('#meCard');
-    if (me) { toggleMePop(); return; }
+    if (me) {
+      try { if (!meAccount().logged) { openLoginModal(); return; } } catch (err) {}
+      toggleMePop(); return;
+    }
     // 单词本：筛选 / 展开 / 重学 / 播放 / 加载更多（M3，都是每次重渲的节点，走事件代理）。
     const wf = e.target.closest('.wb-filter');
     if (wf) { location.hash = '#/words/' + wf.dataset.f; return; }
@@ -612,8 +615,8 @@
     </div>`;
     const b = view.querySelector('#lockLoginBtn');
     if (b) b.addEventListener('click', () => {
-      // 延迟一拍：这次点击还在冒泡，同步打开会被"点外面收浮窗"反手关掉（见 taskLoginPrompt 同一注释）
-      setTimeout(() => { try { openMePop(); } catch (e) {} }, 0);
+      // 2026-09-30：改调统一登录弹窗（不再开 mePop 内嵌表单）。延迟一拍避开点击冒泡期的误关。
+      setTimeout(() => { try { openLoginModal(); } catch (e) {} }, 0);
     });
   }
   window.APP3 = Object.assign(window.APP3, { renderLocked });
@@ -932,12 +935,13 @@
     const card = document.getElementById('meCard');
     if (!card) return;
     const acc = meAccount();
-    // 2026-09-24：未登录显示「登录」按钮（不是头像）；已登录显示头像 + 账号。
+    // 2026-09-30：未登录显示用户图标 + 「我的」（i-line/i-fill 双态与其他 tab 同风格，
+    // 不再是裸「登录」两字）；点它开统一登录弹窗。已登录显示头像 + 账号（不变），点它开浮窗。
     card.innerHTML = acc.logged
       ? `<span class="me-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>`
         + `<span class="me-meta"><span class="me-name">${esc(acc.nickname)}</span></span>`
-      : `<span class="me-login">登录</span>`;
-    card.setAttribute('aria-label', acc.logged ? `我的 · ${acc.nickname}` : '登录 / 我的');
+      : `<i class="ri-user-smile-line i-line" aria-hidden="true"></i><i class="ri-user-smile-fill i-fill" aria-hidden="true"></i><span class="me-tab-label">我的</span>`;
+    card.setAttribute('aria-label', acc.logged ? `我的 · ${acc.nickname}` : '我的 · 未登录，点击登录');
   }
   function renderMePop() {
     const pop = document.getElementById('mePop');
@@ -997,11 +1001,7 @@
       </div>
       <div class="mp-foot">${acc.logged
         ? `<button class="mp-logout" type="button" data-me-logout>退出登录</button>`
-        : `<form class="mp-login-form" data-me-form>
-             <input id="meEmail" type="email" placeholder="邮箱" autocomplete="email" aria-label="邮箱">
-             <input id="mePass" type="password" placeholder="密码" autocomplete="current-password" aria-label="密码">
-             <div class="row"><button type="submit" data-me-login>登录</button><button type="button" data-me-signup>注册</button></div>
-           </form>`}</div>
+        : `<button class="mp-login-btn" type="button" data-me-login-btn>去登录</button>`}</div>
       <input type="file" id="meImportFile" accept="application/json,.json" style="display:none">`;
     // 音色选择器（③ 挪进来）：重渲后 #voicePop 是新元素，要重新渲染 + 重新绑事件代理。
     try { if (typeof renderVoicePop === 'function') renderVoicePop(); } catch (e) {}
@@ -1069,16 +1069,62 @@
     const pop = document.getElementById('mePop');
     if (pop && !pop.hidden) closeMePop(); else openMePop();
   }
-  async function meLogin() { try { if (typeof cloudLogin === 'function') await cloudLogin({ email: 'meEmail', pass: 'mePass' }); } catch (e) {} renderMePop(); positionMePop(); }
-  async function meSignup() { try { if (typeof cloudSignup === 'function') await cloudSignup({ email: 'meEmail', pass: 'mePass' }); } catch (e) {} }
   async function meLogout() { try { if (typeof cloudLogout === 'function') await cloudLogout(); } catch (e) {} renderMePop(); positionMePop(); }
+  /* 统一登录弹窗（2026-09-30）：移动 + 桌面共用。登录/注册走同一套 cloudLogin/cloudSignup，
+     只是读弹窗里的输入框（loginEmail/loginPass）。成功（CLOUD._userMail 落定）才关弹窗并刷新用户卡；
+     失败时 cloudLogin 已弹提示，弹窗保持打开。SIGNED_IN 监听会自动重渲被锁住的路由。 */
+  function openLoginModal() {
+    try { if (meAccount().logged) return; } catch (e) {}
+    try { closeMePop(); } catch (e) {}
+    const m = document.getElementById('loginModal');
+    if (!m) return;
+    if (typeof openModal === 'function') openModal(m);
+    else m.style.display = 'block';
+  }
+  function closeLoginModal() {
+    const m = document.getElementById('loginModal');
+    if (!m) return;
+    if (typeof closeModal === 'function') closeModal(m);
+    else m.style.display = 'none';
+  }
+  async function modalLogin() {
+    try { if (typeof cloudLogin === 'function') await cloudLogin({ email: 'loginEmail', pass: 'loginPass' }); } catch (e) {}
+    try {
+      if (typeof CLOUD !== 'undefined' && CLOUD._userMail) { closeLoginModal(); updateMeCard(); }
+    } catch (e) {}
+  }
+  async function modalSignup() {
+    try { if (typeof cloudSignup === 'function') await cloudSignup({ email: 'loginEmail', pass: 'loginPass' }); } catch (e) {}
+  }
+  function wireLoginModal() {
+    const m = document.getElementById('loginModal');
+    if (!m || m._wired) return;
+    m._wired = true;
+    m.addEventListener('click', (e) => {
+      if (e.target === m) { closeLoginModal(); return; }
+      const t = e.target.closest('[data-login-close],[data-login-signup],[data-login-settings]');
+      if (!t) return;
+      e.stopPropagation();
+      if (t.hasAttribute('data-login-close')) closeLoginModal();
+      else if (t.hasAttribute('data-login-signup')) modalSignup();
+      else if (t.hasAttribute('data-login-settings')) { closeLoginModal(); try { openMePop(); } catch (err) {} }
+    });
+    // 登录走 <form> 提交：点「登录」（type=submit）与在输入框里按 Enter 是同一条路（键盘可达）。
+    m.addEventListener('submit', (e) => {
+      const form = e.target.closest('[data-login-form]');
+      if (!form) return;
+      e.preventDefault();
+      e.stopPropagation();
+      modalLogin();
+    });
+  }
   // 浮窗 innerHTML 每次重渲，逐颗绑会漏 → 用事件代理，只绑一次。
   function wireMePop() {
     const pop = document.getElementById('mePop');
     if (!pop || pop._wired) return;
     pop._wired = true;
     pop.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-new],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-signup],[data-me-logout]');
+      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-new],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-login-btn],[data-me-logout]');
       if (!t) return;
       // 有些按钮点完会 renderMePop() 重渲（主题/分钟/新词）—— 重渲会把 e.target 从 DOM 摘下来，
       // 事件继续冒泡到 document 的「点外面收掉」监听时，target 已不在 #mePop 里，会被误判成点外面。
@@ -1094,16 +1140,8 @@
       else if (t.hasAttribute('data-me-reset-plan')) { TASK.resetLearningPlan(); renderMePop(); positionMePop(); }
       else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }
       else if (t.hasAttribute('data-me-import')) { TASK.importBackup('meImportFile'); }
-      else if (t.hasAttribute('data-me-signup')) { meSignup(); }
+      else if (t.hasAttribute('data-me-login-btn')) { openLoginModal(); }
       else if (t.hasAttribute('data-me-logout')) { meLogout(); }
-    });
-    // 登录走 <form> 提交：点「登录」（type=submit）与在输入框里按 Enter 是同一条路（§10.4 键盘可达）。
-    pop.addEventListener('submit', (e) => {
-      const form = e.target.closest('[data-me-form]');
-      if (!form) return;
-      e.preventDefault();
-      e.stopPropagation();
-      meLogin();
     });
     // §10.4：Tab 在浮窗内收敛，别让键盘焦点逃到背景里的侧栏/正文。
     pop.addEventListener('keydown', (e) => {
@@ -1120,7 +1158,7 @@
       }
     });
   }
-  window.APP3 = Object.assign(window.APP3, { renderMePop, openMePop, closeMePop, toggleMePop, meLogin, meLogout, meSignup, updateMeCard });
+  window.APP3 = Object.assign(window.APP3, { renderMePop, openMePop, closeMePop, toggleMePop, meLogout, updateMeCard, openLoginModal, closeLoginModal });
   // 点浮窗外面收掉；Esc 也收。
   document.addEventListener('click', (e) => {
     const pop = document.getElementById('mePop');
@@ -1132,6 +1170,7 @@
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMePop(); });
   window.addEventListener('resize', () => { const pop = document.getElementById('mePop'); if (pop && !pop.hidden) positionMePop(); });
   wireMePop();
+  wireLoginModal();
   updateMeCard();
   setTimeout(updateMeCard, 1500);   // CLOUD.boot 异步恢复登录态：稍后把卡上昵称补一次
 
