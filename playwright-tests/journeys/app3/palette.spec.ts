@@ -72,6 +72,8 @@ test.describe('3.0 主按钮轻渐变薄荷（锁定色值）', () => {
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await page.locator('#meCard').click();
+    await expect(page.locator('#loginModal')).toBeVisible();
+    await page.locator('#loginModal [data-login-settings]').click();
     const cta = page.locator('#mePop .mp-cta');
     await expect(cta).toBeVisible();
     assertLockedMint(await cta.evaluate(measureButton), '「我的」主按钮');
@@ -228,6 +230,8 @@ function describeRefine3() {
     await page.reload();
     await waitShadowReady(page);
     await page.locator('#meCard').click();
+    await expect(page.locator('#loginModal')).toBeVisible();
+    await page.locator('#loginModal [data-login-settings]').click();
     await expect(page.locator('#mePop')).toBeVisible();
     const sel = page.locator('#mePop .ps-opt.sel').first();
     await expect(sel).toBeVisible();

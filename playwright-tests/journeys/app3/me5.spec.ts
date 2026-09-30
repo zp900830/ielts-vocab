@@ -54,7 +54,12 @@ const waitTask = (page: import('@playwright/test').Page) =>
   page.waitForFunction(() => { try { return typeof TASK !== 'undefined' && !!TASK.state; } catch (e) { return false; } });
 const openMe = async (page: import('@playwright/test').Page) => {
   const pop = page.locator('#mePop');
+  const modal = page.locator('#loginModal');
   await page.locator('#meCard').click();
+  // 未登录 → 先开登录弹窗，经「先去设置」进浮窗；已登录 → 点卡片直接开/关浮窗
+  if (await modal.isVisible()) {
+    await modal.locator('[data-login-settings]').click();
+  }
   if (!(await pop.isVisible())) await page.locator('#meCard').click(); // 已开时点一下 = 收掉，补一下
   await expect(pop).toBeVisible();
   return pop;
@@ -156,11 +161,16 @@ test.describe('M5 · 导出/导入（§8.1 数据管理）', () => {
 });
 
 test.describe('M5 · 账号（§8.1 账号信息 / §10.4 键盘可达）', () => {
-  test('回车提交登录；注册/登出接线；已登录态显示邮箱+退出、无登录表单', async ({ page }) => {
+  test('弹窗内回车提交登录；注册/登出接线；已登录态显示邮箱+退出、无内嵌表单', async ({ page }) => {
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await waitTask(page);
-    const pop = await openMe(page);
+
+    // 未登录点卡片 → 统一登录弹窗（不是浮窗）
+    await page.locator('#meCard').click();
+    const modal = page.locator('#loginModal');
+    await expect(modal).toBeVisible();
+    await expect(page.locator('#mePop')).toBeHidden();
 
     // 装录音笔：把 cloud* 换成记录调用
     await page.evaluate(() => {
@@ -170,23 +180,32 @@ test.describe('M5 · 账号（§8.1 账号信息 / §10.4 键盘可达）', () =
       (window as unknown as { cloudLogout: unknown }).cloudLogout = () => { (window as unknown as { __calls: unknown[] }).__calls.push(['logout']); };
     });
 
-    // 输入回车 → 视为登录提交
-    await pop.locator('#meEmail').fill('bob@example.com');
-    await pop.locator('#mePass').fill('secret');
-    await pop.locator('#mePass').press('Enter');
+    // 输入回车 → 视为登录提交（读弹窗里的框）
+    await modal.locator('#loginEmail').fill('bob@example.com');
+    await modal.locator('#loginPass').fill('secret');
+    await modal.locator('#loginPass').press('Enter');
     await expect.poll(() => page.evaluate(() => (window as unknown as { __calls: unknown[] }).__calls.length)).toBeGreaterThan(0);
-    expect(await page.evaluate(() => (window as unknown as { __calls: unknown[] }).__calls[0])).toEqual(['login', { email: 'meEmail', pass: 'mePass' }]);
+    expect(await page.evaluate(() => (window as unknown as { __calls: unknown[] }).__calls[0])).toEqual(['login', { email: 'loginEmail', pass: 'loginPass' }]);
 
     // 注册按钮 → cloudSignup
     await page.evaluate(() => { (window as unknown as { __calls: unknown[] }).__calls = []; });
-    await pop.locator('[data-me-signup]').click();
+    await modal.locator('[data-login-signup]').click();
     await expect.poll(() => page.evaluate(() => (window as unknown as { __calls: unknown[] }).__calls.length)).toBeGreaterThan(0);
     expect(await page.evaluate(() => (window as unknown as { __calls: unknown[][] }).__calls[0][0])).toBe('signup');
 
-    // 已登录态：头像 + 昵称 + 退出按钮；登录表单消失
-    await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); APP3.renderMePop(); });
+    // 弹窗输入与按钮触区 ≥44px（M5 口径）
+    for (const sel of ['#loginEmail', '#loginPass', '.login-go', '.login-reg']) {
+      const h = await modal.locator(sel).evaluate((el) => (el as HTMLElement).offsetHeight);
+      expect(h, `${sel} 触区`).toBeGreaterThanOrEqual(44);
+    }
+
+    // 已登录态：浮窗里是退出按钮 + 邮箱；全站无内嵌登录表单
+    await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); });
+    await modal.locator('[data-login-close]').click();
+    const pop = await openMe(page);
     await expect(pop.locator('.mp-logout')).toBeVisible();
-    await expect(pop.locator('.mp-login-form')).toHaveCount(0);
+    expect(await pop.locator('.mp-login-form').count(), '无内嵌登录表单').toBe(0);
+    expect(await pop.locator('[data-me-login-btn]').count(), '已登录无去登录按钮').toBe(0);
     await expect(pop.locator('.mp-sub')).toHaveText('alice@example.com');
 
     // 退出按钮 → cloudLogout
@@ -204,6 +223,10 @@ test.describe('M5 · 浮窗无障碍（§10.4）', () => {
     await waitTask(page);
     const card = page.locator('#meCard');
     await card.click();
+    // 未登录点卡片 → 统一登录弹窗（经「先去设置」进浮窗，设置不对未登录关闭）
+    const modal = page.locator('#loginModal');
+    await expect(modal).toBeVisible();
+    await modal.locator('[data-login-settings]').click();
     const pop = page.locator('#mePop');
     await expect(pop).toBeVisible();
 
@@ -234,7 +257,7 @@ test.describe('M5 · 触摸目标（§10.4）', () => {
       await waitTask(page);
       await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
       const pop = await openMe(page);
-      for (const sel of ['#btnAccent', '#voiceBtn', '[data-me-theme]', '[data-me-export]', '[data-me-import]', '.mp-cta', '.mp-row .ps-opt', '#meEmail', '[data-me-login]']) {
+      for (const sel of ['#btnAccent', '#voiceBtn', '[data-me-theme]', '[data-me-export]', '[data-me-import]', '.mp-cta', '.mp-row .ps-opt', '.mp-login-btn']) {
         const t = pop.locator(sel).first();
         await expect(t).toBeVisible();
         const h = await t.evaluate((el) => el.getBoundingClientRect().height);

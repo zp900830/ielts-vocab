@@ -124,6 +124,8 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
 
     // 点左下角用户卡 → 向上弹「我的」浮窗，里面有主题拨杆
     await page.locator('#meCard').click();
+    await expect(page.locator('#loginModal')).toBeVisible();
+    await page.locator('#loginModal [data-login-settings]').click();
     const pop = page.locator('#mePop');
     await expect(pop).toBeVisible();
     const theme = pop.locator('[data-me-theme]');
@@ -220,6 +222,8 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
     // ③ 音色选择器已挪进「我的」浮窗：在一级页面开浮窗再点
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await page.locator('#meCard').click();
+    await expect(page.locator('#loginModal')).toBeVisible();
+    await page.locator('#loginModal [data-login-settings]').click();
     const mePop = page.locator('#mePop');
     await expect(mePop).toBeVisible();
 

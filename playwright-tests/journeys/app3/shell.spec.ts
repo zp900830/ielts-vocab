@@ -52,9 +52,9 @@ test.describe('3.0 外壳', () => {
     await expect(page.locator('.sidenav .nav-item')).toHaveCount(4);
     expect(await page.locator('.sidenav .nav-item').allInnerTexts())
       .toEqual(['首页', '随身听', '单词本', '学习数据']);
-    // 「我的」不再是 nav-item，也不是卡片：一条分割线 + 一行（未登录显示「登录」按钮）
+    // 「我的」不再是 nav-item，也不是卡片：一条分割线 + 一行（未登录显示用户图标+「我的」）
     await expect(page.locator('.sidenav .me-card')).toBeVisible();
-    await expect(page.locator('.sidenav .me-card .me-login')).toHaveText('登录');
+    await expect(page.locator('.sidenav .me-card .me-tab-label')).toHaveText('我的');
 
     // 深链：#/stats 应把「学习数据」标成当前项
     await page.goto(`${rootUrl}/app/index.html#/stats`);

@@ -60,8 +60,9 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
       else { expect(v.line, '未选中显示线性').not.toBe('none'); expect(v.fill, '未选中藏面性').toBe('none'); }
     }
     expect(vis.filter((v) => v.on).length, '恰好一项选中').toBe(1);
-    // 未登录「我的」显示「登录」按钮（无头像）；已登录才显示默认头像图标
-    await expect(page.locator('.sidenav .me-card .me-login'), '未登录显示登录按钮').toHaveText('登录');
+    // 未登录「我的」显示用户图标 + 「我的」（不再是裸「登录」两字）；已登录才显示默认头像图标
+    await expect(page.locator('.sidenav .me-card .me-tab-label'), '未登录显示「我的」').toHaveText('我的');
+    await expect(page.locator('.sidenav .me-card .i-line'), '未登录显示线性用户图标').toHaveClass(/\bri-user-smile-line\b/);
     await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); });
     await expect(page.locator('.sidenav .me-card .me-avatar i'), '已登录默认头像').toHaveClass(/\bri-user-3-fill\b/);
 

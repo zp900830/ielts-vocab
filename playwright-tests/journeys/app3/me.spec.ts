@@ -15,22 +15,35 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
 }
 
 test.describe('3.0 「我的」一行 + 浮窗（PRD §2.2 / §8.1）', () => {
-  test('未登录显示「登录」按钮；点它弹浮窗（含主题/口音/音色）；已登录显示头像+账号', async ({ page }) => {
+  test('未登录显示图标+「我的」；点它开统一登录弹窗；弹窗可进设置；已登录显示头像+账号', async ({ page }) => {
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/app/index.html#/home`);
 
-    // ① 未登录：「我的」那一行是一颗「登录」按钮（不是头像）
-    await expect(page.locator('#meCard .me-login'), '未登录显示登录按钮').toHaveText('登录');
+    // ① 未登录：「我的」那一行是用户图标 + 「我的」（不再是裸「登录」两字，也不是头像）
+    await expect(page.locator('#meCard .me-tab-label'), '未登录显示「我的」标签').toHaveText('我的');
+    await expect(page.locator('#meCard .i-line'), '未登录显示用户图标').toHaveClass(/\bri-user-smile-line\b/);
+    expect(await page.locator('#meCard .me-login').count(), '不再有裸登录文字').toBe(0);
     expect(await page.locator('#meCard .me-avatar').count(), '未登录不显示头像').toBe(0);
     await expect(page.locator('#mePop'), '浮窗初始是关的').toBeHidden();
     // ③ 口音/音色只活在「我的」里：浮窗没开时，页面上不该有它们
     expect(await page.locator('#btnAccent').count(), '口音只在我的里').toBe(0);
     expect(await page.locator('#voiceBtn').count(), '音色只在我的里').toBe(0);
 
-    // 点它 → 向上弹浮窗
+    // 点它 → 开统一登录弹窗（不是浮窗）
     await page.locator('#meCard').click();
+    const modal = page.locator('#loginModal');
+    await expect(modal, '点卡片开登录弹窗').toBeVisible();
+    await expect(page.locator('#mePop'), '浮窗保持关闭').toBeHidden();
+    await expect(modal.locator('#loginEmail'), '弹窗有邮箱框').toBeVisible();
+    await expect(modal.locator('#loginPass'), '弹窗有密码框').toBeVisible();
+    await expect(modal.locator('.login-go'), '弹窗有登录按钮').toHaveText('登录');
+    await expect(modal.locator('.login-reg'), '弹窗有注册按钮').toHaveText('注册');
+
+    // 弹窗里「先去设置」→ 关弹窗、开浮窗（未登录也要调得了主题/口音/音色）
+    await modal.locator('[data-login-settings]').click();
+    await expect(modal, '弹窗关闭').toBeHidden();
     const pop = page.locator('#mePop');
-    await expect(pop).toBeVisible();
+    await expect(pop, '浮窗打开').toBeVisible();
     await expect(pop.locator('.mp-avatar i'), '浮窗里是默认头像').toHaveClass(/\bri-user-3-fill\b/);
     await expect(pop.locator('[data-me-theme]'), '浮窗里必须有主题开关').toBeVisible();
     // ③ 口音 + 音色都只在「我的」里
@@ -54,7 +67,7 @@ test.describe('3.0 「我的」一行 + 浮窗（PRD §2.2 / §8.1）', () => {
     await expect(pop.locator('.mp-nums')).toBeVisible();
     await expect(pop.locator('[data-me-export]')).toBeVisible();
     await expect(pop.locator('[data-me-import]')).toBeVisible();
-    await expect(pop.locator('[data-me-logout],[data-me-login]')).toBeVisible();
+    await expect(pop.locator('[data-me-logout],[data-me-login-btn]')).toBeVisible();
 
     // 点浮窗外收掉
     await page.locator('body').click({ position: { x: 4, y: 4 } });
@@ -67,7 +80,7 @@ test.describe('3.0 「我的」一行 + 浮窗（PRD §2.2 / §8.1）', () => {
     expect(await page.locator('#meCard .me-login').count(), '已登录不再显示登录按钮').toBe(0);
   });
 
-  test('手机端：用户卡是 TabBar 第 5 格，点它弹浮窗（不塞进浮窗里点不到）', async ({ page }) => {
+  test('手机端：用户卡是 TabBar 第 5 格（图标+「我的」），点它开登录弹窗', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 800 });
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/app/index.html#/home`);
@@ -79,8 +92,15 @@ test.describe('3.0 「我的」一行 + 浮窗（PRD §2.2 / §8.1）', () => {
       return { bottom: r.bottom, vh: window.innerHeight, count: document.querySelectorAll('.sidenav > *').length };
     });
     expect(geo.bottom, '手机端用户卡贴在底部 TabBar').toBeGreaterThan(geo.vh - 80);
+    // 第 5 格是用户图标 + 「我的」（风格与其他 tab 一致），不是裸「登录」两字
+    await expect(card.locator('.me-tab-label'), '标签是「我的」').toHaveText('我的');
+    await expect(card.locator('.i-line'), '图标与其他 tab 同风格').toHaveClass(/\bri-user-smile-line\b/);
 
     await card.click();
+    await expect(page.locator('#loginModal'), '点它开登录弹窗').toBeVisible();
+    await expect(page.locator('#mePop'), '浮窗保持关闭').toBeHidden();
+    // 弹窗里进设置 → 浮窗打开（未登录也要调得了主题）
+    await page.locator('#loginModal [data-login-settings]').click();
     await expect(page.locator('#mePop')).toBeVisible();
     await expect(page.locator('#mePop [data-me-theme]')).toBeVisible();
   });

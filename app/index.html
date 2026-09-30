@@ -1868,13 +1868,17 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .nav-item.on .i-fill { display: inline-block; }
   .nav-item.on { background: var(--accent-soft, rgba(16,180,135,.07)); color: var(--accent-text); font-weight: 600; }
   /* ---- 侧栏底部：一条分割线 + 一行「我的」（2026-09-24 用户：不要卡片）----
-     未登录显示「登录」按钮，已登录显示头像 + 账号；内容由 updateMeCard() 渲染。 */
+     2026-09-30：未登录显示用户图标 + 「我的」（i-line/i-fill 双态与其他 tab 同风格，不再是裸「登录」两字）；
+     已登录显示头像 + 账号；内容由 updateMeCard() 渲染。 */
   .me-card { display: flex; align-items: center; gap: 10px; width: 100%; margin-top: auto;
     padding: 12px 8px 2px; border: none; border-top: 1px solid var(--border); border-radius: 0;
     background: transparent; color: var(--text); cursor: pointer; text-align: left; }
   .me-card:hover { color: var(--accent-text); }
   .me-card:hover .me-name { color: var(--accent-text); }
-  .me-login { font-size: 13.5px; font-weight: 700; color: var(--accent-text); }
+  /* 未登录态图标：与 nav-item 同一套 i-line/i-fill，但 meCard 不是路由、没有 .on 态，恒显示线框版 */
+  .me-card .i-fill { display: none; }
+  .me-card .i-line, .me-card .i-fill { font-size: 19px; line-height: 1; flex: none; }
+  .me-card .me-tab-label { font-size: 13.5px; font-weight: 600; }
   .me-avatar { flex: none; width: 30px; height: 30px; border-radius: 8px; background: var(--grad);
     color: var(--cta-ink); display: flex; align-items: center; justify-content: center; font-size: 17px; }
   .me-meta { min-width: 0; display: flex; align-items: center; gap: 6px; }
@@ -1897,6 +1901,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: var(--grad-shadow);
     transition: filter var(--t-fast), box-shadow var(--t-fast); }
   .mp-cta:hover { filter: brightness(1.04); box-shadow: 0 12px 28px -8px rgba(16,180,135,.6), inset 0 1px 0 rgba(255,255,255,.45); }
+  /* 去登录：视觉与 .mp-cta 同一套渐变主按钮，但选择器独立（.mp-cta 在浮窗里唯一指计划 CTA，测试按它定位） */
+  .mp-login-btn { width: 100%; min-height: 44px; border: none; border-radius: 999px; background: var(--grad);
+    color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: var(--grad-shadow);
+    transition: filter var(--t-fast), box-shadow var(--t-fast); }
+  .mp-login-btn:hover { filter: brightness(1.04); }
   .mp-cta:active { filter: brightness(.94); }
   .mp-card { margin-top: 12px; padding: 10px 12px; border: 1px solid var(--accent-line); border-radius: 12px;
     background: var(--accent-soft); }
@@ -1916,8 +1925,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .me-pop .accent-btn,
   .me-pop .voice-btn,
   .me-pop .tr-msw,
-  .me-pop .mp-login-form input,
-  .me-pop .mp-login-form .row button,
   .me-pop .mp-logout,
   .me-pop .mp-row .ps-opt { min-height: 44px; }
   .me-pop .tr-msw { align-items: center; }
@@ -1926,12 +1933,31 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .mp-logout { width: 100%; min-height: 40px; border: 1px solid var(--border); border-radius: 999px;
     background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; }
   .mp-logout:hover { color: var(--coral-deep); border-color: var(--coral); }
-  .mp-login-form { display: flex; flex-direction: column; gap: 6px; }
-  .mp-login-form input { width: 100%; min-height: 38px; border: 1px solid var(--border); border-radius: 10px;
-    padding: 0 10px; font-size: 13px; background: #fff; color: var(--text); }
-  .mp-login-form .row { display: flex; gap: 6px; }
-  .mp-login-form .row button { flex: 1; min-height: 38px; border: 1px solid var(--accent-line); border-radius: 999px;
-    background: var(--accent-soft); color: var(--accent-text); font-size: 13px; font-weight: 700; cursor: pointer; }
+  /* 统一登录弹窗（2026-09-30）：移动 + 桌面共用这一个；mePop 内嵌表单已删。
+     输入框 16px（iOS 防聚焦放大）；openModal/closeModal 管显示隐藏（display block/none）。 */
+  #loginModal { position: fixed; inset: 0; z-index: 450; display: none;
+    background: rgba(20,18,14,.45); }
+  #loginModal .login-card { position: relative; width: min(340px, calc(100vw - 40px));
+    margin: 14vh auto 0; background: var(--card); border: 1px solid var(--border);
+    border-radius: 18px; box-shadow: var(--shadow-lg); padding: 20px; }
+  #loginModal .login-x { position: absolute; top: 8px; right: 8px; width: 36px; height: 36px;
+    border: none; background: transparent; color: var(--muted); font-size: 16px; cursor: pointer;
+    border-radius: 10px; }
+  #loginModal .login-title { font-size: 17px; font-weight: 800; margin-bottom: 4px; padding-right: 32px; }
+  #loginModal .login-sub { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+  #loginModal [data-login-form] { display: flex; flex-direction: column; gap: 8px; }
+  #loginModal [data-login-form] input { width: 100%; min-height: 44px; border: 1px solid var(--border);
+    border-radius: 10px; padding: 0 12px; font-size: 16px; font-family: inherit;
+    background: var(--card); color: var(--text); outline: none; }
+  #loginModal [data-login-form] input:focus { border-color: var(--accent-bright); }
+  #loginModal [data-login-form] .row { display: flex; gap: 8px; }
+  #loginModal .login-go { flex: 1; min-height: 44px; border: none; border-radius: 999px;
+    background: var(--grad); color: var(--cta-ink); font-size: 14px; font-weight: 700; cursor: pointer; }
+  #loginModal .login-reg { flex: 1; min-height: 44px; border: 1px solid var(--accent-line); border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent-text); font-size: 14px; font-weight: 700; cursor: pointer; }
+  /* 次要出口：不登录先去调主题/口音/音色（这些设置本来就在 mePop 里，未登录也可用） */
+  #loginModal .login-skip { display: block; width: 100%; margin-top: 10px; border: none; background: transparent;
+    color: var(--muted); font-size: 12.5px; cursor: pointer; min-height: 32px; }
   /* ② 右侧内容区照主站首页那套 token（冷薄荷：线 #e7eee9 / 墨 #2b3a34 / 次墨 #63706a）；
      只作用于 #appView 内的卡片/横幅，左侧导航（.sidenav）保持自己那套暖色不变。
      深色由 body.dark 那套管，所以这里限定 body:not(.dark)。 */
@@ -1960,7 +1986,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .me-avatar { width: 22px; height: 22px; border-radius: 6px; font-size: 15px; }
     .me-meta { flex-direction: column; gap: 0; }
     .me-name { font-size: 11px; font-weight: 500; }
-    .me-login { font-size: 11px; }
+    .me-card .i-line, .me-card .i-fill { font-size: 20px; }
+    .me-card .me-tab-label { font-size: 11px; font-weight: 500; }
     #appView { padding: 16px 16px 88px; }
     /* 文章内头部（G 2026-09-25）：一行在 390px 装不下（标题被挤没、下一篇溢出），
        手机档改两行 grid：上排 返回/标题/目标词，下排 拨杆+帮助 / 上下篇。
@@ -2196,7 +2223,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .me-card { background: transparent; border-top-color: var(--border); }
   body.dark .me-card:hover { background: transparent; }
   body.dark .me-pop { background: var(--card); border-color: var(--border); }
-  body.dark .mp-login-form input { background: var(--bg); border-color: var(--border); color: var(--text); }
   body.dark #appView { color: var(--text); }
   body.dark .art-card { background: var(--card); border-color: var(--border); }
   body.dark .art-card .a-bar { background: var(--hl); }
@@ -2472,10 +2498,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         <button class="nav-item" data-route="words"><i class="ri-book-2-line i-line" aria-hidden="true"></i><i class="ri-book-2-fill i-fill" aria-hidden="true"></i><span>单词本</span></button>
         <button class="nav-item" data-route="stats"><i class="ri-bar-chart-2-line i-line" aria-hidden="true"></i><i class="ri-bar-chart-2-fill i-fill" aria-hidden="true"></i><span>学习数据</span></button>
         <!-- 侧栏底部：一条分割线 + 一行「我的」（2026-09-24 用户：不要卡片，用分割线）。
-             未登录显示「登录」按钮，已登录显示头像 + 账号；内容由 app.js 的 updateMeCard() 渲染。
-             点它向上弹「我的」浮窗（口音/音色/主题/计划/账号/数据都在里面）。 -->
+             2026-09-30：未登录显示用户图标 + 「我的」，点它开统一登录弹窗（#loginModal）；
+             已登录显示头像 + 账号，点它向上弹「我的」浮窗。内容由 app.js 的 updateMeCard() 渲染。 -->
         <button class="me-card" id="meCard" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="mePop">
-          <span class="me-login">登录</span>
+          <i class="ri-user-smile-line i-line" aria-hidden="true"></i><i class="ri-user-smile-fill i-fill" aria-hidden="true"></i><span class="me-tab-label">我的</span>
         </button>
       </nav>
       <main id="appView"></main>
@@ -2483,6 +2509,26 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
 
     <!-- 「我的」浮窗（用户 2026-09-24）：点底部那一行向上弹出；主题（深浅色）/口音/音色/计划/账号/数据都在这里。 -->
     <div class="me-pop" id="mePop" role="dialog" aria-label="我的" hidden></div>
+
+    <!-- 统一登录弹窗（2026-09-30）：移动 + 桌面共用。替代 mePop 内嵌表单与各处"去 mePop 登录"。
+         邮箱/密码 ID 独立（loginEmail/loginPass），不与 meEmail/mePass、cloudEmail/cloudPass 复用。
+         显示隐藏走全局 openModal/closeModal（display block/none），Esc 走 closeAllOverlays。 -->
+    <div id="loginModal" role="dialog" aria-modal="true" aria-label="登录" tabindex="-1" style="display:none">
+      <div class="login-card" role="document">
+        <div class="login-title">登录</div>
+        <div class="login-sub">与词汇真经站同一账号（注册需管理员审批）</div>
+        <form data-login-form>
+          <input id="loginEmail" type="email" placeholder="邮箱" autocomplete="email" aria-label="邮箱">
+          <input id="loginPass" type="password" placeholder="密码" autocomplete="current-password" aria-label="密码">
+          <div class="row">
+            <button class="login-go" type="submit">登录</button>
+            <button class="login-reg" type="button" data-login-signup>注册</button>
+          </div>
+        </form>
+        <button class="login-skip" type="button" data-login-settings>暂不登录，先去设置主题 / 音色</button>
+        <button class="login-x" type="button" data-login-close aria-label="关闭登录">✕</button>
+      </div>
+    </div>
 
     <header class="topbar" role="banner">
       <h1><i class="ri-book-open-line" aria-hidden="true"></i> 雅思词汇 · 影子跟读</h1>
@@ -5165,6 +5211,8 @@ let listenOn = false;
     if (popEl && popEl.style.display === 'block') { closeModal(popEl); closedAny = true; }
     const jumpEl = document.getElementById('jumpPop');
     if (jumpEl && jumpEl.style.display === 'block') { closeModal(jumpEl); closedAny = true; }
+    const loginEl = document.getElementById('loginModal');
+    if (loginEl && loginEl.style.display === 'block') { closeModal(loginEl); closedAny = true; }
     OVERLAY_WRAP_IDS.forEach(id => {
       const el = document.getElementById(id);
       if (el && el.classList.contains('open')) { el.classList.remove('open'); closedAny = true; }
