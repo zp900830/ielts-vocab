@@ -74,6 +74,7 @@ const AXE_UNCALCULABLE: { sel: string; why: string }[] = [
   { sel: '.st-go', why: '学习数据页同款 --grad 渐变 CTA，同上' },
   { sel: '.tip-go', why: '「待加强」提示里的 --grad 渐变按钮，同上' },
   { sel: '.mp-cta', why: '「我的」浮窗主 CTA：同款 --grad 渐变' },
+  { sel: '.mp-login-btn', why: '「我的」浮窗去登录按钮：与 .mp-cta 同款 --grad 渐变，同上' },
   { sel: '.st-open-me', why: '空态主 CTA：同款 --grad 渐变' },
   { sel: '.tb-btn.next', why: '任务条推进键：--grad 渐变底' },
   { sel: '.tb-btn.quit', why: '任务条收工键：--grad 渐变底' },
@@ -228,7 +229,10 @@ test.describe('3.0 无障碍（axe，WCAG A/AA）', () => {
 
   test('「我的」浮窗：浅色 + 深色无 axe 违规、无未登记的对比度 incomplete', async ({ page }) => {
     await bootHome(page);
+    // 未登录点卡片先开登录弹窗，经「先去设置」进浮窗（设置不对未登录关闭）
     await page.locator('#meCard').click();
+    await expect(page.locator('#loginModal')).toBeVisible();
+    await page.locator('#loginModal [data-login-settings]').click();
     await expect(page.locator('#mePop')).toBeVisible();
     await lightAndDark(page, '我的浮窗');
   });

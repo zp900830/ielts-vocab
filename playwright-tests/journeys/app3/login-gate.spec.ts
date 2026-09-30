@@ -75,7 +75,7 @@ test('未登录直进数据/单词本：锁定页 + 去登录按钮', async ({ p
     await expect(page.locator('#lockLoginBtn'), '有去登录按钮').toBeVisible();
   }
   await page.locator('#lockLoginBtn').click();
-  await expect(page.locator('#mePop'), '去登录打开浮窗').toBeVisible();
+  await expect(page.locator('#loginModal'), '去登录打开统一登录弹窗').toBeVisible();
 });
 
 test('未登录：设置学习时间（建计划/改分钟数）都要登录', async ({ page }) => {

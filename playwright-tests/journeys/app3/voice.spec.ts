@@ -117,8 +117,11 @@ test.describe('3.0 音色：全局立刻生效（refine3 ①）', () => {
     });
     expect(firstUri, '先出声要落在某个假本机音色上').toContain('fake-');
 
-    // 换到另一个音色
+    // 换到另一个音色（未登录经弹窗进设置浮窗）
     await page.locator('#meCard').click();
+    await expect(page.locator('#loginModal')).toBeVisible();
+    await page.locator('#loginModal [data-login-settings]').click();
+    await expect(page.locator('#mePop')).toBeVisible();
     await page.locator('#mePop #voiceBtn').click();
     const items = page.locator('#voicePop .vp-item[data-voice-uri]');
     await expect(items).toHaveCount(2);
