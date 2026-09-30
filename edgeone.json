@@ -1,5 +1,11 @@
 {
   "buildCommand": "node scripts/build_site.mjs",
   "installCommand": "true",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "headers": [
+    {
+      "source": "/shadow/data/*.json",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
+  ]
 }
