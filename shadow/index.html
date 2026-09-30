@@ -2159,9 +2159,16 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     /* ============ 播放条句子圆点 ============ */
     let artOfSent = [], dotsArt = -1;
     const plainEN = t => t.replace(/\[\[[^\]:]+:([^\]]+)\]\]/g, '$1');
+    /* 用户主动滚动的判据：只认真实输入手势（滚轮/触摸/按键），不认滚动事件本身 ——
+       2026-09-30：两阶段加载的 hydrate 重绘会因回流产生滚动事件，旧判据把它当用户滚动，
+       播放中会莫名冒出「回到播放位置」（seek-drag 回归）。手势时间戳窗口外的滚动一律当程序触发。 */
+    let _userInputAt = 0;
+    ['wheel', 'touchstart', 'touchmove', 'keydown'].forEach(function (ev) {
+    window.addEventListener(ev, function () { _userInputAt = Date.now(); }, { passive: true });
+    });
     window.addEventListener('scroll', () => {
-    // 检测用户手动滚动（播放中且非程序触发的滚动）
-    if (playing && !_programmaticScroll) {
+    // 检测用户手动滚动（播放中、非程序触发、且近 1.2s 内有真实输入手势）
+    if (playing && !_programmaticScroll && Date.now() - _userInputAt < 1200) {
     _userScrolled = true;
     clearTimeout(_scrollTimer);
     _scrollTimer = setTimeout(() => { _userScrolled = false; }, 3000);
@@ -4324,6 +4331,10 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     function savePos() {
     try {
+      /* idx<0 = 还没定位到任何句子。此时写存档 = 把「空位置」盖掉真实续读位 ——
+         冷启动尚未 loadPos 就刷新/切走标签页（pagehide）时旧页 idx=-1 正好撞上。
+         守卫收口在这里而不是各调用点，任何路径触发都不会写坏。 */
+      if (idx >= 0) {
       const o = readPos();
       const now = Date.now();
       if (currentChapter >= 0) {
@@ -4336,6 +4347,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       // 保留章节私有进度，不删除 o.chapter / o.chapterI
       }
       writePos(o);
+      }
     } catch (e) {}
     try { queueMarkPush(); } catch (e) {} // 进度与书签同一次 debounce 推云，多端同步最新播放位置
     }
@@ -4571,9 +4583,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     onChapterChange(String(ch));
     setTimeout(() => { const nl = globalToLocal(i); if (nl >= 0 && sents[nl]) playFrom(nl); }, 300);
     }
+    // idx<0 的写坏保护已收口在 savePos 内部（冷启动未定位就刷新/切走时旧页 idx=-1）
     window.addEventListener('pagehide', savePos);
-    // idx<0 时存档会把「还没定位到任何句子」写掉真实续读位（冷启动即切走标签页就会遇到）
-    document.addEventListener('visibilitychange', () => { if (document.hidden && idx >= 0) savePos(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) savePos(); });
 
     /* 用户无操作5s自动收回播放条+导航透明度降低 */
     let idleTimer = null;
