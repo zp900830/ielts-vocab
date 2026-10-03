@@ -23,7 +23,7 @@ import re
 import sys
 import collections
 
-ROOT = '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目'
+ROOT = '/Users/pengzhou/Library/Mobile Documents/com~apple~CloudDocs/词汇真经单词速记'
 POS = {'n': 'n', 'vt': 'n', 'vi': 'n', 'v': 'v', 'a': 'adj', 'adj': 'adj',
        'ad': 'adv', 'adv': 'adv', 'prep': 'prep', 'conj': 'conj', 'pron': 'n', 'num': 'adj'}
 TAG = re.compile(r'(?:^|[；;，,\s])(n|vt|vi|v|a|adj|ad|prep|conj|pron|num)\.', re.I)

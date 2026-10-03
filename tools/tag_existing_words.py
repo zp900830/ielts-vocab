@@ -20,7 +20,7 @@ import json
 import re
 import sys
 
-ROOT = '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目'
+ROOT = '/Users/pengzhou/Library/Mobile Documents/com~apple~CloudDocs/词汇真经单词速记'
 sys.path.insert(0, ROOT + '/scripts')
 from validate_data import shadow_data_ver  # noqa: E402
 

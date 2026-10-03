@@ -14,7 +14,7 @@ import json
 import re
 import collections
 
-ROOT = '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目'
+ROOT = '/Users/pengzhou/Library/Mobile Documents/com~apple~CloudDocs/词汇真经单词速记'
 HE = '/tmp/syn/heqiong.txt'
 GP = '/tmp/syn/gaopin_entries.json'
 

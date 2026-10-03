@@ -16,7 +16,7 @@ import os
 import re
 import sys
 
-ROOT = '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目'
+ROOT = '/Users/pengzhou/Library/Mobile Documents/com~apple~CloudDocs/词汇真经单词速记'
 sys.path.insert(0, ROOT + '/tools')
 from validate_card_patch import trim_match  # noqa: E402
 from make_review_packets import locate, strip_to_key  # noqa: E402

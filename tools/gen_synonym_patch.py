@@ -17,10 +17,10 @@ import re
 import sys
 import collections
 
-sys.path.insert(0, '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目/tools')
+sys.path.insert(0, '/Users/pengzhou/Library/Mobile Documents/com~apple~CloudDocs/词汇真经单词速记/tools')
 from crosscheck_syn import load_he, load_gp, norm, key   # noqa: E402
 
-ROOT = '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目'
+ROOT = '/Users/pengzhou/Library/Mobile Documents/com~apple~CloudDocs/词汇真经单词速记'
 VERDICTS = ['/tmp/tqa/syn-verdict-0.json', '/tmp/tqa/syn-verdict-1.json']
 CAP = 5
 
