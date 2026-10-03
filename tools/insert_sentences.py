@@ -20,7 +20,7 @@ import re
 import sys
 import collections
 
-ROOT = '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目'
+ROOT = '/Users/pengzhou/Library/Mobile Documents/com~apple~CloudDocs/词汇真经单词速记'
 SEC = ROOT + '/shadow/data/sections.json'
 CHA = ROOT + '/shadow/data/chapters.json'
 VOC = ROOT + '/shadow/data/vocab.json'

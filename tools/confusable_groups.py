@@ -18,7 +18,7 @@ import json
 import re
 import sys
 
-ROOT = '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目'
+ROOT = '/Users/pengzhou/Library/Mobile Documents/com~apple~CloudDocs/词汇真经单词速记'
 POS = r'(?:n|v|vt|vi|adj|adv|prep|conj|pron|num|int|art|aux|abbr)\.'
 STOP_SENSE = {'的', '地', '得', '东西', '样子', '情况', '时候', '人', '事物'}
 

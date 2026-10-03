@@ -12,7 +12,7 @@ if os.environ.get('IELTS_ALLOW_REBUILD') != '1':
 
 # 默认值仅作为示例/后备；实际路径优先由 --src / --out 或 IELTS_SRC / IELTS_OUT 指定。
 DEFAULT_SRC = os.environ.get('IELTS_SRC', '/Users/zhoupeng/Downloads/雅思词汇真经(Excel版待背）')
-DEFAULT_OUT = os.environ.get('IELTS_OUT', '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目/雅思影子跟读.html')
+DEFAULT_OUT = os.environ.get('IELTS_OUT', '/Users/pengzhou/Library/Mobile Documents/com~apple~CloudDocs/词汇真经单词速记/雅思影子跟读.html')
 
 parser = argparse.ArgumentParser(description='Build / update IELTS shadowing HTML from Excel sources.')
 parser.add_argument('--src', default=DEFAULT_SRC, help='Directory containing chapter Excel files')

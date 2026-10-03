@@ -17,7 +17,7 @@ import re
 import sys
 import collections
 
-ROOT = '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目'
+ROOT = '/Users/pengzhou/Library/Mobile Documents/com~apple~CloudDocs/词汇真经单词速记'
 BOOK = sys.argv[1] if len(sys.argv) > 1 else '/tmp/gjb/book.txt'
 CAP = 3
 STOP = set('the a an to of in on for and or at by with is are be as it that this some any no'.split())

@@ -25,7 +25,7 @@
 """
 import json, re, csv, sys, collections
 
-ROOT = "/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目"
+ROOT = "/Users/pengzhou/Library/Mobile Documents/com~apple~CloudDocs/词汇真经单词速记"
 WL = "/tmp/wordlists/derived"
 MARK = re.compile(r"\[\[([^\]:]+):([^\]]+)\]\]")
 WORD = re.compile(r"[A-Za-z][A-Za-z'’\-]*")

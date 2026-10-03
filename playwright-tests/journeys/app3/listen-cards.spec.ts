@@ -202,6 +202,40 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     await expect(mini).toBeHidden();
   });
 
+  test('字幕窗：当前句任务模式高亮、邻句不亮；切句平滑滚到居中', async ({ page }) => {
+    await stubData(page, CARDS);
+    await gotoListen(page);
+    // 抽屉关、滚出播放卡 → 迷你条 .show，字幕窗全高（垫高页面保证可滚，harness 非功能代码）
+    await page.evaluate(() => { const d = document.createElement('div'); d.style.height = '3000px'; document.getElementById('appView')!.appendChild(d); });
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    const roll = page.locator('#lcSent');
+    await expect(roll).toBeVisible();
+    // 行体与精读同源：唯一当前句挂 .playing 薄荷高亮 + 行内词义 .gl + 译文 .sent-zh
+    const cur = roll.locator('.mb-row.cur');
+    await expect(cur).toHaveCount(1);
+    await expect(cur.locator('.sent')).toHaveClass(/playing/);
+    await expect(cur.locator('.gl').first()).toBeAttached();
+    await expect(cur.locator('.sent-zh')).toBeAttached();
+    // 邻句在窗里但不高亮、降透明度
+    const others = roll.locator('.mb-row:not(.cur)');
+    expect(await others.count()).toBeGreaterThanOrEqual(1);
+    expect(await others.first().evaluate((el) => getComputedStyle(el).opacity)).toBe('0.42');
+    expect(await roll.locator('.mb-row:not(.cur) .sent.playing').count()).toBe(0);
+    // 首句贴顶（上面没有行，居中会被 clamp）
+    await expect.poll(() => roll.evaluate((el) => (el as HTMLElement).scrollTop)).toBe(0);
+
+    // 切到中间句：高亮搬家 + 320ms 滚动后当前句居中
+    const centered = () => roll.locator('.mb-row.cur').evaluate((el) => {
+      const r = (el as HTMLElement).getBoundingClientRect();
+      const p = (el as HTMLElement).closest('.mb-roll')!.getBoundingClientRect();
+      return Math.abs((r.top + r.height / 2) - (p.top + p.height / 2));
+    });
+    const g0 = await cur.getAttribute('data-g');
+    await page.locator('#lcMini .mb-next').click();
+    await expect.poll(() => roll.locator('.mb-row.cur').getAttribute('data-g'), { timeout: 2000 }).not.toBe(g0);
+    await expect.poll(centered, { timeout: 2000 }).toBeLessThan(6);
+  });
+
   test('辨析展开：默认一行简单记；点开展开无横向溢出', async ({ page }) => {
     await stubData(page, CARDS);
     await gotoListen(page);

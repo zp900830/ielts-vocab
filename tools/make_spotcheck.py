@@ -15,7 +15,7 @@ import json
 import re
 import sys
 
-ROOT = '/Users/zhoupeng/Library/Mobile Documents/com~apple~CloudDocs/雅思背单词项目'
+ROOT = '/Users/pengzhou/Library/Mobile Documents/com~apple~CloudDocs/词汇真经单词速记'
 MARK = re.compile(r'\[\[([^\]:]+):([^\]]+)\]\]')
 SRC = {'M': '同义替换资料', 'R': '反向索引', 'B': '词伙书', 'T': '课文原句', 'F': '无出处'}
 
