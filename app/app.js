@@ -761,6 +761,7 @@
     }
     lcScrollToCur(false);
   }
+  const LC_EMPTY_HTML = '<div class="lc-empty"><i class="ri-music-2-line" aria-hidden="true"></i><span>本句无目标词，继续听</span></div>';
   function refreshListenCards() {
     const E = listenCardsEls();
     if (!E.drawer) return;
@@ -774,12 +775,12 @@
     try { cards = TASK.listenCards(); } catch (e) { return; }
     if (!cards) return;
     const open = lcDrawerOpen();
-    // FAB：无目标词隐藏（空抽屉不出）。先落显隐，再判自动收起 —— 收起时的焦点回切才能看到 hidden。
+    // FAB：无目标词隐藏（关着时不给开空抽屉的入口；开着时抽屉内显占位，见下）。
     const fabHidden = cards.count <= 0;
     if (E.fab.hidden !== fabHidden) E.fab.hidden = fabHidden;
     if (E.badge && E.badge.textContent !== String(cards.count)) E.badge.textContent = String(cards.count);
-    // 抽屉开着切到无词句：自动收起，不出空抽屉（收起会写 prefs + 重进刷新，直接返回）
-    if (open && cards.count <= 0) { setLcDrawer(false); return; }
+    // 无目标词句：抽屉若开着不再自动收起（收起只由用户操作 / 离路由 / 全屏触发），
+    // 内部改显占位；播到有词句会自动刷新卡片。
     // key 含篇号：today 模式跨篇同局部句号+同词数时不漏刷（a 变了卡必变）
     const key = [st.a, st.idx, st.playing, cards.count, open ? 1 : 0].join('|');
     if (key === _lcLast) return;
@@ -802,12 +803,15 @@
       if (E.count.textContent !== c) E.count.textContent = c;
     }
     lcSyncRoll(st);
-    if (E.title && E.title.textContent !== cards.title) E.title.textContent = cards.title;
+    const empty = cards.count <= 0;
+    const titleTxt = empty ? '本句无目标词' : cards.title;
+    if (E.title && E.title.textContent !== titleTxt) E.title.textContent = titleTxt;
     // 抽屉开着：淡入刷新卡片 + 回顶（约 170ms，淡出完才允许 hidden 的反操作都在 CSS 侧）；
     // 首开（grid 还空）直接落卡，不走淡入，避免 170ms 空抽屉闪一下
     if (open && E.grid) {
+      const bodyHtml = empty ? LC_EMPTY_HTML : cards.html;
       if (!E.grid.innerHTML) {
-        E.grid.innerHTML = cards.html;
+        E.grid.innerHTML = bodyHtml;
         E.grid.scrollTop = 0;
       } else {
         E.grid.classList.add('swap');
@@ -818,11 +822,13 @@
           let now = null;
           try { now = TASK.listenCards(); } catch (e) { return; }
           if (!now) return;
-          g2.innerHTML = now.html;
+          const nowEmpty = now.count <= 0;
+          g2.innerHTML = nowEmpty ? LC_EMPTY_HTML : now.html;
           g2.scrollTop = 0;
           g2.classList.remove('swap');
           const t2 = document.getElementById('lcTitle');
-          if (t2 && t2.textContent !== now.title) t2.textContent = now.title;
+          const t2txt = nowEmpty ? '本句无目标词' : now.title;
+          if (t2 && t2.textContent !== t2txt) t2.textContent = t2txt;
         }, 170);
       }
     }

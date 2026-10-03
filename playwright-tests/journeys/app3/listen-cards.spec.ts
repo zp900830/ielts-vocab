@@ -168,9 +168,12 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     // 回顶：内容区 scrollTop 回 0（轮询等 170ms 淡入刷新落定）
     await expect.poll(() => drawer.locator('#lcGrid').evaluate((el) => (el as HTMLElement).scrollTop)).toBe(0);
 
-    // S1 → S2（无词）：抽屉自动收，不出空抽屉；FAB 藏（迷你条切）
+    // S1 → S2（无词）：抽屉不再自动收起，改在内部显占位（收起只由用户操作 / 离路由 / 全屏触发）；FAB 藏
     await page.locator('#lcMini .mb-next').click();
-    await expect(drawer).not.toHaveClass(/open/);
+    await expect(drawer).toHaveClass(/open/);
+    await expect(page.locator('#lcTitle')).toHaveText('本句无目标词');
+    await expect(drawer.locator('.lc-empty')).toBeVisible();
+    expect(await drawer.locator('.wcard').count()).toBe(0);
     await expect(page.locator('#lcFab')).toBeHidden();
   });
 

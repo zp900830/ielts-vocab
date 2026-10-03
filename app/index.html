@@ -2462,6 +2462,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #lcDrawer .wc-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
   #lcDrawer .wc-word { font-size: 19px; font-weight: 700; color: var(--accent-text); font-family: Georgia, 'Songti SC', serif; }
   #lcDrawer .wc-gloss { font-size: 13px; color: var(--muted); }
+  /* 无目标词占位：抽屉不再因切到无词句自动收起，改在内部显示此态 */
+  #lcDrawer .lc-empty { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 10px; min-height: 220px; color: var(--muted); text-align: center; font-size: 14px; }
+  #lcDrawer .lc-empty i { font-size: 34px; opacity: .45; }
   /* ---- 辨析展开：demo 的 0fr→1fr 动效壳；scoped 到抽屉内，不碰精读 .cmp-card 那套 ---- */
   #lcDrawer .cmp { margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 8px; }
   #lcDrawer .cmp-toggle { display: flex; width: 100%; align-items: center; gap: 8px; padding: 4px 2px;
