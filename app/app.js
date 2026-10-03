@@ -623,7 +623,7 @@
      刷新入口是 updateListenCard（paint 每次状态变化都调，见末尾追加）；离开路由/展开全屏时收起。
      动效与 z 序照 demo：scrim(70) < 迷你条(75) < 抽屉(80)；移动端 TabBar(z=300) 在最上，
      FAB 浮到它上面、抽屉内容底垫 88px（CSS 侧），导航可点。 */
-  var _lcObs = null, _lcLast = '', _lcOff = true, _lcTouchOn = false;
+  var _lcObs = null, _lcLast = '', _lcOff = true, _lcTouchOn = false, _lcSwapSeq = 0;
   function listenCardsEls() {
     return {
       fab: document.getElementById('lcFab'),
@@ -779,6 +779,13 @@
     const fabHidden = cards.count <= 0;
     if (E.fab.hidden !== fabHidden) E.fab.hidden = fabHidden;
     if (E.badge && E.badge.textContent !== String(cards.count)) E.badge.textContent = String(cards.count);
+    // 持久化恢复补位：boot / 回路由 / 退全屏时若恰逢无词句，setLcDrawer(true) 会被拒开，
+    // 抽屉从此一直关着。pref.open 此时仍是 true（手动关会写成 false），等有词句就补开。
+    if (!open && cards.count > 0) {
+      let wantOpen = false;
+      try { wantOpen = !!(TASK.listenCardsPref() && TASK.listenCardsPref().open); } catch (e) {}
+      if (wantOpen) { setLcDrawer(true, { save: false, focus: false }); return; }
+    }
     // 无目标词句：抽屉若开着不再自动收起（收起只由用户操作 / 离路由 / 全屏触发），
     // 内部改显占位；播到有词句会自动刷新卡片。
     // key 含篇号：today 模式跨篇同局部句号+同词数时不漏刷（a 变了卡必变）
@@ -806,29 +813,30 @@
     const empty = cards.count <= 0;
     const titleTxt = empty ? '本句无目标词' : cards.title;
     if (E.title && E.title.textContent !== titleTxt) E.title.textContent = titleTxt;
-    // 抽屉开着：淡入刷新卡片 + 回顶（约 170ms，淡出完才允许 hidden 的反操作都在 CSS 侧）；
-    // 首开（grid 还空）直接落卡，不走淡入，避免 170ms 空抽屉闪一下
+    // 抽屉开着：淡入刷新卡片 + 回顶（约 170ms）。渲染的是调度那一刻的快照，
+    // 令牌只让最后一次调度生效 —— 旧实现在超时里重读实时状态，任何提前 return
+    // 都会把 .swap（透明态）和旧卡永久卡死（表现为卡片概率不显示/切句不更新）。
+    // 内容没变（如 播放/暂停 翻转 key）不触发 fade，避免无意义闪烁。
     if (open && E.grid) {
       const bodyHtml = empty ? LC_EMPTY_HTML : cards.html;
+      const titleSnap = empty ? '本句无目标词' : cards.title;
       if (!E.grid.innerHTML) {
         E.grid.innerHTML = bodyHtml;
+        E.grid._lcHtml = bodyHtml;
         E.grid.scrollTop = 0;
-      } else {
+      } else if (E.grid._lcHtml !== bodyHtml) {
+        const seq = ++_lcSwapSeq;
         E.grid.classList.add('swap');
         setTimeout(() => {
+          if (seq !== _lcSwapSeq) return;   // 已被更新的调度接管，swap 由那次负责清
           const g2 = document.getElementById('lcGrid');
           if (!g2) return;
-          if (!lcDrawerOpen()) { g2.classList.remove('swap'); return; }
-          let now = null;
-          try { now = TASK.listenCards(); } catch (e) { return; }
-          if (!now) return;
-          const nowEmpty = now.count <= 0;
-          g2.innerHTML = nowEmpty ? LC_EMPTY_HTML : now.html;
+          g2.innerHTML = bodyHtml;
+          g2._lcHtml = bodyHtml;
           g2.scrollTop = 0;
           g2.classList.remove('swap');
           const t2 = document.getElementById('lcTitle');
-          const t2txt = nowEmpty ? '本句无目标词' : now.title;
-          if (t2 && t2.textContent !== t2txt) t2.textContent = t2txt;
+          if (t2 && t2.textContent !== titleSnap) t2.textContent = titleSnap;
         }, 170);
       }
     }

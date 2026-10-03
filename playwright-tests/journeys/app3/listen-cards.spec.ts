@@ -8,6 +8,7 @@ declare const TASK: {
   listenState(): { a: number; idx: number; total: number; playing: boolean; text: string; src: string; todayPos: number; todayTotal: number };
   listenSentenceStep(d: number): void;
   listenToggle(): void;
+  listenStep(d: number): void;
 };
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
@@ -274,6 +275,116 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     await expect(page.locator('#lcDrawer')).toHaveClass(/open/);
     await expect(page.locator('#lcDrawer')).toHaveClass(/tall/);
     await expect(page.locator('#lcDrawer .wcard')).toHaveCount(2);
+  });
+
+  test('只有基础词义(m)的目标词也出卡（词+词义即卡；seismic/tsunami 丢卡回归）', async ({ page }) => {
+    const errs = trackErrors(page);
+    // 同 CARDS 的课文；vocab 里 strip/nutrient 只留词义，无 note 无 cmp
+    const vocab = {
+      atmo: { m: 'n. 大气', p: 'ˈætməsfɪə', note: '同义词：air；词伙：thin atmo' },
+      cover: { m: 'v. 覆盖', p: 'ˈkʌvə', note: '词伙：cover costs' },
+      strip: { m: 'v. 剥去', p: 'strɪp' },
+      nutrient: { m: 'n. 营养', p: 'ˈnjuːtriənt' },
+    };
+    await stubData(page, {
+      'sections.json': CARDS['sections.json'],
+      'vocab.json': JSON.stringify(vocab),
+      'chapters.json': '[]',
+    });
+    await gotoListen(page);
+    await page.locator('.ls-next').click();   // → S1：strip + nutrient 全是 gloss-only
+    const fab = page.locator('#lcFab');
+    await expect(fab).toBeVisible();
+    await expect(page.locator('#lcFabN')).toHaveText('2');
+    await fab.click();
+    const drawer = page.locator('#lcDrawer');
+    await expect(drawer).toHaveClass(/open/);
+    const stripCard = drawer.locator('.wcard', { hasText: 'strip' });
+    await expect(stripCard.locator('.wc-word')).toHaveText('strip');
+    await expect(stripCard.locator('.wc-gloss')).toHaveText('v. 剥去');
+    expect(await stripCard.locator('.nb-label').count()).toBe(0);   // 无 note/cmp，卡体就是词+词义
+    expect(errs).toEqual([]);
+  });
+
+  test('跨篇句号：第 2 篇的卡来自第 2 篇的句（全局句号查词），不借第 1 篇', async ({ page }) => {
+    const errs = trackErrors(page);
+    const mk = (title: string, lines: string[]) => ({
+      title, zh: title, subheads: ['第一卷'],
+      paragraphs: [lines],
+      sentZh: [lines.map((_, i) => `第 ${i + 1} 句译文。`)],
+      paraZh: [''],
+    });
+    const sections = [
+      mk('地球与生命', [
+        'The [[atmo:atmo]] is a thin [[cover:cover]].',
+        'Heat may [[strip:strip]] [[nutrient:nutrient]].',
+        'Plain sky today.',
+      ]),
+      mk('极地传说', ['The [[glacier:glacier]] melts fast.']),
+    ];
+    const vocab = {
+      atmo: { m: 'n. 大气', p: 'ˈætməsfɪə', note: '同义词：air；词伙：thin atmo' },
+      cover: { m: 'v. 覆盖', p: 'ˈkʌvə', note: '词伙：cover costs' },
+      strip: { m: 'v. 剥去', p: 'strɪp', note: '词伙：strip bark' },
+      nutrient: { m: 'n. 营养', p: 'ˈnjuːtriənt', note: '同义词：nourishment' },
+      glacier: { m: 'n. 冰川', p: 'ˈɡlæsiə', note: '词伙：glacier melt' },
+    };
+    await stubData(page, {
+      'sections.json': JSON.stringify(sections),
+      'vocab.json': JSON.stringify(vocab),
+      'chapters.json': '[]',
+    });
+    await gotoListen(page);
+    await page.evaluate(() => TASK.listenStep(1));   // → 第 2 篇
+    const fab = page.locator('#lcFab');
+    await expect(fab).toBeVisible();
+    await expect(page.locator('#lcFabN')).toHaveText('1');
+    await fab.click();
+    const drawer = page.locator('#lcDrawer');
+    await expect(drawer).toHaveClass(/open/);
+    // 修前用篇内 idx 查全书索引，会借到第 1 篇第 1 句的 atmo
+    await expect(drawer.locator('.wc-word')).toHaveText('glacier');
+    await expect(page.locator('#lcTitle')).toContainText('第 1 句');
+    expect(errs).toEqual([]);
+  });
+
+  test('持久化补开：boot 恰逢无词句被拒开后，进到有词句自动补开抽屉', async ({ page }) => {
+    // S0 无词：boot 恰逢无词句
+    const sections = [{
+      title: '地球与生命', zh: '地球与生命', subheads: ['第一卷'],
+      paragraphs: [
+        ['Plain sky today.',
+         'The [[atmo:atmo]] is a thin [[cover:cover]].',
+         'Heat may [[strip:strip]] [[nutrient:nutrient]].'],
+      ],
+      sentZh: [['第 1 句译文。', '第 2 句译文。', '第 3 句译文。']],
+      paraZh: [''],
+    }];
+    const vocab = {
+      atmo: { m: 'n. 大气', p: 'ˈætməsfɪə', note: '同义词：air；词伙：thin atmo' },
+      cover: { m: 'v. 覆盖', p: 'ˈkʌvə', note: '词伙：cover costs' },
+      strip: { m: 'v. 剥去', p: 'strɪp', note: '词伙：strip bark' },
+      nutrient: { m: 'n. 营养', p: 'ˈnjuːtriənt', note: '同义词：nourishment' },
+    };
+    await stubData(page, {
+      'sections.json': JSON.stringify(sections),
+      'vocab.json': JSON.stringify(vocab),
+      'chapters.json': '[]',
+    });
+    // 预置「抽屉打开」偏好（等价于上次手动开过）；S0 无词 → boot 恢复被拒
+    await page.addInitScript(() => {
+      localStorage.setItem('ielts-shadow-prefs', JSON.stringify({ listenCards: { open: true } }));
+    });
+    await gotoListen(page);
+    const drawer = page.locator('#lcDrawer');
+    await expect(drawer).not.toHaveClass(/open/);
+    await expect(page.locator('#lcFab')).toBeHidden();
+    await page.locator('.ls-next').click();   // → S1 有词
+    await expect(drawer).toHaveClass(/open/);
+    await expect(page.locator('#lcTitle')).toContainText('第 2 句');
+    // 补开用的是 save:false —— 此后手动关掉仍以用户为准（pref 写回 false），不再抢开
+    await page.locator('#lcClose').click();
+    await expect(drawer).not.toHaveClass(/open/);
   });
 
   test('播完自动进句刷新徽标（speak 录音笔兑现 onend）', async ({ page }) => {

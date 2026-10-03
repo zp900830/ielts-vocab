@@ -2373,12 +2373,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* ---- FAB：右下唤起 + 目标词数角标；当前句无目标词时 hidden ---- */
   #lcFab { position: fixed; right: 18px; bottom: 20px; z-index: 50;
     display: inline-flex; align-items: center; gap: 8px; padding: 13px 20px; border: none; border-radius: 999px;
-    background: var(--accent); color: #fff; font-size: 15px; font-weight: 600;
+    /* 白字压实底深绿（5.1:1）；--accent #0c9c74 只有 3.48:1，a11y 门禁拦截。
+       之前 FAB 在纯词义句上恒为 hidden，扫描扫不到，改成 gloss-only 也出卡后才现形。 */
+    background: #0a7d5e; color: #fff; font-size: 15px; font-weight: 600;
     box-shadow: 0 8px 24px rgba(12, 166, 120, .35);
     transition: transform .2s cubic-bezier(.22,.61,.36,1), opacity .2s cubic-bezier(.22,.61,.36,1), box-shadow .2s cubic-bezier(.22,.61,.36,1), visibility 0s; }
   #lcFab:hover { box-shadow: 0 10px 28px rgba(12, 166, 120, .45); }
   #lcFab:active { transform: scale(.96); }
-  #lcFab .fab-n { padding: 0 7px; border-radius: 999px; background: rgba(255,255,255,.25); font-size: 12px; }
+  #lcFab .fab-n { padding: 0 7px; border-radius: 999px; background: #085f48; font-size: 12px; }  /* 实底：白字 7.7:1，且 axe 能算出对比度 */
   #lcFab i { font-size: 17px; }
   #lcFab[hidden] { display: none; }
   body.dw-open #lcFab { opacity: 0; visibility: hidden; transform: scale(.9) translateY(10px); pointer-events: none;
@@ -2390,14 +2392,21 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #lcScrim { position: fixed; inset: 0; z-index: 70; background: rgba(18,32,27,.38);
     opacity: 0; pointer-events: none; transition: opacity .3s cubic-bezier(.22,.61,.36,1); }
   #lcScrim.on { opacity: 1; pointer-events: auto; }
-  /* ---- 抽屉本体 ---- */
+  /* ---- 抽屉本体：Liquid Glass（配方同 .audiobar：白玻璃渐变 + 32px 背景模糊 + 内侧高光） ---- */
   #lcDrawer { position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
     max-height: min(78vh, 680px); display: flex; flex-direction: column;
-    background: var(--card); border-radius: 24px 24px 0 0;
-    box-shadow: 0 -12px 40px rgba(15, 40, 32, .22);
+    background: linear-gradient(145deg, rgba(255,255,255,.72), rgba(255,255,255,.34) 42%, rgba(255,255,255,.24));
+    -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
+    backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
+    border: 1px solid rgba(255,255,255,.65); border-bottom: none; border-radius: 24px 24px 0 0;
+    box-shadow: 0 -12px 40px rgba(15, 40, 32, .18), 0 -2px 12px rgba(15, 40, 32, .08),
+      inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.35);
     transform: translateY(102%); visibility: hidden;
     transition: transform .34s cubic-bezier(.22,.61,.36,1), max-height .3s cubic-bezier(.22,.61,.36,1), visibility 0s .34s; }
   #lcDrawer.open { transform: translateY(0); visibility: visible; transition: transform .34s cubic-bezier(.22,.61,.36,1), max-height .3s cubic-bezier(.22,.61,.36,1), visibility 0s 0s; }
+  body.dark #lcDrawer { background: linear-gradient(145deg, rgba(30,28,25,.9), rgba(30,28,25,.76) 42%, rgba(30,28,25,.62));
+    border-color: #33302b;
+    box-shadow: 0 -12px 40px rgba(0,0,0,.4), 0 -2px 12px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.05), inset 0 -1px 0 rgba(0,0,0,.32); }
   #lcDrawer.tall { max-height: calc(100vh - 118px); max-height: calc(100dvh - 118px); }
   @media (min-width: 900px) {
     #lcDrawer { left: 50%; transform: translate(-50%, 102%); width: min(860px, 92vw); }
@@ -2409,7 +2418,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dw-open { overflow: hidden; }
   body.dw-open #appView { overscroll-behavior: contain; }
   #lcDrawer .dw-head { display: flex; align-items: center; gap: 10px; padding: 4px 20px 12px; border-bottom: 1px solid var(--border); }
-  #lcDrawer .dw-head h2 { margin: 0; font-size: 16px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
+  /* 标题弱化：只是定位信息（第几句/几个词），主角是卡片内容 */
+  #lcDrawer .dw-head h2 { margin: 0; font-size: 12.5px; font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); letter-spacing: .02em; }
   #lcDrawer .dw-close { padding: 6px 14px; border: none; border-radius: 999px; background: var(--accent-soft); color: var(--accent-text); font-size: 13px; cursor: pointer; transition: background-color .2s cubic-bezier(.22,.61,.36,1); }
   #lcDrawer .dw-close:hover { filter: brightness(.97); }
   #lcDrawer .dw-body { overflow-y: auto; overscroll-behavior: contain; padding: 16px 20px calc(24px + env(safe-area-inset-bottom, 0px)); transition: opacity .18s cubic-bezier(.22,.61,.36,1), transform .18s cubic-bezier(.22,.61,.36,1); }
@@ -2418,13 +2428,19 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     /* TabBar 压在抽屉上（z=300），内容底垫 88px 与 #appView 同口径，末卡不被盖住 */
     #lcDrawer .dw-body { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
   }
-  /* ---- 吸顶迷你条：播放卡滚出视口后出现；抽屉开时强制吸顶且可点 ---- */
+  /* ---- 吸顶迷你条：播放卡滚出视口后出现；抽屉开时强制吸顶且可点。Liquid Glass 同 .audiobar ---- */
   #lcMini { position: fixed; left: 0; right: 0; top: 0; z-index: 75;
     display: flex; flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 14px 10px;
-    background: var(--card); border-bottom: 1px solid var(--border);
-    box-shadow: 0 4px 16px rgba(20, 45, 38, .08);
+    background: linear-gradient(145deg, rgba(255,255,255,.65), rgba(255,255,255,.25) 42%, rgba(255,255,255,.15));
+    -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
+    backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
+    border-bottom: 1px solid rgba(255,255,255,.65);
+    box-shadow: 0 4px 16px rgba(20, 45, 38, .08), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.35);
     transform: translateY(-100%); opacity: 0; visibility: hidden; pointer-events: none;
     transition: transform .28s cubic-bezier(.22,.61,.36,1), opacity .28s cubic-bezier(.22,.61,.36,1), visibility 0s .28s; }
+  body.dark #lcMini { background: linear-gradient(145deg, rgba(30,28,25,.92), rgba(30,28,25,.78) 42%, rgba(30,28,25,.62));
+    border-bottom-color: #33302b;
+    box-shadow: 0 4px 16px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05), inset 0 -1px 0 rgba(0,0,0,.32); }
   #lcMini.show, body.dw-open #lcMini { transform: translateY(0); opacity: 1; visibility: visible; pointer-events: auto;
     transition: transform .28s cubic-bezier(.22,.61,.36,1), opacity .28s cubic-bezier(.22,.61,.36,1), visibility 0s 0s; }
   body.dw-open #lcMini { padding-top: calc(8px + env(safe-area-inset-top, 0px)); }
@@ -2457,8 +2473,16 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #lcMini .mb-play { background: var(--accent); color: #fff; }
   /* ---- 单词卡容器（行内 notebar 与 nb-table 对比表直接复用精读类） ---- */
   #lcDrawer .lc-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-  #lcDrawer .wcard { min-width: 0; padding: 16px 18px; background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; box-shadow: 0 3px 12px rgba(20, 45, 38, .04); }
+  #lcDrawer .wcard { min-width: 0; padding: 16px 18px; background: rgba(255,255,255,.55);
+    -webkit-backdrop-filter: blur(20px) saturate(160%); backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255,255,255,.65); box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 3px 12px rgba(20, 45, 38, .05);
+    border-radius: 16px; }
+  body.dark #lcDrawer .wcard { background: rgba(255,255,255,.055); border-color: rgba(255,255,255,.09);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 3px 12px rgba(0,0,0,.25); }
+  /* 瘦身卡：没有 note/cmp 的卡体就是词+词义，词义升为主文案、卡更紧凑 */
+  #lcDrawer .wcard.wcard-slim { padding: 13px 16px; }
+  #lcDrawer .wcard.wcard-slim .wc-head { margin-bottom: 0; }
+  #lcDrawer .wcard.wcard-slim .wc-gloss { font-size: 15px; color: var(--text); }
   #lcDrawer .wc-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
   #lcDrawer .wc-word { font-size: 19px; font-weight: 700; color: var(--accent-text); font-family: Georgia, 'Songti SC', serif; }
   #lcDrawer .wc-gloss { font-size: 13px; color: var(--muted); }
@@ -6354,7 +6378,12 @@ let listenOn = false;
           `<div class="cmp-body"><div>${renderCompareTable(note)}</div></div></div>`;
       }
       function listenCards() {
-        const gi = (typeof idx === 'number' && idx >= 0) ? idx : 0;
+        /* 句号双轨：idx 是当前篇的局内下标，WORDS_BY_SENT 是全书扁平索引。
+           查词必须用全局句号（chapterSentStart + idx），否则第 2 篇起全部借到
+           第 1 篇同位置句子的卡；标题仍按篇内句号展示（与迷你条口径一致）。 */
+        const base = (currentChapter >= 0) ? chapterSentStart : 0;
+        const at = (typeof idx === 'number' && idx >= 0) ? idx : 0;
+        const gi = base + at;
         let words = [];
         try { words = wordsOfSent(gi) || []; } catch (e) { words = []; }
         const keys = [], parts = [];
@@ -6365,14 +6394,18 @@ let listenOn = false;
           if (!info) continue;
           const noteHtml = listenCardNote(k);
           const cmpHtml = listenCardCmp(k);
-          if (!noteHtml && !cmpHtml) continue;   // 两无：不占一张空卡
+          // 词 + 词义(m)就是一张有效的卡（字幕里高亮的目标词必须能对上卡）；
+          // 只跳过连基础词义都没有的（note/cmp 有则锦上添花）
+          if (!info.m && !noteHtml && !cmpHtml) continue;
+          // 无 note/cmp 的瘦身卡：卡体就是词+词义，词义升级为主文案
+          const slim = (!noteHtml && !cmpHtml) ? ' wcard-slim' : '';
           keys.push(k);
-          parts.push(`<article class="wcard"><header class="wc-head"><b class="wc-word">${esc(k)}</b>` +
+          parts.push(`<article class="wcard${slim}"><header class="wc-head"><b class="wc-word">${esc(k)}</b>` +
             `<span class="wc-gloss">${esc(info.m || '')}</span></header>${noteHtml}${cmpHtml}</article>`);
         }
         const n = keys.length;
-        return { idx: gi, keys: keys, count: n,
-          title: `本句单词卡 · 第 ${gi + 1} 句 · ${n} 个目标词`,
+        return { idx: at, g: gi, keys: keys, count: n,
+          title: `本句单词卡 · 第 ${at + 1} 句 · ${n} 个目标词`,
           html: parts.join('') };
       }
       function listenCardsPref() { try { const p = readPrefs(); return (p && p.listenCards) || {}; } catch (e) { return {}; } }
@@ -9958,7 +9991,7 @@ let listenOn = false;
         init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode, openArticle, openArticleQuiz, playSentence,
         isLoggedIn, ensureLogin, taskLoginPrompt,
         listenOpen, listenClose, listenToggle, listenStep, listenSeek,
-        listenSentenceStep, listenStop, listenReplay,
+        listenSentenceStep, listenStop, listenReplay, listenStep,
         listenExpand, listenCollapse, listenNextArticle, updateListenHud,
         listenSetSrc, get listenSrc() { return _listenSrc; }, listenTodayAdvance,
         listenLeave, listenMiniStop: listenStop,
