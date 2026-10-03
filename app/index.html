@@ -2420,7 +2420,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   }
   /* ---- 吸顶迷你条：播放卡滚出视口后出现；抽屉开时强制吸顶且可点 ---- */
   #lcMini { position: fixed; left: 0; right: 0; top: 0; z-index: 75;
-    display: flex; align-items: center; gap: 10px; padding: 8px 14px;
+    display: flex; flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 14px 10px;
     background: var(--card); border-bottom: 1px solid var(--border);
     box-shadow: 0 4px 16px rgba(20, 45, 38, .08);
     transform: translateY(-100%); opacity: 0; visibility: hidden; pointer-events: none;
@@ -2428,8 +2428,26 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #lcMini.show, body.dw-open #lcMini { transform: translateY(0); opacity: 1; visibility: visible; pointer-events: auto;
     transition: transform .28s cubic-bezier(.22,.61,.36,1), opacity .28s cubic-bezier(.22,.61,.36,1), visibility 0s 0s; }
   body.dw-open #lcMini { padding-top: calc(8px + env(safe-area-inset-top, 0px)); }
-  #lcMini .mb-sent { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    font-family: Georgia, 'Songti SC', serif; font-size: 13px; color: var(--muted); }
+  #lcMini .mb-bar { display: flex; align-items: center; gap: 10px; }
+  #lcMini .mb-count { margin-left: auto; font-family: var(--sans); font-size: 12px; color: var(--muted); white-space: nowrap; }
+  /* 字幕窗：固定高 + 上下渐隐；行体复用精读 .sent/.gl/.sent-zh，只有当前句挂 .playing 薄荷高亮 */
+  #lcMini .mb-roll { height: 108px; overflow: hidden;
+    transition: height .28s cubic-bezier(.22,.61,.36,1);
+    -webkit-mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
+    mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent); }
+  /* 抽屉开：字幕窗收矮到只露当前句（遮罩可点带不能被吃掉）；抽屉关才展开成完整字幕条 */
+  body.dw-open #lcMini .mb-roll { height: 64px; }
+  #lcMini .mb-row { padding: 3px 4px; }
+  #lcMini .mb-row .sent { cursor: default; font-size: 15px; line-height: 1.55; }
+  #lcMini .mb-row .sent:hover { background: none; }
+  #lcMini .mb-row .gl { font-size: 11px; }
+  #lcMini .mb-row .sent-zh { font-size: 12.5px; margin-top: 1px; }
+  #lcMini .mb-row:not(.cur) { opacity: .42; }
+  @media (min-width: 700px) {
+    #lcMini { flex-direction: row; align-items: center; gap: 12px; padding: 8px 14px; }
+    #lcMini .mb-bar { flex: none; }
+    #lcMini .mb-roll { flex: 1; min-width: 0; height: 96px; }
+  }
   #lcMini button { flex: none; display: inline-flex; align-items: center; justify-content: center;
     width: 36px; height: 36px; border: none; border-radius: 50%; background: var(--accent-soft); color: var(--text); font-size: 14px; cursor: pointer;
     transition: background-color .2s cubic-bezier(.22,.61,.36,1); }
@@ -2459,7 +2477,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #lcDrawer .cmp-body > div { overflow: hidden; min-width: 0; }
   #lcDrawer .cmp.open .cmp-body { grid-template-rows: 1fr; opacity: 1; }
   @media (prefers-reduced-motion: reduce) {
-    #lcFab, #lcScrim, #lcDrawer, #lcMini, #lcDrawer .dw-body, #lcDrawer .chev, #lcDrawer .cmp-body { transition-duration: .01ms !important; }
+    #lcFab, #lcScrim, #lcDrawer, #lcMini, #lcMini .mb-roll, #lcDrawer .dw-body, #lcDrawer .chev, #lcDrawer .cmp-body { transition-duration: .01ms !important; }
   }
   /* 展开全屏阅读：复用任务模式那套（.layout 正文 + 底部 .audiobar），只是不挂任务条。 */
   body.listen-mode { background: #faf8f4; }
@@ -6290,6 +6308,7 @@ let listenOn = false;
           loop: loopMode ? loopCount : 0, rate: rate, ab: abMode, expanded: _listenExpanded,
           ctx: _listenCtx, active: _listenArmed,
           src: _listenSrc, todayPos: _listenTodayPos, todayTotal: _listenToday.length,
+          g: (currentChapter >= 0) ? chapterSentStart + Math.max(0, idx | 0) : Math.max(0, idx | 0),
           text: idx >= 0 ? plainEN(sentRaw(idx)) : (sents.length ? plainEN(sentRaw(0)) : ''),
         };
       }
@@ -6354,6 +6373,43 @@ let listenOn = false;
       }
       function listenCardsPref() { try { const p = readPrefs(); return (p && p.listenCards) || {}; } catch (e) { return {}; } }
       function listenCardsPrefSet(patch) { try { const p = readPrefs(); p.listenCards = Object.assign({}, p.listenCards, patch); savePref('listenCards', p.listenCards); } catch (e) {} }
+      /* 字幕滚动条数据（2026-10-04）：整章（all）/ 整今日列表（today）一次性全渲，
+         切句只滚不重建 —— 重建必跳帧，全量行才能让 rAF 平滑滚动任意跳句（含 seek / 今日跨篇）。
+         行体与精读逐字同源：.sent（.playing 薄荷高亮）+ wrapWords 行内词义 + .sent-zh 译文。 */
+      let _rollZh = null;
+      function rollZhFlat() {
+        if (_rollZh) return _rollZh;
+        const out = [];
+        for (let si = 0; si < SECTIONS.length; si++) {
+          const s = SECTIONS[si], paras = s.paragraphs || [];
+          for (let pi = 0; pi < paras.length; pi++) {
+            for (let ti = 0; ti < paras[pi].length; ti++) out.push((s.sentZh && s.sentZh[pi] && s.sentZh[pi][ti]) || '');
+          }
+        }
+        _rollZh = out;
+        return out;
+      }
+      function listenRoll() {
+        const cur = Math.max(0, idx | 0);
+        const curG = (currentChapter >= 0) ? chapterSentStart + cur : cur;
+        let gs = [];
+        if (_listenSrc === 'today' && _listenToday.length) gs = _listenToday.slice();
+        else {
+          const start = (currentChapter >= 0) ? chapterSentStart : 0;
+          for (let l = 0; l < sents.length; l++) gs.push(start + l);
+        }
+        const zh = rollZhFlat();
+        let html = '';
+        for (let i = 0; i < gs.length; i++) {
+          const g = gs[i], isCur = (g === curG);
+          const raw = SENT_RAW[g] || '';
+          if (!raw) continue;
+          html += `<div class="mb-row${isCur ? ' cur' : ''}" data-g="${g}">` +
+            `<span class="sent${isCur ? ' playing' : ''}">${wrapWords(raw)}</span>` +
+            (zh[g] ? `<span class="sent-zh">${esc(zh[g])}</span>` : '') + `</div>`;
+        }
+        return { html: html, g: curG, total: gs.length };
+      }
       /* ⑤ 起播/继续：把上下文、收听账、以及「已起播」都置上（暂停不清 active，只有 stop 清）。 */
       function listenArm() {
         _listenCtx = true; listenOn = true; _listenArmed = true;
@@ -9902,7 +9958,7 @@ let listenOn = false;
         listenExpand, listenCollapse, listenNextArticle, updateListenHud,
         listenSetSrc, get listenSrc() { return _listenSrc; }, listenTodayAdvance,
         listenLeave, listenMiniStop: listenStop,
-        listenState, listenCards, listenCardsPref, listenCardsPrefSet, listenStat, listenLast, listenTick, listenFlush, listenSetTickForTest,
+        listenState, listenCards, listenRoll, listenCardsPref, listenCardsPrefSet, listenStat, listenLast, listenTick, listenFlush, listenSetTickForTest,
         get listenTickMs() { return _listenTick; },   // 测试锁：跨场清零（①②③④）读这根指针
         pauseListenTick: function () { _listenTick = 0; },   // 暂停时把收听计时清零（togglePlay 调，见上）
         get listenArticle() { return _listenArticle; },

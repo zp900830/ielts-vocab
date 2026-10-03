@@ -634,6 +634,8 @@
       title: document.getElementById('lcTitle'),
       mini: document.getElementById('lcMini'),
       sent: document.getElementById('lcSent'),
+      rows: document.getElementById('lcRows'),
+      count: document.getElementById('lcCount'),
     };
   }
   function ensureListenCards() {
@@ -642,10 +644,13 @@
       '<button id="lcFab" type="button" aria-label="本句单词卡" hidden><i class="ri-bank-card-line" aria-hidden="true"></i>本句单词卡 <span class="fab-n" id="lcFabN">0</span></button>' +
       '<div id="lcScrim"></div>' +
       '<div id="lcMini" aria-hidden="true">' +
-        '<button type="button" class="mb-prev" aria-label="上一句"><i class="ri-play-reverse-fill" aria-hidden="true"></i></button>' +
-        '<button type="button" class="mb-play" aria-label="播放"><i class="ri-play-fill" aria-hidden="true"></i></button>' +
-        '<button type="button" class="mb-next" aria-label="下一句"><i class="ri-play-fill" aria-hidden="true"></i></button>' +
-        '<span class="mb-sent" id="lcSent">—</span>' +
+        '<div class="mb-bar">' +
+          '<button type="button" class="mb-prev" aria-label="上一句"><i class="ri-play-reverse-fill" aria-hidden="true"></i></button>' +
+          '<button type="button" class="mb-play" aria-label="播放"><i class="ri-play-fill" aria-hidden="true"></i></button>' +
+          '<button type="button" class="mb-next" aria-label="下一句"><i class="ri-play-fill" aria-hidden="true"></i></button>' +
+          '<span class="mb-count" id="lcCount"></span>' +
+        '</div>' +
+        '<div class="mb-roll" id="lcSent"><div class="mb-rows" id="lcRows"></div></div>' +
       '</div>' +
       '<section id="lcDrawer" role="dialog" aria-modal="true" aria-label="本句单词卡">' +
         '<button class="dw-grip" type="button" aria-label="切换抽屉高度（半屏 / 近全屏）"><i></i></button>' +
@@ -694,6 +699,68 @@
     }
     if (_lcObs) { try { _lcObs.disconnect(); } catch (e) {} _lcObs = null; }
   }
+  /* ---- 字幕滚动窗：整表一次渲（TASK.listenRoll），切句只挪高亮 + rAF 平滑滚到当前句居中。
+     缓动与全站统一 cubic-bezier(.22,.61,.36,1)；reduced-motion / 换篇 / 切 today 直接落位。 ---- */
+  var _lcRollSig = '', _lcRollCurG = -1, _lcRollRaf = 0;
+  function lcEase(t) {
+    const x1 = .22, y1 = .61, x2 = .36, y2 = 1;
+    let u = t;
+    for (let i = 0; i < 5; i++) {
+      const x = 3 * u * (1 - u) * (1 - u) * x1 + 3 * u * u * (1 - u) * x2 + u * u * u - t;
+      const dx = 3 * (1 - u) * (1 - u) * x1 + 6 * u * (1 - u) * (x2 - x1) + 3 * u * u * (1 - x2);
+      if (Math.abs(dx) < 1e-6) break;
+      u -= x / dx;
+    }
+    u = Math.max(0, Math.min(1, u));
+    return 3 * u * (1 - u) * (1 - u) * y1 + 3 * u * u * (1 - u) * y2 + u * u * u;
+  }
+  function lcRowCenter(row, roll) {
+    const wr = row.getBoundingClientRect(), rr = roll.getBoundingClientRect();
+    return wr.top - rr.top + roll.scrollTop + wr.height / 2;
+  }
+  function lcScrollToCur(instant) {
+    const roll = document.getElementById('lcSent');
+    const row = roll && roll.querySelector('.mb-row.cur');
+    if (!roll || !row) return;
+    const max = Math.max(0, roll.scrollHeight - roll.clientHeight);
+    const target = Math.max(0, Math.min(max, lcRowCenter(row, roll) - roll.clientHeight / 2));
+    if (_lcRollRaf) { cancelAnimationFrame(_lcRollRaf); _lcRollRaf = 0; }
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const from = roll.scrollTop, dy = target - from;
+    if (instant || reduce || Math.abs(dy) < 1) { roll.scrollTop = target; return; }
+    const t0 = performance.now(), D = 320;
+    const step = (now) => {
+      const p = Math.min(1, (now - t0) / D);
+      roll.scrollTop = from + dy * lcEase(p);
+      _lcRollRaf = p < 1 ? requestAnimationFrame(step) : 0;
+    };
+    _lcRollRaf = requestAnimationFrame(step);
+  }
+  function lcSyncRoll(st) {
+    const E = listenCardsEls();
+    if (!E.rows || st.g == null) return;
+    const sig = [st.a, st.src, st.todayTotal].join('|');
+    let row = (sig === _lcRollSig) ? E.rows.querySelector('.mb-row[data-g="' + st.g + '"]') : null;
+    if (!row) {
+      // 换篇 / 切 today / 首进：整表重渲并瞬移居中（重建必跳帧，所以只在签名变化时做）
+      _lcRollSig = sig; _lcRollCurG = st.g;
+      let roll = null;
+      try { roll = TASK.listenRoll(); } catch (e) { return; }
+      E.rows.innerHTML = roll ? roll.html : '';
+      row = E.rows.querySelector('.mb-row[data-g="' + st.g + '"]');
+      lcScrollToCur(true);
+      return;
+    }
+    if (st.g !== _lcRollCurG) {
+      const old = E.rows.querySelector('.mb-row.cur');
+      if (old) { old.classList.remove('cur'); const os = old.querySelector('.sent'); if (os) os.classList.remove('playing'); }
+      row.classList.add('cur');
+      const ns = row.querySelector('.sent');
+      if (ns) ns.classList.add('playing');
+      _lcRollCurG = st.g;
+    }
+    lcScrollToCur(false);
+  }
   function refreshListenCards() {
     const E = listenCardsEls();
     if (!E.drawer) return;
@@ -717,8 +784,7 @@
     const key = [st.a, st.idx, st.playing, cards.count, open ? 1 : 0].join('|');
     if (key === _lcLast) return;
     _lcLast = key;
-    // 迷你条句文 + 播放态（显隐由 CSS：抽屉开强制，平时走 IO；这里只同步内容，不抢焦点）
-    if (E.sent && E.sent.textContent !== (st.text || '—')) E.sent.textContent = st.text || '—';
+    // 迷你条播放态（显隐由 CSS：抽屉开强制，平时走 IO；这里只同步内容，不抢焦点）
     const mbPlay = E.mini.querySelector('.mb-play');
     if (mbPlay) {
       const g = st.playing ? '<i class="ri-pause-fill" aria-hidden="true"></i>' : '<i class="ri-play-fill" aria-hidden="true"></i>';
@@ -731,6 +797,11 @@
     const mbPrev = E.mini.querySelector('.mb-prev'), mbNext = E.mini.querySelector('.mb-next');
     if (mbPrev) mbPrev.disabled = todayMode ? st.todayTotal <= 1 : at <= 0;
     if (mbNext) mbNext.disabled = todayMode ? st.todayTotal <= 1 : at >= total - 1;
+    if (E.count) {
+      const c = todayMode ? `今日 ${st.todayPos + 1} / ${st.todayTotal} 句` : `第 ${at + 1} / ${total} 句`;
+      if (E.count.textContent !== c) E.count.textContent = c;
+    }
+    lcSyncRoll(st);
     if (E.title && E.title.textContent !== cards.title) E.title.textContent = cards.title;
     // 抽屉开着：淡入刷新卡片 + 回顶（约 170ms，淡出完才允许 hidden 的反操作都在 CSS 侧）；
     // 首开（grid 还空）直接落卡，不走淡入，避免 170ms 空抽屉闪一下
