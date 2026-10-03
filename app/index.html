@@ -2379,6 +2379,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #lcFab:hover { box-shadow: 0 10px 28px rgba(12, 166, 120, .45); }
   #lcFab:active { transform: scale(.96); }
   #lcFab .fab-n { padding: 0 7px; border-radius: 999px; background: rgba(255,255,255,.25); font-size: 12px; }
+  #lcFab i { font-size: 17px; }
   #lcFab[hidden] { display: none; }
   body.dw-open #lcFab { opacity: 0; visibility: hidden; transform: scale(.9) translateY(10px); pointer-events: none;
     transition: transform .2s cubic-bezier(.22,.61,.36,1), opacity .2s cubic-bezier(.22,.61,.36,1), visibility 0s .2s; }
@@ -2433,6 +2434,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     width: 36px; height: 36px; border: none; border-radius: 50%; background: var(--accent-soft); color: var(--text); font-size: 14px; cursor: pointer;
     transition: background-color .2s cubic-bezier(.22,.61,.36,1); }
   #lcMini button:hover { filter: brightness(.97); }
+  #lcMini button i { font-size: 16px; }
   #lcMini button:disabled { opacity: .45; }
   #lcMini .mb-play { background: var(--accent); color: #fff; }
   /* ---- 单词卡容器（行内 notebar 与 nb-table 对比表直接复用精读类） ---- */
@@ -6322,9 +6324,10 @@ let listenOn = false;
           }
         }
         if (!note) return '';
-        const title = note.title || '辨析';
+        // 折叠态露「简单记」一行（compareLine 自带 title 兜底），与精读 cmp-line 同口径
+        const easy = compareLine(note) || '辨析';
         return `<div class="cmp"><button class="cmp-toggle" type="button" aria-expanded="false">` +
-          `<span class="nb-label">辨析</span><span class="cmp-easy">${esc(title)}</span><i class="chev" aria-hidden="true">▾</i></button>` +
+          `<span class="nb-label">辨析</span><span class="cmp-easy">${esc(easy)}</span><i class="chev" aria-hidden="true">▾</i></button>` +
           `<div class="cmp-body"><div>${renderCompareTable(note)}</div></div></div>`;
       }
       function listenCards() {

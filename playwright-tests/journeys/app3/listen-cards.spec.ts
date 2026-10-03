@@ -114,6 +114,13 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     await expect(drawer).toHaveAttribute('aria-modal', 'true');
     const first = drawer.locator('.wcard').first();
     await expect(first).toBeVisible();
+    // 等抽屉滑入动画落定再量（卡现在首开即落，不等会量到 .34s 位移动画的中间帧）
+    await page.waitForFunction(() => {
+      const d = document.getElementById('lcDrawer');
+      if (!d) return false;
+      const r = d.getBoundingClientRect();
+      return Math.abs(r.top - (window.innerHeight - r.height)) < 1;
+    }, undefined, { timeout: 3000 });
     const r = await first.evaluate((el) => { const b = (el as HTMLElement).getBoundingClientRect(); return { top: b.top, bottom: b.bottom, vh: window.innerHeight }; });
     expect(r.top, '第一张卡顶边在屏内').toBeGreaterThanOrEqual(0);
     expect(r.bottom, '第一张卡底边在屏内（390px 首屏看全）').toBeLessThanOrEqual(r.vh);

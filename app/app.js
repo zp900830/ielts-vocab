@@ -617,7 +617,6 @@
     // 本句单词卡联动（paint 每次状态变化都到这里；refresh 内部按 key 差分，无变化不碰 DOM）
     try { refreshListenCards(); } catch (e) {}
   }
-  window.APP3 = Object.assign(window.APP3, { renderListen, updateListenCard });
 
   /* ---- 随身听 · 本句单词卡悬浮层（方案 B 底部抽屉，2026-10-04）----
      卡片 HTML 由 TASK.listenCards() 组装（读 wordsOfSent/VOCAB），这里只管挂载/显隐/联动。
@@ -640,12 +639,12 @@
   function ensureListenCards() {
     if (document.getElementById('lcDrawer')) return;
     document.body.insertAdjacentHTML('beforeend',
-      '<button id="lcFab" type="button" aria-label="本句单词卡" hidden>🃏 本句单词卡 <span class="fab-n" id="lcFabN">0</span></button>' +
+      '<button id="lcFab" type="button" aria-label="本句单词卡" hidden><i class="ri-bank-card-line" aria-hidden="true"></i>本句单词卡 <span class="fab-n" id="lcFabN">0</span></button>' +
       '<div id="lcScrim"></div>' +
       '<div id="lcMini" aria-hidden="true">' +
-        '<button type="button" class="mb-prev" aria-label="上一句">◀</button>' +
-        '<button type="button" class="mb-play" aria-label="播放">▶</button>' +
-        '<button type="button" class="mb-next" aria-label="下一句">▶</button>' +
+        '<button type="button" class="mb-prev" aria-label="上一句"><i class="ri-play-reverse-fill" aria-hidden="true"></i></button>' +
+        '<button type="button" class="mb-play" aria-label="播放"><i class="ri-play-fill" aria-hidden="true"></i></button>' +
+        '<button type="button" class="mb-next" aria-label="下一句"><i class="ri-play-fill" aria-hidden="true"></i></button>' +
         '<span class="mb-sent" id="lcSent">—</span>' +
       '</div>' +
       '<section id="lcDrawer" role="dialog" aria-modal="true" aria-label="本句单词卡">' +
@@ -714,15 +713,16 @@
     if (E.badge && E.badge.textContent !== String(cards.count)) E.badge.textContent = String(cards.count);
     // 抽屉开着切到无词句：自动收起，不出空抽屉（收起会写 prefs + 重进刷新，直接返回）
     if (open && cards.count <= 0) { setLcDrawer(false); return; }
-    const key = [st.idx, st.playing, cards.count, open ? 1 : 0].join('|');
+    // key 含篇号：today 模式跨篇同局部句号+同词数时不漏刷（a 变了卡必变）
+    const key = [st.a, st.idx, st.playing, cards.count, open ? 1 : 0].join('|');
     if (key === _lcLast) return;
     _lcLast = key;
     // 迷你条句文 + 播放态（显隐由 CSS：抽屉开强制，平时走 IO；这里只同步内容，不抢焦点）
     if (E.sent && E.sent.textContent !== (st.text || '—')) E.sent.textContent = st.text || '—';
     const mbPlay = E.mini.querySelector('.mb-play');
     if (mbPlay) {
-      const g = st.playing ? '⏸' : '▶';
-      if (mbPlay.textContent !== g) mbPlay.textContent = g;
+      const g = st.playing ? '<i class="ri-pause-fill" aria-hidden="true"></i>' : '<i class="ri-play-fill" aria-hidden="true"></i>';
+      if (mbPlay.innerHTML !== g) mbPlay.innerHTML = g;
       mbPlay.setAttribute('aria-label', st.playing ? '暂停' : '播放');
     }
     // 迷你条 ◀/▶ 禁用态与播放卡同口径（首句 ◀ 禁 / 末句 ▶ 禁；今日循环态不禁用）
@@ -732,22 +732,28 @@
     if (mbPrev) mbPrev.disabled = todayMode ? st.todayTotal <= 1 : at <= 0;
     if (mbNext) mbNext.disabled = todayMode ? st.todayTotal <= 1 : at >= total - 1;
     if (E.title && E.title.textContent !== cards.title) E.title.textContent = cards.title;
-    // 抽屉开着：淡入刷新卡片 + 回顶（约 170ms，淡出完才允许 hidden 的反操作都在 CSS 侧）
+    // 抽屉开着：淡入刷新卡片 + 回顶（约 170ms，淡出完才允许 hidden 的反操作都在 CSS 侧）；
+    // 首开（grid 还空）直接落卡，不走淡入，避免 170ms 空抽屉闪一下
     if (open && E.grid) {
-      E.grid.classList.add('swap');
-      setTimeout(() => {
-        const g2 = document.getElementById('lcGrid');
-        if (!g2) return;
-        if (!lcDrawerOpen()) { g2.classList.remove('swap'); return; }
-        let now = null;
-        try { now = TASK.listenCards(); } catch (e) { return; }
-        if (!now) return;
-        g2.innerHTML = now.html;
-        g2.scrollTop = 0;
-        g2.classList.remove('swap');
-        const t2 = document.getElementById('lcTitle');
-        if (t2 && t2.textContent !== now.title) t2.textContent = now.title;
-      }, 170);
+      if (!E.grid.innerHTML) {
+        E.grid.innerHTML = cards.html;
+        E.grid.scrollTop = 0;
+      } else {
+        E.grid.classList.add('swap');
+        setTimeout(() => {
+          const g2 = document.getElementById('lcGrid');
+          if (!g2) return;
+          if (!lcDrawerOpen()) { g2.classList.remove('swap'); return; }
+          let now = null;
+          try { now = TASK.listenCards(); } catch (e) { return; }
+          if (!now) return;
+          g2.innerHTML = now.html;
+          g2.scrollTop = 0;
+          g2.classList.remove('swap');
+          const t2 = document.getElementById('lcTitle');
+          if (t2 && t2.textContent !== now.title) t2.textContent = now.title;
+        }, 170);
+      }
     }
   }
   function wireListenCardsOnce() {
