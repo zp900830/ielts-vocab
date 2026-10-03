@@ -316,6 +316,8 @@
   .cmp-card { display: block; margin: 5px 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
   .cmp-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 7px; width: 100%; text-align: left; background: none; border: 0; padding: 7px 9px; font: inherit; font-size: 13px; color: var(--text); cursor: pointer; }
   .cmp-card .nb-label { flex: none; }
+  /* 随身听抽屉卡片（2026-10-04）复用同一套表样：选择器并列，不改原值 */
+  #lcDrawer .cmp-toggle .nb-label { flex: none; }
   .cmp-ws { flex: none; font-weight: 700; font-family: var(--serif); color: var(--ink2); }
   /* 那一行辨析独占一行：390px 屏上跟词头挤在一起会被切成两截，正是要背的那半句反而最难读 */
   .cmp-line { flex: 1 0 100%; order: 3; min-width: 0; color: var(--muted); }
@@ -324,21 +326,21 @@
   .cmp-body { display: none; padding: 0 9px 9px; }
   .cmp-card.open .cmp-body { display: block; }
   .cmp-card .nb-ct { display: block; font-weight: 700; margin-bottom: 4px; color: var(--text); }
-  .cmp-card .nb-table { width: 100%; border-collapse: collapse; margin: 4px 0; font-size: 12px; line-height: 1.5; }
-  .cmp-card .nb-table td, .cmp-card .nb-table th { border: 1px solid var(--border); padding: 4px 6px; text-align: left; vertical-align: top; }
-  .cmp-card .nb-table th { background: rgba(12,156,116,.08); color: var(--ink2); font-weight: 600; }
-  .cmp-card .nb-tw { font-weight: 700; white-space: nowrap; color: var(--ink2); }
-  .cmp-card .nb-tp { font-weight: 400; color: var(--muted); font-size: 11px; }
-  .cmp-card .nb-tm { color: var(--ink2); white-space: nowrap; }
-  .cmp-card .nb-tc { color: var(--ink2); }
-  .cmp-card .nb-scene { color: var(--muted); font-size: 11px; }
-  .cmp-card .nb-tl { font-weight: 600; background: rgba(12,156,116,.04); white-space: nowrap; }  /* 「用在哪」三列窄时会竖排成「用\n在\n哪」，标签必须一行 */
+  .cmp-card .nb-table, #lcDrawer .cmp .nb-table { width: 100%; border-collapse: collapse; margin: 4px 0; font-size: 12px; line-height: 1.5; }
+  .cmp-card .nb-table td, .cmp-card .nb-table th, #lcDrawer .cmp .nb-table td, #lcDrawer .cmp .nb-table th { border: 1px solid var(--border); padding: 4px 6px; text-align: left; vertical-align: top; }
+  .cmp-card .nb-table th, #lcDrawer .cmp .nb-table th { background: rgba(12,156,116,.08); color: var(--ink2); font-weight: 600; }
+  .cmp-card .nb-tw, #lcDrawer .cmp .nb-tw { font-weight: 700; white-space: nowrap; color: var(--ink2); }
+  .cmp-card .nb-tp, #lcDrawer .cmp .nb-tp { font-weight: 400; color: var(--muted); font-size: 11px; }
+  .cmp-card .nb-tm, #lcDrawer .cmp .nb-tm { color: var(--ink2); white-space: nowrap; }
+  .cmp-card .nb-tc, #lcDrawer .cmp .nb-tc { color: var(--ink2); }
+  .cmp-card .nb-scene, #lcDrawer .cmp .nb-scene { color: var(--muted); font-size: 11px; }
+  .cmp-card .nb-tl, #lcDrawer .cmp .nb-tl { font-weight: 600; background: rgba(12,156,116,.04); white-space: nowrap; }  /* 「用在哪」三列窄时会竖排成「用\n在\n哪」，标签必须一行 */
   /* 长表转置后一个维度占两三行，靠这条小标题分块；不加分隔就是一堵平铺的十二行墙 */
-  .cmp-card .nb-dim td { font-weight: 700; background: rgba(12,156,116,.10); padding: 5px 7px; }
-  .cmp-card .nb-summary { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); color: var(--accent-text); font-weight: 600; font-size: 12px; }
+  .cmp-card .nb-dim td, #lcDrawer .cmp .nb-dim td { font-weight: 700; background: rgba(12,156,116,.10); padding: 5px 7px; }
+  .cmp-card .nb-summary, #lcDrawer .cmp .nb-summary { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); color: var(--accent-text); font-weight: 600; font-size: 12px; }
   body.dark .cmp-card { border-color: #33302b; }
-  body.dark .cmp-card .nb-table td, body.dark .cmp-card .nb-table th { border-color: #33302b; }
-  body.dark .cmp-card .nb-table th, body.dark .cmp-card .nb-tl { background: rgba(16,180,135,.1); }
+  body.dark .cmp-card .nb-table td, body.dark .cmp-card .nb-table th, body.dark #lcDrawer .cmp .nb-table td, body.dark #lcDrawer .cmp .nb-table th { border-color: #33302b; }
+  body.dark .cmp-card .nb-table th, body.dark .cmp-card .nb-tl, body.dark #lcDrawer .cmp .nb-table th, body.dark #lcDrawer .cmp .nb-tl { background: rgba(16,180,135,.1); }
   /* 音色选择：自定义按钮 + 玻璃浮层（换掉原生 <select>，2026-09-24）。
      尺寸/配色与文章头那排 .accent-btn/.tr-msw 一致（12.5px、999px 圆角、玻璃浮层）。 */
   .voice-pick { position: relative; flex: none; }
@@ -2359,6 +2361,106 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     body.listen-mode > .layout, body.listen-mode > .listen-top, body.listen-mode > #audiobar,
     body.listen-closing > .layout, body.listen-closing > .listen-top, body.listen-closing > #audiobar { animation: none; }
   }
+  /* ============ 随身听 · 本句单词卡（方案 B 底部抽屉，2026-10-04） ============
+     布局与动效唯一参照 work/listen-cards-demo.html（用户实测已定案），结构/时序/z 序照抄；
+     颜色走本站 token（demo 自有调色盘不引入）。卡片内的 notebar 行与 nb-table 对比表
+     直接复用精读现有类，不另起样式；只有 demo 有、精读没有的壳类才在这里声明。
+     定案 z 序：scrim(70) < 迷你条(75) < 抽屉(80) —— 抽屉开着也能经迷你条切句/播放，不用先关。
+     与 demo 的差异（任务书确认，均非设计变更）：① 移动端 TabBar(z=300) 压在抽屉上，
+     FAB 浮到它上面、抽屉内容底垫 88px（导航可点，离开路由时隐藏悬浮层）；② 抽屉开时
+     迷你条加 safe-area；③ 隐藏态一律 visibility:hidden（demo 只靠 opacity，键盘仍能
+     Tab 进去，axe 违规）；④ .fading 只服务于 demo 的 A/B 切换（真应用无模式切换，不要）。 */
+  /* ---- FAB：右下唤起 + 目标词数角标；当前句无目标词时 hidden ---- */
+  #lcFab { position: fixed; right: 18px; bottom: 20px; z-index: 50;
+    display: inline-flex; align-items: center; gap: 8px; padding: 13px 20px; border: none; border-radius: 999px;
+    background: var(--accent); color: #fff; font-size: 15px; font-weight: 600;
+    box-shadow: 0 8px 24px rgba(12, 166, 120, .35);
+    transition: transform .2s cubic-bezier(.22,.61,.36,1), opacity .2s cubic-bezier(.22,.61,.36,1), box-shadow .2s cubic-bezier(.22,.61,.36,1), visibility 0s; }
+  #lcFab:hover { box-shadow: 0 10px 28px rgba(12, 166, 120, .45); }
+  #lcFab:active { transform: scale(.96); }
+  #lcFab .fab-n { padding: 0 7px; border-radius: 999px; background: rgba(255,255,255,.25); font-size: 12px; }
+  #lcFab i { font-size: 17px; }
+  #lcFab[hidden] { display: none; }
+  body.dw-open #lcFab { opacity: 0; visibility: hidden; transform: scale(.9) translateY(10px); pointer-events: none;
+    transition: transform .2s cubic-bezier(.22,.61,.36,1), opacity .2s cubic-bezier(.22,.61,.36,1), visibility 0s .2s; }
+  @media (max-width: 700px) {
+    #lcFab { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+  }
+  /* ---- 遮罩 ---- */
+  #lcScrim { position: fixed; inset: 0; z-index: 70; background: rgba(18,32,27,.38);
+    opacity: 0; pointer-events: none; transition: opacity .3s cubic-bezier(.22,.61,.36,1); }
+  #lcScrim.on { opacity: 1; pointer-events: auto; }
+  /* ---- 抽屉本体 ---- */
+  #lcDrawer { position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
+    max-height: min(78vh, 680px); display: flex; flex-direction: column;
+    background: var(--card); border-radius: 24px 24px 0 0;
+    box-shadow: 0 -12px 40px rgba(15, 40, 32, .22);
+    transform: translateY(102%); visibility: hidden;
+    transition: transform .34s cubic-bezier(.22,.61,.36,1), max-height .3s cubic-bezier(.22,.61,.36,1), visibility 0s .34s; }
+  #lcDrawer.open { transform: translateY(0); visibility: visible; transition: transform .34s cubic-bezier(.22,.61,.36,1), max-height .3s cubic-bezier(.22,.61,.36,1), visibility 0s 0s; }
+  #lcDrawer.tall { max-height: calc(100vh - 118px); max-height: calc(100dvh - 118px); }
+  @media (min-width: 900px) {
+    #lcDrawer { left: 50%; transform: translate(-50%, 102%); width: min(860px, 92vw); }
+    #lcDrawer.open { transform: translate(-50%, 0); }
+  }
+  #lcDrawer .dw-grip { padding: 10px 0 4px; text-align: center; display: block; width: 100%; background: none; border: 0; cursor: pointer; }
+  #lcDrawer .dw-grip i { display: inline-block; width: 42px; height: 5px; border-radius: 999px; background: #d7e2dd; transition: background-color .2s cubic-bezier(.22,.61,.36,1); }
+  #lcDrawer .dw-grip:hover i { background: #bfd2cb; }
+  body.dw-open { overflow: hidden; }
+  body.dw-open #appView { overscroll-behavior: contain; }
+  #lcDrawer .dw-head { display: flex; align-items: center; gap: 10px; padding: 4px 20px 12px; border-bottom: 1px solid var(--border); }
+  #lcDrawer .dw-head h2 { margin: 0; font-size: 16px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
+  #lcDrawer .dw-close { padding: 6px 14px; border: none; border-radius: 999px; background: var(--accent-soft); color: var(--accent-text); font-size: 13px; cursor: pointer; transition: background-color .2s cubic-bezier(.22,.61,.36,1); }
+  #lcDrawer .dw-close:hover { filter: brightness(.97); }
+  #lcDrawer .dw-body { overflow-y: auto; overscroll-behavior: contain; padding: 16px 20px calc(24px + env(safe-area-inset-bottom, 0px)); transition: opacity .18s cubic-bezier(.22,.61,.36,1), transform .18s cubic-bezier(.22,.61,.36,1); }
+  #lcDrawer .dw-body.swap { opacity: 0; transform: translateY(6px); }
+  @media (max-width: 700px) {
+    /* TabBar 压在抽屉上（z=300），内容底垫 88px 与 #appView 同口径，末卡不被盖住 */
+    #lcDrawer .dw-body { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
+  }
+  /* ---- 吸顶迷你条：播放卡滚出视口后出现；抽屉开时强制吸顶且可点 ---- */
+  #lcMini { position: fixed; left: 0; right: 0; top: 0; z-index: 75;
+    display: flex; align-items: center; gap: 10px; padding: 8px 14px;
+    background: var(--card); border-bottom: 1px solid var(--border);
+    box-shadow: 0 4px 16px rgba(20, 45, 38, .08);
+    transform: translateY(-100%); opacity: 0; visibility: hidden; pointer-events: none;
+    transition: transform .28s cubic-bezier(.22,.61,.36,1), opacity .28s cubic-bezier(.22,.61,.36,1), visibility 0s .28s; }
+  #lcMini.show, body.dw-open #lcMini { transform: translateY(0); opacity: 1; visibility: visible; pointer-events: auto;
+    transition: transform .28s cubic-bezier(.22,.61,.36,1), opacity .28s cubic-bezier(.22,.61,.36,1), visibility 0s 0s; }
+  body.dw-open #lcMini { padding-top: calc(8px + env(safe-area-inset-top, 0px)); }
+  #lcMini .mb-sent { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-family: Georgia, 'Songti SC', serif; font-size: 13px; color: var(--muted); }
+  #lcMini button { flex: none; display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border: none; border-radius: 50%; background: var(--accent-soft); color: var(--text); font-size: 14px; cursor: pointer;
+    transition: background-color .2s cubic-bezier(.22,.61,.36,1); }
+  #lcMini button:hover { filter: brightness(.97); }
+  #lcMini button i { font-size: 16px; }
+  #lcMini button:disabled { opacity: .45; }
+  #lcMini .mb-play { background: var(--accent); color: #fff; }
+  /* ---- 单词卡容器（行内 notebar 与 nb-table 对比表直接复用精读类） ---- */
+  #lcDrawer .lc-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  #lcDrawer .wcard { min-width: 0; padding: 16px 18px; background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; box-shadow: 0 3px 12px rgba(20, 45, 38, .04); }
+  #lcDrawer .wc-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  #lcDrawer .wc-word { font-size: 19px; font-weight: 700; color: var(--accent-text); font-family: Georgia, 'Songti SC', serif; }
+  #lcDrawer .wc-gloss { font-size: 13px; color: var(--muted); }
+  /* ---- 辨析展开：demo 的 0fr→1fr 动效壳；scoped 到抽屉内，不碰精读 .cmp-card 那套 ---- */
+  #lcDrawer .cmp { margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 8px; }
+  #lcDrawer .cmp-toggle { display: flex; width: 100%; align-items: center; gap: 8px; padding: 4px 2px;
+    text-align: left; font-size: 14px; color: var(--muted); background: none; border: 0; cursor: pointer; }
+  #lcDrawer .cmp-toggle .nb-label { font-size: 10.5px; font-weight: 700; color: var(--ink2); line-height: 1.6; }
+  body.dark #lcDrawer .cmp-toggle .nb-label { color: var(--muted); }
+  #lcDrawer .cmp-easy { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #lcDrawer .cmp.open .cmp-easy { white-space: normal; }
+  #lcDrawer .chev { flex: none; transition: transform .25s cubic-bezier(.22,.61,.36,1); font-style: normal; font-size: 12px; }
+  #lcDrawer .cmp.open .chev { transform: rotate(180deg); }
+  #lcDrawer .cmp-body { display: grid; grid-template-rows: 0fr; opacity: 0;
+    transition: grid-template-rows .3s cubic-bezier(.22,.61,.36,1), opacity .3s cubic-bezier(.22,.61,.36,1); }
+  #lcDrawer .cmp-body > div { overflow: hidden; min-width: 0; }
+  #lcDrawer .cmp.open .cmp-body { grid-template-rows: 1fr; opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    #lcFab, #lcScrim, #lcDrawer, #lcMini, #lcDrawer .dw-body, #lcDrawer .chev, #lcDrawer .cmp-body { transition-duration: .01ms !important; }
+  }
   /* 展开全屏阅读：复用任务模式那套（.layout 正文 + 底部 .audiobar），只是不挂任务条。 */
   body.listen-mode { background: #faf8f4; }
   body.listen-mode > .layout { display: block; }
@@ -2953,15 +3055,11 @@ let listenOn = false;
       const m = sm.match(/简单记[:：](.+?)\s*$/);
       return (m ? m[1] : (note.title || sm.replace(/^辨析[:：]/, ''))).trim();
     }
-    function renderCompareNote(note, open) {
+    /* 对比表体抽取（2026-10-04 随身听单词卡复用）：下体与 renderCompareNote 原体内逐字节一致，
+       renderCompareNote 改调它，旧调用方输出不变。 */
+    function renderCompareTable(note) {
     const items = note.items || [];
-    const words = items.map(it => it.w).filter(Boolean);
-    const gid = String(note.group || words.join('-'));
-    let html = `<div class="cmp-card${open ? ' open' : ''}" data-grp="${esc(gid)}">`;
-    html += `<button type="button" class="cmp-head" aria-expanded="${open ? 'true' : 'false'}" onclick="toggleCmp(this)">` +
-      `<span class="nb-label">辨析</span><span class="cmp-ws">${words.map(w => esc(w)).join(' · ')}</span>` +
-      `<span class="cmp-line">${esc(compareLine(note))}</span><span class="cmp-caret" aria-hidden="true">▾</span></button>`;
-    html += `<div class="cmp-body">`;
+    let html = '';
     if (items.length) {
       html += `<table class="nb-table">`;
       for (const it of items) {
@@ -2996,6 +3094,18 @@ let listenOn = false;
       html += `</table>`;
     }
     if (note.summary) html += `<span class="nb-summary">${esc(note.summary)}</span>`;
+    return html;
+    }
+    function renderCompareNote(note, open) {
+    const items = note.items || [];
+    const words = items.map(it => it.w).filter(Boolean);
+    const gid = String(note.group || words.join('-'));
+    let html = `<div class="cmp-card${open ? ' open' : ''}" data-grp="${esc(gid)}">`;
+    html += `<button type="button" class="cmp-head" aria-expanded="${open ? 'true' : 'false'}" onclick="toggleCmp(this)">` +
+      `<span class="nb-label">辨析</span><span class="cmp-ws">${words.map(w => esc(w)).join(' · ')}</span>` +
+      `<span class="cmp-line">${esc(compareLine(note))}</span><span class="cmp-caret" aria-hidden="true">▾</span></button>`;
+    html += `<div class="cmp-body">`;
+    html += renderCompareTable(note);
     html += `</div></div>`;
     return html;
     }
@@ -6183,6 +6293,67 @@ let listenOn = false;
           text: idx >= 0 ? plainEN(sentRaw(idx)) : (sents.length ? plainEN(sentRaw(0)) : ''),
         };
       }
+      /* ---- 随身听 · 本句单词卡（方案 B，2026-10-04）----
+         卡片 HTML 在这里组装（能直接读 wordsOfSent/VOCAB），外壳只负责挂载/显隐/联动。
+         note 行与 noteBar() 同构（标签抽取见 3057-3060，不叠双冒号）；对比表体走
+         renderCompareTable()；展开壳（.cmp/.cmp-toggle/.cmp-body 0fr→1fr）照 demo。
+         卡片纯展示：不写任何学习账（§7.6 收听不碰精读）。 */
+      function listenCardNote(k) {
+        const info = (typeof VOCAB !== 'undefined' && VOCAB[k]) || null;
+        if (!info || !info.note) return '';
+        let ph = '';
+        try { ph = glossPhon(k) || ''; } catch (e) {}
+        const noteText = info.note;
+        let label = '辨析', rest = noteText;
+        const lm = noteText.match(/^(同义词|词伙)(：)/);
+        if (lm) { label = lm[1]; rest = noteText.slice(lm[0].length); }
+        return `<span class="notebar"><span class="nb-t"><span class="nb-w">${esc(k)}</span>${ph ? `<span class="nb-ph">${esc(ph)}</span>` : ''}<span class="nb-m">${esc(info.m || '')}</span></span><span class="nb-n"><span class="nb-label">${label}</span>${esc(rest)}</span></span>`;
+      }
+      function listenCardCmp(k) {
+        const info = (typeof VOCAB !== 'undefined' && VOCAB[k]) || null;
+        if (!info) return '';
+        let note = (info.cmp && Array.isArray(info.cmp.items)) ? info.cmp : null;
+        if (!note) {
+          // 表锚在组内别的词上：经反向索引找第一张可用的表（只取一张，不复制多遍）
+          let grp = {};
+          try { grp = groupCardsOf(k) || {}; } catch (e) {}
+          const keys = Object.keys(grp);
+          for (let i = 0; i < keys.length && !note; i++) {
+            const c = grp[keys[i]] && grp[keys[i]].cmp;
+            if (c && Array.isArray(c.items)) note = c;
+          }
+        }
+        if (!note) return '';
+        // 折叠态露「简单记」一行（compareLine 自带 title 兜底），与精读 cmp-line 同口径
+        const easy = compareLine(note) || '辨析';
+        return `<div class="cmp"><button class="cmp-toggle" type="button" aria-expanded="false">` +
+          `<span class="nb-label">辨析</span><span class="cmp-easy">${esc(easy)}</span><i class="chev" aria-hidden="true">▾</i></button>` +
+          `<div class="cmp-body"><div>${renderCompareTable(note)}</div></div></div>`;
+      }
+      function listenCards() {
+        const gi = (typeof idx === 'number' && idx >= 0) ? idx : 0;
+        let words = [];
+        try { words = wordsOfSent(gi) || []; } catch (e) { words = []; }
+        const keys = [], parts = [];
+        for (let i = 0; i < words.length; i++) {
+          const k = String(words[i] || '').toLowerCase();
+          if (!k || keys.indexOf(k) >= 0) continue;
+          const info = (typeof VOCAB !== 'undefined' && VOCAB[k]) || null;
+          if (!info) continue;
+          const noteHtml = listenCardNote(k);
+          const cmpHtml = listenCardCmp(k);
+          if (!noteHtml && !cmpHtml) continue;   // 两无：不占一张空卡
+          keys.push(k);
+          parts.push(`<article class="wcard"><header class="wc-head"><b class="wc-word">${esc(k)}</b>` +
+            `<span class="wc-gloss">${esc(info.m || '')}</span></header>${noteHtml}${cmpHtml}</article>`);
+        }
+        const n = keys.length;
+        return { idx: gi, keys: keys, count: n,
+          title: `本句单词卡 · 第 ${gi + 1} 句 · ${n} 个目标词`,
+          html: parts.join('') };
+      }
+      function listenCardsPref() { try { const p = readPrefs(); return (p && p.listenCards) || {}; } catch (e) { return {}; } }
+      function listenCardsPrefSet(patch) { try { const p = readPrefs(); p.listenCards = Object.assign({}, p.listenCards, patch); savePref('listenCards', p.listenCards); } catch (e) {} }
       /* ⑤ 起播/继续：把上下文、收听账、以及「已起播」都置上（暂停不清 active，只有 stop 清）。 */
       function listenArm() {
         _listenCtx = true; listenOn = true; _listenArmed = true;
@@ -9731,7 +9902,7 @@ let listenOn = false;
         listenExpand, listenCollapse, listenNextArticle, updateListenHud,
         listenSetSrc, get listenSrc() { return _listenSrc; }, listenTodayAdvance,
         listenLeave, listenMiniStop: listenStop,
-        listenState, listenStat, listenLast, listenTick, listenFlush, listenSetTickForTest,
+        listenState, listenCards, listenCardsPref, listenCardsPrefSet, listenStat, listenLast, listenTick, listenFlush, listenSetTickForTest,
         get listenTickMs() { return _listenTick; },   // 测试锁：跨场清零（①②③④）读这根指针
         pauseListenTick: function () { _listenTick = 0; },   // 暂停时把收听计时清零（togglePlay 调，见上）
         get listenArticle() { return _listenArticle; },

@@ -38,6 +38,8 @@
     // 离开随身听 → 播放不中断，交给右下角悬浮球继续控制（照搬主站 switchView 的口径）。
     // 只有「从没起播过」才会真正收掉随身听上下文（listenLeave 内部判断）。
     if (cur !== 'listen') { try { if (typeof TASK !== 'undefined' && TASK.listenLeave) TASK.listenLeave(); } catch (e) {} }
+    // 离开随身听路由：单词卡悬浮层全部收视觉（不写 prefs，回来按 prefs 恢复；播放本身不中断）
+    if (cur !== 'listen') { try { hideListenCards(); } catch (e) {} }
     if (cur !== 'home') _hlArticle = null;
     document.querySelectorAll('.sidenav .nav-item').forEach(b =>
       b.classList.toggle('on', b.dataset.route === cur));
@@ -545,10 +547,33 @@
       </div>
     </div>`;
     updateListenCard();
+    // 本句单词卡悬浮层：建一次（body 级， guarded）；按持久化恢复高度档与打开态；
+    // 迷你条观察播放卡（滚出 95% 视口出现）。无词时 FAB 保持 hidden，恢复打开会被拒。
+    try {
+      ensureListenCards();
+      const pref = (typeof TASK !== 'undefined' && TASK.listenCardsPref) ? TASK.listenCardsPref() : {};
+      const dw = document.getElementById('lcDrawer');
+      if (dw) dw.classList.toggle('tall', !!pref.tall);
+      if (_lcObs) { try { _lcObs.disconnect(); } catch (e) {} _lcObs = null; }
+      const lcard = view.querySelector('.ls-card');
+      const mini = document.getElementById('lcMini');
+      if (lcard && mini && 'IntersectionObserver' in window) {
+        _lcObs = new IntersectionObserver((es) => {
+          if (cur !== 'listen' || !es[0]) return;
+          const show = !es[0].isIntersecting;
+          mini.classList.toggle('show', show);
+          try { mini.setAttribute('aria-hidden', String(!(show || lcDrawerOpen()))); } catch (e) {}
+        }, { threshold: 0.05 });
+        _lcObs.observe(lcard);
+      }
+      if (pref && pref.open) setLcDrawer(true, { save: false, focus: false });
+      // 悬浮层刚建好：显式刷一遍（此前的 updateListenCard 调用发生在其之前，直接返回了）
+      try { refreshListenCards(); } catch (e) {}
+    } catch (e) {}
   }
   // 就地刷新卡片（paint() 每次状态变化都调）：只改文本/属性，不重建 DOM，别抢焦点。
   function updateListenCard() {
-    if (cur !== 'listen') return;
+    if (cur !== 'listen') { try { hideListenCards(); } catch (e) {} return; }
     const card = document.querySelector('.ls-card');
     if (!card) return;
     const ctx = (typeof TASK !== 'undefined' && TASK.listenState) ? TASK.listenState() : null;
@@ -589,7 +614,191 @@
     if (art) art.textContent = `《${SECTIONS[a].title}》`;
     const vol = card.querySelector('.ls-vol');
     if (vol) vol.textContent = `第 ${listenVolNo(a, at)} 卷`;
+    // 本句单词卡联动（paint 每次状态变化都到这里；refresh 内部按 key 差分，无变化不碰 DOM）
+    try { refreshListenCards(); } catch (e) {}
   }
+
+  /* ---- 随身听 · 本句单词卡悬浮层（方案 B 底部抽屉，2026-10-04）----
+     卡片 HTML 由 TASK.listenCards() 组装（读 wordsOfSent/VOCAB），这里只管挂载/显隐/联动。
+     刷新入口是 updateListenCard（paint 每次状态变化都调，见末尾追加）；离开路由/展开全屏时收起。
+     动效与 z 序照 demo：scrim(70) < 迷你条(75) < 抽屉(80)；移动端 TabBar(z=300) 在最上，
+     FAB 浮到它上面、抽屉内容底垫 88px（CSS 侧），导航可点。 */
+  var _lcObs = null, _lcLast = '', _lcOff = true, _lcTouchOn = false;
+  function listenCardsEls() {
+    return {
+      fab: document.getElementById('lcFab'),
+      badge: document.getElementById('lcFabN'),
+      scrim: document.getElementById('lcScrim'),
+      drawer: document.getElementById('lcDrawer'),
+      grid: document.getElementById('lcGrid'),
+      title: document.getElementById('lcTitle'),
+      mini: document.getElementById('lcMini'),
+      sent: document.getElementById('lcSent'),
+    };
+  }
+  function ensureListenCards() {
+    if (document.getElementById('lcDrawer')) return;
+    document.body.insertAdjacentHTML('beforeend',
+      '<button id="lcFab" type="button" aria-label="本句单词卡" hidden><i class="ri-bank-card-line" aria-hidden="true"></i>本句单词卡 <span class="fab-n" id="lcFabN">0</span></button>' +
+      '<div id="lcScrim"></div>' +
+      '<div id="lcMini" aria-hidden="true">' +
+        '<button type="button" class="mb-prev" aria-label="上一句"><i class="ri-play-reverse-fill" aria-hidden="true"></i></button>' +
+        '<button type="button" class="mb-play" aria-label="播放"><i class="ri-play-fill" aria-hidden="true"></i></button>' +
+        '<button type="button" class="mb-next" aria-label="下一句"><i class="ri-play-fill" aria-hidden="true"></i></button>' +
+        '<span class="mb-sent" id="lcSent">—</span>' +
+      '</div>' +
+      '<section id="lcDrawer" role="dialog" aria-modal="true" aria-label="本句单词卡">' +
+        '<button class="dw-grip" type="button" aria-label="切换抽屉高度（半屏 / 近全屏）"><i></i></button>' +
+        '<div class="dw-head"><h2 id="lcTitle">本句单词卡</h2>' +
+        '<button class="dw-close" type="button" id="lcClose">收起</button></div>' +
+        '<div class="dw-body lc-grid" id="lcGrid"></div>' +
+      '</section>');
+    wireListenCardsOnce();
+  }
+  function lcDrawerOpen() { const d = document.getElementById('lcDrawer'); return !!(d && d.classList.contains('open')); }
+  function setLcDrawer(open, opts) {
+    const o = opts || {};
+    const E = listenCardsEls();
+    if (!E.drawer) return;
+    if (open) {
+      // 无可渲染的卡：不出空抽屉（FAB 本来就是 hidden 的，这里是持久化恢复路径的兜底）
+      let n = -1;
+      try { n = (TASK.listenCards().count) || 0; } catch (e) { n = -1; }
+      if (n <= 0) return;
+    }
+    document.body.classList.toggle('dw-open', open);
+    E.drawer.classList.toggle('open', open);
+    if (E.scrim) E.scrim.classList.toggle('on', open);
+    if (E.mini) E.mini.setAttribute('aria-hidden', open ? 'false' : String(!E.mini.classList.contains('show')));
+    if (o.save !== false) { try { TASK.listenCardsPrefSet({ open: open }); } catch (e) {} }
+    if (open) {
+      if (o.focus !== false) { const c = document.getElementById('lcClose'); if (c) { try { c.focus({ preventScroll: true }); } catch (e) {} } }
+    } else if (o.focus !== false) {
+      const f = document.getElementById('lcFab');
+      if (f && !f.hidden) { try { f.focus({ preventScroll: true }); } catch (e) {} }
+    }
+    _lcLast = '';   // 开合切显隐：下一次刷新强制走一遍（徽标/句文/标题同步）
+    try { refreshListenCards(); } catch (e) {}
+  }
+  function hideListenCards() {
+    if (_lcOff) return;
+    _lcOff = true;
+    _lcLast = '';
+    const E = listenCardsEls();
+    if (E.fab) E.fab.hidden = true;
+    if (E.mini) { E.mini.classList.remove('show'); E.mini.setAttribute('aria-hidden', 'true'); }
+    if (E.drawer && E.drawer.classList.contains('open')) {
+      document.body.classList.remove('dw-open');
+      E.drawer.classList.remove('open');
+      if (E.scrim) E.scrim.classList.remove('on');
+    }
+    if (_lcObs) { try { _lcObs.disconnect(); } catch (e) {} _lcObs = null; }
+  }
+  function refreshListenCards() {
+    const E = listenCardsEls();
+    if (!E.drawer) return;
+    // 离开随身听路由 / 展开全屏：悬浮层全部收起（只收视觉，不写 prefs；回来按 prefs 恢复）
+    if (cur !== 'listen') { hideListenCards(); return; }
+    let st = null;
+    try { st = TASK.listenState(); } catch (e) { return; }
+    if (!st || st.expanded) { hideListenCards(); return; }
+    _lcOff = false;
+    let cards = null;
+    try { cards = TASK.listenCards(); } catch (e) { return; }
+    if (!cards) return;
+    const open = lcDrawerOpen();
+    // FAB：无目标词隐藏（空抽屉不出）。先落显隐，再判自动收起 —— 收起时的焦点回切才能看到 hidden。
+    const fabHidden = cards.count <= 0;
+    if (E.fab.hidden !== fabHidden) E.fab.hidden = fabHidden;
+    if (E.badge && E.badge.textContent !== String(cards.count)) E.badge.textContent = String(cards.count);
+    // 抽屉开着切到无词句：自动收起，不出空抽屉（收起会写 prefs + 重进刷新，直接返回）
+    if (open && cards.count <= 0) { setLcDrawer(false); return; }
+    // key 含篇号：today 模式跨篇同局部句号+同词数时不漏刷（a 变了卡必变）
+    const key = [st.a, st.idx, st.playing, cards.count, open ? 1 : 0].join('|');
+    if (key === _lcLast) return;
+    _lcLast = key;
+    // 迷你条句文 + 播放态（显隐由 CSS：抽屉开强制，平时走 IO；这里只同步内容，不抢焦点）
+    if (E.sent && E.sent.textContent !== (st.text || '—')) E.sent.textContent = st.text || '—';
+    const mbPlay = E.mini.querySelector('.mb-play');
+    if (mbPlay) {
+      const g = st.playing ? '<i class="ri-pause-fill" aria-hidden="true"></i>' : '<i class="ri-play-fill" aria-hidden="true"></i>';
+      if (mbPlay.innerHTML !== g) mbPlay.innerHTML = g;
+      mbPlay.setAttribute('aria-label', st.playing ? '暂停' : '播放');
+    }
+    // 迷你条 ◀/▶ 禁用态与播放卡同口径（首句 ◀ 禁 / 末句 ▶ 禁；今日循环态不禁用）
+    const todayMode = st.src === 'today' && (st.todayTotal || 0) > 0;
+    const at = st.idx >= 0 ? st.idx : 0, total = Math.max(1, st.total || 0);
+    const mbPrev = E.mini.querySelector('.mb-prev'), mbNext = E.mini.querySelector('.mb-next');
+    if (mbPrev) mbPrev.disabled = todayMode ? st.todayTotal <= 1 : at <= 0;
+    if (mbNext) mbNext.disabled = todayMode ? st.todayTotal <= 1 : at >= total - 1;
+    if (E.title && E.title.textContent !== cards.title) E.title.textContent = cards.title;
+    // 抽屉开着：淡入刷新卡片 + 回顶（约 170ms，淡出完才允许 hidden 的反操作都在 CSS 侧）；
+    // 首开（grid 还空）直接落卡，不走淡入，避免 170ms 空抽屉闪一下
+    if (open && E.grid) {
+      if (!E.grid.innerHTML) {
+        E.grid.innerHTML = cards.html;
+        E.grid.scrollTop = 0;
+      } else {
+        E.grid.classList.add('swap');
+        setTimeout(() => {
+          const g2 = document.getElementById('lcGrid');
+          if (!g2) return;
+          if (!lcDrawerOpen()) { g2.classList.remove('swap'); return; }
+          let now = null;
+          try { now = TASK.listenCards(); } catch (e) { return; }
+          if (!now) return;
+          g2.innerHTML = now.html;
+          g2.scrollTop = 0;
+          g2.classList.remove('swap');
+          const t2 = document.getElementById('lcTitle');
+          if (t2 && t2.textContent !== now.title) t2.textContent = now.title;
+        }, 170);
+      }
+    }
+  }
+  function wireListenCardsOnce() {
+    const E = listenCardsEls();
+    if (!E.drawer || E.drawer._lcWired) return;
+    E.drawer._lcWired = true;
+    E.fab.addEventListener('click', () => setLcDrawer(true));
+    E.scrim.addEventListener('click', () => setLcDrawer(false));
+    E.drawer.querySelector('#lcClose').addEventListener('click', () => setLcDrawer(false));
+    E.drawer.querySelector('.dw-grip').addEventListener('click', () => {
+      const tall = !E.drawer.classList.contains('tall');
+      E.drawer.classList.toggle('tall', tall);
+      try { TASK.listenCardsPrefSet({ tall: tall }); } catch (e) {}
+    });
+    // 辨析展开（照 demo：.open 翻表 + aria；0fr→1fr 动效在 CSS 侧）
+    E.drawer.addEventListener('click', (e) => {
+      const t = e.target.closest('.cmp-toggle');
+      if (!t) return;
+      const box = t.closest('.cmp');
+      if (!box) return;
+      const open = box.classList.toggle('open');
+      t.setAttribute('aria-expanded', String(open));
+    });
+    const mb = (sel, fn) => { const b = E.mini.querySelector(sel); if (b) b.addEventListener('click', fn); };
+    mb('.mb-prev', () => { try { TASK.listenSentenceStep(-1); } catch (e) {} });
+    mb('.mb-next', () => { try { TASK.listenSentenceStep(1); } catch (e) {} });
+    mb('.mb-play', () => { try { TASK.listenToggle(); } catch (e) {} });
+  }
+  // iOS 真机：overflow:hidden 锁不住橡皮筋滚动。抽屉开时，非抽屉内容区的 touchmove 一律吃掉；
+  // 抽屉内容区（.dw-body）放行。click 不受影响。
+  if (!window.__lcTouchGuard) {
+    window.__lcTouchGuard = true;
+    document.addEventListener('touchmove', (e) => {
+      if (!document.body.classList.contains('dw-open')) return;
+      const t = e.target && e.target.closest ? e.target.closest('#lcDrawer .dw-body') : null;
+      if (!t) { try { e.preventDefault(); } catch (err) {} }
+    }, { passive: false });
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !lcDrawerOpen()) return;
+    const mePop = document.getElementById('mePop');
+    if (mePop && !mePop.hidden) return;   // mePop 在上层（z=400），让它先收
+    e.stopPropagation();
+    setLcDrawer(false);
+  });
   window.APP3 = Object.assign(window.APP3, { renderListen, updateListenCard });
 
   /* 登录锁定页（2026-09-30）：未登录打开学习数据/单词本时显示。复用随身听卡片样式，

@@ -38,7 +38,7 @@ git diff
 
 要求：
 
-- `npm test` 必须全绿（目前 27 个测试）。
+- `npm test` 必须全绿（目前 387 个测试）。
 - **改 `shadow/data/sections.json` 的句子数量，必须同时在 `shadow/index.html` 的 `SENT_SHIFTS`
   追加一条记录**（书签 / 续读位 / 间隔复习 / A-B 循环存的全是全局句号，不登记就会让用户进度静默错位）。
   `validate_data.py` 第 14 条会拦住漏记，第 15 条拦住英文句与中文译文数量不齐。

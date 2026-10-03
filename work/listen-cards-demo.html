@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>随身听 · 本句单词卡 Demo（A 内嵌 / B 抽屉）</title>
+<style>
+  :root {
+    --acc: #10b981; --acc-deep: #0ca678; --acc-soft: #d9f2e8;
+    --bg: #f2f6f4; --card: #fbfdfc; --border: #e2eae6;
+    --ink: #1f2937; --sub: #68756f;
+    --ease: cubic-bezier(.22, .61, .36, 1);
+    --r-lg: 22px; --r-md: 16px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font: 15px/1.65 -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+  /* ---- demo 切换条（随页面滚走；真应用无此条） ---- */
+  .demo-bar {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding: 10px 16px; background: rgba(242, 246, 244, .92);
+    border-bottom: 1px solid var(--border);
+  }
+  .demo-bar .tag { font-size: 12px; color: var(--sub); }
+  .seg { display: inline-flex; padding: 3px; background: #e7eeeb; border-radius: 999px; }
+  .seg button {
+    padding: 6px 14px; border-radius: 999px; font-size: 13px; color: var(--sub);
+    transition: color .2s var(--ease), background-color .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .seg button.on { background: #fff; color: var(--acc-deep); box-shadow: 0 1px 4px rgba(15, 40, 32, .12); }
+
+  main { max-width: 1180px; margin: 0 auto; padding: 22px 20px 90px; }
+  .pg-title { margin: 4px 0 18px; font-size: 24px; font-weight: 700; }
+
+  /* ---- 播放卡（照抄现网观感） ---- */
+  .ls-card {
+    display: grid; gap: 18px; padding: 20px;
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--r-lg);
+    box-shadow: 0 6px 22px rgba(20, 45, 38, .05);
+  }
+  @media (min-width: 1024px) { .ls-card { grid-template-columns: minmax(300px, 1fr) minmax(0, 1.15fr); } }
+  .ls-cover {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 10px; text-align: left;
+    padding: 20px; border: 1px solid #cfe8dd; border-radius: var(--r-md); background: #eaf6f0;
+    transition: background-color .2s var(--ease);
+  }
+  .ls-cover:hover { background: #e2f2ea; }
+  .ls-disc {
+    display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%;
+    background: var(--acc); color: #fff; font-size: 20px;
+  }
+  .ls-art { font-size: 19px; font-weight: 700; }
+  .ls-vol { font-size: 12px; color: var(--sub); }
+  .ls-now { font-family: Georgia, "Songti SC", serif; font-size: 16px; line-height: 1.75; }
+  .ls-main { display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+  .ls-controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .ls-controls button {
+    display: inline-flex; align-items: center; gap: 7px; padding: 10px 16px;
+    border: 1px solid var(--border); border-radius: 999px; background: #fff; font-size: 14px;
+    transition: transform .15s var(--ease), box-shadow .2s var(--ease), background-color .2s var(--ease);
+  }
+  .ls-controls button:hover { box-shadow: 0 3px 10px rgba(20, 45, 38, .1); }
+  .ls-controls button:active { transform: scale(.96); }
+  .ls-controls button:disabled { opacity: .45; pointer-events: none; }
+  .ls-play { background: var(--acc) !important; border-color: var(--acc) !important; color: #fff; font-weight: 600; }
+  .ls-seek { -webkit-appearance: none; appearance: none; width: 100%; height: 18px; background: none; margin: 0; }
+  .ls-seek::-webkit-slider-runnable-track { height: 4px; border-radius: 999px; background: #dfe8e4; }
+  .ls-seek::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px; margin-top: -5px; border-radius: 50%;
+    background: var(--acc-deep); box-shadow: 0 1px 4px rgba(12, 166, 120, .4);
+  }
+  .ls-seek::-moz-range-track { height: 4px; border-radius: 999px; background: #dfe8e4; }
+  .ls-seek::-moz-range-thumb { width: 14px; height: 14px; border: 0; border-radius: 50%; background: var(--acc-deep); }
+  .ls-info { margin: 0; text-align: center; font-size: 13px; color: var(--sub); }
+  .ls-expand {
+    padding: 11px; border-radius: 999px; background: var(--acc-soft); color: var(--acc-deep);
+    font-size: 14px; transition: background-color .2s var(--ease);
+  }
+  .ls-expand:hover { background: #cdeee0; }
+
+  /* ---- 吸顶迷你条（滚过播放卡后出现；抽屉打开时压在遮罩上层） ---- */
+  .mini-bar {
+    position: fixed; left: 0; right: 0; top: 0; z-index: 75;
+    display: flex; align-items: center; gap: 10px; padding: 8px 14px;
+    background: rgba(251, 253, 252, .95); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border); box-shadow: 0 4px 16px rgba(20, 45, 38, .08);
+    transform: translateY(-100%); opacity: 0; pointer-events: none;
+    transition: transform .28s var(--ease), opacity .28s var(--ease);
+  }
+  .mini-bar.show, body.dw-open .mini-bar { transform: translateY(0); opacity: 1; pointer-events: auto; }
+  .mini-bar .mb-sent { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: Georgia, serif; font-size: 13px; color: var(--sub); }
+  .mini-bar button {
+    flex: none; display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 50%; background: #eef5f2; font-size: 14px;
+    transition: background-color .2s var(--ease);
+  }
+  .mini-bar button:hover { background: #e0ede8; }
+  .mini-bar .mb-play { background: var(--acc); color: #fff; }
+
+  /* ---- 方案 A：内嵌卡片流 ---- */
+  .cards-flow { margin-top: 26px; transition: opacity .18s var(--ease), transform .18s var(--ease); }
+  .cards-flow.swap { opacity: 0; transform: translateY(6px); }
+  .cf-head { display: flex; align-items: baseline; gap: 10px; margin: 0 0 12px; }
+  .cf-head h2 { margin: 0; font-size: 17px; }
+  .cf-head span { font-size: 12px; color: var(--sub); }
+  .cf-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+
+  /* ---- 单词卡（复用精读 notebar / 辨析观感） ---- */
+  .wcard {
+    min-width: 0; padding: 16px 18px; background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--r-md); box-shadow: 0 3px 12px rgba(20, 45, 38, .04);
+  }
+  .wc-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .wc-word { font-size: 19px; font-weight: 700; color: var(--acc-deep); font-family: Georgia, serif; }
+  .wc-gloss { font-size: 13px; color: var(--sub); }
+  .nb {
+    display: flex; gap: 8px; align-items: flex-start; margin: 8px 0; padding: 9px 12px;
+    background: #f1f7f4; border-radius: 10px; font-size: 14px;
+  }
+  .nb > span:last-child { min-width: 0; overflow-wrap: break-word; }
+  .nb-label {
+    flex: none; margin-top: 1px; padding: 1px 8px; border-radius: 999px;
+    background: var(--acc-soft); color: var(--acc-deep); font-size: 12px; line-height: 1.6;
+  }
+  .nb-label.colloc { background: #e8eefb; color: #3b62b0; }
+  .cmp { margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 8px; }
+  .cmp-toggle {
+    display: flex; width: 100%; align-items: center; gap: 8px; padding: 4px 2px;
+    text-align: left; font-size: 14px; color: var(--sub);
+  }
+  .cmp-toggle .nb-label { background: #f6e8d8; color: #a06a2c; }
+  .cmp-easy { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cmp.open .cmp-easy { white-space: normal; }
+  .chev { flex: none; transition: transform .25s var(--ease); font-style: normal; font-size: 12px; }
+  .cmp.open .chev { transform: rotate(180deg); }
+  .cmp-body { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .3s var(--ease), opacity .3s var(--ease); }
+  .cmp-body > div { overflow: hidden; }
+  .cmp.open .cmp-body { grid-template-rows: 1fr; opacity: 1; }
+  .cmp-body table { width: 100%; margin: 8px 0 4px; border-collapse: collapse; font-size: 13px; }
+  .cmp-body th, .cmp-body td { padding: 7px 8px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+  .cmp-body th { color: var(--sub); font-weight: 600; white-space: nowrap; }
+  .cmp-body td:first-child { font-family: Georgia, serif; color: var(--acc-deep); white-space: nowrap; }
+
+  /* ---- 方案 B：底部抽屉 ---- */
+  .fab {
+    position: fixed; right: 18px; bottom: calc(20px + env(safe-area-inset-bottom)); z-index: 50;
+    display: inline-flex; align-items: center; gap: 8px; padding: 13px 20px; border-radius: 999px;
+    background: var(--acc); color: #fff; font-size: 15px; font-weight: 600;
+    box-shadow: 0 8px 24px rgba(12, 166, 120, .35);
+    transition: transform .2s var(--ease), opacity .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .fab:hover { box-shadow: 0 10px 28px rgba(12, 166, 120, .45); }
+  .fab:active { transform: scale(.96); }
+  .fab .fab-n { padding: 0 7px; border-radius: 999px; background: rgba(255, 255, 255, .25); font-size: 12px; }
+  body.dw-open .fab { opacity: 0; transform: scale(.9) translateY(10px); pointer-events: none; }
+  .scrim {
+    position: fixed; inset: 0; z-index: 70; background: rgba(18, 32, 27, .38);
+    opacity: 0; pointer-events: none; transition: opacity .3s var(--ease);
+  }
+  .scrim.on { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
+    max-height: min(78vh, 680px); display: flex; flex-direction: column;
+    background: var(--card); border-radius: 24px 24px 0 0;
+    box-shadow: 0 -12px 40px rgba(15, 40, 32, .22);
+    transform: translateY(102%);
+    transition: transform .34s var(--ease), max-height .3s var(--ease);
+  }
+  .drawer.open { transform: translateY(0); }
+  .drawer.tall { max-height: calc(100vh - 118px); max-height: calc(100dvh - 118px); }
+  @media (min-width: 900px) {
+    .drawer { left: 50%; transform: translate(-50%, 102%); width: min(860px, 92vw); border-radius: 24px 24px 0 0; }
+    .drawer.open { transform: translate(-50%, 0); }
+  }
+  .dw-grip { padding: 10px 0 4px; text-align: center; display: block; width: 100%; }
+  .dw-grip i { display: inline-block; width: 42px; height: 5px; border-radius: 999px; background: #d7e2dd; transition: background-color .2s var(--ease); }
+  .dw-grip:hover i { background: #bfd2cb; }
+  body.dw-open { overflow: hidden; }
+  .dw-head { display: flex; align-items: center; gap: 10px; padding: 4px 20px 12px; border-bottom: 1px solid var(--border); }
+  .dw-head h2 { margin: 0; font-size: 16px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dw-head .dw-close { padding: 6px 14px; border-radius: 999px; background: #eef5f2; font-size: 13px; transition: background-color .2s var(--ease); }
+  .dw-head .dw-close:hover { background: #e0ede8; }
+  .dw-body { overflow-y: auto; overscroll-behavior: contain; padding: 16px 20px calc(24px + env(safe-area-inset-bottom)); transition: opacity .18s var(--ease), transform .18s var(--ease); }
+  .dw-body.swap { opacity: 0; transform: translateY(6px); }
+
+  /* 模式切换的淡出收尾（淡完才 hidden，避免生硬 display:none） */
+  .fading { opacity: 0 !important; transform: translateY(6px); pointer-events: none; transition: opacity .16s var(--ease), transform .16s var(--ease); }
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body data-mode="a">
+
+<div class="demo-bar">
+  <div class="seg" role="group" aria-label="布局方案切换">
+    <button type="button" id="segA" class="on">方案 A · 内嵌卡片流</button>
+    <button type="button" id="segB">方案 B · 底部抽屉</button>
+  </div>
+  <span class="tag">Demo 假数据 · 只看布局与动效 · 切句/展开辨析都点按即可</span>
+</div>
+
+<div class="mini-bar" id="miniBar" aria-hidden="true">
+  <button type="button" id="mbPrev" aria-label="上一句">◀</button>
+  <button type="button" id="mbPlay" class="mb-play" aria-label="播放">▶</button>
+  <button type="button" id="mbNext" aria-label="下一句">▶</button>
+  <span class="mb-sent" id="mbSent">—</span>
+</div>
+
+<main>
+  <h1 class="pg-title">随身听</h1>
+
+  <section class="ls-card" id="lsCard">
+    <button class="ls-cover" type="button" aria-label="展开全文阅读（demo 不跳）">
+      <span class="ls-disc" aria-hidden="true">🎧</span>
+      <span class="ls-art">《地球与生命》</span>
+      <span class="ls-vol">第 1 卷</span>
+      <span class="ls-now" id="lsNow">—</span>
+    </button>
+    <div class="ls-main">
+      <div class="ls-controls" role="group" aria-label="播放控制">
+        <button type="button" id="lsPrev">◀ 上一句</button>
+        <button type="button" id="lsPlay" class="ls-play">▶ 播放</button>
+        <button type="button" id="lsStop">■ 停止</button>
+        <button type="button" id="lsNext">下一句 ▶</button>
+      </div>
+      <input class="ls-seek" id="lsSeek" type="range" min="1" max="3" value="1" step="1" aria-label="句级位置条">
+      <p class="ls-info" id="lsInfo">—</p>
+      <button class="ls-expand" type="button"> 展开全文阅读（demo 不跳）</button>
+    </div>
+  </section>
+
+  <section class="cards-flow" id="flowA" aria-label="本句单词卡">
+    <div class="cf-head"><h2 id="cfTitle">本句单词卡</h2><span id="cfSub"></span></div>
+    <div class="cf-grid" id="cfGrid"></div>
+  </section>
+</main>
+
+<button class="fab" id="fab" type="button" hidden>🃏 本句单词卡 <span class="fab-n" id="fabN">0</span></button>
+<div class="scrim" id="scrim"></div>
+<section class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="本句单词卡">
+  <button class="dw-grip" type="button" aria-label="切换抽屉高度（半屏 / 近全屏）"><i></i></button>
+  <div class="dw-head">
+    <h2 id="dwTitle">本句单词卡</h2>
+    <button class="dw-close" type="button" id="dwClose">收起</button>
+  </div>
+  <div class="dw-body cf-grid" id="dwGrid" style="display:grid"></div>
+</section>
+
+<script>
+'use strict';
+/* ---- 假数据：3 句 × 目标词卡（同义 / 词伙 / 辨析） ---- */
+const WORDS = {
+  atmosphere: {
+    gloss: 'n. 大气层；气氛',
+    syn: 'air, climate；mood, ambiance',
+    colloc: 'the earth’s atmosphere 大气层；a festive atmosphere 节日气氛',
+    cmp: {
+      easy: 'atmosphere 是地方的「气」，mood 是人的「气」，tone 是文字说话的「气」。',
+      rows: [
+        ['atmosphere', '地方、空间的空气 / 氛围', 'the earth’s atmosphere / a cozy atmosphere'],
+        ['mood', '人或群体当下的心情', 'in a good mood'],
+        ['tone', '说话、文字的语气腔调', 'a serious tone'],
+      ],
+    },
+  },
+  cover: {
+    gloss: 'n./v. 覆盖物；遮盖',
+    syn: 'blanket, coat, mask',
+    colloc: 'a thin cover 薄薄的一层；cover the costs 覆盖成本',
+    cmp: {
+      easy: 'cover 泛指「盖住」，blanket 像毯子一样「铺满」，lid 是容器上的「盖」。',
+      rows: [
+        ['cover', '泛称：把东西放上面遮住、盖住', 'cover the pot with a lid'],
+        ['blanket', '像毯子一样厚厚铺满整片', 'snow blanketed the field'],
+        ['lid', '容器上可开合的盖子', 'put the lid back on'],
+      ],
+    },
+  },
+  sustain: {
+    gloss: 'v. 维持；支撑',
+    syn: 'maintain, support；endure',
+    colloc: 'sustain life 维持生命；sustain growth 维持增长',
+    cmp: {
+      easy: 'sustain 是「撑着不倒」，maintain 是「保养如常」，retain 是「留着不丢」。',
+      rows: [
+        ['sustain', '让生命 / 活动持续下去、不倒', 'sustain economic growth'],
+        ['maintain', '保养、维护使其保持好状态', 'maintain the machine'],
+        ['retain', '保留住、不失去（控制、记忆）', 'retain control'],
+      ],
+    },
+  },
+  fragile: {
+    gloss: 'adj. 脆弱的',
+    syn: 'delicate, brittle, vulnerable',
+    colloc: 'a fragile ecosystem 脆弱的生态；fragile peace 脆弱的和平',
+    cmp: {
+      easy: 'fragile 一碰就碎、常说系统关系；delicate 精细娇嫩；brittle 硬但易裂。',
+      rows: [
+        ['fragile', '整体弱、易受损（系统、关系、经济）', 'a fragile economy'],
+        ['delicate', '精细娇嫩、需轻拿轻放', 'delicate skin'],
+        ['brittle', '硬却一折就断（骨、材料）', 'brittle bones'],
+      ],
+    },
+  },
+  strip: {
+    gloss: 'v. 剥去；剥夺',
+    syn: 'remove, peel；deprive',
+    colloc: 'strip nutrients 剥走养分；strip the bark 剥掉树皮',
+    cmp: null,
+  },
+  nutrient: {
+    gloss: 'n. 营养物质',
+    syn: 'nourishment, sustenance',
+    colloc: 'essential nutrients 必需营养素；rich in nutrients 富含养分',
+    cmp: null,
+  },
+};
+const SENT = [
+  { en: 'Ms. Lin said the atmosphere is a thin cover that holds oxygen for us to breathe.', words: ['atmosphere', 'cover'] },
+  { en: 'The soil beneath the forest sustains a fragile web of life that recovers slowly.', words: ['sustain', 'fragile'] },
+  { en: 'Rising heat may strip nutrients from the crops people rely on every day.', words: ['strip', 'nutrient'] },
+];
+
+let at = 0, playing = false, mode = 'a', drawerOpen = false;
+const $ = (s) => document.querySelector(s);
+
+function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+function wordCardHTML(k) {
+  const w = WORDS[k];
+  let cmp = '';
+  if (w.cmp) {
+    cmp = `<div class="cmp">
+      <button class="cmp-toggle" type="button" aria-expanded="false">
+        <span class="nb-label" style="background:#f6e8d8;color:#a06a2c">辨析</span>
+        <span class="cmp-easy">${esc(w.cmp.easy)}</span><i class="chev">▾</i>
+      </button>
+      <div class="cmp-body"><div><table>
+        <tr><th>词</th><th>核心意象</th><th>典型搭配</th></tr>
+        ${w.cmp.rows.map((r) => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')}
+      </table></div></div>
+    </div>`;
+  }
+  return `<article class="wcard">
+    <header class="wc-head"><b class="wc-word">${esc(k)}</b><span class="wc-gloss">${esc(w.gloss)}</span></header>
+    <div class="nb"><span class="nb-label">同义</span><span>${esc(w.syn)}</span></div>
+    <div class="nb"><span class="nb-label colloc">词伙</span><span>${esc(w.colloc)}</span></div>
+    ${cmp}
+  </article>`;
+}
+const cardsHTML = (sent) => sent.words.map(wordCardHTML).join('');
+
+/* ---- 渲染 ---- */
+function paintPlayer() {
+  const s = SENT[at];
+  $('#lsNow').textContent = s.en;
+  $('#mbSent').textContent = s.en;
+  $('#lsInfo').textContent = `第 ${at + 1} / ${SENT.length} 句 · 还剩 ${SENT.length - at - 1} 句`;
+  $('#lsSeek').value = String(at + 1);
+  $('#lsPrev').disabled = at <= 0; $('#mbPrev').disabled = at <= 0;
+  $('#lsNext').disabled = at >= SENT.length - 1; $('#mbNext').disabled = at >= SENT.length - 1;
+  const label = playing ? '⏸ 暂停' : '▶ 播放';
+  $('#lsPlay').textContent = label; $('#mbPlay').textContent = playing ? '⏸' : '▶';
+}
+function paintCards() {
+  const s = SENT[at];
+  const sub = `第 ${at + 1} 句 · ${s.words.length} 个目标词`;
+  $('#cfTitle').textContent = '本句单词卡';
+  $('#cfSub').textContent = sub;
+  $('#dwTitle').textContent = `本句单词卡 · ${sub}`;
+  $('#cfGrid').innerHTML = cardsHTML(s);
+  $('#dwGrid').innerHTML = cardsHTML(s);
+  $('#fabN').textContent = String(s.words.length);
+}
+function step(d) {
+  const n = Math.min(SENT.length - 1, Math.max(0, at + d));
+  if (n === at) return;
+  at = n;
+  paintPlayer();
+  const targets = [];
+  if (mode === 'a') targets.push($('#flowA'));
+  if (drawerOpen) targets.push($('#dwGrid'));
+  targets.forEach((el) => el.classList.add('swap'));
+  setTimeout(() => {
+    paintCards();
+    targets.forEach((el) => el.classList.remove('swap'));
+    if (drawerOpen) $('#dwGrid').scrollTop = 0;   // 切句后回顶，第一张卡必须在视线内
+  }, 170);
+}
+
+/* ---- 播放卡控件 ---- */
+$('#lsPrev').onclick = $('#mbPrev').onclick = () => step(-1);
+$('#lsNext').onclick = $('#mbNext').onclick = () => step(1);
+$('#lsPlay').onclick = $('#mbPlay').onclick = () => { playing = !playing; paintPlayer(); };
+$('#lsStop').onclick = () => { playing = false; paintPlayer(); };
+$('#lsSeek').addEventListener('change', (e) => { const n = Number(e.target.value) - 1; if (n !== at) { at = n; paintPlayer(); paintCards(); } });
+
+/* ---- 辨析展开（事件代理，点按翻表） ---- */
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('.cmp-toggle');
+  if (!t) return;
+  const box = t.closest('.cmp');
+  const open = box.classList.toggle('open');
+  t.setAttribute('aria-expanded', String(open));
+});
+
+/* ---- 方案 B 抽屉 ---- */
+function setDrawer(open) {
+  if (drawerOpen === open) return;
+  drawerOpen = open;
+  document.body.classList.toggle('dw-open', open);
+  $('#drawer').classList.toggle('open', open);
+  $('#scrim').classList.toggle('on', open);
+  if (open) { $('#dwClose').focus({ preventScroll: true }); }
+  else if (!$('#fab').hidden) { $('#fab').focus({ preventScroll: true }); }
+}
+$('#fab').onclick = () => setDrawer(true);
+$('#dwClose').onclick = () => setDrawer(false);
+$('#scrim').onclick = () => setDrawer(false);
+document.querySelector('.dw-grip').onclick = () => $('#drawer').classList.toggle('tall');
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && drawerOpen) setDrawer(false); });
+
+/* ---- A/B 模式切换：先淡出再 hidden，避免生硬跳变 ---- */
+function fadeSwap(el, hide, after) {
+  if (hide) {
+    el.classList.add('fading');
+    setTimeout(() => { el.hidden = true; el.classList.remove('fading'); if (after) after(); }, 160);
+  } else {
+    el.classList.add('fading');
+    el.hidden = false;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      el.classList.remove('fading');
+      if (after) setTimeout(after, 180);
+    }));
+  }
+}
+function setMode(m) {
+  if (m === mode) return;
+  mode = m;
+  document.body.dataset.mode = m;
+  $('#segA').classList.toggle('on', m === 'a');
+  $('#segB').classList.toggle('on', m === 'b');
+  if (m === 'b') { setDrawer(false); fadeSwap($('#flowA'), true); fadeSwap($('#fab'), false); }
+  else { fadeSwap($('#fab'), true); fadeSwap($('#flowA'), false); }
+}
+$('#segA').onclick = () => setMode('a');
+$('#segB').onclick = () => setMode('b');
+
+/* ---- 吸顶迷你条：播放卡滚出视口后出现，直接吸视口顶（top:0 已在 CSS） ---- */
+const miniBar = $('#miniBar');
+new IntersectionObserver((es) => {
+  miniBar.classList.toggle('show', !es[0].isIntersecting);
+}, { threshold: 0.05 }).observe($('#lsCard'));
+paintPlayer();
+paintCards();
+</script>
+</body>
+</html>
