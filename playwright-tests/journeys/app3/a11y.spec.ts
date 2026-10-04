@@ -88,6 +88,7 @@ const AXE_UNCALCULABLE: { sel: string; why: string }[] = [
   { sel: '.ls-cover', why: '随身听封面卡：accent-soft→白的浅色渐变底，axe 判不了背景（--text 压浅渐变，人工核过）' },
   { sel: '.sidenav', why: '左侧导航：refine2 ⑤ 起底色叠了一道极轻竖向渐变（#fcfcfb→#f6f6f4），axe 判不了 nav 文字的合成背景；nav 字是 --text/--accent-text 压这条近白底，人工核过 ≥4.5' },
   { sel: '.blank-pop', why: '② 答题浮窗：玻璃浮层，底下正文 .sent.task-new 有高亮底，axe 判不了合成背景' },
+  { sel: '.dw-close', why: '单词卡抽屉的幽灵收起键（2026-10-04 用户「太抢眼」改无底无边）：背景透到 #lcDrawer 玻璃渐变，axe 判不了；muted 字压近白玻璃人工核 ≥5:1（暗色同）' },
 ];
 
 function luminance(rgb: number[]) {

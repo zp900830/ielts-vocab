@@ -655,7 +655,7 @@
       '<section id="lcDrawer" role="dialog" aria-modal="true" aria-label="本句单词卡">' +
         '<button class="dw-grip" type="button" aria-label="切换抽屉高度（半屏 / 近全屏）"><i></i></button>' +
         '<div class="dw-head"><h2 id="lcTitle">本句单词卡</h2>' +
-        '<button class="dw-close" type="button" id="lcClose">收起</button></div>' +
+        '<button class="dw-close" type="button" id="lcClose" aria-label="收起"><i class="ri-arrow-down-s-line" aria-hidden="true"></i><span>收起</span></button></div>' +
         '<div class="dw-body lc-grid" id="lcGrid"></div>' +
       '</section>');
     wireListenCardsOnce();

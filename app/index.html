@@ -2420,8 +2420,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #lcDrawer .dw-head { display: flex; align-items: center; gap: 10px; padding: 4px 20px 12px; border-bottom: 1px solid var(--border); }
   /* 标题弱化：只是定位信息（第几句/几个词），主角是卡片内容 */
   #lcDrawer .dw-head h2 { margin: 0; font-size: 12.5px; font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); letter-spacing: .02em; }
-  #lcDrawer .dw-close { padding: 6px 14px; border: none; border-radius: 999px; background: var(--accent-soft); color: var(--accent-text); font-size: 13px; cursor: pointer; transition: background-color .2s cubic-bezier(.22,.61,.36,1); }
-  #lcDrawer .dw-close:hover { filter: brightness(.97); }
+  /* 收起键（2026-10-04 用户反馈「太抢眼太大」）：改成幽灵文字键 —— 无底无边、muted 小字，
+     hover 才出浅薄荷底（与 .ls-collapse 同一套轻量口径）；焦点管理（setLcDrawer focus 进它）不受影响 */
+  #lcDrawer .dw-close { display: inline-flex; align-items: center; gap: 1px; padding: 3px 8px 3px 4px;
+    border: none; border-radius: 999px; background: transparent; color: var(--muted);
+    font: inherit; font-size: 12px; line-height: 1; cursor: pointer;
+    transition: background-color .2s cubic-bezier(.22,.61,.36,1), color .2s cubic-bezier(.22,.61,.36,1); }
+  #lcDrawer .dw-close i { font-size: 15px; line-height: 1; }
+  #lcDrawer .dw-close:hover { background: var(--accent-soft); color: var(--accent-text); }
   #lcDrawer .dw-body { overflow-y: auto; overscroll-behavior: contain; padding: 16px 20px calc(24px + env(safe-area-inset-bottom, 0px)); transition: opacity .18s cubic-bezier(.22,.61,.36,1), transform .18s cubic-bezier(.22,.61,.36,1); }
   #lcDrawer .dw-body.swap { opacity: 0; transform: translateY(6px); }
   @media (max-width: 700px) {
@@ -2444,6 +2450,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #lcMini.show, body.dw-open #lcMini { transform: translateY(0); opacity: 1; visibility: visible; pointer-events: auto;
     transition: transform .28s cubic-bezier(.22,.61,.36,1), opacity .28s cubic-bezier(.22,.61,.36,1), visibility 0s 0s; }
   body.dw-open #lcMini { padding-top: calc(8px + env(safe-area-inset-top, 0px)); }
+  /* 抽屉开：迷你条压在暗遮罩上，玻璃太透（尾端 alpha .15）会让遮罩底色渗进来把文字「洗灰」
+     （2026-10-04 用户截图反馈「看不清」）—— 收成单行时玻璃加实。 */
+  body.dw-open #lcMini { background: linear-gradient(145deg, rgba(255,255,255,.93), rgba(255,255,255,.88) 42%, rgba(255,255,255,.82)); }
+  body.dark.dw-open #lcMini { background: linear-gradient(145deg, rgba(30,28,25,.97), rgba(30,28,25,.92) 42%, rgba(30,28,25,.86)); }
+  /* 64px 单行窗里 mask 的上下渐隐正好啃掉当前句英文的顶和译文的底 —— 单行模式不需要渐隐，直接摘掉 */
+  body.dw-open #lcMini .mb-roll { -webkit-mask-image: none; mask-image: none; }
   #lcMini .mb-bar { display: flex; align-items: center; gap: 10px; }
   #lcMini .mb-count { margin-left: auto; font-family: var(--sans); font-size: 12px; color: var(--muted); white-space: nowrap; }
   /* 字幕窗：固定高 + 上下渐隐；行体复用精读 .sent/.gl/.sent-zh，只有当前句挂 .playing 薄荷高亮 */
@@ -2452,7 +2464,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     -webkit-mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
     mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent); }
   /* 抽屉开：字幕窗收矮到只露当前句（遮罩可点带不能被吃掉）；抽屉关才展开成完整字幕条 */
-  body.dw-open #lcMini .mb-roll { height: 64px; }
+  body.dw-open #lcMini .mb-roll { height: 76px; }
   #lcMini .mb-row { padding: 3px 4px; }
   #lcMini .mb-row .sent { cursor: default; font-size: 15px; line-height: 1.55; }
   #lcMini .mb-row .sent:hover { background: none; }
