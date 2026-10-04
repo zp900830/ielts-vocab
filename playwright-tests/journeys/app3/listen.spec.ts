@@ -107,9 +107,9 @@ test.describe('3.0 随身听（M4，PRD §7）', () => {
     await expect(page.locator('#art')).toBeVisible();
     await expect(page.locator('#art .sent').first()).toBeVisible();
     await expect(page.locator('#audiobar')).toBeVisible();
-    // 展开即起播：当前句高亮
-    await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(true);
-    await expect(page.locator('#art .sent.playing')).toHaveCount(1);
+    // 展开只是换形态，不动播放链（2026-10-04 用户口径）：未播放就不自动起播，正文无高亮
+    await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(false);
+    await expect(page.locator('#art .sent.playing')).toHaveCount(0);
 
     // 关闭 → 收回卡片，仍在 #/listen
     await page.locator('#lsClose').click();

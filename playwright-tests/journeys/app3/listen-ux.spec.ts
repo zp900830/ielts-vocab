@@ -167,7 +167,7 @@ test.describe('③ 未展开态没有 循环/AB/倍速/书签', () => {
 });
 
 test.describe('④ 展开 = 全屏弹窗（不离开 #/listen）', () => {
-  test('点展开：留在 #/listen、正文全屏、可播放；**不再有 HUD 大卡片**；顶栏是「收起」', async ({ page }) => {
+  test('点展开：留在 #/listen、正文全屏、**不自动起播**；**不再有 HUD 大卡片**；顶栏是「收起」', async ({ page }) => {
     await stubData(page, TWO);
     await gotoListen(page);
     await installSpeakStub(page);
@@ -181,7 +181,8 @@ test.describe('④ 展开 = 全屏弹窗（不离开 #/listen）', () => {
     await expect(page.locator('#lsTitle'), '顶部条报篇名').toContainText('地球与生命');
     await expect(page.locator('#lsPos'), '顶部条报篇号').toContainText(/第 \d+\/\d+ 篇/);
     await expect(page.locator('#art .sent').first()).toBeVisible();   // §7.3 正文
-    await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(true);
+    // 展开只是换形态，不动播放链（2026-10-04 用户口径）：没在播就不出声
+    await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(false);
     // 左上角 = 收起，不是返回（收起后播放继续，见 ⑦）
     await expect(page.locator('#lsClose')).toHaveAttribute('aria-label', '收起');
     // task-mode class 不许泄漏进听书态（用户截图实测过泄漏）
@@ -193,8 +194,14 @@ test.describe('④ 展开 = 全屏弹窗（不离开 #/listen）', () => {
     await gotoListen(page);
     await installSpeakStub(page);
 
+    // 先在卡片页起播，再展开 —— 展开不得打断当前句（2026-10-04 用户口径）
+    await page.locator('.ls-play').click();
+    await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(true);
+    const idx0 = await page.evaluate(() => TASK.listenState().idx);
     await page.locator('.ls-expand').click();
     await expect(page.locator('body')).toHaveClass(/listen-mode/);
+    expect((await st(page)).playing, '展开不打断播放').toBe(true);
+    expect((await st(page)).idx, '展开不重播当前句').toBe(idx0);
     const opened = await page.evaluate(() =>
       getComputedStyle(document.querySelector('body > .layout')!).animationName);
     expect(opened, '展开要有进入动效（正文整块淡入）').not.toBe('none');

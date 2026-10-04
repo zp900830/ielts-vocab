@@ -6586,7 +6586,6 @@ let listenOn = false;
       function listenExpand() {
         if (taskMode) exitTaskMode();   // 与任务模式互斥：答题卡/任务条完整收掉（同 listenOpen）
         if (_listenArticle == null) listenOpen(0);
-        listenArm();
         if (_listenArticle != null && currentChapter !== _listenArticle) {
           currentChapter = _listenArticle; chapterSentStart = computeChapterStart(_listenArticle);
           idx = -1; _paintIdx = -2; render();
@@ -6596,8 +6595,10 @@ let listenOn = false;
         document.body.classList.remove('listen-closing');
         document.body.classList.add('listen-mode');
         updateListenHud();
-        if (_listenSrc === 'today' && !taskMode && !(_listenArmed && idx >= 0)) listenTodayStart();
-        else playFrom(idx >= 0 ? idx : 0);   // 展开即连播（§7.4）
+        /* 展开只是换形态，不动播放链（2026-10-04 用户改口径）：在播无缝继续、暂停停在原地、
+           没起播就不出声 —— 旧「展开即连播」调 playFrom(idx) 会把当前句从头重播、未播时突然
+           自动开始，用户报的两条 bug 都出在这。 */
+        try { paint(); } catch (e) {}
       }
       /* ④ 收起（2026-09-25 用户改口径）：收起**不停止** —— 播放继续、悬浮球在、收听账继续记；
          只有「停止」才收掉上下文。左上角那颗是「收起」不是「返回」：展开态 ⇄ 卡片态是同一场收听
