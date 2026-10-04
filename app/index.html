@@ -2371,17 +2371,20 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      迷你条加 safe-area；③ 隐藏态一律 visibility:hidden（demo 只靠 opacity，键盘仍能
      Tab 进去，axe 违规）；④ .fading 只服务于 demo 的 A/B 切换（真应用无模式切换，不要）。 */
   /* ---- FAB：右下唤起 + 目标词数角标；当前句无目标词时 hidden ---- */
+  /* 2026-10-04 用户反馈「太抢眼太大」：深绿实底大胶囊改成白底细边小胶囊 —— 弱、但找得到。
+     全实底色（#fff / #e0f5ec / #252220），axe 都能算对比度，不用登记例外。 */
   #lcFab { position: fixed; right: 18px; bottom: 20px; z-index: 50;
-    display: inline-flex; align-items: center; gap: 8px; padding: 13px 20px; border: none; border-radius: 999px;
-    /* 白字压实底深绿（5.1:1）；--accent #0c9c74 只有 3.48:1，a11y 门禁拦截。
-       之前 FAB 在纯词义句上恒为 hidden，扫描扫不到，改成 gloss-only 也出卡后才现形。 */
-    background: #0a7d5e; color: #fff; font-size: 15px; font-weight: 600;
-    box-shadow: 0 8px 24px rgba(12, 166, 120, .35);
-    transition: transform .2s cubic-bezier(.22,.61,.36,1), opacity .2s cubic-bezier(.22,.61,.36,1), box-shadow .2s cubic-bezier(.22,.61,.36,1), visibility 0s; }
-  #lcFab:hover { box-shadow: 0 10px 28px rgba(12, 166, 120, .45); }
+    display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px 7px 11px; border: 1px solid #dce7e1; border-radius: 999px;
+    background: #fff; color: var(--accent-text); font-size: 12.5px; font-weight: 500;
+    box-shadow: 0 2px 10px rgba(20, 45, 38, .10);
+    transition: transform .2s cubic-bezier(.22,.61,.36,1), opacity .2s cubic-bezier(.22,.61,.36,1), background-color .2s cubic-bezier(.22,.61,.36,1), box-shadow .2s cubic-bezier(.22,.61,.36,1), visibility 0s; }
+  #lcFab:hover { background: var(--accent-soft); box-shadow: 0 3px 12px rgba(20, 45, 38, .14); }
   #lcFab:active { transform: scale(.96); }
-  #lcFab .fab-n { padding: 0 7px; border-radius: 999px; background: #085f48; font-size: 12px; }  /* 实底：白字 7.7:1，且 axe 能算出对比度 */
-  #lcFab i { font-size: 17px; }
+  #lcFab .fab-n { padding: 0 6px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-text); font-size: 11px; }  /* 实底可算：浅 #0a7558 压 #e0f5ec ≈ 5.6:1 */
+  body.dark #lcFab { background: #252220; border-color: #33302b; color: var(--accent-text); }  /* 暗色 --accent-text=#10b487 压 #252220 ≈ 5.95:1 */
+  body.dark #lcFab .fab-n { background: rgba(16,180,135,.14); }
+  body.dark #lcFab:hover { background: #2b2926; }
+  #lcFab i { font-size: 14px; }
   #lcFab[hidden] { display: none; }
   body.dw-open #lcFab { opacity: 0; visibility: hidden; transform: scale(.9) translateY(10px); pointer-events: none;
     transition: transform .2s cubic-bezier(.22,.61,.36,1), opacity .2s cubic-bezier(.22,.61,.36,1), visibility 0s .2s; }
