@@ -3874,13 +3874,24 @@ let listenOn = false;
     return this._auEl;
     },
     _unlock() {
-    // iOS 必须在用户手势内先 play 一次音频元素，后续锁屏/后台才能继续播放；用极短静音 WAV 占位解锁
+    // iOS 必须在用户手势内先 play 一次音频元素，后续锁屏/后台才能继续播放；用极短静音 WAV 占位解锁。
+    // 必须用独立元素，绝不复用 _auEl：旧实现发现 src 不含 audio/wav 就把正在播的真实 blob 换成静音 WAV，
+    // 而 pointerdown 每次点击都调这里 → 点一下掐掉当前句，恢复机制把 0.04s 静音 WAV 播完 →
+    // onended → 直接跳下一句（2026-10-04 用户报「播放中点任何位置都下一句」的根因）。
     try {
-    const au = this._ensureAudio();
-    if (!au.src || au.src.indexOf('audio/wav') === -1) {
-    au.src = 'data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQIAAAAAAA==';
+    if (!this._unlockEl) {
+    this._unlockEl = document.createElement('audio');
+    this._unlockEl.setAttribute('playsinline', '');
+    this._unlockEl.setAttribute('webkit-playsinline', '');
+    this._unlockEl.setAttribute('preload', 'auto');
+    this._unlockEl.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;z-index:-1;';
+    this._unlockEl.src = 'data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQIAAAAAAA==';
+    document.body.appendChild(this._unlockEl);
     }
-    const p = au.play();
+    const u = this._unlockEl;
+    if (!u.paused && !u.ended) return; // 上一次静音 WAV 还没播完，不必重放
+    try { u.currentTime = 0; } catch (e) {}
+    const p = u.play();
     if (p && p.catch) p.catch(() => {});
     } catch (e) {}
     },
