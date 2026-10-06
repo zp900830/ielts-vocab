@@ -204,7 +204,7 @@ test.describe('3.0 状态胶囊（实底）对比度 ≥ AA 正文 4.5', () => {
 });
 
 /* refine3 ③：非主按钮的操作组件（选中态胶囊）统一「浅底 + 同色深字」，
-   不再「深绿实心 + 黑字」。用户截图点名的是「我的」浮窗里「每天分钟数 / 新词」两排。
+   不再「深绿实心 + 黑字」。用户截图点名的是「我的」浮窗里「每天分钟数」那一排。
    锁：背景是浅薄荷、字是深绿、对比 ≥4.5；字不是近黑。 */
 describeRefine3();
 
@@ -222,7 +222,7 @@ function describeRefine3() {
     return { 'sections.json': JSON.stringify(titles.map((t, i) => mk(t, i === 0 ? 12 : 2))), 'vocab.json': JSON.stringify(vocab), 'chapters.json': '[]' };
   })();
 
-  test('refine3 ③：「我的」选中态（每天分钟数 / 新词）浅底深绿字，不再是深绿实心 + 黑字', async ({ page }) => {
+  test('refine3 ③：「我的」选中态（每天分钟数）浅底深绿字，不再是深绿实心 + 黑字', async ({ page }) => {
     await stubData(page, fixture);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await waitShadowReady(page);

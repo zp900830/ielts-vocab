@@ -4976,7 +4976,12 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         try { ROOT2 = JSON.parse(localStorage.getItem(LS_V2) || 'null'); } catch (e) { ROOT2 = null; }
         if (ROOT2 && ROOT2.state && ROOT2.state.v === 2 && Array.isArray(ROOT2.events)) {
           if (ROOT2.state.eventsSeen !== ROOT2.events.length) recompute2();
+          /* 2026-10-06 用户砍掉「只复习不见新词」：存量 pausedNew:true 就地翻回 false，
+             否则那批人被永久锁在"只复习"且再无开关可关。镜像在下一条 syncLegacyPlan 之后落盘。 */
+          let _pn = false;
+          if (ROOT2.plan && ROOT2.plan.pausedNew) { ROOT2.plan.pausedNew = false; _pn = true; persist2(); }
           syncLegacyPlan();
+          if (_pn) savePlan();
           return;
         }
         const oldPlan = readLegacy(LS_PLAN);
@@ -4986,6 +4991,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         ROOT2 = { plan: oldPlan ? r.state.plan : null, state: r.state, events: r.events,
                   uploaded: r.events.length, migratedAt: Date.now(), report: r.report };
         ROOT2.state.eventsSeen = r.events.length;
+        if (ROOT2.plan && ROOT2.plan.pausedNew) { ROOT2.plan.pausedNew = false; }
         syncLegacyPlan();
         persist2();
       }
@@ -4995,13 +5001,13 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         const p = ROOT2 && ROOT2.plan;
         if (!p) { plan = null; return; }
         plan = { startDate: p.startDate, totalDays: p.totalDays || 30, dailyMinutes: p.todayMinutes,
-                 newPerDay: p.newPerDay || newPerDayOf(p.totalDays || 30), paused: !!p.pausedNew };
+                 newPerDay: p.newPerDay || newPerDayOf(p.totalDays || 30), paused: false };
       }
       function initPlan(minutes) {
         const m = Math.max(1, Math.min(180, Math.round(Number(minutes) || 15)));
         ROOT2 = ROOT2 || {};
         ROOT2.plan = { todayMinutes: m, boundaryHour: 4, startDate: ShadowPlan.dayKey(Date.now(), 4),
-                       endDate: null, pausedNew: false, totalDays: 30 };
+                       endDate: null, totalDays: 30 };
         ROOT2.state = ShadowPlan.emptyState(); ROOT2.events = []; ROOT2.uploaded = 0; ROOT2.migratedAt = 0;
         ROOT2.planned = {};
         syncLegacyPlan(); savePlan();
@@ -6232,7 +6238,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
          所以按「计划的指纹」缓存：改分钟 / 改日界 / 暂停新词 / 换一天 / 词表变了 才重算。 */
       function etaKey(m) {
         const p = (ROOT2 && ROOT2.plan) || {};
-        return [m, ALL_TARGET_WORDS, day2(), p.boundaryHour, p.pausedNew ? 1 : 0, rate].join('|');
+        return [m, ALL_TARGET_WORDS, day2(), p.boundaryHour, rate].join('|');
       }
       /* 2026-09-30：368ms 全量模拟不许再抢关键路径 —— 三处调用方画的都是「算一下…」占位，
          resolve 快慢只影响占位时长，不影响正确性。requestIdleCallback 让浏览器先做完解析/布局/
@@ -6273,7 +6279,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         return d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月' + (exact ? ' ' + d.getDate() + ' 日' : '');
       }
       function etaText(r, m, exact) {
-        if (!r || r.empty) return '按每天 ' + m + ' 分钟排不出任务，先调大一点或取消「只复习」';
+        if (!r || r.empty) return '按每天 ' + m + ' 分钟排不出任务，先把每天的时间调大一点';
         if (!r.done) return '按每天 ' + m + ' 分钟，三年内到不了终点（先把每天时间调大些）';
         return '到 ' + etaMonth(r.doneAt, exact) + ' <b>新词全部过完一遍</b>（需要 ' + r.days + ' 天）';
       }
@@ -6472,10 +6478,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           <div class="ps-opts">${opts.map(o => `<button class="ps-opt${String(o[0]) === String(cur) ? ' sel' : ''}" data-v="${o[0]}" onclick="${fn}(${o[0]})">${o[1]}</button>`).join('')}</div></div>`;
         return row('每天有多少分钟', MINS.map(m => [m, m + ' 分钟']), ROOT2.plan.todayMinutes, 'TASK.setMinutes') +
           row('几点算换一天', BOUND, ROOT2.plan.boundaryHour, 'TASK.setBoundary') +
-          `<div class="ps-group"><label>新词</label><div class="ps-opts">
-            <button class="ps-opt${ROOT2.plan.pausedNew ? '' : ' sel'}" onclick="TASK.setPauseNew(false)">正常见新词</button>
-            <button class="ps-opt${ROOT2.plan.pausedNew ? ' sel' : ''}" onclick="TASK.setPauseNew(true)">只复习，先不见新词</button></div></div>
-          <div class="ps-eta" id="planEta" data-days="">算一下…</div>
+          `<div class="ps-eta" id="planEta" data-days="">算一下…</div>
           ${ROOT2.report && ROOT2.report.words ? `<div class="tp-note sm">上次改成按词记：<b>${ROOT2.report.words}</b> 个词从句子账搬过来，`
             + `其中 ${ROOT2.report.cappedWords} 个原本算「巩固/掌握」的被压回「已见面」，要重新考才算数。</div>` : ''}
           <div class="tp-note sm">进度存在这台设备上，并以上传「完成记录」的方式同步。<span class="sync-state" id="syncState">${syncHintText()}</span></div>
@@ -6491,7 +6494,6 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel'));
       }
       function setBoundary(h) { ROOT2.plan.boundaryHour = h; recompute2(); _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel')); }
-      function setPauseNew(v) { ROOT2.plan.pausedNew = !!v; _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel')); }
       function syncHintText() {
         // 只有真的登录了、且上传链已接上才报差额 —— 没登录时说「还有 N 条没传上去」是空许诺
         if (typeof CLOUD === 'undefined' || !CLOUD._userMail) return '';
@@ -6521,14 +6523,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           <p class="sm">这里不是背单词的入口，是查「我到底会没会」的地方。</p>`;
       }
 
-      function pauseNew() {
-        if (!plan) return;
-        plan.paused = !plan.paused;
-        savePlan(); buildQueue(); updateBtn();
-        showAbToast(plan.paused ? '已暂停新句，只复习' : '已恢复新句推进');
-        const p = document.getElementById('todayPanel');
-        if (p && _panelOpen) renderToday(p);
-      }
+      /* pauseNew（「暂停新句，只复习」）已随 2026-10-06 砍「只复习」开关一并删除。 */
       /* ---- 本地备份：计划与进度只存在 localStorage，清缓存或换设备即归零 ----
          ⚠️ 真值根 `ielts.shadow.v2` 用的是**点**分隔，`startsWith('ielts-')` 匹配不到它 ——
          2026-09-24 实测：导出/恢复都绕开了 events/state/plan，备份出来是个空壳，
@@ -6728,7 +6723,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
       // ---- 公开 API ----
       return {
         init, togglePanel, openPanel, closePanel, enterTaskMode, exitTaskMode,
-        again, prev, next, requestExit, cancelExit, confirmExit, pauseNew, resetPlan, onSentenceComplete,
+        again, prev, next, requestExit, cancelExit, confirmExit, resetPlan, onSentenceComplete,
         taskSentenceFinished,
         exportBackup, importBackup,
         get active() { return taskMode; },
@@ -6739,7 +6734,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
         loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
         pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
         offerResume, resumeTask, skipResume, hideResumeOffer,
-        initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary, setPauseNew,
+        initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setBoundary,
         etaFor, etaCalls, countStages, seedDailyForTest,
         // 事件流「安全合并」的对照实验：先冻住派生状态 → 合并 → 重放 → 再比。
         // 测试断言两次 state 深相等（合并不许动账），并断言确实真掉了重复条。

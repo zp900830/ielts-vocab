@@ -15,7 +15,7 @@ declare const TASK: {
   importBackup(id?: string): void;
   todayStats(): { streak: number; graduated: number; targetWords: number };
   state(): { daily: Record<string, unknown> } | null;
-  planConfig(): { minutes: number; boundary: number; pausedNew: boolean; startDate: string } | null;
+  planConfig(): { minutes: number; boundary: number; startDate: string } | null;
   hasPlan: boolean;
 };
 declare const ShadowPlan: { articleScope(sections: unknown, article: number): Set<number> };
@@ -368,7 +368,7 @@ test.describe('M5 · 去掉「免费」标签', () => {
 });
 
 /* 2026-09-25 用户：补上「重置学习计划」。语义（我的判断）：
-   只清计划配置与当天排程（分钟数/新词开关/开始日期），**进度/词状态/日账/streak 一律保留**
+   只清计划配置与当天排程（分钟数/开始日期），**进度/词状态/日账/streak 一律保留**
    （§9 是核心资产，破坏性操作要二次确认并说清）。重置后可重新建计划，进度续上。 */
 test.describe('M5 · 重置学习计划', () => {
   test('二次确认说清「会重置什么/不会动什么」；重置后计划没了、进度还在、可重新建', async ({ page }) => {

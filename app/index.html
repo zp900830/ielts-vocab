@@ -1527,9 +1527,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   @media (max-width: 560px) {
     .task-bar #tbPrev .lbl { display: none; }
     .task-bar .tb-btn { padding: 6px 11px; }
-    .task-bar .tb-play { gap: 2px; }
-    .task-bar .tb-play .ab-left { gap: 2px; }
-    .task-bar .tb-play .btn { padding: 4px 7px; }
     body.task-mode .task-bar[data-state="read"] #tbPrev,
     body.task-mode .task-bar[data-state="read"] #tbAgain,
     body.task-mode .task-bar[data-state="read"] #tbNext { font-size: 0; padding: 6px 0; width: 44px; }
@@ -1592,15 +1589,19 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 窄屏：文字独占上面两行、按钮整排落在下面一行（同一张卡片里）。
      宽屏才让文字在左、按钮在右 —— 390px 上二者并排会把文字挤没（上一轮实测过）。 */
   @media (max-width: 700px) {
-    .task-bar { left: 12px; right: 12px; padding: 8px 10px 8px 12px; }
-    .tb-body { flex-direction: column; align-items: stretch; gap: 6px; padding-right: 26px; }
-    /* M6 a11y：手机档 .tb-play 里那几颗（循环/AB/倍速/书签）视觉只有 30px，触区要 ≥44（PRD §10.4）。
-       条子高度由 --task-bar-h 现量，撑高不影响让位逻辑。宽度必须 !important：这些按钮被
-       mobileBtnIcons() 写了行内 `min-width:0; flex:0 0 auto`，普通声明压不过行内样式。
-       实测强行 44 宽后整排仍落在 366px 的条里（最右 202 < 378），不溢出屏幕。 */
-    body.task-mode .task-bar .tb-play .btn { min-height: 44px; min-width: 44px !important; }
+    .task-bar { left: 12px; right: 12px; padding: 8px 12px; }
+    .tb-body { flex-direction: column; align-items: stretch; gap: 8px; }
     .tb-text { flex: none; }
-    .tb-btns { justify-content: flex-end; }
+    /* 播放控件排（2026-10-06 用户：借鉴随身听展开态播放条 —— 居中、可换行、紧凑胶囊）：
+       旧做法给每颗强按 44px 定宽，一行挤不下就互相叠影、还把「去设置」顶出条外。
+       现在改成随身听那套：按钮按内容自适应、整排居中、放不下就换行；
+       44px 触区改由 ::after 热区外扩补齐（a11y.spec 量的就是 rect + inset）。 */
+    .tb-btns { flex-wrap: wrap; justify-content: center; gap: 6px; }
+    .task-bar .tb-play { justify-content: center; gap: 6px; }
+    .task-bar .tb-play .ab-left { flex-wrap: wrap; justify-content: center; gap: 6px; }
+    .task-bar .tb-play .btn { position: relative; min-height: 36px; padding: 5px 12px;
+      font-size: 12.5px; min-width: 0; }
+    .task-bar .tb-play .btn::after { content: ""; position: absolute; inset: -5px; border-radius: 999px; }
   }
   /* 手机上这几颗的热区不用这里管：111 行那条 @media (max-width:700px) 已经给 .tb-btn 定了
      min-height:44px（390 宽下实测就是 44 高）；桌面用鼠标，不该为此把条子撑高。 */
@@ -1876,15 +1877,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     padding: 12px 8px 2px; border: none; border-top: 1px solid var(--border); border-radius: 0;
     background: transparent; color: var(--text); cursor: pointer; text-align: left; }
   .me-card:hover { color: var(--accent-text); }
-  .me-card:hover .me-name { color: var(--accent-text); }
-  /* 未登录态图标：与 nav-item 同一套 i-line/i-fill，但 meCard 不是路由、没有 .on 态，恒显示线框版 */
+  /* 「我的」图标：与 nav-item 同一套 i-line/i-fill（已登录/未登录长得一样，
+     登录态信息只留在浮窗头部 mp-head，不再把账号塞进 tab） */
   .me-card .i-fill { display: none; }
   .me-card .i-line, .me-card .i-fill { font-size: 19px; line-height: 1; flex: none; }
   .me-card .me-tab-label { font-size: 13.5px; font-weight: 600; }
-  .me-avatar { flex: none; width: 30px; height: 30px; border-radius: 8px; background: var(--grad);
-    color: var(--cta-ink); display: flex; align-items: center; justify-content: center; font-size: 17px; }
-  .me-meta { min-width: 0; display: flex; align-items: center; gap: 6px; }
-  .me-name { font-size: 13.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   /* ---- 「我的」浮窗（点用户卡向上弹；主题/计划/账号/数据都在这里）---- */
   .me-pop { position: fixed; z-index: 400; width: 360px; max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); overflow-y: auto;
     background: var(--card); border: 1px solid var(--border); border-radius: 16px;
@@ -1985,9 +1982,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .me-card { flex: 1; flex-direction: column; justify-content: center; gap: 2px; margin-top: 0;
       padding: 0 4px; border: none; border-top: none; background: transparent; }
     .me-card:hover { background: transparent; }
-    .me-avatar { width: 22px; height: 22px; border-radius: 6px; font-size: 15px; }
-    .me-meta { flex-direction: column; gap: 0; }
-    .me-name { font-size: 11px; font-weight: 500; }
     .me-card .i-line, .me-card .i-fill { font-size: 20px; }
     .me-card .me-tab-label { font-size: 11px; font-weight: 500; }
     #appView { padding: 16px 16px 88px; }
@@ -4321,9 +4315,14 @@ let listenOn = false;
     if (!pop) return;
     const groups = V.groups || [];
     const flat = groups.flatMap(g => g.list);
+    /* 2026-10-06 用户报（安卓 Edge）：账号明明登录着，音色列表里却写着「未登录」。
+       幽灵项此前只看 _on（云端链路是否连通），把「连不上/未审批」一律说成「未登录」。
+       已登录（_userMail 在）就别再喊未登录 —— 那是在把排查方向带偏。 */
+    const cloudDownText = () => (typeof CLOUD !== 'undefined' && CLOUD._userMail)
+      ? '上次云音色（云端暂不可用）' : '上次云音色（未登录）';
     const ghost = (selVoiceURI && !flat.some(v => v.voiceURI === selVoiceURI))
     ? `<div class="vp-item sel" data-voice-uri="${escAttr(selVoiceURI)}" data-ghost="1" role="option" aria-selected="true">`
-      + `<span class="vp-name">${isCloudURI(selVoiceURI) ? '上次云音色（未登录）' : '上次音色（暂时不可用）'}</span></div>` : '';
+      + `<span class="vp-name">${isCloudURI(selVoiceURI) ? cloudDownText() : '上次音色（暂时不可用）'}</span></div>` : '';
     pop.innerHTML = ghost + groups.map(g =>
     `<div class="vp-group">${esc(g.label)}</div>` + g.list.map(v =>
       `<div class="vp-item${v.voiceURI === selVoiceURI ? ' sel' : ''}" role="option" aria-selected="${v.voiceURI === selVoiceURI}" data-voice-uri="${escAttr(v.voiceURI)}">`
@@ -4362,7 +4361,9 @@ let listenOn = false;
     function pickVoice(uri, keepOpen) {
     if (isCloudURI(uri) && !(typeof CLOUD !== 'undefined' && CLOUD._on)) {
     toggleCloudWrap();
-    alert('☁ 云端语音需先登录（与词汇真经站同一账号）。');
+    alert(typeof CLOUD !== 'undefined' && CLOUD._userMail
+      ? '☁ 云端语音还没连通（状态确认中，或账号未通过审批）。可稍后重试，先选本地音色。'
+      : '☁ 云端语音需先登录（与词汇真经站同一账号）。');
     return;
     }
     selVoiceURI = uri;
@@ -4512,7 +4513,9 @@ let listenOn = false;
     speak._nudge = Date.now();
     const cp0 = document.getElementById('cloudWrap');
     if (cp0 && cp0.style.display !== 'block') cp0.style.display = 'block';
-    alert('☁ 云端语音需先登录（与词汇真经站同一账号）。本次先用本地语音朗读。');
+    alert(typeof CLOUD !== 'undefined' && CLOUD._userMail
+      ? '☁ 云端语音还没连通（状态确认中，或账号未通过审批）。本次先用本地语音朗读。'
+      : '☁ 云端语音需先登录（与词汇真经站同一账号）。本次先用本地语音朗读。');
     }
     plain = true;
     }
@@ -6858,12 +6861,16 @@ let listenOn = false;
         if (!ROOT2) return [];
         return ROOT2.events.slice(ROOT2.uploaded || 0);
       }
+      /* 已登录却拿不到 client（SDK 慢/被拦）时别说「未登录」—— 那是他 2026-10-06 报的误导（安卓 Edge） */
+      function syncOfflineText() {
+        return (typeof CLOUD !== 'undefined' && CLOUD._userMail) ? '云端暂连不上 · 进度先记在本机' : '未登录 · 进度先记在本机';
+      }
       async function cloudPush() {
         const c = (typeof CLOUD !== 'undefined') ? CLOUD.client() : null;
         // 原来这两条分支是 setSyncHint('') —— 传不上去还把提示清空，界面看着像「一切正常」。
         // 但也不能一写本地进度就挂一条「未登录」：那是常驻噪音，还会盖住底下的播放条控件。
         // 只有【确实有事件等着传】才值得说。（手动点重试那条路径照旧无条件回话，见 retrySync。）
-        if (!c) { if (pendingEvents().length) setSyncHint('未登录 · 进度先记在本机'); return { sent: 0, offline: true }; }
+        if (!c) { if (pendingEvents().length) setSyncHint(syncOfflineText()); return { sent: 0, offline: true }; }
         if (_pushing) return { sent: 0, busy: true };
         _pushing = true;
         try {
@@ -6968,7 +6975,7 @@ let listenOn = false;
          两种情况在屏幕上长得一模一样。 */
       async function retrySync() {
         const c = (typeof CLOUD !== 'undefined') ? CLOUD.client() : null;
-        if (!c) { setSyncHint('未登录 · 进度先记在本机'); return { sent: 0, offline: true }; }
+        if (!c) { setSyncHint(syncOfflineText()); return { sent: 0, offline: true }; }
         const left = pendingEvents().length;
         setSyncHint(left ? '正在补传 ' + Math.min(left, 400) + ' 条…' : '正在和云端核对…');
         const r = await cloudSync();
@@ -7015,7 +7022,12 @@ let listenOn = false;
           // 迁移老账必须在 recompute2 之前：重放会从零重建 daily，把旧的 daily.repsByArticle 抹掉
           migrateArticleStats();
           if (ROOT2.state.eventsSeen !== ROOT2.events.length) recompute2();
+          /* 2026-10-06 用户砍掉「只复习不见新词」：历史上存过 pausedNew:true 的计划就地翻回 false，
+             否则那批人被永久锁在"只复习"且再无开关可关（设置删了、行为却还锁着）。 */
+          let _pn = false;
+          if (ROOT2.plan && ROOT2.plan.pausedNew) { ROOT2.plan.pausedNew = false; _pn = true; persist2(); }
           syncLegacyPlan();
+          if (_pn) savePlan();
           return;
         }
         const oldPlan = readLegacy(LS_PLAN);
@@ -7025,16 +7037,19 @@ let listenOn = false;
         ROOT2 = { plan: oldPlan ? r.state.plan : null, state: r.state, events: r.events,
                   uploaded: r.events.length, migratedAt: Date.now(), report: r.report };
         ROOT2.state.eventsSeen = r.events.length;
+        /* 2026-10-06 用户砍掉「只复习不见新词」：迁移进来的老计划同样不再继承 paused。 */
+        if (ROOT2.plan && ROOT2.plan.pausedNew) { ROOT2.plan.pausedNew = false; }
         syncLegacyPlan();
         persist2();
       }
       // 老代码（① 遍的句队列、剩余时间估算）还在读 plan.totalDays/newPerDay，
       // 这里给一个不绑新模型的固定值，等 Task 7 把那条链删掉。
+      // （2026-10-06「只复习不见新词」开关已删：paused 恒 false，引擎侧不再有这条分支可进。）
       function syncLegacyPlan() {
         const p = ROOT2 && ROOT2.plan;
         if (!p) { plan = null; return; }
         plan = { startDate: p.startDate, totalDays: p.totalDays || 30, dailyMinutes: p.todayMinutes,
-                 newPerDay: p.newPerDay || newPerDayOf(p.totalDays || 30), paused: !!p.pausedNew };
+                 newPerDay: p.newPerDay || newPerDayOf(p.totalDays || 30), paused: false };
       }
       function initPlan(minutes) {
         const m = Math.max(1, Math.min(180, Math.round(Number(minutes) || 15)));
@@ -7049,7 +7064,7 @@ let listenOn = false;
         const keepProgress = !!(ROOT2.pendingReplan && ROOT2.state && ROOT2.events && ROOT2.events.length);
         if (ROOT2.pendingReplan) delete ROOT2.pendingReplan;
         ROOT2.plan = { todayMinutes: m, startDate: ShadowPlan.dayKey(Date.now(), 4),
-                       endDate: null, pausedNew: false, totalDays: 30 };
+                       endDate: null, totalDays: 30 };
         ROOT2.planned = {};
         if (!keepProgress) {
           ROOT2.state = ShadowPlan.emptyState(); ROOT2.events = []; ROOT2.uploaded = 0; ROOT2.migratedAt = 0;
@@ -9391,7 +9406,7 @@ let listenOn = false;
          所以按「计划的指纹」缓存：改分钟 / 改日界 / 暂停新词 / 换一天 / 词表变了 才重算。 */
       function etaKey(m) {
         const p = (ROOT2 && ROOT2.plan) || {};
-        return [m, ALL_TARGET_WORDS, day2(), p.pausedNew ? 1 : 0, rate].join('|');
+        return [m, ALL_TARGET_WORDS, day2(), rate].join('|');
       }
       function etaFor(minutes) {
         const key = etaKey(minutes);
@@ -9420,7 +9435,7 @@ let listenOn = false;
         return d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月' + (exact ? ' ' + d.getDate() + ' 日' : '');
       }
       function etaText(r, m, exact) {
-        if (!r || r.empty) return '按每天 ' + m + ' 分钟排不出任务，先调大一点或取消「只复习」';
+        if (!r || r.empty) return '按每天 ' + m + ' 分钟排不出任务，先把每天的时间调大一点';
         if (!r.done) return '按每天 ' + m + ' 分钟，三年内到不了终点（先把每天时间调大些）';
         return '到 ' + etaMonth(r.doneAt, exact) + ' <b>新词全部过完一遍</b>（需要 ' + r.days + ' 天）';
       }
@@ -9669,10 +9684,7 @@ let listenOn = false;
           <div class="ps-opts">${opts.map(o => `<button class="ps-opt${String(o[0]) === String(cur) ? ' sel' : ''}" data-v="${o[0]}" onclick="${fn}(${o[0]})">${o[1]}</button>`).join('')}</div></div>`;
         /* 2026-09-25：「几点算换一天」整行删除（日界固定凌晨 4 点，见 bdHour）。 */
         return row('每天有多少分钟', MINS.map(m => [m, m + ' 分钟']), ROOT2.plan.todayMinutes, 'TASK.setMinutes') +
-          `<div class="ps-group"><label>新词</label><div class="ps-opts">
-            <button class="ps-opt${ROOT2.plan.pausedNew ? '' : ' sel'}" onclick="TASK.setPauseNew(false)">正常见新词</button>
-            <button class="ps-opt${ROOT2.plan.pausedNew ? ' sel' : ''}" onclick="TASK.setPauseNew(true)">只复习，先不见新词</button></div></div>
-          <div class="ps-eta" id="planEta" data-days="">算一下…</div>
+          `<div class="ps-eta" id="planEta" data-days="">算一下…</div>
           ${ROOT2.report && ROOT2.report.words ? `<div class="tp-note sm">上次改成按词记：<b>${ROOT2.report.words}</b> 个词从句子账搬过来，`
             + `其中 ${ROOT2.report.cappedWords} 个原本算「巩固/掌握」的被压回「已见面」，要重新考才算数。</div>` : ''}
           <div class="tp-note sm">进度存在这台设备上，并以上传「完成记录」的方式同步。<span class="sync-state" id="syncState">${syncHintText()}</span></div>
@@ -9689,7 +9701,6 @@ let listenOn = false;
         if (ROOT2.planned) ROOT2.planned[day2()] = 0;   // 预算变了，今天的句数承诺重算一次
         _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel'));
       }
-      function setPauseNew(v) { ROOT2.plan.pausedNew = !!v; _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel')); }
       function syncHintText() {
         // 只有真的登录了、且上传链已接上才报差额 —— 没登录时说「还有 N 条没传上去」是空许诺
         if (typeof CLOUD === 'undefined' || !CLOUD._userMail) return '';
@@ -9719,14 +9730,8 @@ let listenOn = false;
           <p class="sm">这里不是背单词的入口，是查「我到底会没会」的地方。</p>`;
       }
 
-      function pauseNew() {
-        if (!plan) return;
-        plan.paused = !plan.paused;
-        savePlan(); buildQueue(); updateBtn();
-        showAbToast(plan.paused ? '已暂停新句，只复习' : '已恢复新句推进');
-        const p = document.getElementById('todayPanel');
-        if (p && _panelOpen) renderToday(p);
-      }
+      /* pauseNew（「暂停新句，只复习」）已随 2026-10-06 砍「只复习」开关一并删除：
+         没有入口再产生 plan.paused=true，引擎按正常见新词排。 */
       /* ---- 本地备份：计划与进度只存在 localStorage，清缓存或换设备即归零 ----
          ⚠️ 真值根 `ielts.shadow.v2` 用的是**点**分隔，`startsWith('ielts-')` 匹配不到它 ——
          2026-09-24 实测：导出/恢复都绕开了 events/state/plan，备份出来是个空壳，
@@ -10026,7 +10031,7 @@ let listenOn = false;
         get listenTickMs() { return _listenTick; },   // 测试锁：跨场清零（①②③④）读这根指针
         pauseListenTick: function () { _listenTick = 0; },   // 暂停时把收听计时清零（togglePlay 调，见上）
         get listenArticle() { return _listenArticle; },
-        again, prev, next, pauseNew, resetPlan, resetLearningPlan, onSentenceComplete,
+        again, prev, next, resetPlan, resetLearningPlan, onSentenceComplete,
         taskSentenceFinished,
         backToLearn, updateBackBtn, sentenceTapped,   // 「回到学习位置」唯一的键（2026-09-25 合并）
         exportBackup, importBackup, backupPayload, parseBackup, applyBackup,
@@ -10036,14 +10041,14 @@ let listenOn = false;
         // 「我的」浮窗（2026-09-24）读计划旋钮的当前值；没计划时返回 null。
         planConfig: () => (ROOT2 && ROOT2.plan) ? {
           minutes: ROOT2.plan.todayMinutes, boundary: bdHour(),
-          pausedNew: !!ROOT2.plan.pausedNew, startDate: ROOT2.plan.startDate,
+          startDate: ROOT2.plan.startDate,
         } : null,
         get queue() { return todayQueue; },
         get progress() { return prog; },
         recordRep, buildQueue, updateMarkers, updateBtn,
         loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
         pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
-        initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes, setPauseNew,
+        initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes,
         etaFor, etaCalls, etaText, etaMonth, countStages, seedDailyForTest, seedArticleForTest,
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
         repsOf, articlePass2Done,

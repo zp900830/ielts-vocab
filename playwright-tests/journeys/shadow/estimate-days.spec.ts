@@ -22,7 +22,7 @@ interface EtaRes {
 declare const TASK: {
   resetV2(): void; initPlan(n: number): void;
   openPanel(): void; setView(v: string): void;
-  setMinutes(m: number): void; setBoundary(h: number): void; setPauseNew(v: boolean): void;
+  setMinutes(m: number): void; setBoundary(h: number): void;
   enterTaskMode(): void; exitTaskMode(): void; next(): void;
   countStages(): { graduated: number; owned: number; recognized: number; leech: number };
   etaFor(m: number): Promise<EtaRes>;
@@ -131,11 +131,9 @@ test.describe('走完全部词要多久 · 四处同源', () => {
     await page.locator('[onclick="TASK.setBoundary(6)"]').click();
     expect(await settled(eta)).toContain('新词全部过完一遍');
 
-    // 规格 §5：模拟必须走同一个「只复习不见新词」开关，否则给出的天数偏乐观
-    const beforePause = (await daysOf(eta)) || '';
-    await page.locator('[onclick="TASK.setPauseNew(true)"]').click();
-    await settled(eta);
-    expect((await daysOf(eta)) || '').not.toBe(beforePause);
+    // 2026-10-06「只复习不见新词」开关已删：设置屏不再出现这组按钮
+    await expect(page.locator('.ps-group', { hasText: '新词' })).toHaveCount(0);
+    expect(await page.locator('[onclick^="TASK.setPauseNew"]').count()).toBe(0);
   });
 
   test('今天面板注脚：已毕业 / 分母 / 完工日同源，且只说一次完工', async ({ page }) => {

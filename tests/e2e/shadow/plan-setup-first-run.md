@@ -56,8 +56,9 @@ Navigate to `{E2E_BASE_URL}/index.html`（带 cache-buster）。
 （跟随所选，不是写死的 15）；`.ps-start` 与 `#psMin` 都查不到。
 
 ### 5. 计划落盘，事件流里只有那条初值
-**Verify:** `ielts.shadow.v2` 的 `plan.todayMinutes === 5`、`plan.boundaryHour === 4`、
-`plan.pausedNew === false`；`events` 里 `type === 'dayplan'` **恰好一条**且 `minutes === 5`。
+**Verify:** `ielts.shadow.v2` 的 `plan.todayMinutes === 5`、`plan.boundaryHour === 4`；
+2026-10-06 砍「只复习」开关后新计划不再写 `pausedNew` 字段（`undefined`）；
+`events` 里 `type === 'dayplan'` **恰好一条**且 `minutes === 5`。
 
 **Pass condition:** 五步全绿。第 1 步（只有一颗旋钮）与第 5 步（一条 `dayplan`、一个真值来源）
 是本用例的判据，其余三步保证它们不是巧合。
