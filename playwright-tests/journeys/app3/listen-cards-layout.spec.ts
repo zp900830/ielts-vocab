@@ -1,0 +1,85 @@
+/* 2026-10-07 用户两张对照图（调整前/后）锁两件事，全部 390×844 量：
+   ① 「本句单词卡」入口从右下挪到右上（与「随身听」大标题同一行）—— 原来压在
+      「展开全文」上；② 展开态单词卡挂**顶部**，迷你条沉到 TabBar 正上方：
+      字幕窗在上、按钮行在下，行内句数在左、三键在右。 */
+import { test, expect } from '../../fixtures';
+import { waitShadowReady } from '../../utils/app-ready';
+
+const rootUrl = process.env.E2E_ROOT_URL || '';
+
+const TWO: Record<string, string> = (() => {
+  const mk = (title: string, lines: string[]) => ({
+    title, zh: title, subheads: ['第一卷'],
+    paragraphs: [lines],
+    sentZh: [lines.map((_, i) => `第 ${i + 1} 句译文。`)],
+    paraZh: [''],
+  });
+  const sections = [
+    mk('地球与生命', ['The [[atmosphere:atmosphere]] protects life.', 'We need [[oxygen:oxygen]] to live.',
+      'The [[atmosphere:atmosphere]] keeps us warm.', 'Plants give us [[oxygen:oxygen]].']),
+    mk('校园与图书馆', ['A [[library:library]] is quiet.', 'The [[library:library]] opens late.']),
+  ];
+  const vocab = { atmosphere: { m: 'n. 大气' }, oxygen: { m: 'n. 氧气' }, library: { m: 'n. 图书馆' } };
+  return { 'sections.json': JSON.stringify(sections), 'vocab.json': JSON.stringify(vocab), 'chapters.json': '[]' };
+})();
+
+async function gotoListen(page: import('@playwright/test').Page) {
+  for (const [name, body] of Object.entries(TWO)) {
+    await page.route(`**/shadow/data/${name}*`, (r) =>
+      r.fulfill({ status: 200, contentType: 'application/json', body }));
+  }
+  await page.goto(`${rootUrl}/app/index.html#/listen`);
+  await waitShadowReady(page);
+  await page.waitForFunction(() => {
+    const w = window as unknown as { APP3?: { renderListen?: unknown } };
+    const v = document.getElementById('appView');
+    return !!(w.APP3 && typeof w.APP3.renderListen === 'function' && v && v.querySelector('.listen-page'));
+  }, undefined, { timeout: 20000 });
+  await page.waitForFunction(() => {
+    const f = document.getElementById('lcFab');
+    return !!f && !f.hidden;
+  }, undefined, { timeout: 20000 });
+}
+
+test.use({ viewport: { width: 390, height: 844 } });
+
+test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉底', () => {
+  test('① 入口在右上角，与标题同行，不压播放卡', async ({ page }) => {
+    await gotoListen(page);
+    const geo = await page.evaluate(() => {
+      const r = (s: string) => {
+        const b = document.querySelector(s)!.getBoundingClientRect();
+        return { x: b.left, y: b.top, r: b.right, b: b.bottom };
+      };
+      return { fab: r('#lcFab'), title: r('.pg-title'), expand: r('.ls-expand') };
+    });
+    expect(geo.fab.y, '入口要贴在视口顶部（标题那一行）').toBeLessThan(80);
+    expect(geo.fab.y, '和标题同一行，不是浮在标题上面老远').toBeLessThan(geo.title.b);
+    expect(geo.fab.r, '靠右缘').toBeGreaterThan(390 - 32);
+    expect(geo.fab.b, '不许压到播放卡的展开键').toBeLessThan(geo.expand.y);
+  });
+
+  test('② 展开态：抽屉顶挂、迷你条沉底且句数左三键右', async ({ page }) => {
+    await gotoListen(page);
+    await page.locator('#lcFab').click();
+    await expect(page.locator('#lcDrawer')).toHaveClass(/open/);
+    await page.waitForTimeout(450);
+    const geo = await page.evaluate(() => {
+      const r = (s: string) => {
+        const b = document.querySelector(s)!.getBoundingClientRect();
+        return { x: b.left, y: b.top, r: b.right, b: b.bottom };
+      };
+      return {
+        drawer: r('#lcDrawer'), mini: r('#lcMini'), roll: r('#lcMini .mb-roll'),
+        bar: r('#lcMini .mb-bar'), count: r('#lcCount'), next: r('#lcMini .mb-next'),
+        nav: r('.sidenav'),
+      };
+    });
+    expect(geo.drawer.y, '单词卡挂顶部').toBeLessThanOrEqual(1);
+    expect(geo.drawer.b, '顶挂抽屉不许吃掉整屏').toBeLessThan(844 * 0.8);
+    expect(geo.mini.b, '迷你条贴在 TabBar 正上方').toBeLessThanOrEqual(geo.nav.y + 1);
+    expect(geo.roll.y, '字幕窗在按钮行上面').toBeLessThan(geo.bar.y);
+    expect(geo.count.x, '句数在左').toBeLessThan(geo.next.x);
+    expect(geo.next.r, '三键在右').toBeGreaterThan(390 - 60);
+  });
+});

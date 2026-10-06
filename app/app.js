@@ -1487,10 +1487,13 @@
   }
   // 与底部 TabBar / 「今天 N 句」任务条互斥定位：谁在屏幕上，就浮到谁上面（都不许压住）。
   function positionListenMini() {
-    const el = document.getElementById('lsMini');
-    if (!el) return;
     const mobile = window.matchMedia('(max-width: 700px)').matches;
     const nav = document.querySelector('.sidenav');
+    // 底栏真实高度写给 #lcMini（沉底迷你条贴它正上方），别在 CSS 里猜常量
+    if (mobile && nav && nav.offsetHeight) document.documentElement.style.setProperty('--tabbar-h', nav.offsetHeight + 'px');
+    else document.documentElement.style.removeProperty('--tabbar-h');
+    const el = document.getElementById('lsMini');
+    if (!el) return;
     let bottom = mobile ? ((nav ? nav.offsetHeight : 56) + 12) : 24;
     const bar = document.getElementById('taskBar');
     if (bar && bar.classList.contains('show') && getComputedStyle(bar).display !== 'none') {
