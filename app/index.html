@@ -3541,7 +3541,7 @@ let listenOn = false;
     this._userMail = (sess && sess.user && sess.user.email) || this._userMail;
     this.setStatus('正在连接云端语音…'); // 先立即刷新菜单（登录表单→退出按钮），别等网络查询
     this.checkStatus();
-    if (ev === 'SIGNED_IN') { try { cloudPullMarks(); } catch (e) {} try { TASK.cloudPullArticleAccount(); } catch (e2) {} try { if (window.__routeLocked && window.APP3 && window.APP3.route) window.APP3.route(); } catch (e3) {} } // 登录即拉书签/按篇账，多端合并
+    if (ev === 'SIGNED_IN') { try { cloudPullMarks(); } catch (e) {} try { TASK.cloudPullArticleAccount(); } catch (e2) {} try { if (typeof TASK !== 'undefined' && TASK.cloudSync) TASK.cloudSync(); } catch (e4) {} try { if (window.__routeLocked && window.APP3 && window.APP3.route) window.APP3.route(); } catch (e3) {} } // 登录即拉书签/按篇账/事件流（含 dayplan→计划重建），多端合并
     } else if (ev === 'SIGNED_OUT' || ev === 'USER_DELETED') {
     this._on = false; this._userMail = '';
     this.setStatus('已退出登录，云端音色不可用。');
@@ -6964,6 +6964,12 @@ let listenOn = false;
       }
       async function cloudSync() {
         await cloudPull();
+        /* 换设备首登：事件流里带着手机上建的计划（dayplan），本机没有计划时就地重建，
+           首页横幅/「我的」浮窗从「设置学习时间」翻成「继续学」。 */
+        if (planFromEvents()) {
+          try { renderToday(document.getElementById('todayPanel')); } catch (e) {}
+          try { if (window.__routeLocked && window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
+        }
         const r = await cloudPush();
         try { await cloudPullArticleAccount(); } catch (e) {}   // 按篇账跟着走一遍（补传/换设备合并）
         try { cloudPushArticleAccount(); } catch (e) {}
@@ -7050,6 +7056,32 @@ let listenOn = false;
         if (!p) { plan = null; return; }
         plan = { startDate: p.startDate, totalDays: p.totalDays || 30, dailyMinutes: p.todayMinutes,
                  newPerDay: p.newPerDay || newPerDayOf(p.totalDays || 30), paused: false };
+      }
+      /* 2026-10-06 用户报：手机上建了计划，桌面端拉完事件仍显示「设置你每天的学习时间」。
+         原因：dayplan 事件会上云，但对端 cloudPull 只把它记进 daily 账，没人重建 ROOT2.plan。
+         修法：本机【没有】计划、事件流里有 dayplan → 用「最早一条的 day 当 startDate、
+         最新一条的 minutes 当 todayMinutes」按 initPlan 同一形状重建。
+         只兜"这台设备从没建过计划"的场景；本机已有计划时不碰 —— 两台各自改分钟
+         仍是各自的（PRD §12 计划以本机为主的口径不变）。 */
+      function planFromEvents() {
+        if (!ROOT2 || ROOT2.plan) return false;
+        /* 刚在这台设备上「重置学习计划」（pendingReplan 挂着）≠ 换新设备 ——
+           这时候从历史 dayplan 里把旧计划捞回来，等于重置了个寂寞。 */
+        if (ROOT2.pendingReplan) return false;
+        let first = null, last = null;
+        for (let i = 0; i < ROOT2.events.length; i++) {
+          const e = ROOT2.events[i];
+          if (!e || e.type !== 'dayplan' || !e.day || !e.minutes) continue;
+          if (!first || (e.ts || 0) < (first.ts || 0)) first = e;
+          if (!last || (e.ts || 0) > (last.ts || 0)) last = e;
+        }
+        if (!first) return false;
+        ROOT2.plan = { todayMinutes: Math.max(1, Math.min(180, Math.round(Number(last.minutes) || 15))),
+                       startDate: first.day, endDate: null, totalDays: 30 };
+        syncLegacyPlan(); _cachedPlan = null;
+        try { buildQueue(); } catch (e) {}
+        persist2();
+        return true;
       }
       function initPlan(minutes) {
         const m = Math.max(1, Math.min(180, Math.round(Number(minutes) || 15)));
@@ -9875,10 +9907,10 @@ let listenOn = false;
       /* 「重置学习计划」（用户 2026-09-25：以前的学习计划重置的功能没做）。
          与上面的 resetPlan()「清空重来」**不是一回事**：那支把进度连根清掉，这支只换计划。
          二次确认写清「会重置什么 / 不会动什么」；重置后 pendingReplan 让下一次 initPlan
-         保住事件流 / 词状态 / 日账 / streak，只重设分钟数、新词开关、开始日期与今天排程。 */
+         保住事件流 / 词状态 / 日账 / streak，只重设分钟数、开始日期与今天排程。 */
       function resetLearningPlan() {
         if (!ROOT2 || !ROOT2.plan) return false;
-        if (!confirm('重置学习计划？\n\n会重置：每天分钟数、新词开关、开始日期与今天的排程。\n'
+        if (!confirm('重置学习计划？\n\n会重置：每天分钟数、开始日期与今天的排程。\n'
           + '不会动：已学进度、单词状态、连续天数与学习数据。\n重置后可重新设置每天读多久。')) return false;
         ROOT2.plan = null;
         ROOT2.planned = {};
