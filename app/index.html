@@ -1566,10 +1566,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.task-mode #btnPlay { display: none !important; }
   /* ② 新加的停止键只服务随身听展开态：任务模式把播放条控件 dock 进任务条时，别把它带进去。 */
   body.task-mode #btnStop { display: none !important; }
-  /* 循环 / AB / 倍速这几颗是 .btn 自带的绿字，12px 下对白底实测 3.49:1（AA 要 4.5）。
-     只在任务条里把这支绿压深一档；深色模式反过来提亮。全站 .btn 不动。 */
-  #taskBar .tb-play .btn:not(.play) { color: #0a7d5d; }
-  body.dark #taskBar .tb-play .btn:not(.play) { color: #58c9a2; }
+  /* 这一排不再单独压绿字：dock 进来的播放控件和任务条自带的翻句键并排站，墨色/边框/
+     图标号/高度全走下面「同排同皮」那一段（2026-10-06 用户：「icon 黑的黑绿的绿，
+     大的大，小的小」）。绿色从此只留给推进键那颗 CTA。 */
   .tb-play .ab-right { flex: 0 1 auto; min-width: 0; display: block; text-align: right; }
   .tb-play .ab-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11.5px; }
   /* 进度条：任务模式里不给位置，同一能力由「快速跳转」那颗承担（弹窗输章节+句号）；
@@ -1583,9 +1582,18 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 底栏这几行小字/图标原来吃 --muted，实测 3.5:1 —— 12px 字号按 WCAG AA 要 4.5:1。
      只在这条栏里加深，不动全局 --muted（全站都在用，改了影响面太大）。
      这条栏现在是半透明玻璃，比原来的白底更吃对比度 —— 改完必须用探针复量，别只信纸面值。 */
-  #taskBar .tb-play .btn { color: #4a554f; }
+  /* 同排同皮：dock 进来的播放控件与任务条自带的翻句键既然并排，就共用一套墨色、底色、
+     边框、图标号 —— 两套皮并排就是用户说的「黑的黑绿的绿」。图标号带 !important：
+     mobileBtnIcons() 给 dock 那几颗写过行内 14px，不压住就又是两套号。 */
+  #taskBar .tb-play .btn, #taskBar .tb-btn.again { color: #4a554f;
+    background: var(--card); border-color: var(--border); }
+  #taskBar .tb-play .btn i, #taskBar .tb-btn.again i { font-size: 16px !important; }
   body.dark .task-bar .tb-sub, body.dark .task-bar .tb-eta { color: #bdb5a8; }
-  body.dark #taskBar .tb-play .btn { color: #cfc7ba; }
+  body.dark #taskBar .tb-play .btn, body.dark #taskBar .tb-btn.again { color: #cfc7ba;
+    background: #252220; border-color: #33302b; }
+  /* 同皮不等于抹掉状态：循环开着的那颗仍要亮起来（.loop-active 原选择器压不过上面这条）。 */
+  #taskBar .tb-play .btn.loop-active, #taskBar .tb-play .btn.active {
+    background: var(--accent-soft); border-color: var(--accent-bright); color: var(--accent-text); }
   /* 窄屏：文字独占上面两行、按钮整排落在下面一行（同一张卡片里）。
      宽屏才让文字在左、按钮在右 —— 390px 上二者并排会把文字挤没（上一轮实测过）。 */
   @media (max-width: 700px) {
@@ -1601,7 +1609,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .task-bar .tb-play .ab-left { flex-wrap: wrap; justify-content: center; gap: 6px; }
     .task-bar .tb-play .btn { position: relative; min-height: 36px; padding: 5px 12px;
       font-size: 12.5px; min-width: 0; }
-    .task-bar .tb-play .btn::after { content: ""; position: absolute; inset: -5px; border-radius: 999px; }
+    .task-bar .tb-play .btn::after { content: ""; position: absolute; inset: -5px -3px; border-radius: 999px; }
     /* 推进键是全条唯一的主操作，不该和其余胶囊同形却孤零零掉到第二行（2026-10-06 用户：
        「按钮形式都一样，凭什么只有它在第二行」）。窄屏让它带回文字并可弹性拉长：
        能并进上一排就跟着排，落单就自己撑满整行 —— 换行由「它是主按钮」解释，
@@ -1612,6 +1620,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     body.task-mode .task-bar[data-state="read"] #tbNext { font-size: 13px; width: auto;
       padding: 10px 18px; flex: 1 1 auto; min-width: 0; }
     body.task-mode .task-bar[data-state="read"] #tbNext i { font-size: 15px; }
+    /* 同排同高：dock 那排 36、翻句两颗 44（194 行触屏档给的），并排看一高一矮就是
+       「大的大，小的小」。统一 40px 视觉 + ::after 外扩 5px = 50px 触区
+       （a11y.spec 量的就是 rect + inset）。翻句两颗原来靠 44 实高，改矮必须补同款热区。 */
+    #taskBar .tb-play .btn, #taskBar .tb-btn.again { min-height: 40px; }
+    body.task-mode .task-bar[data-state="read"] #tbPrev,
+    body.task-mode .task-bar[data-state="read"] #tbAgain { width: 40px; position: relative; }
+    body.task-mode .task-bar[data-state="read"] #tbPrev::after,
+    body.task-mode .task-bar[data-state="read"] #tbAgain::after { content: ""; position: absolute; inset: -5px -3px; border-radius: 999px; }
   }
   /* 手机上这几颗的热区不用这里管：111 行那条 @media (max-width:700px) 已经给 .tb-btn 定了
      min-height:44px（390 宽下实测就是 44 高）；桌面用鼠标，不该为此把条子撑高。 */

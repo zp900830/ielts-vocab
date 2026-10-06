@@ -4,7 +4,10 @@
    ② 「再来一遍这句」(#tbAgain) 与「每句重复几遍」(#btnLoop) 过去都是 ri-repeat-line，
       窄屏纯图标下完全分不出；锁图标不同 + 名字不同。
    ③ 快速跳转的章节下拉在单篇视图里被 filter 成当前章，只剩一项；锁「列出全部章节」
-      且跳去别的章真的换章、落到该章那一句。 */
+      且跳去别的章真的换章、落到该章那一句。
+   ④ 次级排（循环/AB/倍速/书签/跳转/上一句/再来）过去是两套皮：dock 来的绿字小胶囊 +
+      任务条自带的黑字大圆键（用户：「icon 黑的黑绿的绿，大的大，小的小」）。
+      锁整排同墨色、同底色、同边框、同图标号、同高度，绿色只留给推进键。 */
 import { test, expect } from '../../fixtures';
 
 declare const TASK: {
@@ -167,5 +170,41 @@ test.describe('任务条：推进键是主按钮 / 再来与循环可分 / 快�
     expect(landed.ch, '跳到别的章必须真的换章').toBe(2);
     expect(landed.len, '换章后正文只剩目标章').toBe(hint3.total);
     expect(landed.i, '单篇视图里句号是本地下标：第 2 句 = 下标 1').toBe(1);
+  });
+
+  test('④ 次级排同排同皮：墨色/底色/边框/图标号/高度全一致，绿只留给推进键', async ({ page }) => {
+    await enterRead(page);
+    const row = await page.evaluate(() => {
+      const sels = ['#btnLoop', '#btnAB', '#rateCycle', '#markBtn',
+        '#taskBar .jump-btn', '#tbPrev', '#tbAgain'];
+      return sels.map((s) => {
+        const el = document.querySelector(s) as HTMLElement | null;
+        // 跳转键在 ① 通读态是藏起来的（能力在弹窗里），不参与「同排」比较
+        if (!el || el.offsetParent === null) return null;
+        const cs = getComputedStyle(el);
+        const ic = el.querySelector('i');
+        const parts = (getComputedStyle(el, '::after').inset || '0px')
+          .split(/\s+/).map((x) => Math.abs(parseFloat(x) || 0));
+        const r = el.getBoundingClientRect();
+        return {
+          s, color: cs.color, bg: cs.backgroundColor, border: cs.borderTopColor,
+          h: +r.height.toFixed(1), touchH: +(r.height + 2 * (parts[0] || 0)).toFixed(1),
+          icon: ic ? getComputedStyle(ic).fontSize : null,
+        };
+      }).filter((o): o is NonNullable<typeof o> => o !== null);
+    });
+    const first = row[0];
+    row.forEach((o) => {
+      expect(o.color, `${o.s} 墨色要和整排一致（${o.color} vs ${first.color}）`).toBe(first.color);
+      expect(o.bg, `${o.s} 底色要和整排一致（${o.bg} vs ${first.bg}）`).toBe(first.bg);
+      expect(o.border, `${o.s} 边框要和整排一致（${o.border} vs ${first.border}）`).toBe(first.border);
+      expect(Math.abs(o.h - first.h), `${o.s} 高度要和整排一致（${o.h} vs ${first.h}）`)
+        .toBeLessThanOrEqual(1);
+      if (o.icon) expect(o.icon, `${o.s} 图标号要和整排一致（mobileBtnIcons 的行内 14px 必须被压住）`).toBe('16px');
+      expect(o.touchH, `${o.s} 视觉改矮后有效触区仍要 ≥44`).toBeGreaterThanOrEqual(44);
+    });
+    expect(first.color, '整排不许再是 .btn 那支绿').not.toBe('rgb(10, 125, 93)');
+    const cta = await page.evaluate(() => getComputedStyle(document.getElementById('tbNext')!).color);
+    expect(cta, '推进键仍要是自己的 CTA 色，不和次级排同色').not.toBe(first.color);
   });
 });
