@@ -1,4 +1,5 @@
-// 随身听 · 本句单词卡（方案 B 底部抽屉）。布局动效唯一参照 work/listen-cards-demo.html。
+// 随身听 · 本句单词卡（2026-10-04 方案 B，2026-10-07 反转成顶挂抽屉 + 沉底迷你条）。
+// 位置类断言另有 listen-cards-layout.spec.ts 专锁，本文件管行为（开闭/切句/字幕/无障碍）。
 // 服务器归 global-setup.ts 起停（仓库根 8932）：/app/ 在仓库根，用 E2E_ROOT_URL。
 // 桩数据/录音笔照抄 listen.spec.ts 同套路；VOCAB 桩带 note/cmp（真数据同形）。
 import { test, expect } from '../../fixtures';
@@ -116,11 +117,11 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     const first = drawer.locator('.wcard').first();
     await expect(first).toBeVisible();
     // 等抽屉滑入动画落定再量（卡现在首开即落，不等会量到 .34s 位移动画的中间帧）
+    // 2026-10-07 起抽屉顶挂：落定态 top === 0（不再是 innerHeight - height）
     await page.waitForFunction(() => {
       const d = document.getElementById('lcDrawer');
       if (!d) return false;
-      const r = d.getBoundingClientRect();
-      return Math.abs(r.top - (window.innerHeight - r.height)) < 1;
+      return Math.abs(d.getBoundingClientRect().top) < 1;
     }, undefined, { timeout: 3000 });
     const r = await first.evaluate((el) => { const b = (el as HTMLElement).getBoundingClientRect(); return { top: b.top, bottom: b.bottom, vh: window.innerHeight }; });
     expect(r.top, '第一张卡顶边在屏内').toBeGreaterThanOrEqual(0);
@@ -129,8 +130,12 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     await expect(drawer.locator('.wcard')).toHaveCount(2);
     await expect(drawer.locator('.wc-word').first()).toHaveText('atmo');
 
-    // 遮罩点按关 → 焦点回 FAB（点遮罩可见带：迷你条之下、抽屉之上）
-    await page.locator('#lcScrim').click({ position: { x: 195, y: 150 } });
+    // 遮罩点按关 → 焦点回 FAB（点遮罩可见带：顶挂抽屉之下、沉底迷你条之上）
+    const gapY = await page.evaluate(() => {
+      const b = (s: string) => (document.querySelector(s) as HTMLElement).getBoundingClientRect();
+      return Math.round((b('#lcDrawer').bottom + b('#lcMini').top) / 2);
+    });
+    await page.locator('#lcScrim').click({ position: { x: 195, y: gapY } });
     await expect(drawer).not.toHaveClass(/open/);
     await expect(fab).toBeFocused();
 
@@ -178,7 +183,7 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     await expect(page.locator('#lcFab')).toBeHidden();
   });
 
-  test('迷你条：层级 scrim<迷你条<抽屉；开抽屉强制吸顶；滚出播放卡才出现', async ({ page }) => {
+  test('迷你条：层级 scrim<迷你条<抽屉；开抽屉强制沉底贴 TabBar 上方；滚出播放卡才出现', async ({ page }) => {
     await stubData(page, CARDS);
     await gotoListen(page);
 
@@ -189,11 +194,22 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     });
     expect([z.scrim, z.mini, z.drawer].map(Number)).toEqual([70, 75, 80]);
 
-    // 抽屉开 → 迷你条强制可见且吸顶 top:0（等 .28s 位移动画落定再量）
+    // 抽屉开 → 迷你条强制可见且沉底：贴在底部 TabBar 正上方（等 .28s 位移动画落定再量）
     await page.locator('#lcFab').click();
     const mini = page.locator('#lcMini');
     await expect(mini).toBeVisible();
-    await expect.poll(() => mini.evaluate((el) => Math.round((el as HTMLElement).getBoundingClientRect().top))).toBe(0);
+    const dock = () => mini.evaluate((el) => {
+      const b = el.getBoundingClientRect();
+      const nav = document.querySelector('.sidenav');
+      const navTop = nav ? (nav as HTMLElement).getBoundingClientRect().top : window.innerHeight;
+      return { bottom: Math.round(b.bottom), top: Math.round(b.top), navTop: Math.round(navTop) };
+    });
+    await expect.poll(async () => {
+      const d = await dock();
+      return d.bottom <= d.navTop + 1;
+    }, { timeout: 3000 }).toBe(true);
+    const d0 = await dock();
+    expect(d0.top, '沉底：整条在屏幕下半区，不再吸顶').toBeGreaterThan(844 / 2);
     // 迷你条句文同步当前句
     await expect(page.locator('#lcSent')).toContainText('atmo');
     await page.locator('#lcClose').click();

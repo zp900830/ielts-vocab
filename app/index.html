@@ -2365,19 +2365,18 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     body.listen-mode > .layout, body.listen-mode > .listen-top, body.listen-mode > #audiobar,
     body.listen-closing > .layout, body.listen-closing > .listen-top, body.listen-closing > #audiobar { animation: none; }
   }
-  /* ============ 随身听 · 本句单词卡（方案 B 底部抽屉，2026-10-04） ============
-     布局与动效唯一参照 work/listen-cards-demo.html（用户实测已定案），结构/时序/z 序照抄；
-     颜色走本站 token（demo 自有调色盘不引入）。卡片内的 notebar 行与 nb-table 对比表
-     直接复用精读现有类，不另起样式；只有 demo 有、精读没有的壳类才在这里声明。
-     定案 z 序：scrim(70) < 迷你条(75) < 抽屉(80) —— 抽屉开着也能经迷你条切句/播放，不用先关。
-     与 demo 的差异（任务书确认，均非设计变更）：① 移动端 TabBar(z=300) 压在抽屉上，
-     FAB 浮到它上面、抽屉内容底垫 88px（导航可点，离开路由时隐藏悬浮层）；② 抽屉开时
-     迷你条加 safe-area；③ 隐藏态一律 visibility:hidden（demo 只靠 opacity，键盘仍能
-     Tab 进去，axe 违规）；④ .fading 只服务于 demo 的 A/B 切换（真应用无模式切换，不要）。 */
-  /* ---- FAB：右下唤起 + 目标词数角标；当前句无目标词时 hidden ---- */
-  /* 2026-10-04 用户反馈「太抢眼太大」：深绿实底大胶囊改成白底细边小胶囊 —— 弱、但找得到。
-     全实底色（#fff / #e0f5ec / #252220），axe 都能算对比度，不用登记例外。 */
-  #lcFab { position: fixed; right: 18px; bottom: 20px; z-index: 50;
+  /* ============ 随身听 · 本句单词卡（2026-10-04 方案 B，2026-10-07 上下反转） ============
+     颜色走本站 token；卡片内的 notebar 行与 nb-table 对比表直接复用精读现有类，不另起样式。
+     z 序不变：scrim(70) < 迷你条(75) < 抽屉(80) —— 抽屉开着也能经迷你条切句/播放，不用先关。
+     10-07 用户按截图要求反转：**卡片抽屉挂顶部**（FAB 也在右上，就近唤起），
+     **迷你条沉到 TabBar 正上方**，条内「第 x/xxx 句」左下角、三个播放键右下角、字幕窗在其上。
+     与 demo（work/listen-cards-demo.html，仍是旧底部抽屉）的差异：① 隐藏态一律
+     visibility:hidden（demo 只靠 opacity，键盘仍能 Tab 进去，axe 违规）；② .fading 只服务
+     demo 的 A/B 切换（真应用无模式切换，不要）。 */
+  /* ---- FAB：右上角唤起 + 目标词数角标；当前句无目标词时 hidden ----
+     2026-10-07 用户：从右下挪到右上（与「随身听」大标题同一行）—— 右下角和播放卡/
+     展开键挤在一起，还盖住「展开全文」。固定吸顶：滚下去也够得着。 */
+  #lcFab { position: fixed; right: 16px; top: calc(18px + env(safe-area-inset-top, 0px)); z-index: 50;
     display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px 7px 11px; border: 1px solid #dce7e1; border-radius: 999px;
     background: #fff; color: var(--accent-text); font-size: 12.5px; font-weight: 500;
     box-shadow: 0 2px 10px rgba(20, 45, 38, .10);
@@ -2390,33 +2389,32 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark #lcFab:hover { background: #2b2926; }
   #lcFab i { font-size: 14px; }
   #lcFab[hidden] { display: none; }
-  body.dw-open #lcFab { opacity: 0; visibility: hidden; transform: scale(.9) translateY(10px); pointer-events: none;
+  body.dw-open #lcFab { opacity: 0; visibility: hidden; transform: scale(.9) translateY(-10px); pointer-events: none;
     transition: transform .2s cubic-bezier(.22,.61,.36,1), opacity .2s cubic-bezier(.22,.61,.36,1), visibility 0s .2s; }
-  @media (max-width: 700px) {
-    #lcFab { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
-  }
   /* ---- 遮罩 ---- */
   #lcScrim { position: fixed; inset: 0; z-index: 70; background: rgba(18,32,27,.38);
     opacity: 0; pointer-events: none; transition: opacity .3s cubic-bezier(.22,.61,.36,1); }
   #lcScrim.on { opacity: 1; pointer-events: auto; }
-  /* ---- 抽屉本体：Liquid Glass（配方同 .audiobar：白玻璃渐变 + 32px 背景模糊 + 内侧高光） ---- */
-  #lcDrawer { position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
+  /* ---- 抽屉本体：Liquid Glass（配方同 .audiobar：白玻璃渐变 + 32px 背景模糊 + 内侧高光） ----
+     2026-10-07 用户：单词卡改挂**顶部**（原来底部抽屉把迷你条挤去吸顶，上下两块打架）。
+     顶挂后圆角/描边/投影全部翻面：下缘收圆、阴影往下投、内侧高光移到下缘。 */
+  #lcDrawer { position: fixed; left: 0; right: 0; top: 0; z-index: 80;
     max-height: min(78vh, 680px); display: flex; flex-direction: column;
     background: linear-gradient(145deg, rgba(255,255,255,.72), rgba(255,255,255,.34) 42%, rgba(255,255,255,.24));
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
-    border: 1px solid rgba(255,255,255,.65); border-bottom: none; border-radius: 24px 24px 0 0;
-    box-shadow: 0 -12px 40px rgba(15, 40, 32, .18), 0 -2px 12px rgba(15, 40, 32, .08),
-      inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.35);
-    transform: translateY(102%); visibility: hidden;
+    border: 1px solid rgba(255,255,255,.65); border-top: none; border-radius: 0 0 24px 24px;
+    box-shadow: 0 12px 40px rgba(15, 40, 32, .18), 0 2px 12px rgba(15, 40, 32, .08),
+      inset 0 -1px 0 rgba(255,255,255,.9), inset 0 1px 0 rgba(255,255,255,.35);
+    transform: translateY(-102%); visibility: hidden;
     transition: transform .34s cubic-bezier(.22,.61,.36,1), max-height .3s cubic-bezier(.22,.61,.36,1), visibility 0s .34s; }
   #lcDrawer.open { transform: translateY(0); visibility: visible; transition: transform .34s cubic-bezier(.22,.61,.36,1), max-height .3s cubic-bezier(.22,.61,.36,1), visibility 0s 0s; }
   body.dark #lcDrawer { background: linear-gradient(145deg, rgba(30,28,25,.9), rgba(30,28,25,.76) 42%, rgba(30,28,25,.62));
     border-color: #33302b;
-    box-shadow: 0 -12px 40px rgba(0,0,0,.4), 0 -2px 12px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.05), inset 0 -1px 0 rgba(0,0,0,.32); }
+    box-shadow: 0 12px 40px rgba(0,0,0,.4), 0 2px 12px rgba(0,0,0,.25), inset 0 -1px 0 rgba(255,255,255,.05), inset 0 1px 0 rgba(0,0,0,.32); }
   #lcDrawer.tall { max-height: calc(100vh - 118px); max-height: calc(100dvh - 118px); }
   @media (min-width: 900px) {
-    #lcDrawer { left: 50%; transform: translate(-50%, 102%); width: min(860px, 92vw); }
+    #lcDrawer { left: 50%; transform: translate(-50%, -102%); width: min(860px, 92vw); }
     #lcDrawer.open { transform: translate(-50%, 0); }
   }
   #lcDrawer .dw-grip { padding: 10px 0 4px; text-align: center; display: block; width: 100%; background: none; border: 0; cursor: pointer; }
@@ -2435,28 +2433,31 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     transition: background-color .2s cubic-bezier(.22,.61,.36,1), color .2s cubic-bezier(.22,.61,.36,1); }
   #lcDrawer .dw-close i { font-size: 15px; line-height: 1; }
   #lcDrawer .dw-close:hover { background: var(--accent-soft); color: var(--accent-text); }
-  #lcDrawer .dw-body { overflow-y: auto; overscroll-behavior: contain; padding: 16px 20px calc(24px + env(safe-area-inset-bottom, 0px)); transition: opacity .18s cubic-bezier(.22,.61,.36,1), transform .18s cubic-bezier(.22,.61,.36,1); }
+  #lcDrawer .dw-body { overflow-y: auto; overscroll-behavior: contain; padding: 16px 20px 20px; transition: opacity .18s cubic-bezier(.22,.61,.36,1), transform .18s cubic-bezier(.22,.61,.36,1); }
   #lcDrawer .dw-body.swap { opacity: 0; transform: translateY(6px); }
-  @media (max-width: 700px) {
-    /* TabBar 压在抽屉上（z=300），内容底垫 88px 与 #appView 同口径，末卡不被盖住 */
-    #lcDrawer .dw-body { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
-  }
-  /* ---- 吸顶迷你条：播放卡滚出视口后出现；抽屉开时强制吸顶且可点。Liquid Glass 同 .audiobar ---- */
-  #lcMini { position: fixed; left: 0; right: 0; top: 0; z-index: 75;
-    display: flex; flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 14px 10px;
+  /* ---- 迷你条沉底（2026-10-07 用户：三键右下角、第 x/xxx 句左下角）：
+     抽屉顶挂后它不再需要吸顶让位，落到 TabBar 正上方；字幕窗翻到按钮行上面。
+     底边高度吃 --tabbar-h（positionListenMini 实测写入），桌面侧栏不在底部则为 0。 ---- */
+  #lcMini { position: fixed; left: 0; right: 0; top: auto; bottom: var(--tabbar-h, 0px); z-index: 75;
+    display: flex; flex-direction: column; align-items: stretch; gap: 6px; padding: 10px 14px 8px;
     background: linear-gradient(145deg, rgba(255,255,255,.65), rgba(255,255,255,.25) 42%, rgba(255,255,255,.15));
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
-    border-bottom: 1px solid rgba(255,255,255,.65);
-    box-shadow: 0 4px 16px rgba(20, 45, 38, .08), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.35);
-    transform: translateY(-100%); opacity: 0; visibility: hidden; pointer-events: none;
+    border-top: 1px solid rgba(255,255,255,.65);
+    box-shadow: 0 -4px 16px rgba(20, 45, 38, .08), inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(255,255,255,.35);
+    transform: translateY(102%); opacity: 0; visibility: hidden; pointer-events: none;
     transition: transform .28s cubic-bezier(.22,.61,.36,1), opacity .28s cubic-bezier(.22,.61,.36,1), visibility 0s .28s; }
+  @media (max-width: 700px) {
+    #lcMini { bottom: var(--tabbar-h, 56px); }
+    /* 沉底后字幕窗在按钮行上面；句数挪到行首、三键被 auto margin 推到行尾 */
+    #lcMini .mb-roll { order: -1; }
+    #lcMini .mb-count { order: -1; margin-left: 0; margin-right: auto; }
+  }
   body.dark #lcMini { background: linear-gradient(145deg, rgba(30,28,25,.92), rgba(30,28,25,.78) 42%, rgba(30,28,25,.62));
-    border-bottom-color: #33302b;
-    box-shadow: 0 4px 16px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05), inset 0 -1px 0 rgba(0,0,0,.32); }
+    border-top-color: #33302b;
+    box-shadow: 0 -4px 16px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05), inset 0 -1px 0 rgba(0,0,0,.32); }
   #lcMini.show, body.dw-open #lcMini { transform: translateY(0); opacity: 1; visibility: visible; pointer-events: auto;
     transition: transform .28s cubic-bezier(.22,.61,.36,1), opacity .28s cubic-bezier(.22,.61,.36,1), visibility 0s 0s; }
-  body.dw-open #lcMini { padding-top: calc(8px + env(safe-area-inset-top, 0px)); }
   /* 抽屉开：迷你条压在暗遮罩上，玻璃太透（尾端 alpha .15）会让遮罩底色渗进来把文字「洗灰」
      （2026-10-04 用户截图反馈「看不清」）—— 收成单行时玻璃加实。 */
   body.dw-open #lcMini { background: linear-gradient(145deg, rgba(255,255,255,.93), rgba(255,255,255,.88) 42%, rgba(255,255,255,.82)); }
