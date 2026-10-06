@@ -705,8 +705,10 @@
     report.minutes = minutes;
 
     const startDate = /^\d{4}-\d{2}-\d{2}$/.test(String(plan.startDate || '')) ? plan.startDate : dayKey(at, 4);
+    // 2026-10-06「只复习不见新词」开关已从两个应用删除：迁移老计划时不再继承 1.0 的 paused，
+    // 否则存量用户会被锁进"只复习"且再无开关可关。
     const planNew = { todayMinutes: minutes, boundaryHour: 4, startDate: startDate,
-                      endDate: null, pausedNew: !!plan.paused };
+                      endDate: null, pausedNew: false };
     const state = replay(events, { boundaryHour: 4, wordsOf: list, plan: planNew });
     state.plan = planNew;
     state.migratedAt = at;

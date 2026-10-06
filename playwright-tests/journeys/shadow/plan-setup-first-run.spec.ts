@@ -131,7 +131,8 @@ test.describe('Plan setup: the first-run screen asks only about minutes', () => 
         });
         expect(stored.plan.todayMinutes).toBe(MIN_SEL);
         expect(stored.plan.boundaryHour).toBe(4);
-        expect(stored.plan.pausedNew).toBe(false);
+        // 2026-10-06 砍「只复习」开关：新计划不再写 pausedNew 字段
+        expect(stored.plan.pausedNew).toBeUndefined();
         expect(stored.dayplans).toHaveLength(1);
         expect(stored.dayplans[0].minutes).toBe(MIN_SEL);
       });

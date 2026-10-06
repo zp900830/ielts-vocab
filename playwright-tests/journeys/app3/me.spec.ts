@@ -73,10 +73,12 @@ test.describe('3.0 「我的」一行 + 浮窗（PRD §2.2 / §8.1）', () => {
     await page.locator('body').click({ position: { x: 4, y: 4 } });
     await expect(pop).toBeHidden();
 
-    // 已登录：「我的」那一行变成头像 + 账号（昵称/邮箱前缀）
+    // 已登录（2026-10-06 改口径）：tab 仍是用户图标 + 「我的」，与其他 tab 同风格；
+    // 账号信息只留在浮窗头部（mp-head），不再把头像/账号塞进 tab
     await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); });
-    await expect(page.locator('#meCard .me-avatar i'), '已登录显示默认头像').toHaveClass(/\bri-user-3-fill\b/);
-    await expect(page.locator('#meCard .me-name'), '已登录显示账号').toHaveText('alice');
+    await expect(page.locator('#meCard .i-line'), '已登录仍是用户图标（同 tab 风格）').toHaveClass(/\bri-user-smile-line\b/);
+    await expect(page.locator('#meCard .me-tab-label'), '已登录标签仍是「我的」').toHaveText('我的');
+    expect(await page.locator('#meCard .me-avatar').count(), '已登录不再显示头像方块').toBe(0);
     expect(await page.locator('#meCard .me-login').count(), '已登录不再显示登录按钮').toBe(0);
   });
 

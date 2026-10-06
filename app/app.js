@@ -265,7 +265,7 @@
       // §5.2（2026-09-24 用户改口径）：一句话 + 一个按钮，点了打开「我的」浮窗；不内嵌计划表单。
       view.innerHTML = `<div class="st-empty-start">
         <h1>开始你的学习计划</h1>
-        <p>学习数据会在你建立计划后出现在这里。每天读多久、新词开关都在「我的」里。</p>
+        <p>学习数据会在你建立计划后出现在这里。每天读多久在「我的」里。</p>
         <button class="st-open-me" type="button">打开「我的」</button>
       </div>`;
       return;
@@ -428,7 +428,7 @@
       <div class="tr-bars">${bars}</div>
       <div class="tr-linewrap">
         <svg class="tr-line" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
-          <polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
         </svg>${dot(0)}${dot(n - 1)}
       </div>
       <div class="tr-legend"><span>柱 = 每日学习次数</span><span>线 = 每日学习时长</span></div>
@@ -1229,12 +1229,9 @@
     const card = document.getElementById('meCard');
     if (!card) return;
     const acc = meAccount();
-    // 2026-09-30：未登录显示用户图标 + 「我的」（i-line/i-fill 双态与其他 tab 同风格，
-    // 不再是裸「登录」两字）；点它开统一登录弹窗。已登录显示头像 + 账号（不变），点它开浮窗。
-    card.innerHTML = acc.logged
-      ? `<span class="me-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>`
-        + `<span class="me-meta"><span class="me-name">${esc(acc.nickname)}</span></span>`
-      : `<i class="ri-user-smile-line i-line" aria-hidden="true"></i><i class="ri-user-smile-fill i-fill" aria-hidden="true"></i><span class="me-tab-label">我的</span>`;
+    // 2026-10-06 用户：已登录的绿色方块头像+账号与底部其余 4 颗 tab 风格不搭 ——
+    // 统一成 nav-item 同款 i-line/i-fill 图标 + 「我的」；登录态信息只留在浮窗头（mp-head）。
+    card.innerHTML = `<i class="ri-user-smile-line i-line" aria-hidden="true"></i><i class="ri-user-smile-fill i-fill" aria-hidden="true"></i><span class="me-tab-label">我的</span>`;
     card.setAttribute('aria-label', acc.logged ? `我的 · ${acc.nickname}` : '我的 · 未登录，点击登录');
   }
   function renderMePop() {
@@ -1285,9 +1282,6 @@
         <div class="mp-row"><span class="mp-label">每天分钟数</span><div class="ps-opts">
           ${MINS.map(m => `<button class="ps-opt${m === cfg.minutes ? ' sel' : ''}" data-me-min="${m}">${m}</button>`).join('')}</div></div>
         <div class="mp-eta" id="mpEta" role="status">工期算一下…</div>
-        <div class="mp-row"><span class="mp-label">新词</span><div class="ps-opts">
-          <button class="ps-opt${cfg.pausedNew ? '' : ' sel'}" data-me-new="0">正常</button>
-          <button class="ps-opt${cfg.pausedNew ? ' sel' : ''}" data-me-new="1">只复习</button></div></div>
         <div class="mp-row"><button class="link-danger" type="button" data-me-reset-plan aria-label="重置学习计划，只重设计划、保留进度">重置学习计划</button></div>` : ''}
         <div class="mp-row"><span class="mp-label">数据</span><div class="ps-opts">
           <button class="ps-opt" data-me-export>导出备份</button>
@@ -1418,9 +1412,9 @@
     if (!pop || pop._wired) return;
     pop._wired = true;
     pop.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-new],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-login-btn],[data-me-logout]');
+      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-login-btn],[data-me-logout]');
       if (!t) return;
-      // 有些按钮点完会 renderMePop() 重渲（主题/分钟/新词）—— 重渲会把 e.target 从 DOM 摘下来，
+      // 有些按钮点完会 renderMePop() 重渲（主题/分钟）—— 重渲会把 e.target 从 DOM 摘下来，
       // 事件继续冒泡到 document 的「点外面收掉」监听时，target 已不在 #mePop 里，会被误判成点外面。
       // 所以这里先 stopPropagation，别让 document 那道再看到它。
       e.stopPropagation();
@@ -1430,7 +1424,6 @@
         else openSetup();
       } else if (t.hasAttribute('data-me-theme')) { if (typeof toggleDark === 'function') toggleDark(); renderMePop(); }
       else if (t.hasAttribute('data-me-min')) { TASK.setMinutes(Number(t.dataset.meMin)); renderMePop(); positionMePop(); refreshMeEta(); }
-      else if (t.hasAttribute('data-me-new')) { TASK.setPauseNew(t.dataset.meNew === '1'); renderMePop(); }
       else if (t.hasAttribute('data-me-reset-plan')) { TASK.resetLearningPlan(); renderMePop(); positionMePop(); }
       else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }
       else if (t.hasAttribute('data-me-import')) { TASK.importBackup('meImportFile'); }

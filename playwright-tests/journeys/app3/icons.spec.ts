@@ -60,27 +60,28 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
       else { expect(v.line, '未选中显示线性').not.toBe('none'); expect(v.fill, '未选中藏面性').toBe('none'); }
     }
     expect(vis.filter((v) => v.on).length, '恰好一项选中').toBe(1);
-    // 未登录「我的」显示用户图标 + 「我的」（不再是裸「登录」两字）；已登录才显示默认头像图标
+    // 「我的」登录前后都是用户图标 + 「我的」（2026-10-06：不再用头像方块区分登录态）
     await expect(page.locator('.sidenav .me-card .me-tab-label'), '未登录显示「我的」').toHaveText('我的');
     await expect(page.locator('.sidenav .me-card .i-line'), '未登录显示线性用户图标').toHaveClass(/\bri-user-smile-line\b/);
     await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); });
-    await expect(page.locator('.sidenav .me-card .me-avatar i'), '已登录默认头像').toHaveClass(/\bri-user-3-fill\b/);
+    await expect(page.locator('.sidenav .me-card .i-line'), '已登录仍是线性用户图标').toHaveClass(/\bri-user-smile-line\b/);
+    await expect(page.locator('.sidenav .me-card .i-fill'), '已登录仍带面性用户图标（与其他 tab 同结构）').toHaveClass(/\bri-user-smile-fill\b/);
 
     // 量字形：等 4.5.0 的 CSS 落地后，每个 ::before 必须真有 content（名字不存在 = none）。
     // M6 抖动排查：这条依赖 CDN（fastly.jsdelivr.net）的 CSS/woff2，全量并行 + 网络抖动时
     // 15s 偶发不够（实测 1/6 视红）。条件等待本身没问题，只是给足上限；源级锁在第一条，
     // 就算 CDN 一时挂掉也不会让「版本引用」这件事失守。
     await page.waitForFunction(() => {
-      const els = document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card .me-avatar i');
-      /* 4 个导航项 × 2（线性 + 面性）+ 1 个头像 = 9（2026-09-26 成对图标） */
-      if (els.length !== 9) return false;
+      const els = document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card i');
+      /* 4 个导航项 × 2 + 「我的」× 2（线性 + 面性）= 10（2026-10-06 成对图标） */
+      if (els.length !== 10) return false;
       return Array.from(els).every((el) => {
         const c = getComputedStyle(el, '::before').content;
         return !!c && c !== 'none' && c !== 'normal';
       });
     }, null, { timeout: 30000 });
     const contents = await page.evaluate(() =>
-      Array.from(document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card .me-avatar i')).map((el) => getComputedStyle(el, '::before').content));
+      Array.from(document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card i')).map((el) => getComputedStyle(el, '::before').content));
     for (const c of contents) expect(c, `::before content 全量：${JSON.stringify(contents)}`).not.toMatch(/^(none|normal)$/);
 
     // 字体文件本身加载成功（woff2 可达）
