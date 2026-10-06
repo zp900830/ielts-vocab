@@ -1602,6 +1602,16 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .task-bar .tb-play .btn { position: relative; min-height: 36px; padding: 5px 12px;
       font-size: 12.5px; min-width: 0; }
     .task-bar .tb-play .btn::after { content: ""; position: absolute; inset: -5px; border-radius: 999px; }
+    /* 推进键是全条唯一的主操作，不该和其余胶囊同形却孤零零掉到第二行（2026-10-06 用户：
+       「按钮形式都一样，凭什么只有它在第二行」）。窄屏让它带回文字并可弹性拉长：
+       能并进上一排就跟着排，落单就自己撑满整行 —— 换行由「它是主按钮」解释，
+       不再由「挤不下」解释。其余按钮保持紧凑胶囊（44px 触区仍由 ::after / min-height 兜）。 */
+    .task-bar .tb-btn.next { font-size: 13px; padding: 10px 18px; flex: 1 1 auto; min-width: 0; }
+    /* ① 通读态那三颗在 560 以下退成纯图标方块；这里只把推进键请回文字，
+       选择器与那条同形、位置更靠后，所以按层叠顺序胜出（不是靠 !important）。 */
+    body.task-mode .task-bar[data-state="read"] #tbNext { font-size: 13px; width: auto;
+      padding: 10px 18px; flex: 1 1 auto; min-width: 0; }
+    body.task-mode .task-bar[data-state="read"] #tbNext i { font-size: 15px; }
   }
   /* 手机上这几颗的热区不用这里管：111 行那条 @media (max-width:700px) 已经给 .tb-btn 定了
      min-height:44px（390 宽下实测就是 44 高）；桌面用鼠标，不该为此把条子撑高。 */
@@ -2729,7 +2739,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         <button class="btn ab-step ab-step-fwd" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line" aria-hidden="true"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
           <div class="menu-bridge" aria-hidden="true"></div>
-          <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="单句循环：选择每句重复次数" aria-label="单句循环次数"><i class="ri-repeat-line" aria-hidden="true"></i><span id="loopCount">3</span></button>
+          <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="每句重复几遍（循环设置，不是只重播这一句）" aria-label="每句重复几遍"><i class="ri-repeat-line" aria-hidden="true"></i><span id="loopCount">3</span></button>
           <div class="loop-menu" id="loopMenu">
             <button data-count="0" onclick="setLoopCount(0)">关</button>
             <button data-count="2" onclick="setLoopCount(2)">2遍</button>
@@ -2837,7 +2847,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
              搬 DOM 而不是复制一份：id / 事件 / paint() 只有一份，播放状态不会两处各说各话。 -->
         <div class="tb-play" id="tbPlay"></div>
         <button class="tb-btn again" id="tbPrev" onclick="TASK.prev()" title="上一句" aria-label="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i><span class="lbl"> 上一句</span></button>
-        <button class="tb-btn again" id="tbAgain" onclick="TASK.again()" title="再来一遍这句" aria-label="再来一遍这句"><i class="ri-repeat-line" aria-hidden="true"></i> 再来</button>
+        <button class="tb-btn again" id="tbAgain" onclick="TASK.again()" title="再来一遍这句（只这一句）" aria-label="再来一遍这句"><i class="ri-loop-left-line" aria-hidden="true"></i> 再来</button>
         <button class="tb-btn next" id="tbNext" onclick="TASK.next()" title="下一句" aria-label="下一句"><i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句</button>
       </div>
       </div>
@@ -4124,9 +4134,11 @@ let listenOn = false;
     const show = force !== undefined ? force : p.style.display !== 'block';
     if (show) {
     const curA = (currentChapter >= 0) ? currentChapter : ((idx >= 0 && artOfSent[idx] !== undefined) ? artOfSent[idx] : 0);
-    const opts = (currentChapter >= 0)
-      ? SECTIONS.map((s, i) => `<option value="${i}"${i === curA ? ' selected' : ''}>${i + 1}. ${esc(s.title)}${TIT_EN[s.title] ? ' ' + esc(TIT_EN[s.title]) : ''}</option>`).filter((_, i) => i === currentChapter).join('')
-      : SECTIONS.map((s, i) => `<option value="${i}"${i === curA ? ' selected' : ''}>${i + 1}. ${esc(s.title)}${TIT_EN[s.title] ? ' ' + esc(TIT_EN[s.title]) : ''}</option>`).join('');
+    /* 2026-10-06 用户：「快速跳转筛选，只有一个章节可选」。旧写法在单篇视图里把选项
+       filter 成当前章，而 3.0 点文章卡片必然把 currentChapter 钉死在这一篇 —— 弹窗于是
+       永远只有一项。换章本来就是合法动作（顶栏 #chapSel、上/下篇箭头、书签跨章定位都换），
+       这里没有理由拦着；句号口径见下面 jumpGo。 */
+    const opts = SECTIONS.map((s, i) => `<option value="${i}"${i === curA ? ' selected' : ''}>${i + 1}. ${esc(s.title)}${TIT_EN[s.title] ? ' ' + esc(TIT_EN[s.title]) : ''}</option>`).join('');
     document.getElementById('jumpCh').innerHTML = opts;
     syncJumpHint();
     openModal(p);
@@ -4135,20 +4147,37 @@ let listenOn = false;
     }
     function syncJumpHint() {
     const ai = parseInt(document.getElementById('jumpCh').value, 10);
-    const [s, e] = segRange(ai);
-    document.getElementById('jumpHint').textContent = `第${ai + 1}章共 ${e - s} 句（全文第 ${s + 1}–${e} 句）`;
-    document.getElementById('jumpN').max = e - s;
-    document.getElementById('jumpN').placeholder = '句号 1–' + (e - s);
+    if (!SECTIONS[ai]) return;
+    /* 句数一律按**全局**章起点算（segRange 读的是已渲染的 .sent，单篇视图里只覆盖当前章，
+       拿它算别的章会得到「第 1–N 句」这种错话）。 */
+    const s = computeChapterStart(ai), total = chapterSentCount(ai);
+    document.getElementById('jumpHint').textContent = `第${ai + 1}章共 ${total} 句（全文第 ${s + 1}–${s + total} 句）`;
+    document.getElementById('jumpN').max = total;
+    document.getElementById('jumpN').placeholder = '句号 1–' + total;
     }
     function jumpGo() {
     const ai = parseInt(document.getElementById('jumpCh').value, 10);
-    const [s, e] = segRange(ai);
+    if (!SECTIONS[ai]) return;
+    const total = chapterSentCount(ai);
     let n = parseInt(document.getElementById('jumpN').value, 10);
     if (isNaN(n)) n = 1;
-    n = Math.max(1, Math.min(e - s, n));
+    n = Math.max(1, Math.min(total, n));
     toggleJumpPop(false);
     if (abMode === 3) abCancel(true);
-    playFrom(s + n - 1);
+    /* 单篇视图（currentChapter>=0，也就是 3.0 的正常形态）里 sents 只有当前这一篇，
+       playFrom 吃的是**本地下标**，所以跳别的章要先换章。onChapterChange 里的 render()
+       是同步重建 sents 的，因此紧跟着起播 —— 不绕 setTimeout：那会离开点击这个用户手势，
+       移动端（iOS/Edge）常见后果是"点了直达但没出声"。 */
+    if (currentChapter >= 0) {
+      if (ai !== currentChapter) {
+        const sel = document.getElementById('chapSel');
+        if (sel) sel.value = String(ai);
+        onChapterChange(String(ai));
+      }
+      playFrom(n - 1);
+    } else {
+      playFrom(computeChapterStart(ai) + n - 1);
+    }
     }
     async function cloudLogin(src) {
     if (cloudLogin._busy) return; cloudLogin._busy = true;
@@ -8819,7 +8848,7 @@ let listenOn = false;
             + `覆盖 ${dayPlan.words.length} 词`
             + (tp.done > tp.planned ? ` · 多读了 ${tp.done - tp.planned} 句` : '');
           againBtn.style.display = '';
-          againBtn.innerHTML = '<i class="ri-repeat-line" aria-hidden="true"></i> 再来';
+          againBtn.innerHTML = '<i class="ri-loop-left-line" aria-hidden="true"></i> 再来';
           /* 名字跟着口径改（他 2026-09-23：删掉播放键、点一句放一句）：这颗现在不"翻到下一句"，
              而是"把这一句放一遍"，放完才记完成；正在放的时候改名「下一句」（收尾前进）。
              图标仍用 →：窄屏上这颗只显示图标（.lbl 那套 font-size:0），给个 ▶ 三角形就等于

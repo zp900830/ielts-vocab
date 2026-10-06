@@ -1604,7 +1604,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         <button class="btn ab-step ab-step-fwd" onclick="step(1)" title="下一句"><i class="ri-arrow-right-s-line" aria-hidden="true"></i> 下一句</button>
         <div class="loop-wrap" id="loopWrap">
           <div class="menu-bridge" aria-hidden="true"></div>
-          <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="单句循环：选择每句重复次数" aria-label="单句循环次数"><i class="ri-repeat-line" aria-hidden="true"></i><span id="loopCount">3</span></button>
+          <button class="btn" id="btnLoop" onclick="toggleLoopMenu(event)" title="每句重复几遍（循环设置，不是只重播这一句）" aria-label="每句重复几遍"><i class="ri-repeat-line" aria-hidden="true"></i><span id="loopCount">3</span></button>
           <div class="loop-menu" id="loopMenu">
             <button data-count="0" onclick="setLoopCount(0)">关</button>
             <button data-count="2" onclick="setLoopCount(2)">2遍</button>
@@ -1696,7 +1696,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
              搬 DOM 而不是复制一份：id / 事件 / paint() 只有一份，播放状态不会两处各说各话。 -->
         <div class="tb-play" id="tbPlay"></div>
         <button class="tb-btn again" id="tbPrev" onclick="TASK.prev()" title="上一句" aria-label="上一句"><i class="ri-arrow-left-s-line" aria-hidden="true"></i><span class="lbl"> 上一句</span></button>
-        <button class="tb-btn again" id="tbAgain" onclick="TASK.again()" title="再来一遍这句" aria-label="再来一遍这句"><i class="ri-repeat-line" aria-hidden="true"></i> 再来</button>
+        <button class="tb-btn again" id="tbAgain" onclick="TASK.again()" title="再来一遍这句（只这一句）" aria-label="再来一遍这句"><i class="ri-loop-left-line" aria-hidden="true"></i> 再来</button>
         <button class="tb-btn next" id="tbNext" onclick="TASK.next()" title="下一句" aria-label="下一句"><i class="ri-arrow-right-line" aria-hidden="true"></i> 下一句</button>
         <!-- 点 ✕ 之后才露脸的一对：同一条栏换内容，不弹层、不新开弹窗 -->
         <button class="tb-btn again" id="tbStay" onclick="TASK.cancelExit()" title="留在任务模式继续做" aria-label="继续做">继续做</button>
@@ -2902,9 +2902,9 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     const show = force !== undefined ? force : p.style.display !== 'block';
     if (show) {
     const curA = (currentChapter >= 0) ? currentChapter : ((idx >= 0 && artOfSent[idx] !== undefined) ? artOfSent[idx] : 0);
-    const opts = (currentChapter >= 0)
-      ? SECTIONS.map((s, i) => `<option value="${i}"${i === curA ? ' selected' : ''}>${i + 1}. ${esc(s.title)}${TIT_EN[s.title] ? ' ' + esc(TIT_EN[s.title]) : ''}</option>`).filter((_, i) => i === currentChapter).join('')
-      : SECTIONS.map((s, i) => `<option value="${i}"${i === curA ? ' selected' : ''}>${i + 1}. ${esc(s.title)}${TIT_EN[s.title] ? ' ' + esc(TIT_EN[s.title]) : ''}</option>`).join('');
+    /* 2026-10-06 与 /app/ 同步：单篇视图里不再把选项 filter 成当前章 —— 一栏只有一项的
+       下拉等于没有筛选。换章本来就是合法动作（顶栏 #chapSel、书签跨章定位都会换）。 */
+    const opts = SECTIONS.map((s, i) => `<option value="${i}"${i === curA ? ' selected' : ''}>${i + 1}. ${esc(s.title)}${TIT_EN[s.title] ? ' ' + esc(TIT_EN[s.title]) : ''}</option>`).join('');
     document.getElementById('jumpCh').innerHTML = opts;
     syncJumpHint();
     openModal(p);
@@ -2913,20 +2913,35 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
     }
     function syncJumpHint() {
     const ai = parseInt(document.getElementById('jumpCh').value, 10);
-    const [s, e] = segRange(ai);
-    document.getElementById('jumpHint').textContent = `第${ai + 1}章共 ${e - s} 句（全文第 ${s + 1}–${e} 句）`;
-    document.getElementById('jumpN').max = e - s;
-    document.getElementById('jumpN').placeholder = '句号 1–' + (e - s);
+    if (!SECTIONS[ai]) return;
+    // 句数按**全局**章起点算：segRange 读的是已渲染的 .sent，单篇视图里只覆盖当前章
+    const s = computeChapterStart(ai), total = chapterSentCount(ai);
+    document.getElementById('jumpHint').textContent = `第${ai + 1}章共 ${total} 句（全文第 ${s + 1}–${s + total} 句）`;
+    document.getElementById('jumpN').max = total;
+    document.getElementById('jumpN').placeholder = '句号 1–' + total;
     }
     function jumpGo() {
     const ai = parseInt(document.getElementById('jumpCh').value, 10);
-    const [s, e] = segRange(ai);
+    if (!SECTIONS[ai]) return;
+    const total = chapterSentCount(ai);
     let n = parseInt(document.getElementById('jumpN').value, 10);
     if (isNaN(n)) n = 1;
-    n = Math.max(1, Math.min(e - s, n));
+    n = Math.max(1, Math.min(total, n));
     toggleJumpPop(false);
     if (abMode === 3) abCancel(true);
-    playFrom(s + n - 1);
+    /* 单篇视图里 sents 只有当前这一篇，playFrom 吃**本地下标**，跳别的章得先换章。
+       onChapterChange 里的 render() 同步重建 sents，所以紧跟着起播，不绕 setTimeout：
+       离开点击手势后移动端可能"点了直达却没出声"。 */
+    if (currentChapter >= 0) {
+      if (ai !== currentChapter) {
+        const sel = document.getElementById('chapSel');
+        if (sel) sel.value = String(ai);
+        onChapterChange(String(ai));
+      }
+      playFrom(n - 1);
+    } else {
+      playFrom(computeChapterStart(ai) + n - 1);
+    }
     }
     async function cloudLogin() {
     if (cloudLogin._busy) return; cloudLogin._busy = true;
@@ -5992,7 +6007,7 @@ let accent = 'en-GB', rate = 1, sents = [], idx = -1, playing = false;
           subEl.textContent = leftN ? `还剩 ~${fmtTime(leftN * secNew())}`
             : (extra ? `今天的量读完了 · 多读了 ${extra} 句` : '这批读完了，接着出这一批的词');
           againBtn.style.display = '';
-          againBtn.innerHTML = '<i class="ri-repeat-line" aria-hidden="true"></i> 再来';
+          againBtn.innerHTML = '<i class="ri-loop-left-line" aria-hidden="true"></i> 再来';
           /* 名字跟着口径改（他 2026-09-23：删掉播放键、点一句放一句）：这颗现在不"翻到下一句"，
              而是"把这一句放一遍"，放完才记完成；正在放的时候改名「下一句」（收尾前进）。
              图标仍用 →：窄屏上这颗只显示图标（.lbl 那套 font-size:0），给个 ▶ 三角形就等于
