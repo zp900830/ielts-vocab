@@ -1,7 +1,8 @@
 /* 2026-10-07 用户两张对照图（调整前/后）锁两件事，全部 390×844 量：
    ① 「本句单词卡」入口从右下挪到右上（与「随身听」大标题同一行）—— 原来压在
       「展开全文」上；② 展开态单词卡挂**顶部**，迷你条沉到 TabBar 正上方：
-      字幕窗在上、按钮行在下，行内句数在左、三键在右。 */
+      字幕窗在上、三键在右下。同轮第二次改：迷你条左下角的句序号删掉，
+      位置信息只留抽屉标题「本句单词卡 · 第 N 句 · N 个目标词」。 */
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 
@@ -59,7 +60,7 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     expect(geo.fab.b, '不许压到播放卡的展开键').toBeLessThan(geo.expand.y);
   });
 
-  test('② 展开态：抽屉顶挂、迷你条沉底且句数左三键右', async ({ page }) => {
+  test('② 展开态：抽屉顶挂、迷你条沉底三键贴右，句序号只在抽屉标题里', async ({ page }) => {
     await gotoListen(page);
     await page.locator('#lcFab').click();
     await expect(page.locator('#lcDrawer')).toHaveClass(/open/);
@@ -71,8 +72,10 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
       };
       return {
         drawer: r('#lcDrawer'), mini: r('#lcMini'), roll: r('#lcMini .mb-roll'),
-        bar: r('#lcMini .mb-bar'), count: r('#lcCount'), next: r('#lcMini .mb-next'),
+        bar: r('#lcMini .mb-bar'), prev: r('#lcMini .mb-prev'), next: r('#lcMini .mb-next'),
         nav: r('.sidenav'),
+        count: document.querySelectorAll('#lcMini .mb-count').length,
+        title: (document.getElementById('lcTitle') as HTMLElement).textContent || '',
       };
     });
     expect(geo.drawer.y, '单词卡挂顶部').toBeLessThanOrEqual(1);
@@ -80,8 +83,14 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     expect(geo.drawer.b, '抽屉不许盖住沉底迷你条（盖住就点不到切句键）').toBeLessThanOrEqual(geo.mini.y + 1);
     expect(geo.mini.b, '迷你条贴在 TabBar 正上方').toBeLessThanOrEqual(geo.nav.y + 1);
     expect(geo.roll.y, '字幕窗在按钮行上面').toBeLessThan(geo.bar.y);
-    expect(geo.count.x, '句数在左').toBeLessThan(geo.next.x);
     expect(geo.next.r, '三键在右').toBeGreaterThan(390 - 60);
+    // .mb-bar 是 left/right:14 的绝对层，光看它的 x 没意义 —— 要看最左那颗键真被推到右端
+    expect(geo.prev.x, '三键整排贴右，不许散回左边（句数那颗的 auto margin 已删）')
+      .toBeGreaterThan(200);
+    // 2026-10-07 用户：「去掉左下角第x/xxx句，和左上角第 x 句的信息合并」
+    expect(geo.count, '迷你条左下角的句序号整个删掉').toBe(0);
+    expect(geo.title.trim(), '抽屉标题是唯一出口：本句单词卡 · 第 N 句 · N 个目标词')
+      .toMatch(/^本句单词卡 · 第 \d+ 句 · \d+ 个目标词$/);
   });
 
   test('③ 字幕窗加高到「三行英文 + 一句译文」，三颗玻璃键浮在它下沿', async ({ page }) => {
@@ -99,7 +108,6 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
         overlap: Math.round(r('#lcMini .mb-roll').bottom - r('#lcMini .mb-bar').top),
         btn: Math.round(r('#lcMini .mb-next').width),
         btnBg: cs('#lcMini .mb-next', 'backgroundImage').slice(0, 24),
-        weight: cs('#lcCount', 'fontWeight'),
       };
     });
     // 三行英文 + 一句译文：行高按实测算，别写死字面量
@@ -107,6 +115,5 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     expect(g.overlap, '按钮行浮在字幕窗之上（字从玻璃键底下穿过去）').toBeGreaterThan(20);
     expect(g.btn, '三颗键加大到好点（≥44）').toBeGreaterThanOrEqual(44);
     expect(g.btnBg, '玻璃键用渐变底，不再是实底薄荷').toMatch(/gradient/);
-    expect(Number(g.weight), `句数加重（现在 ${g.weight}）`).toBeGreaterThanOrEqual(600);
   });
 });

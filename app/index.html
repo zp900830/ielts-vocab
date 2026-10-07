@@ -2393,7 +2393,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      颜色走本站 token；卡片内的 notebar 行与 nb-table 对比表直接复用精读现有类，不另起样式。
      z 序不变：scrim(70) < 迷你条(75) < 抽屉(80) —— 抽屉开着也能经迷你条切句/播放，不用先关。
      10-07 用户按截图要求反转：**卡片抽屉挂顶部**（FAB 也在右上，就近唤起），
-     **迷你条沉到 TabBar 正上方**，条内「第 x/xxx 句」左下角、三个播放键右下角、字幕窗在其上。
+     **迷你条沉到 TabBar 正上方**，三个播放键右下角、字幕窗在其上（句序号 10-07 第二次改：
+     从迷你条挪进抽屉标题，见 .dw-head h2）。
      与 demo（work/listen-cards-demo.html，仍是旧底部抽屉）的差异：① 隐藏态一律
      visibility:hidden（demo 只靠 opacity，键盘仍能 Tab 进去，axe 违规）；② .fading 只服务
      demo 的 A/B 切换（真应用无模式切换，不要）。 */
@@ -2448,8 +2449,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dw-open { overflow: hidden; }
   body.dw-open #appView { overscroll-behavior: contain; }
   #lcDrawer .dw-head { display: flex; align-items: center; gap: 10px; padding: 14px 20px 12px; border-bottom: 1px solid var(--border); }
-  /* 标题弱化：只是定位信息（第几句/几个词），主角是卡片内容 */
-  #lcDrawer .dw-head h2 { margin: 0; font-size: 12.5px; font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); letter-spacing: .02em; }
+  /* 标题：2026-10-07 用户把迷你条左下角的句序号并进来了（本句单词卡 · 第 N 句 · N 个目标词），
+     它从此是这一屏唯一的定位信息 —— 墨色/字重按迷你条那颗句数同档（13px/600/--text），
+     不再走 10-04「标题弱化成 muted」那条（当时标题只写「本句单词卡」四个字）。 */
+  #lcDrawer .dw-head h2 { margin: 0; font-size: 13px; font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); letter-spacing: .02em; }
+  body.dark #lcDrawer .dw-head h2 { color: #efe9df; }
   /* 收起键（2026-10-04 用户反馈「太抢眼太大」）：改成幽灵文字键 —— 无底无边、muted 小字，
      hover 才出浅薄荷底（与 .ls-collapse 同一套轻量口径）；焦点管理（setLcDrawer focus 进它）不受影响 */
   #lcDrawer .dw-close { display: inline-flex; align-items: center; gap: 1px; padding: 3px 8px 3px 4px;
@@ -2460,7 +2464,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #lcDrawer .dw-close:hover { background: var(--accent-soft); color: var(--accent-text); }
   #lcDrawer .dw-body { overflow-y: auto; overscroll-behavior: contain; padding: 16px 20px 20px; transition: opacity .18s cubic-bezier(.22,.61,.36,1), transform .18s cubic-bezier(.22,.61,.36,1); }
   #lcDrawer .dw-body.swap { opacity: 0; transform: translateY(6px); }
-  /* ---- 迷你条沉底（2026-10-07 用户：三键右下角、第 x/xxx 句左下角）：
+  /* ---- 迷你条沉底（2026-10-07 用户：三键右下角；句序号同轮第二次改：删掉，挪进抽屉标题）：
      抽屉顶挂后它不再需要吸顶让位，落到 TabBar 正上方；字幕窗翻到按钮行上面。
      底边高度吃 --tabbar-h（positionListenMini 实测写入），桌面侧栏不在底部则为 0。 ---- */
   #lcMini { position: fixed; left: 0; right: 0; top: auto; bottom: var(--tabbar-h, 0px); z-index: 75;
@@ -2485,11 +2489,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dw-open #lcMini { background: linear-gradient(145deg, rgba(255,255,255,.93), rgba(255,255,255,.88) 42%, rgba(255,255,255,.82)); }
   body.dark.dw-open #lcMini { background: linear-gradient(145deg, rgba(30,28,25,.97), rgba(30,28,25,.92) 42%, rgba(30,28,25,.86)); }
   #lcMini .mb-bar { display: flex; align-items: center; gap: 10px; }
-  /* 句序号：2026-10-07 用户「稍微做重一点」—— 它现在是这一条上唯一的定位信息
-     （标题在抽屉里、正文被玻璃键压着），得比 --muted 站得住。 */
-  #lcMini .mb-count { margin-left: auto; font-family: var(--sans); font-size: 13px; font-weight: 600;
-    color: var(--text); white-space: nowrap; }
-  body.dark #lcMini .mb-count { color: #efe9df; }
   /* 字幕窗：固定高 + 上下渐隐；行体复用精读 .sent/.gl/.sent-zh，只有当前句挂 .playing 薄荷高亮 */
   #lcMini .mb-roll { height: 108px; overflow: hidden;
     transition: height .28s cubic-bezier(.22,.61,.36,1);
@@ -2514,8 +2513,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     /* z-index 不是可选项：.mb-roll 有 mask-image ⇒ 自成一个层叠上下文，和绝对定位的按钮行
        同处 z=0，于是按源码顺序决胜 —— DOM 里窗口排在按钮之后，字幕会把三颗键整个盖住、
        并吃掉点击（Playwright 报 sent-zh intercepts pointer events）。 */
-    #lcMini .mb-bar { position: absolute; left: 14px; right: 14px; bottom: 12px; gap: 8px; z-index: 1; }
-    #lcMini .mb-count { order: -1; margin-left: 0; margin-right: auto; }
+    #lcMini .mb-bar { position: absolute; left: 14px; right: 14px; bottom: 12px; gap: 8px;
+      z-index: 1; justify-content: flex-end; }
+    /* 句序号那颗 2026-10-07 删了（用户：并进抽屉标题「本句单词卡 · 第 N 句 · N 个目标词」），
+       三颗键改由 justify-content 贴右，不再靠句数的 auto margin 顶过去。 */
   }
   @media (min-width: 700px) {
     #lcMini { flex-direction: row; align-items: center; gap: 12px; padding: 8px 14px; }
