@@ -2468,7 +2468,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      点遮罩、ESC 三条路。grip 的 10px 顶垫改由 .dw-head 自己补。 */
   body.dw-open { overflow: hidden; }
   body.dw-open #appView { overscroll-behavior: contain; }
-  #lcDrawer .dw-head { display: flex; align-items: center; gap: 8px; padding: 14px 20px 12px; border-bottom: 1px solid var(--border); }
+  #lcDrawer .dw-head { display: flex; align-items: center; gap: 8px; padding: 15px 14px 12px 20px; border-bottom: 1px solid var(--border); }
+  /* 落点对齐（2026-10-07 用户「位置均居右侧，位置一样」）：展开全文阅读那条是居中玻璃胶囊
+     （width: min(1084px, 100% - 36px) → 手机档距视口右缘 18px，再吃 14px 内档 = 33px），
+     抽屉在 <900px 是通栏面板，没人垫那 18px —— 把窗距补进它的右内距（32px + 1px 边框 = 33px），
+     两枚收起键右缘到视口右缘的距离实测一致；≥900px 抽屉自己就是居中面板，按同档 14px 收。
+     按钮顶边也一档：抽屉 top:0 + padding-top 15 = 胶囊 top:8 + 边框 1 + padding 6 = 15。 */
+  @media (max-width: 899px) { #lcDrawer .dw-head { padding-right: 32px; } }
   /* 标题（2026-10-07 用户第三次改）：整串「本句单词卡 · 第 N 句 · N 个目标词」拆成
      「第 xx / xxx 句」+ 目标词数量胶囊 —— 篇名这一屏本来就只装本篇（.sidenav 已经说明在
      哪），「本句单词卡」四个字是噪音；词数从文字改成复用文章头部那颗琥珀 .r-badge，
@@ -2480,15 +2486,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark #lcDrawer .dw-head h2 { color: #efe9df; }
   /* 胶囊紧跟标题排成一组，收起键靠 auto margin 顶到右缘 —— 和原来 h2:flex:1 的落点一致。 */
   #lcDrawer .dw-head .fav-badge { flex: none; font-weight: 600; }
-  #lcDrawer .dw-head .dw-close { margin-left: auto; }
-  /* 收起键（2026-10-04 用户反馈「太抢眼太大」）：改成幽灵文字键 —— 无底无边、muted 小字，
-     hover 才出浅薄荷底（与 .ls-collapse 同一套轻量口径）；焦点管理（setLcDrawer focus 进它）不受影响 */
-  #lcDrawer .dw-close { display: inline-flex; align-items: center; gap: 1px; padding: 3px 8px 3px 4px;
-    border: none; border-radius: 999px; background: transparent; color: var(--muted);
-    font: inherit; font-size: 12px; line-height: 1; cursor: pointer;
-    transition: background-color .2s cubic-bezier(.22,.61,.36,1), color .2s cubic-bezier(.22,.61,.36,1); }
-  #lcDrawer .dw-close i { font-size: 15px; line-height: 1; }
-  #lcDrawer .dw-close:hover { background: var(--accent-soft); color: var(--accent-text); }
+  /* 抽屉收起键自己那套视觉声明（2026-10-04 的幽灵文字键）2026-10-07 整段删除：
+     用户要求「本句单词卡」和「展开全文阅读」两处收起键用同一颗的样式 —— 直接挂
+     .ls-collapse（见下方「收起键」那条），这里再留一份 #lcDrawer .dw-close 会靠 id
+     特异性把共用规则压掉，等于没复用。焦点管理（setLcDrawer 里 focus 进它）不受影响。 */
   #lcDrawer .dw-body { overflow-y: auto; overscroll-behavior: contain; padding: 16px 20px 20px; transition: opacity .18s cubic-bezier(.22,.61,.36,1), transform .18s cubic-bezier(.22,.61,.36,1); }
   #lcDrawer .dw-body.swap { opacity: 0; transform: translateY(6px); }
   /* ---- 迷你条沉底（2026-10-07 用户：三键右下角；句序号同轮第二次改：删掉，挪进抽屉标题）：
@@ -2650,14 +2651,19 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 收起键（2026-09-26 用户两轮反馈）：带字胶囊、**无边框无实底** —— 玻璃顶栏上叠一个白底描边
      小盒太笨重（「太丑了」）。现在就是一枚轻量文字键：⌄ + 收起，hover 才出浅底。
      ⚠️ 类名是 .ls-collapse（不再复用 .back）—— 样式必须挂在真类名上，
-     上一版挂在 .listen-top .back 上没生效，这颗键其实一直在吃浏览器默认按钮样式（灰底黑边）。 */
-  .listen-top .ls-collapse { width: auto; min-height: 30px; padding: 0 10px 0 4px; border: none;
+     上一版挂在 .listen-top .back 上没生效，这颗键其实一直在吃浏览器默认按钮样式（灰底黑边）。
+     2026-10-07 用户：「本句单词卡」和「展开全文阅读」两处收起键都使用展开全文阅读那颗的样式，
+     位置均居右侧、位置一样 —— 选择器从 .listen-top .ls-collapse 解耦成裸类，两处共用同一条规则
+     （抽屉那颗原先自己那套 #lcDrawer .dw-close 视觉声明必须一起删干净：id 特异性压过裸类，
+     「复用同一个类」就会在那儿失效）。margin-left:auto 让它在这两条栏里都顶到右端。 */
+  .ls-collapse { width: auto; min-height: 30px; padding: 0 10px 0 4px; border: none; margin-left: auto;
     display: inline-flex; align-items: center; gap: 1px;
     background: transparent; color: var(--accent-text);
-    font: inherit; font-weight: 600; font-size: 12.5px; border-radius: 999px; cursor: pointer; }
-  .listen-top .ls-collapse i { font-size: 17px; line-height: 1; }
-  .listen-top .ls-collapse:hover { background: var(--accent-soft); }
-  body.dark .listen-top .ls-collapse:hover { background: rgba(16,180,135,.14); }
+    font: inherit; font-weight: 600; font-size: 12.5px; border-radius: 999px; cursor: pointer;
+    transition: background-color .2s cubic-bezier(.22,.61,.36,1), color .2s cubic-bezier(.22,.61,.36,1); }
+  .ls-collapse i { font-size: 17px; line-height: 1; }
+  .ls-collapse:hover { background: var(--accent-soft); }
+  body.dark .ls-collapse:hover { background: rgba(16,180,135,.14); }
   .listen-top { position: sticky; top: 8px; z-index: 40; display: none; align-items: center; gap: 5px;
     width: min(1084px, calc(100% - 36px)); margin: 0 auto; padding: 6px 14px 6px 6px;
     background: rgba(255,255,255,.42); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
@@ -2759,11 +2765,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       </div>
     </header>
 
-    <!-- 随身听展开态顶栏（M4 §7.3）：只有标题 + 返回卡片。复用任务模式那套 reader-head 观感，
-         但不挂任务模式的 #ttPrev/#ttNext（那两颗会跳进任务模式，随身听只要听）。 -->
+    <!-- 随身听展开态顶栏（M4 §7.3）：只有标题 + 收起。复用任务模式那套 reader-head 观感，
+         但不挂任务模式的 #ttPrev/#ttNext（那两颗会跳进任务模式，随身听只要听）。
+         2026-10-07 用户：收起键改到右端，与「本句单词卡」抽屉那颗同一位置 ——
+         DOM 顺序就是视觉顺序（标题在左、键在右，靠 .ls-collapse 的 margin-left:auto 顶过去）。 -->
     <header class="listen-top" id="listenTop">
-      <button class="ls-collapse" id="lsClose" type="button" onclick="TASK.listenCollapse()" aria-label="收起" title="收起（播放继续）"><i class="ri-arrow-down-s-line" aria-hidden="true"></i><span>收起</span></button>
       <div class="r-title"><span class="tt-zh" id="lsTitle"></span><span class="r-pos" id="lsPos"></span></div>
+      <button class="ls-collapse" id="lsClose" type="button" onclick="TASK.listenCollapse()" aria-label="收起" title="收起（播放继续）"><i class="ri-arrow-down-s-line" aria-hidden="true"></i><span>收起</span></button>
     </header>
 
     <!-- 3.0 外壳（M1）：左侧导航 4 项 + 底部「我的」一行 + #appView，路由见 app.js。 -->
@@ -6743,8 +6751,8 @@ let listenOn = false;
         try { paint(); } catch (e) {}
       }
       /* ④ 收起（2026-09-25 用户改口径）：收起**不停止** —— 播放继续、悬浮球在、收听账继续记；
-         只有「停止」才收掉上下文。左上角那颗是「收起」不是「返回」：展开态 ⇄ 卡片态是同一场收听
-         的两种形态。收起时把已听时长先记一笔（listenFlush，_listenTick 续到 now），
+         只有「停止」才收掉上下文。右上角那颗（2026-10-07 从栏左端挪到右端，和单词卡抽屉那颗同一位置）
+         是「收起」不是「返回」：展开态 ⇄ 卡片态是同一场收听的两种形态。收起时把已听时长先记一笔（listenFlush，_listenTick 续到 now），
          之后的句子照常继续记账，不清零。 */
       function listenCollapse() {
         _listenExpanded = false;

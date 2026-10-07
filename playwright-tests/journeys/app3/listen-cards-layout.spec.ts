@@ -5,7 +5,9 @@
    ④ 句序号只留抽屉标题一处（迷你条左下角 → 字幕窗角标 → 全部撤掉，用户：「这是重复信息」），
       标题本身改成「第 xx / xxx 句」+ 目标词数量胶囊（复用文章头部那颗琥珀 .r-badge）；
    ⑤ 移动端抽屉开着 = 一整屏阅读面，底部 TabBar 整条隐藏，迷你条落到屏底；
-   ⑥ PC 端（1280）三键靠右 + 字幕整条真居中。 */
+   ⑥ PC 端（1280）三键靠右 + 字幕整条真居中；
+   ⑦ 抽屉与「展开全文阅读」两处收起键同一个类、同一个矩形（390 实测两枚都是右 357 / 上 15 / 58×30）；
+   ⑧ PC 档同档口径：两枚各自贴住本条栏右缘、顶边一致（两条栏宽度本就不同，不谈像素重合）。 */
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 
@@ -47,6 +49,39 @@ async function gotoListen(page: import('@playwright/test').Page) {
 
 test.use({ viewport: { width: 390, height: 844 } });
 
+/* 收起键探针（⑦⑧ 共用）：样式量 computed、落点量矩形，「居右」量的是键右缘到**本条栏内容右缘**
+   的净距离 —— `margin-left: auto` 到了 computed 里已经被浏览器算成像素值，量不出「贴住右端」这件事。 */
+function collapseProbe(el: HTMLElement) {
+  const cs = getComputedStyle(el);
+  const r = el.getBoundingClientRect();
+  const bar = el.parentElement as HTMLElement;
+  const bcs = getComputedStyle(bar);
+  const br = bar.getBoundingClientRect();
+  return {
+    cls: el.className,
+    right: Math.round(r.right), top: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height),
+    color: cs.color, bg: cs.backgroundColor, border: `${cs.borderTopWidth} ${cs.borderTopStyle}`,
+    radius: cs.borderRadius, fs: cs.fontSize, fw: cs.fontWeight, pad: cs.padding,
+    iconFs: getComputedStyle(el.querySelector('i')!).fontSize,
+    flushRight: Math.round(br.right - parseFloat(bcs.paddingRight) - parseFloat(bcs.borderRightWidth || '0') - r.right),
+    inRightHalf: r.left + r.width / 2 > br.left + br.width / 2,
+  };
+}
+/* 量之前先等字体与入场动画落定：这颗键是内容宽，webfont 一 swap 就漂 1px（同一份 CSS 两次量到
+   57/58 就是这么来的）；而 .listen-top 的 lsBarIn 还在跑时顶边差 14px。⑦⑧ 量的正是像素，
+   这两件事不排掉就是随机红。
+   还要先把鼠标挪开 —— 两枚键现在落在**同一个矩形**，点完抽屉那颗之后鼠标就停在原地，
+   展开态那颗正好接手一个 :hover（bg 从 transparent 变成 --accent-soft），实测就是这么红的。 */
+async function probeCollapse(page: import('@playwright/test').Page, sel: string) {
+  await page.mouse.move(0, 0);
+  await page.evaluate(async () => {
+    try { await document.fonts.ready; } catch (e) {}
+    document.getAnimations().forEach((a) => { try { a.finish(); } catch (e) {} });
+  });
+  await page.waitForTimeout(120);
+  return page.locator(sel).evaluate(collapseProbe);
+}
+
 test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉底', () => {
   test('① 入口在右上角，与标题同行，不压播放卡', async ({ page }) => {
     await gotoListen(page);
@@ -77,7 +112,7 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
       const cs = getComputedStyle(chip);
       const cr = chip.getBoundingClientRect();
       const title = (document.getElementById('lcTitle') as HTMLElement).getBoundingClientRect();
-      const close = (document.querySelector('#lcDrawer .dw-close') as HTMLElement).getBoundingClientRect();
+      const close = (document.getElementById('lcClose') as HTMLElement).getBoundingClientRect();
       return {
         drawer: r('#lcDrawer'), mini: r('#lcMini'), roll: r('#lcMini .mb-roll'),
         bar: r('#lcMini .mb-bar'), prev: r('#lcMini .mb-prev'), next: r('#lcMini .mb-next'),
@@ -230,6 +265,40 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     expect(after.tabbar, 'body 上那条 --tabbar-h:0 一起撤掉，回到 html 的实测值').not.toBe('0px');
     expect(after.miniBottom, '迷你条重新停在 TabBar 正上方').toBeLessThanOrEqual(after.y + 1);
   });
+
+  /* ⑦ 2026-10-07 用户：「展开的本句单词卡和展开全文阅读页面。收起按钮都使用展开全文阅读页面的
+     收起按钮样式。位置均居右侧，位置一样。」
+     「样式一致」按用户口径 = 同一个 CSS 类，不是仿写声明；「位置一样」按字面 = 两个状态各量一次，
+     同一个矩形（右缘 / 顶边 / 宽高）实测重合，不是「都在右边大概那个位置」。
+     两处不同容器（居中玻璃胶囊 vs 通栏面板）能重合，靠的是抽屉在手机档把胶囊那 18px 窗距
+     补进右内距、并把顶边对齐到 8+1+6=15px —— 数值改动一发生这条就红，正是为了拦住「改回一套」。 */
+  test('⑦ 两处收起键：同一个类、同一个落点（右缘 / 顶边 / 尺寸实测重合）', async ({ page }) => {
+    await gotoListen(page);
+    await page.locator('#lcFab').click();
+    await expect(page.locator('#lcDrawer')).toHaveClass(/open/);
+    await page.waitForTimeout(450);
+    const dw = await probeCollapse(page, '#lcClose');
+
+    await page.locator('#lcClose').click();
+    await expect(page.locator('#lcDrawer')).not.toHaveClass(/open/);
+    await page.evaluate(() => { (TASK as unknown as { listenExpand(): void }).listenExpand(); });
+    await expect(page.locator('body')).toHaveClass(/listen-mode/);
+    await expect(page.locator('#listenTop')).toBeVisible();
+    const lt = await probeCollapse(page, '#lsClose');
+
+    expect(lt.cls, '抽屉那颗直接挂展开全文阅读那颗的类（复用，不是仿写）').toBe(dw.cls);
+    expect(dw.cls, '两处都是 .ls-collapse').toContain('ls-collapse');
+    for (const k of ['color', 'bg', 'border', 'radius', 'fs', 'fw', 'pad', 'iconFs', 'h', 'w'] as const) {
+      expect(dw[k], `收起键样式第 ${k} 项两处不一致`).toBe(lt[k]);
+    }
+    expect(dw.flushRight, '抽屉那颗贴住栏右缘').toBe(0);
+    expect(lt.flushRight, '展开态那颗贴住栏右缘（原先它在最左，现在挪到右端）').toBe(0);
+    expect(dw.right, '两枚收起键右缘到视口右缘重合').toBe(lt.right);
+    expect(dw.top, '顶边也同档（抽屉 15 = 胶囊 8+1+6）').toBe(lt.top);
+    const vw = 390;
+    expect(lt.right, '展开态那颗确实在右端（不是还留在左边）').toBeGreaterThan(vw / 2);
+    expect(vw - lt.right, '右缘距视口 = 胶囊那 33px 一档').toBeLessThanOrEqual(34);
+  });
 });
 
 /* ⑥ 2026-10-07 用户 PC 截图：三颗键挪到右边、字幕在播放条上居中（「第 N 句」那颗本条 ④ 已整颗撤掉）。
@@ -265,5 +334,30 @@ test.describe('随身听迷你条 PC 端：三键靠右 + 字幕真居中', () =
     expect(g.overlap, '字幕文本列不许钻到按键底下').toBe(false);
     expect(g.align).toBe('center');
     expect(g.curInside, '当前句整句落在窗口里').toBe(true);
+  });
+
+  /* ⑧ PC 档同一件事的另一半：抽屉在 ≥900px 是居中面板（min(860px, 92vw)）、顶栏是居中胶囊
+     （min(1084px, 100% - 36px)），两条栏本来不同宽，像素级重合无从谈起 —— 这一档的
+     「位置一样」按同档口径锁：同一个类、同一套样式、都贴住自己那条栏的右缘、顶边同一档。 */
+  test('⑧ 两处收起键在 PC 档同档：同一类 + 各自贴住栏右缘 + 顶边一致', async ({ page }) => {
+    await gotoListen(page);
+    await page.locator('#lcFab').click();
+    await expect(page.locator('#lcDrawer')).toHaveClass(/open/);
+    await page.waitForTimeout(450);
+    const dw = await probeCollapse(page, '#lcClose');
+    await page.locator('#lcClose').click();
+    await page.evaluate(() => { (TASK as unknown as { listenExpand(): void }).listenExpand(); });
+    await expect(page.locator('body')).toHaveClass(/listen-mode/);
+    const lt = await probeCollapse(page, '#lsClose');
+
+    expect(lt.cls).toBe(dw.cls);
+    expect(dw.inRightHalf, '抽屉那颗在栏的右半边').toBe(true);
+    expect(lt.inRightHalf, '展开态那颗也在右半边（不再是最左）').toBe(true);
+    expect(dw.flushRight, '抽屉那颗贴住栏右缘').toBe(0);
+    expect(lt.flushRight, '展开态那颗贴住栏右缘').toBe(0);
+    expect(dw.top, '顶边同档').toBe(lt.top);
+    for (const k of ['color', 'bg', 'border', 'radius', 'fs', 'fw', 'pad', 'iconFs', 'h', 'w'] as const) {
+      expect(dw[k], `第 ${k} 项两处不一致`).toBe(lt[k]);
+    }
   });
 });

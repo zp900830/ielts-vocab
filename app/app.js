@@ -653,7 +653,7 @@
       '<section id="lcDrawer" role="dialog" aria-modal="true" aria-label="本句单词卡">' +
         '<div class="dw-head"><h2 id="lcTitle">本句单词卡</h2>' +
         '<span class="r-badge fav-badge" id="lcWords"></span>' +
-        '<button class="dw-close" type="button" id="lcClose" aria-label="收起"><i class="ri-arrow-down-s-line" aria-hidden="true"></i><span>收起</span></button></div>' +
+        '<button class="ls-collapse" type="button" id="lcClose" aria-label="收起"><i class="ri-arrow-down-s-line" aria-hidden="true"></i><span>收起</span></button></div>' +
         '<div class="dw-body lc-grid" id="lcGrid"></div>' +
       '</section>');
     wireListenCardsOnce();
