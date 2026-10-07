@@ -510,6 +510,8 @@
     opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
   #abToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  /* 错误档只换底色（同一颗 pill、同一个出口 showAbToast），深一档保证白字对比度够。 */
+  #abToast.err { background: #6d2a20; }
   /* A-B 循环常驻指示：循环开着就一直显示（框角那个 ✕ 一滚出框顶就找不到了），点一下退出。
      压在 #abToast 上方一档，避免和 2.4s 自动消失的提示条叠在一起。 */
   #abLive { position: fixed; left: 50%; transform: translateX(-50%);
@@ -687,7 +689,7 @@
     background-color: #fff; color: var(--text); }
   .jpop select:focus, .jpop input:focus { border-color: var(--accent-bright); }
   .jpop .row { display: flex; gap: 8px; }
-  .jpop .row input { flex: 1; margin-bottom: 0; min-width: 0; }
+  .jpop .row input, .jpop .row select { flex: 1; margin-bottom: 0; min-width: 0; }
   .jpop .row .btn.play { flex: none; }
   #markList { display: flex; flex-direction: column; gap: 6px; max-height: 38vh; overflow-y: auto;
     min-width: 230px; } /* 撑开菜单：否则中文随意断行把菜单挤到最小宽，按钮全缩成一团 */
@@ -1144,13 +1146,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     aside::before { content: ""; display: block; width: 36px; height: 4px; border-radius: 2px;
       background: rgba(0,0,0,.15); margin: 8px auto 0; flex: none; }
     body.dark aside::before { background: rgba(255,255,255,.25); }
-    .layout.panel-open aside { transform: translateY(0); visibility: visible; }
-    .layout.panel-open #edgeTab { opacity: 0; pointer-events: none; }
+    body.panel-open aside { transform: translateY(0); visibility: visible; }
+    body.panel-open #edgeTab { opacity: 0; pointer-events: none; }
     .back-to-learn { right: 12px; bottom: calc(100px + env(safe-area-inset-bottom, 0px)); font-size: 11px; padding: 6px 12px; }
     aside .list { max-height: calc(62vh - 110px); -webkit-overflow-scrolling: touch; }
     .layout::after { content: ""; position: fixed; inset: 0; z-index: 180; background: rgba(0,0,0,.35);
       opacity: 0; pointer-events: none; transition: opacity var(--t-fast); }
-    .layout.panel-open::after { opacity: 1; pointer-events: auto; }
+    body.panel-open .layout::after { opacity: 1; pointer-events: auto; }
     /* 单词弹窗：底部抽屉式浮层，避开播放条 */
     .pop { left: 12px !important; right: 12px; width: auto; bottom: calc(90px + env(safe-area-inset-bottom, 0px)); top: auto !important;
       border-radius: 18px; padding: 14px 14px 12px; max-height: calc(100vh - 120px); overflow-y: auto; }
@@ -1981,6 +1983,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     border: none; background: transparent; color: var(--muted); font-size: 16px; cursor: pointer;
     border-radius: 10px; }
   #loginModal .login-title { font-size: 17px; font-weight: 800; margin-bottom: 4px; padding-right: 32px; }
+  #loginModal .login-why { font-size: 12px; color: var(--text); line-height: 1.6; margin-bottom: 4px; }
+  #loginModal .login-why:empty { display: none; }
   #loginModal .login-sub { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
   #loginModal [data-login-form] { display: flex; flex-direction: column; gap: 8px; }
   #loginModal [data-login-form] input { width: 100%; min-height: 44px; border: 1px solid var(--border);
@@ -2803,6 +2807,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     <div id="loginModal" role="dialog" aria-modal="true" aria-label="登录" tabindex="-1" style="display:none">
       <div class="login-card" role="document">
         <div class="login-title">登录</div>
+        <!-- 被门禁拦下时把「为什么」写在这里（taskLoginPrompt），不再在弹窗底下另挂一颗 toast -->
+        <div class="login-why" id="loginWhy"></div>
         <div class="login-sub">与词汇真经站同一账号（注册需管理员审批）</div>
         <form data-login-form>
           <input id="loginEmail" type="email" placeholder="邮箱" autocomplete="email" aria-label="邮箱">
@@ -2916,7 +2922,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       <div class="cs" id="jumpHint"></div>
       <select id="jumpCh" onchange="syncJumpHint()" aria-label="选择章节"></select>
       <div class="row">
-        <input id="jumpN" type="number" min="1" value="1" onkeydown="if(event.key==='Enter')jumpGo()" aria-label="跳转句号">
+        <select id="jumpN" onchange="syncJumpHint()" aria-label="选择句号"></select>
         <button class="btn play" onclick="jumpGo()">直达</button>
       </div>
     </div>
@@ -2976,7 +2982,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
          底部题卡 #taskCard 及其 renderQuiz 分支已删；小结卡 id/class 改为 pass-card。 -->
     <div class="pass-card" id="passCard" role="group" aria-label="遍间小结" hidden></div>
     <!-- ② 浮窗答题卡：锚在被点的那个空旁边，4 个选项 + 「这题有问题」。定位由 JS 算。 -->
-    <div class="blank-pop" id="blankPop" role="dialog" aria-label="选出填回空格的词" hidden></div>
+    <div class="blank-pop" id="blankPop" role="dialog" aria-modal="true" aria-label="选出填回空格的词" hidden></div>
 
     <div class="layout">
       <!-- ④ 随身听展开弹窗（2026-09-25 用户：原 HUD 大卡片删掉 —— 篇名/篇号在顶部条、
@@ -3625,8 +3631,11 @@ let listenOn = false;
 
     /* ============ 语音（Edge/系统语音全列出） ============ */
     let V = {};
-    let selVoiceURI = localStorage.getItem('ielts-voice') || '';
-    try { accent = localStorage.getItem('ielts-accent') || 'en-GB'; } catch(e) {}
+    /* 隐私模式 / Safari「阻止所有 Cookie」下 localStorage 连【读】都会抛。写有 safeStore 包着，
+       读这一行是全文件唯一的裸读（其余都在 try 里）—— 统一走 lsGet。 */
+    function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+    let selVoiceURI = lsGet('ielts-voice') || '';
+    accent = lsGet('ielts-accent') || 'en-GB';
     const HAS_SPEECH = ('speechSynthesis' in window);
     // iOS：speak() 必须在手势上下文内同步调用（setTimeout 出手势即被系统静默丢弃，
     // 拖进度条松手无声的主因）；且 iOS 无 Chrome 的 cancel-吞声 bug，可同步直发
@@ -4155,10 +4164,7 @@ let listenOn = false;
     if (e) e.stopPropagation();
     const w = document.getElementById('cloudWrap');
     if (!w) return;
-    const open = w.classList.toggle('open');
-    if (open) setTimeout(() => document.addEventListener('pointerdown', function h(ev) {
-      if (!ev.target.closest('#cloudWrap')) { w.classList.remove('open'); document.removeEventListener('pointerdown', h); }
-    }), 0);
+    w.classList.toggle('open');
     }
     function toggleMenu() { document.body.classList.toggle('menu-open'); }
 
@@ -4262,7 +4268,7 @@ let listenOn = false;
     document.getElementById('jumpCh').innerHTML = opts;
     syncJumpHint();
     openModal(p);
-    setTimeout(() => { const inp = document.getElementById('jumpN'); inp.value = '1'; inp.focus(); inp.select(); }, 0);
+    setTimeout(() => { const sel = document.getElementById('jumpN'); sel.value = '1'; try { sel.focus(); } catch (e) {} }, 0);
     } else closeModal(p);
     }
     function syncJumpHint() {
@@ -4272,8 +4278,22 @@ let listenOn = false;
        拿它算别的章会得到「第 1–N 句」这种错话）。 */
     const s = computeChapterStart(ai), total = chapterSentCount(ai);
     document.getElementById('jumpHint').textContent = `第${ai + 1}章共 ${total} 句（全文第 ${s + 1}–${s + total} 句）`;
-    document.getElementById('jumpN').max = total;
-    document.getElementById('jumpN').placeholder = '句号 1–' + total;
+    /* 句号是点选不是打字（D9）。选项带上句首几词 —— 只给序号等于让人盲选，
+       本来就没读到过这些句。快速跳转与「今日任务从哪开始」共用这一份。 */
+    const sel = document.getElementById('jumpN');
+    const cur = Math.min(Math.max(1, parseInt(sel.value, 10) || 1), total);
+    sel.innerHTML = sentOptions(s, total, cur);
+    sel.value = String(cur);
+    }
+    function sentOptions(startGi, total, cur) {
+    let o = '';
+    for (let k = 1; k <= total; k++) {
+      const raw = (SENT_RAW[startGi + k - 1] || '')
+        .replace(/\[\[(?:[^\]:]+:)?([^\]:]+)\]\]/g, '$1').replace(/[\[\]]/g, '').trim();
+      o += '<option value="' + k + '"' + (k === cur ? ' selected' : '') + '>' +
+        '第 ' + k + ' 句' + (raw ? ' · ' + esc(raw.slice(0, 26)) : '') + '</option>';
+    }
+    return o;
     }
     function jumpGo() {
     const ai = parseInt(document.getElementById('jumpCh').value, 10);
@@ -4302,14 +4322,14 @@ let listenOn = false;
     async function cloudLogin(src) {
     if (cloudLogin._busy) return; cloudLogin._busy = true;
     try {
-    if (!CLOUD.configured()) { alert('云端语音未配置：管理员尚未设置 Supabase。'); return; }
+    if (!CLOUD.configured()) { showErrorToast('云端语音未配置：管理员尚未设置 Supabase。'); return; }
     const c = CLOUD.client();
-    if (!c) { alert('网络不可用，登录组件加载失败，请刷新重试。'); return; }
+    if (!c) { showErrorToast('网络不可用，登录组件加载失败，请刷新重试。'); return; }
     const em = document.getElementById((src && src.email) || 'cloudEmail').value.trim();
     const pw = document.getElementById((src && src.pass) || 'cloudPass').value;
-    if (!em || !pw) { alert('请填写邮箱和密码'); return; }
+    if (!em || !pw) { showErrorToast('请填写邮箱和密码'); return; }
     const { error } = await c.auth.signInWithPassword({ email: em, password: pw });
-    if (error) { alert('登录失败：' + error.message); return; }
+    if (error) { showErrorToast('登录失败：' + error.message); return; }
     CLOUD._userMail = em;
     // 登录前攒下的进度立刻上云，不必等下一次刷新（云同步是后台动作，不打断登录反馈）
     try { TASK.cloudSync().catch(() => {}); } catch (e) {}
@@ -4320,18 +4340,21 @@ let listenOn = false;
     async function cloudSignup(src) {
     if (cloudSignup._busy) return; cloudSignup._busy = true;
     try {
-    if (!CLOUD.configured()) { alert('云端语音未配置：管理员尚未设置 Supabase。'); return; }
+    if (!CLOUD.configured()) { showErrorToast('云端语音未配置：管理员尚未设置 Supabase。'); return; }
     const c = CLOUD.client();
-    if (!c) { alert('网络不可用，登录组件加载失败，请刷新重试。'); return; }
+    if (!c) { showErrorToast('网络不可用，登录组件加载失败，请刷新重试。'); return; }
     const em = document.getElementById((src && src.email) || 'cloudEmail').value.trim();
     const pw = document.getElementById((src && src.pass) || 'cloudPass').value;
-    if (!em || !pw) { alert('请填写邮箱和密码'); return; }
+    if (!em || !pw) { showErrorToast('请填写邮箱和密码'); return; }
     const { error } = await c.auth.signUp({ email: em, password: pw });
-    if (error) { alert('注册失败：' + error.message); return; }
-    alert('注册成功，请等待管理员审批后再使用云端语音（审批前可用本地语音）。');
+    if (error) { showErrorToast('注册失败：' + error.message); return; }
+    showAbToast('注册成功，请等待管理员审批后再使用云端语音（审批前可用本地语音）。', 6000);
     } finally { cloudSignup._busy = false; }
     }
     async function cloudLogout() {
+    // 确认与反馈都放在这一颗里：☁ 菜单里的 #btnLogout 和「我的」浮窗里的退出按钮（app.js meLogout）
+    // 是同一个动作的两个入口，各自再问一遍就会变成两套话术。
+    if (!confirm('退出登录？本机进度照常保留，只是不再同步云端，云端音色不可用。')) return false;
     let signedOut = false;
     const cleanup = CLOUD.client().auth.onAuthStateChange((ev, sess) => {
         if (ev === 'SIGNED_OUT') {
@@ -4348,7 +4371,12 @@ let listenOn = false;
     loadVoices();
     }
     cleanup.data.subscription.unsubscribe();
-    toggleCloudWrap();
+    // 只收不开：从「我的」浮窗退出时这层菜单本来是关着的，toggle 会把它弹开 ——
+    // 一次退出两条反馈（toast + 菜单自动开）。反馈归 toast 一家管。
+    const cw = document.getElementById('cloudWrap');
+    if (cw) cw.classList.remove('open');
+    showAbToast('已退出登录，本机进度照常保留');
+    return true;
     }
 
     /* 语音三分类：神经网络 Natural/Online 系 + 口碑好的真人采样音色，其余隐藏 */
@@ -4510,7 +4538,7 @@ let listenOn = false;
     function pickVoice(uri, keepOpen) {
     if (isCloudURI(uri) && !(typeof CLOUD !== 'undefined' && CLOUD._on)) {
     toggleCloudWrap();
-    alert(typeof CLOUD !== 'undefined' && CLOUD._userMail
+    showErrorToast(typeof CLOUD !== 'undefined' && CLOUD._userMail
       ? '☁ 云端语音还没连通（状态确认中，或账号未通过审批）。可稍后重试，先选本地音色。'
       : '☁ 云端语音需先登录（与词汇真经站同一账号）。');
     return;
@@ -4548,14 +4576,21 @@ let listenOn = false;
     }
     }
     // 点浮层外面 / Esc / 改窗口大小：只绑一次（回调里每次现查 #voicePop，重渲也管用）。
+    /* 「点外面关」的误判守卫：浮层里的按钮点完会同步重渲 innerHTML，事件冒泡到 document 时
+       e.target 已被摘出 DOM，closest 全灭 → 会被当成「点了外面」。voicePop / mePop 两处以前
+       各写一遍这个判断（将来必漂），收进这一颗（app.js 也用它）。 */
+    function outsideTap(e, sels) {
+    const t = e.target;
+    if (!t || !t.isConnected) return false;
+    return !(t.closest && sels.some(s => t.closest(s)));
+    }
     document.addEventListener('click', (e) => {
     const p = document.getElementById('voicePop');
     if (!p || p.hidden) return;
-    if (!e.target.isConnected) return;
-    if (e.target.closest('#voicePop') || e.target.closest('#voicePick')) return;
+    if (!outsideTap(e, ['#voicePop', '#voicePick'])) return;
     closeVoicePop();
     });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVoicePop(); });
+    // Esc 由浮层栈（OVERLAY_STACK）统一收，这里不再单挂一颗监听。
     window.addEventListener('resize', () => { const p = document.getElementById('voicePop'); if (p && !p.hidden) positionVoicePop(); });
     wireVoicePop();
 
@@ -4661,8 +4696,9 @@ let listenOn = false;
     if (!speak._nudge || Date.now() - speak._nudge > 15000) {
     speak._nudge = Date.now();
     const cp0 = document.getElementById('cloudWrap');
-    if (cp0 && cp0.style.display !== 'block') cp0.style.display = 'block';
-    alert(typeof CLOUD !== 'undefined' && CLOUD._userMail
+    // 只认 .open 这一套显隐（旧写法在这里写 inline display:block，于是 Esc/互斥都关不掉它）
+    if (cp0 && !cp0.classList.contains('open')) cp0.classList.add('open');
+    showErrorToast(typeof CLOUD !== 'undefined' && CLOUD._userMail
       ? '☁ 云端语音还没连通（状态确认中，或账号未通过审批）。本次先用本地语音朗读。'
       : '☁ 云端语音需先登录（与词汇真经站同一账号）。本次先用本地语音朗读。');
     }
@@ -4670,7 +4706,7 @@ let listenOn = false;
     }
     if (!HAS_SPEECH) {
     // 无本地引擎、无云端：停下连播，避免无声空转全篇
-    if (cb && playing) { playing = false; paint(); alert('当前环境不支持语音朗读：请用 Chrome/Edge 打开，或登录 ☁ 云端语音。'); return; }
+    if (cb && playing) { playing = false; paint(); showErrorToast('当前环境不支持语音朗读：请用 Chrome/Edge 打开，或登录 ☁ 云端语音。'); return; }
     if (cb) cb(); return;
     }
     const go = () => {
@@ -4711,7 +4747,7 @@ let listenOn = false;
     try { busy = !!(speechSynthesis.speaking || speechSynthesis.pending); } catch (e) {}
     if (!busy) {
     errStreak = 0; playing = false; paint(); savePos();
-    alert('本次朗读没能出声：iOS 要求点 ▶／点句子手势内起播（拖进度条后要点一下句子）；锁屏持续播请用 ☁ 云端音色。');
+    showErrorToast('本次朗读没能出声：iOS 要求点 ▶／点句子手势内起播（拖进度条后要点一下句子）；锁屏持续播请用 ☁ 云端音色。');
     return;
     }
     errStreak++;
@@ -4722,7 +4758,7 @@ let listenOn = false;
     errStreak++;
     if (errStreak >= 3) {
     errStreak = 0; playing = false; paint();
-    alert(isCloudURI(selVoiceURI)
+    showErrorToast(isCloudURI(selVoiceURI)
     ? '☁ 云端合成多次失败且本机也播不出：请检查网络后点 ▶ 重试（配额/审批问题看顶部云状态）。'
     : (everStarted ? '语音播不出来：' + ENV_HINT
     : '本机语音引擎无响应（一次都没出过声）：请在地址栏输 chrome://restart 回车重启 Chrome；或直接登录 ☁ 云端语音绕开它。'));
@@ -5149,10 +5185,7 @@ let listenOn = false;
     if (e) e.stopPropagation();
     const w = document.getElementById('loopWrap');
     if (!w) return;
-    const open = w.classList.toggle('open');
-    if (open) setTimeout(() => document.addEventListener('pointerdown', function h(ev) {
-    if (!ev.target.closest('#loopWrap')) { w.classList.remove('open'); document.removeEventListener('pointerdown', h); }
-    }), 0);
+    w.classList.toggle('open');
     }
     function setLoopCount(count) {
     loopMode = count > 0;
@@ -5178,14 +5211,18 @@ let listenOn = false;
     let abMode = 0;
     let abStart = -1, abEnd = -1;
     let _abToastT = null;
-    function showAbToast(msg) {
+    function showAbToast(msg, ms, isErr) {
     const t = document.getElementById('abToast');
     if (!t) return;
     t.textContent = msg;
+    t.classList.toggle('err', !!isErr);
     t.classList.add('show');
     clearTimeout(_abToastT);
-    _abToastT = setTimeout(() => t.classList.remove('show'), 2400);
+    _abToastT = setTimeout(() => t.classList.remove('show'), ms || 2400);
     }
+    /* 错误路径统一走这颗 toast，不再用原生 alert：阻塞、不可样式化，iOS 上还会把域名顶出来。
+       错误文案普遍长（有的带排查步骤），按时长随字数走：6s 起、15s 封顶。 */
+    function showErrorToast(msg) { showAbToast(msg, Math.min(15000, Math.max(6000, (msg || '').length * 90)), true); }
     function safeStore(key, value, silent) {
       try { localStorage.setItem(key, value); return true; }
       catch (e) {
@@ -5321,21 +5358,15 @@ let listenOn = false;
     if (e) e.stopPropagation();
     const w = document.getElementById('abWrap');
     if (!w) return;
-    const open = w.classList.toggle('open');
+    w.classList.toggle('open');
     renderABLoops();
-    if (open) setTimeout(() => document.addEventListener('pointerdown', function h(ev) {
-      if (!ev.target.closest('#abWrap')) { w.classList.remove('open'); document.removeEventListener('pointerdown', h); }
-    }), 0);
     }
     function toggleMarkWrap(e) {
     if (e) e.stopPropagation();
     const w = document.getElementById('markWrap');
     if (!w) return;
-    const open = w.classList.toggle('open');
+    w.classList.toggle('open');
     renderMarks();
-    if (open) setTimeout(() => document.addEventListener('pointerdown', function h(ev) {
-      if (!ev.target.closest('#markWrap')) { w.classList.remove('open'); document.removeEventListener('pointerdown', h); }
-    }), 0);
     }
     // 旧 toggleABPop/toggleMarkPop 兼容：重定向到新的 wrap toggle
     function toggleABPop(force) {
@@ -5463,10 +5494,7 @@ let listenOn = false;
     if (e) e.stopPropagation();
     const w = document.getElementById('rateWrap');
     if (!w) return;
-    const open = w.classList.toggle('open');
-    if (open) setTimeout(() => document.addEventListener('pointerdown', function h(ev) {
-    if (!ev.target.closest('#rateWrap')) { w.classList.remove('open'); document.removeEventListener('pointerdown', h); }
-    }), 0);
+    w.classList.toggle('open');
     }
     function pickRate(r) {
     setRate(r);
@@ -5493,72 +5521,58 @@ let listenOn = false;
     const p = e.composedPath && e.composedPath();
     if (p) for (const el of p) { if (el && el.matches && el.matches(sel)) return true; }
     } catch (err) {} return false; };
-    /* 弹窗焦点管理：打开时记录触发源、聚焦首个可聚焦元素；Tab 限制在弹窗内；关闭后返回焦点 */
-    let _modalReturnFocus = null, _modalTrapCleanup = null;
+    /* 浮层焦点管理：打开时记录触发源、聚焦首个可聚焦元素；关闭后返回焦点。
+       Tab 不在这儿逐浮层挂（旧 _trapFocus 只有 openModal 那条路挂得上，其余 5 个标着
+       aria-modal 的浮层拦不住 Tab）—— 统一走下面那一份按浮层栈裁决的全局监听。 */
+    let _modalReturnFocus = null;
     function _focusable(el) {
     return [...el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
       .filter(e => !e.disabled && e.offsetParent !== null);
     }
-    function _trapFocus(el) {
-    const handler = e => {
-      if (e.key !== 'Tab') return;
-      const list = _focusable(el);
-      if (!list.length) { e.preventDefault(); return; }
-      const first = list[0], last = list[list.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-    };
-    el.addEventListener('keydown', handler);
-    return () => el.removeEventListener('keydown', handler);
-    }
+    /* Tab 收在最上层浮层里：以前只有 openModal 那三个接了陷阱，另外 5 个写着「我是模态」的浮层
+       一 Tab 就逃到背后正文。改成一份常驻监听，按浮层栈（见 syncToggleAria 上方那份清单）
+       自动接管当前最上层 —— 以后加浮层不用记得挂。 */
+    document.addEventListener('keydown', e => {
+    if (e.key !== 'Tab') return;
+    const st = overlayEntries();
+    if (!st.length) return;
+    const top = st[0].el;
+    const list = _focusable(top);
+    if (!list.length) { e.preventDefault(); top.focus(); return; }
+    const first = list[0], last = list[list.length - 1];
+    if (!top.contains(document.activeElement)) { e.preventDefault(); first.focus(); return; }
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && (document.activeElement === last || document.activeElement === top)) { e.preventDefault(); first.focus(); }
+    });
     function openModal(el) {
     if (!el) return;
-    // 关闭其它弹窗，保持互斥
-    ['#pop','#jumpPop'].forEach(s => {
-      const o = document.querySelector(s); if (o && o !== el && o.style.display === 'block') closeModal(o);
-    });
-    ['#abWrap','#markWrap','#cloudWrap.open','#rateWrap.open','#loopWrap.open'].forEach(s => {
-      const o = document.querySelector(s); if (o && o !== el) o.classList.remove('open');
+    // 互斥范围与旧口径一致：只有这两族互相顶掉。抽屉/今日面板/浮窗有各自的叠放语义，
+    // 不该因为点到一个生词就被一起收掉；关它们一律走栈里配的 close（不留第二套摘 class 的路）。
+    overlayEntries().forEach(({ el: o, def }) => {
+      if (o !== el && MUTUAL_EXCLUSIVE[def.id]) def.close(o);
     });
     _modalReturnFocus = document.activeElement;
-    if (_modalTrapCleanup) { _modalTrapCleanup(); _modalTrapCleanup = null; }
     el.style.display = 'block';
-    _modalTrapCleanup = _trapFocus(el);
     const list = _focusable(el);
     (list[0] || el).focus();
     }
     function closeModal(el) {
     if (!el) return;
     el.style.display = 'none';
-    if (_modalTrapCleanup) { _modalTrapCleanup(); _modalTrapCleanup = null; }
     if (_modalReturnFocus && _modalReturnFocus.focus) { try { _modalReturnFocus.focus(); } catch (e) {} }
     _modalReturnFocus = null;
     }
-    /* 浮层总关闭入口：新增浮层只改这一处，不要再往 Escape 分支里手写清单。
-       今日面板用 .open 类 + #todayScrim 内联样式，不走 openModal，必须在这里一并收。
-       返回值（2026-09-25）：true = 关掉了至少一层 —— Esc 的「只关最上层」语义靠它：
-       普通浮层都关干净了才轮到随身听全屏弹窗（listen-mode），一次 Esc 不该两层全收。 */
-    const OVERLAY_WRAP_IDS = ['cloudWrap', 'markWrap', 'abWrap', 'loopWrap', 'rateWrap'];
+    /* 浮层总关闭入口：一次 Esc 只收最上层（2026-09-25 定的分层口径，旧实现是一键全收）。
+       清单就是上面那份 OVERLAY_STACK —— 随身听抽屉、「我的」浮窗、音色、今日起点这几个
+       以前各挂各的 document 监听、不在总清单里，于是 Esc 会越过它们先把全屏收起收掉。 */
     function closeAllOverlays() {
-    let closedAny = false;
-    const popEl = document.getElementById('pop');
-    if (popEl && popEl.style.display === 'block') { closeModal(popEl); closedAny = true; }
-    const jumpEl = document.getElementById('jumpPop');
-    if (jumpEl && jumpEl.style.display === 'block') { closeModal(jumpEl); closedAny = true; }
-    const loginEl = document.getElementById('loginModal');
-    if (loginEl && loginEl.style.display === 'block') { closeModal(loginEl); closedAny = true; }
-    OVERLAY_WRAP_IDS.forEach(id => {
-      const el = document.getElementById(id);
-      if (el && el.classList.contains('open')) { el.classList.remove('open'); closedAny = true; }
-    });
-    const tp = document.getElementById('todayPanel');
-    if (tp && tp.classList.contains('open')) { TASK.closePanel(); closedAny = true; }
-    if (typeof TASK !== 'undefined' && TASK.closeBlankPop) {
-      const bp = document.getElementById('blankPop');
-      if (bp && !bp.hidden) { try { TASK.closeBlankPop(); } catch (e) {} closedAny = true; }
-    }
-    if (document.body.classList.contains('menu-open')) { document.body.classList.remove('menu-open'); closedAny = true; }
-    return closedAny;
+    const top = overlayEntries()[0];
+    if (!top) return false;
+    try { top.def.close(top.el); } catch (e) {}
+    /* Esc 这条路后面不会再来一次 click，而 .open 已经变了 —— 不补这一下，
+       「☁ 已展开」的 aria-expanded 会一直停在 true，读屏与实际相反（syncToggleAria 平时靠 click 触发）。 */
+    try { syncToggleAria(); } catch (e) {}
+    return true;
     }
     /* 顶栏/播放条这排开关的「按下没按下、菜单开没开」此前只写在 class 里，读屏软件拿不到。
        与其在八个开关各自的函数里补一行同步（漏一个就长期不一致），不如按当前 DOM 反推：
@@ -5578,26 +5592,70 @@ let listenOn = false;
       const m = document.getElementById('btnMenu');
       if (m) m.setAttribute('aria-expanded', document.body.classList.contains('menu-open') ? 'true' : 'false');
     }
+    /* ============ 浮层栈：唯一口径（Tab 陷阱 + Esc 分层 + 点外面都读它） ============
+       顺序 = z 序从上到下（实测值：todayPanel 600 / loginModal 450 / mePop 400 / voicePop 300
+       / blankPop 260 / jpop 220 / pop 200 / startPickPop 91 / lcDrawer 80，顶栏五个下拉菜单最底）。
+       新增浮层只在这里加一行 + 配一个 close，不要再往 Esc 分支里手写清单。
+       open：判「开着」的选择器 —— 三套显隐机制并存（hidden 属性 / inline display / .open 类），
+             这里逐一认领，调用方不必再关心用的是哪一种。
+       own：点在这些元素上不算「点外面」（菜单本体 + 它自己的触发键）；没有 own = 不归点外面管。 */
+    const OVERLAY_STACK = [
+      { id: 'todayPanel', open: '.today-panel.open', close: () => TASK.closePanel() },
+      { id: 'loginModal', open: '#loginModal[style*="block"]', close: () => closeModal(document.getElementById('loginModal')) },
+      { id: 'mePop', open: '.me-pop:not([hidden])', close: () => { try { APP3.closeMePop(); } catch (e) {} } },
+      { id: 'voicePop', open: '.voice-pop:not([hidden])', close: () => { try { closeVoicePop(); } catch (e) {} } },
+      { id: 'blankPop', open: '.blank-pop:not([hidden])', close: () => { try { TASK.closeBlankPop(); } catch (e) {} } },
+      { id: 'jumpPop', open: '#jumpPop[style*="block"]', close: () => closeModal(document.getElementById('jumpPop')) },
+      { id: 'pop', open: '#pop[style*="block"]', close: () => closeModal(document.getElementById('pop')) },
+      { id: 'startPickPop', open: '#startPickPop', close: () => { try { TASK.closeStartPicker(); } catch (e) {} } },
+      { id: 'lcDrawer', open: '#lcDrawer.open', close: () => { try { APP3.setLcDrawer(false); } catch (e) {} } },
+      { id: 'cloudWrap', open: '.cloud-wrap.open', own: '#cloudWrap', close: el => el.classList.remove('open') },
+      { id: 'markWrap', open: '#markWrap.open', own: '#markWrap', close: el => el.classList.remove('open') },
+      { id: 'abWrap', open: '#abWrap.open', own: '#abWrap', close: el => el.classList.remove('open') },
+      { id: 'rateWrap', open: '.rate-wrap.open', own: '#rateWrap', close: el => el.classList.remove('open') },
+      { id: 'loopWrap', open: '.loop-wrap.open', own: '#loopWrap', close: el => el.classList.remove('open') },
+    ];
+    /* openModal 的互斥族：#pop / #jumpPop 走 inline display，顶栏五个下拉走 .open —— 两族内部顶掉。 */
+    const MUTUAL_EXCLUSIVE = { pop: 1, jumpPop: 1, cloudWrap: 1, markWrap: 1, abWrap: 1, rateWrap: 1, loopWrap: 1 };
+    function overlayEntries() {
+      const out = [];
+      for (const o of OVERLAY_STACK) {
+        try {
+          const el = document.getElementById(o.id);
+          if (el && document.querySelector(o.open) === el) out.push({ el, def: o });
+        } catch (e) {}
+      }
+      if (document.body.classList.contains('menu-open')) out.push({ el: document.body, def: { id: 'menu-open', own: '#btnMenu,.topbar-right,.nav-more', close: () => document.body.classList.remove('menu-open') } });
+      return out;
+    }
     document.addEventListener('click', function () {
       setTimeout(function () { try { syncToggleAria(); } catch (e) {} }, 0);
     }, true);
     window.addEventListener('load', function () { try { syncToggleAria(); } catch (e) {} });
 
+    /* 顶栏五个下拉 + 汉堡面板的「点外面就收」：一份常驻监听，按浮层栈现查谁还开着。
+       旧写法是每个菜单打开时挂一颗一次性 pointerdown，而它只在「自己命中」时才摘自己 ——
+       浮层若是被别的路径关掉的（Esc / openModal 互斥摘 class），那颗监听就永久挂在 document 上，
+       五个菜单能同时挂五颗。
+       为什么是 pointerdown 而不是 click：这几颗触发键的 onclick 都 stopPropagation，
+       click 到不了 document（旧监听同理必须用 pointerdown）。 */
+    const OUTSIDE_CLOSE_IDS = { cloudWrap: 1, markWrap: 1, abWrap: 1, rateWrap: 1, loopWrap: 1, 'menu-open': 1 };
+    document.addEventListener('pointerdown', e => {
+    overlayEntries().forEach(({ el, def }) => {
+      if (!OUTSIDE_CLOSE_IDS[def.id]) return;
+      if (_inPath(e, def.own)) return;
+      try { def.close(el); } catch (err) {}
+    });
+    });
+
     document.addEventListener('click', e => {
     const t = _inPath(e, '.w') ? e.target.closest('.w') : null;
     if (t) { openPop(t); return; }
     if (!_inPath(e, '.pop') && !_inPath(e, 'aside')) closeModal(pop);
-    const _cp = document.getElementById('cloudWrap');
-    if (_cp && _cp.style.display === 'block' && !_inPath(e, '.cpop') && !_inPath(e, '#btnCloud') && !_inPath(e, '#voicePick')) closeModal(_cp);
     const _jp = document.getElementById('jumpPop');
     if (_jp && _jp.style.display === 'block' && !_inPath(e, '.jpop') && !_inPath(e, '#abTitle') && !_inPath(e, '.jump-btn')) closeModal(_jp);
-    const _mp = document.getElementById('markWrap');
-    if (_mp && _mp.classList.contains('open') && !_inPath(e, '#markWrap')) _mp.classList.remove('open');
-    const _abp = document.getElementById('abWrap');
-    if (_abp && _abp.classList.contains('open') && !_inPath(e, '#abWrap')) _abp.classList.remove('open');
-    if (document.body.classList.contains('menu-open') && !_inPath(e, '.topbar-right') && !_inPath(e, '#btnMenu')) document.body.classList.remove('menu-open');
-    /* 移动端：点遮罩关词库抽屉 */
-    if (window.matchMedia('(max-width: 700px)').matches && document.querySelector('.layout.panel-open')) {
+    /* 移动端：点遮罩关词库抽屉（panel-open 现在只挂 body 一个宿主） */
+    if (window.matchMedia('(max-width: 700px)').matches && document.body.classList.contains('panel-open')) {
     const asideEl = document.getElementById('panel');
     if (asideEl && !_inPath(e, '#panel') && !_inPath(e, '#edgeTab')) {
     togglePanel();
@@ -5678,18 +5736,21 @@ let listenOn = false;
     // 初始化夜间模式
     try { const _dk = localStorage.getItem('ielts-dark'); updateDarkUI(_dk === null ? matchMedia('(prefers-color-scheme: dark)').matches : _dk === '1'); } catch (e) { updateDarkUI(false); }
 
-    /* ============ 词库面板（桌面：侧栏显隐；移动：底部抽屉 + 遮罩） ============ */
+    /* ============ 词库面板（桌面：侧栏显隐；移动：底部抽屉 + 遮罩） ============
+       panel-open 只挂 body 一个宿主（旧口径移动挂 .layout、桌面挂 body，同名两套，
+       跨 700px 就互相不认）。锁滚无条件清：旧口径只在窄屏分支清，
+       手机开着抽屉把窗口拖宽过 700px 后两条清除路径同时失效 → 页面永久锁滚只能刷新。 */
     function togglePanel() {
-    const layout = document.querySelector('.layout');
-    const mobile = window.matchMedia('(max-width: 700px)').matches;
-    if (mobile) {
-    const opening = !layout.classList.contains('panel-open');
-    layout.classList.toggle('panel-open');
-    document.body.style.overflow = opening ? 'hidden' : '';
-    } else {
-    document.body.classList.toggle('panel-open');
+    const opening = !document.body.classList.contains('panel-open');
+    document.body.classList.toggle('panel-open', opening);
+    document.body.style.overflow = (opening && window.matchMedia('(max-width: 700px)').matches) ? 'hidden' : '';
     }
-    }
+    (function () {
+    const mq = window.matchMedia('(max-width: 700px)');
+    const release = () => { if (!mq.matches) document.body.style.overflow = ''; };
+    if (mq.addEventListener) mq.addEventListener('change', release);
+    else if (mq.addListener) mq.addListener(release);
+    })();
     const escAttr = s => s.replace(/&/g,'&amp;').replace(/'/g, "&#39;").replace(/"/g, '&quot;');
     let _inTextSet = null, _vocabCount = 0, _rlT = null;
     function queueRenderList() { // 搜索防抖：每击键全量重建 3219 卡片太重，150ms 合并一次
@@ -8418,15 +8479,24 @@ let listenOn = false;
           return !!(typeof CLOUD !== 'undefined' && CLOUD._userMail);
         } catch (e) { return false; }
       }
+      /* 登录门禁只留一条反馈：把「为什么被拦」写进统一登录弹窗里，再摆出弹窗。
+         旧做法是弹层底下再挂一颗 toast —— 一次动作两层反馈，两条各走各的关闭路径
+         （toast 归 toast 系统管、浮窗归另一套管，Esc 只收得掉其中一层）。 */
       function taskLoginPrompt(kind) {
-        try {
-          showAbToast(kind === 'words' ? '登录后使用单词本' : kind === 'stats' ? '登录后查看学习数据'
-            : kind === 'today' ? '今日任务需登录后使用（随身听全部文章无需登录）'
-            : kind === 'setup' ? '登录后设置学习时间' : '登录后阅读文章');
-        } catch (e) {}
-        /* 延迟一拍再弹浮窗：触发这次调用的多半是一次点击，被拦下的那次点击还在冒泡，
-           同步打开会被文档级的"点外面收浮窗"反手关掉（卡片/切换键实测）。 */
-        try { setTimeout(function () { try { if (window.APP3 && window.APP3.openMePop) window.APP3.openMePop(); } catch (e) {} }, 0); } catch (e) {}
+        const why = kind === 'words' ? '单词本要登录后使用'
+          : kind === 'stats' ? '学习数据要登录后才能同步查看'
+          : kind === 'today' ? '今日任务要登录后使用（随身听全部文章无需登录）'
+          : kind === 'setup' ? '每天学多久要先登录才存得住'
+          : '登录后才能接着读这篇';
+        /* 延迟一拍：触发这次调用的多半是一次点击，被拦下的那次点击还在冒泡，
+           同步打开容易被文档级的「点外面收浮窗」反手关掉（卡片/切换键实测）。 */
+        setTimeout(function () {
+          try {
+            const el = document.getElementById('loginWhy');
+            if (el) el.textContent = why;
+            if (window.APP3 && window.APP3.openLoginModal) window.APP3.openLoginModal();
+          } catch (e) {}
+        }, 0);
       }
       /* 路由/直链冷启动用：先等存档会话恢复（5s 封顶，CLOUD.waitSession 自带），
          有会话就地接好 _userMail（boot 干的事的子集，不重跑拉取），再判。 */
@@ -9361,15 +9431,17 @@ let listenOn = false;
         const pop = document.createElement('div');
         pop.id = 'startPickPop';
         pop.setAttribute('role', 'dialog');
+        pop.setAttribute('aria-modal', 'true');
         pop.setAttribute('aria-label', '设置今日任务起点');
         pop.innerHTML = '<h3>今日任务从哪开始</h3>' +
-          '<div class="sp-row"><label for="spArt">篇目</label><select id="spArt">' + opts + '</select></div>' +
-          '<div class="sp-row"><label for="spSent">第几句</label><input id="spSent" type="number" min="1" value="' + defN + '"></div>' +
+          '<div class="sp-row"><label for="spArt">篇目</label><select id="spArt" onchange="TASK.syncStartSent()">' + opts + '</select></div>' +
+          '<div class="sp-row"><label for="spSent">第几句</label><select id="spSent"></select></div>' +
           '<div class="sp-actions"><button class="btn" onclick="TASK.closeStartPicker()">取消</button>' +
           '<button class="btn" onclick="TASK.clearManualStart()">改回自动安排</button>' +
           '<button class="btn primary" onclick="TASK.confirmStartPicker()">确定</button></div>';
         document.body.appendChild(mask);
         document.body.appendChild(pop);
+        try { syncStartSent(defN); } catch (e) {}
         try {
           const first = document.getElementById('spArt');
           if (first) first.focus();
@@ -9379,6 +9451,17 @@ let listenOn = false;
         _startPending = null;
         try { const m = document.getElementById('startPickMask'); if (m) m.remove(); } catch (e) {}
         try { const w = document.getElementById('startPickPop'); if (w) w.remove(); } catch (e) {}
+      }
+      /* 换一篇就按那一篇的句数重列「第几句」（D9：点选，不打字）。 */
+      function syncStartSent(keep) {
+        const sa = document.getElementById('spArt'), sn = document.getElementById('spSent');
+        if (!sa || !sn) return;
+        let a = parseInt(sa.value, 10);
+        if (!Number.isFinite(a) || a < 0 || a >= SECTIONS.length) a = 0;
+        let total = 1; try { total = chapterSentCount(a); } catch (e) {}
+        const cur = Math.min(Math.max(1, parseInt(keep != null ? keep : sn.value, 10) || 1), total);
+        sn.innerHTML = sentOptions(computeChapterStart(a), total, cur);
+        sn.value = String(cur);
       }
       /* 确定 → 今天还没读就直接改；已有进度（2026-09-30 用户要）先弹确认：
          改起点会清掉今天的已读记录重算今日任务（排程历史/总进度/颜色不动）。 */
@@ -9596,15 +9679,23 @@ let listenOn = false;
         const p = (ROOT2 && ROOT2.plan) || {};
         const run = new Promise(function (resolve) {
           setTimeout(function () {                                  // 让浏览器先把「算一下…」画出去
-            etaCalls.n++;
-            const val = ShadowPlan.estimateDays(ROOT2 && ROOT2.state, minutes, {
-              totalSents: SENT_RAW.length, wordsOf: wordsOfSent, totalWords: ALL_TARGET_WORDS,
-              boundaryHour: bdHour(), plan: ROOT2 && ROOT2.plan,
-              secNew: avgNew, secReview: avgReview, rate: rate || 1,   // 1× 基准 + 倍速：与 todayPlan 同一口径，倍速只除一次
-            });
+            /* 估算一抛，resolve 不执行、_etaPending.delete 也不执行 —— 那颗永不落定的 Promise 就永久
+               留在 pending 表里，之后每次点同一个分钟数都拿到它（9612 直接返回），那一行永远写着
+               「算一下…」。所以 try/catch 必须包住计算本身，失败也要落定，并且【不】进 memo，下次能重算。 */
+            let val = null;
+            try {
+              etaCalls.n++;
+              val = ShadowPlan.estimateDays(ROOT2 && ROOT2.state, minutes, {
+                totalSents: SENT_RAW.length, wordsOf: wordsOfSent, totalWords: ALL_TARGET_WORDS,
+                boundaryHour: bdHour(), plan: ROOT2 && ROOT2.plan,
+                secNew: avgNew, secReview: avgReview, rate: rate || 1,   // 1× 基准 + 倍速：与 todayPlan 同一口径，倍速只除一次
+              });
+            } catch (e) { dlog('eta-error', 'minutes=' + minutes + ' err=' + ((e && e.message) || e)); val = null; }
             _etaPending.delete(key);
-            if (_etaMemo.size > 24) _etaMemo.clear();
-            _etaMemo.set(key, val);
+            if (val) {
+              if (_etaMemo.size > 24) _etaMemo.clear();
+              _etaMemo.set(key, val);
+            }
             resolve(val);
           }, 0);
         });
@@ -9616,11 +9707,13 @@ let listenOn = false;
         return d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月' + (exact ? ' ' + d.getDate() + ' 日' : '');
       }
       function etaText(r, m, exact) {
+        if (r === null) return '工期暂时算不出来，刷新页面再试';      // 估算抛错（见 etaFor：失败也要落定）
         if (!r || r.empty) return '按每天 ' + m + ' 分钟排不出任务，先把每天的时间调大一点';
         if (!r.done) return '按每天 ' + m + ' 分钟，三年内到不了终点（先把每天时间调大些）';
         return '到 ' + etaMonth(r.doneAt, exact) + ' <b>新词全部过完一遍</b>（需要 ' + r.days + ' 天）';
       }
       function etaShort(r) {                 // 任务条那一行：已经有今日进度和「这批还剩」，第三个数只留最短形态
+        if (r === null) return '工期算不出来';
         if (!r) return '';
         if (!r.done) return r.empty ? '排不出任务' : '三年内到不了终点';
         return '全部过完约 ' + etaMonth(r.doneAt, false);
@@ -10234,7 +10327,7 @@ let listenOn = false;
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
         repsOf, articlePass2Done,
         roundInfo, startNewRound, seedRoundSeenForTest, setManualStart, clearManualStart,
-        openStartPicker, closeStartPicker, confirmStartPicker, startConfirmBack, startConfirmYes,
+        openStartPicker, closeStartPicker, confirmStartPicker, startConfirmBack, startConfirmYes, syncStartSent,
         /* 真实用时账出口（2026-09-25 链路排查）：数据页「累计学习时长」按天读真实毫秒。 */
         readMsByDay: function () { return loadArticleStats().read.ms; },
         /* 今天这一篇排到多少句 / 读过几句（2026-09-26 用户：卡片除了文章进度，必须显示今天任务进度）。

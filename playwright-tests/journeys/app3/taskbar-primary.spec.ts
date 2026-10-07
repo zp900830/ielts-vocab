@@ -164,7 +164,7 @@ test.describe('任务条：推进键是主按钮 / 再来与循环可分 / 快�
     expect(hint3.text).toContain(`第3章共 ${hint3.total} 句`);
     expect(hint3.text).toContain(`全文第 ${hint3.start + 1}–${hint3.start + hint3.total} 句`);
 
-    await page.locator('#jumpN').fill('2');
+    await page.locator('#jumpN').selectOption('2');
     await page.evaluate(() => jumpGo());
     await expect(page.locator('#jumpPop')).toBeHidden();
     const landed = await page.evaluate(() => ({ ch: currentChapter, i: idx, len: sents.length }));

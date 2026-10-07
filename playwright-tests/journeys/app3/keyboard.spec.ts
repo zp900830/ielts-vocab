@@ -86,14 +86,15 @@ test.describe('3.0 任务模式键盘快捷键（H）', () => {
     await expect.poll(() => playingIdx(page), '← 应把高亮挪回上一句').toBe(first);
   });
 
-  test('输入框里按空格不触发全局播放（不抢键）', async ({ page }) => {
+  test('表单控件里按空格不触发全局播放（不抢键）', async ({ page }) => {
     await enterTask(page);
     await page.evaluate(() => { (window as unknown as { toggleJumpPop: () => void }).toggleJumpPop(); });
-    const input = page.locator('#jumpN');
-    await expect(input).toBeVisible();
-    await input.focus();
+    // 句号从数字输入改成点选（D9）：select 同样是「空格归控件自己」的那一类，锁的口径不变
+    const sel = page.locator('#jumpN');
+    await expect(sel).toBeVisible();
+    await sel.focus();
     await page.keyboard.press('Space');
-    expect(await playing(page), '输入框里按空格不该开播').toBe(false);
+    expect(await playing(page), '控件里按空格不该开播').toBe(false);
     await page.keyboard.press('Escape');
   });
 });

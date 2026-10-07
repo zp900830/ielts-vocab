@@ -214,6 +214,49 @@ test.describe('M5 · 账号（§8.1 账号信息 / §10.4 键盘可达）', () =
     await expect.poll(() => page.evaluate(() => (window as unknown as { __calls: unknown[] }).__calls.length)).toBeGreaterThan(0);
     expect(await page.evaluate(() => (window as unknown as { __calls: unknown[][] }).__calls[0][0])).toBe('logout');
   });
+
+  /* D7（2026-10-07 一致性排查报告）：以前点「退出登录」零确认、零反馈，只是浮窗重画一遍。
+     现在确认框与成功 toast 都收在 cloudLogout 里 —— ☁ 菜单的 #btnLogout 和这里的退出按钮
+     是同一个动作的两个入口，必须问同一句话、给同一条反馈。上面那条用的是假 cloudLogout，
+     碰不到确认这一环，所以这里单独走真家伙（只把 Supabase 客户端换成哑的）。 */
+  test('退出登录：先二次确认；取消则登录态分毫不动，确认后才退并给一条 toast', async ({ page }) => {
+    await stubData(page, EMPTY);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    await page.evaluate(() => {
+      CLOUD._userMail = 'alice@example.com';
+      (CLOUD as unknown as { client: unknown }).client = () => ({
+        auth: {
+          onAuthStateChange: (cb: (ev: string, s: unknown) => void) => {
+            cb('SIGNED_OUT', null);
+            return { data: { subscription: { unsubscribe() { } } } };
+          },
+          signOut: async () => ({ error: null }),
+        },
+      });
+      APP3.updateMeCard();
+    });
+    const pop = await openMe(page);
+    await expect(pop.locator('.mp-logout')).toBeVisible();
+
+    // 取消：确认框问过了，但什么都没发生
+    let msg = '';
+    page.once('dialog', async (d) => { msg = d.message(); await d.dismiss(); });
+    await pop.locator('[data-me-logout]').click();
+    await expect.poll(() => msg).toMatch(/退出登录/);
+    expect(msg, '确认文案要说清本机进度不动').toMatch(/本机进度/);
+    expect(await page.evaluate(() => CLOUD._userMail), '取消后仍是登录态').toBe('alice@example.com');
+    await expect(pop.locator('.mp-logout')).toBeVisible();
+    await expect(page.locator('#abToast'), '取消不该有反馈').not.toHaveClass(/show/);
+
+    // 确认：退掉、给一条 toast，且不再顺手把 ☁ 菜单弹开（一次动作只留一条反馈）
+    page.once('dialog', async (d) => { await d.accept(); });
+    await pop.locator('[data-me-logout]').click();
+    await expect(page.locator('#abToast')).toHaveClass(/show/);
+    await expect(page.locator('#abToast')).toHaveText('已退出登录，本机进度照常保留');
+    expect(await page.evaluate(() => CLOUD._userMail), '确认后已退出').toBe('');
+    await expect(page.locator('#cloudWrap'), '退出不会把云菜单弹开').not.toHaveClass(/open/);
+  });
 });
 
 test.describe('M5 · 浮窗无障碍（§10.4）', () => {

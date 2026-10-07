@@ -883,13 +883,9 @@
       if (!t) { try { e.preventDefault(); } catch (err) {} }
     }, { passive: false });
   }
-  document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape' || !lcDrawerOpen()) return;
-    const mePop = document.getElementById('mePop');
-    if (mePop && !mePop.hidden) return;   // mePop 在上层（z=400），让它先收
-    e.stopPropagation();
-    setLcDrawer(false);
-  });
+  // Esc 不在这里挂监听：抽屉收在最上层由 app/index.html 的浮层栈（OVERLAY_STACK）统一裁决 ——
+  // 以前这里挂一颗、#mePop 再挂一颗，主站内联脚本（注册更早）那颗先跑，
+  // 清单里又没有抽屉，于是一次 Esc 把「抽屉 + 全屏收起」两层全收了。
   window.APP3 = Object.assign(window.APP3, { renderListen, updateListenCard });
 
   /* 登录锁定页（2026-09-30）：未登录打开学习数据/单词本时显示。复用随身听卡片样式，
@@ -1320,6 +1316,8 @@
     el.textContent = '工期算一下…';
     TASK.etaFor(m).then((r) => {
       if (!el.isConnected) return;
+      // r === null = 估算抛错（etaFor 失败也落定，绝不再挂着一颗永不 resolve 的 Promise）
+      if (r === null) { el.textContent = '工期暂时算不出来，刷新页面再试'; return; }   // 与 TASK.etaText 同一句
       el.textContent = '按每天 ' + m + ' 分钟：新词全部过完一遍（需要 ' + (r && r.days ? r.days + ' 天' : '更久') + '）';
     });
   }
@@ -1363,6 +1361,7 @@
     const pop = document.getElementById('mePop');
     if (pop && !pop.hidden) closeMePop(); else openMePop();
   }
+  // 确认框与「已退出登录」提示都在 cloudLogout 里（两个入口共用一套），这里只负责退出后把浮窗画回未登录态。
   async function meLogout() { try { if (typeof cloudLogout === 'function') await cloudLogout(); } catch (e) {} renderMePop(); positionMePop(); }
   /* 统一登录弹窗（2026-09-30）：移动 + 桌面共用。登录/注册走同一套 cloudLogin/cloudSignup，
      只是读弹窗里的输入框（loginEmail/loginPass）。成功（CLOUD._userMail 落定）才关弹窗并刷新用户卡；
@@ -1436,28 +1435,13 @@
       else if (t.hasAttribute('data-me-login-btn')) { openLoginModal(); }
       else if (t.hasAttribute('data-me-logout')) { meLogout(); }
     });
-    // §10.4：Tab 在浮窗内收敛，别让键盘焦点逃到背景里的侧栏/正文。
-    pop.addEventListener('keydown', (e) => {
-      if (e.key !== 'Tab') return;
-      const nodes = Array.prototype.filter.call(
-        pop.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'),
-        (el) => !el.disabled && el.offsetParent !== null);
-      if (!nodes.length) return;
-      const first = nodes[0], last = nodes[nodes.length - 1];
-      if (e.shiftKey && (document.activeElement === first || document.activeElement === pop)) {
-        e.preventDefault(); last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault(); first.focus();
-      }
-    });
   }
-  window.APP3 = Object.assign(window.APP3, { renderMePop, openMePop, closeMePop, toggleMePop, meLogout, updateMeCard, openLoginModal, closeLoginModal });
-  // 点浮窗外面收掉；Esc 也收。
+  window.APP3 = Object.assign(window.APP3, { renderMePop, openMePop, closeMePop, toggleMePop, meLogout, updateMeCard, openLoginModal, closeLoginModal, setLcDrawer, lcDrawerOpen });
+  // 点浮窗外面收掉。Esc 不在这里挂 —— 浮层栈（app/index.html 的 OVERLAY_STACK）统一管分层与焦点。
   document.addEventListener('click', (e) => {
     const pop = document.getElementById('mePop');
     if (!pop || pop.hidden) return;
-    if (!e.target.isConnected) return;   // 已被重渲摘下的节点，别当成「点外面」
-    if (e.target.closest('#mePop') || e.target.closest('#meCard') || e.target.closest('.st-open-me')) return;
+    if (!outsideTap(e, ['#mePop', '#meCard', '.st-open-me'])) return;   // 守卫与 voicePop 共用一颗
     closeMePop();
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMePop(); });
