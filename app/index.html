@@ -189,9 +189,16 @@
   :focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 2px; }
 
   /* 触屏拇指区：这些颗实测 24–35px，够不到 44px 的最低线（汉堡 24×24、抽屉 ✕ 27×22 连 24 线都擦边）。
-     只写在 ≤700px 里 —— 桌面用鼠标，不为此改播放条/顶栏的高度。 */
+     只写在 ≤700px 里 —— 桌面用鼠标，不为此改播放条/顶栏的高度。
+     补到 44 只有两条路，一颗控件只走一条，两边都写等于互相压死（上一版就是这么漏掉整排播放键的，
+     见 docs/2026-10-07-app站点一致性排查报告.md C1）：
+       A 路「长高」：盒子观感没被设计稿钉死 → 加进下面这条清单，min-height 直接给到 44；
+       B 路「外扩」：观感高度是定稿的紧凑胶囊（播放条、任务条播放排、收起键、FAB、✕ 小键）
+                    → 盒子一点不动，::after 向外扩出透明热区。a11y.spec 量的是 rect + inset，两路都认。
+     清单里只留 A 路真正生效的：.audiobar .btn 走 B 路（它自己那条 min-height:30px 特异度相同又排在
+     后面，写在这里从来就没赢过）；#btnMenu 走 B 路（body.nav-menu #btnMenu 用 id 压这条）。 */
   @media (max-width: 700px) {
-    .audiobar .btn, .tb-btn, .ps-opt, #btnMenu, #edgeTab, aside .x { min-height: 44px; }
+    .tb-btn, .ps-opt, #edgeTab, aside .x { min-height: 44px; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -364,7 +371,9 @@
   .voice-pop .vp-name { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .voice-pop .vp-play { flex: none; width: 30px; height: 30px; border: 1px solid var(--accent-line); border-radius: 50%;
     background: #fff; color: var(--accent-text); display: inline-flex; align-items: center; justify-content: center;
-    font-size: 14px; cursor: pointer; }
+    font-size: 14px; cursor: pointer; position: relative; }
+  /* 试听键 30×30（报告 C7）：外扩补到 44，键本身和浮层排版都不动。 */
+  .voice-pop .vp-play::after { content: ""; position: absolute; inset: -7px; border-radius: 50%; }
   .voice-pop .vp-play:hover { background: var(--accent-soft); }
   body.dark .voice-btn { background: var(--card); border-color: var(--border); color: var(--accent-text); }
   body.dark .voice-pop { background: var(--glass-strong); border-color: var(--border); }
@@ -501,6 +510,8 @@
     border-radius: 50%; border: 0; padding: 0; line-height: 22px; font-size: 16px;
     background: var(--coral); color: #fff; cursor: pointer; pointer-events: auto;
     box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+  /* 24×24 的摘除键是全页最小的一颗（报告 C8）：外扩 10px = 44×44。 */
+  .ab-region .ab-cancel::after { content: ""; position: absolute; inset: -10px; border-radius: 50%; }
   .ab-region .ab-cancel:hover { background: var(--coral-deep); }
   /* A-B 提示条：播放条上方居中小 pill，2.4s 自动消失 */
   #abToast { position: fixed; left: 50%; transform: translateX(-50%) translateY(8px);
@@ -630,6 +641,8 @@
     -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%);
     border: 1px solid rgba(255,255,255,.65); border-right: none; border-radius: 12px 0 0 12px;
     padding: 14px 7px; cursor: pointer; box-shadow: var(--shadow); }
+  /* 竖排侧边签：194 行清扫补到 44 高，宽度仍是 26（报告 C10）—— 只补左右。 */
+  #edgeTab::after { content: ""; position: absolute; inset: 0 -9px; }
   #edgeTab:hover { background: var(--accent-soft); }
   .back-to-learn { position: fixed; right: 16px; bottom: calc(130px + env(safe-area-inset-bottom, 0px)); z-index: 115;
     background: var(--glass-strong); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%);
@@ -821,7 +834,10 @@
   aside .head { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); }
   aside .head .t { font-size: 14px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
   aside .head .t .x { margin-left: auto; border: none; background: transparent; color: var(--muted);
-    font-size: 15px; cursor: pointer; padding: 2px 8px; border-radius: 8px; }
+    font-size: 15px; cursor: pointer; padding: 2px 8px; border-radius: 8px; position: relative; }
+  /* 194 行那条清扫给了它 44 高，但横向仍是 27（报告 C10：清扫只补高不补宽）。
+     只补左右、不补上下，否则会和 44 高叠成 58。 */
+  aside .head .t .x::after { content: ""; position: absolute; inset: 0 -9px; border-radius: 999px; }
   aside .head .t .x:hover { background: var(--accent-soft); color: var(--accent-text); }
   aside input { width: 100%; border: 1px solid var(--border); background: #fff;
     border-radius: 10px; padding: 8px 12px; font-size: 16px; outline: none; min-height: 40px;
@@ -1046,7 +1062,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.nav-menu .topbar h1 { flex: 1 1 auto; min-width: 0; margin-right: auto;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   body.nav-menu #btnMenu { display: inline-flex; flex: none; min-width: 24px; min-height: 24px;
-    padding: 4px; justify-content: center; align-items: center; }
+    padding: 4px; justify-content: center; align-items: center; position: relative; }
+  /* 手机端唯一的顶栏入口不能是 24×24（报告 C3）。id + 类压住 194 行那条批量清扫，
+     所以这里走 B 路：视觉仍是 24 的细汉堡，热区外扩 10px = 44×44。 */
+  body.nav-menu #btnMenu::after { content: ""; position: absolute; inset: -10px; border-radius: 999px; }
   body.nav-menu #btnMenu .burger { display: block; width: 11px; height: 7px; flex: none;
     border-top: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
     background: linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat; }
@@ -1125,7 +1144,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     body.scrolled.show-nav .topbar, body.fade-nav.scrolled.show-nav .topbar { padding: 8px 12px; gap: 6px; flex-wrap: nowrap; overflow: visible; }
     body.scrolled.show-nav .topbar h1 { font-size: 14px; }
     .ctrl { font-size: 12px; gap: 5px; flex: none; }
-    .btn { padding: 6px 10px; font-size: 12px; min-height: 30px; white-space: nowrap; flex: none; }
+    .btn { padding: 6px 10px; font-size: 12px; min-height: 30px; white-space: nowrap; flex: none; position: relative; }
+    /* 通用文字键手机档（报告 C8 最后一条：既没走进 194 的清扫，也没人逐个补 44）：
+       顶栏/面板里的 .btn 都是带字的胶囊，横向够宽，只补竖向 30 → 44。
+       播放条那排不吃这条 —— .audiobar .btn::after 权重更高，走它自己那条 -7/-6。 */
+    .btn::after { content: ""; position: absolute; inset: -7px 0; border-radius: 999px; }
     .chapter-sel { max-width: 42vw; font-size: 12px; padding: 4px 12px; padding-right: 26px; }
     #btnCloud { flex: none; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
     /* 布局：左侧预留章节圆点空间 */
@@ -1172,7 +1195,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .loop-menu button { font-size: 12px; padding: 6px 8px; }
     .audiobar .btn { font-size: 11px; padding: 5px 8px; min-height: 30px; min-width: 0; flex: none; white-space: nowrap; }
     .audiobar .btn.play { font-size: 12px; padding: 5px 12px; }
-    .audiobar .btn::after { display: none; }
+    /* B 路（见 191 行那段口径）：30px 高的胶囊靠 ::after 外扩补到 44 触区，观感零变化。
+       自由播放态（播放条没搬进 .tb-play 时）历史上只有这一条 ::after 声明，而它写的是
+       display:none —— 于是整排播放键的 44 触区从头到尾不存在（排查报告 C1）。
+       外扩量 7/8：高 30+14=44；最窄那颗是 #rateCycle（盒宽 29.4，「1x」两个字），+16=45.4 才够。
+       相邻键间距 4px，两半热区在间隙里相遇后最坏压进对方盒子 6px < 半颗键宽，中心点击不受影响。
+       任务模式里播放条被 JS 整个搬进 .tb-play，那里由 .task-bar .tb-play .btn::after
+       （三层类，权重更高）接管，这条不会串台。 */
+    .audiobar .btn::after { content: ""; position: absolute; inset: -7px -8px; border-radius: 999px; }
     /* 移动端沉浸模式：与桌面端一致，三按钮居中胶囊（定宽＋max-width morph，中心不动） */
     body.scrolled .audiobar { padding: 4px 8px; gap: 4px; border-radius: 999px;
       width: calc(100vw - 24px); max-width: 340px;
@@ -1249,7 +1279,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 超窄屏（≤360px）：播放条进一步收纳 */
   @media (max-width: 360px) {
     .audiobar { gap: 3px; padding: 6px 8px; left: 4px; right: 4px; max-width: calc(100vw - 8px); }
-    .audiobar .btn { padding: 4px 6px; font-size: 10px; min-height: 28px; }
+    /* 只收横向：min-height 一起压到 28px 会把 ::after 的 44 触区削成 42（报告 C1 第三重压死）。
+       30px 那一档由 1173 行给，热区 -7px 正好补满 44。 */
+    .audiobar .btn { padding: 4px 6px; font-size: 10px; }
     .audiobar .btn.play { padding: 4px 10px; font-size: 11px; }
     }
 
@@ -1417,7 +1449,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .sync-hint { background: rgba(58,36,30,.96); color: #f0a08c; border-color: rgba(240,160,140,.3); }
   /* 词本：状态过滤器 + 词行 */
   .tp-filters { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
-  .pill { min-height: 30px; padding: 4px 11px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--text); font-size: 12px; cursor: pointer; }
+  .pill { min-height: 30px; padding: 4px 11px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--text); font-size: 12px; cursor: pointer; position: relative; }
+  /* 筛选胶囊 30 高（报告 C8）：文字键横向本来就够，只补竖向。 */
+  .pill::after { content: ""; position: absolute; inset: -7px 0; border-radius: 999px; }
   /* refine3 ③：非主按钮的选中态一律走「浅色底 + 同色深字」（与主站 .tr-msw.on/.r-badge/.wb-filter 同一支），
      不再用深绿实心 + 黑字。 */
   .pill.on { background: var(--accent-soft); color: var(--accent-text); border-color: var(--accent-line); font-weight: 600; }
@@ -1653,7 +1687,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .pass-card[hidden] { display: none; }
   body.dark .pass-card { background: rgba(30,28,25,.97); border-color: #33302b; }
   .qz-mini { min-height: 30px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px;
-    background: transparent; color: var(--muted); font-size: 11.5px; cursor: pointer; }
+    background: transparent; color: var(--muted); font-size: 11.5px; cursor: pointer; position: relative; }
+  /* 遍间小结那排 30 高的轻键（报告 C8）：外扩 7/4 补到 44，卡片排版不动。 */
+  .qz-mini::after { content: ""; position: absolute; inset: -7px -4px; border-radius: 999px; }
   .qz-mini:hover { color: var(--text); border-color: var(--muted); }
   /* 文内挖空：空是 .sent 里的内联元素，不另起容器。三态：未答 / 答对 / 答错。
      宽度按被遮词形给（§4.4，沿用 maskSplit 口径）：maskArticle 量出被遮的 .w 实际宽度写进
@@ -1815,7 +1851,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .reader-head.shrunk .r-pos { font-size: 10px; padding: 1px 5px; margin-left: 6px; }
   .reader-head.shrunk .fav-badge { font-size: 10.5px; padding: 1px 7px; margin-left: 6px; }
   .reader-head.shrunk .back { width: 26px; height: 26px; font-size: 14px; }
-  .reader-head.shrunk .back::after { content: ""; position: absolute; inset: -9px; }
   /* G：右侧两个拨杆 / 帮助 / 目标词胶囊随头部一起等比缩放，缩小后不错位。 */
   .reader-head.shrunk .r-badges { gap: 5px; }
   .reader-head.shrunk .tr-msw { padding: 2px 9px 2px 2px; font-size: 10.5px; gap: 5px; }
@@ -1824,11 +1859,20 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .reader-head.shrunk .tr-msw.on .knob::after { left: 11px; }
   .reader-head.shrunk .tr-help { width: 20px; height: 20px; font-size: 10px; }
   .reader-head.shrunk .nav-arrow { height: 22px; padding: 0 9px; font-size: 11px; }
+  /* 收缩档也要 44（报告 C2）：盒子随头部一起缩了，热区却没跟着补 —— 「滚动前 44、滚动后 40」，
+     而收缩态才是读正文时一直在的那一面。
+     补法是**把基础热区一次给够**（-11 / -12 按缩完之后的盒量算，见下面 .back/.nav-arrow/
+     .tr-help/.tr-msw 那四条 ::after），不写 .reader-head.shrunk 覆盖档：覆盖档实测晚一帧才生效
+     （滚动后立刻读 computed inset 还是 -9，900ms 后才变 -11），热区在收缩过程中真的掉到 40 ——
+     用户正好在那一刻点。基础档恒定就没这个过程，代价只是未收缩时热区高 2px（48），
+     上下都是头部留白，不压别的键。
+     横向不跟着加：胶囊是文字键，缩完仍 ≥44 宽；左右外扩会压到隔壁那颗，所以竖向规则一律写两个值。
+     tr-msw 不在这排里：手机档那条 -12px 0（见 @media 排的注释）对缩完的 21px 盒已经给到 45。 */
   .back { pointer-events: auto; border: 1px solid var(--iel-line); background: #fff; border-radius: 50%;
     width: 30px; height: 30px; padding: 0; font-size: 15px; line-height: 1; color: var(--iel-ink2);
     flex: none; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;
     transition: width var(--iel-t), height var(--iel-t), font-size var(--iel-t); }
-  .back::after { content: ""; position: absolute; inset: -7px; border-radius: 50%; }
+  .back::after { content: ""; position: absolute; inset: -9px; border-radius: 50%; }
   .back:hover { border-color: var(--iel-accent); color: var(--iel-accent-deep); background: #fff; }
   .r-title { font-size: 15.5px; font-weight: 700; line-height: 1.3; white-space: nowrap; overflow: hidden;
     text-overflow: ellipsis; flex: 0 1 auto; min-width: 0; color: var(--text); }
@@ -1843,7 +1887,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     padding: 0 12px; font-size: 12px; line-height: 1; color: var(--iel-accent-deep); flex: none; display: flex;
     align-items: center; justify-content: center; cursor: pointer; white-space: nowrap; position: relative;
     transition: background var(--iel-t-fast), color var(--iel-t-fast); }
-  .nav-arrow::after { content: ""; position: absolute; inset: -9px 0; border-radius: 999px; }
+  .nav-arrow::after { content: ""; position: absolute; inset: -11px 0; border-radius: 999px; }
   .nav-arrow:hover:not(:disabled) { background: var(--iel-accent-soft); }
   .nav-arrow:disabled { opacity: .35; cursor: default; }
   /* —— 文章内右侧工具组（原第二排；2026-09-25 用户 G 挪进 .reader-head，紧在 .r-nav 之前）—— */
@@ -1863,7 +1907,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tr-help { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--iel-line); background: #fff;
     color: var(--iel-ink2); font-size: 12px; font-weight: 600; line-height: 1; cursor: pointer; flex: none;
     position: relative; transition: border-color var(--iel-t-fast), color var(--iel-t-fast), background var(--iel-t-fast); }
-  .tr-help::after { content: ""; position: absolute; inset: -10px; border-radius: 50%; }
+  .tr-help::after { content: ""; position: absolute; inset: -12px; border-radius: 50%; }
   .tr-help:hover { border-color: var(--iel-accent); color: var(--iel-accent-deep); background: var(--iel-tint); }
   .r-badge { display: inline-block; font-size: 12px; padding: 2px 10px; background: var(--iel-accent-soft);
     color: var(--iel-accent-deep); border-radius: 999px; font-weight: 600; }
@@ -1982,6 +2026,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #loginModal .login-x { position: absolute; top: 8px; right: 8px; width: 36px; height: 36px;
     border: none; background: transparent; color: var(--muted); font-size: 16px; cursor: pointer;
     border-radius: 10px; }
+  /* 关窗键 36 → 44（报告 C8）：弹窗右上角没有邻居，四周都能外扩 4px。 */
+  #loginModal .login-x::after { content: ""; position: absolute; inset: -4px; border-radius: 999px; }
   #loginModal .login-title { font-size: 17px; font-weight: 800; margin-bottom: 4px; padding-right: 32px; }
   #loginModal .login-why { font-size: 12px; color: var(--text); line-height: 1.6; margin-bottom: 4px; }
   #loginModal .login-why:empty { display: none; }
@@ -2433,6 +2479,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #lcFab:hover { background: var(--accent-soft); box-shadow: 0 3px 12px rgba(20, 45, 38, .14); }
   #lcFab:active { transform: scale(.96); }
   #lcFab .fab-n { padding: 0 6px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-text); font-size: 11px; }  /* 实底可算：浅 #0a7558 压 #e0f5ec ≈ 5.6:1 */
+  /* 手机上进抽屉只有这颗 FAB 一个入口，实测 33 高（报告 C6）：外扩补到 44，胶囊不动。 */
+  #lcFab::after { content: ""; position: absolute; inset: -7px -6px; border-radius: 999px; }
   body.dark #lcFab { background: #252220; border-color: #33302b; color: var(--accent-text); }  /* 暗色 --accent-text=#10b487 压 #252220 ≈ 5.95:1 */
   body.dark #lcFab .fab-n { background: rgba(16,180,135,.14); }
   body.dark #lcFab:hover { background: #2b2926; }
@@ -2664,7 +2712,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     display: inline-flex; align-items: center; gap: 1px;
     background: transparent; color: var(--accent-text);
     font: inherit; font-weight: 600; font-size: 12.5px; border-radius: 999px; cursor: pointer;
+    position: relative;
     transition: background-color .2s cubic-bezier(.22,.61,.36,1), color .2s cubic-bezier(.22,.61,.36,1); }
+  /* 收起键 30 高，而同排的展开键 .ls-expand 是 44 实高（报告 C5，评的是「高」）：
+     同排两颗键触差 14px，而且出抽屉只能靠这颗矮的。抽屉那颗共用本类，热区一起补 ——
+     两枚收起键仍落同一矩形（listen-cards-layout.spec ⑦ 锁的是盒子，不含伪元素）。 */
+  .ls-collapse::after { content: ""; position: absolute; inset: -7px -4px; border-radius: 999px; }
   .ls-collapse i { font-size: 17px; line-height: 1; }
   .ls-collapse:hover { background: var(--accent-soft); }
   body.dark .ls-collapse:hover { background: rgba(16,180,135,.14); }
