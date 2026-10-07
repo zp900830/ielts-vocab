@@ -14,11 +14,11 @@
   }
   let cur = 'home';
   let _hlArticle = null;   // 数据页点文章小卡 → 回首页要高亮的那一篇（§5.4）
-  /* ---- 3.0 单词本（M3，PRD §6）---- */
-  const WB_FILTERS = ['all', 'todo', 'learning', 'mastered'];
-  const WB_FILTER_LABEL = { all: '全部', todo: '待掌握', learning: '学习中', mastered: '已掌握' };
-  const WORD_STAGE_LABEL = { fresh: '未见面', seen: '已见面', recognized: '文中可辨',
-                             owned: '义项直连', graduated: '已毕业' };
+  /* ---- 3.0 单词本（M3，PRD §6）----
+     词表 / 筛选档位不再在这里另立一份（报告 A5）：唯一出口是 index.html 内联脚本里的
+     全局 WORD_STAGE_LABEL / WB_FILTERS / WB_FILTER_LABEL（与 posOf 同一处，A5 注释在那里）。
+     以前这里的 WB_FILTER_LABEL 是「待掌握 / 学习中 / 已掌握」三档，fresh（未见面）不属于
+     任何一档 —— 三档相加永远小于「全部」，同一个单词本在两个屏上数出两个总数。 */
   const W_BATCH = 60;              // 增量渲染每批行数
   let _wordIndex = null, _wordIndexOrder = null, _wordIndexFor = null;
   let _wordsShown = W_BATCH, _wordsFilter = null;
@@ -145,8 +145,10 @@
   }
   // 当前阶段的文案（§3.3 / §9.4）。通读满还没做题 = 「可答题」；`已学完` 留给"通读 + ② 各一遍"。
   // 2026-09-24 用户：圈号 ①/② 全部去掉 —— 阶段靠文字读，别只剩一个圈。
-  const STAGE_LABEL = { todo: '未开始', reading: '通读中', read: '可答题',
-                        quiz: '做题中', done: '已学完', pro: '熟练' };
+  /* A5：原名 STAGE_LABEL 与「词」的进度表同名不同轴（那一份现在叫 WORD_STAGE_LABEL，
+     在 index.html 里），印在屏上两个「已学完 / 已毕业」很容易串。改带主语的名字。 */
+  const ART_STAGE_LABEL = { todo: '未开始', reading: '通读中', read: '可答题',
+                            quiz: '做题中', done: '已学完', pro: '熟练' };
   function articleStat(a) {
     const st = (typeof TASK !== 'undefined' && TASK.state()) || window.ShadowPlan.emptyState();
     const wordsOf = (typeof TASK !== 'undefined' && TASK.sentWordsOf) || function () { return []; };
@@ -230,7 +232,7 @@
       return `<article class="art-card" data-a="${a}" data-stage="${x.stage}">
         <button class="a-open" data-a="${a}" type="button" aria-label="进入《${esc(s.title)}》任务模式">
           <span class="a-head"><span class="a-title">${esc(s.title)}</span>
-            <span class="a-stage">${STAGE_LABEL[x.stage] || '未开始'}</span></span>
+            <span class="a-stage">${ART_STAGE_LABEL[x.stage] || '未开始'}</span></span>
           <span class="a-en">${esc((TIT_EN[s.title] || '').replace(/^\s*·\s*/, ''))}</span>
           <span class="a-bar"><i style="width:${x.readPct}%"></i></span>
           <span class="a-meta"><span class="a-pct">${x.readPct}%</span>
@@ -265,7 +267,7 @@
       // §5.2（2026-09-24 用户改口径）：一句话 + 一个按钮，点了打开「我的」浮窗；不内嵌计划表单。
       view.innerHTML = `<div class="st-empty-start">
         <h1>开始你的学习计划</h1>
-        <p>学习数据会在你建立计划后出现在这里。每天读多久在「我的」里。</p>
+        <p>学习数据会在你建立计划后出现在这里。「每天有多少分钟」在「我的」里。</p>
         <button class="st-open-me" type="button">打开「我的」</button>
       </div>`;
       return;
@@ -310,7 +312,7 @@
           return `<button class="st-art" data-a="${a}" type="button" aria-label="《${esc(s.title)}》通读完成度 ${x.readPct}%，回首页看这张卡片">
             <span class="sa-head"><span class="sa-title">${esc(s.title)}</span><span class="sa-pct">${x.readPct}%</span></span>
             <span class="sa-bar"><i style="width:${x.readPct}%"></i></span>
-            <span class="sa-meta">${STAGE_LABEL[x.stage] || '未开始'}</span>
+            <span class="sa-meta">${ART_STAGE_LABEL[x.stage] || '未开始'}</span>
           </button>`;
         }).join('')}</div>
       </section>
@@ -318,8 +320,8 @@
         <h2 id="stH3">我的单词掌握到了什么程度？</h2>
         <div class="st-nums" data-cols="4">
           <div class="st-num" data-k="learned"><b>${wd.learned}</b><span>已学习单词</span></div>
-          <div class="st-num" data-k="grad"><b>${wd.grad}</b><span>已掌握（已毕业）</span></div>
-          <div class="st-num" data-k="leech"><b>${wd.leech}</b><span>待巩固（重点词）</span></div>
+          <div class="st-num" data-k="grad"><b>${wd.grad}</b><span>已毕业词</span></div>
+          <div class="st-num" data-k="leech"><b>${wd.leech}</b><span>重点词</span></div>
           <div class="st-num" data-k="rate"><b>${wd.rate}%</b><span>掌握率</span></div>
         </div>
       </section>
@@ -606,8 +608,8 @@
     if (seek) { seek.max = String(todayMode ? ctx.todayTotal : total); seek.value = String(todayMode ? ctx.todayPos + 1 : at + 1); }
     const info = card.querySelector('.ls-info');
     if (info) info.textContent = todayMode
-      ? `今日第 ${ctx.todayPos + 1} / ${ctx.todayTotal} 句 · 播完自动循环`
-      : `第 ${at + 1} / ${total} 句 · 还剩 ${Math.max(0, total - at - 1)} 句`;
+      ? `今日${posOf(ctx.todayPos + 1, ctx.todayTotal)} · 播完自动循环`
+      : `${posOf(at + 1, total)} · 还剩 ${Math.max(0, total - at - 1)} 句`;
     const art = card.querySelector('.ls-art');
     if (art) art.textContent = `《${SECTIONS[a].title}》`;
     const vol = card.querySelector('.ls-vol');
@@ -641,7 +643,7 @@
     if (document.getElementById('lcDrawer')) return;
     document.body.insertAdjacentHTML('beforeend',
       '<button id="lcFab" type="button" aria-label="本句单词卡" hidden><i class="ri-bank-card-line" aria-hidden="true"></i>本句单词卡 <span class="fab-n" id="lcFabN">0</span></button>' +
-      '<div id="lcScrim"></div>' +
+      '<div id="lcScrim" class="scrim"></div>' +
       '<div id="lcMini" aria-hidden="true">' +
         '<div class="mb-bar">' +
           '<button type="button" class="mb-prev" aria-label="上一句"><i class="ri-play-reverse-fill" aria-hidden="true"></i></button>' +
@@ -652,8 +654,8 @@
       '</div>' +
       '<section id="lcDrawer" role="dialog" aria-modal="true" aria-label="本句单词卡">' +
         '<div class="dw-head"><h2 id="lcTitle">本句单词卡</h2>' +
-        '<span class="r-badge fav-badge" id="lcWords"></span>' +
-        '<button class="ls-collapse" type="button" id="lcClose" aria-label="收起"><i class="ri-arrow-down-s-line" aria-hidden="true"></i><span>收起</span></button></div>' +
+        '<span class="r-badge fav-badge" id="lcWords" title="本句目标词数"></span>' +
+        '<button class="ls-collapse" type="button" id="lcClose" aria-label="收起" title="收起（播放继续）"><i class="ri-arrow-down-s-line" aria-hidden="true"></i><span>收起</span></button></div>' +
         '<div class="dw-body lc-grid" id="lcGrid"></div>' +
       '</section>');
     wireListenCardsOnce();
@@ -698,7 +700,7 @@
     if (_lcObs) { try { _lcObs.disconnect(); } catch (e) {} _lcObs = null; }
   }
   /* ---- 字幕滚动窗：整表一次渲（TASK.listenRoll），切句只挪高亮 + rAF 平滑滚到当前句居中。
-     缓动与全站统一 cubic-bezier(.22,.61,.36,1)；reduced-motion / 换篇 / 切 today 直接落位。 ---- */
+     缓动与全站统一 var(--ease-move)；reduced-motion / 换篇 / 切 today 直接落位。 ---- */
   var _lcRollSig = '', _lcRollCurG = -1, _lcRollRaf = 0;
   function lcEase(t) {
     const x1 = .22, y1 = .61, x2 = .36, y2 = 1;
@@ -821,9 +823,9 @@
     // 抽屉标题（2026-10-07 用户第三次改）：「第 xx / xxx 句」+ 目标词数量胶囊，两截各写各的；
     // 句号与 ◀/▶ 禁用判断同源（同一个 at/total），迷你条那颗 .mb-pos 角标本轮整颗拆掉 ——
     // 用户：「这是重复信息」。
-    const titleTxt = `第 ${at + 1} / ${total} 句`;
+    const titleTxt = posOf(at + 1, total);
     const empty = cards.count <= 0;
-    const wordsTxt = `目标词 ${cards.count}`;
+    const wordsTxt = `本句目标词 ${cards.count}`;
     if (E.title && E.title.textContent !== titleTxt) E.title.textContent = titleTxt;
     if (E.words && E.words.textContent !== wordsTxt) E.words.textContent = wordsTxt;
     lcSyncRoll(st);
@@ -883,13 +885,9 @@
       if (!t) { try { e.preventDefault(); } catch (err) {} }
     }, { passive: false });
   }
-  document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape' || !lcDrawerOpen()) return;
-    const mePop = document.getElementById('mePop');
-    if (mePop && !mePop.hidden) return;   // mePop 在上层（z=400），让它先收
-    e.stopPropagation();
-    setLcDrawer(false);
-  });
+  // Esc 不在这里挂监听：抽屉收在最上层由 app/index.html 的浮层栈（OVERLAY_STACK）统一裁决 ——
+  // 以前这里挂一颗、#mePop 再挂一颗，主站内联脚本（注册更早）那颗先跑，
+  // 清单里又没有抽屉，于是一次 Esc 把「抽屉 + 全屏收起」两层全收了。
   window.APP3 = Object.assign(window.APP3, { renderListen, updateListenCard });
 
   /* 登录锁定页（2026-09-30）：未登录打开学习数据/单词本时显示。复用随身听卡片样式，
@@ -976,14 +974,17 @@
     if (!s) return { stage: 'fresh', leech: false, s: null };
     return { stage: s.stage || 'fresh', leech: !!s.leech, s: s };
   }
-  // 四档判据（§6.3，唯一出口：筛选、计数、测试断言同源）
+  /* A5：档位 = 五个真状态本身（词表在 index.html 的全局 WORD_STAGE_LABEL，与筛选标签同源）。
+     旧写法是「待掌握(seen|recognized|leech) / 学习中(owned) / 已掌握(graduated)」——
+     没碰过的 fresh 不落在任何一档，三档相加永远小于「全部」，注释还写着「唯一出口」。
+     现在 fresh/seen/recognized/owned/graduated 两两互斥、相加恒等于「全部」；
+     「重点词」是盖在状态上的标记，所以是一档**正交**筛选，不参与相加。
+     §6.3 的判据本身一个字没动，动的只是分档与命名。 */
   function inFilter(w, st, filter) {
     if (filter === 'all') return true;
     const x = wbStatus(w, st);
-    if (filter === 'todo') return x.stage === 'seen' || x.stage === 'recognized' || x.leech;
-    if (filter === 'learning') return x.stage === 'owned';
-    if (filter === 'mastered') return x.stage === 'graduated';
-    return true;
+    if (filter === 'leech') return x.leech;
+    return x.stage === filter;
   }
   function filterWords(filter, st) {
     return wordIndexOrder().filter((w) => inFilter(w, st, filter));
@@ -1000,8 +1001,10 @@
     const a = pos.a;
     const meta = `${esc(SECTIONS[a].title)} · 第 ${volNo(a, pos.pi)} 卷 · 出现 ${e.count} 次`;
     const x = wbStatus(w, st);
-    const pill = x.leech ? '重点词' : (WORD_STAGE_LABEL[x.stage] || '未见面');
-    const pillCls = x.leech ? ' leech' : (' s-' + x.stage);
+    /* 一颗胶囊同时说「哪一档 + 是不是重点词」：以前 leech 会把状态整个盖掉，
+       于是按状态筛出来的行里混着一颗读不出状态的「重点词」。底色仍走 .leech（那条在后，压过 s-*）。 */
+    const pill = (WORD_STAGE_LABEL[x.stage] || WORD_STAGE_LABEL.fresh) + (x.leech ? ' · 重点词' : '');
+    const pillCls = ' s-' + x.stage + (x.leech ? ' leech' : '');
     const relt = (x.s && x.s.lastContactAt) ? rel(x.s.lastContactAt) : '还没学过';
     return `<li class="wb-item">
       <button class="wb-row" type="button" data-w="${esc(w)}" aria-expanded="false">
@@ -1026,10 +1029,11 @@
       ? `<button class="wb-more" type="button">加载更多（还剩 ${list.length - shown} 个）</button>` : '';
     view.innerHTML = `<div class="words-page">
       <h1 class="pg-title">单词本</h1>
-      <div class="wb-filters" role="group" aria-label="按掌握状态筛选">${filters}</div>
+      <div class="wb-filters" role="group" aria-label="按词状态筛选（重点词是叠在状态上的标记）">${filters}</div>
       <p class="wb-hint">共 ${list.length} 个词${filter === 'all' ? '' : '（当前筛选）'} · 点词行看原文语境</p>
       <ul class="wb-list" aria-label="单词列表">${rows}</ul>
       ${more}
+      <p class="wb-hint">这里不是背单词的入口，是查「我到底会没会」的地方。</p>
     </div>`;
   }
   window.APP3 = Object.assign(window.APP3, { renderWords });
@@ -1063,7 +1067,7 @@
         <p class="wd-ex">${esc(v.ex)}</p>${v.exZh ? `<p class="wd-exzh">${esc(v.exZh)}</p>` : ''}</div>` : '';
     return `<div class="wb-detail" role="region" aria-label="${esc(w)} 详情">
       <div class="wd-top"><span class="wd-word">${esc(w)}</span>
-        <span class="wd-stage${x.leech ? ' leech' : ''}">${x.leech ? '重点词' : (WORD_STAGE_LABEL[x.stage] || '未见面')}</span>
+        <span class="wd-stage${x.leech ? ' s-' + x.stage + ' leech' : ' s-' + x.stage}">${(WORD_STAGE_LABEL[x.stage] || WORD_STAGE_LABEL.fresh) + (x.leech ? ' · 重点词' : '')}</span>
         <button class="wd-relearn" type="button" data-relearn="${esc(w)}">重学</button></div>
       ${p ? `<div class="wd-phon">/${esc(p)}/</div>` : ''}
       <div class="wd-mean">${esc(v.m || '（词库中无此词条）')}</div>
@@ -1104,7 +1108,9 @@
     if (go) {
       const tip = go.closest('.st-tip');
       const kind = tip ? tip.dataset.tip : go.dataset.go;
-      if (kind === 'leech') { location.hash = '#/words/todo'; return; }
+      /* A5：以前跳 #/words/todo（旧「待掌握」档里混着 leech），现在单词本有了正对应的
+         「重点词」档，这条提示该落在它自己的档位上。 */
+      if (kind === 'leech') { location.hash = '#/words/leech'; return; }
       if (kind === 'words') { location.hash = '#/words'; return; }
       if (kind === 'listen') { location.hash = '#/listen'; return; }
       const a = tip && tip.dataset.a != null ? Number(tip.dataset.a)
@@ -1285,9 +1291,9 @@
         <div class="mp-row"><span class="mp-label">深色模式</span>
           <button class="tr-msw${dark ? ' on' : ''}" type="button" role="switch" aria-checked="${dark}" data-me-theme aria-label="深色模式"><span class="knob" aria-hidden="true"></span></button></div>
         ${cfg ? `
-        <div class="mp-row"><span class="mp-label">每天分钟数</span><div class="ps-opts">
+        <div class="mp-row"><span class="mp-label">每天有多少分钟</span><div class="ps-opts">
           ${MINS.map(m => `<button class="ps-opt${m === cfg.minutes ? ' sel' : ''}" data-me-min="${m}">${m}</button>`).join('')}</div></div>
-        <div class="mp-eta" id="mpEta" role="status">工期算一下…</div>
+        <div class="mp-eta" id="mpEta" role="status">算一下…</div>
         <div class="mp-row"><button class="link-danger" type="button" data-me-reset-plan aria-label="重置学习计划，只重设计划、保留进度">重置学习计划</button></div>` : ''}
         <div class="mp-row"><span class="mp-label">数据</span><div class="ps-opts">
           <button class="ps-opt" data-me-export>导出备份</button>
@@ -1317,9 +1323,11 @@
     if (!cfg) { el.textContent = ''; el.hidden = true; return; }
     const m = cfg.minutes;
     el.hidden = false;
-    el.textContent = '工期算一下…';
+    el.textContent = '算一下…';   /* A13：与设置屏那六处同一个占位词（成品句两边也都是「按每天 X 分钟…」开头，不带「工期」两字） */
     TASK.etaFor(m).then((r) => {
       if (!el.isConnected) return;
+      // r === null = 估算抛错（etaFor 失败也落定，绝不再挂着一颗永不 resolve 的 Promise）
+      if (r === null) { el.textContent = '工期暂时算不出来，刷新页面再试'; return; }   // 与 TASK.etaText 同一句
       el.textContent = '按每天 ' + m + ' 分钟：新词全部过完一遍（需要 ' + (r && r.days ? r.days + ' 天' : '更久') + '）';
     });
   }
@@ -1363,6 +1371,7 @@
     const pop = document.getElementById('mePop');
     if (pop && !pop.hidden) closeMePop(); else openMePop();
   }
+  // 确认框与「已退出登录」提示都在 cloudLogout 里（两个入口共用一套），这里只负责退出后把浮窗画回未登录态。
   async function meLogout() { try { if (typeof cloudLogout === 'function') await cloudLogout(); } catch (e) {} renderMePop(); positionMePop(); }
   /* 统一登录弹窗（2026-09-30）：移动 + 桌面共用。登录/注册走同一套 cloudLogin/cloudSignup，
      只是读弹窗里的输入框（loginEmail/loginPass）。成功（CLOUD._userMail 落定）才关弹窗并刷新用户卡；
@@ -1436,28 +1445,13 @@
       else if (t.hasAttribute('data-me-login-btn')) { openLoginModal(); }
       else if (t.hasAttribute('data-me-logout')) { meLogout(); }
     });
-    // §10.4：Tab 在浮窗内收敛，别让键盘焦点逃到背景里的侧栏/正文。
-    pop.addEventListener('keydown', (e) => {
-      if (e.key !== 'Tab') return;
-      const nodes = Array.prototype.filter.call(
-        pop.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'),
-        (el) => !el.disabled && el.offsetParent !== null);
-      if (!nodes.length) return;
-      const first = nodes[0], last = nodes[nodes.length - 1];
-      if (e.shiftKey && (document.activeElement === first || document.activeElement === pop)) {
-        e.preventDefault(); last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault(); first.focus();
-      }
-    });
   }
-  window.APP3 = Object.assign(window.APP3, { renderMePop, openMePop, closeMePop, toggleMePop, meLogout, updateMeCard, openLoginModal, closeLoginModal });
-  // 点浮窗外面收掉；Esc 也收。
+  window.APP3 = Object.assign(window.APP3, { renderMePop, openMePop, closeMePop, toggleMePop, meLogout, updateMeCard, openLoginModal, closeLoginModal, setLcDrawer, lcDrawerOpen });
+  // 点浮窗外面收掉。Esc 不在这里挂 —— 浮层栈（app/index.html 的 OVERLAY_STACK）统一管分层与焦点。
   document.addEventListener('click', (e) => {
     const pop = document.getElementById('mePop');
     if (!pop || pop.hidden) return;
-    if (!e.target.isConnected) return;   // 已被重渲摘下的节点，别当成「点外面」
-    if (e.target.closest('#mePop') || e.target.closest('#meCard') || e.target.closest('.st-open-me')) return;
+    if (!outsideTap(e, ['#mePop', '#meCard', '.st-open-me'])) return;   // 守卫与 voicePop 共用一颗
     closeMePop();
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMePop(); });

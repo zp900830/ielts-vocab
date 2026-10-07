@@ -271,8 +271,25 @@ test.describe('3.0 无障碍（axe，WCAG A/AA）', () => {
 
   /* 触区 ≥44px（PRD §10.4）：axe 不管这条，M6 补。手机档头部那排（.nav-arrow/.tr-msw/.tr-help）
      视觉 24–26px、任务条播放条那排（循环/AB/倍速/书签）视觉 30px，靠 ::after hit-slop 与
-     移动档 min-height/min-width 补到 ≥44。反向验证：去掉这些补丁必红（实测 40/42/30）。 */
-  test('移动端任务模式：头部与任务条控件的有效触区 ≥44px', async ({ page }) => {
+     移动档 min-height/min-width 补到 ≥44。反向验证：去掉这些补丁必红（实测 40/42/30）。
+     有效触区 = 盒子 + ::after 的 inset，两种补法（长高 / 外扩）都认，见 index.html 文件头那段
+     A/B 两路口径（「44 清扫清单」那条 @media 上方）。 */
+  async function hit(page: import('@playwright/test').Page, sel: string) {
+    return page.locator(sel).evaluate((el) => {
+      const r = (el as HTMLElement).getBoundingClientRect();
+      const a = getComputedStyle(el, '::after');
+      let w = r.width, h = r.height;
+      if (a.content !== 'none' && a.display !== 'none') {
+        const parts = (a.inset || '0px').split(/\s+/).map((x) => Math.abs(parseFloat(x) || 0));
+        const tb = parts[0] || 0;
+        const lr = parts.length > 1 ? parts[1] : tb;
+        w += 2 * lr; h += 2 * tb;
+      }
+      return { w: Math.round(w), h: Math.round(h) };
+    });
+  }
+
+  test('移动端任务模式：头部与任务条控件的有效触区 ≥44px（滚动前后都量）', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width: 390, height: 844 });
     await stubData(page);
@@ -288,16 +305,20 @@ test.describe('3.0 无障碍（axe，WCAG A/AA）', () => {
     const sels = ['#ttPrev', '#ttNext', '#btnZh', '#btnGloss', '#ttHelp',
       '#btnLoop', '#btnAB', '#rateCycle', '#markBtn'];
     for (const sel of sels) {
-      const m = await page.locator(sel).evaluate((el) => {
-        const r = (el as HTMLElement).getBoundingClientRect();
-        const a = getComputedStyle(el, '::after');
-        const parts = (a.inset || '0px').split(/\s+/).map((x) => Math.abs(parseFloat(x) || 0));
-        const tb = parts[0] || 0;
-        const lr = parts.length > 1 ? parts[1] : parts[0] || 0;
-        return { w: r.width + 2 * lr, h: r.height + 2 * tb };
-      });
+      const m = await hit(page, sel);
       expect(m.h, `${sel} 有效触区高`).toBeGreaterThanOrEqual(44);
       expect(m.w, `${sel} 有效触区宽`).toBeGreaterThanOrEqual(44);
+    }
+
+    /* C2（2026-10-07 排查报告）：滚动后头部进 .shrunk 档，盒子随头部一起缩，热区不跟着补就会
+       掉到 40 —— 「滚动前 44、滚动后 40」，而收缩态才是读正文时一直在的那一面。
+       这条以前全程不滚动，所以那一路一直是假绿。滚到 400（onScroll 的阈值是 scrollY > 40）。 */
+    await page.evaluate(() => window.scrollTo(0, 400));
+    await expect(page.locator('.reader-head.shrunk')).toBeVisible();
+    for (const sel of ['#ttPrev', '#ttNext', '#btnZh', '#btnGloss', '#ttHelp']) {
+      const m = await hit(page, sel);
+      expect(m.h, `${sel} 收缩态有效触区高`).toBeGreaterThanOrEqual(44);
+      expect(m.w, `${sel} 收缩态有效触区宽`).toBeGreaterThanOrEqual(44);
     }
   });
 });

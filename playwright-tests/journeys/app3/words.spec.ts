@@ -32,6 +32,11 @@ declare const dataReady: boolean;
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
 
+/* A5 之后全应用只有一份档位表（app/index.html 的 WB_FILTERS）：
+   全部 + 五个真状态 + 重点词（重点词是叠在状态上的正交标记）。 */
+const STAGES = ['fresh', 'seen', 'recognized', 'owned', 'graduated'];
+const WB_KEYS = ['all'].concat(STAGES).concat(['leech']);
+
 /* 两篇小课文 + 3 个已知目标词，够断言「文章关联 / 卷 / 出现次数 / 原文语境 / 联动」。
    句号：篇 0 = 0,1,2；篇 1 = 3,4。atmosphere 在篇 0 出现 2 次（第 0、2 句）。 */
 const WORDS = (() => {
@@ -118,7 +123,10 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
     await expect.poll(() => page.locator('.wb-row').count(), { message: '加载更多要真的追加' }).toBeGreaterThan(first);
   });
 
-  test('四档筛选各自真的改变结果集，且计数与 state 同源', async ({ page }) => {
+  /* A5 回归锁：筛选档位就是五个真状态（+「全部」与正交的「重点词」）。
+     旧版是「待掌握 / 学习中 / 已掌握」三档，没碰过的 fresh 不落在任何一档 ——
+     三档相加永远小于「全部」，同一个单词本在两个屏上数出两个总数。现在这条相加必须恒等。 */
+  test('筛选档位 = 五个真状态 + 重点词，五档互斥且相加恒等于「全部」', async ({ page }) => {
     await stubData(page, WORDS);
     await page.goto(`${rootUrl}/app/index.html#/words`);
     await waitShadowReady(page);
@@ -127,42 +135,48 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
       const st = TASK.state();
       const mk = (o: Record<string, unknown>) => Object.assign(ShadowPlan.newWord(), o);
       st.words['atmosphere'] = mk({ stage: 'graduated', reps: 12, ok3: 1, leech: false });
-      st.words['oxygen'] = mk({ stage: 'seen', reps: 1, ok3: 0, leech: false });
-      st.words['library'] = mk({ stage: 'owned', reps: 5, ok3: 1, leech: false });
+      st.words['oxygen'] = mk({ stage: 'seen', reps: 1, ok3: 0, leech: true });
+      /* library 故意不写状态 → 它是「未见面」，让 fresh 档有非零读数 */
       APP3.route();
     });
 
     // 期望集从 state 现算（真断言，不写死字面量）
-    const exp = await page.evaluate(() => {
+    const exp = await page.evaluate((stages: string[]) => {
       const st = TASK.state();
       const all = Object.keys(VOCAB);
-      const bucket = (w: string) => { const s = st.words[w]; if (!s) return 'fresh'; if (s.leech) return 'leech'; return s.stage; };
+      const bucket = (w: string) => { const s = st.words[w]; return (s && s.stage) || 'fresh'; };
+      const by: Record<string, string[]> = {};
+      stages.forEach((k) => { by[k] = all.filter((w) => bucket(w) === k); });
       return {
-        all: all.length,
-        todo: all.filter((w) => { const b = bucket(w); return b === 'seen' || b === 'recognized' || b === 'leech'; }),
-        learning: all.filter((w) => bucket(w) === 'owned'),
-        mastered: all.filter((w) => bucket(w) === 'graduated'),
+        all: all.length, by,
+        leech: all.filter((w) => st.words[w] && st.words[w].leech),
         universe: all.slice().sort(),
       };
-    });
+    }, STAGES);
+
     await expect(page.locator('.wb-filter[data-f="all"] .wf-n')).toHaveText(String(exp.all));
-    await expect(page.locator('.wb-filter[data-f="todo"] .wf-n')).toHaveText(String(exp.todo.length));
-    await expect(page.locator('.wb-filter[data-f="learning"] .wf-n')).toHaveText(String(exp.learning.length));
-    await expect(page.locator('.wb-filter[data-f="mastered"] .wf-n')).toHaveText(String(exp.mastered.length));
+    for (const f of STAGES) {
+      await expect(page.locator(`.wb-filter[data-f="${f}"] .wf-n`), `${f} 档计数`).toHaveText(String(exp.by[f].length));
+    }
+    await expect(page.locator('.wb-filter[data-f="leech"] .wf-n')).toHaveText(String(exp.leech.length));
+    expect(STAGES.reduce((n, f) => n + exp.by[f].length, 0), '五档相加 = 全部').toBe(exp.all);
 
     const shownWords = async () => (await page.locator('.wb-row .wr-word').allInnerTexts()).sort();
-    const want: Record<string, string[]> = { all: exp.universe, todo: exp.todo, learning: exp.learning, mastered: exp.mastered };
-    for (const f of ['all', 'todo', 'learning', 'mastered']) {
+    const want: Record<string, string[]> = Object.assign({}, exp.by, { all: exp.universe, leech: exp.leech });
+    for (const f of WB_KEYS) {
       await page.locator(`.wb-filter[data-f="${f}"]`).click();
       await expect(page).toHaveURL(new RegExp('#/words/' + f));
-      await expect(page.locator(`.wb-filter[data-f="${f}"]`)).toHaveAttribute('aria-pressed', 'true');
-      expect(await shownWords(), `筛选 ${f} 的结果集`).toEqual([...want[f]].sort());
+      await expect(page.locator(`.wb-filter[data-f="${f}"]`), `${f} 档要点亮自己`).toHaveAttribute('aria-pressed', 'true');
+      expect(await shownWords(), `筛选 ${f} 的结果集`).toEqual([...(want[f] || [])].sort());
     }
-    // 三档之和 = 有状态的词且不重复：todo 1 + learning 1 + mastered 1 = 3
-    expect(exp.todo.length + exp.learning.length + exp.mastered.length, '夹具要真造出三档').toBe(3);
+    // 重点词那颗胶囊不再把状态盖掉：已见面档里 oxygen 的胶囊同时写着状态与「重点词」
+    await page.locator('.wb-filter[data-f="seen"]').click();
+    await expect(page.locator('.wb-row[data-w="oxygen"] .wr-pill')).toHaveText('已见面 · 重点词');
+    await expect(page.locator('.wb-row[data-w="oxygen"] .wr-pill'), '胶囊带档位 class，底色仍走 .leech')
+      .toHaveClass(/s-seen/);
   });
 
-  test('M2 待加强的「去复习」落到单词本「待掌握」筛选视图', async ({ page }) => {
+  test('M2 待加强的「去复习」落到单词本「重点词」筛选视图', async ({ page }) => {
     await stubData(page, WORDS);
     await page.goto(`${rootUrl}/app/index.html#/stats`);
     await waitShadowReady(page);
@@ -174,8 +188,8 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
     });
     await expect(page.locator('.st-tip[data-tip="leech"]')).toBeVisible();
     await page.locator('.st-tip[data-tip="leech"] .tip-go').click();
-    await expect(page).toHaveURL(/#\/words\/todo/);
-    await expect(page.locator('.wb-filter[data-f="todo"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page).toHaveURL(/#\/words\/leech/);
+    await expect(page.locator('.wb-filter[data-f="leech"]')).toHaveAttribute('aria-pressed', 'true');
     expect((await page.locator('.wb-row .wr-word').allInnerTexts()).sort()).toEqual(['oxygen']);
   });
 
@@ -286,8 +300,9 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); APP3.route(); });
 
     await expect(page.locator('.words-page > h1')).toHaveCount(1);
-    await expect(page.locator('.wb-filter')).toHaveCount(4);
-    for (const f of ['all', 'todo', 'learning', 'mastered']) {
+    // A5：档位表只剩一份（五个真状态 + 全部 + 重点词），不再有四档/词本两套账
+    await expect(page.locator('.wb-filter')).toHaveCount(WB_KEYS.length);
+    for (const f of WB_KEYS) {
       await expect(page.locator(`.wb-filter[data-f="${f}"]`)).toHaveAttribute('aria-pressed', /^(true|false)$/);
     }
     const row = page.locator('.wb-row').first();

@@ -152,7 +152,8 @@ test.describe('3.0 状态胶囊（实底）对比度 ≥ AA 正文 4.5', () => {
     // 覆盖保证：5 档都在（空选择器别假绿）
     await expect(page.locator('.wb-row .wr-pill')).toHaveCount(5);
     await expect(page.locator('.wb-row .wr-pill.s-graduated')).toHaveCount(1);
-    await expect(page.locator('.wb-row .wr-pill.s-seen')).toHaveCount(1);
+    // A5：重点词不再把状态盖掉，leechw（stage=seen + leech）也带 s-seen → 两颗
+    await expect(page.locator('.wb-row .wr-pill.s-seen')).toHaveCount(2);
     await expect(page.locator('.wb-row .wr-pill.s-owned')).toHaveCount(1);
     await expect(page.locator('.wb-row .wr-pill.leech')).toHaveCount(1);
 

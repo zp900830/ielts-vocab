@@ -1,6 +1,7 @@
 // 3.0 M5「我的」（PRD §8.1 / §8.2 / §10.4）。服务器归 global-setup.ts 起停（仓库根 8932）；
 // /app/ 在仓库根，同 home/stats/words，用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
+import { stubCloudAccount } from '../../utils/cloud-stub';
 
 declare const TASK: {
   resetV2(): void;
@@ -21,7 +22,7 @@ declare const TASK: {
 declare const ShadowPlan: { articleScope(sections: unknown, article: number): Set<number> };
 declare const SECTIONS: unknown[];
 declare const CLOUD: { _userMail: string };
-declare const APP3: { updateMeCard(): void; renderMePop(): void };
+declare const APP3: { renderMePop(): void };
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
 
@@ -200,7 +201,7 @@ test.describe('M5 · 账号（§8.1 账号信息 / §10.4 键盘可达）', () =
     }
 
     // 已登录态：浮窗里是退出按钮 + 邮箱；全站无内嵌登录表单
-    await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); });
+    await stubCloudAccount(page);
     await modal.locator('[data-login-close]').click();
     const pop = await openMe(page);
     await expect(pop.locator('.mp-logout')).toBeVisible();
@@ -213,6 +214,51 @@ test.describe('M5 · 账号（§8.1 账号信息 / §10.4 键盘可达）', () =
     await pop.locator('[data-me-logout]').click();
     await expect.poll(() => page.evaluate(() => (window as unknown as { __calls: unknown[] }).__calls.length)).toBeGreaterThan(0);
     expect(await page.evaluate(() => (window as unknown as { __calls: unknown[][] }).__calls[0][0])).toBe('logout');
+  });
+
+  /* D7（2026-10-07 一致性排查报告）：以前点「退出登录」零确认、零反馈，只是浮窗重画一遍。
+     现在确认框与成功 toast 都收在 cloudLogout 里 —— ☁ 菜单的 #btnLogout 和这里的退出按钮
+     是同一个动作的两个入口，必须问同一句话、给同一条反馈。上面那条用的是假 cloudLogout，
+     碰不到确认这一环，所以这里单独走真家伙（只把 Supabase 客户端换成哑的）。 */
+  test('退出登录：先二次确认；取消则登录态分毫不动，确认后才退并给一条 toast', async ({ page }) => {
+    await stubData(page, EMPTY);
+    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await waitTask(page);
+    // 登录态先由 stubCloudAccount 点亮（它等 CLOUD.boot() 落定，回写擦不掉它），
+    // 再把 Supabase 客户端换成哑的：它的 onAuthStateChange 在注册时就回 SIGNED_OUT，
+    // 那正是「确认退出后邮箱清空」这一步的依据。
+    await stubCloudAccount(page);
+    await page.evaluate(() => {
+      (CLOUD as unknown as { client: unknown }).client = () => ({
+        auth: {
+          onAuthStateChange: (cb: (ev: string, s: unknown) => void) => {
+            cb('SIGNED_OUT', null);
+            return { data: { subscription: { unsubscribe() { } } } };
+          },
+          signOut: async () => ({ error: null }),
+        },
+      });
+    });
+    const pop = await openMe(page);
+    await expect(pop.locator('.mp-logout')).toBeVisible();
+
+    // 取消：确认框问过了，但什么都没发生
+    let msg = '';
+    page.once('dialog', async (d) => { msg = d.message(); await d.dismiss(); });
+    await pop.locator('[data-me-logout]').click();
+    await expect.poll(() => msg).toMatch(/退出登录/);
+    expect(msg, '确认文案要说清本机进度不动').toMatch(/本机进度/);
+    expect(await page.evaluate(() => CLOUD._userMail), '取消后仍是登录态').toBe('alice@example.com');
+    await expect(pop.locator('.mp-logout')).toBeVisible();
+    await expect(page.locator('#abToast'), '取消不该有反馈').not.toHaveClass(/show/);
+
+    // 确认：退掉、给一条 toast，且不再顺手把 ☁ 菜单弹开（一次动作只留一条反馈）
+    page.once('dialog', async (d) => { await d.accept(); });
+    await pop.locator('[data-me-logout]').click();
+    await expect(page.locator('#abToast')).toHaveClass(/show/);
+    await expect(page.locator('#abToast')).toHaveText('已退出登录，本机进度照常保留');
+    expect(await page.evaluate(() => CLOUD._userMail), '确认后已退出').toBe('');
+    await expect(page.locator('#cloudWrap'), '退出不会把云菜单弹开').not.toHaveClass(/open/);
   });
 });
 
@@ -361,7 +407,8 @@ test.describe('M5 · 去掉「免费」标签', () => {
     await expect(pop).not.toContainText('免费');
     await expect(pop.locator('.mp-badge')).toHaveCount(0);
 
-    await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); APP3.renderMePop(); });
+    await stubCloudAccount(page);
+    await page.evaluate(() => { APP3.renderMePop(); });
     await expect(page.locator('#meCard')).not.toContainText('免费');
     await expect(page.locator('.me-tag')).toHaveCount(0);
   });

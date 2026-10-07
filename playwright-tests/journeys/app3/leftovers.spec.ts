@@ -317,7 +317,9 @@ test.describe('3.0 W6 PWA', () => {
     const m = href!.match(/^data:application\/manifest\+json;base64,(.+)$/);
     expect(m, 'manifest 用主站那套 base64 data-URI').toBeTruthy();
     const json = JSON.parse(Buffer.from(m![1], 'base64').toString('utf8'));
-    expect(json.name, 'manifest 要指名 3.0').toContain('3.0');
+    // A4：装机名与站内自称同一个词，别再「雅思背单词 3.0」和「词汇真经单词速记」两套并行
+    expect(json.name, 'manifest 名字要等于产品自称').toBe('词汇真经单词速记');
+    expect(json.short_name, '桌面图标短名同自称').toBe('词汇真经单词速记');
     expect(json.display).toBe('standalone');
     expect(json.start_url).toBeTruthy();
 

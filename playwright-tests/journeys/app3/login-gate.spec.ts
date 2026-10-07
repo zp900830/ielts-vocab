@@ -59,12 +59,13 @@ async function freshPlan(page: import('@playwright/test').Page) {
   await waitAppReady(page);
 }
 
-test('未登录点文章卡：不进任务模式，弹登录浮窗', async ({ page }) => {
+test('未登录点文章卡：不进任务模式，弹统一登录弹窗', async ({ page }) => {
   await freshPlan(page);
   expect(await page.evaluate(() => TASK.isLoggedIn()), '本文件必须保持未登录态').toBe(false);
   await page.locator('.art-card').first().click();
   await expect(page.locator('body'), '未登录不许进任务模式').not.toHaveClass(/task-mode/);
-  await expect(page.locator('#mePop'), '应弹出登录浮窗').toBeVisible();
+  await expect(page.locator('#loginModal'), '应弹出统一登录弹窗').toBeVisible();
+  await expect(page.locator('#loginWhy'), '弹窗里要写清为什么被拦').toContainText('登录后才能');
 });
 
 test('未登录直进数据/单词本：锁定页 + 去登录按钮', async ({ page }) => {
@@ -87,7 +88,8 @@ test('未登录：设置学习时间（建计划/改分钟数）都要登录', a
   // openPanel 没计划 = 设置屏入口（横幅/我的/任务条空状态全走它）→ 应被拦
   await page.evaluate(() => TASK.openPanel());
   await expect(page.locator('#todayPanel'), '设置屏不许开').toBeHidden();
-  await expect(page.locator('#mePop'), '弹登录浮窗').toBeVisible();
+  await expect(page.locator('#loginModal'), '弹统一登录弹窗').toBeVisible();
+  await expect(page.locator('#loginWhy'), '弹窗里要写清为什么被拦').toContainText('要先登录');
   // 绕过 UI 直接建计划（API 级，门禁只拦界面入口），再造一份"有计划的未登录"样本
   await page.evaluate(() => { TASK.initPlan(15); });
   await page.reload();

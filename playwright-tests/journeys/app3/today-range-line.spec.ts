@@ -274,7 +274,7 @@ test.describe('文章内「今天任务区间」横线', () => {
     // 第一次：出确认步 → 返回 → 线与进度都不动
     await page.locator('.today-range-line[data-edge="start"]').click();
     await expect(page.locator('#startPickPop')).toBeVisible();
-    await page.locator('#spSent').fill('5');
+    await page.locator('#spSent').selectOption('5');
     await page.locator('#startPickPop .sp-actions .btn.primary').click();
     await expect(page.locator('#startPickPop'), '有进度必须先出重新计算确认').toContainText('重新计算');
     await page.locator('#startPickPop .sp-actions .btn').first().click();   // 返回
@@ -288,7 +288,7 @@ test.describe('文章内「今天任务区间」横线', () => {
 
     // 第二次：确认调整 → 两线一起移动，今日记录清零
     await page.locator('.today-range-line[data-edge="start"]').click();
-    await page.locator('#spSent').fill('5');
+    await page.locator('#spSent').selectOption('5');
     await page.locator('#startPickPop .sp-actions .btn.primary').click();
     await expect(page.locator('#startPickPop')).toContainText('重新计算');
     await page.locator('#startPickPop .sp-actions .btn.primary').click();   // 确认调整
