@@ -7,7 +7,8 @@
    ⑤ 移动端抽屉开着 = 一整屏阅读面，底部 TabBar 整条隐藏，迷你条落到屏底；
    ⑥ PC 端（1280）三键靠右 + 字幕整条真居中；
    ⑦ 抽屉与「展开全文阅读」两处收起键同一个类、同一个矩形（390 实测两枚都是右 357 / 上 15 / 58×30）；
-   ⑧ PC 档同档口径：两枚各自贴住本条栏右缘、顶边一致（两条栏宽度本就不同，不谈像素重合）。 */
+   ⑧ PC 档同档口径：两枚各自贴住本条栏右缘、顶边一致（两条栏宽度本就不同，不谈像素重合）；
+   ⑨ 展开态顶栏标题的左内距（照抄 .reader-head 时把垫返回键的 6px 一起抄了过来，标题压进圆弧）。 */
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 
@@ -298,6 +299,36 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     const vw = 390;
     expect(lt.right, '展开态那颗确实在右端（不是还留在左边）').toBeGreaterThan(vw / 2);
     expect(vw - lt.right, '右缘距视口 = 胶囊那 33px 一档').toBeLessThanOrEqual(34);
+  });
+
+  /* ⑨ 2026-10-07 用户圈图「这个标题位置需要有内间距啊」：这条栏是照抄任务模式 .reader-head 来的，
+     连左内距 6px 一起抄 —— 但那 6px 是给 30px 圆形返回键垫的，键本身填掉了胶囊左端那截圆弧。
+     本栏没有返回键，标题第一个字就压在圆弧里（栏高 44 → 左端半圆半径 22，字却从第 7px 开始）。
+     量法：标题矩形左缘到**栏边框盒左缘**的净距离，左右两边都要 ≥12 且互相对称。 */
+  test('⑨ 展开态顶栏标题有左内距（不压在胶囊圆弧里），左右对称', async ({ page }) => {
+    await gotoListen(page);
+    await page.evaluate(() => { (TASK as unknown as { listenExpand(): void }).listenExpand(); });
+    await expect(page.locator('body')).toHaveClass(/listen-mode/);
+    await expect(page.locator('#listenTop')).toBeVisible();
+    await page.mouse.move(0, 0);
+    await page.evaluate(async () => {
+      try { await document.fonts.ready; } catch (e) {}
+      document.getAnimations().forEach((a) => { try { a.finish(); } catch (e) {} });
+    });
+    await page.waitForTimeout(120);
+    const g = await page.evaluate(() => {
+      const bar = document.getElementById('listenTop') as HTMLElement;
+      const title = bar.querySelector('.r-title') as HTMLElement;
+      const key = document.getElementById('lsClose') as HTMLElement;
+      const br = bar.getBoundingClientRect(), tr = title.getBoundingClientRect(), kr = key.getBoundingClientRect();
+      return {
+        barH: Math.round(br.height),
+        left: Math.round(tr.left - br.left),
+        right: Math.round(br.right - kr.right),
+      };
+    });
+    expect(g.left, `标题左内距实测 ${g.left}px：要 ≥12 才出得了半径 ${Math.round(g.barH / 2)}px 的左端圆弧`).toBeGreaterThanOrEqual(12);
+    expect(g.right, `栏右内距（收起键到边框盒，margin-left:auto 贴到底）=${ g.right}px，左边要与之对称`).toBe(g.left);
   });
 });
 
