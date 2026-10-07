@@ -1600,13 +1600,21 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .task-bar { left: 12px; right: 12px; padding: 8px 12px; }
     .tb-body { flex-direction: column; align-items: stretch; gap: 8px; }
     .tb-text { flex: none; }
-    /* 播放控件排（2026-10-06 用户：借鉴随身听展开态播放条 —— 居中、可换行、紧凑胶囊）：
+    /* 播放控件排（2026-10-06 用户：借鉴随身听展开态播放条 —— 紧凑胶囊、放不下就换行；
+       2026-10-07 用户：改成整行两端对齐、等间距平铺）。
        旧做法给每颗强按 44px 定宽，一行挤不下就互相叠影、还把「去设置」顶出条外。
-       现在改成随身听那套：按钮按内容自适应、整排居中、放不下就换行；
        44px 触区改由 ::after 热区外扩补齐（a11y.spec 量的就是 rect + inset）。 */
-    .tb-btns { flex-wrap: wrap; justify-content: center; gap: 6px; }
-    .task-bar .tb-play { justify-content: center; gap: 6px; }
-    .task-bar .tb-play .ab-left { flex-wrap: wrap; justify-content: center; gap: 6px; }
+    .task-bar .tb-btns { flex-wrap: wrap; gap: 8px; }
+    /* 两端对齐只给这两态：② 做题 / 收工态那一排只有一两颗文字键，硬摊到两头反而散架，
+       留在基础规则的 flex-end。 */
+    body.task-mode .task-bar[data-state="read"] .tb-btns,
+    body.task-mode .task-bar[data-state="noplan"] .tb-btns { justify-content: space-between; }
+    /* dock 那四颗套在 .tb-play > .ab-left 两层 div 里，等间距就只能让它们不再是盒子 ——
+       display:contents 把六颗键提到同一根 flex 轴上，剩下的自由宽度由上面的 space-between
+       平分。选择器与「哪一态才露脸」那两条同状态、位置更靠后，所以不泄漏到 idle。 */
+    body.task-mode .task-bar[data-state="read"] .tb-play,
+    body.task-mode .task-bar[data-state="noplan"] .tb-play { display: contents; }
+    .task-bar .tb-play .ab-left { display: contents; }
     .task-bar .tb-play .btn { position: relative; min-height: 36px; padding: 5px 12px;
       font-size: 12.5px; min-width: 0; }
     .task-bar .tb-play .btn::after { content: ""; position: absolute; inset: -5px -3px; border-radius: 999px; }
@@ -2413,9 +2421,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #lcScrim.on { opacity: 1; pointer-events: auto; }
   /* ---- 抽屉本体：Liquid Glass（配方同 .audiobar：白玻璃渐变 + 32px 背景模糊 + 内侧高光） ----
      2026-10-07 用户：单词卡改挂**顶部**（原来底部抽屉把迷你条挤去吸顶，上下两块打架）。
-     顶挂后圆角/描边/投影全部翻面：下缘收圆、阴影往下投、内侧高光移到下缘。 */
+     顶挂后圆角/描边/投影全部翻面：下缘收圆、阴影往下投、内侧高光移到下缘。
+     高度上限再减掉沉底迷你条（--lc-mini-h 由 positionListenMini 实测写）：抽屉 z=80 压在
+     迷你条 z=75 之上，卡片一长就会把三颗玻璃键整个盖住 —— 切句键不能点，是硬故障。 */
   #lcDrawer { position: fixed; left: 0; right: 0; top: 0; z-index: 80;
-    max-height: min(78vh, 680px); display: flex; flex-direction: column;
+    max-height: min(78vh, 680px, calc(100dvh - var(--tabbar-h, 0px) - var(--lc-mini-h, 0px) - 16px)); display: flex; flex-direction: column;
     background: linear-gradient(145deg, rgba(255,255,255,.72), rgba(255,255,255,.34) 42%, rgba(255,255,255,.24));
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
@@ -2428,17 +2438,16 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark #lcDrawer { background: linear-gradient(145deg, rgba(30,28,25,.9), rgba(30,28,25,.76) 42%, rgba(30,28,25,.62));
     border-color: #33302b;
     box-shadow: 0 12px 40px rgba(0,0,0,.4), 0 2px 12px rgba(0,0,0,.25), inset 0 -1px 0 rgba(255,255,255,.05), inset 0 1px 0 rgba(0,0,0,.32); }
-  #lcDrawer.tall { max-height: calc(100vh - 118px); max-height: calc(100dvh - 118px); }
   @media (min-width: 900px) {
     #lcDrawer { left: 50%; transform: translate(-50%, -102%); width: min(860px, 92vw); }
     #lcDrawer.open { transform: translate(-50%, 0); }
   }
-  #lcDrawer .dw-grip { padding: 10px 0 4px; text-align: center; display: block; width: 100%; background: none; border: 0; cursor: pointer; }
-  #lcDrawer .dw-grip i { display: inline-block; width: 42px; height: 5px; border-radius: 999px; background: #d7e2dd; transition: background-color .2s cubic-bezier(.22,.61,.36,1); }
-  #lcDrawer .dw-grip:hover i { background: #bfd2cb; }
+  /* 抽屉顶部那条 grip 拖手 2026-10-07 删掉（用户：「那一行都不要，本来也没有实际意义
+     也不能向下拖动关闭，还占着一行」）—— 半屏/近全屏两档随之作废，收起只留 ⌄ 键、
+     点遮罩、ESC 三条路。grip 的 10px 顶垫改由 .dw-head 自己补。 */
   body.dw-open { overflow: hidden; }
   body.dw-open #appView { overscroll-behavior: contain; }
-  #lcDrawer .dw-head { display: flex; align-items: center; gap: 10px; padding: 4px 20px 12px; border-bottom: 1px solid var(--border); }
+  #lcDrawer .dw-head { display: flex; align-items: center; gap: 10px; padding: 14px 20px 12px; border-bottom: 1px solid var(--border); }
   /* 标题弱化：只是定位信息（第几句/几个词），主角是卡片内容 */
   #lcDrawer .dw-head h2 { margin: 0; font-size: 12.5px; font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); letter-spacing: .02em; }
   /* 收起键（2026-10-04 用户反馈「太抢眼太大」）：改成幽灵文字键 —— 无底无边、muted 小字，
@@ -2464,10 +2473,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     transform: translateY(102%); opacity: 0; visibility: hidden; pointer-events: none;
     transition: transform .28s cubic-bezier(.22,.61,.36,1), opacity .28s cubic-bezier(.22,.61,.36,1), visibility 0s .28s; }
   @media (max-width: 700px) {
-    #lcMini { bottom: var(--tabbar-h, 56px); }
-    /* 沉底后字幕窗在按钮行上面；句数挪到行首、三键被 auto margin 推到行尾 */
-    #lcMini .mb-roll { order: -1; }
-    #lcMini .mb-count { order: -1; margin-left: 0; margin-right: auto; }
+    #lcMini { bottom: var(--tabbar-h, 56px); padding-bottom: 12px; }
   }
   body.dark #lcMini { background: linear-gradient(145deg, rgba(30,28,25,.92), rgba(30,28,25,.78) 42%, rgba(30,28,25,.62));
     border-top-color: #33302b;
@@ -2478,27 +2484,46 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      （2026-10-04 用户截图反馈「看不清」）—— 收成单行时玻璃加实。 */
   body.dw-open #lcMini { background: linear-gradient(145deg, rgba(255,255,255,.93), rgba(255,255,255,.88) 42%, rgba(255,255,255,.82)); }
   body.dark.dw-open #lcMini { background: linear-gradient(145deg, rgba(30,28,25,.97), rgba(30,28,25,.92) 42%, rgba(30,28,25,.86)); }
-  /* 64px 单行窗里 mask 的上下渐隐正好啃掉当前句英文的顶和译文的底 —— 单行模式不需要渐隐，直接摘掉 */
-  body.dw-open #lcMini .mb-roll { -webkit-mask-image: none; mask-image: none; }
   #lcMini .mb-bar { display: flex; align-items: center; gap: 10px; }
-  #lcMini .mb-count { margin-left: auto; font-family: var(--sans); font-size: 12px; color: var(--muted); white-space: nowrap; }
+  /* 句序号：2026-10-07 用户「稍微做重一点」—— 它现在是这一条上唯一的定位信息
+     （标题在抽屉里、正文被玻璃键压着），得比 --muted 站得住。 */
+  #lcMini .mb-count { margin-left: auto; font-family: var(--sans); font-size: 13px; font-weight: 600;
+    color: var(--text); white-space: nowrap; }
+  body.dark #lcMini .mb-count { color: #efe9df; }
   /* 字幕窗：固定高 + 上下渐隐；行体复用精读 .sent/.gl/.sent-zh，只有当前句挂 .playing 薄荷高亮 */
   #lcMini .mb-roll { height: 108px; overflow: hidden;
     transition: height .28s cubic-bezier(.22,.61,.36,1);
     -webkit-mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
     mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent); }
-  /* 抽屉开：字幕窗收矮到只露当前句（遮罩可点带不能被吃掉）；抽屉关才展开成完整字幕条 */
-  body.dw-open #lcMini .mb-roll { height: 76px; }
+  /* 抽屉开时字幕窗收矮那条已挪进下面 @media (min-width: 700px)：窄屏 2026-10-07 起
+     抽屉开着也要看全三行英文 + 一句译文，不再收矮。 */
   #lcMini .mb-row { padding: 3px 4px; }
   #lcMini .mb-row .sent { cursor: default; font-size: 15px; line-height: 1.55; }
   #lcMini .mb-row .sent:hover { background: none; }
   #lcMini .mb-row .gl { font-size: 11px; }
   #lcMini .mb-row .sent-zh { font-size: 12.5px; margin-top: 1px; }
   #lcMini .mb-row:not(.cur) { opacity: .42; }
+  /* 窄屏（2026-10-07 用户）：字幕窗加高到「三行英文 + 一句译文」，三颗键浮在它下沿 ——
+     字从玻璃键底下穿过去。所以按钮行不再独占一行，改成浮在窗口下沿的绝对层；
+     净带 = 窗高 − 被键压住的那截，居中偏移由 lcScrollToCur 按遮挡量补。
+     .mb-rows 的底垫让末句也能滚到键上方。整块必须排在上面那些 #lcMini .mb-* 基础规则
+     之后：媒体查询不加权重，同特异度靠源码顺序决胜。 */
+  @media (max-width: 700px) {
+    #lcMini .mb-roll { height: 156px; }
+    #lcMini .mb-rows { padding-bottom: 58px; }
+    /* z-index 不是可选项：.mb-roll 有 mask-image ⇒ 自成一个层叠上下文，和绝对定位的按钮行
+       同处 z=0，于是按源码顺序决胜 —— DOM 里窗口排在按钮之后，字幕会把三颗键整个盖住、
+       并吃掉点击（Playwright 报 sent-zh intercepts pointer events）。 */
+    #lcMini .mb-bar { position: absolute; left: 14px; right: 14px; bottom: 12px; gap: 8px; z-index: 1; }
+    #lcMini .mb-count { order: -1; margin-left: 0; margin-right: auto; }
+  }
   @media (min-width: 700px) {
     #lcMini { flex-direction: row; align-items: center; gap: 12px; padding: 8px 14px; }
     #lcMini .mb-bar { flex: none; }
     #lcMini .mb-roll { flex: 1; min-width: 0; height: 96px; }
+    /* 桌面抽屉开时窗口收矮（遮罩可点带不能被吃掉），76px 差不多是单行 ——
+       单行里 mask 的上下渐隐正好啃掉英文的顶和译文的底，所以这条只在桌面摘 mask。 */
+    body.dw-open #lcMini .mb-roll { height: 76px; -webkit-mask-image: none; mask-image: none; }
   }
   #lcMini button { flex: none; display: inline-flex; align-items: center; justify-content: center;
     width: 36px; height: 36px; border: none; border-radius: 50%; background: var(--accent-soft); color: var(--text); font-size: 14px; cursor: pointer;
@@ -2507,6 +2532,25 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #lcMini button i { font-size: 16px; }
   #lcMini button:disabled { opacity: .45; }
   #lcMini .mb-play { background: var(--accent); color: #fff; }
+  /* 2026-10-07 用户：三颗键加大好点，并且要 Glass —— 让字幕从键底下穿过去。
+     实底薄荷/绿会盖死字幕，所以整排换成白玻璃（同 .audiobar 配方缩到一颗键的尺寸：
+     半透渐变 + backdrop-blur + 内侧高光 + 细白边）；推进那颗仍带一点薄荷 tint，
+     绿色只给 CTA 的口径不变（图标改 accent-text 深绿，压浅薄荷玻璃 ≥5:1）。
+     这段必须排在上面 `#lcMini button` 之后：媒体查询不加权重，同选择器靠后者胜。 */
+  @media (max-width: 700px) {
+    #lcMini button { width: 46px; height: 46px; border: 1px solid rgba(255,255,255,.72);
+      background: linear-gradient(150deg, rgba(255,255,255,.74), rgba(255,255,255,.4));
+      -webkit-backdrop-filter: blur(14px) saturate(180%); backdrop-filter: blur(14px) saturate(180%);
+      box-shadow: 0 2px 10px rgba(20, 45, 38, .12), inset 0 1px 0 rgba(255,255,255,.9);
+      color: var(--text); }
+    #lcMini button i { font-size: 20px; }
+    #lcMini .mb-play { border-color: rgba(12, 156, 116, .3); color: var(--accent-text);
+      background: linear-gradient(150deg, rgba(224,245,236,.88), rgba(224,245,236,.52)); }
+    body.dark #lcMini button { background: linear-gradient(150deg, rgba(70,65,58,.72), rgba(37,34,32,.42));
+      border-color: rgba(255,255,255,.14); color: #efe9df;
+      box-shadow: 0 2px 10px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08); }
+    body.dark #lcMini .mb-play { border-color: rgba(16,180,135,.42); color: #10b487; }
+  }
   /* ---- 单词卡容器（行内 notebar 与 nb-table 对比表直接复用精读类） ---- */
   #lcDrawer .lc-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
   #lcDrawer .wcard { min-width: 0; padding: 16px 18px; background: rgba(255,255,255,.55);

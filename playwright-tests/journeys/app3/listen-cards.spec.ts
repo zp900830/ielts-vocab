@@ -244,16 +244,20 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     // 首句贴顶（上面没有行，居中会被 clamp）
     await expect.poll(() => roll.evaluate((el) => (el as HTMLElement).scrollTop)).toBe(0);
 
-    // 切到中间句：高亮搬家 + 320ms 滚动后当前句居中
-    const centered = () => roll.locator('.mb-row.cur').evaluate((el) => {
+    // 切到中间句：高亮搬家 + 320ms 滚动后当前句落在「玻璃键之上那条净带」里居中
+    // （2026-10-07：三颗键浮在字幕窗下沿，居中不能按整窗算，否则句子下半截永远压在键底下）
+    const placement = () => roll.locator('.mb-row.cur').evaluate((el) => {
       const r = (el as HTMLElement).getBoundingClientRect();
       const p = (el as HTMLElement).closest('.mb-roll')!.getBoundingClientRect();
-      return Math.abs((r.top + r.height / 2) - (p.top + p.height / 2));
+      const b = (document.querySelector('#lcMini .mb-bar') as HTMLElement).getBoundingClientRect();
+      const occ = Math.max(0, p.bottom - b.top);
+      return { off: Math.abs((r.top + r.height / 2) - (p.top + (p.height - occ) / 2)), clear: b.top - r.bottom, occ: Math.round(occ) };
     });
     const g0 = await cur.getAttribute('data-g');
     await page.locator('#lcMini .mb-next').click();
     await expect.poll(() => roll.locator('.mb-row.cur').getAttribute('data-g'), { timeout: 2000 }).not.toBe(g0);
-    await expect.poll(centered, { timeout: 2000 }).toBeLessThan(6);
+    await expect.poll(async () => (await placement()).off, { timeout: 2000 }).toBeLessThan(6);
+    expect((await placement()).clear, '当前句整句在按钮之上，不被玻璃键压住').toBeGreaterThanOrEqual(0);
   });
 
   test('辨析展开：默认一行简单记；点开展开无横向溢出', async ({ page }) => {
@@ -280,16 +284,15 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     expect(over.table, '对比表无横向溢出').toBeLessThanOrEqual(1);
   });
 
-  test('持久化：开抽屉+高档 → reload → 恢复', async ({ page }) => {
+  test('持久化：开抽屉 → reload → 恢复（2026-10-07 grip 行与高档已删，只剩一个开合态）', async ({ page }) => {
     await stubData(page, CARDS);
     await gotoListen(page);
     await page.locator('#lcFab').click();
-    await page.locator('#lcDrawer .dw-grip').click();
-    await expect(page.locator('#lcDrawer')).toHaveClass(/tall/);
+    await expect(page.locator('#lcDrawer')).toHaveClass(/open/);
+    expect(await page.locator('#lcDrawer .dw-grip').count(), '拖手那一行整个删掉').toBe(0);
     await page.reload();
     await gotoListen(page);
     await expect(page.locator('#lcDrawer')).toHaveClass(/open/);
-    await expect(page.locator('#lcDrawer')).toHaveClass(/tall/);
     await expect(page.locator('#lcDrawer .wcard')).toHaveCount(2);
   });
 

@@ -77,9 +77,36 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     });
     expect(geo.drawer.y, '单词卡挂顶部').toBeLessThanOrEqual(1);
     expect(geo.drawer.b, '顶挂抽屉不许吃掉整屏').toBeLessThan(844 * 0.8);
+    expect(geo.drawer.b, '抽屉不许盖住沉底迷你条（盖住就点不到切句键）').toBeLessThanOrEqual(geo.mini.y + 1);
     expect(geo.mini.b, '迷你条贴在 TabBar 正上方').toBeLessThanOrEqual(geo.nav.y + 1);
     expect(geo.roll.y, '字幕窗在按钮行上面').toBeLessThan(geo.bar.y);
     expect(geo.count.x, '句数在左').toBeLessThan(geo.next.x);
     expect(geo.next.r, '三键在右').toBeGreaterThan(390 - 60);
+  });
+
+  test('③ 字幕窗加高到「三行英文 + 一句译文」，三颗玻璃键浮在它下沿', async ({ page }) => {
+    await gotoListen(page);
+    await page.locator('#lcFab').click();
+    await page.waitForTimeout(450);
+    const g = await page.evaluate(() => {
+      const r = (s: string) => (document.querySelector(s) as HTMLElement).getBoundingClientRect();
+      const cs = (s: string, p: string) => getComputedStyle(document.querySelector(s) as Element)[p as 'fontSize'];
+      const lh = parseFloat(cs('#lcMini .mb-row .sent', 'lineHeight')) || 23;
+      const lhz = parseFloat(cs('#lcMini .mb-row .sent-zh', 'lineHeight')) || 19;
+      return {
+        rollH: Math.round(r('#lcMini .mb-roll').height),
+        need: Math.round(lh * 3 + lhz),
+        overlap: Math.round(r('#lcMini .mb-roll').bottom - r('#lcMini .mb-bar').top),
+        btn: Math.round(r('#lcMini .mb-next').width),
+        btnBg: cs('#lcMini .mb-next', 'backgroundImage').slice(0, 24),
+        weight: cs('#lcCount', 'fontWeight'),
+      };
+    });
+    // 三行英文 + 一句译文：行高按实测算，别写死字面量
+    expect(g.rollH, `字幕窗 ${g.rollH}px 要装得下三行英文+一句译文（${g.need}px）再加被键压住的那截`).toBeGreaterThanOrEqual(g.need);
+    expect(g.overlap, '按钮行浮在字幕窗之上（字从玻璃键底下穿过去）').toBeGreaterThan(20);
+    expect(g.btn, '三颗键加大到好点（≥44）').toBeGreaterThanOrEqual(44);
+    expect(g.btnBg, '玻璃键用渐变底，不再是实底薄荷').toMatch(/gradient/);
+    expect(Number(g.weight), `句数加重（现在 ${g.weight}）`).toBeGreaterThanOrEqual(600);
   });
 });
