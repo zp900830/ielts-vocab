@@ -1,8 +1,9 @@
 /* 2026-10-07 用户两张对照图（调整前/后）锁两件事，全部 390×844 量：
    ① 「本句单词卡」入口从右下挪到右上（与「随身听」大标题同一行）—— 原来压在
       「展开全文」上；② 展开态单词卡挂**顶部**，迷你条沉到 TabBar 正上方：
-      字幕窗在上、三键在右下。同轮第二次改：迷你条左下角的句序号删掉，
-      位置信息只留抽屉标题「本句单词卡 · 第 N 句 · N 个目标词」。 */
+      字幕窗在上、三键在右下。同轮第二次改：迷你条左下角的句序号删掉，位置信息
+      改由抽屉标题「本句单词卡 · 第 N 句 · N 个目标词」承担；第三次（④）又把
+      「第 N 句」以角标形式放回字幕窗右上角 —— 绝对定位，不占行。 */
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 
@@ -60,7 +61,7 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     expect(geo.fab.b, '不许压到播放卡的展开键').toBeLessThan(geo.expand.y);
   });
 
-  test('② 展开态：抽屉顶挂、迷你条沉底三键贴右，句序号只在抽屉标题里', async ({ page }) => {
+  test('② 展开态：抽屉顶挂、迷你条沉底三键贴右，左下角那颗句数已并进标题', async ({ page }) => {
     await gotoListen(page);
     await page.locator('#lcFab').click();
     await expect(page.locator('#lcDrawer')).toHaveClass(/open/);
@@ -88,8 +89,8 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     expect(geo.prev.x, '三键整排贴右，不许散回左边（句数那颗的 auto margin 已删）')
       .toBeGreaterThan(200);
     // 2026-10-07 用户：「去掉左下角第x/xxx句，和左上角第 x 句的信息合并」
-    expect(geo.count, '迷你条左下角的句序号整个删掉').toBe(0);
-    expect(geo.title.trim(), '抽屉标题是唯一出口：本句单词卡 · 第 N 句 · N 个目标词')
+    expect(geo.count, '迷你条左下角那颗句数整行删掉（位置改由右上角标 + 标题承担）').toBe(0);
+    expect(geo.title.trim(), '抽屉标题：本句单词卡 · 第 N 句 · N 个目标词')
       .toMatch(/^本句单词卡 · 第 \d+ 句 · \d+ 个目标词$/);
   });
 
@@ -115,5 +116,44 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     expect(g.overlap, '按钮行浮在字幕窗之上（字从玻璃键底下穿过去）').toBeGreaterThan(20);
     expect(g.btn, '三颗键加大到好点（≥44）').toBeGreaterThanOrEqual(44);
     expect(g.btnBg, '玻璃键用渐变底，不再是实底薄荷').toMatch(/gradient/);
+  });
+
+  /* ④ 2026-10-07 用户采纳建议：句序号删掉后抽屉**关着**时这一屏没有位置信息了，
+     把它放回字幕窗**右上角** —— 绝对定位不占行、比标题轻一档、跟着切句走。
+     迷你条平时靠 IntersectionObserver 才现形，这里直接加 .show（IO 做的也就是这件事）。 */
+  test('④ 位置角标浮在字幕窗右上角：不占行、跟着切句走', async ({ page }) => {
+    await gotoListen(page);
+    await page.evaluate(() => { document.getElementById('lcMini')!.classList.add('show'); });
+    await page.waitForTimeout(350);
+    const g = await page.evaluate(() => {
+      const r = (s: string) => (document.querySelector(s) as HTMLElement).getBoundingClientRect();
+      const pos = document.querySelector('#lcMini .mb-pos') as HTMLElement;
+      const roll = r('#lcMini .mb-roll');
+      const pr = pos.getBoundingClientRect();
+      return {
+        text: pos.textContent || '',
+        pos: getComputedStyle(pos).position,
+        pe: getComputedStyle(pos).pointerEvents,
+        size: getComputedStyle(pos).fontSize,
+        weight: getComputedStyle(pos).fontWeight,
+        rightGap: Math.round(roll.right - pr.right),
+        inTopBand: pr.top >= roll.top - 4 && pr.bottom <= roll.top + roll.height * 0.25,
+        miniH: Math.round(r('#lcMini').height),
+        rollH: Math.round(roll.height),
+      };
+    });
+    expect(g.text, '角标只报本篇第几句（与抽屉标题同一个数）').toMatch(/^第 \d+ 句$/);
+    expect(g.pos, '绝对定位才不占行').toBe('absolute');
+    expect(g.pe, '不许吃掉三颗键的点击').toBe('none');
+    expect(Number(g.weight), '比标题轻一档（标题 600）').toBeLessThan(600);
+    expect(g.inTopBand, `角标要落在字幕窗顶部那条渐隐带里（窗高 ${g.rollH}）`).toBe(true);
+    expect(Math.abs(g.rightGap), '贴着窗口右缘').toBeLessThanOrEqual(6);
+    expect(g.miniH - g.rollH, '整条高度 = 字幕窗 + 上下内边距，角标没额外撑高')
+      .toBeLessThanOrEqual(24);
+    // 切句要跟着走
+    await page.locator('#lcMini .mb-next').click();
+    await expect.poll(() => page.evaluate(() =>
+      (document.querySelector('#lcMini .mb-pos') as HTMLElement).textContent), { timeout: 2000 })
+      .toBe('第 2 句');
   });
 });

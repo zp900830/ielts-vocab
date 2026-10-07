@@ -633,6 +633,7 @@
       mini: document.getElementById('lcMini'),
       sent: document.getElementById('lcSent'),
       rows: document.getElementById('lcRows'),
+      pos: document.getElementById('lcPos'),
     };
   }
   function ensureListenCards() {
@@ -647,6 +648,7 @@
           '<button type="button" class="mb-next" aria-label="下一句"><i class="ri-play-fill" aria-hidden="true"></i></button>' +
         '</div>' +
         '<div class="mb-roll" id="lcSent"><div class="mb-rows" id="lcRows"></div></div>' +
+        '<span class="mb-pos" id="lcPos"></span>' +
       '</div>' +
       '<section id="lcDrawer" role="dialog" aria-modal="true" aria-label="本句单词卡">' +
         '<div class="dw-head"><h2 id="lcTitle">本句单词卡</h2>' +
@@ -807,6 +809,10 @@
     const mbPrev = E.mini.querySelector('.mb-prev'), mbNext = E.mini.querySelector('.mb-next');
     if (mbPrev) mbPrev.disabled = todayMode ? st.todayTotal <= 1 : at <= 0;
     if (mbNext) mbNext.disabled = todayMode ? st.todayTotal <= 1 : at >= total - 1;
+    // 位置角标（浮在字幕窗右上角，不占行）：抽屉关着时它是唯一的句位置出口；
+    // 数字与抽屉标题同源（都是本篇第 N 句），两处不许各报一个口径。
+    const posTxt = `第 ${at + 1} 句`;
+    if (E.pos && E.pos.textContent !== posTxt) E.pos.textContent = posTxt;
     lcSyncRoll(st);
     const empty = cards.count <= 0;
     const titleTxt = empty ? '本句无目标词' : cards.title;
