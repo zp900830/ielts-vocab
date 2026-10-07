@@ -616,11 +616,12 @@
     try { refreshListenCards(); } catch (e) {}
   }
 
-  /* ---- 随身听 · 本句单词卡悬浮层（方案 B 底部抽屉，2026-10-04）----
+  /* ---- 随身听 · 本句单词卡悬浮层（2026-10-04 方案 B，2026-10-07 上下反转：抽屉顶挂）----
      卡片 HTML 由 TASK.listenCards() 组装（读 wordsOfSent/VOCAB），这里只管挂载/显隐/联动。
      刷新入口是 updateListenCard（paint 每次状态变化都调，见末尾追加）；离开路由/展开全屏时收起。
-     动效与 z 序照 demo：scrim(70) < 迷你条(75) < 抽屉(80)；移动端 TabBar(z=300) 在最上，
-     FAB 浮到它上面、抽屉内容底垫 88px（CSS 侧），导航可点。 */
+     动效与 z 序照 demo：scrim(70) < 迷你条(75) < 抽屉(80)。桌面 TabBar 在左侧栏（不挡抽屉）；
+     移动端 TabBar(z=300) 抽屉一开就整条滑出视口（CSS 里 body.dw-open .sidenav），
+     --tabbar-h 同时归零，迷你条落屏底、抽屉收回报高。 */
   var _lcObs = null, _lcLast = '', _lcOff = true, _lcTouchOn = false, _lcSwapSeq = 0;
   function listenCardsEls() {
     return {
@@ -630,10 +631,10 @@
       drawer: document.getElementById('lcDrawer'),
       grid: document.getElementById('lcGrid'),
       title: document.getElementById('lcTitle'),
+      words: document.getElementById('lcWords'),
       mini: document.getElementById('lcMini'),
       sent: document.getElementById('lcSent'),
       rows: document.getElementById('lcRows'),
-      pos: document.getElementById('lcPos'),
     };
   }
   function ensureListenCards() {
@@ -648,10 +649,10 @@
           '<button type="button" class="mb-next" aria-label="下一句"><i class="ri-play-fill" aria-hidden="true"></i></button>' +
         '</div>' +
         '<div class="mb-roll" id="lcSent"><div class="mb-rows" id="lcRows"></div></div>' +
-        '<span class="mb-pos" id="lcPos"></span>' +
       '</div>' +
       '<section id="lcDrawer" role="dialog" aria-modal="true" aria-label="本句单词卡">' +
         '<div class="dw-head"><h2 id="lcTitle">本句单词卡</h2>' +
+        '<span class="r-badge fav-badge" id="lcWords"></span>' +
         '<button class="dw-close" type="button" id="lcClose" aria-label="收起"><i class="ri-arrow-down-s-line" aria-hidden="true"></i><span>收起</span></button></div>' +
         '<div class="dw-body lc-grid" id="lcGrid"></div>' +
       '</section>');
@@ -817,21 +818,21 @@
     const mbPrev = E.mini.querySelector('.mb-prev'), mbNext = E.mini.querySelector('.mb-next');
     if (mbPrev) mbPrev.disabled = todayMode ? st.todayTotal <= 1 : at <= 0;
     if (mbNext) mbNext.disabled = todayMode ? st.todayTotal <= 1 : at >= total - 1;
-    // 位置角标（浮在字幕窗右上角，不占行）：抽屉关着时它是唯一的句位置出口；
-    // 数字与抽屉标题同源（都是本篇第 N 句），两处不许各报一个口径。
-    const posTxt = `第 ${at + 1} 句`;
-    if (E.pos && E.pos.textContent !== posTxt) E.pos.textContent = posTxt;
-    lcSyncRoll(st);
+    // 抽屉标题（2026-10-07 用户第三次改）：「第 xx / xxx 句」+ 目标词数量胶囊，两截各写各的；
+    // 句号与 ◀/▶ 禁用判断同源（同一个 at/total），迷你条那颗 .mb-pos 角标本轮整颗拆掉 ——
+    // 用户：「这是重复信息」。
+    const titleTxt = `第 ${at + 1} / ${total} 句`;
     const empty = cards.count <= 0;
-    const titleTxt = empty ? '本句无目标词' : cards.title;
+    const wordsTxt = `目标词 ${cards.count}`;
     if (E.title && E.title.textContent !== titleTxt) E.title.textContent = titleTxt;
+    if (E.words && E.words.textContent !== wordsTxt) E.words.textContent = wordsTxt;
+    lcSyncRoll(st);
     // 抽屉开着：淡入刷新卡片 + 回顶（约 170ms）。渲染的是调度那一刻的快照，
     // 令牌只让最后一次调度生效 —— 旧实现在超时里重读实时状态，任何提前 return
     // 都会把 .swap（透明态）和旧卡永久卡死（表现为卡片概率不显示/切句不更新）。
     // 内容没变（如 播放/暂停 翻转 key）不触发 fade，避免无意义闪烁。
     if (open && E.grid) {
       const bodyHtml = empty ? LC_EMPTY_HTML : cards.html;
-      const titleSnap = empty ? '本句无目标词' : cards.title;
       if (!E.grid.innerHTML) {
         E.grid.innerHTML = bodyHtml;
         E.grid._lcHtml = bodyHtml;
@@ -847,8 +848,6 @@
           g2._lcHtml = bodyHtml;
           g2.scrollTop = 0;
           g2.classList.remove('swap');
-          const t2 = document.getElementById('lcTitle');
-          if (t2 && t2.textContent !== titleSnap) t2.textContent = titleSnap;
         }, 170);
       }
     }

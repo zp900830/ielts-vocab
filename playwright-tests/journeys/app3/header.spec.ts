@@ -100,3 +100,33 @@ test.describe('3.0 文章头部（G）：目标词左 / 拨杆右 / 随头部缩
     expect(after.zhR).toBeLessThan(after.prevL);
   });
 });
+
+/* 2026-10-07 用户（阅读页截图）：「顺便把这个标签样式修复一下，内间距不等宽」。
+   根因不在 padding（声明本来就是左右各 6px），而在手机档 .reader-head 是 grid：胶囊落在第三列，
+   grid item 默认 justify-self:stretch，于是被拉到和下排「上/下篇」同宽 —— 实测左 6px、右 53.6px，
+   文字偏在左边，看着就是 padding 写歪了。这条锁住实测值。 */
+test.describe('3.0 文章头部 · 手机档目标词胶囊', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test('胶囊不被 grid 拉宽：左右内间距实测相等', async ({ page }) => {
+    await enterTask(page);
+    const g = await page.evaluate(() => {
+      const b = document.getElementById('ttWords') as HTMLElement;
+      const cs = getComputedStyle(b);
+      const r = b.getBoundingClientRect();
+      const rg = document.createRange();
+      rg.selectNodeContents(b);
+      const t = rg.getBoundingClientRect();
+      return {
+        justify: cs.justifySelf,
+        padL: parseFloat(cs.paddingLeft), padR: parseFloat(cs.paddingRight),
+        gapL: +(t.left - r.left).toFixed(1), gapR: +(r.right - t.right).toFixed(1),
+        boxW: +r.width.toFixed(1),
+      };
+    });
+    expect(g.justify, '不许 stretch：一 stretch 就吃到整列宽').toBe('end');
+    expect(Math.abs(g.gapL - g.padL), `左内间距实测 ${g.gapL} vs 声明 ${g.padL}`).toBeLessThanOrEqual(0.6);
+    expect(Math.abs(g.gapR - g.padR), `右内间距实测 ${g.gapR} vs 声明 ${g.padR}`).toBeLessThanOrEqual(0.6);
+    expect(Math.abs(g.gapL - g.gapR), '左右内间距相等').toBeLessThanOrEqual(0.6);
+  });
+});

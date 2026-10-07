@@ -164,7 +164,7 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     // 先把内容区滚到底，验证切句后回顶
     await drawer.locator('#lcGrid').evaluate((el) => { (el as HTMLElement).scrollTop = 9999; });
     await page.locator('#lcMini .mb-next').click();
-    await expect(page.locator('#lcTitle')).toContainText('第 2 句');
+    await expect(page.locator('#lcTitle')).toHaveText(/^第 2 \/ \d+ 句$/);
     await expect(drawer).toHaveClass(/open/);
     await expect(drawer.locator('.wc-word').first()).toHaveText('strip');
     // strip 无 cmp：只有 note 行，没有辨析块
@@ -177,7 +177,10 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     // S1 → S2（无词）：抽屉不再自动收起，改在内部显占位（收起只由用户操作 / 离路由 / 全屏触发）；FAB 藏
     await page.locator('#lcMini .mb-next').click();
     await expect(drawer).toHaveClass(/open/);
-    await expect(page.locator('#lcTitle')).toHaveText('本句无目标词');
+    await expect(page.locator('#lcTitle')).toHaveText(/^第 3 \/ \d+ 句$/);
+    // 无词句不再把标题换成「本句无目标词」：位置那一截恒为「第 N / M 句」，
+    // 词数交给胶囊读数 0，占位提示仍由卡片区的 .lc-empty 说。
+    await expect(page.locator('#lcWords')).toHaveText('目标词 0');
     await expect(drawer.locator('.lc-empty')).toBeVisible();
     expect(await drawer.locator('.wcard').count()).toBe(0);
     await expect(page.locator('#lcFab')).toBeHidden();
@@ -373,7 +376,7 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     await expect(drawer).toHaveClass(/open/);
     // 修前用篇内 idx 查全书索引，会借到第 1 篇第 1 句的 atmo
     await expect(drawer.locator('.wc-word')).toHaveText('glacier');
-    await expect(page.locator('#lcTitle')).toContainText('第 1 句');
+    await expect(page.locator('#lcTitle')).toHaveText(/^第 1 \/ \d+ 句$/);
     expect(errs).toEqual([]);
   });
 
@@ -410,7 +413,7 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     await expect(page.locator('#lcFab')).toBeHidden();
     await page.locator('.ls-next').click();   // → S1 有词
     await expect(drawer).toHaveClass(/open/);
-    await expect(page.locator('#lcTitle')).toContainText('第 2 句');
+    await expect(page.locator('#lcTitle')).toHaveText(/^第 2 \/ \d+ 句$/);
     // 补开用的是 save:false —— 此后手动关掉仍以用户为准（pref 写回 false），不再抢开
     await page.locator('#lcClose').click();
     await expect(drawer).not.toHaveClass(/open/);
@@ -424,7 +427,7 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(true);
     // 兑现第 1 句播完 → 自动进第 2 句 → 标题同步
     await finishSpeak(page);
-    await expect(page.locator('#lcTitle')).toContainText('第 2 句', { timeout: 15000 });
+    await expect(page.locator('#lcTitle')).toHaveText(/^第 2 \/ \d+ 句$/, { timeout: 15000 });
   });
 
   test.describe('桌面 1280', () => {

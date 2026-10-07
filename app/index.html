@@ -1865,8 +1865,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .tr-help:hover { border-color: var(--iel-accent); color: var(--iel-accent-deep); background: var(--iel-tint); }
   .r-badge { display: inline-block; font-size: 12px; padding: 2px 10px; background: var(--iel-accent-soft);
     color: var(--iel-accent-deep); border-radius: 999px; font-weight: 600; }
-  /* 目标词胶囊（G）：在 .r-title 之后、紧跟「第 N/6 篇」；与标题同一行随 .shrunk 一起缩。 */
-  .reader-head .fav-badge { flex: none; margin-left: 8px; background: #fdf1dc; color: #8a5f0a; }   /* M6 a11y：#b07a10 只有 3.33:1 */
+  /* 目标词胶囊（G）：在 .r-title 之后、紧跟「第 N/6 篇」；与标题同一行随 .shrunk 一起缩。
+     琥珀这一档抽成裸类 .fav-badge，让文章头部和随身听抽屉标题共用同一份样式（用户 10-07：
+     「目标词数量标签样式和图片中的页面右上角一样」= 复用同一个类，不是仿写）。
+     深色那条 body.dark .r-badge.fav-badge 本来就按双类选择器写，跟着一起生效。 */
+  .fav-badge { background: #fdf1dc; color: #8a5f0a; }   /* M6 a11y：#b07a10 只有 3.33:1 */
+  .reader-head .fav-badge { flex: none; margin-left: 8px; }
   .tr-bubble { position: absolute; top: calc(100% + 10px); right: 0; width: min(330px, calc(100vw - 40px));
     background: var(--iel-glass-strong); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
     border: 1px solid var(--iel-accent-line); border-radius: var(--iel-radius-sm); padding: 10px 14px;
@@ -2007,6 +2011,15 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .sidenav { width: auto; height: auto; position: fixed; top: auto; left: 0; right: 0; bottom: 0; z-index: 300;
       flex-direction: row; border-right: none; border-top: 1px solid var(--border);
       padding: 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px)); }
+    /* 移动端「本句单词卡」这一屏（2026-10-07 用户：需要隐藏导航）：抽屉一开，底栏整条滑出
+       视口 —— 卡片要占满一屏来读，底下那条 TabBar 既压住迷你条又分流注意力。
+       --tabbar-h 同时归零：迷你条/抽屉都挂在 body 下，读到的是 body 这条，于是迷你条落到屏底、
+       抽屉把底栏那 ~56px 整个收回去（它的 max-height 减的就是这个变量）。
+       visibility 要等滑出结束再关（delay .3s），否则中途消失看着像跳帧；关抽屉时反向立即恢复。 */
+    .sidenav { transition: transform .3s cubic-bezier(.22,.61,.36,1), opacity .3s cubic-bezier(.22,.61,.36,1), visibility 0s 0s; }
+    body.dw-open .sidenav { transform: translateY(100%); opacity: 0; visibility: hidden; pointer-events: none;
+      transition: transform .3s cubic-bezier(.22,.61,.36,1), opacity .3s cubic-bezier(.22,.61,.36,1), visibility 0s .3s; }
+    body.dw-open { --tabbar-h: 0px; }
     .sn-logo { display: none; }
     /* 手机 TabBar：图标在上、文字在下 */
     .nav-item { flex: 1; flex-direction: column; justify-content: center; gap: 2px; text-align: center;
@@ -2028,7 +2041,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       column-gap: 6px; row-gap: 4px; align-items: center; }
     .reader-head .back { grid-area: back; }
     .reader-head .r-title { grid-area: title; }
-    .reader-head .fav-badge { grid-area: words; font-size: 10px; padding: 1px 6px; margin-left: 0; }
+    /* justify-self:end 是修 bug（2026-10-07 用户：「内间距不等宽」）：胶囊被摆进 grid 第三列，
+       grid item 默认 justify-self:stretch，于是整颗药丸被拉到和下排「上/下篇」同宽 ——
+       padding 明明左右各 6px，实测左 6 / 右 53.6，文字偏在左边像 padding 写歪了。
+       改成靠右：右缘与下排箭头对齐，盒宽回到内容宽，左右内间距重新相等。 */
+    .reader-head .fav-badge { grid-area: words; justify-self: end; font-size: 10px; padding: 1px 6px; margin-left: 0; }
     .reader-head .r-spacer { display: none; }
     .reader-head .r-badges { grid-area: tools; justify-content: flex-end; gap: 5px; }
     .reader-head .r-nav { grid-area: nav; }
@@ -2393,9 +2410,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      颜色走本站 token；卡片内的 notebar 行与 nb-table 对比表直接复用精读现有类，不另起样式。
      z 序不变：scrim(70) < 迷你条(75) < 抽屉(80) —— 抽屉开着也能经迷你条切句/播放，不用先关。
      10-07 用户按截图要求反转：**卡片抽屉挂顶部**（FAB 也在右上，就近唤起），
-     **迷你条沉到 TabBar 正上方**，三个播放键右下角、字幕窗在其上。
-     句序号改过三次（10-07）：迷你条左下角 → 抽屉标题 → 第三次补一枚字幕窗右上角轻角标
-     （.mb-pos），因为抽屉**关着**时标题看不见，这一屏就没有位置信息了；两处数字同源，见 refreshListenCards。
+     **迷你条沉到 TabBar 正上方**，三个播放键右下角、字幕窗在其上；移动端抽屉开着时
+     TabBar 整条隐藏（见 .sidenav 那条 body.dw-open）。
+     句序号改过四次（10-07）：迷你条左下角 → 抽屉标题 → 补一枚字幕窗右上角轻角标（.mb-pos）
+     → 第四次又拆掉角标（用户：「这是重复信息」），最终只剩抽屉标题「第 xx / xxx 句」
+     + 目标词数量胶囊这一处口径。
      与 demo（work/listen-cards-demo.html，仍是旧底部抽屉）的差异：① 隐藏态一律
      visibility:hidden（demo 只靠 opacity，键盘仍能 Tab 进去，axe 违规）；② .fading 只服务
      demo 的 A/B 切换（真应用无模式切换，不要）。 */
@@ -2449,12 +2468,19 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      点遮罩、ESC 三条路。grip 的 10px 顶垫改由 .dw-head 自己补。 */
   body.dw-open { overflow: hidden; }
   body.dw-open #appView { overscroll-behavior: contain; }
-  #lcDrawer .dw-head { display: flex; align-items: center; gap: 10px; padding: 14px 20px 12px; border-bottom: 1px solid var(--border); }
-  /* 标题：2026-10-07 用户把迷你条左下角的句序号并进来了（本句单词卡 · 第 N 句 · N 个目标词），
-     它从此是这一屏唯一的定位信息 —— 墨色/字重按迷你条那颗句数同档（13px/600/--text），
-     不再走 10-04「标题弱化成 muted」那条（当时标题只写「本句单词卡」四个字）。 */
-  #lcDrawer .dw-head h2 { margin: 0; font-size: 13px; font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); letter-spacing: .02em; }
+  #lcDrawer .dw-head { display: flex; align-items: center; gap: 8px; padding: 14px 20px 12px; border-bottom: 1px solid var(--border); }
+  /* 标题（2026-10-07 用户第三次改）：整串「本句单词卡 · 第 N 句 · N 个目标词」拆成
+     「第 xx / xxx 句」+ 目标词数量胶囊 —— 篇名这一屏本来就只装本篇（.sidenav 已经说明在
+     哪），「本句单词卡」四个字是噪音；词数从文字改成复用文章头部那颗琥珀 .r-badge，
+     和右上角同一个类、同一个视觉口径。「本句单词卡」这句话仍留在 <section aria-label> 里，
+     读屏不缺名字。墨色/字重沿用迷你条那颗句数同档（13px/600/--text）。 */
+  #lcDrawer .dw-head h2 { margin: 0; font-size: 13px; font-weight: 600; flex: 0 1 auto; min-width: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); letter-spacing: .02em;
+    font-variant-numeric: tabular-nums; }
   body.dark #lcDrawer .dw-head h2 { color: #efe9df; }
+  /* 胶囊紧跟标题排成一组，收起键靠 auto margin 顶到右缘 —— 和原来 h2:flex:1 的落点一致。 */
+  #lcDrawer .dw-head .fav-badge { flex: none; font-weight: 600; }
+  #lcDrawer .dw-head .dw-close { margin-left: auto; }
   /* 收起键（2026-10-04 用户反馈「太抢眼太大」）：改成幽灵文字键 —— 无底无边、muted 小字，
      hover 才出浅薄荷底（与 .ls-collapse 同一套轻量口径）；焦点管理（setLcDrawer focus 进它）不受影响 */
   #lcDrawer .dw-close { display: inline-flex; align-items: center; gap: 1px; padding: 3px 8px 3px 4px;
@@ -2479,6 +2505,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     transition: transform .28s cubic-bezier(.22,.61,.36,1), opacity .28s cubic-bezier(.22,.61,.36,1), visibility 0s .28s; }
   @media (max-width: 700px) {
     #lcMini { bottom: var(--tabbar-h, 56px); padding-bottom: 12px; }
+    /* 抽屉开着（底栏隐藏、--tabbar-h=0）时迷你条落到屏底，iPhone 的 home 指示条那一截
+       原来是被 TabBar 的 padding 垫掉的，这一下没人垫了 —— 三颗玻璃键不能坐在指示条上，
+       安全区改由迷你条自己补。 */
+    body.dw-open #lcMini { padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
   }
   body.dark #lcMini { background: linear-gradient(145deg, rgba(30,28,25,.92), rgba(30,28,25,.78) 42%, rgba(30,28,25,.62));
     border-top-color: #33302b;
@@ -2490,16 +2520,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dw-open #lcMini { background: linear-gradient(145deg, rgba(255,255,255,.93), rgba(255,255,255,.88) 42%, rgba(255,255,255,.82)); }
   body.dark.dw-open #lcMini { background: linear-gradient(145deg, rgba(30,28,25,.97), rgba(30,28,25,.92) 42%, rgba(30,28,25,.86)); }
   #lcMini .mb-bar { display: flex; align-items: center; gap: 10px; }
-  /* 位置角标（2026-10-07 用户采纳建议）：句序号从迷你条左下角删掉后，抽屉**关着**时这一屏
-     就没有位置信息了 —— 放回右上角：绝对定位不占行，比标题轻一档（11px/500/--muted）。
-     窄屏把它停在 mini 的上内边距里（top:3 + padding-top:14），因为字幕窗加高后当前句最高
-     能顶到渐隐带下沿，角标再低一点就会压在正文上。桌面整颗撤掉（用户：PC 端不要）。
-     z-index 必须显式给：.mb-roll 带 mask-image ⇒ 自成一个层叠上下文，同 z=0 时按源码顺序决胜，
-     角标今天排在它后面才压得住，DOM 一改就翻车。pointer-events:none —— 它只是读数，不挡点击。 */
-  #lcMini .mb-pos { position: absolute; top: 10px; right: 16px; z-index: 2; pointer-events: none;
-    font-family: var(--sans); font-size: 11px; font-weight: 500; color: var(--muted);
-    font-variant-numeric: tabular-nums; white-space: nowrap; }
-  body.dark #lcMini .mb-pos { color: #bdb5a8; }
+  /* 字幕窗右上角那颗「第 N 句」角标 2026-10-07 撤掉（用户：「这是重复信息」——
+     同一个数抽屉标题「第 xx / xxx 句」已经报过）。 */
   /* 字幕窗：固定高 + 上下渐隐；行体复用精读 .sent/.gl/.sent-zh，只有当前句挂 .playing 薄荷高亮。
      渐隐带用固定 px（不是百分比）：窗高一改，百分比带会跟着长，把当前句头一行洗淡。
      带宽同时发给 JS（lcScrollToCur 读 --lc-fade-top），CSS 和滚动居中不许两个口径。 */
@@ -2527,9 +2549,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      而 156 减掉 46px 键高只剩 98px 净带，居中后头一行被裁 16px 又落进渐隐带 —— 「看不清」
      就是这么来的。200 的净带是 [12, 154] = 142px，够到五行英文 + 一句译文。 */
   @media (max-width: 700px) {
-    /* 顶部多给 4px 留角标的位置：角标挪进 mini 的内边距，不压当前句可能到达的最高点 */
-    #lcMini { padding-top: 14px; }
-    #lcMini .mb-pos { top: 3px; }
     #lcMini .mb-roll { height: 200px; }
     #lcMini .mb-rows { padding-bottom: 64px; }
     /* z-index 不是可选项：.mb-roll 有 mask-image ⇒ 自成一个层叠上下文，和绝对定位的按钮行
@@ -2537,7 +2556,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
        并吃掉点击（Playwright 报 sent-zh intercepts pointer events）。 */
     #lcMini .mb-bar { position: absolute; left: 14px; right: 14px; bottom: 12px; gap: 8px;
       z-index: 1; justify-content: flex-end; }
-    /* 句序号那颗 2026-10-07 删了（用户：并进抽屉标题「本句单词卡 · 第 N 句 · N 个目标词」），
+    /* 句序号那颗 2026-10-07 删了（用户：位置信息由抽屉标题「第 xx / xxx 句」独报，两处不许重复），
        三颗键改由 justify-content 贴右，不再靠句数的 auto margin 顶过去。 */
   }
   @media (min-width: 700px) {
@@ -2549,7 +2568,6 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     #lcMini .mb-bar { position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
       flex: none; z-index: 1; }
     #lcMini .mb-roll { flex: 1; min-width: 0; height: 96px; padding-inline: 150px; text-align: center; }
-    #lcMini .mb-pos { display: none; }
     /* 桌面抽屉开时窗口收矮（遮罩可点带不能被吃掉），76px 差不多是单行 ——
        单行里 mask 的上下渐隐正好啃掉英文的顶和译文的底，所以这条只在桌面摘 mask。
        摘了 mask 就得把渐隐带宽一起归零，否则 lcScrollToCur 还按 12px 往下偏。 */
@@ -6554,9 +6572,9 @@ let listenOn = false;
             `<span class="wc-gloss">${esc(info.m || '')}</span></header>${noteHtml}${cmpHtml}</article>`);
         }
         const n = keys.length;
-        return { idx: at, g: gi, keys: keys, count: n,
-          title: `本句单词卡 · 第 ${at + 1} 句 · ${n} 个目标词`,
-          html: parts.join('') };
+        // 标题文案不在这里拼（2026-10-07 改由外壳按「第 N / M 句」+ 词数胶囊排），
+        // 句号双轨那套口径见上面注释
+        return { idx: at, g: gi, keys: keys, count: n, html: parts.join('') };
       }
       function listenCardsPref() { try { const p = readPrefs(); return (p && p.listenCards) || {}; } catch (e) { return {}; } }
       function listenCardsPrefSet(patch) { try { const p = readPrefs(); p.listenCards = Object.assign({}, p.listenCards, patch); savePref('listenCards', p.listenCards); } catch (e) {} }

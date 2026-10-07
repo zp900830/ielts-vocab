@@ -1,9 +1,11 @@
-/* 2026-10-07 用户两张对照图（调整前/后）锁两件事，全部 390×844 量：
+/* 2026-10-07 用户多轮截图（全部 390×844 量）锁这几件事：
    ① 「本句单词卡」入口从右下挪到右上（与「随身听」大标题同一行）—— 原来压在
-      「展开全文」上；② 展开态单词卡挂**顶部**，迷你条沉到 TabBar 正上方：
-      字幕窗在上、三键在右下。同轮第二次改：迷你条左下角的句序号删掉，位置信息
-      改由抽屉标题「本句单词卡 · 第 N 句 · N 个目标词」承担；第三次（④）又把
-      「第 N 句」以角标形式放回字幕窗右上角 —— 绝对定位，不占行。 */
+      「展开全文」上；② 展开态单词卡挂**顶部**，迷你条沉到底：字幕窗在上、三键在右下；
+      ③ 字幕窗加高到「三行英文 + 一句译文」，三颗玻璃键浮在它下沿；
+   ④ 句序号只留抽屉标题一处（迷你条左下角 → 字幕窗角标 → 全部撤掉，用户：「这是重复信息」），
+      标题本身改成「第 xx / xxx 句」+ 目标词数量胶囊（复用文章头部那颗琥珀 .r-badge）；
+   ⑤ 移动端抽屉开着 = 一整屏阅读面，底部 TabBar 整条隐藏，迷你条落到屏底；
+   ⑥ PC 端（1280）三键靠右 + 字幕整条真居中。 */
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 
@@ -61,7 +63,7 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     expect(geo.fab.b, '不许压到播放卡的展开键').toBeLessThan(geo.expand.y);
   });
 
-  test('② 展开态：抽屉顶挂、迷你条沉底三键贴右，左下角那颗句数已并进标题', async ({ page }) => {
+  test('② 展开态：抽屉顶挂、迷你条沉底三键贴右，标题「第 N / M 句」+ 目标词胶囊', async ({ page }) => {
     await gotoListen(page);
     await page.locator('#lcFab').click();
     await expect(page.locator('#lcDrawer')).toHaveClass(/open/);
@@ -71,27 +73,47 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
         const b = document.querySelector(s)!.getBoundingClientRect();
         return { x: b.left, y: b.top, r: b.right, b: b.bottom };
       };
+      const chip = document.getElementById('lcWords') as HTMLElement;
+      const cs = getComputedStyle(chip);
+      const cr = chip.getBoundingClientRect();
+      const title = (document.getElementById('lcTitle') as HTMLElement).getBoundingClientRect();
+      const close = (document.querySelector('#lcDrawer .dw-close') as HTMLElement).getBoundingClientRect();
       return {
         drawer: r('#lcDrawer'), mini: r('#lcMini'), roll: r('#lcMini .mb-roll'),
         bar: r('#lcMini .mb-bar'), prev: r('#lcMini .mb-prev'), next: r('#lcMini .mb-next'),
-        nav: r('.sidenav'),
         count: document.querySelectorAll('#lcMini .mb-count').length,
-        title: (document.getElementById('lcTitle') as HTMLElement).textContent || '',
+        posDots: document.querySelectorAll('#lcMini .mb-pos').length,
+        title: title.width,
+        titleTxt: (document.getElementById('lcTitle') as HTMLElement).textContent || '',
+        chip: chip.textContent || '',
+        chipCls: chip.className,
+        chipBg: cs.backgroundColor, chipFg: cs.color,
+        chipVsClose: Math.round(cr.right - close.left),
+        chipGapToTitle: Math.round(cr.left - title.right),
       };
     });
     expect(geo.drawer.y, '单词卡挂顶部').toBeLessThanOrEqual(1);
     expect(geo.drawer.b, '顶挂抽屉不许吃掉整屏').toBeLessThan(844 * 0.8);
     expect(geo.drawer.b, '抽屉不许盖住沉底迷你条（盖住就点不到切句键）').toBeLessThanOrEqual(geo.mini.y + 1);
-    expect(geo.mini.b, '迷你条贴在 TabBar 正上方').toBeLessThanOrEqual(geo.nav.y + 1);
+    expect(geo.mini.b, '抽屉开着 = 底栏整条隐藏，迷你条落到视口底（见 ⑤）').toBeGreaterThanOrEqual(843);
     expect(geo.roll.y, '字幕窗在按钮行上面').toBeLessThan(geo.bar.y);
     expect(geo.next.r, '三键在右').toBeGreaterThan(390 - 60);
     // .mb-bar 是 left/right:14 的绝对层，光看它的 x 没意义 —— 要看最左那颗键真被推到右端
     expect(geo.prev.x, '三键整排贴右，不许散回左边（句数那颗的 auto margin 已删）')
       .toBeGreaterThan(200);
-    // 2026-10-07 用户：「去掉左下角第x/xxx句，和左上角第 x 句的信息合并」
-    expect(geo.count, '迷你条左下角那颗句数整行删掉（位置改由右上角标 + 标题承担）').toBe(0);
-    expect(geo.title.trim(), '抽屉标题：本句单词卡 · 第 N 句 · N 个目标词')
-      .toMatch(/^本句单词卡 · 第 \d+ 句 · \d+ 个目标词$/);
+    // 2026-10-07 用户：「去掉左下角第x/xxx句」+「播放条上的第 x 句去掉啊。这是重复信息」
+    expect(geo.count, '迷你条左下角那颗句数整行删掉').toBe(0);
+    expect(geo.posDots, '字幕窗右上角的「第 N 句」角标也撤了：位置信息只留抽屉标题一处').toBe(0);
+    expect(geo.titleTxt.trim(), '抽屉标题：第 N / M 句（M = 本篇总句数）').toMatch(/^第 \d+ \/ \d+ 句$/);
+    expect(geo.chip.trim(), '词数从标题文字改成胶囊读数').toMatch(/^目标词 \d+$/);
+    // 「样式和图片中的页面右上角一样」= 同一个类、同一份样式，不是仿写
+    expect(geo.chipCls, '胶囊复用文章头部那两个类').toBe('r-badge fav-badge');
+    expect(geo.chipBg, '琥珀底同 .fav-badge').toBe('rgb(253, 241, 220)');
+    expect(geo.chipFg, '琥珀深字同 .fav-badge').toBe('rgb(138, 95, 10)');
+    expect(geo.chipVsClose, '胶囊停在收起键左边，不许叠上去').toBeLessThanOrEqual(0);
+    // 「组合」按字面做：胶囊紧贴标题排在左边一组，收起键仍独占行右端（margin-left:auto）
+    expect(Math.abs(geo.chipGapToTitle - 8), `胶囊与标题的实际间距 ${geo.chipGapToTitle}px 应等于 .dw-head 的 gap`)
+      .toBeLessThanOrEqual(1);
   });
 
   test('③ 字幕窗加高到「三行英文 + 一句译文」，三颗玻璃键浮在它下沿', async ({ page }) => {
@@ -121,55 +143,101 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     expect(g.btnBg, '玻璃键用渐变底，不再是实底薄荷').toMatch(/gradient/);
   });
 
-  /* ④ 2026-10-07 用户采纳建议：句序号删掉后抽屉**关着**时这一屏没有位置信息了，
-     把它放回字幕窗**右上角** —— 绝对定位不占行、比标题轻一档、跟着切句走。
+  /* ④ 2026-10-07 用户（阅读页截图）：「下面播放条上的『第 x 句』去掉啊。这是重复信息」——
+     上一轮补的那枚字幕窗右上角轻角标本轮整颗从 DOM 撤掉，位置信息只留抽屉标题一处。
      迷你条平时靠 IntersectionObserver 才现形，这里直接加 .show（IO 做的也就是这件事）。 */
-  test('④ 位置角标浮在字幕窗右上角：不占行、跟着切句走', async ({ page }) => {
+  test('④ 迷你条不重复报句序号：.mb-pos 整颗撤掉，切句仍跟着走', async ({ page }) => {
     await gotoListen(page);
     await page.evaluate(() => { document.getElementById('lcMini')!.classList.add('show'); });
     await page.waitForTimeout(350);
     const g = await page.evaluate(() => {
       const r = (s: string) => (document.querySelector(s) as HTMLElement).getBoundingClientRect();
-      const pos = document.querySelector('#lcMini .mb-pos') as HTMLElement;
-      const roll = r('#lcMini .mb-roll');
-      const pr = pos.getBoundingClientRect();
-      const fade = parseFloat(getComputedStyle(pos.parentElement as Element).getPropertyValue('--lc-fade-top')) || 0;
+      const mini = document.getElementById('lcMini') as HTMLElement;
       return {
-        text: pos.textContent || '',
-        pos: getComputedStyle(pos).position,
-        pe: getComputedStyle(pos).pointerEvents,
-        size: getComputedStyle(pos).fontSize,
-        weight: getComputedStyle(pos).fontWeight,
-        rightGap: Math.round(roll.right - pr.right),
-        // 窗加高后当前句最高能顶到渐隐带下沿（roll.top + fade），角标不许越过这条线
-        aboveBand: pr.bottom <= roll.top + fade,
-        fade,
+        dots: document.querySelectorAll('#lcMini .mb-pos').length,
+        padTop: getComputedStyle(mini).paddingTop,
         miniH: Math.round(r('#lcMini').height),
-        rollH: Math.round(roll.height),
+        rollH: Math.round(r('#lcMini .mb-roll').height),
       };
     });
-    expect(g.text, '角标只报本篇第几句（与抽屉标题同一个数）').toMatch(/^第 \d+ 句$/);
-    expect(g.pos, '绝对定位才不占行').toBe('absolute');
-    expect(g.pe, '不许吃掉三颗键的点击').toBe('none');
-    expect(Number(g.weight), '比标题轻一档（标题 600）').toBeLessThan(600);
-    expect(g.aboveBand, `角标要停在渐隐带（${g.fade}px）之上，不许压到当前句可能到达的最高点`).toBe(true);
-    expect(Math.abs(g.rightGap), '贴着窗口右缘').toBeLessThanOrEqual(6);
-    expect(g.miniH - g.rollH, '整条高度 = 字幕窗 + 上下内边距，角标没额外撑高')
-      .toBeLessThanOrEqual(28);
-    // 切句要跟着走
+    expect(g.dots, '字幕窗右上角那颗角标整颗撤掉（DOM 里都不该有）').toBe(0);
+    expect(g.padTop, '上一轮为角标多给的 4px 顶垫一起回收，回到基础内边距').toBe('10px');
+    expect(g.miniH - g.rollH, '整条高度 = 字幕窗 + 上下内边距，没有第三样东西把它撑高')
+      .toBeLessThanOrEqual(23);
+    // 撤掉角标不能把切句联动一起带走：高亮行要跟着挪
     await page.locator('#lcMini .mb-next').click();
     await expect.poll(() => page.evaluate(() =>
-      (document.querySelector('#lcMini .mb-pos') as HTMLElement).textContent), { timeout: 2000 })
-      .toBe('第 2 句');
+      document.querySelector('#lcMini .mb-row.cur')?.getAttribute('data-g')), { timeout: 2000 }).toBe('1');
+  });
+
+  /* ⑤ 2026-10-07 用户：移动端本句单词卡页面需要隐藏导航 —— 抽屉那一屏是整屏阅读面，
+     底下那条 TabBar(z=300) 压在迷你条下面既占位又分流注意力。--tabbar-h 同时归零，
+     迷你条落到屏底、抽屉把那一截高度收回去。 */
+  test('⑤ 抽屉开 → TabBar 整条滑出视口、迷你条落屏底；收起 → 原样回来', async ({ page }) => {
+    await gotoListen(page);
+    const before = await page.evaluate(() => {
+      const nav = document.querySelector('.sidenav') as HTMLElement;
+      return {
+        vis: getComputedStyle(nav).visibility,
+        y: Math.round(nav.getBoundingClientRect().top),
+        tabbar: getComputedStyle(document.documentElement).getPropertyValue('--tabbar-h').trim(),
+      };
+    });
+    expect(before.vis, '没开抽屉时导航照常可见').toBe('visible');
+    expect(before.y, '没开抽屉时导航停在视口之内').toBeLessThan(844);
+    expect(before.tabbar, 'positionListenMini 已把底栏实测高写进 --tabbar-h').not.toBe('');
+
+    await page.locator('#lcFab').click();
+    await expect(page.locator('#lcDrawer')).toHaveClass(/open/);
+    await page.waitForTimeout(500);
+    const open = await page.evaluate(() => {
+      const nav = document.querySelector('.sidenav') as HTMLElement;
+      const cs = getComputedStyle(nav);
+      const mini = (document.getElementById('lcMini') as HTMLElement).getBoundingClientRect();
+      const drawer = (document.getElementById('lcDrawer') as HTMLElement).getBoundingClientRect();
+      const first = (document.querySelector('.sidenav .nav-item') as HTMLElement).getBoundingClientRect();
+      return {
+        vis: cs.visibility, pe: cs.pointerEvents, navY: Math.round(nav.getBoundingClientRect().top),
+        itemY: Math.round(first.top), miniBottom: Math.round(mini.bottom), miniY: Math.round(mini.top),
+        drawerB: Math.round(drawer.bottom),
+        tabbar: getComputedStyle(document.body).getPropertyValue('--tabbar-h').trim(),
+      };
+    });
+    expect(open.vis, '抽屉开着：底栏从无障碍树/Tab 序里一起摘掉（不是只挪位置）').toBe('hidden');
+    expect(open.pe, 'pointer-events 也关掉').toBe('none');
+    expect(open.navY, '整条滑到视口之下').toBeGreaterThanOrEqual(844);
+    expect(open.itemY, 'Tab 键本身也跟着出去了，够不着').toBeGreaterThanOrEqual(844);
+    expect(open.tabbar, 'body.dw-open 时 --tabbar-h 归零（迷你条和抽屉都读它）').toBe('0px');
+    expect(open.miniBottom, '迷你条落到视口底，原来那条底栏那一截归它').toBeGreaterThanOrEqual(843);
+    expect(open.drawerB, '抽屉仍不许盖住迷你条（盖住就点不到切句键）').toBeLessThanOrEqual(open.miniY + 1);
+
+    // 关抽屉前先把迷你条钉在显示态（它平时靠 IO，播放卡在视口内时收起后本就该藏起来）
+    await page.evaluate(() => { document.getElementById('lcMini')!.classList.add('show'); });
+    await page.locator('#lcClose').click();
+    await page.waitForTimeout(500);
+    const after = await page.evaluate(() => {
+      const nav = document.querySelector('.sidenav') as HTMLElement;
+      const mini = (document.getElementById('lcMini') as HTMLElement).getBoundingClientRect();
+      return {
+        vis: getComputedStyle(nav).visibility,
+        y: Math.round(nav.getBoundingClientRect().top),
+        miniBottom: Math.round(mini.bottom),
+        tabbar: getComputedStyle(document.body).getPropertyValue('--tabbar-h').trim(),
+      };
+    });
+    expect(after.vis, '收起后导航原样回来').toBe('visible');
+    expect(after.y, '导航回到屏底').toBeLessThan(844);
+    expect(after.tabbar, 'body 上那条 --tabbar-h:0 一起撤掉，回到 html 的实测值').not.toBe('0px');
+    expect(after.miniBottom, '迷你条重新停在 TabBar 正上方').toBeLessThanOrEqual(after.y + 1);
   });
 });
 
-/* ⑤ 2026-10-07 用户 PC 截图：三颗键挪到右边、字幕在播放条上居中、「第 N 句」角标去掉。
+/* ⑥ 2026-10-07 用户 PC 截图：三颗键挪到右边、字幕在播放条上居中（「第 N 句」那颗本条 ④ 已整颗撤掉）。
    「居中」按字面量：文本列的中线要和整条播放条的中线重合，不是挤在按键剩下的那点宽度里。 */
-test.describe('随身听迷你条 PC 端：三键靠右 + 字幕真居中 + 无角标', () => {
+test.describe('随身听迷你条 PC 端：三键靠右 + 字幕真居中', () => {
   test.use({ viewport: { width: 1280, height: 800 } });
 
-  test('⑤ 按键浮在右端，字幕整条居中，角标不出现', async ({ page }) => {
+  test('⑥ 按键浮在右端，字幕整条居中', async ({ page }) => {
     await gotoListen(page);
     await page.locator('#lcFab').click();
     await page.waitForTimeout(450);
@@ -180,7 +248,7 @@ test.describe('随身听迷你条 PC 端：三键靠右 + 字幕真居中 + 无�
       const pad = parseFloat(getComputedStyle(el('#lcMini .mb-roll')).paddingLeft);
       const textMid = roll.left + pad + (roll.width - 2 * pad) / 2;
       return {
-        posDisplay: getComputedStyle(el('#lcMini .mb-pos')).display,
+        posDots: document.querySelectorAll('.mb-pos').length,
         barRightGap: Math.round(mini.right - bar.right),
         centerOff: Math.round(textMid - (mini.left + mini.width / 2)),
         overlap: bar.left < roll.right - pad,
@@ -191,7 +259,7 @@ test.describe('随身听迷你条 PC 端：三键靠右 + 字幕真居中 + 无�
         })(),
       };
     });
-    expect(g.posDisplay, 'PC 端不要「第 N 句」角标').toBe('none');
+    expect(g.posDots, '「第 N 句」角标两端都不再有').toBe(0);
     expect(g.barRightGap, '三颗键贴右缘').toBeLessThanOrEqual(20);
     expect(Math.abs(g.centerOff), `字幕文本列要在整条上正中（实测偏 ${g.centerOff}px）`).toBeLessThanOrEqual(2);
     expect(g.overlap, '字幕文本列不许钻到按键底下').toBe(false);
