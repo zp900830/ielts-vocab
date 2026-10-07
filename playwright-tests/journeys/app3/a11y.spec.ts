@@ -272,7 +272,8 @@ test.describe('3.0 无障碍（axe，WCAG A/AA）', () => {
   /* 触区 ≥44px（PRD §10.4）：axe 不管这条，M6 补。手机档头部那排（.nav-arrow/.tr-msw/.tr-help）
      视觉 24–26px、任务条播放条那排（循环/AB/倍速/书签）视觉 30px，靠 ::after hit-slop 与
      移动档 min-height/min-width 补到 ≥44。反向验证：去掉这些补丁必红（实测 40/42/30）。
-     有效触区 = 盒子 + ::after 的 inset，两种补法（长高 / 外扩）都认，见 index.html 191 行那段口径。 */
+     有效触区 = 盒子 + ::after 的 inset，两种补法（长高 / 外扩）都认，见 index.html 文件头那段
+     A/B 两路口径（「44 清扫清单」那条 @media 上方）。 */
   async function hit(page: import('@playwright/test').Page, sel: string) {
     return page.locator(sel).evaluate((el) => {
       const r = (el as HTMLElement).getBoundingClientRect();
