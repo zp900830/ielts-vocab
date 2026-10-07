@@ -1633,7 +1633,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* 窄屏：文字独占上面两行、按钮整排落在下面一行（同一张卡片里）。
      宽屏才让文字在左、按钮在右 —— 390px 上二者并排会把文字挤没（上一轮实测过）。 */
   @media (max-width: 700px) {
-    .task-bar { left: 12px; right: 12px; padding: 8px 12px; }
+    /* C4（2026-10-07 排查报告）：手机档这条栏的左右缘此前是 12px，而同屏的正文框 / 头部胶囊 /
+       FAB / 迷你条都是 16px —— 一屏七处排了五个值。归到 16 一档（桌面 24px 不动，那是另一套观感）。 */
+    .task-bar { left: 16px; right: 16px; padding: 8px 12px; }
     .tb-body { flex-direction: column; align-items: stretch; gap: 8px; }
     .tb-text { flex: none; }
     /* 播放控件排（2026-10-06 用户：借鉴随身听展开态播放条 —— 紧凑胶囊、放不下就换行；
@@ -2521,12 +2523,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dw-open { overflow: hidden; }
   body.dw-open #appView { overscroll-behavior: contain; }
   #lcDrawer .dw-head { display: flex; align-items: center; gap: 8px; padding: 15px 14px 12px 20px; border-bottom: 1px solid var(--border); }
-  /* 落点对齐（2026-10-07 用户「位置均居右侧，位置一样」）：展开全文阅读那条是居中玻璃胶囊
-     （width: min(1084px, 100% - 36px) → 手机档距视口右缘 18px，再吃 14px 内档 = 33px），
-     抽屉在 <900px 是通栏面板，没人垫那 18px —— 把窗距补进它的右内距（32px + 1px 边框 = 33px），
-     两枚收起键右缘到视口右缘的距离实测一致；≥900px 抽屉自己就是居中面板，按同档 14px 收。
+  /* 落点对齐（2026-10-07 用户「位置均居右侧，位置一样」）：展开全文阅读那条是居中玻璃胶囊，
+     手机档距视口右缘 16px，再加 1px 边框与 14px 内档 = 31px；抽屉在 <900px 是通栏面板，
+     没人垫那 16px —— 把窗距补进它的右内距（30px + 1px 边框 = 31px），两枚收起键右缘到
+     视口右缘的距离实测一致；≥900px 抽屉自己就是居中面板，按同档 14px 收。
+     ⚠️ 这两个数是联动的：顶栏窗距（16）或抽屉右内距（30）任一改动，另一处必须同步 ±，
+     否则 listen-cards-layout.spec ⑦ 会红。C4 归一 16px 那轮就是把 33/32 一起降到 31/30。
      按钮顶边也一档：抽屉 top:0 + padding-top 15 = 胶囊 top:8 + 边框 1 + padding 6 = 15。 */
-  @media (max-width: 899px) { #lcDrawer .dw-head { padding-right: 32px; } }
+  @media (max-width: 899px) { #lcDrawer .dw-head { padding-right: 30px; } }
   /* 标题（2026-10-07 用户第三次改）：整串「本句单词卡 · 第 N 句 · N 个目标词」拆成
      「第 xx / xxx 句」+ 目标词数量胶囊 —— 篇名这一屏本来就只装本篇（.sidenav 已经说明在
      哪），「本句单词卡」四个字是噪音；词数从文字改成复用文章头部那颗琥珀 .r-badge，
@@ -2548,7 +2552,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      抽屉顶挂后它不再需要吸顶让位，落到 TabBar 正上方；字幕窗翻到按钮行上面。
      底边高度吃 --tabbar-h（positionListenMini 实测写入），桌面侧栏不在底部则为 0。 ---- */
   #lcMini { position: fixed; left: 0; right: 0; top: auto; bottom: var(--tabbar-h, 0px); z-index: 75;
-    display: flex; flex-direction: column; align-items: stretch; gap: 6px; padding: 10px 14px 8px;
+    /* 左右内距 16（报告 C4）：迷你条是通栏浮层，它的内档就是屏上的「一屏水平缘」，
+       和 #appView / .layout / 头部胶囊同一档。 */
+    display: flex; flex-direction: column; align-items: stretch; gap: 6px; padding: 10px 16px 8px;
     background: linear-gradient(145deg, rgba(255,255,255,.65), rgba(255,255,255,.25) 42%, rgba(255,255,255,.15));
     -webkit-backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
     backdrop-filter: blur(32px) saturate(180%) brightness(1.02);
@@ -2607,18 +2613,18 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     /* z-index 不是可选项：.mb-roll 有 mask-image ⇒ 自成一个层叠上下文，和绝对定位的按钮行
        同处 z=0，于是按源码顺序决胜 —— DOM 里窗口排在按钮之后，字幕会把三颗键整个盖住、
        并吃掉点击（Playwright 报 sent-zh intercepts pointer events）。 */
-    #lcMini .mb-bar { position: absolute; left: 14px; right: 14px; bottom: 12px; gap: 8px;
+    #lcMini .mb-bar { position: absolute; left: 16px; right: 16px; bottom: 12px; gap: 8px;
       z-index: 1; justify-content: flex-end; }
     /* 句序号那颗 2026-10-07 删了（用户：位置信息由抽屉标题「第 xx / xxx 句」独报，两处不许重复），
        三颗键改由 justify-content 贴右，不再靠句数的 auto margin 顶过去。 */
   }
   @media (min-width: 700px) {
-    #lcMini { flex-direction: row; align-items: center; gap: 12px; padding: 8px 14px; }
+    #lcMini { flex-direction: row; align-items: center; gap: 12px; padding: 8px 16px; }
     /* 2026-10-07 用户（PC 截图）：三颗键挪到右边、字幕在播放条上**居中**、「第 N 句」角标去掉。
        居中要按字面做：按键留在 flex 流里的话，字幕只会在「剩余宽度」里居中，整体被按键
        往左挤掉半个排宽（实测 -70px）。所以按键改成浮在右端，字幕吃满整条、两侧留等宽
        内垫 —— 文本列因此既在整条上正中，又永远碰不到那三颗键。 */
-    #lcMini .mb-bar { position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    #lcMini .mb-bar { position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
       flex: none; z-index: 1; }
     #lcMini .mb-roll { flex: 1; min-width: 0; height: 96px; padding-inline: 150px; text-align: center; }
     /* 桌面抽屉开时窗口收矮（遮罩可点带不能被吃掉），76px 差不多是单行 ——
@@ -2727,6 +2733,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     width: min(1084px, calc(100% - 36px)); margin: 0 auto; padding: 6px 14px;
     background: rgba(255,255,255,.42); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
     border: 1px solid rgba(255,255,255,.5); border-radius: 999px; box-shadow: 0 3px 14px rgba(30,60,48,.08); }
+  /* 手机档与文章头部胶囊同宽（报告 C4 归一 16px）：100% − 32px = 距视口 16px，与 .layout /
+     #appView 那 16px 内边距齐。桌面档保留 36 —— 那一档正文框 .layout 的左右内边距就是 18px，
+     胶囊跟着它才齐（与 .reader-head 两档一模一样）。
+     ⚠️ 这条必须排在基础档**之后**：媒体查询不加权重，同特异度靠源码顺序决胜 —— 上一版把它塞进
+     2088 那条 @media（排在上面这行之前），一行代码写了等于没写，实测右缘仍差 2px。
+     抽屉那颗收起键的补偿值（#lcDrawer .dw-head 的 padding-right:30）与这条联动，改一处必改另一处。 */
+  @media (max-width: 700px) { .listen-top { width: calc(100% - 32px); } }
   /* 深色（§10.1）：页面底与顶栏的写死浅色值换成暖黑 token；卡片/文字本就走 token 会自动跟随。 */
   body.dark.listen-page, body.dark.listen-mode { background: var(--bg); }
   body.dark .listen-top { background: rgba(30,28,25,.72); border-color: rgba(255,255,255,.08); }

@@ -1,10 +1,11 @@
-// 触区回归锁 · app 单站（docs/2026-10-07-app站点一致性排查报告.md C1/C5/C6/C8）
+// 触区与一屏水平缘回归锁 · app 单站（docs/2026-10-07-app站点一致性排查报告.md C1/C4/C5/C6/C8）
 // 口径（与 index.html 191 行那段一致）：视觉盒子允许小于 44，但 **盒子 + ::after 外扩**之后的
 // 有效触区必须 ≥44×44。所以这里量的不是 getBoundingClientRect 本身，而是它加上计算样式里
 // ::after 的 inset —— 与 a11y.spec 那条同口径，但补上它覆盖不到的三场：
 //   C1 自由播放态那排播放键（旧版这条是 display:none，整排实测 30 高、最窄 29.4 宽）
 //   C5/C6 两枚收起键与右上角 FAB（同排一颗 44 一颗 30）
 //   C8 弹窗里的通用文字键 .btn（既没进 194 的批量清扫，也没人逐个补）
+//   C4 390 屏上贴视口左右缘的那些横栏 —— 同一个缘只许一个值（16px）
 //
 // 数值都是 2026-10-07 在 390×844 上实测的：#rateCycle 盒 29.4×30 → 外扩 -7/-8 才刚好过线；
 // #lcFab 盒 132.5×33；.ls-collapse 盒 57.7×30。反面验证：把 .audiobar .btn::after 改回
@@ -154,5 +155,65 @@ test.describe('C8 · 弹窗里的通用文字键（两条路都没走的那批�
       await expectHit(page, sel);
     }
     await page.evaluate(() => TASK.closeStartPicker());
+  });
+});
+
+/* ── C4 · 一屏水平缘 ─────────────────────────────────────────────────────────
+   报告原文：390 屏上「贴视口左右缘」的浮层排了 5 个值（12/14/16/18/33）。同一屏上
+   两条玻璃横栏一条距边 12、一条距边 16，用户说不出的「没对齐」就是这么来的。
+   现在统一 16px 一档，这里逐颗钉住：
+     .task-bar 12→16 · #lcMini 与 .mb-bar 14→16 · .listen-top 18→16（基础档 36 留给桌面，
+     那一档 .layout 的内边距就是 18，胶囊跟着它才齐）· 抽屉补偿值 32→30 与 .listen-top 联动
+     （那条对齐由 listen-cards-layout.spec ⑦ 锁，这里不重复量）。
+   ⚠️ 只量**贴视口**的那些：.reader-head / #appView / #lcFab 本来就是 16，写在这里是为了
+   让「新增一条横栏」时先撞上这条红，而不是又各写各的。 */
+async function edge(page: import('@playwright/test').Page, sel: string) {
+  return page.locator(sel).first().evaluate((el) => {
+    const b = (el as HTMLElement).getBoundingClientRect();
+    return { left: Math.round(b.left), right: Math.round(window.innerWidth - b.right), vw: window.innerWidth };
+  });
+}
+
+test.describe('C4 · 390 屏上一屏水平缘只有 16px 一档', () => {
+  test('任务模式：头部胶囊、任务条、内容框同一个左缘', async ({ page }) => {
+    await bootMobile(page, '#/home');
+    await waitTask(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    await page.locator('.art-card .a-open').first().click();
+    await expect(page.locator('body')).toHaveClass(/task-mode/);
+    await expect(page.locator('#readerHead')).toBeVisible();
+    await expect(page.locator('#taskBar')).toBeVisible();
+
+    for (const sel of ['#readerHead', '#taskBar']) {
+      const e = await edge(page, sel);
+      expect(e.vw, '视口宽 390').toBe(390);
+      expect(e.left, `${sel} 距视口左缘`).toBe(16);
+      expect(e.right, `${sel} 距视口右缘`).toBe(16);
+    }
+    /* 内容框是 padding 不是浮层盒子，按 padding 量。 */
+    const pad = await page.locator('#appView').evaluate((el) =>
+      Math.round(parseFloat(getComputedStyle(el).paddingLeft)));
+    expect(pad, '#appView 左右内距也在这档').toBe(16);
+  });
+
+  test('随身听：顶栏、FAB、迷你条同一个缘', async ({ page }) => {
+    await bootMobile(page, '#/listen');
+    await page.evaluate(() => TASK.listenOpen(0));
+    const fab = await edge(page, '#lcFab');
+    expect(fab.right, 'FAB 距右缘与横栏同档').toBe(16);
+
+    /* 迷你条：盒子是通栏（left:0 right:0），贴视口的缘在它自己的内档上。 */
+    const miniPad = await page.locator('#lcMini').evaluate((el) =>
+      Math.round(parseFloat(getComputedStyle(el).paddingLeft)));
+    const bar = await edge(page, '#lcMini .mb-bar');
+    expect(miniPad, '#lcMini 左右内距').toBe(16);
+    expect(bar.left, '迷你条三键那层距左缘').toBe(16);
+    expect(bar.right, '迷你条三键那层距右缘').toBe(16);
+
+    await page.evaluate(() => TASK.listenExpand());
+    await expect(page.locator('#listenTop')).toBeVisible();
+    const top = await edge(page, '#listenTop');
+    expect(top.left, '展开态顶栏与任务模式头部同宽（它俩是同皮双子）').toBe(16);
+    expect(top.right, '展开态顶栏距右缘（抽屉收起键的补偿值就锚在这）').toBe(16);
   });
 });

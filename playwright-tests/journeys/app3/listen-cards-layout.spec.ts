@@ -134,7 +134,7 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     expect(geo.mini.b, '抽屉开着 = 底栏整条隐藏，迷你条落到视口底（见 ⑤）').toBeGreaterThanOrEqual(843);
     expect(geo.roll.y, '字幕窗在按钮行上面').toBeLessThan(geo.bar.y);
     expect(geo.next.r, '三键在右').toBeGreaterThan(390 - 60);
-    // .mb-bar 是 left/right:14 的绝对层，光看它的 x 没意义 —— 要看最左那颗键真被推到右端
+    // .mb-bar 是 left/right:16 的绝对层（C4 归一 16），光看它的 x 没意义 —— 要看最左那颗键真被推到右端
     expect(geo.prev.x, '三键整排贴右，不许散回左边（句数那颗的 auto margin 已删）')
       .toBeGreaterThan(200);
     // 2026-10-07 用户：「去掉左下角第x/xxx句」+「播放条上的第 x 句去掉啊。这是重复信息」
@@ -298,7 +298,9 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     expect(dw.top, '顶边也同档（抽屉 15 = 胶囊 8+1+6）').toBe(lt.top);
     const vw = 390;
     expect(lt.right, '展开态那颗确实在右端（不是还留在左边）').toBeGreaterThan(vw / 2);
-    expect(vw - lt.right, '右缘距视口 = 胶囊那 33px 一档').toBeLessThanOrEqual(34);
+    /* C4（2026-10-07）把手机档一屏水平缘归到 16px：右缘距视口 = 16 窗距 + 1 边框 + 14 内档 = 31
+       （上一档是 18+1+14 = 33）。留 1px 余量是给移动端布局视口的小数。 */
+    expect(vw - lt.right, '右缘距视口 = 胶囊那 31px 一档（16 窗距 + 1 边框 + 14 内档）').toBeLessThanOrEqual(32);
   });
 
   /* ⑨ 2026-10-07 用户圈图「这个标题位置需要有内间距啊」：这条栏是照抄任务模式 .reader-head 来的，
