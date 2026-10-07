@@ -7,7 +7,8 @@
       且跳去别的章真的换章、落到该章那一句。
    ④ 次级排（循环/AB/倍速/书签/跳转/上一句/再来）过去是两套皮：dock 来的绿字小胶囊 +
       任务条自带的黑字大圆键（用户：「icon 黑的黑绿的绿，大的大，小的小」）。
-      锁整排同墨色、同底色、同边框、同图标号、同高度，绿色只留给推进键。 */
+      锁整排同墨色、同底色、同边框、同图标号、同高度，绿色只留给推进键。
+   ⑤ 2026-10-07 用户：这一排改成两端对齐、等间距平铺整行（以前贴着右边缘、左边空一截）。 */
 import { test, expect } from '../../fixtures';
 
 declare const TASK: {
@@ -206,5 +207,35 @@ test.describe('任务条：推进键是主按钮 / 再来与循环可分 / 快�
     expect(first.color, '整排不许再是 .btn 那支绿').not.toBe('rgb(10, 125, 93)');
     const cta = await page.evaluate(() => getComputedStyle(document.getElementById('tbNext')!).color);
     expect(cta, '推进键仍要是自己的 CTA 色，不和次级排同色').not.toBe(first.color);
+  });
+
+  /* ⑤ 2026-10-07 用户（移动端截图）：「"放这一句"上面的按钮，两端对齐、等间距平铺在这一行」。
+     以前整排 flex-end 贴着右边缘、左边空一大截。锁三件事：首颗贴容器左内缘、末颗贴右内缘、
+     相邻间隙彼此相等（gap 之外只剩 space-between 平分的那点余量，允许 2px 舍入）。 */
+  test('⑤ 次级排整行两端对齐、等间距平铺', async ({ page }) => {
+    await enterRead(page);
+    const row = await page.evaluate(() => {
+      const box = document.querySelector('#taskBar .tb-btns')!.getBoundingClientRect();
+      const shown = (el: Element) => (el as HTMLElement).offsetParent !== null
+        && !el.closest('.loop-menu, .rate-menu, .ab-menu');
+      const btns = [...document.querySelectorAll('#taskBar .tb-btns button')].filter(shown)
+        .map((el) => el.getBoundingClientRect())
+        .filter((r) => r.width > 0)
+        .sort((a, b) => a.left - b.left);
+      const line = btns.filter((r) => Math.abs(r.top - btns[0].top) < 10);
+      const gaps: number[] = [];
+      for (let i = 1; i < line.length; i++) gaps.push(+(line[i].left - line[i - 1].right).toFixed(1));
+      return {
+        n: line.length,
+        lead: +(line[0].left - box.left).toFixed(1),
+        trail: +(box.right - line[line.length - 1].right).toFixed(1),
+        gaps,
+      };
+    });
+    expect(row.n, '这一排要多颗按钮才谈得上平铺').toBeGreaterThanOrEqual(4);
+    expect(row.lead, '首颗要贴住容器左内缘（两端对齐的"左端"）').toBeLessThanOrEqual(2);
+    expect(row.trail, '末颗要贴住容器右内缘（两端对齐的"右端"）').toBeLessThanOrEqual(2);
+    const lo = Math.min(...row.gaps), hi = Math.max(...row.gaps);
+    expect(hi - lo, `相邻间隙要等距（实测 ${row.gaps.join('/')}）`).toBeLessThanOrEqual(2);
   });
 });

@@ -547,13 +547,11 @@
       </div>
     </div>`;
     updateListenCard();
-    // 本句单词卡悬浮层：建一次（body 级， guarded）；按持久化恢复高度档与打开态；
+    // 本句单词卡悬浮层：建一次（body 级， guarded）；按持久化恢复打开态；
     // 迷你条观察播放卡（滚出 95% 视口出现）。无词时 FAB 保持 hidden，恢复打开会被拒。
     try {
       ensureListenCards();
       const pref = (typeof TASK !== 'undefined' && TASK.listenCardsPref) ? TASK.listenCardsPref() : {};
-      const dw = document.getElementById('lcDrawer');
-      if (dw) dw.classList.toggle('tall', !!pref.tall);
       if (_lcObs) { try { _lcObs.disconnect(); } catch (e) {} _lcObs = null; }
       const lcard = view.querySelector('.ls-card');
       const mini = document.getElementById('lcMini');
@@ -653,7 +651,6 @@
         '<div class="mb-roll" id="lcSent"><div class="mb-rows" id="lcRows"></div></div>' +
       '</div>' +
       '<section id="lcDrawer" role="dialog" aria-modal="true" aria-label="本句单词卡">' +
-        '<button class="dw-grip" type="button" aria-label="切换抽屉高度（半屏 / 近全屏）"><i></i></button>' +
         '<div class="dw-head"><h2 id="lcTitle">本句单词卡</h2>' +
         '<button class="dw-close" type="button" id="lcClose" aria-label="收起"><i class="ri-arrow-down-s-line" aria-hidden="true"></i><span>收起</span></button></div>' +
         '<div class="dw-body lc-grid" id="lcGrid"></div>' +
@@ -722,8 +719,15 @@
     const roll = document.getElementById('lcSent');
     const row = roll && roll.querySelector('.mb-row.cur');
     if (!roll || !row) return;
+    /* 窄屏的三键排是浮在字幕窗下沿的玻璃（单词从它底下穿过去），所以「居中」要按
+       露出来的那条带算，不能按整窗算 —— 否则当前句的下半截永远压在玻璃键底下。 */
+    const bar = roll.parentNode.querySelector('.mb-bar');
+    let occ = 0;
+    if (bar && getComputedStyle(bar).position === 'absolute') {
+      occ = Math.max(0, roll.getBoundingClientRect().bottom - bar.getBoundingClientRect().top);
+    }
     const max = Math.max(0, roll.scrollHeight - roll.clientHeight);
-    const target = Math.max(0, Math.min(max, lcRowCenter(row, roll) - roll.clientHeight / 2));
+    const target = Math.max(0, Math.min(max, lcRowCenter(row, roll) - (roll.clientHeight - occ) / 2));
     if (_lcRollRaf) { cancelAnimationFrame(_lcRollRaf); _lcRollRaf = 0; }
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const from = roll.scrollTop, dy = target - from;
@@ -848,11 +852,6 @@
     E.fab.addEventListener('click', () => setLcDrawer(true));
     E.scrim.addEventListener('click', () => setLcDrawer(false));
     E.drawer.querySelector('#lcClose').addEventListener('click', () => setLcDrawer(false));
-    E.drawer.querySelector('.dw-grip').addEventListener('click', () => {
-      const tall = !E.drawer.classList.contains('tall');
-      E.drawer.classList.toggle('tall', tall);
-      try { TASK.listenCardsPrefSet({ tall: tall }); } catch (e) {}
-    });
     // 辨析展开（照 demo：.open 翻表 + aria；0fr→1fr 动效在 CSS 侧）
     E.drawer.addEventListener('click', (e) => {
       const t = e.target.closest('.cmp-toggle');
@@ -1492,6 +1491,10 @@
     // 底栏真实高度写给 #lcMini（沉底迷你条贴它正上方），别在 CSS 里猜常量
     if (mobile && nav && nav.offsetHeight) document.documentElement.style.setProperty('--tabbar-h', nav.offsetHeight + 'px');
     else document.documentElement.style.removeProperty('--tabbar-h');
+    // 迷你条真实高度也写给抽屉：顶挂抽屉最迟要停在它上面，否则玻璃键被卡片盖住点不到
+    const lcMini = document.getElementById('lcMini');
+    if (mobile && lcMini && lcMini.offsetHeight) document.documentElement.style.setProperty('--lc-mini-h', lcMini.offsetHeight + 'px');
+    else document.documentElement.style.removeProperty('--lc-mini-h');
     const el = document.getElementById('lsMini');
     if (!el) return;
     let bottom = mobile ? ((nav ? nav.offsetHeight : 56) + 12) : 24;

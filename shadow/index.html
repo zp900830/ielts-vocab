@@ -1440,7 +1440,15 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .task-bar { left: 12px; right: 12px; padding: 8px 10px 8px 12px; }
     .tb-body { flex-direction: column; align-items: stretch; gap: 6px; padding-right: 26px; }
     .tb-text { flex: none; }
-    .tb-btns { justify-content: flex-end; }
+    /* ① 通读态那一排整行两端对齐、等间距平铺（2026-10-07 用户，与 app3 同一轮）。
+       必须写成 .task-bar .tb-btns：基础那条就是 (0,2,0)，光写 .tb-btns 压不住
+       （媒体查询不加权重，同特异度才看源码顺序）。
+       只给 read：exit / done 那一排只有一两颗文字键，硬摊到两头反而散架。 */
+    .task-bar .tb-btns { flex-wrap: wrap; gap: 8px; }
+    body.task-mode .task-bar[data-state="read"] .tb-btns { justify-content: space-between; }
+    /* dock 那几颗套在 .tb-play > .ab-left 两层 div 里，等间距就得让它们不再是盒子。 */
+    body.task-mode .task-bar[data-state="read"] .tb-play { display: contents; }
+    .task-bar .tb-play .ab-left { display: contents; }
     /* 同排同高（与 app3 同一轮）：dock 那排 ~34、翻句两颗 44，并排一高一矮。
        统一 40px 视觉 + ::after 外扩 5px = 50px 触区。 */
     #taskBar .tb-play .btn, #taskBar .tb-btn.again { min-height: 40px; }
