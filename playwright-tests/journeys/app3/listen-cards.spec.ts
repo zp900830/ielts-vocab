@@ -245,19 +245,29 @@ test.describe('随身听 · 本句单词卡抽屉（方案 B）', () => {
     await expect.poll(() => roll.evaluate((el) => (el as HTMLElement).scrollTop)).toBe(0);
 
     // 切到中间句：高亮搬家 + 320ms 滚动后当前句落在「玻璃键之上那条净带」里居中
-    // （2026-10-07：三颗键浮在字幕窗下沿，居中不能按整窗算，否则句子下半截永远压在键底下）
+    // （2026-10-07：三颗键浮在字幕窗下沿，居中不能按整窗算，否则句子下半截永远压在键底下；
+    //   同轮第二次改：顶边那条 mask 渐隐带也不算进净带 —— 当前句的头一行落进去就是淡的）
     const placement = () => roll.locator('.mb-row.cur').evaluate((el) => {
       const r = (el as HTMLElement).getBoundingClientRect();
-      const p = (el as HTMLElement).closest('.mb-roll')!.getBoundingClientRect();
+      const rollEl = (el as HTMLElement).closest('.mb-roll') as HTMLElement;
+      const p = rollEl.getBoundingClientRect();
       const b = (document.querySelector('#lcMini .mb-bar') as HTMLElement).getBoundingClientRect();
       const occ = Math.max(0, p.bottom - b.top);
-      return { off: Math.abs((r.top + r.height / 2) - (p.top + (p.height - occ) / 2)), clear: b.top - r.bottom, occ: Math.round(occ) };
+      const fade = parseFloat(getComputedStyle(rollEl).getPropertyValue('--lc-fade-top')) || 0;
+      return {
+        off: Math.abs((r.top + r.height / 2) - (p.top + fade + (p.height - occ - fade) / 2)),
+        clear: b.top - r.bottom,
+        headClear: r.top - (p.top + fade),
+        occ: Math.round(occ),
+      };
     });
     const g0 = await cur.getAttribute('data-g');
     await page.locator('#lcMini .mb-next').click();
     await expect.poll(() => roll.locator('.mb-row.cur').getAttribute('data-g'), { timeout: 2000 }).not.toBe(g0);
     await expect.poll(async () => (await placement()).off, { timeout: 2000 }).toBeLessThan(6);
-    expect((await placement()).clear, '当前句整句在按钮之上，不被玻璃键压住').toBeGreaterThanOrEqual(0);
+    const g1 = await placement();
+    expect(g1.clear, '当前句整句在按钮之上，不被玻璃键压住').toBeGreaterThanOrEqual(0);
+    expect(g1.headClear, '当前句的头一行不许落进 mask 渐隐带').toBeGreaterThanOrEqual(0);
   });
 
   test('辨析展开：默认一行简单记；点开展开无横向溢出', async ({ page }) => {

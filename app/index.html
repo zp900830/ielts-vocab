@@ -2491,19 +2491,23 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark.dw-open #lcMini { background: linear-gradient(145deg, rgba(30,28,25,.97), rgba(30,28,25,.92) 42%, rgba(30,28,25,.86)); }
   #lcMini .mb-bar { display: flex; align-items: center; gap: 10px; }
   /* 位置角标（2026-10-07 用户采纳建议）：句序号从迷你条左下角删掉后，抽屉**关着**时这一屏
-     就没有位置信息了 —— 放回字幕窗右上角：绝对定位不占行，比标题轻一档（11px/500/--muted），
-     正好落在 mask 渐隐掉的那条顶带里（邻句本来就淡）。
+     就没有位置信息了 —— 放回右上角：绝对定位不占行，比标题轻一档（11px/500/--muted）。
+     窄屏把它停在 mini 的上内边距里（top:3 + padding-top:14），因为字幕窗加高后当前句最高
+     能顶到渐隐带下沿，角标再低一点就会压在正文上。桌面整颗撤掉（用户：PC 端不要）。
      z-index 必须显式给：.mb-roll 带 mask-image ⇒ 自成一个层叠上下文，同 z=0 时按源码顺序决胜，
      角标今天排在它后面才压得住，DOM 一改就翻车。pointer-events:none —— 它只是读数，不挡点击。 */
   #lcMini .mb-pos { position: absolute; top: 10px; right: 16px; z-index: 2; pointer-events: none;
     font-family: var(--sans); font-size: 11px; font-weight: 500; color: var(--muted);
     font-variant-numeric: tabular-nums; white-space: nowrap; }
   body.dark #lcMini .mb-pos { color: #bdb5a8; }
-  /* 字幕窗：固定高 + 上下渐隐；行体复用精读 .sent/.gl/.sent-zh，只有当前句挂 .playing 薄荷高亮 */
+  /* 字幕窗：固定高 + 上下渐隐；行体复用精读 .sent/.gl/.sent-zh，只有当前句挂 .playing 薄荷高亮。
+     渐隐带用固定 px（不是百分比）：窗高一改，百分比带会跟着长，把当前句头一行洗淡。
+     带宽同时发给 JS（lcScrollToCur 读 --lc-fade-top），CSS 和滚动居中不许两个口径。 */
+  #lcMini { --lc-fade-top: 12px; --lc-fade-bot: 14px; }
   #lcMini .mb-roll { height: 108px; overflow: hidden;
     transition: height .28s cubic-bezier(.22,.61,.36,1);
-    -webkit-mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
-    mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent); }
+    -webkit-mask-image: linear-gradient(transparent 0, #000 var(--lc-fade-top), #000 calc(100% - var(--lc-fade-bot)), transparent);
+    mask-image: linear-gradient(transparent 0, #000 var(--lc-fade-top), #000 calc(100% - var(--lc-fade-bot)), transparent); }
   /* 抽屉开时字幕窗收矮那条已挪进下面 @media (min-width: 700px)：窄屏 2026-10-07 起
      抽屉开着也要看全三行英文 + 一句译文，不再收矮。 */
   #lcMini .mb-row { padding: 3px 4px; }
@@ -2512,14 +2516,22 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #lcMini .mb-row .gl { font-size: 11px; }
   #lcMini .mb-row .sent-zh { font-size: 12.5px; margin-top: 1px; }
   #lcMini .mb-row:not(.cur) { opacity: .42; }
+  /* 顶垫 = 渐隐带宽：否则首句在 scrollTop=0 时永远压在淡区里（居中公式被 Math.max(0,…) 夹住）。 */
+  #lcMini .mb-rows { padding-top: var(--lc-fade-top); }
   /* 窄屏（2026-10-07 用户）：字幕窗加高到「三行英文 + 一句译文」，三颗键浮在它下沿 ——
      字从玻璃键底下穿过去。所以按钮行不再独占一行，改成浮在窗口下沿的绝对层；
      净带 = 窗高 − 被键压住的那截，居中偏移由 lcScrollToCur 按遮挡量补。
      .mb-rows 的底垫让末句也能滚到键上方。整块必须排在上面那些 #lcMini .mb-* 基础规则
-     之后：媒体查询不加权重，同特异度靠源码顺序决胜。 */
+     之后：媒体查询不加权重，同特异度靠源码顺序决胜。
+     10-07 第二次加高 156 → 200：实测用户截图那条长句（4 行英文 + 1 行译文）就要 120px，
+     而 156 减掉 46px 键高只剩 98px 净带，居中后头一行被裁 16px 又落进渐隐带 —— 「看不清」
+     就是这么来的。200 的净带是 [12, 154] = 142px，够到五行英文 + 一句译文。 */
   @media (max-width: 700px) {
-    #lcMini .mb-roll { height: 156px; }
-    #lcMini .mb-rows { padding-bottom: 58px; }
+    /* 顶部多给 4px 留角标的位置：角标挪进 mini 的内边距，不压当前句可能到达的最高点 */
+    #lcMini { padding-top: 14px; }
+    #lcMini .mb-pos { top: 3px; }
+    #lcMini .mb-roll { height: 200px; }
+    #lcMini .mb-rows { padding-bottom: 64px; }
     /* z-index 不是可选项：.mb-roll 有 mask-image ⇒ 自成一个层叠上下文，和绝对定位的按钮行
        同处 z=0，于是按源码顺序决胜 —— DOM 里窗口排在按钮之后，字幕会把三颗键整个盖住、
        并吃掉点击（Playwright 报 sent-zh intercepts pointer events）。 */
@@ -2530,10 +2542,18 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   }
   @media (min-width: 700px) {
     #lcMini { flex-direction: row; align-items: center; gap: 12px; padding: 8px 14px; }
-    #lcMini .mb-bar { flex: none; }
-    #lcMini .mb-roll { flex: 1; min-width: 0; height: 96px; }
+    /* 2026-10-07 用户（PC 截图）：三颗键挪到右边、字幕在播放条上**居中**、「第 N 句」角标去掉。
+       居中要按字面做：按键留在 flex 流里的话，字幕只会在「剩余宽度」里居中，整体被按键
+       往左挤掉半个排宽（实测 -70px）。所以按键改成浮在右端，字幕吃满整条、两侧留等宽
+       内垫 —— 文本列因此既在整条上正中，又永远碰不到那三颗键。 */
+    #lcMini .mb-bar { position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      flex: none; z-index: 1; }
+    #lcMini .mb-roll { flex: 1; min-width: 0; height: 96px; padding-inline: 150px; text-align: center; }
+    #lcMini .mb-pos { display: none; }
     /* 桌面抽屉开时窗口收矮（遮罩可点带不能被吃掉），76px 差不多是单行 ——
-       单行里 mask 的上下渐隐正好啃掉英文的顶和译文的底，所以这条只在桌面摘 mask。 */
+       单行里 mask 的上下渐隐正好啃掉英文的顶和译文的底，所以这条只在桌面摘 mask。
+       摘了 mask 就得把渐隐带宽一起归零，否则 lcScrollToCur 还按 12px 往下偏。 */
+    body.dw-open #lcMini { --lc-fade-top: 0px; --lc-fade-bot: 0px; }
     body.dw-open #lcMini .mb-roll { height: 76px; -webkit-mask-image: none; mask-image: none; }
   }
   #lcMini button { flex: none; display: inline-flex; align-items: center; justify-content: center;

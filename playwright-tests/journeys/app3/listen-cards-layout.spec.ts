@@ -113,6 +113,9 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     });
     // 三行英文 + 一句译文：行高按实测算，别写死字面量
     expect(g.rollH, `字幕窗 ${g.rollH}px 要装得下三行英文+一句译文（${g.need}px）再加被键压住的那截`).toBeGreaterThanOrEqual(g.need);
+    // 2026-10-07 用户第二次加高：真正的判据是「整句落在按键**上方**」，所以窗高要 ≥ 文本 + 遮挡
+    expect(g.rollH, `按键吃掉 ${g.overlap}px 后，剩下的净带还得装得下三行英文+一句译文（${g.need}px）`)
+      .toBeGreaterThanOrEqual(g.need + g.overlap);
     expect(g.overlap, '按钮行浮在字幕窗之上（字从玻璃键底下穿过去）').toBeGreaterThan(20);
     expect(g.btn, '三颗键加大到好点（≥44）').toBeGreaterThanOrEqual(44);
     expect(g.btnBg, '玻璃键用渐变底，不再是实底薄荷').toMatch(/gradient/);
@@ -130,6 +133,7 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
       const pos = document.querySelector('#lcMini .mb-pos') as HTMLElement;
       const roll = r('#lcMini .mb-roll');
       const pr = pos.getBoundingClientRect();
+      const fade = parseFloat(getComputedStyle(pos.parentElement as Element).getPropertyValue('--lc-fade-top')) || 0;
       return {
         text: pos.textContent || '',
         pos: getComputedStyle(pos).position,
@@ -137,7 +141,9 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
         size: getComputedStyle(pos).fontSize,
         weight: getComputedStyle(pos).fontWeight,
         rightGap: Math.round(roll.right - pr.right),
-        inTopBand: pr.top >= roll.top - 4 && pr.bottom <= roll.top + roll.height * 0.25,
+        // 窗加高后当前句最高能顶到渐隐带下沿（roll.top + fade），角标不许越过这条线
+        aboveBand: pr.bottom <= roll.top + fade,
+        fade,
         miniH: Math.round(r('#lcMini').height),
         rollH: Math.round(roll.height),
       };
@@ -146,14 +152,50 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     expect(g.pos, '绝对定位才不占行').toBe('absolute');
     expect(g.pe, '不许吃掉三颗键的点击').toBe('none');
     expect(Number(g.weight), '比标题轻一档（标题 600）').toBeLessThan(600);
-    expect(g.inTopBand, `角标要落在字幕窗顶部那条渐隐带里（窗高 ${g.rollH}）`).toBe(true);
+    expect(g.aboveBand, `角标要停在渐隐带（${g.fade}px）之上，不许压到当前句可能到达的最高点`).toBe(true);
     expect(Math.abs(g.rightGap), '贴着窗口右缘').toBeLessThanOrEqual(6);
     expect(g.miniH - g.rollH, '整条高度 = 字幕窗 + 上下内边距，角标没额外撑高')
-      .toBeLessThanOrEqual(24);
+      .toBeLessThanOrEqual(28);
     // 切句要跟着走
     await page.locator('#lcMini .mb-next').click();
     await expect.poll(() => page.evaluate(() =>
       (document.querySelector('#lcMini .mb-pos') as HTMLElement).textContent), { timeout: 2000 })
       .toBe('第 2 句');
+  });
+});
+
+/* ⑤ 2026-10-07 用户 PC 截图：三颗键挪到右边、字幕在播放条上居中、「第 N 句」角标去掉。
+   「居中」按字面量：文本列的中线要和整条播放条的中线重合，不是挤在按键剩下的那点宽度里。 */
+test.describe('随身听迷你条 PC 端：三键靠右 + 字幕真居中 + 无角标', () => {
+  test.use({ viewport: { width: 1280, height: 800 } });
+
+  test('⑤ 按键浮在右端，字幕整条居中，角标不出现', async ({ page }) => {
+    await gotoListen(page);
+    await page.locator('#lcFab').click();
+    await page.waitForTimeout(450);
+    const g = await page.evaluate(() => {
+      const el = (s: string) => document.querySelector(s) as HTMLElement;
+      const r = (s: string) => el(s).getBoundingClientRect();
+      const mini = r('#lcMini'); const roll = r('#lcMini .mb-roll'); const bar = r('#lcMini .mb-bar');
+      const pad = parseFloat(getComputedStyle(el('#lcMini .mb-roll')).paddingLeft);
+      const textMid = roll.left + pad + (roll.width - 2 * pad) / 2;
+      return {
+        posDisplay: getComputedStyle(el('#lcMini .mb-pos')).display,
+        barRightGap: Math.round(mini.right - bar.right),
+        centerOff: Math.round(textMid - (mini.left + mini.width / 2)),
+        overlap: bar.left < roll.right - pad,
+        align: getComputedStyle(el('#lcMini .mb-roll')).textAlign,
+        curInside: (() => {
+          const c = r('#lcMini .mb-row.cur');
+          return c.top >= roll.top - 1 && c.bottom <= roll.bottom + 1;
+        })(),
+      };
+    });
+    expect(g.posDisplay, 'PC 端不要「第 N 句」角标').toBe('none');
+    expect(g.barRightGap, '三颗键贴右缘').toBeLessThanOrEqual(20);
+    expect(Math.abs(g.centerOff), `字幕文本列要在整条上正中（实测偏 ${g.centerOff}px）`).toBeLessThanOrEqual(2);
+    expect(g.overlap, '字幕文本列不许钻到按键底下').toBe(false);
+    expect(g.align).toBe('center');
+    expect(g.curInside, '当前句整句落在窗口里').toBe(true);
   });
 });
