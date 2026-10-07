@@ -633,7 +633,6 @@
       mini: document.getElementById('lcMini'),
       sent: document.getElementById('lcSent'),
       rows: document.getElementById('lcRows'),
-      count: document.getElementById('lcCount'),
     };
   }
   function ensureListenCards() {
@@ -646,7 +645,6 @@
           '<button type="button" class="mb-prev" aria-label="上一句"><i class="ri-play-reverse-fill" aria-hidden="true"></i></button>' +
           '<button type="button" class="mb-play" aria-label="播放"><i class="ri-play-fill" aria-hidden="true"></i></button>' +
           '<button type="button" class="mb-next" aria-label="下一句"><i class="ri-play-fill" aria-hidden="true"></i></button>' +
-          '<span class="mb-count" id="lcCount"></span>' +
         '</div>' +
         '<div class="mb-roll" id="lcSent"><div class="mb-rows" id="lcRows"></div></div>' +
       '</div>' +
@@ -809,10 +807,6 @@
     const mbPrev = E.mini.querySelector('.mb-prev'), mbNext = E.mini.querySelector('.mb-next');
     if (mbPrev) mbPrev.disabled = todayMode ? st.todayTotal <= 1 : at <= 0;
     if (mbNext) mbNext.disabled = todayMode ? st.todayTotal <= 1 : at >= total - 1;
-    if (E.count) {
-      const c = todayMode ? `今日 ${st.todayPos + 1} / ${st.todayTotal} 句` : `第 ${at + 1} / ${total} 句`;
-      if (E.count.textContent !== c) E.count.textContent = c;
-    }
     lcSyncRoll(st);
     const empty = cards.count <= 0;
     const titleTxt = empty ? '本句无目标词' : cards.title;
