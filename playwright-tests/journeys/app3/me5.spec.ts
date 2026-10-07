@@ -1,6 +1,7 @@
 // 3.0 M5「我的」（PRD §8.1 / §8.2 / §10.4）。服务器归 global-setup.ts 起停（仓库根 8932）；
 // /app/ 在仓库根，同 home/stats/words，用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
+import { stubCloudAccount } from '../../utils/cloud-stub';
 
 declare const TASK: {
   resetV2(): void;
@@ -21,7 +22,7 @@ declare const TASK: {
 declare const ShadowPlan: { articleScope(sections: unknown, article: number): Set<number> };
 declare const SECTIONS: unknown[];
 declare const CLOUD: { _userMail: string };
-declare const APP3: { updateMeCard(): void; renderMePop(): void };
+declare const APP3: { renderMePop(): void };
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
 
@@ -200,7 +201,7 @@ test.describe('M5 · 账号（§8.1 账号信息 / §10.4 键盘可达）', () =
     }
 
     // 已登录态：浮窗里是退出按钮 + 邮箱；全站无内嵌登录表单
-    await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); });
+    await stubCloudAccount(page);
     await modal.locator('[data-login-close]').click();
     const pop = await openMe(page);
     await expect(pop.locator('.mp-logout')).toBeVisible();
@@ -223,8 +224,11 @@ test.describe('M5 · 账号（§8.1 账号信息 / §10.4 键盘可达）', () =
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await waitTask(page);
+    // 登录态先由 stubCloudAccount 点亮（它等 CLOUD.boot() 落定，回写擦不掉它），
+    // 再把 Supabase 客户端换成哑的：它的 onAuthStateChange 在注册时就回 SIGNED_OUT，
+    // 那正是「确认退出后邮箱清空」这一步的依据。
+    await stubCloudAccount(page);
     await page.evaluate(() => {
-      CLOUD._userMail = 'alice@example.com';
       (CLOUD as unknown as { client: unknown }).client = () => ({
         auth: {
           onAuthStateChange: (cb: (ev: string, s: unknown) => void) => {
@@ -234,7 +238,6 @@ test.describe('M5 · 账号（§8.1 账号信息 / §10.4 键盘可达）', () =
           signOut: async () => ({ error: null }),
         },
       });
-      APP3.updateMeCard();
     });
     const pop = await openMe(page);
     await expect(pop.locator('.mp-logout')).toBeVisible();
@@ -404,7 +407,8 @@ test.describe('M5 · 去掉「免费」标签', () => {
     await expect(pop).not.toContainText('免费');
     await expect(pop.locator('.mp-badge')).toHaveCount(0);
 
-    await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); APP3.renderMePop(); });
+    await stubCloudAccount(page);
+    await page.evaluate(() => { APP3.renderMePop(); });
     await expect(page.locator('#meCard')).not.toContainText('免费');
     await expect(page.locator('.me-tag')).toHaveCount(0);
   });

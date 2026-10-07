@@ -643,7 +643,7 @@
     if (document.getElementById('lcDrawer')) return;
     document.body.insertAdjacentHTML('beforeend',
       '<button id="lcFab" type="button" aria-label="本句单词卡" hidden><i class="ri-bank-card-line" aria-hidden="true"></i>本句单词卡 <span class="fab-n" id="lcFabN">0</span></button>' +
-      '<div id="lcScrim"></div>' +
+      '<div id="lcScrim" class="scrim"></div>' +
       '<div id="lcMini" aria-hidden="true">' +
         '<div class="mb-bar">' +
           '<button type="button" class="mb-prev" aria-label="上一句"><i class="ri-play-reverse-fill" aria-hidden="true"></i></button>' +
@@ -700,7 +700,7 @@
     if (_lcObs) { try { _lcObs.disconnect(); } catch (e) {} _lcObs = null; }
   }
   /* ---- 字幕滚动窗：整表一次渲（TASK.listenRoll），切句只挪高亮 + rAF 平滑滚到当前句居中。
-     缓动与全站统一 cubic-bezier(.22,.61,.36,1)；reduced-motion / 换篇 / 切 today 直接落位。 ---- */
+     缓动与全站统一 var(--ease-move)；reduced-motion / 换篇 / 切 today 直接落位。 ---- */
   var _lcRollSig = '', _lcRollCurG = -1, _lcRollRaf = 0;
   function lcEase(t) {
     const x1 = .22, y1 = .61, x2 = .36, y2 = 1;

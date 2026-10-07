@@ -56,7 +56,7 @@ async function bootMobile(page: import('@playwright/test').Page, hash: string) {
 }
 
 /* 有效触区 = 盒子 + ::after 外扩；没有热区的元素就按盒子本身算（.ls-expand / <select> 是实高 44）。
-   ⚠️ 不能顺手判 ::after 的 visibility —— 抽屉/迷你条的显隐是 `visibility 0s .28s` 过渡，
+   ⚠️ 不能顺手判 ::after 的 visibility —— 抽屉/迷你条的显隐是 `visibility 0s var(--t-slide)`（.3s 延迟），
    刚加完 .open 的那一刻计算值还是 hidden，会把热区读成 0（量出来就是 30 高的假红）。
    与 a11y.spec 那条同口径：只看 content / display。 */
 async function hit(page: import('@playwright/test').Page, sel: string) {

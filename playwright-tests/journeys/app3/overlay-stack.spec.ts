@@ -5,6 +5,7 @@
 // 服务器归 global-setup.ts 起停（仓库根 8932）；/app/ 在仓库根，用 E2E_ROOT_URL。
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
+import { stubCloudAccount } from '../../utils/cloud-stub';
 
 declare const TASK: {
   resetV2(): void;
@@ -14,9 +15,7 @@ declare const TASK: {
   state(): unknown;
   etaCalls: { n: number };
 };
-declare const CLOUD: { _userMail: string };
 declare const APP3: {
-  updateMeCard(): void;
   setLcDrawer(open: boolean, opts?: { focus?: boolean; save?: boolean }): void;
 };
 declare const ShadowPlan: { estimateDays(...args: unknown[]): number };
@@ -64,9 +63,11 @@ async function gotoListen(page: import('@playwright/test').Page) {
     return !!(w.APP3 && typeof w.APP3.renderListen === 'function' && v && v.querySelector('.listen-page'));
   }, undefined, { timeout: 20000 });
 }
-/* 「我的」浮窗：未登录点卡片进的是登录弹窗，所以先把账号态点亮（与 me5 同一口径）。 */
+/* 「我的」浮窗：未登录点卡片进的是登录弹窗，所以先把账号态点亮。
+   点亮这件事本身有竞态，已经收进 utils/cloud-stub.ts 的 stubCloudAccount —— 它会先等
+   CLOUD.boot() 跑完，否则 boot 拿不到会话的回写会把邮箱擦回空（app/index.html:3960）。 */
 async function openMeLogged(page: import('@playwright/test').Page) {
-  await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); });
+  await stubCloudAccount(page);
   const pop = page.locator('#mePop');
   await page.locator('#meCard').click();
   if (!(await pop.isVisible())) await page.locator('#meCard').click();

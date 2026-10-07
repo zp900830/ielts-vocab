@@ -4,6 +4,7 @@
 // B. 正式播放优先——串行队列里正在执行的预取（20s 上限）stop 清不掉，
 //    新起播干等它。stop 现在把它掐掉，新播放立刻拿到槽位。
 import { test, expect } from '../../fixtures';
+import { stubCloudVoice } from '../../utils/cloud-stub';
 
 declare const TASK: {
   resetV2(): void;
@@ -57,17 +58,19 @@ test('进文章即预热后面几句：开播前后台已合成', async ({ page 
   await page.evaluate(() => { localStorage.setItem('ielts-voice', 'cloud:test-voice'); });
   await page.reload();
   await waitAppReady(page);
-  // 上线云开关 + 录音 fetch（即时 resolve，不真请求网络）
+  // 录音 fetch 先换成即时 resolve 的假货，再上线云开关 ——
+  // stubCloudVoice 会先等 CLOUD.boot() 落定，否则 boot/checkStatus 的异步回写会把 _on 擦回
+  // false，入口预热整段跳过（app/index.html 里 warmupCloudAhead 的第一道门就是它）。
   await page.evaluate(() => {
     const w = window as unknown as { __fetched: string[] };
     const cloud = CLOUD as any;
     w.__fetched = [];
-    cloud._on = true;
     cloud._fetchTTS = async (t: string) => {
       w.__fetched.push(t.slice(0, 30));
       return new Blob(['x'], { type: 'audio/mpeg' });
     };
   });
+  await stubCloudVoice(page);
   await page.locator('.art-card').first().click();
   await expect(page.locator('body')).toHaveClass(/task-mode/);
   // 入口不自动播，但预取已经跑了后面几句
