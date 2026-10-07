@@ -179,7 +179,7 @@ test.describe('④ 展开 = 全屏弹窗（不离开 #/listen）', () => {
     // 2026-09-25 用户：HUD 大卡片删掉 —— 篇名在顶部条、当前句在正文高亮、控件在播放条
     expect(await page.locator('#listenHud').count(), 'HUD 卡必须不存在').toBe(0);
     await expect(page.locator('#lsTitle'), '顶部条报篇名').toContainText('地球与生命');
-    await expect(page.locator('#lsPos'), '顶部条报篇号').toContainText(/第 \d+\/\d+ 篇/);
+    await expect(page.locator('#lsPos'), '顶部条报篇号').toContainText(/第 \d+ \/ \d+ 篇/);
     await expect(page.locator('#art .sent').first()).toBeVisible();   // §7.3 正文
     // 展开只是换形态，不动播放链（2026-10-04 用户口径）：没在播就不出声
     await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(false);

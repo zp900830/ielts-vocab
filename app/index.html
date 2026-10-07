@@ -25,7 +25,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="词汇真经单词速记">
     <link rel="apple-touch-icon" href="./apple-touch-icon.png">
-    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoi6ZuF5oCd6IOM5Y2V6K+NIDMuMCIsInNob3J0X25hbWUiOiLpm4XmgJ3og4zljZXor40iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZmFmOGY0IiwidGhlbWVfY29sb3IiOiIjZmFmOGY0Iiwic3RhcnRfdXJsIjoiLi8iLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJyUzRSUzQ3JlY3Qgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnIHJ4PScyMicgZmlsbD0nJTIzMTBiNDg3Jy8lM0UlM0N0ZXh0IHg9JzUwJyB5PSc2OCcgZm9udC1zaXplPSc1MicgdGV4dC1hbmNob3I9J21pZGRsZScgZmlsbD0nJTIzZmZmJyBmb250LWZhbWlseT0nc2VyaWYnJTNFVyUzQy90ZXh0JTNFJTNDL3N2ZyUzRSIsInNpemVzIjoiYW55IiwidHlwZSI6ImltYWdlL3N2Zyt4bWwiLCJwdXJwb3NlIjoiYW55IG1hc2thYmxlIn1dfQ==">
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoi6K+N5rGH55yf57uP5Y2V6K+N6YCf6K6wIiwic2hvcnRfbmFtZSI6Iuivjeaxh+ecn+e7j+WNleivjemAn+iusCIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmYWY4ZjQiLCJ0aGVtZV9jb2xvciI6IiNmYWY4ZjQiLCJzdGFydF91cmwiOiIuLyIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDEwMCAxMDAnJTNFJTNDcmVjdCB3aWR0aD0nMTAwJyBoZWlnaHQ9JzEwMCcgcng9JzIyJyBmaWxsPSclMjMxMGI0ODcnLyUzRSUzQ3RleHQgeD0nNTAnIHk9JzY4JyBmb250LXNpemU9JzUyJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmaWxsPSclMjNmZmYnIGZvbnQtZmFtaWx5PSdzZXJpZiclM0VXJTNDL3RleHQlM0UlM0Mvc3ZnJTNFIiwic2l6ZXMiOiJhbnkiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
     <title>词汇真经单词速记</title>
     <style>
   /* ============ 设计令牌（对齐 雅思词汇真经项目：薄荷绿 + 衬线故事体 + 毛玻璃） ============ */
@@ -456,9 +456,9 @@
   .ab-left { display: flex; align-items: center; gap: 6px; flex: none;
     order: 2; width: 100%; flex-wrap: wrap; justify-content: center;
     transition: gap var(--t-bar) var(--ease-bar); } /* 默认完整条：控制按钮在下排 */
-  /* 下排：播放/暂停、上一句、下一句、单句循环、AB循环、倍速、跟读书签（+🔁AB循环列表）。
+  /* 下排：播放/暂停、上一句、下一句、单句循环、A-B 循环、倍速、跟读书签（+🔁A-B 循环列表）。
      快速跳转已在上排 ab-title（点击即可跳转），故下排不再重复放 jump-btn；
-     🔁 abLoopBtn 是「AB循环列表」唯一入口，默认态保留（保证功能可达），仅在 mini 态隐藏 */
+     🔁 abLoopBtn 是「A-B 循环列表」唯一入口，默认态保留（保证功能可达），仅在 mini 态隐藏 */
   .ab-left > .jump-btn { display: none; }
   .ab-right { display: flex; align-items: center; gap: 10px; flex: none; min-width: 0;
     order: 1; width: 100%;
@@ -501,7 +501,7 @@
     box-shadow: 0 1px 5px rgba(201,86,74,.5); }
   .sent.ab-in { border-radius: 4px; position: relative; z-index: 1; }
   .sent.ab-in.playing { background: linear-gradient(transparent 62%, var(--hl) 62%); }
-  /* AB 循环区域：用绝对定位的框把区间内句子圈起来 */
+  /* A-B 循环区域：用绝对定位的框把区间内句子圈起来 */
   .ab-region { position: absolute; left: 0; top: 0; z-index: 10;
     border: 2px solid var(--accent); border-radius: 10px;
     background: rgba(12,156,116,.06); pointer-events: none;
@@ -564,7 +564,7 @@
     .loop-wrap:hover .loop-menu, .rate-wrap:hover .rate-menu { opacity: 1; visibility: visible;
       pointer-events: auto; transform: translateX(-50%) translateY(0); }
   }
-  /* AB循环 + 书签：沿用 loop-menu/rate-menu 同一套悬浮打开 + 点击切换 */
+  /* A-B 循环 + 书签：沿用 loop-menu/rate-menu 同一套悬浮打开 + 点击切换 */
   .ab-wrap { position: relative; flex: none; }
   .ab-menu { position: absolute; bottom: calc(100% + 8px); left: 50%;
     transform: translateX(-50%) translateY(4px); min-width: 140px; max-width: 260px;
@@ -694,7 +694,7 @@
   .ab-loop-item .ab-loop-act.del { color: var(--coral-deep, #c0492f); }
   .ab-loop-item .ab-loop-act.del:hover { background: rgba(192,73,47,.1); }
   body.dark .ab-menu-action:hover, body.dark .ab-loop-item .ab-loop-act:hover { background: rgba(16,180,135,.14); }
-  /* AB 循环列表：中文任意处可断行，菜单会被内容撑到 min-width 导致挤成一团；
+  /* A-B 循环列表：中文任意处可断行，菜单会被内容撑到 min-width 导致挤成一团；
      给列表定最小宽 + 名称单行省略，范围与按钮永不换行 */
   #abLoopList { min-width: 230px; }
   .ab-loop-item .ab-loop-name { overflow: hidden; }
@@ -913,7 +913,7 @@
   /* mini 态：在「单句循环」前加一条细分隔线，把播放控制（上一句/播放/下一句）和选项（循环/AB/倍速/书签）视觉分开 */
   body.scrolled .audiobar .loop-wrap::before { content: ""; width: 1px; height: 20px; background: rgba(0,0,0,.22); margin-right: 3px; flex-shrink: 0; }
   body.dark.scrolled .audiobar .loop-wrap::before { background: rgba(255,255,255,.22); }
-  /* mini 态展示 7 个控制按钮：播放/暂停、上一句、下一句、单句循环、AB循环、倍速、跟读书签；
+  /* mini 态展示 7 个控制按钮：播放/暂停、上一句、下一句、单句循环、A-B 循环、倍速、跟读书签；
      隐藏快速跳转（默认态已在上排）；abLoopBtn 已合并到 btnAB（长按打开列表），不再需要独立按钮 */
   body.scrolled .audiobar .ab-left > .jump-btn,
   body.scrolled .audiobar .ab-left > #abLoopBtn { display: none; }
@@ -1449,29 +1449,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     box-shadow: 0 3px 12px rgba(30,60,48,.12); }
   .sync-hint[hidden] { display: none; }
   body.dark .sync-hint { background: rgba(58,36,30,.96); color: #f0a08c; border-color: rgba(240,160,140,.3); }
-  /* 词本：状态过滤器 + 词行 */
-  .tp-filters { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
-  .pill { min-height: 30px; padding: 4px 11px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--text); font-size: 12px; cursor: pointer; position: relative; }
-  /* 筛选胶囊 30 高（报告 C8）：文字键横向本来就够，只补竖向。 */
-  .pill::after { content: ""; position: absolute; inset: -7px 0; border-radius: 999px; }
-  /* refine3 ③：非主按钮的选中态一律走「浅色底 + 同色深字」（与主站 .tr-msw.on/.r-badge/.wb-filter 同一支），
-     不再用深绿实心 + 黑字。 */
-  .pill.on { background: var(--accent-soft); color: var(--accent-text); border-color: var(--accent-line); font-weight: 600; }
-  .tp-book { max-height: 44vh; overflow-y: auto; border: 1px solid var(--border); border-radius: 12px; }
-  /* 词与状态贴在一起说同一个词，别让 1fr 把状态推到中缝：auto / 1fr / auto ——
-     状态紧跟词后、右端只留「重学」。 */
-  .tp-book-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--border); }
-  .tp-book-row:last-child { border-bottom: none; }
-  .tp-book-row .bw { font-size: 13.5px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .tp-book-row .bs { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .tp-book-row .bx { min-height: 28px; padding: 3px 10px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--muted); font-size: 11.5px; cursor: pointer; }
-  .tp-book-row .bx:hover { color: var(--task-new); border-color: var(--task-new); }
-  .tp-book p.sm { padding: 14px 12px; text-align: center; }
+  /* 词本页签（.tp-filters / .pill / .tp-book*）随 renderBookView 一起删除（报告 A5）：
+     单词本只留路由页 #/words 一条出口，样式见文件后面的 .wb-filters / .wb-row。 */
   body.dark .tp-tab { color: var(--muted); }
   body.dark .tp-tab.on { color: var(--task-new); }
   body.dark .tp-note { background: rgba(52,211,153,.07); border-color: rgba(52,211,153,.16); }
-  body.dark .pill { color: var(--text); }
-  body.dark .pill.on { color: var(--accent-text); }
   body.dark .sync-state { color: #f0a08c; }
   .tp-week { display: flex; gap: 4px; align-items: flex-end; height: 48px; margin-top: 10px; }
   .tp-week-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
@@ -2296,7 +2278,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .wr-pill.s-owned, body.dark .wr-pill.leech { background: var(--note-bg); color: var(--note-text); }
   body.dark .wr-pill.s-graduated { background: var(--accent-soft); color: var(--accent-text);
     box-shadow: inset 0 0 0 1px var(--accent-text); }
-  @media (max-width: 700px) { .wb-filter { flex: 1 1 calc(50% - 8px); } }
+  /* A5：档位从 4 颗变 7 颗（五个真状态 + 全部 + 重点词）。两列会堆成四行 ≈190px 的筛选墙，
+     手机上正文一行都看不见 —— 改三列并收内距，7 颗落三行。 */
+  @media (max-width: 700px) {
+    .wb-filter { flex: 1 1 calc(33.333% - 6px); padding: 0 6px; font-size: 12.5px; }
+  }
   .wb-detail { padding: 12px 14px 14px; border: 1px solid var(--border); border-top: none;
     border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; background: var(--card); }
   .wd-top { display: flex; align-items: center; gap: 8px; }
@@ -2853,7 +2839,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
           <button class="tr-msw on" id="btnZh" type="button" role="switch" aria-checked="true" title="显示/隐藏每句下方的中文全句翻译"><span class="knob" aria-hidden="true"></span>全句译文</button>
           <button class="tr-msw on" id="btnGloss" type="button" role="switch" aria-checked="true" title="显示/隐藏英文句内行间的单词词义与音标"><span class="knob" aria-hidden="true"></span>行内词义</button>
           <button class="tr-help" id="ttHelp" type="button" aria-label="使用说明">?</button>
-          <div class="tr-bubble" id="ttBubble" role="tooltip">点「全句译文」显示/隐藏每句下方的中文翻译；点「行内词义」显示/隐藏句内小字词义。口音与音色在「我的」里切换（侧栏左下角）。</div>
+          <div class="tr-bubble" id="ttBubble" role="tooltip">点「全句译文」显示/隐藏每句下方的中文翻译；点「行内词义」显示/隐藏句内小字词义。口音与音色在「我的」里切换。</div>
         </div>
         <div class="r-nav">
           <button class="nav-arrow" id="ttPrev" type="button" aria-label="上一篇">上一篇</button>
@@ -2966,9 +2952,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         </div>
         <div class="ab-wrap" id="abWrap">
           <div class="menu-bridge" aria-hidden="true"></div>
-          <button class="btn ab-btn" id="btnAB" onclick="toggleABWrap(event)" title="AB循环" aria-label="设置 A-B 复读区间"><i class="ri-arrow-left-right-line" aria-hidden="true"></i><span class="ab-label">AB</span></button>
+          <button class="btn ab-btn" id="btnAB" onclick="toggleABWrap(event)" title="A-B 循环" aria-label="A-B 循环"><i class="ri-arrow-left-right-line" aria-hidden="true"></i><span class="ab-label">AB</span></button>
           <div class="ab-menu">
-            <button class="ab-menu-action" onclick="toggleAB(); abWrap.classList.remove('open')" id="abSetBtn">设置AB循环</button>
+            <button class="ab-menu-action" onclick="toggleAB(); abWrap.classList.remove('open')" id="abSetBtn">设置 A-B 循环</button>
             <div id="abLoopList" style="margin-top:6px"></div>
           </div>
         </div>
@@ -3003,15 +2989,15 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
             </div>
           </div>
         </div>
-        <div class="ab-title" id="abTitle" onclick="toggleJumpPop()" title="点击快速跳转到某章某句">—</div>
+        <div class="ab-title" id="abTitle" onclick="toggleJumpPop()" title="点击快速跳转到某篇某句">—</div>
       </div>
-      <button class="btn ab-expand" id="abExpand" onclick="expandAudiobar()" title="展开播放条" aria-label="展开控制栏"><i class="ri-arrow-up-s-line" aria-hidden="true"></i></button>
-      <button class="btn ab-collapse" id="abCollapse" onclick="collapseAudiobar()" title="收起播放条" aria-label="收起控制栏"><i class="ri-arrow-down-s-line" aria-hidden="true"></i></button>
+      <button class="btn ab-expand" id="abExpand" onclick="expandAudiobar()" title="展开播放条" aria-label="展开播放条"><i class="ri-arrow-up-s-line" aria-hidden="true"></i></button>
+      <button class="btn ab-collapse" id="abCollapse" onclick="collapseAudiobar()" title="收起播放条" aria-label="收起播放条"><i class="ri-arrow-down-s-line" aria-hidden="true"></i></button>
     </footer>
     <div class="jpop" id="jumpPop" role="dialog" aria-modal="true" aria-label="快速跳转" tabindex="-1">
       <div class="ct"><i class="ri-navigation-line" aria-hidden="true"></i> 快速跳转</div>
       <div class="cs" id="jumpHint"></div>
-      <select id="jumpCh" onchange="syncJumpHint()" aria-label="选择章节"></select>
+      <select id="jumpCh" onchange="syncJumpHint()" aria-label="选择篇"></select>
       <div class="row">
         <select id="jumpN" onchange="syncJumpHint()" aria-label="选择句号"></select>
         <button class="btn play" onclick="jumpGo()">直达</button>
@@ -3468,6 +3454,34 @@ let listenOn = false;
       '上篇·跨国列车': 'Part 1 · The Transnational Train', '下篇·街角小店': 'Part 2 · The Corner Shop',
       '上篇·纪念馆': 'Part 1 · The Memorial Hall', '下篇·发明比赛': 'Part 2 · The Invention Contest',
       '上篇·备考的一天': 'Part 1 · A Day of Exam Prep', '下篇·奶奶的健康年': "Part 2 · Grandma's Healthy Year",};    const titEN = t => TIT_EN[t] ? ` <span class="t-en">${esc(TIT_EN[t])}</span>` : '';
+    /* ── 位置文案的唯一口径（排查报告 A1）──────────────────────────────
+       同一件事原先有六种排法：`第3章 5/40`（第二个数没有单位，读者不知道 40 是什么）、
+       `第 2/6 篇`（斜杠两侧没空格）、`5 / 40`（连「第」和单位都没有了，还是同一个 paint() 的
+       另一条分支）、`全文 5/3219`……现在凡是「第 n / N 某单位」一律走这两个函数：
+         posOf(n, N, unit)   → 第 n / N 句      （1 基；unit 必填语义，默认「句」）
+         posRange(a, b, unit) → 第 a–b 句       （区间，破折号两侧不加空格）
+       数据层级只有三级：SECTIONS = 篇 → subheads = 卷 → 句。
+       ⚠️ A2：本文件里那几个 chapter* 函数（chapterSentCount / computeChapterStart /
+       chapterOfGlobal）iterate 的是 **SECTIONS**，也就是「篇」—— 「章」是影子跟读主站带过来的
+       旧词，跟「篇」指的是同一级数据。旧文案在同一页上把同一级一会儿叫「第 3 章」一会儿叫
+       「第 2/6 篇」，用户以为是两级。UI 上一律印「篇」，函数名不动（改了要动一片调用点）。
+       CHAPTERS 只服务词库搜索列表，不参与句号坐标，别把它当第三级。
+       app.js（外壳）在运行期直接调这两个全局函数 —— 它是 defer 加载，内联脚本早跑完了。 */
+    function posOf(n, N, unit) { return `第 ${n} / ${N} ${unit || '句'}`; }
+    function posRange(a, b, unit) { return `第 ${a}–${b} ${unit || '句'}`; }
+    /* ── 词状态的唯一词表（排查报告 A5 / A11）──────────────────────────
+       原先同一份「词学到哪一步了」有三张表：本文件的 STAGE_LABEL（缺 fresh，未见面词把英文键
+       直接印到屏上）、app.js 的 WORD_STAGE_LABEL（五态齐全）、app.js 的 WB_FILTER_LABEL
+       （待掌握 / 学习中 / 已掌握 —— 三档相加永远小于「全部」，因为没碰过的词不在任何一档里）。
+       现在只剩这一份：五态互斥且相加恒等于「全部」，筛选档位就是五个真状态本身，
+       「重点词」是盖在状态之上的一个标记，所以它是一档**正交**筛选而不参与相加。
+       今日面板里那个「词本」页签整套删掉，单词本只留 #/words 一条出口。
+       注意 app.js 里另有一份 STAGE_LABEL（app.js:148）说的是**文章**进度，与词无关 —— 已改名
+       ART_STAGE_LABEL，免得同名不同义。 */
+    const WORD_STAGE_LABEL = { fresh: '未见面', seen: '已见面', recognized: '文中可辨',
+                               owned: '义项直连', graduated: '已毕业' };
+    const WB_FILTERS = ['all', 'fresh', 'seen', 'recognized', 'owned', 'graduated', 'leech'];
+    const WB_FILTER_LABEL = Object.assign({ all: '全部', leech: '重点词' }, WORD_STAGE_LABEL);
     function chapterSentCount(si) {
       if (!SECTIONS[si]) return 0;
       return SECTIONS[si].paragraphs.reduce((n, p) => n + p.length, 0);
@@ -3601,7 +3615,7 @@ let listenOn = false;
       trk.setAttribute('aria-valuemin', '1');
       trk.setAttribute('aria-valuemax', String(n));
       trk.setAttribute('aria-valuenow', String(cur));
-      trk.setAttribute('aria-valuetext', '本章第 ' + cur + ' 句，共 ' + n + ' 句');
+      trk.setAttribute('aria-valuetext', '本篇第 ' + cur + ' 句，共 ' + n + ' 句');   /* A2：印给读屏的也叫篇 */
     }
     _ticks.forEach(t => {
     const i = parseInt(t.dataset.i, 10);
@@ -3622,7 +3636,10 @@ let listenOn = false;
     const tip = document.getElementById('seekTip');
     if (!tip) return;
     const ai = artOfSent[i];
-    const idxText = ai !== undefined ? `第${ai + 1}章 第${i - artOfSent.indexOf(ai) + 1}句` : `第${i + 1}句`;
+    /* ai 是 artOfSent 下标 = 篇（A2），第二个数补上单位（A1）。 */
+    const idxText = ai !== undefined
+      ? posOf(ai + 1, SECTIONS.length, '篇') + ' · ' + posOf(i - artOfSent.indexOf(ai) + 1, chapterSentCount(ai))
+      : posOf(i + 1, totalSentCount());
     tip.innerHTML = `<div class="tip-idx">${idxText}</div><div>${esc(plainEN(sentRaw(i)))}</div>`;
     tip.style.display = 'block';
     tip.style.transform = 'none';
@@ -4368,7 +4385,8 @@ let listenOn = false;
     /* 句数一律按**全局**章起点算（segRange 读的是已渲染的 .sent，单篇视图里只覆盖当前章，
        拿它算别的章会得到「第 1–N 句」这种错话）。 */
     const s = computeChapterStart(ai), total = chapterSentCount(ai);
-    document.getElementById('jumpHint').textContent = `第${ai + 1}章共 ${total} 句（全文第 ${s + 1}–${s + total} 句）`;
+    document.getElementById('jumpHint').textContent =
+      posOf(ai + 1, SECTIONS.length, '篇') + `共 ${total} 句（全文${posRange(s + 1, s + total)}）`;   /* A1/A2 */
     /* 句号是点选不是打字（D9）。选项带上句首几词 —— 只给序号等于让人盲选，
        本来就没读到过这些句。快速跳转与「今日任务从哪开始」共用这一份。 */
     const sel = document.getElementById('jumpN');
@@ -4951,7 +4969,10 @@ let listenOn = false;
     function mediaMeta(title) {
     try {
     if (!('mediaSession' in navigator)) return;
-    if (title) navigator.mediaSession.metadata = new MediaMetadata({ title: title, artist: 'IELTS Shadow', album: '雅思词汇' });
+    /* A4：锁屏/控制中心那两行署名是用户看得到 app 自称的唯一去处（浏览器标签页只显示 title）。
+       以前写 artist: 'IELTS Shadow' + album: '雅思词汇' —— 加上 title/桌面图标/侧栏品牌，
+       app 对自己有四个名字。统一成 `<title>` 那个自称，album 留空免得同一行重复两遍。 */
+    if (title) navigator.mediaSession.metadata = new MediaMetadata({ title: title, artist: '词汇真经单词速记', album: '' });
     navigator.mediaSession.playbackState = (typeof playing !== 'undefined' && playing) ? 'playing' : 'paused';
     } catch (e) {}
     }
@@ -5047,7 +5068,13 @@ let listenOn = false;
     // 「回到学习位置」的显隐：目标（学习句 / 当前空）与是否在视口都要现算，统一交给 TASK。
     try { if (typeof TASK !== 'undefined' && TASK.updateBackBtn) TASK.updateBackBtn(); } catch (e) {}
     const bp = _getDom('btnPlay');
-    if (bp) bp.innerHTML = playing ? '<i class="ri-pause-fill" aria-hidden="true"></i><span class="lbl"> 暂停</span>' : '<i class="ri-play-fill" aria-hidden="true"></i><span class="lbl"> 播放</span>';
+    /* A8：可见文字在「播放 ⇄ 暂停」之间切换，aria-label 也必须跟着表态 ——
+       写死「播放或暂停」的键，读屏用户永远听不到现在按下去会发生什么，
+       而同栏的 #btnStop 是具体的「停止播放」。口径同 app.js 那颗 .ls-play。 */
+    if (bp) {
+      bp.innerHTML = playing ? '<i class="ri-pause-fill" aria-hidden="true"></i><span class="lbl"> 暂停</span>' : '<i class="ri-play-fill" aria-hidden="true"></i><span class="lbl"> 播放</span>';
+      bp.setAttribute('aria-label', playing ? '暂停' : '播放');
+    }
     // 更新章节标题
     // 任务模式下这一行归任务栏说（「读到第 N 句 · 章节名」），播放路径别再把它盖回去
     const titleEl = (typeof TASK !== 'undefined' && TASK.active) ? null : _getDom('abTitle');
@@ -5055,9 +5082,11 @@ let listenOn = false;
     const ai0 = artOfSent[idx];
     if (ai0 !== undefined) {
     const [s0, e0] = segRange(ai0);
-    titleEl.textContent = `第${ai0 + 1}章 ${idx - s0 + 1}/${e0 - s0}`;
+    titleEl.textContent = posOf(ai0 + 1, SECTIONS.length, '篇') + ' · ' + posOf(idx - s0 + 1, e0 - s0);
     } else {
-    titleEl.textContent = `${idx + 1} / ${sents.length}`;
+    /* 同一个 paint() 的 else 分支（取不到文章序号时）：以前写成「5 / 40」，连「第」和单位都没了，
+       与两行之上那条只差不到一屏的写法互相打脸（A1 表第五行）。 */
+    titleEl.textContent = posOf(idx + 1, sents.length);
     }
     }
     paintSeek();
@@ -5147,7 +5176,7 @@ let listenOn = false;
     loopCurrent = 0;
     loopSent = -1;
     }
-    // A-B段落循环模式：到达B点后跳回A点；若同时开启单句循环，把循环锚点也重置到A
+    // A-B 循环（跨句段）模式：到达B点后跳回A点；若同时开启单句循环，把循环锚点也重置到A
     if (abMode === 3 && abStart >= 0 && abEnd >= 0 && i >= abEnd) {
     launchedUpTo = abStart - 1;
     if (loopMode) { loopSent = abStart; loopCurrent = 0; }
@@ -5172,7 +5201,7 @@ let listenOn = false;
     /* 任务模式一步一停（他 2026-09-23：「不点不放」）：这一句放完就收，下一句由任务条那颗键叫起来。
        链子自己往前滚的代价是两条：听完的句子一句都不计完成（计数原本挂在点「下一句」上），
        ①→② 的交接也永远不触发（那个检查同样只挂在按钮上）—— 条上写着「接着出这一批的词」却不出题。
-       A-B 段循环在上面已经 return 走不到这里；单句循环要等设定的遍数跑完才落到这一行。 */
+       A-B 循环在上面已经 return 走不到这里；单句循环要等设定的遍数跑完才落到这一行。 */
     try {
       if (TASK.active) {
         const gi = (currentChapter < 0) ? i : chapterSentStart + i;
@@ -5235,7 +5264,7 @@ let listenOn = false;
     }
     if (loopMode) loopSent = i; // 起播/切句/跳转时把循环锚定到目标句
     // 循环模式只发锚定句：兄弟句连发会进引擎队列抢播、且它们的 completion 会消费 loopCurrent
-    // A-B循环同样只发单句链：预取会把 B+1、B+2 提前入队，回绕后它们插在 A 前面导致每轮多播两句
+    // A-B 循环同样只发单句链：预取会把 B+1、B+2 提前入队，回绕后它们插在 A 前面导致每轮多播两句
     // 任务模式同样只发这一句：链子上写的是「放完就停」，可预取出去的那两句已经在引擎里排着队，
     // 停是停住了、声音还要替你把下面两句念完 —— 那正是他要拆掉的连读。
     const todaySingle = (typeof TASK !== 'undefined' && TASK.listenSrc === 'today' && listenOn && !TASK.active);
@@ -5339,7 +5368,7 @@ let listenOn = false;
       live.setAttribute('aria-hidden', on ? 'false' : 'true');
       if (on) {
         const a = Math.min(abStart, abEnd) + 1, b = Math.max(abStart, abEnd) + 1;
-        live.textContent = `A-B 循环中：第 ${a}–${b} 句 · 点击退出`;
+        live.textContent = `A-B 循环中：${posRange(a, b)} · 点击退出`;
       }
     }
     // 书签弹窗/AB 弹窗开着时同步状态
@@ -5405,7 +5434,7 @@ let listenOn = false;
     if (abMode === 0) return;
     abMode = 0; abStart = -1; abEnd = -1;
     abUI(); paintAB();
-    if (!silent) showAbToast('A-B循环已取消');
+    if (!silent) showAbToast('A-B 循环已取消');
     dlog('ab-loop', 'off');
     }
     // 正文点中句子：待选态则收为 A/B（返回 true 表示已消费，不再朗读跳转）
@@ -5423,7 +5452,7 @@ let listenOn = false;
     abStart = a; abEnd = b; abMode = 3;
     abUI(); paintAB();
     const n = b - a + 1;
-    showAbToast(n === 1 ? `单句循环：第${a + 1}句` : `A-B循环：第${a + 1}~${b + 1}句，共${n}句`);
+    showAbToast(n === 1 ? `单句循环：第 ${a + 1} 句` : `A-B 循环：${posRange(a + 1, b + 1)}，共 ${n} 句`);
     dlog('ab-loop', `A=${a} B=${b}`);
     playFrom(a);
     // 选择完成 → 自动保存循环结果
@@ -5482,7 +5511,7 @@ let listenOn = false;
     const ai = chapterOfGlobal(a), bi = chapterOfGlobal(b);
     if (ai === bi) {   // 同一章内： compact 形式，避免与下方范围行重复啰嗦
     const s0 = computeChapterStart(ai);
-    return `第${ai + 1}章 · 第${a - s0 + 1}–${b - s0 + 1}句`;
+    return posOf(ai + 1, SECTIONS.length, '篇') + ' · ' + posRange(a - s0 + 1, b - s0 + 1);   /* A1/A2 */
     }
     return `${markLabel(a)} — ${markLabel(b)}`;
     }
@@ -5495,14 +5524,14 @@ let listenOn = false;
     const loops = getABLoops().filter(x => !(x && x.start === ga && x.end === gb));
     loops.unshift({ start: ga, end: gb, name, u: Date.now() });
     setABLoops(loops); renderABLoops();
-    showAbToast('AB 循环已保存');
+    showAbToast('A-B 循环已保存');
     }
     function renderABLoops() {
     const list = document.getElementById('abLoopList');
     if (!list) return;
     // 菜单打开时同步主按钮文案：有循环/待选中显示"取消"，一眼就知道怎么退出
     const setBtn = document.getElementById('abSetBtn');
-    if (setBtn) setBtn.textContent = abMode === 0 ? '设置AB循环' : '取消AB循环';
+    if (setBtn) setBtn.textContent = abMode === 0 ? '设置 A-B 循环' : '取消 A-B 循环';
     const maxI = sents.length ? ((currentChapter >= 0) ? chapterSentStart + sents.length - 1 : sents.length - 1) : -1;
     const minI = (currentChapter >= 0) ? chapterSentStart : 0;
     const all = getABLoops().filter(x => x && Number.isInteger(x.start) && Number.isInteger(x.end));
@@ -5511,11 +5540,11 @@ let listenOn = false;
       const localA = (currentChapter >= 0) ? x.start - chapterSentStart : x.start;
       const localB = (currentChapter >= 0) ? x.end - chapterSentStart : x.end;
       const a = Math.min(localA, localB), b = Math.max(localA, localB);
-      return `<div class="ab-loop-item"><div class="ab-loop-name"><span class="ab-loop-title">${esc(x.name || loopName(x.start, x.end))}</span><div class="ab-loop-range">第 ${a + 1}–${b + 1} 句</div></div><div class="ab-loop-btns"><button class="ab-loop-act" onclick="recallABLoop(${x.start}, ${x.end})">加载</button><button class="ab-loop-act del" onclick="deleteABLoop(${x.start}, ${x.end})">删</button></div></div>`;
+      return `<div class="ab-loop-item"><div class="ab-loop-name"><span class="ab-loop-title">${esc(x.name || loopName(x.start, x.end))}</span><div class="ab-loop-range">${posRange(a + 1, b + 1)}</div></div><div class="ab-loop-btns"><button class="ab-loop-act" onclick="recallABLoop(${x.start}, ${x.end})">加载</button><button class="ab-loop-act del" onclick="deleteABLoop(${x.start}, ${x.end})">删</button></div></div>`;
     }).join('') : (all.length
-      // 原先一律显示"还没有保存的 AB 循环"，切章后用户以为自己存的循环被删了
-      ? `<div style="font-size:12px;color:var(--muted)">当前范围里没有可用的循环：已保存的 ${all.length} 个都在其它章，切到「全部文章」就能看到。</div>`
-      : '<div style="font-size:12px;color:var(--muted)">还没有保存的 AB 循环。</div>');
+      // 原先一律显示「还没有保存的 A-B 循环」，切篇后用户以为自己存的循环被删了
+      ? `<div style="font-size:12px;color:var(--muted)">当前范围里没有可用的循环：已保存的 ${all.length} 个都在其它篇，切到「全部文章」就能看到。</div>`
+      : '<div style="font-size:12px;color:var(--muted)">还没有保存的 A-B 循环。</div>');
     }
     function recallABLoop(ga, gb) {
     toggleABPop(false);
@@ -6201,10 +6230,10 @@ let listenOn = false;
     function markLabel(i) {
     i = Math.max(0, Math.min(totalSentCount() - 1, i));
     const ch = chapterOfGlobal(i);
-    return `第${ch + 1}章 · 第${i - computeChapterStart(ch) + 1}句`;
+    return posOf(ch + 1, SECTIONS.length, '篇') + ' · ' + posOf(i - computeChapterStart(ch) + 1, chapterSentCount(ch));   /* A1/A2 */
     }
     function markSub(i, ts) {
-    return `全文 ${i + 1}/${totalSentCount()}` + (ts ? ` · ${ts}` : '');
+    return '全文 ' + posOf(i + 1, totalSentCount()) + (ts ? ` · ${ts}` : '');   /* A1：补「第」和单位 */
     }
     function addMark() {
     const at = localToGlobal(idx >= 0 ? idx : 0);
@@ -6261,7 +6290,7 @@ let listenOn = false;
       `<button class="mk-act ab${aOn ? ' ab-on' : ''}" onclick="abMarkPick(${x.i},'A')" title="设为A-B起点">A</button>` +
       `<button class="mk-act ab${bOn ? ' ab-on' : ''}" onclick="abMarkPick(${x.i},'B')" title="设为A-B终点">B</button>` +
     `<button class="mk-act del" onclick="delMark(${x.i})">删</button></div></div>`; }).join('')
-    : '<div style="font-size:12px;color:var(--muted)">还没有书签，先点“记下当前位置”。</div>';
+    : '<div style="font-size:12px;color:var(--muted)">还没有书签，先点「记下当前位置」。</div>';
     }
     function jumpMark(i) {
     toggleMarkPop(false);
@@ -6928,14 +6957,14 @@ let listenOn = false;
         if (_listenSrc === 'today' && listenOn && !taskMode && _listenToday.length) {
           const t0 = document.getElementById('lsTitle'), p0 = document.getElementById('lsPos');
           if (t0) t0.textContent = '今日任务 · 循环播放';
-          if (p0) p0.textContent = '第 ' + (_listenTodayPos + 1) + '/' + _listenToday.length + ' 句';
+          if (p0) p0.textContent = posOf(_listenTodayPos + 1, _listenToday.length);   /* A1：斜杠两侧各一个空格 */
           return;
         }
         const a = (_listenArticle != null) ? _listenArticle : 0;
         const sec = SECTIONS[a] || {};
         const lt = document.getElementById('lsTitle'), lp = document.getElementById('lsPos');
         if (lt) lt.textContent = sec.title || '';
-        if (lp) lp.textContent = `第 ${a + 1}/${SECTIONS.length} 篇`;
+        if (lp) lp.textContent = posOf(a + 1, SECTIONS.length, '篇');
       }
       /* §7.4 篇末自动切下一篇（六篇循环）——只由 launch 的完播分支在随身听上下文里调。 */
       function listenNextArticle() {
@@ -6947,7 +6976,7 @@ let listenOn = false;
         _listenTick = Date.now();
         const t = document.getElementById('lsTitle'), p = document.getElementById('lsPos');
         if (t) t.textContent = SECTIONS[a] ? SECTIONS[a].title : '';
-        if (p) p.textContent = `第 ${a + 1}/${SECTIONS.length} 篇`;
+        if (p) p.textContent = posOf(a + 1, SECTIONS.length, '篇');
         updateListenHud();
         playFrom(0);
       }
@@ -6982,7 +7011,7 @@ let listenOn = false;
       }
       function listenTodayStart() {
         if (!listenTodayBuild()) {
-          try { showAbToast('还没有今日任务：先去「我的」设置每天读多久'); } catch (e) {}
+          try { showAbToast('还没有今日任务：先去「我的」设置「每天有多少分钟」'); } catch (e) {}
           return false;
         }
         listenArm();
@@ -7010,8 +7039,8 @@ let listenOn = false;
         src = (src === 'today') ? 'today' : 'all';
         if (src === 'today' && !isLoggedIn()) { taskLoginPrompt('today'); return _listenSrc; }
         if (src === 'today') {
-          if (!plan) { try { showAbToast('还没有学习计划：先去「我的」设置每天读多久'); } catch (e) {} return _listenSrc; }
-          if (!listenTodayBuild()) { try { showAbToast('今天没有排到句子：把每天的分钟数调大一点试试'); } catch (e) {} return _listenSrc; }
+          if (!plan) { try { showAbToast('还没有学习计划：先去「我的」设置「每天有多少分钟」'); } catch (e) {} return _listenSrc; }
+          if (!listenTodayBuild()) { try { showAbToast('今天没有排到句子：把「每天有多少分钟」调大一点试试'); } catch (e) {} return _listenSrc; }
           if (playing && listenOn && !taskMode) {
             try {
               const gic = (currentChapter < 0) ? idx : chapterSentStart + idx;
@@ -7076,8 +7105,6 @@ let listenOn = false;
       const MIG_KEY = 'ielts.shadow.migNotice';
       let ROOT2 = null;
       let WORDS_BY_SENT = null, ALL_TARGET_WORDS = 0, _cachedPlan = null, _cachedDay = '', _cachedArticle = undefined, _cachedManual = '';
-      const STAGE_LABEL = { all: '全部', seen: '已见面', recognized: '文中可辨',
-                            owned: '义项直连', graduated: '已毕业', leech: '重点词' };
 
       function indexWords() {
         WORDS_BY_SENT = [];
@@ -8463,7 +8490,7 @@ let listenOn = false;
         }
       }
       /* §2.3 / §14.2：没计划时点卡片也能进这一篇 —— 正文可读、自由跟读照常（播放条控件
-         搬进任务条），任务条那一格换成空状态「还没有学习计划 · 去设置每天读多久」。
+         搬进任务条），任务条那一格换成空状态「还没有学习计划 · 去设置每天有多少分钟」。
          它不建队列、不记进度（没有计划就没有今天的账），只把「读文章」这件事先给到人。 */
       function enterFreeTaskMode(opts) {
         if (taskMode) { closePanel(); return; }
@@ -8516,7 +8543,7 @@ let listenOn = false;
         batchItems = items.map(x => Object.assign({}, x));
         pass = 1; resetQuizRun(); taskFinished = false;
         _tabStarted = false;                       // 那颗键每一趟都从「放这一句」起步
-        if (!todayQueue.length && !fallback) { showAbToast('今天没有排到的句子 —— 把每天的分钟数调大一点试试'); return; }
+        if (!todayQueue.length && !fallback) { showAbToast('今天没有排到的句子 —— 把「每天有多少分钟」调大一点试试'); return; }
         taskMode = true;
         window.__taskEnterAt = Date.now();   // route() 靠它豁免「建立任务模式自带的那次 hashchange」
         _tapCounted.clear();   // 新的一趟：点即+1 的防重账本清零
@@ -8998,7 +9025,7 @@ let listenOn = false;
         const posEl = document.querySelector('#ttTitle .r-pos');
         if (titleEl) titleEl.textContent = (a != null && SECTIONS[a]) ? SECTIONS[a].title : '全部文章';
         if (tcnEl) tcnEl.textContent = (a != null && SECTIONS[a] && TIT_EN[SECTIONS[a].title]) ? TIT_EN[SECTIONS[a].title] : '';
-        if (posEl) posEl.textContent = (a != null) ? `第 ${a + 1}/${SECTIONS.length} 篇` : '';
+        if (posEl) posEl.textContent = (a != null) ? posOf(a + 1, SECTIONS.length, '篇') : '';
         const prev = document.getElementById('ttPrev'), next = document.getElementById('ttNext');
         /* 随身听展开态（listen-mode）里这双箭头是**切篇继续听**（listenStep，口径 §7.4），
            不许跳去任务模式把收听收掉（openArticle → enterTaskMode 会 listenStopForTask）。
@@ -9022,12 +9049,12 @@ let listenOn = false;
         const clockEl = document.getElementById('tbClock');
         renderTaskTop(currentArticle);
         if (titleEl) titleEl.textContent = '还没有学习计划';
-        if (subEl) subEl.textContent = '去设置每天读多久';
+        if (subEl) subEl.textContent = '去设置「每天有多少分钟」';
         if (againBtn) againBtn.style.display = 'none';
         if (clockEl) clockEl.textContent = '';
         const nextBtn = document.getElementById('tbNext');
         if (nextBtn) nextBtn.dataset.label = '';
-        setTaskNext('去设置', '去设置每天读多久');
+        setTaskNext('去设置', '设置「每天有多少分钟」');
         syncTaskSeek(false, 0);
         syncTaskBarHeight(); syncCardBottom();
       }
@@ -9255,7 +9282,7 @@ let listenOn = false;
           el.setAttribute('aria-valuemin', '1');
           el.setAttribute('aria-valuemax', String(n));
           el.setAttribute('aria-valuenow', String(k + 1));
-          el.setAttribute('aria-valuetext', '今天第 ' + (k + 1) + ' 句，还剩 ' + (n - k) + ' 句');
+          el.setAttribute('aria-valuetext', seekValText(k, n));
         } else {
           el.removeAttribute('title');
           el.removeAttribute('aria-valuetext');
@@ -9263,6 +9290,11 @@ let listenOn = false;
           el.setAttribute('aria-valuemax', '100');
           el.setAttribute('aria-valuenow', String(Math.round(frac * 100)));
         }
+      }
+      /* 读屏口径单一来源：拖动路径与 15 秒刷新路径以前一个说「今天第 X 句，还剩 M 句」、
+         一个说「第 X 句，共 N 句」（A1 表最后一行）。 */
+      function seekValText(k, n) {
+        return '今天第 ' + (k + 1) + ' 句，还剩 ' + Math.max(0, n - k - 1) + ' 句';
       }
       function bindTaskSeek() {
         const el = document.getElementById('tbSeek');
@@ -9277,7 +9309,7 @@ let listenOn = false;
           if (fill) fill.style.width = p;
           if (knob) knob.style.left = p;
           el.setAttribute('aria-valuenow', String(k + 1));
-          el.setAttribute('aria-valuetext', '第 ' + (k + 1) + ' 句，共 ' + nOf() + ' 句');
+          el.setAttribute('aria-valuetext', seekValText(k, nOf()));   /* A1：与上面那条同说法，同一控件两套读屏文案是 bug */
         };
         const kAt = (clientX) => {
           const r = el.getBoundingClientRect();
@@ -9497,7 +9529,7 @@ let listenOn = false;
       let _startPending = null;   // 确认步暂存 {a, n}（有今日进度时先问再改）
       function openStartPicker(defAA, defNA) {
         closeStartPicker();
-        if (!ROOT2 || !ROOT2.plan) { try { showAbToast('先去「我的」设置每天读多久，再定起点'); } catch (e) {} return; }
+        if (!ROOT2 || !ROOT2.plan) { try { showAbToast('先去「我的」设置「每天有多少分钟」，再定起点'); } catch (e) {} return; }
         let defA = (currentChapter >= 0) ? currentChapter : 0;
         try {
           const q0 = (todayQueue && todayQueue.length && todayQueue[0].i);
@@ -9615,7 +9647,7 @@ let listenOn = false;
         return dropped;
       }
       function setManualStart(gi) {
-        if (!ROOT2 || !ROOT2.plan) { try { showAbToast('先去「我的」设置每天读多久，再定起点'); } catch (e) {} return false; }
+        if (!ROOT2 || !ROOT2.plan) { try { showAbToast('先去「我的」设置「每天有多少分钟」，再定起点'); } catch (e) {} return false; }
         gi = Math.max(0, Math.min(SENT_RAW.length - 1, gi | 0));
         ROOT2.plan.manualStart = { gi: gi, day: day2() };
         /* 起点一改，旧钉全作废；目标篇按手动窗口 [gi, gi+N-1] 重新钉 —— 开始/结束两条线
@@ -9735,9 +9767,8 @@ let listenOn = false;
         _pendingArticle = null;
       }
 
-      let _view = 'today', _bookFilter = 'all';
+      let _view = 'today';
       function setView(v) { _view = v; const el = document.getElementById('todayPanel'); if (el) renderToday(el); }
-      function setBookFilter(f) { _bookFilter = f; setView('book'); }
 
       /* 计划设置只问一件事：每天有多少分钟。
          「总天数 → 反推每天句数」这条除法链和「慢/正常/快」三档一起删掉了：
@@ -9799,7 +9830,7 @@ let listenOn = false;
       }
       function etaText(r, m, exact) {
         if (r === null) return '工期暂时算不出来，刷新页面再试';      // 估算抛错（见 etaFor：失败也要落定）
-        if (!r || r.empty) return '按每天 ' + m + ' 分钟排不出任务，先把每天的时间调大一点';
+        if (!r || r.empty) return '按每天 ' + m + ' 分钟排不出任务，先把「每天有多少分钟」调大一点';
         if (!r.done) return '按每天 ' + m + ' 分钟，三年内到不了终点（先把每天时间调大些）';
         return '到 ' + etaMonth(r.doneAt, exact) + ' <b>新词全部过完一遍</b>（需要 ' + r.days + ' 天）';
       }
@@ -9902,14 +9933,14 @@ let listenOn = false;
           <div class="plan-setup">
           <h3>每天有多少分钟</h3>
           <p class="ps-sub">共 ${SENT_RAW.length} 句 · ${ALL_TARGET_WORDS} 个目标词。句数与覆盖词数由分钟数算出来。</p>
-          <div class="ps-group"><div class="ps-opts" id="psMin" role="group" aria-label="每天多少分钟">
+          <div class="ps-group"><div class="ps-opts" id="psMin" role="group" aria-label="每天有多少分钟">
             ${MINS.map(m => `<button class="ps-opt${m === sel ? ' sel' : ''}" data-v="${m}">${m} 分钟</button>`).join('')}
           </div></div>
           <div class="ps-sum" id="psSum"></div>
           <div class="ps-eta" id="psEta" data-days="">算一下…</div>
           <div class="ps-eta sm" id="psEtaAssume">（只按通读时间估算：新句约 ${Math.round(secNew())} 秒、复习句约 ${Math.round(secReview())} 秒。做题不占每天的分钟数）</div>
           <button class="ps-start" id="psStart">开始这个计划</button>
-          <div class="ps-adjust"><button class="btn" onclick="TASK.importBackup()">导入备份恢复</button></div>
+          <div class="ps-adjust"><button class="btn" onclick="TASK.importBackup()">导入恢复</button></div>
           <input type="file" id="importFile" accept="application/json,.json" style="display:none">
         </div>`;
         const refresh = () => {
@@ -9969,7 +10000,10 @@ let listenOn = false;
       function renderToday(p) {
         if (!ROOT2 || !ROOT2.plan) { renderSetup(p); return; }
         p.dataset.view = _view;
-        const tabs = [['today', '今天'], ['plan', '计划'], ['book', '词本']]
+        /* A5：面板里不再另设「词本」页签 —— 它和 #/words 是同一个单词本的两套账
+           （那边数的是「已收录 = 有状态记录的词」，这边数的是「全部 = 全部目标词」，
+           同一个「全部」在两个屏上不是同一个数）。词本只留底部 Tab 那一条出口。 */
+        const tabs = [['today', '今天'], ['plan', '计划']]
           .map(v => `<button class="tp-tab${_view === v[0] ? ' on' : ''}" data-view="${v[0]}" onclick="TASK.setView('${v[0]}')">${v[1]}</button>`).join('');
         /* 标题写死一句「今日学习任务」：以前它跟着当前 tab 走（今天/计划/词本），
            于是同一行里「今天」出现两次（h3 一次、下面 tab 一次），纯重复。
@@ -9978,7 +10012,7 @@ let listenOn = false;
         p.innerHTML = `<div class="tp-head"><h3>今日学习任务</h3>
           <button class="tp-close" onclick="TASK.closePanel()" aria-label="关闭面板">✕</button></div>
           <div class="tp-tabs">${tabs}</div>` +
-          (_view === 'plan' ? renderPlanView() : _view === 'book' ? renderBookView() : renderTodayView());
+          (_view === 'plan' ? renderPlanView() : renderTodayView());
         // 数字停在「打开面板那一刻」是这类双路径写同一节点最典型的翻车；放在这里，
         // 改分钟 / 改日界 / 暂停新词三条重绘路径就都自动带上，不用一个个补。
         if (_view === 'plan') paintPlanEta(); else if (_view === 'today') paintTodayEta();
@@ -10053,8 +10087,8 @@ let listenOn = false;
           ${ROOT2.report && ROOT2.report.words ? `<div class="tp-note sm">上次改成按词记：<b>${ROOT2.report.words}</b> 个词从句子账搬过来，`
             + `其中 ${ROOT2.report.cappedWords} 个原本算「巩固/掌握」的被压回「已见面」，要重新考才算数。</div>` : ''}
           <div class="tp-note sm">进度存在这台设备上，并以上传「完成记录」的方式同步。<span class="sync-state" id="syncState">${syncHintText()}</span></div>
-          <div class="ps-adjust"><button class="btn" onclick="TASK.exportBackup()">导出进度备份</button>
-            <button class="btn" onclick="TASK.importBackup()">导入备份恢复</button></div>
+          <div class="ps-adjust"><button class="btn" onclick="TASK.exportBackup()">导出备份</button>
+            <button class="btn" onclick="TASK.importBackup()">导入恢复</button></div>
           <input type="file" id="importFile" accept="application/json,.json" style="display:none">
           <div class="ps-adjust"><button class="link-danger" onclick="TASK.resetPlan()">清空重来</button></div>`;
       }
@@ -10073,27 +10107,10 @@ let listenOn = false;
         return left > 0 ? `还有 ${left} 条没传上去` : '';
       }
 
-      function renderBookView() {
-        const c = countStages();
-        /* 「全部」不是一个总数：这里是【已经收进来的词】，跟别处「已毕业 0 / 3245」的 3245（目标词）
-           不是一个量纲。改叫「已收录」，别让两个数都被读成"我有多少词"。 */
-        const filters = [['all', '已收录'], ['seen', '已见面'], ['recognized', '文中可辨'],
-                         ['owned', '义项直连'], ['graduated', '已毕业'], ['leech', '重点词']]
-          .map(f => `<button class="pill${_bookFilter === f[0] ? ' on' : ''}" onclick="TASK.setBookFilter('${f[0]}')">${f[1]} ${f[0] === 'leech' ? c.leech : (f[0] === 'all' ? Object.keys(ROOT2.state.words).length : c[f[0]])}</button>`).join('');
-        const rows = Object.keys(ROOT2.state.words)
-          .filter(k => _bookFilter === 'all' || (_bookFilter === 'leech' ? ROOT2.state.words[k].leech : ROOT2.state.words[k].stage === _bookFilter))
-          .sort((a, x) => (ROOT2.state.words[x].reps || 0) - (ROOT2.state.words[a].reps || 0))
-          .slice(0, 160)
-          .map(k => {
-            const w = ROOT2.state.words[k];
-            return `<div class="tp-book-row"><span class="bw">${esc(k)}</span>
-              <span class="bs">${STAGE_LABEL[w.stage] || w.stage} · 读过 ${w.reps} 次${w.leech ? ' · 重点' : ''}</span>
-              <button class="bx" onclick="TASK.relearn('${esc(k)}')">重学</button></div>`;
-          }).join('');
-        return `<div class="tp-filters">${filters}</div>
-          <div class="tp-book">${rows || '<p class="sm">这一档还没有词 —— 先去读几句，词是自己走进来的。</p>'}</div>
-          <p class="sm">这里不是背单词的入口，是查「我到底会没会」的地方。</p>`;
-      }
+      /* renderBookView（今日面板的「词本」页签）整套删除（排查报告 A5）：它和路由页 #/words
+         是同一个单词本的两套账 —— 这边「已收录」数的是有状态记录的词，那边「全部」数的是全部目标词，
+         同一个词表两个分母；词表也各有一张（缺 fresh 的 STAGE_LABEL）。
+         「这里不是背单词的入口，是查『我到底会没会』的地方」这句自我定位搬进 #/words 页脚。 */
 
       /* pauseNew（「暂停新句，只复习」）已随 2026-10-06 砍「只复习」开关一并删除：
          没有入口再产生 plan.paused=true，引擎按正常见新词排。 */
@@ -10132,7 +10149,7 @@ let listenOn = false;
       function parseBackup(o) {
         if (!o || typeof o !== 'object' || Array.isArray(o)) return { ok: false, reason: '备份文件格式不对' };
         if (o.app !== 'ielts-shadow' || !o.data || typeof o.data !== 'object' || Array.isArray(o.data)) {
-          return { ok: false, reason: '这不是影子跟读导出的备份文件' };
+          return { ok: false, reason: '这不是本应用导出的备份文件' };
         }
         const keys = Object.keys(o.data).filter(isBackupKey);
         if (!keys.length) return { ok: false, reason: '备份里没有可恢复的数据' };
@@ -10183,7 +10200,7 @@ let listenOn = false;
         a.href = URL.createObjectURL(blob);
         const d = new Date();
         const stamp = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
-        a.download = `影子跟读备份_${stamp}.json`;
+        a.download = `词汇真经单词速记备份_${stamp}.json`;
         document.body.appendChild(a);
         a.click();
         a.remove();
@@ -10243,8 +10260,8 @@ let listenOn = false;
          保住事件流 / 词状态 / 日账 / streak，只重设分钟数、开始日期与今天排程。 */
       function resetLearningPlan() {
         if (!ROOT2 || !ROOT2.plan) return false;
-        if (!confirm('重置学习计划？\n\n会重置：每天分钟数、开始日期与今天的排程。\n'
-          + '不会动：已学进度、单词状态、连续天数与学习数据。\n重置后可重新设置每天读多久。')) return false;
+        if (!confirm('重置学习计划？\n\n会重置：「每天有多少分钟」、开始日期与今天的排程。\n'
+          + '不会动：已学进度、单词状态、连续天数与学习数据。\n重置后可重新设置「每天有多少分钟」。')) return false;
         ROOT2.plan = null;
         ROOT2.planned = {};
         ROOT2.pendingReplan = true;      // 下次 initPlan：只换计划，进度照留
@@ -10413,7 +10430,7 @@ let listenOn = false;
         recordRep, buildQueue, updateMarkers, updateBtn,
         loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
         pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
-        initPlan, resetV2, readDone, relearn, setView, setBookFilter, setMinutes,
+        initPlan, resetV2, readDone, relearn, setView, setMinutes,
         etaFor, etaCalls, etaText, etaMonth, countStages, seedDailyForTest, seedArticleForTest,
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
         repsOf, articlePass2Done,

@@ -144,7 +144,7 @@ test.describe('任务条：推进键是主按钮 / 再来与循环可分 / 快�
     await expect(page.locator('#tbAgain i')).toHaveClass(/ri-loop-left-line/);
   });
 
-  test('③ 快速跳转列出全部章节，跳章真的换章并落到该章那一句', async ({ page }) => {
+  test('③ 快速跳转列出全部篇，跳篇真的换篇并落到那一句', async ({ page }) => {
     await enterRead(page);
     // 任务模式里播放条那颗跳转键在 docked 那一排；直接开弹窗更稳（同一支函数）
     await page.evaluate(() => toggleJumpPop(true));
@@ -152,7 +152,7 @@ test.describe('任务条：推进键是主按钮 / 再来与循环可分 / 快�
     const n = await page.evaluate(() => SECTIONS.length);
     expect(n).toBeGreaterThan(2);
     await expect(page.locator('#jumpCh option')).toHaveCount(n);
-    // 单篇视图里停在第 0 篇：提示说的是**目标章**的全局句区间，不是「第 1–N 句」的错话
+    // 单篇视图里停在第 0 篇：提示说的是**目标篇**的全局句区间，不是「第 1–N 句」的错话
     const hint3 = await page.evaluate(() => {
       const sel = document.getElementById('jumpCh') as HTMLSelectElement;
       sel.value = '2'; syncJumpHint();
@@ -161,15 +161,16 @@ test.describe('任务条：推进键是主按钮 / 再来与循环可分 / 快�
         total: chapterSentCount(2), start: computeChapterStart(2),
       };
     });
-    expect(hint3.text).toContain(`第3章共 ${hint3.total} 句`);
+    // A1/A2：位置说法只有一种写法 ——「第 n / N 篇」+「全文第 a–b 句」
+    expect(hint3.text).toContain(`第 3 / ${n} 篇共 ${hint3.total} 句`);
     expect(hint3.text).toContain(`全文第 ${hint3.start + 1}–${hint3.start + hint3.total} 句`);
 
     await page.locator('#jumpN').selectOption('2');
     await page.evaluate(() => jumpGo());
     await expect(page.locator('#jumpPop')).toBeHidden();
     const landed = await page.evaluate(() => ({ ch: currentChapter, i: idx, len: sents.length }));
-    expect(landed.ch, '跳到别的章必须真的换章').toBe(2);
-    expect(landed.len, '换章后正文只剩目标章').toBe(hint3.total);
+    expect(landed.ch, '跳到别的篇必须真的换篇').toBe(2);
+    expect(landed.len, '换篇后正文只剩目标篇').toBe(hint3.total);
     expect(landed.i, '单篇视图里句号是本地下标：第 2 句 = 下标 1').toBe(1);
   });
 

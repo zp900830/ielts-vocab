@@ -141,7 +141,7 @@ test.describe('随身听单词卡：入口右上 + 抽屉顶挂 + 迷你条沉�
     expect(geo.count, '迷你条左下角那颗句数整行删掉').toBe(0);
     expect(geo.posDots, '字幕窗右上角的「第 N 句」角标也撤了：位置信息只留抽屉标题一处').toBe(0);
     expect(geo.titleTxt.trim(), '抽屉标题：第 N / M 句（M = 本篇总句数）').toMatch(/^第 \d+ \/ \d+ 句$/);
-    expect(geo.chip.trim(), '词数从标题文字改成胶囊读数').toMatch(/^目标词 \d+$/);
+    expect(geo.chip.trim(), '词数从标题文字改成胶囊读数（A6：写清是「本句」，与头部那颗「本篇」区分）').toMatch(/^本句目标词 \d+$/);
     // 「样式和图片中的页面右上角一样」= 同一个类、同一份样式，不是仿写
     expect(geo.chipCls, '胶囊复用文章头部那两个类').toBe('r-badge fav-badge');
     expect(geo.chipBg, '琥珀底同 .fav-badge').toBe('rgb(253, 241, 220)');

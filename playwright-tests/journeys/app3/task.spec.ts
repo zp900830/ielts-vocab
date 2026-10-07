@@ -233,7 +233,7 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
     // W1 重做：头部照抄主站 .reader-head —— 返回是 .back 圆钮，标题是 .r-title 里的 .tt-zh
     await expect(top.locator('.reader-head .back')).toBeVisible();
     await expect(top.locator('#ttTitle .tt-zh')).toHaveText('地球与生命');
-    await expect(top.locator('#ttTitle .r-pos')).toContainText('第 1/6 篇');
+    await expect(top.locator('#ttTitle .r-pos')).toContainText('第 1 / 6 篇');
 
     await top.locator('.reader-head .back').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
@@ -892,7 +892,7 @@ test.describe('3.0 §2.3 没计划也能进任务模式', () => {
     // 任务条那一格是空状态（§2.3）
     await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'noplan');
     await expect(page.locator('#tbTitle')).toContainText('还没有学习计划');
-    await expect(page.locator('#tbSub')).toContainText('去设置每天读多久');
+    await expect(page.locator('#tbSub')).toContainText('去设置「每天有多少分钟」');
     await expect(page.locator('#tbNext')).toContainText('去设置');
     // 自由跟读：播放条控件搬进任务条了，那颗 ▶ 也在
     await expect(page.locator('#taskBar .tb-play')).toBeVisible();
