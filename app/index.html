@@ -2665,7 +2665,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .ls-collapse:hover { background: var(--accent-soft); }
   body.dark .ls-collapse:hover { background: rgba(16,180,135,.14); }
   .listen-top { position: sticky; top: 8px; z-index: 40; display: none; align-items: center; gap: 5px;
-    width: min(1084px, calc(100% - 36px)); margin: 0 auto; padding: 6px 14px 6px 6px;
+    /* 左内距与右对称取 14px，不照抄 .reader-head 的 6px：那 6px 是给 30px 圆形返回键垫的，
+       键本身填掉了胶囊左端 22px 的圆弧区。这条栏没有返回键，标题第一个字就压在圆弧里（2026-10-07 用户圈图）。 */
+    width: min(1084px, calc(100% - 36px)); margin: 0 auto; padding: 6px 14px;
     background: rgba(255,255,255,.42); -webkit-backdrop-filter: var(--iel-blur); backdrop-filter: var(--iel-blur);
     border: 1px solid rgba(255,255,255,.5); border-radius: 999px; box-shadow: 0 3px 14px rgba(30,60,48,.08); }
   /* 深色（§10.1）：页面底与顶栏的写死浅色值换成暖黑 token；卡片/文字本就走 token 会自动跟随。 */
