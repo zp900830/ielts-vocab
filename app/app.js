@@ -720,14 +720,22 @@
     const row = roll && roll.querySelector('.mb-row.cur');
     if (!roll || !row) return;
     /* 窄屏的三键排是浮在字幕窗下沿的玻璃（单词从它底下穿过去），所以「居中」要按
-       露出来的那条带算，不能按整窗算 —— 否则当前句的下半截永远压在玻璃键底下。 */
+       露出来的那条带算，不能按整窗算 —— 否则当前句的下半截永远压在玻璃键底下。
+       顶边那条 mask 渐隐带同样不算进净带：字落进去就是淡的（2026-10-07 用户截图
+       「当前句太靠上看不清」，实测 4 行长句被裁掉 16px 又叠在渐隐里）。
+       带宽取自 CSS 的 --lc-fade-top，样式和滚动只有一个口径。 */
     const bar = roll.parentNode.querySelector('.mb-bar');
     let occ = 0;
     if (bar && getComputedStyle(bar).position === 'absolute') {
-      occ = Math.max(0, roll.getBoundingClientRect().bottom - bar.getBoundingClientRect().top);
+      const br = bar.getBoundingClientRect(), rr = roll.getBoundingClientRect();
+      // 只有「压在窗口下沿」的按键排才需要纵向避让；桌面那三颗是浮在右端、纵向居中的，
+      // 按底部遮挡算会把字幕整个顶到窗口上半截去。
+      if (br.top > rr.top + rr.height / 2) occ = Math.max(0, rr.bottom - br.top);
     }
+    const fadeTop = parseFloat(getComputedStyle(roll).getPropertyValue('--lc-fade-top')) || 0;
     const max = Math.max(0, roll.scrollHeight - roll.clientHeight);
-    const target = Math.max(0, Math.min(max, lcRowCenter(row, roll) - (roll.clientHeight - occ) / 2));
+    const target = Math.max(0, Math.min(max,
+      lcRowCenter(row, roll) - (roll.clientHeight - occ + fadeTop) / 2));
     if (_lcRollRaf) { cancelAnimationFrame(_lcRollRaf); _lcRollRaf = 0; }
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const from = roll.scrollTop, dy = target - from;
