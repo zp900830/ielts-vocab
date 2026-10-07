@@ -183,7 +183,7 @@ test.describe('④ 展开 = 全屏弹窗（不离开 #/listen）', () => {
     await expect(page.locator('#art .sent').first()).toBeVisible();   // §7.3 正文
     // 展开只是换形态，不动播放链（2026-10-04 用户口径）：没在播就不出声
     await expect.poll(() => page.evaluate(() => TASK.listenState().playing)).toBe(false);
-    // 左上角 = 收起，不是返回（收起后播放继续，见 ⑦）
+    // 右上角 = 收起，不是返回（收起后播放继续，见 ⑦）；2026-10-07 从栏左端挪到右端，与单词卡抽屉那颗同位置
     await expect(page.locator('#lsClose')).toHaveAttribute('aria-label', '收起');
     // task-mode class 不许泄漏进听书态（用户截图实测过泄漏）
     await expect(page.locator('#taskTop')).toBeHidden();

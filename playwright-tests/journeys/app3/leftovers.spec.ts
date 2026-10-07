@@ -203,7 +203,8 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
     expect(Math.abs(m.ltL - m.contentL), '二级页头部左缘').toBeLessThan(2);
     expect(Math.abs(m.ltR - m.contentR), '二级页头部右缘').toBeLessThan(2);
     expect(m.radius, '与任务模式头部同一套玻璃胶囊（999px）').toContain('999px');
-    // 2026-09-26 用户改口径：左上角是「收起」不是返回 —— 不再复用 .back，改成带字胶囊 .ls-collapse
+    // 2026-09-26 用户改口径：那枚是「收起」不是返回 —— 不再复用 .back，改成带字胶囊 .ls-collapse
+    // （2026-10-07：从栏左端挪到右端，与单词卡抽屉的收起键共用同一个类、同一个落点）
     expect(m.backCls, '收起键是带字胶囊控件').toContain('ls-collapse');
     expect(m.posCls, '同一 .r-pos 标题层级胶囊').toContain('r-pos');
   });
