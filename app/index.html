@@ -2393,8 +2393,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      颜色走本站 token；卡片内的 notebar 行与 nb-table 对比表直接复用精读现有类，不另起样式。
      z 序不变：scrim(70) < 迷你条(75) < 抽屉(80) —— 抽屉开着也能经迷你条切句/播放，不用先关。
      10-07 用户按截图要求反转：**卡片抽屉挂顶部**（FAB 也在右上，就近唤起），
-     **迷你条沉到 TabBar 正上方**，三个播放键右下角、字幕窗在其上（句序号 10-07 第二次改：
-     从迷你条挪进抽屉标题，见 .dw-head h2）。
+     **迷你条沉到 TabBar 正上方**，三个播放键右下角、字幕窗在其上。
+     句序号改过三次（10-07）：迷你条左下角 → 抽屉标题 → 第三次补一枚字幕窗右上角轻角标
+     （.mb-pos），因为抽屉**关着**时标题看不见，这一屏就没有位置信息了；两处数字同源，见 refreshListenCards。
      与 demo（work/listen-cards-demo.html，仍是旧底部抽屉）的差异：① 隐藏态一律
      visibility:hidden（demo 只靠 opacity，键盘仍能 Tab 进去，axe 违规）；② .fading 只服务
      demo 的 A/B 切换（真应用无模式切换，不要）。 */
@@ -2489,6 +2490,15 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dw-open #lcMini { background: linear-gradient(145deg, rgba(255,255,255,.93), rgba(255,255,255,.88) 42%, rgba(255,255,255,.82)); }
   body.dark.dw-open #lcMini { background: linear-gradient(145deg, rgba(30,28,25,.97), rgba(30,28,25,.92) 42%, rgba(30,28,25,.86)); }
   #lcMini .mb-bar { display: flex; align-items: center; gap: 10px; }
+  /* 位置角标（2026-10-07 用户采纳建议）：句序号从迷你条左下角删掉后，抽屉**关着**时这一屏
+     就没有位置信息了 —— 放回字幕窗右上角：绝对定位不占行，比标题轻一档（11px/500/--muted），
+     正好落在 mask 渐隐掉的那条顶带里（邻句本来就淡）。
+     z-index 必须显式给：.mb-roll 带 mask-image ⇒ 自成一个层叠上下文，同 z=0 时按源码顺序决胜，
+     角标今天排在它后面才压得住，DOM 一改就翻车。pointer-events:none —— 它只是读数，不挡点击。 */
+  #lcMini .mb-pos { position: absolute; top: 10px; right: 16px; z-index: 2; pointer-events: none;
+    font-family: var(--sans); font-size: 11px; font-weight: 500; color: var(--muted);
+    font-variant-numeric: tabular-nums; white-space: nowrap; }
+  body.dark #lcMini .mb-pos { color: #bdb5a8; }
   /* 字幕窗：固定高 + 上下渐隐；行体复用精读 .sent/.gl/.sent-zh，只有当前句挂 .playing 薄荷高亮 */
   #lcMini .mb-roll { height: 108px; overflow: hidden;
     transition: height .28s cubic-bezier(.22,.61,.36,1);
