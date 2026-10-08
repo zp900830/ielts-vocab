@@ -39,7 +39,7 @@ git diff
 要求：
 
 - `npm test` 必须全绿（数量以最近一次全量门禁输出为准）。
-- **改 `app/data/sections.json` 的句子数量，必须同时在 `app/index.html` 的 `SENT_SHIFTS`
+- **改 `data/sections.json` 的句子数量，必须同时在 `index.html` 的 `SENT_SHIFTS`
   追加一条记录**（书签 / 续读位 / 间隔复习 / A-B 循环存的全是全局句号，不登记就会让用户进度静默错位）。
   `validate_data.py` 第 14 条会拦住漏记，第 15 条拦住英文句与中文译文数量不齐。
 - `validate_data.py` 必须输出 `Validation PASSED`。
@@ -118,7 +118,7 @@ node scripts/build_site.mjs      # 生成 dist/，本地可跑
 - [ ] 源码中无硬编码密钥、密码、private key
 - [ ] 没有 `<<<<<<<` / `=======` / `>>>>>>>` 合并冲突标记
 - [ ] `config.example.js` 已包含项目所需的所有环境变量
-- [ ] 没有误删用户数据文件（如 `app/data/` 等）
+- [ ] 没有误删用户数据文件（如 `data/` 等）
 
 ## 7. 沟通规则
 
@@ -134,10 +134,10 @@ node scripts/build_site.mjs      # 生成 dist/，本地可跑
 
 | 文件/目录 | 说明 |
 |-----------|------|
-| `app/index.html` | 现役主应用（单词速记 3.0，路由式单页） |
-| `app/app.js` `app/js/plan-engine.js` | 3.0 逻辑与学习计划引擎 |
-| `app/data/` | 3.0 运行数据（sections / vocab / chapters） |
-| `app/sw.js` | 3.0 PWA service worker（scope /app/） |
+| `index.html` | 现役主应用（词汇真经单词速记，路由式单页，2026-10-08 起部署在根路径） |
+| `app.js` `js/plan-engine.js` | 应用逻辑与学习计划引擎 |
+| `data/` | 运行数据（sections / vocab / chapters） |
+| `sw.js` | PWA service worker（scope /，/admin/ 与数据 JSON 放行） |
 | `admin/index.html` | 管理后台（Supabase 数据） |
 | `scripts/build_site.mjs` | 生成发布目录 `dist/`（白名单 + 注入 config.js） |
 | `sql/` | 需要在 Supabase 执行的 SQL（建表 / RLS） |

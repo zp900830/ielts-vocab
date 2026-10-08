@@ -1,6 +1,6 @@
-// 3.0 M1 Task 2：/app/ 外壳（左侧导航 5 项 + hash 路由 + 三档断点 + 任务模式复原正文）。
-// 服务器归 global-setup.ts 起停（根目录 8932）；8931 那台服务的是 shadow/ 树，
-// 而 /app/ 在仓库根，所以这里和 smoke.spec.ts 一样用 E2E_ROOT_URL，不走 baseURL。
+// 3.0 M1 Task 2：主站外壳（左侧导航 5 项 + hash 路由 + 三档断点 + 任务模式复原正文）。
+// 服务器归 global-setup.ts 起停（仓库根 8932）；
+// 站点在仓库根，所以这里和 smoke.spec.ts 一样用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 
 declare const TASK: {
@@ -19,7 +19,7 @@ const rootUrl = process.env.E2E_ROOT_URL || '';
    scripts/build_site.mjs 的白名单自检守着（引用缺失会直接 BUILD FAILED）。 */
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }),
     );
   }
@@ -48,7 +48,7 @@ const TINY: Record<string, string> = {
 test.describe('3.0 外壳', () => {
   test('左侧导航 4 项 + 底部「我的」一行（分割线），文案与顺序正确，深链选中态正确，三档断点宽度正确', async ({ page }) => {
     await stubData(page, EMPTY);
-    await page.goto(`${rootUrl}/app/index.html`);
+    await page.goto(`${rootUrl}/index.html`);
     await expect(page.locator('.sidenav .nav-item')).toHaveCount(4);
     expect(await page.locator('.sidenav .nav-item').allInnerTexts())
       .toEqual(['首页', '随身听', '单词本', '学习数据']);
@@ -58,7 +58,7 @@ test.describe('3.0 外壳', () => {
     await expect(page.locator('.sidenav .me-card .me-tab-label')).toHaveText('未登录');
 
     // 深链：#/stats 应把「学习数据」标成当前项
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await expect(page.locator('.sidenav .nav-item.on')).toHaveText('学习数据');
 
     // PRD §10.2 三档：≥1024 → 220px；701–1023 → 180px；≤700 → 底部 TabBar（通栏 fixed）
@@ -85,7 +85,7 @@ test.describe('3.0 外壳', () => {
 
   test('任务模式复原正文：#art 可见（Finding 2 回归锁）', async ({ page }) => {
     await stubData(page, TINY);
-    await page.goto(`${rootUrl}/app/index.html`);
+    await page.goto(`${rootUrl}/index.html`);
     // 等这一篇渲完（stub 数据就两句）
     await page.waitForFunction(() => document.querySelectorAll('#art .sent').length > 0);
 
@@ -105,7 +105,7 @@ test.describe('3.0 外壳', () => {
      兜底 + background-image 叠渐变，这样深色仍能靠 background-color 与浅色区分（leftovers 的深色锁）。 */
   test('侧栏比原 #f6f6f4 更白 + 一道极轻渐变；深色同步不破', async ({ page }) => {
     await stubData(page, EMPTY);
-    await page.goto(`${rootUrl}/app/index.html`);
+    await page.goto(`${rootUrl}/index.html`);
     const nav = page.locator('.sidenav');
     await expect(nav).toBeVisible();
 
@@ -140,7 +140,7 @@ test.describe('3.0 外壳', () => {
   test('四个一级页面都有同一样式的大标题（.pg-title），切页顶部高度不跳', async ({ page }) => {
     // 用 TINY + 建计划：stats 无计划时走「开始你的学习计划」空态（另一种设计，不带 pg-title）
     await stubData(page, TINY);
-    await page.goto(`${rootUrl}/app/index.html`);
+    await page.goto(`${rootUrl}/index.html`);
     await page.waitForFunction(() => document.querySelectorAll('#art .sent').length > 0);
     await page.evaluate(() => { if (!TASK.hasPlan) { TASK.resetV2(); TASK.initPlan(15); } });
     const cases: Array<[string, string]> = [
@@ -148,7 +148,7 @@ test.describe('3.0 外壳', () => {
     ];
     let lastTop = -1, lastStyle = '';
     for (const [route, text] of cases) {
-      await page.goto(`${rootUrl}/app/index.html#/${route}`);
+      await page.goto(`${rootUrl}/index.html#/${route}`);
       const h1 = page.locator('.pg-title');
       await expect(h1).toHaveText(text);
       await expect(h1).toBeVisible();

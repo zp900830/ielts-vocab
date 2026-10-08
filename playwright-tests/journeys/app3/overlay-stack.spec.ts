@@ -1,8 +1,8 @@
 // 2026-10-07 一致性排查报告 D 批的回归锁。
 // D1（锁滚残留）/ D2（云菜单两套显隐）/ D3（dialog 没焦点陷阱）/ D4（Esc 分层失控）/ D11（外点监听复制五份）
-// 本是同一个病的五张脸：浮层显隐有三套机制各走各的关闭路径。现在全部读 app/index.html 里那份
+// 本是同一个病的五张脸：浮层显隐有三套机制各走各的关闭路径。现在全部读 index.html 里那份
 // OVERLAY_STACK —— 这里逐条钉住，防止将来又长回第二套。
-// 服务器归 global-setup.ts 起停（仓库根 8932）；/app/ 在仓库根，用 E2E_ROOT_URL。
+// 服务器归 global-setup.ts 起停（仓库根 8932）；站点在仓库根，用 E2E_ROOT_URL。
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 import { stubCloudAccount } from '../../utils/cloud-stub';
@@ -49,14 +49,14 @@ const TWO: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
 const waitTask = (page: import('@playwright/test').Page) =>
   page.waitForFunction(() => { try { return typeof TASK !== 'undefined' && !!TASK.state; } catch (e) { return false; } });
 async function gotoListen(page: import('@playwright/test').Page) {
-  await page.goto(`${rootUrl}/app/index.html#/listen`);
+  await page.goto(`${rootUrl}/index.html#/listen`);
   await waitShadowReady(page);
   await page.waitForFunction(() => {
     const w = window as unknown as { APP3?: { renderListen?: unknown } };
@@ -66,7 +66,7 @@ async function gotoListen(page: import('@playwright/test').Page) {
 }
 /* 「我的」浮窗：未登录点卡片进的是登录弹窗，所以先把账号态点亮。
    点亮这件事本身有竞态，已经收进 utils/cloud-stub.ts 的 stubCloudAccount —— 它会先等
-   CLOUD.boot() 跑完，否则 boot 拿不到会话的回写会把邮箱擦回空（app/index.html:3960）。 */
+   CLOUD.boot() 跑完，否则 boot 拿不到会话的回写会把邮箱擦回空（index.html:3960）。 */
 async function openMeLogged(page: import('@playwright/test').Page) {
   await stubCloudAccount(page);
   const pop = page.locator('#mePop');
@@ -80,7 +80,7 @@ test.describe('D1 · 词库抽屉的锁滚跟着断点走', () => {
   test.use({ viewport: { width: 390, height: 844 } });
   test('窄屏锁滚、转宽屏自动放行；panel-open 只挂 body 一个宿主', async ({ page }) => {
     await stubData(page, TWO);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { document.body.style.overflow = ''; togglePanel(); });
     await expect(page.locator('body')).toHaveClass(/panel-open/);
@@ -115,7 +115,7 @@ test.describe('D2 · ☁ 云菜单只认 .open 这一套显隐', () => {
 test.describe('D3 · 标了 role=dialog 的浮层都得拦住 Tab', () => {
   test('今日任务起点弹层：Tab 五下不逃逸，Esc 关得掉（从前它连 Esc 都没有）', async ({ page }) => {
     await stubData(page, TWO);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.openStartPicker(); });
     const pop = page.locator('#startPickPop');
@@ -169,7 +169,7 @@ test.describe('D4 · 一次 Esc 只关最上面那一层', () => {
 test.describe('D8 · 工期估算抛错不许毒掉这一档', () => {
   test('估算抛错 → 说「算不出来」而不是永远「算一下…」；修好后同一分钟数还能重算', async ({ page }) => {
     await stubData(page, TWO);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     const pop = await openMeLogged(page);
@@ -196,7 +196,7 @@ test.describe('D8 · 工期估算抛错不许毒掉这一档', () => {
 test.describe('D9 · 还要打字的两处改成点选', () => {
   test('快速跳转：句号是 select（选项数 = 该章句数、带句首预览），换章重列，直达落在那一句', async ({ page }) => {
     await stubData(page, TWO);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await page.locator('.art-card .a-open').first().click();
@@ -221,7 +221,7 @@ test.describe('D9 · 还要打字的两处改成点选', () => {
     // 「定了起点之后线真的挪」由 today-range-line.spec.ts 端到端锁（那边夹具够大）；
     // 这里只锁这颗控件不再要求打字：选项 = 本篇句数，换篇重列。
     await stubData(page, TWO);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await page.locator('.art-card .a-open').first().click();

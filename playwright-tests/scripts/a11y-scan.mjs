@@ -19,7 +19,7 @@ const BASE = `http://127.0.0.1:${PORT}`;
 async function waitHealthy() {
   for (let i = 0; i < 40; i++) {
     try {
-      const r = await fetch(`${BASE}/app/index.html`);
+      const r = await fetch(`${BASE}/index.html`);
       if (r.ok) return;
     } catch (e) {}
     await new Promise((r) => setTimeout(r, 250));
@@ -81,7 +81,7 @@ const main = async () => {
   const routes = ['home', 'stats', 'words', 'listen'];
   for (const route of routes) {
     const { ctx, page } = await openPage(browser, { width: 1200, height: 900 });
-    await page.goto(`${BASE}/app/index.html#/${route}`);
+    await page.goto(`${BASE}/index.html#/${route}`);
     await page.evaluate(() => { try { TASK.initPlan(15); } catch (e) {} });
     await page.reload();
     await appReady(page);
@@ -94,7 +94,7 @@ const main = async () => {
 
   for (const vp of [{ width: 1200, height: 900 }, { width: 390, height: 844 }]) {
     const { ctx, page } = await openPage(browser, vp);
-    await page.goto(`${BASE}/app/index.html#/home`);
+    await page.goto(`${BASE}/index.html#/home`);
     await appReady(page);
     await run(page, `me-pop ${vp.width}`, async (p) => {
       await p.locator('#meCard').click();
@@ -105,7 +105,7 @@ const main = async () => {
 
   {
     const { ctx, page } = await openPage(browser, { width: 1200, height: 900 });
-    await page.goto(`${BASE}/app/index.html#/home`);
+    await page.goto(`${BASE}/index.html#/home`);
     await page.evaluate(() => { try { TASK.initPlan(15); } catch (e) {} });
     await page.reload();
     await appReady(page);
@@ -122,7 +122,7 @@ const main = async () => {
 
   {
     const { ctx, page } = await openPage(browser, { width: 1200, height: 900 });
-    await page.goto(`${BASE}/app/index.html#/home`);
+    await page.goto(`${BASE}/index.html#/home`);
     await page.evaluate(() => { try { TASK.initPlan(15); } catch (e) {} });
     await page.reload();
     await appReady(page);

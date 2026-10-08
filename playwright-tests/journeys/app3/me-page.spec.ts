@@ -1,7 +1,7 @@
 // 2026-10-08 用户：「我的」按宿主分叉 —— PC 端仍是浮窗，移动端改成与浮窗内容相同的一级页面（#/me）；
 // 同时 PC 侧栏那一行按登录态显示「未登录 / 账号名」，移动端底栏两种登录态都保持「我的」。
 // 账号行的观感借鉴用户给的参考截图：圆形首字母头像（未登录是「未」），不再是通用用户图标。
-// 服务器归 global-setup.ts 起停（仓库根 8932）；/app/ 在仓库根，用 E2E_ROOT_URL，不走 baseURL。
+// 服务器归 global-setup.ts 起停（仓库根 8932）；站点在仓库根，用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 import { stubCloudAccount } from '../../utils/cloud-stub';
 import { setMin } from '../../utils/min-slider';
@@ -38,18 +38,18 @@ const SIX: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
 const waitTask = (page: import('@playwright/test').Page) =>
   page.waitForFunction(() => { try { return typeof TASK !== 'undefined' && !!TASK.state; } catch (e) { return false; } });
 
-/** 起一台指定视口的 /app/ 首页；withPlan 才建计划（计划相关那一行要有计划才出现）。 */
+/** 起一台指定视口的主站首页；withPlan 才建计划（计划相关那一行要有计划才出现）。 */
 async function boot(page: import('@playwright/test').Page, vp: { width: number; height: number }, withPlan = true) {
   await page.setViewportSize(vp);
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitTask(page);
   if (withPlan) await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
 }

@@ -7,7 +7,7 @@
 //   ⑥ 展开弹窗 Esc 关闭（分层：普通浮层先关）
 //   ⑦ 收听计时清零（停止/关闭/暂停）；收起不停止不清零
 //   ⑧ 按篇账云同步合并语义 = 单调 max
-// 服务器归 global-setup.ts 起停（仓库根 8932）：/app/ 在仓库根，用 E2E_ROOT_URL。
+// 服务器归 global-setup.ts 起停（仓库根 8932）：站点在仓库根，用 E2E_ROOT_URL。
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 
@@ -53,7 +53,7 @@ const TWO: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -70,7 +70,7 @@ const finishSpeak = (page: import('@playwright/test').Page) =>
   page.evaluate(() => { const w = window as unknown as { __cbs: (() => void)[] }; const cb = w.__cbs.shift(); if (cb) cb(); });
 
 async function gotoListen(page: import('@playwright/test').Page) {
-  await page.goto(`${rootUrl}/app/index.html#/listen`);
+  await page.goto(`${rootUrl}/index.html#/listen`);
   await waitShadowReady(page);
   await page.waitForFunction(() => {
     const w = window as unknown as { APP3?: { renderListen?: unknown } };

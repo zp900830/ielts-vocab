@@ -12,8 +12,8 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = 8931;
-const PROBE = '/app/js/plan-engine.js';
-const LOCAL = path.resolve(__dirname, '../../app/js/plan-engine.js');
+const PROBE = '/js/plan-engine.js';
+const LOCAL = path.resolve(__dirname, '../../js/plan-engine.js');
 
 async function main() {
   if (process.env.E2E_NO_SERVER) return;

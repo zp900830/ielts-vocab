@@ -227,7 +227,7 @@
              stage, grad: c.graduated, total, lastAt, wordTotal: words.size, ever, quizReady };
   }
   function renderHome(view) {
-    // 数据未就绪时先占位：initApp 拉完数据会再调一次 route()（见 app/index.html）。
+    // 数据未就绪时先占位：initApp 拉完数据会再调一次 route()（见 index.html）。
     if (typeof dataReady === 'undefined' || !dataReady) {
       view.innerHTML = loadingHtml();
       return;
@@ -891,7 +891,7 @@
       if (!t) { try { e.preventDefault(); } catch (err) {} }
     }, { passive: false });
   }
-  // Esc 不在这里挂监听：抽屉收在最上层由 app/index.html 的浮层栈（OVERLAY_STACK）统一裁决 ——
+  // Esc 不在这里挂监听：抽屉收在最上层由 index.html 的浮层栈（OVERLAY_STACK）统一裁决 ——
   // 以前这里挂一颗、#mePop 再挂一颗，主站内联脚本（注册更早）那颗先跑，
   // 清单里又没有抽屉，于是一次 Esc 把「抽屉 + 全屏收起」两层全收了。
   window.APP3 = Object.assign(window.APP3, { renderListen, updateListenCard });
@@ -1541,7 +1541,7 @@
     });
   }
   window.APP3 = Object.assign(window.APP3, { renderMePop, renderMe, meContent, openMePop, closeMePop, toggleMePop, meOpen, meOpenSettings, meLogout, updateMeCard, openLoginModal, closeLoginModal, setLcDrawer, lcDrawerOpen });
-  // 点浮窗外面收掉（只有 PC 有浮窗）。Esc 不在这里挂 —— 浮层栈（app/index.html 的 OVERLAY_STACK）统一管分层与焦点。
+  // 点浮窗外面收掉（只有 PC 有浮窗）。Esc 不在这里挂 —— 浮层栈（index.html 的 OVERLAY_STACK）统一管分层与焦点。
   document.addEventListener('click', (e) => {
     const pop = document.getElementById('mePop');
     if (!pop || pop.hidden) return;

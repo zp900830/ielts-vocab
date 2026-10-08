@@ -26,7 +26,7 @@ const SIXQ: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -44,7 +44,7 @@ test.describe('3.0 云端音色：队列防死锁', () => {
   test('fetch 不响应 abort 时，队列安全网会释放消费者并降级', async ({ page }) => {
     test.setTimeout(20000);
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitAppReady(page);
 
     const r = await page.evaluate(async () => {
@@ -109,7 +109,7 @@ test.describe('3.0 云端音色：队列防死锁', () => {
   test('401 文案不误导：只有真没 session 才提示登录，有 session 被拒要指去重登/查审批订阅', async ({ page }) => {
     // 2026-09-28 实测：Azure 订阅过期时函数回 401，旧文案一律报「请先登录」，排查被带偏两轮。
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitAppReady(page);
     const r = await page.evaluate(() => {
       const cloud = CLOUD as any;

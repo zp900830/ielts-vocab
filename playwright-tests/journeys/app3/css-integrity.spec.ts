@@ -7,7 +7,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
-const SRC = resolve(__dirname, '../../../app/index.html');
+const SRC = resolve(__dirname, '../../../index.html');
 
 /** 词法扫一遍 <style>：跳过注释与字符串，收每条叶子规则的 prelude（含其 @media 上下文）。 */
 function leafSelectors(css: string): { sel: string; media: string[] }[] {
@@ -59,7 +59,7 @@ function looksLikeSelector(pre: string): boolean {
 // 比之前两边都压成无空白小写，并抹掉伪元素前那颗多余的 `*`。
 const norm = (s: string) => s.replace(/\s+/g, '').toLowerCase().replace(/\*::/g, '::');
 
-test('app/index.html 没有规则被 CSS 解析器吞掉', async ({ page }) => {
+test('index.html 没有规则被 CSS 解析器吞掉', async ({ page }) => {
   const html = readFileSync(SRC, 'utf8');
   const css = html.slice(html.indexOf('<style>') + 7, html.indexOf('</style>'));
   const srcRules = leafSelectors(css)
@@ -71,7 +71,7 @@ test('app/index.html 没有规则被 CSS 解析器吞掉', async ({ page }) => {
   expect(srcRules.length, '源码里应能解析出叶子规则').toBeGreaterThan(600);
 
   // 真实加载一次，读浏览器解析后的样式表
-  await page.goto(`${rootUrl}/app/index.html`);
+  await page.goto(`${rootUrl}/index.html`);
   await waitShadowReady(page);
   const collected = await page.evaluate(() => {
     const sels: string[] = [];

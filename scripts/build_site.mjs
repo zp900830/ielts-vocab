@@ -21,19 +21,19 @@ const OUT = path.join(ROOT, 'dist');
 
 // 明确白名单，不做「整目录复制再排除」——后者会让新加的备份文件默认变成公开
 const FILES = [
+  // 3.0 主站（2026-10-08 起 3.0 就是根站点）：外壳 + 路由 + 引擎 + 数据
+  'index.html',
+  'app.js',
+  'js/plan-engine.js',
+  'data/sections.json',
+  'data/vocab.json',
+  'data/chapters.json',
+  // 3.0 PWA：真实 service worker 文件（scope /，/admin/ 与数据 JSON 放行）。缺它则 SW 注册 404、离线兜底失效。
+  'sw.js',
+  // 3.0 PWA iOS 图标（2026-09-25）：iOS 只认 apple-touch-icon，manifest 的 data-URI 图标它不收。
+  'apple-touch-icon.png',
   '404.html',
   'admin/index.html',
-  // 3.0 现役站点：外壳 + 路由 + 引擎 + 数据
-  'app/index.html',
-  'app/app.js',
-  'app/js/plan-engine.js',
-  'app/data/sections.json',
-  'app/data/vocab.json',
-  'app/data/chapters.json',
-  // 3.0 PWA：真实 service worker 文件（scope /app/）。缺它则 SW 注册 404、离线兜底失效。
-  'app/sw.js',
-  // 3.0 PWA iOS 图标（2026-09-25）：iOS 只认 apple-touch-icon，manifest 的 data-URI 图标它不收。
-  'app/apple-touch-icon.png',
 ];
 
 const warn = [];
@@ -78,7 +78,6 @@ function main() {
     );
   }
   writeConfig(path.join(OUT), url, key);
-  writeConfig(path.join(OUT, 'app'), url, key);
 
   // 防「白名单漏文件」：扫已复制的 HTML，凡是引用本站相对路径的 json/js/html，必须在 dist 里
   const missing = [];

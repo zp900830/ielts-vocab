@@ -1,5 +1,5 @@
 // M6 收口：无障碍回归锁（PRD §10.4）。
-// 用 @axe-core/playwright 对 /app/ 的关键页面/状态扫 WCAG 2.0/2.1 A+AA。
+// 用 @axe-core/playwright 对主站的关键页面/状态扫 WCAG 2.0/2.1 A+AA。
 //
 // 2026-09-24 复审修正（本文件的核心教训）：
 //   旧版只断言 `violations === ''`，完全无视 `incomplete`。axe 对**算不出背景**的元素
@@ -46,7 +46,7 @@ const SIX: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page) {
   for (const [name, body] of Object.entries(SIX)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -176,7 +176,7 @@ async function expectClean(page: import('@playwright/test').Page, label: string)
 async function bootHome(page: import('@playwright/test').Page) {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await stubData(page);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
   await expect(page.locator('.art-card')).toHaveCount(6);
@@ -211,21 +211,21 @@ test.describe('3.0 无障碍（axe，WCAG A/AA）', () => {
      现在用同一套小夹具纳入回归。 */
   test('学习数据页：浅色 + 深色无 axe 违规、无未登记的对比度 incomplete', async ({ page }) => {
     await bootHome(page);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await expect(page.locator('.stats-page')).toBeVisible();
     await lightAndDark(page, '学习数据页');
   });
 
   test('单词本：浅色 + 深色无 axe 违规、无未登记的对比度 incomplete', async ({ page }) => {
     await bootHome(page);
-    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await page.goto(`${rootUrl}/index.html#/words`);
     await expect(page.locator('.words-page')).toBeVisible();
     await lightAndDark(page, '单词本');
   });
 
   test('随身听：浅色 + 深色无 axe 违规、无未登记的对比度 incomplete', async ({ page }) => {
     await bootHome(page);
-    await page.goto(`${rootUrl}/app/index.html#/listen`);
+    await page.goto(`${rootUrl}/index.html#/listen`);
     await expect(page.locator('div.listen-page')).toBeVisible();
     await lightAndDark(page, '随身听');
   });
@@ -293,7 +293,7 @@ test.describe('3.0 无障碍（axe，WCAG A/AA）', () => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width: 390, height: 844 });
     await stubData(page);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await page.reload();
     await page.locator('.art-card .a-open').first().click();

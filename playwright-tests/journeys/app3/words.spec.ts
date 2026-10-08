@@ -1,6 +1,6 @@
 // playwright-tests/journeys/app3/words.spec.ts
 // 3.0 M3：单词本页（PRD §6）。服务器归 global-setup.ts 起停（仓库根 8932）；
-// /app/ 在仓库根，所以和 shell/home/stats 一样用 E2E_ROOT_URL，不走 baseURL。
+// 站点在仓库根，所以和 shell/home/stats 一样用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 
@@ -32,7 +32,7 @@ declare const dataReady: boolean;
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
 
-/* A5 之后全应用只有一份档位表（app/index.html 的 WB_FILTERS）：
+/* A5 之后全应用只有一份档位表（index.html 的 WB_FILTERS）：
    全部 + 五个真状态 + 重点词（重点词是叠在状态上的正交标记）。 */
 const STAGES = ['fresh', 'seen', 'recognized', 'owned', 'graduated'];
 const WB_KEYS = ['all'].concat(STAGES).concat(['leech']);
@@ -82,7 +82,7 @@ const BIG = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -90,7 +90,7 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
 test.describe('3.0 单词本页（M3，PRD §6）', () => {
   test('列出全部目标词，行含状态/文章/卷/出现次数；未见面也在「全部」里', async ({ page }) => {
     await stubData(page, WORDS);
-    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await page.goto(`${rootUrl}/index.html#/words`);
     await waitShadowReady(page);
 
     await expect(page.locator('.words-page > h1')).toHaveText('单词本');
@@ -109,7 +109,7 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
 
   test('长列表增量渲染：初始只渲一批，点「加载更多」才追加（不能一次渲全部）', async ({ page }) => {
     await stubData(page, BIG);
-    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await page.goto(`${rootUrl}/index.html#/words`);
     await waitShadowReady(page);
 
     const total = await page.evaluate(() => Object.keys(VOCAB).length);
@@ -128,7 +128,7 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
      三档相加永远小于「全部」，同一个单词本在两个屏上数出两个总数。现在这条相加必须恒等。 */
   test('筛选档位 = 五个真状态 + 重点词，五档互斥且相加恒等于「全部」', async ({ page }) => {
     await stubData(page, WORDS);
-    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await page.goto(`${rootUrl}/index.html#/words`);
     await waitShadowReady(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
@@ -178,7 +178,7 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
 
   test('M2 待加强的「去复习」落到单词本「重点词」筛选视图', async ({ page }) => {
     await stubData(page, WORDS);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await waitShadowReady(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
@@ -195,7 +195,7 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
 
   test('点词行展开详情：原文语境在前、例句其次，含状态路径与接触/答对', async ({ page }) => {
     await stubData(page, WORDS);
-    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await page.goto(`${rootUrl}/index.html#/words`);
     await waitShadowReady(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
@@ -240,7 +240,7 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
 
   test('词详情「▶ 播放这句」→ 回首页并进该篇任务模式、定位该句并播放', async ({ page }) => {
     await stubData(page, WORDS);
-    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await page.goto(`${rootUrl}/index.html#/words`);
     await waitShadowReady(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
@@ -266,7 +266,7 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
 
   test('深色模式：单词本卡片/详情不是白底，深色下可读（PRD §10.1）', async ({ page }) => {
     await stubData(page, WORDS);
-    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await page.goto(`${rootUrl}/index.html#/words`);
     await waitShadowReady(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
@@ -295,7 +295,7 @@ test.describe('3.0 单词本页（M3，PRD §6）', () => {
 
   test('无障碍：h1 唯一、筛选是 button+aria-pressed、行可聚焦可键盘、触摸目标 ≥44px', async ({ page }) => {
     await stubData(page, BIG);
-    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await page.goto(`${rootUrl}/index.html#/words`);
     await waitShadowReady(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); APP3.route(); });
 

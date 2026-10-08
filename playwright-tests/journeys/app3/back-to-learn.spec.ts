@@ -1,6 +1,6 @@
 // 2026-09-25：把任务模式里两条「回到某处」的心智负担合并成**唯一**一条「回到学习位置」。
 //
-// 现状（开工前摸清）：/app/ 任务模式里其实只有一颗浮动的「回到播放位置」(#backToPlay / .back-to-play /
+// 现状（开工前摸清）：主站任务模式里其实只有一颗浮动的「回到播放位置」(#backToPlay / .back-to-play /
 // scrollToPlaying)，且只在「播放中 + 手动滚走」时才出现；② 里根本不出现。用户口里的「回到学习的位置」
 // 并不是另一颗既有控件，而是「回到学习句 / 当前待答的那一题」这项**能力**。本轮把它落成一颗键，
 // 旧的「回到播放位置」整颗删掉（控件 + 逻辑 + CSS + 死函数）。
@@ -58,7 +58,7 @@ const MANY: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -87,7 +87,7 @@ const isPlaying = (page: import('@playwright/test').Page) =>
 
 async function enterTask(page: import('@playwright/test').Page) {
   await stubData(page, MANY);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await freshPlan(page);
   await page.locator('.art-card .a-open[data-a="0"]').click();
   await expect(page.locator('body')).toHaveClass(/task-mode/);
@@ -162,7 +162,7 @@ test.describe('3.0 「回到学习位置」唯一键（合并「回到播放位�
 
   test('没有学习位置时不出现：无计划态隐藏', async ({ page }) => {
     await stubData(page, MANY);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await page.evaluate(() => {
       localStorage.removeItem('ielts.shadow.v2');
       localStorage.removeItem('ielts.app3.article');

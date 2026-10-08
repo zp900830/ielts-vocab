@@ -4,7 +4,7 @@
 // 知情接受。所以本门禁**不再按对比度判达标**（那是假达标），改成**锁定色值的回归锁**：
 // 把主按钮的渐变色标拆出来与 LOCKED_GRAD 精确比对，只防手滑改浅/改深或改掉字色。
 // 下方「色值锁自检」塞一颗漂移值，证明锁真的会响。
-// 服务器归 global-setup.ts 起停（仓库根 8932）；/app/ 在仓库根，用 E2E_ROOT_URL，不走 baseURL。
+// 服务器归 global-setup.ts 起停（仓库根 8932）；站点在仓库根，用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 
@@ -24,7 +24,7 @@ const isLockedGrad = (stops: string[]) => JSON.stringify(stops) === JSON.stringi
 const EMPTY: Record<string, string> = { 'sections.json': '[]', 'vocab.json': '{}', 'chapters.json': '[]' };
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) => r.fulfill({ status: 200, contentType: 'application/json', body }));
+    await page.route(`**/data/${name}*`, (r) => r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
 
@@ -62,7 +62,7 @@ function assertLockedMint(m: { color: string; stops: string[]; ratios: number[] 
 test.describe('3.0 主按钮轻渐变薄荷（锁定色值）', () => {
   test('首页主按钮：白字 + 锁定的品牌渐变（防手滑改浅/改深）', async ({ page }) => {
     await stubData(page, EMPTY);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     const btn = page.locator('#homeBanner .b-go');
     await expect(btn).toBeVisible();
     assertLockedMint(await btn.evaluate(measureButton), '首页主按钮');
@@ -70,7 +70,7 @@ test.describe('3.0 主按钮轻渐变薄荷（锁定色值）', () => {
 
   test('「我的」浮窗主按钮同一套渐变（不是两套绿）', async ({ page }) => {
     await stubData(page, EMPTY);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await page.locator('#meCard').click();
     await expect(page.locator('#loginModal')).toBeVisible();
     await page.locator('#loginModal [data-login-settings]').click();
@@ -84,7 +84,7 @@ test.describe('3.0 主按钮轻渐变薄荷（锁定色值）', () => {
      与用户新选定的 1.90:1 品牌色直接冲突，已删除；现在锁的是色值，不是对比度。 */
   test('色值锁自检：漂移的渐变（旧的 #2e9c76 一版）必须被判不合规', async ({ page }) => {
     await stubData(page, EMPTY);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await page.evaluate(() => {
       const b = document.createElement('button');
       b.id = '__drift_probe';
@@ -136,7 +136,7 @@ const PILLS: Record<string, string> = (() => {
 test.describe('3.0 状态胶囊（实底）对比度 ≥ AA 正文 4.5', () => {
   test('单词本每一档胶囊：字压底浅/深都 ≥4.5，毕业胶囊不得再用白字', async ({ page }) => {
     await stubData(page, PILLS);
-    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await page.goto(`${rootUrl}/index.html#/words`);
     await waitShadowReady(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
@@ -177,7 +177,7 @@ test.describe('3.0 状态胶囊（实底）对比度 ≥ AA 正文 4.5', () => {
      背景暗、字近黑；本用例量「背景亮度必须够高（浅底）」+「字不是那支近黑」。 */
   test('refine3 ④：义项直连/重点词/已毕业 一律浅底深字，背景不是实心深色、字不是近黑', async ({ page }) => {
     await stubData(page, PILLS);
-    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await page.goto(`${rootUrl}/index.html#/words`);
     await waitShadowReady(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
@@ -228,7 +228,7 @@ function describeRefine3() {
      那支绿（accent-color，与随身听 .ls-seek 同源）。本文件按惯例只锁色值，不假装在判达标。 */
   test('refine3 ③ 续：分钟数滑块读数深绿字、控件那支绿是 --accent，且不铺胶囊底', async ({ page }) => {
     await stubData(page, fixture);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitShadowReady(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await page.reload();

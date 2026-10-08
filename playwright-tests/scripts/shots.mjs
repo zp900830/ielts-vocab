@@ -17,11 +17,11 @@ function spawnServer() {
 }
 async function ensureServer() {
   for (let i = 0; i < 3; i++) {
-    try { const r = await fetch(BASE + '/app/index.html'); if (r.ok) return; } catch (e) {}
+    try { const r = await fetch(BASE + '/index.html'); if (r.ok) return; } catch (e) {}
     try { if (srv) srv.kill('SIGKILL'); } catch (e) {}
     await new Promise((r) => setTimeout(r, 300));
     spawnServer();
-    for (let j = 0; j < 20; j++) { await new Promise((r) => setTimeout(r, 250)); try { const r = await fetch(BASE + '/app/index.html'); if (r.ok) return; } catch (e) {} }
+    for (let j = 0; j < 20; j++) { await new Promise((r) => setTimeout(r, 250)); try { const r = await fetch(BASE + '/index.html'); if (r.ok) return; } catch (e) {} }
   }
   throw new Error('server unavailable');
 }
@@ -41,7 +41,7 @@ async function shot(name, vp, setup, dark) {
   const ctx = await browser.newContext({ viewport: vp });
   const page = await ctx.newPage();
   try {
-    await page.goto(`${BASE}/app/index.html#/home`);
+    await page.goto(`${BASE}/index.html#/home`);
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.evaluate(() => { try { TASK.resetV2(); TASK.initPlan(15); } catch (e) {} });
     await page.reload();
@@ -62,15 +62,15 @@ const mobile = { width: 390, height: 844 };
 
 for (const dark of [false, true]) {
   const t = dark ? 'dark' : 'light';
-  await shot(`home-${t}`, desktop, async (p) => { await p.goto(`${BASE}/app/index.html#/home`); await ready(p); }, dark);
-  await shot(`stats-${t}`, desktop, async (p) => { await p.goto(`${BASE}/app/index.html#/stats`); await ready(p); }, dark);
-  await shot(`words-${t}`, desktop, async (p) => { await p.goto(`${BASE}/app/index.html#/words`); await ready(p); await p.locator('.wb-row').first().click(); await p.waitForTimeout(250); }, dark);
-  await shot(`listen-${t}`, desktop, async (p) => { await p.goto(`${BASE}/app/index.html#/listen`); await ready(p); }, dark);
-  await shot(`listen-expand-${t}`, desktop, async (p) => { await p.goto(`${BASE}/app/index.html#/listen`); await ready(p); await p.locator('.ls-cover').click(); await p.waitForTimeout(500); }, dark);
+  await shot(`home-${t}`, desktop, async (p) => { await p.goto(`${BASE}/index.html#/home`); await ready(p); }, dark);
+  await shot(`stats-${t}`, desktop, async (p) => { await p.goto(`${BASE}/index.html#/stats`); await ready(p); }, dark);
+  await shot(`words-${t}`, desktop, async (p) => { await p.goto(`${BASE}/index.html#/words`); await ready(p); await p.locator('.wb-row').first().click(); await p.waitForTimeout(250); }, dark);
+  await shot(`listen-${t}`, desktop, async (p) => { await p.goto(`${BASE}/index.html#/listen`); await ready(p); }, dark);
+  await shot(`listen-expand-${t}`, desktop, async (p) => { await p.goto(`${BASE}/index.html#/listen`); await ready(p); await p.locator('.ls-cover').click(); await p.waitForTimeout(500); }, dark);
   await shot(`me-${t}`, desktop, async (p) => { await p.locator('#meCard').click(); await p.waitForTimeout(300); }, dark);
   await shot(`task-${t}`, desktop, async (p) => { await p.locator('.art-card .a-open').first().click(); await p.waitForTimeout(700); }, dark);
-  await shot(`home-mobile-${t}`, mobile, async (p) => { await p.goto(`${BASE}/app/index.html#/home`); await ready(p); }, dark);
-  await shot(`words-mobile-${t}`, mobile, async (p) => { await p.goto(`${BASE}/app/index.html#/words`); await ready(p); }, dark);
+  await shot(`home-mobile-${t}`, mobile, async (p) => { await p.goto(`${BASE}/index.html#/home`); await ready(p); }, dark);
+  await shot(`words-mobile-${t}`, mobile, async (p) => { await p.goto(`${BASE}/index.html#/words`); await ready(p); }, dark);
 }
 await browser.close();
 srv.kill();
