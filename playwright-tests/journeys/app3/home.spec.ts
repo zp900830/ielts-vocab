@@ -3,6 +3,7 @@
 // 而 /app/ 在仓库根，所以和 shell.spec.ts / smoke.spec.ts 一样用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
+import { setMin } from '../../utils/min-slider';
 
 declare const TASK: {
   resetV2(): void;
@@ -132,7 +133,7 @@ test.describe('3.0 首页', () => {
     // 点它 → 出设置屏（复用影子跟读的 renderSetup，套在 #setupSheet 里）
     await page.locator('#homeBanner .b-go').click();
     await expect(page.locator('#setupSheet .ps-start')).toBeVisible();
-    await page.locator('#setupSheet .ps-opt').nth(2).click();      // 15 分钟
+    await setMin(page.locator('#setupSheet .min-range'), 15);        // 拖到 15 分钟
     await page.locator('#setupSheet .ps-start').click();
     await expect(page.locator('#homeBanner .b-go')).toContainText('继续学');
     // 建完计划横幅补一条摘要（§3.5 第四类）。W5-2：新建计划当天 streak=0，文案是「今天开始」不是「连续 0 天」

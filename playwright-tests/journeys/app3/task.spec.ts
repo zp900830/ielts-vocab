@@ -6,6 +6,7 @@
 // 引擎据此才能排句 —— 六篇句数刻意不等，才能锁住「按篇」而不是「全局」。
 import fs from 'node:fs';
 import { test, expect } from '../../fixtures';
+import { setMin } from '../../utils/min-slider';
 
 declare const TASK: {
   resetV2(): void;
@@ -904,7 +905,7 @@ test.describe('3.0 §2.3 没计划也能进任务模式', () => {
     await expect(page.locator('#setupSheet .ps-start')).toBeVisible();
 
     // 建计划 → 回到那一篇，换成真任务条
-    await page.locator('#setupSheet .ps-opt').nth(2).click();      // 15 分钟
+    await setMin(page.locator('#setupSheet .min-range'), 15);        // 拖到 15 分钟
     await page.locator('#setupSheet .ps-start').click();
     await expect(page.locator('body')).toHaveClass(/task-mode/);
     await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'read');

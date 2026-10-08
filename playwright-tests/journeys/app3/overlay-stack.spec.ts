@@ -6,6 +6,7 @@
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 import { stubCloudAccount } from '../../utils/cloud-stub';
+import { setMin } from '../../utils/min-slider';
 
 declare const TASK: {
   resetV2(): void;
@@ -179,14 +180,14 @@ test.describe('D8 · 工期估算抛错不许毒掉这一档', () => {
       (window as unknown as { __origEta: unknown }).__origEta = ShadowPlan.estimateDays;
       ShadowPlan.estimateDays = () => { throw new Error('stub boom'); };
     });
-    await pop.locator('[data-me-min="30"]').click();
+    await setMin(pop.locator('.min-range'), 30);
     await expect(page.locator('#mpEta')).toHaveText(/算不出来/);
 
-    // 病灶：那颗死 Promise 留在 _etaPending 里，之后每次点 30 分钟都拿回它 —— 补 .catch 也救不了
+    // 病灶：那颗死 Promise 留在 _etaPending 里，之后每次拖到 30 分钟都拿回它 —— 补 .catch 也救不了
     await page.evaluate(() => {
       ShadowPlan.estimateDays = (window as unknown as { __origEta: typeof ShadowPlan.estimateDays }).__origEta;
     });
-    await pop.locator('[data-me-min="30"]').click();
+    await setMin(pop.locator('.min-range'), 30);
     await expect(page.locator('#mpEta'), '同一档重试要重新算').not.toHaveText(/算不出来|算一下/);
     expect(await calls(), '失败不许进缓存，必须真的重算一次').toBeGreaterThan(before);
   });

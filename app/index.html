@@ -1827,12 +1827,22 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .plan-setup h3 { font-size: 17px; margin-bottom: 6px; }
   .plan-setup .ps-sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
   .ps-group { margin-bottom: 16px; text-align: left; }
-  .ps-group label { font-size: 12px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px; }
   .ps-opts { display: flex; gap: 6px; flex-wrap: wrap; }
   .ps-opt { border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer; background: transparent; transition: all var(--t-hover); }
   @media (hover: hover) { .ps-opt:hover { border-color: var(--accent); color: var(--accent-text); } }
-  /* refine3 ③：选中态从「深绿实心 + 黑字」改成浅薄荷底 + 深绿字（他截图的「每天分钟数 / 新词」那一排）。 */
-  .ps-opt.sel { background: var(--accent-soft); color: var(--accent-text); border-color: var(--accent-line); font-weight: 600; }
+  /* 「每天有多少分钟」滑块（2026-10-08 用户：胶囊档位换成 5..240、步长 5 的滑块）。
+     三处宿主共用 .min-* 这一套：设置屏、今日面板「计划」页、「我的」浮窗。
+     那支绿走 accent-color，与随身听的 .ls-seek 同源；min-height 44 是 §10.4 的触摸目标。 */
+  .min-cap { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .min-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .min-val { font-size: 13px; font-weight: 700; color: var(--accent-text); font-variant-numeric: tabular-nums; }
+  .min-range { display: block; width: 100%; min-width: 0; min-height: 44px; margin: 0; background: transparent;
+    accent-color: var(--accent); cursor: pointer; }
+  /* 刻度是读数的坐标、不是快捷档（用户拍板「只画刻度，不可点」）：左右各让开半枚拇指，
+     数字才对得上轨道上的位置。 */
+  .min-ticks { position: relative; height: 18px; margin: 0 11px; font-size: 10px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .min-tick { position: absolute; transform: translateX(-50%); }
+  .min-tick::before { content: ''; display: block; width: 1px; height: 5px; margin: 0 auto 2px; background: var(--border); }
   /* 计划小结：标签—数值结构化，轮数只在这里出现一次并放大 */
   .ps-sum { margin: 14px 0 12px; padding: 2px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
   .ps-sum-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 12px; color: var(--muted); }
@@ -1865,12 +1875,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     color: var(--danger-ink); font-size: 11.5px; text-decoration: underline; text-underline-offset: 3px; }
   @media (hover: hover) { .ps-adjust .link-danger:hover, .mp-row .link-danger:hover { color: var(--coral, #d9694e); } }
   /* AA（§10.4）：字色走 --danger-ink（浅 #c0492f ≈4.96:1 / 深 #f0a08c），不再吃 4.27:1 的 --coral-deep。 */
-  /* §10.4：浮窗内触摸目标 ≥44px（视觉仍是那行小字链接） */
-  .me-pop .mp-row .link-danger { min-height: 44px; }
+  /* §10.4：「我的」宿主内触摸目标 ≥44px（视觉仍是那行小字链接）—— scope 走 .me-host，
+     两个宿主（PC 浮窗 / 移动端 #/me 页面）都管得到 */
+  .me-host .mp-row .link-danger { min-height: 44px; }
   /* 暗色模式补充覆盖 */
   @media (hover: hover) { body.dark .tp-close:hover { background: var(--dark-lift); } }
   body.dark .ps-opt { color: var(--text); }
-  body.dark .ps-opt.sel { color: var(--accent-text); }
   body.dark .today-panel .tp-head h3, body.dark .today-panel .plan-setup h3 { color: var(--text); }
   body.dark .task-bar .tb-title { color: var(--text); }
   body.dark .sent.task-new { background: rgba(52,211,153,.07); }
@@ -2022,18 +2032,25 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .nav-item.on .i-fill { display: inline-block; }
   .nav-item.on { background: var(--accent-soft, rgba(16,180,135,.07)); color: var(--accent-text); font-weight: 600; }
   /* ---- 侧栏底部：一条分割线 + 一行「我的」（2026-09-24 用户：不要卡片）----
-     2026-09-30：未登录显示用户图标 + 「我的」（i-line/i-fill 双态与其他 tab 同风格，不再是裸「登录」两字）；
-     已登录显示头像 + 账号；内容由 updateMeCard() 渲染。 */
+     2026-10-08 用户：PC 端这一行本身就报登录状态（未登录 / 账号名），手机端两种登录态都写「我的」。
+     文案由 updateMeCard() 按断点给；图标两颗（线性/面性）与其他四格同结构，选中态只换面性 + 底色。 */
   .me-card { display: flex; align-items: center; gap: 10px; width: 100%; margin-top: auto;
     padding: 12px 8px 2px; border: none; border-top: 1px solid var(--border); border-radius: 0;
     background: transparent; color: var(--text); cursor: pointer; text-align: left; }
   @media (hover: hover) { .me-card:hover { color: var(--accent-text); } }
-  /* 「我的」图标：与 nav-item 同一套 i-line/i-fill（已登录/未登录长得一样，
-     登录态信息只留在浮窗头部 mp-head，不再把账号塞进 tab） */
   .me-card .i-fill { display: none; }
   .me-card .i-line, .me-card .i-fill { font-size: 19px; line-height: 1; flex: none; }
-  .me-card .me-tab-label { font-size: 13px; font-weight: 600; }
-  /* ---- 「我的」浮窗（点用户卡向上弹；主题/计划/账号/数据都在这里）---- */
+  .me-card .me-tab-label { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; }   /* 账号名可能很长（PC 侧栏 220px 装不下）：省略号，不许撑破侧栏 */
+  /* 选中态与其他四格同一套（.nav-item.on 那三行）。写成 .me-card.on 两条类，特异度高于基样式
+     .me-card（含媒体查询里那条 background:transparent），选中的底色才不会被后面的声明打掉。 */
+  .me-card.on .i-line { display: none; }
+  .me-card.on .i-fill { display: inline-block; }
+  .me-card.on { background: var(--accent-soft, rgba(16,180,135,.07)); color: var(--accent-text); font-weight: 600; }
+  /* ---- 「我的」的两个宿主（2026-10-08）----
+     .me-host = 「我的」内容那一层的皮，两个宿主共用同一个类：#mePop（PC 向上弹的浮窗）
+     与移动端 #/me 页面里的 #meBody。浮窗独有的定位/滚层仍写在 .me-pop 上。
+     ⚠️ 宿主内的控件触区、颜色一律挂在 .me-host —— 挂在 .me-pop 上移动端就没人管了。 */
   .me-pop { position: fixed; z-index: 400; width: 360px; max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); overflow-y: auto;
     background: var(--card); border: 1px solid var(--border); border-radius: 16px;
     box-shadow: var(--shadow-lg); padding: 14px; }
@@ -2041,9 +2058,17 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .mp-eta { font-size: 11.5px; color: var(--muted); margin: -4px 0 10px; padding: 7px 10px;
     background: var(--accent-soft); border-radius: 10px; line-height: 1.5; }
   .me-pop[hidden] { display: none; }
+  /* 移动端 #/me 的页面宿主（2026-10-08 用户）：内容那一层套与浮窗同一张皮（--card 底 + --border
+     描边 + 16px 圆角 + 14px 内距），所以 .mp-* 那些子块两个宿主读到的样式是同一份，不是仿写。
+     页面独有的只有顶部那行 .pg-title（四页同款）。深色不必另写一条 —— --card/--border 走 body.dark。 */
+  .me-page .me-host { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px; }
   .mp-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .mp-avatar { flex: none; width: 42px; height: 42px; border-radius: 12px; background: var(--grad);
-    color: var(--cta-ink); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  /* 圆形首字母头像（2026-10-08 用户给的参考图）：账号取首字母大写，未登录是「未」。
+     底色走 --accent-soft + --accent-text 绿字（与 .nav-item.on、.mp-nums b 同一档），
+     不再是渐变底 —— 底上现在是文字，渐变底 axe 算不出对比度。 */
+  .mp-avatar { flex: none; width: 42px; height: 42px; border-radius: 50%; background: var(--accent-soft);
+    color: var(--accent-text); display: flex; align-items: center; justify-content: center;
+    font-size: 17px; font-weight: 800; line-height: 1; }
   .mp-id { min-width: 0; flex: 1; }
   .mp-name { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .mp-sub { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -2068,17 +2093,21 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     border-bottom: 1px solid var(--border); }
   .mp-row > .mp-label { font-size: 13px; font-weight: 600; color: var(--text); flex: none; }
   .mp-row .ps-opts { justify-content: flex-end; flex-wrap: wrap; }
+  /* 每天分钟数那一行整行让给滑块（2026-10-08）：标签与读数在 .min-head 里自己排左右，
+     胶囊时代「左标签 + 右边一堆胶囊」那一排在 390px 放不下 48 档。 */
+  .mp-row .min-slider { flex: 1; min-width: 0; }
   .mp-row .ps-opt { padding: 5px 10px; font-size: 12px; }
   .mp-row .tr-msw { padding: 4px 8px 4px 4px; }
-  /* M5（§10.4）：浮窗内所有可点控件触摸目标 ≥44px。scope 在 .me-pop ——
-     文章内那套紧凑控件（.r-badges 等）另有口径，不跟着变高。 */
-  .me-pop .accent-btn,
-  .me-pop .voice-btn,
-  .me-pop .tr-msw,
-  .me-pop .mp-logout,
-  .me-pop .mp-row .ps-opt { min-height: 44px; }
-  .me-pop .tr-msw { align-items: center; }
-  .me-pop .accent-btn { display: inline-flex; align-items: center; }
+  /* M5（§10.4）：「我的」里所有可点控件触摸目标 ≥44px。scope 在 .me-host（两个宿主共用）——
+     以前挂在 .me-pop 上，移动端换成一级页面就整批失效了。文章内那套紧凑控件（.r-badges 等）
+     另有口径，不跟着变高。 */
+  .me-host .accent-btn,
+  .me-host .voice-btn,
+  .me-host .tr-msw,
+  .me-host .mp-logout,
+  .me-host .mp-row .ps-opt { min-height: 44px; }
+  .me-host .tr-msw { align-items: center; }
+  .me-host .accent-btn { display: inline-flex; align-items: center; }
   .mp-foot { margin-top: 12px; }
   .mp-logout { width: 100%; min-height: 40px; border: 1px solid var(--border); border-radius: 999px;
     background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; }
@@ -2148,9 +2177,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .nav-item { flex: 1; flex-direction: column; justify-content: center; gap: 2px; text-align: center;
       font-size: 11px; padding: 0 4px; }
     .nav-item i { font-size: 20px; width: auto; }
-    /* 「我的」在手机 = 第 5 个 Tab（未登录「登录」/ 已登录头像+「我的」），点它弹浮窗；不塞进浮窗里点不到 */
+    /* 「我的」在手机 = 第 5 个 Tab（两种登录态都写「我的」，与其他四格同风格），点它切到 #/me 那一页。
+       圆角与 .nav-item 同值：选中态 .me-card.on 那块 accent-soft 底才是同一颗药丸，不是方的。 */
     .me-card { flex: 1; flex-direction: column; justify-content: center; gap: 2px; margin-top: 0;
-      padding: 0 4px; border: none; border-top: none; background: transparent; }
+      padding: 0 4px; border: none; border-top: none; border-radius: 12px; background: transparent; }
     @media (hover: hover) { .me-card:hover { background: transparent; } }
     .me-card .i-line, .me-card .i-fill { font-size: 20px; }
     .me-card .me-tab-label { font-size: 11px; font-weight: 500; }
@@ -2949,8 +2979,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         <button class="nav-item" data-route="words"><i class="ri-book-2-line i-line" aria-hidden="true"></i><i class="ri-book-2-fill i-fill" aria-hidden="true"></i><span>单词本</span></button>
         <button class="nav-item" data-route="stats"><i class="ri-bar-chart-2-line i-line" aria-hidden="true"></i><i class="ri-bar-chart-2-fill i-fill" aria-hidden="true"></i><span>学习数据</span></button>
         <!-- 侧栏底部：一条分割线 + 一行「我的」（2026-09-24 用户：不要卡片，用分割线）。
-             2026-09-30：未登录显示用户图标 + 「我的」，点它开统一登录弹窗（#loginModal）；
-             已登录显示头像 + 账号，点它向上弹「我的」浮窗。内容由 app.js 的 updateMeCard() 渲染。 -->
+             2026-10-08 用户：PC 端这一行按登录态显示文字（未登录 / 账号名），点它开统一登录弹窗或
+             向上弹浮窗；手机端它是底栏第 5 格，两种登录态都写「我的」，点它切到 #/me 那一页。
+             文案、选中态与 aria 语义都由 app.js 的 updateMeCard() 按断点给。 -->
         <button class="me-card" id="meCard" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="mePop">
           <i class="ri-user-smile-line i-line" aria-hidden="true"></i><i class="ri-user-smile-fill i-fill" aria-hidden="true"></i><span class="me-tab-label">我的</span>
         </button>
@@ -2958,8 +2989,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       <main id="appView"></main>
     </div>
 
-    <!-- 「我的」浮窗（用户 2026-09-24）：点底部那一行向上弹出；主题（深浅色）/口音/音色/计划/账号/数据都在这里。 -->
-    <div class="me-pop" id="mePop" role="dialog" aria-label="我的" hidden></div>
+    <!-- 「我的」的 PC 宿主（用户 2026-09-24）：点侧栏那一行向上弹出；主题（深浅色）/口音/音色/计划/账号/数据都在这里。
+         手机端不用它 —— 那边是 #/me 一级页面，内容与它同一份（app.js 的 meContent），宿主类 .me-host 也同一个。
+         ⚠️ 移动端它必须保持空壳（app.js 不往里渲）：#voicePop / #mpEta / #meImportFile 这些 id 会撞车。 -->
+    <div class="me-pop me-host" id="mePop" role="dialog" aria-label="我的" hidden></div>
 
     <!-- 统一登录弹窗（2026-09-30）：移动 + 桌面共用。替代 mePop 内嵌表单与各处"去 mePop 登录"。
          邮箱/密码 ID 独立（loginEmail/loginPass），不与 meEmail/mePass、cloudEmail/cloudPass 复用。
@@ -7192,6 +7225,15 @@ let listenOn = false;
          「老的继续写、新的负责读」；界面只读 ROOT2，不会再出现两个口径打架。 */
       const LS_V2 = 'ielts.shadow.v2';
       const MIG_KEY = 'ielts.shadow.migNotice';
+      /* 「每天有多少分钟」的档位（2026-10-08 用户：胶囊选择器换成滑块，最小 5、最大 240、以 5 为单位）。
+         区间只有这一份：以前 1..180 抄在三处（事件流重建 / initPlan / setMinutes），
+         改一次上限要翻三个地方，漏一处就是「UI 拖到 240、落账被夹回 180」。 */
+      const MIN_RANGE = { min: 5, max: 240, step: 5 };
+      // 只做边界夹取，不抹到整步：历史档案里的 25、27 这些数不该被偷偷改掉。
+      function clampMin(v) { return Math.max(MIN_RANGE.min, Math.min(MIN_RANGE.max, Math.round(Number(v) || MIN_RANGE.min))); }
+      // 滑块那颗拇指只能停在步长上，读数必须跟拇指一致，所以显示/回写前抹一次。
+      function snapMin(v) { const s = MIN_RANGE.step;
+        return Math.max(MIN_RANGE.min, Math.min(MIN_RANGE.max, Math.round(clampMin(v) / s) * s)); }
       let ROOT2 = null;
       let WORDS_BY_SENT = null, ALL_TARGET_WORDS = 0, _cachedPlan = null, _cachedDay = '', _cachedArticle = undefined, _cachedManual = '';
 
@@ -7493,7 +7535,7 @@ let listenOn = false;
           if (!last || (e.ts || 0) > (last.ts || 0)) last = e;
         }
         if (!first) return false;
-        ROOT2.plan = { todayMinutes: Math.max(1, Math.min(180, Math.round(Number(last.minutes) || 15))),
+        ROOT2.plan = { todayMinutes: clampMin(Number(last.minutes) || 15),
                        startDate: first.day, endDate: null, totalDays: 30 };
         syncLegacyPlan(); _cachedPlan = null;
         try { buildQueue(); } catch (e) {}
@@ -7501,7 +7543,7 @@ let listenOn = false;
         return true;
       }
       function initPlan(minutes) {
-        const m = Math.max(1, Math.min(180, Math.round(Number(minutes) || 15)));
+        const m = clampMin(Number(minutes) || 15);
         /* W7-4：任何一次建计划都让「从空状态点去设置」的那一篇作废 —— 否则经过导入 / 重置
            等非 ps-start 的路径之后，残留的 _pendingArticle 会在下一次建计划时把人拽回旧文章。
            ps-start 会先于本函数把 pending 取走，所以这里清掉不会弄丢正常的「回到那一篇」。 */
@@ -9985,10 +10027,11 @@ let listenOn = false;
         el.innerHTML = html;
         el.dataset.days = r && r.done ? String(r.days) : '';
       }
-      function paintPlanEta() {
+      /* mOverride：滑块还在拖、计划尚未落账时，用它预览工期（见 bindMinSlider 的 onInput）。 */
+      function paintPlanEta(mOverride) {
         const el = document.getElementById('planEta');
         if (!el || !ROOT2 || !ROOT2.plan) return;
-        const m = ROOT2.plan.todayMinutes;
+        const m = mOverride == null ? ROOT2.plan.todayMinutes : mOverride;
         el.textContent = '算一下…';
         etaFor(m).then(r => etaSet(el, etaText(r, m, false) + (milestoneText(r) ? ' · ' + milestoneText(r) : ''), r));
       }
@@ -10010,21 +10053,47 @@ let listenOn = false;
           etaSet(el, t, r);
         });
       }
+      /* 「每天有多少分钟」的滑块（2026-10-08 用户：档位胶囊换成滑块，最小 5、最大 240、以 5 为单位）。
+         markup 只有这一份，三处宿主共用：设置屏 renderSetup、今日面板 renderPlanView、
+         「我的」浮窗（app/app.js 拼 TASK.minSlider(...)）。刻度是读数的坐标、不是快捷档
+         （用户拍板「只画刻度，不可点」），所以是纯 span，不挂任何监听。 */
+      function minSlider(label, cur) {
+        const R = MIN_RANGE, v = snapMin(cur);
+        const ticks = [];
+        for (let t = 30; t <= R.max; t += 30) {
+          ticks.push(`<span class="min-tick" style="left:${((t - R.min) / (R.max - R.min) * 100).toFixed(2)}%">${t}</span>`);
+        }
+        return `<div class="min-slider" role="group" aria-label="${label}">
+          <div class="min-head"><span class="min-cap">${label}</span><output class="min-val" aria-hidden="true">${v} 分钟</output></div>
+          <input type="range" class="min-range" min="${R.min}" max="${R.max}" step="${R.step}" value="${v}" aria-label="${label}" aria-valuetext="${v} 分钟">
+          <div class="min-ticks" aria-hidden="true">${ticks.join('')}</div>
+        </div>`;
+      }
+      /* 滑块的两段语义必须分开：input = 手还在拖（只改读数与工期预览），change = 松手（才落账）。
+         落账一次要重排今天的队列、写存档，还会换掉正在拖的那个节点 —— 每跨一档来一遍既卡又丢焦点。 */
+      function bindMinSlider(root, opts) {
+        const el = root && root.querySelector('.min-range');
+        if (!el) return;
+        const o = opts || {}, valEl = root.querySelector('.min-val');
+        const paint = () => {
+          const v = snapMin(el.value);
+          if (el.value !== String(v)) el.value = String(v);
+          if (valEl) valEl.textContent = v + ' 分钟';
+          el.setAttribute('aria-valuetext', v + ' 分钟');
+          return v;
+        };
+        el.addEventListener('input', () => { const v = paint(); if (o.onInput) o.onInput(v); });
+        el.addEventListener('change', () => { const v = paint(); if (o.onCommit) o.onCommit(v); });
+      }
       function renderSetup(p) {
-        /* 档位（2026-09-26 用户）：加 90/120、去 10/20 —— 档位之间要有真实差异，太碎没有意义 */
-        const MINS = [5, 15, 30, 45, 60, 90, 120];
         let sel = 15;
-        /* 视觉上去掉「每天」那一行（标题已经说了「每天有多少分钟」），
-           但组名不能丢 —— 换成 role=group + aria-label，读屏照样念得出这组是什么。
+        /* 组名不能丢 —— 滑块时代靠 role=group + aria-label 念（胶囊 era 那条注释的口径不变）。
            ⚠️ 注释别写进下面这个模板字符串里：会被当正文渲染出来（踩过两次）。 */
         p.innerHTML = `<div class="tp-head"><h3>设置学习计划</h3>
             <button class="tp-close" onclick="TASK.closePanel()" aria-label="关闭面板">✕</button></div>
           <div class="plan-setup">
-          <h3>每天有多少分钟</h3>
           <p class="ps-sub">共 ${SENT_RAW.length} 句 · ${ALL_TARGET_WORDS} 个目标词。句数与覆盖词数由分钟数算出来。</p>
-          <div class="ps-group"><div class="ps-opts" id="psMin" role="group" aria-label="每天有多少分钟">
-            ${MINS.map(m => `<button class="ps-opt${m === sel ? ' sel' : ''}" data-v="${m}">${m} 分钟</button>`).join('')}
-          </div></div>
+          <div class="ps-group">${minSlider('每天有多少分钟', sel)}</div>
           <div class="ps-sum" id="psSum"></div>
           <div class="ps-eta" id="psEta" data-days="">算一下…</div>
           <div class="ps-eta sm" id="psEtaAssume">（只按通读时间估算：新句约 ${Math.round(secNew())} 秒、复习句约 ${Math.round(secReview())} 秒。做题不占每天的分钟数）</div>
@@ -10064,14 +10133,10 @@ let listenOn = false;
           }
         };
         refresh();
-        p.querySelectorAll('.ps-opts').forEach(group => group.addEventListener('click', e => {
-          const btn = e.target.closest('.ps-opt');
-          if (!btn) return;
-          group.querySelectorAll('.ps-opt').forEach(x => x.classList.remove('sel'));
-          btn.classList.add('sel');
-          sel = parseInt(btn.dataset.v, 10);
-          refresh();
-        }));
+        /* 这一屏还没有计划可改（建计划要等「开始这个计划」），所以只挂 onInput。
+           rAF 合并：一帧内跨过多档只算一次装配 —— 真数据 3245 句，逐档装配会掉帧。 */
+        let raf = 0;
+        bindMinSlider(p, { onInput: (m) => { sel = m; if (raf) return; raf = requestAnimationFrame(() => { raf = 0; refresh(); }); } });
         document.getElementById('psStart').onclick = () => {
           /* W7-4：先取走「从空状态点去设置」的那一篇，再建计划 —— initPlan 会把残留清掉，
              顺序反了就把这一篇弄丢了。 */
@@ -10104,7 +10169,12 @@ let listenOn = false;
           (_view === 'plan' ? renderPlanView() : renderTodayView());
         // 数字停在「打开面板那一刻」是这类双路径写同一节点最典型的翻车；放在这里，
         // 改分钟 / 改日界 / 暂停新词三条重绘路径就都自动带上，不用一个个补。
-        if (_view === 'plan') paintPlanEta(); else if (_view === 'today') paintTodayEta();
+        if (_view === 'plan') {
+          /* 监听也挂在这里：renderPlanView 只管拼字符串，重绘路径由本函数统一收尾，
+             否则面板重开一次就多绑一份、松手落账会被 call 两遍。 */
+          bindMinSlider(p, { onInput: paintPlanEta, onCommit: setMinutes });
+          paintPlanEta();
+        } else if (_view === 'today') paintTodayEta();
       }
 
       /* 两栏并列、永不合并成一个「总进度」：今天做到位没有，和词往前走了几步，
@@ -10166,13 +10236,10 @@ let listenOn = false;
       }
 
       function renderPlanView() {
-        /* 档位与设置屏同一份（2026-09-26 用户）：加 90/120、去 10/20 */
-        const MINS = [5, 15, 30, 45, 60, 90, 120];
-        const row = (label, opts, cur, fn) => `<div class="ps-group"><label>${label}</label>
-          <div class="ps-opts">${opts.map(o => `<button class="ps-opt${String(o[0]) === String(cur) ? ' sel' : ''}" data-v="${o[0]}" onclick="${fn}(${o[0]})">${o[1]}</button>`).join('')}</div></div>`;
-        /* 2026-09-25：「几点算换一天」整行删除（日界固定凌晨 4 点，见 bdHour）。 */
-        return row('每天有多少分钟', MINS.map(m => [m, m + ' 分钟']), ROOT2.plan.todayMinutes, 'TASK.setMinutes') +
-          `<div class="ps-eta" id="planEta" data-days="">算一下…</div>
+        /* 2026-09-25：「几点算换一天」整行删除（日界固定凌晨 4 点，见 bdHour）。
+           2026-10-08：每天分钟数由胶囊档位换成滑块，与设置屏、「我的」浮窗共用同一份 minSlider。 */
+        return `<div class="ps-group">${minSlider('每天有多少分钟', ROOT2.plan.todayMinutes)}</div>
+          <div class="ps-eta" id="planEta" data-days="">算一下…</div>
           ${ROOT2.report && ROOT2.report.words ? `<div class="tp-note sm">上次改成按词记：<b>${ROOT2.report.words}</b> 个词从句子账搬过来，`
             + `其中 ${ROOT2.report.cappedWords} 个原本算「巩固/掌握」的被压回「已见面」，要重新考才算数。</div>` : ''}
           <div class="tp-note sm">进度存在这台设备上，并以上传「完成记录」的方式同步。<span class="sync-state" id="syncState">${syncHintText()}</span></div>
@@ -10185,9 +10252,13 @@ let listenOn = false;
       function setMinutes(m) {
         // 改学习时间需登录（2026-09-30 用户）：建计划拦在 openPanel，改分钟拦在这里，两口全覆盖。
         if (typeof isLoggedIn === 'function' && !isLoggedIn()) { if (typeof taskLoginPrompt === 'function') taskLoginPrompt('setup'); return; }
-        ROOT2.plan.todayMinutes = Math.max(1, Math.min(180, m));
+        ROOT2.plan.todayMinutes = clampMin(m);
         if (ROOT2.planned) ROOT2.planned[day2()] = 0;   // 预算变了，今天的句数承诺重算一次
-        _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2(); renderToday(document.getElementById('todayPanel'));
+        _cachedPlan = null; syncLegacyPlan(); savePlan(); persist2();
+        /* 面板正停在「计划」页签时不整屏重绘：那会换掉用户正在拖（或刚按过方向键）的滑块节点，
+           焦点掉回 body，第二下方向键就没反应了。这一页随分钟数变的只有工期行。 */
+        if (_panelOpen && _view === 'plan') paintPlanEta();
+        else renderToday(document.getElementById('todayPanel'));
       }
       function syncHintText() {
         // 只有真的登录了、且上传链已接上才报差额 —— 没登录时说「还有 N 条没传上去」是空许诺
@@ -10520,6 +10591,9 @@ let listenOn = false;
         loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
         pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
         initPlan, resetV2, readDone, relearn, setView, setMinutes,
+        /* 「每天有多少分钟」滑块的三份出口（2026-10-08）：minSlider 给「我的」浮窗拼 markup，
+           bindMinSlider 给它挂监听，MIN_RANGE 让外面读到同一份档位（别再抄第二份 5..240）。 */
+        minSlider, bindMinSlider, MIN_RANGE,
         etaFor, etaCalls, etaText, etaMonth, countStages, seedDailyForTest, seedArticleForTest,
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
         repsOf, articlePass2Done,

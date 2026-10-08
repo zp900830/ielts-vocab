@@ -1,8 +1,9 @@
 /* 3.0 外壳路由。#/home（六张卡片）/ #/stats（学习数据页）/ #/words（单词本）/ #/listen（随身听）
    四个一级页都是真页（M4 起随身听落地）。
-   「我的」不再是路由（用户 2026-09-24）：改成左下角常驻用户卡 + 向上弹出的浮窗，见文件末尾。 */
+   #/me 是 2026-10-08 加的，但它只有移动端是一级页：手机底栏那一格点它进页面，PC 上「我的」
+   仍旧是侧栏那一行向上弹的浮窗、不是路由（撞上 #/me 弹回首页，见 route() 里那条分叉）。 */
 (function () {
-  const ROUTES = ['home', 'stats', 'words', 'listen'];
+  const ROUTES = ['home', 'stats', 'words', 'listen', 'me'];
   /* refine3 ⑦：「正在载入…」占位统一出口。薄荷绿三点轻脉冲（纯 CSS，见 index.html 的 .iel-loading），
      尊重 prefers-reduced-motion；role=status 让读屏知道在加载，而不是一片空白。 */
   function loadingHtml() {
@@ -26,6 +27,11 @@
     const raw = (location.hash || '#/home').replace(/^#\//, '').split('/');
     const h = raw[0];
     cur = ROUTES.includes(h) ? h : 'home';
+    /* 「我的」的宿主按视口分叉（2026-10-08 用户）：移动端 = 一级页面，PC = 浮窗。
+       PC 档撞上 #/me（深链、或窗口从手机拖宽）没有地方放它，弹回首页。
+       这么切还有个硬理由：两个宿主绝不能同时活着 —— #voicePop / #mpEta / #meImportFile
+       这些 id 是内容模板里的，双份会让 renderVoicePop / refreshMeEta 各捡到一半。 */
+    if (cur === 'me' && !meIsMobile()) { cur = 'home'; location.hash = '#/home'; return; }
     /* 一级页导航 = 离开任务模式（2026-09-28 用户报障：「我都返回了，不在任务模式了，还仍在播放」——
        头部 #ttBack 那条已修，但点左侧导航 / 浏览器后退只改 hash 走这里，任务模式没退出、播放没停）。
        exitTaskMode 内含停播三件套 + 收 chrome（index.html）。
@@ -43,6 +49,8 @@
     if (cur !== 'home') _hlArticle = null;
     document.querySelectorAll('.sidenav .nav-item').forEach(b =>
       b.classList.toggle('on', b.dataset.route === cur));
+    // 「我的」那一行不是 .nav-item：选中态、文案、aria 语义由它自己按 cur + 断点管。
+    updateMeCard();
     const view = document.getElementById('appView');
     /* 登录门禁（2026-09-30）：学习数据 / 单词本需登录。冷启动直链时先等存档会话恢复
        （ensureLogin，5s 封顶），别把"会话还在恢复"误判成未登录；__routeLocked 记着锁的是哪页，
@@ -64,7 +72,7 @@
       }
       window.__routeLocked = '';
     }
-    if (cur === 'home' && window.APP3 && window.APP3.renderHome) { updateMeCard(); return window.APP3.renderHome(view); }
+    if (cur === 'home' && window.APP3 && window.APP3.renderHome) return window.APP3.renderHome(view);
     if (cur === 'home') { view.innerHTML = loadingHtml(); return; }
     if (cur === 'stats' && window.APP3 && window.APP3.renderStats) return window.APP3.renderStats(view);
     if (cur === 'stats') { view.innerHTML = loadingHtml(); return; }
@@ -72,16 +80,14 @@
     if (cur === 'words') { view.innerHTML = loadingHtml(); return; }
     if (cur === 'listen' && window.APP3 && window.APP3.renderListen) return window.APP3.renderListen(view);
     if (cur === 'listen') { view.innerHTML = loadingHtml(); return; }
+    if (cur === 'me') return renderMe(view);
     // cur 只可能是 ROUTES 成员，这里只作兜底：回首页。
     return window.APP3.renderHome(view);
   }
   document.addEventListener('click', (e) => {
-    // 左下角用户卡（手机端第 5 格）：未登录 → 开统一登录弹窗；已登录 → 开/关「我的」浮窗（不是切页）。
+    // 左下角用户卡：PC 未登录 → 统一登录弹窗，已登录 → 开/关浮窗；手机端 → 一律切到 #/me 那一页。
     const me = e.target.closest('#meCard');
-    if (me) {
-      try { if (!meAccount().logged) { openLoginModal(); return; } } catch (err) {}
-      toggleMePop(); return;
-    }
+    if (me) { meOpen(); return; }
     // 单词本：筛选 / 展开 / 重学 / 播放 / 加载更多（M3，都是每次重渲的节点，走事件代理）。
     const wf = e.target.closest('.wb-filter');
     if (wf) { location.hash = '#/words/' + wf.dataset.f; return; }
@@ -1101,7 +1107,10 @@
 
   // 数据页的点击（按钮是每次重渲的，走事件代理，只绑一次）
   document.addEventListener('click', (e) => {
-    if (e.target.closest('.st-open-me')) { openMePop(); return; }
+    /* 这颗键的意图是「去设置」（上面写着「『每天有多少分钟』在『我的』里」），不是「去登录」：
+       走 meOpenSettings —— PC 直接开浮窗（未登录也调得了主题），手机端切到 #/me 那一页。
+       用 meOpen() 会在未登录时先弹登录窗，把设置挡在门外。 */
+    if (e.target.closest('.st-open-me')) { meOpenSettings(); return; }
     const art = e.target.closest('.st-art');
     if (art && art.dataset.a != null) { openHomeHighlight(Number(art.dataset.a)); return; }
     const go = e.target.closest('.st-go, .tip-go');
@@ -1229,27 +1238,48 @@
     closeBlankPop: () => TASK.closeBlankPop(),
   });
 
-  /* ---- 左下角用户卡 + 「我的」浮窗（用户 2026-09-24）----
-     「我的」从一级导航拿出来：桌面侧栏底部常驻一张用户卡，点它向上弹浮窗；手机端这张卡
-     就是 TabBar 的第 5 格。浮窗内容按 PRD §8.1：账号 / 学习摘要 / 当前状态 / 数据管理 /
-     主题（深浅色）/ 计划设置。深色开关从一级页面顶栏挪到这里（顶栏随之去掉）。 */
+  /* ---- 左下角用户卡 + 「我的」（用户 2026-09-24；2026-10-08 起按宿主分叉）----
+     内容一份（meContent）、监听一份（mountMe/wireMeHost），宿主两个：
+     PC = 侧栏那一行向上弹的浮窗 #mePop；手机端 = 底栏那一格点开的 #/me 一级页面。
+     判据只有一颗 meIsMobile()，与 index.html 的 @media (max-width: 700px) 同档。
+     内容项按 PRD §8.1：账号 / 学习摘要 / 当前状态 / 数据管理 / 主题（深浅色）/ 计划设置。 */
   function meAccount() {
     const mail = (typeof CLOUD !== 'undefined' && CLOUD._userMail) || '';
     return { mail, logged: !!mail, nickname: mail ? mail.split('@')[0] : '我的' };
+  }
+  function meIsMobile() { return window.matchMedia('(max-width: 700px)').matches; }
+  // 圆形首字母头像（2026-10-08 用户给的参考图）：中文/emoji 也算一个字符，按码点取第一个。
+  function meInitial(nick) {
+    const ch = Array.from(String(nick || '').trim())[0] || '';
+    return ch.toUpperCase();
   }
   function updateMeCard() {
     const card = document.getElementById('meCard');
     if (!card) return;
     const acc = meAccount();
-    // 2026-10-06 用户：已登录的绿色方块头像+账号与底部其余 4 颗 tab 风格不搭 ——
-    // 统一成 nav-item 同款 i-line/i-fill 图标 + 「我的」；登录态信息只留在浮窗头（mp-head）。
-    card.innerHTML = `<i class="ri-user-smile-line i-line" aria-hidden="true"></i><i class="ri-user-smile-fill i-fill" aria-hidden="true"></i><span class="me-tab-label">我的</span>`;
+    const mobile = meIsMobile();
+    /* 两颗图标（线性/面性）都不动 —— 与其他四格同结构，选中态靠 CSS 换面性。
+       动的只有文字：手机底栏两种登录态都写「我的」（账号只出现在页面里），
+       PC 侧栏这一行本身就报登录状态：未登录写「未登录」，登录后写账号名。 */
+    const label = mobile ? '我的' : (acc.logged ? acc.nickname : '未登录');
+    card.innerHTML = `<i class="ri-user-smile-line i-line" aria-hidden="true"></i><i class="ri-user-smile-fill i-fill" aria-hidden="true"></i><span class="me-tab-label">${esc(label)}</span>`;
     card.setAttribute('aria-label', acc.logged ? `我的 · ${acc.nickname}` : '我的 · 未登录，点击登录');
+    const onMe = mobile && cur === 'me';
+    card.classList.toggle('on', onMe);
+    if (onMe) card.setAttribute('aria-current', 'page'); else card.removeAttribute('aria-current');
+    /* 手机上它是 tab、不是弹窗触发键：haspopup/expanded/controls 留着，读屏会念「有对话框」，
+       而它开的是一个页面。PC 那侧才回到 dialog 语义（aria-expanded 直接读浮窗的真实显隐）。 */
+    if (mobile) {
+      card.removeAttribute('aria-haspopup'); card.removeAttribute('aria-expanded'); card.removeAttribute('aria-controls');
+    } else {
+      const pop = document.getElementById('mePop');
+      card.setAttribute('aria-haspopup', 'dialog');
+      card.setAttribute('aria-controls', 'mePop');
+      card.setAttribute('aria-expanded', String(!!pop && !pop.hidden));
+    }
   }
-  function renderMePop() {
-    const pop = document.getElementById('mePop');
-    if (!pop) return;
-    updateMeCard();
+  // 「我的」的正文模板：PC 浮窗与移动端一级页面共用这一份，两个宿主不许各写一套。
+  function meContent() {
     const acc = meAccount();
     const s = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats() : { streak: 0, graduated: 0, targetWords: 0 };
     const state = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
@@ -1261,11 +1291,10 @@
     const title = SECTIONS[focus] ? SECTIONS[focus].title : '';
     const planDay = cfg && cfg.startDate ? Math.floor((Date.now() - Date.parse(cfg.startDate)) / 864e5) + 1 : 1;
     const dark = document.body.classList.contains('dark');
-    /* 档位（2026-09-26 用户）：加 90/120、去 10/20；选完立刻在下方给出工期（与设置屏同一份估算） */
-    const MINS = [5, 15, 30, 45, 60, 90, 120];
-    pop.innerHTML = `
+    const initial = acc.logged ? meInitial(acc.nickname) : '未';
+    return `
       <div class="mp-head">
-        <span class="mp-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>
+        <span class="mp-avatar" aria-hidden="true">${esc(initial)}</span>
         <div class="mp-id"><div class="mp-name">${esc(acc.logged ? acc.nickname : '未登录')}</div>
           <div class="mp-sub">${esc(acc.logged ? acc.mail : '登录后跨设备同步')}</div></div>
       </div>
@@ -1291,8 +1320,7 @@
         <div class="mp-row"><span class="mp-label">深色模式</span>
           <button class="tr-msw${dark ? ' on' : ''}" type="button" role="switch" aria-checked="${dark}" data-me-theme aria-label="深色模式"><span class="knob" aria-hidden="true"></span></button></div>
         ${cfg ? `
-        <div class="mp-row"><span class="mp-label">每天有多少分钟</span><div class="ps-opts">
-          ${MINS.map(m => `<button class="ps-opt${m === cfg.minutes ? ' sel' : ''}" data-me-min="${m}">${m}</button>`).join('')}</div></div>
+        <div class="mp-row">${TASK.minSlider('每天有多少分钟', cfg.minutes)}</div>
         <div class="mp-eta" id="mpEta" role="status">算一下…</div>
         <div class="mp-row"><button class="link-danger" type="button" data-me-reset-plan aria-label="重置学习计划，只重设计划、保留进度">重置学习计划</button></div>` : ''}
         <div class="mp-row"><span class="mp-label">数据</span><div class="ps-opts">
@@ -1303,25 +1331,70 @@
         ? `<button class="mp-logout" type="button" data-me-logout>退出登录</button>`
         : `<button class="mp-login-btn" type="button" data-me-login-btn>去登录</button>`}</div>
       <input type="file" id="meImportFile" accept="application/json,.json" style="display:none">`;
+  }
+  /* 挂一个宿主：渲内容 → 绑音色 → 绑滑块 → 算工期 → 绑这一颗的事件代理。
+     宿主是谁都行（#mePop / #meBody），内容与 TASK 出口都只有一份。 */
+  function mountMe(root) {
+    if (!root) return;
+    const cfg = (typeof TASK !== 'undefined' && TASK.planConfig) ? TASK.planConfig() : null;
+    root.innerHTML = meContent();
     // 音色选择器（③ 挪进来）：重渲后 #voicePop 是新元素，要重新渲染 + 重新绑事件代理。
     try { if (typeof renderVoicePop === 'function') renderVoicePop(); } catch (e) {}
     wireVoicePop();
-    // 工期行（2026-09-26 用户）：换分钟数/重开浮窗都要刷新 —— 与设置屏同一份估算
+    /* 每天分钟数的滑块（2026-10-08）：档位与监听都走 TASK 那一份，「我的」不抄第二套 5..240。
+       松手（change）才落账；落完只补工期行，不重渲整个宿主 —— 重渲会换掉滑块节点，
+       键盘党按第二下就没靶了（胶囊时代靠 renderMePop 挪选中态，滑块自己就停在那一格）。 */
+    if (cfg && TASK.bindMinSlider) TASK.bindMinSlider(root, {
+      onInput: refreshMeEta,
+      onCommit: (m) => { TASK.setMinutes(m); refreshMeEta(); },
+    });
+    // 工期行（2026-09-26 用户）：换分钟数/重开都要刷新 —— 与设置屏同一份估算
     refreshMeEta();
+    wireMeHost(root);
+  }
+  function renderMePop() {
+    const pop = document.getElementById('mePop');
+    if (!pop) return;
+    updateMeCard();
+    mountMe(pop);
+    // 重渲可能把内容换高/换矮（重置计划、退出登录），浮窗那几条定位量要跟着重算。
+    if (!pop.hidden) positionMePop();
     // §10.4：重渲把原焦点节点摘掉（activeElement 掉到 body）—— 浮窗若还开着，把焦点收回浮窗。
     if (!pop.hidden && (document.activeElement === document.body || !pop.contains(document.activeElement))) {
       pop.tabIndex = -1;
       try { pop.focus(); } catch (e) {}
     }
   }
+  /* 移动端的一级页面宿主（2026-10-08 用户：「移动端点『我的』则为内容相同的一级页面」）。
+     标题走四页同款的 .pg-title；.me-host 那一层是浮窗皮的对应物（见 index.html）。
+     ⚠️ 这个宿主活着时 #mePop 必须保持空壳：#voicePop / #mpEta / #meImportFile 这些 id
+     在模板里，两边同时渲就撞车（renderVoicePop/refreshMeEta 各捡到一半）。 */
+  function renderMe(view) {
+    const host = view || document.getElementById('appView');
+    if (!host) return;
+    updateMeCard();
+    host.innerHTML = '<div class="me-page" id="mePage"><h1 class="pg-title">我的</h1><div class="me-host" id="meBody"></div></div>';
+    mountMe(document.getElementById('meBody'));
+  }
+  /* 重渲「当前活着的那个宿主」。移动端的判据是 #meBody 真在页面里（= 正在 #/me），
+     不是光看断点：登录/退出也可能发生在 #/stats，那时不该把数据页换成「我的」。 */
+  function rerenderMe() {
+    if (meIsMobile()) {
+      const body = document.getElementById('meBody');
+      if (body && body.isConnected) renderMe(document.getElementById('appView'));
+      return;
+    }
+    renderMePop();
+  }
   /* 工期行（2026-09-26 用户拍板）：「我的」里改每天分钟数也要能看到「新词全部过完一遍（需要 N 天）」
      —— 与设置屏/计划页同一份 estimateDays 估算（TASK.etaFor/etaText 出口）。 */
-  function refreshMeEta() {
+  /* mOverride：滑块还在拖、计划尚未落账时，用它预览工期（TASK.bindMinSlider 的 onInput）。 */
+  function refreshMeEta(mOverride) {
     const el = document.getElementById('mpEta');
     if (!el) return;
     const cfg = (typeof TASK !== 'undefined' && TASK.planConfig) ? TASK.planConfig() : null;
     if (!cfg) { el.textContent = ''; el.hidden = true; return; }
-    const m = cfg.minutes;
+    const m = mOverride == null ? cfg.minutes : mOverride;
     el.hidden = false;
     el.textContent = '算一下…';   /* A13：与设置屏那六处同一个占位词（成品句两边也都是「按每天 X 分钟…」开头，不带「工期」两字） */
     TASK.etaFor(m).then((r) => {
@@ -1331,20 +1404,33 @@
       el.textContent = '按每天 ' + m + ' 分钟：新词全部过完一遍（需要 ' + (r && r.days ? r.days + ' 天' : '更久') + '）';
     });
   }
-  /* 浮窗开在用户卡正上方（桌面 360px 宽，2026-09-26 用户加宽；手机通栏 bottom-sheet），
-     高度夹在卡片上沿以内。 */
+  /* 浮窗开在用户卡正上方（桌面 360px 宽，2026-09-26 用户加宽），高度夹在卡片上沿以内。
+     2026-10-08：手机端不再是它的形态（移动端走 #/me 页面），所以这里只剩桌面那一条算法。 */
   function positionMePop() {
     const pop = document.getElementById('mePop');
     const card = document.getElementById('meCard');
     if (!pop || !card) return;
     const r = card.getBoundingClientRect();
-    const mobile = window.matchMedia('(max-width: 700px)').matches;
-    if (mobile) { pop.style.left = '8px'; pop.style.width = Math.max(200, window.innerWidth - 16) + 'px'; }
-    else { pop.style.left = Math.max(8, r.left) + 'px'; pop.style.width = '360px'; }
+    pop.style.left = Math.max(8, r.left) + 'px';
+    pop.style.width = '360px';
     pop.style.top = 'auto';
     pop.style.bottom = Math.max(8, window.innerHeight - r.top + 8) + 'px';
     pop.style.maxHeight = Math.max(220, r.top - 16) + 'px';
   }
+  /* 「我的」的两个入口姿势（2026-10-08 用户拍板）：
+     手机端一律切到 #/me —— 未登录也进得去，页内给「去登录」大按钮，不再先拦一道弹窗；
+     PC 保持原样 —— 未登录先弹统一登录弹窗，已登录才向上弹浮窗。 */
+  function meOpen() {
+    if (meIsMobile()) { location.hash = '#/me'; return; }
+    if (!meAccount().logged) { openLoginModal(); return; }
+    toggleMePop();
+  }
+  /* 「暂不登录，先去设置」：不看登录态的那条出口（主题/口音/音色对未登录也开放）。 */
+  function meOpenSettings() { if (meIsMobile()) location.hash = '#/me'; else openMePop(); }
+  /* CTA（继续学 / 设置学习计划）=「离开我的」的动作：PC 收浮窗，手机端把路由退回首页。
+     退回首页不是装饰：任务模式整条 `body.task-mode #appShell { display:none }`，
+     页面宿主留在 #appView 里会被盖住 —— 与 playSentence 那条「先改 hash 再进任务」同一步。 */
+  function meDepart() { if (meIsMobile()) { location.hash = '#/home'; return; } closeMePop(); }
   function openMePop() {
     const pop = document.getElementById('mePop');
     if (!pop) return;
@@ -1371,8 +1457,8 @@
     const pop = document.getElementById('mePop');
     if (pop && !pop.hidden) closeMePop(); else openMePop();
   }
-  // 确认框与「已退出登录」提示都在 cloudLogout 里（两个入口共用一套），这里只负责退出后把浮窗画回未登录态。
-  async function meLogout() { try { if (typeof cloudLogout === 'function') await cloudLogout(); } catch (e) {} renderMePop(); positionMePop(); }
+  // 确认框与「已退出登录」提示都在 cloudLogout 里（两个入口共用一套），这里只负责退出后把「我的」画回未登录态。
+  async function meLogout() { try { if (typeof cloudLogout === 'function') await cloudLogout(); } catch (e) {} rerenderMe(); }
   /* 统一登录弹窗（2026-09-30）：移动 + 桌面共用。登录/注册走同一套 cloudLogin/cloudSignup，
      只是读弹窗里的输入框（loginEmail/loginPass）。成功（CLOUD._userMail 落定）才关弹窗并刷新用户卡；
      失败时 cloudLogin 已弹提示，弹窗保持打开。SIGNED_IN 监听会自动重渲被锁住的路由。 */
@@ -1393,7 +1479,9 @@
   async function modalLogin() {
     try { if (typeof cloudLogin === 'function') await cloudLogin({ email: 'loginEmail', pass: 'loginPass' }); } catch (e) {}
     try {
-      if (typeof CLOUD !== 'undefined' && CLOUD._userMail) { closeLoginModal(); updateMeCard(); }
+      /* 登录成功：卡片文案要翻（PC 那侧「未登录」→ 账号名），活着的宿主也要翻
+         （手机端此刻正站在 #/me 上，页头的「未登录 / 去登录」得当场变成账号 + 退出登录）。 */
+      if (typeof CLOUD !== 'undefined' && CLOUD._userMail) { closeLoginModal(); updateMeCard(); rerenderMe(); }
     } catch (e) {}
   }
   async function modalSignup() {
@@ -1410,7 +1498,7 @@
       e.stopPropagation();
       if (t.hasAttribute('data-login-close')) closeLoginModal();
       else if (t.hasAttribute('data-login-signup')) modalSignup();
-      else if (t.hasAttribute('data-login-settings')) { closeLoginModal(); try { openMePop(); } catch (err) {} }
+      else if (t.hasAttribute('data-login-settings')) { closeLoginModal(); meOpenSettings(); }
     });
     // 登录走 <form> 提交：点「登录」（type=submit）与在输入框里按 Enter 是同一条路（键盘可达）。
     m.addEventListener('submit', (e) => {
@@ -1421,33 +1509,39 @@
       modalLogin();
     });
   }
-  // 浮窗 innerHTML 每次重渲，逐颗绑会漏 → 用事件代理，只绑一次。
-  function wireMePop() {
-    const pop = document.getElementById('mePop');
-    if (!pop || pop._wired) return;
-    pop._wired = true;
-    pop.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-login-btn],[data-me-logout]');
+  // 宿主的 innerHTML 每次重渲，逐颗绑会漏 → 用事件代理。#mePop 长驻只绑一次；
+  // 页面宿主（#meBody）每次渲页面都是新节点，_meWired 为空 → 自然重绑。
+  function wireMeHost(root) {
+    if (!root || root._meWired) return;
+    root._meWired = true;
+    root.addEventListener('click', (e) => {
+      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-login-btn],[data-me-logout]');
       if (!t) return;
-      // 有些按钮点完会 renderMePop() 重渲（主题/分钟）—— 重渲会把 e.target 从 DOM 摘下来，
-      // 事件继续冒泡到 document 的「点外面收掉」监听时，target 已不在 #mePop 里，会被误判成点外面。
+      // 有些按钮点完会重渲宿主（重置/退出）—— 重渲会把 e.target 从 DOM 摘下来，
+      // 事件继续冒泡到 document 的「点外面收掉」监听时，target 已不在宿主里，会被误判成点外面。
       // 所以这里先 stopPropagation，别让 document 那道再看到它。
       e.stopPropagation();
       if (t.hasAttribute('data-me-cta')) {
-        closeMePop();
+        meDepart();
         if (typeof TASK !== 'undefined' && TASK.hasPlan) { const n = nextArticle(); openArticle(n >= 0 ? n : 0); }
         else openSetup();
-      } else if (t.hasAttribute('data-me-theme')) { if (typeof toggleDark === 'function') toggleDark(); renderMePop(); }
-      else if (t.hasAttribute('data-me-min')) { TASK.setMinutes(Number(t.dataset.meMin)); renderMePop(); positionMePop(); refreshMeEta(); }
-      else if (t.hasAttribute('data-me-reset-plan')) { TASK.resetLearningPlan(); renderMePop(); positionMePop(); }
+      } else if (t.hasAttribute('data-me-theme')) {
+        /* 就地翻拨杆，不重渲宿主：页面宿主重渲会把滚动位置甩回顶部、焦点一起丢
+           （浮窗时代靠 renderMePop 挪类，这种「状态长在自己身上」的控件不必绕那道）。 */
+        if (typeof toggleDark === 'function') toggleDark();
+        const on = document.body.classList.contains('dark');
+        t.classList.toggle('on', on);
+        t.setAttribute('aria-checked', String(on));
+      }
+      else if (t.hasAttribute('data-me-reset-plan')) { TASK.resetLearningPlan(); rerenderMe(); }
       else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }
       else if (t.hasAttribute('data-me-import')) { TASK.importBackup('meImportFile'); }
       else if (t.hasAttribute('data-me-login-btn')) { openLoginModal(); }
       else if (t.hasAttribute('data-me-logout')) { meLogout(); }
     });
   }
-  window.APP3 = Object.assign(window.APP3, { renderMePop, openMePop, closeMePop, toggleMePop, meLogout, updateMeCard, openLoginModal, closeLoginModal, setLcDrawer, lcDrawerOpen });
-  // 点浮窗外面收掉。Esc 不在这里挂 —— 浮层栈（app/index.html 的 OVERLAY_STACK）统一管分层与焦点。
+  window.APP3 = Object.assign(window.APP3, { renderMePop, renderMe, meContent, openMePop, closeMePop, toggleMePop, meOpen, meOpenSettings, meLogout, updateMeCard, openLoginModal, closeLoginModal, setLcDrawer, lcDrawerOpen });
+  // 点浮窗外面收掉（只有 PC 有浮窗）。Esc 不在这里挂 —— 浮层栈（app/index.html 的 OVERLAY_STACK）统一管分层与焦点。
   document.addEventListener('click', (e) => {
     const pop = document.getElementById('mePop');
     if (!pop || pop.hidden) return;
@@ -1455,8 +1549,17 @@
     closeMePop();
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMePop(); });
-  window.addEventListener('resize', () => { const pop = document.getElementById('mePop'); if (pop && !pop.hidden) positionMePop(); });
-  wireMePop();
+  window.addEventListener('resize', () => {
+    const pop = document.getElementById('mePop');
+    /* 跨越 700px 断点 = 换宿主：文案（「我的」↔ 账号名/未登录）与 tab/dialog 语义都得重刷。
+       两个方向都要清干净 —— 两个宿主同时活着，模板里那些 id（#voicePop / #mpEta / #meImportFile）
+       就会被 renderVoicePop / refreshMeEta 各捡到一半。 */
+    if (meIsMobile()) { if (pop && !pop.hidden) closeMePop(); }
+    else if (pop && !pop.hidden) positionMePop();
+    updateMeCard();
+    if (!meIsMobile() && cur === 'me') location.hash = '#/home';   // 桌面档没有这一页：退回首页
+  });
+  wireMeHost(document.getElementById('mePop'));
   wireLoginModal();
   updateMeCard();
   setTimeout(updateMeCard, 1500);   // CLOUD.boot 异步恢复登录态：稍后把卡上昵称补一次

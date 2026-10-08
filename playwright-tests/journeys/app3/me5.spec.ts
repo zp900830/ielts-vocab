@@ -2,6 +2,7 @@
 // /app/ 在仓库根，同 home/stats/words，用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 import { stubCloudAccount } from '../../utils/cloud-stub';
+import { setMin } from '../../utils/min-slider';
 
 declare const TASK: {
   resetV2(): void;
@@ -53,17 +54,20 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
 }
 const waitTask = (page: import('@playwright/test').Page) =>
   page.waitForFunction(() => { try { return typeof TASK !== 'undefined' && !!TASK.state; } catch (e) { return false; } });
+/* 「我的」两个宿主（2026-10-08 用户）：PC = #mePop 向上弹的浮窗，手机端 = #/me 一级页面。
+   判据与 app.js 同一颗（max-width:700px），测试只拿「当前活着的那个」，不各记一个选择器。 */
+const isMobileVp = (page: import('@playwright/test').Page) =>
+  page.evaluate(() => window.matchMedia('(max-width: 700px)').matches);
 const openMe = async (page: import('@playwright/test').Page) => {
-  const pop = page.locator('#mePop');
+  const mobile = await isMobileVp(page);
+  const host = page.locator(mobile ? '#appView .me-page' : '#mePop');
   const modal = page.locator('#loginModal');
   await page.locator('#meCard').click();
-  // 未登录 → 先开登录弹窗，经「先去设置」进浮窗；已登录 → 点卡片直接开/关浮窗
-  if (await modal.isVisible()) {
-    await modal.locator('[data-login-settings]').click();
-  }
-  if (!(await pop.isVisible())) await page.locator('#meCard').click(); // 已开时点一下 = 收掉，补一下
-  await expect(pop).toBeVisible();
-  return pop;
+  // 未登录只有 PC 会先拦一道登录弹窗，经「先去设置」进浮窗；移动端点它就直接在页面上
+  if (await modal.isVisible()) await modal.locator('[data-login-settings]').click();
+  if (!mobile && !(await host.isVisible())) await page.locator('#meCard').click(); // 已开时点一下 = 收掉，补一下
+  await expect(host).toBeVisible();
+  return host;
 };
 
 test.describe('M5 · 导出/导入（§8.1 数据管理）', () => {
@@ -303,7 +307,7 @@ test.describe('M5 · 触摸目标（§10.4）', () => {
       await waitTask(page);
       await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
       const pop = await openMe(page);
-      for (const sel of ['#btnAccent', '#voiceBtn', '[data-me-theme]', '[data-me-export]', '[data-me-import]', '.mp-cta', '.mp-row .ps-opt', '.mp-login-btn']) {
+      for (const sel of ['#btnAccent', '#voiceBtn', '[data-me-theme]', '[data-me-export]', '[data-me-import]', '.mp-cta', '.mp-row .ps-opt', '.mp-row .min-range', '.mp-login-btn']) {
         const t = pop.locator(sel).first();
         await expect(t).toBeVisible();
         const h = await t.evaluate((el) => el.getBoundingClientRect().height);
@@ -314,24 +318,27 @@ test.describe('M5 · 触摸目标（§10.4）', () => {
 });
 
 test.describe('M5 · 形态与边界（§8.1 / §8.2 / §10.1）', () => {
-  test('手机端：浮窗是底部抽屉，§8.1 各区块都在且可达', async ({ page }) => {
+  test('手机端：「我的」是一级页面（不再是底部抽屉），§8.1 各区块都在且可达', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 800 });
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
-    const pop = await openMe(page);
-    const geo = await page.evaluate(() => {
-      const p = document.getElementById('mePop')!.getBoundingClientRect();
+    const me = await openMe(page);
+    expect(await page.evaluate(() => location.hash), '手机点底栏那一格 = 切路由').toBe('#/me');
+    const geo = await me.evaluate((el) => {
+      const r = (el as HTMLElement).getBoundingClientRect();
       const c = document.getElementById('meCard')!.getBoundingClientRect();
-      return { bottom: p.bottom, cardTop: c.top, left: p.left, right: p.right, vw: innerWidth };
+      return { left: r.left, right: r.right, top: r.top, vw: innerWidth, tabTop: c.top };
     });
-    expect(geo.bottom, '抽屉底边贴 TabBar').toBeLessThanOrEqual(geo.cardTop + 1);
-    expect(geo.left, '贴左边').toBeLessThan(16);
-    expect(geo.right, '不溢出右边').toBeLessThanOrEqual(geo.vw);
-    for (const sel of ['.mp-head', '.mp-nums', '.mp-status', '#btnAccent', '#voiceBtn', '[data-me-theme]', '[data-me-export]', '[data-me-import]', '.mp-row .ps-opt']) {
-      await expect(pop.locator(sel).first(), `${sel} 在抽屉里`).toBeVisible();
+    expect(geo.left, '不溢出左缘').toBeGreaterThanOrEqual(0);
+    expect(geo.right, '不溢出右缘').toBeLessThanOrEqual(geo.vw);
+    expect(geo.top, '页面排在 TabBar 之上，不是盖住它的浮层').toBeLessThan(geo.tabTop);
+    for (const sel of ['.mp-head', '.mp-nums', '.mp-status', '#btnAccent', '#voiceBtn', '[data-me-theme]', '[data-me-export]', '[data-me-import]', '.mp-row .ps-opt', '.mp-row .min-range']) {
+      await expect(me.locator(sel).first(), `${sel} 在页面里`).toBeVisible();
     }
+    expect(await page.locator('#mePop').evaluate((el) => el.innerHTML.trim()),
+      '浮窗在移动端保持空壳（不跟页面抢同一批 id）').toBe('');
   });
 
   test('深色：浮窗不是白底、文字可读（§10.1）', async ({ page }) => {
@@ -451,7 +458,7 @@ test.describe('M5 · 重置学习计划', () => {
     await pop.locator('[data-me-cta]').click();
     const panel = page.locator('#todayPanel');
     await expect(panel).toBeVisible();
-    await panel.locator('.ps-opt[data-v="30"]').click();
+    await setMin(panel.locator('.min-range'), 30);
     await panel.locator('#psStart').click();
     await expect.poll(() => page.evaluate(() => TASK.hasPlan)).toBe(true);
     expect((await page.evaluate(() => TASK.planConfig()))!.minutes, '重新选了 30 分钟').toBe(30);
