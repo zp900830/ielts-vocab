@@ -57,11 +57,6 @@ def main() -> int:
         help="Only check that required environment variables are present; do not write files.",
     )
     parser.add_argument(
-        "--shadow",
-        action="store_true",
-        help="Also write shadow/config.js for the shadowing sub-app.",
-    )
-    parser.add_argument(
         "--output",
         default=os.path.join(ROOT, "config.js"),
         help="Output path for config.js (default: ./config.js).",
@@ -85,8 +80,6 @@ def main() -> int:
         missing.append("SUPABASE_KEY (or SUPABASE_ANON_KEY)")
 
     targets = [args.output]
-    if args.shadow:
-        targets.append(os.path.join(ROOT, "shadow", "config.js"))
 
     if missing:
         print("WARN: Missing environment variables:", ", ".join(missing), file=sys.stderr)
@@ -109,11 +102,6 @@ def main() -> int:
 
     write_config(args.output, url, key)
     print(f"Wrote {args.output}")
-
-    if args.shadow:
-        shadow_path = os.path.join(ROOT, "shadow", "config.js")
-        write_config(shadow_path, url, key)
-        print(f"Wrote {shadow_path}")
 
     return 0
 

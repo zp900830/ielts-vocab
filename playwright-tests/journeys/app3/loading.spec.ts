@@ -10,7 +10,7 @@ test.describe('refine3 ⑦ 载入动画（薄荷绿三点脉冲）', () => {
   test('占位是薄荷绿三点脉冲；启动屏同套；reduced-motion 下降级为静态', async ({ page }) => {
     // 数据请求一直挂起 → 页面停在「正在载入…」，不靠加载速度抢时机
     for (const name of ['sections.json', 'vocab.json', 'chapters.json']) {
-      await page.route(`**/shadow/data/${name}*`, () => { /* never fulfil: keep it pending */ });
+      await page.route(`**/app/data/${name}*`, () => { /* never fulfil: keep it pending */ });
     }
     await page.goto(`${rootUrl}/app/index.html#/home`);
 
@@ -39,7 +39,7 @@ test.describe('refine3 ⑦ 载入动画（薄荷绿三点脉冲）', () => {
 test.describe('载入动效居中', () => {
   test('占位块在内容区中央：纵向占大半屏、小精灵与文字都居中', async ({ page }) => {
     for (const name of ['sections.json', 'vocab.json', 'chapters.json']) {
-      await page.route(`**/shadow/data/${name}*`, () => { /* 挂起请求，停在加载态 */ });
+      await page.route(`**/app/data/${name}*`, () => { /* 挂起请求，停在加载态 */ });
     }
     await page.goto(`${rootUrl}/app/index.html#/home`);
     const ld = page.locator('#appView .iel-loading');

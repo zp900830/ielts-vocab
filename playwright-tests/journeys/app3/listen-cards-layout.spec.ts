@@ -32,7 +32,7 @@ const TWO: Record<string, string> = (() => {
 
 async function gotoListen(page: import('@playwright/test').Page) {
   for (const [name, body] of Object.entries(TWO)) {
-    await page.route(`**/shadow/data/${name}*`, (r) =>
+    await page.route(`**/app/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
   await page.goto(`${rootUrl}/app/index.html#/listen`);

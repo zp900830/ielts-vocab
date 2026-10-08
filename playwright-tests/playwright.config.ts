@@ -13,7 +13,7 @@ export default defineConfig({
   globalSetup: './global-setup.ts',
   globalTeardown: './global-teardown.ts',
   webServer: process.env.E2E_NO_SERVER ? undefined : {
-    command: 'python3 -m http.server 8931 --bind 127.0.0.1 --directory ../shadow',
+    command: 'python3 -m http.server 8931 --bind 127.0.0.1 --directory ..',
     port: 8931,
     reuseExistingServer: true,
   },
