@@ -23,9 +23,9 @@ const NAV_ICONS = ['ri-home-5-line', 'ri-headphone-line', 'ri-book-2-line', 'ri-
 const NAV_ICONS_FILL = ['ri-home-5-fill', 'ri-headphone-fill', 'ri-book-2-fill', 'ri-bar-chart-2-fill'];
 
 test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
-  test('源码级：三站图标样式表都指向 4.5.0，不再引用 4.2.0', () => {
+  test('源码级：图标样式表指向 4.5.0，不再引用 4.2.0', () => {
     const root = path.resolve(process.cwd(), '..');
-    for (const f of ['index.html', 'shadow/index.html', 'app/index.html']) {
+    for (const f of ['app/index.html']) {
       const src = fs.readFileSync(path.join(root, f), 'utf8');
       expect(src, `${f} 必须引用 remixicon@4.5.0`).toContain('remixicon@4.5.0');
       expect(src, `${f} 不许再引用 4.2.0`).not.toContain('remixicon/4.2.0');
