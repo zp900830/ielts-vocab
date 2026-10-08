@@ -9890,13 +9890,17 @@ let listenOn = false;
       function updateMarkers() {
         paintTodayRange();
         /* 已学点亮（判据 2026-10-08 二次改口径，用户截图：「已完成的任务有灰有黑」）：
-           黑 = 「已完成」，两支 ——
-           ① 曾经读过的句子（reps>0）：不管哪一轮、哪一天读的都算。旧判据只认 roundSeen（本轮），
-              上一轮读过的、被「开启新的一轮」清过账的已完成句全留在灰字里，正是他截到的灰。
-           ② 任务①里当前高亮的这句：高亮挪到哪句，哪句当场算已完成（含刚翻过来的瞬间），
+           黑 = 「已完成」，三源并集 ——
+           ① 本地句子账 reps>0（prog.sentences）：不管哪一轮、哪一天读的都算。旧判据只认
+              roundSeen（本轮），上一轮读过的、被「开启新的一轮」清过账的句全留在灰字里。
+           ② 影子引擎句账 lastReadAt>0（ROOT2.state.sents，2026-10-09 补）：接触事件走
+              shadow_events 云同步、引擎重放出的跨设备账 —— 手机上读过的句子，这台设备的
+              本地 reps 永远是 0，而任务条「本篇 x/y」「今天 x/y」全读这本账（readToday2 /
+              everRead 同源）。只认 ① 就会出现「数字说读过、颜色还是灰」（用户实测踩中）。
+           ③ 任务①里当前高亮的这句：高亮挪到哪句，哪句当场算已完成（含刚翻过来的瞬间），
               不等播完、不等记账 —— 上一句 / 键盘 / 直接点句这些不经过 TASK.next 的路径此前永远漏亮。
-           roundSeen 照旧只在真正记账那几处写（markSentenceRead），从此只喂「本轮 x/y」的账，
-           不再管颜色；开新轮清它也只是清账，颜色跟 reps 走不再回灰（按钮文案已同步改）。 */
+           roundSeen 也并入（防 09-30→10-08 过渡期只写 roundSeen 的历史账）；它只在真正记账处
+           写、开新轮清零 —— 清了颜色也不回灰，因为 ①② 都是跨轮的。 */
         try {
           sents.forEach(function (el, localIdx) {
             const _g = localToGlobal(localIdx);
@@ -9905,6 +9909,13 @@ let listenOn = false;
               const _st = prog.sentences[_g];
               _known = !!_st && (_st.reps || 0) > 0;
             }
+            if (!_known) {
+              try {
+                const _v = (typeof ROOT2 !== 'undefined') && ROOT2 && ROOT2.state && ROOT2.state.sents && ROOT2.state.sents[_g];
+                if (_v && (_v.lastReadAt || 0) > 0) _known = true;
+              } catch (e) {}
+            }
+            if (!_known && typeof prog !== 'undefined' && prog && prog.roundSeen && prog.roundSeen[_g]) _known = true;
             if (!_known && taskMode && pass === 1 && idx >= 0 && localIdx === idx) _known = true;
             el.classList.toggle('lw-known', _known);
             el.classList.toggle('lw-unknown', !_known);

@@ -6,7 +6,7 @@ declare const TASK: {
   resetV2(): void;
   initPlan(minutes: number): void;
   exitTaskMode(): void;
-  state(): { daily: Record<string, unknown> };
+  state(): { daily: Record<string, unknown>; sents: Record<string, { lastReadAt: number }> };
   queue: { i: number }[];
   progress: { sentences: Record<string, { reps: number }> };
   listenSetSrc(s: string): string;
@@ -419,6 +419,43 @@ test('读过就保持黑：退出任务模式后 reps>0 的句子仍黑（判据
   expect(cls0.known, '非当前句、非任务模式：reps>0 仍挂黑字类').toBe(true);
   expect(cls0.unknown, '不许同时挂着灰字类').toBe(false);
   expect(cls0.color, '计算色 = 近黑 --ink-known #181c15').toBe('rgb(24, 28, 21)');
+});
+
+/* 跨设备账（2026-10-09 用户报「硬刷新后只有高亮句黑，其他都是灰」）：接触事件走
+   shadow_events 云同步，引擎重放出 ROOT2.state.sents —— 手机上读过的句子，这台设备
+   的本地 reps 账是空的，但任务条「本篇 x/y」「今天 x/y」全读这本云账（readToday2 /
+   everRead 同源）。颜色必须跟它对齐：ROOT2 里有 lastReadAt 的照样点亮（判据②），
+   不能只认本地 prog.sentences，否则数字说读过、颜色还是灰。 */
+test('跨设备账：影子引擎句账（云事件重放）里的已读句也点亮（判据②）', async ({ page }) => {
+  await stubData(page, SIX);
+  // 本地账只有第 1 句：模拟「这句是在这台设备上读的」
+  await page.addInitScript(() => {
+    localStorage.setItem('ielts-task-progress', JSON.stringify({
+      sentences: { 1: { reps: 2, phase: 'learning', nextDue: 0, lastRead: 1700000000000 } },
+      daily: {}, streak: 0, lastDay: '', cycleCount: 0, cycleSeen: {},
+    }));
+  });
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitAppReady(page);
+  // 引擎侧种跨设备账：第 0、2 句在「另一台设备」读过（云事件重放结果），本地从没碰过
+  await page.evaluate(() => {
+    TASK.state().sents = { 0: { lastReadAt: 1700000000000 }, 2: { lastReadAt: 1700000000001 } };
+  });
+  await page.evaluate(() => TASK.openArticle(0));      // 渲染正文 → updateMarkers
+  await page.evaluate(() => TASK.exitTaskMode());      // 出任务模式：关掉「当前句」兜底，只验 ①②
+  await page.evaluate(() => TASK.updateMarkers());     // 退出后显式重刷一遍
+
+  const states = await page.evaluate(() => [...document.querySelectorAll('#art .sent')].slice(0, 5).map((el) => ({
+    known: el.classList.contains('lw-known'),
+    unknown: el.classList.contains('lw-unknown'),
+    color: getComputedStyle(el).color,
+  })));
+  expect(states.length, '正文已渲染').toBeGreaterThanOrEqual(4);
+  expect(states[0].known, '云账 lastReadAt>0 → 黑（判据②）').toBe(true);
+  expect(states[1].known, '本地 reps>0 → 黑（判据①不变）').toBe(true);
+  expect(states[2].known, '云账第二句也黑').toBe(true);
+  expect(states[3].unknown, '两本账都没有 → 灰').toBe(true);
+  expect(states[0].color, '计算色 = 近黑 --ink-known #181c15').toBe('rgb(24, 28, 21)');
 });
 
 
