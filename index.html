@@ -9613,15 +9613,21 @@ let listenOn = false;
           const tr = ROOT2.plan.todayRange;
           if (!tr || tr.day !== day2()) return null;
           if (Number.isInteger(tr.first) && Number.isInteger(tr.last) && tr.first <= tr.last) {
+            /* 钉子必须和当前生效起点对得上（2026-10-10 接力规则）：手动状态变了、
+               或接力冻结出的起点与钉子不符（升级当天带着旧钉子进来）→ 作废重钉。
+               不加这道校验，昨天的手动钉子/旧自动钉子会把今天的线钉在错误位置。 */
+            const ms = manualStartToday();
+            if (!!tr.manual !== !!ms) return null;
+            if (ms && tr.first !== ms.gi) return null;
             return [tr.first, tr.last];
           }
         } catch (e) {}
         return null;
       }
-      function pinTodayRange(first, last) {
+      function pinTodayRange(first, last, manual) {
         try {
           if (!ROOT2 || !ROOT2.plan) return;
-          ROOT2.plan.todayRange = { day: day2(), first: first, last: last };
+          ROOT2.plan.todayRange = { day: day2(), first: first, last: last, manual: !!manual };
           persist2();
         } catch (e) {}
       }
@@ -9633,8 +9639,8 @@ let listenOn = false;
         if (pinned) { first = pinned[0]; last = pinned[1]; }
         else {
           /* 没钉子（当天第一次画 / 刚建计划 / 刚清完）才现算并钉下。
-             有手动起点时直接钉手动窗口 [gi, gi+N-1]（引擎挑句可能不从 gi 起，
-             线必须落在用户指定的位置上）；否则钉**全天**队列的 min/max —— 不是本篇的，
+             接力模式（2026-10-10）：ms.gi 是今天冻结出的接力起点（昨天读到的位置+1），
+             直接钉手动窗口 [gi, gi+N-1]；否则钉**全天**队列的 min/max —— 不是本篇的，
              用本篇的就变成每篇各画一条开始线（2026-10-08 用户报的那件事）。 */
           const ms = manualStartToday();
           if (ms) {
@@ -9645,7 +9651,7 @@ let listenOn = false;
             if (!g) return;
             first = g[0]; last = g[1];
           }
-          pinTodayRange(first, last);
+          pinTodayRange(first, last, !!ms);
         }
         const mkLine = function (gi, edge) {
           const el = document.createElement('div');
@@ -9689,39 +9695,66 @@ let listenOn = false;
          当天队列 = 起点往后 N 句（N = 全局每日承诺数），开始/结束两条线一起平移；
          引擎（间隔排程）在范围内照常挑，② 批次同源，不另造一套。统计重置 = 清掉今天的
          contact/quiz 事件（N/M 回零），reps/排程历史不动。 */
+      /* 手动起点 = 接力书签（2026-10-10 用户：「昨天设的起点没学完，今天应该接着学到的
+         位置继续，而不是回第一章第一句」）。旧规则 manualStart 只认当天，跨天一过期
+         自动排程就把人拽回全局第一个没读过的句（跳过的篇目回头补）——三处回显各读
+         一套账，用户看到的三个数互相对不上。新规则：
+         - 设置（gi, ts）持续有效，直到「改回自动」或读完全文；
+         - 每天第一次用到时冻结今天的接力起点：cursor = max(设置位置, 设置之后读到的
+           最远位置+1)。「设置之后」用 lastReadAt > ts 判 —— 接触账走云同步，跨设备
+           自然一致；gi >= m.gi 限制保证「设置后回头读旧内容」不推进书签。
+         - 冻结值存 resolvedDay：当天读句不让起点漂移（09-30 钉子 bug 同一条教训），
+           跨天重新冻结 → 自然接力。
+         - gi:-1 是「改回自动」的清除标记（clearManualStart 发的事件），不是起点。
+         返回 {gi: 当天生效起点（clamp 进正文）, atEnd, ts, base}；atEnd = 已接力到文末。 */
       function manualStartToday() {
         try {
           const m = ROOT2 && ROOT2.plan && ROOT2.plan.manualStart;
-          if (!m || !Number.isInteger(m.gi)) return null;
-          if (m.day !== day2()) return null;
-          if (m.gi < 0 || m.gi >= SENT_RAW.length) return null;
-          return m;
+          if (!m || !Number.isInteger(m.gi) || m.gi < 0) return null;
+          const len = SENT_RAW.length;
+          if (!len || m.gi >= len) return null;
+          if (m.resolvedDay !== day2()) {
+            let cursor = m.gi;
+            try {
+              const ss = ROOT2.state.sents || {};
+              let far = m.gi - 1;
+              for (let i = m.gi; i < len; i++) {
+                const s = ss[i];
+                if (s && (s.lastReadAt || 0) > (m.ts || 0)) far = i;
+              }
+              cursor = far + 1;
+            } catch (e2) {}
+            m.cursor = cursor; m.resolvedDay = day2();
+            try { persist2(); } catch (e2) {}
+          }
+          const cur = Number.isInteger(m.cursor) ? m.cursor : m.gi;
+          return { gi: Math.max(0, Math.min(cur, len - 1)), atEnd: cur >= len, ts: m.ts || 0, base: m.gi };
         } catch (e) { return null; }
       }
-      /* 起点事件的跨设备重放（2026-10-09，配 setManualStart/clearManualStart 的 daystart 上云）：
-         cloudPull 拉到别机发的 daystart 后，按 ts 最新者赢地落到本机 plan.manualStart。
-         只认今天（day 不对的一律不理，manualStartToday 本来也只认当天）；
+      /* 起点事件的跨设备重放（2026-10-09，配 setManualStart/clearManualStart 的 daystart 上云；
+         2026-10-10 随接力规则改：不再只认当天 —— 接力书签跨天持续，昨天设的起点今天拉下来
+         依然生效。取全部 daystart 里 ts 最新的一条（最新意图赢，含 gi:-1 的清除标记）；
          本机 manualStart 的 ts 更新（自己刚点过）就不动 —— 双向对拍谁后点谁赢。
-         历史遗留没 ts 的本机账按 0 算，云端事件自然覆盖。返回是否应用了变化。 */
+         重放落账不带 resolvedDay，下一次 manualStartToday 会按本机接触账重新冻结接力起点
+         （接触账已云同步，两台设备推出来同一个数）。返回是否应用了变化。 */
       function applyDaystartEvents() {
         try {
           if (!ROOT2 || !ROOT2.plan || !Array.isArray(ROOT2.events)) return false;
-          const d = day2();
           let best = null;
           for (let i = 0; i < ROOT2.events.length; i++) {
             const e = ROOT2.events[i];
-            if (e && e.type === 'daystart' && e.day === d && (!best || (e.ts || 0) >= (best.ts || 0))) best = e;
+            if (e && e.type === 'daystart' && Number.isInteger(e.gi) && (!best || (e.ts || 0) >= (best.ts || 0))) best = e;
           }
           if (!best) return false;
           const cur = ROOT2.plan.manualStart;
-          if (cur && cur.day === d && (cur.ts || 0) >= (best.ts || 0)) return false;
+          if (cur && Number.isInteger(cur.gi) && (cur.ts || 0) >= (best.ts || 0)) return false;
           _cachedPlan = null; _cachedDay = ''; _cachedManual = '';
-          if (Number.isInteger(best.gi) && best.gi >= 0 && best.gi < SENT_RAW.length) {
-            ROOT2.plan.manualStart = { gi: best.gi, day: d, ts: best.ts || Date.now() };
+          if (best.gi >= 0 && best.gi < SENT_RAW.length) {
+            ROOT2.plan.manualStart = { gi: best.gi, day: day2(), ts: best.ts || Date.now() };
             /* 与 setManualStart 同款重钉：手动窗口 [gi, gi+N-1]（N 用本机分钟数现算）。 */
             try {
               const _N = Math.max(1, globalPromiseN());
-              pinTodayRange(best.gi, Math.min(best.gi + _N - 1, SENT_RAW.length - 1));
+              pinTodayRange(best.gi, Math.min(best.gi + _N - 1, SENT_RAW.length - 1), true);
             } catch (e2) { try { ROOT2.plan.todayRange = null; } catch (e3) {} }
           } else {
             ROOT2.plan.manualStart = null; ROOT2.plan.todayRange = null;
@@ -9745,6 +9778,7 @@ let listenOn = false;
         if (ms) gi = ms.gi;
         else { const g = pinnedTodayRange() || globalDayRange(); if (g) gi = g[0]; }
         if (gi == null || gi < 0) return { manual: !!ms, gi: null, text: ms ? '手动（读不到当前位置）' : '自动' };
+        if (ms && ms.atEnd) return { manual: true, gi: gi, text: '手动 · 已到全文末尾' };
         try {
           const a = artOfSentGlobal(gi);
           const where = `第 ${a + 1} 篇第 ${gi - computeChapterStart(a) + 1} 句`;
@@ -9800,13 +9834,22 @@ let listenOn = false;
       function openStartPicker(defAA, defNA) {
         closeStartPicker();
         if (!ROOT2 || !ROOT2.plan) { try { showAbToast('先去「我的」设置「每天有多少分钟」，再定起点'); } catch (e) {} return; }
-        let defA = (currentChapter >= 0) ? currentChapter : 0;
+        /* 预填 = 今天实际生效的起点（2026-10-10 用户报「弹窗、回显、文章开始线三处对不上」）：
+           统一读 startInfo() —— 手动接力时是接力起点，自动时是引擎现挑的全天队列首句。
+           旧逻辑混着用 todayQueue[0]（按篇收窄，跟着当时打开的文章走）和过期的
+           manualStart，两个数经常各说各话。 */
+        let defA = (currentChapter >= 0) ? currentChapter : 0, defN = 1, siGi = null;
         try {
-          const q0 = (todayQueue && todayQueue.length && todayQueue[0].i);
-          if (Number.isInteger(q0)) defA = artOfSentGlobal(q0);
+          const si = startInfo();
+          if (si.gi != null && si.gi >= 0) {
+            siGi = si.gi;
+            defA = artOfSentGlobal(siGi);
+            defN = siGi - computeChapterStart(defA) + 1;
+          }
         } catch (e) {}
-        const ms = manualStartToday();
-        if (ms) { try { defA = artOfSentGlobal(ms.gi); } catch (e) {} }
+        if (!Number.isInteger(siGi) && todayQueue && todayQueue.length) {
+          try { defA = artOfSentGlobal(todayQueue[0].i); } catch (e) {}
+        }
         if (Number.isInteger(defAA)) defA = defAA;   // 确认步「返回」要还原用户填过的值
         let opts = '';
         try {
@@ -9815,8 +9858,6 @@ let listenOn = false;
             opts += '<option value="' + a + '"' + (a === defA ? ' selected' : '') + '>第' + (a + 1) + '篇 · ' + esc(SECTIONS[a].title) + '（' + n + '句）</option>';
           }
         } catch (e) {}
-        let defN = 1;
-        if (ms) { try { defN = ms.gi - computeChapterStart(artOfSentGlobal(ms.gi)) + 1; } catch (e) {} }
         if (Number.isInteger(defNA)) defN = defNA;
         const mask = document.createElement('div');
         mask.id = 'startPickMask';
@@ -9878,6 +9919,7 @@ let listenOn = false;
         pop.innerHTML = '<h3>今天已有进度，重新计算？</h3>' +
           '<p class="sp-warn">今天已读 <b>' + done + '</b> 句。调整开始位置后会重新计算今日任务：' +
           '今天的已读记录清零（N/M 回到 0），排程历史、总进度和颜色都不动。</p>' +
+          '<p class="sp-warn">此后每天会接着上次学到的位置继续（接力），直到你在下面点「改回自动安排」。</p>' +
           '<div class="sp-actions"><button class="btn" onclick="TASK.startConfirmBack()">返回</button>' +
           '<button class="btn primary" onclick="TASK.startConfirmYes()">确认调整</button></div>';
         try { const b = pop.querySelector('button.btn.primary'); if (b) b.focus(); } catch (e) {}
@@ -9912,8 +9954,9 @@ let listenOn = false;
         } catch (e) {}
         return '<h3>改回自动安排？</h3>' +
           '<p class="sp-warn">自动起点由排程现算：今日将从 <b>' + esc(where) + '</b> 开始，共 <b>' + (n || '—') + '</b> 句。' +
-          (done > 0 ? '今天已读的 <b>' + done + '</b> 句保留不清。' : '') +
-          '排程历史、总进度、颜色都不动。</p>' +
+          '自动会优先排到期的复习，新内容从没读过的往前顺延 —— 之前跳过的篇目会被回头补上（不再接着上次的位置）。</p>' +
+          (done > 0 ? '<p class="sp-warn">今天已读的 <b>' + done + '</b> 句保留不清。</p>' : '') +
+          '<p class="sp-warn">排程历史、总进度、颜色都不动。</p>' +
           '<div class="sp-actions"><button class="btn" onclick="TASK.' + (fromPicker ? 'startConfirmBack()' : 'closeStartPicker()') + '">返回</button>' +
           '<button class="btn primary" onclick="TASK.clearManualStart()">确认改回</button></div>';
       }
@@ -9964,13 +10007,15 @@ let listenOn = false;
       function setManualStart(gi) {
         if (!ROOT2 || !ROOT2.plan) { try { showAbToast('先去「我的」设置「每天有多少分钟」，再定起点'); } catch (e) {} return false; }
         gi = Math.max(0, Math.min(SENT_RAW.length - 1, gi | 0));
-        /* ts（2026-10-09）：manualStart 事件化后，跨设备按 ts 定谁最新 —— 本机写入也要带。 */
+        /* ts（2026-10-09）：manualStart 事件化后，跨设备按 ts 定谁最新 —— 本机写入也要带。
+           2026-10-10 接力规则：设置即书签，持续有效直到改回自动；不带 resolvedDay，
+           让 manualStartToday 明天第一次读取时按接触账冻结接力起点。 */
         ROOT2.plan.manualStart = { gi: gi, day: day2(), ts: Date.now() };
         /* 起点一改，旧钉作废；按手动窗口 [gi, gi+N-1] 重新钉 —— 开始/结束两条线
            一起平移到新位置（N 与引擎的 manualRange 同一个 globalPromiseN，口径不另算）。 */
         try {
           const _N = Math.max(1, globalPromiseN());
-          pinTodayRange(gi, Math.min(gi + _N - 1, SENT_RAW.length - 1));
+          pinTodayRange(gi, Math.min(gi + _N - 1, SENT_RAW.length - 1), true);
         } catch (e) { try { ROOT2.plan.todayRange = null; } catch (e2) {} }
         try { savePlan(); } catch (e) {}
         const dropped = resetTodayEvents();
@@ -9989,7 +10034,7 @@ let listenOn = false;
         try { closeStartPicker(); } catch (e) {}
         try {
           const a = artOfSentGlobal(gi), l = gi - computeChapterStart(a);
-          showAbToast('今日起点：第' + (a + 1) + '篇第' + (l + 1) + '句，今日进度已重置' + (dropped ? '（清掉' + dropped + '条今日记录）' : ''));
+          showAbToast('今日起点：第' + (a + 1) + '篇第' + (l + 1) + '句，今日进度已重置' + (dropped ? '（清掉' + dropped + '条今日记录）' : '') + '。此后每天接着上次学到的位置继续，直到改回自动安排');
         } catch (e) {}
         return true;
       }

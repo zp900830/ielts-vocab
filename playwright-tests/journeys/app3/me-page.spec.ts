@@ -144,7 +144,7 @@ test.describe('「我的」双宿主 · 移动端一级页面 / PC 浮窗', () =
     await me.locator('[data-me-start-auto]').click();
     await expect(page.locator('#startPickPop h3'), '先看到结果预览，不是直接改').toContainText('改回自动安排？');
     /* 预览显示的是【自动排程】算出的起点（不是手动位置）：新计划引擎从头排 = 第1篇第1句。 */
-    await expect(page.locator('#startPickPop .sp-warn'), '预览里有自动算出的起点位置').toContainText('第1篇第1句');
+    await expect(page.locator('#startPickPop .sp-warn').first(), '预览里有自动算出的起点位置').toContainText('第1篇第1句');
     await page.locator('#startPickPop button', { hasText: '确认改回' }).click();
     await expect(page.locator('#startPickPop'), '确认后弹窗收掉').toHaveCount(0);
     await expect(start, '改回自动后回到自动文案').toContainText('自动');

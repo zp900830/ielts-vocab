@@ -579,9 +579,10 @@ test('改回自动安排：先预览起点结果，确认才清账', async ({ pa
   await page.evaluate(() => TASK.openStartPicker());
   await page.locator('#startPickPop button', { hasText: '改回自动安排' }).click();
   await expect(page.locator('#startPickPop h3'), '预览弹层出现').toHaveText(/改回自动安排/);
-  const warn = await page.locator('#startPickPop .sp-warn').textContent();
+  const warn = await page.locator('#startPickPop .sp-warn').first().textContent();
   expect(warn, '预览里有起点位置（第 X 篇第 Y 句）').toMatch(/第\s*\d+\s*篇第\s*\d+\s*句/);
   expect(warn, '预览里有句数').toContain('句');
+  expect(await page.locator('#startPickPop').textContent(), '说清自动会回头补跳过的').toContain('回头补');
 
   // 返回：还原选择器，账没动
   await page.locator('#startPickPop button', { hasText: '返回' }).click();
@@ -593,4 +594,110 @@ test('改回自动安排：先预览起点结果，确认才清账', async ({ pa
   await page.locator('#startPickPop button', { hasText: '确认改回' }).click();
   expect(await page.evaluate(() => TASK.manualStart()), '确认后回到自动').toBeNull();
   expect(await page.evaluate(() => TASK.startInfo().manual), '回显为自动').toBe(false);
+});
+
+/* 接力规则（2026-10-10 用户：「昨天设的起点没学完，今天应该接着学到的位置继续，
+   而不是又从第一章第一句开始」）：手动起点 = 书签，跨天持续有效直到改回自动。
+   每天第一次用到时冻结接力起点：cursor = max(设置位置, 设置之后读到的最远位置+1)，
+   「设置之后」用接触账 lastReadAt > 设置时刻 ts 判（接触账云同步 → 跨设备一致）。
+   冻结后当天不漂（09-30 钉子 bug 教训），跨天重新冻结 → 自然接力。
+   浮窗回显 / 弹窗预填 / 文章开始线三处必须读同一个数。 */
+test('接力跨天：昨天设的起点读到第9句，今天从第10句接着学', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+
+  // 种昨天的账：起点 gi=6（26h 前设），昨天从 6 读到 8（接触账在设置时刻之后）
+  await page.evaluate(() => {
+    const KEY = 'ielts.shadow.v2';
+    const root = JSON.parse(localStorage.getItem(KEY)!);
+    const T1 = Date.now() - 26 * 3600000;
+    root.plan.manualStart = { gi: 6, day: 'yesterday', ts: T1 };
+    root.state.sents[6] = { lastReadAt: T1 + 60000 };
+    root.state.sents[7] = { lastReadAt: T1 + 120000 };
+    root.state.sents[8] = { lastReadAt: T1 + 180000 };
+    localStorage.setItem(KEY, JSON.stringify(root));
+  });
+  await page.reload();
+  await waitAppReady(page);
+
+  // 回显：接力起点 = 9（第 1 篇第 10 句）
+  const si = await page.evaluate(() => TASK.startInfo());
+  expect(si.manual, '接力模式跨天生效（旧规则 day 不对就作废）').toBe(true);
+  expect(si.gi, '接力起点 = 中断位置 + 1').toBe(9);
+  expect(si.text, '回显报接力位置').toContain('第 1 篇第 10 句');
+
+  // 文章开始线钉在同一个位置，队列也从它起
+  await installSpeakStub(page);
+  await page.locator('.art-card').first().click();
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+  expect(await page.evaluate(() => TASK.queue[0].i), '今日队列从接力起点起').toBe(9);
+  expect(await page.evaluate(() =>
+    document.querySelector('.today-range-line[data-edge="start"]')?.getAttribute('data-gi')),
+    '开始线钉在接力起点').toBe('9');
+  await page.evaluate(() => TASK.exitTaskMode());
+
+  // 弹窗预填 = 同一个起点（三处一致的最后一环）
+  await page.evaluate(() => TASK.openStartPicker());
+  const picked = await page.evaluate(() => ({
+    art: parseInt((document.getElementById('spArt') as HTMLSelectElement).value, 10),
+    sent: parseInt((document.getElementById('spSent') as HTMLSelectElement).value, 10),
+  }));
+  expect(picked.art, '预填篇目跟接力起点走').toBe(0);
+  expect(picked.sent, '预填第几句 = 接力位置').toBe(10);
+  await page.evaluate(() => TASK.closeStartPicker());
+
+  // 当天冻结：此刻再读一句（9），今天的起点不许漂
+  await page.evaluate(() => {
+    const KEY = 'ielts.shadow.v2';
+    const root = JSON.parse(localStorage.getItem(KEY)!);
+    root.state.sents[9] = { lastReadAt: Date.now() };
+    localStorage.setItem(KEY, JSON.stringify(root));
+  });
+  expect((await page.evaluate(() => TASK.startInfo())).gi, '冻结后起点不漂').toBe(9);
+});
+
+test('接力跨天重放：昨天发的 daystart 事件今天拉取依然生效', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  // 另一台设备昨天发来的 daystart（day 是昨天、事件在流里躺着）
+  await page.evaluate(() => {
+    const KEY = 'ielts.shadow.v2';
+    const root = JSON.parse(localStorage.getItem(KEY)!);
+    root.events = root.events || [];
+    root.events.push({ type: 'daystart', day: 'yesterday', gi: 6, ts: Date.now() - 26 * 3600000 });
+    root.eventsSeen = root.events.length;
+    localStorage.setItem(KEY, JSON.stringify(root));
+  });
+  await page.reload();
+  await waitAppReady(page);
+  expect(await page.evaluate(() => TASK.applyDaystartEvents()), '跨天事件照常应用').toBe(true);
+  expect((await page.evaluate(() => TASK.manualStart()))?.gi, '书签落账').toBe(6);
+  const si = await page.evaluate(() => TASK.startInfo());
+  expect(si.manual, '接力模式生效').toBe(true);
+  expect(si.gi, '昨天设的没读过 → 今天从设置位置起').toBe(6);
+});
+
+test('接力到文末：回显「已到全文末尾」，窗口 clamp 不越界', async ({ page }) => {
+  await stubData(page, SIX);                       // 全文 22 句（gi 0..21）
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.evaluate(() => {
+    const KEY = 'ielts.shadow.v2';
+    const root = JSON.parse(localStorage.getItem(KEY)!);
+    const T1 = Date.now() - 26 * 3600000;
+    root.plan.manualStart = { gi: 21, day: 'yesterday', ts: T1 };
+    root.state.sents[21] = { lastReadAt: T1 + 60000 };   // 最后一句昨天读过 → cursor = 22 = len
+    localStorage.setItem(KEY, JSON.stringify(root));
+  });
+  await page.reload();
+  await waitAppReady(page);
+  const si = await page.evaluate(() => TASK.startInfo());
+  expect(si.manual, '接力模式').toBe(true);
+  expect(si.gi, 'clamp 到全文最后一句').toBe(21);
+  expect(si.text, '回显明说到头了').toContain('已到全文末尾');
 });
