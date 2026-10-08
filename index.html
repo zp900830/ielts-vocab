@@ -10564,7 +10564,7 @@ let listenOn = false;
              分钟 ÷ 单句 = 今天连刷几句）。按篇打开文章时整篇承诺优先，时间只用来报预计
              时长 —— 不亮出来，就会出现「今天 15 分钟：连刷 40 句」这种数字对不上的账面。 */
           if (msAcc && msAcc.atEnd) {
-            noteHtml = `<div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>已刷到全文末尾</b>（绝不跳句）
+            noteHtml = `<div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>已刷到全文末尾</b>
           <span class="sm">点「再刷一遍」从第 1 篇第 1 句再连刷一轮 · 刷完一轮再刷一轮，觉得都会了自然就不用刷了</span></div>`;
           } else if (currentArticle != null) {
             const artSec = tp.queue.reduce((a, q) => a + (q.sec || 0), 0);
