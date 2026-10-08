@@ -451,10 +451,14 @@
   /* 开始线是「点线设起点」的入口（2026-09-30 修：线本体原来 pointer-events:none，
      330a3f6 挂的点击处理器从上线起就点不动）——只放开 start 这一条，结束线保持纯装饰。 */
   .today-range-line[data-edge="start"] { cursor: pointer; pointer-events: auto; }
-  /* 起点设置弹窗：居中卡片 + 遮罩，复用 .btn 按钮（键盘可达，无障碍走原生控件）。 */
-  #startPickMask { position: fixed; inset: 0; background: rgba(20,25,22,.45); z-index: 90; }
+  /* 2px 的线在手机上点不着（2026-10-08）：外扩一层透明 ::after 把可点高度补到 30px。
+     上下各只吃线自己的 14px margin，不伸进相邻句子 —— 抢了上下那句的点击就是帮倒忙。 */
+  .today-range-line[data-edge="start"]::after { content: ""; position: absolute; inset: -14px -8px; }
+  /* 起点设置弹窗：居中卡片 + 遮罩，复用 .btn 按钮（键盘可达，无障碍走原生控件）。
+     z 在 todayPanel(600) 之上 —— 面板里也有一颗「今日任务从哪开始」，从面板开它必须盖住面板。 */
+  #startPickMask { position: fixed; inset: 0; background: rgba(20,25,22,.45); z-index: 610; }
   #startPickPop { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    z-index: 91; background: var(--card); color: var(--text); border: 1px solid var(--border);
+    z-index: 611; background: var(--card); color: var(--text); border: 1px solid var(--border);
     border-radius: 16px; padding: 18px; width: min(340px, calc(100vw - 48px));
     box-shadow: 0 12px 40px rgba(0,0,0,.25); }
   #startPickPop h3 { margin: 0 0 12px; font-size: 16px; }
@@ -2091,6 +2095,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .mp-list { margin-top: 12px; border-top: 1px solid var(--border); }
   .mp-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 0;
     border-bottom: 1px solid var(--border); }
+  /* display:flex 会盖掉 [hidden] 的默认隐藏（与 .voice-pop[hidden] 那几条同一套补法） */
+  .mp-row[hidden] { display: none; }
   .mp-row > .mp-label { font-size: 13px; font-weight: 600; color: var(--text); flex: none; }
   .mp-row .ps-opts { justify-content: flex-end; flex-wrap: wrap; }
   /* 每天分钟数那一行整行让给滑块（2026-10-08）：标签与读数在 .min-head 里自己排左右，
@@ -5833,13 +5839,14 @@ let listenOn = false;
       if (m) m.setAttribute('aria-expanded', document.body.classList.contains('menu-open') ? 'true' : 'false');
     }
     /* ============ 浮层栈：唯一口径（Tab 陷阱 + Esc 分层 + 点外面都读它） ============
-       顺序 = z 序从上到下（实测值：todayPanel 600 / loginModal 450 / mePop 400 / voicePop 300
-       / blankPop 260 / jpop 220 / pop 200 / startPickPop 91 / lcDrawer 80，顶栏五个下拉菜单最底）。
+       顺序 = z 序从上到下（实测值：startPickPop 611 / todayPanel 600 / loginModal 450 / mePop 400
+       / voicePop 300 / blankPop 260 / jpop 220 / pop 200 / lcDrawer 80，顶栏五个下拉菜单最底）。
        新增浮层只在这里加一行 + 配一个 close，不要再往 Esc 分支里手写清单。
        open：判「开着」的选择器 —— 三套显隐机制并存（hidden 属性 / inline display / .open 类），
              这里逐一认领，调用方不必再关心用的是哪一种。
        own：点在这些元素上不算「点外面」（菜单本体 + 它自己的触发键）；没有 own = 不归点外面管。 */
     const OVERLAY_STACK = [
+      { id: 'startPickPop', open: '#startPickPop', close: () => { try { TASK.closeStartPicker(); } catch (e) {} } },
       { id: 'todayPanel', open: '.today-panel.open', close: () => TASK.closePanel() },
       { id: 'loginModal', open: '#loginModal[style*="block"]', close: () => closeModal(document.getElementById('loginModal')) },
       { id: 'mePop', open: '.me-pop:not([hidden])', close: () => { try { APP3.closeMePop(); } catch (e) {} } },
@@ -5847,7 +5854,6 @@ let listenOn = false;
       { id: 'blankPop', open: '.blank-pop:not([hidden])', close: () => { try { TASK.closeBlankPop(); } catch (e) {} } },
       { id: 'jumpPop', open: '#jumpPop[style*="block"]', close: () => closeModal(document.getElementById('jumpPop')) },
       { id: 'pop', open: '#pop[style*="block"]', close: () => closeModal(document.getElementById('pop')) },
-      { id: 'startPickPop', open: '#startPickPop', close: () => { try { TASK.closeStartPicker(); } catch (e) {} } },
       { id: 'lcDrawer', open: '#lcDrawer.open', close: () => { try { APP3.setLcDrawer(false); } catch (e) {} } },
       { id: 'cloudWrap', open: '.cloud-wrap.open', own: '#cloudWrap', close: el => el.classList.remove('open') },
       { id: 'markWrap', open: '#markWrap.open', own: '#markWrap', close: el => el.classList.remove('open') },
@@ -9533,30 +9539,26 @@ let listenOn = false;
       /* 今日区间钉子（2026-09-30 用户报 bug）：线画的是「今天这段」的固定起止，不是
          剩余队列的头尾 —— assemble 会跳过今天已见的词，读两句再重进队列首就后移，开始线
          跟着漂到 +N；首句贴文章边界时旧规则又干脆不画，合起来就是用户看到的「读两句后
-         才出现、向后延两条」。区间在当天该篇第一次画线时定下并存档 —— 这一刻必然早于本篇
+         才出现、向后延两条」。区间在当天第一次画线时定下并存档 —— 这一刻必然早于当天
          任何阅读（读句必须先进任务模式，进模式就会先画一次线）—— 之后读句/退出重进/② 批次
-         重同步都不动它；只有手动调起点、改回自动安排或跨天才改。按天按篇存
-         （plan.todayRange = {day, byArt: {篇: [first, last]}}），换天自动作废。 */
-      function pinArticleKey() {
-        const a = (currentArticle != null) ? currentArticle : currentChapter;
-        return String((typeof a === 'number' && a >= 0) ? a : 0);
-      }
+         重同步都不动它；只有手动调起点、改回自动安排或跨天才改。
+         2026-10-08 用户：「为什么每一章都有个起始线，不应该有且仅有一[天]起始线吗」——
+         钉子从「按天按篇」收成**按天一条**（plan.todayRange = {day, first, last}）：
+         区间是全天那一段，不是本篇那一段，换天自动作废。 */
       function pinnedTodayRange() {
         try {
           const tr = ROOT2.plan.todayRange;
-          if (!tr || tr.day !== day2() || !tr.byArt) return null;
-          const v = tr.byArt[pinArticleKey()];
-          if (Array.isArray(v) && Number.isInteger(v[0]) && Number.isInteger(v[1]) && v[0] <= v[1]) return v;
+          if (!tr || tr.day !== day2()) return null;
+          if (Number.isInteger(tr.first) && Number.isInteger(tr.last) && tr.first <= tr.last) {
+            return [tr.first, tr.last];
+          }
         } catch (e) {}
         return null;
       }
       function pinTodayRange(first, last) {
         try {
           if (!ROOT2 || !ROOT2.plan) return;
-          if (!ROOT2.plan.todayRange || ROOT2.plan.todayRange.day !== day2()) {
-            ROOT2.plan.todayRange = { day: day2(), byArt: {} };
-          }
-          ROOT2.plan.todayRange.byArt[pinArticleKey()] = [first, last];
+          ROOT2.plan.todayRange = { day: day2(), first: first, last: last };
           persist2();
         } catch (e) {}
       }
@@ -9567,22 +9569,18 @@ let listenOn = false;
         const pinned = pinnedTodayRange();
         if (pinned) { first = pinned[0]; last = pinned[1]; }
         else {
-          /* 没钉子（当天该篇第一次画 / 刚建计划 / 刚清完）才现算并钉下。
+          /* 没钉子（当天第一次画 / 刚建计划 / 刚清完）才现算并钉下。
              有手动起点时直接钉手动窗口 [gi, gi+N-1]（引擎挑句可能不从 gi 起，
-             线必须落在用户指定的位置上）；否则钉引擎队列的 min/max。 */
+             线必须落在用户指定的位置上）；否则钉**全天**队列的 min/max —— 不是本篇的，
+             用本篇的就变成每篇各画一条开始线（2026-10-08 用户报的那件事）。 */
           const ms = manualStartToday();
           if (ms) {
             first = ms.gi;
             last = Math.min(ms.gi + Math.max(1, globalPromiseN()) - 1, SENT_RAW.length - 1);
           } else {
-            let f = Infinity, l = -Infinity;
-            for (let k = 0; k < todayQueue.length; k++) {
-              const gi = todayQueue[k].i;
-              if (gi < f) f = gi;
-              if (gi > l) l = gi;
-            }
-            if (!isFinite(f) || !isFinite(l) || f > l) return;
-            first = f; last = l;
+            const g = globalDayRange();
+            if (!g) return;
+            first = g[0]; last = g[1];
           }
           pinTodayRange(first, last);
         }
@@ -9637,6 +9635,28 @@ let listenOn = false;
           return m;
         } catch (e) { return null; }
       }
+      /* 「今天从哪开始」的一句话回显（2026-10-08 用户：「之前可以自定义今日任务开始线的内容没了？」）：
+         今日面板与「我的」两个宿主共用这一份文案，不各写一套。报的句号与正文那根开始线是同一个数 ——
+         钉子（pinnedTodayRange）在读第一句之前就已写下，所以这里优先读钉子，没钉子才现算全天区间。 */
+      function startInfo() {
+        const ms = manualStartToday();
+        let gi = null;
+        if (ms) gi = ms.gi;
+        else { const g = pinnedTodayRange() || globalDayRange(); if (g) gi = g[0]; }
+        if (gi == null || gi < 0) return { manual: !!ms, gi: null, text: ms ? '手动（读不到当前位置）' : '自动' };
+        try {
+          const a = artOfSentGlobal(gi);
+          const where = `第 ${a + 1} 篇第 ${gi - computeChapterStart(a) + 1} 句`;
+          return { manual: !!ms, gi: gi, text: (ms ? '手动 · ' : '自动 · ') + where };
+        } catch (e) { return { manual: !!ms, gi: gi, text: ms ? '手动' : '自动' }; }
+      }
+      /* 起点一改，两处回显都要跟上（2026-10-08）：今日面板那一行、「我的」那一行。
+         「我的」只补起点的文本与那颗「改回自动安排」的显隐，不重渲整个宿主 —— 重渲会把
+         滚动位置甩回顶部、并把滑块/音色的节点换掉（同一份理由见 app.js mountMe 那段注释）。 */
+      function refreshStartHosts() {
+        if (_panelOpen) { try { renderToday(document.getElementById('todayPanel')); } catch (e) {} }
+        try { if (typeof APP3 !== 'undefined' && APP3.refreshMeStart) APP3.refreshMeStart(); } catch (e) {}
+      }
       /* 全局每日承诺数：plannedToday 在按篇上下文里返回的是本篇句数，这里要的是全天的量，
          临时把 scope 摘掉算一次再恢复（缓存随手作废，下一次调用重算）。 */
       function globalPromiseN() {
@@ -9646,6 +9666,24 @@ let listenOn = false;
           const q = todayPlan(true, true).queue || [];
           return Math.max(1, q.length);
         } catch (e) { return 0; }
+        finally { currentArticle = cur; _cachedPlan = null; }
+      }
+      /* 今天这一段的起止（全局句号）：同 globalPromiseN 的口径 —— 摘掉按篇 scope 问引擎要
+         一次全天的装配，取 min/max。todayQueue 是按篇收窄的，拿它算端点就是每篇一条线。 */
+      function globalDayRange() {
+        const cur = currentArticle;
+        try {
+          currentArticle = null; _cachedPlan = null;
+          const q = todayPlan(true, true).queue || [];
+          let f = Infinity, l = -Infinity;
+          for (let k = 0; k < q.length; k++) {
+            const gi = q[k].i;
+            if (gi < f) f = gi;
+            if (gi > l) l = gi;
+          }
+          if (!isFinite(f) || !isFinite(l) || f > l) return null;
+          return [f, l];
+        } catch (e) { return null; }
         finally { currentArticle = cur; _cachedPlan = null; }
       }
       function manualRange() {
@@ -9781,12 +9819,11 @@ let listenOn = false;
         if (!ROOT2 || !ROOT2.plan) { try { showAbToast('先去「我的」设置「每天有多少分钟」，再定起点'); } catch (e) {} return false; }
         gi = Math.max(0, Math.min(SENT_RAW.length - 1, gi | 0));
         ROOT2.plan.manualStart = { gi: gi, day: day2() };
-        /* 起点一改，旧钉全作废；目标篇按手动窗口 [gi, gi+N-1] 重新钉 —— 开始/结束两条线
+        /* 起点一改，旧钉作废；按手动窗口 [gi, gi+N-1] 重新钉 —— 开始/结束两条线
            一起平移到新位置（N 与引擎的 manualRange 同一个 globalPromiseN，口径不另算）。 */
         try {
           const _N = Math.max(1, globalPromiseN());
-          ROOT2.plan.todayRange = { day: day2(), byArt: {} };
-          ROOT2.plan.todayRange.byArt[String(artOfSentGlobal(gi))] = [gi, Math.min(gi + _N - 1, SENT_RAW.length - 1)];
+          pinTodayRange(gi, Math.min(gi + _N - 1, SENT_RAW.length - 1));
         } catch (e) { try { ROOT2.plan.todayRange = null; } catch (e2) {} }
         try { savePlan(); } catch (e) {}
         const dropped = resetTodayEvents();
@@ -9795,6 +9832,8 @@ let listenOn = false;
           try { syncQueueFromPlan(); } catch (e) {}
           try { paint(); updateTaskBar(); updateMarkers(); } catch (e) {}
         }
+        /* 面板/「我的」开着时改的起点：重绘回显，否则读数停在旧值上。 */
+        try { refreshStartHosts(); } catch (e) {}
         try { closeStartPicker(); } catch (e) {}
         try {
           const a = artOfSentGlobal(gi), l = gi - computeChapterStart(a);
@@ -9810,6 +9849,7 @@ let listenOn = false;
           try { syncQueueFromPlan(); } catch (e) {}
           try { paint(); updateTaskBar(); updateMarkers(); } catch (e) {}
         }
+        try { refreshStartHosts(); } catch (e) {}
         try { showAbToast('已改回自动安排'); } catch (e) {}
         return true;
       }
@@ -10197,6 +10237,9 @@ let listenOn = false;
         /* 「地板」是内部三层的说法，学生看不懂 —— 三档改成说人话：还没起步 / 读得偏少 / 读够了。 */
         const grade = done >= 3 ? (done * 2 >= n ? '今天读够了' : '今天读得偏少')
                                 : `还差 ${Math.max(1, 3 - done)} 句`;
+        /* 今日起点的回显（2026-10-08）：文案与「我的」那一行同源（startInfo 一份实现）。 */
+        const si = startInfo();
+        const ms = si.manual;
         return `<div class="tp-cols">
           <div class="tp-col tp-col-today"><h4>今天 · ${ROOT2.plan.todayMinutes} 分钟</h4>
             <div class="tp-num">${done}<span class="unit"> / ${n} 句</span></div>
@@ -10206,6 +10249,7 @@ let listenOn = false;
           <div class="tp-kv"><span>本轮</span><b>第 ${ri.round} 轮 · 已读 ${ri.done}/${ri.total} 句</b></div>
           ${ri.total > 0 && ri.done >= ri.total ? '<div class="tp-actions"><button class="btn primary" onclick="if(confirm(\'全部读完一轮，开启新的一轮？颜色回到全灰重读一遍，排程与进度保留。\'))TASK.startNewRound()">开启新的一轮</button></div>' : ''}
             <div class="tp-kv"><span>预计还要</span><b>${fmtTime(leftSec)}</b></div>
+            <div class="tp-kv"><span>今天起点</span><b>${si.text}</b></div>
           </div>
           <div class="tp-col tp-col-words"><h4>词汇</h4>
             <div class="tp-num">${d.promote || 0}<span class="unit"> 个词今天晋升</span></div>
@@ -10218,7 +10262,9 @@ let listenOn = false;
           <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}${baowenNote(tp.stats)}</span></div>
         <div class="tp-note sm eta-foot" id="todayEta" data-days="">算一下…</div>
         <div class="tp-actions"><button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始今天的任务'}</button>
-          ${taskMode ? '<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>' : ''}</div>`;
+          ${taskMode ? '<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>' : ''}</div>
+        <div class="tp-actions"><button class="btn" onclick="TASK.openStartPicker()">今日任务从哪开始</button>
+          ${ms ? '<button class="btn" onclick="TASK.clearManualStart()">改回自动安排</button>' : ''}</div>`;
       }
 
       /* 保温那一格的话（Task 3：只报负载、不报终点）。三个数全部从引擎的 stats 取 ——
@@ -10594,6 +10640,9 @@ let listenOn = false;
         /* 「每天有多少分钟」滑块的三份出口（2026-10-08）：minSlider 给「我的」浮窗拼 markup，
            bindMinSlider 给它挂监听，MIN_RANGE 让外面读到同一份档位（别再抄第二份 5..240）。 */
         minSlider, bindMinSlider, MIN_RANGE,
+        /* 「今天从哪开始」的当前读数（2026-10-08）：今日面板与「我的」共用这一份文案，
+           面板那一行和线落在同一个句子上。 */
+        startInfo,
         etaFor, etaCalls, etaText, etaMonth, countStages, seedDailyForTest, seedArticleForTest,
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
         repsOf, articlePass2Done,
