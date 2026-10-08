@@ -4,7 +4,7 @@
 // 修复：_drain 给每个 job 加 25s 安全网，超时就 reject 并释放消费者，保证队列能继续。
 import { test, expect } from '../../fixtures';
 
-const rootUrl = 'http://127.0.0.1:8932';
+const rootUrl = process.env.E2E_ROOT_URL || '';
 
 const SIXQ: Record<string, string> = (() => {
   const words = ['apple', 'banana', 'cherry', 'date'];
