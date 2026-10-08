@@ -392,6 +392,35 @@ test('纯听不点：高亮就黑，账等播完', async ({ page }) => {
   expect((await page.evaluate(() => TASK.todayProgress())).done, '今日已读同一下落').toBe(1);
 });
 
+/* 判据①（2026-10-08 晚二次口径的核心支点）：黑 = 已完成 = reps>0，与「是不是当前句」
+   「在不在任务模式」都无关。读到一句就退出任务模式：非当前句、无播放链，这句必须保持黑。
+   旧判据只认 roundSeen（本轮），这条场景在「开新轮/隔天重进」下全是灰 —— 用户截图报的就是它。 */
+test('读过就保持黑：退出任务模式后 reps>0 的句子仍黑（判据①）', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+  await installSpeakStub(page);
+  await page.locator('.art-card').first().click();
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+
+  await page.locator('#tbNext').click();            // s0 点即+1（reps=1）
+  await fireStaleSpeak(page);                       // s0 播完落账
+  await page.evaluate(() => TASK.exitTaskMode());
+  await expect(page.locator('body'), '已退出任务模式').not.toHaveClass(/task-mode/);
+
+  const cls0 = await page.evaluate(() => ({
+    known: !!document.querySelectorAll('#art .sent')[0]?.classList.contains('lw-known'),
+    unknown: !!document.querySelectorAll('#art .sent')[0]?.classList.contains('lw-unknown'),
+    color: (() => { const el = document.querySelectorAll('#art .sent')[0]; return el ? getComputedStyle(el).color : ''; })(),
+  }));
+  expect(cls0.known, '非当前句、非任务模式：reps>0 仍挂黑字类').toBe(true);
+  expect(cls0.unknown, '不许同时挂着灰字类').toBe(false);
+  expect(cls0.color, '计算色 = 近黑 --ink-known #181c15').toBe('rgb(24, 28, 21)');
+});
+
 
 test('读完一轮可开新轮：本轮账清零、轮次+1（颜色跟已完成走，不再回灰）', async ({ page }) => {
   await stubData2(page, TWO);
