@@ -18,39 +18,7 @@ function ignoreKnownErrors(page: any) {
   return errors;
 }
 
-test.describe('Smoke tests for non-shadow pages', () => {
-  test('index.html loads and basic interactions work', async ({ page }) => {
-    const errors = ignoreKnownErrors(page);
-
-    await page.goto(`${rootUrl}/index.html`);
-    await expect(page).toHaveTitle(/雅思词汇真经/);
-
-    const skip = page.locator('.sr-only-focusable');
-    await expect(skip).toHaveAttribute('href', '#app');
-    await expect(page.locator('h1.sr-only')).toHaveText('雅思词汇真经 · 情境阅读训练');
-
-    const darkBtn = page.locator('#darkBtn');
-    await expect(darkBtn).toBeVisible();
-    await darkBtn.click();
-    await expect(page.locator('body')).toHaveClass(/dark/);
-    await darkBtn.click();
-    await expect(page.locator('body')).not.toHaveClass(/dark/);
-
-    const accentBtn = page.locator('#accentBtn');
-    await expect(accentBtn).toHaveText('🇬🇧 英音');
-    await accentBtn.click();
-    await expect(accentBtn).toHaveText('🇺🇸 美音');
-
-    // 两个应用各自独立：阅读这边不许再出现跳去影子跟读的入口（他明确说没这个诉求）
-    await expect(page.locator('#shadowLink')).toHaveCount(0);
-    const toShadow = await page.evaluate(() => [...document.querySelectorAll('a[href]')]
-      .map(a => a.getAttribute('href')!)
-      .filter(h => h.includes('shadow')));
-    expect(toShadow).toEqual([]);
-
-    expect(errors).toEqual([]);
-  });
-
+test.describe('Smoke tests for admin', () => {
   test('admin login page renders and dark mode works', async ({ page }) => {
     const errors = ignoreKnownErrors(page);
 

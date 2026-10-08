@@ -10,13 +10,9 @@ sys.path.insert(0, str(ROOT / 'tools'))
 from width_rule import width as _ruler_width   # 唯一一把尺；口径与上限都只在 tools/width_rule.py 里改
 from check_compare_draft import sec_variants   # 课文标记的拆法也只有一份（门禁 1 与这里必须同口径）
 
-# 主站 fetchCached 用 DATA_VER 做 Cache API 的 x-ver 键：改了数据文件而没 bump
-# DATA_VER，线上会永久命中旧缓存且无任何报错。故把版本号定义为这些文件的内容哈希，
-# 由本脚本校验一致性 —— 忘记 bump 会直接 FAIL，而不是静默服务旧词库。
-DATA_VER_FILES = ['data/book.json', 'data/sup.json', 'data/stories.json', 'data/covers.json']
-# 跟读站同理：它原先完全没有版本戳，改课文后 iOS Safari 会按 Last-Modified 命中旧缓存，
+# 跟读站（现 /app/ 3.0）原先完全没有版本戳，改课文后 iOS Safari 会按 Last-Modified 命中旧缓存，
 # 出现 sections.json 是新的、vocab.json 是旧的 → 句序与词表错位。
-SHADOW_VER_FILES = ['shadow/data/sections.json', 'shadow/data/vocab.json', 'shadow/data/chapters.json']
+SHADOW_VER_FILES = ['app/data/sections.json', 'app/data/vocab.json', 'app/data/chapters.json']
 
 def digest(rels):
     h = hashlib.sha256()
@@ -26,9 +22,6 @@ def digest(rels):
         h.update(len(b).to_bytes(8, 'big'))
         h.update(b)
     return h.hexdigest()[:10]
-
-def data_ver():
-    return digest(DATA_VER_FILES)
 
 def shadow_data_ver():
     return digest(SHADOW_VER_FILES)
@@ -69,33 +62,21 @@ def load(path):
         return json.load(f)
 
 def main():
-    vocab = load(ROOT / 'shadow' / 'data' / 'vocab.json')
-    chapters = load(ROOT / 'shadow' / 'data' / 'chapters.json')
-    sections = load(ROOT / 'shadow' / 'data' / 'sections.json')
-    root_vocab = load(ROOT / 'data' / 'vocab.json')
-    book = load(ROOT / 'data' / 'book.json')
+    vocab = load(ROOT / 'app' / 'data' / 'vocab.json')
+    chapters = load(ROOT / 'app' / 'data' / 'chapters.json')
+    sections = load(ROOT / 'app' / 'data' / 'sections.json')
 
     errors = []
     warnings = []   # 已知待修项：报告但不阻断，修完后可逐条上提为 error
 
-    # 0. DATA_VER 必须等于数据文件内容哈希
-    want = data_ver()
-    html = (ROOT / 'index.html').read_text(encoding='utf-8')
-    m = re.search(r'const DATA_VER\s*=\s*"([0-9a-fA-F]+)"', html)
-    if not m:
-        errors.append('index.html: 找不到 const DATA_VER = "..."，无法校验缓存版本')
-    elif m.group(1) != want:
-        errors.append(f'index.html DATA_VER 已过期：当前 {m.group(1)}，数据文件哈希为 {want}。'
-                      f' 请改为 "{want}"，否则线上会永久命中旧缓存。')
-
-    # 0b. 跟读站 SHADOW_DATA_VER 必须等于 shadow/data 三文件的内容哈希
+    # 0. 跟读站（/app/）SHADOW_DATA_VER 必须等于 app/data 三文件的内容哈希
     want_s = shadow_data_ver()
-    sh = (ROOT / 'shadow' / 'index.html').read_text(encoding='utf-8')
+    sh = (ROOT / 'app' / 'index.html').read_text(encoding='utf-8')
     ms = re.search(r'const SHADOW_DATA_VER\s*=\s*"([0-9a-fA-F]+)"', sh)
     if not ms:
-        errors.append('shadow/index.html: 找不到 const SHADOW_DATA_VER = "..."，跟读站数据无缓存版本')
+        errors.append('app/index.html: 找不到 const SHADOW_DATA_VER = "..."，跟读站数据无缓存版本')
     elif ms.group(1) != want_s:
-        errors.append(f'shadow/index.html SHADOW_DATA_VER 已过期：当前 {ms.group(1)}，'
+        errors.append(f'app/index.html SHADOW_DATA_VER 已过期：当前 {ms.group(1)}，'
                       f' 数据哈希为 {want_s}。请改为 "{want_s}"，否则改课文不会到达手机。')
     missing_pm = [w for w, e in vocab.items() if not e.get('p') or not e.get('m')]
     if missing_pm:
@@ -122,39 +103,14 @@ def main():
     if missing_ph:
         errors.append(f"{len(missing_ph)} placeholder words not in vocab: {list(missing_ph)[:10]}")
 
-    # 4. root vocab 与 shadow vocab 键一致
-    root_keys = set(root_vocab.keys())
-    shadow_keys = set(w.lower() for w in vocab)
-    if root_keys != shadow_keys:
-        only_root = root_keys - shadow_keys
-        only_shadow = shadow_keys - root_keys
-        if only_root:
-            errors.append(f"{len(only_root)} words only in root vocab: {list(only_root)[:10]}")
-        if only_shadow:
-            errors.append(f"{len(only_shadow)} words only in shadow vocab: {list(only_shadow)[:10]}")
-
-    # 5. 释义排版脏字符：悬挂分号与重复分号会直接渲染进词卡弹窗
-    trail = [r[1] for r in book if isinstance(r[3], str) and r[3].rstrip().endswith('；')]
-    if trail:
-        errors.append(f"{len(trail)} book.json defs end with ；: {trail[:10]}")
+    # 4. 释义排版脏字符：重复分号会直接渲染进词卡弹窗
     dbl = []
-    for name, d in (('shadow vocab', vocab), ('root vocab', root_vocab)):
-        for w, e in d.items():
-            txt = e.get('m') if isinstance(e, dict) else (e[3] if isinstance(e, list) else '')
-            if isinstance(txt, str) and '；；' in txt:
-                dbl.append(f"{name}:{w}")
+    for w, e in vocab.items():
+        txt = e.get('m') if isinstance(e, dict) else (e[3] if isinstance(e, list) else '')
+        if isinstance(txt, str) and '；；' in txt:
+            dbl.append(f"vocab:{w}")
     if dbl:
         errors.append(f"{len(dbl)} defs contain ；；: {dbl[:10]}")
-
-    # 6. book.json 重复词头：DICT 构建为后写覆盖，徽章与例句可能张冠李戴
-    seen, dup = set(), []
-    for r in book:
-        k = r[1].lower()
-        if k in seen:
-            dup.append(k)
-        seen.add(k)
-    if dup:
-        warnings.append(f"{len(dup)} duplicate headwords in book.json (later row wins): {sorted(set(dup))[:12]}")
 
     # 7. 大小写不一致的词头：上面 2/3 项用 lower() 比较会掩盖这类脏键
     vkeys = set(vocab.keys())
@@ -241,7 +197,7 @@ def main():
     SENT_BASELINE = 1809  # 2026-09-19 建立账本时的全书句数
     k = sh.find('const SENT_SHIFTS = [')
     if k < 0:
-        errors.append('shadow/index.html 找不到 SENT_SHIFTS 顺移账本；若课文句数有变，必须补记')
+        errors.append('app/index.html 找不到 SENT_SHIFTS 顺移账本；若课文句数有变，必须补记')
     else:
         d0, i = k + len('const SENT_SHIFTS = ['), k + len('const SENT_SHIFTS = [')
         depth = 1
@@ -274,7 +230,7 @@ def main():
 
     # 16. 结构化辨析卡（cmp.type === 'compare'）：不许造词、不许无处可挂
     #     这类卡是第二期 220 组辨析的落库形状，靠人工守不住，所以每条都机检。
-    _sec_raw = (ROOT / 'shadow/data/sections.json').read_text(encoding='utf-8')
+    _sec_raw = (ROOT / 'app/data/sections.json').read_text(encoding='utf-8')
     # 可查集合**不能**含辨析卡自己的内容 —— 否则卡片里编一条搭配，就被它自己"证明"了（自证循环）。
     # 所以卡片侧只收：词头、义项 m、例句 ex/exZh、字符串型 note（同义词/词伙）。
     _card_bits = []
@@ -417,8 +373,6 @@ def main():
     print(f"vocab: {len(vocab)} words")
     print(f"chapters: {len(chapters)} macro chapters, {len(ch_words)} unique words")
     print(f"sections placeholders: {len(ph_words)} unique words")
-    print(f"root vocab: {len(root_vocab)} words")
-    print(f"book: {len(book)} rows")
     print(f"compare cards (辨析卡): {n_cmp}")
 
     if warnings:

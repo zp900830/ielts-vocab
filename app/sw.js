@@ -11,7 +11,7 @@
  *   - 网络失败（断网 / 服务器丢连接）→ 退回缓存 → app.js 这类 defer 脚本「永远拿得到」；
  *   - 两者都没有才抛错，交给浏览器按正常失败处理。
  *   不用 cache-first，是为了「EdgeOne 新部署立刻生效」——绝不让旧缓存盖住新部署。
- *   scope 外的请求（/shadow/data/…、跨域字体/CDN/Supabase）一律放行，绝不拦测试 stub
+ *   scope 外的请求（/app/data/… 之外的相对资源、跨域字体/CDN/Supabase）一律放行，绝不拦测试 stub
  *   或其它模块。缓存名带版本；activate 清掉旧版本缓存。
  */
 

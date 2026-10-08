@@ -951,10 +951,10 @@ test.describe('3.0 §9.4 已学完判据', () => {
   });
 });
 
-/* 终审 I2：repsByArticle 过去塞在共享的 ielts.shadow.v2 里，而 /shadow/ 的 recompute2 没有
-   回搬分支 —— 一开影子跟读就被抹。现在搬到 3.0 自己的 key，开 /shadow/ 也动不了它。 */
+/* 终审 I2：repsByArticle 过去塞在共享的 ielts.shadow.v2 里（/shadow/ 已下线），重放/抹写
+   这类风险已随旧站消失；现在锁两件事——账只住 3.0 自己的 key，且能进 exportBackup。 */
 test.describe('3.0 按篇账不随共享 blob 走', () => {
-  test('精读次数住自己的 key：开一次 /shadow/ 也抹不掉，reload 还在', async ({ page }) => {
+  test('精读次数住自己的 key，reload 与备份都在', async ({ page }) => {
     await stubData(page, SIXQ);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await freshPlan(page);
@@ -971,20 +971,10 @@ test.describe('3.0 按篇账不随共享 blob 走', () => {
     const payload = JSON.parse(fs.readFileSync((await download.path()) as string, 'utf8'));
     expect(Object.keys(payload.data), '备份必须含 ielts.app3.article').toContain('ielts.app3.article');
 
-    /* 逼影子跟读走一次 recompute2：把 eventsSeen 改错，它的 loadRoot 就会从事件流重放 daily。
-       这正是过去抹掉 repsByArticle 的那条码路。 */
-    await page.evaluate(() => {
-      const v = JSON.parse(localStorage.getItem('ielts.shadow.v2') || '{}');
-      v.state = v.state || {}; v.state.eventsSeen = -1;
-      localStorage.setItem('ielts.shadow.v2', JSON.stringify(v));
-    });
-    await page.goto(`${rootUrl}/shadow/index.html`);
-    await page.waitForFunction(() => document.querySelectorAll('.sent').length > 0);
-
-    // 回 3.0：按篇账还在（同源共享 localStorage，影子跟读重写了 v2 也动不到这个 key）
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    // reload 后按篇账还在
+    await page.reload();
     await page.waitForFunction(() => { try { return !!(TASK.state() && TASK.state().daily); } catch (e) { return false; } });
-    expect(await page.evaluate(() => TASK.repsOf(0)), '/shadow/ 不许抹掉 3.0 的按篇账').toBe(3);
+    expect(await page.evaluate(() => TASK.repsOf(0)), 'reload 不许丢按篇账').toBe(3);
   });
 });
 
