@@ -2113,7 +2113,21 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      胶囊时代「左标签 + 右边一堆胶囊」那一排在 390px 放不下 48 档。 */
   .mp-row .min-slider { flex: 1; min-width: 0; }
   .mp-row .ps-opt { padding: 5px 10px; font-size: 12px; }
-  .mp-row .tr-msw { padding: 4px 8px 4px 4px; }
+  /* 「我的」行内右置控件（口音 .accent-btn / 音色 .voice-btn / 深色开关 .tr-msw /
+     今天起点 .ps-opt）外观统一（2026-10-09 用户：「这几个外椭圆的样式都不一样，
+     深色模式的椭圆快接近圆了」）：原来各用一套描边 token（--accent-line 绿 /
+     --hl-line 高亮线 / --border 灰），深色开关的按钮盒里只有一颗 28×17 的开关芯，
+     加 padding 后 40×44（宽<高）配 999px 圆角 → 近似一个圆，非常突兀。
+     统一为：同一描边/透明底/字重/字号 + 标准胶囊比例（开关盒 min-width 拉宽、
+     开关芯居中）。描边统一到 --border 与深色态既有口径（body.dark .voice-btn 等）
+     对齐；开启态开关仍走绿描边（.tr-msw.on）。只 scope 在 .me-host —— 文章内
+     reader-head 那套带文字的紧凑 .tr-msw / .accent-btn / .voice-btn 不跟着动。 */
+  .me-host .mp-row .accent-btn,
+  .me-host .mp-row .voice-btn,
+  .me-host .mp-row .ps-opt,
+  .me-host .mp-row .tr-msw { border-color: var(--border); background: transparent; font-size: 12px; font-weight: 600; }
+  .me-host .mp-row .tr-msw { min-width: 64px; justify-content: center; padding: 4px 12px; }
+  .me-host .mp-row .tr-msw.on { border-color: var(--accent); }
   /* M5（§10.4）：「我的」里所有可点控件触摸目标 ≥44px。scope 在 .me-host（两个宿主共用）——
      以前挂在 .me-pop 上，移动端换成一级页面就整批失效了。文章内那套紧凑控件（.r-badges 等）
      另有口径，不跟着变高。 */
