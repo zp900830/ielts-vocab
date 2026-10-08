@@ -37,11 +37,6 @@
        里重写 :root 改成 2px）。 */
     --sec-padx: 6px;
     --bg: #faf8f4; --card: #fff; --text: #2b3028; --muted: #6b665a; --ink2: #6b665a;
-    /* 正文阅读墨色（2026-10-08 用户嫌"不够黑"）：--text 压纸底已 12.7:1（过 AAA），
-       所以发虚不在颜色档，而在字号与 macOS 字体平滑。这一档只给阅读正文（.sec .para 与
-       已学句）用，UI 文字仍走 --text；深浅两套必须成对改（深色那档在 body.dark 里跟着
-       --text），否则夜间正文会变一团黑。 */
-    --ink-body: #181c15;
     --accent: #0c9c74; --accent-bright: #10b487; --accent-soft: #e0f5ec;
     --accent-line: #bfe6d6; --hl: #c9f2e2; --hl-line: #8fd8bd;
     --border: #e5dfd6; --green: #0c9c74;
@@ -119,7 +114,6 @@
   /* 夜间模式 */
   body.dark {
     --bg: #1c1a17; --card: #252220; --text: #e2ddd5; --muted: #a39b8e; --ink2: #a09a8e;
-    --ink-body: var(--text);   /* 浅底那档近黑搬进夜里就是一团黑块，深色下回到 --text */
     --accent: #10b487; --accent-bright: #2bd4a4; --accent-soft: rgba(16,180,135,.12);
     --accent-line: rgba(16,180,135,.22); --hl: rgba(43,212,164,.18); --hl-line: rgba(43,212,164,.3);
     --border: #33302b; --green: #10b487;
@@ -429,19 +423,15 @@
   body.dark .voice-pop .vp-play { background: var(--card); border-color: var(--border); }
 
   /* ============ 正文（衬线故事体卡片） ============ */
-  /* 字号阶梯（排查报告 B9）：正文这一对 19.5（桌面）/ 18.5（窄屏，见 @media）是有意两档，
-     2026-10-08 各涨半档治的是「Mac 上 Georgia 细笔画发虚」（同轮还去掉了正文的字体平滑）；
+  /* 字号阶梯（排查报告 B9）：正文这一对 18.5（桌面）/ 17.5（窄屏，见 @media）是有意两档，
      胶囊与小字一律走整数档；10.5/11.5 只用于胶囊与说明文字，12.5/13.5/14.5/15.5 这些
      半档孤值已并入 12/13/15。新组件不要再写 .5。 */
-  article { font-size: 19.5px; position: relative; }
+  article { font-size: 18.5px; position: relative; }
   .sec { margin-bottom: 28px; padding: 4px var(--sec-padx, 6px); }
   .sec h2 { display: inline-block; font-size: 14px; color: #065f46; font-weight: 600;
     letter-spacing: .06em; margin-bottom: 12px; background: var(--accent-soft);
     border-radius: 999px; padding: 4px 14px; }
-  /* body 全局写了 -webkit-font-smoothing: antialiased，在 macOS 上把衬线细笔画整体削薄一档
-     —— 正文这一片要回到 subpixel 才有他要的"够黑"。只放开阅读正文，不动 UI 小字。 */
-  .sec .para { margin-bottom: 6px; font-family: var(--serif); line-height: 2.05; text-align: justify;
-    color: var(--ink-body); -webkit-font-smoothing: auto; }
+  .sec .para { margin-bottom: 6px; font-family: var(--serif); line-height: 2.05; text-align: justify; }
   .sent { border-radius: 6px; padding: 1px 4px; transition: background var(--t-hover); cursor: pointer; }
   @media (hover: hover) { .sent:hover { background: var(--accent-soft); } }
   .sent.playing { background: linear-gradient(transparent 62%, var(--hl) 62%); border-radius: 3px; }
@@ -1242,7 +1232,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     body.task-mode > .layout { padding-top: 84px; }   /* 手机档：两行头部（G），让开固定头 */
     :root { --sec-padx: 2px; }   /* 手机档 .sec 左右内边距收窄，横线口径跟着收（见 .today-range-line） */
     .sec { padding: 4px var(--sec-padx, 2px); margin-bottom: 20px; }
-    article { font-size: 18.5px; }
+    article { font-size: 17.5px; }
     .sec .para { line-height: 1.85; text-align: left; }
     /* 词库：改为底部抽屉（划上即用，不占正文空间） */
     aside { position: fixed; left: 0 !important; right: 0 !important; bottom: 0; top: auto; z-index: 190;
@@ -1387,7 +1377,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      与 task-new/review/done 的左边框标记叠加显示；task-done 不再整句变暗（opacity 删掉），
      否则"已学黑字"永远实现不了。 */
   .sent.lw-unknown { color: var(--muted); }
-  .sent.lw-known { color: var(--ink-body); }
+  .sent.lw-known { color: var(--text); }
   /* 他 2026-09-23：「高亮错误，现在全都高亮」。量过 —— 进任务模式后今天这批 36 句每句都带
      6% 绿底 + 3px 绿竖条，而「正在读哪句」全站只有一句、底色还比它们更淡，36 句连成一片绿，
      反而找不着该读哪句。竖条是这里唯一在说「这是今天这批」的东西，留着；
