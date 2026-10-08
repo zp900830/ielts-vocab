@@ -37,6 +37,11 @@
        里重写 :root 改成 2px）。 */
     --sec-padx: 6px;
     --bg: #faf8f4; --card: #fff; --text: #2b3028; --muted: #6b665a; --ink2: #6b665a;
+    /* 已完成句的墨色（2026-10-08 用户「已完成的黑要再黑一点、对比度拉高」）：
+       只给点亮句（.sent.lw-known）用，UI 与未读句一律不碰。注意 E 方案（全文提墨+字号+平滑）
+       同日晚间被否回退过 —— 那次「太奇怪」是整批动正文；这里只动已完成句的颜色档，
+       字号 / 字体平滑一概不动。深浅两套必须成对改（深色档在 body.dark）。 */
+    --ink-known: #181c15;
     --accent: #0c9c74; --accent-bright: #10b487; --accent-soft: #e0f5ec;
     --accent-line: #bfe6d6; --hl: #c9f2e2; --hl-line: #8fd8bd;
     --border: #e5dfd6; --green: #0c9c74;
@@ -114,6 +119,7 @@
   /* 夜间模式 */
   body.dark {
     --bg: #1c1a17; --card: #252220; --text: #e2ddd5; --muted: #a39b8e; --ink2: #a09a8e;
+    --ink-known: #f5f1e8;   /* 已完成句墨色·深色档：夜里「更黑」= 更亮，比 --text 再提一档（成对改，见 :root 注释） */
     --accent: #10b487; --accent-bright: #2bd4a4; --accent-soft: rgba(16,180,135,.12);
     --accent-line: rgba(16,180,135,.22); --hl: rgba(43,212,164,.18); --hl-line: rgba(43,212,164,.3);
     --border: #33302b; --green: #10b487;
@@ -1373,11 +1379,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .sent.task-new { border-left: 3px solid var(--task-new); padding-left: 8px; margin-left: -11px; background: var(--task-bg); border-radius: 4px; }
   .sent.task-review { border-left: 3px solid var(--task-review); padding-left: 8px; margin-left: -11px; border-radius: 4px; }
   .sent.task-done { border-left: 3px solid var(--task-done); padding-left: 8px; margin-left: -11px; border-radius: 4px; }
-  /* 已学点亮（2026-09-30 用户要黑白区分）：本轮跟读过黑字常态，未读灰字。
+  /* 已学点亮（2026-09-30 用户要黑白区分；判据 2026-10-08 二次改口径，见 TASK.updateMarkers）：
+     已完成句黑字常态（近黑 --ink-known，比 --text 深一档），未完成灰字。
      与 task-new/review/done 的左边框标记叠加显示；task-done 不再整句变暗（opacity 删掉），
      否则"已学黑字"永远实现不了。 */
   .sent.lw-unknown { color: var(--muted); }
-  .sent.lw-known { color: var(--text); }
+  .sent.lw-known { color: var(--ink-known); }
   /* 他 2026-09-23：「高亮错误，现在全都高亮」。量过 —— 进任务模式后今天这批 36 句每句都带
      6% 绿底 + 3px 绿竖条，而「正在读哪句」全站只有一句、底色还比它们更淡，36 句连成一片绿，
      反而找不着该读哪句。竖条是这里唯一在说「这是今天这批」的东西，留着；
@@ -5194,6 +5201,9 @@ let listenOn = false;
     setTimeout(() => { _programmaticScroll = false; }, 200);
     }
     }
+    /* 已学点亮跟手（2026-10-08）：任务①里高亮挪到哪句，哪句当场算「已完成」变黑。
+       账（roundSeen / reps）仍只在 markSentenceRead 那几处写，这里只刷颜色。 */
+    try { if (typeof TASK !== 'undefined' && TASK.paintLighting) TASK.paintLighting(); } catch (e) {}
     // 「回到学习位置」的显隐：目标（学习句 / 当前空）与是否在视口都要现算，统一交给 TASK。
     try { if (typeof TASK !== 'undefined' && TASK.updateBackBtn) TASK.updateBackBtn(); } catch (e) {}
     const bp = _getDom('btnPlay');
@@ -6181,6 +6191,10 @@ let listenOn = false;
       if (next.prog && typeof next.prog === 'object') {
         if (next.prog.sentences) next.prog.sentences = shiftKeyed(next.prog.sentences, s);
         if (next.prog.cycleSeen) next.prog.cycleSeen = shiftKeyed(next.prog.cycleSeen, s);
+        /* roundSeen 的键同样是全局句号（2026-09-30「本轮已读」账）。它不再驱动颜色
+           （2026-10-08 起颜色跟 reps 走），但「本轮 x/y」读它 —— 漏迁会让面板进度
+           与「本轮读完」提示整体错位一句的增量。 */
+        if (next.prog.roundSeen) next.prog.roundSeen = shiftKeyed(next.prog.roundSeen, s);
       }
     });
     // 全部算完再落盘：中途抛错就不会留下「改了一半」的序号
@@ -8484,8 +8498,9 @@ let listenOn = false;
         updateMarkers();
       }
 
-      /* 本轮进度与新一轮（2026-09-30 用户要）：颜色只认 roundSeen（本轮跟读过黑字），
-         开新轮只清颜色（roundSeen），reps/事件/排程一律保留。 */
+      /* 本轮进度与新一轮（2026-09-30 用户要）。2026-10-08 起颜色不再归这里管：
+         点亮跟「已完成」（reps）走，开新轮只清 roundSeen 这本本轮账（喂今日面板 x/y），
+         排程与颜色一律不动 —— 他同一晚定的口径「已完成的句子就是黑字」优先。 */
       function roundTotal() { try { return (typeof SENT_RAW !== 'undefined' && SENT_RAW.length) || 0; } catch (e) { return 0; } }
       function roundDoneCount() {
         const t = roundTotal();
@@ -8499,9 +8514,10 @@ let listenOn = false;
       function roundInfo() {
         return { round: (prog && typeof prog.round === 'number') ? prog.round : 1, done: roundDoneCount(), total: roundTotal() };
       }
-      /* 点亮（2026-10-08 用户改口径：「已学的高亮句直接变黑，不要句子读完才由灰变黑」）：
-         黑字跟「记为已读」那一下走。旧口径把它挂在 taskSentenceFinished，可点快了旧播放链会被新点击
-         作废（speakToken++）、回调永不触发 —— 账上 reps 早已 +1，屏幕上却永远留着一句灰字。 */
+      /* 点亮（2026-10-08 早修过一轮：「已学的高亮句直接变黑，不要句子读完才由灰变黑」）；
+          同日晚二次改口径：颜色整体跟「已完成」（reps ∪ 当前高亮句）走，见 updateMarkers。
+         roundSeen 从此只是「本轮已读」的账本 —— markSentenceRead 记账、面板显示 x/y、
+         开新轮清零，三件事，都不再驱动颜色。 */
       function markRoundSeen(globalIdx) {
         if (!prog) return;
         if (!prog.roundSeen || typeof prog.roundSeen !== 'object') prog.roundSeen = {};
@@ -8532,7 +8548,7 @@ let listenOn = false;
         try { saveProg(); } catch (e) {}
         try { updateMarkers(); } catch (e) {}
         try { if (_panelOpen) renderToday(document.getElementById('todayPanel')); } catch (e) {}
-        try { showAbToast('已开启新的一轮，颜色回到全灰重读一遍'); } catch (e) {}
+        try { showAbToast('已开启新的一轮，本轮已读计数重新累计'); } catch (e) {}
         return prog.round;
       }
       // ---- 构建今日队列 ----
@@ -9873,12 +9889,23 @@ let listenOn = false;
       }
       function updateMarkers() {
         paintTodayRange();
-        /* 已学点亮（2026-09-30）：本轮跟读过的黑字，未读灰字；与边框标记叠加。
-           读的是 roundSeen（本轮），不是 reps —— 开新轮颜色即重置，排程账不动。 */
+        /* 已学点亮（判据 2026-10-08 二次改口径，用户截图：「已完成的任务有灰有黑」）：
+           黑 = 「已完成」，两支 ——
+           ① 曾经读过的句子（reps>0）：不管哪一轮、哪一天读的都算。旧判据只认 roundSeen（本轮），
+              上一轮读过的、被「开启新的一轮」清过账的已完成句全留在灰字里，正是他截到的灰。
+           ② 任务①里当前高亮的这句：高亮挪到哪句，哪句当场算已完成（含刚翻过来的瞬间），
+              不等播完、不等记账 —— 上一句 / 键盘 / 直接点句这些不经过 TASK.next 的路径此前永远漏亮。
+           roundSeen 照旧只在真正记账那几处写（markSentenceRead），从此只喂「本轮 x/y」的账，
+           不再管颜色；开新轮清它也只是清账，颜色跟 reps 走不再回灰（按钮文案已同步改）。 */
         try {
-          const _rs = (typeof prog !== 'undefined' && prog && prog.roundSeen) || {};
           sents.forEach(function (el, localIdx) {
-            const _known = !!_rs[localToGlobal(localIdx)];
+            const _g = localToGlobal(localIdx);
+            let _known = false;
+            if (typeof prog !== 'undefined' && prog && prog.sentences) {
+              const _st = prog.sentences[_g];
+              _known = !!_st && (_st.reps || 0) > 0;
+            }
+            if (!_known && taskMode && pass === 1 && idx >= 0 && localIdx === idx) _known = true;
             el.classList.toggle('lw-known', _known);
             el.classList.toggle('lw-unknown', !_known);
           });
@@ -9910,6 +9937,14 @@ let listenOn = false;
           else if (type === 'done') el.classList.add('task-done');
         });
         updateBtn();
+      }
+
+      /* paint 的高频翻句路径只走这道轻量门（2026-10-08）：非任务①零开销返回，
+         是任务①才整遍刷点亮。挂它的原因：高亮挪动唯一共享出口是 paint（playFrom → paint），
+         上一句 / 键盘 / 点句都不经过 TASK.next，没有这道门它们永远漏亮当前句。 */
+      function paintLighting() {
+        if (!taskMode || pass !== 1) return;
+        try { updateMarkers(); } catch (e) {}
       }
 
       function updateBtn() {
@@ -10265,7 +10300,7 @@ let listenOn = false;
             <div class="tp-kv"><span>连续</span><b>${streak2()} 天${floorDayCount() ? `（${floorDayCount()} 天偏少）` : ''}</b></div>
             <div class="tp-kv"><span>完成度</span><b>${grade}</b></div>
           <div class="tp-kv"><span>本轮</span><b>第 ${ri.round} 轮 · 已读 ${ri.done}/${ri.total} 句</b></div>
-          ${ri.total > 0 && ri.done >= ri.total ? '<div class="tp-actions"><button class="btn primary" onclick="if(confirm(\'全部读完一轮，开启新的一轮？颜色回到全灰重读一遍，排程与进度保留。\'))TASK.startNewRound()">开启新的一轮</button></div>' : ''}
+          ${ri.total > 0 && ri.done >= ri.total ? '<div class="tp-actions"><button class="btn primary" onclick="if(confirm(\'全部读完一轮，开启新的一轮？本轮已读计数清零重新累计，进度与句子颜色保留。\'))TASK.startNewRound()">开启新的一轮</button></div>' : ''}
             <div class="tp-kv"><span>预计还要</span><b>${fmtTime(leftSec)}</b></div>
             <div class="tp-kv"><span>今天起点</span><b>${si.text}</b></div>
           </div>
@@ -10642,7 +10677,7 @@ let listenOn = false;
         } : null,
         get queue() { return todayQueue; },
         get progress() { return prog; },
-        recordRep, buildQueue, updateMarkers, updateBtn,
+        recordRep, buildQueue, updateMarkers, updateBtn, paintLighting,
         loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
         pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
         initPlan, resetV2, readDone, relearn, setView, setMinutes,
