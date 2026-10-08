@@ -372,7 +372,11 @@ test.describe('3.0 W6 PWA', () => {
     });
     const RELOADS = 15;
     for (let i = 0; i < RELOADS; i++) {
-      await page.reload();
+      /* 只等到 domcontentloaded：这条锁的是「app.js 每次都真的执行」（下面那道 waitForFunction），
+         而默认 'load' 要等齐所有子资源 —— 图标字体走 CDN，8 worker 抢外网时 15 轮 reload
+         能把单条用例拖过 120s（实测整轮从 6 分钟涨到 36 分钟、这条最先红）。
+         defer 的 app.js 在 DOMContentLoaded 之前就跑完了，所以少等的只有 CDN 字体，锁的强度不变。 */
+      await page.reload({ waitUntil: 'domcontentloaded' });
       // APP3.route 由 defer 的 app.js 定义；app.js 拿不到就永远等 → 红灯。条件等待，不 sleep。
       await page.waitForFunction(() => {
         const w = window as unknown as { APP3?: { route?: unknown } };
