@@ -1541,6 +1541,25 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .tp-tab { color: var(--muted); }
   body.dark .tp-tab.on { color: var(--task-new); }
   body.dark .tp-note { background: rgba(52,211,153,.07); border-color: rgba(52,211,153,.16); }
+  /* 「今天的句子」清单（2026-10-10，记忆模式）：按篇分组 + 每句一枚可点行。
+     标签色与正文染色同一套变量 —— 清单说"新词/该复习了"，正文染的就是同一个状态，
+     两处说的是同一门语言，用户不用再学第二套记号。 */
+  .tp-sl { margin-top: 12px; }
+  .tp-sl h4 { margin: 0 0 8px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .tp-sl-art { font-size: 11px; color: var(--text); font-weight: 700; margin: 10px 0 4px; }
+  .tp-sl-rows { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tp-sl-row { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border);
+    background: var(--card); border-radius: 999px; padding: 4px 9px; font-size: 11px; cursor: pointer;
+    color: var(--text); min-height: 26px; }
+  @media (hover: hover) { .tp-sl-row:hover { border-color: var(--task-new); } }
+  .tp-sl-row:focus-visible { outline: 2px solid var(--task-new); outline-offset: 2px; }
+  .tp-sl-row.did { opacity: .55; }
+  .tp-sl-n { font-weight: 600; }
+  .tp-sl-tag { font-size: 10px; padding: 1px 6px; border-radius: 999px; line-height: 1.5; }
+  .tp-sl-tag.is-new { color: var(--task-new); background: var(--task-bg); }
+  .tp-sl-tag.is-rev { color: var(--task-review); background: rgba(91,155,213,.1); }
+  body.dark .tp-sl-tag.is-rev { background: rgba(124,184,240,.12); }
+  .tp-sl-ok { color: var(--task-new); font-weight: 700; }
   .tp-week { display: flex; gap: 4px; align-items: flex-end; height: 48px; margin-top: 10px; }
   .tp-week-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
   .tp-week-fill { width: 100%; background: linear-gradient(180deg, var(--task-new), #0fae7e); border-radius: 3px 3px 0 0; min-height: 2px; transition: height .3s; }
@@ -7634,15 +7653,35 @@ let listenOn = false;
         /* 手动起点（2026-09-30）：当天队列 = 起点往后 N 句的范围；与按篇 scope 取交集。
            引擎在范围内照常按间隔挑，② 批次同源。缓存键带上手动起点，换起点即失效。 */
         let _mkey = '';
+        let _linear = false;
         try {
           if (skipManual) throw { skip: 1 };
           const _ms = manualStartToday();
           if (_ms) {
-            const _rs = manualRange();
-            if (_rs) {
-              scope = scope ? new Set([...scope].filter(function (x) { return _rs.has(x); })) : _rs;
-              _mkey = _ms.gi + ':' + _rs.size;
+            if (currentArticle != null) {
+              /* 按篇 + 刷句模式（2026-10-10）：书签在这篇里 → 从那句起连刷到篇末；
+                 书签不在（这篇已刷过 / 还没刷到）→ 整篇重刷。不按 N 截断 —— 按篇的
+                 承诺分母本来就是整篇（plannedToday 的按篇口径），窗口截断会出现
+                 「队列比承诺短一截」的对不上。 */
+              const _lo = computeChapterStart(currentArticle);
+              let _cnt = 1;
+              try { _cnt = chapterSentCount(currentArticle); } catch (e0) {}
+              const _hi = Math.min(_lo + _cnt - 1, SENT_RAW.length - 1);
+              const _from = (_ms.gi >= _lo && _ms.gi <= _hi) ? _ms.gi : _lo;
+              const _as = new Set();
+              for (let _i = _from; _i <= _hi; _i++) _as.add(_i);
+              scope = _as;
+              _mkey = 'art:' + currentArticle + ':' + _from;
+            } else {
+              const _rs = manualRange();
+              if (_rs) {
+                scope = _rs;
+                _mkey = _ms.gi + ':' + _rs.size;
+              }
             }
+            /* 刷句模式（2026-10-10 定名）：起点在账 = 按句号顺序全装、绝不跳句。
+               引擎只照单收 + 出题，不再按间隔挑（那是记忆模式的活）。 */
+            _linear = true;
           }
         } catch (e) { if (e && e.skip) { /* 跳过手动范围 */ } }
         if (!force && _cachedPlan && _cachedDay === d && _cachedArticle === currentArticle && _cachedManual === _mkey) return _cachedPlan;
@@ -7654,6 +7693,7 @@ let listenOn = false;
           secNew: avgNew, secReview: avgReview, wordsOf: wordsOfSent,
           totalSents: SENT_RAW.length, boundaryHour: b, plan: ROOT2.plan,
           scope: scope,
+          linear: _linear,
         });
         _cachedDay = d; _cachedArticle = currentArticle; _cachedManual = _mkey;
         return _cachedPlan;
@@ -9316,11 +9356,14 @@ let listenOn = false;
         if (fin) {
           titleEl.innerHTML = '<i class="ri-trophy-line" aria-hidden="true"></i> 今天完成';
           /* 口径 A（2026-09-25）：收工行也说「今天」；本篇没读完才补「本篇还剩 Y 句」
-             （本篇读完 lifetime 追上 planned，Y=0 就不说）。 */
+             （本篇读完 lifetime 追上 planned，Y=0 就不说）。
+             刷句模式刷到全书末尾（2026-10-10）：多说一句去路 —— 今日面板里有「再刷一遍」。 */
           const tpf = todayProgress();
+          const _msFin = manualStartToday();
           const remArt = artScope ? Math.max(0, planned - doneN) : 0;
           subEl.textContent = `今天 ${Math.min(tpf.done, tpf.planned)}/${tpf.planned} 句 · ${d.promote || 0} 个词往前走了`
-            + (artScope && remArt > 0 ? ` · 本篇还剩 ${remArt} 句` : '');
+            + (artScope && remArt > 0 ? ` · 本篇还剩 ${remArt} 句` : '')
+            + (_msFin && _msFin.atEnd ? ' · 已到全文末尾，可去今日面板「再刷一遍」' : '');
           /* 收工态（§4.2）：两颗键换成「回首页」+「看词本」。看词本落在 #tbNext
              （全页唯一的推进位），回首页借 #tbAgain。动作分支写在 next()/again() 里 ——
              不在这里改 onclick，别的态才不会忘了改回来。 */
@@ -9610,15 +9653,17 @@ let listenOn = false;
          区间是全天那一段，不是本篇那一段，换天自动作废。 */
       function pinnedTodayRange() {
         try {
+          /* 刷句模式不读钉子（2026-10-10）：线随上下文现算 —— 全局 = 书签窗口、
+             按篇 = 从书签（或篇首）到篇末。两个区间都由构造定死（队列不按预算滚动），
+             没有旧口径那种「读两句漂一格」的问题，不需要钉子防漂；
+             钉子只服务记忆模式（那边队列是引擎现挑的，才需要当天冻结）。 */
+          if (manualStartToday()) return null;
           const tr = ROOT2.plan.todayRange;
           if (!tr || tr.day !== day2()) return null;
           if (Number.isInteger(tr.first) && Number.isInteger(tr.last) && tr.first <= tr.last) {
             /* 钉子必须和当前生效起点对得上（2026-10-10 接力规则）：手动状态变了、
                或接力冻结出的起点与钉子不符（升级当天带着旧钉子进来）→ 作废重钉。
                不加这道校验，昨天的手动钉子/旧自动钉子会把今天的线钉在错误位置。 */
-            const ms = manualStartToday();
-            if (!!tr.manual !== !!ms) return null;
-            if (ms && tr.first !== ms.gi) return null;
             return [tr.first, tr.last];
           }
         } catch (e) {}
@@ -9638,20 +9683,31 @@ let listenOn = false;
         const pinned = pinnedTodayRange();
         if (pinned) { first = pinned[0]; last = pinned[1]; }
         else {
-          /* 没钉子（当天第一次画 / 刚建计划 / 刚清完）才现算并钉下。
-             接力模式（2026-10-10）：ms.gi 是今天冻结出的接力起点（昨天读到的位置+1），
-             直接钉手动窗口 [gi, gi+N-1]；否则钉**全天**队列的 min/max —— 不是本篇的，
-             用本篇的就变成每篇各画一条开始线（2026-10-08 用户报的那件事）。 */
+          /* 没钉子（当天第一次画 / 刚建计划 / 刚清完 / 刷句模式）才现算。
+             刷句模式（2026-10-10）：全局 = 书签窗口 [gi, gi+N-1]；按篇 = 从书签
+             （不在这篇里就从篇首）到篇末 —— 与 todayPlan 的按篇 linear scope 同一条规则，
+             线和队列永远同一个数（旧写法按全局窗口钉，按篇刷到篇末时结束线比队列短一截）。 */
           const ms = manualStartToday();
           if (ms) {
-            first = ms.gi;
-            last = Math.min(ms.gi + Math.max(1, globalPromiseN()) - 1, SENT_RAW.length - 1);
+            if (currentArticle != null) {
+              const _lo = computeChapterStart(currentArticle);
+              let _cnt = 1;
+              try { _cnt = chapterSentCount(currentArticle); } catch (e) {}
+              const _hi = Math.min(_lo + _cnt - 1, SENT_RAW.length - 1);
+              first = (ms.gi >= _lo && ms.gi <= _hi) ? ms.gi : _lo;
+              last = _hi;
+            } else {
+              first = ms.gi;
+              last = Math.min(ms.gi + Math.max(1, globalPromiseN()) - 1, SENT_RAW.length - 1);
+            }
           } else {
             const g = globalDayRange();
             if (!g) return;
             first = g[0]; last = g[1];
+            /* 记忆模式当天钉住（09-30 钉子 bug：assemble 会跳过已读的词，队列首漂移，
+               开始线跟着挪）。刷句模式的两个区间由构造定死，不钉、不读钉。 */
+            pinTodayRange(first, last, false);
           }
-          pinTodayRange(first, last, !!ms);
         }
         const mkLine = function (gi, edge) {
           const el = document.createElement('div');
@@ -9751,11 +9807,8 @@ let listenOn = false;
           _cachedPlan = null; _cachedDay = ''; _cachedManual = '';
           if (best.gi >= 0 && best.gi < SENT_RAW.length) {
             ROOT2.plan.manualStart = { gi: best.gi, day: day2(), ts: best.ts || Date.now() };
-            /* 与 setManualStart 同款重钉：手动窗口 [gi, gi+N-1]（N 用本机分钟数现算）。 */
-            try {
-              const _N = Math.max(1, globalPromiseN());
-              pinTodayRange(best.gi, Math.min(best.gi + _N - 1, SENT_RAW.length - 1), true);
-            } catch (e2) { try { ROOT2.plan.todayRange = null; } catch (e3) {} }
+            /* 与 setManualStart 同款：只清旧钉 —— 刷句模式的线现算，不再写手动钉（2026-10-10）。 */
+            try { ROOT2.plan.todayRange = null; } catch (e2) {}
           } else {
             ROOT2.plan.manualStart = null; ROOT2.plan.todayRange = null;
           }
@@ -9771,19 +9824,21 @@ let listenOn = false;
       }
       /* 「今天从哪开始」的一句话回显（2026-10-08 用户：「之前可以自定义今日任务开始线的内容没了？」）：
          今日面板与「我的」两个宿主共用这一份文案，不各写一套。报的句号与正文那根开始线是同一个数 ——
-         钉子（pinnedTodayRange）在读第一句之前就已写下，所以这里优先读钉子，没钉子才现算全天区间。 */
+         钉子（pinnedTodayRange）在读第一句之前就已写下，所以这里优先读钉子，没钉子才现算全天区间。
+         2026-10-10 定名：自动→记忆模式（引擎按遗忘曲线挑句）、手动→刷句模式（从起点连刷不跳句）。
+         回显跟着心智模型走：记忆模式点明「句是引擎挑的」（为什么跳句），刷句模式报起点（一眼知道从哪接着刷）。 */
       function startInfo() {
         const ms = manualStartToday();
         let gi = null;
         if (ms) gi = ms.gi;
         else { const g = pinnedTodayRange() || globalDayRange(); if (g) gi = g[0]; }
-        if (gi == null || gi < 0) return { manual: !!ms, gi: null, text: ms ? '手动（读不到当前位置）' : '自动' };
-        if (ms && ms.atEnd) return { manual: true, gi: gi, text: '手动 · 已到全文末尾' };
+        if (gi == null || gi < 0) return { manual: !!ms, gi: null, text: ms ? '刷句模式（读不到当前位置）' : '记忆模式' };
+        if (ms && ms.atEnd) return { manual: true, gi: gi, text: '刷句模式 · 已到全文末尾' };
         try {
           const a = artOfSentGlobal(gi);
           const where = `第 ${a + 1} 篇第 ${gi - computeChapterStart(a) + 1} 句`;
-          return { manual: !!ms, gi: gi, text: (ms ? '手动 · ' : '自动 · ') + where };
-        } catch (e) { return { manual: !!ms, gi: gi, text: ms ? '手动' : '自动' }; }
+          return { manual: !!ms, gi: gi, text: (ms ? '刷句模式 · ' : '记忆模式 · ') + where };
+        } catch (e) { return { manual: !!ms, gi: gi, text: ms ? '刷句模式' : '记忆模式' }; }
       }
       /* 起点一改，两处回显都要跟上（2026-10-08）：今日面板那一行、「我的」那一行。
          「我的」只补起点的文本与那颗「改回自动安排」的显隐，不重渲整个宿主 —— 重渲会把
@@ -9793,8 +9848,19 @@ let listenOn = false;
         try { if (typeof APP3 !== 'undefined' && APP3.refreshMeStart) APP3.refreshMeStart(); } catch (e) {}
       }
       /* 全局每日承诺数：plannedToday 在按篇上下文里返回的是本篇句数，这里要的是全天的量，
-         临时把 scope 摘掉算一次再恢复（缓存随手作废，下一次调用重算）。 */
+         临时把 scope 摘掉算一次再恢复（缓存随手作废，下一次调用重算）。
+         刷句模式（2026-10-10）：N 不再问自动装配要 —— 窗口 = 分钟数 ÷ 25s/句（与引擎
+         linear 装配同一个 25s 口径，见 assemble linear 注释）。这里**不许**调
+         todayPlan(true,true)（那是记忆模式的装配），否则 manualRange ↔ globalPromiseN
+         互相递归、窗口大小也答非所问。 */
       function globalPromiseN() {
+        try {
+          if (manualStartToday()) {
+            const mins = (ROOT2 && ROOT2.plan && ROOT2.plan.todayMinutes) || 0;
+            const secPer = (avgNew || 25) / (rate || 1);
+            return Math.max(1, Math.floor(mins * 60 / secPer));
+          }
+        } catch (e) {}
         const cur = currentArticle;
         try {
           currentArticle = null; _cachedPlan = null;
@@ -9870,8 +9936,9 @@ let listenOn = false;
         pop.innerHTML = '<h3>今日任务从哪开始</h3>' +
           '<div class="sp-row"><label for="spArt">篇目</label><select id="spArt" onchange="TASK.syncStartSent()">' + opts + '</select></div>' +
           '<div class="sp-row"><label for="spSent">第几句</label><select id="spSent"></select></div>' +
+          '<p class="sp-warn sm">确定后进入<b>刷句模式</b>：从这句起按顺序连刷，绝不跳句；每天接着上次学到的位置继续。</p>' +
           '<div class="sp-actions"><button class="btn" onclick="TASK.closeStartPicker()">取消</button>' +
-          '<button class="btn" onclick="TASK.confirmAutoStart(true)">改回自动安排</button>' +
+          '<button class="btn" onclick="TASK.confirmAutoStart(true)">切换到记忆模式</button>' +
           '<button class="btn primary" onclick="TASK.confirmStartPicker()">确定</button></div>';
         document.body.appendChild(mask);
         document.body.appendChild(pop);
@@ -9918,8 +9985,8 @@ let listenOn = false;
         if (!pop) return;
         pop.innerHTML = '<h3>今天已有进度，重新计算？</h3>' +
           '<p class="sp-warn">今天已读 <b>' + done + '</b> 句。调整开始位置后会重新计算今日任务：' +
-          '今天的已读记录清零（N/M 回到 0），排程历史、总进度和颜色都不动。</p>' +
-          '<p class="sp-warn">此后每天会接着上次学到的位置继续（接力），直到你在下面点「改回自动安排」。</p>' +
+          '今天的已读记录清零（N/M 回到 0），学习历史、总进度和颜色都不动。</p>' +
+          '<p class="sp-warn">此后进入刷句模式：每天接着上次学到的位置继续（接力），直到你切回记忆模式。</p>' +
           '<div class="sp-actions"><button class="btn" onclick="TASK.startConfirmBack()">返回</button>' +
           '<button class="btn primary" onclick="TASK.startConfirmYes()">确认调整</button></div>';
         try { const b = pop.querySelector('button.btn.primary'); if (b) b.focus(); } catch (e) {}
@@ -9936,13 +10003,14 @@ let listenOn = false;
         const n = Math.max(1, Math.min(p.n, cnt));
         setManualStart(computeChapterStart(p.a) + n - 1);
       }
-      /* 「改回自动安排」先亮结果再动手（2026-10-09 用户：「改回自动，起点怎么算？怎么让人不恐慌」）：
-         自动起点不是回到某个固定位置，是排程现挑的（到期的复习句优先、新词顺延）——
+      /* 「切换到记忆模式」先亮结果再动手（2026-10-09 用户：「改回自动，起点怎么算？怎么让人不恐慌」）：
+         记忆模式的起点不是回到某个固定位置，是引擎现挑的（到期的复习句优先、新词顺延）——
          每次都把算出来的结果摆在弹窗里：起点落在哪、共几句、今天已读的保留不清。
          看明白了再按，就不慌了。fromPicker=true 时「返回」回选择器（还原所选），
-         否则（「我的」那颗）返回 = 直接关弹窗。 */
+         否则（「我的」那颗）返回 = 直接关弹窗。
+         2026-10-10 定名：改回自动安排 → 切换到记忆模式（说模式，不说"自动"这种引擎词）。 */
       function renderAutoConfirmHTML(fromPicker) {
-        let gi = null, n = 0, done = 0, where = '排程自动挑选的位置';
+        let gi = null, n = 0, done = 0, where = '引擎现挑的位置';
         try { const g = globalDayRange(); gi = g ? g[0] : null; } catch (e) {}
         try { n = globalPromiseN(); } catch (e) {}
         try { done = todayProgress().done; } catch (e) {}
@@ -9952,13 +10020,13 @@ let listenOn = false;
             where = '第' + (a + 1) + '篇第' + (gi - computeChapterStart(a) + 1) + '句';
           }
         } catch (e) {}
-        return '<h3>改回自动安排？</h3>' +
-          '<p class="sp-warn">自动起点由排程现算：今日将从 <b>' + esc(where) + '</b> 开始，共 <b>' + (n || '—') + '</b> 句。' +
-          '自动会优先排到期的复习，新内容从没读过的往前顺延 —— 之前跳过的篇目会被回头补上（不再接着上次的位置）。</p>' +
+        return '<h3>切换到记忆模式？</h3>' +
+          '<p class="sp-warn">记忆模式由引擎按遗忘曲线现算：今日将从 <b>' + esc(where) + '</b> 开始，共 <b>' + (n || '—') + '</b> 句。' +
+          '到期的复习优先排，新内容从没读过的往前顺延 —— 之前跳过的篇目会被回头补上（句子会跳，是为了趁没忘时再见面）。</p>' +
           (done > 0 ? '<p class="sp-warn">今天已读的 <b>' + done + '</b> 句保留不清。</p>' : '') +
-          '<p class="sp-warn">排程历史、总进度、颜色都不动。</p>' +
+          '<p class="sp-warn">学习历史、总进度、颜色都不动。</p>' +
           '<div class="sp-actions"><button class="btn" onclick="TASK.' + (fromPicker ? 'startConfirmBack()' : 'closeStartPicker()') + '">返回</button>' +
-          '<button class="btn primary" onclick="TASK.clearManualStart()">确认改回</button></div>';
+          '<button class="btn primary" onclick="TASK.clearManualStart()">确认切换</button></div>';
       }
       function confirmAutoStart(fromPicker) {
         const html = renderAutoConfirmHTML(fromPicker);
@@ -9976,7 +10044,7 @@ let listenOn = false;
         p.id = 'startPickPop';
         p.setAttribute('role', 'dialog');
         p.setAttribute('aria-modal', 'true');
-        p.setAttribute('aria-label', '改回自动安排');
+        p.setAttribute('aria-label', '切换到记忆模式');
         p.innerHTML = html;
         document.body.appendChild(mask);
         document.body.appendChild(p);
@@ -10011,12 +10079,9 @@ let listenOn = false;
            2026-10-10 接力规则：设置即书签，持续有效直到改回自动；不带 resolvedDay，
            让 manualStartToday 明天第一次读取时按接触账冻结接力起点。 */
         ROOT2.plan.manualStart = { gi: gi, day: day2(), ts: Date.now() };
-        /* 起点一改，旧钉作废；按手动窗口 [gi, gi+N-1] 重新钉 —— 开始/结束两条线
-           一起平移到新位置（N 与引擎的 manualRange 同一个 globalPromiseN，口径不另算）。 */
-        try {
-          const _N = Math.max(1, globalPromiseN());
-          pinTodayRange(gi, Math.min(gi + _N - 1, SENT_RAW.length - 1), true);
-        } catch (e) { try { ROOT2.plan.todayRange = null; } catch (e2) {} }
+        /* 起点一改，旧的记忆模式钉子作废 —— 刷句模式的线现算（与队列同一条规则，
+           全局 = [gi, gi+N-1]，按篇 = 到篇末），不再走钉子（2026-10-10）。 */
+        try { ROOT2.plan.todayRange = null; } catch (e) {}
         try { savePlan(); } catch (e) {}
         const dropped = resetTodayEvents();
         /* 起点上云（2026-10-09 用户报「桌面设了起点，手机还是第一篇第一句」）：
@@ -10034,7 +10099,7 @@ let listenOn = false;
         try { closeStartPicker(); } catch (e) {}
         try {
           const a = artOfSentGlobal(gi), l = gi - computeChapterStart(a);
-          showAbToast('今日起点：第' + (a + 1) + '篇第' + (l + 1) + '句，今日进度已重置' + (dropped ? '（清掉' + dropped + '条今日记录）' : '') + '。此后每天接着上次学到的位置继续，直到改回自动安排');
+          showAbToast('今日起点：第' + (a + 1) + '篇第' + (l + 1) + '句，今日进度已重置' + (dropped ? '（清掉' + dropped + '条今日记录）' : '') + '。已进入刷句模式：按顺序连刷，每天接着上次学到的位置继续');
         } catch (e) {}
         return true;
       }
@@ -10051,16 +10116,16 @@ let listenOn = false;
         try { refreshStartHosts(); } catch (e) {}
         try {
           /* toast 把结果说全（用户：「改回自动，起点怎么算？怎么让人不慌」）：
-             此时 manualStart 已清，globalDayRange 算的就是纯自动队列 —— 说的就是即将发生的。 */
+             此时 manualStart 已清，globalDayRange 算的就是纯记忆模式队列 —— 说的就是即将发生的。 */
           const g = globalDayRange();
-          let msg = '已改回自动安排';
+          let msg = '已切换到记忆模式';
           if (g) {
             const a = artOfSentGlobal(g[0]);
             msg += '，今日从第' + (a + 1) + '篇第' + (g[0] - computeChapterStart(a) + 1) + '句起（共 ' + globalPromiseN() + ' 句）';
           }
           msg += '，今天已读的保留';
           showAbToast(msg);
-        } catch (e) { try { showAbToast('已改回自动安排'); } catch (e2) {} }
+        } catch (e) { try { showAbToast('已切换到记忆模式'); } catch (e2) {} }
         return true;
       }
       function updateMarkers() {
@@ -10480,6 +10545,29 @@ let listenOn = false;
         /* 今日起点的回显（2026-10-08）：文案与「我的」那一行同源（startInfo 一份实现）。 */
         const si = startInfo();
         const ms = si.manual;
+        const msAcc = manualStartToday();
+        /* 模式化的一行说明（2026-10-10 定名后跟心智模型走）：
+           记忆模式 = 引擎按曲线挑句，说明里保留到期/新词的账（那是"为什么是这几句"的答案）；
+           刷句模式 = 从起点连刷不跳句，账换成「从哪刷 · 刷几句 · 覆盖几个词」。 */
+        let noteHtml;
+        if (ms) {
+          let from = '';
+          try {
+            if (si.gi != null && si.gi >= 0) {
+              const a0 = artOfSentGlobal(si.gi);
+              from = `第 ${a0 + 1} 篇第 ${si.gi - computeChapterStart(a0) + 1} 句`;
+            }
+          } catch (e) {}
+          noteHtml = `<div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>${msAcc && msAcc.atEnd ? '已刷到全文末尾' : `从 ${esc(from || '起点')} 按顺序连刷 ${tp.queue.length} 句`}</b>（绝不跳句）
+          <span class="sm">覆盖 ${tp.words.length} 个词 · ${tp.items.length} 题 · 刷完一轮再刷一轮，觉得都会了自然就不用刷了</span></div>`;
+        } else {
+          noteHtml = `<div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>还剩 ${leftN} 句 · 覆盖 ${tp.words.length} 个词</b>
+          <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}${baowenNote(tp.stats)}</span></div>`;
+        }
+        /* 「今天的句子」清单（2026-10-10，记忆模式专属）：跳句这件事本身没毛病，毛病是
+           用户看不懂"为什么是这几句"。清单按篇分组、句号升序（当天内不回跳），每句标
+           「该复习了 / 新词」—— 为什么排它、它是什么状态，一眼见底。点一句直接跳过去读。 */
+        const slHtml = ms ? '' : renderTodaySentList();
         return `<div class="tp-cols">
           <div class="tp-col tp-col-today"><h4>今天 · ${ROOT2.plan.todayMinutes} 分钟</h4>
             <div class="tp-num">${done}<span class="unit"> / ${n} 句</span></div>
@@ -10498,13 +10586,82 @@ let listenOn = false;
             <div class="tp-kv"><span>重点词</span><b>${c.leech}</b></div>
           </div>
         </div>
-        <div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>还剩 ${leftN} 句 · 覆盖 ${tp.words.length} 个词</b>
-          <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}${baowenNote(tp.stats)}</span></div>
+        ${slHtml}
+        ${noteHtml}
         <div class="tp-note sm eta-foot" id="todayEta" data-days="">算一下…</div>
         <div class="tp-actions"><button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始今天的任务'}</button>
           ${taskMode ? '<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>' : ''}</div>
-        <div class="tp-actions"><button class="btn" onclick="TASK.openStartPicker()">今日任务从哪开始</button>
-          ${ms ? '<button class="btn" onclick="TASK.clearManualStart()">改回自动安排</button>' : ''}</div>`;
+        <div class="tp-actions"><button class="btn" onclick="TASK.openStartPicker()">起点与模式</button>
+          ${ms ? '<button class="btn" onclick="TASK.clearManualStart()">切换到记忆模式</button>' : ''}
+          ${ms && msAcc && msAcc.atEnd ? '<button class="btn primary" onclick="TASK.brushAgain()">再刷一遍（从第1篇第1句）</button>' : ''}</div>`;
+      }
+
+      /* 「今天的句子」清单（记忆模式）：队列升序天然按篇聚簇，顺序扫一遍分组即可。
+         句号显示本篇内序号（与起点选择器/开始线同一套句号口径），标签颜色与正文染色
+         同一套变量（新词=--task-new 绿、该复习了=--task-review 蓝），两处说同一个词。 */
+      function renderTodaySentList() {
+        let q = [];
+        try { q = todayPlan(true).queue || []; } catch (e) {}
+        if (!q.length) return '';
+        const groups = [];
+        let curA = -1;
+        for (let k = 0; k < q.length; k++) {
+          const it = q[k];
+          let a = -1;
+          try { a = artOfSentGlobal(it.i); } catch (e) {}
+          if (a !== curA) { groups.push({ a: a, items: [] }); curA = a; }
+          groups[groups.length - 1].items.push(it);
+        }
+        let html = '<div class="tp-sl"><h4>今天的句子</h4>';
+        for (let g = 0; g < groups.length; g++) {
+          const gr = groups[g];
+          const title = (SECTIONS[gr.a] && SECTIONS[gr.a].title) || '';
+          html += '<div class="tp-sl-art">第 ' + (gr.a + 1) + ' 篇' + (title ? ' · ' + esc(title) : '') + '</div><div class="tp-sl-rows">';
+          for (let r = 0; r < gr.items.length; r++) {
+            const it = gr.items[r];
+            const did = readToday2(it.i);
+            const ln = it.i - computeChapterStart(gr.a) + 1;
+            html += '<button class="tp-sl-row' + (did ? ' did' : '') + '" type="button" data-gi="' + it.i + '"' +
+              ' onclick="TASK.jumpQueueSent(' + it.i + ')" aria-label="跳到第' + (gr.a + 1) + '篇第' + ln + '句">' +
+              '<span class="tp-sl-n">第' + ln + '句</span>' +
+              '<span class="tp-sl-tag ' + (it.pool === 'C' ? 'is-new' : 'is-rev') + '">' + (it.pool === 'C' ? '新词' : '该复习了') + '</span>' +
+              (did ? '<span class="tp-sl-ok" aria-hidden="true">✓</span>' : '') +
+              '</button>';
+          }
+          html += '</div>';
+        }
+        html += '</div>';
+        return html;
+      }
+
+      /* 清单点一句 → 直接跳过去读（2026-10-10）。任务模式没开就先进（队列同源，
+         落点必在队列里）；开着就只把面板收掉、高亮挪过去并起播 —— 与位置条/键盘
+         共用 revealTaskPos 这一个实现，不另写第二份落点逻辑。 */
+      function jumpQueueSent(gi) {
+        gi = gi | 0;
+        if (!taskMode) {
+          /* enterTaskMode 成功时没有返回值（undefined），不能用返回值判成败 ——
+             以 taskMode 是否真的翻起来为准（没登录弹窗拦截、空队列都会原地不动）。 */
+          try { enterTaskMode(); } catch (e) {}
+          if (!taskMode) return;
+        } else {
+          try { closePanel(); } catch (e) {}
+        }
+        let qi = -1;
+        for (let k = 0; k < todayQueue.length; k++) { if (todayQueue[k].i === gi) { qi = k; break; } }
+        if (qi < 0) { try { showAbToast('这句不在今天的队列里'); } catch (e) {} return; }
+        try { revealTaskPos(qi, true); } catch (e) {}
+      }
+
+      /* 再刷一遍（刷句模式刷到全文末尾后的出口，2026-10-10）：一轮刷完觉得都会了就从头再来。
+         书签回第1篇第1句（接力从那里重新开始）；本轮账读满才清（roundSeen 是"这一轮读到哪"
+         的账，没读完不折算）。setManualStart 自带进度重置 + toast + 双端同步，不另抄一份。 */
+      function brushAgain() {
+        try {
+          const ri = roundInfo();
+          if (ri.total > 0 && ri.done >= ri.total) startNewRound();
+        } catch (e) {}
+        setManualStart(0);
       }
 
       /* 保温那一格的话（Task 3：只报负载、不报终点）。三个数全部从引擎的 stats 取 ——
@@ -10878,6 +11035,8 @@ let listenOn = false;
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
         repsOf, articlePass2Done,
         roundInfo, startNewRound, seedRoundSeenForTest, setManualStart, clearManualStart, confirmAutoStart,
+        /* 刷句模式（2026-10-10）两个出口：清单点句直达、刷到文末从头再来。 */
+        jumpQueueSent, brushAgain,
         /* 今日起点的同步出口（2026-10-09）：applyDaystartEvents 给 cloudPull/新设备重建后调用，
            也是跨设备重放的测试缝；manualStart() 读当前账（含 ts），测试用它对拍两台设备的账；
            testManualStartLocal 在「不经过本机按钮」的前提下改本机账（模拟他机存量状态，
