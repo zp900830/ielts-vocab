@@ -1842,7 +1842,14 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .plan-setup .ps-sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
   .ps-group { margin-bottom: 16px; text-align: left; }
   .ps-opts { display: flex; gap: 6px; flex-wrap: wrap; }
-  .ps-opt { border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer; background: transparent; transition: all var(--t-hover); }
+  /* color 必须显式给（2026-10-09 用户 Safari 桌面端「组件全变白色填充」）：
+     页面声明了 color-scheme: light dark（17/34 行），macOS 系统深色 + 应用浅色主题时，
+     Safari 给没有显式 color 的 <button> 用 UA 的 buttontext —— 系统深色下是白色，
+     落在白底浮窗上就是「白字白底 = 隐形」，只剩一颗空胶囊。accent-btn/voice-btn/
+     tr-msw 都自带 color 所以没事，唯独 .ps-opt 一直靠 UA 默认，是个埋了的地雷。
+     appearance 一并掐掉，Safari 对按钮的原生外观兜底不再有机会参与。 */
+  .ps-opt { border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer;
+    background: transparent; color: var(--text); -webkit-appearance: none; appearance: none; transition: all var(--t-hover); }
   @media (hover: hover) { .ps-opt:hover { border-color: var(--accent); color: var(--accent-text); } }
   /* 「每天有多少分钟」滑块（2026-10-08 用户：胶囊档位换成 5..240、步长 5 的滑块）。
      三处宿主共用 .min-* 这一套：设置屏、今日面板「计划」页、「我的」浮窗。
@@ -7308,9 +7315,11 @@ let listenOn = false;
          真撞上还有 safeStore 的 QuotaExceeded 兜着。 */
       const EVENTS_CAP = 20000;
       function compactEvents(events) {
-        const seenContact = Object.create(null), lastDayplan = Object.create(null);
+        const seenContact = Object.create(null), lastDayplan = Object.create(null), lastDaystart = Object.create(null);
         // dayplan 在重放里是**赋值**，后者覆盖前者 —— 每天只留最后一条
         for (const e of events) if (e && e.type === 'dayplan') lastDayplan[e.day] = e;
+        // daystart（今日起点，2026-10-09）同理是「最后一次操作赢」——每天只留最后一条
+        for (const e of events) if (e && e.type === 'daystart') lastDaystart[e.day] = e;
         const out = [];
         for (const e of events) {
           if (e && e.type === 'contact') {
@@ -7322,6 +7331,8 @@ let listenOn = false;
             seenContact[key] = 1;
           } else if (e && e.type === 'dayplan') {
             if (lastDayplan[e.day] !== e) continue;
+          } else if (e && e.type === 'daystart') {
+            if (lastDaystart[e.day] !== e) continue;
           }
           out.push(e);
         }
@@ -7443,6 +7454,8 @@ let listenOn = false;
           if (added) {
             ROOT2.events.sort((a, b) => (a.ts || 0) - (b.ts || 0));
             recompute2(); _cachedPlan = null;
+            /* 别机发的「今日起点」在这里落地（2026-10-09）：桌面设了起点，手机拉到事件即跟。 */
+            try { applyDaystartEvents(); } catch (e) {}
           }
           /* 游标按「服务端已经有谁」重算，不再归零。
              归零的代价实测很实在：139 条早就在库里的历史事件被当成待传，每次重试都重推全量，
@@ -7463,6 +7476,8 @@ let listenOn = false;
         /* 换设备首登：事件流里带着手机上建的计划（dayplan），本机没有计划时就地重建，
            首页横幅/「我的」浮窗从「设置学习时间」翻成「继续学」。 */
         if (planFromEvents()) {
+          /* 换新设备：dayplan 重建计划后，今天别人设过的起点也要跟上（事件就在流里）。 */
+          try { applyDaystartEvents(); } catch (e) {}
           try { renderToday(document.getElementById('todayPanel')); } catch (e) {}
           try { if (window.__routeLocked && window.APP3 && window.APP3.route) window.APP3.route(); } catch (e) {}
         }
@@ -9683,6 +9698,44 @@ let listenOn = false;
           return m;
         } catch (e) { return null; }
       }
+      /* 起点事件的跨设备重放（2026-10-09，配 setManualStart/clearManualStart 的 daystart 上云）：
+         cloudPull 拉到别机发的 daystart 后，按 ts 最新者赢地落到本机 plan.manualStart。
+         只认今天（day 不对的一律不理，manualStartToday 本来也只认当天）；
+         本机 manualStart 的 ts 更新（自己刚点过）就不动 —— 双向对拍谁后点谁赢。
+         历史遗留没 ts 的本机账按 0 算，云端事件自然覆盖。返回是否应用了变化。 */
+      function applyDaystartEvents() {
+        try {
+          if (!ROOT2 || !ROOT2.plan || !Array.isArray(ROOT2.events)) return false;
+          const d = day2();
+          let best = null;
+          for (let i = 0; i < ROOT2.events.length; i++) {
+            const e = ROOT2.events[i];
+            if (e && e.type === 'daystart' && e.day === d && (!best || (e.ts || 0) >= (best.ts || 0))) best = e;
+          }
+          if (!best) return false;
+          const cur = ROOT2.plan.manualStart;
+          if (cur && cur.day === d && (cur.ts || 0) >= (best.ts || 0)) return false;
+          _cachedPlan = null; _cachedDay = ''; _cachedManual = '';
+          if (Number.isInteger(best.gi) && best.gi >= 0 && best.gi < SENT_RAW.length) {
+            ROOT2.plan.manualStart = { gi: best.gi, day: d, ts: best.ts || Date.now() };
+            /* 与 setManualStart 同款重钉：手动窗口 [gi, gi+N-1]（N 用本机分钟数现算）。 */
+            try {
+              const _N = Math.max(1, globalPromiseN());
+              pinTodayRange(best.gi, Math.min(best.gi + _N - 1, SENT_RAW.length - 1));
+            } catch (e2) { try { ROOT2.plan.todayRange = null; } catch (e3) {} }
+          } else {
+            ROOT2.plan.manualStart = null; ROOT2.plan.todayRange = null;
+          }
+          persist2();
+          /* 任务模式开着就得换队列（与 setManualStart 的尾巴同一套），其余宿主只刷回显。 */
+          if (taskMode) {
+            try { syncQueueFromPlan(); } catch (e2) {}
+            try { paint(); updateTaskBar(); updateMarkers(); } catch (e2) {}
+          }
+          try { refreshStartHosts(); } catch (e2) {}
+          return true;
+        } catch (e) { return false; }
+      }
       /* 「今天从哪开始」的一句话回显（2026-10-08 用户：「之前可以自定义今日任务开始线的内容没了？」）：
          今日面板与「我的」两个宿主共用这一份文案，不各写一套。报的句号与正文那根开始线是同一个数 ——
          钉子（pinnedTodayRange）在读第一句之前就已写下，所以这里优先读钉子，没钉子才现算全天区间。 */
@@ -9777,7 +9830,7 @@ let listenOn = false;
           '<div class="sp-row"><label for="spArt">篇目</label><select id="spArt" onchange="TASK.syncStartSent()">' + opts + '</select></div>' +
           '<div class="sp-row"><label for="spSent">第几句</label><select id="spSent"></select></div>' +
           '<div class="sp-actions"><button class="btn" onclick="TASK.closeStartPicker()">取消</button>' +
-          '<button class="btn" onclick="TASK.clearManualStart()">改回自动安排</button>' +
+          '<button class="btn" onclick="TASK.confirmAutoStart(true)">改回自动安排</button>' +
           '<button class="btn primary" onclick="TASK.confirmStartPicker()">确定</button></div>';
         document.body.appendChild(mask);
         document.body.appendChild(pop);
@@ -9841,6 +9894,51 @@ let listenOn = false;
         const n = Math.max(1, Math.min(p.n, cnt));
         setManualStart(computeChapterStart(p.a) + n - 1);
       }
+      /* 「改回自动安排」先亮结果再动手（2026-10-09 用户：「改回自动，起点怎么算？怎么让人不恐慌」）：
+         自动起点不是回到某个固定位置，是排程现挑的（到期的复习句优先、新词顺延）——
+         每次都把算出来的结果摆在弹窗里：起点落在哪、共几句、今天已读的保留不清。
+         看明白了再按，就不慌了。fromPicker=true 时「返回」回选择器（还原所选），
+         否则（「我的」那颗）返回 = 直接关弹窗。 */
+      function renderAutoConfirmHTML(fromPicker) {
+        let gi = null, n = 0, done = 0, where = '排程自动挑选的位置';
+        try { const g = globalDayRange(); gi = g ? g[0] : null; } catch (e) {}
+        try { n = globalPromiseN(); } catch (e) {}
+        try { done = todayProgress().done; } catch (e) {}
+        try {
+          if (gi != null && gi >= 0) {
+            const a = artOfSentGlobal(gi);
+            where = '第' + (a + 1) + '篇第' + (gi - computeChapterStart(a) + 1) + '句';
+          }
+        } catch (e) {}
+        return '<h3>改回自动安排？</h3>' +
+          '<p class="sp-warn">自动起点由排程现算：今日将从 <b>' + esc(where) + '</b> 开始，共 <b>' + (n || '—') + '</b> 句。' +
+          (done > 0 ? '今天已读的 <b>' + done + '</b> 句保留不清。' : '') +
+          '排程历史、总进度、颜色都不动。</p>' +
+          '<div class="sp-actions"><button class="btn" onclick="TASK.' + (fromPicker ? 'startConfirmBack()' : 'closeStartPicker()') + '">返回</button>' +
+          '<button class="btn primary" onclick="TASK.clearManualStart()">确认改回</button></div>';
+      }
+      function confirmAutoStart(fromPicker) {
+        const html = renderAutoConfirmHTML(fromPicker);
+        const pop = document.getElementById('startPickPop');
+        if (pop) {
+          pop.innerHTML = html;
+          try { const b = pop.querySelector('.btn.primary'); if (b) b.focus(); } catch (e) {}
+          return;
+        }
+        /* 「我的」入口：起点选择器没开着，开一个只带这份预览的弹窗。 */
+        const mask = document.createElement('div');
+        mask.id = 'startPickMask';
+        mask.addEventListener('click', function () { closeStartPicker(); });
+        const p = document.createElement('div');
+        p.id = 'startPickPop';
+        p.setAttribute('role', 'dialog');
+        p.setAttribute('aria-modal', 'true');
+        p.setAttribute('aria-label', '改回自动安排');
+        p.innerHTML = html;
+        document.body.appendChild(mask);
+        document.body.appendChild(p);
+        try { const b = p.querySelector('.btn.primary'); if (b) b.focus(); } catch (e) {}
+      }
       /* 今日统计重置：只删今天的 contact/quiz 事件（N/M、已读标记回零），relearn 不动、
          reps/排程历史不动。服务端残留行由 cloudPull 的 manualResetTs 守卫挡掉（见下）。 */
       function resetTodayEvents() {
@@ -9866,7 +9964,8 @@ let listenOn = false;
       function setManualStart(gi) {
         if (!ROOT2 || !ROOT2.plan) { try { showAbToast('先去「我的」设置「每天有多少分钟」，再定起点'); } catch (e) {} return false; }
         gi = Math.max(0, Math.min(SENT_RAW.length - 1, gi | 0));
-        ROOT2.plan.manualStart = { gi: gi, day: day2() };
+        /* ts（2026-10-09）：manualStart 事件化后，跨设备按 ts 定谁最新 —— 本机写入也要带。 */
+        ROOT2.plan.manualStart = { gi: gi, day: day2(), ts: Date.now() };
         /* 起点一改，旧钉作废；按手动窗口 [gi, gi+N-1] 重新钉 —— 开始/结束两条线
            一起平移到新位置（N 与引擎的 manualRange 同一个 globalPromiseN，口径不另算）。 */
         try {
@@ -9875,6 +9974,11 @@ let listenOn = false;
         } catch (e) { try { ROOT2.plan.todayRange = null; } catch (e2) {} }
         try { savePlan(); } catch (e) {}
         const dropped = resetTodayEvents();
+        /* 起点上云（2026-10-09 用户报「桌面设了起点，手机还是第一篇第一句」）：
+           manualStart 原来只写本机 LS_V2，事件流里没有它的位置，别的设备永远看不到。
+           现在随 daystart 事件走既有 shadow_events 通道（dayplan 同款），对端拉取时
+           applyDaystartEvents 重放应用。 */
+        try { push2({ type: 'daystart', day: day2(), gi: gi, ts: Date.now() }); } catch (e) {}
         _cachedPlan = null; _cachedDay = ''; _cachedManual = '';
         if (taskMode) {
           try { syncQueueFromPlan(); } catch (e) {}
@@ -9892,13 +9996,26 @@ let listenOn = false;
       function clearManualStart() {
         try { if (ROOT2 && ROOT2.plan) { ROOT2.plan.manualStart = null; ROOT2.plan.todayRange = null; savePlan(); } } catch (e) {}
         _cachedPlan = null; _cachedDay = ''; _cachedManual = '';
+        /* 清空同样上云（gi:-1 = 清除标记），别的设备才能跟着回到自动（2026-10-09）。 */
+        try { push2({ type: 'daystart', day: day2(), gi: -1, ts: Date.now() }); } catch (e) {}
         try { closeStartPicker(); } catch (e) {}
         if (taskMode) {
           try { syncQueueFromPlan(); } catch (e) {}
           try { paint(); updateTaskBar(); updateMarkers(); } catch (e) {}
         }
         try { refreshStartHosts(); } catch (e) {}
-        try { showAbToast('已改回自动安排'); } catch (e) {}
+        try {
+          /* toast 把结果说全（用户：「改回自动，起点怎么算？怎么让人不慌」）：
+             此时 manualStart 已清，globalDayRange 算的就是纯自动队列 —— 说的就是即将发生的。 */
+          const g = globalDayRange();
+          let msg = '已改回自动安排';
+          if (g) {
+            const a = artOfSentGlobal(g[0]);
+            msg += '，今日从第' + (a + 1) + '篇第' + (g[0] - computeChapterStart(a) + 1) + '句起（共 ' + globalPromiseN() + ' 句）';
+          }
+          msg += '，今天已读的保留';
+          showAbToast(msg);
+        } catch (e) { try { showAbToast('已改回自动安排'); } catch (e2) {} }
         return true;
       }
       function updateMarkers() {
@@ -10715,7 +10832,16 @@ let listenOn = false;
         etaFor, etaCalls, etaText, etaMonth, countStages, seedDailyForTest, seedArticleForTest,
         // 3.0 按篇账出口（§7.6 精读次数 / §9.4 ② 批次凭据）：首页 articleStat 只读这两个，不自己数
         repsOf, articlePass2Done,
-        roundInfo, startNewRound, seedRoundSeenForTest, setManualStart, clearManualStart,
+        roundInfo, startNewRound, seedRoundSeenForTest, setManualStart, clearManualStart, confirmAutoStart,
+        /* 今日起点的同步出口（2026-10-09）：applyDaystartEvents 给 cloudPull/新设备重建后调用，
+           也是跨设备重放的测试缝；manualStart() 读当前账（含 ts），测试用它对拍两台设备的账；
+           testManualStartLocal 在「不经过本机按钮」的前提下改本机账（模拟他机存量状态，
+           seedRoundSeenForTest 同款先例）。 */
+        applyDaystartEvents, manualStart: function () { return (ROOT2 && ROOT2.plan && ROOT2.plan.manualStart) || null; },
+        testManualStartLocal: function (v) {
+          try { if (!ROOT2 || !ROOT2.plan) return null; ROOT2.plan.manualStart = v; return ROOT2.plan.manualStart; }
+          catch (e) { return null; }
+        },
         openStartPicker, closeStartPicker, confirmStartPicker, startConfirmBack, startConfirmYes, syncStartSent,
         /* 真实用时账出口（2026-09-25 链路排查）：数据页「累计学习时长」按天读真实毫秒。 */
         readMsByDay: function () { return loadArticleStats().read.ms; },
@@ -10911,6 +11037,17 @@ let listenOn = false;
     window.addEventListener('online', () => {
     try { if (typeof CLOUD !== 'undefined' && CLOUD._userMail && !CLOUD._on) CLOUD.checkStatus(); } catch (e) {}
     try { TASK.cloudSync(); } catch (e) {}   // 断网期间攒下的事件，回网就补传
+    });
+    // 回前台也拉一次（2026-10-09 配「今日起点」跨设备同步）：手机/桌面轮流用的场景里，
+    // 另一台刚设的起点要在这台切回来时跟上 —— PWA/标签页常驻不重开，只靠开页那一次拉取
+    // 永远是旧的。30s 节流；未登录时 cloudSync 自己空转，不发请求。
+    let _visSyncAt = 0;
+    document.addEventListener('visibilitychange', () => {
+    if (document.hidden) return;
+    const now = Date.now();
+    if (now - _visSyncAt < 30000) return;
+    _visSyncAt = now;
+    try { const _p = TASK.cloudSync(); if (_p && _p.catch) _p.catch(() => {}); } catch (e) {}
     });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => loadVoices());
     setTimeout(loadVoices, 500);
