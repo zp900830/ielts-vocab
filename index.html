@@ -368,7 +368,10 @@
   .cmp-ws { flex: none; font-weight: 700; font-family: var(--serif); color: var(--ink2); }
   /* 那一行辨析独占一行：390px 屏上跟词头挤在一起会被切成两截，正是要背的那半句反而最难读 */
   .cmp-line { flex: 1 0 100%; order: 3; min-width: 0; color: var(--muted); }
-  .cmp-caret { margin-left: auto; flex: none; color: var(--muted); transition: transform var(--t-hover) ease; }
+  /* 箭头（2026-10-08 用户截图圈出来「忒小了，都快看不见了」）：它原本跟着 .cmp-head 的 13px
+     走、又是 --muted 色，渲染出来只有约 6px 高 —— 整张卡唯一在说「这行能点开」的东西等于没有。
+     提到 20px + --ink2；字形保持 ▾ 字符，不换图标字体（CDN 一断字形宽度塌成 0，箭头整枚消失）。 */
+  .cmp-caret { margin-left: auto; flex: none; color: var(--ink2); font-size: 20px; line-height: 1; transition: transform var(--t-hover) ease; }
   .cmp-card.open .cmp-caret { transform: rotate(180deg); }
   .cmp-body { display: none; padding: 0 9px 9px; }
   .cmp-card.open .cmp-body { display: block; }
@@ -2816,7 +2819,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark #lcDrawer .cmp-toggle .nb-label { color: var(--muted); }
   #lcDrawer .cmp-easy { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   #lcDrawer .cmp.open .cmp-easy { white-space: normal; }
-  #lcDrawer .chev { flex: none; transition: transform var(--t) var(--ease-move); font-style: normal; font-size: 12px; }
+  #lcDrawer .chev { flex: none; color: var(--ink2); line-height: 1; transition: transform var(--t) var(--ease-move); font-style: normal; font-size: 20px; }  /* 与精读 .cmp-caret 同一把尺子，见上面那条注释 */
   #lcDrawer .cmp.open .chev { transform: rotate(180deg); }
   #lcDrawer .cmp-body { display: grid; grid-template-rows: 0fr; opacity: 0;
     transition: grid-template-rows var(--t-slide) var(--ease-move), opacity var(--t-slide) var(--ease-move); }
@@ -8496,6 +8499,21 @@ let listenOn = false;
       function roundInfo() {
         return { round: (prog && typeof prog.round === 'number') ? prog.round : 1, done: roundDoneCount(), total: roundTotal() };
       }
+      /* 点亮（2026-10-08 用户改口径：「已学的高亮句直接变黑，不要句子读完才由灰变黑」）：
+         黑字跟「记为已读」那一下走。旧口径把它挂在 taskSentenceFinished，可点快了旧播放链会被新点击
+         作废（speakToken++）、回调永不触发 —— 账上 reps 早已 +1，屏幕上却永远留着一句灰字。 */
+      function markRoundSeen(globalIdx) {
+        if (!prog) return;
+        if (!prog.roundSeen || typeof prog.roundSeen !== 'object') prog.roundSeen = {};
+        if (typeof prog.round !== 'number') prog.round = 1;
+        if (prog.roundSeen[globalIdx]) return;
+        prog.roundSeen[globalIdx] = 1;
+        const rt = roundTotal();
+        if (rt > 0 && roundDoneCount() >= rt && _roundToastFor !== prog.round) {
+          _roundToastFor = prog.round;
+          showAbToast('本轮全部读完，可去今日面板开启新的一轮');
+        }
+      }
       /* 测试缝：直接记一轮 Progress，不触发 finishPass 那套门（UI 点读 22 句太慢，且读空队列会翻到 ②）。
          行为与播完记账一致（roundSeen + 存盘 + 刷色），只跳过门控与账目。 */
       function seedRoundSeenForTest(gis) {
@@ -10527,6 +10545,7 @@ let listenOn = false;
         const k = tapKey_(gi);
         if (_tapCounted.has(k)) return false;
         readMsTick();
+        markRoundSeen(gi);   // 点亮必须在 recordRep 之前：它尾巴上的 saveProg + updateMarkers 顺手落盘并刷色
         recordRep(gi, { deferDim: true });
         sessionReps++;
         bumpArticleRep(artOfSentGlobal(gi));
@@ -10544,18 +10563,8 @@ let listenOn = false;
             let _s = prog.sentences[globalIdx];
             if (!_s) { _s = { reps: 0, phase: 'new', nextDue: 0, lastRead: 0 }; prog.sentences[globalIdx] = _s; }
             if (!(_s.lastRead >= startOfToday())) { _s.lastRead = Date.now(); }
-            /* 本轮已学点亮（2026-09-30）：黑字只跟播完走 —— 点那下只记数（roundSeen 不动），
-               播完才点亮；着色与"新一轮"都读它，排程账不动。 */
-            if (!prog.roundSeen || typeof prog.roundSeen !== 'object') prog.roundSeen = {};
-            if (typeof prog.round !== 'number') prog.round = 1;
-            prog.roundSeen[globalIdx] = 1;
-            const _rt = (typeof SENT_RAW !== 'undefined' && SENT_RAW.length) || 0;
-            let _rc = 0;
-            for (const _k in prog.roundSeen) { const _g = Number(_k); if (Number.isFinite(_g) && _g >= 0 && (_rt <= 0 || _g < _rt)) _rc++; }
-            if (_rt > 0 && _rc >= _rt && _roundToastFor !== prog.round) {
-              _roundToastFor = prog.round;
-              showAbToast('本轮全部读完，可去今日面板开启新的一轮');
-            }
+            /* 点亮不在这里了（2026-10-08）：roundSeen 跟着上面那次 markSentenceRead 走。
+               这里只剩 lastRead —— 「今日已读」竖条与额度仍只许发生在播完（2026-09-28 口径不动）。 */
             saveProg();
           } catch (e) {}
           try { updateMarkers(); } catch (e) {}
