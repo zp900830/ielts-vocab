@@ -1290,6 +1290,9 @@
     const focus = a >= 0 ? a : 0;
     const title = SECTIONS[focus] ? SECTIONS[focus].title : '';
     const planDay = cfg && cfg.startDate ? Math.floor((Date.now() - Date.parse(cfg.startDate)) / 864e5) + 1 : 1;
+    /* 今天起点的当前读数（2026-10-08 用户「之前可以自定义今日任务开始线的内容没了？」）：
+       文案由 TASK.startInfo() 那一份给，「我的」不自己算第几篇第几句。 */
+    const si = (typeof TASK !== 'undefined' && TASK.startInfo) ? TASK.startInfo() : { text: '自动', manual: false };
     const dark = document.body.classList.contains('dark');
     const initial = acc.logged ? meInitial(acc.nickname) : '未';
     return `
@@ -1322,6 +1325,10 @@
         ${cfg ? `
         <div class="mp-row">${TASK.minSlider('每天有多少分钟', cfg.minutes)}</div>
         <div class="mp-eta" id="mpEta" role="status">算一下…</div>
+        <div class="mp-row"><span class="mp-label">今天起点</span>
+          <button class="ps-opt" type="button" data-me-start aria-label="设置今天任务从哪开始">${esc(si.text)}</button></div>
+        <div class="mp-row" data-me-start-auto-row${si.manual ? '' : ' hidden'}>
+          <button class="ps-opt" type="button" data-me-start-auto>改回自动安排</button></div>
         <div class="mp-row"><button class="link-danger" type="button" data-me-reset-plan aria-label="重置学习计划，只重设计划、保留进度">重置学习计划</button></div>` : ''}
         <div class="mp-row"><span class="mp-label">数据</span><div class="ps-opts">
           <button class="ps-opt" data-me-export>导出备份</button>
@@ -1385,6 +1392,22 @@
       return;
     }
     renderMePop();
+  }
+  /* 起点回显就地更新（2026-10-08）：起点是在弹窗里定的（index.html 那一侧），定完只补这一行
+     的文字和「改回自动安排」的显隐 —— 不重渲宿主：重渲把滚动甩回顶部、还把滑块/音色节点换掉。
+     两个宿主都扫一遍：移动端的 #mePop 是空壳（没有这颗键），PC 浮窗开着时它是唯一活宿主。 */
+  function refreshMeStart() {
+    if (typeof TASK === 'undefined' || !TASK.startInfo) return;
+    const si = TASK.startInfo();
+    for (const id of ['meBody', 'mePop']) {
+      const host = document.getElementById(id);
+      if (!host || !host.isConnected) continue;
+      const btn = host.querySelector('[data-me-start]');
+      if (!btn) continue;
+      btn.textContent = si.text;
+      const row = host.querySelector('[data-me-start-auto-row]');
+      if (row) row.hidden = !si.manual;
+    }
   }
   /* 工期行（2026-09-26 用户拍板）：「我的」里改每天分钟数也要能看到「新词全部过完一遍（需要 N 天）」
      —— 与设置屏/计划页同一份 estimateDays 估算（TASK.etaFor/etaText 出口）。 */
@@ -1515,7 +1538,7 @@
     if (!root || root._meWired) return;
     root._meWired = true;
     root.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-login-btn],[data-me-logout]');
+      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-start],[data-me-start-auto],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-login-btn],[data-me-logout]');
       if (!t) return;
       // 有些按钮点完会重渲宿主（重置/退出）—— 重渲会把 e.target 从 DOM 摘下来，
       // 事件继续冒泡到 document 的「点外面收掉」监听时，target 已不在宿主里，会被误判成点外面。
@@ -1533,6 +1556,8 @@
         t.classList.toggle('on', on);
         t.setAttribute('aria-checked', String(on));
       }
+      else if (t.hasAttribute('data-me-start')) { TASK.openStartPicker(); }
+      else if (t.hasAttribute('data-me-start-auto')) { TASK.clearManualStart(); }
       else if (t.hasAttribute('data-me-reset-plan')) { TASK.resetLearningPlan(); rerenderMe(); }
       else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }
       else if (t.hasAttribute('data-me-import')) { TASK.importBackup('meImportFile'); }
@@ -1540,15 +1565,17 @@
       else if (t.hasAttribute('data-me-logout')) { meLogout(); }
     });
   }
-  window.APP3 = Object.assign(window.APP3, { renderMePop, renderMe, meContent, openMePop, closeMePop, toggleMePop, meOpen, meOpenSettings, meLogout, updateMeCard, openLoginModal, closeLoginModal, setLcDrawer, lcDrawerOpen });
+  window.APP3 = Object.assign(window.APP3, { renderMePop, renderMe, meContent, openMePop, closeMePop, toggleMePop, meOpen, meOpenSettings, meLogout, updateMeCard, openLoginModal, closeLoginModal, setLcDrawer, lcDrawerOpen, refreshMeStart });
   // 点浮窗外面收掉（只有 PC 有浮窗）。Esc 不在这里挂 —— 浮层栈（index.html 的 OVERLAY_STACK）统一管分层与焦点。
   document.addEventListener('click', (e) => {
     const pop = document.getElementById('mePop');
     if (!pop || pop.hidden) return;
+    /* 起点弹窗（z 611）盖在浮窗之上，点它里面的篇目/句号 select 也算「浮窗外面」—— 那一条层自己收，
+       不该把身后的浮窗一起关掉。（遮罩那一击由 outsideTap 的「target 已断开＝不算外面」兜住。） */
+    if (document.getElementById('startPickPop')) return;
     if (!outsideTap(e, ['#mePop', '#meCard', '.st-open-me'])) return;   // 守卫与 voicePop 共用一颗
     closeMePop();
   });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMePop(); });
   window.addEventListener('resize', () => {
     const pop = document.getElementById('mePop');
     /* 跨越 700px 断点 = 换宿主：文案（「我的」↔ 账号名/未登录）与 tab/dialog 语义都得重刷。

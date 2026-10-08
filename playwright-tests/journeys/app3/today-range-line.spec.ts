@@ -2,11 +2,11 @@
 // （首句前、尾句后）」，把「今天要读的这一段」框出来。
 //
 // 口径（与实现一一对应，不许各算一套）：
-//  · 区间 = 今天这段的**固定起止**（plan.todayRange 按天按篇钉住，2026-09-30 用户报
-//    「开始线读两句后才出现、向后延两条」后改）：当天该篇第一次画线时定下（必然早于
-//    本篇任何阅读 —— 读句必须先进任务模式，进模式就先画一次），之后读句/退出重进/
-//    ② 批次重同步都不动它；只有手动调起点或跨天才改。旧口径「区间 = 实时剩余队列」
-//    会被 assemble 跳过已见词带偏（队列首后移 → 开始线跟着漂 +N）。
+//  · 区间 = 今天这一段的**固定起止**（plan.todayRange 按天钉，一天各一条）：当天第一次画线时
+//    定下（必然早于当天任何阅读 —— 读句必须先进任务模式，进模式就先画一次），之后读句/退出重进/
+//    ② 批次重同步都不动它；只有手动调起点、改回自动安排或跨天才改。旧口径「区间 = 实时剩余队列」
+//    会被 assemble 跳过已见词带偏（队列首后移 → 开始线跟着漂 +N）；更早的「按篇钉」口径会让
+//    每篇各画一条开始线（2026-10-08 用户：「不应该有且仅有一天起始线吗」）。
 //  · 位置的边界取舍：开始线一律画（哪怕贴文章第 1 句）—— 它是「点线设起点」的入口，
 //    贴边界不画等于入口消失；结束线保留贴文章最后一句不画（顶端/底端没有可隔的东西）。
 //  · 宽度 = 与 .reader-head / .layout 内容框同一口径（min(1084px, 100% − 36px)），±2px。
@@ -22,6 +22,8 @@ declare const TASK: {
   readDone(i: number): void;
   exitTaskMode(): void;
   openArticle(a: number, opts?: Record<string, unknown>): void;
+  openPanel(): void;
+  todayPlan(force?: boolean): { queue: { i: number }[] };
   queue: { i: number }[];
   todayProgress(): { done: number; planned: number; left: number };
   state(): { daily: Record<string, unknown> };
@@ -78,6 +80,55 @@ function fullArticleFixture(): Record<string, string> {
     'vocab.json': '{}',
     'chapters.json': '[]',
   };
+}
+
+/* 六篇各 6 句 = 36 句：11 分钟只排得下前缀（约 26 句），今天这一段横跨第 0～4 篇。
+   「每篇各画一条开始线」只有多篇都排到今天的任务时才露馅 —— 唯一性锁必须要这种形状。 */
+function spanFixture(): Record<string, string> {
+  const mk = (title: string, ai: number, n: number) => ({
+    title, zh: title, subheads: [''],
+    paragraphs: [Array.from({ length: n }, (_, i) => `Sentence ${i} about [[w${ai}_${i}:w${ai}_${i}]].`)],
+    sentZh: [Array.from({ length: n }, (_, i) => `第 ${i} 句。`)],
+    paraZh: ['这一段的意思。'],
+  });
+  const titles = ['地球与生命', '校园与文化', '衣食住行', '社会与规则', '历史与发明', '身体与时间'];
+  return {
+    'sections.json': JSON.stringify(titles.map((t, i) => mk(t, i, 6))),
+    'vocab.json': '{}',
+    'chapters.json': '[]',
+  };
+}
+
+/** 停在任务模式里的第 0 篇（跨篇夹具）。 */
+async function enterSpanBook(page: import('@playwright/test').Page, minutes = 11) {
+  await stubData(page, spanFixture());
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate((m) => { TASK.resetV2(); TASK.initPlan(m); }, minutes);
+  await page.reload();
+  await waitAppReady(page);
+  await page.locator('.art-card').first().click();
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+}
+
+/* 逐篇进任务模式，记下「这一篇今天排到哪些句」与「这一篇画了哪几根线」。
+   per[a].q 是按篇收窄的队列，只用来证明「今天不止排到一篇」；它不能当全天窗口 ——
+   按篇装配时每篇都能挑到全天承诺之外的句子（六篇并集比全天窗口长）。
+   每篇之间必须先退出：enterTaskMode 在「已经在任务模式」时只收面板就 return
+   （index.html:8659），不重跑 syncQueueFromPlan —— 不退就六次读到的都是第一篇的队列。 */
+async function sweepArticles(page: import('@playwright/test').Page, n = 6) {
+  const out: { q: number[]; lines: { e: string; gi: string }[] }[] = [];
+  for (let a = 0; a < n; a++) {
+    await page.evaluate(() => TASK.exitTaskMode());
+    await page.evaluate((i) => TASK.openArticle(i), a);
+    await expect(page.locator('body'), `第 ${a} 篇应在任务模式`).toHaveClass(/task-mode/);
+    out.push(await page.evaluate(() => ({
+      q: TASK.queue.map((x) => x.i),
+      lines: [...document.querySelectorAll('.today-range-line')]
+        .map((el) => ({ e: (el as HTMLElement).dataset.edge || '', gi: (el as HTMLElement).dataset.gi || '' })),
+    })));
+  }
+  return out;
 }
 
 /* 建计划（8 分钟，够把 40 句里的前 19 句排进去），并先「读过第 0 句」——
@@ -317,5 +368,98 @@ test.describe('文章内「今天任务区间」横线', () => {
     expect(counts.sent, '任务模式只渲当前这一篇：40 句').toBe(40);
     expect(counts.zh, '每句一条译文').toBe(40);
     expect(counts.paraZh, '这一篇一段段意').toBe(1);
+  });
+});
+
+/* 2026-10-08 用户两问：「之前可以自定义今日任务开始线的内容没了？还有为什么每一章都有个
+   起始线，不应该有且仅有一[天]起始线吗？」
+   查下来功能没删（点线开弹窗那条一直在），但两件事确实不对：
+    · auto 口径下线画的是**本篇**今天队列的头尾（todayQueue 按篇收窄），于是进一篇画一篇；
+      而手动起点是全天一个 —— 同一根线背了两套语义。收成「一天各一条」。
+    · 入口只有正文里那根 2px 的线：移动端零提示（title 在触屏不显示）、键盘 Tab 到不了、
+      读屏听不到（线整条 aria-hidden，而且它本就该保持装饰性 —— 上面那条锁钉着），
+      设完也没有任何地方回显「现在起点在哪」。补一颗今日面板里的真按钮。 */
+test.describe('今日起点的唯一性与入口', () => {
+  test('一天只有一条开始线、一条结束线：切到别的篇不再各画一条', async ({ page }) => {
+    await enterSpanBook(page);
+    const per = await sweepArticles(page);
+    const withQ = per.filter((p) => p.q.length > 0);
+    expect(withQ.length, '夹具：今天的任务要横跨多篇（否则这条锁什么都没锁住）').toBeGreaterThan(1);
+
+    const all = withQ.flatMap((p) => p.q);
+    /* 全天窗口以引擎自己的装配为准（退出任务模式 = 没有按篇 scope）：各篇队列的并集只用来
+       证明横跨多篇，它比全天窗口长（按篇收窄时每篇都能挑到全天承诺之外的句子）。 */
+    const day = await page.evaluate(() => {
+      TASK.exitTaskMode();
+      const q = TASK.todayPlan(true).queue.map((x) => x.i);
+      return { first: Math.min(...q), last: Math.max(...q), n: q.length };
+    });
+    expect(day.n, '夹具：今天排到的不止一句').toBeGreaterThan(1);
+    expect(Math.max(...all), '夹具：并集里确实有全天窗口外的句子（否则这条锁退化成按篇口径也绿）')
+      .toBeGreaterThan(day.last);
+    const artOf = (gi: number) => Math.floor(gi / 6);   // 夹具：每篇 6 句
+
+    const at = (edge: string) => per.flatMap((p, a) =>
+      p.lines.filter((l) => l.e === edge).map((l) => ({ a, gi: Number(l.gi) })));
+    expect(at('start'), '全天只许一条开始线，落在全天窗口的头一句').toEqual([{ a: artOf(day.first), gi: day.first }]);
+    const ends = at('end');
+    expect(ends.length, '全天最多一条结束线（末句贴文章最后一句时按既有口径不画）').toBeLessThanOrEqual(1);
+    if (ends.length) expect(ends[0].gi, '结束线落在全天窗口的末一句，不是本篇队列的末一句').toBe(day.last);
+  });
+
+  test('开始线的可点高度补到 ≥30px，且只吃自己的 margin（不抢上下那句的点击）', async ({ page }) => {
+    await enterSpanBook(page);
+    const m = await page.evaluate(() => {
+      const el = document.querySelector('.today-range-line[data-edge="start"]') as HTMLElement;
+      const r = el.getBoundingClientRect();
+      const after = getComputedStyle(el, '::after');
+      const own = getComputedStyle(el);
+      const parts = (after.inset || 'auto').split(/\s+/).map((x) => parseFloat(x));
+      const tb = Number.isNaN(parts[0]) ? 0 : Math.abs(parts[0]);
+      const lr = Number.isNaN(parts[1]) ? tb : Math.abs(parts[1]);
+      return {
+        h: Math.round(r.height + 2 * tb), w: Math.round(r.width + 2 * lr), inset: tb,
+        mt: parseFloat(own.marginTop), mb: parseFloat(own.marginBottom),
+      };
+    });
+    expect(m.h, '2px 的线在手机上点不着，有效触区要 ≥30px').toBeGreaterThanOrEqual(30);
+    expect(m.inset, '外扩只许吃自己的 margin：越界就盖住上下那句的点击（点句＝跳句）').toBeLessThanOrEqual(Math.min(m.mt, m.mb));
+    expect(m.w, '横向仍是整条线可点').toBeGreaterThan(100);
+  });
+
+  test('今日面板给一颗真按钮：点了开同一个起点弹窗，设完在面板上回显第几篇第几句', async ({ page }) => {
+    await enterSpanBook(page);
+    /* 触区按手机档量（.btn 视觉 30 + ::after 外扩 -7 = 44，见 index.html:1216 那条 @media），
+       与 a11y.spec.ts 的 hit() 同一口径。 */
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.evaluate(() => TASK.exitTaskMode());
+    await page.evaluate(() => TASK.openPanel());
+    const panel = page.locator('#todayPanel');
+    await expect(panel).toBeVisible();
+
+    const btn = panel.locator('button', { hasText: '今日任务从哪开始' });
+    await expect(btn, '入口不许只长在正文那根线上').toHaveCount(1);
+    const hitH = await btn.evaluate((el) => {
+      const r = (el as HTMLElement).getBoundingClientRect();
+      const a = getComputedStyle(el, '::after');
+      let tb = 0;
+      if (a.content !== 'none' && a.display !== 'none') {
+        tb = Math.abs(parseFloat(((a.inset || '0px').split(/\s+/)[0])) || 0);
+      }
+      return Math.round(r.height + 2 * tb);
+    });
+    expect(hitH, '按钮有效触区 ≥44px（PRD §10.4）').toBeGreaterThanOrEqual(44);
+
+    await btn.click();
+    await expect(page.locator('#startPickPop'), '开的是同一个「设置今日任务起点」弹窗').toBeVisible();
+    await expect(page.locator('#startPickPop'), '从面板里开：弹窗必须盖在面板之上').toBeInViewport();
+    await page.locator('#spArt').selectOption('4');
+    await page.locator('#spSent').selectOption('2');
+    await page.locator('#startPickPop .sp-actions .btn.primary').click();
+    await expect(page.locator('#startPickPop')).toHaveCount(0);
+    await expect(panel, '设完要看得见当前起点，不是一句一闪而过的 toast').toContainText('第 5 篇第 2 句');
+
+    await panel.locator('button', { hasText: '改回自动安排' }).click();
+    await expect(panel, '改回自动后不能再报手动起点').not.toContainText('第 5 篇第 2 句');
   });
 });

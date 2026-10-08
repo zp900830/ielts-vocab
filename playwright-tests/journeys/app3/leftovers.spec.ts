@@ -412,7 +412,7 @@ test.describe('3.0 W6 PWA', () => {
   });
 
   /* M6：连缓存都没命中时也不许白屏。旧 SW 在「无网 + 无缓存」时只能 reject，浏览器给一张
-     错误页（白屏）。现在导航请求兜一张极简离线页（带重试）。反向验证：把 app/sw.js 里那段
+     错误页（白屏）。现在导航请求兜一张极简离线页（带重试）。反向验证：把 sw.js 里那段
      `req.mode === 'navigate'` 兜底删掉，本条必红（reload 抛网络错误）。 */
   test('断网且缓存被清空：导航请求兜到离线页，不白屏', async ({ page, context }) => {
     await stubData(page, SIX);

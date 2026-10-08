@@ -114,10 +114,64 @@ test.describe('「我的」双宿主 · 移动端一级页面 / PC 浮窗', () =
     await page.locator('#meCard').click();
     const pg = page.locator('#appView .me-page');
     for (const sel of ['.mp-head', '.mp-cta', '.mp-card', '.mp-nums', '#btnAccent', '#voiceBtn',
-      '[data-me-theme]', '.min-range', '#mpEta', '[data-me-reset-plan]', '[data-me-export]', '[data-me-import]']) {
+      '[data-me-theme]', '.min-range', '#mpEta', '[data-me-start]', '[data-me-reset-plan]', '[data-me-export]', '[data-me-import]']) {
       await expect(pg.locator(sel).first(), `${sel} 在页面里` ).toBeVisible();
     }
     await expect(pg.locator('.mp-name'), '账号名写在页内头部').toHaveText('demo');
+  });
+
+  /* 2026-10-08 用户：「之前可以自定义今日任务开始线的内容没了？」—— 入口原来只长在正文那根
+     2px 的线上（移动端零提示、设完不复现）。今日面板补了真按钮，「我的」这一行也要回显当前起点：
+     这一屏是计划的另一处宿主（每天分钟数也在这里），学生找「今天从哪开始」最先翻的就是它。 */
+  test('「我的」里回显今天起点：点了开同一颗起点弹窗，设完就地更新，并能改回自动', async ({ page }) => {
+    await boot(page, MOBILE);
+    await stubCloudAccount(page, 'demo@example.com');
+    await page.locator('#meCard').click();
+    const me = page.locator('#meBody');
+    const start = me.locator('[data-me-start]');
+    await expect(start, '没设过起点也要报当前是哪一句，不能空着').toContainText('自动');
+
+    await start.click();
+    await expect(page.locator('#startPickPop'), '开的是今日面板那颗同款起点弹窗').toBeVisible();
+    await page.locator('#spArt').selectOption('2');
+    await page.locator('#startPickPop .sp-actions .btn.primary').click();
+    await expect(page.locator('#startPickPop'), '设完弹窗自己收掉').toHaveCount(0);
+    await expect(start, '就地回显新起点（不用重开这一屏）').toContainText('第 3 篇第 1 句');
+    await expect(me.locator('[data-me-start-auto]'), '手动状态下给一把改回自动的键').toBeVisible();
+
+    await me.locator('[data-me-start-auto]').click();
+    await expect(start, '改回自动后回到自动文案').toContainText('自动');
+    await expect(me.locator('[data-me-start-auto]'), '自动状态下这一颗不该可见（行整条 hidden，不换节点）').toBeHidden();
+  });
+
+  /* 起点弹窗（z 611）现在会盖在浮窗（400）之上：Esc 必须一层一层收。
+     浮层栈只管它自己那一层，app.js 里那条「Esc 一律收浮窗」的旧监听得让路（D4 同一件事）。 */
+  test('PC 浮窗里开起点弹窗：Esc 第一下只收弹窗、浮窗还在，第二下才收浮窗', async ({ page }) => {
+    await boot(page, DESKTOP);
+    await stubCloudAccount(page, 'demo@example.com');
+    await page.locator('#meCard').click();
+    await expect(page.locator('#mePop')).toBeVisible();
+    await page.locator('#mePop [data-me-start]').click();
+    await expect(page.locator('#startPickPop'), '起点弹窗盖在浮窗之上').toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#startPickPop'), '第一下只收弹窗').toHaveCount(0);
+    await expect(page.locator('#mePop'), '浮窗不该被第一下一带走').toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#mePop'), '第二下才收浮窗').toBeHidden();
+  });
+
+  /* 同一件事的点击版：遮罩自己的 click 先跑 closeStartPicker 把两个节点摘掉，
+     等事件冒到 document 上那条「点外面收浮窗」时，文档里已经没有 #startPickPop 了 ——
+     守卫必须认 event.target（节点被摘下仍留着父链，closest 还认得它），不能问文档。 */
+  test('PC 浮窗里开起点弹窗：点遮罩只收弹窗，浮窗留在原地', async ({ page }) => {
+    await boot(page, DESKTOP);
+    await stubCloudAccount(page, 'demo@example.com');
+    await page.locator('#meCard').click();
+    await page.locator('#mePop [data-me-start]').click();
+    await expect(page.locator('#startPickPop'), '起点弹窗盖在浮窗之上').toBeVisible();
+    await page.locator('#startPickMask').click({ position: { x: 6, y: 6 } });   // 遮罩左上角，避开居中的卡片
+    await expect(page.locator('#startPickPop'), '这一下发落在遮罩上：弹窗收掉').toHaveCount(0);
+    await expect(page.locator('#mePop'), '浮窗不该被遮罩这一击带走').toBeVisible();
   });
 
   test('账号行按参考图：圆形首字母头像，未登录显示「未」', async ({ page }) => {
