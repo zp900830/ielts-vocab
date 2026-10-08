@@ -139,7 +139,14 @@ test.describe('「我的」双宿主 · 移动端一级页面 / PC 浮窗', () =
     await expect(start, '就地回显新起点（不用重开这一屏）').toContainText('第 3 篇第 1 句');
     await expect(me.locator('[data-me-start-auto]'), '手动状态下给一把改回自动的键').toBeVisible();
 
+    /* 改回自动走两步（2026-10-09 用户「起点怎么算？怎么让人不恐慌」）：先亮预览
+       （自动起点落在哪/几句/已读保留），确认才真清账 —— 不再一键盲改。 */
     await me.locator('[data-me-start-auto]').click();
+    await expect(page.locator('#startPickPop h3'), '先看到结果预览，不是直接改').toContainText('改回自动安排？');
+    /* 预览显示的是【自动排程】算出的起点（不是手动位置）：新计划引擎从头排 = 第1篇第1句。 */
+    await expect(page.locator('#startPickPop .sp-warn'), '预览里有自动算出的起点位置').toContainText('第1篇第1句');
+    await page.locator('#startPickPop button', { hasText: '确认改回' }).click();
+    await expect(page.locator('#startPickPop'), '确认后弹窗收掉').toHaveCount(0);
     await expect(start, '改回自动后回到自动文案').toContainText('自动');
     await expect(me.locator('[data-me-start-auto]'), '自动状态下这一颗不该可见（行整条 hidden，不换节点）').toBeHidden();
   });
@@ -208,5 +215,34 @@ test.describe('「我的」双宿主 · 移动端一级页面 / PC 浮窗', () =
     await page.reload();
     await waitTask(page);
     expect((await page.evaluate(() => TASK.planConfig()))!.minutes, '落账后重开还在').toBe(45);
+  });
+
+  /* 白底隐形地雷（2026-10-09 用户 Safari 桌面端「组件全变白色填充」）：
+     页面声明了 color-scheme: light dark，macOS 系统深色 + 应用浅色时，Safari 给没有显式
+     color 的 <button> 用 UA 的 buttontext（系统深色下 = 白色）—— ps-opt 一直没显式 color，
+     白字落在白底浮窗上只剩一颗空胶囊。修法是显式 color + 掐 appearance；这条锁钉住
+     「浮窗里每颗 ps-opt 都必须自带解析得出的颜色和 appearance:none」，UA 兜底不再有位置。 */
+  test('PC 浮窗的 ps-opt 颗颗显式上色，不吃 UA 的 buttontext 兜底', async ({ page }) => {
+    await boot(page, DESKTOP);
+    await stubCloudAccount(page, 'demo@example.com');
+    await page.locator('#meCard').click();
+    await expect(page.locator('#mePop')).toBeVisible();
+    const pills = await page.evaluate(() => {
+      const pop = document.getElementById('mePop')!;
+      return [...pop.querySelectorAll<HTMLElement>('.mp-row .ps-opt')].map((b) => {
+        const c = getComputedStyle(b);
+        const rowHidden = !!(b.closest('.mp-row') as HTMLElement | null)?.hidden;   // 「改回自动安排」自动态整行隐藏
+        return { text: (b.textContent || '').trim().slice(0, 10), color: c.color,
+                 appearance: c.webkitAppearance || c.appearance,
+                 visible: !rowHidden && b.getBoundingClientRect().width > 0 };
+      });
+    });
+    expect(pills.length, '浮窗里有今天起点 + 导出/导入等一排 ps-opt').toBeGreaterThanOrEqual(3);
+    for (const p of pills) {
+      if (p.visible) expect(p.visible, `"${p.text}" 在浮窗里渲染出来了`).toBe(true);
+      expect(p.color, `"${p.text}" 必须显式上色（不能是 UA 的 buttontext）`).toMatch(/^rgb\(\d+, \d+, \d+\)$/);
+      expect(p.color, `"${p.text}" 不能是纯白（白字白底 = 隐形）`).not.toBe('rgb(255, 255, 255)');
+      expect(p.appearance, `"${p.text}" 掐掉原生外观兜底`).toBe('none');
+    }
   });
 });

@@ -1557,7 +1557,7 @@
         t.setAttribute('aria-checked', String(on));
       }
       else if (t.hasAttribute('data-me-start')) { TASK.openStartPicker(); }
-      else if (t.hasAttribute('data-me-start-auto')) { TASK.clearManualStart(); }
+      else if (t.hasAttribute('data-me-start-auto')) { TASK.confirmAutoStart(false); }
       else if (t.hasAttribute('data-me-reset-plan')) { TASK.resetLearningPlan(); rerenderMe(); }
       else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }
       else if (t.hasAttribute('data-me-import')) { TASK.importBackup('meImportFile'); }

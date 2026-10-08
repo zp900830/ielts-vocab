@@ -18,6 +18,13 @@ declare const TASK: {
   seedRoundSeenForTest(gis: number[]): number;
   setManualStart(gi: number): boolean;
   clearManualStart(): boolean;
+  confirmAutoStart(fromPicker: boolean): void;
+  applyDaystartEvents(): boolean;
+  manualStart(): { gi: number; day: string; ts: number } | null;
+  testManualStartLocal(v: { gi: number; day: string; ts: number } | null): unknown;
+  events(): { type: string; day?: string; gi?: number; ts?: number }[];
+  startInfo(): { manual: boolean; gi: number | null; text: string };
+  openStartPicker(): void;
   openArticle(a: number): void;
   openPanel(): void;
   todayProgress(): { done: number; planned: number };
@@ -511,4 +518,79 @@ test('手动起点：队列从指定句起，今日进度重置', async ({ page 
   expect(await page.evaluate(() => TASK.clearManualStart()), '恢复引擎').toBe(true);
   await page.evaluate(() => TASK.openArticle(0));
   expect(await page.evaluate(() => TASK.queue[0].i), '恢复后引擎从头排').toBe(0);
+});
+
+/* 今日起点跨设备（2026-10-09 用户报「桌面设了起点，手机还是第一篇第一句」）：
+   manualStart 原来只写本机 LS_V2，事件流里没有它的位置，别的设备永远看不到。
+   现在 set/clear 都发 daystart 事件（dayplan 同款通道），对端拉到后 applyDaystartEvents
+   按「ts 最新者赢」重放。这条用例直接在事件流层面拍两台设备的账。 */
+test('今日起点跨设备：daystart 事件入流，对端重放跟账', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+
+  // 设备 A：设起点 → daystart 事件入流 + 本机账带 ts
+  expect(await page.evaluate(() => TASK.setManualStart(13)), '设备 A 设起点成功').toBe(true);
+  const ev = await page.evaluate(() => {
+    const evs = TASK.events().filter((e) => e.type === 'daystart');
+    const last = evs[evs.length - 1];
+    return last ? { gi: last.gi, day: last.day, ts: last.ts } : null;
+  });
+  expect(ev, 'daystart 事件已入流').not.toBeNull();
+  expect(ev!.gi, '事件带着起点句号').toBe(13);
+  expect((await page.evaluate(() => TASK.manualStart()))?.ts, '本机账带 ts').toBeGreaterThan(0);
+
+  // 设备 B：本机从没见过这个设置（账为空）→ 拉到事件重放，起点跟上来
+  await page.evaluate(() => { TASK.testManualStartLocal(null); });
+  expect(await page.evaluate(() => TASK.applyDaystartEvents()), 'B 重放应用').toBe(true);
+  expect((await page.evaluate(() => TASK.manualStart()))?.gi, 'B 的起点 = A 设的 13').toBe(13);
+
+  // A 改回自动（gi:-1 事件）；B 端还留着旧起点账 → 重放后一起回到自动
+  expect(await page.evaluate(() => TASK.clearManualStart()), 'A 改回自动').toBe(true);
+  await page.evaluate((day) => { TASK.testManualStartLocal({ gi: 13, day, ts: 1 }); }, ev!.day!);
+  expect(await page.evaluate(() => TASK.applyDaystartEvents()), 'B 重放清除').toBe(true);
+  expect(await page.evaluate(() => TASK.manualStart()), 'B 回到自动').toBeNull();
+
+  // ts 守卫：本机账比流里任何事件都新（自己刚点过）→ 不被迟到的旧事件盖掉
+  expect(await page.evaluate(() => TASK.setManualStart(13)), 'A 再设一次').toBe(true);
+  const kept = await page.evaluate(() => {
+    const cur = TASK.manualStart()!;
+    TASK.testManualStartLocal({ gi: cur.gi, day: cur.day, ts: Date.now() + 60000 });   // 未来 1 分钟
+    return TASK.applyDaystartEvents();
+  });
+  expect(kept, '本机更新则不动').toBe(false);
+  expect((await page.evaluate(() => TASK.manualStart()))?.gi, '保留本机起点').toBe(13);
+});
+
+/* 「改回自动安排」先亮结果再动手（2026-10-09 用户：「起点怎么算？怎么让人不恐慌」）：
+   点它在弹窗里先看到算出来的起点位置/句数/「已读保留」承诺，确认才真清账。 */
+test('改回自动安排：先预览起点结果，确认才清账', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+
+  await page.evaluate(() => TASK.setManualStart(13));
+  await page.evaluate(() => TASK.openStartPicker());
+  await page.locator('#startPickPop button', { hasText: '改回自动安排' }).click();
+  await expect(page.locator('#startPickPop h3'), '预览弹层出现').toHaveText(/改回自动安排/);
+  const warn = await page.locator('#startPickPop .sp-warn').textContent();
+  expect(warn, '预览里有起点位置（第 X 篇第 Y 句）').toMatch(/第\s*\d+\s*篇第\s*\d+\s*句/);
+  expect(warn, '预览里有句数').toContain('句');
+
+  // 返回：还原选择器，账没动
+  await page.locator('#startPickPop button', { hasText: '返回' }).click();
+  expect(await page.evaluate(() => TASK.manualStart()), '返回不清账').not.toBeNull();
+  await expect(page.locator('#startPickPop h3'), '回到选择器').toHaveText(/今日任务从哪开始/);
+
+  // 再走一遍 → 确认改回：账清掉、回显翻自动
+  await page.locator('#startPickPop button', { hasText: '改回自动安排' }).click();
+  await page.locator('#startPickPop button', { hasText: '确认改回' }).click();
+  expect(await page.evaluate(() => TASK.manualStart()), '确认后回到自动').toBeNull();
+  expect(await page.evaluate(() => TASK.startInfo().manual), '回显为自动').toBe(false);
 });
