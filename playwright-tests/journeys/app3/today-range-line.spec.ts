@@ -34,7 +34,7 @@ const rootUrl = process.env.E2E_ROOT_URL || '';
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/shadow/data/${name}*`, (r) =>
+    await page.route(`**/app/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }

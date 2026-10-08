@@ -3211,8 +3211,8 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     </div>
 
     <script src="config.js"></script>
-    <!-- 引擎与影子跟读共用同一份，绝不复制（3.0 PRD §2.5 复用不重造） -->
-    <script src="/shadow/js/plan-engine.js"></script>
+    <!-- 引擎（原与影子跟读共用，2.0 站点已下线，源文件随 3.0 放 app/js/） -->
+    <script src="/app/js/plan-engine.js"></script>
     <script defer src="app.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
@@ -3222,10 +3222,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       let CHAPTERS = [];
       let SENT_RAW = [];
       let dataReady = false;
-      /* 数据缓存版本：必须等于 shadow/data/ 三个 JSON 的内容哈希，由 scripts/validate_data.py 校验。
+      /* 数据缓存版本：必须等于 app/data/ 三个 JSON 的内容哈希，由 scripts/validate_data.py 校验。
          不写它，iOS Safari 会按 Last-Modified 启发式缓存 —— 课文改了、词表没改，句序与词表就会错位。
          改了数据忘了 bump 会直接让门禁 FAIL，而不是静默服务旧数据。 */
-      const SHADOW_DATA_VER = "4d62b22580";
+      const SHADOW_DATA_VER = "cc50ffca50";
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
@@ -3245,9 +3245,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         }
         try {
           const [s, v, c] = await Promise.all([
-            get('/shadow/data/sections.json?v=' + SHADOW_DATA_VER, '文章数据'),
-            get('/shadow/data/vocab.json?v=' + SHADOW_DATA_VER, '词汇数据'),
-            get('/shadow/data/chapters.json?v=' + SHADOW_DATA_VER, '章节数据')
+            get('/app/data/sections.json?v=' + SHADOW_DATA_VER, '文章数据'),
+            get('/app/data/vocab.json?v=' + SHADOW_DATA_VER, '词汇数据'),
+            get('/app/data/chapters.json?v=' + SHADOW_DATA_VER, '章节数据')
           ]);
           SECTIONS = s; VOCAB = v; CHAPTERS = c;
           SENT_RAW.length = 0;

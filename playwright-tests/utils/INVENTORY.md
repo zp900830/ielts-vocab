@@ -6,5 +6,4 @@
 |----------|------|-----------|---------|-------------|
 | `currentTimeout` | `utils/timeouts.ts` | `currentTimeout(): number` | Retry-aware expect cap (2/3/4 min) | Any non-trivial wait or assertion timeout |
 | `smartWaitFor` | `utils/timeouts.ts` | `smartWaitFor(locator): Promise<void>` | Poll visibility with retry-aware cap | Waiting for elements after navigation |
-| `gotoApp` | `utils/timeouts.ts` | `gotoApp(page, baseURL): Promise<void>` | Navigate to the app root page (`/index.html`) | Test setup navigation |
 | `clearLocalKey` | `utils/storage-helpers.ts` | `clearLocalKey(page, key): Promise<void>` | Remove a localStorage key and fail if it survives | Setup/teardown key resets (extracted 2026-09-30; pattern was inlined in 10+ specs) |

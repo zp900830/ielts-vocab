@@ -11,7 +11,7 @@
  *   - 网络失败（断网 / 服务器丢连接）→ 退回缓存 → app.js 这类 defer 脚本「永远拿得到」；
  *   - 两者都没有才抛错，交给浏览器按正常失败处理。
  *   不用 cache-first，是为了「EdgeOne 新部署立刻生效」——绝不让旧缓存盖住新部署。
- *   scope 外的请求（/shadow/data/…、跨域字体/CDN/Supabase）一律放行，绝不拦测试 stub
+ *   scope 外的请求（/app/data/… 之外的相对资源、跨域字体/CDN/Supabase）一律放行，绝不拦测试 stub
  *   或其它模块。缓存名带版本；activate 清掉旧版本缓存。
  */
 
@@ -58,6 +58,9 @@ self.addEventListener('fetch', (e) => {
   if (url.origin !== self.location.origin) return;          // 跨域不插手
   const scopePath = new URL(self.registration.scope).pathname; // 例如 '/app/'
   if (!url.pathname.startsWith(scopePath)) return;          // 只管网自己的资源
+  // 数据 JSON 不接管：缓存靠 SHADOW_DATA_VER 查询串 + HTTP 头；且接管会让 E2E 的
+  // page.route stub 失效（SW 内部的 fetch 绕过路由拦截），全部用例会吃到真数据。
+  if (url.pathname.startsWith(scopePath + 'data/')) return;
 
   e.respondWith((async () => {
     try {
