@@ -9,6 +9,7 @@ declare const TASK: {
   initPlan(minutes: number): void;
   exitTaskMode(): void;
   openPanel(): void;
+  closePanel(): void;
   openArticle(a: number): void;
   setManualStart(gi: number): boolean;
   clearManualStart(): boolean;
@@ -172,4 +173,26 @@ test('按篇 + 刷句：书签在内接着刷，书签已过整篇重刷', async
   await expect(page.locator('body')).toHaveClass(/task-mode/);
   qis = await page.evaluate(() => TASK.queue.map((q) => q.i));
   expect(qis, '第 2 篇（12..13）：书签 14 已过 → 整篇重刷').toEqual([12, 13]);
+});
+
+/* ⑤ 「每天有多少分钟」的账面（2026-10-10 用户问「时间是不是只针对刷句了」）：
+   两种模式都认它，算法不同且必须亮出来 —— 全局刷句亮「分钟 ≈ 句数」的换算
+   （一句约 25 秒）；按篇刷句亮「整篇为单位、分钟只用来估算时长」——
+   不让「今天 15 分钟：连刷 40 句」这种数字对不上的账面出现。 */
+test('分钟数的账面：全局刷句亮换算，按篇刷句亮整篇承诺', async ({ page }) => {
+  await freshBook(page);
+  expect(await page.evaluate(() => TASK.setManualStart(4)), '进入刷句模式').toBe(true);
+
+  await page.evaluate(() => TASK.openPanel());
+  const note = page.locator('#todayPanel .tp-note').first();
+  await expect(note, '全局刷句：分钟与句数画上 ≈ 号').toContainText('15 分钟 ≈');
+  await expect(note, '换算口径写明：一句约 X 秒').toContainText('按这个换算成今天的句数');
+  await page.evaluate(() => TASK.closePanel());
+
+  await page.evaluate(() => TASK.openArticle(2));   // 第 3 篇（14..15）：书签在内
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+  await page.evaluate(() => TASK.openPanel());
+  const note2 = page.locator('#todayPanel .tp-note').first();
+  await expect(note2, '按篇刷句：整篇承诺亮出来').toContainText('连刷到篇末');
+  await expect(note2, '时间在按篇口径下只是估算').toContainText('只用来估算时长');
 });

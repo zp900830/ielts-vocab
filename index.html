@@ -10558,8 +10558,23 @@ let listenOn = false;
               from = `第 ${a0 + 1} 篇第 ${si.gi - computeChapterStart(a0) + 1} 句`;
             }
           } catch (e) {}
-          noteHtml = `<div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>${msAcc && msAcc.atEnd ? '已刷到全文末尾' : `从 ${esc(from || '起点')} 按顺序连刷 ${tp.queue.length} 句`}</b>（绝不跳句）
-          <span class="sm">覆盖 ${tp.words.length} 个词 · ${tp.items.length} 题 · 刷完一轮再刷一轮，觉得都会了自然就不用刷了</span></div>`;
+          /* 分钟数在两种模式下的含义（2026-10-10 用户问「时间是不是只针对刷句了」）：
+             都认，但算法不同，必须各自亮账 —— 记忆模式当【预算】（引擎在预算内按曲线挑句，
+             复习句便宜、新句贵，每天句数会浮动）；刷句模式当【换算】（一句约 25s ÷ 倍速，
+             分钟 ÷ 单句 = 今天连刷几句）。按篇打开文章时整篇承诺优先，时间只用来报预计
+             时长 —— 不亮出来，就会出现「今天 15 分钟：连刷 40 句」这种数字对不上的账面。 */
+          if (msAcc && msAcc.atEnd) {
+            noteHtml = `<div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>已刷到全文末尾</b>（绝不跳句）
+          <span class="sm">点「再刷一遍」从第 1 篇第 1 句再连刷一轮 · 刷完一轮再刷一轮，觉得都会了自然就不用刷了</span></div>`;
+          } else if (currentArticle != null) {
+            const artSec = tp.queue.reduce((a, q) => a + (q.sec || 0), 0);
+            const est = artSec > 0 ? ` · 约 ${Math.max(1, Math.ceil(artSec / 60))} 分钟` : '';
+            noteHtml = `<div class="tp-note">本篇从 ${esc(from || '第 1 句')} 按顺序连刷到篇末：<b>${tp.queue.length} 句${est}</b>（绝不跳句）
+          <span class="sm">按篇以整篇为单位，每天的分钟数在这里只用来估算时长 · 覆盖 ${tp.words.length} 个词 · ${tp.items.length} 题</span></div>`;
+          } else {
+            noteHtml = `<div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟 ≈ <b>从 ${esc(from || '起点')} 按顺序连刷 ${tp.queue.length} 句</b>（绝不跳句）
+          <span class="sm">一句约 ${Math.round(secNew())} 秒，分钟数就按这个换算成今天的句数 · 覆盖 ${tp.words.length} 个词 · ${tp.items.length} 题 · 刷完一轮再刷一轮，觉得都会了自然就不用刷了</span></div>`;
+          }
         } else {
           noteHtml = `<div class="tp-note">今天 ${ROOT2.plan.todayMinutes} 分钟：<b>还剩 ${leftN} 句 · 覆盖 ${tp.words.length} 个词</b>
           <span class="sm">${tp.stats.dueWords} 个词到期 · ${tp.stats.newWords} 个新词进队列 · ${tp.items.length} 题${tp.stats.droppedA ? ` · ${tp.stats.droppedA} 个词明天见` : ''}${baowenNote(tp.stats)}</span></div>`;
