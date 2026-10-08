@@ -57,7 +57,7 @@ const SIXQ: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) => r.fulfill({ status: 200, contentType: 'application/json', body }));
+    await page.route(`**/data/${name}*`, (r) => r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
 async function waitAppReady(page: import('@playwright/test').Page) {
@@ -96,7 +96,7 @@ async function gotoStatsReady(page: import('@playwright/test').Page) {
 test.describe('3.0 ② 入口修复：额度读满即可答题（不依赖文章读完）', () => {
   test('① 今天额度读满（本篇没读完）→ 放完这句 → 遍间小结「开始答题」端出来', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await pinQuota(page, 2);          // 额度 2 < 本篇队列 4
     await page.locator('.art-card').first().click();
@@ -124,7 +124,7 @@ test.describe('3.0 ② 入口修复：额度读满即可答题（不依赖文章
 
   test('② 读满后任务条不再写「下一句」，主按钮点了直达 ②', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await pinQuota(page, 2);
     await page.locator('.art-card').first().click();
@@ -145,7 +145,7 @@ test.describe('3.0 ② 入口修复：额度读满即可答题（不依赖文章
 
   test('③ 首页卡片在「今天读完了」时给「答题」，点了直达 ②', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await pinQuota(page, 2);
     // 就在首页真读满今天的额度（不先进任务模式）
@@ -166,7 +166,7 @@ test.describe('3.0 ② 入口修复：额度读满即可答题（不依赖文章
 
   test('④ 数据页「今天」块与「待加强」指向同一入口（去答题 → ②）', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await gotoStatsReady(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
@@ -195,7 +195,7 @@ test.describe('3.0 ② 入口修复：额度读满即可答题（不依赖文章
      本篇队列真走完（不靠额度）也必须端小结、进 ②。 */
   test('M1 回归：① 走完整篇队列 → 小结「开始答题」→ 正文立刻挖空', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'read');

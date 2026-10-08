@@ -1,5 +1,5 @@
 // 回归：任务模式退出即停播 + 口音切换不洗掉已存的云音色选择（2026-09-28 用户报障）。
-// 只覆盖 /app/（用户只用 app 项目，shadow/ 主站不动）。
+// 只覆盖主站（2026-10-08 起全站就这一个版本）。
 import { test, expect } from '../../fixtures';
 
 declare const TASK: {
@@ -46,7 +46,7 @@ const SIX: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }),
     );
   }
@@ -79,7 +79,7 @@ const playBtnLabel = (page: import('@playwright/test').Page) =>
 
 test('退出任务模式：滞留的旧播放回调不再续播（退出即停）', async ({ page }) => {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
@@ -101,7 +101,7 @@ test('退出任务模式：滞留的旧播放回调不再续播（退出即停�
 
 test('口音切换：云端不可用时不洗掉已存的云音色选择', async ({ page }) => {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await installSpeakStub(page);                   // setAccent 尾巴上的试听只进录音笔，不真发声
   const cloudOn = await page.evaluate(() => {
@@ -126,7 +126,7 @@ test('口音切换：云端不可用时不洗掉已存的云音色选择', async
    route() 与 .nav-item 点击此前都不碰任务模式。这里锁两条退出路径。 */
 async function enterTaskAndStartPlay(page: import('@playwright/test').Page) {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
@@ -171,7 +171,7 @@ const repsOf = (page: import('@playwright/test').Page, gi: number) =>
 
 test('点“下一句”即+1：不等播完，且播完不重复记', async ({ page }) => {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
@@ -210,12 +210,12 @@ const spokenTexts = (page: import('@playwright/test').Page) =>
 
 test('随身听仅今日任务：按当日列表播完自动从头循环', async ({ page }) => {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
   await waitAppReady(page);
-  await page.goto(`${rootUrl}/app/index.html#/listen`);
+  await page.goto(`${rootUrl}/index.html#/listen`);
   await expect(page.locator('.ls-card')).toBeVisible();
   await installTextStub(page);
 
@@ -244,7 +244,7 @@ const hasTaskDone = (page: import('@playwright/test').Page, local: number) =>
 
 test('点只+1+高亮+播：变暗等播完那一下', async ({ page }) => {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
@@ -264,7 +264,7 @@ test('点只+1+高亮+播：变暗等播完那一下', async ({ page }) => {
 
 test('存档句已读完：重进落到第一条没读的，第一下不跳走', async ({ page }) => {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
@@ -292,7 +292,7 @@ test('存档句已读完：重进落到第一条没读的，第一下不跳走',
    断言 reps / 事件流 / 日账三本账一字不动。 */
 test('任务外自由播放不记账：onSentenceComplete 零写入', async ({ page }) => {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
@@ -328,14 +328,14 @@ const TWO: Record<string, string> = (() => {
 
 async function stubData2(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
 
 test('颜色跟播完走：未读灰，播完才黑', async ({ page }) => {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
@@ -357,7 +357,7 @@ test('颜色跟播完走：未读灰，播完才黑', async ({ page }) => {
 
 test('读完一轮可开新轮：颜色全灰，轮次+1', async ({ page }) => {
   await stubData2(page, TWO);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
@@ -382,7 +382,7 @@ test('读完一轮可开新轮：颜色全灰，轮次+1', async ({ page }) => {
 
 test('手动起点：队列从指定句起，今日进度重置', async ({ page }) => {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();

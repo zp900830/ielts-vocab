@@ -9,7 +9,7 @@ const URL = `http://127.0.0.1:${PORT}`;
 
 async function isHealthy(): Promise<boolean> {
   try {
-    const res = await fetch(`${URL}/app/index.html`);
+    const res = await fetch(`${URL}/index.html`);
     const text = res.ok ? await res.text() : '';
     return res.ok && text.includes('词汇真经单词速记');
   } catch {

@@ -26,14 +26,14 @@ const BIG: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
 
 async function enterTask(page: import('@playwright/test').Page) {
   await stubData(page, BIG);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await page.waitForFunction(() => {
     try {
       return typeof dataReady !== 'undefined' && dataReady

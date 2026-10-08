@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
 
-// CLOUD 是 app/index.html 里 classic script 的顶层 const：它在页面主作用域可见，
+// CLOUD 是 index.html 里 classic script 的顶层 const：它在页面主作用域可见，
 // 但**不是 window 属性** —— 回调里必须用裸标识符读，写成 window.CLOUD 拿到的是 undefined。
 declare const CLOUD: {
   _on: boolean;
@@ -10,7 +10,7 @@ declare const CLOUD: {
 };
 declare const APP3: { updateMeCard(): void } | undefined;
 
-/* 等 CLOUD.boot() 真的跑完（app/index.html 把在跑的 promise 挂在 CLOUD.bootDone 上）。
+/* 等 CLOUD.boot() 真的跑完（index.html 把在跑的 promise 挂在 CLOUD.bootDone 上）。
    不等的代价是并行负载下的偶发红：boot 收尾会拿它自己查到的 session 覆写 _userMail，
    而 E2E 没有真会话 —— 测试先点亮账号态、boot 后落，就把邮箱擦回空，
    下一次点「我的」弹出来的就不是浮窗而是登录弹窗（2026-10-08 全量跑到 424 绿、这 2 条红）。 */

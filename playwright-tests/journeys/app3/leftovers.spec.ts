@@ -3,8 +3,8 @@
 //      `body > .topbar{display:none}` 连根藏掉，全部不可达。现在收进那条常驻顶栏，真的能用。
 // W2 · 深色全覆盖（PRD §10.1）：新外壳的关键元素在 body.dark 下必须换成暖黑 token，而不是
 //      继续用浅色那套（.a-bar / .a-stage 等硬编码色过去在深色下不变）。
-// W6 · PWA（PRD §2.5）：/app/ 要有 manifest 链接，且启动时注册 service worker（scope 落在 /app/）。
-// 服务器归 global-setup.ts 起停（仓库根 8932）；/app/ 在仓库根，所以和其余 app3 用例一样用 E2E_ROOT_URL。
+// W6 · PWA（PRD §2.5）：主站要有 manifest 链接，且启动时注册 service worker（scope 落在 /）。
+// 服务器归 global-setup.ts 起停（仓库根 8932）；站点在仓库根，所以和其余 app3 用例一样用 E2E_ROOT_URL。
 import { test, expect } from '../../fixtures';
 
 declare const TASK: {
@@ -19,7 +19,7 @@ const rootUrl = process.env.E2E_ROOT_URL || '';
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }),
     );
   }
@@ -73,7 +73,7 @@ const SIX: Record<string, string> = (() => {
 })();
 
 async function enterTask(page: import('@playwright/test').Page) {
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
@@ -117,7 +117,7 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
 
   test('主题在「我的」浮窗里：点用户卡弹浮窗 → 切主题 body.dark 真的变；顶栏不再有它', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     // 一级页面顶栏那条（原 #shellTop）与 #btnDark 已去掉：主题只活在「我的」浮窗里
     expect(await page.locator('#shellTop').count(), '一级页面顶栏已去掉').toBe(0);
     expect(await page.locator('#btnDark').count(), '顶栏的夜间按钮已去掉').toBe(0);
@@ -173,10 +173,10 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
      现在照抄任务模式那套 reader-head：同容器宽（<2px）、同 .back、同 .r-pos 层级。 */
   test('随身听展开（二级页）头部与任务模式同套：与正文等宽 <2px + 同一枚 .back / .r-pos', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitAppReady(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
-    await page.goto(`${rootUrl}/app/index.html#/listen`);
+    await page.goto(`${rootUrl}/index.html#/listen`);
     await waitAppReady(page);
     await page.evaluate(() => { (TASK as unknown as { listenExpand(): void }).listenExpand(); });
     await expect(page.locator('body')).toHaveClass(/listen-mode/);
@@ -221,7 +221,7 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
     });
     await stubData(page, SIXQ);
     // ③ 音色选择器已挪进「我的」浮窗：在一级页面开浮窗再点
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await page.locator('#meCard').click();
     await expect(page.locator('#loginModal')).toBeVisible();
     await page.locator('#loginModal [data-login-settings]').click();
@@ -246,7 +246,7 @@ test.describe('3.0 W1 头部开关可达（PRD §4.3 / §8.1，用户 2026-09-24
 test.describe('3.0 W2 深色全覆盖', () => {
   test('切 body.dark 后新头部与外壳关键元素的背景色都换到暖黑', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await expect(page.locator('.art-card')).toHaveCount(6);
 
     const snapshot = () => page.evaluate(() => {
@@ -288,13 +288,13 @@ test.describe('3.0 W2 深色全覆盖', () => {
 });
 
 /* ===================== W6 · PWA（PRD §2.5） ===================== */
-/* 2026-09-24 根因修复：SW 从 blob 内联脚本改为仓内真实文件 /app/sw.js。
+/* 2026-09-24 根因修复：SW 从 blob 内联脚本改为仓内真实文件 /sw.js。
    旧 blob 形式在 Chromium 里 register 直接被拒（blob 协议不被支持），SW 从未注册 ——
-   M2 往 blob 代码里加的「缓存失败退回网络」是死代码，静态服务器偶发丢 /app/app.js 时无兜底 → 白屏。
+   M2 往 blob 代码里加的「缓存失败退回网络」是死代码，静态服务器偶发丢 app.js 时无兜底 → 白屏。
    这组锁：① 注册指向真实文件（非 blob）；② 文件真能取到且是 SW 源码；③ 真实浏览器里注册成功、
-   scope=/app/；④ 高重复加载 app.js 每次都能执行；⑤ 断网 reload 仍能靠缓存供上 app.js。 */
+   scope=/；④ 高重复加载 app.js 每次都能执行；⑤ 断网 reload 仍能靠缓存供上 app.js。 */
 test.describe('3.0 W6 PWA', () => {
-  test('/app/ 有 manifest 链接，且启动时用真实文件 sw.js 注册（scope = /app/，不是 blob）', async ({ page }) => {
+  test('主站有 manifest 链接，且启动时用真实文件 sw.js 注册（scope = /，不是 blob）', async ({ page }) => {
     // 注册在启动时发生，来不及在页面里 stub —— 用 addInitScript 在页面脚本前把 register 换掉
     await page.addInitScript(() => {
       (window as unknown as { __swCalls: unknown[] }).__swCalls = [];
@@ -309,11 +309,11 @@ test.describe('3.0 W6 PWA', () => {
     const errors: string[] = [];
     page.on('pageerror', (e) => errors.push(String(e)));
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
 
     // manifest：主站那套 base64 data-URI，解出来必须是合法 manifest
     const href = await page.locator('link[rel="manifest"]').getAttribute('href');
-    expect(href, '/app/ 必须有 manifest 链接').toBeTruthy();
+    expect(href, '主站必须有 manifest 链接').toBeTruthy();
     const m = href!.match(/^data:application\/manifest\+json;base64,(.+)$/);
     expect(m, 'manifest 用主站那套 base64 data-URI').toBeTruthy();
     const json = JSON.parse(Buffer.from(m![1], 'base64').toString('utf8'));
@@ -323,19 +323,19 @@ test.describe('3.0 W6 PWA', () => {
     expect(json.display).toBe('standalone');
     expect(json.start_url).toBeTruthy();
 
-    // service worker 注册：被调用，URL 是真实文件 sw.js（不是 blob:），scope 落在 /app/
+    // service worker 注册：被调用，URL 是真实文件 sw.js（不是 blob:），scope 落在 /
     await page.waitForFunction(() => ((window as unknown as { __swCalls?: unknown[] }).__swCalls || []).length > 0);
     const calls = await page.evaluate(() => (window as unknown as { __swCalls: { url: string; scope?: string }[] }).__swCalls);
     expect(calls.length, '启动时必须尝试注册 service worker').toBeGreaterThan(0);
     expect(calls[0].url, '必须注册真实文件 sw.js，不能再是 blob:').not.toContain('blob:');
-    expect(calls[0].url, '注册 URL 必须指向 /app/sw.js').toMatch(/\/app\/sw\.js(\?|$)/);
-    expect(calls[0].scope, 'service worker 的 scope 必须是 /app/').toContain('/app/');
+    expect(calls[0].url, '注册 URL 必须指向 /sw.js').toMatch(/\/sw\.js(\?|$)/);
+    expect(calls[0].scope, 'service worker 的 scope 必须是 /').toBe('/');
     expect(errors, 'PWA 初始化不许抛出未捕获错误').toEqual([]);
   });
 
-  test('/app/sw.js 是真实文件：能取到、是 SW 源码（非 blob）、network-first', async ({ request }) => {
-    const res = await request.get(`${rootUrl}/app/sw.js`);
-    expect(res.status(), '/app/sw.js 必须 200 —— 真实文件，不是脚本内联的 blob').toBe(200);
+  test('/sw.js 是真实文件：能取到、是 SW 源码（非 blob）、network-first', async ({ request }) => {
+    const res = await request.get(`${rootUrl}/sw.js`);
+    expect(res.status(), '/sw.js 必须 200 —— 真实文件，不是脚本内联的 blob').toBe(200);
     const body = await res.text();
     expect(body.trim().startsWith('blob:'), '内容不能是一个 blob: URL 字符串').toBe(false);
     expect(body.length, '必须是一整份 SW 源码，不是一个短 URL').toBeGreaterThan(200);
@@ -344,9 +344,9 @@ test.describe('3.0 W6 PWA', () => {
     expect(body, '必须有 fetch 失败退回 caches.match 的兜底').toMatch(/catch[\s\S]*caches\.match/);
   });
 
-  test('真实浏览器里 SW 注册成功、已激活，scope = /app/，脚本是真实文件', async ({ page }) => {
+  test('真实浏览器里 SW 注册成功、已激活，scope = /，脚本是真实文件', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     // 条件等待：本页 scope 的注册已激活（不 sleep）
     await page.waitForFunction(async () => {
       try {
@@ -358,13 +358,14 @@ test.describe('3.0 W6 PWA', () => {
       const reg = await navigator.serviceWorker.getRegistration();
       return { scope: (reg && reg.scope) || '', scriptURL: (reg && reg.active && reg.active.scriptURL) || '' };
     });
-    expect(info.scope, 'scope 必须落在 /app/').toContain('/app/');
-    expect(info.scriptURL, '脚本必须是真实文件 /app/sw.js').toMatch(/\/app\/sw\.js$/);
+    // reg.scope 是绝对 URL（http://host/），剥掉 origin 后必须正好是 /
+    expect(info.scope.replace(/^https?:\/\/[^/]+/, ''), 'scope 必须落在 /').toBe('/');
+    expect(info.scriptURL, '脚本必须是真实文件 /sw.js').toMatch(/\/sw\.js$/);
   });
 
-  test('高重复加载 /app/：app.js 每次都真的执行（回归锁：旧 blob SW 曾让 app.js 拿不到）', async ({ page }) => {
+  test('高重复加载主站：app.js 每次都真的执行（回归锁：旧 blob SW 曾让 app.js 拿不到）', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     // 先让真实 SW 激活，后面的 reload 才都在 SW 接管下
     await page.waitForFunction(async () => {
       try { const reg = await navigator.serviceWorker.getRegistration(); return !!(reg && reg.active); }
@@ -385,9 +386,9 @@ test.describe('3.0 W6 PWA', () => {
     }
   });
 
-  test('断网后 reload：SW 仍从缓存供上 /app/app.js（network-first 的可靠兜底）', async ({ page, context }) => {
+  test('断网后 reload：SW 仍从缓存供上 app.js（network-first 的可靠兜底）', async ({ page, context }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await page.waitForFunction(async () => {
       try { const reg = await navigator.serviceWorker.getRegistration(); return !!(reg && reg.active); }
       catch (e) { return false; }
@@ -411,11 +412,11 @@ test.describe('3.0 W6 PWA', () => {
   });
 
   /* M6：连缓存都没命中时也不许白屏。旧 SW 在「无网 + 无缓存」时只能 reject，浏览器给一张
-     错误页（白屏）。现在导航请求兜一张极简离线页（带重试）。反向验证：把 app/sw.js 里那段
+     错误页（白屏）。现在导航请求兜一张极简离线页（带重试）。反向验证：把 sw.js 里那段
      `req.mode === 'navigate'` 兜底删掉，本条必红（reload 抛网络错误）。 */
   test('断网且缓存被清空：导航请求兜到离线页，不白屏', async ({ page, context }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await page.waitForFunction(async () => {
       try { const reg = await navigator.serviceWorker.getRegistration(); return !!(reg && reg.active); }
       catch (e) { return false; }

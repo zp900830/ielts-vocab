@@ -4,7 +4,7 @@
 // W5 · 观感类小项（占位屏 / 连续 0 天 / 已学完卡片不再出答题 / 卡片结构 / 浮窗避让任务条 /
 //      回看句子已删 / 全读完横幅 / 空与浮窗观感）
 // W7 · 终审 5 观察（I1 夹具 / 免费态翻句 / 迁移删旧字段 / _pendingArticle 残留 / pass2 选项）
-// 服务器归 global-setup.ts 起停（仓库根 8932）；/app/ 在仓库根，所以用 E2E_ROOT_URL。
+// 服务器归 global-setup.ts 起停（仓库根 8932）；站点在仓库根，所以用 E2E_ROOT_URL。
 import { test, expect } from '../../fixtures';
 
 declare const TASK: {
@@ -59,7 +59,7 @@ const SIXQ: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }),
     );
   }
@@ -79,7 +79,7 @@ async function freshPlan(page: import('@playwright/test').Page) {
   await waitAppReady(page);
 }
 async function enterArticle(page: import('@playwright/test').Page, nth: number) {
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await freshPlan(page);
   await page.locator('.art-card').nth(nth).click();
   await expect(page.locator('body')).toHaveClass(/task-mode/);
@@ -150,18 +150,18 @@ test.describe('3.0 W5 观感类小项', () => {
   test('W5-1 M4 起无占位屏：四个一级页都是真页（无 .app-todo）', async ({ page }) => {
     await stubData(page, SIXQ);
     for (const hash of ['home', 'stats', 'words', 'listen']) {
-      await page.goto(`${rootUrl}/app/index.html#/${hash}`);
+      await page.goto(`${rootUrl}/index.html#/${hash}`);
       await page.waitForFunction(() => typeof (window as unknown as { APP3?: unknown }).APP3 !== 'undefined');
       await expect(page.locator('#appView .app-todo')).toHaveCount(0);
     }
-    await page.goto(`${rootUrl}/app/index.html#/listen`);
+    await page.goto(`${rootUrl}/index.html#/listen`);
     await expect(page.locator('#appView .listen-page')).toBeVisible();
   });
 
   // W5-2：新建计划当天不写「连续 0 天」
   test('W5-2 新建计划当天横幅说「今天开始」，不写「连续 0 天」', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     const sum = page.locator('#homeBanner .hb-sum');
     await expect(sum).toContainText('今天开始');
@@ -171,7 +171,7 @@ test.describe('3.0 W5 观感类小项', () => {
   // W5-3：已学完 / 熟练的卡片不再出「答题」
   test('W5-3 已学完的卡片不再显示「答题」（与胶囊口径一致）', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     // 通读满 → data-stage=read（有「答题」）
     await page.evaluate(() => {
@@ -190,7 +190,7 @@ test.describe('3.0 W5 观感类小项', () => {
   // W5-4：卡片是容器、内部只放真按钮
   test('W5-4 卡片不再是 role=button；打开正文的是内部真按钮 .a-open（键盘可达）', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     const card = page.locator('.art-card').first();
     expect(await card.getAttribute('role'), '卡片本身不该再是 role=button').toBeNull();
@@ -249,7 +249,7 @@ test.describe('3.0 W5 观感类小项', () => {
   // W5-7：六篇都读完 → 明确文案，不再返回第 1 篇说「还剩 1 句」
   test('W5-7 六篇全读完横幅说「读完了」，不再假装第 1 篇还剩 1 句', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.evaluate(() => {
       for (let a = 0; a < SECTIONS.length; a++) {
@@ -289,7 +289,7 @@ test.describe('3.0 W7 终审 5 条观察', () => {
   // W7-1 / W7-5：② 批次严格小于全篇也够「已学完」；并用到 seedArticleForTest 的 pass2 选项
   test('W7-1 部分 ②（批次 < 全篇）也判「已学完」：旧判据 quizOk>=全篇句数 在这里必红', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.evaluate(() => {
       Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
@@ -311,7 +311,7 @@ test.describe('3.0 W7 终审 5 条观察', () => {
   // W7-2：免费态（无计划）也能自由翻句
   test('W7-2 免费态任务条露出上一句/下一句，点了真的挪高亮', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await page.evaluate(() => {
       localStorage.removeItem('ielts.shadow.v2');
       localStorage.removeItem('ielts.app3.article');
@@ -332,7 +332,7 @@ test.describe('3.0 W7 终审 5 条观察', () => {
   // W7-3：迁移时把旧 daily.repsByArticle 从共享 blob 删掉
   test('W7-3 迁移顺手清掉 v2 blob 里的 daily.repsByArticle（只删这一个字段）', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.evaluate(() => {
       const raw = JSON.parse(localStorage.getItem('ielts.shadow.v2')!);
@@ -358,7 +358,7 @@ test.describe('3.0 W7 终审 5 条观察', () => {
   // W7-4：_pendingArticle 不残留 —— 走非 ps-start 的建计划路径也不能跳到旧文章
   test('W7-4 设置屏里直接用别的路径建计划，也不会跳回之前那篇', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await page.evaluate(() => {
       localStorage.removeItem('ielts.shadow.v2');
       localStorage.removeItem('ielts.app3.article');
@@ -383,7 +383,7 @@ test.describe('3.0 W7 终审 5 条观察', () => {
   test('refine3 ⑤：一级页面不再有底部续读条；入口在首页「继续学」横幅', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/words`);
+    await page.goto(`${rootUrl}/index.html#/words`);
     await waitAppReady(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await page.reload();
@@ -401,7 +401,7 @@ test.describe('3.0 W7 终审 5 条观察', () => {
     expect(await page.evaluate(() => localStorage.getItem('ielts.shadow.resumeDay'))).toBeNull();
 
     // 入口统一到首页「继续学」：横幅主行说「今天还剩 N 句」，点击直接进任务模式
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await expect(page.locator('#homeBanner .hb-main')).toContainText('继续学');
     await expect(page.locator('#homeBanner .hb-main')).toContainText('今天还剩');
     await expect(page.locator('#homeBanner .hb-sum')).toContainText('今天覆盖');

@@ -40,7 +40,7 @@ const TWO: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page) {
   for (const [name, body] of Object.entries(TWO)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -51,7 +51,7 @@ async function bootMobile(page: import('@playwright/test').Page, hash: string) {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 390, height: 844 });
   await stubData(page);
-  await page.goto(`${rootUrl}/app/index.html${hash}`);
+  await page.goto(`${rootUrl}/index.html${hash}`);
   await waitShadowReady(page);
 }
 

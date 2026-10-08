@@ -1,5 +1,5 @@
 // 3.0 M4：随身听（PRD §7）。服务器归 global-setup.ts 起停（仓库根 8932）：
-// /app/ 在仓库根，和 shell/home/stats/words 一样用 E2E_ROOT_URL，不走 baseURL。
+// 站点在仓库根，和 shell/home/stats/words 一样用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 
@@ -47,7 +47,7 @@ const TWO: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -65,7 +65,7 @@ const finishSpeak = (page: import('@playwright/test').Page) =>
   page.evaluate(() => { const w = window as unknown as { __cbs: (() => void)[] }; const cb = w.__cbs.shift(); if (cb) cb(); });
 
 async function gotoListen(page: import('@playwright/test').Page) {
-  await page.goto(`${rootUrl}/app/index.html#/listen`);
+  await page.goto(`${rootUrl}/index.html#/listen`);
   await waitShadowReady(page);
   await page.waitForFunction(() => {
     const w = window as unknown as { APP3?: { renderListen?: unknown } };
@@ -190,7 +190,7 @@ test.describe('3.0 随身听（M4，PRD §7）', () => {
     await page.evaluate(() => TASK.listenSetTickForTest(Date.now() - 60000));
     await finishSpeak(page);
     const want = await page.evaluate(() => Math.round(TASK.listenStat().totalMs / 60000));
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await waitShadowReady(page);
     await page.waitForFunction(() => {
       const v = document.getElementById('appView');
@@ -212,13 +212,13 @@ test.describe('3.0 随身听（M4，PRD §7）', () => {
     await finishSpeak(page);
 
     // 首页：第 1 篇卡片「最近学习」应显示「今天」（读数 = max(精读 lastReadAt, 收听 last)）
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitShadowReady(page);
     await expect(page.locator('.art-card[data-a="1"]')).toContainText('今天');
     await expect(page.locator('.art-card[data-a="0"]')).toContainText('还没学过');
 
     // 回随身听（刷新 → 默认篇按「最近在学」现算，不是沿用上一趟的 _listenArticle）
-    await page.goto(`${rootUrl}/app/index.html#/listen`);
+    await page.goto(`${rootUrl}/index.html#/listen`);
     await waitShadowReady(page);
     await page.reload();
     await waitShadowReady(page);

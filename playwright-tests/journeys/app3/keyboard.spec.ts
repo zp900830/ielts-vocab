@@ -1,5 +1,5 @@
 // 2026-09-25 用户：「快捷键别丢了，空格是播放/暂停当前高亮句，⬅️是播放上一句，➡️是播放下一句」。
-// 现状验证：/app/ 的全局 keydown（照搬 shadow 的那套）在任务模式里仍然有效 ——
+// 现状验证：主站的全局 keydown（照搬 shadow 的那套）在任务模式里仍然有效 ——
 //   空格 = togglePlay（当前句）；→ = TASK.next()（① 态 = 放这一句 / 下一句，高亮同步开播）；
 //   ← = TASK.prev()（回到上一句并开播）。
 // 这条锁把三颗键钉住，防止以后加浮窗/输入框时把全局 handler 挡掉（要排除输入框/浮窗按键）。
@@ -34,14 +34,14 @@ const SIX: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
 
 async function enterTask(page: import('@playwright/test').Page) {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await page.waitForFunction(() => {
     try {
       return typeof dataReady !== 'undefined' && dataReady

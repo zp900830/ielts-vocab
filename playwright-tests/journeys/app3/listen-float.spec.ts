@@ -1,5 +1,5 @@
 // 3.0 随身听悬浮球（切 tab 续播）：照搬主站 index.html 那套 #lsFab 的完整出现/消失/点击交互。
-// 服务器归 global-setup.ts 起停（仓库根 8932）：/app/ 在仓库根，和 shell/home/stats/words 一样
+// 服务器归 global-setup.ts 起停（仓库根 8932）：站点在仓库根，和 shell/home/stats/words 一样
 // 用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
@@ -35,7 +35,7 @@ const TWO: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -50,7 +50,7 @@ async function installSpeakStub(page: import('@playwright/test').Page) {
 }
 
 async function gotoListen(page: import('@playwright/test').Page) {
-  await page.goto(`${rootUrl}/app/index.html#/listen`);
+  await page.goto(`${rootUrl}/index.html#/listen`);
   await waitShadowReady(page);
   await page.waitForFunction(() => {
     const w = window as unknown as { APP3?: { renderListen?: unknown } };

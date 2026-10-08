@@ -1,5 +1,5 @@
 // 3.0 M1 Task 5：点首页卡片 → 进这一篇的任务模式（按篇队列 + ① 通读）。
-// 服务器归 global-setup.ts 起停（仓库根 8932）；/app/ 在仓库根，所以用 E2E_ROOT_URL。
+// 服务器归 global-setup.ts 起停（仓库根 8932）；站点在仓库根，所以用 E2E_ROOT_URL。
 //
 // 数据用 stub 而不用真课文（和 shell.spec / home.spec 同一理由）：真课文一页 1833 句 +
 // 3242 词，整套并行时会压出 shadow 用例偶发红。这里要的是「有 [[词:形式]] 标记的真句子」，
@@ -66,7 +66,7 @@ const SIX: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }),
     );
   }
@@ -118,7 +118,7 @@ const curIdx = (page: import('@playwright/test').Page) =>
    站在第 0 句点「下一句」必须落到第 1 句，而不是按队列跳到第 2 句。 */
 test('口径 A：下一句=屏幕上紧邻的下一句（不在今天批次也照去）', async ({ page }) => {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.readDone(1); });
   await page.reload();
@@ -162,7 +162,7 @@ async function answerWronglyInPop(page: import('@playwright/test').Page) {
 test.describe('3.0 文章任务模式（按篇队列）', () => {
   test('点卡片 → 任务模式，主行 n/N 是今天的计划句数（口径 A，不是这一篇）', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('body')).toHaveClass(/task-mode/);
@@ -180,7 +180,7 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
 
   test('按篇队列：排出来的句一句都不许出这一篇', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').nth(1).click();   // 第二篇
     await expect(page.locator('#taskBar')).toBeVisible();
@@ -194,7 +194,7 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
 
   test('任务模式里正文是主角：#appShell 让位，#art 可见', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toBeVisible();
@@ -205,7 +205,7 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
 
   test('横幅的文章名与「还剩」读的是同一篇（T4）', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     const main = page.locator('#homeBanner .hb-main');
     // 先等横幅落地（数据是异步拉的）——不等就 evaluate 读 SECTIONS 会偶发 undefined。
@@ -223,7 +223,7 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
   // 审阅 I1：任务模式没有顶栏，光一颗 ✕ 不说明「退出 = 回首页选下一篇」。
   test('任务模式顶栏：文章标题 + 返回首页，点了回首页（I1）', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('body')).toHaveClass(/task-mode/);
@@ -246,7 +246,7 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
   // 2026-09-24 用户：任务条那颗 ✕ 去掉，退出走头部「返回」；退出零惩罚，所以不再摆二次确认。
   test('任务条没有 ✕ 了；退出走头部「返回」，直接退不摆二次确认', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toBeVisible();
@@ -262,7 +262,7 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
   // ④ 任务模式（沉浸式阅读）用原背景色（暖白 #faf8f4），不是首页那套主站薄荷底。
   test('任务模式底色回到暖白，和首页薄荷底不一样', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     const homeBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
     await page.locator('.art-card').first().click();
@@ -275,7 +275,7 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
   // 审阅 I2：退出后首页卡片/横幅还停在进任务模式前的进度，要等点导航或刷新才更新。
   test('退出任务模式后首页立即刷新，不用刷新页面（I2）', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('body')).toHaveClass(/task-mode/);
@@ -321,7 +321,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
   // 还悬在听书页上。锁死：离开任务模式的每条路都要把这两样收干净。
   test('② 态切去随身听：答题卡、答题任务条、quiz 态一起收（不再悬在听书页）', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toBeVisible();
@@ -343,7 +343,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
 
   test('② 态点「返回首页」：答题卡不悬在新页面上（exitTaskMode 一并收）', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await page.evaluate(() => TASK.setPass(2));
@@ -357,7 +357,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
   });
   test('② 挖空长在正文里，点空弹浮窗，下一题定位到下一个空', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toBeVisible();
@@ -385,7 +385,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
   test('390px 宽下浮窗锚在空旁边、不越出屏幕', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toBeVisible();
@@ -401,7 +401,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
   // 审阅 Important 1：② 的分母数了答不了的题（词卡例句题 s==='ex' 没有正文空位可挖）。
   test('② 的分母只数答得出的题：词卡例句题不计入，也不占进度', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     // 往引擎排出的批次里塞一条没有正文空位的 'ex' 题（模拟真实会出现的词卡例句题）
     await page.evaluate(() => {
@@ -429,7 +429,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
   // 审阅 Important 2：乱序点空后，「下一题」必须去找下一个未答的空，既不重问也不漏。
   test('下一题 = 下一个未答的空：乱序点空不漏、不重问', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toBeVisible();
@@ -481,7 +481,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
   test.describe('② 答完自动下一题', () => {
     test('答完不点任何东西：反馈先可见，随后自动到下一题', async ({ page }) => {
       await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await page.goto(`${rootUrl}/index.html#/home`);
       await freshPlan(page);
       await page.locator('.art-card').first().click();
       await expect(page.locator('#taskBar')).toBeVisible();
@@ -508,7 +508,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
 
     test('答错也先给反馈：红字 + 正确答案，停留更久后自动推进', async ({ page }) => {
       await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await page.goto(`${rootUrl}/index.html#/home`);
       await freshPlan(page);
       await page.locator('.art-card').first().click();
       await expect(page.locator('#taskBar')).toBeVisible();
@@ -535,7 +535,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
 
     test('最后一题答完 → 自动进收工态（不留空白）', async ({ page }) => {
       await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await page.goto(`${rootUrl}/index.html#/home`);
       await freshPlan(page);
       await page.locator('.art-card').first().click();
       await expect(page.locator('#taskBar')).toBeVisible();
@@ -565,7 +565,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
 
     test('手动「下一题」与自动推进不打架：不跳两题', async ({ page }) => {
       await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await page.goto(`${rootUrl}/index.html#/home`);
       await freshPlan(page);
       await page.locator('.art-card').first().click();
       await expect(page.locator('#taskBar')).toBeVisible();
@@ -587,7 +587,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
 
     test('乱序点空 + 自动推进：不漏、不重问', async ({ page }) => {
       await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await page.goto(`${rootUrl}/index.html#/home`);
       await freshPlan(page);
       await page.locator('.art-card').first().click();
       await expect(page.locator('#taskBar')).toBeVisible();
@@ -625,7 +625,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     test('prefers-reduced-motion 下自动推进照常工作（不因无障碍偏好失灵）', async ({ page }) => {
       await page.emulateMedia({ reducedMotion: 'reduce' });
       await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await page.goto(`${rootUrl}/index.html#/home`);
       await freshPlan(page);
       await page.locator('.art-card').first().click();
       await expect(page.locator('#taskBar')).toBeVisible();
@@ -640,7 +640,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
 
     test('自动推进不抢焦点（polite 播报不被截断），手动推进仍送焦', async ({ page }) => {
       await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await page.goto(`${rootUrl}/index.html#/home`);
       await freshPlan(page);
       await page.locator('.art-card').first().click();
       await expect(page.locator('#taskBar')).toBeVisible();
@@ -674,7 +674,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
      刷新后 daily 不丢，且 repsByArticle 真的落盘、过了 reload 还在（§7.6 的精读次数）。 */
   test('入口 1 收工态：① 走完 → 答题 → 收工「回首页 + 看词本」，刷新 daily 不丢', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toBeVisible();
@@ -732,7 +732,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
      算术写在断言里，谁改了权重或输入来源，这两条就 RED。 */
   test('熟练度公式：② 正确率（×35）与精读重复度（×25）各自单独动数（§9.2）', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     // 第 0 篇 8 句：通读满 → 第一项 = 40（后面两项的基准）
     /* 2026-09-26：卡片显示的是通读完成度（这里全读满 = 100%），融合熟练度改从
        APP3.articleStat(0).progress 读 —— 公式（×35/×25 两项）照样逐项锁。 */
@@ -758,7 +758,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
   // 收工态两颗键各自去哪：看词本 → #/words 占位屏；回首页 → 首页六张卡片。
   test('收工态：看词本 → #/words；回首页 → 首页', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     // 直接进该篇任务模式并切到 ②，答完这批 → 收工态
     const finishQuiz = async () => {
@@ -780,7 +780,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await expect(page).toHaveURL(/#\/words/);
     await expect(page.locator('#appView')).toContainText('单词本');
 
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await finishQuiz();
     await page.locator('#tbAgain').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
@@ -791,7 +791,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
      批次与「① 后进 ②」同源（都取当天 assemble 的 items 快照）。 */
   test('入口 2：通读完成的卡片有「答题」，点了直达 ②（不要求先跑 ①）', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     // 只通读、不做题 → 该篇「② 可答题」（data-stage="read"）
     await page.evaluate(() => {
@@ -815,7 +815,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
      —— ② 的已答集合按（篇, 天）存 LS_ARTICLE，重进 ② 直接接着答。 */
   test('② 答题进度持久化：答两题后刷新，重进 ② 不重答', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'read');
@@ -845,7 +845,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
 
   test('入口 1：① 走完 → 小结「开始答题」→ 正文立刻挖空（§13.1）', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toBeVisible();
@@ -875,7 +875,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
 test.describe('3.0 §2.3 没计划也能进任务模式', () => {
   test('新用户点卡片 → 自由跟读 + 空状态任务条 →「去设置」建计划 → 真任务条回来', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     // 全新用户：清掉真值根与 3.0 按篇账，刷新让首页读到「没计划」
     await page.evaluate(() => {
       localStorage.removeItem('ielts.shadow.v2');
@@ -921,7 +921,7 @@ test.describe('3.0 §2.3 没计划也能进任务模式', () => {
 test.describe('3.0 §9.4 已学完判据', () => {
   test('通读一遍 + ② 批次答过一遍 → 卡片「已学完」（不要求答对全篇）', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.evaluate(() => {
       Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
@@ -956,7 +956,7 @@ test.describe('3.0 §9.4 已学完判据', () => {
 test.describe('3.0 按篇账不随共享 blob 走', () => {
   test('精读次数住自己的 key，reload 与备份都在', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.evaluate(() => TASK.seedArticleForTest(0, { reps: 3 }));
     expect(await page.evaluate(() => TASK.repsOf(0))).toBe(3);
@@ -1011,7 +1011,7 @@ const SIXLONG: Record<string, string> = (() => {
 test.describe('3.0 终审顺手项', () => {
   test('§4.4 空按被遮词形给宽：长词的空比短词明显宽', async ({ page }) => {
     await stubData(page, SIXLONG);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toBeVisible();
@@ -1026,7 +1026,7 @@ test.describe('3.0 终审顺手项', () => {
 
   test('Global Constraint：.a-quiz / .b-go 触区 ≥44px（头部照抄主站，用 hit-slop 扩热区）', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     // .b-go：横幅那颗
     const goH = await page.locator('#homeBanner .b-go').evaluate((el) => el.getBoundingClientRect().height);
@@ -1056,7 +1056,7 @@ test.describe('3.0 终审顺手项', () => {
 
   test('② / 收工态 #tbNext 的 title/aria 与可见文字一致（不再说「下一句」）', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toBeVisible();

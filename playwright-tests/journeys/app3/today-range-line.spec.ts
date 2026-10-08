@@ -12,7 +12,7 @@
 //  · 宽度 = 与 .reader-head / .layout 内容框同一口径（min(1084px, 100% − 36px)），±2px。
 //  · 无计划 / 自由跟读 / 已收工：不画线。
 //
-// 反向验证：把 app/index.html 的改动 stash 掉后，本文件除「结构不受损」外的锁必须红
+// 反向验证：把 index.html 的改动 stash 掉后，本文件除「结构不受损」外的锁必须红
 //（它们钉的是新节点 new-behavior；结构锁钉的是既有正文结构，不依赖新节点）。
 import { test, expect } from '../../fixtures';
 
@@ -34,7 +34,7 @@ const rootUrl = process.env.E2E_ROOT_URL || '';
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -102,7 +102,7 @@ function spanFixture(): Record<string, string> {
 /** 停在任务模式里的第 0 篇（跨篇夹具）。 */
 async function enterSpanBook(page: import('@playwright/test').Page, minutes = 11) {
   await stubData(page, spanFixture());
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate((m) => { TASK.resetV2(); TASK.initPlan(m); }, minutes);
   await page.reload();
@@ -115,7 +115,7 @@ async function enterSpanBook(page: import('@playwright/test').Page, minutes = 11
    per[a].q 是按篇收窄的队列，只用来证明「今天不止排到一篇」；它不能当全天窗口 ——
    按篇装配时每篇都能挑到全天承诺之外的句子（六篇并集比全天窗口长）。
    每篇之间必须先退出：enterTaskMode 在「已经在任务模式」时只收面板就 return
-   （app/index.html:8656），不重跑 syncQueueFromPlan —— 不退就六次读到的都是第一篇的队列。 */
+   （index.html:8659），不重跑 syncQueueFromPlan —— 不退就六次读到的都是第一篇的队列。 */
 async function sweepArticles(page: import('@playwright/test').Page, n = 6) {
   const out: { q: number[]; lines: { e: string; gi: string }[] }[] = [];
   for (let a = 0; a < n; a++) {
@@ -136,7 +136,7 @@ async function sweepArticles(page: import('@playwright/test').Page, n = 6) {
    两边都不贴文章边界，两条线都该出现。 */
 async function enterRangeArticle(page: import('@playwright/test').Page) {
   await stubData(page, rangeFixture());
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(8); TASK.readDone(0); });
   await page.reload();
@@ -232,7 +232,7 @@ test.describe('文章内「今天任务区间」横线', () => {
 
   test('无计划 / 自由跟读：一条线也不画', async ({ page }) => {
     await stubData(page, rangeFixture());
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await expect(page.locator('.art-card')).toHaveCount(6);
     await page.evaluate(() => TASK.resetV2());   // 清掉计划 = 自由跟读
     await page.reload();
@@ -294,7 +294,7 @@ test.describe('文章内「今天任务区间」横线', () => {
 
   test('全篇即区间：开始线照画（设起点入口），结束线贴底不画', async ({ page }) => {
     await stubData(page, fullArticleFixture());
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitAppReady(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await page.reload();

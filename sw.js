@@ -1,17 +1,17 @@
-/* 3.0 /app/ service worker —— 真实文件（非 blob URL）。
+/* 3.0 主站 service worker —— 真实文件（非 blob URL）。scope '/'（/admin/ 与数据 JSON 放行）。
  *
  * 2026-09-24 根因修复（W6 PWA / M2 暴露）：
  *   旧实现用 URL.createObjectURL(new Blob([...])) 内联脚本再 register(blobUrl, {scope:'/app/'})。
  *   Chromium 直接拒绝：「The URL protocol of the script ('blob:…') is not supported」——
  *   SW 从未真正注册，等于没有离线/缓存兜底（M2 往那段 blob 代码里加的「失败退回网络」
- *   根本没机会执行）。静态服务器偶发丢 /app/app.js 时页面就白屏。改成仓内真实文件后 SW 才生效。
+ *   根本没机会执行）。静态服务器偶发丢 app.js 时页面就白屏。改成仓内真实文件后 SW 才生效。
  *
- * 策略：**只接管自己 scope 内（/app/…）的同源 GET，一律 network-first**：
+ * 策略：**只接管自己 scope 内（除 /admin/ 与 /data/ JSON 外）的同源 GET，一律 network-first**：
  *   - 先走网络 → 成功则回网络响应并顺手写缓存（拿到最新的 app.js / index.html）；
  *   - 网络失败（断网 / 服务器丢连接）→ 退回缓存 → app.js 这类 defer 脚本「永远拿得到」；
  *   - 两者都没有才抛错，交给浏览器按正常失败处理。
  *   不用 cache-first，是为了「EdgeOne 新部署立刻生效」——绝不让旧缓存盖住新部署。
- *   scope 外的请求（/app/data/… 之外的相对资源、跨域字体/CDN/Supabase）一律放行，绝不拦测试 stub
+ *   放行的请求（/admin/、/data/…、跨域字体/CDN/Supabase）绝不拦测试 stub
  *   或其它模块。缓存名带版本；activate 清掉旧版本缓存。
  */
 
@@ -56,8 +56,9 @@ self.addEventListener('fetch', (e) => {
   let url;
   try { url = new URL(req.url); } catch (_) { return; }
   if (url.origin !== self.location.origin) return;          // 跨域不插手
-  const scopePath = new URL(self.registration.scope).pathname; // 例如 '/app/'
+  const scopePath = new URL(self.registration.scope).pathname; // 根部署时是 '/'
   if (!url.pathname.startsWith(scopePath)) return;          // 只管网自己的资源
+  if (url.pathname.startsWith('/admin/')) return;           // 管理后台不经 SW
   // 数据 JSON 不接管：缓存靠 SHADOW_DATA_VER 查询串 + HTTP 头；且接管会让 E2E 的
   // page.route stub 失效（SW 内部的 fetch 绕过路由拦截），全部用例会吃到真数据。
   if (url.pathname.startsWith(scopePath + 'data/')) return;

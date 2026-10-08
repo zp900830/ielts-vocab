@@ -1,6 +1,6 @@
 // 3.0 M1 Task 3：首页六张文章卡片（熟练度 / 阶段 / 已毕业词数 / 最近学习）。
-// 服务器归 global-setup.ts 起停（仓库根 8932）；8931 那台服务的是 shadow/ 树，
-// 而 /app/ 在仓库根，所以和 shell.spec.ts / smoke.spec.ts 一样用 E2E_ROOT_URL，不走 baseURL。
+// 服务器归 global-setup.ts 起停（仓库根 8932）；
+// 站点在仓库根，所以和 shell.spec.ts / smoke.spec.ts 一样用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 import { setMin } from '../../utils/min-slider';
@@ -56,7 +56,7 @@ const SIX: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }),
     );
   }
@@ -68,7 +68,7 @@ const pctOf = (page: import('@playwright/test').Page) =>
 test.describe('3.0 首页', () => {
   test('六张卡片 + 四档状态 + 卡片数据', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitHomeReady(page);
     await expect(page.locator('.art-card')).toHaveCount(6);
     await expect(page.locator('.art-card .a-title').first()).toHaveText('地球与生命');
@@ -125,7 +125,7 @@ test.describe('3.0 首页', () => {
   // 复用影子跟读现成的 renderSetup（设置屏），落在 #setupSheet 容器里；建完计划横幅改口「继续学」。
   test('没计划 → 横幅给「去设置」；有计划 → 给「继续学」', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await page.evaluate(() => localStorage.removeItem('ielts.shadow.v2'));
     await page.reload();
     await waitHomeReady(page);
@@ -145,7 +145,7 @@ test.describe('3.0 首页', () => {
      窄屏（≤700px）挤不下时退化成上下（按钮仍通栏、触摸 ≥44）。 */
   test('横幅排版：宽屏左文字/右按钮，窄屏退化成上下', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitHomeReady(page);
     const banner = page.locator('#homeBanner .b-go').locator('xpath=..');
     await expect(banner).toBeVisible();

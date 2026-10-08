@@ -1,5 +1,5 @@
 // 3.0 M2：学习数据页（PRD §5）。服务器归 global-setup.ts 起停（仓库根 8932）；
-// /app/ 在仓库根，所以和 shell.spec.ts / home.spec.ts 一样用 E2E_ROOT_URL，不走 baseURL。
+// 站点在仓库根，所以和 shell.spec.ts / home.spec.ts 一样用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
 
@@ -53,7 +53,7 @@ const SIX: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -65,7 +65,7 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
       高并发下 #appView 会停在「正在载入…」/空，5s 的 locator 自动等待会偶发红。
    2026-09-24 根因修复后去掉 M2 的「有界重载重试」：那个重试是为绕开 blob-URL SW 不生效、
    app.js 偶发丢而加的缓解，会把以后 app.js 的真故障一起吞掉。现在 SW 是真实文件
-   /app/sw.js（network-first + 缓存兜底），app.js 有可靠保障，不需要重试。 */
+   /sw.js（network-first + 缓存兜底），app.js 有可靠保障，不需要重试。 */
 async function waitStatsReady(page: import('@playwright/test').Page) {
   await waitShadowReady(page);
   await page.waitForFunction(() => {
@@ -77,7 +77,7 @@ async function waitStatsReady(page: import('@playwright/test').Page) {
 }
 
 async function gotoStats(page: import('@playwright/test').Page) {
-  await page.goto(`${rootUrl}/app/index.html#/stats`);
+  await page.goto(`${rootUrl}/index.html#/stats`);
   await waitStatsReady(page);
 }
 /* reload 之后同样要过闸（defer 的 app.js 可能还没跑，5s 的 locator 自动等待不够）。 */
@@ -89,7 +89,7 @@ async function reloadStats(page: import('@playwright/test').Page) {
 test.describe('3.0 学习数据页（M2，PRD §5）', () => {
   test('未开始：一句话 + 一个按钮，点了打开「我的」浮窗，不内嵌计划表单', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await page.evaluate(() => localStorage.removeItem('ielts.shadow.v2'));
     await reloadStats(page);
 
@@ -112,7 +112,7 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
      #appView 一直停在 .st-empty-start（hasPlan 已 true）。 */
   test('空态建计划后：学习数据页自己切到进行中视图（blocker 回归锁）', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await page.evaluate(() => localStorage.removeItem('ielts.shadow.v2'));
     await reloadStats(page);
     await expect(page.locator('.st-empty-start')).toBeVisible();
@@ -180,11 +180,11 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
       await expect(page.locator(`.st-art[data-a="${a}"] .sa-pct`), `第 ${a} 篇小卡百分比`).toHaveText(stats[a] + '%');
     }
     // 首页卡片同一个数：切到首页比对
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await expect(page.locator('.art-card[data-a="0"] .a-pct')).toHaveText(stats[0] + '%');
 
     // 点第 0 篇小卡 → 回首页且该卡片被高亮
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await page.locator('.st-art[data-a="0"]').click();
     await expect(page).toHaveURL(/#\/home/);
     await expect(page.locator('.art-card[data-a="0"]')).toHaveClass(/hl/);
@@ -283,12 +283,12 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     await page.locator('.st-tip[data-tip="leech"] .tip-go').click();
     await expect(page).toHaveURL(/#\/words/);
     // continue → 回首页并高亮第 0 篇
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await page.locator('.st-tip[data-tip="continue"] .tip-go').click();
     await expect(page).toHaveURL(/#\/home/);
     await expect(page.locator('.art-card[data-a="0"]')).toHaveClass(/hl/);
     // stale → 回首页并高亮第 0 篇
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await page.locator('.st-tip[data-tip="stale"] .tip-go').click();
     await expect(page).toHaveURL(/#\/home/);
     await expect(page.locator('.art-card[data-a="0"]')).toHaveClass(/hl/);
@@ -311,7 +311,7 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     await expect(page).toHaveURL(/#\/home/);
     await expect(page.locator('.art-card[data-a="0"]')).toHaveClass(/hl/);
     // words → 单词本
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await page.locator('.st-tip[data-tip="words"] .tip-go').click();
     await expect(page).toHaveURL(/#\/words/);
   });

@@ -24,7 +24,7 @@ const SIX: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -52,7 +52,7 @@ declare const SECTIONS: unknown[];
 
 async function freshPlan(page: import('@playwright/test').Page) {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.reload();
@@ -71,7 +71,7 @@ test('未登录点文章卡：不进任务模式，弹统一登录弹窗', async
 test('未登录直进数据/单词本：锁定页 + 去登录按钮', async ({ page }) => {
   await freshPlan(page);
   for (const route of ['stats', 'words']) {
-    await page.goto(`${rootUrl}/app/index.html#/${route}`);
+    await page.goto(`${rootUrl}/index.html#/${route}`);
     await expect(page.locator('.ls-card'), `${route} 应显示锁定页`).toBeVisible({ timeout: 15000 });
     await expect(page.locator('#lockLoginBtn'), '有去登录按钮').toBeVisible();
   }
@@ -81,7 +81,7 @@ test('未登录直进数据/单词本：锁定页 + 去登录按钮', async ({ p
 
 test('未登录：设置学习时间（建计划/改分钟数）都要登录', async ({ page }) => {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); });
   expect(await page.evaluate(() => TASK.isLoggedIn()), '本文件必须保持未登录态').toBe(false);
@@ -108,7 +108,7 @@ test('未登录随身听可用，但今日任务切不过去', async ({ page }) 
     w.__cbs = [];
     w.speak = function (t: string, cb?: () => void) { if (cb) w.__cbs.push(cb); };
   });
-  await page.goto(`${rootUrl}/app/index.html#/listen`);
+  await page.goto(`${rootUrl}/index.html#/listen`);
   await expect(page.locator('.ls-card')).toBeVisible();
   await page.evaluate(() => TASK.listenToggle());
   await expect.poll(async () => page.evaluate(() =>

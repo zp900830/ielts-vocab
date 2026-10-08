@@ -48,7 +48,7 @@ const SIXQ: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -99,13 +99,13 @@ test.describe('3.0 音色：全局立刻生效（refine3 ①）', () => {
   test('正在播时换音色：用新音色就地重播当前句，并持久化 ielts-voice', async ({ page }) => {
     await installVoiceStub(page);
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitAppReady(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await page.reload();
     await waitAppReady(page);
     // 「正在播」现实里发生在随身听（任务模式里不播时也能开「我的」，但一步一停；随身听才是连播场景）
-    await page.goto(`${rootUrl}/app/index.html#/listen`);
+    await page.goto(`${rootUrl}/index.html#/listen`);
     await expect(page.locator('.ls-card')).toBeVisible();
 
     // 起播当前句（本地音色）
@@ -144,7 +144,7 @@ test.describe('3.0 音色：全局立刻生效（refine3 ①）', () => {
 test.describe('3.0 云端音色：起播不再被自己的清理误杀（refine3 ②）', () => {
   test('stop(keepKey) 留下同 key 的排队项，其余 reject 成 stale', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitAppReady(page);
     const r = await page.evaluate(async () => {
       CLOUD._running = 2; // 卡住消费者，让两个 job 都停在队列里（双通道用 _running 计数）
@@ -164,7 +164,7 @@ test.describe('3.0 云端音色：起播不再被自己的清理误杀（refine3
 
   test('预取后的起播复用同一份合成，不触发"改用本地音色"降级', async ({ page }) => {
     await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitAppReady(page);
     const r = await page.evaluate(async () => {
       const w = window as unknown as { __fb: string[]; __done: { ok: boolean } };

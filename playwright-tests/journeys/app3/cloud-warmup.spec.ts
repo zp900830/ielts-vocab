@@ -35,7 +35,7 @@ const SIX: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }),
     );
   }
@@ -52,7 +52,7 @@ async function waitAppReady(page: import('@playwright/test').Page) {
 
 test('进文章即预热后面几句：开播前后台已合成', async ({ page }) => {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
   await page.evaluate(() => { localStorage.setItem('ielts-voice', 'cloud:test-voice'); });
@@ -60,7 +60,7 @@ test('进文章即预热后面几句：开播前后台已合成', async ({ page 
   await waitAppReady(page);
   // 录音 fetch 先换成即时 resolve 的假货，再上线云开关 ——
   // stubCloudVoice 会先等 CLOUD.boot() 落定，否则 boot/checkStatus 的异步回写会把 _on 擦回
-  // false，入口预热整段跳过（app/index.html 里 warmupCloudAhead 的第一道门就是它）。
+  // false，入口预热整段跳过（index.html 里 warmupCloudAhead 的第一道门就是它）。
   await page.evaluate(() => {
     const w = window as unknown as { __fetched: string[] };
     const cloud = CLOUD as any;
@@ -91,7 +91,7 @@ test('进文章即预热后面几句：开播前后台已合成', async ({ page 
 test('正式播放不等慢预取：stop 掐掉执行中的预取，新播放立刻拿到槽位', async ({ page }) => {
   test.setTimeout(25000);
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   const r = await page.evaluate(async () => {
     const w = window as unknown as { __n: number; __aborted: boolean };
@@ -141,7 +141,7 @@ test('正式播放不等慢预取：stop 掐掉执行中的预取，新播放立
 test('双通道：两个预取可并发，后发的快请求先完成', async ({ page }) => {
   test.setTimeout(25000);
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
   const order = await page.evaluate(async () => {
     const w = window as unknown as { __order: string[] };

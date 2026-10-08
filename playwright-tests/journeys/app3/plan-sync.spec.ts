@@ -40,7 +40,7 @@ const SIX: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page) {
   for (const [name, body] of Object.entries(SIX)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -84,7 +84,7 @@ async function installFakeEvents(page: import('@playwright/test').Page, rows: un
 test.describe('换设备计划同步：dayplan 事件重建 ROOT2.plan', () => {
   test('本机无计划时从事件流重建；刚重置过则不许复活', async ({ page }) => {
     await stubData(page);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
 
     // 干净机：没有任何计划

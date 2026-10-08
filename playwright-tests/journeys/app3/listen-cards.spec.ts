@@ -1,6 +1,6 @@
 // 随身听 · 本句单词卡（2026-10-04 方案 B，2026-10-07 反转成顶挂抽屉 + 沉底迷你条）。
 // 位置类断言另有 listen-cards-layout.spec.ts 专锁，本文件管行为（开闭/切句/字幕/无障碍）。
-// 服务器归 global-setup.ts 起停（仓库根 8932）：/app/ 在仓库根，用 E2E_ROOT_URL。
+// 服务器归 global-setup.ts 起停（仓库根 8932）：站点在仓库根，用 E2E_ROOT_URL。
 // 桩数据/录音笔照抄 listen.spec.ts 同套路；VOCAB 桩带 note/cmp（真数据同形）。
 import { test, expect } from '../../fixtures';
 import { waitShadowReady } from '../../utils/app-ready';
@@ -46,13 +46,13 @@ const CARDS: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
 
 async function gotoListen(page: import('@playwright/test').Page) {
-  await page.goto(`${rootUrl}/app/index.html#/listen`);
+  await page.goto(`${rootUrl}/index.html#/listen`);
   await waitShadowReady(page);
   await page.waitForFunction(() => {
     const v = document.getElementById('appView');

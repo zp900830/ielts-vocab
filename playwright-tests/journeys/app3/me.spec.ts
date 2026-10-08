@@ -3,7 +3,7 @@
 //   手机端两种登录态都写「我的」，点它切到内容相同的一级页面 #/me（不再是浮窗/抽屉）。
 // 这条锁三件事：① 点左下角卡片 → 浮窗出现且含主题开关；② 切主题 → body.dark 真的变；
 // ③ 未登录时头像位是「未」字（不引新图）。另锁手机端用户卡是 TabBar 的第 5 格、点得到、进页面。
-// 服务器归 global-setup.ts 起停（仓库根 8932）；/app/ 在仓库根，用 E2E_ROOT_URL，不走 baseURL。
+// 服务器归 global-setup.ts 起停（仓库根 8932）；站点在仓库根，用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
@@ -12,14 +12,14 @@ declare const APP3: { updateMeCard(): void };
 const EMPTY: Record<string, string> = { 'sections.json': '[]', 'vocab.json': '{}', 'chapters.json': '[]' };
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) => r.fulfill({ status: 200, contentType: 'application/json', body }));
+    await page.route(`**/data/${name}*`, (r) => r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
 
 test.describe('3.0 用户卡 + 「我的」浮窗（PRD §2.2 / §8.1，PC 宿主）', () => {
   test('未登录显示图标+「未登录」；点它开统一登录弹窗；弹窗可进设置；已登录显示账号名', async ({ page }) => {
     await stubData(page, EMPTY);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
 
     // ① 未登录（2026-10-08 用户改口径）：PC 侧栏这一行本身就报登录状态 —— 图标 + 「未登录」
     await expect(page.locator('#meCard .me-tab-label'), '未登录显示「未登录」标签').toHaveText('未登录');
@@ -88,7 +88,7 @@ test.describe('3.0 用户卡 + 「我的」浮窗（PRD §2.2 / §8.1，PC 宿�
   test('手机端：用户卡是 TabBar 第 5 格（图标+「我的」），点它进「我的」一级页面', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 800 });
     await stubData(page, EMPTY);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
 
     const card = page.locator('#meCard');
     await expect(card).toBeVisible();

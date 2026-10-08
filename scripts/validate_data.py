@@ -10,9 +10,9 @@ sys.path.insert(0, str(ROOT / 'tools'))
 from width_rule import width as _ruler_width   # 唯一一把尺；口径与上限都只在 tools/width_rule.py 里改
 from check_compare_draft import sec_variants   # 课文标记的拆法也只有一份（门禁 1 与这里必须同口径）
 
-# 跟读站（现 /app/ 3.0）原先完全没有版本戳，改课文后 iOS Safari 会按 Last-Modified 命中旧缓存，
+# 主站（3.0，2026-10-08 起即根站点）原先完全没有版本戳，改课文后 iOS Safari 会按 Last-Modified 命中旧缓存，
 # 出现 sections.json 是新的、vocab.json 是旧的 → 句序与词表错位。
-SHADOW_VER_FILES = ['app/data/sections.json', 'app/data/vocab.json', 'app/data/chapters.json']
+SHADOW_VER_FILES = ['data/sections.json', 'data/vocab.json', 'data/chapters.json']
 
 def digest(rels):
     h = hashlib.sha256()
@@ -62,21 +62,21 @@ def load(path):
         return json.load(f)
 
 def main():
-    vocab = load(ROOT / 'app' / 'data' / 'vocab.json')
-    chapters = load(ROOT / 'app' / 'data' / 'chapters.json')
-    sections = load(ROOT / 'app' / 'data' / 'sections.json')
+    vocab = load(ROOT / 'data' / 'vocab.json')
+    chapters = load(ROOT / 'data' / 'chapters.json')
+    sections = load(ROOT / 'data' / 'sections.json')
 
     errors = []
     warnings = []   # 已知待修项：报告但不阻断，修完后可逐条上提为 error
 
-    # 0. 跟读站（/app/）SHADOW_DATA_VER 必须等于 app/data 三文件的内容哈希
+    # 0. 主站 SHADOW_DATA_VER 必须等于 data 三文件的内容哈希
     want_s = shadow_data_ver()
-    sh = (ROOT / 'app' / 'index.html').read_text(encoding='utf-8')
+    sh = (ROOT / 'index.html').read_text(encoding='utf-8')
     ms = re.search(r'const SHADOW_DATA_VER\s*=\s*"([0-9a-fA-F]+)"', sh)
     if not ms:
-        errors.append('app/index.html: 找不到 const SHADOW_DATA_VER = "..."，跟读站数据无缓存版本')
+        errors.append('index.html: 找不到 const SHADOW_DATA_VER = "..."，跟读站数据无缓存版本')
     elif ms.group(1) != want_s:
-        errors.append(f'app/index.html SHADOW_DATA_VER 已过期：当前 {ms.group(1)}，'
+        errors.append(f'index.html SHADOW_DATA_VER 已过期：当前 {ms.group(1)}，'
                       f' 数据哈希为 {want_s}。请改为 "{want_s}"，否则改课文不会到达手机。')
     missing_pm = [w for w, e in vocab.items() if not e.get('p') or not e.get('m')]
     if missing_pm:
@@ -197,7 +197,7 @@ def main():
     SENT_BASELINE = 1809  # 2026-09-19 建立账本时的全书句数
     k = sh.find('const SENT_SHIFTS = [')
     if k < 0:
-        errors.append('app/index.html 找不到 SENT_SHIFTS 顺移账本；若课文句数有变，必须补记')
+        errors.append('index.html 找不到 SENT_SHIFTS 顺移账本；若课文句数有变，必须补记')
     else:
         d0, i = k + len('const SENT_SHIFTS = ['), k + len('const SENT_SHIFTS = [')
         depth = 1
@@ -230,7 +230,7 @@ def main():
 
     # 16. 结构化辨析卡（cmp.type === 'compare'）：不许造词、不许无处可挂
     #     这类卡是第二期 220 组辨析的落库形状，靠人工守不住，所以每条都机检。
-    _sec_raw = (ROOT / 'app/data/sections.json').read_text(encoding='utf-8')
+    _sec_raw = (ROOT / 'data/sections.json').read_text(encoding='utf-8')
     # 可查集合**不能**含辨析卡自己的内容 —— 否则卡片里编一条搭配，就被它自己"证明"了（自证循环）。
     # 所以卡片侧只收：词头、义项 m、例句 ex/exZh、字符串型 note（同义词/词伙）。
     _card_bits = []

@@ -1,5 +1,5 @@
 // 3.0 M5「我的」（PRD §8.1 / §8.2 / §10.4）。服务器归 global-setup.ts 起停（仓库根 8932）；
-// /app/ 在仓库根，同 home/stats/words，用 E2E_ROOT_URL，不走 baseURL。
+// 站点在仓库根，同 home/stats/words，用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 import { stubCloudAccount } from '../../utils/cloud-stub';
 import { setMin } from '../../utils/min-slider';
@@ -48,7 +48,7 @@ const EMPTY: Record<string, string> = { 'sections.json': '[]', 'vocab.json': '{}
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -73,7 +73,7 @@ const openMe = async (page: import('@playwright/test').Page) => {
 test.describe('M5 · 导出/导入（§8.1 数据管理）', () => {
   test('坏数据被 parseBackup 拒绝，且原 localStorage 分毫不动', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.seedArticleForTest(0, { reps: 5 }); });
     const before = await page.evaluate(() => localStorage.getItem('ielts.shadow.v2'));
@@ -106,7 +106,7 @@ test.describe('M5 · 导出/导入（§8.1 数据管理）', () => {
 
   test('落盘失败整份回滚，原数据不留半截', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.seedArticleForTest(0, { reps: 2 }); });
     const beforeV2 = await page.evaluate(() => localStorage.getItem('ielts.shadow.v2'));
@@ -141,7 +141,7 @@ test.describe('M5 · 导出/导入（§8.1 数据管理）', () => {
 
   test('导出 → 导入往返一致，且导入后按篇账可用', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(20); TASK.seedArticleForTest(0, { reps: 4 }); TASK.readDone(0); });
     const payload = await page.evaluate(() => TASK.backupPayload());
@@ -168,7 +168,7 @@ test.describe('M5 · 导出/导入（§8.1 数据管理）', () => {
 test.describe('M5 · 账号（§8.1 账号信息 / §10.4 键盘可达）', () => {
   test('弹窗内回车提交登录；注册/登出接线；已登录态显示邮箱+退出、无内嵌表单', async ({ page }) => {
     await stubData(page, EMPTY);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
 
     // 未登录点卡片 → 统一登录弹窗（不是浮窗）
@@ -226,7 +226,7 @@ test.describe('M5 · 账号（§8.1 账号信息 / §10.4 键盘可达）', () =
      碰不到确认这一环，所以这里单独走真家伙（只把 Supabase 客户端换成哑的）。 */
   test('退出登录：先二次确认；取消则登录态分毫不动，确认后才退并给一条 toast', async ({ page }) => {
     await stubData(page, EMPTY);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     // 登录态先由 stubCloudAccount 点亮（它等 CLOUD.boot() 落定，回写擦不掉它），
     // 再把 Supabase 客户端换成哑的：它的 onAuthStateChange 在注册时就回 SIGNED_OUT，
@@ -269,7 +269,7 @@ test.describe('M5 · 账号（§8.1 账号信息 / §10.4 键盘可达）', () =
 test.describe('M5 · 浮窗无障碍（§10.4）', () => {
   test('打开即聚焦、aria-modal、Esc 关闭归还焦点、Tab 不逃逸；重渲后焦点仍在浮窗内', async ({ page }) => {
     await stubData(page, EMPTY);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     const card = page.locator('#meCard');
     await card.click();
@@ -303,7 +303,7 @@ test.describe('M5 · 触摸目标（§10.4）', () => {
     await stubData(page, SIX);
     for (const vp of [{ width: 1280, height: 900 }, { width: 390, height: 800 }]) {
       await page.setViewportSize(vp);
-      await page.goto(`${rootUrl}/app/index.html#/home`);
+      await page.goto(`${rootUrl}/index.html#/home`);
       await waitTask(page);
       await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
       const pop = await openMe(page);
@@ -321,7 +321,7 @@ test.describe('M5 · 形态与边界（§8.1 / §8.2 / §10.1）', () => {
   test('手机端：「我的」是一级页面（不再是底部抽屉），§8.1 各区块都在且可达', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 800 });
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     const me = await openMe(page);
@@ -343,7 +343,7 @@ test.describe('M5 · 形态与边界（§8.1 / §8.2 / §10.1）', () => {
 
   test('深色：浮窗不是白底、文字可读（§10.1）', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     const pop = await openMe(page);
     const light = await pop.evaluate((el) => getComputedStyle(el).backgroundColor);
@@ -359,7 +359,7 @@ test.describe('M5 · 形态与边界（§8.1 / §8.2 / §10.1）', () => {
 
   test('§8.2 负向锁：我的里没有帮助/关于/产品说明/性能/设置大杂烩等无关入口', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     const pop = await openMe(page);
@@ -375,7 +375,7 @@ test.describe('M5 · 形态与边界（§8.1 / §8.2 / §10.1）', () => {
 test.describe('M5 · 计划旋钮（去掉「几点换一天」，日界固定 4 点）', () => {
   test('浮窗没有该旋钮；planConfig 固定 boundary=4；新计划不写 boundaryHour；旧值被忽略', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     const pop = await openMe(page);
@@ -407,7 +407,7 @@ test.describe('M5 · 计划旋钮（去掉「几点换一天」，日界固定 4
 test.describe('M5 · 去掉「免费」标签', () => {
   test('未登录/已登录下，用户卡与「我的」浮窗都不再出现「免费」', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await expect(page.locator('#meCard')).not.toContainText('免费');
     const pop = await openMe(page);
@@ -427,7 +427,7 @@ test.describe('M5 · 去掉「免费」标签', () => {
 test.describe('M5 · 重置学习计划', () => {
   test('二次确认说清「会重置什么/不会动什么」；重置后计划没了、进度还在、可重新建', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.readDone(0); TASK.seedArticleForTest(0, { reps: 5 }); });
     const before = await page.evaluate(() => ({
@@ -469,7 +469,7 @@ test.describe('M5 · 重置学习计划', () => {
      改成 2.0 那套极弱化文字按钮（下面沿用 .link-danger 声明）；破坏性操作的二次确认保持不变。 */
   test('重置 = 极弱化文字按钮（无标题、无底无框无影带下划线），点击仍二次确认', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     const pop = await openMe(page);

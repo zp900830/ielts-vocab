@@ -1,6 +1,6 @@
 // 「每天有多少分钟」= 滑块（2026-10-08 用户：「这里改成滑块设置，最小 5，最大 240。以 5 为单位滑动」，
 // 追问后拍板：三处宿主一起换、刻度只画不可点）。服务器归 global-setup.ts 起停（仓库根 8932），
-// /app/ 在仓库根，用 E2E_ROOT_URL，和 home/me5/overlay-stack 同一套。
+// 站点在仓库根，用 E2E_ROOT_URL，和 home/me5/overlay-stack 同一套。
 // 这里锁的是**契约**，不是长相：
 //   ① 设置屏 / 今日面板计划页 / 「我的」浮窗共用同一份档位（一处定义，三处复用，不许长回三套）；
 //   ② 上限真的到 240 —— 旧代码有三处把分钟夹在 1..180，光换 UI 不改夹取，拖到底会被打回 180；
@@ -46,7 +46,7 @@ const SIX: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -102,7 +102,7 @@ async function installCloudDayplan(page: import('@playwright/test').Page, minute
 /** 干净机：本机没有计划。 */
 async function gotoNoPlan(page: import('@playwright/test').Page) {
   await stubData(page, SIX);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await waitTask(page);
   await page.evaluate(() => { TASK.resetV2(); localStorage.removeItem('ielts.shadow.v2'); });
   await page.reload();
@@ -112,7 +112,7 @@ async function gotoNoPlan(page: import('@playwright/test').Page) {
 test.describe('「每天有多少分钟」滑块 · 5..240 步长 5', () => {
   test('三处宿主档位一模一样，旧的分钟胶囊彻底没了', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { localStorage.removeItem('ielts.shadow.v2'); });
     await page.reload();
@@ -153,7 +153,7 @@ test.describe('「每天有多少分钟」滑块 · 5..240 步长 5', () => {
 
   test('拖到 240 落得住（不再被 180 夹回），刷新回来还是 240', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     const range = await openPlanTab(page);
 
@@ -169,7 +169,7 @@ test.describe('「每天有多少分钟」滑块 · 5..240 步长 5', () => {
 
   test('5 是下限：拨到 5 以下夹回 5，initPlan 也照同一份档位', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     const range = await openPlanTab(page);
 
@@ -184,7 +184,7 @@ test.describe('「每天有多少分钟」滑块 · 5..240 步长 5', () => {
 
   test('拖动只改读数与工期预览，松手才改计划', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     const range = await openPlanTab(page);
     /* 工期文案按小数据算出来就是「到 X 年 X 月…」，里面没有分钟数，所以这一条不文字比对，
@@ -204,7 +204,7 @@ test.describe('「每天有多少分钟」滑块 · 5..240 步长 5', () => {
 
   test('键盘 → 与拖动同一条路，且按完焦点还在滑块上（第二下要按得动）', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     const range = await openPlanTab(page);
 
@@ -219,7 +219,7 @@ test.describe('「每天有多少分钟」滑块 · 5..240 步长 5', () => {
 
   test('刻度只画不点：不是按钮、点它不改值', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     const range = await openPlanTab(page, 60);
     const ticks = page.locator('#todayPanel .min-tick');
@@ -238,7 +238,7 @@ test.describe('「每天有多少分钟」滑块 · 5..240 步长 5', () => {
   test('手机端 390：「我的」页面里的滑块整行不溢出，触摸高度 ≥44', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await stubCloudAccount(page);

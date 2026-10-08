@@ -70,7 +70,7 @@ const SIXQ: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   for (const [name, body] of Object.entries(payloads)) {
-    await page.route(`**/app/data/${name}*`, (r) =>
+    await page.route(`**/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
@@ -95,7 +95,7 @@ async function freshPlan(page: import('@playwright/test').Page) {
 /* 建一份「刚建好、还没读」的 15 分钟计划 → 进第 0 篇的任务模式（① 通读态）。 */
 async function enterFirstArticle(page: import('@playwright/test').Page, payloads: Record<string, string>) {
   await stubData(page, payloads);
-  await page.goto(`${rootUrl}/app/index.html#/home`);
+  await page.goto(`${rootUrl}/index.html#/home`);
   await freshPlan(page);
   await page.locator('.art-card').first().click();
   await expect(page.locator('#taskBar')).toBeVisible();
@@ -151,7 +151,7 @@ test.describe('3.0 任务条/数据页的「今天」口径（主行·辅行·�
   });
 
   test('学习数据页「今天」块：读了几句 / 学习时长 / 还剩几句，都与 state 同源', async ({ page }) => {    await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await waitStatsReady(page);
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
@@ -201,7 +201,7 @@ test.describe('3.0 任务条/数据页的「今天」口径（主行·辅行·�
 test.describe('「今日学习时长」= 真实用时', () => {
   test('read.ms 有账 → 显示真实分钟；无账 → 回退计划分钟数', async ({ page }) => {
     await stubData(page, SIX);
-    await page.goto(`${rootUrl}/app/index.html#/home`);
+    await page.goto(`${rootUrl}/index.html#/home`);
     await waitAppReady(page);
     await page.evaluate(() => {
       const w = window as unknown as { __day: string };
@@ -223,7 +223,7 @@ test.describe('「今日学习时长」= 真实用时', () => {
     const tp = await page.evaluate(() => TASK.todayProgress());
     expect(tp.minutes, '有真实账 → 显示 3 分钟，不是计划的 15').toBe(3);
     // 数据页同源：导航过去看「今天」块
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await waitStatsReady(page);
     await expect(page.locator('.st-num[data-k="today-min"] b')).toHaveText('3');
 
@@ -239,7 +239,7 @@ test.describe('「今日学习时长」= 真实用时', () => {
     await waitAppReady(page);
     const tp2 = await page.evaluate(() => TASK.todayProgress());
     expect(tp2.minutes, '无真实账 → 回退计划分钟数').toBeGreaterThan(0);
-    await page.goto(`${rootUrl}/app/index.html#/stats`);
+    await page.goto(`${rootUrl}/index.html#/stats`);
     await waitStatsReady(page);
     await expect(page.locator('.st-num[data-k="today-min"] b')).not.toHaveText('0');
   });
