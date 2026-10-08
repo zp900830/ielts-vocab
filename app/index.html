@@ -1875,8 +1875,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     color: var(--danger-ink); font-size: 11.5px; text-decoration: underline; text-underline-offset: 3px; }
   @media (hover: hover) { .ps-adjust .link-danger:hover, .mp-row .link-danger:hover { color: var(--coral, #d9694e); } }
   /* AA（§10.4）：字色走 --danger-ink（浅 #c0492f ≈4.96:1 / 深 #f0a08c），不再吃 4.27:1 的 --coral-deep。 */
-  /* §10.4：浮窗内触摸目标 ≥44px（视觉仍是那行小字链接） */
-  .me-pop .mp-row .link-danger { min-height: 44px; }
+  /* §10.4：「我的」宿主内触摸目标 ≥44px（视觉仍是那行小字链接）—— scope 走 .me-host，
+     两个宿主（PC 浮窗 / 移动端 #/me 页面）都管得到 */
+  .me-host .mp-row .link-danger { min-height: 44px; }
   /* 暗色模式补充覆盖 */
   @media (hover: hover) { body.dark .tp-close:hover { background: var(--dark-lift); } }
   body.dark .ps-opt { color: var(--text); }
@@ -2031,18 +2032,25 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .nav-item.on .i-fill { display: inline-block; }
   .nav-item.on { background: var(--accent-soft, rgba(16,180,135,.07)); color: var(--accent-text); font-weight: 600; }
   /* ---- 侧栏底部：一条分割线 + 一行「我的」（2026-09-24 用户：不要卡片）----
-     2026-09-30：未登录显示用户图标 + 「我的」（i-line/i-fill 双态与其他 tab 同风格，不再是裸「登录」两字）；
-     已登录显示头像 + 账号；内容由 updateMeCard() 渲染。 */
+     2026-10-08 用户：PC 端这一行本身就报登录状态（未登录 / 账号名），手机端两种登录态都写「我的」。
+     文案由 updateMeCard() 按断点给；图标两颗（线性/面性）与其他四格同结构，选中态只换面性 + 底色。 */
   .me-card { display: flex; align-items: center; gap: 10px; width: 100%; margin-top: auto;
     padding: 12px 8px 2px; border: none; border-top: 1px solid var(--border); border-radius: 0;
     background: transparent; color: var(--text); cursor: pointer; text-align: left; }
   @media (hover: hover) { .me-card:hover { color: var(--accent-text); } }
-  /* 「我的」图标：与 nav-item 同一套 i-line/i-fill（已登录/未登录长得一样，
-     登录态信息只留在浮窗头部 mp-head，不再把账号塞进 tab） */
   .me-card .i-fill { display: none; }
   .me-card .i-line, .me-card .i-fill { font-size: 19px; line-height: 1; flex: none; }
-  .me-card .me-tab-label { font-size: 13px; font-weight: 600; }
-  /* ---- 「我的」浮窗（点用户卡向上弹；主题/计划/账号/数据都在这里）---- */
+  .me-card .me-tab-label { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; }   /* 账号名可能很长（PC 侧栏 220px 装不下）：省略号，不许撑破侧栏 */
+  /* 选中态与其他四格同一套（.nav-item.on 那三行）。写成 .me-card.on 两条类，特异度高于基样式
+     .me-card（含媒体查询里那条 background:transparent），选中的底色才不会被后面的声明打掉。 */
+  .me-card.on .i-line { display: none; }
+  .me-card.on .i-fill { display: inline-block; }
+  .me-card.on { background: var(--accent-soft, rgba(16,180,135,.07)); color: var(--accent-text); font-weight: 600; }
+  /* ---- 「我的」的两个宿主（2026-10-08）----
+     .me-host = 「我的」内容那一层的皮，两个宿主共用同一个类：#mePop（PC 向上弹的浮窗）
+     与移动端 #/me 页面里的 #meBody。浮窗独有的定位/滚层仍写在 .me-pop 上。
+     ⚠️ 宿主内的控件触区、颜色一律挂在 .me-host —— 挂在 .me-pop 上移动端就没人管了。 */
   .me-pop { position: fixed; z-index: 400; width: 360px; max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); overflow-y: auto;
     background: var(--card); border: 1px solid var(--border); border-radius: 16px;
     box-shadow: var(--shadow-lg); padding: 14px; }
@@ -2050,9 +2058,17 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .mp-eta { font-size: 11.5px; color: var(--muted); margin: -4px 0 10px; padding: 7px 10px;
     background: var(--accent-soft); border-radius: 10px; line-height: 1.5; }
   .me-pop[hidden] { display: none; }
+  /* 移动端 #/me 的页面宿主（2026-10-08 用户）：内容那一层套与浮窗同一张皮（--card 底 + --border
+     描边 + 16px 圆角 + 14px 内距），所以 .mp-* 那些子块两个宿主读到的样式是同一份，不是仿写。
+     页面独有的只有顶部那行 .pg-title（四页同款）。深色不必另写一条 —— --card/--border 走 body.dark。 */
+  .me-page .me-host { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px; }
   .mp-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .mp-avatar { flex: none; width: 42px; height: 42px; border-radius: 12px; background: var(--grad);
-    color: var(--cta-ink); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  /* 圆形首字母头像（2026-10-08 用户给的参考图）：账号取首字母大写，未登录是「未」。
+     底色走 --accent-soft + --accent-text 绿字（与 .nav-item.on、.mp-nums b 同一档），
+     不再是渐变底 —— 底上现在是文字，渐变底 axe 算不出对比度。 */
+  .mp-avatar { flex: none; width: 42px; height: 42px; border-radius: 50%; background: var(--accent-soft);
+    color: var(--accent-text); display: flex; align-items: center; justify-content: center;
+    font-size: 17px; font-weight: 800; line-height: 1; }
   .mp-id { min-width: 0; flex: 1; }
   .mp-name { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .mp-sub { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -2082,15 +2098,16 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .mp-row .min-slider { flex: 1; min-width: 0; }
   .mp-row .ps-opt { padding: 5px 10px; font-size: 12px; }
   .mp-row .tr-msw { padding: 4px 8px 4px 4px; }
-  /* M5（§10.4）：浮窗内所有可点控件触摸目标 ≥44px。scope 在 .me-pop ——
-     文章内那套紧凑控件（.r-badges 等）另有口径，不跟着变高。 */
-  .me-pop .accent-btn,
-  .me-pop .voice-btn,
-  .me-pop .tr-msw,
-  .me-pop .mp-logout,
-  .me-pop .mp-row .ps-opt { min-height: 44px; }
-  .me-pop .tr-msw { align-items: center; }
-  .me-pop .accent-btn { display: inline-flex; align-items: center; }
+  /* M5（§10.4）：「我的」里所有可点控件触摸目标 ≥44px。scope 在 .me-host（两个宿主共用）——
+     以前挂在 .me-pop 上，移动端换成一级页面就整批失效了。文章内那套紧凑控件（.r-badges 等）
+     另有口径，不跟着变高。 */
+  .me-host .accent-btn,
+  .me-host .voice-btn,
+  .me-host .tr-msw,
+  .me-host .mp-logout,
+  .me-host .mp-row .ps-opt { min-height: 44px; }
+  .me-host .tr-msw { align-items: center; }
+  .me-host .accent-btn { display: inline-flex; align-items: center; }
   .mp-foot { margin-top: 12px; }
   .mp-logout { width: 100%; min-height: 40px; border: 1px solid var(--border); border-radius: 999px;
     background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; }
@@ -2160,9 +2177,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .nav-item { flex: 1; flex-direction: column; justify-content: center; gap: 2px; text-align: center;
       font-size: 11px; padding: 0 4px; }
     .nav-item i { font-size: 20px; width: auto; }
-    /* 「我的」在手机 = 第 5 个 Tab（未登录「登录」/ 已登录头像+「我的」），点它弹浮窗；不塞进浮窗里点不到 */
+    /* 「我的」在手机 = 第 5 个 Tab（两种登录态都写「我的」，与其他四格同风格），点它切到 #/me 那一页。
+       圆角与 .nav-item 同值：选中态 .me-card.on 那块 accent-soft 底才是同一颗药丸，不是方的。 */
     .me-card { flex: 1; flex-direction: column; justify-content: center; gap: 2px; margin-top: 0;
-      padding: 0 4px; border: none; border-top: none; background: transparent; }
+      padding: 0 4px; border: none; border-top: none; border-radius: 12px; background: transparent; }
     @media (hover: hover) { .me-card:hover { background: transparent; } }
     .me-card .i-line, .me-card .i-fill { font-size: 20px; }
     .me-card .me-tab-label { font-size: 11px; font-weight: 500; }
@@ -2961,8 +2979,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         <button class="nav-item" data-route="words"><i class="ri-book-2-line i-line" aria-hidden="true"></i><i class="ri-book-2-fill i-fill" aria-hidden="true"></i><span>单词本</span></button>
         <button class="nav-item" data-route="stats"><i class="ri-bar-chart-2-line i-line" aria-hidden="true"></i><i class="ri-bar-chart-2-fill i-fill" aria-hidden="true"></i><span>学习数据</span></button>
         <!-- 侧栏底部：一条分割线 + 一行「我的」（2026-09-24 用户：不要卡片，用分割线）。
-             2026-09-30：未登录显示用户图标 + 「我的」，点它开统一登录弹窗（#loginModal）；
-             已登录显示头像 + 账号，点它向上弹「我的」浮窗。内容由 app.js 的 updateMeCard() 渲染。 -->
+             2026-10-08 用户：PC 端这一行按登录态显示文字（未登录 / 账号名），点它开统一登录弹窗或
+             向上弹浮窗；手机端它是底栏第 5 格，两种登录态都写「我的」，点它切到 #/me 那一页。
+             文案、选中态与 aria 语义都由 app.js 的 updateMeCard() 按断点给。 -->
         <button class="me-card" id="meCard" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="mePop">
           <i class="ri-user-smile-line i-line" aria-hidden="true"></i><i class="ri-user-smile-fill i-fill" aria-hidden="true"></i><span class="me-tab-label">我的</span>
         </button>
@@ -2970,8 +2989,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       <main id="appView"></main>
     </div>
 
-    <!-- 「我的」浮窗（用户 2026-09-24）：点底部那一行向上弹出；主题（深浅色）/口音/音色/计划/账号/数据都在这里。 -->
-    <div class="me-pop" id="mePop" role="dialog" aria-label="我的" hidden></div>
+    <!-- 「我的」的 PC 宿主（用户 2026-09-24）：点侧栏那一行向上弹出；主题（深浅色）/口音/音色/计划/账号/数据都在这里。
+         手机端不用它 —— 那边是 #/me 一级页面，内容与它同一份（app.js 的 meContent），宿主类 .me-host 也同一个。
+         ⚠️ 移动端它必须保持空壳（app.js 不往里渲）：#voicePop / #mpEta / #meImportFile 这些 id 会撞车。 -->
+    <div class="me-pop me-host" id="mePop" role="dialog" aria-label="我的" hidden></div>
 
     <!-- 统一登录弹窗（2026-09-30）：移动 + 桌面共用。替代 mePop 内嵌表单与各处"去 mePop 登录"。
          邮箱/密码 ID 独立（loginEmail/loginPass），不与 meEmail/mePass、cloudEmail/cloudPass 复用。

@@ -235,7 +235,7 @@ test.describe('「每天有多少分钟」滑块 · 5..240 步长 5', () => {
     expect((await readMinSlider(range)).value, '点刻度不跳档').toBe('60');
   });
 
-  test('手机端 390：浮窗里的滑块整行不溢出，触摸高度 ≥44', async ({ page }) => {
+  test('手机端 390：「我的」页面里的滑块整行不溢出，触摸高度 ≥44', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/app/index.html#/home`);
@@ -243,17 +243,20 @@ test.describe('「每天有多少分钟」滑块 · 5..240 步长 5', () => {
     await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     await stubCloudAccount(page);
     await page.locator('#meCard').click();
-    const range = page.locator('#mePop .min-range');
+    // 2026-10-08：手机端「我的」是一级页面，滑块住在 #appView .me-page 里，不再是 #mePop
+    const host = page.locator('#appView .me-page');
+    await expect(host, '手机点底栏那一格进的是页面').toBeVisible();
+    const range = host.locator('.min-range');
     await expect(range).toBeVisible();
     const geo = await page.evaluate(() => {
-      const r = document.querySelector('#mePop .min-range')!.getBoundingClientRect();
-      const p = document.getElementById('mePop')!.getBoundingClientRect();
-      return { left: r.left, right: r.right, h: r.height, popRight: p.right, vw: innerWidth };
+      const r = document.querySelector('#appView .me-page .min-range')!.getBoundingClientRect();
+      const p = document.querySelector('#appView .me-page')!.getBoundingClientRect();
+      return { left: r.left, right: r.right, h: r.height, pageRight: p.right, vw: innerWidth };
     });
     expect(geo.h, '滑块触摸高度 ≥44（§10.4）').toBeGreaterThanOrEqual(44);
     expect(geo.right, '不溢出右缘').toBeLessThanOrEqual(geo.vw);
     expect(geo.left, '不溢出左缘').toBeGreaterThanOrEqual(0);
-    expect(geo.popRight, '浮窗本身也不溢出').toBeLessThanOrEqual(geo.vw);
+    expect(geo.pageRight, '宿主本身也不溢出').toBeLessThanOrEqual(geo.vw);
     // 拖得动：390 上拨到 120 要落账
     await setMin(range, 120);
     expect(await minutes(page)).toBe(120);

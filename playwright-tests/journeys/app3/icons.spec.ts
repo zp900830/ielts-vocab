@@ -60,10 +60,12 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
       else { expect(v.line, '未选中显示线性').not.toBe('none'); expect(v.fill, '未选中藏面性').toBe('none'); }
     }
     expect(vis.filter((v) => v.on).length, '恰好一项选中').toBe(1);
-    // 「我的」登录前后都是用户图标 + 「我的」（2026-10-06：不再用头像方块区分登录态）
-    await expect(page.locator('.sidenav .me-card .me-tab-label'), '未登录显示「我的」').toHaveText('我的');
+    // 「我的」那一行：图标前后都是同一对用户图标（线性+面性，靠选中态换），文字才报登录状态
+    // （2026-10-08 PC 改口径：未登录写「未登录」，登录后写账号名；手机端才统一写「我的」）
+    await expect(page.locator('.sidenav .me-card .me-tab-label'), '未登录显示「未登录」').toHaveText('未登录');
     await expect(page.locator('.sidenav .me-card .i-line'), '未登录显示线性用户图标').toHaveClass(/\bri-user-smile-line\b/);
     await page.evaluate(() => { CLOUD._userMail = 'alice@example.com'; APP3.updateMeCard(); });
+    await expect(page.locator('.sidenav .me-card .me-tab-label'), '已登录显示账号名').toHaveText('alice');
     await expect(page.locator('.sidenav .me-card .i-line'), '已登录仍是线性用户图标').toHaveClass(/\bri-user-smile-line\b/);
     await expect(page.locator('.sidenav .me-card .i-fill'), '已登录仍带面性用户图标（与其他 tab 同结构）').toHaveClass(/\bri-user-smile-fill\b/);
 
