@@ -123,13 +123,13 @@ test.describe('「我的」双宿主 · 移动端一级页面 / PC 浮窗', () =
   /* 2026-10-08 用户：「之前可以自定义今日任务开始线的内容没了？」—— 入口原来只长在正文那根
      2px 的线上（移动端零提示、设完不复现）。今日面板补了真按钮，「我的」这一行也要回显当前起点：
      这一屏是计划的另一处宿主（每天分钟数也在这里），学生找「今天从哪开始」最先翻的就是它。 */
-  test('「我的」里回显今天起点：点了开同一颗起点弹窗，设完就地更新，并能改回自动', async ({ page }) => {
+  test('「我的」里回显今天起点：点了开同一颗起点弹窗，设完就地更新，并能切回记忆模式', async ({ page }) => {
     await boot(page, MOBILE);
     await stubCloudAccount(page, 'demo@example.com');
     await page.locator('#meCard').click();
     const me = page.locator('#meBody');
     const start = me.locator('[data-me-start]');
-    await expect(start, '没设过起点也要报当前是哪一句，不能空着').toContainText('自动');
+    await expect(start, '没设过起点也要报当前是哪一句，不能空着').toContainText('记忆模式');
 
     await start.click();
     await expect(page.locator('#startPickPop'), '开的是今日面板那颗同款起点弹窗').toBeVisible();
@@ -137,18 +137,19 @@ test.describe('「我的」双宿主 · 移动端一级页面 / PC 浮窗', () =
     await page.locator('#startPickPop .sp-actions .btn.primary').click();
     await expect(page.locator('#startPickPop'), '设完弹窗自己收掉').toHaveCount(0);
     await expect(start, '就地回显新起点（不用重开这一屏）').toContainText('第 3 篇第 1 句');
-    await expect(me.locator('[data-me-start-auto]'), '手动状态下给一把改回自动的键').toBeVisible();
+    await expect(me.locator('[data-me-start-auto]'), '刷句模式下给一把切回记忆模式的键').toBeVisible();
 
-    /* 改回自动走两步（2026-10-09 用户「起点怎么算？怎么让人不恐慌」）：先亮预览
-       （自动起点落在哪/几句/已读保留），确认才真清账 —— 不再一键盲改。 */
+    /* 切回记忆模式走两步（2026-10-09 用户「起点怎么算？怎么让人不恐慌」）：先亮预览
+       （引擎挑的起点落在哪/几句/已读保留），确认才真清账 —— 不再一键盲改。
+       2026-10-10 定名：改回自动安排 → 切换到记忆模式。 */
     await me.locator('[data-me-start-auto]').click();
-    await expect(page.locator('#startPickPop h3'), '先看到结果预览，不是直接改').toContainText('改回自动安排？');
-    /* 预览显示的是【自动排程】算出的起点（不是手动位置）：新计划引擎从头排 = 第1篇第1句。 */
-    await expect(page.locator('#startPickPop .sp-warn').first(), '预览里有自动算出的起点位置').toContainText('第1篇第1句');
-    await page.locator('#startPickPop button', { hasText: '确认改回' }).click();
+    await expect(page.locator('#startPickPop h3'), '先看到结果预览，不是直接改').toContainText('切换到记忆模式？');
+    /* 预览显示的是【记忆模式引擎】算出的起点（不是刷句位置）：新计划引擎从头排 = 第1篇第1句。 */
+    await expect(page.locator('#startPickPop .sp-warn').first(), '预览里有引擎算出的起点位置').toContainText('第1篇第1句');
+    await page.locator('#startPickPop button', { hasText: '确认切换' }).click();
     await expect(page.locator('#startPickPop'), '确认后弹窗收掉').toHaveCount(0);
-    await expect(start, '改回自动后回到自动文案').toContainText('自动');
-    await expect(me.locator('[data-me-start-auto]'), '自动状态下这一颗不该可见（行整条 hidden，不换节点）').toBeHidden();
+    await expect(start, '切回后回到记忆模式文案').toContainText('记忆模式');
+    await expect(me.locator('[data-me-start-auto]'), '记忆模式下这一颗不该可见（行整条 hidden，不换节点）').toBeHidden();
   });
 
   /* 起点弹窗（z 611）现在会盖在浮窗（400）之上：Esc 必须一层一层收。

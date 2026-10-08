@@ -548,11 +548,11 @@ test('今日起点跨设备：daystart 事件入流，对端重放跟账', async
   expect(await page.evaluate(() => TASK.applyDaystartEvents()), 'B 重放应用').toBe(true);
   expect((await page.evaluate(() => TASK.manualStart()))?.gi, 'B 的起点 = A 设的 13').toBe(13);
 
-  // A 改回自动（gi:-1 事件）；B 端还留着旧起点账 → 重放后一起回到自动
-  expect(await page.evaluate(() => TASK.clearManualStart()), 'A 改回自动').toBe(true);
+  // A 切回记忆模式（gi:-1 事件）；B 端还留着旧起点账 → 重放后一起切回
+  expect(await page.evaluate(() => TASK.clearManualStart()), 'A 切回记忆模式').toBe(true);
   await page.evaluate((day) => { TASK.testManualStartLocal({ gi: 13, day, ts: 1 }); }, ev!.day!);
   expect(await page.evaluate(() => TASK.applyDaystartEvents()), 'B 重放清除').toBe(true);
-  expect(await page.evaluate(() => TASK.manualStart()), 'B 回到自动').toBeNull();
+  expect(await page.evaluate(() => TASK.manualStart()), 'B 回到记忆模式').toBeNull();
 
   // ts 守卫：本机账比流里任何事件都新（自己刚点过）→ 不被迟到的旧事件盖掉
   expect(await page.evaluate(() => TASK.setManualStart(13)), 'A 再设一次').toBe(true);
@@ -565,9 +565,10 @@ test('今日起点跨设备：daystart 事件入流，对端重放跟账', async
   expect((await page.evaluate(() => TASK.manualStart()))?.gi, '保留本机起点').toBe(13);
 });
 
-/* 「改回自动安排」先亮结果再动手（2026-10-09 用户：「起点怎么算？怎么让人不恐慌」）：
-   点它在弹窗里先看到算出来的起点位置/句数/「已读保留」承诺，确认才真清账。 */
-test('改回自动安排：先预览起点结果，确认才清账', async ({ page }) => {
+/* 「切换到记忆模式」先亮结果再动手（2026-10-09 用户：「改回自动，起点怎么算？怎么让人不恐慌」；
+   2026-10-10 定名：改回自动安排 → 切换到记忆模式）：
+   点它在弹窗里先看到引擎挑出来的起点位置/句数/「已读保留」承诺，确认才真清账。 */
+test('切换到记忆模式：先预览起点结果，确认才清账', async ({ page }) => {
   await stubData(page, SIX);
   await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
@@ -577,23 +578,23 @@ test('改回自动安排：先预览起点结果，确认才清账', async ({ pa
 
   await page.evaluate(() => TASK.setManualStart(13));
   await page.evaluate(() => TASK.openStartPicker());
-  await page.locator('#startPickPop button', { hasText: '改回自动安排' }).click();
-  await expect(page.locator('#startPickPop h3'), '预览弹层出现').toHaveText(/改回自动安排/);
+  await page.locator('#startPickPop button', { hasText: '切换到记忆模式' }).click();
+  await expect(page.locator('#startPickPop h3'), '预览弹层出现').toHaveText(/切换到记忆模式/);
   const warn = await page.locator('#startPickPop .sp-warn').first().textContent();
   expect(warn, '预览里有起点位置（第 X 篇第 Y 句）').toMatch(/第\s*\d+\s*篇第\s*\d+\s*句/);
   expect(warn, '预览里有句数').toContain('句');
-  expect(await page.locator('#startPickPop').textContent(), '说清自动会回头补跳过的').toContain('回头补');
+  expect(await page.locator('#startPickPop').textContent(), '说清记忆模式会回头补跳过的').toContain('回头补');
 
   // 返回：还原选择器，账没动
   await page.locator('#startPickPop button', { hasText: '返回' }).click();
   expect(await page.evaluate(() => TASK.manualStart()), '返回不清账').not.toBeNull();
   await expect(page.locator('#startPickPop h3'), '回到选择器').toHaveText(/今日任务从哪开始/);
 
-  // 再走一遍 → 确认改回：账清掉、回显翻自动
-  await page.locator('#startPickPop button', { hasText: '改回自动安排' }).click();
-  await page.locator('#startPickPop button', { hasText: '确认改回' }).click();
-  expect(await page.evaluate(() => TASK.manualStart()), '确认后回到自动').toBeNull();
-  expect(await page.evaluate(() => TASK.startInfo().manual), '回显为自动').toBe(false);
+  // 再走一遍 → 确认切换：账清掉、回显翻记忆模式
+  await page.locator('#startPickPop button', { hasText: '切换到记忆模式' }).click();
+  await page.locator('#startPickPop button', { hasText: '确认切换' }).click();
+  expect(await page.evaluate(() => TASK.manualStart()), '确认后回到记忆模式').toBeNull();
+  expect(await page.evaluate(() => TASK.startInfo().manual), '回显为记忆模式').toBe(false);
 });
 
 /* 接力规则（2026-10-10 用户：「昨天设的起点没学完，今天应该接着学到的位置继续，

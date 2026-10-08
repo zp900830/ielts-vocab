@@ -355,7 +355,12 @@ test.describe('文章内「今天任务区间」横线', () => {
     const start = moved.lines.find((x) => x.e === 'start');
     expect(start && start.gi, '开始线落到第 5 句（全局 4）').toBe('4');
     const end = moved.lines.find((x) => x.e === 'end');
-    expect(end && end.gi, '结束线随起点一起平移（起点 + 队列长 - 1）').toBe(String(4 + moved.q.length - 1));
+    /* 2026-10-10 刷句模式：按篇队列 = 从书签连刷到篇末（8 分钟 N=19 不再截断按篇队列），
+       区间尾 = 文章最后一句 —— 「结束线贴底不画」规则生效（同文件 295 行那条锁），
+       队列与开始线仍是一套数：q = [4..39]，线只画开始那条。 */
+    expect(moved.q.length, '按篇从书签连刷到篇末（39-4+1 = 36 句）').toBe(36);
+    expect(moved.q[moved.q.length - 1], '队列尾句 = 篇末').toBe(39);
+    expect(end && end.gi, '结束线贴篇末不画').toBeUndefined();
   });
 
   test('不破坏正文结构：句子 / 译文 / 段意数量不变', async ({ page }) => {
@@ -437,7 +442,7 @@ test.describe('今日起点的唯一性与入口', () => {
     const panel = page.locator('#todayPanel');
     await expect(panel).toBeVisible();
 
-    const btn = panel.locator('button', { hasText: '今日任务从哪开始' });
+    const btn = panel.locator('button', { hasText: '起点与模式' });
     await expect(btn, '入口不许只长在正文那根线上').toHaveCount(1);
     const hitH = await btn.evaluate((el) => {
       const r = (el as HTMLElement).getBoundingClientRect();
@@ -459,7 +464,7 @@ test.describe('今日起点的唯一性与入口', () => {
     await expect(page.locator('#startPickPop')).toHaveCount(0);
     await expect(panel, '设完要看得见当前起点，不是一句一闪而过的 toast').toContainText('第 5 篇第 2 句');
 
-    await panel.locator('button', { hasText: '改回自动安排' }).click();
-    await expect(panel, '改回自动后不能再报手动起点').not.toContainText('第 5 篇第 2 句');
+    await panel.locator('button', { hasText: '切换到记忆模式' }).click();
+    await expect(panel, '切回记忆模式后不能再报刷句起点').not.toContainText('第 5 篇第 2 句');
   });
 });

@@ -1292,7 +1292,7 @@
     const planDay = cfg && cfg.startDate ? Math.floor((Date.now() - Date.parse(cfg.startDate)) / 864e5) + 1 : 1;
     /* 今天起点的当前读数（2026-10-08 用户「之前可以自定义今日任务开始线的内容没了？」）：
        文案由 TASK.startInfo() 那一份给，「我的」不自己算第几篇第几句。 */
-    const si = (typeof TASK !== 'undefined' && TASK.startInfo) ? TASK.startInfo() : { text: '自动', manual: false };
+    const si = (typeof TASK !== 'undefined' && TASK.startInfo) ? TASK.startInfo() : { text: '记忆模式', manual: false };
     const dark = document.body.classList.contains('dark');
     const initial = acc.logged ? meInitial(acc.nickname) : '未';
     return `
@@ -1328,7 +1328,7 @@
         <div class="mp-row"><span class="mp-label">今天起点</span>
           <button class="ps-opt" type="button" data-me-start aria-label="设置今天任务从哪开始">${esc(si.text)}</button></div>
         <div class="mp-row" data-me-start-auto-row${si.manual ? '' : ' hidden'}>
-          <button class="ps-opt" type="button" data-me-start-auto>改回自动安排</button></div>
+          <button class="ps-opt" type="button" data-me-start-auto>切换到记忆模式</button></div>
         <div class="mp-row"><button class="link-danger" type="button" data-me-reset-plan aria-label="重置学习计划，只重设计划、保留进度">重置学习计划</button></div>` : ''}
         <div class="mp-row"><span class="mp-label">数据</span><div class="ps-opts">
           <button class="ps-opt" data-me-export>导出备份</button>
@@ -1394,7 +1394,7 @@
     renderMePop();
   }
   /* 起点回显就地更新（2026-10-08）：起点是在弹窗里定的（index.html 那一侧），定完只补这一行
-     的文字和「改回自动安排」的显隐 —— 不重渲宿主：重渲把滚动甩回顶部、还把滑块/音色节点换掉。
+     的文字和「切换到记忆模式」的显隐 —— 不重渲宿主：重渲把滚动甩回顶部、还把滑块/音色节点换掉。
      两个宿主都扫一遍：移动端的 #mePop 是空壳（没有这颗键），PC 浮窗开着时它是唯一活宿主。 */
   function refreshMeStart() {
     if (typeof TASK === 'undefined' || !TASK.startInfo) return;

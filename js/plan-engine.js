@@ -275,13 +275,31 @@
       left -= cost;
       return true;
     }
+    /* 刷句模式（2026-10-10 用户定名，原「手动」）：scope 内的句**按句号顺序全装、绝不跳句**。
+       「手动更像是刷句模式——连续刷，我希望快速刷完，不需要你定什么时候到期，我刷完一轮
+       再刷一轮」。所以这里不走三池挑选（那是记忆模式的事），scope 本身就是今天的队列：
+       全局时上游 todayPlan 已把 scope 算成 [接力起点, 起点+N-1]（N = 分钟数 ÷ 25s/句，见宿主
+       globalPromiseN），按篇时是「书签在这篇里就接着刷、否则整篇重刷」（刻意不受 N 截断，
+       与按篇的整篇承诺同口径）。pool 仍标 C/A（句里有没见过的词 = 新），供正文
+       task-new/task-review 染色与「新词」计数，不再驱动挑选顺序。不做预算裁剪：
+       预算体现在窗口尺寸上，这里再裁一次会出现「按篇队列比承诺短一截」的对不上。 */
+    if (o.linear) {
+      for (let i = 0; i < total; i++) {
+        if (!inScope(i)) continue;
+        const list = wordsOf(i);
+        let hasFresh = false;
+        for (let j = 0; j < list.length; j++) { const st = ws[list[j]]; if (!st || st.stage === 'fresh') { hasFresh = true; break; } }
+        chosen.set(i, { i: i, kind: 'sent', pool: hasFresh ? 'C' : 'A', sec: secNew, words: list.slice() });
+      }
+    }
     /* 到期句（含回炉句）先取，再取新词，最后加深句 —— 与 work/baowen_probe.mjs 量那批数时
-       用的顺序逐字一致，改了顺序就等于换了成本模型，实测那张表不再适用。 */
+       用的顺序逐字一致，改了顺序就等于换了成本模型，实测那张表不再适用。
+       刷句模式不走这段（上面已照单全收），三池只用来算 stats。 */
     const plan = o.plan || (state && state.plan) || null;
     const baowenCap = resolveBaowenCap(plan, o.todayMinutes);
     let baowenSent = 0, retentionDropped = 0;
     const retainedWords = {};
-    for (let n = 0; n < due.length; n++) {
+    if (!o.linear) for (let n = 0; n < due.length; n++) {
       const e = due[n];
       if (!e.g) { if (!take(e.i, 'A', secReview)) droppedA++; continue; }
       /* riding：这句已经因为别的词被排进来了 → 这个回炉词免费搭车，**不吃配额**
@@ -294,7 +312,7 @@
       retainedWords[e.w] = 1;
     }
     const baowenWords = Object.keys(retainedWords).length;
-    if (!plan || !plan.pausedNew) {
+    if (!o.linear && (!plan || !plan.pausedNew)) {
       const roomy = left >= 0.6 * budget || chosen.size === 0 && budget === 0;
       if (roomy) for (let n = 0; n < fresh.length; n++) if (!take(fresh[n].i, 'C', secNew)) break;
       for (let n = 0; n < grow.length; n++) take(grow[n].i, 'B', secReview);
@@ -326,7 +344,7 @@
     });
 
     let floor = false;
-    if (!queue.length && (dueWords || fresh.length || grow.length)) {
+    if (!o.linear && !queue.length && (dueWords || fresh.length || grow.length)) {
       /* 兜底那句只从【未毕业】的活儿里挑。毕业词是被 cap 拦下来的，不是"预算装不下"：
          兜底的本意是「预算小到一句都排不出，别让他今天没得读」，拿它绕过保温上限，
          等于把「每天不到 15 分钟不保温」这条口径偷偷改成"其实每天还是排一句"。 */
@@ -362,6 +380,8 @@
            retentionWords 是**词**，含免费搭车的那些，所以它会 ≥ baowenSent。 */
         baowenCap: baowenCap, baowenSent: baowenSent, retentionWords: baowenWords,
         retentionDropped: retentionDropped,
+        /* 刷句模式标记：宿主据此换文案（「连刷 N 句不跳句」而不是「到期/新词进队列」）。 */
+        linear: !!o.linear,
 
       },
     };
