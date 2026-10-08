@@ -58,6 +58,9 @@ self.addEventListener('fetch', (e) => {
   if (url.origin !== self.location.origin) return;          // 跨域不插手
   const scopePath = new URL(self.registration.scope).pathname; // 例如 '/app/'
   if (!url.pathname.startsWith(scopePath)) return;          // 只管网自己的资源
+  // 数据 JSON 不接管：缓存靠 SHADOW_DATA_VER 查询串 + HTTP 头；且接管会让 E2E 的
+  // page.route stub 失效（SW 内部的 fetch 绕过路由拦截），全部用例会吃到真数据。
+  if (url.pathname.startsWith(scopePath + 'data/')) return;
 
   e.respondWith((async () => {
     try {

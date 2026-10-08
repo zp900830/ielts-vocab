@@ -38,8 +38,8 @@ git diff
 
 要求：
 
-- `npm test` 必须全绿（目前 387 个测试）。
-- **改 `shadow/data/sections.json` 的句子数量，必须同时在 `shadow/index.html` 的 `SENT_SHIFTS`
+- `npm test` 必须全绿（数量以最近一次全量门禁输出为准）。
+- **改 `app/data/sections.json` 的句子数量，必须同时在 `app/index.html` 的 `SENT_SHIFTS`
   追加一条记录**（书签 / 续读位 / 间隔复习 / A-B 循环存的全是全局句号，不登记就会让用户进度静默错位）。
   `validate_data.py` 第 14 条会拦住漏记，第 15 条拦住英文句与中文译文数量不齐。
 - `validate_data.py` 必须输出 `Validation PASSED`。
@@ -90,7 +90,7 @@ gh pr create --title "描述" --body "改动说明"
 ## 5. 部署
 
 生产托管是 **腾讯云 EdgeOne Pages（已改名 EdgeOne Makers）**，只监听 `main` 分支，推上去约 1 分钟自动部署。
-**`netlify.toml` 和 `_redirects` 平台完全不认**（是死文件，别指望改缓存/重定向生效）。
+平台只认 `edgeone.json` 的构建与缓存配置（历史上的 `netlify.toml` / `_redirects` 均不被认，已删除）。
 
 发布产物由构建生成（`edgeone.json` 里已配好，控制台显示旧值时手动同步）：
 
@@ -118,7 +118,7 @@ node scripts/build_site.mjs      # 生成 dist/，本地可跑
 - [ ] 源码中无硬编码密钥、密码、private key
 - [ ] 没有 `<<<<<<<` / `=======` / `>>>>>>>` 合并冲突标记
 - [ ] `config.example.js` 已包含项目所需的所有环境变量
-- [ ] 没有误删用户数据文件（如 `data/vocab.json`、`shadow/data/` 等）
+- [ ] 没有误删用户数据文件（如 `app/data/` 等）
 
 ## 7. 沟通规则
 
@@ -134,18 +134,17 @@ node scripts/build_site.mjs      # 生成 dist/，本地可跑
 
 | 文件/目录 | 说明 |
 |-----------|------|
-| `index.html` | 主应用（阅读训练） |
-| `shadow/index.html` | 影子跟读主应用 |
-| `admin/index.html` | 管理后台 |
-| `data/` | 词汇、故事、章节源数据 |
-| `shadow/data/` | shadow 应用运行所需数据 |
+| `app/index.html` | 现役主应用（单词速记 3.0，路由式单页） |
+| `app/app.js` `app/js/plan-engine.js` | 3.0 逻辑与学习计划引擎 |
+| `app/data/` | 3.0 运行数据（sections / vocab / chapters） |
+| `app/sw.js` | 3.0 PWA service worker（scope /app/） |
+| `admin/index.html` | 管理后台（Supabase 数据） |
 | `scripts/build_site.mjs` | 生成发布目录 `dist/`（白名单 + 注入 config.js） |
 | `sql/` | 需要在 Supabase 执行的 SQL（建表 / RLS） |
 | `edgeone.json` | 构建命令与输出目录 |
 | `scripts/` | 构建与数据工具 |
 | `playwright-tests/` | E2E 测试 |
 | `config.example.js` | 环境变量配置模板 |
-| `netlify.toml` | 部署缓存头配置 |
 
 ## 10. 常用命令速查
 
@@ -158,9 +157,6 @@ python3 scripts/validate_data.py
 
 # 生成生产 config.js
 python3 scripts/inject_config.py
-
-# 同步词汇 schema
-python3 scripts/normalize_vocab.py --apply
 
 # 查看状态
 git status

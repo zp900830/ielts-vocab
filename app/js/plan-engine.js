@@ -1,4 +1,4 @@
-/* 学习计划引擎：纯逻辑，不碰 DOM、不发请求。宿主是 shadow/index.html 的 TASK 模块。
+/* 学习计划引擎：纯逻辑，不碰 DOM、不发请求。宿主是 app/index.html 的 TASK 模块。
    真值只有一份 —— 事件日志；词状态、每天完成度、连续天数一律从日志重放现算，
    这样界面不会出现「三个数字互相打架」，换设备也不需要合并策略。 */
 (function () {
@@ -759,7 +759,7 @@
   }
 
   // 只在 scope 内的句子里统计词（scope 为 null/省略 → 全量）。
-  // ⚠️ 引擎里**没有** countStages —— 那个函数长在 shadow/index.html 里（它还要 ALL_TARGET_WORDS
+  // ⚠️ 引擎里**没有** countStages —— 那个函数长在宿主页面（app/index.html）里（它还要 ALL_TARGET_WORDS
   //    才能算 fresh）。所以这里从零数，**别去调 countStages**，否则 ReferenceError。
   //    也不返回 fresh（引擎不知道目标词总数，fresh 由调用方拿总数减）。
   //    scope 给了就必须给 wordsOf：纯函数不认识 SECTIONS，没有映射就只能数全表，

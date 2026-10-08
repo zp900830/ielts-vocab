@@ -46,7 +46,7 @@ const SIX: Record<string, string> = (() => {
 
 async function stubData(page: import('@playwright/test').Page) {
   for (const [name, body] of Object.entries(SIX)) {
-    await page.route(`**/shadow/data/${name}*`, (r) =>
+    await page.route(`**/app/data/${name}*`, (r) =>
       r.fulfill({ status: 200, contentType: 'application/json', body }));
   }
 }
