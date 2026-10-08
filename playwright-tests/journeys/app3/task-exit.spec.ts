@@ -12,6 +12,7 @@ declare const TASK: {
   listenSetSrc(s: string): string;
   listenToggle(): void;
   onSentenceComplete(gi: number): void;
+  taskSentenceFinished(gi: number): boolean;
   roundInfo(): { round: number; done: number; total: number };
   startNewRound(): number;
   seedRoundSeenForTest(gis: number[]): number;
@@ -333,7 +334,11 @@ async function stubData2(page: import('@playwright/test').Page, payloads: Record
   }
 }
 
-test('颜色跟播完走：未读灰，播完才黑', async ({ page }) => {
+/* 口径（2026-10-08 用户改）：黑字跟「记为已读」那一下走，不跟播完。
+   旧口径把点亮挂在 taskSentenceFinished，而点快了旧播放链会被新点击作废（speakToken++）、
+   回调永不触发 —— 账上 reps 已经 +1（markSentenceRead 在点那一下就记了），屏幕上却还是灰字。
+   另一半没动：lastRead（左侧「今日已读」竖条 + 额度）仍只许发生在播完，那是 2026-09-28 他自己拍的。 */
+test('颜色跟已读记数走：点「下一句」那一下就黑；「今日已读」仍等播完', async ({ page }) => {
   await stubData(page, SIX);
   await page.goto(`${rootUrl}/index.html#/home`);
   await waitAppReady(page);
@@ -348,12 +353,42 @@ test('颜色跟播完走：未读灰，播完才黑', async ({ page }) => {
     unknown: !!document.querySelectorAll('#art .sent')[i]?.classList.contains('lw-unknown'),
   }), li);
   expect((await cls(0)).unknown, '没读过灰字').toBe(true);
-  await page.locator('#tbNext').click();            // 点：+1 但不变黑
-  expect((await cls(0)).unknown, '点了没播完还是灰').toBe(true);
-  expect((await cls(0)).known, '点了没播完不许黑').toBe(false);
-  await fireStaleSpeak(page);                       // 播完
-  expect((await cls(0)).known, '播完才黑').toBe(true);
+  expect((await page.evaluate(() => TASK.roundInfo())).done, '没读过本轮 0 句').toBe(0);
+
+  await page.locator('#tbNext').click();                 // 点即+1：颜色跟着 +1 走
+  expect(await pendingSpeaks(page), '这句的音频还在排队，根本没放完').toBeGreaterThan(0);
+  expect((await cls(0)).known, '点了就黑，不许等播完').toBe(true);
+  expect((await cls(0)).unknown, '黑了就不许再挂着灰字类').toBe(false);
+  expect((await page.evaluate(() => TASK.roundInfo())).done, '点一下就记进本轮').toBe(1);
+  expect(await hasTaskDone(page, 0), '「今日已读」的竖条仍等播完（2026-09-28 口径没跟着动）').toBe(false);
+
+  await fireStaleSpeak(page);                            // 播完回调再来一次
+  expect((await cls(0)).known, '播完仍是黑').toBe(true);
+  expect((await page.evaluate(() => TASK.roundInfo())).done, '同一句不许记两遍').toBe(1);
+  expect(await hasTaskDone(page, 0), '播完才落 task-done').toBe(true);
 });
+
+/* 纯听不点：没人提前点它，点亮就落在「这句真的放完了」那一下（同一次 markSentenceRead）。 */
+test('纯听不点：这句放完了才黑', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+  await installSpeakStub(page);
+  await page.locator('.art-card').first().click();
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+  const known0 = () => page.evaluate(() =>
+    !!document.querySelectorAll('#art .sent')[0]?.classList.contains('lw-known'));
+  expect(await known0(), '没点也没放完，还是灰').toBe(false);
+
+  await page.evaluate(() => TASK.taskSentenceFinished(0));   // 放完回调直接进来
+  expect(await known0(), '放完就黑').toBe(true);
+  expect((await page.evaluate(() => TASK.roundInfo())).done, '一句就是一句').toBe(1);
+  expect((await page.evaluate(() => TASK.todayProgress())).done, '今日已读同一下落').toBe(1);
+});
+
 
 test('读完一轮可开新轮：颜色全灰，轮次+1', async ({ page }) => {
   await stubData2(page, TWO);
