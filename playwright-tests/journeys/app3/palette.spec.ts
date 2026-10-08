@@ -223,7 +223,10 @@ function describeRefine3() {
     return { 'sections.json': JSON.stringify(titles.map((t, i) => mk(t, i === 0 ? 12 : 2))), 'vocab.json': JSON.stringify(vocab), 'chapters.json': '[]' };
   })();
 
-  test('refine3 ③：「我的」选中态（每天分钟数）浅底深绿字，不再是深绿实心 + 黑字', async ({ page }) => {
+  /* refine3 ③ 的续篇（2026-10-08：每天分钟数从胶囊换成滑块）。这一行「当前值」的皮不再靠
+     浅薄荷底 + 深绿字的胶囊表达，改成：读数 .min-val 走 --accent-text 深绿、控件走 --accent
+     那支绿（accent-color，与随身听 .ls-seek 同源）。本文件按惯例只锁色值，不假装在判达标。 */
+  test('refine3 ③ 续：分钟数滑块读数深绿字、控件那支绿是 --accent，且不铺胶囊底', async ({ page }) => {
     await stubData(page, fixture);
     await page.goto(`${rootUrl}/app/index.html#/home`);
     await waitShadowReady(page);
@@ -234,19 +237,23 @@ function describeRefine3() {
     await expect(page.locator('#loginModal')).toBeVisible();
     await page.locator('#loginModal [data-login-settings]').click();
     await expect(page.locator('#mePop')).toBeVisible();
-    const sel = page.locator('#mePop .ps-opt.sel').first();
-    await expect(sel).toBeVisible();
-    const m = await sel.evaluate((el) => {
-      const cs = getComputedStyle(el as HTMLElement);
-      const nums = (s: string) => (s.match(/[\d.]+/g) || []).slice(0, 3).map(Number);
-      const f = (v: number) => { const x = v / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); };
-      const lum = (c: number[]) => 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
-      const bg = nums(cs.backgroundColor), fg = nums(cs.color);
-      const ratio = (Math.max(lum(bg), lum(fg)) + 0.05) / (Math.min(lum(bg), lum(fg)) + 0.05);
-      return { bg, fg, ratio: +ratio.toFixed(2) };
+    const m = await page.evaluate(() => {
+      const nums = (el: Element | null, prop: keyof CSSStyleDeclaration) => {
+        const s = String(getComputedStyle(el as Element)[prop] ?? '');
+        return (s.match(/[\d.]+/g) || []).slice(0, 3).map(Number);
+      };
+      const range = document.querySelector('#mePop .min-range');
+      const val = document.querySelector('#mePop .min-val');
+      return {
+        accent: nums(range, 'accentColor'),
+        valColor: nums(val, 'color'),
+        valBg: nums(val, 'backgroundColor'),
+        text: (val as HTMLElement).textContent,
+      };
     });
-    expect(m.bg, '选中态必须是浅薄荷底（--accent-soft），不是 #10b487 实心').toEqual([224, 245, 236]);
-    expect(m.fg, '选中态字必须是深绿（--accent-text #0a7558）').toEqual([10, 117, 88]);
-    expect(m.ratio, `选中态对比度 ${m.ratio}:1`).toBeGreaterThanOrEqual(4.5);
+    expect(m.accent, '控件那支绿 = var(--accent) 浅色档 #0c9c74，不是 #2bd4a4 / #10b487').toEqual([12, 156, 116]);
+    expect(m.valColor, '读数走 --accent-text 深绿 #0a7558，不是黑字').toEqual([10, 117, 88]);
+    expect(m.valBg, '读数不再铺一层胶囊底色').toEqual([0, 0, 0]);
+    expect(m.text, '读数带单位').toBe('15 分钟');
   });
 }

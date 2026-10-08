@@ -2,6 +2,7 @@
 // /app/ 在仓库根，同 home/stats/words，用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
 import { stubCloudAccount } from '../../utils/cloud-stub';
+import { setMin } from '../../utils/min-slider';
 
 declare const TASK: {
   resetV2(): void;
@@ -303,7 +304,7 @@ test.describe('M5 · 触摸目标（§10.4）', () => {
       await waitTask(page);
       await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
       const pop = await openMe(page);
-      for (const sel of ['#btnAccent', '#voiceBtn', '[data-me-theme]', '[data-me-export]', '[data-me-import]', '.mp-cta', '.mp-row .ps-opt', '.mp-login-btn']) {
+      for (const sel of ['#btnAccent', '#voiceBtn', '[data-me-theme]', '[data-me-export]', '[data-me-import]', '.mp-cta', '.mp-row .ps-opt', '.mp-row .min-range', '.mp-login-btn']) {
         const t = pop.locator(sel).first();
         await expect(t).toBeVisible();
         const h = await t.evaluate((el) => el.getBoundingClientRect().height);
@@ -329,7 +330,7 @@ test.describe('M5 · 形态与边界（§8.1 / §8.2 / §10.1）', () => {
     expect(geo.bottom, '抽屉底边贴 TabBar').toBeLessThanOrEqual(geo.cardTop + 1);
     expect(geo.left, '贴左边').toBeLessThan(16);
     expect(geo.right, '不溢出右边').toBeLessThanOrEqual(geo.vw);
-    for (const sel of ['.mp-head', '.mp-nums', '.mp-status', '#btnAccent', '#voiceBtn', '[data-me-theme]', '[data-me-export]', '[data-me-import]', '.mp-row .ps-opt']) {
+    for (const sel of ['.mp-head', '.mp-nums', '.mp-status', '#btnAccent', '#voiceBtn', '[data-me-theme]', '[data-me-export]', '[data-me-import]', '.mp-row .ps-opt', '.mp-row .min-range']) {
       await expect(pop.locator(sel).first(), `${sel} 在抽屉里`).toBeVisible();
     }
   });
@@ -451,7 +452,7 @@ test.describe('M5 · 重置学习计划', () => {
     await pop.locator('[data-me-cta]').click();
     const panel = page.locator('#todayPanel');
     await expect(panel).toBeVisible();
-    await panel.locator('.ps-opt[data-v="30"]').click();
+    await setMin(panel.locator('.min-range'), 30);
     await panel.locator('#psStart').click();
     await expect.poll(() => page.evaluate(() => TASK.hasPlan)).toBe(true);
     expect((await page.evaluate(() => TASK.planConfig()))!.minutes, '重新选了 30 分钟').toBe(30);

@@ -1261,8 +1261,6 @@
     const title = SECTIONS[focus] ? SECTIONS[focus].title : '';
     const planDay = cfg && cfg.startDate ? Math.floor((Date.now() - Date.parse(cfg.startDate)) / 864e5) + 1 : 1;
     const dark = document.body.classList.contains('dark');
-    /* 档位（2026-09-26 用户）：加 90/120、去 10/20；选完立刻在下方给出工期（与设置屏同一份估算） */
-    const MINS = [5, 15, 30, 45, 60, 90, 120];
     pop.innerHTML = `
       <div class="mp-head">
         <span class="mp-avatar" aria-hidden="true"><i class="ri-user-3-fill"></i></span>
@@ -1291,8 +1289,7 @@
         <div class="mp-row"><span class="mp-label">深色模式</span>
           <button class="tr-msw${dark ? ' on' : ''}" type="button" role="switch" aria-checked="${dark}" data-me-theme aria-label="深色模式"><span class="knob" aria-hidden="true"></span></button></div>
         ${cfg ? `
-        <div class="mp-row"><span class="mp-label">每天有多少分钟</span><div class="ps-opts">
-          ${MINS.map(m => `<button class="ps-opt${m === cfg.minutes ? ' sel' : ''}" data-me-min="${m}">${m}</button>`).join('')}</div></div>
+        <div class="mp-row">${TASK.minSlider('每天有多少分钟', cfg.minutes)}</div>
         <div class="mp-eta" id="mpEta" role="status">算一下…</div>
         <div class="mp-row"><button class="link-danger" type="button" data-me-reset-plan aria-label="重置学习计划，只重设计划、保留进度">重置学习计划</button></div>` : ''}
         <div class="mp-row"><span class="mp-label">数据</span><div class="ps-opts">
@@ -1306,6 +1303,13 @@
     // 音色选择器（③ 挪进来）：重渲后 #voicePop 是新元素，要重新渲染 + 重新绑事件代理。
     try { if (typeof renderVoicePop === 'function') renderVoicePop(); } catch (e) {}
     wireVoicePop();
+    /* 每天分钟数的滑块（2026-10-08）：档位与监听都走 TASK 那一份，浮窗不抄第二套 5..240。
+       松手（change）才落账；落完只补工期行，不重渲整个浮窗 —— 重渲会换掉滑块节点，
+       键盘党按第二下就没靶了（胶囊时代靠 renderMePop 挪选中态，滑块自己就停在那一格）。 */
+    if (cfg && TASK.bindMinSlider) TASK.bindMinSlider(pop, {
+      onInput: refreshMeEta,
+      onCommit: (m) => { TASK.setMinutes(m); refreshMeEta(); },
+    });
     // 工期行（2026-09-26 用户）：换分钟数/重开浮窗都要刷新 —— 与设置屏同一份估算
     refreshMeEta();
     // §10.4：重渲把原焦点节点摘掉（activeElement 掉到 body）—— 浮窗若还开着，把焦点收回浮窗。
@@ -1316,12 +1320,13 @@
   }
   /* 工期行（2026-09-26 用户拍板）：「我的」里改每天分钟数也要能看到「新词全部过完一遍（需要 N 天）」
      —— 与设置屏/计划页同一份 estimateDays 估算（TASK.etaFor/etaText 出口）。 */
-  function refreshMeEta() {
+  /* mOverride：滑块还在拖、计划尚未落账时，用它预览工期（TASK.bindMinSlider 的 onInput）。 */
+  function refreshMeEta(mOverride) {
     const el = document.getElementById('mpEta');
     if (!el) return;
     const cfg = (typeof TASK !== 'undefined' && TASK.planConfig) ? TASK.planConfig() : null;
     if (!cfg) { el.textContent = ''; el.hidden = true; return; }
-    const m = cfg.minutes;
+    const m = mOverride == null ? cfg.minutes : mOverride;
     el.hidden = false;
     el.textContent = '算一下…';   /* A13：与设置屏那六处同一个占位词（成品句两边也都是「按每天 X 分钟…」开头，不带「工期」两字） */
     TASK.etaFor(m).then((r) => {
@@ -1427,7 +1432,7 @@
     if (!pop || pop._wired) return;
     pop._wired = true;
     pop.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-min],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-login-btn],[data-me-logout]');
+      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-login-btn],[data-me-logout]');
       if (!t) return;
       // 有些按钮点完会 renderMePop() 重渲（主题/分钟）—— 重渲会把 e.target 从 DOM 摘下来，
       // 事件继续冒泡到 document 的「点外面收掉」监听时，target 已不在 #mePop 里，会被误判成点外面。
@@ -1438,7 +1443,6 @@
         if (typeof TASK !== 'undefined' && TASK.hasPlan) { const n = nextArticle(); openArticle(n >= 0 ? n : 0); }
         else openSetup();
       } else if (t.hasAttribute('data-me-theme')) { if (typeof toggleDark === 'function') toggleDark(); renderMePop(); }
-      else if (t.hasAttribute('data-me-min')) { TASK.setMinutes(Number(t.dataset.meMin)); renderMePop(); positionMePop(); refreshMeEta(); }
       else if (t.hasAttribute('data-me-reset-plan')) { TASK.resetLearningPlan(); renderMePop(); positionMePop(); }
       else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }
       else if (t.hasAttribute('data-me-import')) { TASK.importBackup('meImportFile'); }
