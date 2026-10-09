@@ -1,0 +1,31 @@
+{
+  "si": 1,
+  "flags": [
+    {
+      "at": "8.5",
+      "cat": "EN_ERROR",
+      "why": "\"coverage lettering\" 不是英语中存在的搭配（母语者只会说 map legend/lettering），glossary 里该词条的 m（覆盖说明）和例句（The map includes a coverage lettering that explains the service areas.）同样不通，属生造硬凑。",
+      "fixEn": "Beneath the small [[coverage lettering:lettering]] on his map, there was even a short reading [[bibliography:bibliography]].",
+      "fixZh": "他地图上那行小小的标注文字下面，甚至还附了一份简短的阅读书目。"
+    },
+    {
+      "at": "13.5",
+      "cat": "EN_ERROR",
+      "why": "\"an approximately clear study diagram\" 中 approximately 只修饰可量度的数量概念，母语者不会用 approximate 修饰 clear 这类形容词，属生硬塞词的非地道搭配。",
+      "fixEn": "Late at [[night:night]], Sam drew an [[approximately:approximately]] correct study [[diagram:diagram]] on the whiteboard.",
+      "fixZh": "深夜里，山姆在白板上画了一张大体正确的学习图表。"
+    },
+    {
+      "at": "18.6",
+      "cat": "FLOW_BREAK",
+      "why": "人物代词自相矛盾：15.1 \"Lin explained her simple study ratio\"、22.1 \"Lin put forward... for her friends to test\" 均用 her 指林，本句却写 \"Lin packed his backpack\"，同一角色性别指代断裂。",
+      "fixEn": "Every morning, Lin packed her [[backpack:backpack]] with lunch and one red book."
+    },
+    {
+      "at": "20.3",
+      "cat": "EN_ERROR",
+      "why": "句子以标记词开头但 display 为小写 \"senior\"，整句以小写字母开头，违反英文句首大写的硬性规则（对比 9.0 Opening、46.0 Vigorous 等句首标记均已大写）。",
+      "fixEn": "[[senior:Senior]] students showed a short [[thesis:thesis]] and a neat model [[paper:paper]] as guides."
+    }
+  ]
+}

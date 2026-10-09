@@ -1,0 +1,15 @@
+{
+ "si": 4,
+ "flags": [
+  {
+   "at": "30.3",
+   "cat": "CARD_ERROR",
+   "why": "glossary 中 stern 仅有名词义项「n. 船尾」，而正文 30.3/32.6/34.3/35.4 四处的 [[stern:stern]]（stern landlady/boss/chancellor/attorney）均作形容词「严厉的」，词性与义项同词条明显矛盾（且该词未列入 declared_words）。"
+  },
+  {
+   "at": "35.6",
+   "cat": "CARD_ERROR",
+   "why": "glossary 中 bound 仅有形容词义项「一定会；密切相关的；有义务的」（例句 He is bound to win），而本句 [[bound:bound]] 作谓语动词（bind 的过去式，包扎：bound an aching knuckle），词性与义项均不符（且该词未列入 declared_words）。"
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+{
+ "si": 0,
+ "flags": [
+  {
+   "at": "31.4",
+   "cat": "EN_ERROR",
+   "why": "科学搭配硬伤：原句称原子『给出或得到一个离子』，实际原子给出/得到的是电子并因此变成离子；'each atom gives or takes an ion' 是理科母语者不会写的搭配",
+   "fixEn": "Leo said that in salty water each [[atom:atom]] gives or takes an electron, becoming an [[ion:ion]]."
+  },
+  {
+   "at": "40.4",
+   "cat": "CARD_ERROR",
+   "why": "glossary 中 violet 仅录 'n. 紫罗兰'，句中 'a violet tag'（一张紫罗兰色的标签）用作颜色形容词，词性与词条不符"
+  },
+  {
+   "at": "46.4",
+   "cat": "CARD_ERROR",
+   "why": "glossary 中 brute 仅录 'adj. 粗暴的'（例句 He gave a brute answer），句中 'a rough brute of a dog' 把 brute 用作名词（粗野的家伙），词性与词条不符"
+  },
+  {
+   "at": "50.1",
+   "cat": "EN_ERROR",
+   "why": "数搭配硬伤：不定冠词 a 后接复数，'heard a far lonely wolves howl' 不成立，母语者不会这样写",
+   "fixEn": "They polished a curved antelope [[horn:horn]] model and heard far lonely [[wolf:wolves]] howl at [[night:night]]."
+  },
+  {
+   "at": "52.5",
+   "cat": "CARD_ERROR",
+   "why": "glossary 中 puff 仅录 'v. 喘息'（另段 24.5 正是此义），句中 'a bee sting could puff up fast' 取的是『肿胀』(puff up) 义，义项与词条不符"
+  }
+ ]
+}
