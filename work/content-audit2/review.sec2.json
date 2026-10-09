@@ -1,0 +1,5 @@
+{"si":2,"flags":[
+ {"at":"14.2","cat":"CARD_ERROR","why":"正文把 overalls 用作服装名词（His work overalls are covered in dust，译文'工装裤'），但词条 overall 的 m 只有 'adj. 全面的；adv. 总计'，完全没有服装名词义项，卡片与正文词性、义项直接冲突。"},
+ {"at":"20.6","cat":"ZH_MISMATCH","why":"英文 'a hunting lodge for strangers' 意为'供陌生人使用的猎屋'，译文'也不愿让陌生人来当猎屋'主宾错位（人不能'当猎屋'），语义不通。","fixZh":"他们不肯把它改成吵闹的旅舍，也不愿把它变成供陌生人住的猎屋。"},
+ {"at":"27.3","cat":"CARD_ERROR","why":"正文 'Grandma shared a secret recipe' 中 recipe 取'（烹饪）配方/秘方'义，而词条 m 只收 'n. 秘诀'（例句为 recipe for success），义项与正文用法明显矛盾。"}
+]}

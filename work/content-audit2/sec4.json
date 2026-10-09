@@ -1,0 +1,4446 @@
+{
+ "si": 4,
+ "title": "历史与发明",
+ "subheads": [
+  "上篇·纪念馆",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "下篇·发明比赛",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  ""
+ ],
+ "declared_words": [
+  "violence",
+  "conflict",
+  "raid",
+  "enormity",
+  "campaign",
+  "battle",
+  "struggle",
+  "explosion",
+  "bombard",
+  "bomb",
+  "blast",
+  "burst",
+  "spark",
+  "twinkle",
+  "gunpowder",
+  "tank",
+  "cannon",
+  "missile",
+  "weapon",
+  "pistol",
+  "rifle",
+  "bullet",
+  "target",
+  "deflect",
+  "mission",
+  "flame",
+  "flare",
+  "glitter",
+  "glow",
+  "blade",
+  "sword",
+  "axe",
+  "hammer",
+  "bow",
+  "arrow",
+  "spear",
+  "helmet",
+  "shield",
+  "equip",
+  "prepare",
+  "provide",
+  "deploy",
+  "hit",
+  "beat",
+  "strike",
+  "punch",
+  "chop",
+  "stab",
+  "dilemma",
+  "plight",
+  "pitfall",
+  "conspiracy",
+  "destitute",
+  "famine",
+  "starve",
+  "deprive",
+  "seize",
+  "pursue",
+  "threat",
+  "offend",
+  "aggressive",
+  "invade",
+  "trespass",
+  "intrude",
+  "violate",
+  "attack",
+  "assault",
+  "challenge",
+  "siege",
+  "surround",
+  "enclose",
+  "pause",
+  "halt",
+  "cease",
+  "oppose",
+  "oppress",
+  "counter",
+  "deter",
+  "forbid",
+  "prohibit",
+  "prevent",
+  "revolt",
+  "betray",
+  "treason",
+  "rebel",
+  "traitor",
+  "patriot",
+  "blame",
+  "reproach",
+  "evidence",
+  "proof",
+  "terror",
+  "terrible",
+  "terrific",
+  "horrible",
+  "alarm",
+  "dread",
+  "frighten",
+  "tension",
+  "turbulent",
+  "turmoil",
+  "scenario",
+  "occasion",
+  "limit",
+  "boundary",
+  "rein",
+  "compete",
+  "contest",
+  "contend",
+  "rival",
+  "competitor",
+  "enemy",
+  "strategy",
+  "tactic",
+  "manoeuvre",
+  "blueprint",
+  "warn",
+  "compel",
+  "oblige",
+  "order",
+  "protest",
+  "refute",
+  "might",
+  "force",
+  "reinforce",
+  "impair",
+  "mitigate",
+  "comfort",
+  "event",
+  "matter",
+  "happen",
+  "occur",
+  "savage",
+  "reckless",
+  "fierce",
+  "foul",
+  "evil",
+  "devil",
+  "punishment",
+  "execute",
+  "hang",
+  "sacrifice",
+  "casualty",
+  "bury",
+  "funeral",
+  "grave",
+  "tomb",
+  "hell",
+  "maritime",
+  "naval",
+  "fleet",
+  "troop",
+  "landing",
+  "hover",
+  "proceed",
+  "progress",
+  "military",
+  "nuclear",
+  "poison",
+  "devastate",
+  "risk",
+  "adventure",
+  "peril",
+  "catastrophe",
+  "collapse",
+  "torture",
+  "humiliate",
+  "damage",
+  "harmful",
+  "mislead",
+  "disturb",
+  "interfere",
+  "interrupt",
+  "retreat",
+  "shrink",
+  "withdraw",
+  "withstand",
+  "compromise",
+  "surrender",
+  "escape",
+  "quit",
+  "abandon",
+  "forgo",
+  "discard",
+  "rid",
+  "defend",
+  "safeguard",
+  "defeat",
+  "resist",
+  "capture",
+  "victory",
+  "triumph",
+  "conquer",
+  "monument",
+  "tablet",
+  "statue",
+  "medal",
+  "honour",
+  "glorious",
+  "contribute",
+  "devote",
+  "owe",
+  "patrol",
+  "guard",
+  "camouflage",
+  "obstacle",
+  "burrow",
+  "spy",
+  "scout",
+  "general",
+  "soldier",
+  "veteran",
+  "polytechnic",
+  "mechanic",
+  "advance",
+  "innovate",
+  "breakthrough",
+  "gizmo",
+  "patent",
+  "invent",
+  "disclose",
+  "reveal",
+  "uncover",
+  "expose",
+  "domain",
+  "realm",
+  "foundation",
+  "specialise",
+  "concentrate",
+  "utilise",
+  "usage",
+  "tester",
+  "device",
+  "appliance",
+  "facility",
+  "equipment",
+  "instrument",
+  "tool",
+  "gauge",
+  "measure",
+  "calculate",
+  "compute",
+  "count",
+  "estimate",
+  "assess",
+  "evaluate",
+  "accessory",
+  "byproduct",
+  "auxiliary",
+  "versatile",
+  "accumulate",
+  "attach",
+  "belong",
+  "optics",
+  "microscope",
+  "lens",
+  "radar",
+  "echo",
+  "sensor",
+  "multimedia",
+  "network",
+  "dial",
+  "laptop",
+  "loudspeaker",
+  "microphone",
+  "cassette",
+  "tape",
+  "binary",
+  "wireless",
+  "high-definition",
+  "audio",
+  "vision",
+  "fantasy",
+  "science fiction",
+  "pump",
+  "generator",
+  "gear",
+  "pivot",
+  "hydraulic",
+  "drainage",
+  "sewage",
+  "ventilation",
+  "compress",
+  "condense",
+  "refine",
+  "simplify",
+  "purify",
+  "filter",
+  "distil",
+  "mode",
+  "prototype",
+  "framework",
+  "aspect",
+  "phase",
+  "operate",
+  "facilitate",
+  "transform",
+  "convert",
+  "alter",
+  "shift",
+  "turn",
+  "adapt",
+  "adjust",
+  "pinpoint",
+  "accurate",
+  "precise",
+  "correct",
+  "error",
+  "mistake",
+  "flaw",
+  "welcome home",
+  "fault",
+  "stumble",
+  "contingency",
+  "circumstance",
+  "pioneer",
+  "prophet",
+  "herald",
+  "heir",
+  "successor",
+  "generation",
+  "surname",
+  "gender",
+  "spouse",
+  "grandfather",
+  "father-in-law",
+  "sibling",
+  "cousin",
+  "nephew",
+  "niece",
+  "embryo",
+  "infant",
+  "orphan",
+  "juvenile",
+  "youngster",
+  "youth",
+  "gang",
+  "teenage",
+  "adolescence",
+  "kin",
+  "folk",
+  "relative",
+  "intimate",
+  "dear",
+  "darling",
+  "lover",
+  "beloved",
+  "madam",
+  "hostess",
+  "landlady",
+  "mistress",
+  "housewife",
+  "widow",
+  "maid",
+  "maiden",
+  "household",
+  "chore",
+  "host",
+  "landlord",
+  "tenant",
+  "guest",
+  "customer",
+  "client",
+  "encounter",
+  "chase",
+  "miss",
+  "appointment",
+  "accompany",
+  "dependent",
+  "propose",
+  "engagement",
+  "honeymoon",
+  "divorce",
+  "single",
+  "sole",
+  "respective",
+  "individual",
+  "commuter",
+  "neighbourhood",
+  "boss",
+  "supervisor",
+  "subordinate",
+  "partner",
+  "mate",
+  "colleague",
+  "comrade",
+  "acquaintance",
+  "affection",
+  "stranger",
+  "apprentice",
+  "deputy",
+  "hero",
+  "heroine",
+  "actress",
+  "chancellor",
+  "commander",
+  "director",
+  "proponent",
+  "committee",
+  "council",
+  "delegate",
+  "specialist",
+  "consultant",
+  "veterinary",
+  "counsellor",
+  "solicitor",
+  "attorney",
+  "umpire",
+  "cashier",
+  "fireman",
+  "nurse",
+  "gardener",
+  "barber",
+  "haircut",
+  "fisherman",
+  "butcher",
+  "groom",
+  "hostage",
+  "toil",
+  "beggar",
+  "slave",
+  "coward",
+  "foe",
+  "replica"
+ ],
+ "paragraphs": [
+  [
+   "Last Sunday Grandpa took us to the war memorial and spoke about the [[violence:violence]] and long [[conflict:conflict]] of his childhood.",
+   "One [[night:night]], he said, a sudden [[raid:raid]] revealed the full [[enormity:enormity]] of the pain behind brave words.",
+   "He described a winter [[campaign:campaign]] that ended in one final [[battle:battle]] beside the frozen river.",
+   "My little brother shivered as he heard of the [[quiet:quiet]] [[struggle:struggle]] and the distant [[explosion:explosion]].",
+   "Soldiers would [[bombard:bombard]] the town, while planes flew over to [[bomb:bomb]] the bridges at [[night:night]].",
+   "Each [[blast:blast]] made the windows [[burst:burst]] and sent small children crying beneath the tables."
+  ],
+  [
+   "Even now, a tiny [[spark:spark]] from a [[stove:stove]] [[twinkle:twinkles]] in Grandpa's sad memories.",
+   "He remembered the smell of [[gunpowder:gunpowder]] rising from a wrecked [[tank:tank]] in an open [[field:field]].",
+   "A heavy [[cannon:cannon]] stood silent in the hall, and a small [[missile:missile]] lay beside it.",
+   "Grandpa gently placed an old [[weapon:weapon]] and a worn [[pistol:pistol]] into a [[wooden:wooden]] box.",
+   "Next to them lay a rusty [[rifle:rifle]] and one [[bullet:bullet]], sad souvenirs of those days.",
+   "Finally he pointed to a [[target:target]] that once helped shells [[deflect:deflect]] away from nearby homes."
+  ],
+  [
+   "Grandpa's [[first:first]] [[mission:mission]] was to carry letters, guided by the warm [[flame:flame]] of a lamp.",
+   "One evening a red [[flare:flare]] rose, and its [[glitter:glitter]] fell softly across the dark sky.",
+   "By the soft [[glow:glow]] of that light he cleaned his [[blade:blade]] slowly after [[supper:supper]].",
+   "Then he would lay his [[sword:sword]] and old [[axe:axe]] beside the [[quiet:quiet]] [[fireplace:fireplace]].",
+   "With a small [[hammer:hammer]] he once fixed the [[bow:bow]] that played music on cold evenings.",
+   "Years later, a bent [[arrow:arrow]] and a long [[spear:spear]] lay under the dusty classroom pictures."
+  ],
+  [
+   "A cracked [[helmet:helmet]] and a dented [[shield:shield]] rest side by side above the school door.",
+   "Kind teachers helped [[equip:equip]] the children and [[prepare:prepare]] warm tea for tired visitors.",
+   "The hall could [[provide:provide]] hot soup and [[deploy:deploy]] friendly helpers at the gate.",
+   "No stone has [[hit:hit]] the wall since then, and no drum has [[beat:beat]] for marching armies.",
+   "No sudden [[strike:strike]] has been heard, and no angry fist has [[punch:punched]] holes in doors.",
+   "Hands that once used to [[chop:chop]] wood will never [[stab:stab]] a friend in anger."
+  ],
+  [
+   "That hard [[dilemma:dilemma]] left Grandpa's whole family in a lasting [[plight:plight]] for years.",
+   "Every hidden [[pitfall:pitfall]] sprang from a [[cruel:cruel]] [[conspiracy:conspiracy]] among greedy leaders.",
+   "Streets grew [[destitute:destitute]], and a long [[famine:famine]] spread slowly through the [[valley:valley]].",
+   "Thin children would [[starve:starve]] when cold nights [[deprive:deprived]] them of warm meals.",
+   "Strong men came to [[seize:seize]] the [[grain:grain]] and [[pursue:pursue]] poor farmers down the lanes.",
+   "Each new [[threat:threat]] would [[offend:offend]] the calm folks who loved their [[quiet:quiet]] country life."
+  ],
+  [
+   "Yet no [[aggressive:aggressive]] shouts could ever [[invade:invade]] their small house full of love.",
+   "No outsider dared [[trespass:trespass]] past the [[fence:fence]] or [[intrude:intrude]] into their yard.",
+   "The family's kind rules were never [[violate:violated]], even when angry crowds [[attack:attacked]] the old peace.",
+   "Each sudden [[assault:assault]] only taught them to [[challenge:challenge]] spite with calm, patient words.",
+   "A long [[siege:siege]] failed to [[surround:surround]] the town with hunger, and a young [[guard:guard]] kept watch at the gate.",
+   "Even the high walls could not [[enclose:enclose]] their hope through the long [[pause:pause]] in the talks.",
+   "Long after, the town built an exact [[replica:replica]] of the old gate in the square."
+  ],
+  [
+   "At last the guns would [[halt:halt]], and the sad songs would slowly [[cease:cease]].",
+   "Brave mothers would [[oppose:oppose]] the spite, and the crowds no longer tried to [[oppress:oppress]] the weak.",
+   "Wise words could [[counter:counter]] the fear and [[deter:deter]] young men from joining the fights.",
+   "Old laws would [[forbid:forbid]] guns, and city schools [[prohibit:prohibited]] games with knives.",
+   "Calm leaders tried to [[prevent:prevent]] further [[loss:loss]], while farmers began to [[revolt:revolt]] softly.",
+   "No son would [[betray:betray]] a friend, and no [[treason:treason]] would [[stain:stain]] the family name."
+  ],
+  [
+   "One young [[rebel:rebel]] refused the [[praise:praise]] offered by a hired [[traitor:traitor]] across the river.",
+   "Each true [[patriot:patriot]] carried no [[blame:blame]] for the sad faults of their leaders.",
+   "A soft [[reproach:reproach]] spoke louder than the cold [[evidence:evidence]] laid upon the table.",
+   "Clear [[proof:proof]] ended the idle [[terror:terror]] once felt by children who loved nightly stories.",
+   "The news was [[terrible:terrible]], yet the will for peace grew [[terrific:terrific]] in every heart.",
+   "One [[horrible:horrible]] noise woke sharp [[alarm:alarm]] inside each tiny [[wooden:wooden]] house."
+  ],
+  [
+   "Deep [[dread:dread]] filled the nights, and loud booms would [[frighten:frighten]] the small dogs.",
+   "A long [[tension:tension]] grew through those [[turbulent:turbulent]] days, until [[quiet:quiet]] talks brought hope.",
+   "The past [[turmoil:turmoil]] coloured every true [[scenario:scenario]] they shared inside the warm hall.",
+   "That special [[occasion:occasion]] taught everyone to respect [[limit:limits]] on pride and anger.",
+   "The old [[boundary:boundary]] stones kept a firm [[rein:rein]] on the horses that strayed.",
+   "Teams no longer [[compete:compete]] in shooting [[contest:contests]], but in joyful [[harvest:harvest]] games."
+  ],
+  [
+   "Old [[foe:foes]] learned to [[contend:contend]] kindly, never letting [[rival:rival]] pride [[spoil:spoil]] the [[spring:spring]] work.",
+   "One former [[competitor:competitor]] now calls his old [[enemy:enemy]] a cherished, close friend.",
+   "Good [[strategy:strategy]] needs wiser [[tactic:tactics]] than hasty guns and [[bitter:bitter]] cries.",
+   "Each [[clever:clever]] [[manoeuvre:manoeuvre]] followed Grandpa's simple [[blueprint:blueprint]] for a safe return home.",
+   "Grandpa would [[warn:warn]] the children kindly, and hunger once [[compel:compelled]] mothers to weep.",
+   "Kind nurses felt [[oblige:obliged]] by [[duty:duty]] to [[order:order]] bread for hungry mouths."
+  ],
+  [
+   "Their calm [[protest:protest]] helped [[refute:refute]] the lies spread by distant radio stations.",
+   "True [[might:might]] lies not in [[cruel:cruel]] [[force:force]] but in [[gentle:gentle]] helping hands.",
+   "Warm food will [[reinforce:reinforce]] weak bodies, and nothing [[can:can]] [[impair:impair]] such kindly care.",
+   "Soft songs [[can:can]] [[mitigate:mitigate]] the torment and bring [[comfort:comfort]] to lonely widows.",
+   "Each small [[event:event]] holds some [[matter:matter]] [[worthy:worthy]] of [[quiet:quiet]] adult thought.",
+   "Great change [[can:can]] [[happen:happen]] wherever kind deeds [[occur:occur]] daily around the schools."
+  ],
+  [
+   "No [[savage:savage]] act seems [[reckless:reckless]] now beside Grandpa's [[gentle:gentle]] wrinkled smile.",
+   "His [[fierce:fierce]] winter cough sounds [[foul:foul]], yet his heart stays kind.",
+   "No [[evil:evil]] thought serves the [[devil:devil]] who feeds on angry quarrels.",
+   "Harsh [[punishment:punishment]] should never be [[execute:executed]] on boys who stole bread from hunger.",
+   "They did not [[hang:hang]] up their tools but [[sacrifice:sacrificed]] sweet sleep to help neighbours.",
+   "Each lost [[casualty:casualty]] asks us to [[bury:bury]] our pride along with the rusty shells."
+  ],
+  [
+   "One silent [[funeral:funeral]] ended near a mossy [[grave:grave]] behind the white poplars.",
+   "A [[plain:plain]] [[tomb:tomb]] stands far from the noisy [[hell:hell]] of those smoky old fields.",
+   "Old [[maritime:maritime]] maps show the [[naval:naval]] routes once used by worried sailors.",
+   "A [[quiet:quiet]] [[fleet:fleet]] sleeps offshore, while a tired [[troop:troop]] rests among the green pines.",
+   "No [[rough:rough]] [[landing:landing]] shakes the cove where gulls [[hover:hover]] over blue waves.",
+   "Slow walkers [[proceed:proceed]] along the stone steps as peace [[progress:progresses]] in every heart."
+  ],
+  [
+   "No [[military:military]] [[truck:truck]] carries [[nuclear:nuclear]] loads through the blossoming apple orchards.",
+   "[[bitter:Bitter]] [[poison:poison]] cannot [[devastate:devastate]] the gardens where children plant young saplings.",
+   "Each needless [[risk:risk]] steals the calm joy of [[adventure:adventure]] from curious young travellers.",
+   "Sudden [[peril:peril]] may foretell [[catastrophe:catastrophe]] for towns that ignore the early signs.",
+   "Old bridges need not [[collapse:collapse]] under the [[torture:torture]] of the long rainy seasons.",
+   "[[cruel:Cruel]] words [[humiliate:humiliate]] playmates, and lies [[can:can]] [[damage:damage]] young friendships."
+  ],
+  [
+   "Such [[harmful:harmful]] jokes [[mislead:mislead]] newcomers and [[spoil:spoil]] the [[quiet:quiet]] evening classes.",
+   "Loud quarrels [[disturb:disturb]] sleepy minds, and boastful shouts [[interfere:interfere]] with the lessons.",
+   "Late bells [[interrupt:interrupt]] the games, but kind children never [[retreat:retreat]] from their [[duty:duty]].",
+   "Dry leaves [[shrink:shrink]] in the sun, and tired feet [[withdraw:withdraw]] from the dusty roads.",
+   "Frail elders [[withstand:withstand]] the cold winds through firm [[compromise:compromise]] among neighbours.",
+   "Tired hands [[surrender:surrender]] their knives, while white doves [[escape:escape]] into the clouds."
+  ],
+  [
+   "Sleepy clerks [[quit:quit]] their quarrels, and leaders [[abandon:abandon]] pride for warm handshakes.",
+   "We gladly [[forgo:forgo]] harsh slogans and [[discard:discard]] the faded posters of old days.",
+   "Clean yards are [[rid:rid]] of weeds, and children [[defend:defend]] the blossoms with care.",
+   "Stone walls [[safeguard:safeguard]] the seeds, and [[gentle:gentle]] love will [[defeat:defeat]] cold mistrust.",
+   "[[gentle:Gentle]] hands [[resist:resist]] anger, and letters [[capture:capture]] the smiles of distant cousins.",
+   "True [[victory:victory]] brings [[quiet:quiet]] [[triumph:triumph]] to simple homes and sunny schools."
+  ],
+  [
+   "Kind hearts [[conquer:conquer]] fear where a white [[monument:monument]] holds its silent names.",
+   "A grey [[tablet:tablet]] stands beside a tall [[statue:statue]] in the shady courtyard.",
+   "A [[bronze:bronze]] [[medal:medal]] keeps high [[honour:honour]] for the nurses of wartime winters.",
+   "Their [[glorious:glorious]] deeds [[contribute:contribute]] light to the clear autumn classrooms each year.",
+   "Old friends [[devote:devote]] their evenings and [[owe:owe]] warm thanks to the nameless helpers.",
+   "[[night:Night]] [[patrol:patrols]] have turned into friendly watchers of the sleepy village lanes."
+  ],
+  [
+   "Among the blooming peony bushes, faded [[camouflage:camouflage]] now hides no [[obstacle:obstacle]].",
+   "Deep [[burrow:burrows]] [[shelter:shelter]] the rabbits, and no crafty [[spy:spy]] walks at [[midnight:midnight]].",
+   "Young [[scout:scouts]] follow the paths where one kind [[general:general]] shares warm bread.",
+   "A tired [[soldier:soldier]] rests beside a stately [[veteran:veteran]] under the maple trees."
+  ],
+  [
+   "Our small town [[polytechnic:polytechnic]] asked a kind [[mechanic:mechanic]] to guide the students today.",
+   "They wanted real [[advance:advance]] and hoped the students could [[innovate:innovate]] for cleaner streets.",
+   "Nobody expected a big [[breakthrough:breakthrough]] from a tiny [[gizmo:gizmo]] made in a backyard.",
+   "A friendly [[clerk:clerk]] explained [[patent:patents]] and showed the students how to [[invent:invent]] safely.",
+   "The team would not [[disclose:disclose]] their plans early, but would [[reveal:reveal]] them at the fair.",
+   "They hoped the judges [[might:might]] [[uncover:uncover]] bright ideas and never coldly [[expose:expose]] weak points."
+  ],
+  [
+   "The old sea man chose a water [[domain:domain]] from the blue [[realm:realm]] he knew so well.",
+   "A small green [[foundation:foundation]] paid for the work, and the students [[specialise:specialised]] in cleaning water.",
+   "They would [[concentrate:concentrate]] each noon and [[utilise:utilise]] the rain jars behind the school.",
+   "Daily [[usage:usage]] stayed simple, so a shy [[tester:tester]] wrote notes after each [[trial:trial]].",
+   "Their very [[first:first]] [[device:device]] joined a [[kitchen:kitchen]] [[appliance:appliance]] to save water for plants.",
+   "The school yard offered free [[facility:facilities]] and shared [[equipment:equipment]] for the evening work."
+  ],
+  [
+   "Each sharp [[instrument:instrument]] and hand [[tool:tool]] stayed locked inside a [[wooden:wooden]] box.",
+   "A [[brass:brass]] [[gauge:gauge]] helped the students [[measure:measure]] the [[muddy:muddy]] water with [[steady:steady]] hands.",
+   "They would [[calculate:calculate]] the drops saved and [[compute:compute]] the costs on [[paper:paper]] after [[supper:supper]].",
+   "They could [[count:count]] the jars emptied and [[estimate:estimate]] the savings for the whole street.",
+   "Teachers came to [[assess:assess]] the build and [[evaluate:evaluate]] the drawings with kind smiles.",
+   "A [[spare:spare]] [[accessory:accessory]] came free, with a clean [[byproduct:byproduct]] for the garden soil."
+  ],
+  [
+   "An [[auxiliary:auxiliary]] [[tube:tube]] made the build more [[versatile:versatile]] for small homes.",
+   "The students would [[accumulate:accumulate]] old bottles and [[attach:attach]] them with strong [[string:string]] lines.",
+   "These glass jars [[belong:belong]] to the school lab that studies light and [[optics:optics]].",
+   "A school [[microscope:microscope]] showed the [[dirt:dirt]] clearly through its curved [[lens:lens]] at noon.",
+   "A toy [[radar:radar]] beeped softly, and its faint [[echo:echo]] amused the children by the [[fence:fence]].",
+   "A small [[sensor:sensor]] sent signals to a [[plain:plain]] [[multimedia:multimedia]] screen for everyone to see."
+  ],
+  [
+   "A safe [[network:network]] linked the rooms, and a [[round:round]] [[dial:dial]] set the water flow.",
+   "A borrowed [[laptop:laptop]] recorded the charts, while a big [[loudspeaker:loudspeaker]] called the breaks.",
+   "A cheap [[microphone:microphone]] caught the voices near an old [[cassette:cassette]] box of songs.",
+   "Sticky [[tape:tape]] held the wires [[tight:tight]], and [[binary:binary]] code blinked on the tiny screen.",
+   "A [[wireless:wireless]] link worked well, sending [[high-definition:high-definition]] pictures of the [[pond:pond]].",
+   "Clear [[audio:audio]] helped everyone hear, and a shared [[vision:vision]] kept the team brave and calm."
+  ],
+  [
+   "Their [[fantasy:fantasy]] grew wild, like happy [[science fiction:Science fiction]] about clean rivers.",
+   "A hand [[pump:pump]] lifted [[pond:pond]] water, while a tiny [[generator:generator]] lit a small lamp.",
+   "Each [[plastic:plastic]] [[gear:gear]] held firm, and the base could [[pivot:pivot]] toward the sun.",
+   "No [[hydraulic:hydraulic]] oil leaked, and the school [[drainage:drainage]] stayed dry all week.",
+   "Dirty [[sewage:sewage]] stayed apart, and fresh [[ventilation:ventilation]] kept the [[shed:shed]] sweet.",
+   "Wet leaves would be [[compress:compressed]], and steam would [[condense:condense]] on the cold lids."
+  ],
+  [
+   "Each seam was [[refine:refined]] again, and the tubes were [[simplify:simplified]] for easy daily care.",
+   "Grey water would be [[purify:purified]], and soup bits [[filter:filtered]] for the garden beds.",
+   "Drinking water was not [[distil:distilled]]; that [[mode:mode]] needed more heat and time.",
+   "The third [[prototype:prototype]] stood on a light [[wooden:wooden]] [[framework:framework]] near the gate.",
+   "Each new [[aspect:aspect]] looked fine, yet one [[phase:phase]] still leaked at [[night:night]].",
+   "Old Chen taught the students to [[operate:operate]] the spouts and [[facilitate:facilitate]] fast morning checks."
+  ],
+  [
+   "They could [[transform:transform]] [[ditch:ditch]] water and [[convert:convert]] it for the flower beds.",
+   "They did not [[alter:alter]] the roof path, but did [[shift:shift]] the jars to gather rain.",
+   "At [[dusk:dusk]] the [[crew:crew]] would [[turn:turn]] the valves and [[adapt:adapt]] the flows for [[thirsty:thirsty]] roots.",
+   "They would [[adjust:adjust]] the small screws and [[pinpoint:pinpoint]] drips with chalk marks.",
+   "The readings grew [[accurate:accurate]] and [[precise:precise]] after three calm [[trial:trial]] days.",
+   "Each [[correct:correct]] fitting saved water, and every fixed [[error:error]] taught them care."
+  ],
+  [
+   "One small [[mistake:mistake]] revealed a thin [[flaw:flaw]] in the lower left seam.",
+   "[[welcome home:Welcome home]] signs cheered the workers, hiding each small [[fault:fault]] with smiles.",
+   "A loose stone made Li [[stumble:stumble]], a dull [[contingency:contingency]] they soon fixed.",
+   "In hard [[circumstance:circumstances]] the old sea man stayed a true [[pioneer:pioneer]] for everyone.",
+   "No loud [[prophet:prophet]] promised wins, yet a kind [[herald:herald]] praised their [[steady:steady]] work.",
+   "The old man named Mei his [[heir:heir]] for the jars, and Lan his [[successor:successor]] for the notes."
+  ],
+  [
+   "Three school [[generation:generations]] joined, writing a shared [[surname:surname]] [[list:list]] on [[paper:paper]].",
+   "No one asked [[gender:gender]] questions; every [[pupil:pupil]] and [[spouse:spouse]] helper got the same tasks.",
+   "The kind old [[grandfather:grandfather]] and his tired [[father-in-law:father-in-law]] carried the heavy jars.",
+   "Each [[sibling:sibling]] brought a [[cousin:cousin]] to scrub bottles after lunch every day.",
+   "Little [[nephew:nephew]] Tao poured slowly, while [[niece:niece]] Ana held the funnel high.",
+   "They watched the bean [[embryo:embryos]] wake, just like a weak [[infant:infant]] opening its eyes."
+  ],
+  [
+   "A stray dog, a small [[orphan:orphan]], followed every [[juvenile:juvenile]] helper to the [[shed:shed]].",
+   "Each [[youngster:youngster]] shared bread, and [[youth:youth]] songs kept the long noon bright.",
+   "No noisy [[gang:gang]] blocked the path; [[teenage:teenage]] volunteers swept the [[lane:lane]] daily.",
+   "In bright [[adolescence:adolescence]] they learned much, helped by close [[kin:kin]] nearby.",
+   "Country [[folk:folk]] stopped to watch, and one far [[relative:relative]] sent seeds by post.",
+   "Close, [[intimate:intimate]] chats grew nightly, with [[dear:dear]] thanks for rice and tea."
+  ],
+  [
+   "Little Ying, a [[darling:darling]] of all, served cold tea to every plant [[lover:lover]].",
+   "Their [[beloved:beloved]] teacher [[madam:Madam]] Lin praised the neat joints and calm hands.",
+   "The smiling [[hostess:hostess]] poured tea, while the [[stern:stern]] [[landlady:landlady]] washed the cups.",
+   "The kind [[mistress:mistress]] of the yard and a busy [[housewife:housewife]] mopped the floor.",
+   "Old [[widow:widow]] Su sewed cloth bags, and a quick [[maid:maid]] rinsed the jars.",
+   "Its [[maiden:maiden]] [[trial:trial]] passed, pleasing the whole tired [[household:household]] at [[dusk:dusk]]."
+  ],
+  [
+   "Each dull [[chore:chore]] felt light when the students sang, led by a funny [[host:host]].",
+   "The grey-haired [[landlord:landlord]] lent a [[shed:shed]], and his new [[tenant:tenant]] swept it clean.",
+   "Each [[guest:guest]] tasted the clean tea, and every shop [[customer:customer]] praised the clear water.",
+   "A shy [[client:client]] asked questions, and one brief [[encounter:encounter]] led to more help.",
+   "The students did not [[chase:chase]] stray dogs or [[miss:miss]] lunch while fixing the drips.",
+   "After each [[appointment:appointment]] with the judges, Mei would [[accompany:accompany]] Lin to the gate."
+  ],
+  [
+   "Small Bo, still [[dependent:dependent]] on crutches, dared to [[propose:propose]] a safer spout.",
+   "Their close [[engagement:engagement]] with the street felt sweet, longer than a short [[honeymoon:honeymoon]].",
+   "No row caused [[divorce:divorce]] in the team; everyone kept a [[single:single]] shared aim.",
+   "Mei took [[sole:sole]] care of the charts, and the others kept their [[respective:respective]] jars in line.",
+   "Each [[individual:individual]] wrote notes, even the tired [[commuter:commuter]] uncle from North Street.",
+   "The whole [[neighbourhood:neighbourhood]] clapped, even the [[stern:stern]] [[boss:boss]] from the tea shop."
+  ],
+  [
+   "A kind [[supervisor:supervisor]] praised the work, never scolding a slow [[subordinate:subordinate]] helper.",
+   "Lan chose Tao as her [[partner:partner]], too shy to [[mate:mate]] pigeons for the school show.",
+   "A sick [[colleague:colleague]] sent greetings, and a brave [[comrade:comrade]] brought soup at noon.",
+   "An old [[acquaintance:acquaintance]] smiled warmly, showing true [[affection:affection]] for the busy [[crew:crew]].",
+   "A kind [[stranger:stranger]] watched for a long while, then joined as an eager [[apprentice:apprentice]] helper.",
+   "The tired [[deputy:deputy]] head bowed to each small [[hero:hero]] of the street."
+  ],
+  [
+   "Rain fell softly over the [[quiet:quiet]] roofs and washed the dusty lanes at last.",
+   "A brave [[heroine:heroine]] from the [[drama:drama]] club and a shy [[actress:actress]] cheered loudly.",
+   "No [[stern:stern]] [[chancellor:chancellor]] visited, but a retired [[commander:commander]] sent a kind note.",
+   "The kind [[director:director]] of the fair stayed a firm [[proponent:proponent]] of school builds.",
+   "The fair [[committee:committee]] met twice, and the town [[council:council]] lent chairs and tables.",
+   "They chose Lan as [[delegate:delegate]], guided by a water [[specialist:specialist]] from South Street."
+  ],
+  [
+   "Children laughed aloud and shared warm buns with every [[guest:guest]] under the bright lamps.",
+   "A plant [[consultant:consultant]] and a kind [[veterinary:veterinary]] doctor praised the safe runoff.",
+   "The school [[counsellor:counsellor]] smiled, and a fair [[solicitor:solicitor]] explained the [[contest:contest]] rules clearly.",
+   "No [[stern:stern]] [[attorney:attorney]] argued, and a calm [[umpire:umpire]] timed each [[trial:trial]] fairly.",
+   "The busy [[cashier:cashier]] from the store and a tall [[fireman:fireman]] kept [[order:order]] near the spouts.",
+   "A [[gentle:gentle]] [[nurse:nurse]] [[bound:bound]] an aching knuckle, while a cheerful [[gardener:gardener]] planted new seeds."
+  ],
+  [
+   "Morning sun dried the wet paths, and the students greeted the whole [[neighbourhood:neighbourhood]] with smiles.",
+   "The funny [[barber:barber]] promised free [[haircut:haircuts]] to the winners after the fair.",
+   "The old [[fisherman:fisherman]] grinned widely, while the kind [[butcher:butcher]] shared hot buns.",
+   "Boys learned to [[groom:groom]] the ponies gently; no shouting held patience [[hostage:hostage]] any more.",
+   "Years of hard [[toil:toil]] ended sweetly; even a poor [[beggar:beggar]] drank clean water.",
+   "Nobody lived as a tired [[slave:slave]] to thirst, and no [[coward:coward]] feared telling the truth."
+  ]
+ ],
+ "sentZh": [
+  [
+   "上周日爷爷带我们参观战争纪念馆，讲起他童年时代的暴力与漫长冲突。",
+   "他说，一天夜里一场突袭让人看清了豪言壮语背后巨大的痛苦。",
+   "他讲述了一场冬季战役，最后在结冰的河边打了最后一仗。",
+   "弟弟听到那场无声的挣扎和远处的爆炸，忍不住打了个寒战。",
+   "士兵们会炮轰镇子，飞机则在夜间飞来轰炸桥梁。",
+   "每一次爆炸都震碎窗户，吓得小孩子们躲到桌子底下哭。"
+  ],
+  [
+   "直到现在，炉边的一粒小火星仍在爷爷悲伤的记忆里闪烁。",
+   "他记得空旷田野里一辆毁坏的坦克散发出的火药味。",
+   "展厅里一门重炮静静立着，旁边躺着一枚小导弹。",
+   "爷爷轻轻地把一件旧武器和一把磨旧的手枪放回木箱。",
+   "旁边躺着一支生锈的步枪和一颗子弹，是那些岁月留下的伤感纪念。",
+   "最后他指着旧靶子，它曾帮炮弹偏转，护住附近的家园。"
+  ],
+  [
+   "爷爷的第一个任务是送信，一盏灯暖暖的火焰为他引路。",
+   "一天傍晚，红色信号弹升起，点点亮光轻轻洒满夜空。",
+   "晚饭后，他就着柔和的微光慢慢擦拭自己的刀刃。",
+   "然后他把剑和旧斧放在安静的壁炉旁。",
+   "他曾用小锤子修好琴弓，让它在寒夜里奏出音乐。",
+   "多年后，一张弯箭和一杆长矛静静躺在教室布满灰尘的图画下。"
+  ],
+  [
+   "一顶裂开的头盔和一面凹陷的盾牌并排安放在学校门上方。",
+   "好心的老师帮孩子们配备物品，还为疲惫的来访者准备热茶。",
+   "大厅能提供热汤，还在门口安排了友好的帮手。",
+   "从那以后再没有石头砸中墙壁，也没有战鼓为行军的队伍擂响。",
+   "再没听过突然的袭击，也没有愤怒的拳头在门上砸出洞。",
+   "曾经砍柴的手，绝不会在怒气中刺伤朋友。"
+  ],
+  [
+   "那个艰难的两难处境让爷爷全家多年陷于困苦之中。",
+   "每个暗藏的陷阱都源于贪婪首领间残酷的阴谋。",
+   "街道一片赤贫，漫长的饥荒慢慢蔓延整个山谷。",
+   "寒夜夺走了热饭，瘦弱的孩子们只好挨饿。",
+   "壮汉们跑来夺取粮食，沿着小巷追赶可怜的农夫。",
+   "每一次新的威胁都会冒犯那些热爱安静乡村生活的乡民。"
+  ],
+  [
+   "然而再凶的叫嚷也侵犯不了他们那间满是爱的小屋。",
+   "没有外人敢越过栅栏擅自闯入，也没人敢踏进他们的院子。",
+   "即使愤怒的人群攻击旧日的安宁，家中的规矩也从未被违反。",
+   "每次突然的袭击只教会他们用平静耐心的话语回击恶意。",
+   "漫长的围困没能用饥饿围住小镇，一名年轻的哨兵守在门口。",
+   "即便在谈判长期停顿的日子里，高墙也围不住他们的希望。",
+   "多年以后，镇上在广场建起一座旧城门的等比复制品。"
+  ],
+  [
+   "枪声终于停了下来，悲伤的歌声也慢慢止息。",
+   "勇敢的母亲们奋起反抗恶意，人群也不再压迫弱者。",
+   "明智的话语能化解恐惧，劝阻年轻人别去参加打斗。",
+   "旧法律禁止枪支，城里的学校也不许玩刀具游戏。",
+   "冷静的领袖设法防止更多损失，农夫们则开始悄悄反抗。",
+   "没有儿子会背叛朋友，叛国也玷污不了家族的名声。"
+  ],
+  [
+   "一位年轻的反抗者拒绝了河对岸雇来的叛徒的称赞。",
+   "每个真正的爱国者都不为首领可悲的过错担责。",
+   "温和的责备比摆在桌上的冰冷证据更有分量。",
+   "确凿的证据消除了爱听夜间故事的孩子们莫名的恐惧。",
+   "消息很可怕，但每颗心中对和平的渴望却愈发强烈。",
+   "一声可怕的巨响，惊醒了每间小木屋里人们的警觉。"
+  ],
+  [
+   "深深的恐惧笼罩夜晚，巨大的轰鸣常把小狗吓坏。",
+   "动荡的日子里紧张不断累积，直到安静的交谈带来希望。",
+   "过去的动荡给他们在温暖大厅里讲述的每个真实设想都染上色彩。",
+   "那个特别的场合教会大家给骄傲和怒气设下界限。",
+   "古老的界石像缰绳一样，牢牢管住乱跑的马匹。",
+   "队伍不再参加射击比赛，而是参加欢乐的丰收游戏。"
+  ],
+  [
+   "老对手们学会友好竞争，不让敌对的骄傲毁掉春耕。",
+   "一位昔日的竞争者如今把老敌人唤作珍贵的好友。",
+   "好的战略需要的战术，比仓促的枪炮和苦涩的哭喊更明智。",
+   "每一次巧妙的行动，都遵循爷爷那简单蓝图上的平安回家路。",
+   "爷爷总是和气地提醒孩子们，而饥饿曾逼得母亲们落泪。",
+   "善良的护士们出于职责，觉得必须为饥饿的人们订购面包。"
+  ],
+  [
+   "他们平静的抗议帮助驳斥了远方电台散布的谎言。",
+   "真正的力量不在残酷的武力，而在温柔的援手。",
+   "热食会增强虚弱的身体，什么都损害不了这份暖心关怀。",
+   "轻柔的歌能减轻痛苦，给孤独的寡妇带去安慰。",
+   "每件小事都藏着值得成年人安静思量的东西。",
+   "只要善行天天在学校周围发生，巨大的改变就会出现。"
+  ],
+  [
+   "在爷爷温柔而布满皱纹的笑容旁，再野蛮的行径也不显鲁莽。",
+   "冬天他猛烈的咳嗽声很难听，心却依然善良。",
+   "没有邪恶的念头会去侍奉那以愤怒争吵为食的魔鬼。",
+   "对因饥饿偷面包的男孩，绝不该施以严酷的惩罚。",
+   "他们没有挂起工具歇手，而是牺牲甜美的睡眠去帮邻居。",
+   "每一位伤亡者都在提醒我们：把骄傲连同生锈的弹壳一起埋葬。"
+  ],
+  [
+   "一场寂静的葬礼，在白杨后长满苔藓的坟墓旁结束。",
+   "朴素的坟墓远离硝烟弥漫的旧战场那喧闹的地狱。",
+   "古老的海事地图上，标着忧心的水手们曾走过的海军航线。",
+   "安静的舰队在近海沉睡，疲惫的部队在绿松间休整。",
+   "没有猛烈的抢滩惊扰小海湾，海鸥在蓝色浪涛上盘旋。",
+   "行人沿石阶缓缓前行，和平在每个人心中生长。"
+  ],
+  [
+   "没有军用卡车载着核货物穿过盛开的苹果园。",
+   "在孩子们栽种幼苗的园子里，苦味的毒药也无法肆虐。",
+   "每次不必要的冒险，都在偷走好奇旅人从容的乐趣。",
+   "对无视早期征兆的村镇，突如其来的危险可能预示灾难。",
+   "古桥不必在漫长雨季的折磨下倒塌。",
+   "狠心的话会让伙伴蒙羞，谎言也会伤害幼小的友谊。"
+  ],
+  [
+   "这种有害的玩笑误导新人，还搅扰了安静的晚课。",
+   "大声争吵打扰困倦的人，自夸的喊叫干扰上课。",
+   "迟来的钟声打断了游戏，但好孩子从不逃避自己的职责。",
+   "干叶在阳光下收缩，疲惫的双脚从尘土路上退回。",
+   "体弱的老人靠邻里间坚定的互谅互让，抵御住寒风。",
+   "疲惫的手放下刀具，白鸽飞向云间。"
+  ],
+  [
+   "困倦的职员停止争吵，领袖们放下骄傲，热情握手。",
+   "我们欣然舍弃严苛的口号，丢弃旧日褪色的海报。",
+   "干净的院子清除了杂草，孩子们细心守护着花朵。",
+   "石墙守护种子，温柔的爱终将战胜冰冷的猜疑。",
+   "温柔的手压住怒气，书信留住远方表亲的笑颜。",
+   "真正的胜利把安宁的凯旋带给简朴人家和阳光校园。"
+  ],
+  [
+   "白色纪念碑上刻着沉默的名字，善良的心在那里战胜恐惧。",
+   "绿荫庭院里，灰色石碑立在高大的雕像旁。",
+   "一枚铜质奖章，为战时寒冬里的护士们守护着崇高荣誉。",
+   "他们光荣的事迹，年年为明朗的秋日教室添一份光亮。",
+   "老朋友们奉献出夜晚，把由衷的感谢献给无名的帮手。",
+   "夜间巡逻变成了守望沉睡村巷的友好护卫。"
+  ],
+  [
+   "盛开的牡丹丛中，褪色的伪装再也遮不住什么障碍。",
+   "深深的地洞庇护着兔子，午夜里再没有狡猾的间谍出没。",
+   "年轻的侦察员沿着小路走去，和善的将军在那里分发热面包。",
+   "枫树下，疲惫的士兵靠着一位威严的老兵休息。"
+  ],
+  [
+   "今天，镇上的小理工学院请来一位和善的机修工指导学生。",
+   "他们想要真正的进步，盼着学生能为更洁净的街道创新。",
+   "谁也没料到，后院里做的小玩意会带来大突破。",
+   "一位友好的职员讲解了专利，教学生如何安全地搞发明。",
+   "团队不打算提前透露计划，要留到集市上再揭晓。",
+   "他们希望评委能发掘出闪光的点子，而不是冷漠地揭短。"
+  ],
+  [
+   "老海员从自己熟悉的蓝色王国里，选定了用水这个领域。",
+   "一家小型绿色基金会出资支持，学生们专门研究净水。",
+   "他们每天中午聚在一起，利用学校后面的雨水罐。",
+   "日常使用很简单，害羞的测试员每次试验后都做记录。",
+   "他们的第一个装置与厨房电器相连，为浇植物省水。",
+   "校园免费提供场地设施，晚上大家共用设备干活。"
+  ],
+  [
+   "每件锋利的仪器和手工工具都锁在木箱里。",
+   "黄铜量规帮学生们稳稳地测量浑浊的水样。",
+   "晚饭后，他们在纸上计算省下的水滴，核算费用。",
+   "他们能数清用空的罐子，估算出整条街的节水量。",
+   "老师们带着和善的笑容来评估作品、点评图纸。",
+   "一个备用配件是白送的，还带来可肥花园土壤的干净副产品。"
+  ],
+  [
+   "一根辅助管让这个装置更百搭，适合小户人家。",
+   "学生们攒下旧瓶子，用结实的细绳把它们系好。",
+   "这些玻璃罐属于学校研究光与光学的实验室。",
+   "正午亮光下，学校显微镜透过弧形镜片把污垢照得清清楚楚。",
+   "玩具雷达轻轻作响，微弱的回声逗乐了篱笆边的孩子。",
+   "小传感器把信号发到朴素的多媒体屏幕上，人人都能看到。"
+  ],
+  [
+   "安全的网络连通各个房间，圆形刻度盘调节着水流。",
+   "借来的笔记本电脑记录图表，大喇叭通知休息时间。",
+   "便宜的麦克风录下人声，旁边是装满歌曲的旧磁带盒。",
+   "胶带把电线粘得牢牢的，二进制代码在小屏幕上闪烁。",
+   "无线连接运转良好，传回池塘的高清画面。",
+   "清晰的音频让大家听得真切，共同的愿景让团队勇敢又镇定。"
+  ],
+  [
+   "他们的幻想天马行空，像关于清澈河流的快乐科幻故事。",
+   "手压泵抽起池水，小发电机点亮一盏小灯。",
+   "每个塑料齿轮都咬合牢固，底座还能朝太阳转动。",
+   "液压油一滴不漏，学校的排水沟整周干爽。",
+   "污水分开存放，清新的通风让小棚气味干净。",
+   "湿叶会被压缩，蒸汽则在冰冷的盖子上冷凝。"
+  ],
+  [
+   "每道接缝都重新修整过，管路也做了简化，日常打理更容易。",
+   "灰水会被净化，汤渣也会被滤出来用于菜床。",
+   "饮用水没有蒸馏，那种方式需要更多热量和时间。",
+   "第三个原型立在大门旁轻巧的木架上。",
+   "每个新方面都看着不错，可有一个环节夜里还是会漏。",
+   "老陈教学生们操作水嘴，让清晨检查又快又顺。"
+  ],
+  [
+   "他们能转化沟里的水，再改造出来浇灌花坛。",
+   "他们没改动屋顶水道，只是挪动罐子来收集雨水。",
+   "黄昏时分，全组人转动阀门，为干渴的根调整水流。",
+   "他们拧动小螺丝，用粉笔记号精准定位漏水点。",
+   "经过三天平稳的试验，读数变得又准又精。",
+   "每个正确的接件都省下水，每处改正的错误都教人细心。"
+  ],
+  [
+   "一个小失误暴露了左下接缝处细细的裂痕。",
+   "“欢迎回家”的牌子鼓舞着工人，笑容掩过一个个小故障。",
+   "一块松动的石头绊了李一跤，这桩小意外很快就被处理好了。",
+   "在艰难的处境中，老海员依然是大家真正的先驱。",
+   "没有高声的预言者许诺胜利，和善的报信人却夸他们的活儿做得稳。",
+   "老人指定梅做罐子的继承人，兰做记录的接班人。"
+  ],
+  [
+   "三代学生一起加入，在纸上写下同姓的共用名单。",
+   "没人问性别，每个小学生和配偶帮手都领同样的任务。",
+   "和善的老祖父和疲惫的岳父搬起沉重的大罐。",
+   "每个兄弟姐妹都带个表亲，每天午饭后刷瓶子。",
+   "小侄子涛慢慢倾倒，侄女安娜把漏斗高高举着。",
+   "他们看着豆胚苏醒，就像虚弱的婴儿慢慢睁开眼睛。"
+  ],
+  [
+   "一只流浪小狗，小小的孤儿，跟着每个少年帮手走进棚屋。",
+   "每个年轻人分着面包，青春的歌声把漫长的正午唱得明亮。",
+   "没有喧闹的帮派挡路，青少年志愿者每天清扫小巷。",
+   "在明媚的青春期里他们学到很多，身边有亲近的亲戚帮忙。",
+   "乡亲们驻足观看，一位远方的亲戚还寄来了种子。",
+   "亲密的夜谈渐渐多起来，为米饭和茶献上真挚的感谢。"
+  ],
+  [
+   "人见人爱的小莹，给每位爱花的人端上凉茶。",
+   "孩子们敬爱的林老师夸接头整齐、双手沉稳。",
+   "笑盈盈的女主人倒茶，板着脸的女房东洗杯子。",
+   "院子那位和善的女主人和忙碌的家庭主妇一起拖地。",
+   "苏寡妇缝着布袋，手脚麻利的女仆冲净罐子。",
+   "首次试验顺利通过，让疲惫的全家人在黄昏时分满心欢喜。"
+  ],
+  [
+   "有风趣的主持人领唱，再枯燥的杂活也变得轻快。",
+   "白发的房东借出棚屋，新来的房客把它扫得干干净净。",
+   "每位客人都尝到了干净的茶，店里每位顾客都夸水清。",
+   "一位害羞的客户提了问题，短短一面之缘带来了更多帮助。",
+   "修滴水点的日子里，学生们不追野狗，也不误午饭。",
+   "每次与评委约见之后，梅都陪林走到门口。"
+  ],
+  [
+   "拄着双拐还要靠人照应的小波，大胆提出了更安全的水嘴方案。",
+   "他们与街坊的紧密情谊甜蜜绵长，胜过短暂的蜜月。",
+   "没有争吵让团队散伙，大家守着同一个目标。",
+   "梅独自负责图表，其他人把各自的罐子排列整齐。",
+   "人人都记笔记，连北街疲惫的通勤叔叔也写。",
+   "整个街坊都鼓起掌来，连茶铺里严厉的老板也在拍手。"
+  ],
+  [
+   "和善的主管夸赞大家的活儿，从不责骂手脚慢的下属帮手。",
+   "兰选涛做搭档，她太害羞，不好意思为校园演出配对鸽子。",
+   "生病的同事捎来问候，勇敢的伙伴中午送来热汤。",
+   "一位老相识暖暖地笑着，对忙碌的全组人满怀真心的喜爱。",
+   "一位好心的陌生人看了许久，随后加入成了热心的学徒帮手。",
+   "疲惫的副校长向街上每一位小英雄鞠躬。"
+  ],
+  [
+   "细雨轻轻落在安静的屋顶上，终于洗净了尘土飞扬的小巷。",
+   "戏剧社里勇敢的女主角和害羞的女演员放声喝彩。",
+   "严厉的大臣没有来访，退休的指挥官却寄来一张暖心字条。",
+   "集市上和善的主任，始终是校园工程的坚定支持者。",
+   "集市委员会开了两次会，镇议会借出了桌椅。",
+   "他们推选兰做代表，还有南街的水专家从旁指导。"
+  ],
+  [
+   "明亮的灯下，孩子们大声笑着，把热包子分给每一位来宾。",
+   "植物顾问和和善的兽医都夸排水安全。",
+   "学校辅导员面带微笑，公正的事务律师把比赛规则讲得清清楚楚。",
+   "没有严厉的律师争辩，沉稳的裁判为每次试验公平计时。",
+   "店里忙碌的收银员和高个子消防员在水嘴旁维持秩序。",
+   "温柔的护士包扎好作痛的指关节，开朗的园丁种下新种子。"
+  ],
+  [
+   "晨阳晒干了湿漉漉的小路，学生们笑着向整条街坊问好。",
+   "风趣的理发师许诺，集市结束后给获胜者免费理发。",
+   "老渔夫咧嘴大笑，和善的屠夫分发热包子。",
+   "男孩们学会轻柔地给小马梳毛，喊叫再也不能挟持耐心。",
+   "多年的辛苦劳作有了甜美的收尾，连穷乞丐也喝上了清水。",
+   "没有人再做干渴的疲惫奴隶，也没有懦夫不敢说真话。"
+  ]
+ ],
+ "paraZh": [
+  "周日爷爷带我们参观纪念馆，讲述战争年代的暴力冲突与炮火。",
+  "展厅里坦克大炮静静陈列，爷爷把旧武器与子弹收进木箱。",
+  "灯下送信是第一个任务，刀剑归置壁炉旁，琴弓修好再奏乐。",
+  "头盔盾牌挂上校门，老师备茶送汤，校园里打斗从此绝迹。",
+  "阴谋与饥荒让全家陷于困境，夺粮追人，威胁冒犯着村民。",
+  "凶喊闯不进爱心小屋，围困失败，广场立起旧城门复制品。",
+  "枪声止息歌声停，智言劝阻青年，旧法禁枪，无人叛家。",
+  "反抗者拒斥叛徒夸赞，铁证驱散恐惧，和平意志愈发坚定。",
+  "动荡渐息希望生，聚会教人给骄怒设限，比赛改庆丰收。",
+  "宿敌化友共春耕，巧计循蓝图，警告与职责换来面包。",
+  "抗议驳斥谎言，真力源于援手；善行日日发生，巨变自来。",
+  "爷爷笑容抚平野蛮岁月；众人牺牲睡眠助邻里，埋葬骄傲。",
+  "白杨后葬礼静穆，航线犹存，舰队安眠，和平悄然生长。",
+  "军车不扰果园毒药难毁花园，险情预示灾难，恶语伤友谊。",
+  "玩笑误导晚课受扰，孩子不退缩；放下刀具，白鸽入云。",
+  "止吵弃口号除杂草，善意胜猜疑，书信留笑迎凯旋。",
+  "碑石像旁荣誉长存，护士事迹添光，夜巡化作友好守望。",
+  "牡丹丛中伪装褪色，地洞藏兔，将军分粮，士兵傍老兵歇。",
+  "理工学院请机修工指导创新，专利讲解后留待集市揭晓。",
+  "老海员选定用水课题，基金会资助，学生专攻雨水利用。",
+  "仪器锁箱量规测水，晚饭后算账估算，老师微笑来评估。",
+  "辅助管增功能，瓶罐细绳搭装置，显微镜雷达传感器齐上阵。",
+  "网络连通刻度盘调水，电脑喇叭磁带齐全，高清看池塘。",
+  "幻想如科幻奔放，泵抽水灯点亮，齿轮牢固排水干爽。",
+  "接缝修整灰水净化，原型立上木架，老陈教操作促检查。",
+  "沟水转化浇花坛，黄昏调阀定位滴漏，三天试验读数精准。",
+  "小错暴露裂痕被修好，老海员稳当先驱，梅兰接下衣钵。",
+  "三代同写姓氏名单，祖父搬罐，孩子看豆胚如婴儿初醒。",
+  "小狗孤儿也来帮忙，青少年扫巷，乡亲远亲夜里亲密畅谈。",
+  "小莹端茶待客，林老师夸手稳；女眷各司其职，首试通过。",
+  "主持人领唱杂活变轻，房东借棚客商夸水，梅陪林赴约。",
+  "拄拐小波提议安全水嘴，全街鼓掌，众人同守一个目标。",
+  "主管不骂下属，兰涛结伴送汤；陌生人当学徒，副手敬英雄。",
+  "雨洗小巷戏剧社喝彩，指挥官寄字条，兰当选代表获专家指导。",
+  "灯下分包子迎宾，律师讲规则裁判计时，护士包扎园丁播种。",
+  "晨阳晒干小路，理发师渔夫屠夫同庆，辛劳换来清水与勇气。"
+ ],
+ "glossary": {
+  "abandon": {
+   "p": "əˈbændən",
+   "m": "v. 抛弃；放弃；中止",
+   "ex": "He abandoned his car in the snow.",
+   "exZh": "他把车抛弃在雪地里。",
+   "note": "同义词：discard（丢弃无用之物）；forsake（正式，永久舍弃）；词伙：abandon careers"
+  },
+  "accessory": {
+   "p": "əkˈsesəri",
+   "m": "n. 配件",
+   "ex": "He bought a new accessory for his phone.",
+   "exZh": "他为他的手机买了一个新配件。",
+   "note": "词伙：spare accessory"
+  },
+  "accompany": {
+   "p": "əˈkʌmpəni",
+   "m": "v. 伴随",
+   "ex": "The music accompanies the dance.",
+   "exZh": "音乐伴随舞蹈。",
+   "note": ""
+  },
+  "accumulate": {
+   "p": "əˈkjuːmjəleɪt",
+   "m": "v. 积累",
+   "ex": "He accumulates coins from different countries.",
+   "exZh": "他收集来自不同国家的硬币。",
+   "note": "同义词：concentrate（聚于一点）；gather（收拢，动作较快）；词伙：accumulate wisdom, accumulate resources"
+  },
+  "accurate": {
+   "p": "ˈækjərət",
+   "m": "adj. 精确的",
+   "ex": "The clock shows accurate time.",
+   "exZh": "这个钟显示的时间很精确。",
+   "note": "同义词：correct（笼统说对）；exact（分毫不差）；precise（精细确切，偏数据）；词伙：accurately represent the real world"
+  },
+  "acquaintance": {
+   "p": "əˈkweɪntəns",
+   "m": "n. 认识的人；相识",
+   "ex": "I met him at a party, but he is only an acquaintance.",
+   "exZh": "我在聚会上认识了他，但他只是个熟人。",
+   "note": "词伙：old acquaintance"
+  },
+  "actress": {
+   "p": "ˈæktrəs",
+   "m": "n. 女演员",
+   "ex": "The actress sings in the movie.",
+   "exZh": "这位女演员在电影中唱歌。",
+   "note": "词伙：shy actress"
+  },
+  "adapt": {
+   "p": "əˈdæpt",
+   "m": "v. 适应；改编",
+   "ex": "He adapted to the new school quickly.",
+   "exZh": "他很快就适应了新学校。",
+   "note": "同义词：adjust（小幅调整以适应）；alter（改动局部）；词伙：adapt to change, adapt to local customs, adapt to the local culture"
+  },
+  "adjust": {
+   "p": "əˈdʒʌst",
+   "m": "v. 调整；使适合；使适应",
+   "ex": "He adjusted the chair to sit comfortably.",
+   "exZh": "他调整了椅子以便坐得舒服。",
+   "note": "同义词：adapt（渐变以适应环境）；alter（改动细节）；change（泛指改变）；词伙：adjust the font size, adjust to different climates"
+  },
+  "adolescence": {
+   "p": "ˌædəˈles(ə)ns",
+   "m": "n. 青春期",
+   "ex": "He was shy during his adolescence.",
+   "exZh": "他在青春期时很害羞。",
+   "note": "词伙：bright adolescence"
+  },
+  "advance": {
+   "p": "ədˈvæns",
+   "m": "n. 进步；adj. 预先的；v. 前进",
+   "ex": "The advance of technology has changed our lives.",
+   "exZh": "科技的发展改变了我们的生活。",
+   "note": "同义词：boost（推动提升，作动词）；progress（持续进步）；headway（进展，常与make连用）；词伙：advanced courses, medical advances, advance in the workforce"
+  },
+  "adventure": {
+   "p": "ədˈventʃər",
+   "m": "n. 冒险",
+   "ex": "He went on an adventure in the jungle.",
+   "exZh": "他去丛林里冒险。",
+   "note": "词伙：trend towards adventure tourism"
+  },
+  "affection": {
+   "p": "əˈfekʃ(ə)n",
+   "m": "n. 钟爱；喜爱",
+   "ex": "She showed great affection for her little dog.",
+   "exZh": "她对她的小狗非常钟爱。",
+   "note": "词伙：true affection"
+  },
+  "aggressive": {
+   "p": "əˈɡresɪv",
+   "m": "adj. 攻击性的；有进取心的；侵略性的",
+   "ex": "The dog showed aggressive behavior toward strangers.",
+   "exZh": "这只狗对陌生人表现出攻击性行为。",
+   "note": "同义词：fierce（凶猛，多形容野兽）；violent（狂暴，含实际暴力）；词伙：aggressive driving, reduce aggressive behaviour"
+  },
+  "alarm": {
+   "p": "əˈlɑːrm",
+   "m": "n. 警报；闹钟；v. 使惊恐",
+   "ex": "The fire alarm rang loudly.",
+   "exZh": "火警警报大声响了起来。",
+   "note": "词伙：sharp alarm"
+  },
+  "alter": {
+   "p": "ˈɔːltər",
+   "m": "v. 改动；变更",
+   "ex": "He will alter the plan tomorrow.",
+   "exZh": "他明天会改动计划。",
+   "note": "同义词：change（泛指改变）；adjust（微调以适应）；amend（正式修改条文）；adapt（改变以求适应）；shift（转变方向重点）"
+  },
+  "appliance": {
+   "p": "əˈplaɪəns",
+   "m": "n. 家用电器",
+   "ex": "The kitchen has a new washing appliance.",
+   "exZh": "厨房里有一台新的洗衣机。",
+   "note": "词伙：electrical appliances, energy-efficient appliances"
+  },
+  "appointment": {
+   "p": "əˈpɔɪntmənt",
+   "m": "n. 约会；约定；任命",
+   "ex": "I have an appointment with my doctor at 3 p.m.",
+   "exZh": "我下午三点有个医生的约会。",
+   "note": ""
+  },
+  "apprentice": {
+   "p": "əˈprentɪs",
+   "m": "n. 学徒；徒弟",
+   "ex": "He is an apprentice in a car repair shop.",
+   "exZh": "他是汽车修理店的一名学徒。",
+   "note": "同义词：intern（公司里的实习生）；trainee（受训中的新人）；learner（泛指学习者）；词伙：fervent apprentice"
+  },
+  "arrow": {
+   "p": "ˈærəʊ",
+   "m": "n. 箭；箭头",
+   "ex": "The hunter shot an arrow at the target.",
+   "exZh": "猎人向目标射了一支箭。",
+   "note": "词伙：bent arrow"
+  },
+  "aspect": {
+   "p": "ˈæspekt",
+   "m": "n. 方面",
+   "ex": "One aspect of learning English is practicing speaking.",
+   "exZh": "学习英语的一个方面是练习口语。",
+   "note": "词伙：practical aspects, other aspects of life"
+  },
+  "assault": {
+   "p": "əˈsɔːlt",
+   "m": "n. 攻击；袭击",
+   "ex": "The police investigated the assault on the old man.",
+   "exZh": "警方调查了对那位老人的攻击。",
+   "note": "同义词：attack（常用词，泛指攻击）；词伙：sudden assault"
+  },
+  "assess": {
+   "p": "əˈses",
+   "m": "v. 评估",
+   "ex": "The teacher will assess your homework tomorrow.",
+   "exZh": "老师明天会评估你的作业。",
+   "note": "同义词：calculate（算出具体数值）；measure（量出尺寸数据）；evaluate（评出优劣高下）"
+  },
+  "attach": {
+   "p": "əˈtætʃ",
+   "m": "v. 附加；系上",
+   "ex": "Please attach the file to the email.",
+   "exZh": "请将文件附加到邮件中。",
+   "note": "同义词：connect（接通相连）；join（接合为一处）；associate（心理上关联联想）"
+  },
+  "attack": {
+   "p": "əˈtæk",
+   "m": "v. 攻击；n. 袭击",
+   "ex": "The attack happened at night.",
+   "exZh": "这次攻击发生在夜晚。",
+   "note": "同义词：assault（暴力人身袭击，正式）；strike（突然出手击打）；invade（武装入侵领土）；词伙：attack old peace"
+  },
+  "attorney": {
+   "p": "əˈtɜːrni",
+   "m": "n. 律师；辩护律师；代理人",
+   "ex": "The attorney helped the man with his case.",
+   "exZh": "律师帮助那个人处理了他的案件。",
+   "note": "同义词：solicitor（英式律师，办事务）；词伙：stern attorney"
+  },
+  "audio": {
+   "p": "ˈɔːdiəʊ",
+   "m": "adj. 音频的；声音的",
+   "ex": "The audio signal was clear and loud.",
+   "exZh": "音频信号清晰响亮。",
+   "note": "词伙：clear audio"
+  },
+  "auxiliary": {
+   "p": "ɔːɡˈzɪliəri",
+   "m": "adj. 辅助的；n. 辅助物",
+   "ex": "He used an auxiliary verb to form the past tense.",
+   "exZh": "他使用了一个助动词来构成过去时。",
+   "note": "词伙：auxiliary tube"
+  },
+  "axe": {
+   "p": "æks",
+   "m": "n. 斧子",
+   "ex": "He picked up an axe to chop wood.",
+   "exZh": "他拿起一把斧子去砍柴。",
+   "note": "词伙：old axe"
+  },
+  "barber": {
+   "p": "ˈbɑːrbər",
+   "m": "n. 理发师",
+   "ex": "The barber cuts hair every day.",
+   "exZh": "理发师每天剪头发。",
+   "note": "词伙：funny barber"
+  },
+  "battle": {
+   "p": "ˈbæt(ə)l",
+   "m": "n. 战斗；v. 战斗",
+   "ex": "The soldiers fought in a long battle.",
+   "exZh": "士兵们进行了一场漫长的战斗。",
+   "note": "词伙：last battle"
+  },
+  "beat": {
+   "p": "biːt",
+   "m": "v. 打；击败；n. 跳动",
+   "ex": "He beat the drum loudly.",
+   "exZh": "他用力敲打鼓。",
+   "note": "同义词：defeat（击败，稍正式）；词伙：beat opponents"
+  },
+  "beggar": {
+   "p": "ˈbeɡər",
+   "m": "n. 乞丐",
+   "ex": "The beggar sat on the street with a cup.",
+   "exZh": "那个乞丐坐在街上，手里拿着一个杯子。",
+   "note": "词伙：poor beggar"
+  },
+  "belong": {
+   "p": "bɪˈlɔːŋ",
+   "m": "v. 属于",
+   "ex": "This book belongs to me.",
+   "exZh": "这本书属于我。",
+   "note": "词伙：sense of belonging"
+  },
+  "beloved": {
+   "p": "bɪˈlʌvɪd",
+   "m": "adj. 钟爱的",
+   "ex": "Her beloved dog always greeted her at the door.",
+   "exZh": "她钟爱的狗总是在门口迎接她。",
+   "note": "词伙：beloved teacher"
+  },
+  "betray": {
+   "p": "bɪˈtreɪ",
+   "m": "v. 背叛；泄露",
+   "ex": "He betrays his friend by telling the secret.",
+   "exZh": "他通过泄露秘密背叛了朋友。",
+   "note": "词伙：betray friends"
+  },
+  "binary": {
+   "p": "ˈbaɪnəri",
+   "m": "adj. 二进位的；二元的",
+   "ex": "The computer uses binary code to process data.",
+   "exZh": "计算机使用二进制代码来处理数据。",
+   "note": "词伙：binary code"
+  },
+  "bitter": {
+   "p": "ˈbɪtər",
+   "m": "adj. 有苦味的；痛苦的；刺痛的",
+   "ex": "The medicine tastes bitter.",
+   "exZh": "这种药尝起来很苦。",
+   "note": "词伙：bitter skin"
+  },
+  "blade": {
+   "p": "bleɪd",
+   "m": "n. 刀刃；叶片",
+   "ex": "The wind turns the blade of the fan.",
+   "exZh": "风转动了风扇的叶片。",
+   "note": ""
+  },
+  "blame": {
+   "p": "bleɪm",
+   "m": "n. 责任；v. 责怪；归咎于",
+   "ex": "He took the blame for the mistake.",
+   "exZh": "他承担了这个错误的责任。",
+   "note": ""
+  },
+  "blast": {
+   "p": "blæst",
+   "m": "n. 爆炸；巨响；一阵强劲的气流",
+   "ex": "A blast of cold wind hit the window.",
+   "exZh": "一阵冷风击中了窗户。",
+   "note": "词伙：loud blast"
+  },
+  "blueprint": {
+   "p": "ˈbluːprɪnt",
+   "m": "n. 蓝图",
+   "ex": "The architect showed us the blueprint of the new house.",
+   "exZh": "建筑师给我们看了新房子的蓝图。",
+   "note": "词伙：simple blueprint"
+  },
+  "bomb": {
+   "p": "bɑːm",
+   "m": "v. 投弹于；轰炸；n. 炸弹",
+   "ex": "The bomb exploded at noon.",
+   "exZh": "炸弹在中午爆炸了。",
+   "note": "词伙：bomb bridges"
+  },
+  "bombard": {
+   "p": "bɑːmˈbɑːrd",
+   "m": "v. 炮轰；轰击",
+   "ex": "The soldiers were bombarded with cannon fire.",
+   "exZh": "士兵们遭到炮火轰击。",
+   "note": ""
+  },
+  "boss": {
+   "p": "bɔːs",
+   "m": "n. 老板",
+   "ex": "My boss gives me work every morning.",
+   "exZh": "我的老板每天早上给我安排工作。",
+   "note": "同义词：manager（打理日常的经理）；employer（雇佣你的雇主）；director（董事或主管）；leader（带头的领导）；entrepreneur（创业企业家）；词伙：stern boss"
+  },
+  "bound": {
+   "p": "baʊnd",
+   "m": "adj. 一定会；密切相关的；有义务的",
+   "ex": "He is bound to win the race.",
+   "exZh": "他一定会赢得比赛。",
+   "note": ""
+  },
+  "boundary": {
+   "p": "ˈbaʊnd(ə)ri",
+   "m": "n. 分界线；边界",
+   "ex": "The fence marks the boundary between the two gardens.",
+   "exZh": "这道围栏标志着两个花园的分界线。",
+   "note": "词伙：set boundaries, push boundaries, boundaries of behaviour"
+  },
+  "bow": {
+   "p": "baʊ",
+   "m": "n. 弓；鞠躬；（使）鞠躬",
+   "ex": "The archer drew the bow and shot the arrow.",
+   "exZh": "弓箭手拉弓射出了箭。",
+   "note": ""
+  },
+  "brass": {
+   "p": "bræs",
+   "m": "n. 黄铜制品",
+   "ex": "He bought a brass lamp at the market.",
+   "exZh": "他在市场上买了一个黄铜制品台灯。",
+   "note": "词伙：yellow brass"
+  },
+  "breakthrough": {
+   "p": "ˈbreɪkθruː",
+   "m": "n. 突破；突破性进展",
+   "ex": "The scientist made a breakthrough in cancer research.",
+   "exZh": "这位科学家在癌症研究中取得了突破。",
+   "note": "词伙：big breakthrough"
+  },
+  "bronze": {
+   "p": "brɑːnz",
+   "m": "n. 青铜；青铜色",
+   "ex": "The statue is made of bronze.",
+   "exZh": "这座雕像由青铜制成。",
+   "note": "词伙：green bronze horse"
+  },
+  "bullet": {
+   "p": "ˈbʊlɪt",
+   "m": "n. 子弹；枪弹",
+   "ex": "The soldier picked up a bullet from the ground.",
+   "exZh": "士兵从地上捡起一颗子弹。",
+   "note": ""
+  },
+  "burrow": {
+   "p": "ˈbɜːrəʊ",
+   "m": "n. 地洞；v. 挖洞；钻进",
+   "ex": "The rabbit burrows under the tree.",
+   "exZh": "兔子在树下打洞。",
+   "note": "词伙：deep burrow"
+  },
+  "burst": {
+   "p": "bɜːrst",
+   "m": "v. 爆裂；n. 突然而起",
+   "ex": "The balloon burst when he blew too much air.",
+   "exZh": "当他吹入太多空气时，气球爆裂了。",
+   "note": "词伙：burst out laughing"
+  },
+  "bury": {
+   "p": "ˈberi",
+   "m": "v. 埋葬",
+   "ex": "They bury the dead in the cemetery.",
+   "exZh": "他们把死者埋葬在墓地里。",
+   "note": "词伙：bury pride"
+  },
+  "butcher": {
+   "p": "ˈbʊtʃər",
+   "m": "n. 屠夫；v. 屠宰；糟蹋",
+   "ex": "The butcher sold fresh meat at the market.",
+   "exZh": "屠夫在市场卖新鲜的肉。",
+   "note": "词伙：kind butcher"
+  },
+  "byproduct": {
+   "p": "ˈbaɪ prɑːdʌkt",
+   "m": "n. 副产品；意外结果",
+   "ex": "The factory makes cheese, and whey is a by-product.",
+   "exZh": "这家工厂生产奶酪，乳清是副产品。",
+   "note": "词伙：clean byproduct"
+  },
+  "calculate": {
+   "p": "ˈkælkjuleɪt",
+   "m": "v. 计算；推测",
+   "ex": "He calculates the total cost quickly.",
+   "exZh": "他快速计算出总成本。",
+   "note": "同义词：assess（估量评判）；measure（用工具测量）；词伙：calculate drops"
+  },
+  "camouflage": {
+   "p": "ˈkæməflɑːʒ",
+   "m": "n. 伪装；掩饰",
+   "ex": "The soldier wore camouflage to hide in the forest.",
+   "exZh": "士兵穿着伪装服在森林中隐藏自己。",
+   "note": "词伙：faded camouflage"
+  },
+  "campaign": {
+   "p": "kæmˈpeɪn",
+   "m": "n. 战役；n. （政治、商业或社会性）活动；运动",
+   "ex": "The city launched a campaign to reduce plastic waste.",
+   "exZh": "这座城市发起了一项减少塑料垃圾的活动。",
+   "note": "词伙：air campaigns, advertising campaigns, launch awareness campaigns"
+  },
+  "can": {
+   "p": "kæn",
+   "m": "n. 金属罐；v. 能",
+   "ex": "I can swim very well.",
+   "exZh": "我能够游得很好。",
+   "note": ""
+  },
+  "cannon": {
+   "p": "ˈkænən",
+   "m": "n. 大炮；v. 碰撞",
+   "ex": "The soldiers fired the cannon at the enemy.",
+   "exZh": "士兵们向敌人开炮。",
+   "note": "词伙：heavy cannon"
+  },
+  "capture": {
+   "p": "ˈkæptʃər",
+   "m": "v. 捕捉；记录；吸引",
+   "ex": "The camera can capture the moment clearly.",
+   "exZh": "相机可以清晰地记录下这一瞬间。",
+   "note": "词伙：capture special moments"
+  },
+  "cashier": {
+   "p": "kæˈʃɪr",
+   "m": "n. 出纳员，收银员；v. 革除（军职）",
+   "ex": "The cashier counted the money at the end of the day.",
+   "exZh": "收银员在一天结束时清点了钱。",
+   "note": "词伙：busy cashier"
+  },
+  "cassette": {
+   "p": "kəˈset",
+   "m": "n. 盒式磁带",
+   "ex": "He played his favorite song on a cassette player.",
+   "exZh": "他用盒式磁带播放器播放了他最喜欢的歌。",
+   "note": "词伙：old cassette, cassette box"
+  },
+  "casualty": {
+   "p": "ˈkæʒuəlti",
+   "m": "n. 受伤的人",
+   "ex": "The accident caused many casualties.",
+   "exZh": "这场事故造成了许多伤亡人员。",
+   "note": "词伙：lost casualty"
+  },
+  "catastrophe": {
+   "p": "kəˈtæstrəfi",
+   "m": "n. 灾难",
+   "ex": "The earthquake was a catastrophe.",
+   "exZh": "这场地震是一场灾难。",
+   "note": "同义词：disaster（日常泛称灾难）；calamity（正式文学，大灾）"
+  },
+  "cease": {
+   "p": "siːs",
+   "m": "v. 停息；停止",
+   "ex": "The rain ceased after an hour.",
+   "exZh": "一小时后，雨停了。",
+   "note": "同义词：stop（最常用，口语）；halt（使突然停下）；discontinue（正式，不再继续）；词伙：cease slowly"
+  },
+  "challenge": {
+   "p": "ˈtʃælɪndʒ",
+   "m": "v. 提出挑战；n. 挑战",
+   "ex": "Climbing that mountain is a big challenge.",
+   "exZh": "爬那座山是一个巨大的挑战。",
+   "note": "同义词：contest（公开争辩质疑）；dispute（反驳，存疑不服）；test（考验检验能力）；词伙：face challenges, create challenges, technological challenges"
+  },
+  "chancellor": {
+   "p": "ˈtʃænsələr",
+   "m": "n. 大臣；总理",
+   "ex": "The chancellor announced a new tax policy.",
+   "exZh": "大臣宣布了一项新的税收政策。",
+   "note": "词伙：stern chancellor"
+  },
+  "chase": {
+   "p": "tʃeɪs",
+   "m": "v. 追逐；n. 追逐",
+   "ex": "The dog chases the cat every morning.",
+   "exZh": "这只狗每天早上追逐猫。",
+   "note": ""
+  },
+  "chop": {
+   "p": "tʃɑːp",
+   "m": "v. 剁；砍",
+   "ex": "He chopped the carrots into small pieces.",
+   "exZh": "他把胡萝卜剁成了小块。",
+   "note": "词伙：chop wood"
+  },
+  "chore": {
+   "p": "tʃɔːr",
+   "m": "n. 杂活；繁重工作",
+   "ex": "Washing dishes is a boring chore.",
+   "exZh": "洗碗是一件烦人的琐事。",
+   "note": "词伙：help with household chores"
+  },
+  "circumstance": {
+   "p": "ˈsɜːrkəmstæns",
+   "m": "n. 情况",
+   "ex": "Under these circumstances, we had to cancel the trip.",
+   "exZh": "在这种情况下，我们不得不取消旅行。",
+   "note": "词伙：changing circumstances, financial circumstances, adapt to changing circumstances"
+  },
+  "clerk": {
+   "p": "klɜːrk",
+   "m": "n. 职员；店员",
+   "ex": "The clerk at the store helped me find the book.",
+   "exZh": "商店里的职员帮我找到了那本书。",
+   "note": "词伙：young clerk"
+  },
+  "clever": {
+   "p": "ˈklevər",
+   "m": "adj. 聪明的",
+   "ex": "The clever boy solved the math problem quickly.",
+   "exZh": "这个聪明的男孩很快解决了这道数学题。",
+   "note": "同义词：intelligent（智力高，较正式）；词伙：clever ways"
+  },
+  "client": {
+   "p": "ˈklaɪənt",
+   "m": "n. 客户",
+   "ex": "The lawyer helped her client with the contract.",
+   "exZh": "律师帮助她的客户处理合同。",
+   "note": "词伙：shy client"
+  },
+  "collapse": {
+   "p": "kəˈlæps",
+   "m": "v. 倒塌；崩溃；n. 暴跌",
+   "ex": "The collapse of the old bridge caused many problems.",
+   "exZh": "这座旧桥的倒塌引起了诸多问题。",
+   "note": ""
+  },
+  "colleague": {
+   "p": "ˈkɑːliːɡ",
+   "m": "n. 同事",
+   "ex": "My colleague helped me with the report.",
+   "exZh": "我的同事帮我完成了报告。",
+   "note": "词伙：supportive colleagues"
+  },
+  "comfort": {
+   "p": "ˈkʌmfərt",
+   "m": "n. 安慰；舒服；安逸",
+   "ex": "The soft chair gives me comfort.",
+   "exZh": "这把软椅子给我带来舒服。",
+   "note": "同义词：relief（不适解除后的宽慰）；词伙：in the comfort of home, from the comfort of home, move out of the comfort zone"
+  },
+  "commander": {
+   "p": "kəˈmændər",
+   "m": "n. 指挥官",
+   "ex": "The commander gave the order to advance.",
+   "exZh": "指挥官下达了前进的命令。",
+   "note": "词伙：retired commander"
+  },
+  "committee": {
+   "p": "kəˈmɪti",
+   "m": "n. 委员会",
+   "ex": "The committee meets every Monday.",
+   "exZh": "委员会每周一开会。",
+   "note": "词伙：fair committee"
+  },
+  "commuter": {
+   "p": "kəˈmjuːtər",
+   "m": "n. 通勤者；经常往返者",
+   "ex": "He is a commuter who takes the train to work every day.",
+   "exZh": "他是一名每天乘火车上班的通勤者。",
+   "note": "词伙：tired commuter"
+  },
+  "compel": {
+   "p": "kəmˈpel",
+   "m": "v. 强迫；胁迫",
+   "ex": "The law compels drivers to wear seat belts.",
+   "exZh": "法律强迫司机系安全带。",
+   "note": ""
+  },
+  "compete": {
+   "p": "kəmˈpiːt",
+   "m": "v. 竞争；比赛",
+   "ex": "Two companies compete for the same customers.",
+   "exZh": "两家公司为争夺相同的客户而竞争。",
+   "note": "同义词：contend（奋力抗争争夺）；vie（暗中较量争抢）；contest（参加角逐比拼）；词伙：compete for, competing demands on time"
+  },
+  "competitor": {
+   "p": "kəmˈpetɪtər",
+   "m": "n. 竞争者",
+   "ex": "He beat his competitor in the race.",
+   "exZh": "他在比赛中击败了对手。",
+   "note": "词伙：in the face of numerous competitors"
+  },
+  "compress": {
+   "p": "kəmˈpres",
+   "m": "v. 压缩",
+   "ex": "He compresses the file to save space.",
+   "exZh": "他压缩文件以节省空间。",
+   "note": ""
+  },
+  "compromise": {
+   "p": "ˈkɑːmprəmaɪz",
+   "m": "n. 妥协；v. 危及",
+   "ex": "They reached a compromise after hours of talk.",
+   "exZh": "经过数小时的讨论，他们达成了妥协。",
+   "note": "词伙：compromise sovereignty, compromise artistic freedom"
+  },
+  "compute": {
+   "p": "kəmˈpjuːt",
+   "m": "v. 估算；计算",
+   "ex": "He computes the total cost quickly.",
+   "exZh": "他很快算出总成本。",
+   "note": "词伙：compute costs"
+  },
+  "comrade": {
+   "p": "ˈkɑːmræd",
+   "m": "n. 同志；伙伴",
+   "ex": "He called his friend a comrade.",
+   "exZh": "他称他的朋友为同志。",
+   "note": "词伙：brave comrade"
+  },
+  "concentrate": {
+   "p": "ˈkɑːns(ə)ntreɪt",
+   "m": "v. 集中；浓缩",
+   "ex": "You must concentrate on your homework.",
+   "exZh": "你必须集中精力做作业。",
+   "note": "同义词：focus（注意力聚焦）；gather（聚拢收集）；词伙：concentrate on work"
+  },
+  "condense": {
+   "p": "kənˈdens",
+   "m": "v. （使）冷凝",
+   "ex": "The steam condenses into water when it touches the cold glass.",
+   "exZh": "当蒸汽接触到冷的玻璃时，会凝结成水。",
+   "note": ""
+  },
+  "conflict": {
+   "p": "ˈkɑːnflɪkt",
+   "m": "n. 冲突；矛盾",
+   "ex": "The conflict between the two countries lasted for years.",
+   "exZh": "这两个国家之间的冲突持续了多年。",
+   "note": "同义词：clash（短而激烈的碰撞）；dispute（因分歧的争执）；friction（持续微妙的摩擦）；词伙：conflicts erupt, resolve conflicts, conflict resolution"
+  },
+  "conquer": {
+   "p": "ˈkɑːŋkər",
+   "m": "v. 征服；克服",
+   "ex": "The army conquered the small city after a long battle.",
+   "exZh": "军队经过长期战斗征服了这座小城。",
+   "note": "同义词：defeat（击败对手）；overcome（克服困难恐惧）；subdue（制压制伏）；词伙：conquer fright"
+  },
+  "conspiracy": {
+   "p": "kənˈspɪrəsi",
+   "m": "n. 阴谋",
+   "ex": "They believed there was a conspiracy to hide the truth.",
+   "exZh": "他们相信有人密谋隐瞒真相。",
+   "note": "词伙：cruel conspiracy"
+  },
+  "consultant": {
+   "p": "kənˈsʌltənt",
+   "m": "n. 顾问",
+   "ex": "He is a consultant for a big company.",
+   "exZh": "他是这家大公司的顾问。",
+   "note": "词伙：plant consultant"
+  },
+  "contend": {
+   "p": "kənˈtend",
+   "m": "v. 竞争；主张",
+   "ex": "He contends that education is the key to success.",
+   "exZh": "他主张教育是成功的关键。",
+   "note": "同义词：compete（同场竞技争夺）"
+  },
+  "contest": {
+   "p": "ˈkɑːntest",
+   "m": "n. 比赛；竞赛",
+   "ex": "He won the spelling contest.",
+   "exZh": "他赢得了拼写比赛。",
+   "note": "同义词：competition（竞争比赛，通用词）；词伙：shooting contest, contest rules"
+  },
+  "contingency": {
+   "p": "kənˈtɪndʒənsi",
+   "m": "n. 偶然事故；意外事件",
+   "ex": "He saved money for a contingency.",
+   "exZh": "他存钱以备不时之需。",
+   "note": ""
+  },
+  "contribute": {
+   "p": "kənˈtrɪbjuːt",
+   "m": "v. 贡献；促成；投稿",
+   "ex": "He contributes money to the charity.",
+   "exZh": "他向慈善机构捐款。",
+   "note": "同义词：donate（捐赠钱物出去）；dedicate（毕生奉献于）；词伙：contribute insights, contribute to society, contribute to worthy causes"
+  },
+  "convert": {
+   "p": "kənˈvɜːrt",
+   "m": "v. 转换；转变；变换",
+   "ex": "He converts old paper into new notebooks.",
+   "exZh": "他把旧纸张转换成新笔记本。",
+   "note": ""
+  },
+  "correct": {
+   "p": "kəˈrekt",
+   "m": "adj. 正确的；v. 改正；修正",
+   "ex": "The answer is correct.",
+   "exZh": "这个答案是正确的。",
+   "note": "同义词：accurate（准确无误）；exact（精确丝毫不差）；precise（细致精准）；词伙：correct misbehaviour, correct misconceptions, correct wording mistakes"
+  },
+  "council": {
+   "p": "ˈkaʊns(ə)l",
+   "m": "n. 理事会；委员会；议会",
+   "ex": "The city council made a new rule about recycling.",
+   "exZh": "市政府理事会制定了关于回收的新规定。",
+   "note": "同义词：authority（主管当局机构）；government（政府层级）；ministry（政府部门）；词伙：town council"
+  },
+  "counsellor": {
+   "p": "ˈkaʊnsələr",
+   "m": "n. 辅导员",
+   "ex": "The school counsellor helped me with my study problems.",
+   "exZh": "学校的辅导员帮我解决了学习问题。",
+   "note": "词伙：school counsellor"
+  },
+  "count": {
+   "p": "kaʊnt",
+   "m": "v. 计算；看作；n. 计数",
+   "ex": "He counts the apples on the table.",
+   "exZh": "他计算桌子上的苹果数量。",
+   "note": ""
+  },
+  "counter": {
+   "p": "ˈkaʊntər",
+   "m": "v. 抵消；反驳；n. 柜台",
+   "ex": "The customer paid at the counter.",
+   "exZh": "顾客在柜台付款。",
+   "note": "同义词：oppose（立场相对反对）；refute（驳斥对方论点）；offset（抵消平衡掉）；词伙：counter fright"
+  },
+  "cousin": {
+   "p": "ˈkʌz(ə)n",
+   "m": "n. 表兄弟（或姐妹）；堂兄弟（或姐妹）",
+   "ex": "My cousin plays soccer with me every weekend.",
+   "exZh": "我的表兄弟每周六都和我一起踢足球。",
+   "note": "词伙：distant cousins"
+  },
+  "coward": {
+   "p": "ˈkaʊərd",
+   "m": "n. 懦夫；adj. 胆小的",
+   "ex": "He was a coward and ran away from the fight.",
+   "exZh": "他是个懦夫，逃跑了。",
+   "note": ""
+  },
+  "crew": {
+   "p": "kruː",
+   "m": "n. 全体船员；全体人员",
+   "ex": "The crew fixed the ship's engine during the storm.",
+   "exZh": "全体船员在风暴中修好了船的引擎。",
+   "note": ""
+  },
+  "cruel": {
+   "p": "ˈkruːəl",
+   "m": "adj. 残酷的",
+   "ex": "The cruel king punished the innocent people.",
+   "exZh": "残酷的国王惩罚了无辜的人。",
+   "note": ""
+  },
+  "customer": {
+   "p": "ˈkʌstəmər",
+   "m": "n. 客户；顾客；主顾",
+   "ex": "The customer bought a new phone.",
+   "exZh": "这位客户买了一部新手机。",
+   "note": "同义词：consumer（消费者角度）；user（使用者用户）；词伙：shop customer"
+  },
+  "damage": {
+   "p": "ˈdæmɪdʒ",
+   "m": "v. 损害；破坏；n. 破损",
+   "ex": "The storm caused serious damage to the house.",
+   "exZh": "风暴对房屋造成了严重损害。",
+   "note": "词伙：at risk of damage, damage the scenery, environmental damage"
+  },
+  "darling": {
+   "p": "ˈdɑːrlɪŋ",
+   "m": "n. 心爱的人；adj. 亲爱的",
+   "ex": "My darling, come here for a moment.",
+   "exZh": "亲爱的，过来一下。",
+   "note": ""
+  },
+  "dear": {
+   "p": "dɪr",
+   "m": "adj. 亲爱的；昂贵的；宝贵的",
+   "ex": "Dear friend, I miss you so much.",
+   "exZh": "亲爱的朋友，我非常想念你。",
+   "note": ""
+  },
+  "defeat": {
+   "p": "dɪˈfiːt",
+   "m": "v. 击败；战胜；n. 失败",
+   "ex": "The team accepted the defeat with pride.",
+   "exZh": "球队以自豪的态度接受了失败。",
+   "note": "同义词：beat（口语，打赢）；conquer（征服，占为己有）；overcome（战胜困难自我）；词伙：defeat opposing teams"
+  },
+  "defend": {
+   "p": "dɪˈfend",
+   "m": "v. 防御；辩护",
+   "ex": "The soldiers defend their country from enemies.",
+   "exZh": "士兵们保卫自己的国家免受敌人入侵。",
+   "note": ""
+  },
+  "deflect": {
+   "p": "dɪˈflekt",
+   "m": "v. 使转向",
+   "ex": "The mirror deflects the light to the wall.",
+   "exZh": "镜子把光线反射到墙上。",
+   "note": "词伙：deflect away"
+  },
+  "delegate": {
+   "p": "ˈdelɪɡeɪt",
+   "m": "n. 代表；v. 委派",
+   "ex": "The manager will delegate the task to her assistant.",
+   "exZh": "经理将把这个任务委派给她的助手。",
+   "note": "词伙：as delegate"
+  },
+  "dependent": {
+   "p": "dɪˈpendənt",
+   "m": "adj. 依靠的；依赖的；n. 受赡养者",
+   "ex": "The child is dependent on his parents for food.",
+   "exZh": "这个孩子依靠父母提供食物。",
+   "note": ""
+  },
+  "deploy": {
+   "p": "dɪˈplɔɪ",
+   "m": "v. 部署；有效地利用",
+   "ex": "The company will deploy new software next week.",
+   "exZh": "公司将在下周部署新软件。",
+   "note": "词伙：deploy more police officers"
+  },
+  "deprive": {
+   "p": "dɪˈpraɪv",
+   "m": "v. 剥夺；使丧失",
+   "ex": "The storm deprived us of electricity.",
+   "exZh": "这场风暴剥夺了我们的电力。",
+   "note": "词伙：deprived communities；同义词：reduce, decrease, decline"
+  },
+  "deputy": {
+   "p": "ˈdepjuti",
+   "m": "n. 代理人；副手",
+   "ex": "The deputy signed the document for the manager.",
+   "exZh": "代理人替经理签署了文件。",
+   "note": "词伙：deputy head"
+  },
+  "destitute": {
+   "p": "ˈdestɪtuːt",
+   "m": "adj. 赤贫的；贫困的；一无所有的",
+   "ex": "The destitute family had no food or shelter.",
+   "exZh": "这个赤贫的家庭没有食物和住所。",
+   "note": "词伙：looked destitute"
+  },
+  "deter": {
+   "p": "dɪˈtɜːr",
+   "m": "v. 制止",
+   "ex": "The high fine will deter people from breaking the law.",
+   "exZh": "高额罚款会制止人们违法。",
+   "note": "同义词：prevent（防止其发生）；discourage（使泄气退缩）；dissuade（劝阻打消念头）；词伙：deter young men"
+  },
+  "devastate": {
+   "p": "ˈdevəsteɪt",
+   "m": "v. 毁灭；摧毁",
+   "ex": "The earthquake devastated the small town.",
+   "exZh": "地震摧毁了这个小镇。",
+   "note": "词伙：devastate the rural economy"
+  },
+  "device": {
+   "p": "dɪˈvaɪs",
+   "m": "n. 设备；装置；手段",
+   "ex": "He bought a new device to take photos.",
+   "exZh": "他买了一个新设备来拍照。",
+   "note": "词伙：digital devices, electronic devices, portable device"
+  },
+  "devil": {
+   "p": "ˈdev(ə)l",
+   "m": "n. 魔鬼；恶魔",
+   "ex": "The devil made him do it.",
+   "exZh": "魔鬼让他这么做的。",
+   "note": ""
+  },
+  "devote": {
+   "p": "dɪˈvəʊt",
+   "m": "v. 投入",
+   "ex": "He devotes his time to helping children.",
+   "exZh": "他投入时间帮助孩子们。",
+   "note": "词伙：devote time and energy"
+  },
+  "dial": {
+   "p": "ˈdaɪəl",
+   "m": "n. 刻度盘；v. 拨",
+   "ex": "He looked at the clock's dial to check the time.",
+   "exZh": "他看着钟的刻度盘来查看时间。",
+   "note": "词伙：round dial"
+  },
+  "dilemma": {
+   "p": "dɪˈlemə",
+   "m": "n. 困境；两难",
+   "ex": "He faced a dilemma: stay home or go to work.",
+   "exZh": "他面临一个困境：是待在家里还是去上班。",
+   "note": "词伙：hard dilemma"
+  },
+  "director": {
+   "p": "dəˈrektər",
+   "m": "n. 主任；导演；董事",
+   "ex": "The director of the school gave a speech.",
+   "exZh": "学校的主任发表了一次演讲。",
+   "note": "同义词：manager（打理运营的经理）；boss（口语，老板）；leader（领头的领导）；employer（用人的雇主）；entrepreneur（创业企业家）；词伙：kind director"
+  },
+  "dirt": {
+   "p": "dɜːrt",
+   "m": "n. 污垢；泥土",
+   "ex": "He washed his hands to remove the dirt.",
+   "exZh": "他洗手以去除污垢。",
+   "note": ""
+  },
+  "discard": {
+   "p": "dɪˈskɑːrd",
+   "m": "v. 抛开；废弃",
+   "ex": "He decided to discard his old habits.",
+   "exZh": "他决定抛开旧习惯。",
+   "note": "同义词：abandon（抛下不管）；forsake（正式，彻底舍弃）；词伙：discard items, discard imperfect produce"
+  },
+  "disclose": {
+   "p": "dɪsˈkləʊz",
+   "m": "v. 透露",
+   "ex": "He refused to disclose the secret.",
+   "exZh": "他拒绝透露这个秘密。",
+   "note": "同义词：reveal（揭示透露）；expose（揭穿暴露丑事）；divulge（泄露秘密，正式）；词伙：disclose plans"
+  },
+  "distil": {
+   "p": "dɪˈstɪl",
+   "m": "v. 蒸馏；用蒸馏法制造；提炼",
+   "ex": "He distils water to make it clean.",
+   "exZh": "他蒸馏水以使其变干净。",
+   "note": ""
+  },
+  "disturb": {
+   "p": "dɪˈstɜːrb",
+   "m": "v. 打扰；妨碍",
+   "ex": "Please don't disturb me while I'm reading.",
+   "exZh": "我读书时请不要打扰我。",
+   "note": "同义词：affect（泛指造成影响）；influence（潜移默化影响）；impact（冲击力强的影响）；词伙：disturb sleepy minds"
+  },
+  "ditch": {
+   "p": "dɪtʃ",
+   "m": "n. 沟；渠",
+   "ex": "The farmer dug a ditch to water the fields.",
+   "exZh": "农夫挖了一条沟来给田地浇水。",
+   "note": "词伙：deep ditch"
+  },
+  "divorce": {
+   "p": "dɪˈvɔːrs",
+   "m": "n. 离婚；v. 和…离婚",
+   "ex": "They filed for divorce after ten years of marriage.",
+   "exZh": "他们结婚十年后申请了离婚。",
+   "note": ""
+  },
+  "domain": {
+   "p": "dəʊˈmeɪn",
+   "m": "n. 领域",
+   "ex": "He is an expert in the domain of artificial intelligence.",
+   "exZh": "他是人工智能领域的专家。",
+   "note": "同义词：field（专业领域）；area（范围方面）；discipline（学科门类）；词伙：water domain"
+  },
+  "drainage": {
+   "p": "ˈdreɪnɪdʒ",
+   "m": "n. 排水系统；排水",
+   "ex": "The city improved its drainage system after the flood.",
+   "exZh": "洪水之后，这座城市改进了它的排水系统。",
+   "note": "词伙：school drainage"
+  },
+  "drama": {
+   "p": "ˈdrɑːmə",
+   "m": "n. 戏剧；话剧",
+   "ex": "He loves watching drama on TV.",
+   "exZh": "他喜欢在电视上看戏剧。",
+   "note": "词伙：funny drama"
+  },
+  "dread": {
+   "p": "dred",
+   "m": "n. 恐惧；v. 害怕",
+   "ex": "He dreads going to the dentist.",
+   "exZh": "他害怕去看牙医。",
+   "note": "同义词：fear（一般害怕，通用）；词伙：deep dread"
+  },
+  "dusk": {
+   "p": "dʌsk",
+   "m": "n. 黄昏",
+   "ex": "The birds flew home at dusk.",
+   "exZh": "鸟儿在黄昏时飞回家。",
+   "note": ""
+  },
+  "duty": {
+   "p": "ˈduːti",
+   "m": "n. 职责；责任；义务",
+   "ex": "It is your duty to finish your homework.",
+   "exZh": "完成你的作业是你的职责。",
+   "note": "同义词：responsibility（份内的职责）；obligation（须履行的义务）；词伙：child-rearing duties"
+  },
+  "echo": {
+   "p": "ˈekəʊ",
+   "m": "n. 回声；v. 回响",
+   "ex": "The echo came back from the mountain.",
+   "exZh": "回声从山上反弹回来。",
+   "note": "词伙：echo chambers"
+  },
+  "embryo": {
+   "p": "ˈembriəʊ",
+   "m": "n. 胚；胚胎",
+   "ex": "The embryo grows inside the mother's womb.",
+   "exZh": "胚胎在母亲的子宫内生长。",
+   "note": "词伙：bean embryo"
+  },
+  "enclose": {
+   "p": "ɪnˈkləʊz",
+   "m": "v. 围起；附上；封入",
+   "ex": "They enclose the garden with a wooden fence.",
+   "exZh": "他们用木栅栏把花园围起来。",
+   "note": ""
+  },
+  "encounter": {
+   "p": "ɪnˈkaʊntər",
+   "m": "n. 遭遇；v. 遇到",
+   "ex": "He encountered a bear while hiking in the forest.",
+   "exZh": "他在森林里徒步时遭遇了一只熊。",
+   "note": "词伙：encounter distractions, encounter the broader world, encounter difficulties"
+  },
+  "enemy": {
+   "p": "ˈenəmi",
+   "m": "n. 敌人；敌军",
+   "ex": "The soldier fought against his enemy in the war.",
+   "exZh": "士兵在战争中与他的敌人作战。",
+   "note": "同义词：foe（敌人，文学书面）；opponent（竞争的对手）；adversary（敌手，正式）；词伙：old enemy"
+  },
+  "engagement": {
+   "p": "ɪnˈɡeɪdʒmənt",
+   "m": "n. 密切关系；订婚",
+   "ex": "The engagement between the teacher and students improved learning.",
+   "exZh": "老师与学生之间的密切关系提高了学习效果。",
+   "note": "词伙：promote engagement"
+  },
+  "enormity": {
+   "p": "ɪˈnɔːrməti",
+   "m": "n. 巨大；庞大；极恶",
+   "ex": "The enormity of the crime shocked the whole city.",
+   "exZh": "这桩罪行的极恶震惊了整个城市。",
+   "note": ""
+  },
+  "equip": {
+   "p": "ɪˈkwɪp",
+   "m": "v. 装备；配备",
+   "ex": "The school will equip the lab with new computers.",
+   "exZh": "学校将为实验室配备新电脑。",
+   "note": "同义词：prepare（事先准备好）；词伙：equip kids"
+  },
+  "equipment": {
+   "p": "ɪˈkwɪpmənt",
+   "m": "n. 设备；装备",
+   "ex": "The gym has new exercise equipment.",
+   "exZh": "健身房有新的健身设备。",
+   "note": "词伙：fitness equipment, household equipment, medical equipment"
+  },
+  "error": {
+   "p": "ˈerər",
+   "m": "n. 错误；差错",
+   "ex": "He made an error in his math homework.",
+   "exZh": "他在数学作业中犯了一个错误。",
+   "note": "同义词：mistake（错误，通用口语）；词伙：human errors, trial and error"
+  },
+  "escape": {
+   "p": "ɪˈskeɪp",
+   "m": "v. 逃走；n. 逃脱",
+   "ex": "He tried to escape from the prison.",
+   "exZh": "他试图逃离监狱。",
+   "note": "同义词：flee（仓皇逃走，书面）；evade（躲避逃避责任）；break free（挣脱束缚）；词伙：escape justice, an escape from reality, an escape from the real world"
+  },
+  "estimate": {
+   "p": "ˈestɪmeɪt",
+   "m": "v. 估算；n. 估价",
+   "ex": "Can you estimate how long it will take?",
+   "exZh": "你能估算一下需要多长时间吗？",
+   "note": "同义词：calculate（精确计算）；approximate（取约数估算）；gauge（凭经验估摸）；词伙：estimate savings"
+  },
+  "evaluate": {
+   "p": "ɪˈvæljueɪt",
+   "m": "v. 估价；评价",
+   "ex": "The shopkeeper will evaluate the old watch.",
+   "exZh": "店主将估价这块旧手表。",
+   "note": "词伙：evaluate risks；同义词：assess"
+  },
+  "event": {
+   "p": "ɪˈvent",
+   "m": "n. 事件；大事；比赛项目",
+   "ex": "The school event was fun for everyone.",
+   "exZh": "学校的活动对每个人都很有趣。",
+   "note": "词伙：news event, social events, external events"
+  },
+  "evidence": {
+   "p": "ˈevɪdəns",
+   "m": "n. 证据",
+   "ex": "The police found evidence at the crime scene.",
+   "exZh": "警察在犯罪现场找到了证据。",
+   "note": "同义词：proof（确凿的铁证）；clue（破案的线索）；testimony（证词证言）；词伙：factual evidence, compelling evidence"
+  },
+  "evil": {
+   "p": "ˈiːv(ə)l",
+   "m": "adj. 恶毒的；n. 邪恶；罪恶",
+   "ex": "The evil king punished innocent people.",
+   "exZh": "这个恶毒的国王惩罚了无辜的人。",
+   "note": "词伙：evil thought"
+  },
+  "execute": {
+   "p": "ˈeksɪkjuːt",
+   "m": "v. 执行",
+   "ex": "The computer will execute the program quickly.",
+   "exZh": "计算机将快速执行该程序。",
+   "note": "同义词：implement（实施落实计划）；fulfill（履行完成诺言）"
+  },
+  "explosion": {
+   "p": "ɪkˈspləʊʒ(ə)n",
+   "m": "n. 爆炸；（感情）爆发；激增",
+   "ex": "The explosion broke all the windows.",
+   "exZh": "爆炸震碎了所有的窗户。",
+   "note": "词伙：population explosion"
+  },
+  "expose": {
+   "p": "ɪkˈspəʊz",
+   "m": "v. 使遭受；暴露；揭露",
+   "ex": "The children were exposed to cold weather without coats.",
+   "exZh": "孩子们在没有外套的情况下遭受了寒冷天气。",
+   "note": "同义词：disclose（公开披露信息）；display（陈列展示）；词伙：be exposed to distractions, be exposed to violent images, be exposed to domestic violence"
+  },
+  "facilitate": {
+   "p": "fəˈsɪlɪteɪt",
+   "m": "v. 促进；使便利；使容易",
+   "ex": "The teacher facilitates learning by asking questions.",
+   "exZh": "老师通过提问来促进学习。",
+   "note": "同义词：ease（减轻使容易）；enable（使能够做到）；expedite（加快办妥，正式）；词伙：facilitate connections, facilitate development, facilitate instant communication"
+  },
+  "facility": {
+   "p": "fəˈsɪləti",
+   "m": "n. 设施；资质",
+   "ex": "The school has a new sports facility.",
+   "exZh": "这所学校有一个新的体育设施。",
+   "note": "词伙：proper facilities, sports facilities, medical facilities"
+  },
+  "famine": {
+   "p": "ˈfæmɪn",
+   "m": "n. 饥荒",
+   "ex": "The village suffered from famine last year.",
+   "exZh": "去年这个村庄遭受了饥荒。",
+   "note": "同义词：hunger（个人饥饿感）；词伙：long famine"
+  },
+  "fantasy": {
+   "p": "ˈfæntəsi",
+   "m": "n. 幻想",
+   "ex": "The child loves to play with fantasy stories about dragons.",
+   "exZh": "这个孩子喜欢玩关于龙的幻想故事。",
+   "note": "词伙：distinguish between reality and fantasy"
+  },
+  "father-in-law": {
+   "p": "ˈfɑːðər ɪn lɔː",
+   "m": "n. 岳父；公公",
+   "ex": "My father-in-law gave me advice about cars.",
+   "exZh": "我的岳父给了我关于汽车的建议。",
+   "note": ""
+  },
+  "fault": {
+   "p": "fɔːlt",
+   "m": "n. 故障；缺陷；过错",
+   "ex": "It was his fault that the car crashed.",
+   "exZh": "汽车撞车是他的过错。",
+   "note": "同义词：mistake（做错的差错）；词伙：sad faults, small fault"
+  },
+  "fence": {
+   "p": "fens",
+   "m": "n. 栅栏；围栏；篱笆",
+   "ex": "The dog jumped over the fence.",
+   "exZh": "狗跳过了栅栏。",
+   "note": "词伙：garden fence"
+  },
+  "field": {
+   "p": "fiːld",
+   "m": "n. 田地；领域；v. 处理，应付（问题、电话等）",
+   "ex": "He works in the field of computer science.",
+   "exZh": "他在计算机科学领域工作。",
+   "note": "field=田地/领域；take the field=上场比赛；同义词：domain, discipline；词伙：in the accounting field"
+  },
+  "fierce": {
+   "p": "fɪrs",
+   "m": "adj. 凶猛的；凶狠的",
+   "ex": "The fierce lion chased the deer.",
+   "exZh": "那只凶猛的狮子追赶着鹿。",
+   "note": "同义词：aggressive（主动挑衅好斗）；violent（狂暴，施以暴力）；词伙：fierce animals"
+  },
+  "filter": {
+   "p": "ˈfɪltər",
+   "m": "v. 过滤；n. 过滤器",
+   "ex": "She filters the water before drinking it.",
+   "exZh": "她在喝水之前过滤水。",
+   "note": ""
+  },
+  "fireman": {
+   "p": "ˈfaɪərmən",
+   "m": "n. 消防队员",
+   "ex": "The fireman saved the cat from the tree.",
+   "exZh": "消防员从树上救下了那只猫。",
+   "note": "词伙：tall fireman"
+  },
+  "fireplace": {
+   "p": "ˈfaɪərpleɪs",
+   "m": "n. 壁炉",
+   "ex": "He sits by the fireplace in winter.",
+   "exZh": "冬天他坐在壁炉旁。",
+   "note": "词伙：stone fireplace"
+  },
+  "first": {
+   "p": "fɜːrst",
+   "m": "adj. 第一的；adv. 首先；n. 第一",
+   "ex": "He got the first prize in the race.",
+   "exZh": "他在比赛中获得了第一名。",
+   "note": "同义词：initial（最初开头的）；leading（位居前列的）；major（主要重要的）；词伙：gather first hand information, fluent in the first language"
+  },
+  "fisherman": {
+   "p": "ˈfɪʃərmən",
+   "m": "n. 渔夫",
+   "ex": "The fisherman catches fish every morning.",
+   "exZh": "渔夫每天早上捕鱼。",
+   "note": "词伙：old fisherman"
+  },
+  "flame": {
+   "p": "fleɪm",
+   "m": "n. 火焰；v. 燃烧",
+   "ex": "The candle flame flickered in the wind.",
+   "exZh": "蜡烛的火焰在风中摇曳。",
+   "note": "词伙：warm flame"
+  },
+  "flare": {
+   "p": "fler",
+   "m": "n. 信号弹；v. （突然）烧旺；突然爆发",
+   "ex": "The fire began to flare up suddenly.",
+   "exZh": "火突然燃了起来。",
+   "note": "词伙：red flare"
+  },
+  "flaw": {
+   "p": "flɔː",
+   "m": "n. 瑕疵；缺陷；裂痕",
+   "ex": "The flaw in the glass made it break easily.",
+   "exZh": "玻璃上的瑕疵让它很容易碎。",
+   "note": "词伙：thin flaw"
+  },
+  "fleet": {
+   "p": "fliːt",
+   "m": "n. 舰队；船队；机群",
+   "ex": "The navy launched a large fleet to protect the coast.",
+   "exZh": "海军派出了一支大型舰队来保护海岸。",
+   "note": "词伙：quiet fleet"
+  },
+  "foe": {
+   "p": "fəʊ",
+   "m": "n. 敌人；对手",
+   "ex": "Old foes learned to contend kindly without letting rival pride spoil spring work.",
+   "exZh": "老对手学会友好竞争，不让对手式的骄傲毁掉春耕。",
+   "note": "同义词：enemy（敌人，通用词）；词伙：old foe"
+  },
+  "folk": {
+   "p": "fəʊk",
+   "m": "n. 人们；人民；adj. 民间的",
+   "ex": "The folk in the village are very friendly.",
+   "exZh": "村子里的人们非常友好。",
+   "note": "词伙：folk songs"
+  },
+  "forbid": {
+   "p": "fərˈbɪd",
+   "m": "v. 禁止；不准",
+   "ex": "The school forbids students to use phones in class.",
+   "exZh": "学校禁止学生在课堂上使用手机。",
+   "note": "词伙：forbid guns"
+  },
+  "force": {
+   "p": "fɔːrs",
+   "m": "n. 力量；武力；v. 强迫",
+   "ex": "The force of the wind broke the tree.",
+   "exZh": "风的力量折断了那棵树。",
+   "note": "同义词：energy（能量活力）；dynamic（推动的动力）；push（推力）；词伙：cruel force"
+  },
+  "forgo": {
+   "p": "fɔːrˈɡəʊ",
+   "m": "v. 弃绝；摒绝",
+   "ex": "He will forgo dessert to stay healthy.",
+   "exZh": "为了保持健康，他将放弃甜点。",
+   "note": ""
+  },
+  "foul": {
+   "p": "faʊl",
+   "m": "adj. 恶劣的；肮脏恶臭的；v. 对…犯规",
+   "ex": "The foul smell came from the garbage bin.",
+   "exZh": "那股恶臭来自垃圾桶。",
+   "note": ""
+  },
+  "foundation": {
+   "p": "faʊnˈdeɪʃ(ə)n",
+   "m": "n. 基金（会）；基础；创建",
+   "ex": "The foundation gives money to poor students.",
+   "exZh": "这个基金会向贫困学生提供资金。",
+   "note": "词伙：small green foundation, green foundation"
+  },
+  "framework": {
+   "p": "ˈfreɪmwɜːrk",
+   "m": "n. 骨架；支架；框架",
+   "ex": "The framework of the house is made of wood.",
+   "exZh": "房子的骨架是木制的。",
+   "note": "同义词：frame（边框框架）；skeleton（骨架支架）；structure（整体结构）；词伙：wooden framework"
+  },
+  "frighten": {
+   "p": "ˈfraɪt(ə)n",
+   "m": "v. 使惊吓；使惊恐",
+   "ex": "The loud noise frightened the child.",
+   "exZh": "巨大的噪音吓到了孩子。",
+   "note": "词伙：frighten small dogs"
+  },
+  "funeral": {
+   "p": "ˈfjuːnərəl",
+   "m": "n. 葬礼",
+   "ex": "He went to his grandfather's funeral.",
+   "exZh": "他去参加了他祖父的葬礼。",
+   "note": "词伙：silent funeral"
+  },
+  "gang": {
+   "p": "ɡæŋ",
+   "m": "n. 一伙；v. 合伙攻击",
+   "ex": "The gang stole a car last night.",
+   "exZh": "那群人昨晚偷了一辆车。",
+   "note": "词伙：noisy gang"
+  },
+  "gardener": {
+   "p": "ˈɡɑːrd(ə)nər",
+   "m": "n. 园丁",
+   "ex": "The gardener waters the plants every morning.",
+   "exZh": "园丁每天早上给植物浇水。",
+   "note": "词伙：cheerful gardener"
+  },
+  "gauge": {
+   "p": "ɡeɪdʒ",
+   "m": "n. 测量仪器；规格；评估",
+   "ex": "The mechanic used a gauge to check the tire pressure.",
+   "exZh": "机械师用一个测量仪器来检查轮胎气压。",
+   "note": "同义词：estimate（估测估计，作动词）；词伙：brass gauge"
+  },
+  "gear": {
+   "p": "ɡɪr",
+   "m": "n. 齿轮；排挡；用具",
+   "ex": "He shifted the gear to slow down the car.",
+   "exZh": "他换挡以减慢车速。",
+   "note": "词伙：plastic gear"
+  },
+  "gender": {
+   "p": "ˈdʒendər",
+   "m": "n. 性别",
+   "ex": "The survey asks about your gender.",
+   "exZh": "这个调查询问你的性别。",
+   "note": "同义词：sex（生理性别，直白）；词伙：gender roles, gender equality, gender imbalance"
+  },
+  "general": {
+   "p": "ˈdʒenrəl",
+   "m": "n. 将军；adj. 一般的",
+   "ex": "He gave a general answer to the question.",
+   "exZh": "他对这个问题给出了一个一般的回答。",
+   "note": "同义词：common（常见，到处都有）；average（平平常常，中等）；词伙：the general public, the general population"
+  },
+  "generation": {
+   "p": "ˌdʒenəˈreɪʃ(ə)n",
+   "m": "n. 代；产生",
+   "ex": "My generation grew up with smartphones.",
+   "exZh": "我们这一代人是伴随着智能手机长大的。",
+   "note": "词伙：waste generation, future generations, previous generations"
+  },
+  "generator": {
+   "p": "ˈdʒenəreɪtər",
+   "m": "n. 发电机；发生器",
+   "ex": "The generator provides electricity during the power outage.",
+   "exZh": "发电机在停电时提供电力。",
+   "note": "词伙：tiny generator"
+  },
+  "gentle": {
+   "p": "ˈdʒent(ə)l",
+   "m": "adj. 温和的；文雅的；温柔的",
+   "ex": "The mother gave a gentle hug to her child.",
+   "exZh": "母亲给了孩子一个温和的拥抱。",
+   "note": "词伙：gentle exercise, gentle physical exercise"
+  },
+  "gizmo": {
+   "p": "ˈɡɪzməʊ",
+   "m": "n. 小发明",
+   "ex": "He bought a new gizmo to fix his phone.",
+   "exZh": "他买了一个新小装置来修他的手机。",
+   "note": "词伙：tiny gizmo"
+  },
+  "glitter": {
+   "p": "ˈɡlɪtər",
+   "m": "n. 闪耀；v. 闪亮",
+   "ex": "The glitter of the stars lit up the night sky.",
+   "exZh": "星星的闪耀照亮了夜空。",
+   "note": ""
+  },
+  "glorious": {
+   "p": "ˈɡlɔːriəs",
+   "m": "adj. 辉煌的",
+   "ex": "The glorious sunset lit up the whole sky.",
+   "exZh": "辉煌的日落染红了整个天空。",
+   "note": ""
+  },
+  "glow": {
+   "p": "ɡləʊ",
+   "m": "n. 微光；辉光；n. 炽热",
+   "ex": "The glow of the fire warmed the room.",
+   "exZh": "火的炽热温暖了房间。",
+   "note": "词伙：soft glow"
+  },
+  "grain": {
+   "p": "ɡreɪn",
+   "m": "n. 谷物；颗粒",
+   "ex": "Farmers grow grain like wheat and rice.",
+   "exZh": "农民种植小麦和大米等谷物。",
+   "note": "词伙：pepper grains"
+  },
+  "grandfather": {
+   "p": "ˈɡrænfɑːðər",
+   "m": "n. 祖父；爷爷",
+   "ex": "My grandfather tells stories every evening.",
+   "exZh": "我的祖父每天晚上都讲故事。",
+   "note": "词伙：kind old grandfather, old grandfather"
+  },
+  "grave": {
+   "p": "ɡreɪv",
+   "m": "n. 坟墓；adj. 严重的",
+   "ex": "They visited the grave of their grandfather.",
+   "exZh": "他们参观了祖父的坟墓。",
+   "note": ""
+  },
+  "groom": {
+   "p": "ɡruːm",
+   "m": "v. 梳理毛发",
+   "ex": "The mother grooms her puppy every morning.",
+   "exZh": "妈妈每天早上给她的小狗梳理毛发。",
+   "note": ""
+  },
+  "guard": {
+   "p": "ɡɑːrd",
+   "m": "n. 保卫；警卫；v. 守卫",
+   "ex": "The guard stands at the gate to protect the building.",
+   "exZh": "保卫人员站在门口保护大楼。",
+   "note": "词伙：border guard"
+  },
+  "guest": {
+   "p": "ɡest",
+   "m": "n. 客人；宾客",
+   "ex": "The guest arrived at the party early.",
+   "exZh": "客人早早到了派对。",
+   "note": "词伙：tired guests"
+  },
+  "gunpowder": {
+   "p": "ˈɡʌnpaʊdər",
+   "m": "n. 火药",
+   "ex": "Gunpowder was used to make fireworks.",
+   "exZh": "火药被用来制作烟花。",
+   "note": ""
+  },
+  "haircut": {
+   "p": "ˈherkʌt",
+   "m": "n. 发型",
+   "ex": "He got a new haircut yesterday.",
+   "exZh": "他昨天理了一个新发型。",
+   "note": "词伙：free haircut"
+  },
+  "halt": {
+   "p": "hɔːlt",
+   "m": "v. 中断；暂停；n. 停顿下来",
+   "ex": "The storm halted the flight.",
+   "exZh": "风暴中断了航班。",
+   "note": "同义词：stop（停下，最常用）；cease（正式，不再）；suspend（暂停中止）；quit（戒除停止做）"
+  },
+  "hammer": {
+   "p": "ˈhæmər",
+   "m": "n. 锤子；v. 锤打",
+   "ex": "He hit the nail with a hammer.",
+   "exZh": "他用锤子敲钉子。",
+   "note": "词伙：small hammer"
+  },
+  "hang": {
+   "p": "hæŋ",
+   "m": "v. 悬挂；吊；n. 悬挂",
+   "ex": "He hangs a picture on the wall.",
+   "exZh": "他把一幅画挂在墙上。",
+   "note": "词伙：hang out with friends"
+  },
+  "happen": {
+   "p": "ˈhæpən",
+   "m": "v. 发生",
+   "ex": "The accident happened yesterday.",
+   "exZh": "事故昨天发生了。",
+   "note": ""
+  },
+  "harmful": {
+   "p": "ˈhɑːrmf(ə)l",
+   "m": "adj. 有害的",
+   "ex": "Smoking is harmful to your health.",
+   "exZh": "吸烟对你的健康有害。",
+   "note": "词伙：harmful content, harmful effects, harmful to health"
+  },
+  "harvest": {
+   "p": "ˈhɑːrvɪst",
+   "m": "n. 收成；v. 收割",
+   "ex": "The farmers celebrated the harvest in autumn.",
+   "exZh": "农民们在秋天庆祝收获。",
+   "note": "词伙：bad harvest in agriculture, good harvest"
+  },
+  "heir": {
+   "p": "er",
+   "m": "n. 继承人",
+   "ex": "The prince is the heir to the throne.",
+   "exZh": "王子是王位的继承人。",
+   "note": ""
+  },
+  "hell": {
+   "p": "hel",
+   "m": "n. 地狱",
+   "ex": "He fears going to hell after death.",
+   "exZh": "他害怕死后去地狱。",
+   "note": ""
+  },
+  "helmet": {
+   "p": "ˈhelmɪt",
+   "m": "n. 头盔；防护帽",
+   "ex": "He wears a helmet when he rides a bike.",
+   "exZh": "他骑自行车时戴头盔。",
+   "note": "词伙：cracked helmet"
+  },
+  "herald": {
+   "p": "ˈherəld",
+   "m": "n. 传令官",
+   "ex": "The herald announced the king's arrival.",
+   "exZh": "传令官宣布了国王的到来。",
+   "note": "词伙：kind herald"
+  },
+  "hero": {
+   "p": "ˈhɪrəʊ",
+   "m": "n. 英雄；男主角",
+   "ex": "The firefighter is a hero for saving the child.",
+   "exZh": "消防员救了孩子，是个英雄。",
+   "note": "词伙：small hero"
+  },
+  "heroine": {
+   "p": "ˈherəʊɪn",
+   "m": "n. 女主角",
+   "ex": "The heroine saves the town from the dragon.",
+   "exZh": "女主角拯救了小镇免受龙的侵害。",
+   "note": "词伙：brave heroine"
+  },
+  "high-definition": {
+   "p": "haɪ ˌdefəˈnɪʃən",
+   "m": "adj. 高清的",
+   "ex": "He watches movies in high-definition on his TV.",
+   "exZh": "他用电视以高清观看电影。",
+   "note": ""
+  },
+  "hit": {
+   "p": "hɪt",
+   "m": "v. 碰撞；袭击",
+   "ex": "He hit the ball with a bat.",
+   "exZh": "他用球棒打了球。",
+   "note": "词伙：hit songs"
+  },
+  "honeymoon": {
+   "p": "ˈhʌnimuːn",
+   "m": "n. 蜜月",
+   "ex": "They went to Bali for their honeymoon.",
+   "exZh": "他们去巴厘岛度蜜月。",
+   "note": "词伙：short honeymoon"
+  },
+  "honour": {
+   "p": "ˈɑːnər",
+   "m": "n. 荣誉；荣幸；v. 尊敬",
+   "ex": "He received an honour for his brave actions.",
+   "exZh": "他因英勇的行为获得了荣誉。",
+   "note": "词伙：high honour"
+  },
+  "horrible": {
+   "p": "ˈhɔːrəb(ə)l",
+   "m": "adj. 恐怖的；可怕的",
+   "ex": "The movie was horrible and made me scared.",
+   "exZh": "这部电影很恐怖，让我害怕。",
+   "note": "词伙：horrible noise"
+  },
+  "host": {
+   "p": "həʊst",
+   "m": "n. 主持人；主人；v. 主持",
+   "ex": "The host welcomed us with tea and cookies.",
+   "exZh": "主人用茶和饼干欢迎了我们。",
+   "note": "词伙：host seminars, the host country, host sports events"
+  },
+  "hostage": {
+   "p": "ˈhɑːstɪdʒ",
+   "m": "n. 人质",
+   "ex": "The robbers took a hostage during the bank robbery.",
+   "exZh": "劫匪在银行抢劫时抓了一名人质。",
+   "note": "词伙：held patience hostage"
+  },
+  "hostess": {
+   "p": "ˈhəʊstəs",
+   "m": "n. 女主人；女招待",
+   "ex": "The hostess welcomed us with a smile.",
+   "exZh": "女主人微笑着欢迎我们。",
+   "note": "词伙：smiling hostess"
+  },
+  "household": {
+   "p": "ˈhaʊshəʊld",
+   "m": "n. 家庭；adj. 家庭的",
+   "ex": "This household has three children.",
+   "exZh": "这个家庭有三个孩子。",
+   "note": "词伙：household equipment, dual-income households, help with household chores"
+  },
+  "housewife": {
+   "p": "ˈhaʊswaɪf",
+   "m": "n. 家庭主妇",
+   "ex": "She is a housewife who takes care of her children.",
+   "exZh": "她是一位照顾孩子的家庭主妇。",
+   "note": "词伙：busy housewife"
+  },
+  "hover": {
+   "p": "ˈhʌvər",
+   "m": "v. 盘旋",
+   "ex": "The bird hovers above the flowers.",
+   "exZh": "鸟在花上空盘旋。",
+   "note": ""
+  },
+  "humiliate": {
+   "p": "hjuːˈmɪlieɪt",
+   "m": "v. 使屈辱；使丢脸；使蒙羞",
+   "ex": "He tried to humiliate her in front of the class.",
+   "exZh": "他试图在全班面前羞辱她。",
+   "note": ""
+  },
+  "hydraulic": {
+   "p": "haɪˈdrɔːlɪk",
+   "m": "adj. 液压的；流体的；利用液体压力的",
+   "ex": "The hydraulic brake system stops the car quickly.",
+   "exZh": "液压制动系统能快速让汽车停下。",
+   "note": "词伙：hydraulic oil"
+  },
+  "impair": {
+   "p": "ɪmˈper",
+   "m": "v. 损害；削弱",
+   "ex": "The injury impaired his ability to walk.",
+   "exZh": "这次受伤损害了他走路的能力。",
+   "note": ""
+  },
+  "individual": {
+   "p": "ˌɪndɪˈvɪdʒuəl",
+   "m": "n. 个人；adj. 个别的；单独的",
+   "ex": "Each individual has the right to speak freely.",
+   "exZh": "每个人都有权自由发言。",
+   "note": "词伙：well-rounded individuals, those individuals in need, college-educated individuals"
+  },
+  "infant": {
+   "p": "ˈɪnfənt",
+   "m": "n. 婴儿；adj. 初期的",
+   "ex": "The infant is sleeping in the crib.",
+   "exZh": "婴儿正在婴儿床里睡觉。",
+   "note": "同义词：baby（婴儿，口语）；child（儿童，比婴儿大）；kid（小孩，口语）；词伙：weak infant"
+  },
+  "innovate": {
+   "p": "ˈɪnəveɪt",
+   "m": "v. 改革；创新",
+   "ex": "The company wants to innovate its production process.",
+   "exZh": "这家公司想改革它的生产流程。",
+   "note": ""
+  },
+  "instrument": {
+   "p": "ˈɪnstrəmənt",
+   "m": "n. 仪器；工具",
+   "ex": "A hammer is a useful instrument for building.",
+   "exZh": "锤子是建造时有用的工具。",
+   "note": "词伙：play an instrument, musical instruments"
+  },
+  "interfere": {
+   "p": "ˌɪntərˈfɪr",
+   "m": "v. 干扰",
+   "ex": "Don't interfere when I am working.",
+   "exZh": "我工作时不要打扰。",
+   "note": ""
+  },
+  "interrupt": {
+   "p": "ˌɪntəˈrʌpt",
+   "m": "v. 打断；打扰；打岔",
+   "ex": "He interrupted me while I was speaking.",
+   "exZh": "我在说话时他打断了我。",
+   "note": "同义词：disturb（打扰使人分心）；disrupt（扰乱使中断，重）；interfere with（插手妨碍）；词伙：interrupt games"
+  },
+  "intimate": {
+   "p": "ˈɪntɪmət",
+   "m": "adj. 亲密的；私密的",
+   "ex": "They have an intimate friendship.",
+   "exZh": "他们有着亲密的友谊。",
+   "note": "词伙：intimate chats"
+  },
+  "intrude": {
+   "p": "ɪnˈtruːd",
+   "m": "v. 闯入；打扰；强使",
+   "ex": "He does not want to intrude on their conversation.",
+   "exZh": "他不想插话他们的谈话。",
+   "note": ""
+  },
+  "invade": {
+   "p": "ɪnˈveɪd",
+   "m": "v. 侵犯；侵略",
+   "ex": "The army tried to invade the neighboring country.",
+   "exZh": "军队试图侵犯邻国。",
+   "note": ""
+  },
+  "invent": {
+   "p": "ɪnˈvent",
+   "m": "v. 发明",
+   "ex": "He invented a new machine to clean the house.",
+   "exZh": "他发明了一台新机器来打扫房子。",
+   "note": "同义词：create（创造出来）；devise（设计想出办法）；coin（首创新词说法）；词伙：invent new drugs"
+  },
+  "juvenile": {
+   "p": "ˈdʒuːvən(ə)l",
+   "m": "adj. 青少年的；幼稚的；n. 少年",
+   "ex": "The book is written for juvenile readers.",
+   "exZh": "这本书是为青少年读者撰写的。",
+   "note": "同义词：child（泛指小孩，最常用）；kid（口语词，随意亲昵）；词伙：juvenile delinquents, juvenile delinquencies, juvenile delinquency"
+  },
+  "kin": {
+   "p": "kɪn",
+   "m": "n. 亲属；亲戚",
+   "ex": "She invited all her kin to the family reunion.",
+   "exZh": "她邀请了所有亲属参加家庭聚会。",
+   "note": "同义词：relative（亲戚，日常通用说法）；词伙：close kin"
+  },
+  "kitchen": {
+   "p": "ˈkɪtʃɪn",
+   "m": "n. 厨房",
+   "ex": "She cooks dinner in the kitchen.",
+   "exZh": "她在厨房里做晚饭。",
+   "note": "词伙：old kitchen"
+  },
+  "landing": {
+   "p": "ˈlændɪŋ",
+   "m": "n. 着陆；降落；楼梯平台",
+   "ex": "The plane made a smooth landing at the airport.",
+   "exZh": "飞机在机场平稳着陆。",
+   "note": "词伙：rough landing"
+  },
+  "landlady": {
+   "p": "ˈlændleɪdi",
+   "m": "n. 女房东",
+   "ex": "The landlady gives us the keys every Monday.",
+   "exZh": "女房东每周一给我们钥匙。",
+   "note": "词伙：stern landlady"
+  },
+  "landlord": {
+   "p": "ˈlændlɔːrd",
+   "m": "n. 房东",
+   "ex": "The landlord fixed the broken window.",
+   "exZh": "房东修好了破掉的窗户。",
+   "note": ""
+  },
+  "lane": {
+   "p": "leɪn",
+   "m": "n. 小路；车道；航线",
+   "ex": "The children walked down the narrow lane to school.",
+   "exZh": "孩子们沿着狭窄的小路去上学。",
+   "note": "词伙：pedestrian lanes, designated bike lanes, dedicated biking lanes；同义词：avenue"
+  },
+  "laptop": {
+   "p": "ˈlæptɑːp",
+   "m": "n. 便携式电脑；笔记本电脑",
+   "ex": "He uses a laptop to work from home.",
+   "exZh": "他用笔记本电脑在家工作。",
+   "note": "词伙：borrowed laptop"
+  },
+  "lens": {
+   "p": "lenz",
+   "m": "n. 透镜；镜片",
+   "ex": "The camera has a clear lens.",
+   "exZh": "这台相机有一个清晰的透镜。",
+   "note": "词伙：curved lens"
+  },
+  "limit": {
+   "p": "ˈlɪmɪt",
+   "m": "n. 限制；v. 限制",
+   "ex": "The teacher set a limit on homework time.",
+   "exZh": "老师对作业时间设定了限制。",
+   "note": "同义词：confine（限制在范围内）；constrain（束缚，使受限制）；constraint（名词：约束条件）；curb（遏制抑制，多治坏事）；词伙：limit work hours, limited presence, limit the ability"
+  },
+  "list": {
+   "p": "lɪst",
+   "m": "n. 表；名单；v. 列出",
+   "ex": "He wrote his name on the list.",
+   "exZh": "他把自己的名字写在了表上。",
+   "note": "词伙：long waiting list"
+  },
+  "loss": {
+   "p": "lɔːs",
+   "m": "n. 损失；丢失；亏损",
+   "ex": "The company suffered a big loss last year.",
+   "exZh": "这家公司去年遭受了巨大损失。",
+   "note": "同义词：damage（损害造成的损失）；deficit（赤字缺口，财政亏空）；ruin（毁灭性损失，程度最重）；词伙：habitat loss, loss of privacy, financial losses"
+  },
+  "loudspeaker": {
+   "p": "ˌlaʊdˈspiːkər",
+   "m": "n. 扬声器；喇叭",
+   "ex": "The teacher used a loudspeaker to talk to the students.",
+   "exZh": "老师用扬声器对学生们讲话。",
+   "note": "词伙：big loudspeaker"
+  },
+  "lover": {
+   "p": "ˈlʌvər",
+   "m": "n. 爱好者；情人；爱人",
+   "ex": "He gave a rose to his lover on Valentine's Day.",
+   "exZh": "他在情人节给情人送了一朵玫瑰。",
+   "note": "词伙：music lover"
+  },
+  "madam": {
+   "p": "ˈmædəm",
+   "m": "n. 夫人",
+   "ex": "Madam, can you help me with this question?",
+   "exZh": "夫人，您能帮我回答这个问题吗？",
+   "note": ""
+  },
+  "maid": {
+   "p": "meɪd",
+   "m": "n. 女仆；侍女",
+   "ex": "The maid cleans the house every morning.",
+   "exZh": "女仆每天早上打扫房子。",
+   "note": "词伙：quick maid"
+  },
+  "maiden": {
+   "p": "ˈmeɪd(ə)n",
+   "m": "adj. 初次的",
+   "ex": "It was her maiden flight on a plane.",
+   "exZh": "这是她第一次坐飞机。",
+   "note": "词伙：maiden trial"
+  },
+  "manoeuvre": {
+   "p": "məˈnuːvər",
+   "m": "n. 机动；v. 移动；操控",
+   "ex": "He manoeuvred the car into a small parking space.",
+   "exZh": "他把车开进了一个小停车位。",
+   "note": "词伙：clever manoeuvre"
+  },
+  "maritime": {
+   "p": "ˈmærɪtaɪm",
+   "m": "adj. 海的；海运的",
+   "ex": "The small town has a maritime history.",
+   "exZh": "这个小镇有着海洋历史。",
+   "note": "词伙：maritime maps"
+  },
+  "mate": {
+   "p": "meɪt",
+   "m": "v. 交配",
+   "ex": "The birds mate in spring.",
+   "exZh": "这些鸟在春天交配。",
+   "note": "同义词：breed（繁殖育种，繁衍后代）；pair（配对，结成对偶）；couple（交配，动物成双）"
+  },
+  "matter": {
+   "p": "ˈmætər",
+   "m": "n. 事情；物质；v. 要紧",
+   "ex": "What's the matter with you?",
+   "exZh": "你怎么了？",
+   "note": "同义词：substance（物质，具体实体）；material（材料，可制物原料）；词伙：what matters in life"
+  },
+  "measure": {
+   "p": "ˈmeʒər",
+   "m": "v. 测量；n. 衡量；措施",
+   "ex": "He uses a ruler to measure the length of the table.",
+   "exZh": "他用尺子测量桌子的长度。",
+   "note": "同义词：assess（评估，判断价值）；assessment（名词：评估）；calculate（计算，算出数值）；evaluation（名词：评价）；grade（评分，定等级）；词伙：implement measures, cost control measures, public security measures"
+  },
+  "mechanic": {
+   "p": "məˈkænɪk",
+   "m": "n. 机修工",
+   "ex": "The mechanic fixed my car quickly.",
+   "exZh": "机修工很快修好了我的车。",
+   "note": "词伙：kind mechanic"
+  },
+  "medal": {
+   "p": "ˈmed(ə)l",
+   "m": "n. 奖章；勋章",
+   "ex": "He won a gold medal in the Olympics.",
+   "exZh": "他在奥运会上赢得了一枚金牌。",
+   "note": "词伙：win medals"
+  },
+  "microphone": {
+   "p": "ˈmaɪkrəfəʊn",
+   "m": "n. 麦克风",
+   "ex": "He spoke into the microphone to be heard clearly.",
+   "exZh": "他对着麦克风说话，以便被清楚地听到。",
+   "note": "词伙：cheap microphone"
+  },
+  "microscope": {
+   "p": "ˈmaɪkrəskəʊp",
+   "m": "n. 显微镜",
+   "ex": "He looks at the bug through a microscope.",
+   "exZh": "他通过显微镜观察这只虫子。",
+   "note": "词伙：school microscope"
+  },
+  "midnight": {
+   "p": "ˈmɪdnaɪt",
+   "m": "n. 午夜；子夜",
+   "ex": "The clock struck midnight.",
+   "exZh": "钟敲响了午夜。",
+   "note": "词伙：near midnight"
+  },
+  "might": {
+   "p": "maɪt",
+   "m": "n. 强大力量；v. 可能；过去式词形",
+   "ex": "He might come to the party tonight.",
+   "exZh": "他今晚可能会来参加派对。",
+   "note": ""
+  },
+  "military": {
+   "p": "ˈmɪləteri",
+   "m": "adj. 军事的；n. 军队",
+   "ex": "The military base is near the border.",
+   "exZh": "军事基地靠近边境。",
+   "note": "同义词：army（军队，多指陆军）；词伙：military services"
+  },
+  "mislead": {
+   "p": "ˌmɪsˈliːd",
+   "m": "v. 误导",
+   "ex": "He misleads his friends with false stories.",
+   "exZh": "他用虚假的故事误导他的朋友。",
+   "note": "词伙：misleading advertisements, disseminate misleading information, mislead the public"
+  },
+  "miss": {
+   "p": "mɪs",
+   "m": "v. 错过；想念；n. 小姐",
+   "ex": "I missed the bus this morning.",
+   "exZh": "我今天早上错过了公交车。",
+   "note": "词伙：miss lunch"
+  },
+  "missile": {
+   "p": "ˈmɪs(ə)l",
+   "m": "n. 导弹",
+   "ex": "The army launched a missile at the target.",
+   "exZh": "军队向目标发射了一枚导弹。",
+   "note": "词伙：small missile"
+  },
+  "mission": {
+   "p": "ˈmɪʃ(ə)n",
+   "m": "n. 使命；任务；使团",
+   "ex": "His mission is to help poor children.",
+   "exZh": "他的使命是帮助贫困儿童。",
+   "note": "词伙：combat missions"
+  },
+  "mistake": {
+   "p": "mɪˈsteɪk",
+   "m": "n. 错误",
+   "ex": "He made a mistake in his homework.",
+   "exZh": "他在作业中犯了一个错误。",
+   "note": "同义词：error（差错，书面通用）；blunder（大错，愚蠢疏忽）；fault（过失，须担责任）；词伙：avoid hasty mistakes, correct wording mistakes, learn from past mistakes"
+  },
+  "mistress": {
+   "p": "ˈmɪstrəs",
+   "m": "n. 女主人；情妇；女教师（英）",
+   "ex": "The mistress of the house welcomed the guests warmly.",
+   "exZh": "女主人热情地欢迎了客人。",
+   "note": "词伙：kind mistress"
+  },
+  "mitigate": {
+   "p": "ˈmɪtɪɡeɪt",
+   "m": "v. 减轻；缓和",
+   "ex": "Planting trees can mitigate air pollution.",
+   "exZh": "植树可以减轻空气污染。",
+   "note": "同义词：decrease（减少，数量下降）；diminish（渐减，逐步变弱）；词伙：mitigate educational inequality, mitigate the environmental damage, mitigate problems"
+  },
+  "mode": {
+   "p": "məʊd",
+   "m": "n. 方式；模式",
+   "ex": "The mode of transportation is a bike.",
+   "exZh": "出行的方式是骑自行车。",
+   "note": "同义词：form（形式，呈现形态）；manner（方式，举止做法）；pattern（模式，规律套路）；词伙：silent mode"
+  },
+  "monument": {
+   "p": "ˈmɑːnjumənt",
+   "m": "n. 历史遗迹；纪念碑；不朽作品",
+   "ex": "The ancient monument attracts many tourists each year.",
+   "exZh": "这座古代历史遗迹每年吸引许多游客。",
+   "note": "词伙：white monument"
+  },
+  "muddy": {
+   "p": "ˈmʌdi",
+   "m": "adj. 泥泞的；模糊不清的",
+   "ex": "The road became muddy after the rain.",
+   "exZh": "雨后，这条路变得泥泞。",
+   "note": ""
+  },
+  "multimedia": {
+   "p": "ˌmʌltiˈmiːdiə",
+   "m": "adj. 多媒体的；n. 多媒体",
+   "ex": "The school uses multimedia tools to teach students.",
+   "exZh": "这所学校使用多媒体工具来教学。",
+   "note": "词伙：multimedia screen"
+  },
+  "naval": {
+   "p": "ˈneɪv(ə)l",
+   "m": "adj. 海军的",
+   "ex": "He works on a naval ship.",
+   "exZh": "他在一艘军舰上工作。",
+   "note": "词伙：naval routes"
+  },
+  "neighbourhood": {
+   "p": "ˈneɪbərhʊd",
+   "m": "n. 街坊；四邻；附近地区",
+   "ex": "We know all our neighbours in this neighbourhood.",
+   "exZh": "我们认识这个街坊里的所有邻居。",
+   "note": "词伙：low density neighbourhoods, whole neighbourhood"
+  },
+  "nephew": {
+   "p": "ˈnefjuː",
+   "m": "n. 侄子",
+   "ex": "My brother's son is my nephew.",
+   "exZh": "我弟弟的儿子是我的侄子。",
+   "note": "词伙：little nephew"
+  },
+  "network": {
+   "p": "ˈnetwɜːrk",
+   "m": "n. 网络；网路；网状物",
+   "ex": "The internet is a big network of computers.",
+   "exZh": "互联网是一个庞大的计算机网络。",
+   "note": "词伙：public transport networks, social networking websites, build up a network of contacts"
+  },
+  "niece": {
+   "p": "niːs",
+   "m": "n. 侄女",
+   "ex": "My sister's daughter is my niece.",
+   "exZh": "我妹妹的女儿是我的侄女。",
+   "note": ""
+  },
+  "night": {
+   "p": "naɪt",
+   "m": "n. 夜晚；晚上",
+   "ex": "The stars are bright at night.",
+   "exZh": "夜晚星星很亮。",
+   "note": "词伙：night sky, polar night"
+  },
+  "nuclear": {
+   "p": "ˈnuːkliər",
+   "m": "adj. 原子能的；核能的",
+   "ex": "This plant produces electricity using nuclear power.",
+   "exZh": "这座电厂使用核能发电。",
+   "note": "词伙：nuclear power plants"
+  },
+  "nurse": {
+   "p": "nɜːrs",
+   "m": "n. 护士",
+   "ex": "The nurse gave the patient medicine.",
+   "exZh": "护士给病人服了药。",
+   "note": "词伙：in nursing homes"
+  },
+  "oblige": {
+   "p": "əˈblaɪdʒ",
+   "m": "v. 有义务；迫使",
+   "ex": "The law obliges drivers to wear seat belts.",
+   "exZh": "法律迫使司机系安全带。",
+   "note": ""
+  },
+  "obstacle": {
+   "p": "ˈɑːbstək(ə)l",
+   "m": "n. 障碍",
+   "ex": "The big rock was an obstacle on the road.",
+   "exZh": "那块大石头是路上的障碍。",
+   "note": "同义词：barrier（屏障，阻隔通行）；hurdle（栏架，须跨越难关）；词伙：present obstacles to social progress"
+  },
+  "occasion": {
+   "p": "əˈkeɪʒ(ə)n",
+   "m": "n. 特殊场合；时机",
+   "ex": "She wore a dress for the occasion.",
+   "exZh": "她为了这个特殊场合穿了一条裙子。",
+   "note": "词伙：special occasion"
+  },
+  "occur": {
+   "p": "əˈkɜːr",
+   "m": "v. 发生；出现",
+   "ex": "The accident occurred yesterday.",
+   "exZh": "事故昨天发生了。",
+   "note": "词伙：occur daily"
+  },
+  "offend": {
+   "p": "əˈfend",
+   "m": "v. 冒犯；触怒；得罪",
+   "ex": "He offended the law by stealing.",
+   "exZh": "他偷窃触犯了法律。",
+   "note": "同义词：insult（侮辱，蓄意羞辱）；upset（惹难过，使心烦）；anger（激怒，使大怒）；词伙：offend calm folks"
+  },
+  "operate": {
+   "p": "ˈɑːpəreɪt",
+   "m": "v. 运转；操作；施行手术",
+   "ex": "The machine operates smoothly.",
+   "exZh": "这台机器运转顺畅。",
+   "note": "词伙：operating hours, reduce operating costs"
+  },
+  "oppose": {
+   "p": "əˈpəʊz",
+   "m": "v. 反对；反抗",
+   "ex": "He opposes the new law.",
+   "exZh": "他反对这项新法律。",
+   "note": "同义词：boycott（抵制，联合拒绝）；counter（反击，回击对抗）；词伙：defeat opposing teams"
+  },
+  "oppress": {
+   "p": "əˈpres",
+   "m": "v. 压迫；使烦恼",
+   "ex": "The king oppresses the poor people.",
+   "exZh": "国王压迫穷人。",
+   "note": ""
+  },
+  "optics": {
+   "p": "ˈɑːptɪks",
+   "m": "n. 光学",
+   "ex": "He is learning optics in physics class.",
+   "exZh": "他正在物理课上学习光学。",
+   "note": "词伙：optics basics"
+  },
+  "order": {
+   "p": "ˈɔːrdər",
+   "m": "v. 订购；命令；n. 顺序",
+   "ex": "The books are in alphabetical order.",
+   "exZh": "这些书是按字母顺序排列的。",
+   "note": "order=命令/订购；in order=按顺序；in order to=为了；词伙：place an order"
+  },
+  "orphan": {
+   "p": "ˈɔːrf(ə)n",
+   "m": "n. 孤儿；失去生母的幼小动物",
+   "ex": "The boy lives with his uncle because he is an orphan.",
+   "exZh": "这个男孩和叔叔住在一起，因为他是个孤儿。",
+   "note": "词伙：small orphan"
+  },
+  "owe": {
+   "p": "əʊ",
+   "m": "v. 欠；归功于",
+   "ex": "He owes his success to hard work.",
+   "exZh": "他把他的成功归功于努力工作。",
+   "note": "词伙：owe thanks"
+  },
+  "paper": {
+   "p": "ˈpeɪpər",
+   "m": "n. 论文；纸；报纸",
+   "ex": "He wrote his name on the paper.",
+   "exZh": "他在纸上写了名字。",
+   "note": "词伙：model paper, neat model paper"
+  },
+  "partner": {
+   "p": "ˈpɑːrtnər",
+   "m": "n. 合伙人；搭档",
+   "ex": "He is my business partner.",
+   "exZh": "他是我的商业合伙人。",
+   "note": "词伙：as partner"
+  },
+  "patent": {
+   "p": "ˈpæt(ə)nt",
+   "m": "n. 专利",
+   "ex": "He got a patent for his new invention.",
+   "exZh": "他为自己的新发明获得了专利。",
+   "note": ""
+  },
+  "patriot": {
+   "p": "ˈpeɪtriət",
+   "m": "n. 爱国者",
+   "ex": "He is a true patriot who loves his country.",
+   "exZh": "他是一位真正热爱祖国的爱国者。",
+   "note": "词伙：true patriot"
+  },
+  "patrol": {
+   "p": "pəˈtrəʊl",
+   "m": "n. 巡逻；v. 巡逻",
+   "ex": "The police patrol the street at night.",
+   "exZh": "警察晚上在街上巡逻。",
+   "note": "词伙：patrol communities, patrol high-risk communities"
+  },
+  "pause": {
+   "p": "pɔːz",
+   "m": "n. 暂停；v. 停顿",
+   "ex": "There was a short pause before he answered.",
+   "exZh": "他回答之前停顿了一下。",
+   "note": "词伙：long pause"
+  },
+  "peril": {
+   "p": "ˈperəl",
+   "m": "n. 危险",
+   "ex": "The hikers faced great peril in the storm.",
+   "exZh": "徒步者在风暴中面临巨大危险。",
+   "note": "词伙：sudden peril"
+  },
+  "phase": {
+   "p": "feɪz",
+   "m": "n. 阶段；时期；v. 分阶段进行",
+   "ex": "The project is in its final phase.",
+   "exZh": "这个项目正处于最后阶段。",
+   "note": "同义词：stage（阶段，发展时期）；step（步骤，环节次序）；period（时期，一段时间）"
+  },
+  "pinpoint": {
+   "p": "ˈpɪnpɔɪnt",
+   "m": "v. 精准定位",
+   "ex": "The GPS can pinpoint your exact location.",
+   "exZh": "全球定位系统能精确定位你的位置。",
+   "note": ""
+  },
+  "pioneer": {
+   "p": "ˌpaɪəˈnɪr",
+   "m": "n. 先驱者",
+   "ex": "He was a pioneer in space exploration.",
+   "exZh": "他是太空探索的先驱者。",
+   "note": "词伙：true pioneer"
+  },
+  "pistol": {
+   "p": "ˈpɪst(ə)l",
+   "m": "n. 手枪",
+   "ex": "He held a pistol in his hand.",
+   "exZh": "他手里拿着一把手枪。",
+   "note": "词伙：worn pistol"
+  },
+  "pitfall": {
+   "p": "ˈpɪtfɔːl",
+   "m": "n. 陷阱；隐患；想不到的困难",
+   "ex": "Don't ignore the pitfall of skipping homework.",
+   "exZh": "不要忽视不做作业这个陷阱。",
+   "note": "词伙：hidden pitfall"
+  },
+  "pivot": {
+   "p": "ˈpɪvət",
+   "m": "v. 以…为中心；n. 中心",
+   "ex": "The door pivots on a hinge.",
+   "exZh": "门围绕一个铰链旋转。",
+   "note": ""
+  },
+  "plain": {
+   "p": "pleɪn",
+   "m": "n. 平原；adj. 简单明了的；朴素的",
+   "ex": "The cows graze on the plain.",
+   "exZh": "牛在平原上吃草。",
+   "note": "词伙：vast barren plain"
+  },
+  "plastic": {
+   "p": "ˈplæstɪk",
+   "m": "adj. 塑料的；n. 塑料",
+   "ex": "The bottle is made of plastic.",
+   "exZh": "这个瓶子是塑料做的。",
+   "note": "词伙：plastic bags, plastic surgeries, one-time plastic bags"
+  },
+  "plight": {
+   "p": "plaɪt",
+   "m": "n. 困境",
+   "ex": "The family is in a difficult plight after losing their home.",
+   "exZh": "这家人在失去家园后陷入了困境。",
+   "note": "词伙：lasting plight"
+  },
+  "poison": {
+   "p": "ˈpɔɪz(ə)n",
+   "m": "n. 毒药；毒物；v. 毒害",
+   "ex": "The snake's poison can kill quickly.",
+   "exZh": "蛇的毒药能迅速致死。",
+   "note": "同义词：drug（药物，也可指毒）；toxin（毒素，生物体产生）；词伙：risk of food poisoning"
+  },
+  "polytechnic": {
+   "p": "ˌpɑːliˈteknɪk",
+   "m": "n. 工艺专科学院；理工专科学院",
+   "ex": "He enrolled in a polytechnic to learn engineering.",
+   "exZh": "他进入了一所工艺专科学院学习工程。",
+   "note": "词伙：small town polytechnic"
+  },
+  "pond": {
+   "p": "pɑːnd",
+   "m": "n. 池塘",
+   "ex": "Ducks swim in the pond.",
+   "exZh": "鸭子在池塘里游泳。",
+   "note": "词伙：clear pond"
+  },
+  "praise": {
+   "p": "preɪz",
+   "m": "n. 赞美；赞扬",
+   "ex": "His hard work received much praise from the teacher.",
+   "exZh": "他的努力工作得到了老师的许多赞美。",
+   "note": "同义词：commend（嘉奖，正式表扬）；credit（赞誉，归功认可）；词伙：honest praise"
+  },
+  "precise": {
+   "p": "prɪˈsaɪs",
+   "m": "adj. 准确的；确切的",
+   "ex": "He gave a precise answer to the question.",
+   "exZh": "他对这个问题给出了准确的答案。",
+   "note": "同义词：accurate（准确，误差极小）；correct（正确，没有错误）；exact（确切，分毫不差）"
+  },
+  "prepare": {
+   "p": "prɪˈper",
+   "m": "v. 准备",
+   "ex": "I prepare my lunch every morning.",
+   "exZh": "我每天早上准备午餐。",
+   "note": "同义词：arrange（安排，筹办布置）；rehearse（排练，先演练一遍）；equip（配备，使人有备）；词伙：prepare news reports, prepare meals, prepare for working lives"
+  },
+  "prevent": {
+   "p": "prɪˈvent",
+   "m": "v. 防止；阻止；预防",
+   "ex": "Wearing a helmet can prevent head injuries.",
+   "exZh": "戴头盔可以防止头部受伤。",
+   "note": "同义词：counter（反制，对抗遏制）；deter（震慑，吓阻不敢）；词伙：prevent crime, prevent decay, prevent disease"
+  },
+  "proceed": {
+   "p": "prəʊˈsiːd",
+   "m": "v. 继续进行；进行",
+   "ex": "After the break, we will proceed with the meeting.",
+   "exZh": "休息后，我们将继续开会。",
+   "note": "词伙：proceed along"
+  },
+  "progress": {
+   "p": "ˈprɑːɡres",
+   "m": "v. 进步；n. 进展",
+   "ex": "The project shows slow progress.",
+   "exZh": "这个项目进展缓慢。",
+   "note": "同义词：advance（推进，向前迈进）；headway（进展，接make使用）；development（发展，逐步成长）；词伙：impede progress, social progress, drive societal progress"
+  },
+  "prohibit": {
+   "p": "prəˈhɪbɪt",
+   "m": "v. 禁止",
+   "ex": "The school prohibits students from using phones in class.",
+   "exZh": "学校禁止学生在课堂上使用手机。",
+   "note": "词伙：prohibit extreme sport, prohibit animal exploitation"
+  },
+  "proof": {
+   "p": "pruːf",
+   "m": "n. 证明；证据",
+   "ex": "The math teacher asked for a proof of the theorem.",
+   "exZh": "数学老师要求给出这个定理的证明。",
+   "note": "同义词：clue（线索，间接提示）；evidence（证据，可作依据）；词伙：clear proof"
+  },
+  "prophet": {
+   "p": "ˈprɑːfɪt",
+   "m": "n. 预言者；先知",
+   "ex": "The prophet told the people about the coming storm.",
+   "exZh": "预言者告诉人们即将到来的风暴。",
+   "note": "词伙：loud prophet"
+  },
+  "proponent": {
+   "p": "prəˈpəʊnənt",
+   "m": "n. 支持者；拥护者；辩护者",
+   "ex": "He is a proponent of clean energy.",
+   "exZh": "他是清洁能源的支持者。",
+   "note": "词伙：firm proponent"
+  },
+  "propose": {
+   "p": "prəˈpəʊz",
+   "m": "v. 提议；计划",
+   "ex": "He proposes to go to the park after lunch.",
+   "exZh": "他提议午饭后去公园。",
+   "note": "同义词：advise（建议，劝人如何做）"
+  },
+  "protest": {
+   "p": "ˈprəʊtest",
+   "m": "n. 抗议活动；v. 抗议",
+   "ex": "The students protest against the new school rules.",
+   "exZh": "学生们抗议新的校规。",
+   "note": "词伙：calm protest"
+  },
+  "prototype": {
+   "p": "ˈprəʊtətaɪp",
+   "m": "n. 原型",
+   "ex": "The engineer built a prototype of the new car.",
+   "exZh": "工程师制作了这辆新车的原型。",
+   "note": "词伙：third prototype"
+  },
+  "provide": {
+   "p": "prəˈvaɪd",
+   "m": "v. 提供",
+   "ex": "Parents provide food for children.",
+   "exZh": "父母为孩子们提供食物。",
+   "note": "词伙：provide subsidies, provide incentives, provide entertainment"
+  },
+  "pump": {
+   "p": "pʌmp",
+   "m": "n. 泵；v. 打气",
+   "ex": "He pumps water from the well every morning.",
+   "exZh": "他每天早上从井里抽水。",
+   "note": "词伙：hand pump"
+  },
+  "punch": {
+   "p": "pʌntʃ",
+   "m": "v. 打孔；拳打",
+   "ex": "He punched the wall in anger.",
+   "exZh": "他生气地打了墙一拳。",
+   "note": "词伙：punch holes"
+  },
+  "punishment": {
+   "p": "ˈpʌnɪʃmənt",
+   "m": "n. 处罚；惩罚",
+   "ex": "The boy got punishment for breaking the window.",
+   "exZh": "这个男孩因为打碎了窗户而受到了处罚。",
+   "note": "词伙：light punishment, impose punishment, severe punishment"
+  },
+  "pupil": {
+   "p": "ˈpjuːp(ə)l",
+   "m": "n. 小学生",
+   "ex": "The pupil writes with a pencil in class.",
+   "exZh": "这个小学生在课堂上用铅笔写字。",
+   "note": "词伙：school pupil"
+  },
+  "purify": {
+   "p": "ˈpjʊrɪfaɪ",
+   "m": "v. 净化",
+   "ex": "The machine purifies water by removing dirt.",
+   "exZh": "这台机器通过去除杂质来净化水。",
+   "note": "同义词：clean（清洁，弄干净）；refine（提纯，去除杂质）；cleanse（清洗净化，正式些）"
+  },
+  "pursue": {
+   "p": "pərˈsuː",
+   "m": "v. 追求；追逐",
+   "ex": "He wants to pursue his dream of becoming a writer.",
+   "exZh": "他想追求成为作家的梦想。",
+   "note": "词伙：pursue careers, pursue hobbies, pursue stardom"
+  },
+  "quiet": {
+   "p": "ˈkwaɪət",
+   "m": "adj. 安静的",
+   "ex": "The child is quiet during nap time.",
+   "exZh": "孩子在午睡时很安静。",
+   "note": "词伙：quiet lake, quiet farm, quiet old forest"
+  },
+  "quit": {
+   "p": "kwɪt",
+   "m": "v. 停止；辞职；离开",
+   "ex": "He decided to quit smoking last year.",
+   "exZh": "他去年决定戒烟。",
+   "note": "同义词：cease（停止，书面正式）；resign（辞职，离岗卸任）；withdraw（退出，撤回离场）；halt（叫停，使停下）"
+  },
+  "radar": {
+   "p": "ˈreɪdɑːr",
+   "m": "n. 雷达",
+   "ex": "The radar shows a plane coming near.",
+   "exZh": "雷达显示一架飞机正在靠近。",
+   "note": "词伙：toy radar"
+  },
+  "raid": {
+   "p": "reɪd",
+   "m": "n. 突袭；v. 搜捕",
+   "ex": "The soldiers raided the enemy camp at night.",
+   "exZh": "士兵们在夜间突袭了敌人的营地。",
+   "note": "词伙：night raid"
+  },
+  "realm": {
+   "p": "relm",
+   "m": "n. 王国；领域",
+   "ex": "This book is about the realm of artificial intelligence.",
+   "exZh": "这本书是关于人工智能领域的。",
+   "note": "词伙：blue realm"
+  },
+  "rebel": {
+   "p": "rɪˈbel",
+   "m": "n. 叛逆者；造反者",
+   "ex": "The rebel fought against the king's rules.",
+   "exZh": "这位叛逆者反抗国王的法令。",
+   "note": "词伙：young rebel"
+  },
+  "reckless": {
+   "p": "ˈrekləs",
+   "m": "adj. 鲁莽的；不计后果的",
+   "ex": "He drove reckless and got into an accident.",
+   "exZh": "他开车鲁莽，结果出了事故。",
+   "note": "词伙：reckless driving"
+  },
+  "refine": {
+   "p": "rɪˈfaɪn",
+   "m": "v. 精炼；改进",
+   "ex": "He refines his writing every day.",
+   "exZh": "他每天完善自己的写作。",
+   "note": "同义词：purify（净化，除污提纯）；词伙：refined taste"
+  },
+  "refute": {
+   "p": "rɪˈfjuːt",
+   "m": "v. 驳斥；反驳；批驳",
+   "ex": "He refuted the claim with clear evidence.",
+   "exZh": "他用清晰的证据驳斥了这一说法。",
+   "note": "同义词：counter（反驳，回击驳斥）；词伙：refute lies"
+  },
+  "rein": {
+   "p": "reɪn",
+   "m": "n. 缰绳；控制",
+   "ex": "He uses a leather rein to control the horse.",
+   "exZh": "他用皮缰绳来控制马。",
+   "note": ""
+  },
+  "reinforce": {
+   "p": "ˌriːɪnˈfɔːrs",
+   "m": "v. 增强；加强；加固",
+   "ex": "Exercise can reinforce your muscles.",
+   "exZh": "锻炼可以增强你的肌肉。",
+   "note": "同义词：strengthen（加固，变强韧）；support（支撑，托底帮扶）；bolster（提振，撑起信心）；词伙：reinforce good behaviour, reinforce mistaken beliefs"
+  },
+  "relative": {
+   "p": "ˈrelətɪv",
+   "m": "n. 亲戚；adj. 相对的；相关联的",
+   "ex": "His success is relative to his hard work.",
+   "exZh": "他的成功是相对于他的努力而言的。",
+   "note": "同义词：relation（亲属，正式些）；kin（亲族，书面集体）；connection（亲缘关联）"
+  },
+  "replica": {
+   "p": "/ˈreplɪkə/",
+   "m": "n. 复制品；仿制品",
+   "ex": "Museum visitors bought a replica of the lamp.",
+   "exZh": "博物馆的参观者买了那盏灯的复制品。",
+   "note": "词伙：exact replica"
+  },
+  "reproach": {
+   "p": "rɪˈprəʊtʃ",
+   "m": "n. 责备；v. 指责",
+   "ex": "She reproached him for being late.",
+   "exZh": "她责备他迟到了。",
+   "note": "词伙：soft reproach"
+  },
+  "resist": {
+   "p": "rɪˈzɪst",
+   "m": "v. 抵制；抵抗",
+   "ex": "He tried to resist the temptation to eat sweets.",
+   "exZh": "他试图抵制吃甜食的诱惑。",
+   "note": ""
+  },
+  "respective": {
+   "p": "rɪˈspektɪv",
+   "m": "adj. 各自的；各个的",
+   "ex": "Each student received their respective book.",
+   "exZh": "每个学生都收到了他们各自的书。",
+   "note": ""
+  },
+  "retreat": {
+   "p": "rɪˈtriːt",
+   "m": "v. 撤退；n. 静居处",
+   "ex": "The army ordered a retreat after the battle.",
+   "exZh": "战斗后，军队下令撤退。",
+   "note": "词伙：never retreat"
+  },
+  "reveal": {
+   "p": "rɪˈviːl",
+   "m": "v. 揭露；泄露；显露",
+   "ex": "The letter revealed his secret.",
+   "exZh": "这封信揭露了他的秘密。",
+   "note": "同义词：disclose（披露，透露信息）；display（展示，陈列出来）；expose（揭露，曝光坏事）；词伙：reveal facts"
+  },
+  "revolt": {
+   "p": "rɪˈvəʊlt",
+   "m": "v. 反叛；（使）厌恶；n. 叛乱",
+   "ex": "The people revolt against the unfair rules.",
+   "exZh": "人们反抗不公平的规则。",
+   "note": ""
+  },
+  "rid": {
+   "p": "rɪd",
+   "m": "v. 摆脱；除去",
+   "ex": "He wants to rid his house of clutter.",
+   "exZh": "他想摆脱家里的杂乱。",
+   "note": "词伙：get rid of poverty"
+  },
+  "rifle": {
+   "p": "ˈraɪf(ə)l",
+   "m": "n. 步枪；来复枪（又称来福枪）；v. 快速搜寻",
+   "ex": "He carries a rifle in the forest.",
+   "exZh": "他带着一把步枪在森林里。",
+   "note": "词伙：rusty rifle"
+  },
+  "risk": {
+   "p": "rɪsk",
+   "m": "n. 风险；v. 冒...的危险",
+   "ex": "He took a risk by starting his own business.",
+   "exZh": "他创业时承担了风险。",
+   "note": "同义词：danger（危险，泛指威胁）；hazard（隐患，正式，潜在危害）；词伙：take risks, evaluate risks, financial risks"
+  },
+  "rival": {
+   "p": "ˈraɪv(ə)l",
+   "m": "n. 敌手；v. 相匹敌",
+   "ex": "He is my main rival in the race.",
+   "exZh": "他是我在比赛中主要的竞争者。",
+   "note": "词伙：rival pride"
+  },
+  "rough": {
+   "p": "rʌf",
+   "m": "adj. 粗糙的；粗略的",
+   "ex": "The wood surface is rough.",
+   "exZh": "木头表面很粗糙。",
+   "note": "词伙：stayed rough, rough brute"
+  },
+  "round": {
+   "p": "raʊnd",
+   "m": "n. 回合；adj. 圆的；prep./adv. 在…周围",
+   "ex": "The children sat round the fire.",
+   "exZh": "孩子们围坐在火堆旁。",
+   "note": "round≈around；round the corner=拐过街角；词伙：quick round, quick round game"
+  },
+  "sacrifice": {
+   "p": "ˈsækrɪfaɪs",
+   "m": "v. 牺牲；n. 牺牲（品）",
+   "ex": "He sacrificed his time to help his friend.",
+   "exZh": "他牺牲了自己的时间来帮助朋友。",
+   "note": "词伙：make sacrifices, sacrifice health, sacrifice family life"
+  },
+  "safeguard": {
+   "p": "ˈseɪfɡɑːrd",
+   "m": "v. 保卫；保护",
+   "ex": "The fence safeguards the garden from animals.",
+   "exZh": "围栏保护花园免受动物侵扰。",
+   "note": "词伙：safeguard seeds"
+  },
+  "savage": {
+   "p": "ˈsævɪdʒ",
+   "m": "adj. 野性的",
+   "ex": "The savage wolf howled under the moon.",
+   "exZh": "那头野性的狼在月光下嚎叫。",
+   "note": "词伙：savage act"
+  },
+  "scenario": {
+   "p": "səˈnæriəʊ",
+   "m": "n. 可能发生的情况；设想",
+   "ex": "It's a possible scenario that it will rain tomorrow.",
+   "exZh": "明天会下雨是一个可能发生的情况。",
+   "note": "词伙：handle complex real-life communication scenarios"
+  },
+  "science fiction": {
+   "p": "ˌsaɪəns ˈfɪkʃ(ə)n",
+   "m": "phrase. 科幻作品",
+   "ex": "He likes to read science fiction books.",
+   "exZh": "他喜欢读科幻小说。",
+   "note": ""
+  },
+  "scout": {
+   "p": "skaʊt",
+   "m": "n. 侦察兵；v. 搜寻",
+   "ex": "The scout watched the enemy's movement quietly.",
+   "exZh": "侦察兵悄悄观察敌人的动向。",
+   "note": "词伙：young scout"
+  },
+  "seize": {
+   "p": "siːz",
+   "m": "v. 抓住；夺取",
+   "ex": "The boy tried to seize the ball.",
+   "exZh": "男孩试图抓住球。",
+   "note": "词伙：seize job opportunities"
+  },
+  "sensor": {
+   "p": "ˈsensər",
+   "m": "n. 传感器",
+   "ex": "The robot uses a sensor to detect walls.",
+   "exZh": "机器人使用传感器来检测墙壁。",
+   "note": "词伙：small sensor"
+  },
+  "sewage": {
+   "p": "ˈsuːɪdʒ",
+   "m": "n. 污水；污物；下水道",
+   "ex": "The city cleaned the sewage from the streets.",
+   "exZh": "城市清理了街道上的污水。",
+   "note": "词伙：dirty sewage"
+  },
+  "shed": {
+   "p": "ʃed",
+   "m": "n. 棚屋；v. 使脱落；去除",
+   "ex": "The tree sheds its leaves in autumn.",
+   "exZh": "这棵树在秋天落叶。",
+   "note": "词伙：leaning shed"
+  },
+  "shelter": {
+   "p": "ˈʃeltər",
+   "m": "n. 避难所；v. 庇护",
+   "ex": "The refugees found shelter in a small building.",
+   "exZh": "难民们在一个小建筑里找到了避难所。",
+   "note": "同义词：shade（荫凉，遮阳避晒处）；词伙：provide shelter"
+  },
+  "shield": {
+   "p": "ʃiːld",
+   "m": "n. 盾牌",
+   "ex": "The knight held up his shield to block the arrow.",
+   "exZh": "骑士举起盾牌来挡箭。",
+   "note": ""
+  },
+  "shift": {
+   "p": "ʃɪft",
+   "m": "v. 转移；换（挡）；n. 轮班",
+   "ex": "The shift of power to the new government was sudden.",
+   "exZh": "权力向新政府的转移是突然的。",
+   "note": "同义词：adjust（调整，微调适应）；alter（改变，变动内容）"
+  },
+  "shrink": {
+   "p": "ʃrɪŋk",
+   "m": "v. 收缩",
+   "ex": "The sweater shrinks in hot water.",
+   "exZh": "这件毛衣在热水中会收缩。",
+   "note": "同义词：decline（缩减，持续下滑）；decrease（减少，数量变小）"
+  },
+  "sibling": {
+   "p": "ˈsɪblɪŋ",
+   "m": "n. 兄弟姐妹",
+   "ex": "My sibling plays soccer every weekend.",
+   "exZh": "我的兄弟/姐妹每个周末都踢足球。",
+   "note": ""
+  },
+  "siege": {
+   "p": "siːdʒ",
+   "m": "n. 围攻；封锁",
+   "ex": "The castle endured a long siege during the war.",
+   "exZh": "这座城堡在战争中经历了长期的围攻。",
+   "note": "词伙：long siege"
+  },
+  "simplify": {
+   "p": "ˈsɪmplɪfaɪ",
+   "m": "v. 简化",
+   "ex": "He tries to simplify the math problem.",
+   "exZh": "他试图简化这个数学问题。",
+   "note": ""
+  },
+  "single": {
+   "p": "ˈsɪŋɡl",
+   "m": "adj. 单一的；单独的；单身的",
+   "ex": "He bought a single ticket for the bus.",
+   "exZh": "他买了一张单程公交车票。",
+   "note": "词伙：remain single"
+  },
+  "slave": {
+   "p": "sleɪv",
+   "m": "n. 奴隶",
+   "ex": "The slave worked in the fields every day.",
+   "exZh": "这个奴隶每天在田地里劳作。",
+   "note": "词伙：tired slave"
+  },
+  "soldier": {
+   "p": "ˈsəʊldʒər",
+   "m": "n. 士兵；军人",
+   "ex": "The soldier walks to the camp every morning.",
+   "exZh": "士兵每天早上步行去营地。",
+   "note": "词伙：tired soldier"
+  },
+  "sole": {
+   "p": "səʊl",
+   "m": "adj. 唯一的；n. 鞋底",
+   "ex": "He is the sole owner of the shop.",
+   "exZh": "他是这家商店唯一的主人。",
+   "note": "词伙：sole breadwinners"
+  },
+  "solicitor": {
+   "p": "səˈlɪsɪtər",
+   "m": "n. 事务律师",
+   "ex": "He hired a solicitor to help with his house sale.",
+   "exZh": "他聘请了一名事务律师来帮助处理他的房屋出售。",
+   "note": "同义词：lawyer（律师，泛称）；attorney（律师，美式代理）；counsel（辩护律师，出庭顾问）；词伙：fair solicitor"
+  },
+  "spare": {
+   "p": "sper",
+   "m": "adj. 多余的；v. 抽出",
+   "ex": "Can you spare a few minutes to help me?",
+   "exZh": "你能抽出几分钟帮我吗？",
+   "note": "词伙：spare chairs"
+  },
+  "spark": {
+   "p": "spɑːrk",
+   "m": "n. 火花；火星；v. 激发",
+   "ex": "The match produced a small spark.",
+   "exZh": "火柴产生了一个小火花。",
+   "note": "词伙：spark anger"
+  },
+  "spear": {
+   "p": "spɪr",
+   "m": "n. 矛；枪",
+   "ex": "The warrior threw a spear at the enemy.",
+   "exZh": "战士向敌人投掷了一支矛。",
+   "note": "词伙：long spear"
+  },
+  "specialise": {
+   "p": "ˈspeʃəlaɪz",
+   "m": "v. 专用于；专门研究",
+   "ex": "He specialises in repairing old clocks.",
+   "exZh": "他专用于修理老式钟表。",
+   "note": "同义词：concentrate（专注，集中精力）；focus（聚焦，专心于）；词伙：specialised jobs, specialised skills, specialised expertise"
+  },
+  "specialist": {
+   "p": "ˈspeʃəlɪst",
+   "m": "n. 专家；专科医生",
+   "ex": "He is a specialist in heart surgery.",
+   "exZh": "他是心脏手术方面的专家。",
+   "note": "同义词：expert（专家，行家里手）；authority（权威，业界泰斗）；词伙：specialist knowledge"
+  },
+  "spoil": {
+   "p": "spɔɪl",
+   "m": "v. 搞糟；宠坏；变质",
+   "ex": "Parents often spoil their children with too many toys.",
+   "exZh": "父母经常用太多玩具宠坏孩子。",
+   "note": "同义词：indulge（溺爱，放任娇惯）"
+  },
+  "spouse": {
+   "p": "spaʊs",
+   "m": "n. 配偶",
+   "ex": "He bought a gift for his spouse.",
+   "exZh": "他给他的配偶买了一份礼物。",
+   "note": "同义词：mate（配偶，伴侣）；partner（伴侣，生活搭档）"
+  },
+  "spring": {
+   "p": "sprɪŋ",
+   "m": "v. 跳；n. 春天；弹簧",
+   "ex": "Flowers bloom in spring.",
+   "exZh": "春天花朵盛开。",
+   "note": "词伙：warm spring"
+  },
+  "spy": {
+   "p": "spaɪ",
+   "m": "n. 间谍；v. 秘密侦察",
+   "ex": "The soldier was spying on the enemy camp at night.",
+   "exZh": "这名士兵在夜间秘密侦察敌军营地。",
+   "note": ""
+  },
+  "stab": {
+   "p": "stæb",
+   "m": "v. 刺；n. 戳",
+   "ex": "He felt a sharp stab in his side.",
+   "exZh": "他感到侧腹一阵刺痛。",
+   "note": "词伙：stab friends, never stab friends"
+  },
+  "stain": {
+   "p": "steɪn",
+   "m": "n. 污渍；v. 玷污",
+   "ex": "There is a coffee stain on the table.",
+   "exZh": "桌子上有一个咖啡污点。",
+   "note": "词伙：food stain"
+  },
+  "starve": {
+   "p": "stɑːrv",
+   "m": "v. 挨饿；饿死",
+   "ex": "The children starve without food.",
+   "exZh": "孩子们没有食物就会挨饿。",
+   "note": ""
+  },
+  "statue": {
+   "p": "ˈstætʃuː",
+   "m": "n. 雕像；雕塑",
+   "ex": "There is a big statue in the city center.",
+   "exZh": "城市中心有一座巨大的雕像。",
+   "note": "词伙：tall statue"
+  },
+  "steady": {
+   "p": "ˈstedi",
+   "m": "adj. 稳定的；v. 使稳住",
+   "ex": "The boat moved in a steady way on the calm sea.",
+   "exZh": "船在平静的海面上平稳地移动。",
+   "note": "同义词：stable（稳固，安稳不动）；词伙：steady income, steady career, steady jobs"
+  },
+  "stern": {
+   "p": "stɜːrn",
+   "m": "n. 船尾",
+   "ex": "The sailors cleaned the stern of the boat.",
+   "exZh": "水手们打扫了船尾。",
+   "note": ""
+  },
+  "stove": {
+   "p": "stəʊv",
+   "m": "n. 火炉",
+   "ex": "He cooks soup on the stove.",
+   "exZh": "他用炉子煮汤。",
+   "note": "词伙：old stove"
+  },
+  "stranger": {
+   "p": "ˈstreɪndʒər",
+   "m": "n. 陌生人；新来者；adj. 比较级词形",
+   "ex": "He is a stranger in this town.",
+   "exZh": "他是这个镇上的新来者。",
+   "note": "词伙：kind stranger"
+  },
+  "strategy": {
+   "p": "ˈstrætədʒi",
+   "m": "n. 策略；战略",
+   "ex": "The team made a smart strategy to win the game.",
+   "exZh": "这个团队制定了一项聪明的策略来赢得比赛。",
+   "note": "同义词：tactic（战术，具体手段，层级低）；词伙：good strategy"
+  },
+  "strike": {
+   "p": "straɪk",
+   "m": "n. 袭击；罢工；v. 击打",
+   "ex": "The strike on the base happened at dawn.",
+   "exZh": "对基地的袭击发生在黎明时分。",
+   "note": "同义词：attack（攻击，袭击打击）；词伙：loud strike"
+  },
+  "string": {
+   "p": "strɪŋ",
+   "m": "n. 细绳；线",
+   "ex": "She tied the box with a thin string.",
+   "exZh": "她用一根细线把盒子绑了起来。",
+   "note": "词伙：red string"
+  },
+  "struggle": {
+   "p": "ˈstrʌɡl",
+   "m": "n. 斗争；v. 努力",
+   "ex": "He struggles to finish his homework every night.",
+   "exZh": "他每天晚上都努力完成作业。",
+   "note": "词伙：struggling students"
+  },
+  "stumble": {
+   "p": "ˈstʌmb(ə)l",
+   "m": "v. 绊倒；绊跌；n. 绊倒",
+   "ex": "He had a stumble on the rocky path.",
+   "exZh": "他在布满石头的小路上绊了一跤。",
+   "note": ""
+  },
+  "subordinate": {
+   "p": "səˈbɔːrdɪnət",
+   "m": "n. 下属；adj. 次要的",
+   "ex": "His opinion is subordinate to the manager's.",
+   "exZh": "他的意见比经理的次要。",
+   "note": "词伙：slow subordinate"
+  },
+  "successor": {
+   "p": "səkˈsesər",
+   "m": "n. 接班人；继任人",
+   "ex": "The young manager is the successor to the CEO.",
+   "exZh": "这位年轻经理是首席执行官的接班人。",
+   "note": ""
+  },
+  "supervisor": {
+   "p": "ˈsuːpərvaɪzər",
+   "m": "n. 主管人",
+   "ex": "The supervisor checked the workers' progress.",
+   "exZh": "主管检查了工人们的进展。",
+   "note": "词伙：kind supervisor"
+  },
+  "supper": {
+   "p": "ˈsʌpər",
+   "m": "n. 晚饭；晚餐",
+   "ex": "We eat supper at six o'clock.",
+   "exZh": "我们六点吃晚饭。",
+   "note": "词伙：family supper"
+  },
+  "surname": {
+   "p": "ˈsɜːrneɪm",
+   "m": "n. 姓",
+   "ex": "His surname is Smith.",
+   "exZh": "他的姓是史密斯。",
+   "note": "词伙：surname list, shared surname, shared surname list"
+  },
+  "surrender": {
+   "p": "səˈrendər",
+   "m": "v. 投降",
+   "ex": "He will surrender when he sees the police.",
+   "exZh": "当他看到警察时，他会投降。",
+   "note": "词伙：surrender knives"
+  },
+  "surround": {
+   "p": "səˈraʊnd",
+   "m": "v. 环绕；围绕",
+   "ex": "The trees surround the house.",
+   "exZh": "树木环绕着房子。",
+   "note": ""
+  },
+  "sword": {
+   "p": "sɔːrd",
+   "m": "n. 剑",
+   "ex": "The knight held a sharp sword in his hand.",
+   "exZh": "骑士手里拿着一把锋利的剑。",
+   "note": ""
+  },
+  "tablet": {
+   "p": "ˈtæblət",
+   "m": "n. 石碑；（刻有文字的）匾；平板电脑",
+   "ex": "He uses a tablet to read books.",
+   "exZh": "他用平板电脑读书。",
+   "note": "词伙：grey tablet"
+  },
+  "tactic": {
+   "p": "ˈtæktɪk",
+   "m": "n. 战术；策略",
+   "ex": "The coach changed his tactic to win the game.",
+   "exZh": "教练改变了战术以赢得比赛。",
+   "note": "同义词：strategy（战略，全局谋划，层级高）；词伙：wiser tactic"
+  },
+  "tank": {
+   "p": "tæŋk",
+   "m": "n. 坦克；罐；箱",
+   "ex": "He filled the tank with water.",
+   "exZh": "他把罐子装满了水。",
+   "note": "词伙：ruined tank"
+  },
+  "tape": {
+   "p": "teɪp",
+   "m": "n. 磁带；胶带",
+   "ex": "He recorded the song on a tape.",
+   "exZh": "他把这首歌录在磁带上。",
+   "note": "词伙：sticky tape"
+  },
+  "target": {
+   "p": "ˈtɑːrɡɪt",
+   "m": "n. 目标；对象；v. 以…为目标",
+   "ex": "His target is to finish the project on time.",
+   "exZh": "他的目标是按时完成项目。",
+   "note": "同义词：aim（目标，泛指所向）；goal（目标，长远所求）；intention（意图，心中打算）；objective（目标，正式明确）；purpose（目的，事之所为）；词伙：attain targets, achieve targets, attain shared targets"
+  },
+  "teenage": {
+   "p": "ˈtiːneɪdʒ",
+   "m": "adj. 青少年的；十来岁的",
+   "ex": "Teenage boys often like playing basketball.",
+   "exZh": "青少年男孩通常喜欢打篮球。",
+   "note": "词伙：teenage volunteers"
+  },
+  "tenant": {
+   "p": "ˈtenənt",
+   "m": "n. 房客；租户；佃户",
+   "ex": "The tenant pays rent every month.",
+   "exZh": "房客每个月支付租金。",
+   "note": "词伙：new tenant"
+  },
+  "tension": {
+   "p": "ˈtenʃ(ə)n",
+   "m": "n. 紧张；紧张局势；紧张关系",
+   "ex": "There was tension between the two friends after the argument.",
+   "exZh": "两人争吵后，彼此之间出现了紧张。",
+   "note": "同义词：anxiety（焦虑，内心不安）；stress（压力，身心紧绷）；词伙：ease tensions, cause tensions, increase tensions"
+  },
+  "terrible": {
+   "p": "ˈterəb(ə)l",
+   "m": "adj. 可怕的；极坏的；糟糕的",
+   "ex": "The storm caused a terrible flood.",
+   "exZh": "这场风暴引发了一场可怕的洪水。",
+   "note": ""
+  },
+  "terrific": {
+   "p": "təˈrɪfɪk",
+   "m": "adj. 极大的；强烈的；极好的",
+   "ex": "The concert was terrific!",
+   "exZh": "这场音乐会太棒了！",
+   "note": ""
+  },
+  "terror": {
+   "p": "ˈterər",
+   "m": "n. 恐怖",
+   "ex": "The movie caused a feeling of terror in the audience.",
+   "exZh": "这部电影让观众感到恐怖。",
+   "note": "同义词：fear（恐惧，泛指害怕）；词伙：idle terror"
+  },
+  "tester": {
+   "p": "ˈtestər",
+   "m": "n. 测试员；试验员",
+   "ex": "The tester checked the software for bugs.",
+   "exZh": "测试员检查了软件中的错误。",
+   "note": "词伙：shy tester"
+  },
+  "thirsty": {
+   "p": "ˈθɜːrsti",
+   "m": "adj. 口渴的；渴望的",
+   "ex": "He is thirsty after running.",
+   "exZh": "他跑步后口渴了。",
+   "note": "词伙：thirsty workers"
+  },
+  "threat": {
+   "p": "θrɛt",
+   "m": "n. 威胁",
+   "ex": "The storm is a threat to the village.",
+   "exZh": "这场风暴对村庄构成了威胁。",
+   "note": "同义词：danger（危险，泛指威胁）；menace（威胁，令人不安）；词伙：threat to public health"
+  },
+  "tight": {
+   "p": "taɪt",
+   "m": "adj. 紧的",
+   "ex": "The lid is tight on the jar.",
+   "exZh": "罐子的盖子很紧。",
+   "note": "词伙：tight schedule"
+  },
+  "toil": {
+   "p": "tɔɪl",
+   "m": "n. 苦工；v. 苦干",
+   "ex": "He toils in the field every day.",
+   "exZh": "他每天在田里辛苦劳作。",
+   "note": "词伙：hard toil"
+  },
+  "tomb": {
+   "p": "tuːm",
+   "m": "n. 坟墓；冢",
+   "ex": "The ancient tomb was filled with artifacts.",
+   "exZh": "这座古老的坟墓里充满了文物。",
+   "note": "词伙：plain tomb"
+  },
+  "tool": {
+   "p": "tuːl",
+   "m": "n. 工具；刀具；器具",
+   "ex": "A hammer is a useful tool for fixing things.",
+   "exZh": "锤子是修理东西的有用工具。",
+   "note": "词伙：online tools, digital tools, communication tools"
+  },
+  "torture": {
+   "p": "ˈtɔːrtʃər",
+   "m": "n. 酷刑；v. 折磨",
+   "ex": "The prisoner suffered from torture during the war.",
+   "exZh": "这名囚犯在战争期间遭受了酷刑。",
+   "note": ""
+  },
+  "traitor": {
+   "p": "ˈtreɪtər",
+   "m": "n. 叛徒；背叛者；卖国贼",
+   "ex": "He was called a traitor for helping the enemy.",
+   "exZh": "他因为帮助敌人而被称为叛徒。",
+   "note": "词伙：hired traitor"
+  },
+  "transform": {
+   "p": "trænsˈfɔːrm",
+   "m": "v. 转变",
+   "ex": "The new teacher transformed the class into a lively group.",
+   "exZh": "这位新老师把班级变成了一个充满活力的团体。",
+   "note": "词伙：transform skylines"
+  },
+  "treason": {
+   "p": "ˈtriːz(ə)n",
+   "m": "n. 叛国（罪）；卖国（罪）",
+   "ex": "He was punished for treason against the king.",
+   "exZh": "他因对国王叛国而受到惩罚。",
+   "note": ""
+  },
+  "trespass": {
+   "p": "ˈtrespæs",
+   "m": "v. 非法侵入；冒犯",
+   "ex": "He trespasses on private land.",
+   "exZh": "他擅自进入私人土地。",
+   "note": ""
+  },
+  "trial": {
+   "p": "ˈtraɪəl",
+   "m": "n. 审判；试验；试用",
+   "ex": "The doctor ran a trial to test the new medicine.",
+   "exZh": "医生进行了试验来测试这种新药。",
+   "note": "同义词：experiment（实验，科学验证）；词伙：criminal trials, trial and error, broadcast criminal trials"
+  },
+  "triumph": {
+   "p": "ˈtraɪʌmf",
+   "m": "n. 胜利",
+   "ex": "The team celebrated their triumph after winning the match.",
+   "exZh": "球队在赢得比赛后庆祝了他们的胜利。",
+   "note": "词伙：quiet triumph"
+  },
+  "troop": {
+   "p": "truːp",
+   "m": "n. 部队（复）",
+   "ex": "The troop marched into the town at dawn.",
+   "exZh": "部队在黎明时分进入城镇。",
+   "note": "词伙：tired troop"
+  },
+  "truck": {
+   "p": "trʌk",
+   "m": "n. 卡车",
+   "ex": "The truck carried boxes to the store.",
+   "exZh": "卡车把箱子运到了商店。",
+   "note": "词伙：late truck, little truck"
+  },
+  "tube": {
+   "p": "tuːb",
+   "m": "n. 管子；地铁",
+   "ex": "I take the tube to work every morning.",
+   "exZh": "我每天早上乘地铁去上班。",
+   "note": "词伙：travel by tube"
+  },
+  "turbulent": {
+   "p": "ˈtɜːrbjələnt",
+   "m": "adj. 狂暴的；动荡的",
+   "ex": "The turbulent sea made the boat shake.",
+   "exZh": "汹涌的海让船摇晃。",
+   "note": "词伙：turbulent days"
+  },
+  "turmoil": {
+   "p": "ˈtɜːrmɔɪl",
+   "m": "n. 混乱；动荡",
+   "ex": "The storm caused turmoil in the town.",
+   "exZh": "风暴给小镇带来了混乱。",
+   "note": ""
+  },
+  "turn": {
+   "p": "tɜːrn",
+   "m": "v. 转动；转变；n. 轮到的机会",
+   "ex": "Please turn off the light before you leave.",
+   "exZh": "请在你离开前关掉灯。",
+   "note": ""
+  },
+  "twinkle": {
+   "p": "ˈtwɪŋk(ə)l",
+   "m": "v. 闪耀；闪烁；n. 闪烁",
+   "ex": "The stars twinkle in the night sky.",
+   "exZh": "星星在夜空中闪烁。",
+   "note": ""
+  },
+  "umpire": {
+   "p": "ˈʌmpaɪər",
+   "m": "n. 裁判员；仲裁人",
+   "ex": "The umpire blew the whistle when the player broke the rule.",
+   "exZh": "当球员犯规时，裁判吹响了哨子。",
+   "note": "词伙：calm umpire"
+  },
+  "uncover": {
+   "p": "ʌnˈkʌvər",
+   "m": "v. 揭开；揭露",
+   "ex": "The detective uncovered the truth.",
+   "exZh": "侦探揭开了真相。",
+   "note": "同义词：disclose（披露，揭开信息）；display（展示，摊开示人）；expose（揭露，曝出隐事）；词伙：uncover bright ideas"
+  },
+  "usage": {
+   "p": "ˈjuːsɪdʒ",
+   "m": "n. 使用；用法",
+   "ex": "The usage of this machine is very simple.",
+   "exZh": "这个机器的使用非常简单。",
+   "note": "同义词：use（使用，最直接常用）；词伙：extensive car usage"
+  },
+  "utilise": {
+   "p": "ˈjuːtəlaɪz",
+   "m": "v. 利用",
+   "ex": "We can utilise this tool to fix the problem.",
+   "exZh": "我们可以使用这个工具来解决问题。",
+   "note": "词伙：utilise skills and abilities"
+  },
+  "valley": {
+   "p": "ˈvæli",
+   "m": "n. 山谷；溪谷；流域",
+   "ex": "The village is located in a quiet valley.",
+   "exZh": "村庄坐落在一个宁静的山谷中。",
+   "note": "词伙：green valley"
+  },
+  "ventilation": {
+   "p": "ˌventɪˈleɪʃ(ə)n",
+   "m": "n. 通风",
+   "ex": "The room has good ventilation through the windows.",
+   "exZh": "这个房间通过窗户有良好的通风。",
+   "note": "词伙：poor ventilation"
+  },
+  "versatile": {
+   "p": "ˈvɜːrsət(ə)l",
+   "m": "adj. 多方面的；有多种技能的",
+   "ex": "He is a versatile player who can play many positions.",
+   "exZh": "他是一名多方面的运动员，能打多个位置。",
+   "note": ""
+  },
+  "veteran": {
+   "p": "ˈvetərən",
+   "m": "n. 老兵；退伍军人；adj. 老练的",
+   "ex": "He is a veteran player with many years of experience.",
+   "exZh": "他是一位经验丰富的老练球员。",
+   "note": ""
+  },
+  "veterinary": {
+   "p": "ˈvetərəneri",
+   "m": "adj. 兽医的",
+   "ex": "He works at a veterinary clinic.",
+   "exZh": "他在一家兽医诊所工作。",
+   "note": "词伙：veterinary doctor"
+  },
+  "victory": {
+   "p": "ˈvɪktəri",
+   "m": "n. 胜利",
+   "ex": "The team celebrated their victory after the match.",
+   "exZh": "比赛结束后，球队庆祝了他们的胜利。",
+   "note": "词伙：achieve victory"
+  },
+  "violate": {
+   "p": "ˈvaɪəleɪt",
+   "m": "v. 违反；侵犯",
+   "ex": "He violated the school rule by using his phone in class.",
+   "exZh": "他上课使用手机，违反了校规。",
+   "note": "同义词：infringe（侵犯，侵害权利）；breach（违反，破约违约）；break（违反，打破规矩）；词伙：violate rules, violate laws"
+  },
+  "violence": {
+   "p": "ˈvaɪələns",
+   "m": "n. 暴力",
+   "ex": "The movie shows too much violence.",
+   "exZh": "这部电影展示了太多的暴力。",
+   "note": "词伙：media violence, acts of violence, exposure to media violence"
+  },
+  "vision": {
+   "p": "ˈvɪʒ(ə)n",
+   "m": "n. 想象；视力；视野",
+   "ex": "She has excellent night vision.",
+   "exZh": "她有很好的夜视能力。",
+   "note": "词伙：poor vision, bring creative visions to life"
+  },
+  "warn": {
+   "p": "wɔːrn",
+   "m": "v. 警告；告诫；提醒注意",
+   "ex": "The teacher warned the students not to be late.",
+   "exZh": "老师警告学生不要迟到。",
+   "note": "词伙：warn kids"
+  },
+  "weapon": {
+   "p": "ˈwepən",
+   "m": "n. 武器",
+   "ex": "He found a weapon in the old box.",
+   "exZh": "他在旧箱子里发现了一件武器。",
+   "note": "词伙：carry weapons"
+  },
+  "welcome home": {
+   "p": "ˈwɛlkəm hoʊm",
+   "m": "phrase. 欢迎回家",
+   "ex": "They shouted, 'Welcome home!' when he walked through the door.",
+   "exZh": "当他走进门时，他们大喊：‘欢迎回家！’",
+   "note": ""
+  },
+  "widow": {
+   "p": "ˈwɪdəʊ",
+   "m": "n. 寡妇；遗孀",
+   "ex": "The widow lives alone in a small house.",
+   "exZh": "这位寡妇独自住在一所小房子里。",
+   "note": "词伙：lonely widows, old widow"
+  },
+  "wireless": {
+   "p": "ˈwaɪərləs",
+   "m": "adj. 无线的",
+   "ex": "He uses a wireless mouse to work on his laptop.",
+   "exZh": "他用一个无线鼠标在笔记本电脑上工作。",
+   "note": "词伙：wireless link"
+  },
+  "withdraw": {
+   "p": "wɪðˈdrɔː",
+   "m": "v. 提取；撤回",
+   "ex": "He withdrew $100 from the ATM.",
+   "exZh": "他从自动取款机里提取了100美元。",
+   "note": ""
+  },
+  "withstand": {
+   "p": "wɪθˈstænd",
+   "m": "v. 经受住；抵挡",
+   "ex": "The bridge can withstand strong winds.",
+   "exZh": "这座桥能经受住强风。",
+   "note": "同义词：bear（承受，硬扛得住）；face（直面，迎着顶住）；hold（撑住，坚守不退）；词伙：withstand cold winds"
+  },
+  "wooden": {
+   "p": "ˈwʊd(ə)n",
+   "m": "adj. 木制的；木头的",
+   "ex": "He sat on a wooden chair.",
+   "exZh": "他坐在一张木制椅子上。",
+   "note": "词伙：wooden bridge"
+  },
+  "worthy": {
+   "p": "ˈwɜːrði",
+   "m": "adj. 值得…的；值得尊敬的",
+   "ex": "This book is worthy of reading.",
+   "exZh": "这本书值得读。",
+   "note": "词伙：donate to worthy causes, contribute to worthy causes"
+  },
+  "youngster": {
+   "p": "ˈjʌŋstər",
+   "m": "n. 年轻人",
+   "ex": "The youngster rode his bike to school every day.",
+   "exZh": "这个年轻人每天骑自行车去上学。",
+   "note": "同义词：youth（青年，也指青春年少）"
+  },
+  "youth": {
+   "p": "juːθ",
+   "m": "n. 青春；年轻；青年",
+   "ex": "He misses his youth when he played football every day.",
+   "exZh": "他怀念每天踢足球的青春时光。",
+   "note": "同义词：youngster（年轻人，少年轻快）；词伙：youth crime"
+  }
+ }
+}

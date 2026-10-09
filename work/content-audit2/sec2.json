@@ -1,0 +1,4706 @@
+{
+ "si": 2,
+ "title": "衣食住行",
+ "subheads": [
+  "上篇·旧物改造店",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  ""
+ ],
+ "declared_words": [
+  "stuff",
+  "merchandise",
+  "souvenir",
+  "artifact",
+  "raw",
+  "crude",
+  "necessity",
+  "outfit",
+  "kit",
+  "utensil",
+  "rubbish",
+  "reuse",
+  "junk",
+  "landfill",
+  "sewerage",
+  "detergent",
+  "lotion",
+  "tub",
+  "plug",
+  "tap",
+  "pipe",
+  "tube",
+  "mop",
+  "broom",
+  "mattress",
+  "carpet",
+  "rug",
+  "mat",
+  "cushion",
+  "pad",
+  "blanket",
+  "quilt",
+  "pillow",
+  "sponge",
+  "towel",
+  "staple",
+  "nail",
+  "razor",
+  "shave",
+  "fuse",
+  "cable",
+  "cord",
+  "strand",
+  "candle",
+  "wax",
+  "paperback",
+  "pamphlet",
+  "tissue",
+  "xerox",
+  "memorandum",
+  "stationery",
+  "glue",
+  "ink",
+  "rubber",
+  "scissors",
+  "shear",
+  "rim",
+  "element",
+  "factor",
+  "section",
+  "badge",
+  "bolt",
+  "knob",
+  "handle",
+  "shutter",
+  "curtain",
+  "pane",
+  "opacity",
+  "jar",
+  "barrel",
+  "bucket",
+  "pail",
+  "phone",
+  "bell",
+  "portable",
+  "spotlight",
+  "lantern",
+  "bulb",
+  "flashlight",
+  "refrigerator",
+  "fridge",
+  "vacuum",
+  "hurdle",
+  "fence",
+  "pedal",
+  "shelf",
+  "ladder",
+  "stool",
+  "umbrella",
+  "raincoat",
+  "dredge",
+  "can",
+  "mill",
+  "forge",
+  "alloy",
+  "metal",
+  "iron",
+  "brass",
+  "bronze",
+  "cement",
+  "lime",
+  "plaster",
+  "leather",
+  "plastic",
+  "fibre",
+  "fabric",
+  "knit",
+  "weave",
+  "canvas",
+  "linen",
+  "cotton",
+  "nylon",
+  "lumber",
+  "wooden",
+  "pit",
+  "fuel",
+  "lubricate",
+  "crystal",
+  "inferior",
+  "counterfeit",
+  "fake",
+  "fragile",
+  "miniature",
+  "available",
+  "durable",
+  "popularity",
+  "vogue",
+  "prevail",
+  "idol",
+  "luxury",
+  "extravagant",
+  "jewellery",
+  "jewel",
+  "gem",
+  "jade",
+  "adorn",
+  "ornament",
+  "embellish",
+  "embroider",
+  "hairdressing",
+  "pigment",
+  "dye",
+  "masquerade",
+  "veil",
+  "costume",
+  "fascinate",
+  "decent",
+  "exquisite",
+  "grace",
+  "elegance",
+  "appearance",
+  "cosmetics",
+  "makeup",
+  "charming",
+  "clothe",
+  "garment",
+  "laundry",
+  "wardrobe",
+  "overall",
+  "overcoat",
+  "robe",
+  "gown",
+  "sweater",
+  "jacket",
+  "trousers",
+  "clasp",
+  "brim",
+  "scarf",
+  "handkerchief",
+  "purse",
+  "wallet",
+  "vest",
+  "wrap",
+  "cloak",
+  "collar",
+  "sleeve",
+  "sock",
+  "stocking",
+  "slipper",
+  "lace",
+  "tailor",
+  "sew",
+  "spin",
+  "stitch",
+  "needle",
+  "pin",
+  "string",
+  "thread",
+  "strap",
+  "stripe",
+  "ribbon",
+  "belt",
+  "chain",
+  "bracelet",
+  "necklace",
+  "bead",
+  "textile",
+  "velvet",
+  "wool",
+  "patch",
+  "rag",
+  "shabby",
+  "tight",
+  "purple",
+  "tan",
+  "fade",
+  "stain",
+  "blot",
+  "figure",
+  "slender",
+  "slight",
+  "appetite",
+  "cater",
+  "provision",
+  "edible",
+  "recipe",
+  "restaurant",
+  "refectory",
+  "bar",
+  "cafeteria",
+  "buffet",
+  "barbecue",
+  "supper",
+  "banquet",
+  "refreshment",
+  "snack",
+  "appetiser",
+  "cuisine",
+  "takeaway",
+  "chef",
+  "gourmet",
+  "vegetarian",
+  "cutlery",
+  "sliver",
+  "ceramic",
+  "porcelain",
+  "saucer",
+  "tray",
+  "mug",
+  "kettle",
+  "pot",
+  "stove",
+  "furnace",
+  "oven",
+  "tin",
+  "lid",
+  "beverage",
+  "alcohol",
+  "liquor",
+  "whisky",
+  "brandy",
+  "drunk",
+  "tobacco",
+  "cigarette",
+  "sober",
+  "pea",
+  "cucumber",
+  "cabbage",
+  "eggplant",
+  "carrot",
+  "turnip",
+  "radish",
+  "peel",
+  "strip",
+  "core",
+  "hull",
+  "berry",
+  "grape",
+  "papaya",
+  "plum",
+  "crop",
+  "corn",
+  "grain",
+  "wheat",
+  "reap",
+  "flour",
+  "porridge",
+  "paste",
+  "livestock",
+  "chicken",
+  "turkey",
+  "beef",
+  "pork",
+  "mutton",
+  "sausage",
+  "fish",
+  "pond",
+  "rod",
+  "dairy",
+  "yogurt",
+  "butter",
+  "hamburger",
+  "loaf",
+  "pie",
+  "pasta",
+  "spaghetti",
+  "pudding",
+  "biscuit",
+  "jam",
+  "ice cream",
+  "vanilla",
+  "mustard",
+  "wasabi",
+  "pepper",
+  "ginger",
+  "garlic",
+  "scallion",
+  "vinegar",
+  "salt",
+  "flavour",
+  "sour",
+  "bitter",
+  "spicy",
+  "delicious",
+  "yummy",
+  "tasty",
+  "thirsty",
+  "spice",
+  "sauce",
+  "ketchup",
+  "perfume",
+  "ingredient",
+  "supplement",
+  "digest",
+  "bake",
+  "fry",
+  "roast",
+  "toast",
+  "suck",
+  "swallow",
+  "lick",
+  "chew",
+  "gum",
+  "soak",
+  "dip",
+  "squeeze",
+  "stir",
+  "grind",
+  "erection",
+  "stricture",
+  "construct",
+  "obstruct",
+  "establish",
+  "concrete",
+  "steel",
+  "stability",
+  "site",
+  "venue",
+  "landmark",
+  "situated",
+  "locate",
+  "reside",
+  "inhabit",
+  "migrate",
+  "settle",
+  "dwelling",
+  "skyscraper",
+  "villa",
+  "mansion",
+  "apartment",
+  "hostel",
+  "lodge",
+  "hut",
+  "cabin",
+  "cellar",
+  "shed",
+  "cottage",
+  "nursery",
+  "cradle",
+  "shelter",
+  "block",
+  "grid",
+  "aisle",
+  "porch",
+  "corridor",
+  "staircase",
+  "storey",
+  "layer",
+  "escalator",
+  "handrail",
+  "pillar",
+  "column",
+  "beam",
+  "vault",
+  "arch",
+  "ceiling",
+  "eaves",
+  "chimney",
+  "reception",
+  "lobby",
+  "bench",
+  "parlour",
+  "fireplace",
+  "radiator",
+  "living room",
+  "cabinet",
+  "balcony",
+  "terrace",
+  "kitchen",
+  "lavatory",
+  "toilet",
+  "bath",
+  "mall",
+  "complex",
+  "supermarket",
+  "booth",
+  "casino",
+  "studio",
+  "urban",
+  "peripheral",
+  "vicinity",
+  "void",
+  "spacious",
+  "airtight",
+  "expanse",
+  "plaza",
+  "castle",
+  "carpenter",
+  "mason",
+  "tile",
+  "brickwork",
+  "suspension",
+  "hook",
+  "lever",
+  "scaffold",
+  "infrastructure",
+  "apparatus",
+  "crane",
+  "malfunction",
+  "debate",
+  "fix",
+  "mend",
+  "modify",
+  "trim",
+  "weld",
+  "saw",
+  "screw",
+  "drill",
+  "plumb",
+  "viaduct",
+  "dam",
+  "assemble",
+  "install",
+  "furnish",
+  "placement",
+  "layout",
+  "entrance",
+  "entry",
+  "outside",
+  "outward",
+  "exterior",
+  "external",
+  "inner",
+  "interior",
+  "inward",
+  "internal",
+  "refurbish",
+  "trainer"
+ ],
+ "paragraphs": [
+  [
+   "Morning light fills my small old shop, where every piece of [[stuff:stuff]] and second-hand [[merchandise:merchandise]] holds a past life.",
+   "A girl walks in with a worn travel [[souvenir:souvenir]] and a [[clay:clay]] [[artifact:artifact]] her kind grandmother left her.",
+   "I check the [[raw:raw]] wood and the [[crude:crude]] joints [[first:first]], then plan each [[gentle:gentle]] repair [[step:step]].",
+   "Warm coats are a winter [[necessity:necessity]], so I decide to repair her torn [[festival:festival]] [[outfit:outfit]] today.",
+   "I open my repair [[kit:kit]] and lift each little chrome [[utensil:utensil]] with slow care.",
+   "People call such things roadside [[rubbish:rubbish]], yet I [[reuse:reuse]] them and turn them into gifts full of warmth."
+  ],
+  [
+   "This bent board once lay in a [[junk:junk]] pile beside the old city [[landfill:landfill]].",
+   "Street [[sewerage:sewerage]] work had left it under a coat of [[dust:dust]], so I washed it with a [[mild:mild]] [[detergent:detergent]].",
+   "A caregiver drops by with hand [[lotion:lotion]] and a low wide [[tub:tub]] for soaking dirty cloth.",
+   "I [[pull:pull]] out the little [[plug:plug]] and turn on the old [[tap:tap]] to rinse the [[frame:frame]] clean.",
+   "A short zinc [[pipe:pipe]] and a soft [[hollow:hollow]] [[tube:tube]] hold the legs firmly together.",
+   "Before starting work, I clean the floor with a wet [[mop:mop]] and an old [[straw:straw]] [[broom:broom]]."
+  ],
+  [
+   "An old man then brings in a thin torn [[mattress:mattress]] and a dusty rolled-up [[carpet:carpet]].",
+   "His small flowered [[rug:rug]] and door [[mat:mat]] both need fresh edges and a brighter color.",
+   "I fill each [[flat:flat]] seat [[cushion:cushion]] with a soft [[feather:feather]] [[pad:pad]] so it feels comfortable again.",
+   "His baby's blue [[blanket:blanket]] and the cherished wedding [[quilt:quilt]] both smell of long years in the sun.",
+   "I wash the yellowed [[pillow:pillow]] and scrub its marks away with a soft [[sponge:sponge]].",
+   "Then I dry it with a thick white [[towel:towel]] and clip its label back on with one small [[staple:staple]]."
+  ],
+  [
+   "I pull out each old [[nail:nail]] and cut away the loose edges with a sharp [[razor:razor]].",
+   "Each [[rough:rough]] corner is [[shave:shaved]] [[smooth:smooth]], and the faulty safety [[fuse:fuse]] is replaced with a new one.",
+   "A black power [[cable:cable]] and a long white [[cord:cord]] hang quietly behind the desk.",
+   "I twirl each loose wire [[strand:strand]] into place, then light a small honey-scented [[candle:candle]].",
+   "Warm [[wax:wax]] drips softly while I read repair tips from an old [[paperback:paperback]].",
+   "A picture [[pamphlet:pamphlet]] shows old crafts, and I keep the small parts wrapped in soft [[tissue:tissue]]."
+  ],
+  [
+   "I [[xerox:xerox]] the old invoice, then put the short [[memorandum:memorandum]] up on the wall above my desk.",
+   "My drawer of old [[stationery:stationery]] looks messy, yet the strong [[glue:glue]] still works well.",
+   "Blue [[ink:ink]] marks my notebook while a thick [[rubber:rubber]] [[band:band]] holds the pages together.",
+   "With a pair of large silver [[scissors:scissors]], I [[shear:shear]] the loose threads from the thick cloth along the white line.",
+   "The [[round:round]] chair [[rim:rim]] is loose, but every carved [[element:element]] stays truly beautiful.",
+   "Cost is only one small [[factor:factor]], so I repair just the worst-damaged [[section:section]]."
+  ],
+  [
+   "I shine his old school [[badge:badge]] and tighten each tiny silver [[bolt:bolt]].",
+   "A [[round:round]] door [[knob:knob]] and a curved drawer [[handle:handle]] also need a [[gentle:gentle]] fixing today.",
+   "The battered window [[shutter:shutter]] shakes in the wind, while the long flowered [[curtain:curtain]] hangs still.",
+   "I change the cracked window [[pane:pane]], for its cloudy [[opacity:opacity]] blocks the warm light.",
+   "Buttons sleep in a glass [[jar:jar]], and old hooks rest inside a small [[barrel:barrel]].",
+   "I carry water in a red [[bucket:bucket]] and rinse my brushes in a little enamel [[pail:pail]]."
+  ],
+  [
+   "The shop [[phone:phone]] rings twice, and then the little door [[bell:bell]] sings merrily.",
+   "My [[portable:portable]] lamp is handy, but the strong [[spotlight:spotlight]] shows up every defect.",
+   "The old [[paper:paper]] [[lantern:lantern]] glows softly again after I change its little warm [[bulb:bulb]].",
+   "My pocket [[flashlight:flashlight]] helps me peer behind the humming old [[refrigerator:refrigerator]].",
+   "The small [[fridge:fridge]] keeps humming while I clean up the [[dust:dust]] with the loud [[vacuum:vacuum]].",
+   "A worn delivery [[hurdle:hurdle]] and a fallen garden [[fence:fence]] wait for repair behind the shop."
+  ],
+  [
+   "I oil the loose bike [[pedal:pedal]] and straighten the long leaning wall [[shelf:shelf]].",
+   "Then I [[climb:climb]] my short red [[ladder:ladder]] to reach the tall three-legged [[painting:painting]] [[stool:stool]] in the corner.",
+   "By the door, a torn black [[umbrella:umbrella]] and a yellowed child's [[raincoat:raincoat]] keep [[drip:dripping]].",
+   "I [[dredge:dredge]] the thick mud from the bottom of the old well and [[pour:pour]] it into a rusty enamel [[can:can]].",
+   "The old [[mill:mill]] has closed down, so I warm the joints at a neighbor's small [[forge:forge]].",
+   "This light [[alloy:alloy]] [[frame:frame]] feels softer than pure [[metal:metal]]."
+  ],
+  [
+   "An old [[flat:flat]] [[iron:iron]] stands beside a shining candlestick of yellow [[brass:brass]].",
+   "A small green [[bronze:bronze]] [[horse:horse]] sits next to a bag of grey [[cement:cement]].",
+   "White powdered [[lime:lime]] and [[smooth:smooth]] wall [[plaster:plaster]] repair the cracked corner nicely.",
+   "A cracked brown [[leather:leather]] bag and a clear [[plastic:plastic]] cover are waiting for their turn.",
+   "Each plant [[fibre:fibre]] feels [[rough:rough]], while the soft blue [[fabric:fabric]] feels [[smooth:smooth]].",
+   "Grandma loves to [[knit:knit]] warm caps, and I [[weave:weave]] the torn seat anew."
+  ],
+  [
+   "A thick painted [[canvas:canvas]] and white table [[linen:linen]] cover the worktop.",
+   "Soft white [[cotton:cotton]] shirts and a strong blue [[nylon:nylon]] bag hang outdoors to dry.",
+   "Freshly cut [[lumber:lumber]] smells sweet, and every [[wooden:wooden]] leg shines after oiling.",
+   "A date [[pit:pit]] lies near the heater, where wood is our [[steady:steady]] winter [[fuel:fuel]].",
+   "I [[lubricate:lubricate]] each stiff hinge, then hang up a clear shining [[crystal:crystal]] pendant.",
+   "No [[inferior:inferior]] parts stay in this shop, and every [[counterfeit:counterfeit]] coin goes back to the man who brought it."
+  ],
+  [
+   "A [[fake:fake]] pearl breaks fast, for its thin painted shell is quite [[fragile:fragile]].",
+   "A [[miniature:miniature]] model chair is the only gift still [[available:available]] today.",
+   "Strong seams make each repair [[durable:durable]], and that slowly wins me [[popularity:popularity]] among the neighbors.",
+   "Short capes are in [[vogue:vogue]], but warm snugness will always [[prevail:prevail]] here.",
+   "A young [[idol:idol]] loves [[plain:plain]] dress, not the flashy [[luxury:luxury]] of the shops.",
+   "No [[extravagant:extravagant]] spending is needed when old family [[jewellery:jewellery]] shines anew."
+  ],
+  [
+   "Each tiny bright [[jewel:jewel]] and polished blue [[gem:gem]] glows in the little dish on my table.",
+   "A pale green [[jade:jade]] ring will [[adorn:adorn]] the cover of the old music box.",
+   "Every little gold [[ornament:ornament]] will [[embellish:embellish]] the [[plain:plain]] [[festival:festival]] dress.",
+   "I [[embroider:embroider]] red flowers while my sister practises [[gentle:gentle]] wedding [[hairdressing:hairdressing]] on a young bride.",
+   "[[natural:Natural]] green [[pigment:pigment]] and a safe brown [[dye:dye]] give the pale cloth its color.",
+   "For the [[spring:spring]] [[masquerade:masquerade]] dance, she wears a thin shining [[veil:veil]]."
+  ],
+  [
+   "Her old dance [[costume:costume]] will [[fascinate:fascinate]] every child in the front row.",
+   "A [[decent:decent]] clean hem looks good, and neat buttons add an [[exquisite:exquisite]] touch.",
+   "She walks with [[gentle:gentle]] [[grace:grace]] and a [[quiet:quiet]], simple [[elegance:elegance]] every day.",
+   "Her neat new [[appearance:appearance]] needs no costly shop [[cosmetics:cosmetics]] at all.",
+   "Light soft [[makeup:makeup]] keeps her looking sweet and [[charming:charming]] all day long.",
+   "We [[clothe:clothe]] the child warmly and repair every torn school [[garment:garment]]."
+  ],
+  [
+   "The freshly folded [[laundry:laundry]] fills the small [[wardrobe:wardrobe]] in her tidied bedroom once more.",
+   "His work [[overall:overalls]] are covered in dust, so he borrows a long grey [[overcoat:overcoat]].",
+   "A soft morning [[robe:robe]] and a long evening [[gown:gown]] hang behind the screen.",
+   "I repair a blue winter [[sweater:sweater]] and a brown biking [[jacket:jacket]].",
+   "His grey work [[trousers:trousers]] need a strong button and a little silver [[clasp:clasp]].",
+   "I shape the bent hat [[brim:brim]] and wash a soft flowered [[scarf:scarf]]."
+  ],
+  [
+   "A white dotted [[handkerchief:handkerchief]] and a small buttoned [[purse:purse]] lie side by side.",
+   "I keep a worn brown [[wallet:wallet]] and a grey sleeveless [[vest:vest]] for daily use.",
+   "I [[wrap:wrap]] the gift neatly and hang her dark theatre [[cloak:cloak]] inside the cupboard.",
+   "The white shirt [[collar:collar]] is bent, and one [[sleeve:sleeve]] of the long coat is too short.",
+   "One warm winter [[sock:sock]] and a thin party [[stocking:stocking]] still wait for their matching pairs.",
+   "Her pink soft [[slipper:slippers]] are worn through, yet the white [[lace:lace]] edging still looks pretty."
+  ],
+  [
+   "The kind old [[tailor:tailor]] will [[sew:sew]] the hem before the evening show.",
+   "We [[spin:spin]] the yarn smoothly and add one strong hidden [[stitch:stitch]].",
+   "My sharp chrome [[needle:needle]] flashes, and each colored [[pin:pin]] holds a pleat in place.",
+   "A long red [[string:string]] and a thin white [[thread:thread]] lie beside the roller.",
+   "A torn bag [[strap:strap]] hangs loose, while a painted wall [[stripe:stripe]] guides my cut.",
+   "A pink satin [[ribbon:ribbon]] ties the box shut, and a black school [[belt:belt]] needs new holes."
+  ],
+  [
+   "A thin gold [[chain:chain]] shines beside her small new [[bracelet:bracelet]].",
+   "Her old pearl [[necklace:necklace]] broke, so I renew the silk and reset every tiny fallen [[bead:bead]].",
+   "The [[textile:textile]] scraps I saved and a piece of red [[velvet:velvet]] fill the little box.",
+   "Soft grey [[wool:wool]] and a flowered knee [[patch:patch]] save the old coat.",
+   "I wipe the worktop with a torn cleaning [[rag:rag]] here in our [[shabby:shabby]] but cozy corner.",
+   "The [[tight:tight]] [[belt:belt]] is eased, and a calm deep [[purple:purple]] shade hides the repair."
+  ],
+  [
+   "A soft [[tan:tan]] coat is cleaned with care, so its warm color will never [[fade:fade]].",
+   "Each dark food [[stain:stain]] and each paint [[blot:blot]] slowly fades from the cloth.",
+   "The tall singer is quite a [[figure:figure]] on our street today, looking [[slender:slender]] in her fixed dress.",
+   "At [[dusk:dusk]] we share tea, thankful for each [[slight:slight]] repair that warms our street."
+  ],
+  [
+   "Grandma announced her plan for the [[erection:erection]] of a new hall, brushing aside every past [[stricture:stricture]] about money.",
+   "Mom agreed to [[construct:construct]] a warm dining hall, though old [[dust:dust]] might [[obstruct:obstruct]] or even [[ruin:ruin]] dinner.",
+   "Mingming wanted to [[establish:establish]] clear duties for everyone, starting with washing the grey [[concrete:concrete]] floor.",
+   "Uncle Wang brought bright [[steel:steel]] tools, promising strength and long [[stability:stability]] for the shelves.",
+   "They walked around the dusty [[site:site]], dreaming of how the future [[venue:venue]] would welcome guests.",
+   "The old house was a village [[landmark:landmark]], quietly [[situated:situated]] beside green trees and [[narrow:narrow]] paths."
+  ],
+  [
+   "Mom tried to [[locate:locate]] the old drawings in the corner where grandpa once chose to [[reside:reside]] and cook.",
+   "Small birds still [[inhabit:inhabit]] the roof, but they will [[migrate:migrate]] elsewhere once the noise begins.",
+   "Grandma decided to [[settle:settle]] downstairs, keeping the whole [[dwelling:dwelling]] [[lively:lively]] day and [[night:night]].",
+   "Mingming joked that their home was no [[skyscraper:skyscraper]] and no rich man's [[villa:villa]], yet it was full of love.",
+   "Unlike a cold [[mansion:mansion]] or a crowded [[apartment:apartment]], this place kept childhood memories alive.",
+   "They refused to turn it into a noisy [[hostel:hostel]] or a hunting [[lodge:lodge]] for strangers."
+  ],
+  [
+   "Behind the yard stood a weak [[hut:hut]] and a [[wooden:wooden]] [[cabin:cabin]] full of battered chairs.",
+   "Mom opened the dark [[cellar:cellar]] and the leaning [[shed:shed]], coughing through the thick [[dust:dust]].",
+   "The little [[cottage:cottage]] next door once served as a daytime [[nursery:nursery]] for village children.",
+   "Mingming found his tiny [[cradle:cradle]] there, now a safe [[shelter:shelter]] for the kittens.",
+   "Uncle Wang moved each fallen [[block:block]], then drew a neat [[grid:grid]] on [[paper:paper]] for the cleaning plan.",
+   "They swept a [[narrow:narrow]] [[aisle:aisle]] [[first:first]], then cleared the leaves off the wide [[porch:porch]]."
+  ],
+  [
+   "[[dust:Dust]] covered the long [[corridor:corridor]], and [[spider:spider]] webs hung along the shaky [[staircase:staircase]].",
+   "The upper [[storey:storey]] held a thick [[layer:layer]] of [[ash:ash]] that made everyone sneeze loudly.",
+   "Mingming joked that the old house had no [[escalator:escalator]], gripping the loose [[wooden:wooden]] [[handrail:handrail]] tightly.",
+   "Grandma wiped one stone [[pillar:pillar]] after another, counting each tall [[column:column]] aloud.",
+   "A cracked [[wooden:wooden]] [[beam:beam]] held up the curved [[vault:vault]] above the main hall.",
+   "Mom praised the [[round:round]] [[arch:arch]] and the high [[ceiling:ceiling]] that kept the summer air cool."
+  ],
+  [
+   "Sparrows nested under the wide [[eaves:eaves]], near the tall stone [[chimney:chimney]] full of soot.",
+   "They planned a simple [[reception:reception]] corner, brighter than any hotel [[lobby:lobby]] in town.",
+   "With the rickety [[wooden:wooden]] [[bench:bench]] gone, the old [[parlour:parlour]] looked empty and sad.",
+   "Grandma kept the stone [[fireplace:fireplace]] but removed the rusty [[iron:iron]] [[radiator:radiator]] beside it.",
+   "Mingming cleaned the dusty [[living room:living room]] shelves, polishing every [[wooden:wooden]] [[cabinet:cabinet]] door."
+  ],
+  [
+   "Mom opened the sunny [[balcony:balcony]] doors and swept dry leaves off the stone [[terrace:terrace]].",
+   "The old [[kitchen:kitchen]] smelled of smoke, worse even than the forgotten back [[lavatory:lavatory]].",
+   "Uncle Wang scrubbed the yellowed [[toilet:toilet]] seat, then wiped the stained edge of the [[bath:bath]] [[tub:tub]].",
+   "Unlike the noisy town [[mall:mall]] or the stone shopping [[complex:complex]], home felt calm.",
+   "They listed what they needed, skipping the distant [[supermarket:supermarket]] and the [[night:night]] market [[booth:booth]]."
+  ],
+  [
+   "Nobody wanted a flashy [[casino:casino]] or a noisy photo [[studio:studio]]; they longed for warm meals.",
+   "Though the town grew more [[urban:urban]] every year, their own alley stayed [[quiet:quiet]] and almost [[peripheral:peripheral]], like a dream.",
+   "Shops in the near [[vicinity:vicinity]] closed early, leaving the [[night:night]] street an empty [[void:void]].",
+   "After we cleared away the [[junk:junk]], the hall looked [[spacious:spacious]] yet still dusty, far from [[airtight:airtight]] and safe."
+  ],
+  [
+   "Mingming ran across the wide [[expanse:expanse]] toward the small front [[plaza:plaza]], shouting with joy.",
+   "He imagined the house as a storybook [[castle:castle]], and then the old [[carpenter:carpenter]] appeared.",
+   "The careful [[mason:mason]] tapped each loose floor [[tile:tile]], humming an old village [[tune:tune]].",
+   "By [[sunset:sunset]], fresh grey [[brickwork:brickwork]] along the doorway promised many busy mornings ahead."
+  ],
+  [
+   "Mingming woke with a sharp [[appetite:appetite]], eager to help Mom [[cater:cater]] for tomorrow's guests.",
+   "They checked the stored food, keeping only fresh [[edible:edible]] things as a [[provision:provision]] for the week.",
+   "Grandma shared a secret [[recipe:recipe]], planning to turn the old hall into a small [[restaurant:restaurant]].",
+   "Unlike the school [[refectory:refectory]] or the noisy street [[bar:bar]], home food would be [[gentle:gentle]] and warm.",
+   "They refused the dull [[cafeteria:cafeteria]] lines and the costly hotel [[buffet:buffet]] for the big dinner in the hall.",
+   "Uncle Wang offered his yard [[barbecue:barbecue]] stand, freeing the family [[supper:supper]] from dull routines."
+  ],
+  [
+   "Grandma dreamed of a [[harvest:harvest]] [[banquet:banquet]], with warm tea as [[refreshment:refreshment]] for every child.",
+   "Mingming packed a quick [[snack:snack]] and, for a [[first:first]] taste, a tiny [[appetiser:appetiser]] for the road.",
+   "Mom praised the village [[cuisine:cuisine]], refusing greasy street [[takeaway:takeaway]] boxes that [[night:night]].",
+   "A retired [[chef:chef]] nearby smiled, calling Mingming a little [[gourmet:gourmet]] with a refined taste.",
+   "They also cooked for a [[vegetarian:vegetarian]] aunt, borrowing clean extra [[cutlery:cutlery]] from the neighbors.",
+   "Mom sliced a thin [[sliver:sliver]] of melon and served soup in blue [[ceramic:ceramic]] bowls."
+  ],
+  [
+   "Grandma lifted the white [[porcelain:porcelain]] plates, setting a small flower [[saucer:saucer]] under each cup.",
+   "Mingming carried a [[wooden:wooden]] [[tray:tray]] and a [[mug:mug]] of warm milk without spilling a drop.",
+   "Mom filled the black [[kettle:kettle]] and scrubbed the deep [[iron:iron]] [[pot:pot]] until it shone.",
+   "Uncle Wang checked the old [[stove:stove]] flames and cleaned the cold brick [[furnace:furnace]] behind it.",
+   "They warmed bread in the [[clay:clay]] [[oven:oven]] and stored rice in a sealed [[tin:tin]].",
+   "Mingming pressed the loose [[jar:jar]] [[lid:lid]] down [[tight:tight]], then poured Grandma a hot pear [[beverage:beverage]].",
+   "Afterwards Mingming tied his red [[trainer:trainers]] and ran down to the shop.",
+   "There he and Uncle Wang [[refurbish:refurbished]] an old chair with fresh paint."
+  ],
+  [
+   "They refused all [[alcohol:alcohol]] and cheap [[fruit:fruit]] [[liquor:liquor]] at the family table.",
+   "Uncle Wang hid his [[whisky:whisky]] bottle and his sweet [[brandy:brandy]] away from the children.",
+   "Nobody arrived [[drunk:drunk]] for dinner, though an old [[tobacco:tobacco]] smell lingered in the coats.",
+   "Grandma threw away a wet [[cigarette:cigarette]] end, keeping her head clear and [[sober:sober]].",
+   "At [[dawn:dawn]] they picked green [[pea:pea]] pods and crisp long [[cucumber:cucumbers]] in the garden.",
+   "Mom picked firm [[round:round]] [[cabbage:cabbage]] heads and shiny [[purple:purple]] [[eggplant:eggplants]] for the stew."
+  ],
+  [
+   "Mingming pulled up orange [[carrot:carrots]] and [[flat:flat]] white [[turnip:turnips]] from the soft soil.",
+   "He washed each little [[radish:radish]] clean, then helped Grandma [[peel:peel]] apples for lunch.",
+   "Mom taught him to [[strip:strip]] off wilted leaves and keep the soft yellow [[core:core]] inside.",
+   "They cracked open the [[rough:rough]] [[seed:seed]] [[hull:hull]], tasting one red wild [[berry:berry]] after another.",
+   "Mingming traded two bunches of [[purple:purple]] [[grape:grapes]] for two soft, sweet [[papaya:papayas]].",
+   "Grandma dried red [[plum:plum]] slices in the sun, thanking the autumn [[crop:crop]] for its lavish gifts."
+  ],
+  [
+   "Uncle Wang carried golden ears of [[corn:corn]] and heavy [[grain:grain]] sacks into the yard.",
+   "They ground the pale [[wheat:wheat]] kernels, remembering how farmers [[reap:reap]] under the hot sun.",
+   "Mom mixed white [[flour:flour]] with water and cooked thick morning [[porridge:porridge]] for everyone.",
+   "Mingming stirred the sticky rice [[paste:paste]], watching the village [[livestock:livestock]] crowd up to the fences.",
+   "They chose a fat farm [[chicken:chicken]] and a stately brown [[turkey:turkey]] for the [[feast:feast]].",
+   "Mom bought prime pink [[beef:beef]] slices and fresh low-fat [[pork:pork]] from a vendor she trusted."
+  ],
+  [
+   "Grandma seasoned the dark [[mutton:mutton]] chunks, adding a long smoked [[sausage:sausage]] for extra flavor.",
+   "Uncle Wang netted a silver [[fish:fish]] from the clear [[pond:pond]] behind the bamboo grove.",
+   "He carved a new fishing [[rod:rod]] and traded fresh milk and [[dairy:dairy]] food with the neighbors.",
+   "Mingming tasted the thick white [[yogurt:yogurt]] and spread soft yellow [[butter:butter]] on his bread.",
+   "At noon they shared a warm [[hamburger:hamburger]] and a crusty [[loaf:loaf]] of brown bread.",
+   "Mom baked a [[round:round]] apple [[pie:pie]] and boiled thin long [[pasta:pasta]] for the children."
+  ],
+  [
+   "Grandma twirled the long [[spaghetti:spaghetti]] into little nests and chilled sweet milk [[pudding:pudding]] for dessert.",
+   "Mingming crunched a square [[biscuit:biscuit]] and spread red strawberry [[jam:jam]] thick on his bread.",
+   "They churned cold [[ice cream:ice cream]], adding fragrant pale drops of [[vanilla:vanilla]].",
+   "Mom passed round the strong yellow [[mustard:mustard]] and a tiny dab of green [[wasabi:wasabi]] with care.",
+   "Uncle Wang crushed the black [[pepper:pepper]] grains and sliced the pale yellow [[ginger:ginger]] [[root:root]] thinly.",
+   "Mingming minced the white [[garlic:garlic]] cloves and long green [[scallion:scallions]] for the soup."
+  ],
+  [
+   "They sprinkled a few drops of clear rice [[vinegar:vinegar]] and added a small pinch of white [[salt:salt]].",
+   "Grandma loved the [[mild:mild]] [[fruit:fruit]] [[flavour:flavour]], not the sharp [[sour:sour]] taste of unripe plums.",
+   "Mingming spat out the [[bitter:bitter]] skin and reached for the warm soup instead, [[mild:mild]] and [[spicy:spicy]].",
+   "The guests called the stew [[delicious:delicious]] and said the warm buns were simply [[yummy:yummy]].",
+   "The hot noodles were [[tasty:tasty]], just right for [[thirsty:thirsty]] workers after a long day.",
+   "Mom ground red [[spice:spice]] powder, simmering a thick tomato [[sauce:sauce]] slowly."
+  ],
+  [
+   "Mingming squeezed wavy lines of red [[ketchup:ketchup]], while the roses nearby gave off [[natural:natural]] [[perfume:perfume]].",
+   "Grandma counted every fresh [[ingredient:ingredient]], adding a herbal health [[supplement:supplement]] for the elders.",
+   "Warm soup helps the elders [[digest:digest]] well, so Mom chose to [[bake:bake]] soft cakes for lunch.",
+   "Uncle Wang helped [[fry:fry]] golden potato shreds, then watched Grandma [[roast:roast]] chestnuts slowly.",
+   "They served crisp morning [[toast:toast]], warning the children not to [[suck:suck]] the hot soup too fast.",
+   "Mingming learned to [[swallow:swallow]] his food calmly, refusing to [[lick:lick]] his fingers at the table."
+  ],
+  [
+   "He promised not to [[chew:chew]] loudly, blowing little bubbles with his [[mint:mint]] [[gum:gum]] only after meals.",
+   "Mom told him to [[soak:soak]] the dried mushrooms, then briefly [[dip:dip]] the greens in boiling water.",
+   "Grandma taught Mingming to [[squeeze:squeeze]] oranges and gently [[stir:stir]] honey into his tea.",
+   "At last Mom began to [[grind:grind]] sesame seeds, and the yard filled with a nutty fragrance."
+  ],
+  [
+   "They hung the [[paper:paper]] lamps on thin [[suspension:suspension]] cords, tying each [[knot:knot]] to an [[iron:iron]] [[hook:hook]].",
+   "Mingming pulled the [[wooden:wooden]] [[lever:lever]], steadying the tall bamboo [[scaffold:scaffold]] for his uncle.",
+   "New pipes improved the village [[infrastructure:infrastructure]], and a shining new [[apparatus:apparatus]] arrived.",
+   "When the old fan showed signs of [[malfunction:malfunction]], the neighbors started a [[lively:lively]] [[debate:debate]] about repairs.",
+   "Grandma asked Uncle Wang to [[fix:fix]] the wires and carefully [[mend:mend]] the torn tablecloths before daybreak.",
+   "Mom chose to [[modify:modify]] the menu, asking Mingming to [[trim:trim]] the wilted flowers neatly."
+  ],
+  [
+   "Uncle Wang began to [[weld:weld]] the chair legs, while Mingming held the sharp [[saw:saw]] [[steady:steady]].",
+   "They tightened each loose [[screw:screw]], refusing to [[drill:drill]] extra holes in the old walls.",
+   "Grandma tested the well wall with a straight [[plumb:plumb]] line before drawing clear water, dreaming of a stone [[viaduct:viaduct]] in her hometown.",
+   "They used a model of a small earth [[dam:dam]], learning how workers [[assemble:assemble]] bridges together.",
+   "Workers came to [[install:install]] bright lamps and [[furnish:furnish]] the corners with flowers and stools.",
+   "Mingming admired the neat [[placement:placement]] of the bowls and the [[clever:clever]] table [[layout:layout]]."
+  ],
+  [
+   "Guests entered through the red [[entrance:entrance]], guided past the side [[entry:entry]] by Mingming.",
+   "Children played [[outside:outside]] the doorway, then ran [[outward:outward]] toward the music and laughter.",
+   "They touched the [[exterior:exterior]] rails first, then washed their hands, keeping [[external:external]] [[dust:dust]] away from the food.",
+   "Grandma led the tours through the [[inner:inner]] rooms, showing off the renewed [[interior:interior]] with pride.",
+   "Warm light flowed [[inward:inward]], and chuckles and songs filled every [[internal:internal]] corner.",
+   "A tall yellow [[crane:crane]] lifted the new lamps onto the roof at [[dawn:dawn]]."
+  ]
+ ],
+ "sentZh": [
+  [
+   "晨光洒满我的旧小店，这里每件旧物、每件二手商品都藏着一段过去。",
+   "一个女孩走进店里，带来一件磨损的旅行纪念品，还有她慈祥奶奶留下的一件陶土手工艺品。",
+   "我先检查生木料和粗糙的接缝，再为每一步轻柔的修补做好计划。",
+   "保暖外套是冬天的必需品，所以我决定今天补好她那件撕破的节日套装。",
+   "我打开修补工具箱，小心地拿起每一件小小的镀铬用具。",
+   "人们管这些东西叫路边垃圾，可我把它们重新利用，做成满是暖意的礼物。"
+  ],
+  [
+   "这块弯木板原先躺在旧城填埋场边的一堆废旧杂物里。",
+   "街道排污施工让它蒙上了一层灰，于是我用了温和的洗涤剂把它洗净。",
+   "护理员顺路送来护手乳液和一只泡脏布用的矮宽盆。",
+   "我拔掉小塞子，拧开旧水龙头，把框架冲洗干净。",
+   "一截短锌管和一根软空心管把桌腿牢牢固定在一起。",
+   "动工之前，我先用湿拖把和旧草扫帚把地面打扫干净。"
+  ],
+  [
+   "接着一位老人带来一张又薄又破的床垫和一卷落灰的地毯。",
+   "他的碎花小地毯和门口垫子都需要包上新边、添点亮色。",
+   "我在每个瘪掉的坐垫里塞进柔软的羽毛垫芯，让它重新舒服起来。",
+   "宝宝的蓝毛毯和那床珍爱的婚被，都带着多年日晒的味道。",
+   "我把发黄的枕头洗干净，用软海绵擦去上面的污渍。",
+   "再用厚白毛巾把它擦干，用一枚小订书钉把标签夹回去。"
+  ],
+  [
+   "我拔出每颗旧钉子，再用锋利的剃刀切掉翘起的毛边。",
+   "粗糙的边角被刮得平平的，坏掉的保险丝也换上了新的。",
+   "一条黑色电源电缆和一条白色长电线安静地垂在书桌后面。",
+   "我把每股松散的线丝绕好归位，再点上一支蜂蜜香味的小蜡烛。",
+   "温热的蜡一滴滴落下，我边等边读旧平装书里的修补窍门。",
+   "一本图画小册子介绍着老手艺，我把小零件包进软纸巾里收好。"
+  ],
+  [
+   "我把旧发票复印一份，再把那张简短的备忘录贴到书桌上方的墙上。",
+   "旧文具抽屉看着乱，可那管强力胶水依然好用。",
+   "蓝墨水在笔记本上留下痕迹，一圈粗橡皮筋把书页箍在一起。",
+   "我拿一把大银剪刀沿着白线剪开厚布，把松散的线头也剪掉。",
+   "椅子的圆边松了，可每一处雕花依然好看。",
+   "价钱只是一个小因素，所以我只修补损坏最重的那部分。"
+  ],
+  [
+   "我把他的旧校徽擦亮，再拧紧每颗小银螺栓。",
+   "圆门把和弯抽屉柄今天也要轻轻修一修。",
+   "破旧的百叶窗在风里直晃，长长的碎花窗帘却静静垂着。",
+   "我换掉那块裂了的窗玻璃，因为它雾蒙蒙不透亮，挡住了暖光。",
+   "纽扣睡在玻璃罐里，旧挂钩躺在小木桶中。",
+   "我用红水桶提水，再在小搪瓷桶里涮洗刷子。"
+  ],
+  [
+   "店里的电话响了两声，接着小门铃欢快地唱起来。",
+   "便携小灯很顺手，可强射灯一照，每处瑕疵都藏不住。",
+   "换上小暖灯泡，旧纸灯笼又柔柔地亮了起来。",
+   "我打着口袋手电，照看那台嗡嗡作响的旧冰箱后面。",
+   "小冰箱一直嗡嗡响，我用吵人的吸尘器把灰尘清理干净。",
+   "店后还有用旧的送货跨架和倒了的花园栅栏等着修。"
+  ],
+  [
+   "我给松动的自行车脚踏上油，把歪斜的长墙架扶正。",
+   "然后我爬上矮矮的红梯子，去够角落里那张高高的三脚刷漆凳。",
+   "门边那把破黑伞和小孩发黄的雨衣还在滴滴答答地淌水。",
+   "我把旧井底的厚泥清捞出来，倒进一只生锈的搪瓷罐里。",
+   "老磨坊已经关门，我只好去邻居的小锻炉那里把接头烧热。",
+   "这个轻巧的合金框架摸起来比纯金属软一些。"
+  ],
+  [
+   "一只旧扁熨斗立在闪亮的黄铜烛台旁。",
+   "一匹绿锈小铜马挨着一袋灰水泥摆放。",
+   "白石灰粉和平滑的墙面灰浆把裂开的墙角补得整整齐齐。",
+   "裂了口的棕色皮包和透明塑料罩正等着轮流打理。",
+   "每根植物纤维摸着粗，柔软的蓝布料摸着滑。",
+   "奶奶爱织暖帽，我把破了的椅面重新编好。"
+  ],
+  [
+   "厚厚的画布和白色亚麻桌布铺在工作台上。",
+   "软白的棉衬衫和结实的蓝尼龙包挂在外头晾晒。",
+   "新锯的木料气味清甜，每条木腿上完油都发亮。",
+   "一颗枣核躺在暖气边，在这里木头是我们过冬的稳定燃料。",
+   "我给每个发紧的铰链上润滑油，再挂起一颗透亮的水晶吊坠。",
+   "劣质零件在我店里一概不留，假币也退还给拿来的人。"
+  ],
+  [
+   "假珍珠碎得快，它那层薄薄的漆壳实在太脆弱。",
+   "一把微缩的模型小椅，是今天唯一还有货的礼物。",
+   "结实的缝线让每处修补都耐用，这也慢慢让我在邻居中间有了好口碑。",
+   "短斗篷正时髦，可在我们这儿，暖和舒服永远占上风。",
+   "一位年轻偶像偏爱朴素的穿着，不喜欢店里那种张扬的奢华。",
+   "旧传家首饰重新发亮时，根本不用乱花一分钱。"
+  ],
+  [
+   "每颗细小明亮的珠宝、每颗磨亮的蓝色宝石，都在我桌上小盘里发着光。",
+   "一枚淡绿玉戒指将装点旧音乐盒的盖子。",
+   "每枚小金饰都会把那件素色的节日裙子装点得更美。",
+   "我绣着红花，妹妹则在一位年轻新娘头上练习温柔的美发手艺。",
+   "天然绿颜料和安全的棕色染料给浅色布料上了色。",
+   "春季假面舞会上，她戴着一条轻薄的闪光面纱。"
+  ],
+  [
+   "她那身旧舞衣会把前排的每个孩子都迷住。",
+   "干净体面的折边很好看，齐整的纽扣更添一份精致。",
+   "她每天走路都带着温柔的优雅和安静的朴素之美。",
+   "她整洁的新模样，根本不需要店里那些昂贵的化妆品。",
+   "淡淡的妆让她一整天都甜美迷人。",
+   "我们给孩子穿得暖暖的，补好每一件撕破的校服。"
+  ],
+  [
+   "刚叠好的干净衣物又把收拾过的卧室里那只小衣柜塞满了。",
+   "他的工装裤落满灰尘，只好借了一件长长的灰大衣。",
+   "一件柔软的晨袍和一条长长的晚礼服挂在屏风后面。",
+   "我补好一件蓝冬毛衣和一件棕色骑行夹克。",
+   "他的灰工裤要钉一颗结实的纽扣，再加一个小银搭扣。",
+   "我把压弯的帽檐整好，又洗了一条柔软的碎花围巾。"
+  ],
+  [
+   "白点手帕和扣着扣的小钱包并排躺着。",
+   "我日常用着一只旧棕钱包和一件灰色无袖背心。",
+   "我把礼物包得整整齐齐，再把她的深色剧场斗篷挂进柜里。",
+   "白衬衫的领子翘了，长大衣有一只袖子太短。",
+   "一只暖冬袜和一条薄派对长袜还在等各自的另一半。",
+   "她的粉色软拖鞋磨穿了，白色的蕾丝边倒还挺好看。"
+  ],
+  [
+   "好心的老裁缝会在晚会开始前把折边缝好。",
+   "我们把纱线纺得匀匀的，再加一针结实的暗线。",
+   "镀铬钢针闪闪发亮，每枚彩针都别住一道褶。",
+   "长红绳和细白线并排躺在滚轮旁边。",
+   "破包带松松地垂着，墙上的漆条纹指引我下剪。",
+   "粉缎带把盒子系紧，黑校腰带得再打几个孔。"
+  ],
+  [
+   "细金链在她崭新的小手镯旁闪着光。",
+   "她的旧珍珠项链断了，我重新换好丝线，把每颗掉落的小珠子都归回原位。",
+   "我攒下的纺织碎料和一块红丝绒把小箱子装得满满的。",
+   "柔软的灰羊毛和一块碎花膝部补丁救回了这件旧大衣。",
+   "在这个破旧却温馨的小角落，我用一块破抹布擦净台面。",
+   "勒得紧的腰带放宽了，一抹沉静的深紫盖住了修补的痕迹。"
+  ],
+  [
+   "浅棕色大衣被细心洗护，暖色调永远不会褪去。",
+   "每一块深色食物渍、每一点颜料斑，都慢慢从布面上褪去。",
+   "那位高个子女歌手今天真成了街上的风景，修好的裙子衬得她十分苗条。",
+   "黄昏时分我们共饮热茶，感谢每一处小小修补温暖了整条街。"
+  ],
+  [
+   "奶奶宣布了新建一间厅堂的计划，不再理会过去那些关于钱的指责。",
+   "妈妈同意建一间暖和的饭厅，尽管旧灰尘可能碍事，甚至毁了晚餐。",
+   "明明想给每个人定下明确的分工，从冲洗灰色水泥地面开始。",
+   "王叔带来了亮闪闪的钢制工具，保证架子结实稳固、用得长久。",
+   "他们绕着满是灰尘的工地走了一圈，畅想未来这里将如何迎接宾客。",
+   "老屋是村里的地标，静静坐落在绿树与窄巷之间。"
+  ],
+  [
+   "妈妈想找出旧图纸，就在爷爷当年住过、做过饭的那个角落。",
+   "小鸟们还住在屋顶上，可噪声一起，它们就会迁往别处。",
+   "奶奶决定住到楼下，让整栋屋子白天黑夜都热热闹闹。",
+   "明明打趣说，他家既不是摩天大楼，也不是富人的别墅，却满满都是爱。",
+   "不像冷冰冰的大宅，也不像拥挤的公寓，这里一直留着童年的回忆。",
+   "他们不肯把它改成吵闹的旅舍，也不愿让陌生人来当猎屋。"
+  ],
+  [
+   "院子后面立着一间破棚和一间木屋，里面堆满了破椅子。",
+   "妈妈打开黑洞洞的地窖和歪斜的棚屋，呛得直咳嗽。",
+   "隔壁的小村舍白天曾是村里孩子的托儿所。",
+   "明明在那里找到了自己小时候的摇篮，如今成了小猫安稳的窝。",
+   "王叔搬开每一块掉落的砌块，又在纸上画出整齐的方格来安排清扫。",
+   "他们先扫出一条窄过道，再清掉宽门廊上的落叶。"
+  ],
+  [
+   "长走廊蒙着灰尘，摇晃的楼梯旁挂满了蜘蛛网。",
+   "楼上那层积着厚厚的灰，呛得大家连声打喷嚏。",
+   "明明紧抓着松动的木扶手，打趣说这老房子可没有自动扶梯。",
+   "奶奶把石柱一根根擦过去，还大声数着每根高柱。",
+   "一根裂了缝的木梁撑着正厅上方弯弯的穹顶。",
+   "妈妈夸那道圆拱和高高的天花板让夏日屋内凉爽。"
+  ],
+  [
+   "麻雀在宽宽的屋檐下筑巢，挨着积满烟灰的高高石烟囱。",
+   "他们打算布置一个简单的迎客角，要比镇上任何旅馆大堂都亮堂。",
+   "摇晃的木长凳搬走后，旧客厅显得空荡荡的，有点冷清。",
+   "奶奶留下了石头壁炉，却搬走了旁边生锈的铁暖气片。",
+   "明明擦净客厅里落灰的架子，把每扇木柜门都擦得发亮。"
+  ],
+  [
+   "妈妈推开朝阳的阳台门，扫掉石头露台上的枯叶。",
+   "旧厨房满是烟味，比后面那间被遗忘的盥洗室还难闻。",
+   "王叔刷洗发黄的马桶座圈，又擦掉浴缸边沿的污渍。",
+   "不像镇上吵闹的商场和石头购物中心，家里让人觉得安心。",
+   "他们列出了要买的物品，跳过远处的超市和夜市小摊。"
+  ],
+  [
+   "没人想要花哨的赌场或吵闹的照相馆，大家只惦记热乎的家常饭。",
+   "尽管镇子一年年变得更像城市，他们那条小巷依旧安静，几乎被人遗忘，像一场梦。",
+   "附近的店铺早早打烊，夜里的街道空得像一片空白。",
+   "清走废旧杂物后，大厅宽敞了些，可还蒙着灰，远算不上密封安全。"
+  ],
+  [
+   "明明跑过宽阔的空地，冲向门前小广场，高兴地大喊。",
+   "他把老屋想象成童话里的城堡，这时老木匠正好出现。",
+   "细心的泥瓦匠敲了敲每块松动的地砖，嘴里哼着村里的老调子。",
+   "到日落时，门口新砌的灰砖墙预示着往后一个个忙碌的清晨。"
+  ],
+  [
+   "明明饿着肚子醒来，迫不及待要帮妈妈为明天的客人备餐。",
+   "他们检查了存粮，只留下新鲜可吃的，作为一周的储备。",
+   "奶奶拿出一个秘方，打算把旧厅堂改成一家小饭馆。",
+   "不像学校食堂，也不像街上吵闹的酒吧，家里的饭菜温和又暖心。",
+   "厅里那顿大餐，他们既不要冷清的自助食堂排队，也不要昂贵的酒店自助餐。",
+   "王叔把院子里的烧烤架贡献出来，让家里的晚饭不再老一套。"
+  ],
+  [
+   "奶奶梦想摆一场丰收宴，给每个孩子都备上热茶点心。",
+   "明明装了一份快手小吃，还带上一小份开胃菜先尝尝，准备路上吃。",
+   "妈妈夸村里的菜式好，那晚没要油腻的街头外卖。",
+   "附近退休的老厨师笑了，夸明明是个嘴刁的小美食家。",
+   "他们还为吃素的姨妈做了菜，向邻居借来干净的多余餐具。",
+   "妈妈切下薄薄一片甜瓜，用蓝色陶瓷碗盛汤。"
+  ],
+  [
+   "外婆托起白瓷盘，在每个杯子下面垫上小花茶碟。",
+   "明明端着木托盘和一大杯温牛奶，一滴都没洒。",
+   "妈妈灌满黑色水壶，把深铁锅刷得锃亮。",
+   "王叔查看旧炉子的火苗，又清理了后面冷冰冰的砖熔炉。",
+   "他们在土烤箱里热面包，把大米存进密封的锡罐。",
+   "明明把松动的罐盖压紧，又给外婆倒了一杯热乎乎的梨子饮品。",
+   "忙完后，明明系好红色运动鞋，一路跑去了小店。",
+   "他和王叔用新漆把一把旧椅子翻修一新。"
+  ],
+  [
+   "家宴上他们不碰任何酒，也不喝便宜的果酒。",
+   "王叔把威士忌酒瓶和甜甜的白兰地都藏起来，不让孩子们碰到。",
+   "没人带着醉意来吃饭，只是外套上还留着些陈年的烟味。",
+   "外婆扔掉湿漉漉的烟头，让头脑保持清醒沉稳。",
+   "天刚亮，他们就在园子里摘了青豌豆荚和又脆又长的黄瓜。",
+   "妈妈挑了结实的圆白菜和发亮的紫茄子，准备炖菜。"
+  ],
+  [
+   "明明从松软的土里拔出橙色的胡萝卜和扁扁的白萝卜。",
+   "他把每颗小萝卜洗干净，又帮外婆削苹果准备午饭。",
+   "妈妈教他剥掉枯叶，留住里面软黄的菜心。",
+   "他们敲开粗糙的籽壳，一颗接一颗地尝红色野莓。",
+   "明明用两串紫葡萄换回两个又软又甜的木瓜。",
+   "外婆晒着红色李子干，感谢秋天庄稼的丰厚馈赠。"
+  ],
+  [
+   "王叔把金灿灿的玉米和沉重的粮袋扛进院子。",
+   "他们磨着淡色的麦粒，想起农民顶着烈日收割的模样。",
+   "妈妈把白面粉和水调匀，给全家煮了浓浓的早粥。",
+   "明明搅着黏黏的米糊，看着村里的家畜挤到栅栏边来。",
+   "他们为宴席挑了一只肥硕的农家鸡和一只气派的棕色火鸡。",
+   "妈妈从信得过的摊主那里买了上好的粉牛肉片和新鲜低脂猪肉。"
+  ],
+  [
+   "外婆给深色的羊肉块调味，又添一根长长的烟熏香肠提味。",
+   "王叔从竹林后那口清亮的池塘里网起一条银鱼。",
+   "他削了一根新鱼竿，拿新鲜牛奶和乳制品跟邻居们交换东西。",
+   "明明尝了浓稠的白酸奶，又把软黄的黄油抹在面包上。",
+   "中午他们分吃了一个热汉堡和一条脆皮黑面包。",
+   "妈妈烤了一个圆圆的苹果派，又给孩子们煮了细细长长的意面。"
+  ],
+  [
+   "外婆把长长的意大利面卷成一个个小巢，又把甜牛奶布丁冰镇着当甜点。",
+   "明明嘎吱咬着方形饼干，往面包上厚厚地抹了红草莓酱。",
+   "他们搅打冰凉的冰淇淋，滴进几滴芳香的淡色香草。",
+   "妈妈小心地递上呛口的黄芥末酱，还有一小撮青芥末。",
+   "王叔碾碎黑胡椒粒，又把淡黄的生姜根切成薄片。",
+   "明明把白蒜瓣和长长的青葱剁碎，准备下汤。"
+  ],
+  [
+   "他们洒了几滴清亮的米醋，又捏进一小撮白盐。",
+   "外婆喜欢温和的果香，不喜欢没熟的李子那股冲鼻的酸味。",
+   "明明吐掉发苦的皮，转身去喝那碗温和又带辣味的热汤。",
+   "客人们夸炖菜美味，还说热腾腾的馒头好吃极了。",
+   "热面条真够味，正适合干了一整天活、口干舌燥的工人。",
+   "妈妈磨好红色香料粉，又慢慢熬着浓浓的番茄酱。"
+  ],
+  [
+   "明明挤出弯弯的红番茄酱条，旁边的玫瑰散发着天然香气。",
+   "外婆数着每样新鲜食材，还给长辈们添了一份草本补品。",
+   "热汤帮助老人消化，所以妈妈决定中午烤些松软的小饼。",
+   "王叔帮忙煎金黄的土豆丝，接着看外婆慢慢烤栗子。",
+   "他们端上清晨脆脆的烤面包片，提醒孩子们别急着去嘬滚烫的汤。",
+   "明明学会了安安静静地咽下饭菜，饭桌上再也不舔手指。"
+  ],
+  [
+   "他保证不大声咀嚼，薄荷口香糖只在饭后才吹出小泡泡。",
+   "妈妈让他先把干蘑菇泡上，再把青菜放进滚水里快速一烫。",
+   "外婆教明明挤橙汁，再把蜂蜜轻轻搅进茶里。",
+   "最后妈妈开始磨芝麻，小院里顿时满是坚果的香气。"
+  ],
+  [
+   "他们用细细的挂绳把纸灯笼吊起来，把每个绳结都系在铁钩上。",
+   "明明扳动木杠杆，帮叔叔扶稳高高的竹脚手架。",
+   "新管道改善了村里的基础设施，一台闪亮的新器械也运到了。",
+   "旧风扇一露出故障的苗头，邻居们就热热闹闹地讨论起该怎么修。",
+   "外婆请王叔修好电线，赶在天亮前把撕破的桌布仔细补好。",
+   "妈妈决定改改菜单，还让明明把枯萎的花修剪整齐。"
+  ],
+  [
+   "王叔开始焊接椅腿，明明在一旁把锋利的手锯扶得稳稳的。",
+   "他们拧紧每颗松动的螺丝，不肯在旧墙上多钻一个洞。",
+   "外婆打清水前先用笔直的铅垂线检验井壁，心里想着家乡那座石头高架桥。",
+   "他们摆弄一座小土坝模型，学习工人们怎样把桥一段段组装起来。",
+   "工人们来安装明亮的灯，又用鲜花和小凳把各个角落布置起来。",
+   "明明夸碗摆放得整齐，桌子的布局也安排得巧妙。"
+  ],
+  [
+   "客人们从红色正门进来，明明领着他们走过侧门入座。",
+   "孩子们在门外玩耍，随后朝着音乐和笑声向外跑去。",
+   "他们先扶过外侧的栏杆，然后洗了手，不让外面的灰尘碰到饭菜。",
+   "外婆领着大家一间间参观里屋，骄傲地展示翻新一新的内饰。",
+   "暖光向内流淌，轻笑声和歌声填满了屋内每一个角落。",
+   "一台高高的黄色起重机在黎明时分把新灯吊上了屋顶。"
+  ]
+ ],
+ "paraZh": [
+  "清晨小店开门，女孩送来旧物，我定下修补计划。",
+  "旧木板洗净组装成架，动手前先把店里打扫干净。",
+  "老人送来床垫地毯枕被，我逐件清洗修补如新。",
+  "拔钉刮角换保险丝，点蜡读书整理小零件。",
+  "复印单据整理文具，剪布修椅只补最坏处。",
+  "擦徽修把换窗玻璃，纽扣挂钩归位备好水。",
+  "电话门铃响起，灯泡冰箱吸尘器逐一检查。",
+  "上油扶架够高凳，清井泥烧热接头查合金。",
+  "补墙角理皮包摸布料，奶奶织帽我编椅面。",
+  "铺布晾衣上油挂坠，劣货假币一概不留。",
+  "假珠易碎修补耐用，朴素胜过一时奢华。",
+  "珠宝玉饰装点裙子，绣花染色迎春日舞会。",
+  "舞衣迷人体面精致，淡妆暖衣温柔依旧。",
+  "叠衣入柜补衣钉扣，帽檐围巾一一整好。",
+  "手帕钱包归置包礼物，领袖袜鞋各有修补。",
+  "裁缝缝边纺纱别针，绳线缎带腰带齐活。",
+  "金链珠串丝绒羊毛收尾，紫色遮痕旧物重生。",
+  "去渍护色试新衣，黄昏共茶暖意满街。",
+  "奶奶拍板新建厅堂，全家分工畅想新场地。",
+  "找图纸劝小鸟定住处，老屋满是爱不做旅舍。",
+  "清棚屋发现旧摇篮，画方格分区先扫过道。",
+  "擦柱数梁扫灰上楼，圆拱高顶夏也凉。",
+  "留壁炉弃暖气擦柜门，迎客角规划初现。",
+  "开阳台刷马桶列清单，家里安静胜过商场。",
+  "拒绝赌场照相馆，清走杂物大厅变宽敞。",
+  "跑向广场迎木匠，瓦匠补砖黄昏新墙立。",
+  "饿醒备餐查存粮，秘方开饭馆烧烤添彩。",
+  "梦丰收宴备前菜借餐具，陶碗盛汤待客忙。",
+  "备齐瓷器锅灶热面包，系鞋去店翻修旧椅。",
+  "家宴不沾酒藏酒瓶，清晨摘豆挑菜备炖汤。",
+  "拔萝卜剥菜心尝野莓，葡萄换木瓜晒李子干。",
+  "扛玉米磨麦煮粥搅糊，选鸡买肉备足宴席。",
+  "腌羊肉网鱼做鱼竿，尝酸奶分面包烤派煮面。",
+  "卷面冰布丁抹果酱打冰淇淋，切姜剁蒜备汤料。",
+  "洒醋捏盐品果香喝辣汤，客人夸赞熬番茄酱。",
+  "挤番茄酱数食材烤小饼，炸土豆烤栗学礼仪。",
+  "嚼口香糖泡蘑菇挤橙汁，磨芝麻香气满院。",
+  "吊灯笼扶脚手架修风扇，补桌布改菜单剪花。",
+  "焊椅腿拧螺丝验井壁，装灯摆碗学搭桥。",
+  "迎客参观里屋暖光满屋，起重机黎明吊新灯。"
+ ],
+ "glossary": {
+  "adorn": {
+   "p": "əˈdɔːrn",
+   "m": "v. 装饰；佩戴；使美观",
+   "ex": "She adorned her room with flowers.",
+   "exZh": "她用鲜花装饰了房间。",
+   "note": "词伙：adorn with works of art"
+  },
+  "airtight": {
+   "p": "ˈertaɪt",
+   "m": "adj. 密封的",
+   "ex": "The jar is airtight, so the food stays fresh.",
+   "exZh": "这个罐子是密封的，所以食物能保持新鲜。",
+   "note": ""
+  },
+  "aisle": {
+   "p": "aɪl",
+   "m": "n. 过道；通道；走廊",
+   "ex": "The books are on the shelf beside the aisle.",
+   "exZh": "书在过道旁边的架子上。",
+   "note": "词伙：narrow aisle"
+  },
+  "alcohol": {
+   "p": "ˈælkəhɔːl",
+   "m": "n. 含酒精的饮料；酒精",
+   "ex": "He drank alcohol at the party.",
+   "exZh": "他在派对上喝了含酒精的饮料。",
+   "note": ""
+  },
+  "alloy": {
+   "p": "ˈælɔɪ",
+   "m": "n. 合金；v. 把…铸成合金",
+   "ex": "He made a strong alloy from copper and zinc.",
+   "exZh": "他用铜和锌制造了一种坚固的合金。",
+   "note": "词伙：light alloy, alloy frame"
+  },
+  "apartment": {
+   "p": "əˈpɑːrtmənt",
+   "m": "n. 单元住宅；公寓住宅",
+   "ex": "He lives in a small apartment near the park.",
+   "exZh": "他住在公园附近的一间小公寓里。",
+   "note": "同义词：flat（英式英语的叫法）；词伙：crowded apartment"
+  },
+  "apparatus": {
+   "p": "ˌæpəˈrætəs",
+   "m": "n. 装置；仪器；器官",
+   "ex": "The lab has a new apparatus for measuring temperature.",
+   "exZh": "实验室有一台新的温度测量装置。",
+   "note": "词伙：new apparatus"
+  },
+  "appearance": {
+   "p": "əˈpɪrəns",
+   "m": "n. 外表；出现",
+   "ex": "The appearance of the house surprised everyone.",
+   "exZh": "这所房子的外观让所有人都感到惊讶。",
+   "note": "词伙：physical appearance, meet appearance requirements"
+  },
+  "appetiser": {
+   "p": "ˈæpɪtaɪzər",
+   "m": "n. 开胃菜；开胃品",
+   "ex": "He ate an appetiser before dinner.",
+   "exZh": "他在晚餐前吃了一道开胃菜。",
+   "note": "词伙：tiny appetiser"
+  },
+  "appetite": {
+   "p": "ˈæpɪtaɪt",
+   "m": "n. 嗜好；食欲",
+   "ex": "He has an appetite for spicy food.",
+   "exZh": "他喜欢辛辣食物。",
+   "note": "词伙：strong appetite"
+  },
+  "arch": {
+   "p": "ɑːrtʃ",
+   "m": "n. 拱形；拱门；弧形",
+   "ex": "The bridge has a stone arch.",
+   "exZh": "这座桥有一个石拱。",
+   "note": "词伙：round arch"
+  },
+  "artifact": {
+   "p": "ˈɑːrtɪfækt",
+   "m": "n. 人工制品；手工艺品；加工品",
+   "ex": "The museum has an ancient artifact.",
+   "exZh": "博物馆里有一件古代文物。",
+   "note": "词伙：clay artifact"
+  },
+  "ash": {
+   "p": "æʃ",
+   "m": "n. 灰",
+   "ex": "The fire left ash on the ground.",
+   "exZh": "火在地面上留下了灰烬。",
+   "note": "词伙：found ash"
+  },
+  "assemble": {
+   "p": "əˈsemb(ə)l",
+   "m": "v. 装配；集合",
+   "ex": "He will assemble the toy for his son.",
+   "exZh": "他将为儿子组装玩具。",
+   "note": "同义词：put together（口语，动手拼装）；construct（正式，建造大型物）；gather（人员聚集起来）；词伙：assemble components on-site"
+  },
+  "available": {
+   "p": "əˈveɪləb(ə)l",
+   "m": "adj. 可获得的；有空的；可用的",
+   "ex": "The books are available in the library.",
+   "exZh": "这些书在图书馆里可以借到。",
+   "note": "同义词：obtainable（能弄到手）；accessible（易接近得到）；usable（可直接使用）；词伙：still available"
+  },
+  "badge": {
+   "p": "bædʒ",
+   "m": "n. 徽章",
+   "ex": "He wears a badge on his shirt.",
+   "exZh": "他衬衫上戴着一枚徽章。",
+   "note": "词伙：school badge"
+  },
+  "bake": {
+   "p": "beɪk",
+   "m": "v. 烤",
+   "ex": "She bakes bread every Sunday.",
+   "exZh": "她每周日都烤面包。",
+   "note": "词伙：bake soft cakes"
+  },
+  "balcony": {
+   "p": "ˈbælkəni",
+   "m": "n. 阳台",
+   "ex": "He drinks coffee on the balcony every morning.",
+   "exZh": "他每天早上都在阳台上喝咖啡。",
+   "note": "同义词：terrace（露台，屋顶或地面）；platform（站台平台）；gallery（剧院楼座廊台）；词伙：balcony doors, sunny balcony"
+  },
+  "band": {
+   "p": "bænd",
+   "m": "n. 乐队；带子；一伙",
+   "ex": "The band is playing music.",
+   "exZh": "这个乐队在演奏音乐。",
+   "note": "词伙：join a band"
+  },
+  "banquet": {
+   "p": "ˈbæŋkwɪt",
+   "m": "n. 宴会；盛宴",
+   "ex": "They had a big banquet after the wedding.",
+   "exZh": "婚礼后他们举办了一场盛大的宴会。",
+   "note": "词伙：harvest banquet"
+  },
+  "bar": {
+   "p": "bɑːr",
+   "m": "n. 酒吧；条状物；栅栏",
+   "ex": "He ate a chocolate bar after dinner.",
+   "exZh": "他晚饭后吃了一条巧克力。",
+   "note": "词伙：street bar"
+  },
+  "barbecue": {
+   "p": "ˈbɑːrbɪkjuː",
+   "m": "n. 户外烧烤；烤架",
+   "ex": "We had a barbecue in the park last weekend.",
+   "exZh": "上周末我们在公园举行了户外烧烤。",
+   "note": "词伙：barbecue stand"
+  },
+  "barrel": {
+   "p": "ˈbærəl",
+   "m": "n. 桶；枪管",
+   "ex": "He poured water into a wooden barrel.",
+   "exZh": "他把水倒进一个木桶里。",
+   "note": "词伙：small barrel"
+  },
+  "bath": {
+   "p": "bæθ",
+   "m": "n. 浴缸；浴室；洗澡",
+   "ex": "The bath is next to the bedroom.",
+   "exZh": "浴室在卧室旁边。",
+   "note": "词伙：bath tub"
+  },
+  "bead": {
+   "p": "biːd",
+   "m": "n. 有孔的小珠",
+   "ex": "She threaded a bead onto the string.",
+   "exZh": "她把一颗有孔的小珠穿在绳子上。",
+   "note": "词伙：fallen bead"
+  },
+  "beam": {
+   "p": "biːm",
+   "m": "n. 梁；横梁；v. 发射（电波或光）",
+   "ex": "The satellite beams signals to Earth.",
+   "exZh": "卫星向地球发射信号。",
+   "note": "词伙：wooden beam"
+  },
+  "beef": {
+   "p": "biːf",
+   "m": "n. 牛肉",
+   "ex": "He eats beef for dinner every Sunday.",
+   "exZh": "他每周日吃牛肉当晚餐。",
+   "note": "词伙：beef slices"
+  },
+  "bell": {
+   "p": "bel",
+   "m": "n. 铃（声）；钟（声）",
+   "ex": "The bell rang at 8 a.m.",
+   "exZh": "铃在早上八点响了。",
+   "note": "词伙：door bell"
+  },
+  "belt": {
+   "p": "belt",
+   "m": "n. 腰带；皮带；n. 传送带",
+   "ex": "The factory uses a belt to move boxes.",
+   "exZh": "工厂使用传送带来运送箱子。",
+   "note": "词伙：school belt"
+  },
+  "bench": {
+   "p": "bentʃ",
+   "m": "n. 长凳",
+   "ex": "He sat on the bench in the park.",
+   "exZh": "他坐在公园的长凳上。",
+   "note": "词伙：wooden bench"
+  },
+  "berry": {
+   "p": "ˈberi",
+   "m": "n. 浆果",
+   "ex": "He picked a red berry from the bush.",
+   "exZh": "他从灌木丛中摘了一颗红色浆果。",
+   "note": "词伙：wild berry"
+  },
+  "beverage": {
+   "p": "ˈbevərɪdʒ",
+   "m": "n. 饮料",
+   "ex": "He drinks a cold beverage after work.",
+   "exZh": "他下班后喝一杯冷饮。",
+   "note": "词伙：hot beverage"
+  },
+  "biscuit": {
+   "p": "ˈbɪskɪt",
+   "m": "n. 饼干",
+   "ex": "He ate a biscuit with tea.",
+   "exZh": "他喝茶时吃了一块饼干。",
+   "note": "词伙：square biscuit"
+  },
+  "bitter": {
+   "p": "ˈbɪtər",
+   "m": "adj. 有苦味的；痛苦的；刺痛的",
+   "ex": "The medicine tastes bitter.",
+   "exZh": "这种药尝起来很苦。",
+   "note": "词伙：bitter skin"
+  },
+  "blanket": {
+   "p": "ˈblæŋkɪt",
+   "m": "n. 毛毯；厚的覆盖物；adj. 包括所有的",
+   "ex": "He wrapped himself in a warm blanket.",
+   "exZh": "他把自己裹在一条温暖的毛毯里。",
+   "note": "词伙：blue blanket"
+  },
+  "block": {
+   "p": "blɑːk",
+   "m": "n. 块；大楼；v. 阻塞",
+   "ex": "The new block is next to the park.",
+   "exZh": "这栋新大楼就在公园旁边。",
+   "note": "词伙：block out distractions"
+  },
+  "blot": {
+   "p": "blɑːt",
+   "m": "n. 墨渍；污点",
+   "ex": "The ink blot ruined his homework.",
+   "exZh": "墨水污点弄脏了他的作业。",
+   "note": "词伙：paint blot"
+  },
+  "bolt": {
+   "p": "bəʊlt",
+   "m": "n. 螺栓",
+   "ex": "The mechanic tightened the bolt with a wrench.",
+   "exZh": "机械师用扳手拧紧了螺栓。",
+   "note": "词伙：silver bolt"
+  },
+  "booth": {
+   "p": "buːθ",
+   "m": "n. 小亭；隔间",
+   "ex": "He bought a hot dog from a food booth.",
+   "exZh": "他从一个小吃亭买了个热狗。",
+   "note": "词伙：market booth"
+  },
+  "bracelet": {
+   "p": "ˈbreɪslət",
+   "m": "n. 手镯",
+   "ex": "She wears a silver bracelet every day.",
+   "exZh": "她每天戴一条银手链。",
+   "note": "词伙：new bracelet"
+  },
+  "brandy": {
+   "p": "ˈbrændi",
+   "m": "n. 白兰地",
+   "ex": "He drinks brandy after dinner.",
+   "exZh": "他晚饭后喝白兰地。",
+   "note": "词伙：sweet brandy"
+  },
+  "brass": {
+   "p": "bræs",
+   "m": "n. 黄铜制品",
+   "ex": "He bought a brass lamp at the market.",
+   "exZh": "他在市场上买了一个黄铜制品台灯。",
+   "note": "词伙：yellow brass"
+  },
+  "brickwork": {
+   "p": "ˈbrɪkwɜːrk",
+   "m": "n. 砖结构",
+   "ex": "He repaired the brickwork with new mortar.",
+   "exZh": "他用新的砂浆修复了砖墙。",
+   "note": "词伙：gray brickwork"
+  },
+  "brim": {
+   "p": "brɪm",
+   "m": "n. 边缘；v. （装）满",
+   "ex": "The cup is full to the brim.",
+   "exZh": "杯子装得满满的。",
+   "note": "词伙：hat brim"
+  },
+  "bronze": {
+   "p": "brɑːnz",
+   "m": "n. 青铜；青铜色",
+   "ex": "The statue is made of bronze.",
+   "exZh": "这座雕像由青铜制成。",
+   "note": "词伙：green bronze horse"
+  },
+  "broom": {
+   "p": "bruːm",
+   "m": "n. 扫帚",
+   "ex": "She sweeps the floor with a broom.",
+   "exZh": "她用扫帚扫地。",
+   "note": "词伙：straw broom"
+  },
+  "bucket": {
+   "p": "ˈbʌkɪt",
+   "m": "n. 水桶",
+   "ex": "He filled the bucket with water from the well.",
+   "exZh": "他从井里打了一桶水。",
+   "note": "词伙：red bucket"
+  },
+  "buffet": {
+   "p": "bəˈfeɪ",
+   "m": "n. 自助餐",
+   "ex": "We had dinner at a buffet with many dishes to choose from.",
+   "exZh": "我们在自助餐吃了晚饭，有很多菜可以选。",
+   "note": "词伙：hotel buffet"
+  },
+  "bulb": {
+   "p": "bʌlb",
+   "m": "n. 电灯泡",
+   "ex": "The bulb broke when it fell on the floor.",
+   "exZh": "灯泡掉到地上时碎了。",
+   "note": "词伙：warm bulb"
+  },
+  "butter": {
+   "p": "ˈbʌtər",
+   "m": "n. 黄油；奶油",
+   "ex": "She spread butter on her toast.",
+   "exZh": "她在吐司上抹了黄油。",
+   "note": "词伙：yellow butter"
+  },
+  "cabbage": {
+   "p": "ˈkæbɪdʒ",
+   "m": "n. 卷心菜",
+   "ex": "He eats cabbage every day for lunch.",
+   "exZh": "他每天午餐都吃卷心菜。",
+   "note": "词伙：cabbage heads"
+  },
+  "cabin": {
+   "p": "ˈkæbɪn",
+   "m": "n. 小木屋；船舱；客舱",
+   "ex": "The sailors slept in the cabin during the storm.",
+   "exZh": "水手们在风暴期间睡在船舱里。",
+   "note": "词伙：cabin temperature"
+  },
+  "cabinet": {
+   "p": "ˈkæbɪnət",
+   "m": "n. 储藏柜；内阁",
+   "ex": "He kept the dishes in the cabinet.",
+   "exZh": "他把盘子放在储藏柜里。",
+   "note": "词伙：wooden cabinet, cabinet door"
+  },
+  "cable": {
+   "p": "ˈkeɪb(ə)l",
+   "m": "n. 电缆；钢索",
+   "ex": "The cable connects the computer to the printer.",
+   "exZh": "这条电缆将电脑连接到打印机。",
+   "note": "词伙：power cable"
+  },
+  "cafeteria": {
+   "p": "ˌkæfəˈtɪriə",
+   "m": "n. 自助餐厅；自助食堂",
+   "ex": "We ate lunch in the school cafeteria.",
+   "exZh": "我们在学校自助餐厅吃午饭。",
+   "note": "词伙：cafeteria lines"
+  },
+  "can": {
+   "p": "kæn",
+   "m": "n. 金属罐；v. 能",
+   "ex": "I can swim very well.",
+   "exZh": "我能够游得很好。",
+   "note": ""
+  },
+  "candle": {
+   "p": "ˈkænd(ə)l",
+   "m": "n. 蜡烛",
+   "ex": "He lit a candle to see in the dark.",
+   "exZh": "他点燃了一支蜡烛以便在黑暗中看见。",
+   "note": "词伙：blow out candles, honey candle"
+  },
+  "canvas": {
+   "p": "ˈkænvəs",
+   "m": "n. 帆布；（帆布）画布",
+   "ex": "He paints on a canvas with oil colors.",
+   "exZh": "他用油画颜料在帆布上作画。",
+   "note": "词伙：painted canvas"
+  },
+  "carpenter": {
+   "p": "ˈkɑːrpəntər",
+   "m": "n. 木匠；木工",
+   "ex": "The carpenter made a wooden table.",
+   "exZh": "木匠做了一张木桌子。",
+   "note": "词伙：old carpenter"
+  },
+  "carpet": {
+   "p": "ˈkɑːrpɪt",
+   "m": "n. 地毯",
+   "ex": "He walks on the carpet every morning.",
+   "exZh": "他每天早上都走在地毯上。",
+   "note": "词伙：rolled carpet"
+  },
+  "carrot": {
+   "p": "ˈkærət",
+   "m": "n. 胡萝卜",
+   "ex": "He eats a carrot every day.",
+   "exZh": "他每天吃一根胡萝卜。",
+   "note": "词伙：orange carrot, orange carrot roots"
+  },
+  "casino": {
+   "p": "kəˈsiːnəʊ",
+   "m": "n. 赌场",
+   "ex": "He went to the casino to play poker.",
+   "exZh": "他去赌场玩扑克。",
+   "note": ""
+  },
+  "castle": {
+   "p": "ˈkæs(ə)l",
+   "m": "n. 城堡",
+   "ex": "The king lives in a big castle.",
+   "exZh": "国王住在一座大城堡里。",
+   "note": ""
+  },
+  "cater": {
+   "p": "ˈkeɪtər",
+   "m": "v. 备办食物；承办酒席；满足需要",
+   "ex": "The restaurant caters to vegetarians.",
+   "exZh": "这家餐厅满足素食者的需求。",
+   "note": "词伙：cater to the needs, cater to preferences, cater to learning styles"
+  },
+  "ceiling": {
+   "p": "ˈsiːlɪŋ",
+   "m": "n. 天花板",
+   "ex": "The ceiling is white and low.",
+   "exZh": "天花板是白色的，而且很低。",
+   "note": "词伙：break the glass ceiling"
+  },
+  "cellar": {
+   "p": "ˈselər",
+   "m": "n. 地窖；地下室",
+   "ex": "He keeps apples in the cellar.",
+   "exZh": "他把苹果存放在地窖里。",
+   "note": "词伙：dark cellar"
+  },
+  "cement": {
+   "p": "sɪˈment",
+   "m": "n. 水泥",
+   "ex": "They used cement to build the wall.",
+   "exZh": "他们用水泥建造了这堵墙。",
+   "note": "词伙：grey cement"
+  },
+  "ceramic": {
+   "p": "səˈræmɪk",
+   "m": "adj. 陶质的；n. 陶瓷器",
+   "ex": "He bought a ceramic bowl at the market.",
+   "exZh": "他在市场上买了一个陶瓷碗。",
+   "note": "词伙：ceramic bowls"
+  },
+  "chain": {
+   "p": "tʃeɪn",
+   "m": "n. 链条；链子",
+   "ex": "The bike has a metal chain.",
+   "exZh": "这辆自行车有一条金属链条。",
+   "note": "词伙：fast food chains, enter the food chain"
+  },
+  "charming": {
+   "p": "ˈtʃɑːrmɪŋ",
+   "m": "adj. 迷人的；娇媚的；v. 现在分词词形",
+   "ex": "The little village is charming with its flowers and quiet streets.",
+   "exZh": "这个小村庄以其花朵和宁静的街道而迷人。",
+   "note": ""
+  },
+  "chef": {
+   "p": "ʃef",
+   "m": "n. 主厨；厨师",
+   "ex": "The chef cooked a delicious dinner for the guests.",
+   "exZh": "主厨为客人做了一顿美味的晚餐。",
+   "note": "词伙：retired chef"
+  },
+  "chew": {
+   "p": "tʃuː",
+   "m": "v. 咀嚼",
+   "ex": "He is chewing gum loudly.",
+   "exZh": "他正在大声地嚼口香糖。",
+   "note": "词伙：chew loudly"
+  },
+  "chicken": {
+   "p": "ˈtʃɪkɪn",
+   "m": "n. 鸡肉；鸡",
+   "ex": "I ate chicken for dinner.",
+   "exZh": "我晚餐吃了鸡肉。",
+   "note": "词伙：fat village chicken"
+  },
+  "chimney": {
+   "p": "ˈtʃɪmni",
+   "m": "n. 烟囱",
+   "ex": "The smoke came out of the chimney.",
+   "exZh": "烟从烟囱里冒出来。",
+   "note": "词伙：stone chimney"
+  },
+  "cigarette": {
+   "p": "ˈsɪɡəret",
+   "m": "n. 香烟；纸烟",
+   "ex": "He bought a cigarette at the store.",
+   "exZh": "他在商店买了一支香烟。",
+   "note": "词伙：cigarette end"
+  },
+  "clasp": {
+   "p": "klæsp",
+   "m": "n. 扣；紧握；v. 抱紧",
+   "ex": "The necklace has a gold clasp.",
+   "exZh": "这条项链有一个金色的钩。",
+   "note": "词伙：silver clasp"
+  },
+  "clay": {
+   "p": "kleɪ",
+   "m": "n. 黏土；粘土",
+   "ex": "The potter shaped the clay into a bowl.",
+   "exZh": "陶匠把黏土塑造成一个碗。",
+   "note": "词伙：damp clay"
+  },
+  "clever": {
+   "p": "ˈklevər",
+   "m": "adj. 聪明的",
+   "ex": "The clever boy solved the math problem quickly.",
+   "exZh": "这个聪明的男孩很快解决了这道数学题。",
+   "note": "同义词：intelligent（智力高，较正式）；词伙：clever ways"
+  },
+  "climb": {
+   "p": "klaɪm",
+   "m": "v. 攀爬；爬升",
+   "ex": "The boy will climb the tree to get the ball.",
+   "exZh": "男孩会爬树去拿球。",
+   "note": "词伙：climb the corporate ladder"
+  },
+  "cloak": {
+   "p": "kləʊk",
+   "m": "n. 斗篷；掩护物；v. 隐瞒",
+   "ex": "He wore a black cloak to hide his face.",
+   "exZh": "他穿着一件黑色斗篷来遮住脸。",
+   "note": "词伙：theatre cloak"
+  },
+  "clothe": {
+   "p": "kləʊð",
+   "m": "v. 给...穿衣；供给衣服",
+   "ex": "She clothes the baby in warm clothes.",
+   "exZh": "她给婴儿穿上暖和的衣服。",
+   "note": "词伙：protective clothing, wear casual clothing"
+  },
+  "collar": {
+   "p": "ˈkɑːlər",
+   "m": "n. 衣领",
+   "ex": "He fixed his collar before the interview.",
+   "exZh": "他在面试前整理了衣领。",
+   "note": "词伙：shirt collar"
+  },
+  "column": {
+   "p": "ˈkɑːləm",
+   "m": "n. 圆柱；列",
+   "ex": "The ancient temple has a tall stone column.",
+   "exZh": "这座古庙有一根高大的石柱。",
+   "note": "词伙：tall column"
+  },
+  "complex": {
+   "p": "ˈkɑːmpleks",
+   "m": "n. 综合楼（群）；购物中心；adj. 复杂的",
+   "ex": "The instructions are too complex for children.",
+   "exZh": "这些说明对孩子来说太复杂了。",
+   "note": "同义词：complicated（头绪多难懂，含贬义）；intricate（盘根错节般精巧）；involved（牵涉繁多，书面）；词伙：handle complex real-life communication scenarios"
+  },
+  "concrete": {
+   "p": "ˈkɑːnkriːt",
+   "m": "adj. 混凝土的；n. 混凝土；adj. 具体的",
+   "ex": "The workers poured concrete to build the foundation.",
+   "exZh": "工人们浇筑混凝土来建造地基。",
+   "note": "词伙：concrete floor, gray concrete"
+  },
+  "construct": {
+   "p": "kənˈstrʌkt",
+   "m": "v. 建造；构造；n. 概念",
+   "ex": "They construct houses with bricks.",
+   "exZh": "他们用砖块建造房屋。",
+   "note": "同义词：build（建造，最常用）；form（逐渐形成）；create（创造出新事物）"
+  },
+  "cord": {
+   "p": "kɔːrd",
+   "m": "n. 电线；细绳；绳索",
+   "ex": "He tied the box with a red cord.",
+   "exZh": "他用一根红绳把盒子绑了起来。",
+   "note": "词伙：white cord"
+  },
+  "core": {
+   "p": "kɔːr",
+   "m": "n. 核心；adj. 核心的",
+   "ex": "The core of the apple is not edible.",
+   "exZh": "苹果的核心不能吃。",
+   "note": "词伙：core values, core subjects"
+  },
+  "corn": {
+   "p": "kɔːrn",
+   "m": "n. 玉米；谷物",
+   "ex": "He ate popcorn made from corn.",
+   "exZh": "他吃了用玉米做的爆米花。",
+   "note": ""
+  },
+  "corridor": {
+   "p": "ˈkɔːrɪdɔːr",
+   "m": "n. 走廊",
+   "ex": "The boy walked down the long corridor.",
+   "exZh": "男孩走过了长长的走廊。",
+   "note": "词伙：long corridor"
+  },
+  "cosmetics": {
+   "p": "kɑːzˈmetɪks",
+   "m": "n. 化妆品；美容品；复数词形",
+   "ex": "She buys cosmetics at the drugstore.",
+   "exZh": "她在药店买化妆品。",
+   "note": ""
+  },
+  "costume": {
+   "p": "ˈkɑːstuːm",
+   "m": "n. 服装；衣服",
+   "ex": "He wore a funny costume for the party.",
+   "exZh": "他为派对穿了一套滑稽的服装。",
+   "note": "词伙：dance costume"
+  },
+  "cottage": {
+   "p": "ˈkɑːtɪdʒ",
+   "m": "n. 村舍；小屋",
+   "ex": "They live in a small cottage near the forest.",
+   "exZh": "他们住在森林附近的一座小村舍里。",
+   "note": "词伙：small cottage"
+  },
+  "cotton": {
+   "p": "ˈkɑːt(ə)n",
+   "m": "n. 棉花；棉；棉布",
+   "ex": "She wore a dress made of cotton.",
+   "exZh": "她穿了一件棉质裙子。",
+   "note": "词伙：cotton shirts"
+  },
+  "counterfeit": {
+   "p": "ˈkaʊntərfɪt",
+   "m": "adj. 伪造的；假冒的；v. 伪造",
+   "ex": "He tried to counterfeit money.",
+   "exZh": "他试图伪造货币。",
+   "note": "词伙：counterfeit coin"
+  },
+  "cradle": {
+   "p": "ˈkreɪd(ə)l",
+   "m": "n. 摇篮；n. 吊架；发源地",
+   "ex": "The baby was sleeping in the cradle.",
+   "exZh": "婴儿正在吊架里睡觉。",
+   "note": "词伙：tiny cradle"
+  },
+  "crane": {
+   "p": "kreɪn",
+   "m": "n. 起重机",
+   "ex": "The crane lifted the heavy steel beam.",
+   "exZh": "起重机吊起了沉重的钢梁。",
+   "note": "词伙：yellow crane"
+  },
+  "crop": {
+   "p": "krɑːp",
+   "m": "n. 农作物；收成",
+   "ex": "Farmers grow corn as a crop.",
+   "exZh": "农民种植玉米作为农作物。",
+   "note": "词伙：growing crops, high-yield crops, improve crop yields"
+  },
+  "crude": {
+   "p": "kruːd",
+   "m": "adj. 简陋的",
+   "ex": "He lived in a crude hut with no electricity.",
+   "exZh": "他住在一个没有电的简陋小屋里。",
+   "note": "词伙：crude joints"
+  },
+  "crystal": {
+   "p": "ˈkrɪst(ə)l",
+   "m": "n. 水晶；结晶",
+   "ex": "She wears a necklace made of crystal.",
+   "exZh": "她戴一条水晶制成的项链。",
+   "note": "词伙：shining crystal"
+  },
+  "cucumber": {
+   "p": "ˈkjuːkʌmbər",
+   "m": "n. 黄瓜",
+   "ex": "He eats a cucumber for lunch.",
+   "exZh": "他午餐吃了一根黄瓜。",
+   "note": "词伙：long cucumber"
+  },
+  "cuisine": {
+   "p": "kwɪˈziːn",
+   "m": "n. 烹调风格",
+   "ex": "Italian cuisine is famous for pasta and pizza.",
+   "exZh": "意大利烹调风格以意大利面和披萨闻名。",
+   "note": "词伙：traditional cuisines"
+  },
+  "curtain": {
+   "p": "ˈkɜːrt(ə)n",
+   "m": "n. 帷幕；窗帘",
+   "ex": "She pulled the curtain to block the sunlight.",
+   "exZh": "她拉上帷幕以挡住阳光。",
+   "note": "词伙：flowered curtain"
+  },
+  "cushion": {
+   "p": "ˈkʊʃ(ə)n",
+   "m": "n. 靠垫；软垫；缓冲物",
+   "ex": "She put a cushion on the chair to make it comfortable.",
+   "exZh": "她在椅子上放了一个靠垫，让它更舒服。",
+   "note": "词伙：seat cushion"
+  },
+  "cutlery": {
+   "p": "ˈkʌtləri",
+   "m": "n. 餐具（刀、叉和匙）",
+   "ex": "She placed the cutlery neatly on the table.",
+   "exZh": "她把餐具整齐地放在桌子上。",
+   "note": "词伙：extra cutlery"
+  },
+  "dairy": {
+   "p": "ˈderi",
+   "m": "adj. 牛奶的；乳品的；n. 乳品店",
+   "ex": "She bought dairy products from the local farm.",
+   "exZh": "她从当地农场买了乳制品。",
+   "note": "词伙：dairy food"
+  },
+  "dam": {
+   "p": "dæm",
+   "m": "n. 水坝；拦河坝",
+   "ex": "The dam holds back the river water.",
+   "exZh": "水坝拦住了河水。",
+   "note": "词伙：earth dam"
+  },
+  "dawn": {
+   "p": "dɔːn",
+   "m": "n. 黎明；破晓",
+   "ex": "The birds sing at dawn.",
+   "exZh": "鸟儿在黎明时歌唱。",
+   "note": ""
+  },
+  "debate": {
+   "p": "dɪˈbeɪt",
+   "m": "n. 辩论；v. 讨论",
+   "ex": "The students had a debate about homework.",
+   "exZh": "学生们就作业进行了一场辩论。",
+   "note": "词伙：lively debate"
+  },
+  "decent": {
+   "p": "ˈdiːs(ə)nt",
+   "m": "adj. 像样的",
+   "ex": "He wore a decent shirt to the interview.",
+   "exZh": "他穿了一件像样的衬衫去面试。",
+   "note": "词伙：decent quality of life"
+  },
+  "delicious": {
+   "p": "dɪˈlɪʃəs",
+   "m": "adj. 美味的",
+   "ex": "The cake tastes delicious.",
+   "exZh": "这个蛋糕味道很美味。",
+   "note": ""
+  },
+  "detergent": {
+   "p": "dɪˈtɜːrdʒənt",
+   "m": "n. 洗涤剂；洗衣粉；去垢剂",
+   "ex": "She uses detergent to wash the clothes.",
+   "exZh": "她用洗涤剂洗衣服。",
+   "note": "词伙：mild detergent"
+  },
+  "digest": {
+   "p": "daɪˈdʒest",
+   "m": "v. 消化；领会",
+   "ex": "The stomach digests food into nutrients.",
+   "exZh": "胃将食物消化成营养物质。",
+   "note": "词伙：digest well"
+  },
+  "dip": {
+   "p": "dɪp",
+   "m": "v. 蘸；n. 下降",
+   "ex": "There was a dip in sales last month.",
+   "exZh": "上个月销售额有所下降。",
+   "note": "词伙：dip greens"
+  },
+  "dredge": {
+   "p": "dredʒ",
+   "m": "v. 疏浚；n. 挖泥船",
+   "ex": "They dredge the river to remove mud.",
+   "exZh": "他们疏浚河流以清除淤泥。",
+   "note": ""
+  },
+  "drill": {
+   "p": "drɪl",
+   "m": "v. 钻孔；打洞；n. 钻机",
+   "ex": "The workers used a drill to make holes in the rock.",
+   "exZh": "工人们用钻机在岩石上打孔。",
+   "note": "词伙：oil drilling"
+  },
+  "drip": {
+   "p": "drɪp",
+   "m": "v. 滴落；n. 水滴",
+   "ex": "The tap is dripping slowly.",
+   "exZh": "水龙头在慢慢滴水。",
+   "note": ""
+  },
+  "drunk": {
+   "p": "drʌŋk",
+   "m": "adj. 喝醉的；v. 喝；过去分词词形",
+   "ex": "He has drunk all the water.",
+   "exZh": "他喝了所有的水。",
+   "note": ""
+  },
+  "durable": {
+   "p": "ˈdʊrəb(ə)l",
+   "m": "adj. 耐用的；持久的",
+   "ex": "This bag is durable and lasts for years.",
+   "exZh": "这个包很耐用，可以用很多年。",
+   "note": "同义词：lasting（持久长久）；sturdy（结实牢靠）；long-wearing（耐穿耐磨）"
+  },
+  "dusk": {
+   "p": "dʌsk",
+   "m": "n. 黄昏",
+   "ex": "The birds flew home at dusk.",
+   "exZh": "鸟儿在黄昏时飞回家。",
+   "note": ""
+  },
+  "dust": {
+   "p": "dʌst",
+   "m": "n. 粉尘；尘埃",
+   "ex": "The worker wore a mask to avoid breathing in dust.",
+   "exZh": "这位工人戴上口罩以避免吸入粉尘。",
+   "note": "词伙：absorb dust"
+  },
+  "dwelling": {
+   "p": "ˈdwelɪŋ",
+   "m": "n. 住宅；v. 居住；沉湎于",
+   "ex": "He lives in a small dwelling near the lake.",
+   "exZh": "他住在湖边的一个小住所里。",
+   "note": "词伙：whole dwelling"
+  },
+  "dye": {
+   "p": "daɪ",
+   "m": "n. 染料；v. 给...染色",
+   "ex": "She bought a natural dye to color her fabric.",
+   "exZh": "她买了一种天然染料来给布料染色。",
+   "note": "词伙：brown dye"
+  },
+  "eaves": {
+   "p": "iːvz",
+   "m": "n. 屋檐",
+   "ex": "The children sat on the eaves to watch the rain.",
+   "exZh": "孩子们坐在屋檐下看雨。",
+   "note": "词伙：wide eaves"
+  },
+  "edible": {
+   "p": "ˈedəb(ə)l",
+   "m": "adj. 可食用的；可以吃的",
+   "ex": "These mushrooms are edible and safe to eat.",
+   "exZh": "这些蘑菇是可食用的，安全可以吃。",
+   "note": "词伙：edible food"
+  },
+  "eggplant": {
+   "p": "ˈeɡplænt",
+   "m": "n. 茄子",
+   "ex": "He bought an eggplant at the market.",
+   "exZh": "他在市场上买了一个茄子。",
+   "note": "词伙：purple eggplant"
+  },
+  "elegance": {
+   "p": "ˈelɪɡəns",
+   "m": "n. 高雅；典雅；优雅",
+   "ex": "Her dress showed great elegance.",
+   "exZh": "她的裙子展现了极大的优雅。",
+   "note": "词伙：simple elegance"
+  },
+  "element": {
+   "p": "ˈelɪmənt",
+   "m": "n. 要素；元素；成分",
+   "ex": "Water is made of two elements: hydrogen and oxygen.",
+   "exZh": "水由两种要素组成：氢和氧。",
+   "note": "同义词：part（组成部分，通用）；component（零部件或成分）"
+  },
+  "embellish": {
+   "p": "ɪmˈbelɪʃ",
+   "m": "v. 装饰",
+   "ex": "She embellished the dress with flowers.",
+   "exZh": "她用花朵装饰了这条裙子。",
+   "note": ""
+  },
+  "embroider": {
+   "p": "ɪmˈbrɔɪdər",
+   "m": "v. 刺绣；绣（花）；加以渲染（或润色）",
+   "ex": "She embroiders flowers on the pillow.",
+   "exZh": "她在枕头上刺绣花朵。",
+   "note": "词伙：embroider red flowers"
+  },
+  "entrance": {
+   "p": "ˈentrəns",
+   "m": "n. 入口",
+   "ex": "The entrance to the building is on the left.",
+   "exZh": "这座建筑的入口在左边。",
+   "note": "词伙：pay the entrance fees"
+  },
+  "entry": {
+   "p": "ˈentri",
+   "m": "n. 入口；条目；参赛作品",
+   "ex": "The entry to the building is locked after 10 PM.",
+   "exZh": "建筑物在晚上10点后进入通道会被锁上。",
+   "note": "词伙：free entry"
+  },
+  "erection": {
+   "p": "ɪˈrekʃ(ə)n",
+   "m": "n. 建造；建筑物",
+   "ex": "The erection of the new building took six months.",
+   "exZh": "新大楼的建造花了六个月。",
+   "note": ""
+  },
+  "escalator": {
+   "p": "ˈeskəleɪtər",
+   "m": "n. 自动扶梯；电动扶梯",
+   "ex": "He took the escalator to the second floor.",
+   "exZh": "他乘自动扶梯上了二楼。",
+   "note": ""
+  },
+  "establish": {
+   "p": "ɪˈstæblɪʃ",
+   "m": "v. 建立；确立；制订",
+   "ex": "They established a new school in the village.",
+   "exZh": "他们在村里建立了一所新学校。",
+   "note": "同义词：build（建造建立）；create（创造出）；found（创建机构，正式）；initiate（发起启动）；词伙：establish trust, established experts, establish partnerships"
+  },
+  "expanse": {
+   "p": "ɪkˈspæns",
+   "m": "n. 辽阔；广袤",
+   "ex": "The expanse of the desert stretched far beyond the horizon.",
+   "exZh": "沙漠的辽阔延伸到了地平线之外。",
+   "note": "词伙：wide expanse"
+  },
+  "exquisite": {
+   "p": "ɪkˈskwɪzɪt",
+   "m": "adj. 精美的；细腻的；强烈的",
+   "ex": "She wore an exquisite dress to the party.",
+   "exZh": "她穿了一条精美的裙子去参加派对。",
+   "note": "词伙：exquisite touch"
+  },
+  "exterior": {
+   "p": "ɪkˈstɪriər",
+   "m": "n. 外表；adj. 外部的",
+   "ex": "The exterior of the house is painted white.",
+   "exZh": "这所房子的外观是白色的。",
+   "note": "同义词：outside（外面，口语）；external（外部的，较正式）；词伙：impressive exterior design"
+  },
+  "external": {
+   "p": "ɪkˈstɜːrn(ə)l",
+   "m": "adj. 外部的；外界的",
+   "ex": "The external wall of the house is painted blue.",
+   "exZh": "房子的外墙被刷成了蓝色。",
+   "note": "同义词：exterior（外表的，建筑常用）；outside（外面的，口语）；词伙：external events, external factors, external pressures"
+  },
+  "extravagant": {
+   "p": "ɪkˈstrævəɡənt",
+   "m": "adj. 奢侈的；过度的",
+   "ex": "He bought an extravagant car that cost too much money.",
+   "exZh": "他买了一辆奢侈的车，价格太贵了。",
+   "note": "词伙：extravagant lifestyles, extravagant ways of living, pursue an extravagant life"
+  },
+  "fabric": {
+   "p": "ˈfæbrɪk",
+   "m": "n. 织物；（建筑物的）结构",
+   "ex": "The dress is made of soft fabric.",
+   "exZh": "这条裙子是由柔软的织物制成的。",
+   "note": "词伙：blue fabric"
+  },
+  "factor": {
+   "p": "ˈfæktər",
+   "m": "n. 因素；v. 把…因素包括进去",
+   "ex": "Weather is a factor in the game's outcome.",
+   "exZh": "天气是比赛结果的一个因素。",
+   "note": "同义词：element（组成要素）；cause（起因原因）；consideration（考虑到的因素）；词伙：innate factors, social factors, economic factors"
+  },
+  "fade": {
+   "p": "feɪd",
+   "m": "v. 逐渐消失；褪色",
+   "ex": "The colors of the painting fade in the sunlight.",
+   "exZh": "这幅画的颜色在阳光下逐渐消失。",
+   "note": "同义词：disappear（彻底消失不见）；词伙：never fade"
+  },
+  "fake": {
+   "p": "feɪk",
+   "m": "adj. 假的；v. 伪造；假装",
+   "ex": "He faked a signature to get the money.",
+   "exZh": "他伪造了一个签名来拿到钱。",
+   "note": "词伙：fake news, create fake profiles"
+  },
+  "fascinate": {
+   "p": "ˈfæsɪneɪt",
+   "m": "v. 强烈吸引住；使着迷",
+   "ex": "The magic show fascinated the children.",
+   "exZh": "魔术表演深深吸引了孩子们。",
+   "note": "词伙：fascinate every child"
+  },
+  "feast": {
+   "p": "fiːst",
+   "m": "n. 盛宴；宴会；节日",
+   "ex": "They had a feast on New Year's Day.",
+   "exZh": "他们在元旦举办了一场盛宴。",
+   "note": "词伙：sweet feast"
+  },
+  "feather": {
+   "p": "ˈfeðər",
+   "m": "n. 羽毛",
+   "ex": "The bird has a soft feather.",
+   "exZh": "这只鸟有一根柔软的羽毛。",
+   "note": "词伙：brown feather"
+  },
+  "fence": {
+   "p": "fens",
+   "m": "n. 栅栏；围栏；篱笆",
+   "ex": "The dog jumped over the fence.",
+   "exZh": "狗跳过了栅栏。",
+   "note": "词伙：garden fence"
+  },
+  "festival": {
+   "p": "ˈfestɪv(ə)l",
+   "m": "n. 节日",
+   "ex": "The town holds a music festival every summer.",
+   "exZh": "这个小镇每年夏天都举办音乐节。",
+   "note": "词伙：celebrate festivals"
+  },
+  "fibre": {
+   "p": "ˈfaɪbər",
+   "m": "n. 纤维",
+   "ex": "He eats fibre to stay healthy.",
+   "exZh": "他吃纤维来保持健康。",
+   "note": "词伙：plant fibre"
+  },
+  "figure": {
+   "p": "ˈfɪɡjər",
+   "m": "n. 人物；数字；v. 弄懂",
+   "ex": "I couldn't figure out why he was late.",
+   "exZh": "我弄不懂他为什么迟到。",
+   "note": "词伙：public figures, historical figures, commemorate historical figures"
+  },
+  "fireplace": {
+   "p": "ˈfaɪərpleɪs",
+   "m": "n. 壁炉",
+   "ex": "He sits by the fireplace in winter.",
+   "exZh": "冬天他坐在壁炉旁。",
+   "note": "词伙：stone fireplace"
+  },
+  "first": {
+   "p": "fɜːrst",
+   "m": "adj. 第一的；adv. 首先；n. 第一",
+   "ex": "He got the first prize in the race.",
+   "exZh": "他在比赛中获得了第一名。",
+   "note": "同义词：initial（最初开头的）；leading（位居前列的）；major（主要重要的）；词伙：gather first hand information, fluent in the first language"
+  },
+  "fish": {
+   "p": "fɪʃ",
+   "m": "n. 鱼；鱼肉；v. 钓鱼",
+   "ex": "He caught a big fish in the river.",
+   "exZh": "他在河里钓到了一条大鱼。",
+   "note": "词伙：fish and chips"
+  },
+  "fix": {
+   "p": "fɪks",
+   "m": "v. 修理；固定；确定",
+   "ex": "He will fix the broken chair tomorrow.",
+   "exZh": "他明天会修理那把坏掉的椅子。",
+   "note": "同义词：repair（修理，较正式）；mend（缝补修补）；secure（固定牢靠）；词伙：fix bugs"
+  },
+  "flashlight": {
+   "p": "ˈflæʃlaɪt",
+   "m": "n. 手电筒；闪光灯",
+   "ex": "He uses a flashlight to find his keys in the dark.",
+   "exZh": "他用手电筒在黑暗中找钥匙。",
+   "note": "词伙：pocket flashlight"
+  },
+  "flat": {
+   "p": "flæt",
+   "m": "n. 公寓；adj. 平坦的",
+   "ex": "He lives in a small flat in London.",
+   "exZh": "他住在伦敦的一间小公寓里。",
+   "note": "同义词：apartment（美式英语的叫法）；词伙：dry flat"
+  },
+  "flavour": {
+   "p": "ˈfleɪvər",
+   "m": "n. 风味；味道；v. 给…添风味",
+   "ex": "This ice cream has a sweet flavour.",
+   "exZh": "这种冰淇淋有甜美的风味。",
+   "note": "词伙：fruit flavour"
+  },
+  "flour": {
+   "p": "ˈflaʊər",
+   "m": "n. 面粉",
+   "ex": "She adds flour to make bread.",
+   "exZh": "她加面粉来做面包。",
+   "note": "词伙：white flour"
+  },
+  "forge": {
+   "p": "fɔːrdʒ",
+   "m": "n. 锻造车间；v. 建立（联系等）",
+   "ex": "The blacksmith works in the forge every morning.",
+   "exZh": "铁匠每天早上都在锻造车间工作。",
+   "note": "词伙：forge a strong relationship"
+  },
+  "fragile": {
+   "p": "ˈfrædʒ(ə)l",
+   "m": "adj. 脆弱的；易碎的；不牢固的",
+   "ex": "The glass is fragile and might break easily.",
+   "exZh": "这个玻璃很脆弱，容易碎。",
+   "note": "词伙：quite fragile"
+  },
+  "frame": {
+   "p": "freɪm",
+   "m": "n. 框架；v. 表达；陷害",
+   "ex": "The picture is in a wooden frame.",
+   "exZh": "这幅画在一个木制框架里。",
+   "note": "词伙：goal frame"
+  },
+  "fridge": {
+   "p": "frɪdʒ",
+   "m": "n. 冰箱",
+   "ex": "He put the milk in the fridge.",
+   "exZh": "他把牛奶放进冰箱里。",
+   "note": "词伙：small fridge"
+  },
+  "fruit": {
+   "p": "fruːt",
+   "m": "n. 水果；v. 结果实",
+   "ex": "I like fruit.",
+   "exZh": "我喜欢水果。",
+   "note": "词伙：perishable fruit"
+  },
+  "fry": {
+   "p": "fraɪ",
+   "m": "v. 油炸；油煎",
+   "ex": "He fries fish in a pan every Sunday.",
+   "exZh": "他每周日用平底锅油炸鱼。",
+   "note": ""
+  },
+  "fuel": {
+   "p": "ˈfjuːəl",
+   "m": "n. 燃料；燃油；v. 加剧",
+   "ex": "The rocket uses fuel 627 for propulsion.",
+   "exZh": "火箭使用627号燃料推进。",
+   "note": "词伙：fossil fuels, burn fossil fuels, impose fuel taxes"
+  },
+  "furnace": {
+   "p": "ˈfɜːrnɪs",
+   "m": "n. 熔炉",
+   "ex": "The blacksmith heated the metal in the furnace.",
+   "exZh": "铁匠在熔炉里加热金属。",
+   "note": "词伙：brick furnace"
+  },
+  "furnish": {
+   "p": "ˈfɜːrnɪʃ",
+   "m": "v. 布置家具；提供",
+   "ex": "He will furnish the apartment with new furniture.",
+   "exZh": "他将为公寓配备新家具。",
+   "note": ""
+  },
+  "fuse": {
+   "p": "fjuːz",
+   "m": "n. 保险丝；v. 结合",
+   "ex": "The light went out because the fuse blew.",
+   "exZh": "灯灭了，因为保险丝烧断了。",
+   "note": "词伙：safety fuse"
+  },
+  "garlic": {
+   "p": "ˈɡɑːrlɪk",
+   "m": "n. 大蒜",
+   "ex": "He adds garlic to the soup for flavor.",
+   "exZh": "他往汤里加蒜来提味。",
+   "note": "词伙：white garlic"
+  },
+  "garment": {
+   "p": "ˈɡɑːrmənt",
+   "m": "n. 衣服；外衣",
+   "ex": "She bought a new garment for the party.",
+   "exZh": "她为派对买了一件新衣服。",
+   "note": ""
+  },
+  "gem": {
+   "p": "dʒem",
+   "m": "n. 宝石",
+   "ex": "She wore a red gem on her necklace.",
+   "exZh": "她脖子上戴着一颗红宝石。",
+   "note": "词伙：blue gem"
+  },
+  "gentle": {
+   "p": "ˈdʒent(ə)l",
+   "m": "adj. 温和的；文雅的；温柔的",
+   "ex": "The mother gave a gentle hug to her child.",
+   "exZh": "母亲给了孩子一个温和的拥抱。",
+   "note": "词伙：gentle exercise, gentle physical exercise"
+  },
+  "ginger": {
+   "p": "ˈdʒɪndʒər",
+   "m": "n. 生姜",
+   "ex": "He adds ginger to his tea for flavor.",
+   "exZh": "他往茶里加姜来调味。",
+   "note": "词伙：ginger root"
+  },
+  "glue": {
+   "p": "ɡluː",
+   "m": "n. 胶；胶水；v. 粘合",
+   "ex": "He used glue to stick the paper together.",
+   "exZh": "他用胶把纸粘在一起。",
+   "note": "词伙：strong glue"
+  },
+  "gourmet": {
+   "p": "ˈɡʊrmeɪ",
+   "m": "n. 美食家",
+   "ex": "He eats gourmet food at a fancy restaurant.",
+   "exZh": "他在一家高档餐厅吃精致美食。",
+   "note": "词伙：little gourmet"
+  },
+  "gown": {
+   "p": "ɡaʊn",
+   "m": "n. 礼服",
+   "ex": "She wore a beautiful gown to the wedding.",
+   "exZh": "她穿了一件漂亮的礼服去参加婚礼。",
+   "note": "词伙：evening gown"
+  },
+  "grace": {
+   "p": "ɡreɪs",
+   "m": "n. 优雅；恩宠",
+   "ex": "She walked with grace across the stage.",
+   "exZh": "她优雅地走过舞台。",
+   "note": "词伙：gentle grace"
+  },
+  "grain": {
+   "p": "ɡreɪn",
+   "m": "n. 谷物；颗粒",
+   "ex": "Farmers grow grain like wheat and rice.",
+   "exZh": "农民种植小麦和大米等谷物。",
+   "note": "词伙：pepper grains"
+  },
+  "grape": {
+   "p": "ɡreɪp",
+   "m": "n. 葡萄",
+   "ex": "He eats a grape every morning.",
+   "exZh": "他每天早上吃一颗葡萄。",
+   "note": "词伙：purple grape"
+  },
+  "grid": {
+   "p": "ɡrɪd",
+   "m": "n. 网格；方格；n. （电、气）输送网",
+   "ex": "The city improved its power grid to handle more electricity.",
+   "exZh": "这座城市改进了其电力输送网，以承载更多的电力。",
+   "note": "词伙：neat grid"
+  },
+  "grind": {
+   "p": "ɡraɪnd",
+   "m": "v. 碾碎；磨碎",
+   "ex": "He grinds the coffee beans into powder.",
+   "exZh": "他把咖啡豆碾成粉末。",
+   "note": ""
+  },
+  "gum": {
+   "p": "ɡʌm",
+   "m": "n. 口香糖；n. 树胶；牙龈",
+   "ex": "The tree produces a sticky gum.",
+   "exZh": "这棵树分泌出一种粘稠的树胶。",
+   "note": "词伙：mint gum"
+  },
+  "hairdressing": {
+   "p": "ˈherdresɪŋ",
+   "m": "n. 美发",
+   "ex": "He works in hairdressing at a local salon.",
+   "exZh": "他在一家本地美发沙龙从事美发工作。",
+   "note": "词伙：wedding hairdressing"
+  },
+  "hamburger": {
+   "p": "ˈhæmbɜːrɡər",
+   "m": "n. 汉堡包",
+   "ex": "He eats a hamburger for lunch.",
+   "exZh": "他午餐吃一个汉堡包。",
+   "note": "词伙：warm hamburger"
+  },
+  "handkerchief": {
+   "p": "ˈhæŋkərtʃɪf",
+   "m": "n. 手帕；方巾",
+   "ex": "He pulled out a handkerchief to wipe his sweat.",
+   "exZh": "他掏出一块手帕擦汗。",
+   "note": ""
+  },
+  "handle": {
+   "p": "ˈhænd(ə)l",
+   "m": "n. 把手；v. 处理",
+   "ex": "He can handle difficult problems easily.",
+   "exZh": "他能轻松处理难题。",
+   "note": "同义词：manage（统筹管好）；deal with（着手应对）；address（设法解决）；词伙：handle physically demanding work, handle complex real-life communication scenarios, handle complaints"
+  },
+  "handrail": {
+   "p": "ˈhændreɪl",
+   "m": "n. 扶栏",
+   "ex": "He held the handrail while walking down the stairs.",
+   "exZh": "他下楼梯时扶着扶手。",
+   "note": "词伙：wooden handrail"
+  },
+  "harvest": {
+   "p": "ˈhɑːrvɪst",
+   "m": "n. 收成；v. 收割",
+   "ex": "The farmers celebrated the harvest in autumn.",
+   "exZh": "农民们在秋天庆祝收获。",
+   "note": "词伙：bad harvest in agriculture, good harvest"
+  },
+  "hollow": {
+   "p": "ˈhɑːləʊ",
+   "m": "adj. 中空的；空洞的",
+   "ex": "The tree has a hollow trunk.",
+   "exZh": "这棵树的树干是中空的。",
+   "note": "词伙：hollow hall"
+  },
+  "hook": {
+   "p": "hʊk",
+   "m": "n. 钩；挂钩；v. 钩住",
+   "ex": "The key hung on a metal hook.",
+   "exZh": "钥匙挂在金属钩上。",
+   "note": "词伙：iron hook"
+  },
+  "horse": {
+   "p": "hɔːrs",
+   "m": "n. 马",
+   "ex": "The boy rides a horse every morning.",
+   "exZh": "这个男孩每天早上骑马。",
+   "note": "词伙：brown horse"
+  },
+  "hostel": {
+   "p": "ˈhɑːst(ə)l",
+   "m": "n. （校外）学生宿舍；旅社；招待所",
+   "ex": "The students live in a cheap hostel near the university.",
+   "exZh": "学生们住在大学附近的一家便宜的学生宿舍里。",
+   "note": "词伙：noisy hostel"
+  },
+  "hull": {
+   "p": "hʌl",
+   "m": "n. 籽壳；外壳；n. 船体",
+   "ex": "The hull of the boat was damaged by the rocks.",
+   "exZh": "船的船体被岩石损坏了。",
+   "note": "词伙：seed hull"
+  },
+  "hurdle": {
+   "p": "ˈhɜːrd(ə)l",
+   "m": "n. 跨栏；障碍；v. 克服",
+   "ex": "He jumped over the hurdle quickly.",
+   "exZh": "他迅速跳过了跨栏。",
+   "note": "同义词：barrier（挡住去路的障碍）；challenge（须应对的挑战）；词伙：worn delivery hurdle, delivery hurdle"
+  },
+  "hut": {
+   "p": "hʌt",
+   "m": "n. 小屋；棚屋；茅屋",
+   "ex": "The children built a hut in the woods.",
+   "exZh": "孩子们在树林里建了一间小屋。",
+   "note": ""
+  },
+  "ice cream": {
+   "p": "ˈaɪs kriːm",
+   "m": "phrase. 冰淇淋",
+   "ex": "He eats ice cream after dinner.",
+   "exZh": "他晚饭后吃冰淇淋。",
+   "note": ""
+  },
+  "idol": {
+   "p": "ˈaɪd(ə)l",
+   "m": "n. 偶像；神像",
+   "ex": "He looks up to his favorite singer as an idol.",
+   "exZh": "他把自己最喜欢的歌手当作偶像。",
+   "note": "词伙：young idol"
+  },
+  "inferior": {
+   "p": "ɪnˈfɪriər",
+   "m": "adj. 较差的",
+   "ex": "This product is inferior to the other one.",
+   "exZh": "这个产品比另一个差。",
+   "note": "词伙：feel inferior to"
+  },
+  "infrastructure": {
+   "p": "ˈɪnfrəstrʌktʃər",
+   "m": "n. 基础设施",
+   "ex": "The city needs better infrastructure for roads and water.",
+   "exZh": "这座城市需要更好的道路和供水设施。",
+   "note": "词伙：rural infrastructure, healthcare infrastructure, upgrade road infrastructure"
+  },
+  "ingredient": {
+   "p": "ɪnˈɡriːdiənt",
+   "m": "n. 成分；要素；配料",
+   "ex": "Sugar is an ingredient in this cake.",
+   "exZh": "糖是这个蛋糕的一个成分。",
+   "note": "词伙：fresh ingredients"
+  },
+  "inhabit": {
+   "p": "ɪnˈhæbɪt",
+   "m": "v. 居住于",
+   "ex": "Birds inhabit the forest near the lake.",
+   "exZh": "鸟类居住在湖边的森林里。",
+   "note": ""
+  },
+  "ink": {
+   "p": "ɪŋk",
+   "m": "n. 墨水",
+   "ex": "He spilled ink on his shirt.",
+   "exZh": "他把墨水洒在了衬衫上。",
+   "note": "词伙：blue ink"
+  },
+  "inner": {
+   "p": "ˈɪnər",
+   "m": "adj. 内部的；内心的",
+   "ex": "The inner room is quiet and dark.",
+   "exZh": "内部的房间安静而昏暗。",
+   "note": "同义词：inside（里面，口语）；internal（体内机构的）；interior（内部空间，建筑常用）；词伙：inner beauty"
+  },
+  "install": {
+   "p": "ɪnˈstɔːl",
+   "m": "v. 安装",
+   "ex": "He will install the new software on his computer.",
+   "exZh": "他将在他的电脑上安装新软件。",
+   "note": ""
+  },
+  "interior": {
+   "p": "ɪnˈtɪriər",
+   "m": "n. 内部；adj. 内部的",
+   "ex": "The interior of the house is very cozy.",
+   "exZh": "房子的内部非常舒适。",
+   "note": "同义词：inner（更靠内的）；internal（内部固有的）；inside（里面，口语）；词伙：interior space"
+  },
+  "internal": {
+   "p": "ɪnˈtɜːrn(ə)l",
+   "m": "adj. 内部的；国内的",
+   "ex": "The internal parts of the machine need repair.",
+   "exZh": "机器的内部零件需要修理。",
+   "note": "同义词：inner（内侧的）；inside（里面的，口语）；interior（室内的，设计常用）；词伙：internal corner"
+  },
+  "inward": {
+   "p": "ˈɪnwərd",
+   "m": "adv. 向内地",
+   "ex": "The ship sailed inward toward the harbor.",
+   "exZh": "船向港口内航行。",
+   "note": ""
+  },
+  "iron": {
+   "p": "ˈaɪərn",
+   "m": "n. 铁；铁器；熨斗",
+   "ex": "The bridge is made of iron.",
+   "exZh": "这座桥是用铁建造的。",
+   "note": "词伙：flat iron"
+  },
+  "jacket": {
+   "p": "ˈdʒækɪt",
+   "m": "n. 夹克衫",
+   "ex": "He put on his jacket before going out.",
+   "exZh": "他出门前穿上了夹克。",
+   "note": "词伙：biking jacket"
+  },
+  "jade": {
+   "p": "dʒeɪd",
+   "m": "n. 玉；翡翠",
+   "ex": "She wore a necklace made of jade.",
+   "exZh": "她戴着一条玉制的项链。",
+   "note": "词伙：green jade"
+  },
+  "jam": {
+   "p": "dʒæm",
+   "m": "n. 果酱",
+   "ex": "She put jam on her bread for breakfast.",
+   "exZh": "她早餐在面包上涂了果酱。",
+   "note": "词伙：severe traffic jams"
+  },
+  "jar": {
+   "p": "dʒɑːr",
+   "m": "n. 玻璃罐子",
+   "ex": "She stored jam in a glass jar.",
+   "exZh": "她把果酱存放在一个玻璃罐里。",
+   "note": "词伙：glass jar"
+  },
+  "jewel": {
+   "p": "ˈdʒuːəl",
+   "m": "n. 珠宝；宝石",
+   "ex": "She wore a beautiful jewel on her finger.",
+   "exZh": "她手指上戴着一颗漂亮的珠宝。",
+   "note": "词伙：bright jewel"
+  },
+  "jewellery": {
+   "p": "ˈdʒuːəlri",
+   "m": "n. 珠宝；首饰",
+   "ex": "She wore beautiful jewellery to the party.",
+   "exZh": "她戴了漂亮的珠宝去参加派对。",
+   "note": "词伙：family jewellery"
+  },
+  "junk": {
+   "p": "dʒʌŋk",
+   "m": "n. 废旧杂物；无价值的东西",
+   "ex": "He cleaned up the junk in his garage.",
+   "exZh": "他清理了车库里那些废旧杂物。",
+   "note": "词伙：junk pile"
+  },
+  "ketchup": {
+   "p": "ˈketʃəp",
+   "m": "n. 番茄酱",
+   "ex": "He put ketchup on his fries.",
+   "exZh": "他在薯条上放了番茄酱。",
+   "note": "词伙：red ketchup"
+  },
+  "kettle": {
+   "p": "ˈket(ə)l",
+   "m": "n. 水壶",
+   "ex": "She put the kettle on to make tea.",
+   "exZh": "她把水壶放在炉子上烧水泡茶。",
+   "note": "词伙：black kettle"
+  },
+  "kit": {
+   "p": "kɪt",
+   "m": "n. 成套工具；装备",
+   "ex": "He bought a repair kit for his bike.",
+   "exZh": "他买了一套自行车维修工具。",
+   "note": "词伙：repair kit"
+  },
+  "kitchen": {
+   "p": "ˈkɪtʃɪn",
+   "m": "n. 厨房",
+   "ex": "She cooks dinner in the kitchen.",
+   "exZh": "她在厨房里做晚饭。",
+   "note": "词伙：old kitchen"
+  },
+  "knit": {
+   "p": "nɪt",
+   "m": "v. 针织",
+   "ex": "She knit a warm scarf for her brother.",
+   "exZh": "她为她的弟弟织了一条暖和的围巾。",
+   "note": "词伙：knit warm caps"
+  },
+  "knob": {
+   "p": "nɑːb",
+   "m": "n. 旋钮",
+   "ex": "He turned the knob to adjust the volume.",
+   "exZh": "他转动旋钮来调节音量。",
+   "note": "词伙：round door knob"
+  },
+  "knot": {
+   "p": "nɑːt",
+   "m": "n. 结；（树） 节",
+   "ex": "He tied a knot in the rope.",
+   "exZh": "他在绳子上打了一个结。",
+   "note": "词伙：red knot"
+  },
+  "lace": {
+   "p": "leɪs",
+   "m": "n. 花边",
+   "ex": "The dress has a beautiful lace at the bottom.",
+   "exZh": "这条裙子的底部有漂亮的花边。",
+   "note": "词伙：lace edging"
+  },
+  "ladder": {
+   "p": "ˈlædər",
+   "m": "n. 梯子；阶梯",
+   "ex": "He climbed the ladder to fix the roof.",
+   "exZh": "他爬梯子去修屋顶。",
+   "note": "词伙：climb the corporate ladder"
+  },
+  "landfill": {
+   "p": "ˈlændfɪl",
+   "m": "n. 垃圾填埋（场）；垃圾堆填（区）",
+   "ex": "The city built a new landfill outside the town.",
+   "exZh": "这座城市在城外建了一个新的垃圾填埋场。",
+   "note": "词伙：end up in landfills, end up in landfill sites"
+  },
+  "landmark": {
+   "p": "ˈlændmɑːrk",
+   "m": "n. 里程碑；地标",
+   "ex": "The invention of the wheel was a landmark in human history.",
+   "exZh": "轮子的发明是人类历史上的一个里程碑。",
+   "note": "词伙：landmark buildings"
+  },
+  "lantern": {
+   "p": "ˈlæntərn",
+   "m": "n. 灯笼；提灯",
+   "ex": "The children carried paper lanterns at the festival.",
+   "exZh": "孩子们在节日上提着纸灯笼。",
+   "note": "词伙：paper lantern"
+  },
+  "laundry": {
+   "p": "ˈlɔːndri",
+   "m": "n. 要洗的衣物；洗衣店",
+   "ex": "I put the dirty laundry in the washing machine.",
+   "exZh": "我把脏衣服放进洗衣机里。",
+   "note": "词伙：folded laundry"
+  },
+  "lavatory": {
+   "p": "ˈlævətɔːri",
+   "m": "n. 盥洗室；厕所",
+   "ex": "The lavatory is down the hall.",
+   "exZh": "洗手间在走廊尽头。",
+   "note": "词伙：back lavatory"
+  },
+  "layer": {
+   "p": "ˈleɪər",
+   "m": "n. 层；层次",
+   "ex": "The cake has three layers of chocolate.",
+   "exZh": "这个蛋糕有三层巧克力。",
+   "note": "词伙：thick layer"
+  },
+  "layout": {
+   "p": "ˈleɪaʊt",
+   "m": "n. 布局；布置",
+   "ex": "The layout of the room makes it feel bigger.",
+   "exZh": "房间的布局让它显得更大。",
+   "note": "词伙：table layout"
+  },
+  "leather": {
+   "p": "ˈleðər",
+   "m": "n. 皮革",
+   "ex": "He bought a leather jacket for winter.",
+   "exZh": "他冬天买了一件皮夹克。",
+   "note": "词伙：leather bag"
+  },
+  "lever": {
+   "p": "ˈlevər",
+   "m": "n. 杠杆；操纵杆；v. 撬动",
+   "ex": "He used a stick to lever the heavy rock.",
+   "exZh": "他用一根棍子撬动那块大石头。",
+   "note": "词伙：wooden lever"
+  },
+  "lick": {
+   "p": "lɪk",
+   "m": "v. 舔；n. 少许",
+   "ex": "The dog licks its paw.",
+   "exZh": "狗舔它的爪子。",
+   "note": ""
+  },
+  "lid": {
+   "p": "lɪd",
+   "m": "n. 盖子",
+   "ex": "He put the lid on the box.",
+   "exZh": "他把盖子盖在盒子上。",
+   "note": "词伙：jar lid"
+  },
+  "lime": {
+   "p": "laɪm",
+   "m": "n. 石灰",
+   "ex": "Farmers spread lime on the soil to make it less acidic.",
+   "exZh": "农民在土壤上撒石灰以降低其酸性。",
+   "note": ""
+  },
+  "linen": {
+   "p": "ˈlɪnɪn",
+   "m": "n. 亚麻布；亚麻织品",
+   "ex": "She washed the linen in cold water.",
+   "exZh": "她用冷水洗亚麻布。",
+   "note": "词伙：table linen"
+  },
+  "liquor": {
+   "p": "ˈlɪkər",
+   "m": "n. 酒",
+   "ex": "He bought a bottle of liquor for the party.",
+   "exZh": "他为派对买了一瓶酒。",
+   "note": "词伙：fruit liquor"
+  },
+  "lively": {
+   "p": "ˈlaɪvli",
+   "m": "adj. 充满生机的；活泼的",
+   "ex": "The market is lively with people and music.",
+   "exZh": "市场里人来人往，音乐欢快，充满生机。",
+   "note": "词伙：lively atmosphere, lively and stimulating"
+  },
+  "livestock": {
+   "p": "ˈlaɪvstɑːk",
+   "m": "n. 家畜；牲畜",
+   "ex": "The farmer feeds his livestock every morning.",
+   "exZh": "农夫每天早上喂他的家畜。",
+   "note": "词伙：village livestock"
+  },
+  "living room": {
+   "p": "ˈlɪvɪŋ ruːm",
+   "m": "phrase. 客厅；起居室",
+   "ex": "We watch TV in the living room.",
+   "exZh": "我们在客厅看电视。",
+   "note": ""
+  },
+  "loaf": {
+   "p": "ləʊf",
+   "m": "n. 一条（面包）；v. 游荡；虚度光阴",
+   "ex": "He bought a loaf of bread from the bakery.",
+   "exZh": "他从面包店买了一条面包。",
+   "note": ""
+  },
+  "lobby": {
+   "p": "ˈlɑːbi",
+   "m": "n. 大厅；游说团队",
+   "ex": "We waited in the hotel lobby for our friend.",
+   "exZh": "我们在酒店的大厅里等我们的朋友。",
+   "note": "词伙：hotel lobby"
+  },
+  "locate": {
+   "p": "ˈləʊkeɪt",
+   "m": "v. 确定…的位置；使坐落于；查找…的地点",
+   "ex": "Can you locate the hotel on the map?",
+   "exZh": "你能在地图上找到酒店的位置吗？",
+   "note": "词伙：locate important concepts"
+  },
+  "lodge": {
+   "p": "lɑːdʒ",
+   "m": "n. 小舍；传达室",
+   "ex": "They stayed in a small lodge near the forest.",
+   "exZh": "他们住在森林附近的一座小屋里。",
+   "note": "词伙：hunting lodge"
+  },
+  "lotion": {
+   "p": "ˈləʊʃ(ə)n",
+   "m": "n. 乳液",
+   "ex": "She puts lotion on her hands after washing them.",
+   "exZh": "她洗手后在手上涂乳液。",
+   "note": "词伙：hand lotion"
+  },
+  "lubricate": {
+   "p": "ˈluːbrɪkeɪt",
+   "m": "v. 润滑；加润滑油于",
+   "ex": "Oil helps to lubricate the engine parts.",
+   "exZh": "油有助于润滑发动机部件。",
+   "note": ""
+  },
+  "lumber": {
+   "p": "ˈlʌmbər",
+   "m": "n. 木材",
+   "ex": "The factory buys lumber to make furniture.",
+   "exZh": "这家工厂购买木材来制造家具。",
+   "note": "词伙：cut lumber"
+  },
+  "luxury": {
+   "p": "ˈlʌkʃəri",
+   "m": "n. 奢华；奢侈品；难得的享受",
+   "ex": "She bought a luxury dress for the party.",
+   "exZh": "她为派对买了一件奢华的裙子。",
+   "note": "词伙：luxury goods, luxury items, lead a life of luxury"
+  },
+  "makeup": {
+   "p": "ˈmeɪkˌʌp",
+   "m": "n. 化妆品；组成",
+   "ex": "The makeup of the team includes students from five countries.",
+   "exZh": "这个团队的组成包括来自五个国家的学生。",
+   "note": "词伙：light soft makeup, soft makeup"
+  },
+  "malfunction": {
+   "p": "ˌmælˈfʌŋkʃ(ə)n",
+   "m": "n. 故障",
+   "ex": "The car had a malfunction in the engine.",
+   "exZh": "这辆车的发动机出现了故障。",
+   "note": ""
+  },
+  "mall": {
+   "p": "mɔːl",
+   "m": "n. 购物中心",
+   "ex": "He goes to the mall to buy clothes.",
+   "exZh": "他去商场买衣服。",
+   "note": "词伙：shopping malls"
+  },
+  "mansion": {
+   "p": "ˈmænʃ(ə)n",
+   "m": "n. 大厦；宅邸",
+   "ex": "He lives in a big mansion near the lake.",
+   "exZh": "他住在湖边的一座大宅子里。",
+   "note": "词伙：cold mansion"
+  },
+  "mason": {
+   "p": "ˈmeɪs(ə)n",
+   "m": "n. 石匠",
+   "ex": "The mason built a stone wall with care.",
+   "exZh": "石匠仔细地砌了一堵石墙。",
+   "note": "词伙：careful mason"
+  },
+  "masquerade": {
+   "p": "ˌmæskəˈreɪd",
+   "m": "n. 化妆舞会；伪装；v. 冒充",
+   "ex": "We went to a masquerade last night.",
+   "exZh": "我们昨晚去参加了一个化妆舞会。",
+   "note": "词伙：spring masquerade, masquerade dance"
+  },
+  "mat": {
+   "p": "mæt",
+   "m": "n. 垫子；席子",
+   "ex": "He put a mat on the floor to keep it clean.",
+   "exZh": "他在地上放了一块垫子以保持清洁。",
+   "note": "词伙：door mat"
+  },
+  "mattress": {
+   "p": "ˈmætrəs",
+   "m": "n. 褥垫；床垫",
+   "ex": "He bought a new mattress for his bed.",
+   "exZh": "他为床买了一个新床垫。",
+   "note": "词伙：torn mattress"
+  },
+  "memorandum": {
+   "p": "ˌmeməˈrændəm",
+   "m": "n. 备忘录；便笺",
+   "ex": "He wrote a memorandum about the meeting.",
+   "exZh": "他写了一份关于会议的备忘录。",
+   "note": "词伙：short memorandum"
+  },
+  "mend": {
+   "p": "mend",
+   "m": "v. 修补",
+   "ex": "He will mend his broken shoe.",
+   "exZh": "他将修补他破掉的鞋子。",
+   "note": "同义词：fix（修好弄妥，口语常用）；词伙：carefully mend"
+  },
+  "merchandise": {
+   "p": "ˈmɜːrtʃəndaɪs",
+   "m": "n. 商品",
+   "ex": "The store sells cheap merchandise.",
+   "exZh": "这家商店出售廉价商品。",
+   "note": "词伙：used merchandise"
+  },
+  "metal": {
+   "p": "ˈmet(ə)l",
+   "m": "n. 金属",
+   "ex": "He found a piece of metal in the garden.",
+   "exZh": "他在花园里发现了一块金属。",
+   "note": "词伙：pure metal"
+  },
+  "migrate": {
+   "p": "ˈmaɪɡreɪt",
+   "m": "v. 迁移；移居；迁徙",
+   "ex": "Birds migrate south in winter.",
+   "exZh": "鸟类在冬天迁徙到南方。",
+   "note": "词伙：migrate elsewhere"
+  },
+  "mild": {
+   "p": "maɪld",
+   "m": "adj. 温和的；轻微的",
+   "ex": "The weather is mild today.",
+   "exZh": "今天天气温和。",
+   "note": "词伙：mild afternoon, surprisingly mild"
+  },
+  "mill": {
+   "p": "mɪl",
+   "m": "n. 磨坊；磨粉机；工厂",
+   "ex": "The old mill stands by the river.",
+   "exZh": "旧磨坊坐落在河边。",
+   "note": "词伙：old mill"
+  },
+  "miniature": {
+   "p": "ˈmɪnətʃər",
+   "m": "adj. 微型的；n. 微型画；小型模型",
+   "ex": "He bought a miniature car for his collection.",
+   "exZh": "他为他的收藏买了一辆微型汽车。",
+   "note": "词伙：miniature chair"
+  },
+  "mint": {
+   "p": "mɪnt",
+   "m": "n. 薄荷",
+   "ex": "She added a mint leaf to her drink.",
+   "exZh": "她在饮料里加了一片薄荷叶。",
+   "note": ""
+  },
+  "modify": {
+   "p": "ˈmɑːdɪfaɪ",
+   "m": "v. 更改",
+   "ex": "He will modify the plan tomorrow.",
+   "exZh": "他明天会更改计划。",
+   "note": "同义词：adapt（改造，为适应环境）；adjust（微调，小幅校准）；alter（改动，变更部分）；amend（修订，法规条文）"
+  },
+  "mop": {
+   "p": "mɑːp",
+   "m": "n. 拖把；n. 乱蓬蓬的头发",
+   "ex": "He had a mop of curly hair that always looked messy.",
+   "exZh": "他有一头乱蓬蓬的卷发，总是看起来很凌乱。",
+   "note": "词伙：wet mop"
+  },
+  "mug": {
+   "p": "mʌɡ",
+   "m": "n. （有柄的）大杯",
+   "ex": "He drank coffee from a large mug.",
+   "exZh": "他从一个大杯子里喝咖啡。",
+   "note": ""
+  },
+  "mustard": {
+   "p": "ˈmʌstərd",
+   "m": "n. 芥末；芥末酱",
+   "ex": "He put mustard on his sandwich.",
+   "exZh": "他在三明治上加了芥末。",
+   "note": "词伙：yellow mustard"
+  },
+  "mutton": {
+   "p": "ˈmʌt(ə)n",
+   "m": "n. 羊肉",
+   "ex": "He eats mutton for dinner every Sunday.",
+   "exZh": "他每周日吃羊肉当晚餐。",
+   "note": "词伙：dark mutton"
+  },
+  "nail": {
+   "p": "neɪl",
+   "m": "n. 钉子",
+   "ex": "He hammered the nail into the wood.",
+   "exZh": "他把钉子敲进了木头里。",
+   "note": "词伙：old nail"
+  },
+  "narrow": {
+   "p": "ˈnærəʊ",
+   "m": "adj. 狭窄的；窄小的；v. 使窄小",
+   "ex": "The road is narrow and hard to drive on.",
+   "exZh": "这条路很窄，开车很难。",
+   "note": "词伙：gender gap narrows, narrow ridge, narrow channels"
+  },
+  "natural": {
+   "p": "ˈnætʃrəl",
+   "m": "adj. 自然的；天然的",
+   "ex": "The children played in the natural park.",
+   "exZh": "孩子们在自然公园里玩耍。",
+   "note": "词伙：natural habitats, natural endowment, natural predators；同义词：normal"
+  },
+  "necessity": {
+   "p": "nəˈsesəti",
+   "m": "n. 必需品；需要",
+   "ex": "Water is a basic necessity for life.",
+   "exZh": "水是生命的基本必需品。",
+   "note": "词伙：winter necessity"
+  },
+  "necklace": {
+   "p": "ˈnekləs",
+   "m": "n. 项链",
+   "ex": "She wears a gold necklace every day.",
+   "exZh": "她每天都戴一条金项链。",
+   "note": "词伙：pearl necklace"
+  },
+  "needle": {
+   "p": "ˈniːd(ə)l",
+   "m": "n. 针",
+   "ex": "She picked up a needle to sew the button.",
+   "exZh": "她拿起一根针来缝纽扣。",
+   "note": ""
+  },
+  "night": {
+   "p": "naɪt",
+   "m": "n. 夜晚；晚上",
+   "ex": "The stars are bright at night.",
+   "exZh": "夜晚星星很亮。",
+   "note": "词伙：night sky, polar night"
+  },
+  "nursery": {
+   "p": "ˈnɜːrsəri",
+   "m": "n. 托儿所",
+   "ex": "The children play at Nursery 796.",
+   "exZh": "孩子们在796号托儿所玩耍。",
+   "note": ""
+  },
+  "nylon": {
+   "p": "ˈnaɪlɑːn",
+   "m": "n. 尼龙",
+   "ex": "He wears a nylon jacket to stay dry.",
+   "exZh": "他穿一件尼龙夹克来保持干燥。",
+   "note": "词伙：nylon bag"
+  },
+  "obstruct": {
+   "p": "əbˈstrʌkt",
+   "m": "v. 阻碍；阻塞；阻挡",
+   "ex": "The fallen tree obstructs the road.",
+   "exZh": "倒下的树挡住了道路。",
+   "note": "同义词：impede（妨碍阻滞，正式用语）"
+  },
+  "opacity": {
+   "p": "əʊˈpæsəti",
+   "m": "n. 不透明；费解；晦涩",
+   "ex": "The glass has opacity so we cannot see through it.",
+   "exZh": "这玻璃不透明，所以我们看不到它后面的东西。",
+   "note": "词伙：cloudy opacity"
+  },
+  "ornament": {
+   "p": "ˈɔːrnəmənt",
+   "m": "n. 装饰",
+   "ex": "The tree has many colorful ornaments.",
+   "exZh": "这棵树上有许多彩色的装饰品。",
+   "note": "词伙：gold ornament"
+  },
+  "outfit": {
+   "p": "ˈaʊtfɪt",
+   "m": "n. 整套服装",
+   "ex": "She bought a new outfit for the party.",
+   "exZh": "她为派对买了一套新衣服。",
+   "note": "词伙：stylish outfits"
+  },
+  "outside": {
+   "p": "ˌaʊtˈsaɪd",
+   "m": "prep. 在...外；adv. 在外面；n. 外部",
+   "ex": "The cat is sitting outside the house.",
+   "exZh": "猫坐在房子外面。",
+   "note": "同义词：exterior（外部的，建筑外表）；external（外界的，外部因素）；词伙：outside the home"
+  },
+  "outward": {
+   "p": "ˈaʊtwərd",
+   "m": "adv. 向外；adj. 外表的",
+   "ex": "The outward force pushed the door open.",
+   "exZh": "向外的力把门推开了。",
+   "note": ""
+  },
+  "oven": {
+   "p": "ˈʌv(ə)n",
+   "m": "n. 烤箱；烤炉",
+   "ex": "She put the cake in the oven.",
+   "exZh": "她把蛋糕放进烤箱里。",
+   "note": "词伙：clay oven"
+  },
+  "overall": {
+   "p": "ˌəʊvərˈɔːl",
+   "m": "adj. 全面的；adv. 总计",
+   "ex": "The overall cost is too high.",
+   "exZh": "总成本太高了。",
+   "note": "词伙：their overall development, enhance overall well-being"
+  },
+  "overcoat": {
+   "p": "ˈəʊvərkəʊt",
+   "m": "n. 大衣；外套",
+   "ex": "He wears a black overcoat in winter.",
+   "exZh": "他冬天穿一件黑色大衣。",
+   "note": "词伙：grey overcoat"
+  },
+  "pad": {
+   "p": "pæd",
+   "m": "n. 垫；便笺簿；v. 放轻脚步走",
+   "ex": "She put a pad on the chair for comfort.",
+   "exZh": "她在椅子上放了一个垫子以增加舒适感。",
+   "note": "词伙：feather pad"
+  },
+  "pail": {
+   "p": "peɪl",
+   "m": "n. 桶；一桶之量",
+   "ex": "He filled the pail with water from the well.",
+   "exZh": "他从井里打了一桶水。",
+   "note": ""
+  },
+  "painting": {
+   "p": "ˈpeɪntɪŋ",
+   "m": "n. 绘画；油画；v. 刷油漆",
+   "ex": "He loves painting in his free time.",
+   "exZh": "他喜欢在空闲时间绘画。",
+   "note": "同义词：drawing（素描，线条画作）；image（图像，画面泛称）；词伙：bright painting"
+  },
+  "pamphlet": {
+   "p": "ˈpæmflət",
+   "m": "n. 小册子",
+   "ex": "He handed me a pamphlet about the new park.",
+   "exZh": "他递给我一份关于新公园的小册子。",
+   "note": "词伙：picture pamphlet"
+  },
+  "pane": {
+   "p": "peɪn",
+   "m": "n. 一块窗玻璃",
+   "ex": "The window has a broken pane.",
+   "exZh": "这扇窗户有一块碎了的玻璃。",
+   "note": "词伙：window pane"
+  },
+  "papaya": {
+   "p": "pəˈpaɪə",
+   "m": "n. 木瓜",
+   "ex": "He eats a papaya every morning.",
+   "exZh": "他每天早上吃一个木瓜。",
+   "note": "词伙：sweet papaya"
+  },
+  "paper": {
+   "p": "ˈpeɪpər",
+   "m": "n. 论文；纸；报纸",
+   "ex": "He wrote his name on the paper.",
+   "exZh": "他在纸上写了名字。",
+   "note": "词伙：model paper, neat model paper"
+  },
+  "paperback": {
+   "p": "ˈpeɪpərbæk",
+   "m": "n. 平装书；平装本",
+   "ex": "He bought a paperback novel at the bookstore.",
+   "exZh": "他在书店买了一本平装小说。",
+   "note": "词伙：old paperback"
+  },
+  "parlour": {
+   "p": "ˈpɑːrlər",
+   "m": "n. 客厅；起居室；营业室",
+   "ex": "She sat in the parlour and drank tea.",
+   "exZh": "她坐在客厅里喝茶。",
+   "note": "词伙：old parlour"
+  },
+  "pasta": {
+   "p": "ˈpɑːstə",
+   "m": "n. 意大利面食",
+   "ex": "He eats pasta for dinner every night.",
+   "exZh": "他每天晚上吃意大利面。",
+   "note": "词伙：thin long pasta"
+  },
+  "paste": {
+   "p": "peɪst",
+   "m": "n. 面团；浆糊",
+   "ex": "She rolled out the paste for the pie crust.",
+   "exZh": "她把面团擀平做派皮。",
+   "note": "词伙：sticky rice paste"
+  },
+  "patch": {
+   "p": "pætʃ",
+   "m": "n. 补丁；小块地",
+   "ex": "He planted carrots in a small patch.",
+   "exZh": "他在一小块地上种了胡萝卜。",
+   "note": "词伙：knee patch"
+  },
+  "pea": {
+   "p": "piː",
+   "m": "n. 豌豆",
+   "ex": "He eats a pea from his plate.",
+   "exZh": "他从盘子里吃了一颗豌豆。",
+   "note": "词伙：green pea"
+  },
+  "pedal": {
+   "p": "ˈped(ə)l",
+   "m": "n. 踏板；踩踏板",
+   "ex": "He pressed the pedal to speed up the bike.",
+   "exZh": "他踩下踏板让自行车加速。",
+   "note": "词伙：bike pedal"
+  },
+  "peel": {
+   "p": "piːl",
+   "m": "v. 去皮；剥落；n. 果皮",
+   "ex": "The apple peel is rich in fiber.",
+   "exZh": "苹果皮富含纤维。",
+   "note": ""
+  },
+  "pepper": {
+   "p": "ˈpepər",
+   "m": "n. 胡椒粉；甜椒",
+   "ex": "She added pepper to the soup.",
+   "exZh": "她往汤里加了胡椒粉。",
+   "note": "词伙：black pepper"
+  },
+  "perfume": {
+   "p": "pərˈfjuːm",
+   "m": "n. 香水",
+   "ex": "She bought a new perfume for the party.",
+   "exZh": "她为派对买了一瓶新香水。",
+   "note": "词伙：natural perfume"
+  },
+  "peripheral": {
+   "p": "pəˈrɪfərəl",
+   "m": "adj. 外围的；次要的",
+   "ex": "The keyboard is a peripheral device.",
+   "exZh": "键盘是一个外围设备。",
+   "note": "词伙：almost peripheral"
+  },
+  "phone": {
+   "p": "fəʊn",
+   "m": "n. 电话；v. 打电话",
+   "ex": "I lost my phone yesterday.",
+   "exZh": "我昨天丢了电话。",
+   "note": "词伙：phone scams, use phones responsibly, on the phone"
+  },
+  "pie": {
+   "p": "paɪ",
+   "m": "n. 果馅饼",
+   "ex": "He ate a slice of apple pie for dessert.",
+   "exZh": "他吃了一块苹果派作为甜点。",
+   "note": "词伙：apple pie"
+  },
+  "pigment": {
+   "p": "ˈpɪɡmənt",
+   "m": "n. 色素；颜料",
+   "ex": "The pigment in leaves changes color in autumn.",
+   "exZh": "叶子中的色素在秋天会变色。",
+   "note": "词伙：green pigment"
+  },
+  "pillar": {
+   "p": "ˈpɪlər",
+   "m": "n. 柱子；栋梁",
+   "ex": "The old temple has four stone pillars.",
+   "exZh": "这座古老的寺庙有四根石柱。",
+   "note": "词伙：stone pillar"
+  },
+  "pillow": {
+   "p": "ˈpɪləʊ",
+   "m": "n. 枕头",
+   "ex": "He put his head on the pillow and fell asleep.",
+   "exZh": "他把头放在枕头上，睡着了。",
+   "note": "词伙：yellowed pillow"
+  },
+  "pin": {
+   "p": "pɪn",
+   "m": "n. 大头针；v. 固定",
+   "ex": "She stuck a pin on the map.",
+   "exZh": "她在地图上别了一枚大头针。",
+   "note": "词伙：colored pin"
+  },
+  "pipe": {
+   "p": "paɪp",
+   "m": "n. 管道；烟斗",
+   "ex": "The plumber fixed the broken pipe.",
+   "exZh": "水管工修好了坏掉的管子。",
+   "note": "词伙：new pipes"
+  },
+  "pit": {
+   "p": "pɪt",
+   "m": "n. 果核；深坑",
+   "ex": "The dog fell into a deep pit.",
+   "exZh": "狗掉进了一个深坑。",
+   "note": "词伙：date pit"
+  },
+  "placement": {
+   "p": "ˈpleɪsmənt",
+   "m": "n. 安排；实习工作",
+   "ex": "He got a placement at a local company this summer.",
+   "exZh": "他今年夏天获得了一份在本地公司的实习工作。",
+   "note": "词伙：neat placement"
+  },
+  "plain": {
+   "p": "pleɪn",
+   "m": "n. 平原；adj. 简单明了的；朴素的",
+   "ex": "The cows graze on the plain.",
+   "exZh": "牛在平原上吃草。",
+   "note": "词伙：vast barren plain"
+  },
+  "plaster": {
+   "p": "ˈplæstər",
+   "m": "n. 灰泥；v. 涂以灰泥；敷以膏药",
+   "ex": "The wall was covered with white plaster.",
+   "exZh": "墙壁上覆盖着白色灰泥。",
+   "note": "词伙：wall plaster"
+  },
+  "plastic": {
+   "p": "ˈplæstɪk",
+   "m": "adj. 塑料的；n. 塑料",
+   "ex": "The bottle is made of plastic.",
+   "exZh": "这个瓶子是塑料做的。",
+   "note": "词伙：plastic bags, plastic surgeries, one-time plastic bags"
+  },
+  "plaza": {
+   "p": "ˈplæzə",
+   "m": "n. 广场；市场",
+   "ex": "Children play in the plaza after school.",
+   "exZh": "孩子们放学后在广场上玩耍。",
+   "note": "词伙：front plaza"
+  },
+  "plug": {
+   "p": "plʌɡ",
+   "m": "n. 塞子；v. 插上",
+   "ex": "The sink is clogged because the plug is stuck.",
+   "exZh": "水槽堵塞了，因为塞子卡住了。",
+   "note": "词伙：small plug"
+  },
+  "plum": {
+   "p": "plʌm",
+   "m": "n. 李子；adj. 吸引人的",
+   "ex": "He ate a ripe plum for breakfast.",
+   "exZh": "他早餐吃了一个熟透的李子。",
+   "note": "词伙：red plum"
+  },
+  "plumb": {
+   "p": "plʌm",
+   "m": "n. 铅锤",
+   "ex": "The builder used a plumb to check if the wall was straight.",
+   "exZh": "建筑工人用铅锤检查墙是否垂直。",
+   "note": "词伙：plumb line"
+  },
+  "pond": {
+   "p": "pɑːnd",
+   "m": "n. 池塘",
+   "ex": "Ducks swim in the pond.",
+   "exZh": "鸭子在池塘里游泳。",
+   "note": "词伙：clear pond"
+  },
+  "popularity": {
+   "p": "ˌpɑːpjuˈlærəti",
+   "m": "n. 流行；普及",
+   "ex": "The popularity of this song grew quickly on social media.",
+   "exZh": "这首歌在社交媒体上的流行迅速增长。",
+   "note": ""
+  },
+  "porcelain": {
+   "p": "ˈpɔːrsəlɪn",
+   "m": "n. 瓷；瓷器",
+   "ex": "He bought a porcelain cup at the market.",
+   "exZh": "他在市场上买了一个瓷杯。",
+   "note": "词伙：white porcelain"
+  },
+  "porch": {
+   "p": "pɔːrtʃ",
+   "m": "n. 门廊",
+   "ex": "He sits on the porch and drinks coffee.",
+   "exZh": "他坐在门廊上喝咖啡。",
+   "note": "词伙：wide porch"
+  },
+  "pork": {
+   "p": "pɔːrk",
+   "m": "n. 猪肉",
+   "ex": "He eats pork for dinner every Sunday.",
+   "exZh": "他每周日吃猪肉当晚餐。",
+   "note": "词伙：fresh pork"
+  },
+  "porridge": {
+   "p": "ˈpɔːrɪdʒ",
+   "m": "n. 麦片粥；面糊",
+   "ex": "He eats porridge for breakfast every morning.",
+   "exZh": "他每天早上吃粥。",
+   "note": "词伙：morning porridge"
+  },
+  "portable": {
+   "p": "ˈpɔːrtəb(ə)l",
+   "m": "adj. 便携式的；手提的",
+   "ex": "This portable charger works well on trips.",
+   "exZh": "这个便携式充电器在旅行时很好用。",
+   "note": "同义词：mobile（可移动，随身携带）；handheld（手持式，掌上大小）；lightweight（轻量，分量轻便）；词伙：portable device"
+  },
+  "pot": {
+   "p": "pɑːt",
+   "m": "n. 壶；锅",
+   "ex": "She poured tea from the pot.",
+   "exZh": "她从壶里倒出了茶。",
+   "note": "词伙：iron pot"
+  },
+  "pour": {
+   "p": "pɔːr",
+   "m": "v. 倒；倾倒",
+   "ex": "He poured water into the glass.",
+   "exZh": "他把水倒进杯子里。",
+   "note": "词伙：pour hot tea"
+  },
+  "prevail": {
+   "p": "prɪˈveɪl",
+   "m": "v. 盛行；占上风；劝服",
+   "ex": "She tried to prevail on him to change his mind.",
+   "exZh": "她试图劝服他改变主意。",
+   "note": "词伙：always prevail"
+  },
+  "provision": {
+   "p": "prəˈvɪʒ(ə)n",
+   "m": "n. 供应；预备",
+   "ex": "The ship carries a provision of food for the journey.",
+   "exZh": "这艘船为旅程准备了食物供应。",
+   "note": "同义词：supply（供应，提供补给）；preparation（预备，事先准备）；stock（储备，存货库存）"
+  },
+  "pudding": {
+   "p": "ˈpʊdɪŋ",
+   "m": "n. 布丁",
+   "ex": "He ate a bowl of chocolate pudding after dinner.",
+   "exZh": "他晚饭后吃了一碗巧克力布丁。",
+   "note": "词伙：milk pudding"
+  },
+  "pull": {
+   "p": "pʊl",
+   "m": "v. 拉；拖；拔",
+   "ex": "He pulls the door open.",
+   "exZh": "他拉开了门。",
+   "note": ""
+  },
+  "purple": {
+   "p": "ˈpɜːrp(ə)l",
+   "m": "adj. 紫色的；n. 紫色",
+   "ex": "The flower is purple.",
+   "exZh": "这朵花是紫色的。",
+   "note": "词伙：deep purple"
+  },
+  "purse": {
+   "p": "pɜːrs",
+   "m": "n. 女用小包；钱包；资金",
+   "ex": "She put her keys in her purse.",
+   "exZh": "她把钥匙放进她的女用小包里。",
+   "note": "词伙：buttoned purse"
+  },
+  "quiet": {
+   "p": "ˈkwaɪət",
+   "m": "adj. 安静的",
+   "ex": "The child is quiet during nap time.",
+   "exZh": "孩子在午睡时很安静。",
+   "note": "词伙：quiet lake, quiet farm, quiet old forest"
+  },
+  "quilt": {
+   "p": "kwɪlt",
+   "m": "n. 被褥；被子",
+   "ex": "She makes a quilt for her baby.",
+   "exZh": "她为宝宝做了一床被子。",
+   "note": "词伙：wedding quilt"
+  },
+  "radiator": {
+   "p": "ˈreɪdieɪtər",
+   "m": "n. 散热器；暖气装置",
+   "ex": "The radiator is hot in the winter.",
+   "exZh": "冬天时，散热器是热的。",
+   "note": "词伙：iron radiator"
+  },
+  "radish": {
+   "p": "ˈrædɪʃ",
+   "m": "n. 小萝卜",
+   "ex": "He eats a radish for lunch.",
+   "exZh": "他午餐吃了一个萝卜。",
+   "note": "词伙：small radish"
+  },
+  "rag": {
+   "p": "ræɡ",
+   "m": "n. 旧布，破布",
+   "ex": "He wore a rag to clean the floor.",
+   "exZh": "他用一块破布擦地板。",
+   "note": "词伙：cleaning rag"
+  },
+  "raincoat": {
+   "p": "ˈreɪnkəʊt",
+   "m": "n. 雨衣",
+   "ex": "He wears a raincoat when it rains.",
+   "exZh": "天下雨时，他穿雨衣。",
+   "note": ""
+  },
+  "raw": {
+   "p": "rɔː",
+   "m": "adj. 未加工处理过的；生的",
+   "ex": "He eats raw vegetables every day.",
+   "exZh": "他每天吃未加工的蔬菜。",
+   "note": "词伙：raw wood"
+  },
+  "razor": {
+   "p": "ˈreɪzər",
+   "m": "n. 剃须刀；刮脸刀",
+   "ex": "He uses a razor to shave every morning.",
+   "exZh": "他每天早上用剃须刀刮胡子。",
+   "note": "词伙：sharp razor"
+  },
+  "reap": {
+   "p": "riːp",
+   "m": "v. 获得；收割；收获",
+   "ex": "He worked hard and reaped the rewards.",
+   "exZh": "他努力工作，获得了回报。",
+   "note": ""
+  },
+  "reception": {
+   "p": "rɪˈsepʃ(ə)n",
+   "m": "n. 接待；招待会",
+   "ex": "The reception at the hotel was very friendly.",
+   "exZh": "酒店的接待非常友好。",
+   "note": "词伙：simple reception"
+  },
+  "recipe": {
+   "p": "ˈresəpi",
+   "m": "n. 秘诀",
+   "ex": "His recipe for success is hard work and patience.",
+   "exZh": "他成功的秘诀是努力工作和耐心。",
+   "note": "词伙：secret recipe"
+  },
+  "refectory": {
+   "p": "rɪˈfektəri",
+   "m": "n. 食堂；餐厅",
+   "ex": "The students eat lunch in the refectory.",
+   "exZh": "学生们在食堂吃午饭。",
+   "note": "词伙：school refectory"
+  },
+  "refreshment": {
+   "p": "rɪˈfreʃmənt",
+   "m": "n. 茶点和饮料",
+   "ex": "We had a snack and some drinks as refreshment after the meeting.",
+   "exZh": "会议结束后，我们吃了点心和喝了一些饮料作为茶点。",
+   "note": "同义词：snack（小吃，零食点心）；词伙：as refreshment"
+  },
+  "refrigerator": {
+   "p": "rɪˈfrɪdʒəreɪtər",
+   "m": "n. 冰箱",
+   "ex": "He put the milk in the refrigerator.",
+   "exZh": "他把牛奶放进冰箱里。",
+   "note": "词伙：old refrigerator"
+  },
+  "refurbish": {
+   "p": "/ˌriːˈfɜːbɪʃ/",
+   "m": "v. 翻修；整修",
+   "ex": "They refurbish old bikes and sell them cheap.",
+   "exZh": "他们翻修旧自行车，再便宜地卖掉。",
+   "note": ""
+  },
+  "reside": {
+   "p": "rɪˈzaɪd",
+   "m": "v. 居住；（性质）存在",
+   "ex": "They reside in a small house near the park.",
+   "exZh": "他们住在公园附近的一所小房子里。",
+   "note": ""
+  },
+  "restaurant": {
+   "p": "ˈrestərɑːnt",
+   "m": "n. 餐厅；餐馆",
+   "ex": "We ate dinner at a small restaurant.",
+   "exZh": "我们在一家小餐厅吃了晚饭。",
+   "note": "词伙：small restaurant"
+  },
+  "reuse": {
+   "p": "ˌriːˈjuːs",
+   "m": "v. 再使用",
+   "ex": "We can reuse plastic bottles to reduce waste.",
+   "exZh": "我们可以再使用塑料瓶来减少浪费。",
+   "note": ""
+  },
+  "ribbon": {
+   "p": "ˈrɪbən",
+   "m": "n. 带状物",
+   "ex": "She tied a red ribbon around the box.",
+   "exZh": "她把一条红色的带状物系在盒子上。",
+   "note": ""
+  },
+  "rim": {
+   "p": "rɪm",
+   "m": "n. 边缘",
+   "ex": "The bike has a shiny metal rim.",
+   "exZh": "这辆自行车有一个闪亮的金属轮圈。",
+   "note": "词伙：chair rim"
+  },
+  "roast": {
+   "p": "rəʊst",
+   "m": "v. 烤；n. 烤肉",
+   "ex": "We had roast for dinner last night.",
+   "exZh": "昨晚我们吃了烤肉。",
+   "note": ""
+  },
+  "robe": {
+   "p": "rəʊb",
+   "m": "n. 长袍；v. （使）穿上长袍",
+   "ex": "He puts on a white robe after the shower.",
+   "exZh": "他洗完澡后穿上一件白袍。",
+   "note": "词伙：morning robe"
+  },
+  "rod": {
+   "p": "rɑːd",
+   "m": "n. 杆；棒",
+   "ex": "He used a long rod to reach the top shelf.",
+   "exZh": "他用一根长杆够到顶层架子。",
+   "note": "词伙：fishing rod"
+  },
+  "root": {
+   "p": "ruːt",
+   "m": "n. 根；根源；v. 生根",
+   "ex": "The root of 9 is 3.",
+   "exZh": "9的平方根是3。",
+   "note": "同义词：base（基础，底部基座）；basis（依据，抽象根基）；词伙：root causes, connect with cultural roots"
+  },
+  "rough": {
+   "p": "rʌf",
+   "m": "adj. 粗糙的；粗略的",
+   "ex": "The wood surface is rough.",
+   "exZh": "木头表面很粗糙。",
+   "note": "词伙：stayed rough, rough brute"
+  },
+  "round": {
+   "p": "raʊnd",
+   "m": "n. 回合；adj. 圆的；prep./adv. 在…周围",
+   "ex": "The children sat round the fire.",
+   "exZh": "孩子们围坐在火堆旁。",
+   "note": "round≈around；round the corner=拐过街角；词伙：quick round, quick round game"
+  },
+  "rubber": {
+   "p": "ˈrʌbər",
+   "m": "n. 橡胶",
+   "ex": "The boy picked up a piece of rubber from the floor.",
+   "exZh": "男孩从地上捡起一块橡胶。",
+   "note": "词伙：rubber band"
+  },
+  "rubbish": {
+   "p": "ˈrʌbɪʃ",
+   "m": "n. 垃圾；废物",
+   "ex": "He threw the rubbish into the bin.",
+   "exZh": "他把垃圾扔进了垃圾桶。",
+   "note": "词伙：rubbish bins, household rubbish"
+  },
+  "rug": {
+   "p": "rʌɡ",
+   "m": "n. 小地毯；垫子",
+   "ex": "He sat on the rug near the fireplace.",
+   "exZh": "他坐在壁炉旁的地毯上。",
+   "note": "词伙：flowered rug"
+  },
+  "ruin": {
+   "p": "ˈruːɪn",
+   "m": "n. 废墟；v. 破坏",
+   "ex": "The old temple is now a ruin.",
+   "exZh": "这座古老的寺庙现在已成为废墟。",
+   "note": ""
+  },
+  "salt": {
+   "p": "sɔːlt",
+   "m": "n. 盐；食盐",
+   "ex": "She added a little salt to the soup.",
+   "exZh": "她在汤里加了一点盐。",
+   "note": "词伙：high in salt, salt content, high sugar and salt content"
+  },
+  "sauce": {
+   "p": "sɔːs",
+   "m": "n. 酱汁；调味汁",
+   "ex": "He poured sauce on his pasta.",
+   "exZh": "他把酱汁倒在意大利面上。",
+   "note": "词伙：tomato sauce"
+  },
+  "saucer": {
+   "p": "ˈsɔːsər",
+   "m": "n. 茶托；碟子",
+   "ex": "He put the cup on a saucer.",
+   "exZh": "他把杯子放在一个茶托上。",
+   "note": "词伙：small flower saucer, flower saucer"
+  },
+  "sausage": {
+   "p": "ˈsɔːsɪdʒ",
+   "m": "n. 香肠；腊肠",
+   "ex": "He ate a sausage for breakfast.",
+   "exZh": "他早餐吃了一根香肠。",
+   "note": "词伙：smoked sausage"
+  },
+  "saw": {
+   "p": "sɔː",
+   "m": "n. 锯；v. 看",
+   "ex": "I saw a bird fly over the house.",
+   "exZh": "我看到一只鸟飞过房子。",
+   "note": "词伙：sharp saw"
+  },
+  "scaffold": {
+   "p": "ˈskæfəʊld",
+   "m": "n. 脚手架",
+   "ex": "The workers are climbing the scaffold to paint the building.",
+   "exZh": "工人们正在爬脚手架去粉刷大楼。",
+   "note": "词伙：bamboo scaffold"
+  },
+  "scallion": {
+   "p": "ˈskæljən",
+   "m": "n. 大葱",
+   "ex": "She adds a scallion to the soup.",
+   "exZh": "她往汤里加了一根小葱。",
+   "note": "词伙：green scallion"
+  },
+  "scarf": {
+   "p": "skɑːrf",
+   "m": "n. 围巾；头巾",
+   "ex": "She wore a warm scarf in winter.",
+   "exZh": "她在冬天戴了一条暖和的围巾。",
+   "note": "词伙：flowered scarf"
+  },
+  "scissors": {
+   "p": "ˈsɪzərz",
+   "m": "n. 剪刀",
+   "ex": "She cut the paper with scissors.",
+   "exZh": "她用剪刀剪了纸。",
+   "note": "词伙：silver scissors"
+  },
+  "screw": {
+   "p": "skruː",
+   "m": "n. 螺丝钉；v. 拧紧",
+   "ex": "He tightened the screw with a screwdriver.",
+   "exZh": "他用螺丝刀拧紧了螺丝钉。",
+   "note": "词伙：loose screw"
+  },
+  "section": {
+   "p": "ˈsekʃ(ə)n",
+   "m": "n. 部分；章节；部门",
+   "ex": "This book has five sections.",
+   "exZh": "这本书有五个部分。",
+   "note": "词伙：damaged section"
+  },
+  "seed": {
+   "p": "siːd",
+   "m": "n. 种子；籽；v. 播种",
+   "ex": "The farmer planted the seed in the soil.",
+   "exZh": "农夫把种子种在土里。",
+   "note": "词伙：saved seed"
+  },
+  "settle": {
+   "p": "ˈset(ə)l",
+   "m": "v. 安顿；定居；解决",
+   "ex": "They settled in a small village after retirement.",
+   "exZh": "他们退休后在一个小村庄安顿下来。",
+   "note": "同义词：address（处理，着手解决）；establish（定居，建立安家）；resolve（化解，彻底解决）；词伙：settle downstairs"
+  },
+  "sew": {
+   "p": "səʊ",
+   "m": "v. 缝制；缝补",
+   "ex": "She sews a dress for her daughter.",
+   "exZh": "她为女儿缝制一件连衣裙。",
+   "note": ""
+  },
+  "sewerage": {
+   "p": "ˈsuːərɪdʒ",
+   "m": "n. 排水系统；污水",
+   "ex": "The city improved its sewerage system last year.",
+   "exZh": "这座城市去年改进了其排水系统。",
+   "note": "词伙：sewerage work"
+  },
+  "shabby": {
+   "p": "ˈʃæbi",
+   "m": "adj. 破旧的；肮脏破烂的；衣衫褴褛的",
+   "ex": "He wore a shabby coat to school.",
+   "exZh": "他穿着一件破旧的外套去学校。",
+   "note": ""
+  },
+  "shave": {
+   "p": "ʃeɪv",
+   "m": "v. 刮；剃",
+   "ex": "He shaves every morning.",
+   "exZh": "他每天早上刮胡子。",
+   "note": "词伙：shave smooth"
+  },
+  "shear": {
+   "p": "ʃɪr",
+   "m": "v. 剪（羊毛）；剪（头发）",
+   "ex": "The farmer shears sheep every spring.",
+   "exZh": "农夫每年春天给羊剪毛。",
+   "note": ""
+  },
+  "shed": {
+   "p": "ʃed",
+   "m": "n. 棚屋；v. 使脱落；去除",
+   "ex": "The tree sheds its leaves in autumn.",
+   "exZh": "这棵树在秋天落叶。",
+   "note": "词伙：leaning shed"
+  },
+  "shelf": {
+   "p": "ʃelf",
+   "m": "n. 架子",
+   "ex": "He put the books on the shelf.",
+   "exZh": "他把书放在架子上。",
+   "note": "词伙：wall shelf"
+  },
+  "shelter": {
+   "p": "ˈʃeltər",
+   "m": "n. 避难所；v. 庇护",
+   "ex": "The refugees found shelter in a small building.",
+   "exZh": "难民们在一个小建筑里找到了避难所。",
+   "note": "同义词：shade（荫凉，遮阳避晒处）；词伙：provide shelter"
+  },
+  "shutter": {
+   "p": "ˈʃʌtər",
+   "m": "n. 百叶窗；窗板；n. （照相机的）快门",
+   "ex": "He pressed the shutter to take a photo.",
+   "exZh": "他按下快门拍了一张照片。",
+   "note": "词伙：window shutter"
+  },
+  "site": {
+   "p": "saɪt",
+   "m": "n. 位置；场所",
+   "ex": "The site of the old church is now a park.",
+   "exZh": "旧教堂的位置现在是一个公园。",
+   "note": "同义词：location（位置，所在地点）；place（地方，泛指场所）；spot（地点，具体一处）；词伙：restoration of historical sites, cultural site, historic site"
+  },
+  "situated": {
+   "p": "ˈsɪtʃueɪtɪd",
+   "m": "adj. 位于…的；v. 使位于",
+   "ex": "The house is situated near the lake.",
+   "exZh": "这所房子位于湖边。",
+   "note": "词伙：quietly situated"
+  },
+  "skyscraper": {
+   "p": "ˈskaɪskreɪpər",
+   "m": "n. 摩天大楼",
+   "ex": "The skyscraper is very tall and has many floors.",
+   "exZh": "这座摩天大楼非常高，有很多层。",
+   "note": "同义词：tower（塔，高塔建筑）；building（楼房，泛指建筑）；high-rise（高层，多层高楼）"
+  },
+  "sleeve": {
+   "p": "sliːv",
+   "m": "n. 袖子",
+   "ex": "He rolled up his sleeve to wash his hands.",
+   "exZh": "他卷起袖子洗手。",
+   "note": ""
+  },
+  "slender": {
+   "p": "ˈslendər",
+   "m": "adj. 苗条的",
+   "ex": "She has a slender figure.",
+   "exZh": "她身材苗条。",
+   "note": ""
+  },
+  "slight": {
+   "p": "slaɪt",
+   "m": "adj. 轻微的；微小的",
+   "ex": "He has a slight cold.",
+   "exZh": "他有点轻微的感冒。",
+   "note": "同义词：minor（轻微，程度小些）"
+  },
+  "slipper": {
+   "p": "ˈslɪpər",
+   "m": "n. 拖鞋",
+   "ex": "He left his slipper under the bed.",
+   "exZh": "他把拖鞋落在床下了。",
+   "note": "词伙：soft slipper"
+  },
+  "sliver": {
+   "p": "ˈslɪvər",
+   "m": "n. 细片；长条；小片",
+   "ex": "A sliver of wood stuck in his finger.",
+   "exZh": "一小片木头扎进了他的手指。",
+   "note": "词伙：thin sliver"
+  },
+  "smooth": {
+   "p": "smuːð",
+   "m": "adj. 平滑的；平坦的；v. 使平滑",
+   "ex": "The glass surface is smooth.",
+   "exZh": "玻璃表面是平滑的。",
+   "note": "词伙：felt surprisingly smooth"
+  },
+  "snack": {
+   "p": "snæk",
+   "m": "n. 小吃；点心；快餐",
+   "ex": "I ate an apple as a snack after school.",
+   "exZh": "我放学后吃了一个苹果当小吃。",
+   "note": "同义词：refreshment（茶点，饮品点心，正式场合）；词伙：quick snack"
+  },
+  "soak": {
+   "p": "səʊk",
+   "m": "v. 浸泡；吸收；n. 浸泡",
+   "ex": "The clothes went into a soak overnight.",
+   "exZh": "衣服泡了一整晚。",
+   "note": "词伙：soaking dirty cloth"
+  },
+  "sober": {
+   "p": "ˈsəʊbər",
+   "m": "adj. 清醒的；严肃的；素淡的",
+   "ex": "He stayed sober after drinking only water.",
+   "exZh": "他只喝了水，保持清醒。",
+   "note": ""
+  },
+  "sock": {
+   "p": "sɑːk",
+   "m": "n. 短袜；重击；v. 猛打",
+   "ex": "He put on his socks before leaving for school.",
+   "exZh": "他上学前穿上了短袜。",
+   "note": "词伙：winter sock"
+  },
+  "sour": {
+   "p": "ˈsaʊər",
+   "m": "adj. 酸的",
+   "ex": "The lemon tastes sour.",
+   "exZh": "这个柠檬尝起来是酸的。",
+   "note": "词伙：sour taste"
+  },
+  "souvenir": {
+   "p": "ˌsuːvəˈnɪər",
+   "m": "n. 纪念品；纪念物",
+   "ex": "I bought a souvenir from the beach.",
+   "exZh": "我从海边买了一个纪念品。",
+   "note": "词伙：travel souvenir"
+  },
+  "spacious": {
+   "p": "ˈspeɪʃəs",
+   "m": "adj. 宽敞的",
+   "ex": "The new house has a spacious living room.",
+   "exZh": "这所新房子有一个宽敞的客厅。",
+   "note": ""
+  },
+  "spaghetti": {
+   "p": "spəˈɡeti",
+   "m": "n. 意大利式细面条",
+   "ex": "He eats spaghetti for dinner.",
+   "exZh": "他晚餐吃意大利面。",
+   "note": "词伙：long spaghetti"
+  },
+  "spice": {
+   "p": "spaɪs",
+   "m": "n. 香料；调味品",
+   "ex": "She added cinnamon spice to the cake.",
+   "exZh": "她往蛋糕里加了肉桂香料。",
+   "note": "词伙：spice powder"
+  },
+  "spicy": {
+   "p": "ˈspaɪsi",
+   "m": "adj. 辣的",
+   "ex": "The soup is too spicy for me.",
+   "exZh": "这汤对我来说太辣了。",
+   "note": ""
+  },
+  "spider": {
+   "p": "ˈspaɪdər",
+   "m": "n. 蜘蛛",
+   "ex": "A spider is crawling on the wall.",
+   "exZh": "一只蜘蛛正在墙上爬。",
+   "note": ""
+  },
+  "spin": {
+   "p": "spɪn",
+   "m": "v. 纺纱；旋转；n. 旋转",
+   "ex": "The spin of the top made it stay upright.",
+   "exZh": "陀螺的旋转让它保持直立。",
+   "note": ""
+  },
+  "sponge": {
+   "p": "spʌndʒ",
+   "m": "n. 海绵；海绵动物",
+   "ex": "The sponge lives in the ocean and filters water for food.",
+   "exZh": "这种海绵动物生活在海洋中，通过过滤水来获取食物。",
+   "note": "词伙：soft sponge"
+  },
+  "spotlight": {
+   "p": "ˈspɑːtlaɪt",
+   "m": "n. 聚光灯；v. 使公众注意",
+   "ex": "The spotlight shone on the singer during the concert.",
+   "exZh": "演唱会上，聚光灯照在歌手身上。",
+   "note": "词伙：strong spotlight"
+  },
+  "spring": {
+   "p": "sprɪŋ",
+   "m": "v. 跳；n. 春天；弹簧",
+   "ex": "Flowers bloom in spring.",
+   "exZh": "春天花朵盛开。",
+   "note": "词伙：warm spring"
+  },
+  "squeeze": {
+   "p": "skwiːz",
+   "m": "v. 挤（进）",
+   "ex": "He squeezed into the small seat.",
+   "exZh": "他挤进了小座位里。",
+   "note": ""
+  },
+  "stability": {
+   "p": "stəˈbɪləti",
+   "m": "n. 固定；牢固；稳定",
+   "ex": "The stability of the table prevents it from wobbling.",
+   "exZh": "桌子的固定防止它摇晃。",
+   "note": "同义词：steadiness（平稳，不摇晃）；solidity（牢固，扎实可靠）；balance（平衡，稳定均势）；词伙：energy stability, financial stability"
+  },
+  "stain": {
+   "p": "steɪn",
+   "m": "n. 污渍；v. 玷污",
+   "ex": "There is a coffee stain on the table.",
+   "exZh": "桌子上有一个咖啡污点。",
+   "note": "词伙：food stain"
+  },
+  "staircase": {
+   "p": "ˈsterkeɪs",
+   "m": "n. 楼梯",
+   "ex": "He walked up the staircase to his room.",
+   "exZh": "他走上楼梯去了他的房间。",
+   "note": ""
+  },
+  "staple": {
+   "p": "ˈsteɪp(ə)l",
+   "m": "n. 订书钉；主食；adj. 主要的",
+   "ex": "Rice is a staple food in many Asian countries.",
+   "exZh": "大米是许多亚洲国家的主要食物。",
+   "note": "词伙：small staple"
+  },
+  "stationery": {
+   "p": "ˈsteɪʃəneri",
+   "m": "n. 文具",
+   "ex": "He bought new stationery for school.",
+   "exZh": "他为学校买了新的文具。",
+   "note": "词伙：old stationery"
+  },
+  "steady": {
+   "p": "ˈstedi",
+   "m": "adj. 稳定的；v. 使稳住",
+   "ex": "The boat moved in a steady way on the calm sea.",
+   "exZh": "船在平静的海面上平稳地移动。",
+   "note": "同义词：stable（稳固，安稳不动）；词伙：steady income, steady career, steady jobs"
+  },
+  "steel": {
+   "p": "stiːl",
+   "m": "n. 钢；钢铁",
+   "ex": "The bridge is made of steel.",
+   "exZh": "这座桥是用钢建造的。",
+   "note": "词伙：steel tools"
+  },
+  "step": {
+   "p": "step",
+   "m": "n. 步骤；v. 踩",
+   "ex": "He took a small step forward.",
+   "exZh": "他向前迈了一小步。",
+   "note": "同义词：stage（阶段，进程环节）；词伙：small step"
+  },
+  "stir": {
+   "p": "stɜːr",
+   "m": "v. 搅拌",
+   "ex": "Please stir the soup before serving.",
+   "exZh": "请在上菜前搅拌一下汤。",
+   "note": "词伙：stir honey, gently stir"
+  },
+  "stitch": {
+   "p": "stɪtʃ",
+   "m": "n. 一针；v. 缝",
+   "ex": "She sews a stitch to fix the tear.",
+   "exZh": "她缝一针来补破洞。",
+   "note": "词伙：hidden stitch"
+  },
+  "stocking": {
+   "p": "ˈstɑːkɪŋ",
+   "m": "n. 长袜",
+   "ex": "She is wearing a black stocking.",
+   "exZh": "她穿着一只黑色长筒袜。",
+   "note": "词伙：party stocking"
+  },
+  "stool": {
+   "p": "stuːl",
+   "m": "n. 凳子；粪便",
+   "ex": "He sat on a wooden stool.",
+   "exZh": "他坐在一个木凳上。",
+   "note": "词伙：painting stool"
+  },
+  "storey": {
+   "p": "ˈstɔːri",
+   "m": "n. 楼层",
+   "ex": "The house has three storeys.",
+   "exZh": "这栋房子有三层。",
+   "note": "词伙：upper storey"
+  },
+  "stove": {
+   "p": "stəʊv",
+   "m": "n. 火炉",
+   "ex": "He cooks soup on the stove.",
+   "exZh": "他用炉子煮汤。",
+   "note": "词伙：old stove"
+  },
+  "strand": {
+   "p": "strænd",
+   "m": "n. 缕；v. 使滞留",
+   "ex": "The storm stranded the travelers on the island.",
+   "exZh": "风暴使旅行者滞留在岛上。",
+   "note": "词伙：wire strand"
+  },
+  "strap": {
+   "p": "stræp",
+   "m": "n. 带子；皮带；皮条",
+   "ex": "He fastened the strap around his wrist.",
+   "exZh": "他把带子系在手腕上。",
+   "note": "词伙：bag strap"
+  },
+  "straw": {
+   "p": "strɔː",
+   "m": "n. 稻草；吸管",
+   "ex": "The cow eats straw from the barn.",
+   "exZh": "牛吃谷仓里的稻草。",
+   "note": "词伙：dry straw"
+  },
+  "stricture": {
+   "p": "ˈstrɪktʃər",
+   "m": "n. 指责；限制",
+   "ex": "The doctor found a stricture in his esophagus.",
+   "exZh": "医生发现他的食管有狭窄。",
+   "note": "词伙：past stricture"
+  },
+  "string": {
+   "p": "strɪŋ",
+   "m": "n. 细绳；线",
+   "ex": "She tied the box with a thin string.",
+   "exZh": "她用一根细线把盒子绑了起来。",
+   "note": "词伙：red string"
+  },
+  "strip": {
+   "p": "strɪp",
+   "m": "v. 剥去；剥夺；n. 长条",
+   "ex": "He cut a strip of paper to wrap the gift.",
+   "exZh": "他剪了一条纸来包装礼物。",
+   "note": ""
+  },
+  "stripe": {
+   "p": "straɪp",
+   "m": "n. 条纹",
+   "ex": "The tiger has black stripes on its orange fur.",
+   "exZh": "老虎的橙色皮毛上有黑色条纹。",
+   "note": "词伙：wall stripe"
+  },
+  "studio": {
+   "p": "ˈstuːdiəʊ",
+   "m": "n. 工作室；演播室",
+   "ex": "He works in a small studio near the park.",
+   "exZh": "他在公园附近的一个小工作室工作。",
+   "note": "词伙：photo studio"
+  },
+  "stuff": {
+   "p": "stʌf",
+   "m": "n. 东西；v. 塞",
+   "ex": "I need to clean up all this stuff.",
+   "exZh": "我需要清理这些东西。",
+   "note": ""
+  },
+  "suck": {
+   "p": "sʌk",
+   "m": "v. 吮吸",
+   "ex": "The baby suck milk from the bottle.",
+   "exZh": "婴儿从奶瓶里吮吸牛奶。",
+   "note": ""
+  },
+  "sunset": {
+   "p": "ˈsʌnset",
+   "m": "n. 夕阳；落日",
+   "ex": "We watched the sunset by the beach.",
+   "exZh": "我们在海滩上看了夕阳。",
+   "note": "词伙：peaceful sunset"
+  },
+  "supermarket": {
+   "p": "ˈsuːpərmɑːrkɪt",
+   "m": "n. 超市；超级市场",
+   "ex": "I buy milk and bread at the supermarket.",
+   "exZh": "我在超市买牛奶和面包。",
+   "note": "词伙：distant supermarket"
+  },
+  "supper": {
+   "p": "ˈsʌpər",
+   "m": "n. 晚饭；晚餐",
+   "ex": "We eat supper at six o'clock.",
+   "exZh": "我们六点吃晚饭。",
+   "note": "词伙：family supper"
+  },
+  "supplement": {
+   "p": "ˈsʌplɪmənt",
+   "m": "n. 补品；v. 补充",
+   "ex": "He supplements his income by teaching part-time.",
+   "exZh": "他通过兼职教学来补充收入。",
+   "note": "同义词：complement（互补，补足相成）；addition（添加，另加之物）；词伙：dietary supplements"
+  },
+  "suspension": {
+   "p": "səˈspenʃ(ə)n",
+   "m": "n. 悬挂；悬浮；暂时停职（停学、停赛）",
+   "ex": "The suspension of dust in the air made the sky look gray.",
+   "exZh": "空气中的尘埃悬浮使天空看起来灰蒙蒙的。",
+   "note": "词伙：suspension of driving licences"
+  },
+  "swallow": {
+   "p": "ˈswɑːləʊ",
+   "m": "v. 吞咽",
+   "ex": "He swallowed the pill with water.",
+   "exZh": "他用水吞下了药片。",
+   "note": ""
+  },
+  "sweater": {
+   "p": "ˈswetər",
+   "m": "n. 毛衣",
+   "ex": "He wears a warm sweater in winter.",
+   "exZh": "他冬天穿一件暖和的毛衣。",
+   "note": "词伙：winter sweater"
+  },
+  "tailor": {
+   "p": "ˈteɪlər",
+   "m": "n. 裁缝",
+   "ex": "The tailor made a new suit for the man.",
+   "exZh": "裁缝为这位男士做了一套新西装。",
+   "note": "词伙：tailor punishments, tailored materials, tailored to personal needs"
+  },
+  "takeaway": {
+   "p": "ˈteɪkəweɪ",
+   "m": "n. 外卖餐馆；外卖食物",
+   "ex": "We ordered dinner from the Chinese takeaway.",
+   "exZh": "我们从一家中餐外卖店点了晚餐。",
+   "note": "词伙：takeaway boxes"
+  },
+  "tan": {
+   "p": "tæn",
+   "m": "adj. 棕褐色的；v. 将皮肤晒成棕褐色",
+   "ex": "He has a deep tan after spending the week at the beach.",
+   "exZh": "他在海滩度过一周后，皮肤晒成了深棕色。",
+   "note": "词伙：tan coat"
+  },
+  "tap": {
+   "p": "tæp",
+   "m": "n. 水龙头；轻拍；v. 利用",
+   "ex": "The company tapped local talent to grow its business.",
+   "exZh": "这家公司利用本地人才来发展业务。",
+   "note": "词伙：tap into talents, fully tap into talents, tap water"
+  },
+  "tasty": {
+   "p": "ˈteɪsti",
+   "m": "adj. 美味的；可口的",
+   "ex": "The soup is tasty and hot.",
+   "exZh": "这汤美味又热。",
+   "note": ""
+  },
+  "terrace": {
+   "p": "ˈterəs",
+   "m": "n. 平台",
+   "ex": "The house has a small terrace with chairs.",
+   "exZh": "这所房子有一个带椅子的小平台。",
+   "note": "同义词：balcony（阳台，楼上层出）；platform（平台，站台阶台）；gallery（廊台，观览长廊）；词伙：stone terrace"
+  },
+  "textile": {
+   "p": "ˈtekstaɪl",
+   "m": "n. 纺织品；纺织业",
+   "ex": "The store sells many kinds of textile, like cotton and silk.",
+   "exZh": "这家商店出售多种纺织品，比如棉和丝绸。",
+   "note": ""
+  },
+  "thirsty": {
+   "p": "ˈθɜːrsti",
+   "m": "adj. 口渴的；渴望的",
+   "ex": "He is thirsty after running.",
+   "exZh": "他跑步后口渴了。",
+   "note": "词伙：thirsty workers"
+  },
+  "thread": {
+   "p": "θred",
+   "m": "n. 线；v. 穿过",
+   "ex": "She picked up a thread from the fabric.",
+   "exZh": "她从布料上捡起一根线。",
+   "note": "词伙：loose threads, thin white thread"
+  },
+  "tight": {
+   "p": "taɪt",
+   "m": "adj. 紧的",
+   "ex": "The lid is tight on the jar.",
+   "exZh": "罐子的盖子很紧。",
+   "note": "词伙：tight schedule"
+  },
+  "tile": {
+   "p": "taɪl",
+   "m": "n. 瓷砖",
+   "ex": "They laid new tile in the kitchen.",
+   "exZh": "他们在厨房铺了新的瓷砖。",
+   "note": "词伙：floor tile"
+  },
+  "tin": {
+   "p": "tɪn",
+   "m": "n. 锡；罐头",
+   "ex": "The can is made of tin.",
+   "exZh": "这个罐子是锡做的。",
+   "note": "词伙：sealed tin"
+  },
+  "tissue": {
+   "p": "ˈtɪʃuː",
+   "m": "n. 纸巾；薄纸；n. 组织",
+   "ex": "The doctor examined the tissue under a microscope.",
+   "exZh": "医生在显微镜下检查了组织。",
+   "note": "词伙：soft tissue"
+  },
+  "toast": {
+   "p": "təʊst",
+   "m": "n. 烤面包片",
+   "ex": "She ate a slice of toast for breakfast.",
+   "exZh": "她早餐吃了一片烤面包。",
+   "note": "词伙：morning toast"
+  },
+  "tobacco": {
+   "p": "təˈbækəʊ",
+   "m": "n. 烟草；烟叶",
+   "ex": "He smokes tobacco every day.",
+   "exZh": "他每天吸烟草。",
+   "note": "词伙：impose a tobacco tax on"
+  },
+  "toilet": {
+   "p": "ˈtɔɪlət",
+   "m": "n. 马桶",
+   "ex": "The toilet is broken and needs repair.",
+   "exZh": "马桶坏了，需要修理。",
+   "note": "词伙：toilet seat"
+  },
+  "towel": {
+   "p": "ˈtaʊəl",
+   "m": "n. 毛巾；手巾",
+   "ex": "He dried his hands with a towel.",
+   "exZh": "他用毛巾擦干手。",
+   "note": "词伙：white towel"
+  },
+  "trainer": {
+   "p": "/ˈtreɪnə/",
+   "m": "n. 运动鞋；教练",
+   "ex": "Wear old trainers for the long walk.",
+   "exZh": "走远路时要穿旧的运动鞋。",
+   "note": "词伙：red trainer"
+  },
+  "tray": {
+   "p": "treɪ",
+   "m": "n. 托盘",
+   "ex": "He placed the cups on a tray.",
+   "exZh": "他把杯子放在一个托盘上。",
+   "note": "词伙：wooden tray"
+  },
+  "trim": {
+   "p": "trɪm",
+   "m": "v. 修剪；adj. 整洁的",
+   "ex": "He always keeps his garden trim and neat.",
+   "exZh": "他总是把花园打理得整洁有序。",
+   "note": ""
+  },
+  "trousers": {
+   "p": "ˈtraʊzərz",
+   "m": "n. 裤子；长裤",
+   "ex": "He wears blue trousers to work.",
+   "exZh": "他上班穿蓝色的裤子。",
+   "note": "词伙：work trousers"
+  },
+  "tub": {
+   "p": "tʌb",
+   "m": "n. 桶；盆；浴盆",
+   "ex": "He poured water into the tub.",
+   "exZh": "他把水倒进了桶里。",
+   "note": "词伙：bath tub, wide tub"
+  },
+  "tube": {
+   "p": "tuːb",
+   "m": "n. 管子；地铁",
+   "ex": "I take the tube to work every morning.",
+   "exZh": "我每天早上乘地铁去上班。",
+   "note": "词伙：travel by tube"
+  },
+  "tune": {
+   "p": "tuːn",
+   "m": "n. 曲调；v. 调整",
+   "ex": "He hummed a happy tune while walking.",
+   "exZh": "他走路时哼着一首欢快的曲调。",
+   "note": "词伙：sing along to tunes"
+  },
+  "turkey": {
+   "p": "ˈtɜːrki",
+   "m": "n. 火鸡",
+   "ex": "We ate turkey for Thanksgiving dinner.",
+   "exZh": "我们在感恩节晚餐上吃了火鸡。",
+   "note": "词伙：brown turkey"
+  },
+  "turnip": {
+   "p": "ˈtɜːrnɪp",
+   "m": "n. 芜菁；萝卜",
+   "ex": "He eats a turnip for dinner.",
+   "exZh": "他晚餐吃一个萝卜。",
+   "note": "词伙：turnip heads, white turnip"
+  },
+  "umbrella": {
+   "p": "ʌmˈbrelə",
+   "m": "n. 伞；雨伞",
+   "ex": "He opened his umbrella when it started to rain.",
+   "exZh": "天下雨时，他打开了伞。",
+   "note": "词伙：black umbrella"
+  },
+  "urban": {
+   "p": "ˈɜːrbən",
+   "m": "adj. 城市的；都市的",
+   "ex": "The urban area has many tall buildings.",
+   "exZh": "这个城市地区有许多高楼。",
+   "note": "同义词：municipal（市政，政府所辖）；civic（城市，市民公共）；metropolitan（都会，大都市圈）；词伙：urban areas, urban expansion, urban planning"
+  },
+  "utensil": {
+   "p": "juːˈtens(ə)l",
+   "m": "n. 用具；器具",
+   "ex": "He picked up a spoon, a common utensil.",
+   "exZh": "他拿起了一把勺子，一种常见的餐具。",
+   "note": ""
+  },
+  "vacuum": {
+   "p": "ˈvækjuːm",
+   "m": "n. 吸尘器；真空；v. 用真空吸尘器打扫",
+   "ex": "The vacuum in space keeps no air.",
+   "exZh": "太空中的真空没有空气。",
+   "note": "词伙：loud vacuum"
+  },
+  "vanilla": {
+   "p": "vəˈnɪlə",
+   "m": "n. 香草；adj. 寻常的",
+   "ex": "He likes vanilla ice cream.",
+   "exZh": "他喜欢香草冰淇淋。",
+   "note": "词伙：vanilla drops"
+  },
+  "vault": {
+   "p": "vɔːlt",
+   "m": "n. 穹顶；拱顶；n. 金库",
+   "ex": "The bank keeps money in a vault.",
+   "exZh": "银行把钱存放在金库里。",
+   "note": "词伙：curved vault"
+  },
+  "vegetarian": {
+   "p": "ˌvedʒəˈteriən",
+   "m": "adj. 素菜的；n. 素食者",
+   "ex": "He is a vegetarian and doesn't eat meat.",
+   "exZh": "他是一名素食者，不吃肉。",
+   "note": "词伙：vegetarian aunt"
+  },
+  "veil": {
+   "p": "veɪl",
+   "m": "n. 面纱",
+   "ex": "She wore a white veil on her wedding day.",
+   "exZh": "她在婚礼那天戴了一条白色的面纱。",
+   "note": "词伙：shining veil"
+  },
+  "velvet": {
+   "p": "ˈvelvɪt",
+   "m": "n. 天鹅绒；丝绒；adj. 天鹅绒的",
+   "ex": "The chair has a soft velvet cover.",
+   "exZh": "这把椅子有柔软的丝绒坐垫。",
+   "note": "词伙：red velvet"
+  },
+  "venue": {
+   "p": "ˈvenjuː",
+   "m": "n. 举办地点；（比赛）地点；会场",
+   "ex": "The concert will be held at a new venue.",
+   "exZh": "这场音乐会将在一个新的举办地点举行。",
+   "note": "词伙：future venue"
+  },
+  "vest": {
+   "p": "vest",
+   "m": "n. 背心；v. 授予",
+   "ex": "He wears a black vest over his shirt.",
+   "exZh": "他穿着一件黑色背心，上面是衬衫。",
+   "note": ""
+  },
+  "viaduct": {
+   "p": "ˈvaɪədʌkt",
+   "m": "n. 高架桥；高架铁路",
+   "ex": "The train goes over a long viaduct.",
+   "exZh": "火车驶过一座长长的高架桥。",
+   "note": "词伙：stone viaduct"
+  },
+  "vicinity": {
+   "p": "vəˈsɪnəti",
+   "m": "n. 附近",
+   "ex": "The park is in the vicinity of my house.",
+   "exZh": "公园在我家附近。",
+   "note": "词伙：beyond immediate vicinity"
+  },
+  "villa": {
+   "p": "ˈvɪlə",
+   "m": "n. 别墅",
+   "ex": "They live in a big villa near the sea.",
+   "exZh": "他们住在海边的一座大别墅里。",
+   "note": ""
+  },
+  "vinegar": {
+   "p": "ˈvɪnɪɡər",
+   "m": "n. 醋",
+   "ex": "He put vinegar on his salad.",
+   "exZh": "他把醋倒在沙拉上。",
+   "note": "词伙：rice vinegar"
+  },
+  "vogue": {
+   "p": "vəʊɡ",
+   "m": "n. 时髦；时兴",
+   "ex": "Blue jeans are in vogue this year.",
+   "exZh": "今年牛仔裤很时髦。",
+   "note": ""
+  },
+  "void": {
+   "p": "vɔɪd",
+   "m": "n. 空白",
+   "ex": "The void on the page made the text look empty.",
+   "exZh": "页面上的空白让文字看起来空荡荡的。",
+   "note": "词伙：empty void"
+  },
+  "wallet": {
+   "p": "ˈwɑːlɪt",
+   "m": "n. 钱包；皮夹；钱夹",
+   "ex": "He lost his wallet on the bus.",
+   "exZh": "他在公交车上丢了钱包。",
+   "note": "词伙：brown wallet"
+  },
+  "wardrobe": {
+   "p": "ˈwɔːrdrəʊb",
+   "m": "n. 衣柜；衣橱",
+   "ex": "He put his clothes in the wardrobe.",
+   "exZh": "他把衣服放进衣橱里。",
+   "note": "词伙：small wardrobe"
+  },
+  "wasabi": {
+   "p": "wəˈsɑːbi",
+   "m": "n. 山葵；山葵根",
+   "ex": "He ate sushi with wasabi.",
+   "exZh": "他吃寿司时配了芥末。",
+   "note": "词伙：green wasabi"
+  },
+  "wax": {
+   "p": "wæks",
+   "m": "n. 蜡；v. 给…上蜡",
+   "ex": "Bees make wax to build their hives.",
+   "exZh": "蜜蜂用蜡建造蜂巢。",
+   "note": "词伙：warm wax"
+  },
+  "weave": {
+   "p": "wiːv",
+   "m": "v. 编织",
+   "ex": "She weaves a basket from reeds.",
+   "exZh": "她用芦苇编织一个篮子。",
+   "note": ""
+  },
+  "weld": {
+   "p": "weld",
+   "m": "v. 焊接；n. 焊接",
+   "ex": "He welds metal pieces together with a torch.",
+   "exZh": "他用焊枪把金属片焊接在一起。",
+   "note": "词伙：weld chair legs"
+  },
+  "wheat": {
+   "p": "wiːt",
+   "m": "n. 小麦",
+   "ex": "Farmers grow wheat in the field.",
+   "exZh": "农民在田里种植小麦。",
+   "note": ""
+  },
+  "whisky": {
+   "p": "ˈwɪski",
+   "m": "n. 威士忌",
+   "ex": "He drinks whisky every evening.",
+   "exZh": "他每天晚上喝威士忌。",
+   "note": "词伙：whisky bottle"
+  },
+  "wooden": {
+   "p": "ˈwʊd(ə)n",
+   "m": "adj. 木制的；木头的",
+   "ex": "He sat on a wooden chair.",
+   "exZh": "他坐在一张木制椅子上。",
+   "note": "词伙：wooden bridge"
+  },
+  "wool": {
+   "p": "wʊl",
+   "m": "n. 羊毛",
+   "ex": "She knits a sweater from wool.",
+   "exZh": "她用羊毛织毛衣。",
+   "note": "词伙：grey wool"
+  },
+  "wrap": {
+   "p": "ræp",
+   "m": "v. 包；n. 包裹",
+   "ex": "She bought a warm wrap for the winter.",
+   "exZh": "她买了一件保暖的包裹（披肩）过冬。",
+   "note": ""
+  },
+  "xerox": {
+   "p": "ˈzɪrɑːks",
+   "m": "v. 复印；n. 施乐复印机（商标名称）",
+   "ex": "He used the xerox to copy his resume.",
+   "exZh": "他用施乐复印机复印了他的简历。",
+   "note": ""
+  },
+  "yogurt": {
+   "p": "ˈjəʊɡərt",
+   "m": "n. 酸奶",
+   "ex": "I eat yogurt for breakfast every day.",
+   "exZh": "我每天早餐吃酸奶。",
+   "note": "词伙：white yogurt"
+  },
+  "yummy": {
+   "p": "ˈjʌmi",
+   "m": "adj. 美味的；可口的",
+   "ex": "The cake is yummy.",
+   "exZh": "这个蛋糕很好吃。",
+   "note": "词伙：simply yummy"
+  }
+ }
+}

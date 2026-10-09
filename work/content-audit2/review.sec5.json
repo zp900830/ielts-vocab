@@ -1,0 +1,39 @@
+{
+ "si": 5,
+ "flags": [
+  {
+   "at": "15.4",
+   "cat": "EN_ERROR",
+   "why": "prolong 是及物动词，'Short breaks never prolong too long' 把它当不及物动词用，母语者不会这么说；应为被动 'are never prolonged'。",
+   "fixEn": "Short breaks are never [[prolong:prolonged]] too long, and Leo [[uphold:upholds]] firm sleeping hours."
+  },
+  {
+   "at": "glossary.itch",
+   "cat": "CARD_ERROR",
+   "why": "例句 'The mosquito bite caused an itchy on my arm' 中 itchy 是形容词，不能作 an 的宾语名词，明确语法错误，应为 an itch。",
+   "fixEn": "The mosquito bite caused an itch on my arm.",
+   "fixZh": "蚊子叮咬让我的手臂发痒。"
+  },
+  {
+   "at": "glossary.jump",
+   "cat": "CARD_ERROR",
+   "why": "例句 'The boy jump over the puddle.' 主谓不一致，第三人称单数主语应接 jumps。",
+   "fixEn": "The boy jumps over the puddle.",
+   "fixZh": "男孩跳过了水坑。"
+  },
+  {
+   "at": "glossary.tilt",
+   "cat": "CARD_ERROR",
+   "why": "例句 'The boy tilt the cup and spill the water.' 主谓不一致，应为 tilts 和 spills。",
+   "fixEn": "The boy tilts the cup and spills the water.",
+   "fixZh": "男孩把杯子倾斜，水洒了出来。"
+  },
+  {
+   "at": "glossary.scatter",
+   "cat": "CARD_ERROR",
+   "why": "例句 'The wind scatter the leaves everywhere.' 主谓不一致，应为 scatters。",
+   "fixEn": "The wind scatters the leaves everywhere.",
+   "fixZh": "风把树叶吹得四处分散。"
+  }
+ ]
+}
