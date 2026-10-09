@@ -1325,10 +1325,13 @@
         ${cfg ? `
         <div class="mp-row">${TASK.minSlider('每天有多少分钟', cfg.minutes)}</div>
         <div class="mp-eta" id="mpEta" role="status">算一下…</div>
+        <div class="mp-row"><span class="mp-label">学习模式</span>
+          <div class="mode-seg" role="radiogroup" aria-label="学习模式">
+            <button class="mode-opt${si.manual ? '' : ' on'}" type="button" data-me-mode="mem" role="radio" aria-checked="${!si.manual}">记忆模式</button>
+            <button class="mode-opt${si.manual ? ' on' : ''}" type="button" data-me-mode="brush" role="radio" aria-checked="${!!si.manual}">刷句模式</button>
+          </div></div>
         <div class="mp-row"><span class="mp-label">今天起点</span>
           <button class="ps-opt" type="button" data-me-start aria-label="设置今天任务从哪开始">${esc(si.text)}</button></div>
-        <div class="mp-row" data-me-start-auto-row${si.manual ? '' : ' hidden'}>
-          <button class="ps-opt" type="button" data-me-start-auto>切换到记忆模式</button></div>
         <div class="mp-row"><button class="link-danger" type="button" data-me-reset-plan aria-label="重置学习计划，只重设计划、保留进度">重置学习计划</button></div>` : ''}
         <div class="mp-row"><span class="mp-label">数据</span><div class="ps-opts">
           <button class="ps-opt" data-me-export>导出备份</button>
@@ -1394,8 +1397,8 @@
     renderMePop();
   }
   /* 起点回显就地更新（2026-10-08）：起点是在弹窗里定的（index.html 那一侧），定完只补这一行
-     的文字和「切换到记忆模式」的显隐 —— 不重渲宿主：重渲把滚动甩回顶部、还把滑块/音色节点换掉。
-     两个宿主都扫一遍：移动端的 #mePop 是空壳（没有这颗键），PC 浮窗开着时它是唯一活宿主。 */
+     的文字和学习模式开关的高亮 —— 不重渲宿主：重渲把滚动甩回顶部、还把滑块/音色节点换掉。
+     两个宿主都扫一遍：移动端的 #mePop 是空壳（没有这些键），PC 浮窗开着时它是唯一活宿主。 */
   function refreshMeStart() {
     if (typeof TASK === 'undefined' || !TASK.startInfo) return;
     const si = TASK.startInfo();
@@ -1405,8 +1408,13 @@
       const btn = host.querySelector('[data-me-start]');
       if (!btn) continue;
       btn.textContent = si.text;
-      const row = host.querySelector('[data-me-start-auto-row]');
-      if (row) row.hidden = !si.manual;
+      /* 模式开关翻面（2026-10-09 用户：「切换后没感受到任何变化」）：当前模式那侧亮着，
+         切换完成的第一眼反馈就是开关翻面 + 起点行换字，都是就地改，不重渲。 */
+      for (const opt of host.querySelectorAll('[data-me-mode]')) {
+        const on = (opt.getAttribute('data-me-mode') === 'brush') === si.manual;
+        opt.classList.toggle('on', on);
+        opt.setAttribute('aria-checked', String(on));
+      }
     }
   }
   /* 工期行（2026-09-26 用户拍板）：「我的」里改每天分钟数也要能看到「新词全部过完一遍（需要 N 天）」
@@ -1538,7 +1546,7 @@
     if (!root || root._meWired) return;
     root._meWired = true;
     root.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-start],[data-me-start-auto],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-login-btn],[data-me-logout]');
+      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-start],[data-me-mode],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-login-btn],[data-me-logout]');
       if (!t) return;
       // 有些按钮点完会重渲宿主（重置/退出）—— 重渲会把 e.target 从 DOM 摘下来，
       // 事件继续冒泡到 document 的「点外面收掉」监听时，target 已不在宿主里，会被误判成点外面。
@@ -1557,7 +1565,10 @@
         t.setAttribute('aria-checked', String(on));
       }
       else if (t.hasAttribute('data-me-start')) { TASK.openStartPicker(); }
-      else if (t.hasAttribute('data-me-start-auto')) { TASK.confirmAutoStart(false); }
+      /* 学习模式开关（2026-10-09 用户：「应该是个开关组件」）：点另一侧弹对应确认
+         （记忆→刷句开起点选择器、刷句→记忆开预览确认），点当前侧无动作。
+         TASK.switchMode 内部判当前态，这里只管把点击递过去。 */
+      else if (t.hasAttribute('data-me-mode')) { TASK.switchMode(t.getAttribute('data-me-mode')); }
       else if (t.hasAttribute('data-me-reset-plan')) { TASK.resetLearningPlan(); rerenderMe(); }
       else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }
       else if (t.hasAttribute('data-me-import')) { TASK.importBackup('meImportFile'); }

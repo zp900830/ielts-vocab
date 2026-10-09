@@ -442,7 +442,7 @@ test.describe('今日起点的唯一性与入口', () => {
     const panel = page.locator('#todayPanel');
     await expect(panel).toBeVisible();
 
-    const btn = panel.locator('button', { hasText: '起点与模式' });
+    const btn = panel.locator('button', { hasText: '今日任务从哪开始' });
     await expect(btn, '入口不许只长在正文那根线上').toHaveCount(1);
     const hitH = await btn.evaluate((el) => {
       const r = (el as HTMLElement).getBoundingClientRect();
@@ -464,7 +464,12 @@ test.describe('今日起点的唯一性与入口', () => {
     await expect(page.locator('#startPickPop')).toHaveCount(0);
     await expect(panel, '设完要看得见当前起点，不是一句一闪而过的 toast').toContainText('第 5 篇第 2 句');
 
-    await panel.locator('button', { hasText: '切换到记忆模式' }).click();
+    /* 学习模式开关（2026-10-09 用户：「应该是个开关组件」）：刷句态下点「记忆模式」侧 →
+       先弹预览确认，确认才真切 —— 切回后面板不再报刷句起点。 */
+    await panel.locator('.mode-opt', { hasText: '记忆模式' }).click();
+    await expect(page.locator('#startPickPop h3'), '先看到预览再动手').toContainText('切换到记忆模式？');
+    await page.locator('#startPickPop button', { hasText: '确认切换' }).click();
+    await expect(page.locator('#startPickPop')).toHaveCount(0);
     await expect(panel, '切回记忆模式后不能再报刷句起点').not.toContainText('第 5 篇第 2 句');
   });
 });

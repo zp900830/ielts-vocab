@@ -206,7 +206,7 @@ test('起点弹窗的「切换到记忆模式」只在刷句状态下出现', as
 
   // 记忆模式（没设起点）：弹窗里没有这颗按钮
   await page.evaluate(() => TASK.openPanel());
-  await page.locator('#todayPanel button', { hasText: '起点与模式' }).click();
+  await page.locator('#todayPanel button', { hasText: '今日任务从哪开始' }).click();
   await expect(page.locator('#startPickPop'), '弹窗打开').toBeVisible();
   await expect(page.locator('#startPickPop button', { hasText: '切换到记忆模式' }),
     '记忆模式下不给这颗空转的出口').toHaveCount(0);
@@ -222,4 +222,40 @@ test('起点弹窗的「切换到记忆模式」只在刷句状态下出现', as
   await page.locator('#startPickPop button', { hasText: '返回' }).click();
   expect(await page.evaluate(() => TASK.manualStart()), '返回不清账').not.toBeNull();
   await expect(page.locator('#startPickPop h3'), '回到选择器').toHaveText(/今日任务从哪开始/);
+});
+
+/* ⑦ 学习模式开关（2026-10-09 用户：「切换后没感受到任何变化，这里应该是个开关组件」）：
+   模式升成一等公民 —— 今日面板上一排分段开关，当前模式亮着；点另一侧走该方向的
+   既有确认弹窗，确认后开关就地翻面。点当前侧无动作（不弹任何东西）。 */
+test('学习模式开关：当前态高亮，点另一侧走确认弹窗，确认后翻面', async ({ page }) => {
+  await freshBook(page);
+  await page.evaluate(() => TASK.openPanel());
+  const panel = page.locator('#todayPanel');
+  const mem = panel.locator('.mode-opt', { hasText: '记忆模式' });
+  const brush = panel.locator('.mode-opt', { hasText: '刷句模式' });
+
+  // 记忆模式：记忆侧亮；点当前侧不弹任何确认
+  await expect(mem, '当前模式亮着').toHaveClass(/on/);
+  await mem.click();
+  await expect(page.locator('#startPickPop'), '点当前侧无动作').toHaveCount(0);
+
+  // 点「刷句模式」侧 → 弹起点选择器（选起点 = 进刷句）；取消则模式没变
+  await brush.click();
+  await expect(page.locator('#startPickPop h3'), '进刷句走起点选择器').toHaveText(/今日任务从哪开始/);
+  await page.locator('#startPickPop button', { hasText: '取消' }).click();
+  await expect(mem, '取消后仍停在记忆模式').toHaveClass(/on/);
+
+  // 设起点进刷句：开关翻面，说明文字换成连刷口径
+  expect(await page.evaluate(() => TASK.setManualStart(4)), '进入刷句模式').toBe(true);
+  await page.evaluate(() => TASK.openPanel());
+  await expect(brush, '开关翻面：刷句侧亮').toHaveClass(/on/);
+  await expect(mem, '记忆侧熄掉').not.toHaveClass(/on/);
+  await expect(panel.locator('.tp-note').first(), '面板说明跟着换成刷句口径').toContainText('按顺序连刷');
+
+  // 点「记忆模式」侧 → 预览确认 → 确认后翻回 + startInfo 回记忆
+  await mem.click();
+  await expect(page.locator('#startPickPop h3'), '回记忆走预览确认').toContainText('切换到记忆模式？');
+  await page.locator('#startPickPop button', { hasText: '确认切换' }).click();
+  await expect(mem, '确认后翻回记忆侧').toHaveClass(/on/);
+  expect(await page.evaluate(() => TASK.startInfo().manual), '账面回到记忆模式').toBe(false);
 });

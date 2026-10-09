@@ -137,19 +137,23 @@ test.describe('「我的」双宿主 · 移动端一级页面 / PC 浮窗', () =
     await page.locator('#startPickPop .sp-actions .btn.primary').click();
     await expect(page.locator('#startPickPop'), '设完弹窗自己收掉').toHaveCount(0);
     await expect(start, '就地回显新起点（不用重开这一屏）').toContainText('第 3 篇第 1 句');
-    await expect(me.locator('[data-me-start-auto]'), '刷句模式下给一把切回记忆模式的键').toBeVisible();
+    /* 学习模式开关（2026-10-09 用户：「应该是个开关组件」）：进入刷句后刷句那侧亮。 */
+    const memOpt = me.locator('[data-me-mode="mem"]');
+    const brushOpt = me.locator('[data-me-mode="brush"]');
+    await expect(brushOpt, '刷句侧亮着（当前模式一眼可见）').toHaveClass(/on/);
+    await expect(memOpt, '记忆侧不亮').not.toHaveClass(/on/);
 
-    /* 切回记忆模式走两步（2026-10-09 用户「起点怎么算？怎么让人不恐慌」）：先亮预览
-       （引擎挑的起点落在哪/几句/已读保留），确认才真清账 —— 不再一键盲改。
-       2026-10-10 定名：改回自动安排 → 切换到记忆模式。 */
-    await me.locator('[data-me-start-auto]').click();
+    /* 切回记忆模式走开关：点记忆那侧 → 先亮预览（引擎挑的起点落在哪/几句/已读保留），
+       确认才真清账。开关翻面 + 起点行换字，都是切换完成的第一眼反馈。 */
+    await memOpt.click();
     await expect(page.locator('#startPickPop h3'), '先看到结果预览，不是直接改').toContainText('切换到记忆模式？');
     /* 预览显示的是【记忆模式引擎】算出的起点（不是刷句位置）：新计划引擎从头排 = 第1篇第1句。 */
     await expect(page.locator('#startPickPop .sp-warn').first(), '预览里有引擎算出的起点位置').toContainText('第1篇第1句');
     await page.locator('#startPickPop button', { hasText: '确认切换' }).click();
     await expect(page.locator('#startPickPop'), '确认后弹窗收掉').toHaveCount(0);
     await expect(start, '切回后回到记忆模式文案').toContainText('记忆模式');
-    await expect(me.locator('[data-me-start-auto]'), '记忆模式下这一颗不该可见（行整条 hidden，不换节点）').toBeHidden();
+    await expect(memOpt, '开关翻面：记忆侧亮').toHaveClass(/on/);
+    await expect(brushOpt, '刷句侧熄掉').not.toHaveClass(/on/);
   });
 
   /* 起点弹窗（z 611）现在会盖在浮窗（400）之上：Esc 必须一层一层收。

@@ -1870,6 +1870,24 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .ps-opt { border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer;
     background: transparent; color: var(--text); -webkit-appearance: none; appearance: none; transition: all var(--t-hover); }
   @media (hover: hover) { .ps-opt:hover { border-color: var(--accent); color: var(--accent-text); } }
+  /* 学习模式分段开关（2026-10-09 用户：「切换到记忆模式没感受到任何变化，这里应该是个开关组件」）：
+     模式从「藏在起点弹窗里的单向按钮」升成一等公民——两颗胶囊并排，当前模式亮着，
+     在哪个模式一眼可见；点另一侧才弹对应的确认/选起点弹窗。三处宿主共用：
+     「我的」浮窗/页面（.mp-row 内）、今日面板（.tp-actions 内）。
+     高亮走 --accent（与主按钮同源）；min-height 44 是 §10.4 的触摸目标；
+     显式 color 是 Safari buttontext 地雷的同款防御（见上 .ps-opt 注释）。 */
+  .mode-seg { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--border);
+    border-radius: 999px; padding: 3px; background: var(--card); }
+  .mode-opt { border: 0; border-radius: 999px; padding: 6px 14px; font-size: 12.5px; font-weight: 600;
+    cursor: pointer; background: transparent; color: var(--muted); -webkit-appearance: none; appearance: none;
+    min-height: 32px; transition: all var(--t-hover); }
+  .mode-opt.on { background: var(--ink-known); color: var(--bg); }
+  /* 高亮态不用绿底绿字（--accent 压 --accent-text 实测 1.62:1，axe 直接 serious）：
+     墨底亮字（浅色 #181c15/#f6f4ef ≈ 15.8:1、深色 #f5f1e8/#252220 ≈ 14.9:1）——
+     都是现成令牌，且「墨色 = 定下的状态」与已完成句同一门语言。 */
+  body.dark .mode-seg { background: var(--card); }
+  body.dark .mode-opt { color: var(--muted); }
+  body.dark .mode-opt.on { color: var(--bg); }
   /* 「每天有多少分钟」滑块（2026-10-08 用户：胶囊档位换成 5..240、步长 5 的滑块）。
      三处宿主共用 .min-* 这一套：设置屏、今日面板「计划」页、「我的」浮窗。
      那支绿走 accent-color，与随身听的 .ls-seek 同源；min-height 44 是 §10.4 的触摸目标。 */
@@ -10123,17 +10141,29 @@ let listenOn = false;
         try { refreshStartHosts(); } catch (e) {}
         try {
           /* toast 把结果说全（用户：「改回自动，起点怎么算？怎么让人不慌」）：
-             此时 manualStart 已清，globalDayRange 算的就是纯记忆模式队列 —— 说的就是即将发生的。 */
+             此时 manualStart 已清，globalDayRange 算的就是纯记忆模式队列 —— 说的就是即将发生的。
+             2026-10-09 用户「切换后没感受到任何变化」：把「接下来引擎会怎么干」说出口，
+             不让一次只有两个字的回显变化独扛反馈。 */
           const g = globalDayRange();
-          let msg = '已切换到记忆模式';
+          let msg = '已切换到记忆模式：引擎按遗忘曲线挑句';
           if (g) {
             const a = artOfSentGlobal(g[0]);
-            msg += '，今日从第' + (a + 1) + '篇第' + (g[0] - computeChapterStart(a) + 1) + '句起（共 ' + globalPromiseN() + ' 句）';
+            msg += '，今日从第' + (a + 1) + '篇第' + (g[0] - computeChapterStart(a) + 1) + '句起（共 ' + globalPromiseN() + ' 句，已重排）';
           }
           msg += '，今天已读的保留';
           showAbToast(msg);
         } catch (e) { try { showAbToast('已切换到记忆模式'); } catch (e2) {} }
         return true;
+      }
+      /* 学习模式开关（2026-10-09 用户：「这里应该是个开关组件」）：模式切换升成一等公民。
+         点当前侧 = 无动作；点另一侧 = 走该方向的既有确认弹窗 ——
+         刷句 → 记忆：预览确认（confirmAutoStart，返回 = 直接关）；
+         记忆 → 刷句：起点选择器（选起点确定 = 进刷句，弹窗里写明）。
+         两个方向都复用同一套弹窗，不另造第二套确认交互。 */
+      function switchMode(to) {
+        const ms = !!manualStartToday();
+        if (to === 'mem') { if (ms) confirmAutoStart(false); }
+        else if (to === 'brush') { if (!ms) openStartPicker(); }
       }
       function updateMarkers() {
         paintTodayRange();
@@ -10613,8 +10643,10 @@ let listenOn = false;
         <div class="tp-note sm eta-foot" id="todayEta" data-days="">算一下…</div>
         <div class="tp-actions"><button class="btn primary" onclick="TASK.enterTaskMode()">${taskMode ? '继续任务' : '开始今天的任务'}</button>
           ${taskMode ? '<button class="btn" onclick="TASK.exitTaskMode()">退出任务模式</button>' : ''}</div>
-        <div class="tp-actions"><button class="btn" onclick="TASK.openStartPicker()">起点与模式</button>
-          ${ms ? '<button class="btn" onclick="TASK.clearManualStart()">切换到记忆模式</button>' : ''}
+        <div class="tp-actions mode-seg" role="radiogroup" aria-label="学习模式">
+          <button class="mode-opt${ms ? '' : ' on'}" role="radio" aria-checked="${!ms}" onclick="TASK.switchMode('mem')">记忆模式</button>
+          <button class="mode-opt${ms ? ' on' : ''}" role="radio" aria-checked="${!!ms}" onclick="TASK.switchMode('brush')">刷句模式</button></div>
+        <div class="tp-actions"><button class="btn" onclick="TASK.openStartPicker()">今日任务从哪开始</button>
           ${ms && msAcc && msAcc.atEnd ? '<button class="btn primary" onclick="TASK.brushAgain()">再刷一遍（从第1篇第1句）</button>' : ''}</div>`;
       }
 
@@ -11047,6 +11079,9 @@ let listenOn = false;
         loadRoot, todayPlan, state: () => ROOT2 && ROOT2.state, events: () => (ROOT2 && ROOT2.events) || [],
         pendingEvents, cloudPush, cloudPull, cloudSync, retrySync, syncHintText,
         initPlan, resetV2, readDone, relearn, setView, setMinutes,
+        /* 学习模式开关的出口（2026-10-09 用户：「应该是个开关组件」）：今日面板与
+           「我的」共用同一颗 switchMode —— 点另一侧才弹对应确认，点当前侧无动作。 */
+        switchMode,
         /* 「每天有多少分钟」滑块的三份出口（2026-10-08）：minSlider 给「我的」浮窗拼 markup，
            bindMinSlider 给它挂监听，MIN_RANGE 让外面读到同一份档位（别再抄第二份 5..240）。 */
         minSlider, bindMinSlider, MIN_RANGE,
