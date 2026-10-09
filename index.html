@@ -4405,6 +4405,10 @@ let listenOn = false;
     const slowT = setTimeout(() => {
     if (done || my !== speakToken) return;
     if (this._slowT && Date.now() - this._slowT < 20000) return;
+    /* 单词级短合成（答题反馈 / 点词发音，≤2 个词）不弹这句：一两个音节也常超 1.8s，
+       弹出来就成了每答一题弹一次（2026-10-09 用户实测「答题一直提示这个」）。
+       句子级播放保留提示 —— 「等半天突然换人声」的困惑仍值得当场说破。 */
+    if (String(text).trim().split(/\s+/).length <= 2) return;
     this._slowT = Date.now();
     try { showAbToast('☁ 云端语音合成中…（网络慢时会多等一会儿，不会静默换成本地音色）'); } catch (e) {}
     }, 1800);
@@ -8521,6 +8525,16 @@ let listenOn = false;
         }
         if (item.retake) resetBlank(bi);       // 补考：把上一次的红字收掉，重新问
         _curBlank = bi;
+        /* 出题即预热（2026-10-09 用户「为啥每次单词的发音都要单独合成」）：以前答完才合成，
+           每个词都要现场等一趟网络 + TTS，超 1.8s 还弹「云端合成中」。现在题目一亮就把
+           四个选项的短音频丢进后台缓存（cache/_pend 命中直接返回，天然去重），作答时
+           大概率已就绪 → 秒播、零提示。仅云端音色做；本地音色本就不需要合成。 */
+        try {
+          if (isCloudURI(selVoiceURI) && typeof CLOUD !== 'undefined' && CLOUD._on) {
+            const cid = selVoiceURI.slice(6);
+            (q.opts || []).forEach(w => { try { CLOUD.prefetch(String(w), cid, rate); } catch (e) {} });
+          }
+        } catch (e) {}
         renderBlankPop(bi, q);
         const el = _blankEls[bi];
         // 自动推进也会滚：reduced-motion 口径下不用平滑滚动（新动效不许破例）
