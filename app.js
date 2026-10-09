@@ -1,9 +1,11 @@
 /* 3.0 外壳路由。#/home（六张卡片）/ #/stats（学习数据页）/ #/words（单词本）/ #/listen（随身听）
    四个一级页都是真页（M4 起随身听落地）。
    #/me 是 2026-10-08 加的，但它只有移动端是一级页：手机底栏那一格点它进页面，PC 上「我的」
-   仍旧是侧栏那一行向上弹的浮窗、不是路由（撞上 #/me 弹回首页，见 route() 里那条分叉）。 */
+   仍旧是侧栏那一行向上弹的浮窗、不是路由（撞上 #/me 弹回首页，见 route() 里那条分叉）。
+   #/story 是 2026-10-10 加的**二级页**（六篇故事脉络，入口在「我的」里）：不进侧栏导航、
+   可深链，页内「返回首页」回 #/home，选中态不落在任何 nav-item 上。 */
 (function () {
-  const ROUTES = ['home', 'stats', 'words', 'listen', 'me'];
+  const ROUTES = ['home', 'stats', 'words', 'listen', 'me', 'story'];
   /* refine3 ⑦：「正在载入…」占位统一出口。薄荷绿三点轻脉冲（纯 CSS，见 index.html 的 .iel-loading），
      尊重 prefers-reduced-motion；role=status 让读屏知道在加载，而不是一片空白。 */
   function loadingHtml() {
@@ -81,6 +83,8 @@
     if (cur === 'listen' && window.APP3 && window.APP3.renderListen) return window.APP3.renderListen(view);
     if (cur === 'listen') { view.innerHTML = loadingHtml(); return; }
     if (cur === 'me') return renderMe(view);
+    /* 故事脉络（2026-10-10）：纯静态内容页，不依赖 dataReady / 登录 —— 冷启动直链也直接画。 */
+    if (cur === 'story') return renderStory(view);
     // cur 只可能是 ROUTES 成员，这里只作兜底：回首页。
     return window.APP3.renderHome(view);
   }
@@ -88,6 +92,12 @@
     // 左下角用户卡：PC 未登录 → 统一登录弹窗，已登录 → 开/关浮窗；手机端 → 一律切到 #/me 那一页。
     const me = e.target.closest('#meCard');
     if (me) { meOpen(); return; }
+    /* 故事脉络二级页（2026-10-10）：「返回首页」走显式路由（不是 history.back —— 深链进来时
+       背后没有上一页）；每站那颗「去读这一篇」与首页卡片同一个 openArticle 出口。 */
+    const stBack = e.target.closest('.sy-back');
+    if (stBack) { location.hash = '#/home'; return; }
+    const stRead = e.target.closest('.sy-read');
+    if (stRead && stRead.dataset.a != null) { openArticle(Number(stRead.dataset.a)); return; }
     // 单词本：筛选 / 展开 / 重学 / 播放 / 加载更多（M3，都是每次重渲的节点，走事件代理）。
     const wf = e.target.closest('.wb-filter');
     if (wf) { location.hash = '#/words/' + wf.dataset.f; return; }
@@ -1336,6 +1346,8 @@
         <div class="mp-row"><span class="mp-label">数据</span><div class="ps-opts">
           <button class="ps-opt" data-me-export>导出备份</button>
           <button class="ps-opt" data-me-import>导入恢复</button></div></div>
+        <div class="mp-row"><span class="mp-label">故事脉络</span>
+          <button class="ps-opt" type="button" data-me-story aria-label="查看六篇故事脉络">查看</button></div>
       </div>
       <div class="mp-foot">${acc.logged
         ? `<button class="mp-logout" type="button" data-me-logout>退出登录</button>`
@@ -1546,7 +1558,7 @@
     if (!root || root._meWired) return;
     root._meWired = true;
     root.addEventListener('click', (e) => {
-      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-start],[data-me-mode],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-login-btn],[data-me-logout]');
+      const t = e.target.closest('[data-me-cta],[data-me-theme],[data-me-start],[data-me-mode],[data-me-reset-plan],[data-me-export],[data-me-import],[data-me-story],[data-me-login-btn],[data-me-logout]');
       if (!t) return;
       // 有些按钮点完会重渲宿主（重置/退出）—— 重渲会把 e.target 从 DOM 摘下来，
       // 事件继续冒泡到 document 的「点外面收掉」监听时，target 已不在宿主里，会被误判成点外面。
@@ -1572,6 +1584,11 @@
       else if (t.hasAttribute('data-me-reset-plan')) { TASK.resetLearningPlan(); rerenderMe(); }
       else if (t.hasAttribute('data-me-export')) { TASK.exportBackup(); }
       else if (t.hasAttribute('data-me-import')) { TASK.importBackup('meImportFile'); }
+      /* 故事脉络（2026-10-10 用户加）：PC 先收浮窗再切路由；手机端浮窗是空壳，closeMePop 是安全空转。 */
+      else if (t.hasAttribute('data-me-story')) {
+        try { closeMePop(); } catch (err) {}
+        location.hash = '#/story';
+      }
       else if (t.hasAttribute('data-me-login-btn')) { openLoginModal(); }
       else if (t.hasAttribute('data-me-logout')) { meLogout(); }
     });
@@ -1601,6 +1618,220 @@
   wireLoginModal();
   updateMeCard();
   setTimeout(updateMeCard, 1500);   // CLOUD.boot 异步恢复登录态：稍后把卡上昵称补一次
+
+  /* ---- 3.0 故事脉络二级页（2026-10-10 用户加；入口在「我的」里，路由 #/story）----
+     把《docs/2026-10-09-六篇故事主线梳理.md》做成看得见的页面：六站路线图（逐篇场景链）
+     + 情感曲线 + 人物矩阵 + 跨篇接力。目的只有一个 —— 用故事场景记单词：读某篇前先扫
+     一遍它的场景链，读完回来看承接点，把词挂在画面上。
+     ① 内容与梳理文档逐条对应（开篇/收篇引文逐字取自 data/sections.json）；标题/句数/卷数按数据
+        口径（六篇 1833 句冻结）；每卷的「段号范围 + 句数」= sections.json 里按 subheads 非空处
+        切出的真实边界（story.spec.ts 有一条对账锁，改数据必须连这里一起改）；② 纯静态渲染，不依赖
+        dataReady / 登录 —— 冷启动直链 #/story 也能直接看；③ 颜色全走 token，深色自动跟随；
+     ④ 样式在 index.html 的「3.0 故事脉络二级页」一段：类名前缀 **sy-**（story）——注意 st-
+        已被学习数据页整族占用（.st-block/.st-num/.st-art…），加类名前先看一眼那段注释。 */
+  const STORY_STOPS = [
+    {
+      name: '地球与生命', en: 'Earth & Life', icon: 'ri-earth-line',
+      n: 339, vols: 4, tone: '好奇与惊叹', arc: '① 认识世界 → ② 照料生命',
+      time: '一学年：夏 → 冬，又一个周六', cast: '利奥 · 小波 · 小梅 · 山姆 · 林老师',
+      path: [
+        ['卷一 · 远行', 'P0–11', 65, ['课堂圈层', '山地冰川', '沼泽三角洲', '横渡大西洋', '峭壁窄桥']],
+        ['卷二 · 归来', 'P12–27', 97, ['气象站暴雨', '湿地取样', '查出污染', '护林节水', '村民投票']],
+        ['卷三 · 星空菜园', 'P28–44', 98, ['望远镜观星', '土壤与光合', '遗传变异', '收获分享', '蜜蜂授粉']],
+        ['卷四 · 动物救助站', 'P45–57', 79, ['救助站义工', '繁殖与照料', '检查爪喙鳍羽', '夜行冬眠', '老牧羊人道谢']],
+      ],
+      hook: '埋题：卷二查出的河水污染，跨三篇到篇4 才被净水装置作答',
+    },
+    {
+      name: '校园与文化', en: 'Campus & Culture', icon: 'ri-graduation-cap-line',
+      n: 312, vols: 2, tone: '热情与充实', arc: '③ 走进集体',
+      time: '一学期 + 文化娱乐周（周一→周日）', cast: '小宇 · 林 · 梅 · 安娜 · 山姆',
+      path: [
+        ['上篇 · 新生学期', 'P0–26', 164, ['入学立目标', '图书馆夜读', '期末周结伴', '自律计划', '春风转机']],
+        ['下篇 · 文化娱乐周', 'P27–51', 148, ['周一文明课', '周二博物馆', '周三语言角', '周四协商', '周五媒体', '周六马戏音乐会', '周日赛场']],
+      ],
+      hook: '从篇0 的野外课堂走进制度化的校园；「自律」从小宇自己定下的计划开始',
+    },
+    {
+      name: '衣食住行', en: 'Daily Life', icon: 'ri-home-heart-line',
+      n: 232, vols: 2, tone: '安稳与暖意', arc: '④ 安顿家园',
+      time: '数周 → 数月', cast: '「我」 · 奶奶 · 王叔',
+      path: [
+        ['上篇 · 旧物改造店', 'P0–17', 106, ['洗木板', '补床垫', '换保险丝', '修椅缝裙边', '黄昏共茶']],
+        ['下篇 · 老屋餐厅', 'P18–39', 126, ['奶奶拍板', '清棚屋', '请工匠', '秘方开饭馆', '备宴烤派', '黎明吊灯']],
+      ],
+      hook: '前传：这里拍板开饭馆的奶奶，就是篇5 需要全家照顾的奶奶',
+    },
+    {
+      name: '社会与规则', en: 'Society & Rules', icon: 'ri-train-line',
+      n: 394, vols: 2, tone: '压力与冲突', arc: '⑤ 规则与和解',
+      time: '一趟跨国旅程 + 一段店铺经营', cast: '「我」与父亲；老林 · 梅姨',
+      path: [
+        ['上篇 · 跨国列车', 'P0–43', 261, ['拂晓海图', '跨国列车', '老水手渡船', '议会与投票', '独立与王冠', '各国旅人']],
+        ['下篇 · 街角小店', 'P44–65', 133, ['老林开店', '账本吃紧', '冬货延误', '谣言与冲突', '梅姨调解', '认错和好']],
+      ],
+      hook: '大规则（国家 · 法律）与小规则（契约 · 账本）—— 同一枚硬币的两面',
+    },
+    {
+      name: '历史与发明', en: 'History & Inventions', icon: 'ri-lightbulb-line',
+      n: 215, vols: 2, tone: '沉重转昂扬', arc: '⑥ 记忆与创造',
+      time: '一个周日 + 一段赛程', cast: '爷爷 · 小波 · 林 · 梅 · 兰 · 林老师',
+      path: [
+        ['上篇 · 纪念馆', 'P0–17', 107, ['爷爷讲战争', '坦克与围城', '反抗与停战', '宿敌化友', '白鸽与碑石']],
+        ['下篇 · 发明比赛', 'P18–35', 108, ['用水课题', '量规传感器', '灰水净化', '老陈教操作', '小波拄拐提水嘴', '全街鼓掌']],
+      ],
+      hook: '全书最强承接：篇0 埋下的河水污染，在这里被净水装置正面回答',
+    },
+    {
+      name: '身体与时间', en: 'Body & Time', icon: 'ri-heart-pulse-line',
+      n: 341, vols: 2, tone: '平静与感恩', arc: '⑦ 回到自身',
+      time: '利奥的一天 + 奶奶的一年', cast: '利奥 · 奶奶 · 林 · 梅 · 安娜 · 本',
+      path: [
+        ['上篇 · 备考的一天', 'P0–19', 120, ['清晨闹钟', '等车回望星空', '课堂与球场', '夜读互助', '含笑入梦']],
+        ['下篇 · 奶奶的健康年', 'P20–55', 221, ['陪奶奶就诊', '查体验血', '慢病筛查', '调养恢复', '林重新学会走路', '老护士含笑']],
+      ],
+      hook: '闭环：篇0 抬头看星星的利奥在这里低头赶路；看星星的人，换成了下一代',
+    },
+  ];
+  /* 人物跨篇矩阵（梳理文档 §3.1，出场=1）。三条硬事实都是 2026-10-10 回原文逐句核过的：
+     ① 「林」「梅」都是**同名族**、不是一个角色 —— 见 renderStory 里 .sy-cast-note 那句；
+     ② Sam 在篇0 是送货司机（[0.18.2] 长途乡村送货 / [0.19.0] 拒运有毒货物），篇1 起是同学
+        （[1.13.5] 深夜在白板画学习图表…），中文译名随之分作「萨姆/山姆」；两篇是否同一角色
+        文本没坐实（审阅报告 X-2 仍列待确认），这里照「同名并存」记，不替它定案；
+     ③ 篇4 下篇 / 篇5 的「林（奶奶的孙辈）」是终章主角，单独一行 —— 别跟篇0/4 的林老师合并。 */
+  const STORY_CAST = [
+    ['利奥', [1, 0, 0, 0, 0, 1], '野外少年 → 备考青年，全书第一主角'],
+    ['小波', [1, 0, 0, 0, 1, 0], '捡石测磁的孩子 → 登山摔伤后拄双拐提案'],
+    ['林老师', [1, 0, 0, 0, 1, 0], '带队的科学老师：篇0 讲安全 → 篇4 夸孩子手稳'],
+    ['林（孙辈）', [0, 0, 0, 0, 1, 1], '篇4 参赛少年 → 篇5 卧床后重新学走路的奶奶的孙子（梅的哥哥）'],
+    ['爷爷', [1, 0, 1, 0, 1, 1], '家族记忆的承载者：纪念馆讲述者、奶奶的「顶梁柱」'],
+    ['奶奶', [0, 1, 1, 0, 0, 1], '拍板开饭馆 → 被全家照顾的「健康年」'],
+    ['梅（四组同名）', [1, 1, 0, 1, 1, 1], '小梅(篇0) · 同学梅(篇1) · 梅姨(篇3，成年) · 妹妹梅(篇4/5)'],
+    ['安娜', [1, 1, 0, 0, 1, 1], '同学 → 老师，完成一次代际转身'],
+    ['王叔', [1, 0, 1, 0, 0, 0], '邻里工匠：旧吉普等清洁汽油 → 钢工具修老屋'],
+    ['山姆 Sam', [1, 1, 0, 0, 0, 0], '篇0 送货司机（译「萨姆」）· 篇1 同学（译「山姆」）'],
+    ['陈', [0, 0, 0, 0, 1, 1], '老陈教操作 → 陈叔叔送米送书'],
+  ];
+  /* 跨篇接力（梳理文档 §四）：前篇埋的人或题，后篇接着写 —— 五条都能回原文查到。
+     标签刻意用「前篇 / 后篇」而不是「埋题 / 作答」：第 5 条接的是**人**（安娜），不是命题。
+     方向必须是从小篇号到大篇号：篇4 的东西不可能「作答」给更早的篇3（初版那条就是这么错的）。 */
+  const STORY_RELAY = [
+    ['篇0', '河水污染 · 村民大会投票先节水', '篇4', '净水装置通过试验 · 全街鼓掌'],
+    ['篇3', '老水手吃热面包讲汽船往事', '篇4', '老海员领衔用水课题'],
+    ['篇0', '星空与望远镜', '篇5', '林对星星生出好奇'],
+    ['篇0', '林老师在课堂讲大气与氧气', '篇5', '收尾：林稳健向前 · 老护士含笑'],
+    ['篇1', '安娜帮同学背词、讲句法规则', '篇5', '安娜成了康复少年的老师'],
+  ];
+  /* 场景链：站与站之间用 → 相连；每段不断行（nowrap），换行交给箭头间隙。 */
+  function storyChain(stops) {
+    return stops.map((s, i) => `${i ? '<i class="arv" aria-hidden="true">→</i>' : ''}<span>${esc(s)}</span>`).join('');
+  }
+  function storyStopHtml(st, i) {
+    const vols = st.path.map(([nm, rg, sn, stops]) => `<div class="sy-vol">
+        <span class="sy-volname">${esc(nm)}<em>${esc(rg)} · ${sn} 句</em></span>
+        <span class="sy-chain">${storyChain(stops)}</span></div>`).join('');
+    return `<div class="sy-stop" data-a="${i}">
+      <div class="sy-node" aria-hidden="true">${i}</div>
+      <div class="sy-card">
+        <div class="sy-top"><i class="${st.icon} sy-ico" aria-hidden="true"></i>
+          <b class="sy-name">${esc(st.name)}</b><span class="sy-en">${esc(st.en)}</span>
+          <span class="sy-tone">${esc(st.tone)}</span></div>
+        <div class="sy-meta"><span>${st.n} 句 · ${st.vols} 卷</span><span>${esc(st.time)}</span><span>${esc(st.cast)}</span></div>
+        <div class="sy-arc">${esc(st.arc)}</div>
+        <div class="sy-vols">${vols}</div>
+        <div class="sy-hook"><i class="ri-links-line" aria-hidden="true"></i>${esc(st.hook)}</div>
+        <button class="sy-read" type="button" data-a="${i}" aria-label="去读《${esc(st.name)}》">去读这一篇</button>
+      </div>
+    </div>`;
+  }
+  /* 情感曲线（梳理文档 §六·维度三）：好奇 → 热情 → 安稳 → 冲突 → 昂扬 → 平静。
+     y 越小越昂扬、x 六等分；viewBox 344×116，宽度 100% 自适应。 */
+  function storyTrendSvg() {
+    const P = [[32, 34, '好奇'], [88, 40, '热情'], [144, 54, '安稳'], [200, 82, '冲突'], [256, 30, '昂扬'], [312, 60, '平静']];
+    const dots = P.map(([x, y]) => `<circle class="tc-dot" cx="${x}" cy="${y}" r="3.5"/>`).join('');
+    const tones = P.map(([x, y, t]) => `<text class="tc-tone" x="${x}" y="${y - 10}" text-anchor="middle">${t}</text>`).join('');
+    const xs = P.map(([x], i) => `<text class="tc-x" x="${x}" y="107" text-anchor="middle">篇${i}</text>`).join('');
+    return `<svg viewBox="0 0 344 116" role="img" aria-label="六篇情感基调曲线：好奇、热情、安稳、冲突、昂扬、平静">
+      <line class="tc-base" x1="20" y1="92" x2="324" y2="92"/>
+      <path class="tc-area" d="M ${P[0][0]} 92 L ${P.map(([x, y]) => `${x} ${y}`).join(' L ')} L ${P[5][0]} 92 Z"/>
+      <polyline class="tc-line" points="${P.map(([x, y]) => `${x},${y}`).join(' ')}"/>
+      ${dots}${tones}${xs}
+    </svg>`;
+  }
+  function storyCastHtml() {
+    const head = `<div class="sy-cast-row sy-cast-head" role="row"><span class="sy-cast-name" role="columnheader">人物</span>` +
+      [0, 1, 2, 3, 4, 5].map(a => `<span class="sy-cast-cell" role="columnheader">篇${a}</span>`).join('') + `</div>`;
+    const rows = STORY_CAST.map(([name, cells, ttl]) => `<div class="sy-cast-row" role="row" title="${esc(name)}：${esc(ttl)}">
+      <span class="sy-cast-name" role="rowheader">${esc(name)}</span>` +
+      cells.map((v, a) => `<span class="sy-cast-cell" role="cell" aria-label="篇${a}${v ? ' 出场' : ' 未出场'}">` +
+        (v ? '<i aria-hidden="true"></i>' : '<em aria-hidden="true">·</em>') + `</span>`).join('') +
+      `</div>`).join('');
+    return head + rows;
+  }
+  function storyRelayHtml() {
+    return STORY_RELAY.map(([fa, ft, ta, tt]) => `<div class="sy-relay-row">
+      <div class="sy-relay-chip"><em>前篇 · ${fa}</em>${esc(ft)}</div>
+      <i class="ri-arrow-right-line sy-relay-arrow" aria-hidden="true"></i>
+      <div class="sy-relay-chip to"><em>后篇 · ${ta}</em>${esc(tt)}</div>
+    </div>`).join('');
+  }
+  function renderStory(view) {
+    view.innerHTML = `<div class="story-page">
+      <button class="sy-back" type="button"><i class="ri-arrow-left-s-line" aria-hidden="true"></i>返回首页</button>
+      <h1 class="pg-title">故事脉络</h1>
+      <p class="sy-sub">六篇其实是一个故事：同一个小镇、同一批人、跨越三代人的六段时光。先看场景，再读正文 —— 单词会挂在画面上。</p>
+      <section class="sy-block" data-block="loop">
+        <div class="sy-loop">
+          <svg class="sy-loop-svg" viewBox="0 0 350 108" role="img" aria-label="首尾闭环：篇0 从「学会呼吸」开始，篇5 以「重新学会走路」结束">
+            <defs><marker id="syArrowHead" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path d="M 0 1.5 L 10 5 L 0 8.5 Z"/></marker></defs>
+            <path class="sy-loop-line" d="M 40 64 C 99.26 14, 240.74 14, 294.96 59.74" marker-end="url(#syArrowHead)"/>
+            <circle class="sy-loop-dot" cx="40" cy="64" r="5"/>
+            <circle class="sy-loop-dot" cx="300" cy="64" r="5"/>
+            <text class="sy-loop-t1" x="40" y="86" text-anchor="middle">学会呼吸</text>
+            <text class="sy-loop-t2" x="40" y="99" text-anchor="middle">篇0 第 1 句</text>
+            <text class="sy-loop-t1" x="300" y="86" text-anchor="middle">重新学会走路</text>
+            <text class="sy-loop-t2" x="300" y="99" text-anchor="middle">篇5 末句</text>
+            <text class="sy-loop-mid" x="170" y="52" text-anchor="middle">六篇 · 一个故事 · 1833 句</text>
+          </svg>
+          <div class="sy-loop-quotes">
+            <p><span class="sy-q">开篇</span>林老师用一幅简单的图开讲：「大气是一层薄薄的空气，裹住供我们呼吸的氧气。」</p>
+            <p><span class="sy-q">收篇</span>说也凑巧，林在那里遇见一位老护士：「她看着他稳健向前的脚步，笑了。」</p>
+          </div>
+        </div>
+      </section>
+      <section class="sy-block" data-block="route">
+        <h2>六站路线 · 从认识世界到安顿自身</h2>
+        <div class="sy-route">${STORY_STOPS.map((st, i) => storyStopHtml(st, i)).join('')}</div>
+      </section>
+      <section class="sy-block" data-block="trend">
+        <h2>六篇的情感基调</h2>
+        <div class="sy-trend">${storyTrendSvg()}</div>
+      </section>
+      <section class="sy-block" data-block="cast">
+        <h2>谁贯穿了全书</h2>
+        <div class="sy-cast" role="table" aria-label="十位主要人物在六篇中的出场分布">${storyCastHtml()}</div>
+        <p class="sy-cast-eg"><b>最有力三例</b>：小波（篇0 捡石测磁 → 篇4 拄拐提案）· 利奥（篇0 观星 → 篇5 备考）· 奶奶（篇2 开饭馆 → 篇5 健康年）</p>
+        <p class="sy-cast-note">两个「<b>同名族</b>」，别当成一个角色：<b>林</b> = 林老师（篇0/4）· 大学生林（篇1）· 店主老林（篇3）· 奶奶的孙辈林（篇4下篇/篇5）；<b>梅</b> = 小梅（篇0）· 同学梅（篇1）· 梅姨（篇3，成年）· 妹妹梅（篇4/5）。这是刻意的「小镇同姓氏族」—— 记场景，别只记名字。</p>
+      </section>
+      <section class="sy-block" data-block="relay">
+        <h2>跨篇接力 · 前篇埋的人和题，后篇都接着写</h2>
+        <div class="sy-relay">${storyRelayHtml()}</div>
+      </section>
+      <section class="sy-block" data-block="usage">
+        <div class="sy-usage">
+          <h2>怎么用它来记单词</h2>
+          <ul>
+            <li>读某篇之前，先扫一眼它的<b>场景链</b> —— 带着画面进正文，生词的落点就是这些画面。</li>
+            <li>读完一篇，回来看它的<b>承接点</b> —— 「埋题」和「作答」常隔着三篇，串起来才成故事。</li>
+            <li>想不起一个词，先想它出现在哪一幕 —— <b>场景是记忆的抽屉</b>。</li>
+            <li>阅读顺序就是现在的篇序 0→5；篇0 可拆两段看：卷一二是「认识世界」，卷三四是「照料生命」。</li>
+          </ul>
+          <p class="sy-close">一句话总结全书：一群孩子在课堂上第一次听说「大气裹住我们呼吸的氧气」；若干年后，其中一个孩子拄过的拐、修过的水嘴、照顾过的奶奶，都变成了另一代孩子画里的树与夜里的星。</p>
+        </div>
+      </section>
+    </div>`;
+  }
+  window.APP3 = Object.assign(window.APP3, { renderStory });
 
   /* ---- 3.0 随身听悬浮球（切 tab 续播）----
      照搬主站 index.html 的 #lsFab：随身听在播/暂停时离开 #/listen → 右下角浮出玻璃胶囊，

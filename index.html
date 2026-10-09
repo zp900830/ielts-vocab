@@ -2509,6 +2509,145 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .wb-detail { background: var(--card); border-color: var(--border); }
   body.dark .wd-stage { background: rgba(255,255,255,.06); color: var(--ink2); }
   body.dark .wd-stage.leech { background: var(--note-bg); color: var(--note-text); }
+  /* ============ 3.0 故事脉络二级页（2026-10-10 用户加；入口在「我的」→「故事脉络」，路由 #/story）============
+     与学习数据页同族的二级页，但阅读列收窄到 820 并在 #appView 里居中（其它一级页是全宽）。
+     ① 前缀一律 sy-（story）。注意 **st- 已被学习数据页整族占用**（.st-block/.st-num/.st-art/.st-tip…），
+        两族不要混；曲线那 6 个 tc-* 是本页内部的子命名空间（照 .st-art + .sa-* 的分层惯例）。
+     ② 颜色全走 token（--card/--border/--text/--muted/--accent-soft/--note-bg/--iel-tint），
+        深浅两套自动跟随 —— 本页**没有** body.dark 覆盖，加硬编码色前先看这条。
+     ③ 两张图是内联 SVG（零依赖）。SVG 里的 <text> 会跟着 viewBox 一起放大，所以字号按「手机档 1:1」
+        设计，再用 max-width 把桌面档的放大压住：hero 350×1.383=484px、曲线 344×1.45=500px。
+        这是避免两档字体差异的唯一正解，别为了"铺满"把 max-width 调大 —— 改 viewBox 时这两个数要跟着重算。
+     ④ 内容与《docs/2026-10-09-六篇故事主线梳理.md》逐条对应，改一边就要改另一边。 */
+  .story-page { max-width: 820px; margin: 0 auto; }
+  .sy-back { display: inline-flex; align-items: center; gap: 2px; min-height: 44px; margin: 0 0 2px -8px;
+    padding: 0 12px 0 6px; border: none; border-radius: 999px; background: transparent;
+    color: var(--accent-text); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+    -webkit-appearance: none; appearance: none; transition: background var(--t-fast); }
+  @media (hover: hover) { .sy-back:hover { background: var(--accent-soft); } }
+  .sy-back i { font-size: 18px; }
+  /* 与 .pg-title 的 16px 下边距对消 8px，让副题贴住标题（改 .pg-title 时这里一起看）。 */
+  .sy-sub { margin: -8px 0 18px; font-size: 13px; line-height: 1.75; color: var(--muted); }
+  /* 区块标题与学习数据页同一档（15px/700），两页切来切去不跳高。 */
+  .sy-block { margin-bottom: 26px; }
+  .sy-block > h2 { font-size: 15px; font-weight: 700; color: var(--text); margin: 0 0 10px; }
+  /* —— ① 首尾闭环（hero：一条弧 + 两张引文卡）—— */
+  .sy-loop { padding: 14px 16px 15px; border: 1px solid var(--border); border-radius: 16px;
+    background: var(--card); box-shadow: var(--shadow); }
+  /* viewBox 350 是算出来的：右端「重新学会走路」6 字 ×12.5 = 75，居中在 x=300 时右边界 337.5，
+     左端「学会呼吸」4 字居中在 x=40 时左边界 15 —— 留白 15/12.5 正好对称。**layout 改窄会被 SVG 视口裁掉末字。** */
+  .sy-loop-svg { display: block; width: 100%; max-width: 484px; height: auto; margin: 0 auto; }
+  .sy-loop-line { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+  #syArrowHead path { fill: var(--accent); }
+  .sy-loop-dot { fill: var(--accent-bright); stroke: var(--card); stroke-width: 2; }
+  .sy-loop-t1 { font-size: 12.5px; font-weight: 700; fill: var(--text); }
+  .sy-loop-t2 { font-size: 10px; fill: var(--muted); }
+  .sy-loop-mid { font-size: 11.5px; fill: var(--muted); letter-spacing: .04em; }
+  .sy-loop-quotes { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; margin-top: 13px; }
+  .sy-loop-quotes p { margin: 0; padding: 9px 12px; border-left: 3px solid var(--accent-line);
+    border-radius: 0 10px 10px 0; background: var(--iel-tint); font-size: 12.5px; line-height: 1.7; color: var(--text); }
+  .sy-q { display: inline-block; margin-right: 6px; padding: 1px 7px; border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent-text); font-size: 10.5px; font-weight: 700; }
+  /* —— ② 六站路线（左竖线 + 编号节点 + 右卡片）—— */
+  .sy-route { display: flex; flex-direction: column; gap: 14px; }
+  .sy-stop { position: relative; display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 12px; }
+  .sy-stop::before { content: ''; position: absolute; left: 13px; top: 31px; bottom: -14px; width: 2px;
+    background: var(--accent-line); }
+  .sy-stop:last-child::before { display: none; }
+  .sy-node { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; margin-top: 2px; border: 1px solid var(--accent-line); border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent-text); font-size: 12px; font-weight: 800;
+    font-variant-numeric: tabular-nums; }
+  .sy-card { padding: 13px 15px 14px; border: 1px solid var(--border); border-radius: 16px;
+    background: var(--card); box-shadow: var(--shadow); }
+  .sy-top { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 7px; }
+  .sy-ico { font-size: 17px; color: var(--accent-text); }
+  .sy-name { font-size: 15px; font-weight: 800; color: var(--text); }
+  .sy-en { font-size: 11.5px; color: var(--muted); }
+  .sy-tone { margin-left: auto; padding: 2px 9px; border-radius: 999px; background: var(--accent-soft);
+    color: var(--accent-text); font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .sy-meta { display: flex; flex-wrap: wrap; gap: 3px 12px; margin-top: 7px; font-size: 11.5px;
+    color: var(--muted); font-variant-numeric: tabular-nums; }
+  .sy-arc { margin-top: 7px; font-size: 13px; font-weight: 600; color: var(--text); }
+  .sy-vols { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; }
+  .sy-vol { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 9px; }
+  .sy-volname { flex: none; font-size: 11.5px; font-weight: 700; color: var(--accent-text); }
+  .sy-volname em { margin-left: 5px; font-style: normal; font-size: 10.5px; font-weight: 400; color: var(--muted); }
+  /* 场景链：每个场景不断行（nowrap），换行交给箭头之间的空隙 —— 链条断在场景边界上才算"看得清"。 */
+  .sy-chain { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 4px; min-width: 0;
+    font-size: 12px; color: var(--text); }
+  .sy-chain span { padding: 1px 7px; border-radius: 7px; background: var(--iel-tint); white-space: nowrap; }
+  .sy-chain .arv { flex: none; margin: 0 1px; font-size: 10px; font-style: normal; color: var(--muted); }
+  .sy-hook { display: flex; gap: 6px; align-items: flex-start; margin-top: 10px; padding: 8px 10px;
+    border-radius: 10px; background: var(--note-bg); color: var(--note-text); font-size: 12px; line-height: 1.65; }
+  .sy-hook i { flex: none; margin-top: 1px; font-size: 13px; }
+  .sy-read { min-height: 44px; margin-top: 11px; padding: 0 15px; border: 1px solid var(--accent-line);
+    border-radius: 999px; background: var(--accent-soft); color: var(--accent-text);
+    font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+    -webkit-appearance: none; appearance: none; transition: filter var(--t-fast); }
+  @media (hover: hover) { .sy-read:hover { filter: brightness(.97); } }
+  /* —— ③ 情感曲线 —— */
+  .sy-trend { padding: 12px 12px 4px; border: 1px solid var(--border); border-radius: 16px;
+    background: var(--card); box-shadow: var(--shadow); }
+  .sy-trend svg { display: block; width: 100%; max-width: 500px; height: auto; margin: 0 auto; }
+  .tc-base { stroke: var(--border); stroke-width: 1; stroke-dasharray: 4 4; }
+  .tc-area { fill: var(--accent-soft); }
+  .tc-line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .tc-dot { fill: var(--accent); stroke: var(--card); stroke-width: 1.5; }
+  .tc-tone { font-size: 9.5px; font-weight: 700; fill: var(--text); }
+  .tc-x { font-size: 10px; fill: var(--muted); }
+  /* —— ④ 人物矩阵（role=table 的 div 网格；缺席格画一个淡点，密度一眼可见）—— */
+  .sy-cast { overflow: hidden; border: 1px solid var(--border); border-radius: 16px;
+    background: var(--card); box-shadow: var(--shadow); }
+  .sy-cast-row { display: grid; grid-template-columns: 100px repeat(6, minmax(0,1fr)); align-items: center;
+    gap: 4px; padding: 7px 10px; border-top: 1px solid var(--border); }
+  .sy-cast-row:first-child { border-top: none; }
+  .sy-cast-head .sy-cast-name, .sy-cast-head .sy-cast-cell { font-size: 10.5px; font-weight: 700; color: var(--muted); }
+  .sy-cast-name { overflow: hidden; font-size: 12.5px; font-weight: 700; color: var(--text);
+    text-overflow: ellipsis; white-space: nowrap; }
+  .sy-cast-cell { display: flex; align-items: center; justify-content: center; }
+  .sy-cast-cell i { display: block; width: 9px; height: 9px; border-radius: 50%; background: var(--grad); }
+  .sy-cast-cell em { font-style: normal; font-size: 12px; color: var(--muted); opacity: .45; }
+  .sy-cast-eg { margin: 10px 0 0; font-size: 12px; line-height: 1.7; color: var(--muted); }
+  .sy-cast-eg b { color: var(--text); }
+  .sy-cast-note { margin: 7px 0 0; font-size: 12px; line-height: 1.7; color: var(--muted); }
+  .sy-cast-note b { color: var(--text); }
+  /* —— ⑤ 跨篇接力（虚线=埋题，实线薄荷=作答，眼看的差别就是"前后篇"）—— */
+  .sy-relay { display: flex; flex-direction: column; gap: 8px; }
+  .sy-relay-row { display: grid; grid-template-columns: minmax(0,1fr) 26px minmax(0,1fr);
+    align-items: center; gap: 6px; }
+  .sy-relay-chip { padding: 9px 11px; border: 1px dashed var(--border); border-radius: 12px;
+    background: var(--card); font-size: 12px; line-height: 1.6; color: var(--text); }
+  .sy-relay-chip em { display: block; margin-bottom: 1px; font-style: normal; font-size: 10px;
+    font-weight: 700; color: var(--muted); }
+  .sy-relay-chip.to { border-style: solid; border-color: var(--accent-line); background: var(--accent-soft); }
+  .sy-relay-chip.to em { color: var(--accent-text); }
+  .sy-relay-arrow { text-align: center; font-size: 15px; color: var(--muted); }
+  /* —— ⑥ 怎么用它来记单词（页尾）—— */
+  .sy-usage { padding: 15px 16px 16px; border: 1px solid var(--border); border-radius: 16px;
+    background: var(--card); box-shadow: var(--shadow); }
+  .sy-usage h2 { margin: 0 0 10px; font-size: 15px; font-weight: 800; color: var(--text); }
+  .sy-usage ul { display: flex; flex-direction: column; gap: 7px; margin: 0; padding: 0; list-style: none; }
+  .sy-usage li { position: relative; padding-left: 17px; font-size: 13px; line-height: 1.7; color: var(--text); }
+  .sy-usage li::before { content: ''; position: absolute; left: 3px; top: 8px; width: 6px; height: 6px;
+    border-radius: 50%; background: var(--accent); }
+  .sy-usage b { color: var(--accent-text); }
+  .sy-close { margin: 13px 0 0; padding-top: 12px; border-top: 1px dashed var(--border);
+    font-size: 12.5px; line-height: 1.75; color: var(--muted); }
+  @media (max-width: 700px) {
+    .sy-loop { padding: 12px 13px 13px; }
+    .sy-loop-quotes { grid-template-columns: minmax(0,1fr); }
+    .sy-stop { grid-template-columns: 26px minmax(0,1fr); gap: 9px; }
+    .sy-stop::before { left: 12px; top: 29px; }
+    .sy-node { width: 26px; height: 26px; font-size: 11.5px; }
+    .sy-card { padding: 12px 13px 13px; }
+    .sy-tone { margin-left: 0; }
+    .sy-cast-row { grid-template-columns: 78px repeat(6, minmax(0,1fr)); gap: 2px; padding: 6px 8px; }
+    .sy-cast-name { font-size: 11px; }
+    .sy-cast-head .sy-cast-name, .sy-cast-head .sy-cast-cell { font-size: 9.5px; }
+    .sy-relay-row { grid-template-columns: minmax(0,1fr); }
+    .sy-relay-arrow { transform: rotate(90deg); }
+  }
   /* ============ 3.0 外壳深色覆盖（W2，PRD §10.1） ============
      外壳与 M1 新页面统一到影子跟读的暖黑 token（--bg/--card/--border/--text/--accent-soft…），
      只把几处写死的浅色值换掉（.a-bar / .a-stage 等）。全部复用既有 token，不新造色。 */
