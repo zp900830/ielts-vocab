@@ -3313,7 +3313,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       /* 数据缓存版本：必须等于 data/ 三个 JSON 的内容哈希，由 scripts/validate_data.py 校验。
          不写它，iOS Safari 会按 Last-Modified 启发式缓存 —— 课文改了、词表没改，句序与词表就会错位。
          改了数据忘了 bump 会直接让门禁 FAIL，而不是静默服务旧数据。 */
-      const SHADOW_DATA_VER = "dc84cb8a55";
+      const SHADOW_DATA_VER = "dd9ddedab8";
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
@@ -3670,10 +3670,10 @@ let listenOn = false;
       '第三卷·星空菜园——白天种菜夜晚观星': 'Vol. 3 · Starry Garden — Farming by Day, Stargazing by Night',
       '第四卷·动物救助站——周末义工': 'Vol. 4 · Animal Shelter — Weekend Volunteers',
       '上篇·新生学期': 'Part 1 · A New Semester', '下篇·文化娱乐周': 'Part 2 · Culture & Entertainment Week',
-      '上篇·旧物改造店': 'Part 1 · The Upcycling Shop',
+      '上篇·旧物改造店': 'Part 1 · The Upcycling Shop', '下篇·老屋餐厅': 'Part 2 · The Old Hall Restaurant',
       '上篇·跨国列车': 'Part 1 · The Transnational Train', '下篇·街角小店': 'Part 2 · The Corner Shop',
       '上篇·纪念馆': 'Part 1 · The Memorial Hall', '下篇·发明比赛': 'Part 2 · The Invention Contest',
-      '上篇·备考的一天': 'Part 1 · A Day of Exam Prep', '下篇·奶奶的健康年': "Part 2 · Grandma's Healthy Year",};    const titEN = t => TIT_EN[t] ? ` <span class="t-en">${esc(TIT_EN[t])}</span>` : '';
+      '上篇·备考的一天': 'Part 1 · A Day of Exam Prep', '下篇·奶奶的健康年——全家人的康复与成长': "Part 2 · Grandma's Healthy Year — Recovery for the Whole Family",};    const titEN = t => TIT_EN[t] ? ` <span class="t-en">${esc(TIT_EN[t])}</span>` : '';
     /* ── 位置文案的唯一口径（排查报告 A1）──────────────────────────────
        同一件事原先有六种排法：`第3章 5/40`（第二个数没有单位，读者不知道 40 是什么）、
        `第 2/6 篇`（斜杠两侧没空格）、`5 / 40`（连「第」和单位都没有了，还是同一个 paint() 的

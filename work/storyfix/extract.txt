@@ -1,0 +1,300 @@
+#### 结构概览 ####
+ch0 '地球与生命': paras=58 sents=339 subheads=['第一卷·远行——从课堂到山海极地', '', '', '', '', '', '', '', '', '', '', '', '第二卷·归来——风暴过后是家园', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '第三卷·星空菜园——白天种菜夜晚观星', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '第四卷·动物救助站——周末义工', '', '', '', '', '', '', '', '', '', '', '', '']
+ch1 '校园与文化': paras=52 sents=312 subheads=['上篇·新生学期', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '下篇·文化娱乐周', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+ch2 '衣食住行': paras=40 sents=232 subheads=['上篇·旧物改造店', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+ch3 '社会与规则': paras=66 sents=394 subheads=['上篇·跨国列车', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '下篇·街角小店', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+ch4 '历史与发明': paras=36 sents=215 subheads=['上篇·纪念馆', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '下篇·发明比赛', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+ch5 '身体与时间': paras=56 sents=341 subheads=['上篇·备考的一天', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '下篇·奶奶的健康年', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+total 1833
+
+#### SENT_SHIFTS 样例校验 ####
+global 313 = ch0 P53 S5 | The [[barn:barn]] stood [[stable:stable]] and the [[stable:stable]] doors stayed open.
+global 314 = ch0 P53 S6 | These small frogs seem [[ubiquitous:ubiquitous]] near water all through spring.
+global 1619 = ch5 P21 S1 | A strong [[brain:brain]] needs good sleep, and a calm [[mind:mind]] needs love every day.
+→ after=313 record 对应插在 global313 之后；localAfter=6 待比对 P 内句号
+
+#### A. 8项裁定 + 相关句 ####
+[1.12.3] keys=['calculus', 'plus']
+  EN: He previewed basic [[calculus:calculus]] ideas [[plus:plus]] a few graphs before the new term began.
+  ZH: 新学期开始前，他预习了基础微积分概念和一些图表。
+[3.16.2] keys=['mist', 'postpone', 'trip']
+  EN: No rain and no thick [[mist:mist]], Father said, would make us [[postpone:postpone]] the [[trip:trip]] we had waited years to take.
+  ZH: 父亲说，雨也好雾也好，都拦不住这趟我们等了好几年才出门的旅行。
+[3.16.3] keys=['defer', 'trip']
+  EN: In the small hours I heard Father mumble about [[defer:deferring]] the [[trip:trip]], so I pulled the blanket over him.
+  ZH: 夜深了，我听见父亲嘟囔着要把旅行往后推，就把毯子往他身上拉了拉。
+[3.21.0] keys=['political', 'paper']
+  EN: Mother asked why [[political:political]] news filled every [[paper:paper]] that week.
+  ZH: 母亲问，为什么那一周每份报纸都登满了政治新闻。
+[3.42.1] keys=['soviet', 'film']
+  EN: He even copied a line from an old [[soviet:Soviet]] [[film:film]], which made the whole room laugh.
+  ZH: 他甚至学了一句老苏联电影里的台词，把满屋子的人都逗笑了。
+[3.51.3] keys=['shilling', 'copper']
+  EN: He counted every [[shilling:shilling]] carefully and polished the old [[copper:copper]] jars for decoration.
+  ZH: 他一枚一先令地数得清清楚楚，又把旧铜罐擦得亮亮的当摆设。
+[3.52.4] keys=['payment', 'restaurant', 'refund']
+  EN: A late [[payment:payment]] from a [[restaurant:restaurant]] left him short, so he asked the supplier for a small [[refund:refund]].
+  ZH: 一家饭馆迟迟没付货款，他手头紧了，只好向供货商要了一点退款。
+[3.58.6] keys=['surveillance']
+  EN: Our street now has a new [[surveillance:surveillance]] camera above the gate.
+  ZH: 我们这条街的大门上方，现在装了一个新的监控摄像头。
+[4.31.0] keys=['dependent', 'propose']
+  EN: Small Bo, still [[dependent:dependent]] on crutches, dared to [[propose:propose]] a safer spout.
+  ZH: 拄着双拐还要靠人照应的小波，大胆提出了更安全的水嘴方案。
+[5.36.4] keys=['merry', 'laughter']
+  EN: A [[merry:merry]] neighbour boy shared short jokes, and clear [[laughter:laughter]] filled the small sunny sitting room.
+  ZH: 一个欢乐的邻家男孩讲起短笑话，清脆的笑声洒满小小而向阳的客厅。
+[5.38.4] keys=['humorous', 'polite']
+  EN: Ben told [[humorous:humorous]] tales at lunch, and Lin answered in a [[polite:polite]] way with a bright grin.
+  ZH: 本在午饭时讲幽默故事，林咧嘴一笑，很有礼貌地回应。
+
+#### B. 篇5 P33-P38 全文（S5-1 断点区） ####
+--- P33 ---
+  [5.33.0] She needs no big [[operation:operation]] now, for rest and good food will [[cure:cure]] her slowly.
+      ZH: 她现在不需要大手术，好好休息、好好吃饭，身体会慢慢痊愈。
+  [5.33.1] Time will [[heal:heal]] her gently, and the short [[prescription:prescription]] lists two [[mild:mild]] teas.
+      ZH: 时间会温柔地治好她，短短的处方上只列着两种温和的茶饮。
+  [5.33.2] She needs no skin [[transplant:transplant]] at all, nor any [[injection:injection]] this year.
+      ZH: 她完全不需要皮肤移植，今年也不用打任何针。
+  [5.33.3] As a wise [[precaution:precaution]], the clinic will [[vaccinate:vaccinate]] the whole family in [[spring:spring]].
+      ZH: 作为一种明智的预防，诊所开春会给全家接种疫苗。
+  [5.33.4] We never need to [[quarantine:quarantine]] Grandma, nor [[segregate:segregate]] her meals from ours.
+      ZH: 我们从不需要隔离奶奶，也不把她的饭菜和我们的分开。
+  [5.33.5] We never [[isolate:isolate]] her in her room, for the corner [[pharmacy:pharmacy]] brings her teas every day.
+      ZH: 我们从不把她一个人关在房里，街角的药房每天都给她送茶来。
+--- P34 ---
+  [5.34.0] Her daily [[medicine:medicine]] tastes sweet, and honey tea is her evening [[remedy:remedy]] too.
+      ZH: 她每天吃的药带着甜味，蜂蜜茶也是她晚间的良方。
+  [5.34.1] No strong [[drug:drug]] sits on her [[shelf:shelf]] now — only one small [[pill:pill]] beside warm water.
+      ZH: 她的架子上如今没有烈性药，只有一小粒药片放在温水旁边。
+  [5.34.2] The doctor refused every [[antibiotic:antibiotic]] for her colds, and once chose soft [[acupuncture:acupuncture]] instead.
+      ZH: 她感冒时，医生拒绝使用任何抗生素，倒有一次选了轻柔的针灸来代替。
+  [5.34.3] No [[penicillin:penicillin]] shot was needed today, and no strong [[morphine:morphine]] dulled her smile.
+      ZH: 今天不需要打青霉素针，也没有烈性吗啡让她笑容黯淡。
+  [5.34.4] Each small [[dose:dose]] follows the clock closely, guiding her slow [[recovery:recovery]] day by day.
+      ZH: 每一小剂药都严格按着钟点服下，陪她一天天慢慢康复。
+  [5.34.5] Morning walks [[refresh:refresh]] her face brightly, bringing sweet [[relief:relief]] to us all.
+      ZH: 晨走让她脸上重新有了光彩，也给我们大家带来甜甜的宽慰。
+--- P35 ---
+  [5.35.0] [[gentle:Gentle]] songs [[relieve:relieve]] her worry at [[dusk:dusk]], and warm baths [[alleviate:alleviate]] the ache in her legs.
+      ZH: 黄昏时分，轻柔的歌减轻她的忧愁，暖暖的浴缓解她腿上的酸痛。
+  [5.35.1] Warm tea [[can:can]] [[ease:ease]] her cough at [[night:night]], helping her body [[relax:relax]] under the soft light.
+      ZH: 热茶夜里能缓解她的咳嗽，帮她的身体在柔光下放松下来。
+  [5.35.2] Her sleep is [[normal:normal]] again, and smiles are [[common:common]] [[round:round]] our dinner table.
+      ZH: 她的睡眠又正常了，笑容在我们家的晚餐桌上随处可见。
+  [5.35.3] Our [[usual:usual]] walk starts after breakfast, and Grandma feels bright and [[optimistic:optimistic]] every time.
+      ZH: 我们照例早饭后出门散步，奶奶每次都觉得心里亮堂、满怀乐观。
+  [5.35.4] No one feels [[pessimistic:pessimistic]] now, for each small win brings [[positive:positive]] cheer back home.
+      ZH: 如今没人再悲观，每一个小小的胜利都给家里带回积极的欢乐。
+--- P36 ---
+  [5.36.0] After long weeks in bed, Lin felt [[negative:negative]] and [[passive:passive]], while grey skies hung low outside.
+      ZH: 卧床好几个星期之后，林变得消极又被动，窗外灰蒙蒙的天空低低地压着。
+  [5.36.1] His sister Mei stayed [[enthusiastic:enthusiastic]] about slow walks, but Lin felt [[indifferent:indifferent]] to the bright [[spring:spring]] air.
+      ZH: 妹妹梅对慢慢散步依然热情满满，林却对明朗的春日空气提不起兴趣。
+  [5.36.2] He gave [[apathetic:apathetic]] answers on their short calls, saying his weak legs were a [[negligible:negligible]] issue.
+      ZH: 简短的电话里，他答得冷冷淡淡，说自己腿软不过是个不值一提的小问题。
+  [5.36.3] Then Grandma's warm soup brought soft [[happiness:happiness]] and [[quiet:quiet]] [[delight:delight]] to his tired heart.
+      ZH: 后来，奶奶的热汤给他疲惫的心送来了柔软的幸福和安静的喜悦。
+  [5.36.4] A [[merry:merry]] neighbour boy shared short jokes, and clear [[laughter:laughter]] filled the small sunny sitting room.
+      ZH: 一个欢乐的邻家男孩讲起短笑话，清脆的笑声洒满小小而向阳的客厅。
+  [5.36.5] Lin felt pure [[joy:joy]] again, and his whole family seemed to [[rejoice:rejoice]] with warm tears and smiles.
+      ZH: 林重新感到纯粹的喜悦，全家人含着热泪微笑，仿佛都在欢庆。
+--- P37 ---
+  [5.37.0] A short walk by the lake gave him a soft [[thrill:thrill]] and an [[agreeable:agreeable]] calm he had long missed.
+      ZH: 湖边短短一走，给他带来一阵轻柔的兴奋，还有一份久违的舒心平静。
+  [5.37.1] The cool air seemed to [[exhilarate:exhilarate]] him, and his [[first:first]] steps felt easy and [[satisfactory:satisfactory]] after the long rest.
+      ZH: 凉凉的空气让他浑身振奋，久休之后的第一步走得轻快，令人满意。
+  [5.37.2] Slow [[progress:progress]] felt [[desirable:desirable]] to him, and he grew [[keen:keen]] to learn new skills each bright morning.
+      ZH: 缓慢的进步也让他觉得称心，每个明朗的早晨他都热切地想学点新本领。
+  [5.37.3] He read old books with fresh [[zeal:zeal]] and joined a [[lively:lively]] little group near the green park.
+      ZH: 他带着新鲜的热情读旧书，还加入了绿色公园边一个生机勃勃的小组。
+  [5.37.4] Their [[lovely:lovely]] teacher Anna smiled brightly, and Lin grew [[fond:fond]] of her soft stories and songs.
+      ZH: 他们可爱的老师安娜笑容明亮，林渐渐喜欢上她柔和的故事和歌。
+  [5.37.5] She showed special [[favour:favour]] to slow learners, which gave Lin a [[surprising:surprising]] lift on grey days.
+      ZH: 她格外偏爱学得慢的孩子，这让林在阴郁的日子里收获了意外的惊喜。
+--- P38 ---
+  [5.38.0] Loud drums at the hall do not [[startle:startle]] him now, though strong voices once used to [[astound:astound]] his weak ears.
+      ZH: 礼堂里的鼓声如今不再吓到他，虽然从前大嗓门曾让他虚弱的耳朵受不了。
+  [5.38.1] He left his old [[hectic:hectic]] [[routine:routine]] behind and chose a [[liberal:liberal]] plan with plenty of time for rest and books.
+      ZH: 他告别了从前紧张忙碌的老一套，选了一张宽松的计划表，给休息和读书留足时间。
+  [5.38.2] His uncle Chen was [[generous:generous]] with rice and books, and spoke in a [[gentle:gentle]] low voice on every visit.
+      ZH: 陈叔叔大方地送米送书，每次来都用低柔温和的声音说话。
+  [5.38.3] Lin stayed [[humble:humble]] about small wins, keeping a [[modest:modest]] notebook of daily steps and meals.
+      ZH: 林对小小的进步保持谦逊，用一个朴素的本子记下每天的步数和饭食。
+  [5.38.4] Ben told [[humorous:humorous]] tales at lunch, and Lin answered in a [[polite:polite]] way with a bright grin.
+      ZH: 本在午饭时讲幽默故事，林咧嘴一笑，很有礼貌地回应。
+  [5.38.5] Mei was always [[frank:frank]] with Lin, while the old maps on the wall looked [[mysterious:mysterious]] and fun to study.
+      ZH: 梅对林一向坦率，墙上的旧地图则显得神秘又有趣，值得好好研究。
+
+#### C. 篇2「外婆」全部出现（sentZh + paraZh） ####
+sentZh [2.28.0]: 外婆托起白瓷盘，在每个杯子下面垫上小花茶碟。
+sentZh [2.28.5]: 明明把松动的罐盖压紧，又给外婆倒了一杯热乎乎的梨子饮品。
+sentZh [2.29.3]: 外婆扔掉湿漉漉的烟头，让头脑保持清醒沉稳。
+sentZh [2.30.1]: 他把每颗小萝卜洗干净，又帮外婆削苹果准备午饭。
+sentZh [2.30.5]: 外婆晒着红色李子干，感谢秋天庄稼的丰厚馈赠。
+sentZh [2.32.0]: 外婆给深色的羊肉块调味，又添一根长长的烟熏香肠提味。
+sentZh [2.33.0]: 外婆把长长的意大利面卷成一个个小巢，又把甜牛奶布丁冰镇着当甜点。
+sentZh [2.34.1]: 外婆喜欢温和的果香，不喜欢没熟的李子那股冲鼻的酸味。
+sentZh [2.35.1]: 外婆数着每样新鲜食材，还给长辈们添了一份草本补品。
+sentZh [2.35.3]: 王叔帮忙煎金黄的土豆丝，接着看外婆慢慢烤栗子。
+sentZh [2.36.2]: 外婆教明明挤橙汁，再把蜂蜜轻轻搅进茶里。
+sentZh [2.37.4]: 外婆请王叔修好电线，赶在天亮前把撕破的桌布仔细补好。
+sentZh [2.38.2]: 外婆打清水前先用笔直的铅垂线检验井壁，心里想着家乡那座石头高架桥。
+sentZh [2.39.3]: 外婆领着大家一间间参观里屋，骄傲地展示翻新一新的内饰。
+
+#### D. 篇2 P17-P18 + [2.24.3]、[2.26.2]、[2.39.0] ####
+--- P17 ---
+  [2.17.0] A soft [[tan:tan]] coat is cleaned with care, so its warm color will never [[fade:fade]].
+      ZH: 浅棕色大衣被细心洗护，暖色调永远不会褪去。
+  [2.17.1] Each dark food [[stain:stain]] and each paint [[blot:blot]] slowly fades from the cloth.
+      ZH: 每一块深色食物渍、每一点颜料斑，都慢慢从布面上褪去。
+  [2.17.2] The tall singer is quite a [[figure:figure]] on our street today, looking [[slender:slender]] in her fixed dress.
+      ZH: 那位高个子女歌手今天真成了街上的风景，修好的裙子衬得她十分苗条。
+  [2.17.3] At [[dusk:dusk]] we share tea, thankful for each [[slight:slight]] repair that warms our street.
+      ZH: 黄昏时分我们共饮热茶，感谢每一处小小修补温暖了整条街。
+--- P18 ---
+  [2.18.0] Grandma announced her plan for the [[erection:erection]] of a new hall, brushing aside every past [[stricture:stricture]] about money.
+      ZH: 奶奶宣布了新建一间厅堂的计划，不再理会过去那些关于钱的指责。
+  [2.18.1] Mom agreed to [[construct:construct]] a warm dining hall, though old [[dust:dust]] might [[obstruct:obstruct]] or even [[ruin:ruin]] dinner.
+      ZH: 妈妈同意建一间暖和的饭厅，尽管旧灰尘可能碍事，甚至毁了晚餐。
+  [2.18.2] Mingming wanted to [[establish:establish]] clear duties for everyone, starting with washing the grey [[concrete:concrete]] floor.
+      ZH: 明明想给每个人定下明确的分工，从冲洗灰色水泥地面开始。
+  [2.18.3] Uncle Wang brought bright [[steel:steel]] tools, promising strength and long [[stability:stability]] for the shelves.
+      ZH: 王叔带来了亮闪闪的钢制工具，保证架子结实稳固、用得长久。
+  [2.18.4] They walked around the dusty [[site:site]], dreaming of how the future [[venue:venue]] would welcome guests.
+      ZH: 他们绕着满是灰尘的工地走了一圈，畅想未来这里将如何迎接宾客。
+  [2.18.5] The old house was a village [[landmark:landmark]], quietly [[situated:situated]] beside green trees and [[narrow:narrow]] paths.
+      ZH: 老屋是村里的地标，静静坐落在绿树与窄巷之间。
+[2.24.3] keys=['junk', 'spacious', 'airtight']
+  EN: After we cleared away the [[junk:junk]], the hall looked [[spacious:spacious]] yet still dusty, far from [[airtight:airtight]] and safe.
+  ZH: 清走废旧杂物后，大厅宽敞了些，可还蒙着灰，远算不上密封安全。
+[2.26.2] keys=['recipe', 'restaurant']
+  EN: Grandma shared a secret [[recipe:recipe]], planning to turn the old hall into a small [[restaurant:restaurant]].
+  ZH: 奶奶拿出一个秘方，打算把旧厅堂改成一家小饭馆。
+[2.39.0] keys=['entrance', 'entry']
+  EN: Guests entered through the red [[entrance:entrance]], guided past the side [[entry:entry]] by Mingming.
+  ZH: 客人们从红色正门进来，明明领着他们走过侧门入座。
+[2.18.1] keys=['construct', 'dust', 'obstruct', 'ruin']
+  EN: Mom agreed to [[construct:construct]] a warm dining hall, though old [[dust:dust]] might [[obstruct:obstruct]] or even [[ruin:ruin]] dinner.
+  ZH: 妈妈同意建一间暖和的饭厅，尽管旧灰尘可能碍事，甚至毁了晚餐。
+paraZh P17: 去渍护色试新衣，黄昏共茶暖意满街。
+paraZh P18: 奶奶拍板新建厅堂，全家分工畅想新场地。
+
+#### E. 篇0 P16-P19（时态样板区）+ P14-P15 + [0.50.4/5] ####
+--- P14 ---
+  [0.14.0] Far to the north, another story was unfolding in the cold [[polar:polar]] [[night:night]].
+      ZH: 在遥远的北方，另一个故事正在寒冷的极夜里展开。
+  [0.14.1] The evening [[chill:chill]] bit deep, and the puddles on the pier began to [[freeze:freeze]].
+      ZH: 傍晚的寒气刺骨，码头上的水洼开始结冰。
+  [0.14.2] Old Lars faced [[frigid:frigid]] winds on the frozen northern pier.
+      ZH: 老拉尔斯在结冰的北码头迎着严寒的风。
+  [0.14.3] His hands began to [[tremble:tremble]] as icy spray soaked his gloves.
+      ZH: 冰冷的水花浸湿手套，他的双手开始颤抖。
+  [0.14.4] Soon he was [[shiver:shivering]] despite his thick fleece coat.
+      ZH: 尽管穿着厚厚的抓绒大衣，他很快还是浑身发抖。
+  [0.14.5] He tied the boat fast and hurried toward the warm [[harbour:harbour]] lights.
+      ZH: 他系牢小船，快步走向温暖的港灯。
+  [0.14.6] Then distant [[thunder:thunder]] rolled across the dark, heavy clouds.
+      ZH: 接着，远处的雷声滚过厚重的乌云。
+--- P15 ---
+  [0.15.0] Suddenly bright [[lightning:lightning]] tore the sky above his small boat.
+      ZH: 突然，明亮的闪电撕裂了小船上方的天空。
+  [0.15.1] The [[stormy:stormy]] waves tossed the boat against the [[harbour:harbour]] wall.
+      ZH: 狂暴的海浪把船抛向港口的堤墙。
+  [0.15.2] A sudden [[downpour:downpour]] drenched him while he pulled the last rope.
+      ZH: 他拉最后一根绳索时，一阵倾盆大雨把他浇了个透。
+  [0.15.3] He later learned that the evening's [[rainfall:rainfall]] had broken the village record.
+      ZH: 后来他才知道，那晚的降雨量破了村里的纪录。
+  [0.15.4] Back home, he marked the date in red on the wall, hoping the [[seasonal:seasonal]] rains would return.
+      ZH: 回家后，他在墙上用红笔圈下这个日子，盼着季节性的雨季再来。
+--- P16 ---
+  [0.16.0] Early in the morning, Mina [[sprinkle:sprinkles]] sugar into her tea and takes a quick [[shower:shower]] before the climb.
+      ZH: 清晨，米娜往茶里撒了点糖，冲了个快澡，便准备出发登山。
+  [0.16.1] Outdoors it is already twenty-five degrees [[celsius:Celsius]], and such a high [[temperature:temperature]] softens the deep snow.
+      ZH: 户外已经二十五摄氏度，这么高的温度把深深的积雪都泡软了。
+  [0.16.2] Yet the radio [[forecast:forecast]] promises cool winds near the [[snowy:snowy]] [[peak:peak]].
+      ZH: 不过收音机里的天气预报说，雪峰附近会有凉风。
+  [0.16.3] By noon she stands on the [[hillside:hillside]] path, laughing at her own haste.
+      ZH: 到中午，她已站在山坡小路上，笑自己太过心急。
+  [0.16.4] There she helps her friend [[mount:mount]] a small detector on the boulder.
+      ZH: 她在那儿帮朋友把一台小探测器装到巨石上。
+  [0.16.5] Together they watch the distant [[mountain:mountain]] crest glow in the evening light.
+      ZH: 傍晚，他们一起望着暮色里发亮的远处山脊。
+--- P17 ---
+  [0.17.0] Young Ken knows all the nearby [[range:ranges]] well and leads guests along the [[narrow:narrow]] [[ridge:ridge]].
+      ZH: 小肯对附近的每条山脉都了如指掌，带客人走在狭窄的山脊上。
+  [0.17.1] They come down the grassy [[slope:slope]] into a peaceful green [[valley:valley]] dotted with sheep.
+      ZH: 他们顺着草坡而下，走进点缀着绵羊的宁静绿色山谷。
+  [0.17.2] Children race down the sunny [[hillside:hillside]], past the spot where Ken [[overlook:overlooks]] the whole village.
+      ZH: 孩子们在洒满阳光的山坡上奔跑，经过肯俯瞰全村的地方。
+  [0.17.3] In her room his grandmother hung an [[oriental:oriental]] tapestry, saying that losing this land would be [[inevitable:inevitable]] if no one guarded it.
+      ZH: 祖母在屋里挂起一幅东方风格的挂毯，她说如果没人守护，失去这片土地将不可避免。
+  [0.17.4] Ana studies [[irreversible:irreversible]] harm in the wetlands, taking water samples [[irregularly:irregularly]].
+      ZH: 安娜研究湿地遭受的不可逆伤害，断断续续地采集水样。
+  [0.17.5] Last April, when she found [[abnormal:abnormal]] algae by the old conduit, Ana said that dumping waste there would be highly [[inappropriate:inappropriate]].
+      ZH: 去年四月，她在旧管道旁发现异常的水藻，便说往那儿倒废料是极不合适的。
+--- P18 ---
+  [0.18.0] The slow river carries thick [[sediment:sediment]] while soft [[silt:silt]] settles among the roots.
+      ZH: 缓缓的河水带着厚厚的沉积物，松软的淤泥在根系间慢慢沉下。
+  [0.18.1] After storms the bank turns soft and [[muddy:muddy]], so she moulds the [[damp:damp]] [[clay:clay]] into small bricks to show her class.
+      ZH: 暴雨过后河岸松软泥泞，她就用湿黏土捏成小砖块，带给同学们看。
+  [0.18.2] At daybreak Sam wipes [[dirt:dirt]] from his windscreen before his long [[rural:rural]] delivery run.
+      ZH: 破晓时分，小萨姆擦净挡风玻璃上的尘土，开始漫长的乡村送货行程。
+  [0.18.3] His [[first:first]] stop is a [[quiet:quiet]] farm, his second a leafy [[suburb:suburb]] full of waiting children.
+      ZH: 第一站是安静的农场，第二站是绿树成荫的郊区，那里有一群等着收包裹的孩子。
+  [0.18.4] Then come the factories on the dusty [[outskirts:outskirts]] of town.
+      ZH: 接着是镇郊尘土飞扬的工厂区。
+  [0.18.5] After lunch he drives on toward a [[remote:remote]] farm down a long [[desolate:desolate]] road.
+      ZH: 午饭后，他继续沿一条荒凉漫长的路，开往远处偏僻的农庄。
+--- P19 ---
+  [0.19.0] Two warehouses stand [[adjacent:adjacent]] to the old station, but Sam refuses any [[toxic:toxic]] shipment without sealed boxes.
+      ZH: 两座仓库紧挨着老车站，但没有密封箱，萨姆拒运任何有毒货物。
+  [0.19.1] Maya investigates river [[pollution:pollution]] and finds one oily [[pollutant:pollutant]] leaking from a rusty conduit.
+      ZH: 玛雅调查河流污染，发现一种油性污染物正从生锈的管道里渗出。
+  [0.19.2] That waste could [[contaminate:contaminate]] the wells, so her class joins the weekend [[geology:geology]] outings to watch the water.
+      ZH: 这些废料可能污染水井，于是全班报名参加周末的地质考察，顺便盯着水质。
+  [0.19.3] They take samples along the grassy [[fringe:fringe]] of the pines, where Maya drops her enamel [[plate:plate]] on the rocks.
+      ZH: 他们在松林边缘的草地上取样，玛雅却把搪瓷盘摔在了石头上。
+  [0.19.4] The flood has scattered sharp [[debris:debris]] across the path, and she spots a thin [[crack:crack]] spreading in the old bridge wall.
+      ZH: 洪水把尖锐的碎片撒满小路，她还发现旧桥墙上有一道细缝正在变长。
+  [0.19.5] She photographs both and sends them to the county hall, hoping to [[trace:trace]] the [[leak:leak]] that same day.
+      ZH: 她把两处都拍下照片，当天送到县政厅，希望就此追查到泄漏的源头。
+[0.50.4] keys=['pup', 'lamb']
+  EN: A wet newborn [[pup:pup]] shivered in towels while a soft white [[lamb:lamb]] drank warm milk.
+  ZH: 湿漉漉的新生幼犬在毛巾里发抖，软软的白色小羊羔喝着温奶。
+[0.50.5] keys=['quiet', 'cattle', 'ox']
+  EN: The [[quiet:quiet]] milk [[cattle:cattle]] stood in line while a strong brown [[ox:oxen]] pulled a dray.
+  ZH: 安静的奶牛排成一列，强壮的棕色公牛拉着运货车。
+
+#### F. 篇0 里奥/利奥 全部出现 ####
+[0.1.1] ZH=利奥走上前，在旧墙图上找到了学校的经度和纬度。
+[0.2.0] ZH=好在利奥一路上只出过一次小意外——把指南针掉在了石阶上。
+[0.6.1] ZH=利奥停下来，把大陆北缘那片寂静的白色风景画进速写本。
+[0.6.2] ZH=小梅探进黑暗的洞穴时，利奥在外面测量缓缓融化的冰川。
+[0.20.0] ZH=利奥拍下了宁静湖面上壮丽的日出。
+[0.20.5] ZH=看到倒下的树，利奥发誓绝不为赚钱砍伐这片土地上的森林。
+[0.28.0] ZH=利奥钻研头顶的宇宙和辽阔的星系。
+[0.29.3] ZH=利奥在尾部加了个新舱，用空气演示简单的推进原理。
+[0.30.4] ZH=利奥描出月亮的轨道，指给大家看暗淡的黄道线在哪里。
+[0.31.4] ZH=利奥说，在盐水里，每个原子都会给出或得到电子，变成一个离子。
+[0.32.3] ZH=利奥量好每个箱子的尺寸，把浇水频率记在卡片上。
+[0.36.3] ZH=利奥握着小铲，萨姆稳稳地拉着轻耙。
+[0.40.0] ZH=利奥一大早就拔掉每根带尖刺的茎和每株蔓延的杂草。
+[0.44.1] ZH=噪音最小、黑暗正好，利奥结束了这个快乐的夜晚。
+[0.45.0] ZH=周六早晨，里奥在大门口见到了一位和善的动物学家和一位友好的生态学家。
+[0.45.4] ZH=里奥了解到，食肉动物和吃草的食草动物需要的食物很不一样。
+[0.46.2] ZH=里奥望见安静的鹿群在喝水，一群忙碌的蜜蜂从旁飞过。
+[0.48.3] ZH=里奥用温水清洗柔软的爪子，还轻轻修补了一只鸟喙上的裂口。
+[0.48.5] ZH=一根松软的灰色大羽毛轻轻落下，里奥把每根棕色小羽毛都收起来做研究。
+[0.50.3] ZH=里奥把方形饲料块掰碎，分一块给干渴的斑点小牛犊。
+[0.51.1] ZH=里奥轻轻刷着高大的棕马，向旁边温顺的条纹斑马挥手。
+[0.51.2] ZH=和善的灰驴驮着轻袋子，里奥在旁边擦拭磨旧的皮马鞍。
+[0.52.5] ZH=里奥了解到，深深的咬伤会疼，蜜蜂蜇过的地方会很快肿起来。
+[0.53.1] ZH=里奥不在灰尘里揉眼睛，也不悄悄凑近围栏。
+[0.55.2] ZH=里奥凭直觉猜到了口渴的原因，也感受到休息真正的治愈潜力。
+[0.57.2] ZH=里奥学会用耐心驯服自己的恐惧，和善的首席饲养员夸他做得好。
+paraZh P28: 利奥区分天文学和占星术，萨姆指彗星、爷爷寄陨石。
+paraZh P45: 周六早晨里奥一行人来到救助站门口认识专家并了解动物。
+paraZh P48: 春天求偶孵雏，里奥检查爪子、鸟喙、鱼鳍与羽毛。
+paraZh P52: 乌鸦天鹅鹅公鸡松鼠青蛙，里奥学习咬伤与蜇伤。
+paraZh P57: 雨天护弱鸟维生计，里奥驯服恐惧，老牧羊人道谢。
