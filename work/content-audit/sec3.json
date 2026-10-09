@@ -1,0 +1,6490 @@
+{
+ "si": 3,
+ "title": "社会与规则",
+ "zh": "跨国列车与街角小店，两卷读完。",
+ "subheads": [
+  "上篇·跨国列车",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "下篇·街角小店",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  ""
+ ],
+ "declared_words": [
+  "voyage",
+  "aviation",
+  "safari",
+  "parade",
+  "haunt",
+  "attraction",
+  "memorial",
+  "pyramid",
+  "port",
+  "traffic",
+  "airline",
+  "helicopter",
+  "jet",
+  "parachute",
+  "flight",
+  "pilot",
+  "passenger",
+  "baggage",
+  "luggage",
+  "suitcase",
+  "carry-on",
+  "rack",
+  "freight",
+  "fare",
+  "atlas",
+  "route",
+  "itinerary",
+  "passage",
+  "intersection",
+  "lane",
+  "avenue",
+  "highway",
+  "curb",
+  "signpost",
+  "pave",
+  "vehicle",
+  "tram",
+  "ambulance",
+  "truck",
+  "lorry",
+  "van",
+  "wagon",
+  "carriage",
+  "tractor",
+  "cart",
+  "pedicab",
+  "garage",
+  "motor",
+  "horsepower",
+  "wheel",
+  "brake",
+  "tyre",
+  "honk",
+  "crew",
+  "captain",
+  "steward",
+  "emergency",
+  "wreck",
+  "crash",
+  "crush",
+  "dash",
+  "vanish",
+  "disappear",
+  "hazard",
+  "harbour",
+  "dock",
+  "anchor",
+  "submerge",
+  "sailor",
+  "seaman",
+  "carrier",
+  "steamer",
+  "liner",
+  "vessel",
+  "ferry",
+  "sail",
+  "raft",
+  "canoe",
+  "oar",
+  "deck",
+  "turbine",
+  "propeller",
+  "stern",
+  "aboard",
+  "embark",
+  "channel",
+  "canal",
+  "ditch",
+  "railroad",
+  "railway",
+  "locomotive",
+  "underground",
+  "tunnel",
+  "rail",
+  "depart",
+  "arrive",
+  "destination",
+  "delay",
+  "postpone",
+  "defer",
+  "lull",
+  "expire",
+  "due",
+  "postage",
+  "stamp",
+  "envelope",
+  "mail",
+  "packet",
+  "package",
+  "bind",
+  "parcel",
+  "load",
+  "burden",
+  "transfer",
+  "transmit",
+  "transit",
+  "deliver",
+  "convey",
+  "speed",
+  "velocity",
+  "swift",
+  "marxism",
+  "socialism",
+  "communism",
+  "regime",
+  "authority",
+  "political",
+  "hierarchy",
+  "democracy",
+  "bureaucracy",
+  "egalitarian",
+  "materialism",
+  "revolution",
+  "reform",
+  "conservative",
+  "meltdown",
+  "municipal",
+  "neutral",
+  "bilateral",
+  "arena",
+  "banner",
+  "president",
+  "premier",
+  "minister",
+  "secretary",
+  "parliament",
+  "senate",
+  "conference",
+  "meeting",
+  "headquarters",
+  "delegation",
+  "behalf",
+  "statesman",
+  "mayor",
+  "service",
+  "office",
+  "bureau",
+  "department",
+  "harness",
+  "administration",
+  "dominate",
+  "affect",
+  "importance",
+  "significance",
+  "organisation",
+  "association",
+  "union",
+  "community",
+  "consortium",
+  "league",
+  "institution",
+  "unite",
+  "unique",
+  "nation",
+  "global",
+  "worldwide",
+  "federal",
+  "foreign",
+  "overseas",
+  "abroad",
+  "civil",
+  "emigrate",
+  "immigrate",
+  "reign",
+  "puppet",
+  "throne",
+  "crown",
+  "wreath",
+  "colony",
+  "liberty",
+  "independence",
+  "slum",
+  "refuge",
+  "asylum",
+  "population",
+  "demographic",
+  "citizen",
+  "resident",
+  "ethnic",
+  "racial",
+  "clan",
+  "franchise",
+  "entitle",
+  "preference",
+  "vote",
+  "elect",
+  "respondent",
+  "poll",
+  "ambition",
+  "nominate",
+  "checklist",
+  "succession",
+  "welfare",
+  "well-being",
+  "harmony",
+  "steady",
+  "flourish",
+  "succeed",
+  "prospect",
+  "perspective",
+  "viewpoint",
+  "standpoint",
+  "outlook",
+  "guideline",
+  "ethic",
+  "advise",
+  "proposal",
+  "hint",
+  "declare",
+  "affirm",
+  "claim",
+  "proclaim",
+  "state",
+  "announce",
+  "clarify",
+  "assist",
+  "aid",
+  "encourage",
+  "implement",
+  "monitor",
+  "admit",
+  "african",
+  "european",
+  "latin",
+  "jewish",
+  "arabian",
+  "portuguese",
+  "roman",
+  "russian",
+  "spanish",
+  "swiss",
+  "greek",
+  "italian",
+  "soviet",
+  "indian",
+  "australia",
+  "new zealand",
+  "canada",
+  "britain",
+  "france",
+  "germany",
+  "merchant",
+  "financial",
+  "fund",
+  "donate",
+  "endow",
+  "commercial",
+  "advertise",
+  "slogan",
+  "purchase",
+  "lease",
+  "afford",
+  "retail",
+  "grocery",
+  "discount",
+  "promotion",
+  "voucher",
+  "coupon",
+  "currency",
+  "exchange",
+  "swap",
+  "receipt",
+  "levy",
+  "tariff",
+  "duty",
+  "impose",
+  "consume",
+  "revenue",
+  "gross",
+  "recession",
+  "depression",
+  "crisis",
+  "security",
+  "bond",
+  "debt",
+  "deficit",
+  "inflation",
+  "deflation",
+  "dwindle",
+  "decrease",
+  "downsize",
+  "decline",
+  "diminish",
+  "reduce",
+  "increase",
+  "increment",
+  "growth",
+  "escalate",
+  "expand",
+  "influx",
+  "affluent",
+  "enrich",
+  "sufficient",
+  "adequate",
+  "spare",
+  "saving",
+  "redundant",
+  "lack",
+  "company",
+  "enterprise",
+  "agent",
+  "entity",
+  "invest",
+  "input",
+  "product",
+  "acquisition",
+  "goods",
+  "cargo",
+  "insure",
+  "guarantee",
+  "reliable",
+  "negotiation",
+  "attend",
+  "absent",
+  "sale",
+  "wholesale",
+  "auction",
+  "bid",
+  "deal",
+  "transaction",
+  "turnover",
+  "dump",
+  "export",
+  "import",
+  "quota",
+  "interest",
+  "dividend",
+  "stock",
+  "account",
+  "deposit",
+  "installment",
+  "shilling",
+  "copper",
+  "estate",
+  "possess",
+  "legacy",
+  "descend",
+  "worthy",
+  "valuable",
+  "incentive",
+  "accelerate",
+  "prompt",
+  "salary",
+  "income",
+  "wage",
+  "payment",
+  "refund",
+  "reimburse",
+  "payroll",
+  "remuneration",
+  "subsidy",
+  "earn",
+  "undertaking",
+  "profession",
+  "occupation",
+  "vocation",
+  "labour",
+  "workforce",
+  "workaholic",
+  "personnel",
+  "clerk",
+  "interview",
+  "resume",
+  "recommend",
+  "employ",
+  "hire",
+  "fire",
+  "layoff",
+  "dismiss",
+  "discharge",
+  "resign",
+  "sack",
+  "retire",
+  "failure",
+  "abortion",
+  "loss",
+  "opportunity",
+  "chance",
+  "choose",
+  "solve",
+  "sustainable",
+  "manage",
+  "regulate",
+  "sanction",
+  "coordinate",
+  "cooperate",
+  "collaborate",
+  "legal",
+  "regulation",
+  "treaty",
+  "agreement",
+  "charter",
+  "protocol",
+  "norm",
+  "benchmark",
+  "criteria",
+  "standard",
+  "permit",
+  "admission",
+  "perform",
+  "enforce",
+  "reject",
+  "constraint",
+  "official",
+  "mandatory",
+  "potent",
+  "bound",
+  "obligation",
+  "court",
+  "supreme",
+  "enact",
+  "legislate",
+  "equity",
+  "prejudice",
+  "discrimination",
+  "accuse",
+  "sue",
+  "prosecute",
+  "condemn",
+  "boycott",
+  "session",
+  "mediate",
+  "plea",
+  "appeal",
+  "contradict",
+  "persuade",
+  "controversy",
+  "whisper",
+  "mutter",
+  "murmur",
+  "mute",
+  "investigate",
+  "witness",
+  "justify",
+  "reasonable",
+  "suitable",
+  "judge",
+  "fury",
+  "trial",
+  "suspect",
+  "sentence",
+  "arrest",
+  "jail",
+  "prison",
+  "confine",
+  "oversee",
+  "supervise",
+  "restrict",
+  "restrain",
+  "commit",
+  "sin",
+  "crime",
+  "vice",
+  "bribe",
+  "rob",
+  "pirate",
+  "steal",
+  "thief",
+  "murder",
+  "suicide",
+  "deceive",
+  "cheat",
+  "fraud",
+  "liar",
+  "trap",
+  "trick",
+  "pretend",
+  "fool",
+  "stigma",
+  "confess",
+  "conform",
+  "reconcile",
+  "obey",
+  "succumb",
+  "penalty",
+  "fine",
+  "mortgage",
+  "ownership",
+  "copyright",
+  "privilege",
+  "accredit",
+  "clue",
+  "access",
+  "anonymous",
+  "false",
+  "genuine",
+  "procedure",
+  "routine",
+  "consequence",
+  "demand",
+  "request",
+  "require",
+  "petition",
+  "command",
+  "instruct",
+  "burst",
+  "doze",
+  "guard",
+  "host",
+  "might",
+  "footpath",
+  "governance",
+  "notoriety",
+  "superiority",
+  "supremacy",
+  "surveillance"
+ ],
+ "paragraphs": [
+  [
+   "At [[dawn:dawn]] Father spread out the old sea chart and told me about his [[first:first]] [[voyage:voyage]].",
+   "In the [[queue:queue]] Father talked softly about [[aviation:aviation]] and told me not to be nervous.",
+   "Father took me down the [[quiet:quiet]] [[safari:safari]] [[trail:trail]] behind the bakery.",
+   "At [[sunrise:sunrise]] we boarded the train, and Father pointed at the far hills and told me about a [[parade:parade]].",
+   "Crossing the [[plain:plain]], Father laughed about the troubles that used to [[haunt:haunt]] him.",
+   "At noon the kind border [[guard:guard]] showed us around the market and pointed out its best [[attraction:attraction]]."
+  ],
+  [
+   "Under the lamps, Father remembered an old [[memorial:memorial]] that we passed near the border.",
+   "We asked another [[guest:guest]] about the [[pyramid:pyramid]], and he drew it on a page of his book.",
+   "Father compared the grey [[mist:mist]] to a busy [[port:port]] and let me [[describe:describe]] it in my own words.",
+   "The [[host:host]] went on about votes, and Father turned it into a talk about city [[traffic:traffic]].",
+   "The ride home was [[quiet:quiet]], and Father used it to go over the whole [[airline:airline]] from the start.",
+   "When the village lights came on, Father was still talking about a red [[helicopter:helicopter]] over the fields."
+  ],
+  [
+   "A [[jet:jet]] crossed the sky above the train, and Father joined it to the mountains and rivers below.",
+   "The noodles were still too hot to eat, so Father talked about a [[parachute:parachute]] instead.",
+   "A plane moved across the moon, and Father called it the last [[flight:flight]] of the [[night:night]].",
+   "In the morning Father drank hot tea with me in the yard and told me about a brave [[pilot:pilot]] he once met.",
+   "Uncle sang an old song while Father drew lines in the [[dust:dust]] to show the wide road ahead for every tired [[passenger:passenger]].",
+   "Father left our [[baggage:baggage]] in the warm hall and brought us tea."
+  ],
+  [
+   "Father carried our [[luggage:luggage]] up the steps just as the morning light touched the hills.",
+   "The heavy [[suitcase:suitcase]] would not fit under the seat, so Father kept it between his feet.",
+   "Father kept reminding me of our [[carry-on:carry-on]] bags as the noon stop filled the border market.",
+   "Father showed me the old [[wooden:wooden]] [[rack:rack]] behind the bakery.",
+   "Later a long [[freight:freight]] train stood in a yard, and we sat there counting its cars.",
+   "While the [[mist:mist]] still hid the hills, Father paid his [[fare:fare]] and tried to [[describe:describe]] them from memory."
+  ],
+  [
+   "It took Father a whole page of the [[atlas:atlas]] to [[explain:explain]] what the [[host:host]] had said about votes.",
+   "Half asleep on the ride home, I heard Father check our [[route:route]] twice.",
+   "Father read our [[itinerary:itinerary]] out loud in the shop, counting the trains we still had to take.",
+   "On the train Father told me about the [[mountain:mountain]] [[passage:passage]] and the rivers beyond.",
+   "Father let the hot noodles wait and brought up the busy [[intersection:intersection]]; our neighbors laughed before he finished.",
+   "We turned down a [[narrow:narrow]] [[lane:lane]] where two dogs slept in the sun."
+  ],
+  [
+   "Over morning tea in the yard, Father told me about the wide [[avenue:avenue]] in the capital.",
+   "For hours the [[highway:highway]] ran straight ahead, with nothing but [[grass:grass]] on both sides.",
+   "Father told me to [[curb:curb]] my talking near the doorway so the tired children behind us could sleep.",
+   "One white [[signpost:signpost]] by the road told us the capital was still far away.",
+   "Father told a funny [[story:story]] about the men who [[pave:pave]] the road near his old home.",
+   "In the [[dust:dust]] Father drew a big [[vehicle:vehicle]] and said it would carry us over the hills."
+  ],
+  [
+   "Our new friends came by [[tram:tram]] and stayed up talking with us for a long time.",
+   "In the evening our fellow travelers joined us, and we talked about the white [[ambulance:ambulance]] for a long time.",
+   "A man at the small station jumped down from his [[truck:truck]] and helped Father lift our bags.",
+   "One big [[lorry:lorry]], Father told me, could stop a whole city, and he used it to answer the [[host:host]].",
+   "Father took me to the [[quiet:quiet]] [[van:van]] behind the bakery.",
+   "An old [[wagon:wagon]] with two brown horses stood on the road home, and we laughed and waited."
+  ],
+  [
+   "From the train window an old [[carriage:carriage]] on the road joined Father's mountains and rivers.",
+   "He once watched a [[tractor:tractor]] cross a [[field:field]] and never forgot the noise.",
+   "An old man pulled a [[wooden:wooden]] [[cart:cart]] full of boxes through the [[crowd:crowd]].",
+   "Over tea one morning, Father pointed at a [[pedicab:pedicab]] crossing the yard gate and waved until it turned the corner.",
+   "Before we slept, Father told me about a dark [[garage:garage]] behind his [[first:first]] school.",
+   "The [[motor:motor]] under the floor ran so softly that we felt it more than heard it."
+  ],
+  [
+   "I asked Father how much [[horsepower:horsepower]] the old engine had, and he laughed.",
+   "The [[plain:plain]] lay open under the sun, and Father made a [[broken:broken]] [[wheel:wheel]] into the best [[story:story]] of the day.",
+   "The [[truck:truck]] waited at the market gate, and Father let me look at its new [[brake:brake]].",
+   "A [[flat:flat]] [[tyre:tyre]] slowed the [[truck:truck]], so Father showed me the sun coming up while we waited.",
+   "A long [[honk:honk]] from the road made Father smile and point at the rising sun.",
+   "A [[crowd:crowd]] waiting in the [[mist:mist]] looked to Father like the [[crew:crew]] of a whole ship."
+  ],
+  [
+   "Father told me about a kind [[captain:captain]] who sailed a small boat through the long winter.",
+   "The [[steward:steward]] who brought us hot water never sat down all morning.",
+   "The village lights were coming up as Father wove our small train [[emergency:emergency]] into the [[story:story]] he always tells on the last mile home.",
+   "In a dry [[field:field]] we [[saw:saw]] the [[wreck:wreck]] of an old plane with only one [[wing:wing]] left.",
+   "Hardly had Father named the loud [[crash:crash]] over our hot bowls when the table beside us [[burst:burst]] out laughing.",
+   "[[outside:Outside]] the bakery my brother tried to [[crush:crush]] a [[paper:paper]] cup like a clown, and the whole sleepy [[queue:queue]] laughed."
+  ],
+  [
+   "Sitting with me in the yard, Father put a [[dash:dash]] of honey into his morning tea.",
+   "While we waited in line, Father whispered about things that [[vanish:vanish]] on a journey.",
+   "Father told me to [[disappear:disappear]] through the doorway quietly and let the sleepy kids [[doze:doze]] in peace.",
+   "The biggest [[hazard:hazard]] on a [[plain:plain]] this wide, Father told me, is the sun.",
+   "[[sunlight:Sunlight]] filled our seats while Father described a [[harbour:harbour]] he had visited long ago.",
+   "Where the market ended, Father found an old [[dock:dock]] by the water."
+  ],
+  [
+   "The lamps were still bright when we reached the second country, and the heavy [[anchor:anchor]] filled the rest of our talk.",
+   "The owner invited us to sit with the other travelers and feel ourselves slowly [[submerge:submerged]] in the warm gathering over hot bread and sweet honey.",
+   "It was an old [[sailor:sailor]] Father [[describe:described]] to me, standing where the morning [[mist:mist]] met the water.",
+   "A tired [[seaman:seaman]] on the screen made Father put down his spoon.",
+   "As [[quiet:quiet]] as the morning ride home was, Father showed how one [[carrier:carrier]] [[can:can]] pass a cold to a whole bus.",
+   "That evening a tired [[sailor:sailor]] told us about his [[first:first]] [[steamer:steamer]] over warm bread."
+  ],
+  [
+   "The big [[liner:liner]] came back to Father's talk between two stations, tied to the mountains and the rivers behind us.",
+   "A slow [[vessel:vessel]] came down the river, and we both waved at its red flags.",
+   "Past the market square a [[ferry:ferry]] crossed the grey water twice an hour.",
+   "Father said our worries would [[sail:sail]] away with the [[night:night]] train.",
+   "By the wide river we watched a [[raft:raft]] take a boy and five sheep across.",
+   "Father drew a river on the table and talked about the [[canoe:canoe]] he rode years ago."
+  ],
+  [
+   "Father showed me the long [[wooden:wooden]] [[oar:oar]] leaning against the back wall.",
+   "The best place on a ship, he said, was the windy [[deck:deck]] at the back.",
+   "The huge [[turbine:turbine]] behind the [[fence:fence]] made the whole market shake.",
+   "A [[propeller:propeller]] on the screen turned so slowly that I watched it for minutes.",
+   "None of us had seen the [[stern:stern]] of a ship, so we asked him to [[draw:draw]] it.",
+   "Father called everyone [[aboard:aboard]] out of the cold [[mist:mist]], hot tea in his hands."
+  ],
+  [
+   "At [[midnight:midnight]] I heard Father [[whisper:whisper]] in his sleep that we would [[embark:embark]] again at dawn, and I covered him gently.",
+   "Between the hills the ride went [[quiet:quiet]], and Father drew the [[channel:channel]] on the seat for me.",
+   "Home in sight, Father laughed about the old [[canal:canal]] and kept that part of the [[story:story]] for the gate.",
+   "Crossing the border, Father told me about the deep [[ditch:ditch]] and the rivers beyond.",
+   "[[flat:Flat]] land ran past the window; Father said this whole [[railroad:railroad]] was built by hand.",
+   "The new [[railway:railway]] cuts the mountains in two and brings people down to the market."
+  ],
+  [
+   "A small [[locomotive:locomotive]] pulled six cars over the river, and the men beside us cheered.",
+   "We found an [[underground:underground]] and went down the steps together.",
+   "We fell asleep before the train went under the hill, so we missed the long [[tunnel:tunnel]].",
+   "[[outside:Outside]] my seat the [[steel:steel]] [[rail:rail]] ran straight to the edge of the fields.",
+   "Out on the [[plain:plain]], warm sun on our hands, Father laughed about the morning we [[depart:departed]].",
+   "When the old farmer [[arrive:arrived]] late with his goats, the whole border market laughed at noon."
+  ],
+  [
+   "Father said our last [[destination:destination]] was one [[night:night]] away, and I could hardly sleep.",
+   "Father and I waited out the long [[delay:delay]] in the [[quiet:quiet]] bakery while the old farmers sang.",
+   "No rain and no thick [[mist:mist]], Father said, would make us [[postpone:postpone]] the [[trip:trip]] we had waited years to take.",
+   "In the small hours I heard Father mumble about [[defer:deferring]] the [[trip:trip]], so I pulled the blanket over him.",
+   "There came a [[quiet:quiet]] [[lull:lull]] on our morning ride home, and Father filled it with everything we had seen.",
+   "So close to home, with lights in every window, Father laughed at our tickets that would [[expire:expire]] by morning."
+  ],
+  [
+   "While we rode home, Father worked out the money [[due:due]] for our tickets, then turned back to the rivers beyond.",
+   "The extra [[postage:postage]] Father spoke of, over hot noodles, made our whole row [[burst:burst]] out laughing before the bowl was empty.",
+   "Father opened his notebook and drew a small [[stamp:stamp]] beside our [[trip:trip]] plan, to tell Mother at home.",
+   "With our morning tea out in the yard, Father opened an old [[envelope:envelope]] from home.",
+   "Our letters went into the [[mail:mail]] box, and Father said Mother would have them by Friday.",
+   "On the seat I found a [[packet:packet]] of thin cookies, still warm from the shop below."
+  ],
+  [
+   "A kind woman near us gave Father a small [[package:package]] of dried [[fruit:fruit]].",
+   "Hot sun crossed the whole [[plain:plain]] while Father showed me how to [[bind:bind]] our bags together.",
+   "The border market was full at noon, and Father lifted a brown [[parcel:parcel]] off our seat.",
+   "Under its heavy [[load:load]], the little [[truck:truck]] moved slowly far behind our train.",
+   "Father never spoke about the real [[burden:burden]] of paying for all of our tickets.",
+   "Just past the border sign, with [[mist:mist]] on the windows, Father explained our [[transfer:transfer]] in a low voice."
+  ],
+  [
+   "Late that night Father murmured in his sleep about the news we [[transmit:transmit]] home, and I tucked the blanket around him.",
+   "Father talked us through city [[transit:transit]] all the way back, and the morning ride stayed [[quiet:quiet]] around us.",
+   "Near home, Father laughed and said we always [[deliver:deliver]] our promises.",
+   "At [[dawn:dawn]] the conductor asked the tall boys to [[convey:convey]] the message and clear the doorway for the old folks.",
+   "At full [[speed:speed]] the little cups on our table danced, and we all laughed.",
+   "Nothing on this [[plain:plain]] [[can:can]] reach the [[velocity:velocity]] of that morning train."
+  ],
+  [
+   "Some [[swift:swift]] birds went over the wall while Father and I stood in the morning yard with our tea.",
+   "Father read a little about [[marxism:marxism]] on the ride home and asked what I had heard.",
+   "Two men played cards and argued about [[socialism:socialism]] until the [[fire:fire]] in the room went out.",
+   "Two old men at the next table argued about [[communism:communism]] while we ate our bread.",
+   "How [[strict:strict]] our morning [[regime:regime]] was! Father said it loudly, laughing, with the bright [[plain:plain]] running past.",
+   "An officer in [[authority:authority]] came up at noon, and Father answered him politely in the middle of the market."
+  ],
+  [
+   "Mother asked why [[political:political]] news filled every [[paper:paper]] that week.",
+   "Father drew a row of boxes on the window, so the old [[hierarchy:hierarchy]] of titles became clear.",
+   "At [[midnight:midnight]] a soft [[bell:bell]] rang, and Father woke me to tell a quiet little [[story:story]] about [[democracy:democracy]] under the silver moon.",
+   "What is [[bureaucracy:bureaucracy]]? Father waited for the [[host:host]] to finish the news, then told me.",
+   "Climbing the steps with our baskets and warm coats, we boarded the bright [[night:night]] train where every seat felt [[egalitarian:egalitarian]].",
+   "Father saved his [[story:story]] about empty [[materialism:materialism]] for the dark road between the last two lights."
+  ],
+  [
+   "Mountains, rivers, and one old [[revolution:revolution]]: Father made them one for the whole of our ride.",
+   "Hot tea in one hand, bread in the other, Father told me again about the old [[reform:reform]].",
+   "Father took the [[conservative:conservative]] choice: the longer road, but the safer one.",
+   "Father told me the sad [[story:story]] of the [[quiet:quiet]] [[meltdown:meltdown]] behind the bakery.",
+   "Father praised the [[municipal:municipal]] inn where our [[host:host]] gave us hot tea and warm blankets late at [[night:night]].",
+   "When the two men started to shout, I stayed [[neutral:neutral]] and kept drinking my tea."
+  ],
+  [
+   "A [[bilateral:bilateral]] [[deal:deal]], Father said, is just two countries agreeing to build one bridge.",
+   "Dusty and empty in the sun, the old [[arena:arena]] became another [[story:story]] of our [[plain:plain]] crossing.",
+   "Above the noon market a red [[banner:banner]] moved, and Father pointed until everyone looked.",
+   "In the second country we had just reached, our talk under the lamps turned to a [[company:company]] and its [[president:president]].",
+   "With our baskets and coats we climbed aboard, and there stood the [[premier:premier]] himself on the bright [[night:night]] train.",
+   "Grey hills sitting quietly by the track in the morning [[mist:mist]], Father said, looked like a kind old [[minister:minister]] at rest."
+  ],
+  [
+   "The [[host:host]] kept talking about votes while Father asked me what a [[secretary:secretary]] does all day.",
+   "That [[famous:famous]] [[parliament:parliament]], Father said, is only a room full of loud voices.",
+   "It was the [[senate:senate]] that Father worked into the [[story:story]] as we came in sight of our own gate.",
+   "In that tall [[conference:conference]] hall, Father said, he once handed out cups of hot tea.",
+   "Father once hurried to an early morning [[meeting:meeting]] and got on the wrong train.",
+   "Uncle hummed an old tune while Father sketched the big [[headquarters:headquarters]] in the [[dust:dust]] and laughed."
+  ],
+  [
+   "A [[delegation:delegation]] was coming to the village, and Father told me about it in the yard between two cups of tea.",
+   "While we waited, Father spoke softly on [[behalf:behalf]] of our family, and I tried to keep calm.",
+   "The old [[statesman:statesman]] Father spoke of at breakfast had lost two votes before anyone agreed to listen.",
+   "At the border town we met the [[mayor:mayor]], who showed us the new waiting room.",
+   "Father took me to the [[quiet:quiet]] Sunday [[service:service]] where the old farmers sang.",
+   "Inside the little travel [[office:office]], Father asked about tickets for the next day."
+  ],
+  [
+   "Once across the border, we sat under the lamps and let the travel [[bureau:bureau]] take another hour.",
+   "A man from the ticket [[department:department]] came late that evening to look at our papers.",
+   "Father laughed at the [[mist:mist]] and asked, only half joking, how one could [[harness:harness]] the wind.",
+   "Votes, then the new [[administration:administration]]: Father began with the [[host:host]] and let me follow.",
+   "Through the [[quiet:quiet]] of the ride home, one picture kept coming back: the [[snowy:snowy]] peaks that [[dominate:dominate]] the whole view.",
+   "Near home, Father laughed and said the [[trip:trip]] would [[affect:affect]] us for years."
+  ],
+  [
+   "Father talked about the [[importance:importance]] of being on time, and I watched the rivers beyond instead.",
+   "Over hot noodles, Father put on a serious voice about the deep [[significance:significance]] of the old bridge, and our neighbors [[burst:burst]] out laughing.",
+   "Father wrote the name of the [[aid:aid]] [[organisation:organisation]] in his notebook, meaning to tell Mother when we got home.",
+   "The farmers' [[association:association]] was Father's news that morning, told slowly over hot tea in the yard.",
+   "A [[union:union]] flag hung above the shop door, and I asked Father what it meant.",
+   "Every year our small [[community:community]] meets in one hall, and this train felt like that."
+  ],
+  [
+   "With Uncle singing an old song, Father drew a line in the [[dust:dust]] to show the [[consortium:consortium]] [[dam:dam]] ahead.",
+   "A village team once joined a large football [[league:league]], and Father laughed about it for years.",
+   "Father called the old stone building a serious [[institution:institution]] and laughed.",
+   "We asked, half asleep on our own train, whether strangers [[might:might]] ever [[unite:unite]] on a [[night:night]] ride.",
+   "We shared a strong tea from the mountains with a taste Father called [[unique:unique]].",
+   "Father told me the [[quiet:quiet]] [[story:story]] of our [[nation:nation]] while the old farmers sang behind the bakery."
+  ],
+  [
+   "The [[host:host]] read the [[global:global]] [[weather:weather]], and Father joked that our rain was his [[fault:fault]].",
+   "Father lined up the [[worldwide:worldwide]] news for me while the ride home stayed [[quiet:quiet]].",
+   "Only the fields lay between us and home, and Father's [[story:story]] reached as far as the [[federal:federal]] capital.",
+   "Before we stepped into the cold morning [[mist:mist]], Father wrapped around my [[collar:collar]] the worn [[scarf:scarf]] he had bought in a [[foreign:foreign]] market.",
+   "Baskets in hand, we climbed onto the glowing [[night:night]] train, like a ship from [[overseas:overseas]].",
+   "Beside our [[trip:trip]] plan Father wrote down 'study [[abroad:abroad]]', a note for Mother."
+  ],
+  [
+   "Out in the yard, with tea going cold, Father talked about what [[civil:civil]] life was like after the army.",
+   "Some of the children back in our village will [[emigrate:emigrate]] when they grow up.",
+   "The young man across from us hoped to [[immigrate:immigrate]] and open a tiny shop one day.",
+   "Father read me a page about the old king's [[reign:reign]] while the sun moved across the table.",
+   "In the same [[story:story]] a [[wooden:wooden]] [[puppet:puppet]] stood up and started to give orders.",
+   "A soft [[bell:bell]] rang at [[midnight:midnight]], and Father woke me to tell of the empty [[throne:throne]] under the silver moon."
+  ],
+  [
+   "Father pointed at the long river and told me how a king once lost his [[crown:crown]].",
+   "By the station gate we [[saw:saw]] a [[round:round]] [[wreath:wreath]] of white flowers on the stone.",
+   "To [[describe:describe]] the whole [[mist:mist]], Father reached for an ant [[colony:colony]] and the busy line of its small workers.",
+   "After the news, Father let me [[choose:choose]] our dinner and called it [[liberty:liberty]].",
+   "Father kept talking about the long fight for [[independence:independence]] as our train crossed the big river.",
+   "Not far from home, Father turned the old [[slum:slum]] school into a [[story:story]] I still remember."
+  ],
+  [
+   "Father showed me the [[quiet:quiet]] [[refuge:refuge]] behind the bakery, where the old farmers gathered to sing.",
+   "Father had only to name the city [[asylum:asylum]] over hot noodles to make our table [[burst:burst]] out laughing.",
+   "A board by the gate showed the town's [[population:population]], fewer than the number of children at our school back home.",
+   "Father puzzled over the [[demographic:demographic]] chart at breakfast, his tea forgotten beside him.",
+   "As our turn came near, Father told me about a [[proud:proud]] [[citizen:citizen]] to pass the time.",
+   "At [[night:night]] in the little inn we watched the [[resident:resident]] cats [[doze:doze]] by the warm [[stove:stove]] as the rain tapped softly [[outside:outside]]."
+  ],
+  [
+   "A girl down the car sang three songs of her own [[ethnic:ethnic]] group, and half the train laughed with her.",
+   "People of many [[racial:racial]] groups shared one small dining car on our long [[trip:trip]].",
+   "Father saved the talk about the old [[mountain:mountain]] [[clan:clan]] for our noon stop at the border market.",
+   "The owner of our little noodle shop now runs a [[franchise:franchise]] in three other towns.",
+   "In the evening our fellow travelers joined us and talked about the ticket that [[entitle:entitles]] us to a free meal.",
+   "His [[preference:preference]] for early trains, Father said, grew stronger every time the [[mist:mist]] came."
+  ],
+  [
+   "I woke to Father whispering in his sleep that he must not miss the [[vote:vote]], and I covered him gently.",
+   "How do villagers [[elect:elect]] a head? Father put the question into the [[quiet:quiet]] of our morning ride.",
+   "While Uncle sang, Father made marks in the [[dust:dust]] to [[count:count]] each [[survey:survey]] [[respondent:respondent]].",
+   "Even the latest [[poll:poll]] found its place, on the train, in Father's long talk about mountains and rivers.",
+   "Our neighbors [[burst:burst]] out laughing the moment Father put his noodles down and named the [[ambition:ambition]] he had as a boy.",
+   "[[outside:Outside]] the bakery my brother, like a clown, [[nominate:nominated]] our dog for king, and the whole sleepy [[queue:queue]] [[burst:burst]] out laughing."
+  ],
+  [
+   "Father spread his little travel [[checklist:checklist]] on the yard table at breakfast and made me read every line.",
+   "Father told me about the peaceful [[succession:succession]] while the old farmers sang behind the bakery.",
+   "As the rain tapped at the little inn that [[night:night]], we talked about animal [[welfare:welfare]].",
+   "In the middle of the [[plain:plain]], our new friend drank to our health and our [[well-being:well-being]].",
+   "Father closed with a simple hope: that all kinds of people [[might:might]] live in [[harmony:harmony]].",
+   "The noodle shop at the border market kept its [[steady:steady]] way even at noon, and Father praised it twice."
+  ],
+  [
+   "We watched the [[night:night]] come in through the window and thought of the market that [[flourish:flourishes]] after dark.",
+   "To [[succeed:succeed]] in a place like this, the man on the screen said, you must start small.",
+   "The [[prospect:prospect]] ahead looked bright to Father, even where the [[mist:mist]] sat in low grey waves.",
+   "By the end of the news, the [[host:host]] had given us votes and Father had given me a fresh [[perspective:perspective]].",
+   "When the ride home turned [[quiet:quiet]] again, Father put his whole [[viewpoint:viewpoint]] into three short lines.",
+   "Where did Father stand? You heard his [[standpoint:standpoint]] well enough in the [[story:story]] he told us within sight of home."
+  ],
+  [
+   "Father said our bright [[outlook:outlook]] for the year could be read in the mountains and rivers we passed.",
+   "Father wrote one line at the top of his page as a [[guideline:guideline]] for the whole [[trip:trip]].",
+   "Our family [[ethic:ethic]] is short enough to say in one [[sentence:sentence]]: work hard and be kind.",
+   "Father said that after our long [[night:night]] ride worries had nothing left to [[advise:advise]] him about.",
+   "Everyone at the table laughed and said yes to Father's simple [[proposal:proposal]].",
+   "Rain on the inn windows sent us hunting the menu for a [[hint:hint]] of honey."
+  ],
+  [
+   "The train pulled out at [[sunrise:sunrise]], and Father [[declare:declared]] the journey begun.",
+   "Father [[affirm:affirmed]] his [[promise:promise]] again, quietly, while the sun lit the whole [[plain:plain]].",
+   "At noon one voice rose over the border market: the old farmer would [[claim:claim]] his apples were the sweetest of all.",
+   "A [[guard:guard]] came to [[proclaim:proclaim]] the new rules, and by the lamps of the second country we listened to all of them.",
+   "Half glad, half asleep after three countries, we sat in a [[state:state]] none of us could name.",
+   "Father heard a [[guard:guard]] [[announce:announce]] each stop twice, his voice running ahead of the [[mist:mist]]."
+  ],
+  [
+   "Past midnight Father murmured that he still had one small thing to [[clarify:clarify]], and I covered him up.",
+   "Strange how [[quiet:quiet]] a morning ride home stays while Father counts every way strangers [[assist:assist]] us.",
+   "Village lights, the smell of home, and Father laughing about the [[aid:aid]] workers he once met on the road.",
+   "At [[dawn:dawn]] the conductor asked the tall boys to [[encourage:encourage]] each other and clear the doorway for the old folks.",
+   "Over hot noodles, Father put on an important voice about the rules we must [[implement:implement]], and our neighbors [[burst:burst]] out laughing.",
+   "Two tall cameras at the border [[monitor:monitor]] every train that waits by the wall."
+  ],
+  [
+   "Father said that after our long [[night:night]] ride his heart would never [[admit:admit]] to worry again.",
+   "The queue moved slowly, so Father whispered to me about [[african:African]] drums.",
+   "The [[european:European]] trains on the old map looked smaller than ours, and Uncle laughed.",
+   "At [[sunrise:sunrise]] Father pointed at the far hills and taught me a [[latin:Latin]] word.",
+   "At the end he described a [[jewish:Jewish]] [[festival:festival]], where the whole family sat around one long table.",
+   "Near the noon exit of the border market, a smiling [[arabian:Arabian]] seller of dates said good morning to Father."
+  ],
+  [
+   "Nobody knew the man at our table was [[portuguese:Portuguese]] until he broke his bread for the kids.",
+   "Even the old [[roman:Roman]] roads, Father said, were built to last a thousand years.",
+   "An old [[russian:Russian]] song was how Father chose to [[describe:describe]] the [[mist:mist]] that morning.",
+   "The [[spanish:Spanish]] train was late, so Father moved our bags to a [[bench:bench]].",
+   "Father timed the [[swiss:Swiss]] trains himself, and none of them ran late.",
+   "That [[night:night]] Father told a [[greek:Greek]] [[story:story]] about a king, and I fell asleep before the end."
+  ],
+  [
+   "The farmer across from us spoke a soft language that Father called [[italian:Italian]].",
+   "He even copied a line from an old [[soviet:Soviet]] [[film:film]], which made the whole room laugh.",
+   "In his notebook Father sketched an [[indian:Indian]] [[temple:temple]] next to our [[trip:trip]] plan, a page for Mother.",
+   "Half through his morning tea, Father was dreaming out loud about [[australia:Australia]] and its long sunny roads.",
+   "The green fields here, Father said, looked just like [[new zealand:New Zealand]], a country far to the south.",
+   "Uncle once worked two winters in [[canada:Canada]], where the snow could cover a car."
+  ],
+  [
+   "A traveler from [[britain:Britain]] sang softly with us all the way to the village lights.",
+   "My father chatted long with a kind old cook from [[france:France]] about [[snowy:snowy]] hills and warm village festivals.",
+   "Near the window a [[gentle:gentle]] girl from [[germany:Germany]] showed us photos of golden fields and laughing kids at home."
+  ],
+  [
+   "Old Lin dreamed of becoming a small street corner [[merchant:merchant]] facing serious [[financial:financial]] [[pressure:pressure]] daily.",
+   "He used his own small [[fund:fund]] to rent the shop and would often [[donate:donate]] warm food to neighbors.",
+   "Kind neighbors seemed to [[endow:endow]] the old house with new hope beyond simple [[commercial:commercial]] plans.",
+   "He did not [[advertise:advertise]] loudly but wrote a warm [[slogan:slogan]] on the [[wooden:wooden]] door [[outside:outside]].",
+   "Before the [[purchase:purchase]] of shelves he read every line of the [[lease:lease]] with great care.",
+   "He could barely [[afford:afford]] the [[first:first]] month but dreamed of small [[retail:retail]] pleasure for the street."
+  ],
+  [
+   "The little [[grocery:grocery]] opened quietly and he offered a small [[discount:discount]] to old customers nearby.",
+   "For the opening [[promotion:promotion]] he handed out [[paper:paper]] [[voucher:vouchers]] to children playing [[outside:outside]].",
+   "Old people brought [[paper:paper]] [[coupon:coupons]] and asked about the different [[currency:currencies]] their visiting relatives had brought with them.",
+   "Small things were [[exchange:exchanged]] with neighbors, and a good story was sometimes [[swap:swapped]] for a smile.",
+   "Every [[receipt:receipt]] was kept in a box, and he worried about any new [[levy:levy]] on small shops.",
+   "As he learned about [[tariff:tariffs]] on imported [[fruit:fruit]], his sense of [[duty:duty]] grew stronger each day."
+  ],
+  [
+   "He feared that a rich landlord [[might:might]] [[impose:impose]] a high rent and quickly [[consume:consume]] the little money he had.",
+   "Daily [[revenue:revenue]] was small and the [[gross:gross]] [[total:total]] barely covered water and light bills.",
+   "A wider [[recession:recession]] hung over the town and filled him with [[quiet:quiet]] [[depression:depression]] at [[night:night]].",
+   "Yet a sudden shortage [[crisis:crisis]] shook his hope for [[stable:stable]] [[security:security]] in the cold winter.",
+   "Friendship [[bond:bonds]] with neighbors kept him going despite heavy [[debt:debt]] to the supplier.",
+   "Regular [[deficit:deficits]] piled up slowly while rising [[inflation:inflation]] pushed prices higher each week."
+  ],
+  [
+   "He had hoped for price [[deflation:deflation]] but [[saw:saw]] his stored coins [[dwindle:dwindle]] day by day.",
+   "To [[weather:weather]] the [[decrease:decrease]] in business he had to [[downsize:downsize]], closing earlier in the evening.",
+   "He watched his hopes [[decline:decline]] as the daily stream of customers seemed to [[diminish:diminish]].",
+   "He tried to [[reduce:reduce]] waste in the back room and [[increase:increase]] fresh [[fruit:fruit]] on the shelves.",
+   "Every tiny [[increment:increment]] in visitors felt like warm [[growth:growth]] after the long cold spell.",
+   "Costs continued to [[escalate:escalate]] so he dared not [[expand:expand]] the shop to the next door."
+  ],
+  [
+   "A sudden [[influx:influx]] of young renters nearby did not [[imply:imply]] that the street had become [[affluent:affluent]].",
+   "He wanted to [[enrich:enrich]] the morning meals on offer, but he did not have [[sufficient:sufficient]] room for new shelves.",
+   "The back room was barely [[adequate:adequate]] and he had no [[spare:spare]] chairs for resting guests.",
+   "His small [[saving:savings]] kept the lights on while old boxes became [[redundant:redundant]] in the corner.",
+   "The [[lack:lack]] of help exhausted him until a small [[company:company]] next door offered extra hands.",
+   "That small [[enterprise:enterprise]] sent a friendly [[agent:agent]] to talk about shared morning deliveries."
+  ],
+  [
+   "He ran the shop as a small business [[entity:entity]], and he feared to [[invest:invest]] more money without clear family support.",
+   "With honest [[input:input]] from neighbors he picked each [[product:product]] for the morning [[shelf:shelf]].",
+   "A risky [[acquisition:acquisition]] of cheap winter [[goods:goods]] filled the back room to the roof.",
+   "When the winter [[cargo:cargo]] arrived late he forgot to [[insure:insure]] the [[fragile:fragile]] boxes inside.",
+   "The driver gave a strong [[guarantee:guarantee]] that the next driver would be more [[reliable:reliable]] and calm.",
+   "Long [[negotiation:negotiations]] followed and Lin asked his godson to [[attend:attend]] every evening talk."
+  ],
+  [
+   "No one was [[absent:absent]] from the table when they fixed the final [[sale:sale]] price for rice.",
+   "They argued about [[wholesale:wholesale]] cost and joked about offering beans by [[auction:auction]] at [[dawn:dawn]].",
+   "The supplier made a low [[bid:bid]] and Lin shook hands on the final [[deal:deal]] with hope.",
+   "Every [[transaction:transaction]] was written down and regular [[turnover:turnover]] was counted on Sundays.",
+   "They promised never to [[dump:dump]] rotten food and never to [[export:export]] problems to other streets.",
+   "They would [[import:import]] fresh [[fruit:fruit]] weekly within the agreed [[quota:quota]] and share the danger together."
+  ],
+  [
+   "No bank [[interest:interest]] was involved, and no [[dividend:dividend]] for the whole year was promised to anyone.",
+   "Lin listed remaining [[stock:stock]] in a notebook and opened a simple [[account:account]] book for daily records.",
+   "He left a small [[deposit:deposit]] [[first:first]] and agreed to clear the rest by regular [[installment:installments]].",
+   "He counted every [[shilling:shilling]] carefully and polished the old [[copper:copper]] jars for decoration.",
+   "The landlord said the old [[estate:estate]] would soon [[possess:possess]] a row of new shops along the road.",
+   "Lin hoped the shop would become a family [[legacy:legacy]], and that peace would [[descend:descend]] on it for years."
+  ],
+  [
+   "He felt the hard effort was [[worthy:worthy]] of the street he lived on, and every neighbor seemed [[valuable:valuable]] like bright gold.",
+   "A small profit [[incentive:incentive]] made him want to [[accelerate:accelerate]] the morning trade and open an hour earlier.",
+   "His [[prompt:prompt]] [[service:service]] pleased everyone on the street, and he set coins aside each week for staff [[salary:salaries]].",
+   "Thin [[income:income]] still covered soup and the daily [[wage:wages]] of the young helper boy.",
+   "A late [[payment:payment]] from a [[restaurant:restaurant]] forced him to ask for a small [[refund:refund]] from the supplier.",
+   "He would [[reimburse:reimburse]] bus fares quickly but kept the [[paper:paper]] [[payroll:payroll]] locked in a drawer."
+  ],
+  [
+   "No extra [[remuneration:remuneration]] was offered but a street [[subsidy:subsidy]] helped cover winter lights.",
+   "He hoped to [[earn:earn]] trust slowly and treat the shop as a lifetime [[undertaking:undertaking]] with pride.",
+   "Shopkeeping was no [[profession:profession]], he said, yet it was an honest [[occupation:occupation]] for his whole family.",
+   "He [[saw:saw]] it as a true [[vocation:vocation]] and gave honest [[labour:labour]] from [[dawn:dawn]] to dark [[night:night]].",
+   "His tiny [[workforce:workforce]] of three helpers called him a [[gentle:gentle]] [[workaholic:workaholic]] with a smile.",
+   "All shop [[personnel:personnel]] were kind and the young [[clerk:clerk]] remembered every child by name."
+  ],
+  [
+   "During each [[interview:interview]] he read the handwritten [[resume:resumes]] slowly over hot tea.",
+   "Neighbors would [[recommend:recommend]] honest youths and he would gladly [[employ:employ]] one more helper.",
+   "He promised never to [[hire:hire]] a man in anger nor to [[fire:fire]] anyone on a rainy day.",
+   "No sudden [[layoff:layoffs]] frightened the helpers and he would never [[dismiss:dismiss]] a sick boy.",
+   "He would [[discharge:discharge]] nothing but shattered boxes, and never forced anyone to [[resign:resign]] in shame.",
+   "He never used the [[flour:flour]] [[sack:sacks]] as chairs and joked he would never [[retire:retire]] early."
+  ],
+  [
+   "One delivery [[failure:failure]] felt like the [[abortion:abortion]] of every plan he had made that morning.",
+   "The sudden [[loss:loss]] of fresh milk gave an opponent an [[opportunity:opportunity]] to spread harsh rumors.",
+   "Lin had little [[chance:chance]] to explain himself and had to [[choose:choose]] between silence and angry shouts.",
+   "He wanted to [[solve:solve]] the issue calmly and keep a [[sustainable:sustainable]] link with the supplier.",
+   "He tried to [[manage:manage]] his mood and [[regulate:regulate]] his breathing while he listened to the harsh complaints.",
+   "No [[sanction:sanction]] from the street committee could stop the shouting, so friends tried to [[coordinate:coordinate]] a calm talk."
+  ],
+  [
+   "Both sides agreed to [[cooperate:cooperate]] for one evening and [[collaborate:collaborate]] on checking the books.",
+   "A young student explained [[legal:legal]] words and read the cold [[regulation:regulations]] aloud twice.",
+   "Their old [[treaty:treaty]] felt weak compared to the signed [[paper:paper]] [[agreement:agreement]] in Lin's hands.",
+   "The shop [[charter:charter]] on the wall differed from the delivery [[protocol:protocol]] kept by the driver.",
+   "Late delivery broke the trade [[norm:norm]] and fell below the cold [[benchmark:benchmark]] they had set.",
+   "Clear [[criteria:criteria]] for fresh milk were missing and no uniform [[standard:standard]] was ever written."
+  ],
+  [
+   "The driver held no written [[permit:permit]] for the night road, and his [[first:first]] words were a grudging [[admission:admission]] of the [[delay:delay]].",
+   "Lin said they must [[perform:perform]] every promise they had made and [[enforce:enforce]] the morning delivery times strictly.",
+   "He would [[reject:reject]] every rotten bottle, always, even under the [[tight:tight]] time [[constraint:constraints]] of [[dawn:dawn]].",
+   "An [[official:official]] from the street [[office:office]] called morning delivery [[mandatory:mandatory]] for all food shops.",
+   "Strong tea gave a [[potent:potent]] boost and both men felt [[bound:bound]] by honor to talk peacefully.",
+   "Lin explained the plain [[obligation:obligation]] he felt toward the children, and he feared any road to [[court:court]]."
+  ],
+  [
+   "No [[supreme:supreme]] court was needed; the street [[office:office]] would [[enact:enact]] its own simple rules for sharing.",
+   "They did not want to [[legislate:legislate]] harsh orders but keep [[rough:rough]] [[equity:equity]] between small shops.",
+   "Old [[prejudice:prejudice]] against newcomers faded and no [[discrimination:discrimination]] poisoned the evening talk.",
+   "Lin refused to [[accuse:accuse]] anyone in anger and promised never to [[sue:sue]] over one late [[truck:truck]].",
+   "No one wished to [[prosecute:prosecute]] the tired driver nor to [[condemn:condemn]] his honest family.",
+   "They dropped talk of [[boycott:boycott]] and opened a [[quiet:quiet]] evening [[session:session]] with hot tea.",
+   "Our street now has a new [[surveillance:surveillance]] camera above the gate.",
+   "No one accepted the [[supremacy:supremacy]] of one old family over the rest.",
+   "The rich guest smiled with a cold air of [[superiority:superiority]].",
+   "One loud fight at the market gave the corner sudden [[notoriety:notoriety]].",
+   "The whole town agreed on fairer [[governance:governance]] under shared rules.",
+   "The tired shop owner swept the [[footpath:footpath]] clean before the first bus."
+  ],
+  [
+   "Aunt Mei came to [[mediate:mediate]] gently and heard each tired [[plea:plea]] with calm eyes.",
+   "Lin made a soft [[appeal:appeal]] for trust but did not [[contradict:contradict]] the driver harshly.",
+   "She tried to [[persuade:persuade]] both sides and cool the [[bitter:bitter]] [[controversy:controversy]] over spoiled milk.",
+   "A nervous [[whisper:whisper]] ran through the room as the driver began to [[mutter:mutter]] his apology.",
+   "A soft [[murmur:murmur]] of understanding spread and even angry uncles stayed [[mute:mute]] and calm.",
+   "They agreed to [[investigate:investigate]] the late [[truck:truck]] and to ask every [[witness:witness]] on the road for the truth."
+  ],
+  [
+   "Facts would [[justify:justify]] a fair [[outcome:outcome]] and support a [[reasonable:reasonable]] new delivery plan.",
+   "Aunt Mei found a [[suitable:suitable]] hour and asked no [[stern:stern]] [[judge:judge]] to decide the case.",
+   "Old [[fury:fury]] melted slowly, and no [[trial:trial]] of anyone was needed to heal the hurt.",
+   "No one remained a [[suspect:suspect]] and no harsh [[sentence:sentence]] was written on [[paper:paper]].",
+   "No police came to [[arrest:arrest]] anyone and no one faced cold [[jail:jail]] bars that [[night:night]].",
+   "Their fear of the dark [[prison:prison]] walls faded, and they refused to [[confine:confine]] the talk to [[paper:paper]]."
+  ],
+  [
+   "Aunt Mei would [[oversee:oversee]] morning arrivals and personally [[supervise:supervise]] the milk check each [[dawn:dawn]].",
+   "They agreed to [[restrict:restrict]] [[night:night]] orders and [[restrain:restrain]] loud quarrels before the children.",
+   "Both sides would [[commit:commit]] to kindness and hide no darker [[sin:sin]] than the late [[truck:truck]].",
+   "No real [[crime:crime]] stained the street, and no hidden [[vice:vice]] lived behind the small shop.",
+   "No one offered a dirty [[bribe:bribe]] in the dark, and no one tried to [[rob:rob]] a friend of credit.",
+   "No [[pirate:pirate]] from a child's paper book came near the [[shelf:shelf]] at [[night:night]], and no helper would [[steal:steal]] coins from the [[jar:jar]]."
+  ],
+  [
+   "Talk of [[thief:thieves]] and [[murder:murder]] felt far away from the warm tea and smiles.",
+   "[[despair:Despair]] never led to [[suicide:suicide]] and no one wished to [[deceive:deceive]] old friends again.",
+   "No shop would [[cheat:cheat]] with watery milk nor hide any [[quiet:quiet]] [[fraud:fraud]] behind smiles.",
+   "No one was called a [[liar:liar]] any more, and no [[bitter:bitter]] [[trap:trap]] waited in the new terms.",
+   "No [[clever:clever]] [[trick:trick]] was needed and no one had to [[pretend:pretend]] cheer over warm tea.",
+   "No one felt like a [[fool:fool]] and no old [[stigma:stigma]] clung to the driver family."
+  ],
+  [
+   "The driver decided to [[confess:confess]] the [[delay:delay]] openly and [[conform:conform]] to the new [[dawn:dawn]] rule.",
+   "Lin was glad to [[reconcile:reconcile]] fully and [[obey:obey]] the shared plan made that evening.",
+   "Neither side would [[succumb:succumb]] to pride again nor face any harsh [[penalty:penalty]] thereafter.",
+   "No heavy [[fine:fine]] was written and Lin kept no [[mortgage:mortgage]] on the little shop.",
+   "Clear shop [[ownership:ownership]] stayed with Lin and the handpainted sign kept its simple [[copyright:copyright]].",
+   "Serving the street was a [[quiet:quiet]] [[privilege:privilege]], and the neighbors would [[accredit:accredit]] him as an honest man."
+  ],
+  [
+   "A small [[paper:paper]] [[clue:clue]] helped them find better [[access:access]] to fresh farms [[outside:outside]] town.",
+   "No [[anonymous:anonymous]] note spread anger again, and no [[false:false]] rumor entered the shop.",
+   "A [[genuine:genuine]] smile returned to Lin's face and a simple morning [[procedure:procedure]] began each day.",
+   "Daily cleaning became a calm [[routine:routine]], and every kind act brought its own warm [[consequence:consequence]].",
+   "No hard [[demand:demand]] replaced kindness and no sharp [[request:request]] broke the new peace.",
+   "The new rules did not [[require:require]] much money but asked each family to sign a shared [[petition:petition]]."
+  ],
+  [
+   "Aunt Mei did not [[command:command]] like a chief but would gently [[instruct:instruct]] helpers with stories."
+  ]
+ ],
+ "sentZh": [
+  [
+   "拂晓，父亲摊开旧航海图，跟我讲起他的第一次远航。",
+   "排队的时候，父亲低声讲起航空的事，让我别紧张。",
+   "父亲带我走上面包店后面那条安静的游猎小径。",
+   "天刚亮，我们登上列车，父亲指着远山说起游行。",
+   "车过平原，父亲笑起来了，说起从前那些总缠着他的烦恼。",
+   "中午，和善的边防护卫带我们逛市场，还指出那里最棒的景点。"
+  ],
+  [
+   "灯下，父亲提起我们在边境附近路过的那座旧纪念物。",
+   "我们向另一位客人问起金字塔，他就在自己书的一页上画了出来。",
+   "父亲把那片灰蒙蒙的雾说成一处热闹的海港，又让我用自己的话讲一遍。",
+   "那位店主谈起选票停不下来，父亲索性把它讲成城里堵车的道理。",
+   "回去的路很静，父亲趁着这份静，把那家航空公司从头到尾捋了一遍。",
+   "村里的灯亮起来时，父亲还在说着田野上空的一架红色直升机。"
+  ],
+  [
+   "一架喷气机从车顶的天上掠过，父亲把它和底下那些山那些河接到了一起。",
+   "面还太烫，没法吃，父亲就讲起了降落伞。",
+   "一架飞机从月亮前掠过，父亲说那是今晚的最后一班航班。",
+   "清晨，父亲和我在院里喝热茶，讲起他见过的一位勇敢的飞行员。",
+   "叔叔哼着老歌，父亲在尘土上画线，画出每位疲惫旅客前方的宽路。",
+   "父亲把我们的行李放在暖和的大厅里，又给我们端来茶。"
+  ],
+  [
+   "父亲提着我们的行李走上台阶，这时晨光正好落在远处的山上。",
+   "那只沉沉的手提箱塞不进座位下面，父亲就把它放在两脚之间。",
+   "晌午的停留把边境集市填满，父亲一遍遍提醒我别落下随身的手提包。",
+   "父亲给我看面包店后面那个旧木架。",
+   "后来一列长长的货运列车停在站场上，我们坐在那儿数它的车厢。",
+   "雾还没散，山看不见，父亲掏出了车费，凭记忆把山的样子讲给我听。"
+  ],
+  [
+   "店主那句关于选票的话，父亲摊开一整页地图册才给我讲明白。",
+   "回程的车上我几乎睡着了，还是听见父亲把我们的路线核对了两遍。",
+   "父亲在小店里大声念着我们的行程，数着还要坐的那几趟火车。",
+   "在列车上，父亲跟我讲起那条山间通道，还有远处的江河。",
+   "那碗热面父亲顾不上吃，先说起那个忙乱的十字路口，还没讲完邻座就笑了。",
+   "我们拐进一条窄窄的小路，路上有两只狗在晒太阳。"
+  ],
+  [
+   "清晨在院里喝茶时，父亲跟我讲起首都那条宽阔的大街。",
+   "公路笔直地朝前伸了好几个钟头，两边除了草什么都没有。",
+   "父亲让我在门口附近少说话，好让身后那些困了的孩子安稳睡一觉。",
+   "路边一块白色的路标告诉我们，离首都还很远。",
+   "父亲讲了件趣事，说的是他老家附近那条路的铺路工人。",
+   "父亲在尘土上画了一辆大车，说它能带我们翻过山去。"
+  ],
+  [
+   "新朋友们坐电车过来，和我们一起聊到很晚。",
+   "傍晚，邻座的旅客也加入进来，大家围绕救护车聊了很久。",
+   "小站上一个男人从卡车上跳下来，帮父亲把我们的行李抬了上去。",
+   "父亲拿一辆大货车回那店主的话：这么个大家伙，能让全城动弹不得。",
+   "父亲带我去看面包店后面那辆安静的厢式货车。",
+   "一辆套着两匹棕马的旧马车停在回家的路上，我们笑着等着。"
+  ],
+  [
+   "车窗外路上有辆旧马车驶过，也归进了父亲说的那片山河。",
+   "他说过自己看过一台拖拉机穿过田地，一直忘不了那声音。",
+   "一位老人拉着一辆装满箱子的木手推车，从人群里穿过。",
+   "有天早晨正喝着茶，父亲指给我看院门外一辆三轮车，一直挥着手到它拐过街角。",
+   "睡下之前，父亲跟我讲起他头一所学校后面那间昏暗的车库。",
+   "地板下的马达转得极轻，我们与其说是听见，不如说是感觉到了它。"
+  ],
+  [
+   "我问父亲那台旧发动机有多少马力，他笑了。",
+   "平原在太阳底下摊开来，父亲把一只坏了的轮子讲成当天最好笑的一段。",
+   "卡车候在集市门口，父亲让我凑上去看它新装的刹车。",
+   "卡车有一只轮胎没气了，开得慢了下来，父亲就趁着等车的工夫陪我看日出。",
+   "路上响起一声长长的喇叭，父亲笑了，抬手指向升起的太阳。",
+   "雾里候着一大群人，父亲说，像一整条船上到齐了的船员。"
+  ],
+  [
+   "父亲跟我讲起一位和善的船长，他驾着小船驶过了漫长的冬天。",
+   "给我们送热水的那位乘务员，一整个上午都没坐下。",
+   "村子的灯火一盏盏亮起来，父亲把车上那场小小的慌乱，编进他每次回家最后一里路必讲的那段故事。",
+   "在一片干了的田地里，我们看到一架旧飞机的残骸，只剩下一只机翼。",
+   "面还热着，父亲刚提起那一声巨响，旁边一桌就笑开了。",
+   "面包店外，弟弟像小丑一样想把纸杯捏扁，整条犯困的队伍都笑了。"
+  ],
+  [
+   "我们坐在院里，父亲往早晨的茶里添了一点点蜜。",
+   "排着队，父亲低声讲起路上那些不知不觉就不见了的东西。",
+   "父亲让我悄悄从门口走开，好让身后犯困的孩子们安稳打盹。",
+   "父亲跟我说，在这么宽广的平原上，最大的危险是太阳。",
+   "阳光洒满了座位，父亲讲起他很久以前去过的一座海港。",
+   "市集到了尽头，父亲在水边发现了一处旧码头。"
+  ],
+  [
+   "进了第二国，灯还亮着，我们接下来说的全是那只沉甸甸的锚。",
+   "店主把我们请进人群里坐下，就着热面包和甜蜂蜜，我们一点点融进了这场欢聚。",
+   "父亲那天讲起一个老水手，说他当年就站在晨雾和水交界的地方。",
+   "屏幕上那位疲惫的水手，让父亲放下了手里的勺子。",
+   "清晨回程车上安安静静，父亲却说起一个人怎样把感冒传满一车。",
+   "那天傍晚，一个疲惫的水手吃着热面包，给我们讲他头一回坐的汽船。"
+  ],
+  [
+   "两站之间，父亲又说回那艘大邮轮，说它身后也是我们走过的那些山那些水。",
+   "一艘慢船顺河而下，我们俩都朝它挂着的红旗挥手。",
+   "过了市场广场，有艘渡船每小时开两趟，渡过灰蒙蒙的水面。",
+   "父亲说，我们的烦恼会随夜车飘然远去。",
+   "在宽宽的河边，我们看着一只木筏把一个小男孩和五只羊渡了过去。",
+   "父亲在桌上画了一条河，说起他多年前划过的那只独木舟。"
+  ],
+  [
+   "父亲给我看了那根斜靠在后墙上的长木桨。",
+   "他说，船上最好的地方就是后面那块迎着风的甲板。",
+   "围栏后面那台巨大的涡轮机，震得整个集市都在晃。",
+   "画面里的螺旋桨转得极慢，我盯着看了好几分钟。",
+   "我们谁也没见过船的尾部，就请他把它画出来。",
+   "父亲把众人从冷雾里喊上船，手里端着热茶。"
+  ],
+  [
+   "午夜时分，我听见父亲在睡梦里低声说我们天不亮又要上路了，便轻轻给他盖好毯子。",
+   "车在山与山之间静下来，父亲在座位上比划出那道海峡的形状。",
+   "眼看到家了，父亲说起那条老运河，却把最好的一段留到大门口才讲。",
+   "过境时，父亲把沟和沿途的山河连在一起讲给我听。",
+   "平原从窗外掠过，父亲说这条铁路完全是靠人力一寸寸修成的。",
+   "这条新铁路把山一分为二，也把人们带到了集市上。"
+  ],
+  [
+   "一台小机车拖着六节车厢过了河，我们身旁几个男人欢呼起来。",
+   "我们找到一个地铁站，一起走下了台阶。",
+   "火车还没钻山洞我们就睡着了，所以错过了那条长长的隧道。",
+   "车窗外面，那条钢轨笔直地一直铺到田野的边上。",
+   "车到平原，日头暖着手，父亲笑说起我们出发那天早上的样子。",
+   "老农赶着羊来迟了，晌午的边境集市为这事笑了一场。"
+  ],
+  [
+   "父亲说，离最后一个目的地只剩一个晚上了，我几乎睡不着。",
+   "父亲陪我在安静的面包店里度过那段长长的晚点，老农们在旁边轻声唱歌。",
+   "父亲说，雨也好雾也好，都拦不住这趟我们等了好几年才出门的旅行。",
+   "夜深了，我听见父亲嘟囔着要推迟这趟旅行，就把毯子往他身上拉了拉。",
+   "回程的早晨有一段安安静静的空当，父亲把我们一路上看过的东西全填了进去。",
+   "离家这样近，窗窗都有灯，父亲忽然笑起车票来：到天亮就过期了。"
+  ],
+  [
+   "回家的路上，父亲算清我们要付的车票钱，然后又转头去看窗外远处的江河。",
+   "父亲说起那笔多出来的邮资，一碗面还没吃空，我们这一排人就笑翻了。",
+   "父亲翻开小本子，把邮票记在行程旁边，说回家要讲给母亲听。",
+   "早晨那杯茶还在院里端着，父亲就拆开了家里寄来的一只旧信封。",
+   "我们的信投进了邮筒，父亲说母亲星期五之前就能收到。",
+   "我在座位上发现一小包薄饼干，从楼下店里带上来的时候还是温的。"
+  ],
+  [
+   "我们身边一位好心的女士给了父亲一小包果干。",
+   "日头从平原这头照到那头，父亲趁亮教我把两只行李捆成一束。",
+   "正午集市挤满了人，父亲从座位上抱起一只棕色包袱。",
+   "那辆小卡车载着沉重的货物，慢慢地落在我们火车后面很远的地方。",
+   "父亲从没提起过为我们所有人买车票这份真正的担子。",
+   "刚过界碑，车窗上蒙着雾，父亲压低声音给我们讲换乘的事。"
+  ],
+  [
+   "那天深夜，父亲在梦里咕哝着要给家里发消息，我把毯子给他掖好。",
+   "一整个早晨的车程，父亲把城里的交通线路讲给我们听，四周一直静着。",
+   "快到家时，父亲笑着说，我们许下的承诺总会兑现。",
+   "拂晓，列车员让高个男孩们传着话迅速让开门口，好让老人们先过。",
+   "车开得很快的时候，我们桌上的小杯子直跳，大家都笑了。",
+   "平原上没有任何东西赶得上那趟早晨火车的速度。"
+  ],
+  [
+   "院里的早晨，我和父亲捧着茶杯站着，看几只轻快的鸟掠过头顶那道墙。",
+   "回家的路上父亲读了一点马克思主义，还问我都听说过些什么。",
+   "两个男人一边打牌一边争论社会主义，直到屋里的火灭了。",
+   "我们吃面包的时候，邻桌的两位老人正在争论共产主义。",
+   "父亲大声笑我们清晨那套规矩有多严，说时平原正亮晃晃地往后跑。",
+   "中午有位掌权的官员走过来，父亲站在集市当中客客气气回他的话。"
+  ],
+  [
+   "母亲问为什么那一周每份报纸都塞满了政治新闻。",
+   "父亲在车窗上画了一排方框，那些老称呼的等级次序就很清楚了。",
+   "午夜柔和的铃声响起，父亲叫醒我，在银色月光下给我讲了一个关于民主的小小故事。",
+   "什么叫官僚？父亲等主持人念完了这条新闻，才开口给我解释。",
+   "我们提着篮子、穿着暖外套登上台阶，上了那趟明亮的夜车，车上的座位让人觉着人人都一样。",
+   "在最后两盏灯之间的那段黑路上，父亲才讲起那个劝人别只顾贪物件的故事。"
+  ],
+  [
+   "山、水，还有一场旧日的革命，一路车下来，父亲把它们说成了同一件事。",
+   "一手热茶，一手面包，父亲又跟我讲起那场旧改革。",
+   "父亲选了稳妥的那条路：远一些，可是更安全。",
+   "父亲给我讲了面包店后面那场悄然发生的崩溃，语气很伤感。",
+   "父亲称赞那间市营的小店，店主深夜里还给我们端来热茶和暖毯。",
+   "那两个人吵嚷起来的时候，我保持中立，自顾自地喝着茶。"
+  ],
+  [
+   "父亲说，所谓双边协议，就是两个国家谈好了一起修一座桥。",
+   "那座旧竞技场落满灰、空着，被日头一照，又成了这趟过平原时的一段趣事。",
+   "晌午的集市上方飘起一面红横幅，父亲一直指着，直到所有人都抬起头。",
+   "在刚进来的第二国，灯下我们聊的是一家公司，和它的总裁。",
+   "我们提着篮子、穿着外套登上车，那趟灯火通明的夜车上，站着的正是总理本人。",
+   "清晨的雾里，山灰灰地蹲在铁道旁，父亲说那模样像位歇着的老部长，和气。"
+  ],
+  [
+   "主持人还在念选票的事，父亲却问我，一个秘书整天到底在忙些什么。",
+   "父亲说，那个有名的议会不过是一屋子大声说话的人。",
+   "那晚父亲把参议院也安进了故事里，说的时候咱家大门已在眼前。",
+   "父亲说，在那座高大的会议厅里，他曾给人递过一杯又一杯热茶。",
+   "父亲有一次赶早会，急急忙忙上错了车。",
+   "叔叔哼着小调，父亲在尘土上画出那座大大的总部，自己先笑了。"
+  ],
+  [
+   "有一拨外地的队伍要来村里，父亲是在院里喝茶时跟我说的。",
+   "排队时，父亲替我们全家轻声说了几句话，我也努力让自己定下心。",
+   "父亲早饭时说起的那位老政治家，当年输过两次表决，才有人愿意听他讲话。",
+   "在边境小镇，我们见到了市长，他带我们看了新的候车室。",
+   "父亲带我去参加主日那场安静的礼拜，老农们在里面轻声合唱。",
+   "在那间小小的旅行社办公室里，父亲问了第二天的票。"
+  ],
+  [
+   "一过界，我们就在灯下坐着，为那家旅行办事局又耗掉一个钟头。",
+   "那天晚上很晚，票务部门的人才过来看我们的材料。",
+   "父亲笑着指了指雾，半真半假地问：这风要怎样才驾驭得住。",
+   "先是选票，再是新上来的一班人；父亲借主持人的话起了头，让我往下接。",
+   "回程的车厢静得很，只有一幅画面反复浮上来，就是压住所有风景的那几座雪山。",
+   "快到家时，父亲笑着说，这趟旅行会影响我们好些年。"
+  ],
+  [
+   "父亲讲守时有多么重要，我却只顾望着窗外远处的江河。",
+   "我们吃着热面，父亲故意装出一本正经的样子，说那座旧桥的意义多么重大，惹得邻座哈哈大笑。",
+   "父亲在本子上记下那个援助组织，说回家要讲给母亲听。",
+   "那天早晨父亲的话题就是农民协会，一句一句配着热茶说得很慢。",
+   "一家小店的门上方挂着一面联盟旗，我问父亲那是什么意思。",
+   "我们那个小社区每年都聚在一个大厅里，这列火车上也有那种感觉。"
+  ],
+  [
+   "叔叔唱着老歌，父亲在尘土上画出一道线，指给我看前面那座大财团修的水坝。",
+   "一支村队曾经加入过一个大型足球联赛，父亲为这件事笑了好多年。",
+   "父亲把那座石头老楼称作一个正经机构，说完自己笑了。",
+   "在我们自己那趟车上，睡得半醒半迷，我们还问过：素不相识的人，真能在一夜行程里站到一处吗。",
+   "我们分着喝了那种山上的浓茶，父亲说它的味道是独一份的。",
+   "父亲给我讲起我们国家那些平静的往事，老农们在面包店后面轻声唱歌。"
+  ],
+  [
+   "主持人念着全球天气，父亲开玩笑说我们那场雨都怪他。",
+   "父亲替我把世界各地的新闻按顺序排好，一路上谁也没再说话。",
+   "隔着我们和家的只剩一片田，父亲的故事却一路说到联邦那座都城。",
+   "出门走进寒冷的晨雾之前，父亲把他在那边外国市场上买来的旧围巾围在我的衣领上。",
+   "我们提着篮子登上那趟亮着灯的夜车，像一艘来自海外的船。",
+   "在行程旁边，父亲写下'出国留学'几个字，记着要告诉母亲。"
+  ],
+  [
+   "父亲在院里一边喝一边说，茶都凉了，他才讲完脱下军装以后的平民日子。",
+   "我们村里有几个孩子，长大以后会移居国外。",
+   "坐在对面的年轻人希望移居到新的国家，有一天开一家小店。",
+   "父亲给我念了一页老国王在位时的故事，阳光慢慢移过了桌面。",
+   "在同一个故事里，一个木偶站了起来，开始发号施令。",
+   "午夜柔和的铃声响起，父亲叫醒我，讲起银白月光下那张空荡的王座。"
+  ],
+  [
+   "父亲指着长长的河，讲给我听从前一位国王怎样丢了自己的王冠。",
+   "在车站门口，我们看到石头上放着一个圆圆的白花圈。",
+   "要形容那一大片雾，父亲借了蚁群来说，说那些小工排成的长线就是雾在走。",
+   "新闻看完后，父亲难得让我自己选晚饭，还说这就叫自由。",
+   "火车驶过大河时，父亲一直在讲那场争取独立的漫长斗争。",
+   "离家不远了，父亲把贫民区那间旧学堂讲成我到今天还记得的一段。"
+  ],
+  [
+   "父亲带我去看面包店后面那处安静的避难所，老农们常聚在那儿唱歌。",
+   "城里的收容所，父亲在热面上不过提了一句，我们那一桌人便大笑起来。",
+   "大门边的牌子上写着这个镇的人口，比我们老家学校的孩子总数还少。",
+   "早饭时父亲对着那张人口统计图发起愁来，那杯茶就在手边，一口没动。",
+   "快轮到我们时，父亲讲起一位自豪的公民，打发排队的工夫。",
+   "夜里住在小店里，我们看着店里常住的猫在暖炉边打盹，窗外雨声轻轻。"
+  ],
+  [
+   "车厢那头的一个女孩唱了三首她自己民族的歌，车上差不多一半的人都跟着她笑起来。",
+   "在我们漫长的旅途上，许多不同种族的人共用一节小小的餐车。",
+   "山里那个古老氏族的事，父亲留着不说，直等到中午在边境集市歇脚才讲。",
+   "我们那家小面馆的老板，如今在另外三个镇也经营起同样的加盟店。",
+   "傍晚，同车的旅客也凑了过来，聊起我们这张能换一顿免费饭的票。",
+   "雾一来，父亲便说，他越发偏爱一大早的车。"
+  ],
+  [
+   "我醒来时听见父亲在梦里低声说他不能错过那场投票，便轻轻给他盖好毯子。",
+   "村里怎么选当家人？父亲把这个问题丢进清晨车程的一片安静里。",
+   "叔叔唱着歌，父亲在尘土上做记号，逐个数着调查里的受访者。",
+   "连最新的一次民意调查，也被父亲安进他那番关于山河的长谈里。",
+   "父亲放下筷子说出自己小时候的志向，邻座立时笑成一片。",
+   "面包店外，弟弟像小丑一样把咱家的狗提名当国王，整条犯困的队伍都大笑起来。"
+  ],
+  [
+   "早饭时父亲把那张小小的行装单子摊在院里的桌上，要我一行一行念出来。",
+   "父亲给我讲面包店后面那场安静的权力交接，老农们在那里轻声合唱。",
+   "那晚小店里雨声轻敲，我们聊起动物福利。",
+   "走到平原中央，我们新交的朋友举杯祝我们身体健康、平安幸福。",
+   "父亲最后说了一个朴素的愿望：愿各种各样的人都能和睦相处。",
+   "中午最忙的时候，边境集市那家面馆待客还是稳稳当当，父亲夸了两次。"
+  ],
+  [
+   "我们看着夜色从窗外走进来，又想起那处市集：天一黑才真正旺起来。",
+   "屏幕上那个人说，想在这样的地方成功，就得从小事做起。",
+   "父亲说前头的路大有指望，哪怕雾正低低地堆成一片灰浪。",
+   "新闻放完，主持人留下的还是选票，父亲却给了我一个从没想过的角度看它。",
+   "回程又静下来时，父亲只用了短短三句话就说完了自己的看法。",
+   "父亲究竟站在哪一边？快到家时他讲的那段故事里，听得明明白白。"
+  ],
+  [
+   "父亲说，这一年我们的前途怎么样，从沿途的山河里就看得出来。",
+   "父亲在纸的最上头写了一行字，当作这趟旅程的总方针。",
+   "我们家的处世准则一句话就能说完：踏实做事，善待别人。",
+   "父亲说，经过那趟长长的夜车，烦恼再也没什么可劝他的了。",
+   "桌边的每个人都笑了，痛快地答应了父亲那个简单的建议。",
+   "雨点敲着小店窗户，我们翻着菜单想找一丝蜂蜜的影子。"
+  ],
+  [
+   "列车在日出时驶出，父亲宣布旅程开始了。",
+   "太阳照亮整片平原，父亲只是平平地又应了一声，把那话说实。",
+   "正午，集市上有个嗓门格外响：老农一口咬定自家苹果最甜。",
+   "一个卫兵来宣布新规矩，第二国的灯下，我们从头到尾听完没有走开。",
+   "走过三个国家，我们又高兴又犯困，坐在那儿，那种滋味谁也说不清。",
+   "报站的人把每个站名念了两遍，声音比雾先到耳朵里，父亲侧着头听。"
+  ],
+  [
+   "过了午夜，父亲喃喃说还有一件小事没讲清楚，我给他把被子盖好。",
+   "父亲数着陌生人帮过我们的种种，晨间的归途竟一直这样静。",
+   "村里有灯，风里有家的味道，父亲笑着讲起路上遇见过的那几个做援助的人。",
+   "拂晓，列车员让高个男孩们互相鼓着劲迅速让开门口，好让老人们先过。",
+   "我们吃着热面，父亲摆出一副要紧的口气，说要实行那些非守不可的规矩，邻座都大笑起来。",
+   "边境上架着两台高高的摄像头，监视着每一列停在墙边的火车。"
+  ],
+  [
+   "父亲说，经过那趟长长的夜车，他的心里再也不会承认还有什么烦恼。",
+   "队伍挪得很慢，父亲便凑过来低声跟我讲非洲鼓。",
+   "旧地图上那些欧洲的火车看起来比我们的还小，叔叔笑了。",
+   "天刚亮，父亲指着远山，教了我一个拉丁语的词。",
+   "最后他讲到一个犹太人的节日，全家人围坐在一张长桌旁。",
+   "临近中午，集市出口那边走来个笑吟吟卖椰枣的阿拉伯人，同父亲道了早安。"
+  ],
+  [
+   "直到他把面包掰开分给孩子们，我们才知道桌边这位先生是葡萄牙人。",
+   "父亲说，就连古罗马的老路，当初也是照着一千年的年头修的。",
+   "那天早上父亲换了个说法，用一支老俄国民歌来描那片雾。",
+   "那趟西班牙的火车晚点了，父亲把我们的行李搬到了长椅上。",
+   "父亲自己给瑞士的火车掐时间，结果没有一趟晚点。",
+   "那天晚上父亲讲了一个关于国王的希腊故事，我还没听到结尾就睡着了。"
+  ],
+  [
+   "坐在我们对面的农夫说的是一种很柔和的语言，父亲说那是意大利语。",
+   "他甚至学了一句老苏联电影里的台词，把满屋子的人都逗笑了。",
+   "父亲在本子上，挨着行程画了一座印度的庙，说要讲给母亲听。",
+   "早茶喝到一半，父亲已自言自语说起澳大利亚，说那里有大段晒着太阳的公路。",
+   "父亲说，这里绿色的田野很像新西兰，一个远远在南边的国家。",
+   "叔叔曾经在加拿大做过两个冬天的活，那里的雪能盖住一辆汽车。"
+  ],
+  [
+   "一位来自英国的旅人一路轻声和我们唱着，一直唱到望见村口的灯火。",
+   "父亲和一位来自法国的和善老厨师聊了很久，说起雪山和热闹的村庄节庆。",
+   "靠窗一位温柔的德国女孩给我们看她家乡的照片——金色的田野和欢笑的孩子。"
+  ],
+  [
+   "老林梦想成为街角小店主，每天面对沉重的生计压力。",
+   "他用自己微薄的积蓄租下店铺，还常常把热饭送给邻居。",
+   "好心邻居仿佛给老屋注入新的希望，远不止是做生意。",
+   "他没有大声吆喝，只在木门外写下一句温暖的标语。",
+   "买货架之前，他把租约里的每一条都仔细看过。",
+   "第一个月的费用他勉强才能负担，却梦想给整条街带来零售的小愉悦。"
+  ],
+  [
+   "小杂货店安静开张，他给附近老顾客一点小优惠。",
+   "开张促销那几天，他给在外面玩耍的孩子发纸礼券。",
+   "老人们带来纸质优惠券，还打听来访亲戚随身带来的各种外币。",
+   "小物件跟邻居换来换去，一个好故事有时也能换来一个笑脸。",
+   "每张收据都收在盒子里，他担心的是小店再添新税。",
+   "随着他一点点弄懂进口水果的关税，他的责任感一天比一天强。"
+  ],
+  [
+   "他担心有钱的地主会强收高租，很快把他仅有的一点钱吞干净。",
+   "每天的进账很少，毛收入勉强够付水电费。",
+   "一场比这全镇更大的衰退笼罩下来，夜里他心里满是低落。",
+   "一场突如其来的短缺危机，打碎了他冬天求安稳的指望。",
+   "和邻居的情谊支撑着他，尽管欠了供货商不少债。",
+   "一笔一笔的亏空慢慢攒起来，通货膨胀把价格一周比一周推得更高。"
+  ],
+  [
+   "他盼着物价回落，可存下的硬币一天天变少。",
+   "为了撑过生意的下滑，他只好缩小摊子，晚上早早关门。",
+   "他看着自己的希望在心里一点点落下去，每天来买货的人也像越来越少。",
+   "他努力减少后屋的浪费，在货架上多摆新鲜水果。",
+   "客人每多一点点，都像寒冬过后的暖意生长。",
+   "成本不断攀升，他不敢把店面扩到隔壁。"
+  ],
+  [
+   "附近一下子涌进许多年轻租客，这并不说明这条街已经富了起来。",
+   "他想把早餐的花样添多一些，却没有足够的地方摆新货架。",
+   "后屋勉强够用，也没有多余椅子给客人休息。",
+   "微薄的存款维持着灯火，旧箱子在角落成了多余之物。",
+   "缺人手让他筋疲力尽，直到隔壁小公司来搭把手。",
+   "那家小企业派来一个和气的经办人，商量的还是两家的早晨搭伙送货。"
+  ],
+  [
+   "他把小店当成一个独立的小门面来经营，没有家里人撑腰，他不敢再多投钱。",
+   "听了邻居实在的意见，他认真挑好每件早货。",
+   "一次冒险进的便宜冬货，把后屋堆到屋顶。",
+   "冬天运来的货物晚到了，他忘了给易碎箱子保价。",
+   "司机再三保证，下次一定派更可靠沉稳的人来。",
+   "长久商谈之后，老林请教子每晚都来旁听。"
+  ],
+  [
+   "定大米最终售价那晚，桌边一个人也没缺席。",
+   "他们为批发成本争论，还打趣说天亮要把豆子拿来拍卖。",
+   "供货商报了低价，老林怀着希望拍板成交。",
+   "每笔买卖都记下来，定期在周日结算营业额。",
+   "他们保证不丢烂菜，也不把麻烦推给别街。",
+   "他们约定每周按限额进新鲜水果，有危险一起担。"
+  ],
+  [
+   "这里头没有银行利息，也没有答应给谁一整年的分红。",
+   "老林把剩货记进本子，另开一本账管日常。",
+   "他先留下一点定金，余下定期分期付清。",
+   "他一枚一先令地数清楚，又把那些旧铜罐擦得亮亮的好做摆设。",
+   "出租地说，那片老地界很快就要沿路添上一排新店。",
+   "老林希望这间小店能成为家传的业，愿安宁一年年落在这屋檐上。"
+  ],
+  [
+   "他觉得这份苦吃得对得起这条街，每个邻居都像金子一样宝贵。",
+   "一点小赚头让他起了劲，想把早上的买卖做快些，提前一小时开门。",
+   "他待客利索，街上的人都喜欢，每周他还要留下些硬币给店员发工钱。",
+   "微薄的进项还够喝汤，也够付小帮工的日工资。",
+   "饭馆晚付货款，逼得他向供货商要一点退款。",
+   "他很快报销车费，工资本却锁在抽屉里。"
+  ],
+  [
+   "没有额外报酬，但街道补贴帮他付了冬灯费。",
+   "他想慢慢挣得信任，把小店当一辈子事业珍惜。",
+   "他说开小店算不上什么专业行当，却是一门养活全家的正经职业。",
+   "他把它当成天职，天亮到天黑都出实在力气。",
+   "三个帮工的小队伍，笑着说他是温和的拼命人。",
+   "店里人个个和气，年轻店员记得每个孩子的名字。"
+  ],
+  [
+   "每次面谈，他都就着热茶细看手写简历。",
+   "邻居推荐老实青年，他都乐意多收一个帮手。",
+   "他答应过，绝不在气头上招人，也绝不在雨天辞退人。",
+   "从不突然裁员吓人，也不赶走生病的孩子。",
+   "他手里清出去的只有摔碎的箱子，从不逼着谁红着脸辞职。",
+   "他从不用面粉袋当椅子，还笑说自己绝不会提前退休。"
+  ],
+  [
+   "一次送货泡汤，像把他一早晨的安排全废了。",
+   "鲜奶突然断货，给对手散布难听话的机会。",
+   "老林没什么机会解释自己，只能在沉默和大嗓门的争吵之间挑一样。",
+   "他想平心静气解决问题，保住和供货商的长久往来。",
+   "他一边听那些难听话，一边稳住自己的情绪，也稳住自己的呼吸。",
+   "街道小组的处罚拦不住吵嚷，朋友们只好想法子张罗一次平静的谈话。"
+  ],
+  [
+   "双方答应合作一晚，一起对账查本子。",
+   "年轻学生讲解法律字句，把冰冷条例读了两遍。",
+   "老口头约定太松，不如老林手里的纸约可靠。",
+   "墙上的店规和司机留的送货规矩对不上。",
+   "晚送打破了行规，也低于他们定的底线。",
+   "鲜奶怎样才算合格，没写清楚过；也从没定下一个统一的标准。"
+  ],
+  [
+   "司机手里没有夜里行路的书面许可证，而他开口的头一句话，就是勉强承认自己来晚了。",
+   "老林说，许下的话句句都要做到，早上送货的点一刻也得守住。",
+   "再紧的黎明时间，他也一样一个一个挑，烂瓶照旧一律拒收。",
+   "街道干部说早送是食品店必须守的规矩。",
+   "浓茶让人提神，两人都觉得有一份道义绑在身上，必须心平气和地谈。",
+   "老林说了自己对孩子们那份实实在在的责任，也怕有一天走上公堂。"
+  ],
+  [
+   "不必惊动最高法院，街道办公室自会定下几条简单的共用规矩。",
+   "他们不想立苛刻条文，只求小店之间大致公平。",
+   "对新人的旧偏见散了，当晚没人搞歧视。",
+   "老林不肯在气头上指责谁，也答应不为一辆晚到的车去起诉谁。",
+   "没人想告疲惫的司机，也不忍责备他家人。",
+   "抵制的话不提了，大家喝着热茶静静开会。",
+   "我们这条街的大门上方，现在安了一个监控摄像头。",
+   "没人接受一个老牌家族凌驾于众人之上的霸权地位。",
+   "那位富有的客人微微一笑，却带着一股冷漠的优越感。",
+   "市场里的一场吵骂，让这处街角突然臭名远扬。",
+   "全城人在共同遵守的规则下，商定了一套更公平的治理方式。",
+   "第一班公交车来之前，疲惫的店主就把人行道扫干净了。"
+  ],
+  [
+   "梅姨来温和调解，平静听完每个疲惫的诉说。",
+   "老林软语求信任，却没有生硬反驳司机。",
+   "她努力劝和双方，给变质牛奶的争执降温。",
+   "屋里紧张地响起一阵低语，司机则开始嘟囔着道歉。",
+   "理解的轻声蔓延，连生气的叔伯都安静沉默。",
+   "他们商量好了，要查那辆晚到的车，路上见到谁看见了，就请谁说实话。"
+  ],
+  [
+   "事实能证明一个公平的结果，也撑得起一份合情合理的新送货安排。",
+   "梅姨挑了个合适的时间，也没请严厉的法官来断这个案。",
+   "旧日的怒气慢慢化了，不必审谁，这道伤也能长好。",
+   "没人再是嫌疑人，纸上也没写严厉的判语。",
+   "那晚没人被抓，也没人面对冰冷的牢房。",
+   "他们对漆黑监墙的那份害怕慢慢退了，也不肯只让话停在纸上。"
+  ],
+  [
+   "梅姨愿盯着早晨到货，天天亲自查牛奶。",
+   "他们约定少接夜单，不在孩子面前大吵。",
+   "双方都答应存着善心，除了这辆晚到的车，谁也没有更要藏的亏心事。",
+   "这条街上没有过真正的案子，小店后面也没藏着什么恶习。",
+   "黑夜里没人递过一个脏钱，也没人抢过朋友的一份功劳。",
+   "没有一个纸片上的海盗夜里靠近过货架，也没有一个帮工去偷罐子里的硬币。"
+  ],
+  [
+   "贼和命案的话题，离热茶微笑很远很远。",
+   "绝望到底也没走到寻短见那一步，也没人愿意再骗老朋友。",
+   "店里不用掺水奶骗人，也不藏微笑后的骗局。",
+   "再没人被指着骂骗子，新写下的条款里也没有藏着害人的套。",
+   "不用耍小聪明，也不用装欢快喝热茶。",
+   "没人再觉得自己是傻子，也没有旧骂名还缠着司机一家。"
+  ],
+  [
+   "司机决定公开承认晚点，服从新的黎明规矩。",
+   "老林乐意彻底和好，也照着那天晚上一起定下的计划去做。",
+   "双方都不再屈从面子，也不再受重罚。",
+   "重罚单没开，小店也没押出去。",
+   "店面的产权仍旧归老林，那块他亲手画的招牌也保着自己简朴的版权。",
+   "为这条街办事是他安静的福气，邻居们也认他是实实在在的好人。"
+  ],
+  [
+   "一张小纸条的线索，帮他们找到通往城外新鲜农场的更好门路。",
+   "再没有匿名条子把怒气传开，假话也进不了这家店。",
+   "真诚笑容回到老林脸上，早晨的流程也有了章法。",
+   "天天打扫成了安稳的日常，每一件善事也自会带来一份暖和的下文。",
+   "没有硬性要求取代善意，也没有尖刻的请求打破新的安宁。",
+   "新规矩花不了多少钱，只是请每家在一张联名信上签个名。"
+  ],
+  [
+   "梅姨不像头儿那样下令，只用故事轻声教帮工。"
+  ]
+ ],
+ "paraZh": [
+  "我们在家收拾行李，父亲带我去排队办签证，屋里屋外都是出发前的忙碌。",
+  "签证有了着落，我们住进小店，父亲核对材料，商量乘车的事。",
+  "清晨登上列车，车厢温暖，父亲指着窗外讲沿途的山河。",
+  "列车穿过平原，阳光正好，我们和邻座分享吃食，有说有欢。",
+  "父亲念行程讲山河，热面没吃邻座先笑了。",
+  "清晨庭院喝热茶讲大街，公路笔直只有草。",
+  "傍晚停车时，我们认识了新朋友，大家围坐一起谈天。",
+  "夜深了，车厢安静，父亲轻声讲过去的事，哄我入睡。",
+  "清晨雾气未散，列车继续向前，父亲带我看日出。",
+  "上午经过大河，桥很长，水面发亮，我们都趴在窗边看。",
+  "父亲院里茶里添蜜，讲平原上的太阳海港。",
+  "下午穿过村庄，孩子们挥手，父亲也挥手回应。",
+  "一艘慢船顺河而下，木筏渡男孩和羊。",
+  "父亲看木桨说船尾，冷雾里喊众人上船。",
+  "新闻里选情激烈，父亲结合一路见闻，给我讲其中的道理。",
+  "小机车拖车厢过河，几个男人在旁欢呼。",
+  "深夜回到车厢，父亲总结几国的见闻，说世界很大。",
+  "回程的清晨，阳光温柔，我们整理行李，准备回家。",
+  "车过平原，春花开放，父亲说回家要把故事讲给家人听。",
+  "中午短暂停留，我们买了点心，分给同车的孩子。",
+  "父亲讲马克思主义，屋里争论到火灭。",
+  "午夜铃声叫醒我，父亲讲民主的小小故事。",
+  "热茶面包讲旧改革，我保持中立喝茶。",
+  "签证有了着落，我们住进小店，父亲核对材料，商量乘车的事。 灯下团聚，欢语不断。",
+  "议会是一屋大声的人，会议厅里递热茶。",
+  "父亲问票见市长，村里来了外地队伍。",
+  "灯下为办事局耗钟头，很晚才有人看材料。",
+  "门上一面联盟旗，父亲慢讲农民协会。",
+  "傍晚停车时，我们认识了新朋友，大家围坐一起谈天。 灯下团聚，欢语不断。",
+  "父亲排好世界新闻，雾里围上外国旧围巾。",
+  "父亲讲脱下军装后的日子，也念老国王的故事。",
+  "火车过大河讲独立，父亲指河说丢了的王冠。",
+  "牌上人口比学校孩子少，店里猫在炉边打盹。",
+  "不同种族共用一辆餐车，女孩的歌唱笑半列车。",
+  "睡梦里说不能错过投票，父亲问村里怎么选当家人。",
+  "行装单子一行行念，朋友举杯祝平安。",
+  "新闻里选情激烈，父亲结合一路见闻，给我讲其中的道理。 灯下团聚，欢语不断。",
+  "纸上写一行总方针，大家答应父亲的简单建议。",
+  "天刚亮父亲宣布旅程开始，正午集市嗓门最响。",
+  "父亲数着陌生人的帮助，架上摄像头监视火车。",
+  "天刚亮父亲教拉丁词，中午卖椰枣的阿拉伯人道早安。",
+  "中午短暂停留，我们买了点心，分给同车的孩子。 灯下团聚，欢语不断。",
+  "对面农夫说意大利语，父亲说起澳大利亚。",
+  "英国旅人一路轻声唱，法国厨师聊雪山节庆。",
+  "老林想开街角小店，筹备中满是生计压力。",
+  "邻里交换物件故事、保存收据防税费、了解关税强责任、担心高租吞噬积蓄，经济与法治意识并重。",
+  "担忧大地主高租吞噬积蓄，弱势者的生存焦虑真实呈现。",
+  "生意下滑后他省吃俭用，想办法稳住客流。",
+  "人手不够时隔壁企业伸手，带来合作机会。",
+  "他谨慎进货签约，请来侄子旁听谈判。",
+  "双方定价成交，约定新鲜和诚信。",
+  "账目定金理清，老林盼小店长久传家。",
+  "微利维持着工资和日常，日子紧巴却用心。",
+  "小店是全家骄傲，全员和气肯干。",
+  "招人重人品，承诺不轻易赶人。",
+  "一次断货引发谣言争吵，朋友出面缓和。",
+  "旧约模糊不清，新旧规矩对不上。",
+  "干部定下早送铁规，双方愿意心平气和谈。",
+  "大家放下偏见和官司念头，坐下喝茶开会。",
+  "梅姨温和调解，双方查清真相。",
+  "怒气消散，不走公堂也能愈合。",
+  "定下早查夜约，守善不沾歪邪。",
+  "谣言骗局远去，司机一家甩掉骂名。",
+  "双方认错和好，店权分明重获信任。",
+  "找到新农场货源，日子恢复平静安宁。",
+  "梅姨用故事教人，和解长久。"
+ ],
+ "glossary": {
+  "dawn": {
+   "m": "n. 黎明；破晓",
+   "ex": "The birds sing at dawn.",
+   "exZh": "鸟儿在黎明时歌唱。",
+   "forms_seen": [
+    "dawn"
+   ]
+  },
+  "first": {
+   "m": "adj. 第一的；adv. 首先；n. 第一",
+   "ex": "He got the first prize in the race.",
+   "exZh": "他在比赛中获得了第一名。",
+   "forms_seen": [
+    "first"
+   ]
+  },
+  "voyage": {
+   "m": "n. 航行",
+   "ex": "They went on a long voyage across the ocean.",
+   "exZh": "他们进行了一次横跨海洋的长途航行。",
+   "forms_seen": [
+    "voyage"
+   ]
+  },
+  "queue": {
+   "m": "n. 长队；v. 排队",
+   "ex": "There is a long queue at the ticket counter.",
+   "exZh": "售票处排着一条长队。",
+   "forms_seen": [
+    "queue"
+   ]
+  },
+  "aviation": {
+   "m": "n. 航空；航空学；飞行（术）",
+   "ex": "He works in aviation as a pilot.",
+   "exZh": "他作为一名飞行员从事航空工作。",
+   "forms_seen": [
+    "aviation"
+   ]
+  },
+  "quiet": {
+   "m": "adj. 安静的",
+   "ex": "The child is quiet during nap time.",
+   "exZh": "孩子在午睡时很安静。",
+   "forms_seen": [
+    "quiet"
+   ]
+  },
+  "safari": {
+   "m": "n. （在非洲的）旅行；狩猎旅行",
+   "ex": "We went on a safari in Kenya to see lions and elephants.",
+   "exZh": "我们去肯尼亚旅行，去看狮子和大象。",
+   "forms_seen": [
+    "safari"
+   ]
+  },
+  "trail": {
+   "m": "n. 小径；v. 跟踪；落后于",
+   "ex": "We walked along the forest trail.",
+   "exZh": "我们沿着森林小径散步。",
+   "forms_seen": [
+    "trail"
+   ]
+  },
+  "sunrise": {
+   "m": "n. 日出；黎明",
+   "ex": "We woke up early to see the sunrise.",
+   "exZh": "我们早起看日出。",
+   "forms_seen": [
+    "sunrise"
+   ]
+  },
+  "parade": {
+   "m": "n. 游行；v. 阅兵",
+   "ex": "The city held a big parade on Independence Day.",
+   "exZh": "城市在独立日举行了盛大的游行。",
+   "forms_seen": [
+    "parade"
+   ]
+  },
+  "plain": {
+   "m": "n. 平原；adj. 简单明了的；朴素的",
+   "ex": "The cows graze on the plain.",
+   "exZh": "牛在平原上吃草。",
+   "forms_seen": [
+    "plain"
+   ]
+  },
+  "haunt": {
+   "m": "v. 长期困扰",
+   "ex": "The memory of the accident still haunts him.",
+   "exZh": "那场事故的记忆仍然长期困扰着他。",
+   "forms_seen": [
+    "haunt"
+   ]
+  },
+  "guard": {
+   "m": "n. 保卫；警卫；v. 守卫",
+   "ex": "The guard stands at the gate to protect the building.",
+   "exZh": "保卫人员站在门口保护大楼。",
+   "forms_seen": [
+    "guard"
+   ]
+  },
+  "attraction": {
+   "m": "n. 吸引力",
+   "ex": "The attraction of the city draws many tourists.",
+   "exZh": "这个城市的吸引力吸引了许多游客。",
+   "forms_seen": [
+    "attraction"
+   ]
+  },
+  "memorial": {
+   "m": "n. 纪念物；纪念碑",
+   "ex": "They placed a memorial at the site of the accident.",
+   "exZh": "他们在事故地点放置了一座纪念物。",
+   "forms_seen": [
+    "memorial"
+   ]
+  },
+  "guest": {
+   "m": "n. 客人；宾客",
+   "ex": "The guest arrived at the party early.",
+   "exZh": "客人早早到了派对。",
+   "forms_seen": [
+    "guest"
+   ]
+  },
+  "pyramid": {
+   "m": "n. 金字塔",
+   "ex": "The ancient Egyptians built pyramids for their kings.",
+   "exZh": "古埃及人为他们的国王建造了金字塔。",
+   "forms_seen": [
+    "pyramid"
+   ]
+  },
+  "mist": {
+   "m": "n. 薄雾",
+   "ex": "There was a thin mist over the lake at dawn.",
+   "exZh": "黎明时分，湖面上有一层薄雾。",
+   "forms_seen": [
+    "mist"
+   ]
+  },
+  "port": {
+   "m": "n. 港口",
+   "ex": "The ship arrived at the port at noon.",
+   "exZh": "船在中午到达了港口。",
+   "forms_seen": [
+    "port"
+   ]
+  },
+  "describe": {
+   "m": "v. 描述",
+   "ex": "He can describe the picture in one sentence.",
+   "exZh": "他能用一句话描述这幅画。",
+   "forms_seen": [
+    "describe",
+    "described"
+   ]
+  },
+  "host": {
+   "m": "n. 主持人；主人；v. 主持",
+   "ex": "The host welcomed us with tea and cookies.",
+   "exZh": "主人用茶和饼干欢迎了我们。",
+   "forms_seen": [
+    "host"
+   ]
+  },
+  "traffic": {
+   "m": "n. 交通；流量",
+   "ex": "The traffic on the highway was very heavy this morning.",
+   "exZh": "今天早上高速公路上的交通非常拥堵。",
+   "forms_seen": [
+    "traffic"
+   ]
+  },
+  "airline": {
+   "m": "n. 航空公司",
+   "ex": "The airline lost my luggage.",
+   "exZh": "这家航空公司弄丢了我的行李。",
+   "forms_seen": [
+    "airline"
+   ]
+  },
+  "helicopter": {
+   "m": "n. 直升机",
+   "ex": "The helicopter flew over the city.",
+   "exZh": "直升机飞过了城市。",
+   "forms_seen": [
+    "helicopter"
+   ]
+  },
+  "jet": {
+   "m": "n. 喷气式飞机",
+   "ex": "The jet flew high above the clouds.",
+   "exZh": "喷气式飞机在云层上方飞行。",
+   "forms_seen": [
+    "jet"
+   ]
+  },
+  "parachute": {
+   "m": "n. 降落伞；v. 跳伞；用降落伞空投",
+   "ex": "He jumped from the plane and opened his parachute.",
+   "exZh": "他从飞机上跳下并打开了降落伞。",
+   "forms_seen": [
+    "parachute"
+   ]
+  },
+  "flight": {
+   "m": "n. 航班；飞行；（阶梯的）一段",
+   "ex": "The flight to Beijing leaves at 8 a.m.",
+   "exZh": "飞往北京的航班早上8点起飞。",
+   "forms_seen": [
+    "flight"
+   ]
+  },
+  "night": {
+   "m": "n. 夜晚；晚上",
+   "ex": "The stars are bright at night.",
+   "exZh": "夜晚星星很亮。",
+   "forms_seen": [
+    "night"
+   ]
+  },
+  "pilot": {
+   "m": "n. 飞行员；驾驶员",
+   "ex": "The pilot landed the plane safely.",
+   "exZh": "飞行员安全地降落了飞机。",
+   "forms_seen": [
+    "pilot"
+   ]
+  },
+  "dust": {
+   "m": "n. 粉尘；尘埃",
+   "ex": "The worker wore a mask to avoid breathing in dust.",
+   "exZh": "这位工人戴上口罩以避免吸入粉尘。",
+   "forms_seen": [
+    "dust"
+   ]
+  },
+  "passenger": {
+   "m": "n. 旅客；乘客",
+   "ex": "The passenger got off the bus at the next stop.",
+   "exZh": "这位旅客在下一站下了车。",
+   "forms_seen": [
+    "passenger"
+   ]
+  },
+  "baggage": {
+   "m": "n. 行李",
+   "ex": "He carried his baggage to the airport.",
+   "exZh": "他把行李带到了机场。",
+   "forms_seen": [
+    "baggage"
+   ]
+  },
+  "luggage": {
+   "m": "n. 行李",
+   "ex": "He packed his luggage before the trip.",
+   "exZh": "他在旅行前收拾好了行李。",
+   "forms_seen": [
+    "luggage"
+   ]
+  },
+  "suitcase": {
+   "m": "n. 手提箱",
+   "ex": "He packed his clothes into a suitcase.",
+   "exZh": "他把衣服装进了行李箱。",
+   "forms_seen": [
+    "suitcase"
+   ]
+  },
+  "carry-on": {
+   "m": "n. 手提行李；adj. 手提的",
+   "ex": "She has a small carry-on bag for the flight.",
+   "exZh": "她有一个小手提行李箱用于航班。",
+   "forms_seen": [
+    "carry-on"
+   ]
+  },
+  "wooden": {
+   "m": "adj. 木制的；木头的",
+   "ex": "He sat on a wooden chair.",
+   "exZh": "他坐在一张木制椅子上。",
+   "forms_seen": [
+    "wooden"
+   ]
+  },
+  "rack": {
+   "m": "n. 架子；v. 折磨",
+   "ex": "He put the books on the rack.",
+   "exZh": "他把书放在架子上。",
+   "forms_seen": [
+    "rack"
+   ]
+  },
+  "freight": {
+   "m": "n. 货运；运费；货物",
+   "ex": "The freight train carried boxes to the city.",
+   "exZh": "货运列车把箱子运到了城市。",
+   "forms_seen": [
+    "freight"
+   ]
+  },
+  "fare": {
+   "m": "n. 车费；v. 进展",
+   "ex": "The bus fare is two dollars.",
+   "exZh": "公交车费是两美元。",
+   "forms_seen": [
+    "fare"
+   ]
+  },
+  "atlas": {
+   "m": "n. 地图册；地图集",
+   "ex": "He looked up the country in an atlas.",
+   "exZh": "他在地图册里查找那个国家。",
+   "forms_seen": [
+    "atlas"
+   ]
+  },
+  "explain": {
+   "m": "v. 解释；说明；阐明",
+   "ex": "Can you explain this math problem?",
+   "exZh": "你能解释一下这个数学问题吗？",
+   "forms_seen": [
+    "explain"
+   ]
+  },
+  "route": {
+   "m": "n. 路线；途径",
+   "ex": "We took a different route to avoid traffic.",
+   "exZh": "我们换了条路线以避开交通拥堵。",
+   "forms_seen": [
+    "route"
+   ]
+  },
+  "itinerary": {
+   "m": "n. 路线",
+   "ex": "We planned our itinerary before the trip.",
+   "exZh": "我们在旅行前规划了路线。",
+   "forms_seen": [
+    "itinerary"
+   ]
+  },
+  "mountain": {
+   "m": "n. 山；大量",
+   "ex": "He climbed a tall mountain last summer.",
+   "exZh": "去年夏天，他爬了一座高山。",
+   "forms_seen": [
+    "mountain"
+   ]
+  },
+  "passage": {
+   "m": "n. 通道；段落",
+   "ex": "The passage of the train through the tunnel was quick.",
+   "exZh": "火车通过隧道的速度很快。",
+   "forms_seen": [
+    "passage"
+   ]
+  },
+  "intersection": {
+   "m": "n. 交叉；十字路口",
+   "ex": "The intersection of two roads is busy.",
+   "exZh": "两条路的交叉口很繁忙。",
+   "forms_seen": [
+    "intersection"
+   ]
+  },
+  "narrow": {
+   "m": "adj. 狭窄的；窄小的；v. 使窄小",
+   "ex": "The road is narrow and hard to drive on.",
+   "exZh": "这条路很窄，开车很难。",
+   "forms_seen": [
+    "narrow"
+   ]
+  },
+  "lane": {
+   "m": "n. 小路；车道；航线",
+   "ex": "The children walked down the narrow lane to school.",
+   "exZh": "孩子们沿着狭窄的小路去上学。",
+   "forms_seen": [
+    "lane"
+   ]
+  },
+  "avenue": {
+   "m": "n. 大街；途径；林荫道",
+   "ex": "There are many shops on this avenue.",
+   "exZh": "这条大街上有许多商店。",
+   "forms_seen": [
+    "avenue"
+   ]
+  },
+  "highway": {
+   "m": "n. 公路",
+   "ex": "The car drove fast on the highway.",
+   "exZh": "汽车在高速公路上开得很快。",
+   "forms_seen": [
+    "highway"
+   ]
+  },
+  "grass": {
+   "m": "n. 草；草地",
+   "ex": "The children play on the grass after school.",
+   "exZh": "孩子们放学后在草地上玩耍。",
+   "forms_seen": [
+    "grass"
+   ]
+  },
+  "curb": {
+   "m": "v. 勒住；抑制",
+   "ex": "He tried to curb his horse with the reins.",
+   "exZh": "他试图用缰绳勒住马。",
+   "forms_seen": [
+    "curb"
+   ]
+  },
+  "signpost": {
+   "m": "n. 路标",
+   "ex": "The signpost shows the way to the village.",
+   "exZh": "路标指示了去村庄的路。",
+   "forms_seen": [
+    "signpost"
+   ]
+  },
+  "story": {
+   "m": "n. 故事；轶事",
+   "ex": "He told a funny story to his children.",
+   "exZh": "他给孩子们讲了一个有趣的故事。",
+   "forms_seen": [
+    "story"
+   ]
+  },
+  "pave": {
+   "m": "v. 铺路；铺设",
+   "ex": "They pave the road with stones.",
+   "exZh": "他们用石头铺路。",
+   "forms_seen": [
+    "pave"
+   ]
+  },
+  "vehicle": {
+   "m": "n. 车辆；交通工具；媒介",
+   "ex": "The vehicle stopped at the red light.",
+   "exZh": "这辆车在红灯前停了下来。",
+   "forms_seen": [
+    "vehicle"
+   ]
+  },
+  "tram": {
+   "m": "n. 电车；缆车",
+   "ex": "He takes the tram to work every morning.",
+   "exZh": "他每天早上乘电车上班。",
+   "forms_seen": [
+    "tram"
+   ]
+  },
+  "ambulance": {
+   "m": "n. 救护车",
+   "ex": "The ambulance arrived quickly to help the injured man.",
+   "exZh": "救护车迅速到达以帮助受伤的男人。",
+   "forms_seen": [
+    "ambulance"
+   ]
+  },
+  "truck": {
+   "m": "n. 卡车",
+   "ex": "The truck carried boxes to the store.",
+   "exZh": "卡车把箱子运到了商店。",
+   "forms_seen": [
+    "truck"
+   ]
+  },
+  "lorry": {
+   "m": "n. 卡车；载重汽车",
+   "ex": "The lorry carried boxes to the warehouse.",
+   "exZh": "卡车把箱子运到了仓库。",
+   "forms_seen": [
+    "lorry"
+   ]
+  },
+  "van": {
+   "m": "n. 厢式货车",
+   "ex": "He drives a red van to work.",
+   "exZh": "他开一辆红色的货车去上班。",
+   "forms_seen": [
+    "van"
+   ]
+  },
+  "wagon": {
+   "m": "n. 四轮运货马车；敞篷货车",
+   "ex": "The farmer used a wooden wagon to carry crops.",
+   "exZh": "农夫用一辆木制四轮运货马车运送庄稼。",
+   "forms_seen": [
+    "wagon"
+   ]
+  },
+  "carriage": {
+   "m": "n. 四轮马车",
+   "ex": "The king rode in a wooden carriage drawn by four horses.",
+   "exZh": "国王乘坐一辆由四匹马拉的木制四轮马车。",
+   "forms_seen": [
+    "carriage"
+   ]
+  },
+  "tractor": {
+   "m": "n. 拖拉机",
+   "ex": "The farmer drives a tractor in the field.",
+   "exZh": "农夫在田里开拖拉机。",
+   "forms_seen": [
+    "tractor"
+   ]
+  },
+  "field": {
+   "m": "n. 田地；领域；v. 处理，应付（问题、电话等）",
+   "ex": "He works in the field of computer science.",
+   "exZh": "他在计算机科学领域工作。",
+   "forms_seen": [
+    "field"
+   ]
+  },
+  "cart": {
+   "m": "n. 运货马车；手推车",
+   "ex": "The farmer drove his cart full of apples to the market.",
+   "exZh": "农夫驾着装满苹果的运货马车去市场。",
+   "forms_seen": [
+    "cart"
+   ]
+  },
+  "crowd": {
+   "m": "n. 人群；群众",
+   "ex": "A large crowd gathered at the square.",
+   "exZh": "一大群人聚集在广场上。",
+   "forms_seen": [
+    "crowd"
+   ]
+  },
+  "pedicab": {
+   "m": "n. ⼈⼒三轮⻋",
+   "ex": "He rode a pedicab to the market.",
+   "exZh": "他乘坐人力三轮车去市场。",
+   "forms_seen": [
+    "pedicab"
+   ]
+  },
+  "garage": {
+   "m": "n. 车库；汽车修理厂",
+   "ex": "He parked his car in the garage.",
+   "exZh": "他把车停在了车库里。",
+   "forms_seen": [
+    "garage"
+   ]
+  },
+  "motor": {
+   "m": "n. 马达；发动机；机动车",
+   "ex": "The car has a strong motor.",
+   "exZh": "这辆车有一个强大的马达。",
+   "forms_seen": [
+    "motor"
+   ]
+  },
+  "horsepower": {
+   "m": "n. 马力",
+   "ex": "The car has 200 horsepower.",
+   "exZh": "这辆车有200马力。",
+   "forms_seen": [
+    "horsepower"
+   ]
+  },
+  "broken": {
+   "m": "adj. 破损的；v. 打破；过去分词词形",
+   "ex": "The broken cup lay on the floor.",
+   "exZh": "破了的杯子躺在地板上。",
+   "forms_seen": [
+    "broken"
+   ]
+  },
+  "wheel": {
+   "m": "n. 车轮",
+   "ex": "The car has four wheels.",
+   "exZh": "这辆车有四个车轮。",
+   "forms_seen": [
+    "wheel"
+   ]
+  },
+  "brake": {
+   "m": "n. 刹车；制动器；v. 刹车",
+   "ex": "He pressed the brake to stop the car.",
+   "exZh": "他踩了刹车来停车。",
+   "forms_seen": [
+    "brake"
+   ]
+  },
+  "flat": {
+   "m": "n. 公寓；adj. 平坦的",
+   "ex": "He lives in a small flat in London.",
+   "exZh": "他住在伦敦的一间小公寓里。",
+   "forms_seen": [
+    "flat",
+    "Flat"
+   ]
+  },
+  "tyre": {
+   "m": "n. 轮胎",
+   "ex": "The car has a flat tyre.",
+   "exZh": "这辆车有一个瘪了的轮胎。",
+   "forms_seen": [
+    "tyre"
+   ]
+  },
+  "honk": {
+   "m": "n. 汽车喇叭声；v. （使汽车喇叭）鸣响",
+   "ex": "The honk of the geese echoed over the lake.",
+   "exZh": "大雁的叫声在湖面上回荡。",
+   "forms_seen": [
+    "honk"
+   ]
+  },
+  "crew": {
+   "m": "n. 全体船员；全体人员",
+   "ex": "The crew fixed the ship's engine during the storm.",
+   "exZh": "全体船员在风暴中修好了船的引擎。",
+   "forms_seen": [
+    "crew"
+   ]
+  },
+  "captain": {
+   "m": "n. 船长；队长",
+   "ex": "The captain sailed the ship across the ocean.",
+   "exZh": "船长驾驶船穿越了海洋。",
+   "forms_seen": [
+    "captain"
+   ]
+  },
+  "steward": {
+   "m": "n. 乘务员；管家；保护者",
+   "ex": "The steward served drinks on the plane.",
+   "exZh": "空乘人员在飞机上提供饮料。",
+   "forms_seen": [
+    "steward"
+   ]
+  },
+  "emergency": {
+   "m": "n. 紧急情况",
+   "ex": "He called an emergency doctor when he felt sick.",
+   "exZh": "当他感到不舒服时，他叫了急诊医生。",
+   "forms_seen": [
+    "emergency"
+   ]
+  },
+  "saw": {
+   "m": "n. 锯；v. 看",
+   "ex": "I saw a bird fly over the house.",
+   "exZh": "我看到一只鸟飞过房子。",
+   "forms_seen": [
+    "saw"
+   ]
+  },
+  "wreck": {
+   "m": "n. 残骸；v. 破坏",
+   "ex": "The wreck lies at the bottom of the sea.",
+   "exZh": "这艘遇难船只沉在海底。",
+   "forms_seen": [
+    "wreck"
+   ]
+  },
+  "wing": {
+   "m": "n. 翅膀；翼",
+   "ex": "The bird spread its wing to fly.",
+   "exZh": "鸟张开翅膀飞翔。",
+   "forms_seen": [
+    "wing"
+   ]
+  },
+  "crash": {
+   "m": "n. 坠毁；v. 碰撞；崩溃",
+   "ex": "The car crash happened at the intersection.",
+   "exZh": "汽车碰撞发生在十字路口。",
+   "forms_seen": [
+    "crash"
+   ]
+  },
+  "burst": {
+   "m": "v. 爆裂；n. 突然而起",
+   "ex": "The balloon burst when he blew too much air.",
+   "exZh": "当他吹入太多空气时，气球爆裂了。",
+   "forms_seen": [
+    "burst"
+   ]
+  },
+  "outside": {
+   "m": "prep. 在...外；adv. 在外面；n. 外部",
+   "ex": "The cat is sitting outside the house.",
+   "exZh": "猫坐在房子外面。",
+   "forms_seen": [
+    "Outside",
+    "outside"
+   ]
+  },
+  "crush": {
+   "m": "v. 压碎；镇压",
+   "ex": "He crushed the can with his hand.",
+   "exZh": "他用手把罐子压碎了。",
+   "forms_seen": [
+    "crush"
+   ]
+  },
+  "paper": {
+   "m": "n. 论文；纸；报纸",
+   "ex": "He wrote his name on the paper.",
+   "exZh": "他在纸上写了名字。",
+   "forms_seen": [
+    "paper"
+   ]
+  },
+  "dash": {
+   "m": "n. 少量",
+   "ex": "Add a dash of salt to the soup.",
+   "exZh": "给汤里加一点盐。",
+   "forms_seen": [
+    "dash"
+   ]
+  },
+  "vanish": {
+   "m": "v. 销声匿迹；突然消失",
+   "ex": "The magic trick made the coin vanish.",
+   "exZh": "这个魔术让硬币销声匿迹了。",
+   "forms_seen": [
+    "vanish"
+   ]
+  },
+  "disappear": {
+   "m": "v. 消失；不见",
+   "ex": "The cat disappeared behind the house.",
+   "exZh": "猫从房子后面消失了。",
+   "forms_seen": [
+    "disappear"
+   ]
+  },
+  "doze": {
+   "m": "v. 打瞌睡",
+   "ex": "He dozed off during the boring meeting.",
+   "exZh": "他在无聊的会议上打起了瞌睡。",
+   "forms_seen": [
+    "doze"
+   ]
+  },
+  "hazard": {
+   "m": "n. 危险",
+   "ex": "The broken glass is a hazard.",
+   "exZh": "碎玻璃是危险。",
+   "forms_seen": [
+    "hazard"
+   ]
+  },
+  "sunlight": {
+   "m": "n. 阳光；日光",
+   "ex": "Plants grow better with sunlight.",
+   "exZh": "植物在阳光下生长得更好。",
+   "forms_seen": [
+    "Sunlight"
+   ]
+  },
+  "harbour": {
+   "m": "n. 海港；v. 庇护；窝藏",
+   "ex": "The ship docked at the harbour at sunset.",
+   "exZh": "船在日落时停靠在海港。",
+   "forms_seen": [
+    "harbour"
+   ]
+  },
+  "dock": {
+   "m": "n. 码头",
+   "ex": "The ship arrived at the dock at sunrise.",
+   "exZh": "船在日出时到达了码头。",
+   "forms_seen": [
+    "dock"
+   ]
+  },
+  "anchor": {
+   "m": "n. 锚",
+   "ex": "The ship dropped its anchor in the harbor.",
+   "exZh": "船在港口放下了锚。",
+   "forms_seen": [
+    "anchor"
+   ]
+  },
+  "submerge": {
+   "m": "v. 潜水；浸没",
+   "ex": "The diver submerges to explore the coral reef.",
+   "exZh": "潜水员潜水去探索珊瑚礁。",
+   "forms_seen": [
+    "submerged"
+   ]
+  },
+  "sailor": {
+   "m": "n. 水手；海员",
+   "ex": "The sailor fixed the rope on the boat.",
+   "exZh": "水手修理了船上的绳子。",
+   "forms_seen": [
+    "sailor"
+   ]
+  },
+  "seaman": {
+   "m": "n. 海员；水兵；水手",
+   "ex": "The seaman sailed the boat across the sea.",
+   "exZh": "水手驾船横渡大海。",
+   "forms_seen": [
+    "seaman"
+   ]
+  },
+  "carrier": {
+   "m": "n. 病毒携带者",
+   "ex": "He is a carrier of the flu virus.",
+   "exZh": "他是流感病毒的携带者。",
+   "forms_seen": [
+    "carrier"
+   ]
+  },
+  "can": {
+   "m": "n. 金属罐；v. 能",
+   "ex": "I can swim very well.",
+   "exZh": "我能够游得很好。",
+   "forms_seen": [
+    "can"
+   ]
+  },
+  "steamer": {
+   "m": "n. 汽船",
+   "ex": "The steamer sailed across the river.",
+   "exZh": "汽船驶过了河。",
+   "forms_seen": [
+    "steamer"
+   ]
+  },
+  "liner": {
+   "m": "n. 邮轮；客轮；衬里",
+   "ex": "The liner sailed across the ocean with hundreds of passengers.",
+   "exZh": "这艘邮轮载着数百名乘客横渡了海洋。",
+   "forms_seen": [
+    "liner"
+   ]
+  },
+  "vessel": {
+   "m": "n. 船；容器；器皿",
+   "ex": "The fishing vessel sailed out at dawn.",
+   "exZh": "那艘渔船在黎明时出海。",
+   "forms_seen": [
+    "vessel"
+   ]
+  },
+  "ferry": {
+   "m": "n. 渡船；渡口",
+   "ex": "We took the ferry to cross the river.",
+   "exZh": "我们乘渡船过河。",
+   "forms_seen": [
+    "ferry"
+   ]
+  },
+  "sail": {
+   "m": "v. 航行；n. 帆",
+   "ex": "They sail to the island every summer.",
+   "exZh": "他们每年夏天都乘船航行到那个岛。",
+   "forms_seen": [
+    "sail"
+   ]
+  },
+  "raft": {
+   "m": "n. 木筏",
+   "ex": "They crossed the river on a wooden raft.",
+   "exZh": "他们乘着木筏渡过了河。",
+   "forms_seen": [
+    "raft"
+   ]
+  },
+  "canoe": {
+   "m": "n. 独木舟",
+   "ex": "He paddles a canoe on the lake.",
+   "exZh": "他划着独木舟在湖上航行。",
+   "forms_seen": [
+    "canoe"
+   ]
+  },
+  "oar": {
+   "m": "n. 桨；橹；船桨",
+   "ex": "He rowed the boat with an oar.",
+   "exZh": "他用桨划船。",
+   "forms_seen": [
+    "oar"
+   ]
+  },
+  "deck": {
+   "m": "n. 甲板；舱面",
+   "ex": "The children played on the deck of the ship.",
+   "exZh": "孩子们在船的甲板上玩耍。",
+   "forms_seen": [
+    "deck"
+   ]
+  },
+  "turbine": {
+   "m": "n. 涡轮机",
+   "ex": "The wind turbine spins to make electricity.",
+   "exZh": "风力涡轮机旋转以发电。",
+   "forms_seen": [
+    "turbine"
+   ]
+  },
+  "fence": {
+   "m": "n. 栅栏；围栏；篱笆",
+   "ex": "The dog jumped over the fence.",
+   "exZh": "狗跳过了栅栏。",
+   "forms_seen": [
+    "fence"
+   ]
+  },
+  "propeller": {
+   "m": "n. 螺旋桨",
+   "ex": "The boat has a large propeller at the back.",
+   "exZh": "这艘船后面有一个大的螺旋桨。",
+   "forms_seen": [
+    "propeller"
+   ]
+  },
+  "stern": {
+   "m": "n. 船尾",
+   "ex": "The sailors cleaned the stern of the boat.",
+   "exZh": "水手们打扫了船尾。",
+   "forms_seen": [
+    "stern"
+   ]
+  },
+  "draw": {
+   "m": "v. 画；拉；吸引",
+   "ex": "I draw money from the bank every week.",
+   "exZh": "我每周从银行提取钱。",
+   "forms_seen": [
+    "draw"
+   ]
+  },
+  "aboard": {
+   "m": "adv. 在船/机/车上",
+   "ex": "The passengers are aboard the plane.",
+   "exZh": "乘客们在飞机上。",
+   "forms_seen": [
+    "aboard"
+   ]
+  },
+  "midnight": {
+   "m": "n. 午夜；子夜",
+   "ex": "The clock struck midnight.",
+   "exZh": "钟敲响了午夜。",
+   "forms_seen": [
+    "midnight"
+   ]
+  },
+  "whisper": {
+   "m": "n. 耳语；v. 低语",
+   "ex": "He whispered a secret to his friend.",
+   "exZh": "他向朋友低语了一个秘密。",
+   "forms_seen": [
+    "whisper"
+   ]
+  },
+  "embark": {
+   "m": "v. （使）从事",
+   "ex": "He decided to embark on a new career.",
+   "exZh": "他决定从事一份新职业。",
+   "forms_seen": [
+    "embark"
+   ]
+  },
+  "channel": {
+   "m": "n. 渠道；频道；v. 引导",
+   "ex": "The English Channel separates England from France.",
+   "exZh": "英吉利海峡将英格兰与法国分隔开。",
+   "forms_seen": [
+    "channel"
+   ]
+  },
+  "canal": {
+   "m": "n. 运河；沟渠",
+   "ex": "The boat travels through the canal.",
+   "exZh": "船通过运河航行。",
+   "forms_seen": [
+    "canal"
+   ]
+  },
+  "ditch": {
+   "m": "n. 沟；渠",
+   "ex": "The farmer dug a ditch to water the fields.",
+   "exZh": "农夫挖了一条沟来给田地浇水。",
+   "forms_seen": [
+    "ditch"
+   ]
+  },
+  "railroad": {
+   "m": "n. 铁路",
+   "ex": "The train runs on the railroad.",
+   "exZh": "火车在铁路上行驶。",
+   "forms_seen": [
+    "railroad"
+   ]
+  },
+  "railway": {
+   "m": "n. 铁路",
+   "ex": "The train runs on the railway.",
+   "exZh": "火车在铁轨上行驶。",
+   "forms_seen": [
+    "railway"
+   ]
+  },
+  "locomotive": {
+   "m": "n. 机车；火车头",
+   "ex": "The locomotive pulled the train down the track.",
+   "exZh": "机车拉着火车沿着轨道行驶。",
+   "forms_seen": [
+    "locomotive"
+   ]
+  },
+  "underground": {
+   "m": "adj. 地下的；n. 地铁",
+   "ex": "The underground tunnel connects two buildings.",
+   "exZh": "这条地下的隧道连接了两座建筑。",
+   "forms_seen": [
+    "underground"
+   ]
+  },
+  "tunnel": {
+   "m": "n. 隧道；地道",
+   "ex": "The train went through a long tunnel.",
+   "exZh": "火车通过了一条长长的隧道。",
+   "forms_seen": [
+    "tunnel"
+   ]
+  },
+  "steel": {
+   "m": "n. 钢；钢铁",
+   "ex": "The bridge is made of steel.",
+   "exZh": "这座桥是用钢建造的。",
+   "forms_seen": [
+    "steel"
+   ]
+  },
+  "rail": {
+   "m": "n. 铁轨",
+   "ex": "The train runs on the rail.",
+   "exZh": "火车在铁轨上行驶。",
+   "forms_seen": [
+    "rail"
+   ]
+  },
+  "depart": {
+   "m": "v. 离开",
+   "ex": "He will depart tomorrow morning.",
+   "exZh": "他明天早上离开。",
+   "forms_seen": [
+    "departed"
+   ]
+  },
+  "arrive": {
+   "m": "v. 到达；抵达",
+   "ex": "He arrives at the station at 8 a.m.",
+   "exZh": "他早上8点到达车站。",
+   "forms_seen": [
+    "arrived"
+   ]
+  },
+  "destination": {
+   "m": "n. 目的地；终点",
+   "ex": "The train's destination is Beijing.",
+   "exZh": "这列火车的目的地是北京。",
+   "forms_seen": [
+    "destination"
+   ]
+  },
+  "delay": {
+   "m": "n. 推迟；v. 延缓",
+   "ex": "The flight had a delay because of the storm.",
+   "exZh": "由于风暴，航班推迟了。",
+   "forms_seen": [
+    "delay"
+   ]
+  },
+  "postpone": {
+   "m": "v. 延期；延迟",
+   "ex": "They decided to postpone the meeting until next week.",
+   "exZh": "他们决定把会议推迟到下周。",
+   "forms_seen": [
+    "postpone"
+   ]
+  },
+  "trip": {
+   "m": "n. 旅行；旅程；v. 绊倒",
+   "ex": "We went on a trip to the mountains last weekend.",
+   "exZh": "上周末我们去山里旅行了。",
+   "forms_seen": [
+    "trip"
+   ]
+  },
+  "defer": {
+   "m": "v. 推迟；延缓；服从",
+   "ex": "He will defer his trip until next month.",
+   "exZh": "他将把旅行推迟到下个月。",
+   "forms_seen": [
+    "deferring"
+   ]
+  },
+  "lull": {
+   "m": "n. 间歇期；平静期",
+   "ex": "There was a lull in the rain before the storm came back.",
+   "exZh": "暴风雨再次来临前，雨下了一阵间歇。",
+   "forms_seen": [
+    "lull"
+   ]
+  },
+  "expire": {
+   "m": "v. 期满",
+   "ex": "My passport will expire next month.",
+   "exZh": "我的护照下个月到期。",
+   "forms_seen": [
+    "expire"
+   ]
+  },
+  "due": {
+   "m": "adj. 应给的；预期的；到期的",
+   "ex": "The payment is due tomorrow.",
+   "exZh": "这笔款项明天应给。",
+   "forms_seen": [
+    "due"
+   ]
+  },
+  "postage": {
+   "m": "n. 邮资",
+   "ex": "The postage for this letter is one dollar.",
+   "exZh": "这封信的邮资是一美元。",
+   "forms_seen": [
+    "postage"
+   ]
+  },
+  "stamp": {
+   "m": "n. 邮票；印记",
+   "ex": "He put a stamp on the envelope.",
+   "exZh": "他在信封上贴了一张邮票。",
+   "forms_seen": [
+    "stamp"
+   ]
+  },
+  "envelope": {
+   "m": "n. 信封；包络；外罩",
+   "ex": "He put the letter in an envelope.",
+   "exZh": "他把信装进了一个信封。",
+   "forms_seen": [
+    "envelope"
+   ]
+  },
+  "mail": {
+   "m": "n. 邮件；v. 邮寄",
+   "ex": "I checked my mail this morning.",
+   "exZh": "我今天早上查了邮件。",
+   "forms_seen": [
+    "mail"
+   ]
+  },
+  "packet": {
+   "m": "n. 小包；小盒",
+   "ex": "He bought a packet of sugar.",
+   "exZh": "他买了一小包糖。",
+   "forms_seen": [
+    "packet"
+   ]
+  },
+  "package": {
+   "m": "n. 包；包裹；v. 包装",
+   "ex": "He bought a package of cookies.",
+   "exZh": "他买了一包饼干。",
+   "forms_seen": [
+    "package"
+   ]
+  },
+  "fruit": {
+   "m": "n. 水果；v. 结果实",
+   "ex": "I like fruit.",
+   "exZh": "我喜欢水果。",
+   "forms_seen": [
+    "fruit"
+   ]
+  },
+  "bind": {
+   "m": "v. 捆绑；约束",
+   "ex": "He binds the books with string.",
+   "exZh": "他用绳子把书捆起来。",
+   "forms_seen": [
+    "bind"
+   ]
+  },
+  "parcel": {
+   "m": "n. 包裹；小包",
+   "ex": "He picked up the parcel from the post office.",
+   "exZh": "他从邮局取了包裹。",
+   "forms_seen": [
+    "parcel"
+   ]
+  },
+  "load": {
+   "m": "n. 负荷；载重；v. 载入",
+   "ex": "The bridge can't hold such a heavy load.",
+   "exZh": "这座桥承受不了这么重的负荷。",
+   "forms_seen": [
+    "load"
+   ]
+  },
+  "burden": {
+   "m": "n. 负担；重担；责任",
+   "ex": "The heavy workload became a burden for her.",
+   "exZh": "繁重的工作量成了她的负担。",
+   "forms_seen": [
+    "burden"
+   ]
+  },
+  "transfer": {
+   "m": "v. 转移；转让；n. 调任",
+   "ex": "He will transfer the money to his bank account.",
+   "exZh": "他将把钱转到他的银行账户。",
+   "forms_seen": [
+    "transfer"
+   ]
+  },
+  "transmit": {
+   "m": "v. 传递；发送",
+   "ex": "The radio transmits music to listeners.",
+   "exZh": "收音机将音乐传递给听众。",
+   "forms_seen": [
+    "transmit"
+   ]
+  },
+  "transit": {
+   "m": "n. 运输；中转；运送",
+   "ex": "The transit of goods takes three days.",
+   "exZh": "货物的运输需要三天。",
+   "forms_seen": [
+    "transit"
+   ]
+  },
+  "deliver": {
+   "m": "v. 兑现；递送；发表",
+   "ex": "He promised to deliver on his goal.",
+   "exZh": "他承诺要兑现自己的目标。",
+   "forms_seen": [
+    "deliver"
+   ]
+  },
+  "convey": {
+   "m": "v. 传达",
+   "ex": "He conveyed his thanks with a smile.",
+   "exZh": "他微笑着表达了谢意。",
+   "forms_seen": [
+    "convey"
+   ]
+  },
+  "speed": {
+   "m": "n. 速度；v. 加速",
+   "ex": "The car's speed was too high on the wet road.",
+   "exZh": "汽车在湿滑路面上的速度太快了。",
+   "forms_seen": [
+    "speed"
+   ]
+  },
+  "velocity": {
+   "m": "n. 速度；迅速",
+   "ex": "The car's velocity increased on the highway.",
+   "exZh": "这辆车在高速公路上的速度增加了。",
+   "forms_seen": [
+    "velocity"
+   ]
+  },
+  "swift": {
+   "m": "adj. 迅速的；快的；n. 雨燕",
+   "ex": "The swift runner won the race.",
+   "exZh": "这位迅速的跑步者赢得了比赛。",
+   "forms_seen": [
+    "swift"
+   ]
+  },
+  "marxism": {
+   "m": "n. 马克思主义",
+   "ex": "He believes in marxism and supports workers' rights.",
+   "exZh": "他相信马克思主义，并支持工人的权利。",
+   "forms_seen": [
+    "marxism"
+   ]
+  },
+  "socialism": {
+   "m": "n. 社会主义",
+   "ex": "He believes in socialism and wants equal rights for all.",
+   "exZh": "他相信社会主义，希望所有人都享有平等的权利。",
+   "forms_seen": [
+    "socialism"
+   ]
+  },
+  "fire": {
+   "m": "v. 解雇；射击；n. 火",
+   "ex": "The fire burned brightly in the fireplace.",
+   "exZh": "火在壁炉里熊熊燃烧。",
+   "forms_seen": [
+    "fire"
+   ]
+  },
+  "communism": {
+   "m": "n. 共产主义；一种主张生产资料公有、消除阶级差异的社会制度",
+   "ex": "He believes in communism.",
+   "exZh": "他相信共产主义。",
+   "forms_seen": [
+    "communism"
+   ]
+  },
+  "strict": {
+   "m": "adj. 严格的；严厉的",
+   "ex": "My teacher is strict about homework deadlines.",
+   "exZh": "我的老师对作业截止日期要求很严格。",
+   "forms_seen": [
+    "strict"
+   ]
+  },
+  "regime": {
+   "m": "n. 管理制度；政权",
+   "ex": "The new regime changed the tax laws.",
+   "exZh": "新的管理制度改变了税法。",
+   "forms_seen": [
+    "regime"
+   ]
+  },
+  "authority": {
+   "m": "n. 权威；权力；当局",
+   "ex": "The teacher is an authority on ancient history.",
+   "exZh": "这位老师是古代史方面的权威。",
+   "forms_seen": [
+    "authority"
+   ]
+  },
+  "political": {
+   "m": "adj. 政治的",
+   "ex": "He is interested in political news.",
+   "exZh": "他对政治新闻感兴趣。",
+   "forms_seen": [
+    "political"
+   ]
+  },
+  "hierarchy": {
+   "m": "n. 层次体系；等级制度",
+   "ex": "The company has a clear hierarchy from manager to worker.",
+   "exZh": "这家公司有一个从经理到员工的明确层次体系。",
+   "forms_seen": [
+    "hierarchy"
+   ]
+  },
+  "bell": {
+   "m": "n. 铃（声）；钟（声）",
+   "ex": "The bell rang at 8 a.m.",
+   "exZh": "铃在早上八点响了。",
+   "forms_seen": [
+    "bell"
+   ]
+  },
+  "democracy": {
+   "m": "n. 民主",
+   "ex": "In a democracy, people choose their leaders by voting.",
+   "exZh": "在民主制度下，人们通过投票选择他们的领导人。",
+   "forms_seen": [
+    "democracy"
+   ]
+  },
+  "bureaucracy": {
+   "m": "n. 官僚主义；官僚机构",
+   "ex": "He hates the bureaucracy in government offices.",
+   "exZh": "他讨厌政府办公室里的官僚主义。",
+   "forms_seen": [
+    "bureaucracy"
+   ]
+  },
+  "egalitarian": {
+   "m": "adj. 平等主义的",
+   "ex": "He believes in an egalitarian society where everyone is equal.",
+   "exZh": "他相信一个人人平等的平等主义社会。",
+   "forms_seen": [
+    "egalitarian"
+   ]
+  },
+  "materialism": {
+   "m": "n. 实利主义",
+   "ex": "He cares only about money and things, showing strong materialism.",
+   "exZh": "他只关心金钱和物质，表现出强烈的实利主义。",
+   "forms_seen": [
+    "materialism"
+   ]
+  },
+  "revolution": {
+   "m": "n. 革命",
+   "ex": "The French Revolution changed the government.",
+   "exZh": "法国大革命改变了政府。",
+   "forms_seen": [
+    "revolution"
+   ]
+  },
+  "reform": {
+   "m": "n. 改革；改造",
+   "ex": "The government announced a major reform in education.",
+   "exZh": "政府宣布了教育方面的重大改革。",
+   "forms_seen": [
+    "reform"
+   ]
+  },
+  "conservative": {
+   "m": "adj. 保守的；守旧的",
+   "ex": "He is a conservative man who likes old traditions.",
+   "exZh": "他是一个喜欢古老传统的保守男子。",
+   "forms_seen": [
+    "conservative"
+   ]
+  },
+  "meltdown": {
+   "m": "n. 彻底垮台",
+   "ex": "The company had a meltdown after the scandal.",
+   "exZh": "这家公司在丑闻后彻底垮台了。",
+   "forms_seen": [
+    "meltdown"
+   ]
+  },
+  "municipal": {
+   "m": "adj. 市政的；市的",
+   "ex": "The municipal library is open every day.",
+   "exZh": "这座市政图书馆每天都开放。",
+   "forms_seen": [
+    "municipal"
+   ]
+  },
+  "neutral": {
+   "m": "adj. 中性的；中立的",
+   "ex": "He stayed neutral in the argument.",
+   "exZh": "他在争论中保持中立。",
+   "forms_seen": [
+    "neutral"
+   ]
+  },
+  "bilateral": {
+   "m": "adj. 两边的；双方的",
+   "ex": "The two countries signed a bilateral agreement.",
+   "exZh": "这两个国家签署了一项双边协议。",
+   "forms_seen": [
+    "bilateral"
+   ]
+  },
+  "deal": {
+   "m": "n. 交易；v. 处理",
+   "ex": "He can deal with difficult problems easily.",
+   "exZh": "他能轻松处理困难的问题。",
+   "forms_seen": [
+    "deal"
+   ]
+  },
+  "arena": {
+   "m": "n. 竞技场；舞台",
+   "ex": "The boxing match took place in an arena.",
+   "exZh": "拳击比赛在竞技场举行。",
+   "forms_seen": [
+    "arena"
+   ]
+  },
+  "banner": {
+   "m": "n. 旗帜；横幅",
+   "ex": "He waved a red banner in the parade.",
+   "exZh": "他在游行中挥舞着一面红旗子。",
+   "forms_seen": [
+    "banner"
+   ]
+  },
+  "company": {
+   "m": "n. 公司；陪伴",
+   "ex": "He works for a small company.",
+   "exZh": "他在一家小公司工作。",
+   "forms_seen": [
+    "company"
+   ]
+  },
+  "president": {
+   "m": "n. 总裁；总统；校长",
+   "ex": "The president signed the new contract.",
+   "exZh": "总裁签署了新合同。",
+   "forms_seen": [
+    "president"
+   ]
+  },
+  "premier": {
+   "m": "adj. 第一的；首要的",
+   "ex": "He is the premier player on the team.",
+   "exZh": "他是队里最优秀的球员。",
+   "forms_seen": [
+    "premier"
+   ]
+  },
+  "minister": {
+   "m": "n. 部长；大臣",
+   "ex": "The minister signed the new law.",
+   "exZh": "部长签署了新法律。",
+   "forms_seen": [
+    "minister"
+   ]
+  },
+  "secretary": {
+   "m": "n. 秘书；大臣",
+   "ex": "The secretary types letters for the manager.",
+   "exZh": "秘书为经理打字。",
+   "forms_seen": [
+    "secretary"
+   ]
+  },
+  "famous": {
+   "m": "adj. 著名的；出名的",
+   "ex": "He is a famous singer.",
+   "exZh": "他是一位著名的歌手。",
+   "forms_seen": [
+    "famous"
+   ]
+  },
+  "parliament": {
+   "m": "n. 国会；议会",
+   "ex": "The parliament passed a new law about education.",
+   "exZh": "国会通过了一项关于教育的新法律。",
+   "forms_seen": [
+    "parliament"
+   ]
+  },
+  "senate": {
+   "m": "n. 参议院",
+   "ex": "The senate voted to pass the new law.",
+   "exZh": "参议院投票通过了这项新法律。",
+   "forms_seen": [
+    "senate"
+   ]
+  },
+  "conference": {
+   "m": "n. 大型会议；商讨",
+   "ex": "The global climate conference was held in Paris.",
+   "exZh": "全球气候大会在巴黎举行。",
+   "forms_seen": [
+    "conference"
+   ]
+  },
+  "meeting": {
+   "m": "n. 会议；会面；v. 遇见",
+   "ex": "The meeting starts at 9 a.m.",
+   "exZh": "会议上午九点开始。",
+   "forms_seen": [
+    "meeting"
+   ]
+  },
+  "headquarters": {
+   "m": "n. 总部；司令部；指挥部",
+   "ex": "The company's headquarters is in New York.",
+   "exZh": "这家公司的总部在纽约。",
+   "forms_seen": [
+    "headquarters"
+   ]
+  },
+  "delegation": {
+   "m": "n. 代表（团）",
+   "ex": "The delegation met with the president yesterday.",
+   "exZh": "代表团昨天会见了总统。",
+   "forms_seen": [
+    "delegation"
+   ]
+  },
+  "behalf": {
+   "m": "n. 代表；利益",
+   "ex": "He spoke on behalf of his team.",
+   "exZh": "他代表他的团队发言。",
+   "forms_seen": [
+    "behalf"
+   ]
+  },
+  "statesman": {
+   "m": "n. 政治家",
+   "ex": "The statesman spoke wisely to calm the nation.",
+   "exZh": "这位政治家明智地讲话以安抚国家。",
+   "forms_seen": [
+    "statesman"
+   ]
+  },
+  "mayor": {
+   "m": "n. 市长",
+   "ex": "The mayor walks to work every morning.",
+   "exZh": "市长每天早上步行上班。",
+   "forms_seen": [
+    "mayor"
+   ]
+  },
+  "service": {
+   "m": "n. 服务；v. 保养",
+   "ex": "The restaurant offers excellent service.",
+   "exZh": "这家餐厅提供出色的服务。",
+   "forms_seen": [
+    "service"
+   ]
+  },
+  "office": {
+   "m": "n. 办公室",
+   "ex": "He works in an office downtown.",
+   "exZh": "他在市中心的一间办公室工作。",
+   "forms_seen": [
+    "office"
+   ]
+  },
+  "bureau": {
+   "m": "n. 局；办事处",
+   "ex": "The weather bureau issued a storm warning.",
+   "exZh": "气象局发布了风暴预警。",
+   "forms_seen": [
+    "bureau"
+   ]
+  },
+  "department": {
+   "m": "n. 部；部门；系",
+   "ex": "He works in the sales department.",
+   "exZh": "他在销售部工作。",
+   "forms_seen": [
+    "department"
+   ]
+  },
+  "harness": {
+   "m": "v. 利用；n. 马具",
+   "ex": "We must harness the power of the sun.",
+   "exZh": "我们必须利用太阳的能量。",
+   "forms_seen": [
+    "harness"
+   ]
+  },
+  "administration": {
+   "m": "n. 行政；管理",
+   "ex": "The administration of the school is very organized.",
+   "exZh": "学校的行政管理非常有条理。",
+   "forms_seen": [
+    "administration"
+   ]
+  },
+  "snowy": {
+   "m": "adj. 多雪的",
+   "ex": "The snowy mountains look beautiful in winter.",
+   "exZh": "多雪的山在冬天看起来很美。",
+   "forms_seen": [
+    "snowy"
+   ]
+  },
+  "dominate": {
+   "m": "v. 支配",
+   "ex": "He dominates the conversation.",
+   "exZh": "他主宰了谈话。",
+   "forms_seen": [
+    "dominate"
+   ]
+  },
+  "affect": {
+   "m": "v. 影响",
+   "ex": "Rain can affect the crop growth.",
+   "exZh": "雨水会影响作物生长。",
+   "forms_seen": [
+    "affect"
+   ]
+  },
+  "importance": {
+   "m": "n. 重要性",
+   "ex": "The importance of homework is clear.",
+   "exZh": "作业的重要性是显而易见的。",
+   "forms_seen": [
+    "importance"
+   ]
+  },
+  "significance": {
+   "m": "n. 重要性；意义",
+   "ex": "The significance of this discovery changed science.",
+   "exZh": "这一发现的重要性改变了科学。",
+   "forms_seen": [
+    "significance"
+   ]
+  },
+  "aid": {
+   "m": "n. 帮助；援助；v. 协助",
+   "ex": "The charity provided aid to the flood victims.",
+   "exZh": "慈善机构向洪水受害者提供了帮助。",
+   "forms_seen": [
+    "aid"
+   ]
+  },
+  "organisation": {
+   "m": "n. 组织；机构；安排",
+   "ex": "The organisation helps poor children.",
+   "exZh": "这个组织帮助贫困儿童。",
+   "forms_seen": [
+    "organisation"
+   ]
+  },
+  "association": {
+   "m": "n. 协会；联系；联想",
+   "ex": "He joined a local book association.",
+   "exZh": "他加入了一个本地的图书协会。",
+   "forms_seen": [
+    "association"
+   ]
+  },
+  "union": {
+   "m": "n. 联盟；联合；工会",
+   "ex": "The two countries formed a union to strengthen trade.",
+   "exZh": "这两个国家组成了一个联盟以加强贸易。",
+   "forms_seen": [
+    "union"
+   ]
+  },
+  "community": {
+   "m": "n. 社区；团体；群落",
+   "ex": "The community cleaned the park together.",
+   "exZh": "社区居民一起清理了公园。",
+   "forms_seen": [
+    "community"
+   ]
+  },
+  "consortium": {
+   "m": "n. 协会；财团",
+   "ex": "The consortium helps small businesses share resources.",
+   "exZh": "这个协会帮助小企业共享资源。",
+   "forms_seen": [
+    "consortium"
+   ]
+  },
+  "dam": {
+   "m": "n. 水坝；拦河坝",
+   "ex": "The dam holds back the river water.",
+   "exZh": "水坝拦住了河水。",
+   "forms_seen": [
+    "dam"
+   ]
+  },
+  "league": {
+   "m": "n. 联盟；同盟",
+   "ex": "The countries formed a peace league.",
+   "exZh": "这些国家组成了一个和平联盟。",
+   "forms_seen": [
+    "league"
+   ]
+  },
+  "institution": {
+   "m": "n. 机构",
+   "ex": "The hospital is a public institution.",
+   "exZh": "这家医院是一家公共机构。",
+   "forms_seen": [
+    "institution"
+   ]
+  },
+  "might": {
+   "m": "n. 强大力量；v. 可能；过去式词形",
+   "ex": "He might come to the party tonight.",
+   "exZh": "他今晚可能会来参加派对。",
+   "forms_seen": [
+    "might"
+   ]
+  },
+  "unite": {
+   "m": "v. 联合；团结",
+   "ex": "The two teams decide to unite for the competition.",
+   "exZh": "这两个队伍决定在比赛中联合起来。",
+   "forms_seen": [
+    "unite"
+   ]
+  },
+  "unique": {
+   "m": "adj. 独特的；唯一的",
+   "ex": "This painting is unique because no other like it exists.",
+   "exZh": "这幅画是独特的，因为没有其他类似的。",
+   "forms_seen": [
+    "unique"
+   ]
+  },
+  "nation": {
+   "m": "n. 国家；民族",
+   "ex": "The nation celebrated its independence day.",
+   "exZh": "这个国家庆祝了它的独立日。",
+   "forms_seen": [
+    "nation"
+   ]
+  },
+  "global": {
+   "m": "adj. 全球的",
+   "ex": "The problem is a global issue.",
+   "exZh": "这个问题是一个全球性的问题。",
+   "forms_seen": [
+    "global"
+   ]
+  },
+  "weather": {
+   "m": "n. 天气",
+   "ex": "The weather is sunny today.",
+   "exZh": "今天天气晴朗。",
+   "forms_seen": [
+    "weather"
+   ]
+  },
+  "fault": {
+   "m": "n. 故障；缺陷；过错",
+   "ex": "It was his fault that the car crashed.",
+   "exZh": "汽车撞车是他的过错。",
+   "forms_seen": [
+    "fault"
+   ]
+  },
+  "worldwide": {
+   "m": "adv. 全球性地；adj. 全球性的",
+   "ex": "The news spread worldwide overnight.",
+   "exZh": "这则新闻一夜之间传遍全球。",
+   "forms_seen": [
+    "worldwide"
+   ]
+  },
+  "federal": {
+   "m": "adj. 联邦的；联邦制的；联邦政府的",
+   "ex": "The federal government passed a new law.",
+   "exZh": "联邦政府通过了一项新法律。",
+   "forms_seen": [
+    "federal"
+   ]
+  },
+  "collar": {
+   "m": "n. 衣领",
+   "ex": "He fixed his collar before the interview.",
+   "exZh": "他在面试前整理了衣领。",
+   "forms_seen": [
+    "collar"
+   ]
+  },
+  "scarf": {
+   "m": "n. 围巾；头巾",
+   "ex": "She wore a warm scarf in winter.",
+   "exZh": "她在冬天戴了一条暖和的围巾。",
+   "forms_seen": [
+    "scarf"
+   ]
+  },
+  "foreign": {
+   "m": "adj. 外国的；外来的",
+   "ex": "He loves eating foreign food.",
+   "exZh": "他喜欢吃什么外国食物。",
+   "forms_seen": [
+    "foreign"
+   ]
+  },
+  "overseas": {
+   "m": "adv. 在海外；在国外；adj. 海外的",
+   "ex": "He moved overseas for work.",
+   "exZh": "他为了工作搬到了海外。",
+   "forms_seen": [
+    "overseas"
+   ]
+  },
+  "abroad": {
+   "m": "adv. 在国外；出国",
+   "ex": "He went abroad to study medicine.",
+   "exZh": "他去国外学医。",
+   "forms_seen": [
+    "abroad"
+   ]
+  },
+  "civil": {
+   "m": "adj. 国内的；公民的；民用的",
+   "ex": "The country is recovering from a civil war.",
+   "exZh": "这个国家正在从一场内战中恢复。",
+   "forms_seen": [
+    "civil"
+   ]
+  },
+  "emigrate": {
+   "m": "v. 移居国外",
+   "ex": "He wants to emigrate to Canada for a better life.",
+   "exZh": "他想移民到加拿大过更好的生活。",
+   "forms_seen": [
+    "emigrate"
+   ]
+  },
+  "immigrate": {
+   "m": "v. 移居入境",
+   "ex": "They want to immigrate to Canada for a better life.",
+   "exZh": "他们想移民到加拿大过更好的生活。",
+   "forms_seen": [
+    "immigrate"
+   ]
+  },
+  "reign": {
+   "m": "n. 君主统治；在位期",
+   "ex": "The queen's reign lasted 70 years.",
+   "exZh": "女王的统治持续了70年。",
+   "forms_seen": [
+    "reign"
+   ]
+  },
+  "puppet": {
+   "m": "n. 木偶；傀儡",
+   "ex": "The child laughed at the puppet on the stage.",
+   "exZh": "孩子笑了，看着舞台上那个木偶。",
+   "forms_seen": [
+    "puppet"
+   ]
+  },
+  "throne": {
+   "m": "n. 王位；宝座",
+   "ex": "The king sat on the throne.",
+   "exZh": "国王坐在王位上。",
+   "forms_seen": [
+    "throne"
+   ]
+  },
+  "crown": {
+   "m": "n. 皇冠；王冠",
+   "ex": "The queen wore a golden crown on her head.",
+   "exZh": "女王头上戴着一顶金皇冠。",
+   "forms_seen": [
+    "crown"
+   ]
+  },
+  "round": {
+   "m": "n. 回合；adj. 圆的；prep./adv. 在…周围",
+   "ex": "The children sat round the fire.",
+   "exZh": "孩子们围坐在火堆旁。",
+   "forms_seen": [
+    "round"
+   ]
+  },
+  "wreath": {
+   "m": "n. 花圈；圈状物",
+   "ex": "She placed a wreath on the door.",
+   "exZh": "她把花环放在了门上。",
+   "forms_seen": [
+    "wreath"
+   ]
+  },
+  "colony": {
+   "m": "n. 群体；殖民地；聚居地",
+   "ex": "A colony of ants moved quickly across the ground.",
+   "exZh": "一群蚂蚁迅速从地上爬过。",
+   "forms_seen": [
+    "colony"
+   ]
+  },
+  "choose": {
+   "m": "v. 选择",
+   "ex": "He chooses coffee every morning.",
+   "exZh": "他每天早上都选择喝咖啡。",
+   "forms_seen": [
+    "choose"
+   ]
+  },
+  "liberty": {
+   "m": "n. 自由",
+   "ex": "The address is 720 liberty street.",
+   "exZh": "地址是自由大街720号。",
+   "forms_seen": [
+    "liberty"
+   ]
+  },
+  "independence": {
+   "m": "n. 独立；自主",
+   "ex": "The country gained independence in 1960.",
+   "exZh": "这个国家在1960年获得了独立。",
+   "forms_seen": [
+    "independence"
+   ]
+  },
+  "slum": {
+   "m": "n. 贫民窟；贫民区",
+   "ex": "Many families live in the slum near the city center.",
+   "exZh": "许多家庭住在城市中心附近的贫民窟里。",
+   "forms_seen": [
+    "slum"
+   ]
+  },
+  "refuge": {
+   "m": "n. 避难所；庇护",
+   "ex": "The animals found refuge in the forest.",
+   "exZh": "这些动物在森林中找到了避难所。",
+   "forms_seen": [
+    "refuge"
+   ]
+  },
+  "asylum": {
+   "m": "n. 避难所；（政治）庇护",
+   "ex": "The old building now serves as an asylum for the homeless.",
+   "exZh": "这栋旧建筑现在是无家可归者的收容所。",
+   "forms_seen": [
+    "asylum"
+   ]
+  },
+  "population": {
+   "m": "n. 人口",
+   "ex": "The population of this city is growing fast.",
+   "exZh": "这个城市的人口正在快速增长。",
+   "forms_seen": [
+    "population"
+   ]
+  },
+  "demographic": {
+   "m": "adj. 人口统计的；人口的",
+   "ex": "The survey collected demographic data like age and income.",
+   "exZh": "这项调查收集了年龄和收入等人口统计数据。",
+   "forms_seen": [
+    "demographic"
+   ]
+  },
+  "proud": {
+   "m": "adj. 自豪的",
+   "ex": "He is proud of his son's good grades.",
+   "exZh": "他为儿子的好成绩感到自豪。",
+   "forms_seen": [
+    "proud"
+   ]
+  },
+  "citizen": {
+   "m": "n. 公民；市民",
+   "ex": "Every citizen must follow the law.",
+   "exZh": "每个公民都必须遵守法律。",
+   "forms_seen": [
+    "citizen"
+   ]
+  },
+  "resident": {
+   "m": "adj. 居住的；常驻的；n. 常住居民",
+   "ex": "The resident population grew last year.",
+   "exZh": "居住人口去年增加了。",
+   "forms_seen": [
+    "resident"
+   ]
+  },
+  "stove": {
+   "m": "n. 火炉",
+   "ex": "He cooks soup on the stove.",
+   "exZh": "他用炉子煮汤。",
+   "forms_seen": [
+    "stove"
+   ]
+  },
+  "ethnic": {
+   "m": "adj. 民族的；种族的",
+   "ex": "The festival celebrates ethnic music and dance.",
+   "exZh": "这个节日庆祝民族音乐和舞蹈。",
+   "forms_seen": [
+    "ethnic"
+   ]
+  },
+  "racial": {
+   "m": "adj. 种族的",
+   "ex": "He faced racial discrimination at work.",
+   "exZh": "他在工作中遭遇了种族歧视。",
+   "forms_seen": [
+    "racial"
+   ]
+  },
+  "clan": {
+   "m": "n. 氏族；宗族",
+   "ex": "The clan lived in a small village for centuries.",
+   "exZh": "这个氏族几个世纪以来一直住在一个小村庄里。",
+   "forms_seen": [
+    "clan"
+   ]
+  },
+  "franchise": {
+   "m": "n. 特许经营权",
+   "ex": "He bought a franchise to open a coffee shop.",
+   "exZh": "他购买了一个特许经营权来开一家咖啡店。",
+   "forms_seen": [
+    "franchise"
+   ]
+  },
+  "entitle": {
+   "m": "v. 授权；命名；给...权利（或资格）",
+   "ex": "This book entitles you to a free gift.",
+   "exZh": "这本书使你有资格获得一份免费礼物。",
+   "forms_seen": [
+    "entitles"
+   ]
+  },
+  "preference": {
+   "m": "n. 偏好",
+   "ex": "He has a preference for tea over coffee.",
+   "exZh": "他更喜欢茶而不是咖啡。",
+   "forms_seen": [
+    "preference"
+   ]
+  },
+  "vote": {
+   "m": "v. 投票",
+   "ex": "He will vote for the new leader.",
+   "exZh": "他将投票支持新领袖。",
+   "forms_seen": [
+    "vote"
+   ]
+  },
+  "elect": {
+   "m": "v. 选举；选择",
+   "ex": "They elect a new president every four years.",
+   "exZh": "他们每四年选举一位新总统。",
+   "forms_seen": [
+    "elect"
+   ]
+  },
+  "count": {
+   "m": "v. 计算；看作；n. 计数",
+   "ex": "He counts the apples on the table.",
+   "exZh": "他计算桌子上的苹果数量。",
+   "forms_seen": [
+    "count"
+   ]
+  },
+  "survey": {
+   "m": "n. 调查；v. 勘测",
+   "ex": "The school did a survey about student lunch preferences.",
+   "exZh": "学校做了一项关于学生午餐偏好的调查。",
+   "forms_seen": [
+    "survey"
+   ]
+  },
+  "respondent": {
+   "m": "n. 调查对象",
+   "ex": "The respondent answered all the questions honestly.",
+   "exZh": "这位调查对象诚实地回答了所有问题。",
+   "forms_seen": [
+    "respondent"
+   ]
+  },
+  "poll": {
+   "m": "n. 民意调查",
+   "ex": "The poll showed that most people support the new law.",
+   "exZh": "这项民意调查表明，大多数人支持这项新法律。",
+   "forms_seen": [
+    "poll"
+   ]
+  },
+  "ambition": {
+   "m": "n. 野心；雄心；抱负",
+   "ex": "His ambition is to become a president.",
+   "exZh": "他的野心是成为总统。",
+   "forms_seen": [
+    "ambition"
+   ]
+  },
+  "nominate": {
+   "m": "v. 提名；推荐；指派",
+   "ex": "They will nominate her for the award.",
+   "exZh": "他们将提名她获得这个奖项。",
+   "forms_seen": [
+    "nominated"
+   ]
+  },
+  "checklist": {
+   "m": "n. 清单；检查表",
+   "ex": "He made a checklist for his trip.",
+   "exZh": "他为旅行列了一份清单。",
+   "forms_seen": [
+    "checklist"
+   ]
+  },
+  "succession": {
+   "m": "n. 连续；一连串",
+   "ex": "The succession of rain made the ground wet.",
+   "exZh": "连续的雨水使地面变湿了。",
+   "forms_seen": [
+    "succession"
+   ]
+  },
+  "welfare": {
+   "m": "n. 福利；社会救济",
+   "ex": "The government provides welfare to poor families.",
+   "exZh": "政府向贫困家庭提供福利。",
+   "forms_seen": [
+    "welfare"
+   ]
+  },
+  "well-being": {
+   "m": "n. 幸福；安乐；康乐",
+   "ex": "Exercise helps with your well-being.",
+   "exZh": "锻炼有助于你的健康。",
+   "forms_seen": [
+    "well-being"
+   ]
+  },
+  "harmony": {
+   "m": "n. 和谐；协调",
+   "ex": "The team works in harmony.",
+   "exZh": "这个团队合作得很和谐。",
+   "forms_seen": [
+    "harmony"
+   ]
+  },
+  "steady": {
+   "m": "adj. 稳定的；v. 使稳住",
+   "ex": "The boat moved in a steady way on the calm sea.",
+   "exZh": "船在平静的海面上平稳地移动。",
+   "forms_seen": [
+    "steady"
+   ]
+  },
+  "flourish": {
+   "m": "v. 繁荣兴旺；茁壮成长",
+   "ex": "The business flourishes in the new market.",
+   "exZh": "这家企业在新市场中繁荣兴旺。",
+   "forms_seen": [
+    "flourishes"
+   ]
+  },
+  "succeed": {
+   "m": "v. 成功；继承",
+   "ex": "He worked hard and succeeded in the exam.",
+   "exZh": "他努力学习，考试成功了。",
+   "forms_seen": [
+    "succeed"
+   ]
+  },
+  "prospect": {
+   "m": "n. 前景；希望",
+   "ex": "The prospect of a better job makes him happy.",
+   "exZh": "更好工作的前景让他感到高兴。",
+   "forms_seen": [
+    "prospect"
+   ]
+  },
+  "perspective": {
+   "m": "n. 视角；观点；（对事物的）合理判断",
+   "ex": "His perspective on life is very positive.",
+   "exZh": "他对生活的看法非常积极。",
+   "forms_seen": [
+    "perspective"
+   ]
+  },
+  "viewpoint": {
+   "m": "n. 观点；看法",
+   "ex": "His viewpoint is different from mine.",
+   "exZh": "他的观点与我的不同。",
+   "forms_seen": [
+    "viewpoint"
+   ]
+  },
+  "standpoint": {
+   "m": "n. 立场",
+   "ex": "From my standpoint, this plan is too risky.",
+   "exZh": "从我的立场来看，这个计划太冒险了。",
+   "forms_seen": [
+    "standpoint"
+   ]
+  },
+  "outlook": {
+   "m": "n. 观点；人生观；前景",
+   "ex": "His outlook on life is very positive.",
+   "exZh": "他对生活的观点非常积极。",
+   "forms_seen": [
+    "outlook"
+   ]
+  },
+  "guideline": {
+   "m": "n. 指导路线；方针",
+   "ex": "Follow the guideline to complete the form.",
+   "exZh": "按照指导路线完成表格。",
+   "forms_seen": [
+    "guideline"
+   ]
+  },
+  "ethic": {
+   "m": "n. 道德规范；伦理标准",
+   "ex": "The company follows a strong ethic of honesty.",
+   "exZh": "这家公司遵循诚实的道德规范。",
+   "forms_seen": [
+    "ethic"
+   ]
+  },
+  "sentence": {
+   "m": "n. 判决；宣判；句子",
+   "ex": "This sentence is easy to understand.",
+   "exZh": "这个句子很容易理解。",
+   "forms_seen": [
+    "sentence"
+   ]
+  },
+  "advise": {
+   "m": "v. 向…提出建议；劝告",
+   "ex": "I advise you to eat more vegetables.",
+   "exZh": "我建议你多吃蔬菜。",
+   "forms_seen": [
+    "advise"
+   ]
+  },
+  "proposal": {
+   "m": "n. 提案；建议",
+   "ex": "He made a proposal to improve the school lunch.",
+   "exZh": "他提出了一个改善学校午餐的提案。",
+   "forms_seen": [
+    "proposal"
+   ]
+  },
+  "hint": {
+   "m": "n. 暗示；提示；有益的建议",
+   "ex": "He gave me a hint about the surprise party.",
+   "exZh": "他给了我关于惊喜派对的暗示。",
+   "forms_seen": [
+    "hint"
+   ]
+  },
+  "declare": {
+   "m": "v. 宣布；宣告；断言",
+   "ex": "The president will declare a holiday next week.",
+   "exZh": "总统将在下周宣布放假。",
+   "forms_seen": [
+    "declared"
+   ]
+  },
+  "affirm": {
+   "m": "v. 断言；肯定；证实",
+   "ex": "He affirms that the plan will work.",
+   "exZh": "他断言这个计划会成功。",
+   "forms_seen": [
+    "affirmed"
+   ]
+  },
+  "promise": {
+   "m": "n. 许诺；v. 承诺",
+   "ex": "He promised to help me with my homework.",
+   "exZh": "他承诺帮我做作业。",
+   "forms_seen": [
+    "promise"
+   ]
+  },
+  "claim": {
+   "m": "v. 声称；n. 索赔",
+   "ex": "He claims that he saw a UFO last night.",
+   "exZh": "他声称自己昨晚看到了不明飞行物。",
+   "forms_seen": [
+    "claim"
+   ]
+  },
+  "proclaim": {
+   "m": "v. 宣告；公布；表明",
+   "ex": "The king proclaimed a new law.",
+   "exZh": "国王宣告了一项新法律。",
+   "forms_seen": [
+    "proclaim"
+   ]
+  },
+  "state": {
+   "m": "n. 国家；状态；v. 陈述",
+   "ex": "The state of the car is very poor.",
+   "exZh": "这辆车的状态非常差。",
+   "forms_seen": [
+    "state"
+   ]
+  },
+  "announce": {
+   "m": "v. 宣布；宣称",
+   "ex": "The teacher will announce the results tomorrow.",
+   "exZh": "老师明天将宣布结果。",
+   "forms_seen": [
+    "announce"
+   ]
+  },
+  "clarify": {
+   "m": "v. 澄清",
+   "ex": "Can you clarify your answer?",
+   "exZh": "你能澄清一下你的答案吗？",
+   "forms_seen": [
+    "clarify"
+   ]
+  },
+  "assist": {
+   "m": "v. 帮助；援助；协助",
+   "ex": "He assists his brother with homework.",
+   "exZh": "他帮助弟弟做作业。",
+   "forms_seen": [
+    "assist"
+   ]
+  },
+  "encourage": {
+   "m": "v. 鼓励；促进；鼓动",
+   "ex": "My teacher encourages me to speak English every day.",
+   "exZh": "我的老师鼓励我每天说英语。",
+   "forms_seen": [
+    "encourage"
+   ]
+  },
+  "implement": {
+   "m": "v. 实施",
+   "ex": "The government will implement new rules next month.",
+   "exZh": "政府下个月将实施新规定。",
+   "forms_seen": [
+    "implement"
+   ]
+  },
+  "monitor": {
+   "m": "v. 监控",
+   "ex": "The teacher monitors the students' progress each week.",
+   "exZh": "老师每周监控学生的进步。",
+   "forms_seen": [
+    "monitor"
+   ]
+  },
+  "admit": {
+   "m": "v. 承认",
+   "ex": "He finally admitted his mistake.",
+   "exZh": "他终于承认了自己的错误。",
+   "forms_seen": [
+    "admit"
+   ]
+  },
+  "african": {
+   "m": "adj. 非洲的；非洲人的；n. 非洲人",
+   "ex": "He loves African music and dance.",
+   "exZh": "他喜欢非洲的音乐和舞蹈。",
+   "forms_seen": [
+    "African"
+   ]
+  },
+  "european": {
+   "m": "adj. 欧洲的；n. 欧洲人",
+   "ex": "She bought a European car.",
+   "exZh": "她买了一辆欧洲的汽车。",
+   "forms_seen": [
+    "European"
+   ]
+  },
+  "latin": {
+   "m": "adj. 拉丁语的；拉丁语系国家的；n. 拉丁语",
+   "ex": "He read a latin text in class.",
+   "exZh": "他在课堂上读了一篇拉丁语文本。",
+   "forms_seen": [
+    "Latin"
+   ]
+  },
+  "jewish": {
+   "m": "adj. 犹太人的",
+   "ex": "He eats jewish food on holidays.",
+   "exZh": "他在节日吃犹太人的食物。",
+   "forms_seen": [
+    "Jewish"
+   ]
+  },
+  "festival": {
+   "m": "n. 节日",
+   "ex": "The town holds a music festival every summer.",
+   "exZh": "这个小镇每年夏天都举办音乐节。",
+   "forms_seen": [
+    "festival"
+   ]
+  },
+  "arabian": {
+   "m": "adj. 阿拉伯（人）的",
+   "ex": "He wore an arabian robe to the party.",
+   "exZh": "他穿着一件阿拉伯长袍去参加派对。",
+   "forms_seen": [
+    "Arabian"
+   ]
+  },
+  "portuguese": {
+   "m": "n. 葡萄牙人；葡萄牙语；adj. 葡萄牙的",
+   "ex": "He is a Portuguese from Lisbon.",
+   "exZh": "他是一位来自里斯本的葡萄牙人。",
+   "forms_seen": [
+    "Portuguese"
+   ]
+  },
+  "roman": {
+   "m": "adj. 古罗马的；罗马人的；n. 古罗马人",
+   "ex": "The ancient roman roads are still visible today.",
+   "exZh": "古老的罗马道路至今仍清晰可见。",
+   "forms_seen": [
+    "Roman"
+   ]
+  },
+  "russian": {
+   "m": "adj. 俄国的；n. 俄语",
+   "ex": "He loves Russian music and food.",
+   "exZh": "他喜欢俄罗斯的音乐和食物。",
+   "forms_seen": [
+    "Russian"
+   ]
+  },
+  "spanish": {
+   "m": "n. 西班牙语；adj. 西班牙的；西班牙语的",
+   "ex": "He speaks spanish fluently.",
+   "exZh": "他流利地讲西班牙语。",
+   "forms_seen": [
+    "Spanish"
+   ]
+  },
+  "bench": {
+   "m": "n. 长凳",
+   "ex": "He sat on the bench in the park.",
+   "exZh": "他坐在公园的长凳上。",
+   "forms_seen": [
+    "bench"
+   ]
+  },
+  "swiss": {
+   "m": "adj. 瑞士的；瑞士人的",
+   "ex": "He ate a piece of Swiss cheese for breakfast.",
+   "exZh": "他早餐吃了一片瑞士奶酪。",
+   "forms_seen": [
+    "Swiss"
+   ]
+  },
+  "greek": {
+   "m": "adj. 希腊的；n. 希腊语",
+   "ex": "He loves eating Greek food.",
+   "exZh": "他喜欢吃的希腊食物。",
+   "forms_seen": [
+    "Greek"
+   ]
+  },
+  "italian": {
+   "m": "adj. 意大利的；n. 意大利语；意大利人",
+   "ex": "She loves italian food.",
+   "exZh": "她喜欢意大利食物。",
+   "forms_seen": [
+    "Italian"
+   ]
+  },
+  "soviet": {
+   "m": "n. 苏联；adj. 苏联（人）的；苏维埃的",
+   "ex": "The soviet flag flew above the building.",
+   "exZh": "苏联的国旗在大楼上方飘扬。",
+   "forms_seen": [
+    "Soviet"
+   ]
+  },
+  "film": {
+   "m": "n. 电影；薄薄的一层",
+   "ex": "I watched a funny film last night.",
+   "exZh": "我昨晚看了一部有趣的电影。",
+   "forms_seen": [
+    "film"
+   ]
+  },
+  "indian": {
+   "m": "adj. 印度的；n. 印度人",
+   "ex": "She cooked Indian food for dinner.",
+   "exZh": "她为晚餐做了印度菜。",
+   "forms_seen": [
+    "Indian"
+   ]
+  },
+  "temple": {
+   "m": "n. 庙宇；太阳穴",
+   "ex": "The ancient temple stands on the hill.",
+   "exZh": "这座古老的庙宇矗立在山上。",
+   "forms_seen": [
+    "temple"
+   ]
+  },
+  "australia": {
+   "m": "n. 澳大利亚",
+   "ex": "She moved to Australia last year.",
+   "exZh": "她去年搬到了澳大利亚。",
+   "forms_seen": [
+    "Australia"
+   ]
+  },
+  "new zealand": {
+   "m": "phrase. 新西兰",
+   "ex": "He lives in New Zealand.",
+   "exZh": "他住在新西兰。",
+   "forms_seen": [
+    "New Zealand"
+   ]
+  },
+  "canada": {
+   "m": "n. 加拿大",
+   "ex": "He lives in Canada.",
+   "exZh": "他住在加拿大。",
+   "forms_seen": [
+    "Canada"
+   ]
+  },
+  "britain": {
+   "m": "n. 英国；不列颠",
+   "ex": "She was born in Britain.",
+   "exZh": "她出生在英国。",
+   "forms_seen": [
+    "Britain"
+   ]
+  },
+  "france": {
+   "m": "n. 法国",
+   "ex": "He lives in France.",
+   "exZh": "他住在法国。",
+   "forms_seen": [
+    "France"
+   ]
+  },
+  "gentle": {
+   "m": "adj. 温和的；文雅的；温柔的",
+   "ex": "The mother gave a gentle hug to her child.",
+   "exZh": "母亲给了孩子一个温和的拥抱。",
+   "forms_seen": [
+    "gentle"
+   ]
+  },
+  "germany": {
+   "m": "n. 德国",
+   "ex": "He lives in germany.",
+   "exZh": "他住在德国。",
+   "forms_seen": [
+    "Germany"
+   ]
+  },
+  "merchant": {
+   "m": "n. 商人",
+   "ex": "The merchant sells fresh fruit every morning.",
+   "exZh": "商人每天早上卖新鲜水果。",
+   "forms_seen": [
+    "merchant"
+   ]
+  },
+  "financial": {
+   "m": "adj. 财政的；金融的",
+   "ex": "He works in financial planning.",
+   "exZh": "他从事财政规划工作。",
+   "forms_seen": [
+    "financial"
+   ]
+  },
+  "pressure": {
+   "m": "n. 压力；压强；v. 对…施加压力",
+   "ex": "He feels pressure from his parents to get good grades.",
+   "exZh": "他感受到来自父母要取得好成绩的压力。",
+   "forms_seen": [
+    "pressure"
+   ]
+  },
+  "fund": {
+   "m": "n. 基金；资金；v. 提供资金",
+   "ex": "The school raised a fund for new books.",
+   "exZh": "学校为购买新书筹集了一笔基金。",
+   "forms_seen": [
+    "fund"
+   ]
+  },
+  "donate": {
+   "m": "v. 捐赠",
+   "ex": "He donates money to the poor children.",
+   "exZh": "他向贫困儿童捐赠钱。",
+   "forms_seen": [
+    "donate"
+   ]
+  },
+  "endow": {
+   "m": "v. 捐赠；资助；赋予",
+   "ex": "He endows a library with books.",
+   "exZh": "他捐赠了一图书馆的书。",
+   "forms_seen": [
+    "endow"
+   ]
+  },
+  "commercial": {
+   "m": "adj. 贸易的；商业的；n. 广告",
+   "ex": "The commercial ship sailed to another country.",
+   "exZh": "这艘贸易船只驶向了另一个国家。",
+   "forms_seen": [
+    "commercial"
+   ]
+  },
+  "advertise": {
+   "m": "v. 登广告",
+   "ex": "The company will advertise its new phone on TV.",
+   "exZh": "这家公司将在电视上为新手机登广告。",
+   "forms_seen": [
+    "advertise"
+   ]
+  },
+  "slogan": {
+   "m": "n. 口号；标语",
+   "ex": "The company used a short slogan to attract customers.",
+   "exZh": "这家公司用了一个简短的口号来吸引顾客。",
+   "forms_seen": [
+    "slogan"
+   ]
+  },
+  "purchase": {
+   "m": "n. 购买；v. 采购",
+   "ex": "The purchase of a new car took all his savings.",
+   "exZh": "买一辆新车花光了他所有的积蓄。",
+   "forms_seen": [
+    "purchase"
+   ]
+  },
+  "lease": {
+   "m": "n. 租契；v. 出租",
+   "ex": "He signed a lease for the apartment.",
+   "exZh": "他签了公寓的租契。",
+   "forms_seen": [
+    "lease"
+   ]
+  },
+  "afford": {
+   "m": "v. 买得起；担负得起；有时间做",
+   "ex": "I can't afford a new car.",
+   "exZh": "我买不起一辆新车。",
+   "forms_seen": [
+    "afford"
+   ]
+  },
+  "retail": {
+   "m": "n. 零售",
+   "ex": "He works in retail at a small store.",
+   "exZh": "他在一家小店从事零售工作。",
+   "forms_seen": [
+    "retail"
+   ]
+  },
+  "grocery": {
+   "m": "n. 食品杂货店",
+   "ex": "He buys milk and bread at the grocery.",
+   "exZh": "他在杂货店买牛奶和面包。",
+   "forms_seen": [
+    "grocery"
+   ]
+  },
+  "discount": {
+   "m": "n. 折扣；v. 不全信；不重视",
+   "ex": "The store gave a 20% discount on all shoes.",
+   "exZh": "商店对所有鞋子提供了20%的折扣。",
+   "forms_seen": [
+    "discount"
+   ]
+  },
+  "promotion": {
+   "m": "n. 促进；提升；推广",
+   "ex": "The new policy is for the promotion of clean energy.",
+   "exZh": "这项新政策是为了促进清洁能源。",
+   "forms_seen": [
+    "promotion"
+   ]
+  },
+  "voucher": {
+   "m": "n. 代金券；凭单",
+   "ex": "He used a voucher to buy a coffee.",
+   "exZh": "他用一张代金券买了一杯咖啡。",
+   "forms_seen": [
+    "vouchers"
+   ]
+  },
+  "coupon": {
+   "m": "n. 优惠券；息票；配给券",
+   "ex": "He used a coupon to buy milk at half price.",
+   "exZh": "他用一张优惠券以半价买了牛奶。",
+   "forms_seen": [
+    "coupons"
+   ]
+  },
+  "currency": {
+   "m": "n. 货币；流通",
+   "ex": "The currency in Japan is the yen.",
+   "exZh": "日本的货币是日元。",
+   "forms_seen": [
+    "currencies"
+   ]
+  },
+  "exchange": {
+   "m": "v. 交换；n. 兑换；交易所",
+   "ex": "They made an exchange of books.",
+   "exZh": "他们进行了书籍的交换。",
+   "forms_seen": [
+    "exchanged"
+   ]
+  },
+  "swap": {
+   "m": "v. 交换；n. 交换",
+   "ex": "They swap books every week.",
+   "exZh": "他们每周交换书籍。",
+   "forms_seen": [
+    "swapped"
+   ]
+  },
+  "receipt": {
+   "m": "n. 收据；收条",
+   "ex": "He kept the receipt for his new shoes.",
+   "exZh": "他保留了新鞋的收据。",
+   "forms_seen": [
+    "receipt"
+   ]
+  },
+  "levy": {
+   "m": "n. 征税；v. 征收",
+   "ex": "The government will levy a new tax next month.",
+   "exZh": "政府下个月将征收一项新税。",
+   "forms_seen": [
+    "levy"
+   ]
+  },
+  "tariff": {
+   "m": "n. 关税；税率；（旅馆、饭店等的）价目表",
+   "ex": "The government raised the tariff on imported cars.",
+   "exZh": "政府提高了进口汽车的关税。",
+   "forms_seen": [
+    "tariffs"
+   ]
+  },
+  "duty": {
+   "m": "n. 职责；责任；义务",
+   "ex": "It is your duty to finish your homework.",
+   "exZh": "完成你的作业是你的职责。",
+   "forms_seen": [
+    "duty"
+   ]
+  },
+  "impose": {
+   "m": "v. 强加；强制实施",
+   "ex": "The government imposed a new tax on sugar.",
+   "exZh": "政府对糖征收了一项新税。",
+   "forms_seen": [
+    "impose"
+   ]
+  },
+  "consume": {
+   "m": "v. 消耗；消费",
+   "ex": "The car consumes a lot of gas.",
+   "exZh": "这辆车消耗很多汽油。",
+   "forms_seen": [
+    "consume"
+   ]
+  },
+  "revenue": {
+   "m": "n. 收入；税收",
+   "ex": "The company's revenue increased last year.",
+   "exZh": "这家公司的收入去年增加了。",
+   "forms_seen": [
+    "revenue"
+   ]
+  },
+  "gross": {
+   "m": "adj. 总的；恶心的",
+   "ex": "The gross income of the company is $5 million.",
+   "exZh": "公司的总收入是500万美元。",
+   "forms_seen": [
+    "gross"
+   ]
+  },
+  "total": {
+   "m": "n. 总计；adj. 总的；v. 共计",
+   "ex": "The total cost is $50.",
+   "exZh": "总费用是50美元。",
+   "forms_seen": [
+    "total"
+   ]
+  },
+  "recession": {
+   "m": "n. （经济）不景气",
+   "ex": "Many people lost jobs during the recession.",
+   "exZh": "在经济不景气期间，许多人失去了工作。",
+   "forms_seen": [
+    "recession"
+   ]
+  },
+  "depression": {
+   "m": "n. 抑郁；萧条",
+   "ex": "He felt deep depression after losing his job.",
+   "exZh": "他失业后感到深深的抑郁。",
+   "forms_seen": [
+    "depression"
+   ]
+  },
+  "crisis": {
+   "m": "n. 危机；危急关头",
+   "ex": "The country is facing an economic crisis.",
+   "exZh": "这个国家正面临经济危机。",
+   "forms_seen": [
+    "crisis"
+   ]
+  },
+  "stable": {
+   "m": "n. 马厩；厩房；adj. 稳定的",
+   "ex": "The bridge is stable and safe to cross.",
+   "exZh": "这座桥很稳固，可以安全通过。",
+   "forms_seen": [
+    "stable"
+   ]
+  },
+  "security": {
+   "m": "n. 安全；保障；防护措施",
+   "ex": "The school improved security to protect students.",
+   "exZh": "学校加强了安全措施以保护学生。",
+   "forms_seen": [
+    "security"
+   ]
+  },
+  "bond": {
+   "m": "n. 纽带；债券；v. （使）黏合",
+   "ex": "Family is the bond that keeps us together.",
+   "exZh": "家庭是我们团结的纽带。",
+   "forms_seen": [
+    "bonds"
+   ]
+  },
+  "debt": {
+   "m": "n. 债务",
+   "ex": "He paid off his debt last month.",
+   "exZh": "他上个月还清了债务。",
+   "forms_seen": [
+    "debt"
+   ]
+  },
+  "deficit": {
+   "m": "n. 不足额",
+   "ex": "The country has a budget deficit this year.",
+   "exZh": "今年这个国家的预算不足额。",
+   "forms_seen": [
+    "deficits"
+   ]
+  },
+  "inflation": {
+   "m": "n. 通货膨胀；膨胀",
+   "ex": "The price of bread went up because of inflation.",
+   "exZh": "由于通货膨胀，面包的价格上涨了。",
+   "forms_seen": [
+    "inflation"
+   ]
+  },
+  "deflation": {
+   "m": "n. 通货紧缩；放气",
+   "ex": "The prices fell because of deflation.",
+   "exZh": "由于通货紧缩，价格下跌了。",
+   "forms_seen": [
+    "deflation"
+   ]
+  },
+  "dwindle": {
+   "m": "v. 缩小；减少",
+   "ex": "The water in the pond dwindles in summer.",
+   "exZh": "夏天时，池塘里的水逐渐减少。",
+   "forms_seen": [
+    "dwindle"
+   ]
+  },
+  "decrease": {
+   "m": "n. 减少；v. 减少；降低",
+   "ex": "There was a decrease in rainfall last month.",
+   "exZh": "上个月降雨量减少了。",
+   "forms_seen": [
+    "decrease"
+   ]
+  },
+  "downsize": {
+   "m": "v. 缩小（规模）；裁员",
+   "ex": "The company will downsize next month.",
+   "exZh": "这家公司下个月将裁员。",
+   "forms_seen": [
+    "downsize"
+   ]
+  },
+  "decline": {
+   "m": "v. 下降；n. 衰退",
+   "ex": "There was a sharp decline in sales last month.",
+   "exZh": "上个月销售额大幅下降。",
+   "forms_seen": [
+    "decline"
+   ]
+  },
+  "diminish": {
+   "m": "v. 减少；削弱；减损",
+   "ex": "The noise will diminish after midnight.",
+   "exZh": "午夜后噪音会减少。",
+   "forms_seen": [
+    "diminish"
+   ]
+  },
+  "reduce": {
+   "m": "v. 减少；降低；减量",
+   "ex": "We need to reduce waste in our daily life.",
+   "exZh": "我们需要减少日常生活中的浪费。",
+   "forms_seen": [
+    "reduce"
+   ]
+  },
+  "increase": {
+   "m": "v. 增加；n. 增长",
+   "ex": "The company increased its profits last year.",
+   "exZh": "这家公司去年增加了利润。",
+   "forms_seen": [
+    "increase"
+   ]
+  },
+  "increment": {
+   "m": "n. 增加；增量",
+   "ex": "The temperature increases by one increment every hour.",
+   "exZh": "温度每小时增加一个单位。",
+   "forms_seen": [
+    "increment"
+   ]
+  },
+  "growth": {
+   "m": "n. 生长；增长；发展",
+   "ex": "The growth of the plant is slow in winter.",
+   "exZh": "这植物在冬天生长缓慢。",
+   "forms_seen": [
+    "growth"
+   ]
+  },
+  "escalate": {
+   "m": "v. 逐步升高",
+   "ex": "The argument started small but soon escalate.",
+   "exZh": "争论起初很小，但很快逐步升高。",
+   "forms_seen": [
+    "escalate"
+   ]
+  },
+  "expand": {
+   "m": "v. 扩大；膨胀；更充分地阐述",
+   "ex": "The company plans to expand its business to other countries.",
+   "exZh": "这家公司计划将其业务扩大到其他国家。",
+   "forms_seen": [
+    "expand"
+   ]
+  },
+  "influx": {
+   "m": "n. 涌入",
+   "ex": "There was a large influx of tourists during the summer.",
+   "exZh": "夏天期间涌入了大量游客。",
+   "forms_seen": [
+    "influx"
+   ]
+  },
+  "imply": {
+   "m": "v. 暗示；意味",
+   "ex": "His silence implies he disagrees.",
+   "exZh": "他的沉默暗示他不同意。",
+   "forms_seen": [
+    "imply"
+   ]
+  },
+  "affluent": {
+   "m": "adj. 富裕的；富足的",
+   "ex": "The affluent family bought a big house by the lake.",
+   "exZh": "这个富裕的家庭在湖边买了一栋大房子。",
+   "forms_seen": [
+    "affluent"
+   ]
+  },
+  "enrich": {
+   "m": "v. 使富裕；使富足",
+   "ex": "The new job enriched his life.",
+   "exZh": "这份新工作使他的生活富裕起来。",
+   "forms_seen": [
+    "enrich"
+   ]
+  },
+  "sufficient": {
+   "m": "adj. 足够的；充足的",
+   "ex": "We have sufficient food for the trip.",
+   "exZh": "我们有足够的食物用于这次旅行。",
+   "forms_seen": [
+    "sufficient"
+   ]
+  },
+  "adequate": {
+   "m": "adj. 足够的",
+   "ex": "The water supply is adequate for the village.",
+   "exZh": "供水对这个村庄来说是足够的。",
+   "forms_seen": [
+    "adequate"
+   ]
+  },
+  "spare": {
+   "m": "adj. 多余的；v. 抽出",
+   "ex": "Can you spare a few minutes to help me?",
+   "exZh": "你能抽出几分钟帮我吗？",
+   "forms_seen": [
+    "spare"
+   ]
+  },
+  "saving": {
+   "m": "n. 节约；v. 拯救；节省",
+   "ex": "His saving helped him buy a new car.",
+   "exZh": "他的节约帮他买了一辆新车。",
+   "forms_seen": [
+    "savings"
+   ]
+  },
+  "redundant": {
+   "m": "adj. 多余的；被裁减的",
+   "ex": "The extra chair is redundant because we have enough seats.",
+   "exZh": "这把额外的椅子是多余的，因为我们已经有足够的座位了。",
+   "forms_seen": [
+    "redundant"
+   ]
+  },
+  "lack": {
+   "m": "n. 缺乏；v. 短缺",
+   "ex": "There is a lack of clean water in the village.",
+   "exZh": "这个村庄缺乏干净的水。",
+   "forms_seen": [
+    "lack"
+   ]
+  },
+  "enterprise": {
+   "m": "n. 企业；事业",
+   "ex": "This small enterprise makes handmade toys.",
+   "exZh": "这家小企业生产手工玩具。",
+   "forms_seen": [
+    "enterprise"
+   ]
+  },
+  "agent": {
+   "m": "n. 代理人；特工；经纪人",
+   "ex": "The real estate agent helped them buy a house.",
+   "exZh": "房地产代理人帮助他们买了一所房子。",
+   "forms_seen": [
+    "agent"
+   ]
+  },
+  "entity": {
+   "m": "n. 实体",
+   "ex": "The company is a legal entity.",
+   "exZh": "这家公司是一个法律实体。",
+   "forms_seen": [
+    "entity"
+   ]
+  },
+  "invest": {
+   "m": "v. 投资；投入",
+   "ex": "He invests money in stocks.",
+   "exZh": "他投资股票。",
+   "forms_seen": [
+    "invest"
+   ]
+  },
+  "input": {
+   "m": "n. 输入；v. 输入",
+   "ex": "The computer needs user input to work.",
+   "exZh": "计算机需要用户输入才能工作。",
+   "forms_seen": [
+    "input"
+   ]
+  },
+  "product": {
+   "m": "n. 产品；产物；成果",
+   "ex": "This company makes a new product every year.",
+   "exZh": "这家公司每年都会推出一种新产品。",
+   "forms_seen": [
+    "product"
+   ]
+  },
+  "shelf": {
+   "m": "n. 架子",
+   "ex": "He put the books on the shelf.",
+   "exZh": "他把书放在架子上。",
+   "forms_seen": [
+    "shelf"
+   ]
+  },
+  "acquisition": {
+   "m": "n. 获得；得到的东西；收购",
+   "ex": "The acquisition of new skills takes time.",
+   "exZh": "获得新技能需要时间。",
+   "forms_seen": [
+    "acquisition"
+   ]
+  },
+  "goods": {
+   "m": "n. 商品；货物",
+   "ex": "The store sells many kinds of goods.",
+   "exZh": "这家商店出售各种商品。",
+   "forms_seen": [
+    "goods"
+   ]
+  },
+  "cargo": {
+   "m": "n. 货物",
+   "ex": "The ship carries a large cargo of rice.",
+   "exZh": "这艘船运载了大量大米货物。",
+   "forms_seen": [
+    "cargo"
+   ]
+  },
+  "insure": {
+   "m": "v. 投保",
+   "ex": "He insured his car against accidents.",
+   "exZh": "他为自己的车投保了意外险。",
+   "forms_seen": [
+    "insure"
+   ]
+  },
+  "fragile": {
+   "m": "adj. 脆弱的；易碎的；不牢固的",
+   "ex": "The glass is fragile and might break easily.",
+   "exZh": "这个玻璃很脆弱，容易碎。",
+   "forms_seen": [
+    "fragile"
+   ]
+  },
+  "guarantee": {
+   "m": "n. 保证；保证书；v. 确保",
+   "ex": "The store guarantees a refund if you are not happy.",
+   "exZh": "如果你不满意，商店保证退款。",
+   "forms_seen": [
+    "guarantee"
+   ]
+  },
+  "reliable": {
+   "m": "adj. 可靠的",
+   "ex": "He is a reliable friend who always helps.",
+   "exZh": "他是一个可靠的朋友，总是帮忙。",
+   "forms_seen": [
+    "reliable"
+   ]
+  },
+  "negotiation": {
+   "m": "n. 谈判；协商；磋商",
+   "ex": "The two sides started negotiation to solve the conflict.",
+   "exZh": "双方开始了谈判以解决冲突。",
+   "forms_seen": [
+    "negotiations"
+   ]
+  },
+  "attend": {
+   "m": "v. 参加；注意；照料",
+   "ex": "He will attend the meeting tomorrow.",
+   "exZh": "他明天会出席会议。",
+   "forms_seen": [
+    "attend"
+   ]
+  },
+  "absent": {
+   "m": "adj. 缺席的",
+   "ex": "He was absent from school yesterday.",
+   "exZh": "他昨天缺席了学校。",
+   "forms_seen": [
+    "absent"
+   ]
+  },
+  "sale": {
+   "m": "n. 销售；出售；减价销售",
+   "ex": "The store has a big sale every winter.",
+   "exZh": "这家商店每年冬天都有大促销。",
+   "forms_seen": [
+    "sale"
+   ]
+  },
+  "wholesale": {
+   "m": "adj. 批发的；n. 成批出售；adv. 大批地",
+   "ex": "He buys clothes at wholesale prices.",
+   "exZh": "他以批发价购买衣服。",
+   "forms_seen": [
+    "wholesale"
+   ]
+  },
+  "auction": {
+   "m": "n. 拍卖",
+   "ex": "The old painting was sold at an auction.",
+   "exZh": "那幅旧画在拍卖会上被卖出了。",
+   "forms_seen": [
+    "auction"
+   ]
+  },
+  "bid": {
+   "m": "n. 努力争取；投标；v. 出价",
+   "ex": "His bid for the championship inspired everyone.",
+   "exZh": "他为冠军所做的努力鼓舞了所有人。",
+   "forms_seen": [
+    "bid"
+   ]
+  },
+  "transaction": {
+   "m": "n. 交易",
+   "ex": "The bank recorded the transaction quickly.",
+   "exZh": "银行迅速记录了这笔交易。",
+   "forms_seen": [
+    "transaction"
+   ]
+  },
+  "turnover": {
+   "m": "n. 营业额；人员流动率；周转率",
+   "ex": "The store's turnover increased last month.",
+   "exZh": "这家商店上个月的营业额增加了。",
+   "forms_seen": [
+    "turnover"
+   ]
+  },
+  "dump": {
+   "m": "v. 倒空",
+   "ex": "He dumped the trash into the bin.",
+   "exZh": "他把垃圾倒进了垃圾桶。",
+   "forms_seen": [
+    "dump"
+   ]
+  },
+  "export": {
+   "m": "v. 出口；n. 输出",
+   "ex": "This country is a big export of wheat.",
+   "exZh": "这个国家是小麦的大输出国。",
+   "forms_seen": [
+    "export"
+   ]
+  },
+  "import": {
+   "m": "v. 进口；n. 进口；重要性",
+   "ex": "The country increased its import of oil last year.",
+   "exZh": "去年这个国家增加了石油的进口。",
+   "forms_seen": [
+    "import"
+   ]
+  },
+  "quota": {
+   "m": "n. 配额",
+   "ex": "The factory has a quota of 1000 units per day.",
+   "exZh": "这家工厂每天有1000件的配额。",
+   "forms_seen": [
+    "quota"
+   ]
+  },
+  "interest": {
+   "m": "n. 利息；兴趣；利益",
+   "ex": "He has a strong interest in painting.",
+   "exZh": "他对绘画有浓厚的兴趣。",
+   "forms_seen": [
+    "interest"
+   ]
+  },
+  "dividend": {
+   "m": "n. 被除数；股份红利；股息",
+   "ex": "In 12 ÷ 3 = 4, the dividend is 12.",
+   "exZh": "在 12 ÷ 3 = 4 中，被除数是 12。",
+   "forms_seen": [
+    "dividend"
+   ]
+  },
+  "stock": {
+   "m": "n. 库存；股票；v. 贮存",
+   "ex": "The store has low stock of winter coats.",
+   "exZh": "这家商店的冬衣库存很少。",
+   "forms_seen": [
+    "stock"
+   ]
+  },
+  "account": {
+   "m": "n. 账户；叙述；v. 说明",
+   "ex": "I opened a bank account last week.",
+   "exZh": "我上周开了一家银行账户。",
+   "forms_seen": [
+    "account"
+   ]
+  },
+  "deposit": {
+   "m": "n. 押金；存款",
+   "ex": "You need to pay a 40-yuan deposit to rent the bike.",
+   "exZh": "租自行车需要支付40元押金。",
+   "forms_seen": [
+    "deposit"
+   ]
+  },
+  "installment": {
+   "m": "n. 分期付款",
+   "ex": "He paid the first installment last week.",
+   "exZh": "他上周支付了第一期分期付款。",
+   "forms_seen": [
+    "installments"
+   ]
+  },
+  "shilling": {
+   "m": "n. 先令（旧币）",
+   "ex": "He paid five shillings for the bread.",
+   "exZh": "他花了五个先令买面包。",
+   "forms_seen": [
+    "shilling"
+   ]
+  },
+  "copper": {
+   "m": "n. 铜",
+   "ex": "The wire is made of copper.",
+   "exZh": "这根电线是铜制的。",
+   "forms_seen": [
+    "copper"
+   ]
+  },
+  "estate": {
+   "m": "n. 庄园；地产",
+   "ex": "The old estate has large gardens and a beautiful mansion.",
+   "exZh": "这个古老的庄园有大片花园和一座美丽的豪宅。",
+   "forms_seen": [
+    "estate"
+   ]
+  },
+  "possess": {
+   "m": "v. 拥有",
+   "ex": "He possesses a small house near the lake.",
+   "exZh": "他拥有一栋靠近湖边的小房子。",
+   "forms_seen": [
+    "possess"
+   ]
+  },
+  "legacy": {
+   "m": "n. 遗产；遗赠",
+   "ex": "His legacy includes many charity schools.",
+   "exZh": "他的遗产包括许多慈善学校。",
+   "forms_seen": [
+    "legacy"
+   ]
+  },
+  "descend": {
+   "m": "v. 下降；沦落",
+   "ex": "The sun descends behind the hills.",
+   "exZh": "太阳在山后落下。",
+   "forms_seen": [
+    "descend"
+   ]
+  },
+  "worthy": {
+   "m": "adj. 值得…的；值得尊敬的",
+   "ex": "This book is worthy of reading.",
+   "exZh": "这本书值得读。",
+   "forms_seen": [
+    "worthy"
+   ]
+  },
+  "valuable": {
+   "m": "adj. 有价值的；贵重的；值钱的",
+   "ex": "This old book is valuable to historians.",
+   "exZh": "这本旧书对历史学家来说很有价值。",
+   "forms_seen": [
+    "valuable"
+   ]
+  },
+  "incentive": {
+   "m": "n. 动机；诱因",
+   "ex": "The bonus is an incentive to work harder.",
+   "exZh": "奖金是努力工作的动机。",
+   "forms_seen": [
+    "incentive"
+   ]
+  },
+  "accelerate": {
+   "m": "v. 加速；加快",
+   "ex": "The car will accelerate when you press the gas.",
+   "exZh": "当你踩油门时，汽车会加速。",
+   "forms_seen": [
+    "accelerate"
+   ]
+  },
+  "prompt": {
+   "m": "adj. 迅速的；n. 提示；v. 促使",
+   "ex": "The teacher gave a prompt to help students start writing.",
+   "exZh": "老师给了一个提示，帮助学生开始写作。",
+   "forms_seen": [
+    "prompt"
+   ]
+  },
+  "salary": {
+   "m": "n. 薪水",
+   "ex": "He gets a salary of 3000 dollars each month.",
+   "exZh": "他每个月赚3000美元的工资。",
+   "forms_seen": [
+    "salaries"
+   ]
+  },
+  "income": {
+   "m": "n. 收入；收益；所得",
+   "ex": "His income is enough to pay for rent and food.",
+   "exZh": "他的收入足以支付房租和食物。",
+   "forms_seen": [
+    "income"
+   ]
+  },
+  "wage": {
+   "m": "n. 工资",
+   "ex": "He receives his wage every Friday.",
+   "exZh": "他每周五领工资。",
+   "forms_seen": [
+    "wages"
+   ]
+  },
+  "payment": {
+   "m": "n. 支付；报酬",
+   "ex": "He made the payment online.",
+   "exZh": "他在线支付了。",
+   "forms_seen": [
+    "payment"
+   ]
+  },
+  "restaurant": {
+   "m": "n. 餐厅；餐馆",
+   "ex": "We ate dinner at a small restaurant.",
+   "exZh": "我们在一家小餐厅吃了晚饭。",
+   "forms_seen": [
+    "restaurant"
+   ]
+  },
+  "refund": {
+   "m": "n. 退款",
+   "ex": "I asked for a refund after the product broke.",
+   "exZh": "产品坏了之后，我要求退款。",
+   "forms_seen": [
+    "refund"
+   ]
+  },
+  "reimburse": {
+   "m": "v. 报销",
+   "ex": "The company will reimburse you for your travel expenses.",
+   "exZh": "公司会报销你的旅行费用。",
+   "forms_seen": [
+    "reimburse"
+   ]
+  },
+  "payroll": {
+   "m": "n. 职工工资册",
+   "ex": "The company updated the payroll last Friday.",
+   "exZh": "公司上星期五更新了职工工资册。",
+   "forms_seen": [
+    "payroll"
+   ]
+  },
+  "remuneration": {
+   "m": "n. 报酬；酬金",
+   "ex": "He received fair remuneration for his work.",
+   "exZh": "他因工作获得了公平的报酬。",
+   "forms_seen": [
+    "remuneration"
+   ]
+  },
+  "subsidy": {
+   "m": "n. 补贴；津贴；补助金",
+   "ex": "The government gives a subsidy to farmers.",
+   "exZh": "政府向农民提供补贴。",
+   "forms_seen": [
+    "subsidy"
+   ]
+  },
+  "earn": {
+   "m": "v. 赚得；获得",
+   "ex": "He works hard to earn money.",
+   "exZh": "他努力工作以赚取收入。",
+   "forms_seen": [
+    "earn"
+   ]
+  },
+  "undertaking": {
+   "m": "n. 事业；v. 承担",
+   "ex": "He gave an undertaking to finish the project on time.",
+   "exZh": "他保证按时完成项目。",
+   "forms_seen": [
+    "undertaking"
+   ]
+  },
+  "profession": {
+   "m": "n. 职业；专业",
+   "ex": "His profession is a teacher.",
+   "exZh": "他的职业是教师。",
+   "forms_seen": [
+    "profession"
+   ]
+  },
+  "occupation": {
+   "m": "n. 占领；职业；占有",
+   "ex": "The occupation of the city by foreign troops lasted for years.",
+   "exZh": "外国军队对这座城市的占领持续了多年。",
+   "forms_seen": [
+    "occupation"
+   ]
+  },
+  "vocation": {
+   "m": "n. 职业；行业；使命",
+   "ex": "He chose teaching as his vocation.",
+   "exZh": "他选择了教学作为自己的职业。",
+   "forms_seen": [
+    "vocation"
+   ]
+  },
+  "labour": {
+   "m": "n. 劳动；劳工；v. 辛勤工作",
+   "ex": "Hard labour helps people build strong skills.",
+   "exZh": "辛勤的劳动帮助人们培养强大的技能。",
+   "forms_seen": [
+    "labour"
+   ]
+  },
+  "workforce": {
+   "m": "n. 劳动力；工人总数；职工总数",
+   "ex": "The factory needs a larger workforce to meet demand.",
+   "exZh": "工厂需要更多的劳动力来满足需求。",
+   "forms_seen": [
+    "workforce"
+   ]
+  },
+  "workaholic": {
+   "m": "n. 工作狂",
+   "ex": "He is a workaholic who stays late every night.",
+   "exZh": "他是一个每天晚上都加班的工作狂。",
+   "forms_seen": [
+    "workaholic"
+   ]
+  },
+  "personnel": {
+   "m": "n. 全体人员；人事部；职员",
+   "ex": "The company hired new personnel last month.",
+   "exZh": "这家公司上个月雇佣了新员工。",
+   "forms_seen": [
+    "personnel"
+   ]
+  },
+  "clerk": {
+   "m": "n. 职员；店员",
+   "ex": "The clerk at the store helped me find the book.",
+   "exZh": "商店里的职员帮我找到了那本书。",
+   "forms_seen": [
+    "clerk"
+   ]
+  },
+  "interview": {
+   "m": "n. 面试；访谈；v. 接见",
+   "ex": "He has an interview tomorrow for a new job.",
+   "exZh": "他明天有一场新工作的面试。",
+   "forms_seen": [
+    "interview"
+   ]
+  },
+  "resume": {
+   "m": "v. （中断后）继续",
+   "ex": "After a short break, he resumed his work.",
+   "exZh": "短暂休息后，他继续工作。",
+   "forms_seen": [
+    "resumes"
+   ]
+  },
+  "recommend": {
+   "m": "v. 推荐；建议",
+   "ex": "I recommend this book to you.",
+   "exZh": "我向你推荐这本书。",
+   "forms_seen": [
+    "recommend"
+   ]
+  },
+  "employ": {
+   "m": "v. 雇佣；使用",
+   "ex": "The company will employ five new workers next month.",
+   "exZh": "这家公司下个月将雇佣五名新员工。",
+   "forms_seen": [
+    "employ"
+   ]
+  },
+  "hire": {
+   "m": "v. 雇用；租用",
+   "ex": "The company will hire a new manager next week.",
+   "exZh": "公司下周将雇用一位新经理。",
+   "forms_seen": [
+    "hire"
+   ]
+  },
+  "layoff": {
+   "m": "n. 解雇；活动停止期间",
+   "ex": "He got a layoff last month.",
+   "exZh": "他上个月被裁员了。",
+   "forms_seen": [
+    "layoffs"
+   ]
+  },
+  "dismiss": {
+   "m": "v. 解雇；开除；v. 不理会",
+   "ex": "He dismissed her advice and walked away.",
+   "exZh": "他不理会她的建议，走开了。",
+   "forms_seen": [
+    "dismiss"
+   ]
+  },
+  "discharge": {
+   "m": "v. 处理；放电；n. 排放",
+   "ex": "The battery will discharge if left unused for a long time.",
+   "exZh": "如果长时间不使用，电池会放电。",
+   "forms_seen": [
+    "discharge"
+   ]
+  },
+  "resign": {
+   "m": "v. 辞职；使…顺从于（做）某事",
+   "ex": "He decided to resign from his job.",
+   "exZh": "他决定辞去工作。",
+   "forms_seen": [
+    "resign"
+   ]
+  },
+  "flour": {
+   "m": "n. 面粉",
+   "ex": "She adds flour to make bread.",
+   "exZh": "她加面粉来做面包。",
+   "forms_seen": [
+    "flour"
+   ]
+  },
+  "sack": {
+   "m": "n. 袋子；v. 劫掠",
+   "ex": "He carried the apples in a burlap sack.",
+   "exZh": "他把苹果装在一个麻布袋里。",
+   "forms_seen": [
+    "sacks"
+   ]
+  },
+  "retire": {
+   "m": "v. 退休",
+   "ex": "He will retire next year.",
+   "exZh": "他明年将退休。",
+   "forms_seen": [
+    "retire"
+   ]
+  },
+  "failure": {
+   "m": "n. 失败",
+   "ex": "He felt sad after the failure of his business.",
+   "exZh": "他的生意失败后，他感到很难过。",
+   "forms_seen": [
+    "failure"
+   ]
+  },
+  "abortion": {
+   "m": "n. 流产；堕胎",
+   "ex": "She decided to have an abortion.",
+   "exZh": "她决定进行流产。",
+   "forms_seen": [
+    "abortion"
+   ]
+  },
+  "loss": {
+   "m": "n. 损失；丢失；亏损",
+   "ex": "The company suffered a big loss last year.",
+   "exZh": "这家公司去年遭受了巨大损失。",
+   "forms_seen": [
+    "loss"
+   ]
+  },
+  "opportunity": {
+   "m": "n. 机会",
+   "ex": "He got an opportunity to work abroad.",
+   "exZh": "他得到了一个去国外工作的机会。",
+   "forms_seen": [
+    "opportunity"
+   ]
+  },
+  "chance": {
+   "m": "n. 可能性；机会",
+   "ex": "There is a chance it will rain tomorrow.",
+   "exZh": "明天可能会下雨。",
+   "forms_seen": [
+    "chance"
+   ]
+  },
+  "solve": {
+   "m": "v. 解决",
+   "ex": "He solved the math problem quickly.",
+   "exZh": "他很快解决了这道数学题。",
+   "forms_seen": [
+    "solve"
+   ]
+  },
+  "sustainable": {
+   "m": "adj. 可持续的",
+   "ex": "We need sustainable energy to protect the environment.",
+   "exZh": "我们需要可持续的能源来保护环境。",
+   "forms_seen": [
+    "sustainable"
+   ]
+  },
+  "manage": {
+   "m": "v. 设法做到；管理",
+   "ex": "I managed to finish my homework before dinner.",
+   "exZh": "我设法在晚饭前完成了作业。",
+   "forms_seen": [
+    "manage"
+   ]
+  },
+  "regulate": {
+   "m": "v. 调整；管理",
+   "ex": "The thermostat helps regulate the room temperature.",
+   "exZh": "恒温器有助于调节室温。",
+   "forms_seen": [
+    "regulate"
+   ]
+  },
+  "sanction": {
+   "m": "n. 批准；制裁",
+   "ex": "The company got official sanction to open a new branch.",
+   "exZh": "该公司获得了开设新分公司的正式批准。",
+   "forms_seen": [
+    "sanction"
+   ]
+  },
+  "coordinate": {
+   "m": "v. 协调",
+   "ex": "She coordinates the team's schedule.",
+   "exZh": "她协调团队的安排。",
+   "forms_seen": [
+    "coordinate"
+   ]
+  },
+  "cooperate": {
+   "m": "v. 合作；协作",
+   "ex": "They cooperate to finish the project on time.",
+   "exZh": "他们合作以按时完成项目。",
+   "forms_seen": [
+    "cooperate"
+   ]
+  },
+  "collaborate": {
+   "m": "v. 合作",
+   "ex": "They collaborate to finish the project.",
+   "exZh": "他们合作完成这个项目。",
+   "forms_seen": [
+    "collaborate"
+   ]
+  },
+  "legal": {
+   "m": "adj. 法律的；合法的",
+   "ex": "He hired a legal lawyer to help him.",
+   "exZh": "他请了一位法律律师来帮助他。",
+   "forms_seen": [
+    "legal"
+   ]
+  },
+  "regulation": {
+   "m": "n. 管理；条例；规则",
+   "ex": "The government made a new regulation to control pollution.",
+   "exZh": "政府出台了一项新管理措施来控制污染。",
+   "forms_seen": [
+    "regulations"
+   ]
+  },
+  "treaty": {
+   "m": "n. 条约；协议",
+   "ex": "Two countries signed a treaty to stop the war.",
+   "exZh": "两个国家签署了一项条约以停止战争。",
+   "forms_seen": [
+    "treaty"
+   ]
+  },
+  "agreement": {
+   "m": "n. 协议；一致",
+   "ex": "They signed an agreement to share the costs.",
+   "exZh": "他们签署了一份分担费用的协议。",
+   "forms_seen": [
+    "agreement"
+   ]
+  },
+  "charter": {
+   "m": "n. 宪章",
+   "ex": "The Magna Carta is an old charter of rights.",
+   "exZh": "《大宪章》是一份古老的权力宪章。",
+   "forms_seen": [
+    "charter"
+   ]
+  },
+  "protocol": {
+   "m": "n. 协议；（外交）议定书",
+   "ex": "The two countries signed a protocol to stop the war.",
+   "exZh": "这两个国家签署了一项停止战争的协议。",
+   "forms_seen": [
+    "protocol"
+   ]
+  },
+  "norm": {
+   "m": "n. 准则；标准",
+   "ex": "The norm in this school is to arrive on time.",
+   "exZh": "这所学校的准则就是准时到校。",
+   "forms_seen": [
+    "norm"
+   ]
+  },
+  "benchmark": {
+   "m": "n. 基准点",
+   "ex": "This test is a benchmark for all students.",
+   "exZh": "这个测试是所有学生的标准。",
+   "forms_seen": [
+    "benchmark"
+   ]
+  },
+  "criteria": {
+   "m": "n. 评判标准",
+   "ex": "The main criteria for selection are skill and experience.",
+   "exZh": "选择的主要标准是技能和经验。",
+   "forms_seen": [
+    "criteria"
+   ]
+  },
+  "standard": {
+   "m": "n. 标准；adj. 标准的；规范的",
+   "ex": "The school has a high standard for homework.",
+   "exZh": "这所学校对作业有很高的标准。",
+   "forms_seen": [
+    "standard"
+   ]
+  },
+  "permit": {
+   "m": "n. 许可证；v. 允许；准许",
+   "ex": "He showed his fishing permit to the officer.",
+   "exZh": "他向官员出示了他的钓鱼许可证。",
+   "forms_seen": [
+    "permit"
+   ]
+  },
+  "admission": {
+   "m": "n. 允许进入；承认",
+   "ex": "The ticket is your admission to the concert.",
+   "exZh": "这张票是进入音乐会的许可。",
+   "forms_seen": [
+    "admission"
+   ]
+  },
+  "perform": {
+   "m": "v. 执行；表现；表演",
+   "ex": "He will perform the task tomorrow.",
+   "exZh": "他明天会执行这个任务。",
+   "forms_seen": [
+    "perform"
+   ]
+  },
+  "enforce": {
+   "m": "v. 强制执行；强加",
+   "ex": "The police enforce the law.",
+   "exZh": "警察强制执行法律。",
+   "forms_seen": [
+    "enforce"
+   ]
+  },
+  "reject": {
+   "m": "v. 拒绝",
+   "ex": "He rejects the job offer.",
+   "exZh": "他拒绝了这份工作邀请。",
+   "forms_seen": [
+    "reject"
+   ]
+  },
+  "tight": {
+   "m": "adj. 紧的",
+   "ex": "The lid is tight on the jar.",
+   "exZh": "罐子的盖子很紧。",
+   "forms_seen": [
+    "tight"
+   ]
+  },
+  "constraint": {
+   "m": "n. 限制；约束",
+   "ex": "The budget is a constraint on our project.",
+   "exZh": "预算是我们项目的限制。",
+   "forms_seen": [
+    "constraints"
+   ]
+  },
+  "official": {
+   "m": "n. 官员；adj. 官方的",
+   "ex": "The official announced new rules for the festival.",
+   "exZh": "这位官员宣布了节日的新规定。",
+   "forms_seen": [
+    "official"
+   ]
+  },
+  "mandatory": {
+   "m": "adj. 强制的；法定的；义务的",
+   "ex": "Wearing a helmet is mandatory for cyclists.",
+   "exZh": "骑自行车时戴头盔是强制的。",
+   "forms_seen": [
+    "mandatory"
+   ]
+  },
+  "potent": {
+   "m": "adj. 强有力的；有效的",
+   "ex": "The medicine is potent and works quickly.",
+   "exZh": "这种药物非常有效，起效很快。",
+   "forms_seen": [
+    "potent"
+   ]
+  },
+  "bound": {
+   "m": "adj. 一定会；密切相关的；有义务的",
+   "ex": "He is bound to win the race.",
+   "exZh": "他一定会赢得比赛。",
+   "forms_seen": [
+    "bound"
+   ]
+  },
+  "obligation": {
+   "m": "n. 义务",
+   "ex": "He felt an obligation to help his friend.",
+   "exZh": "他感到有义务帮助他的朋友。",
+   "forms_seen": [
+    "obligation"
+   ]
+  },
+  "court": {
+   "m": "n. 法院；球场；宫廷",
+   "ex": "The case will be heard in court next week.",
+   "exZh": "这个案件将于下周在法院审理。",
+   "forms_seen": [
+    "court"
+   ]
+  },
+  "supreme": {
+   "m": "adj. 至上的",
+   "ex": "The supreme leader makes the final decision.",
+   "exZh": "至上的领导人做出最终决定。",
+   "forms_seen": [
+    "supreme"
+   ]
+  },
+  "enact": {
+   "m": "v. 制定（法律）；通过（法律）；扮演（角色）",
+   "ex": "The government will enact a new law next month.",
+   "exZh": "政府下个月将颁布一项新法律。",
+   "forms_seen": [
+    "enact"
+   ]
+  },
+  "legislate": {
+   "m": "v. 制定法律；用立法规定",
+   "ex": "The government will legislate new rules next month.",
+   "exZh": "政府下个月将制定新规则。",
+   "forms_seen": [
+    "legislate"
+   ]
+  },
+  "rough": {
+   "m": "adj. 粗糙的；粗略的",
+   "ex": "The wood surface is rough.",
+   "exZh": "木头表面很粗糙。",
+   "forms_seen": [
+    "rough"
+   ]
+  },
+  "equity": {
+   "m": "n. 公正；股票",
+   "ex": "He bought equity in a tech company.",
+   "exZh": "他购买了一家科技公司的股票。",
+   "forms_seen": [
+    "equity"
+   ]
+  },
+  "prejudice": {
+   "m": "n. 偏见；成见",
+   "ex": "He has prejudice against people from other countries.",
+   "exZh": "他对来自其他国家的人有偏见。",
+   "forms_seen": [
+    "prejudice"
+   ]
+  },
+  "discrimination": {
+   "m": "n. 区别；辨别；歧视",
+   "ex": "He noticed the discrimination between the two prices.",
+   "exZh": "他注意到了两个价格之间的区别。",
+   "forms_seen": [
+    "discrimination"
+   ]
+  },
+  "accuse": {
+   "m": "v. 指控；指责",
+   "ex": "They accused him of stealing the money.",
+   "exZh": "他们指控他偷了钱。",
+   "forms_seen": [
+    "accuse"
+   ]
+  },
+  "sue": {
+   "m": "v. 起诉；控告；请求",
+   "ex": "He will sue the company for damages.",
+   "exZh": "他将起诉这家公司要求赔偿。",
+   "forms_seen": [
+    "sue"
+   ]
+  },
+  "prosecute": {
+   "m": "v. 起诉",
+   "ex": "The court will prosecute him for theft.",
+   "exZh": "法院将因盗窃罪起诉他。",
+   "forms_seen": [
+    "prosecute"
+   ]
+  },
+  "condemn": {
+   "m": "v. 谴责；判刑",
+   "ex": "The public condemned the corrupt politician.",
+   "exZh": "公众谴责了这位腐败的政客。",
+   "forms_seen": [
+    "condemn"
+   ]
+  },
+  "boycott": {
+   "m": "n. 抵制；v. 拒绝参加",
+   "ex": "The students organized a boycott of the unfair school rule.",
+   "exZh": "学生们组织了对这项不公平校规的抵制。",
+   "forms_seen": [
+    "boycott"
+   ]
+  },
+  "session": {
+   "m": "n. 会议；开庭；一段时间",
+   "ex": "We had a long session of studying together.",
+   "exZh": "我们一起学习了一段时间。",
+   "forms_seen": [
+    "session"
+   ]
+  },
+  "surveillance": {
+   "m": "n. 监控；监视",
+   "ex": "The shop uses surveillance cameras at night.",
+   "exZh": "那家小店夜里开着监控摄像头。",
+   "forms_seen": [
+    "surveillance"
+   ]
+  },
+  "supremacy": {
+   "m": "n. 霸权；至高地位",
+   "ex": "The two cities fought for supremacy in trade.",
+   "exZh": "这两座城市为贸易霸权而争斗。",
+   "forms_seen": [
+    "supremacy"
+   ]
+  },
+  "superiority": {
+   "m": "n. 优越感；优势",
+   "ex": "Nobody enjoyed his air of superiority.",
+   "exZh": "没人喜欢他那种优越感。",
+   "forms_seen": [
+    "superiority"
+   ]
+  },
+  "notoriety": {
+   "m": "n. 臭名；声名狼藉",
+   "ex": "The writer gained notoriety after one rude letter.",
+   "exZh": "那位作家因一封无礼的信而恶名远扬。",
+   "forms_seen": [
+    "notoriety"
+   ]
+  },
+  "governance": {
+   "m": "n. 治理；管理方式",
+   "ex": "The company changed its governance after the loss.",
+   "exZh": "那家公司亏损之后改变了自身的治理方式。",
+   "forms_seen": [
+    "governance"
+   ]
+  },
+  "footpath": {
+   "m": "n. 人行道；小路",
+   "ex": "Two bikes blocked the narrow footpath.",
+   "exZh": "两辆自行车挡住了狭窄的人行道。",
+   "forms_seen": [
+    "footpath"
+   ]
+  },
+  "mediate": {
+   "m": "v. 调停；斡旋",
+   "ex": "He tries to mediate between the two friends.",
+   "exZh": "他试图在两个朋友之间调解。",
+   "forms_seen": [
+    "mediate"
+   ]
+  },
+  "plea": {
+   "m": "n. 恳求",
+   "ex": "He made a plea for help.",
+   "exZh": "他恳求帮助。",
+   "forms_seen": [
+    "plea"
+   ]
+  },
+  "appeal": {
+   "m": "n. 呼吁；上诉；v. 吸引",
+   "ex": "The appeal of the beach drew many tourists.",
+   "exZh": "海滩的吸引力吸引了许多游客。",
+   "forms_seen": [
+    "appeal"
+   ]
+  },
+  "contradict": {
+   "m": "v. 反驳；相矛盾",
+   "ex": "He contradicts what she said.",
+   "exZh": "他反驳了她的话。",
+   "forms_seen": [
+    "contradict"
+   ]
+  },
+  "persuade": {
+   "m": "v. 说服",
+   "ex": "He tried to persuade her to stay.",
+   "exZh": "他试图说服她留下。",
+   "forms_seen": [
+    "persuade"
+   ]
+  },
+  "bitter": {
+   "m": "adj. 有苦味的；痛苦的；刺痛的",
+   "ex": "The medicine tastes bitter.",
+   "exZh": "这种药尝起来很苦。",
+   "forms_seen": [
+    "bitter"
+   ]
+  },
+  "controversy": {
+   "m": "n. 争论；论战",
+   "ex": "There was a controversy about the new school rules.",
+   "exZh": "关于新校规，人们展开了争论。",
+   "forms_seen": [
+    "controversy"
+   ]
+  },
+  "mutter": {
+   "m": "v. 咕哝地抱怨；n. 嘀咕",
+   "ex": "He mutters under his breath when he is angry.",
+   "exZh": "当他生气时，他会低声嘟囔。",
+   "forms_seen": [
+    "mutter"
+   ]
+  },
+  "murmur": {
+   "m": "n. 低语声；v. 低语",
+   "ex": "I heard a murmur from the next room.",
+   "exZh": "我听到隔壁房间传来低语声。",
+   "forms_seen": [
+    "murmur"
+   ]
+  },
+  "mute": {
+   "m": "adj. 无声的；v. 减弱…的声音",
+   "ex": "He stayed mute during the meeting.",
+   "exZh": "他在会议期间保持沉默。",
+   "forms_seen": [
+    "mute"
+   ]
+  },
+  "investigate": {
+   "m": "v. 调查；研究",
+   "ex": "The police will investigate the accident.",
+   "exZh": "警方将调查这起事故。",
+   "forms_seen": [
+    "investigate"
+   ]
+  },
+  "witness": {
+   "m": "n. 证人；目击者；v. 见证",
+   "ex": "He witnessed the accident yesterday.",
+   "exZh": "他昨天目睹了那起事故。",
+   "forms_seen": [
+    "witness"
+   ]
+  },
+  "justify": {
+   "m": "v. 证明...正当",
+   "ex": "He tried to justify his mistake by saying he was tired.",
+   "exZh": "他试图以自己累了为由来证明自己的错误是正当的。",
+   "forms_seen": [
+    "justify"
+   ]
+  },
+  "outcome": {
+   "m": "n. 结果；成果",
+   "ex": "The outcome of the game was a tie.",
+   "exZh": "比赛的结果是平局。",
+   "forms_seen": [
+    "outcome"
+   ]
+  },
+  "reasonable": {
+   "m": "adj. 合理的",
+   "ex": "He gave a reasonable answer to the question.",
+   "exZh": "他对这个问题给出了一个合理的回答。",
+   "forms_seen": [
+    "reasonable"
+   ]
+  },
+  "suitable": {
+   "m": "adj. 合适的；适宜的",
+   "ex": "This shirt is suitable for the party.",
+   "exZh": "这件衬衫适合这场派对。",
+   "forms_seen": [
+    "suitable"
+   ]
+  },
+  "judge": {
+   "m": "n. 法官；v. 判断",
+   "ex": "The judge announced the verdict in court.",
+   "exZh": "法官在法庭上宣布了判决。",
+   "forms_seen": [
+    "judge"
+   ]
+  },
+  "fury": {
+   "m": "n. 狂怒；狂暴；暴怒",
+   "ex": "He shouted with fury when he lost the game.",
+   "exZh": "当他输掉比赛时，他愤怒地大喊。",
+   "forms_seen": [
+    "fury"
+   ]
+  },
+  "trial": {
+   "m": "n. 审判；试验；试用",
+   "ex": "The doctor ran a trial to test the new medicine.",
+   "exZh": "医生进行了试验来测试这种新药。",
+   "forms_seen": [
+    "trial"
+   ]
+  },
+  "suspect": {
+   "m": "n. 嫌疑人；v. 猜想；怀疑",
+   "ex": "I suspect it will rain tomorrow.",
+   "exZh": "我猜想明天会下雨。",
+   "forms_seen": [
+    "suspect"
+   ]
+  },
+  "arrest": {
+   "m": "v. 逮捕；拘留",
+   "ex": "The police arrested the thief last night.",
+   "exZh": "警察昨晚逮捕了那个小偷。",
+   "forms_seen": [
+    "arrest"
+   ]
+  },
+  "jail": {
+   "m": "n. 监狱",
+   "ex": "He was sent to jail for stealing.",
+   "exZh": "他因偷窃被送进了监狱。",
+   "forms_seen": [
+    "jail"
+   ]
+  },
+  "prison": {
+   "m": "n. 监狱；监禁",
+   "ex": "He was sent to prison for stealing.",
+   "exZh": "他因偷窃被送进了监狱。",
+   "forms_seen": [
+    "prison"
+   ]
+  },
+  "confine": {
+   "m": "v. 限制；监禁",
+   "ex": "He is confined to his room because he is sick.",
+   "exZh": "他因为生病被限制在房间里。",
+   "forms_seen": [
+    "confine"
+   ]
+  },
+  "oversee": {
+   "m": "v. 监督；监视",
+   "ex": "The manager oversees the team's daily work.",
+   "exZh": "经理监督团队的日常工作。",
+   "forms_seen": [
+    "oversee"
+   ]
+  },
+  "supervise": {
+   "m": "v. 指导；监督；管理",
+   "ex": "The teacher supervises the students during the experiment.",
+   "exZh": "老师在实验期间指导学生。",
+   "forms_seen": [
+    "supervise"
+   ]
+  },
+  "restrict": {
+   "m": "v. 限制",
+   "ex": "The law restricts driving after drinking.",
+   "exZh": "法律限制酒后驾驶。",
+   "forms_seen": [
+    "restrict"
+   ]
+  },
+  "restrain": {
+   "m": "v. 抑制；抑止",
+   "ex": "He tries to restrain his anger.",
+   "exZh": "他努力克制自己的愤怒。",
+   "forms_seen": [
+    "restrain"
+   ]
+  },
+  "commit": {
+   "m": "v. 承诺；犯（罪、错）；（公开地）表达意见",
+   "ex": "He commits to helping his friend.",
+   "exZh": "他承诺帮助他的朋友。",
+   "forms_seen": [
+    "commit"
+   ]
+  },
+  "sin": {
+   "m": "n. 罪；罪行",
+   "ex": "He felt guilt for his sin of lying.",
+   "exZh": "他因撒谎的罪行感到内疚。",
+   "forms_seen": [
+    "sin"
+   ]
+  },
+  "crime": {
+   "m": "n. 罪行；罪恶",
+   "ex": "The police caught the man for a serious crime.",
+   "exZh": "警察抓住了那个犯下严重罪行的人。",
+   "forms_seen": [
+    "crime"
+   ]
+  },
+  "vice": {
+   "m": "n. 恶习；副职",
+   "ex": "He acted as vice for the manager during her absence.",
+   "exZh": "在经理缺席期间，他担任代理。",
+   "forms_seen": [
+    "vice"
+   ]
+  },
+  "bribe": {
+   "m": "n. 贿赂；v. 贿赂",
+   "ex": "He tried to bribe the officer with money.",
+   "exZh": "他试图用钱贿赂官员。",
+   "forms_seen": [
+    "bribe"
+   ]
+  },
+  "rob": {
+   "m": "v. 抢劫；掠夺",
+   "ex": "The thieves robbed the bank last night.",
+   "exZh": "小偷昨晚抢劫了银行。",
+   "forms_seen": [
+    "rob"
+   ]
+  },
+  "pirate": {
+   "m": "n. 海盗；盗版者",
+   "ex": "The pirate sailed the sea with a black flag.",
+   "exZh": "海盗带着黑旗在海上航行。",
+   "forms_seen": [
+    "pirate"
+   ]
+  },
+  "steal": {
+   "m": "v. 偷",
+   "ex": "He stole a book from the store.",
+   "exZh": "他从商店偷了一本书。",
+   "forms_seen": [
+    "steal"
+   ]
+  },
+  "jar": {
+   "m": "n. 玻璃罐子",
+   "ex": "She stored jam in a glass jar.",
+   "exZh": "她把果酱存放在一个玻璃罐里。",
+   "forms_seen": [
+    "jar"
+   ]
+  },
+  "thief": {
+   "m": "n. 小偷；贼；窃贼",
+   "ex": "The thief stole a wallet from the bag.",
+   "exZh": "小偷偷走了包里的钱包。",
+   "forms_seen": [
+    "thieves"
+   ]
+  },
+  "murder": {
+   "m": "n. 谋杀",
+   "ex": "The murder happened last night in the park.",
+   "exZh": "这起谋杀发生在昨晚的公园里。",
+   "forms_seen": [
+    "murder"
+   ]
+  },
+  "despair": {
+   "m": "n. 绝望；v. 绝望",
+   "ex": "He felt despair after losing his job.",
+   "exZh": "他失业后感到绝望。",
+   "forms_seen": [
+    "Despair"
+   ]
+  },
+  "suicide": {
+   "m": "n. 自杀",
+   "ex": "He felt so sad that he thought about suicide.",
+   "exZh": "他感到非常难过，以至于想到了自杀。",
+   "forms_seen": [
+    "suicide"
+   ]
+  },
+  "deceive": {
+   "m": "v. 欺骗；蒙骗",
+   "ex": "He deceived his friend with a lie.",
+   "exZh": "他用一个谎言欺骗了朋友。",
+   "forms_seen": [
+    "deceive"
+   ]
+  },
+  "cheat": {
+   "m": "v. 欺骗；作弊",
+   "ex": "He cheated on the test by copying answers.",
+   "exZh": "他通过抄答案来作弊。",
+   "forms_seen": [
+    "cheat"
+   ]
+  },
+  "fraud": {
+   "m": "n. 欺骗；欺诈",
+   "ex": "The man was punished for fraud.",
+   "exZh": "这个人因欺骗而受到惩罚。",
+   "forms_seen": [
+    "fraud"
+   ]
+  },
+  "liar": {
+   "m": "n. 说谎者；骗子",
+   "ex": "He is a liar because he told a lie.",
+   "exZh": "他是一个骗子，因为他撒了谎。",
+   "forms_seen": [
+    "liar"
+   ]
+  },
+  "trap": {
+   "m": "n. 陷阱；v. 设圈套",
+   "ex": "He trapped himself in debt by spending too much.",
+   "exZh": "他因花钱太多而陷入债务困境。",
+   "forms_seen": [
+    "trap"
+   ]
+  },
+  "clever": {
+   "m": "adj. 聪明的",
+   "ex": "The clever boy solved the math problem quickly.",
+   "exZh": "这个聪明的男孩很快解决了这道数学题。",
+   "forms_seen": [
+    "clever"
+   ]
+  },
+  "trick": {
+   "m": "n. 诀窍；诡计",
+   "ex": "He showed me the trick to solve this math problem quickly.",
+   "exZh": "他给我展示了快速解决这道数学题的诀窍。",
+   "forms_seen": [
+    "trick"
+   ]
+  },
+  "pretend": {
+   "m": "v. 假装",
+   "ex": "He pretends to sleep when his mom asks him to clean his room.",
+   "exZh": "当妈妈让他打扫房间时，他假装睡觉。",
+   "forms_seen": [
+    "pretend"
+   ]
+  },
+  "fool": {
+   "m": "n. 傻瓜；蠢人；v. 愚弄",
+   "ex": "He is a fool for spending all his money on games.",
+   "exZh": "他是个傻瓜，把所有钱都花在游戏上了。",
+   "forms_seen": [
+    "fool"
+   ]
+  },
+  "stigma": {
+   "m": "n. 耻辱；污名",
+   "ex": "He felt the stigma of being unemployed.",
+   "exZh": "他感受到了失业的耻辱。",
+   "forms_seen": [
+    "stigma"
+   ]
+  },
+  "confess": {
+   "m": "v. 承认",
+   "ex": "He confesses that he made a mistake.",
+   "exZh": "他承认自己犯了一个错误。",
+   "forms_seen": [
+    "confess"
+   ]
+  },
+  "conform": {
+   "m": "v. 符合",
+   "ex": "He conforms to the rules of the school.",
+   "exZh": "他遵守学校的规章制度。",
+   "forms_seen": [
+    "conform"
+   ]
+  },
+  "reconcile": {
+   "m": "v. 调和",
+   "ex": "He tried to reconcile his work and family life.",
+   "exZh": "他试图调和工作与家庭生活。",
+   "forms_seen": [
+    "reconcile"
+   ]
+  },
+  "obey": {
+   "m": "v. 遵守；服从",
+   "ex": "Children must obey their parents.",
+   "exZh": "孩子必须遵守父母的规定。",
+   "forms_seen": [
+    "obey"
+   ]
+  },
+  "succumb": {
+   "m": "v. 屈服；屈从",
+   "ex": "He succumbed to the illness after a long fight.",
+   "exZh": "经过长期抗争后，他最终死于疾病。",
+   "forms_seen": [
+    "succumb"
+   ]
+  },
+  "penalty": {
+   "m": "n. 惩罚",
+   "ex": "He got a penalty for breaking the rules.",
+   "exZh": "他因违反规则而受到惩罚。",
+   "forms_seen": [
+    "penalty"
+   ]
+  },
+  "fine": {
+   "m": "n. 罚款；adj. 很好的；健康的",
+   "ex": "She did a fine job on the project.",
+   "exZh": "她在这个项目上做得很好。",
+   "forms_seen": [
+    "fine"
+   ]
+  },
+  "mortgage": {
+   "m": "n. 抵押；按揭",
+   "ex": "He took out a mortgage to buy his first house.",
+   "exZh": "他申请了一笔抵押贷款来购买他的第一套房子。",
+   "forms_seen": [
+    "mortgage"
+   ]
+  },
+  "ownership": {
+   "m": "n. 物主身份；所有权",
+   "ex": "The paper proves his ownership of the house.",
+   "exZh": "这份文件证明了他对这所房子的物主身份。",
+   "forms_seen": [
+    "ownership"
+   ]
+  },
+  "copyright": {
+   "m": "n. 版权；著作权",
+   "ex": "He owns the copyright to his novel.",
+   "exZh": "他拥有这部小说的版权。",
+   "forms_seen": [
+    "copyright"
+   ]
+  },
+  "privilege": {
+   "m": "n. 特权",
+   "ex": "Going first is a privilege, not a right.",
+   "exZh": "优先权是一种特权，而不是权利。",
+   "forms_seen": [
+    "privilege"
+   ]
+  },
+  "accredit": {
+   "m": "v. 归于；委托；授权",
+   "ex": "They accredit the discovery to the scientist.",
+   "exZh": "他们将这一发现归功于这位科学家。",
+   "forms_seen": [
+    "accredit"
+   ]
+  },
+  "clue": {
+   "m": "n. 线索",
+   "ex": "The police found a clue at the crime scene.",
+   "exZh": "警察在犯罪现场找到了一条线索。",
+   "forms_seen": [
+    "clue"
+   ]
+  },
+  "access": {
+   "m": "n. 通道；接触；v. 获取",
+   "ex": "Students need access to the library.",
+   "exZh": "学生需要有接触图书馆的机会。",
+   "forms_seen": [
+    "access"
+   ]
+  },
+  "anonymous": {
+   "m": "adj. 匿名的",
+   "ex": "He posted an anonymous comment online.",
+   "exZh": "他在网上发布了一条匿名评论。",
+   "forms_seen": [
+    "anonymous"
+   ]
+  },
+  "false": {
+   "m": "adj. 虚假的；错误的",
+   "ex": "The news was false.",
+   "exZh": "这条新闻是虚假的。",
+   "forms_seen": [
+    "false"
+   ]
+  },
+  "genuine": {
+   "m": "adj. 真正的；真诚的",
+   "ex": "This is a genuine diamond.",
+   "exZh": "这是一颗真正的钻石。",
+   "forms_seen": [
+    "genuine"
+   ]
+  },
+  "procedure": {
+   "m": "n. 步骤；程序；手续",
+   "ex": "Follow the procedure step by step.",
+   "exZh": "一步一步地按照步骤进行。",
+   "forms_seen": [
+    "procedure"
+   ]
+  },
+  "routine": {
+   "m": "n. 常规；adj. 例行公事的",
+   "ex": "He follows a morning routine every day.",
+   "exZh": "他每天早上都遵循固定的惯例。",
+   "forms_seen": [
+    "routine"
+   ]
+  },
+  "consequence": {
+   "m": "n. 后果；结果",
+   "ex": "Lying has serious consequences.",
+   "exZh": "撒谎会有严重的后果。",
+   "forms_seen": [
+    "consequence"
+   ]
+  },
+  "demand": {
+   "m": "n. 需求；v. 要求",
+   "ex": "The demand for clean water is increasing.",
+   "exZh": "对清洁水的需求正在增加。",
+   "forms_seen": [
+    "demand"
+   ]
+  },
+  "request": {
+   "m": "n. 请求；v. 要求",
+   "ex": "He made a request for help.",
+   "exZh": "他提出了一个帮助的请求。",
+   "forms_seen": [
+    "request"
+   ]
+  },
+  "require": {
+   "m": "v. 需要；要求",
+   "ex": "This job requires patience.",
+   "exZh": "这份工作需要耐心。",
+   "forms_seen": [
+    "require"
+   ]
+  },
+  "petition": {
+   "m": "n. 请愿书",
+   "ex": "The students handed in a petition to the principal.",
+   "exZh": "学生们向校长递交了一份请愿书。",
+   "forms_seen": [
+    "petition"
+   ]
+  },
+  "command": {
+   "m": "v. 命令；掌握；n. 指挥",
+   "ex": "The general has command of the army.",
+   "exZh": "将军指挥着军队。",
+   "forms_seen": [
+    "command"
+   ]
+  },
+  "instruct": {
+   "m": "v. 指示",
+   "ex": "The teacher instructed the students to open their books.",
+   "exZh": "老师指示学生打开书。",
+   "forms_seen": [
+    "instruct"
+   ]
+  }
+ }
+}
