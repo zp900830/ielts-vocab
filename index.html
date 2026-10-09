@@ -9933,12 +9933,19 @@ let listenOn = false;
         pop.setAttribute('role', 'dialog');
         pop.setAttribute('aria-modal', 'true');
         pop.setAttribute('aria-label', '设置今日任务起点');
+        /* 「切换到记忆模式」只在刷句状态下出现（2026-10-09 用户实景抓的荒谬点：
+           明明已在记忆模式，弹窗里还挂着「切换到记忆模式」）。旧名「改回自动安排」
+           时代这颗按钮就无条件渲染——自动状态下点了也是空转，只是一直没被当回事。
+           显隐口径与「我的」页那颗（data-me-start-auto 行）对齐：manualStart 在账
+           （刷句模式）才给这颗出口；记忆模式下弹窗只管选起点 = 进刷句。 */
+        let _msNow = false;
+        try { _msNow = !!manualStartToday(); } catch (e) {}
         pop.innerHTML = '<h3>今日任务从哪开始</h3>' +
           '<div class="sp-row"><label for="spArt">篇目</label><select id="spArt" onchange="TASK.syncStartSent()">' + opts + '</select></div>' +
           '<div class="sp-row"><label for="spSent">第几句</label><select id="spSent"></select></div>' +
           '<p class="sp-warn sm">确定后进入<b>刷句模式</b>：从这句起按顺序连刷，绝不跳句；每天接着上次学到的位置继续。</p>' +
           '<div class="sp-actions"><button class="btn" onclick="TASK.closeStartPicker()">取消</button>' +
-          '<button class="btn" onclick="TASK.confirmAutoStart(true)">切换到记忆模式</button>' +
+          (_msNow ? '<button class="btn" onclick="TASK.confirmAutoStart(true)">切换到记忆模式</button>' : '') +
           '<button class="btn primary" onclick="TASK.confirmStartPicker()">确定</button></div>';
         document.body.appendChild(mask);
         document.body.appendChild(pop);

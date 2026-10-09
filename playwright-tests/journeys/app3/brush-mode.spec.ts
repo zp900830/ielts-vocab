@@ -196,3 +196,30 @@ test('分钟数的账面：全局刷句亮换算，按篇刷句亮整篇承诺',
   await expect(note2, '按篇刷句：整篇承诺亮出来').toContainText('连刷到篇末');
   await expect(note2, '时间在按篇口径下只是估算').toContainText('只用来估算时长');
 });
+
+/* ⑥ 模式出口的显隐跟着状态走（2026-10-09 用户实景抓的荒谬点：已在记忆模式，
+   起点弹窗里还挂着「切换到记忆模式」——在记忆模式里还能再切换成记忆模式？）。
+   三处出口同一条规则：只有刷句状态在账（manualStart 非空）才给这颗出口 ——
+   记忆模式下弹窗只管「选起点 = 进刷句」，不摆一颗空转的切换键。 */
+test('起点弹窗的「切换到记忆模式」只在刷句状态下出现', async ({ page }) => {
+  await freshBook(page);
+
+  // 记忆模式（没设起点）：弹窗里没有这颗按钮
+  await page.evaluate(() => TASK.openPanel());
+  await page.locator('#todayPanel button', { hasText: '起点与模式' }).click();
+  await expect(page.locator('#startPickPop'), '弹窗打开').toBeVisible();
+  await expect(page.locator('#startPickPop button', { hasText: '切换到记忆模式' }),
+    '记忆模式下不给这颗空转的出口').toHaveCount(0);
+  await page.evaluate(() => TASK.closeStartPicker());
+
+  // 设起点进入刷句模式：同一颗弹窗里按钮出现，走预览-确认链路
+  expect(await page.evaluate(() => TASK.setManualStart(4)), '进入刷句模式').toBe(true);
+  await page.evaluate(() => TASK.openStartPicker());
+  await expect(page.locator('#startPickPop button', { hasText: '切换到记忆模式' }),
+    '刷句模式下这颗出口回来').toHaveCount(1);
+  await page.locator('#startPickPop button', { hasText: '切换到记忆模式' }).click();
+  await expect(page.locator('#startPickPop h3'), '先看到预览再动手').toContainText('切换到记忆模式？');
+  await page.locator('#startPickPop button', { hasText: '返回' }).click();
+  expect(await page.evaluate(() => TASK.manualStart()), '返回不清账').not.toBeNull();
+  await expect(page.locator('#startPickPop h3'), '回到选择器').toHaveText(/今日任务从哪开始/);
+});
