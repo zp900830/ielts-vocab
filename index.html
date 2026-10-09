@@ -1808,6 +1808,15 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .sent .qz-blank .ans { font-style: normal; font-weight: 600; font-size: .82em; color: var(--muted); margin-left: .35em; }
   /* 答错就地摊开的辨析表：跟句子同一段流，不再另起浮层 */
   .qz-reveal { display: block; margin: 8px 0 2px; }
+  /* ② 答题防剧透（2026-10-09 用户：「答题时要手动把句内词义关掉，不然选项的词义就在句子里」）：
+     四个候选就埋在本句的行内词义与句下辨析卡里 —— 干扰项的词义跟浮窗里的「这里的意思」
+     一对照，答案自己走出来。答题期间整体压住这三类剧透源，与「行内词义」用户开关独立：
+     进 ② 压住、出 ② 自动还原，用户的开关设置一个字不动。 */
+  body.quiz-gl-off .gl, body.quiz-gl-off .notebar, body.quiz-gl-off .cmp-block { display: none; }
+  /* 浮窗要长在空的**下方**（2026-10-09 用户：现在的位置把刚答完的题遮得严严实实）：
+     renderQuiz 把当前空滚进视口时给它压一个下边距 —— 空落在屏幕偏上，
+     下面既装得下浮窗，上一句的答题反馈（红/绿 + 辨析表）也留在视野里。 */
+  .qz-blank { scroll-margin-bottom: 210px; }
   /* 浮窗答题卡：复用 .prog-tip 那套玻璃配方，但可点、由 JS 定位在空旁边（position:fixed） */
   .blank-pop { position: fixed; z-index: 260; width: min(320px, calc(100vw - 16px)); padding: 12px 14px;
     background: rgba(255,255,255,.92); -webkit-backdrop-filter: blur(32px) saturate(200%); backdrop-filter: blur(32px) saturate(200%);
@@ -1825,6 +1834,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   body.dark .blank-pop { background: var(--glass); border-color: var(--border); }
   .blank-pop .bp-hint { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.55; }
   .blank-pop .bp-hint b { color: var(--ink2); }
+  .blank-pop .bp-hint .bp-gl { display: block; margin-top: 3px; font-size: 11px; color: var(--muted); }
   .blank-pop .qz-opts { margin-top: 0; }
   .blank-pop .qz-mini { margin-top: 9px; }
   .qz-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 11px; }
@@ -4530,7 +4540,7 @@ let listenOn = false;
     sel.innerHTML = '<option value="-1">📚 全部文章</option>' +
       SECTIONS.map((s, i) => `<option value="${i}">${i + 1}. ${esc(s.title)}</option>`).join('');
     }
-    function onChapterChange(val) {
+    function onChapterChange(val, fromTask) {
     const ch = parseInt(val, 10);
     if (ch === currentChapter) return;
     // 切换前暂停播放
@@ -4549,7 +4559,9 @@ let listenOn = false;
     const el = sents[idx];
     if (el) setTimeout(() => el.scrollIntoView({ block: 'center' }), 60);
     const title = ch >= 0 ? SECTIONS[ch].title : '全部文章';
-    showAbToast(`已切换到：${title}`);
+    /* 任务队列带着跨篇（2026-10-09 用户「不迷失」）：只报「已切换到」会让人摸不着头脑 ——
+       好好的怎么自己翻篇了。任务链路来的切换把因果说全：上一篇读完了，队列接着排到这一篇。 */
+    showAbToast(fromTask ? `本篇读完了 · 队列接着读：${title}` : `已切换到：${title}`);
     document.body.classList.remove('menu-open');
     }
     function segRange(ai) {
@@ -7876,6 +7888,7 @@ let listenOn = false;
          全部只在 ② 态活着，resetQuizRun() 一趟清一次。 */
       let _blankItems = [], _blankKey2bi = {}, _blankEls = {}, _ans = {}, _curBlank = -1;
       let _served = new Set(), _popReadonly = false;
+      let _glHintShown = false;   // 「词义已隐藏防剧透」的浮窗说明只会话说一次
       /* 答完自动下一题（2026-09-24 用户：「回答完就自动下一题吧」）。
          _autoNextT 是唯一的定时器句柄：手动「下一题」/ 跳题 / 离开 / 重置都必须 clearAutoNext()，
          否则同一个 reveal 会被推进两次（手动一次、定时一次 = 跳两题）。
@@ -8026,13 +8039,15 @@ let listenOn = false;
       function clearAutoNext() {
         if (_autoNextT) { clearTimeout(_autoNextT); _autoNextT = 0; }
       }
-      /* 自动推进前的停留 = 「视觉下限」与「读屏念完这句的保守估算」取较大者。
+      /* 自动推进前的停留 = 「视觉下限」「读屏念完这句的保守估算」「朗读落完的真实时长」取最大者。
          没有 API 能问读屏念完没有，只能按文字长度估：中文约每字 90ms 再留 300ms 起播余量。
-         答对只要看清绿色（1s）；答错还要看清正确答案 + 就地摊开的辨析（2.2s 起）。 */
+         2026-10-09 起答完还要朗读（不背单词式）：一词约 1.1s；答错两词 + 中间停一拍 ≈ 2.3s，
+         再留一点看辨析表的工夫 —— 推进不能抢在「正确选项还没变绿、读音还没落」之前。 */
       function autoAdvanceDelay(ok, answer) {
         const msg = ok ? '对了' : ('正确的那一个是 ' + String(answer == null ? '' : answer));
         const speakMs = 300 + msg.length * 90;
-        return Math.max(ok ? 1000 : 2200, speakMs);
+        const ttsMs = ok ? 1100 : 2300;
+        return Math.max(ok ? 1600 : 3400, ttsMs, speakMs);
       }
       function scheduleAutoNext(ok, answer) {
         clearAutoNext();
@@ -8100,8 +8115,17 @@ let listenOn = false;
       /* 「这一题之后还有没有题」要跳过出不了题的项（ensureCursor 干的活），
          光看数组长度会把末题写成「下一题」，点下去却弹出小结。 */
       /* 文内挖空只承载「正文句」上的题；词卡例句题（s==='ex'）没有正文空位可挖，
-         M1 不承载它 —— 游标跳过，免得停在一条弹不出浮窗的死题上（见 buildBlanks）。 */
-      function hasInlineBlank(item) { return !!item && item.s !== 'ex' && !!buildQuiz(item); }
+         M1 不承载它 —— 游标跳过，免得停在一条弹不出浮窗的死题上（见 buildBlanks）。
+         2026-10-09 补第二种死题：批次跨篇（额度满提前进 ② / 全局队列一次考两篇）时，
+         正文只渲一篇，别篇的句建不出空 —— 旧判据把它们当「可答」，分母虚大、
+         浮窗弹不出、要人狂点「下一题」一条条跳过。与 'ex' 同口径：正文里没有
+         空位的题不算这一遍的题（readToday 不会因此少记 —— 接触账记在 ①）。 */
+      function hasInlineBlank(item) {
+        if (!item || item.s === 'ex') return false;
+        if (!buildQuiz(item)) return false;
+        const local = globalToLocal(item.s);
+        return local >= 0 && !!sents[local];
+      }
       /* ② 的分母 = **答得出的题**，不是 quizList 原始长度：'ex' 题数进去就会永远走不到 N/N。
          补考题是 mc4zh 拷贝、有正文空位，天然算在内（它们出现时 quizList() 已把它们拼在末尾）。 */
       function inlineQuizTotal() {
@@ -8130,10 +8154,25 @@ let listenOn = false;
       function currentQuiz() { return ensureCursor(); }
       /* 两步制：只有 ① 通读 与 ② 挖空选择。旧的第三步（③ 选义）整步删除，
          setPass(3) 这种历史调用一律折回 ②，不许再开出第三步。 */
+      /* ② 期间压住剧透源（2026-10-09 用户：「答题时要手动把句内词义关掉，不然选项的词义
+         就在句子里」）：行内词义/句下辨析卡全部藏起 —— 候选词的词义跟浮窗「这里的意思」
+         一对照就是答案。与用户自己的「行内词义」开关独立：出 ② 自动还原，设置不动。
+         顶栏那颗开关同步禁用并写明原因，别让人点了没反应还以为坏了。 */
+      let _glOffToastShown = false;
+      function syncQuizGl() {
+        const off = !!(taskMode && pass >= 2 && !taskFinished);
+        document.body.classList.toggle('quiz-gl-off', off);
+        const gb = document.getElementById('btnGloss');
+        if (gb) {
+          gb.disabled = off;
+          gb.setAttribute('title', off ? '答题中：行内词义已隐藏，防止剧透答案' : '显示/隐藏英文句内行间的单词词义与音标');
+        }
+      }
       function setPass(n) {
         pass = (n === 1 ? 1 : 2); resetQuizRun();
         if (pass === 2) { quizRunRestore(); quizStart = Date.now(); }
         if (pass === 2) maskArticle();
+        syncQuizGl();
         renderQuiz(); updateTaskBar(); syncQueueFromPlan(); updateMarkers();
       }
       function answerQuiz(choice) {
@@ -8163,6 +8202,7 @@ let listenOn = false;
         const live = document.getElementById('quizLive');
         if (live) live.textContent = ok ? '对了' : '正确的那一个是 ' + q.answer;
         renderQuiz(); updateTaskBar();
+        speakQuizFeedback(choice, q.answer, ok);   // 选项标色后跟朗读：错项先读（红）、对项跟上（绿）
         scheduleAutoNext(ok, q.answer);   // 反馈先落地，再按对/错的不同停留自动推进
         return ok;
       }
@@ -8182,6 +8222,7 @@ let listenOn = false;
         nextBlank();
       }
       function finishPass(n) {
+        closeBlankPop();   // 反馈态浮窗（2026-10-09 起答题后不收）在收工/进小结时统一收掉，别悬在半空
         renderPassSummary(n);
         if (n === 1) { pass = 2; resetQuizRun(); quizRunRestore(); quizStart = Date.now(); maskArticle(); }
         else {
@@ -8195,7 +8236,12 @@ let listenOn = false;
         updateTaskBar();
       }
       function startSummaryContinue() {
-        if (taskFinished) { hideCard(); updateTaskBar(); return; }
+        if (taskFinished) {
+          /* 收工不是终点站（2026-10-09 用户）：全局队列还有剩 → 「继续读」扩回全局接着走；
+             真没剩的才收摊。小结卡按钮文案与任务条同口径（renderPassSummary 分岔）。 */
+          if (queueLeftToday() > 0) { continueTodayQueue(); return; }
+          hideCard(); updateTaskBar(); return;
+        }
         hideCard();
         if (pass === 2) { if (!currentQuiz()) { finishPass(2); return; } renderQuiz(); updateTaskBar(); }
         else { goToNextTask(true); }
@@ -8312,10 +8358,14 @@ let listenOn = false;
         _popReadonly = !!readonly;
         const st = readonly ? _ans[bi] : null;
         const core = senseText(q.sense);
-        pop.innerHTML = `<div class="bp-hint">${readonly ? '这题你已经答过' : '选出填回空格的词（按 1–4 也能选）'} · 这里的意思：<b>${esc(core || q.sense || '')}</b></div>
+        /* 「行内词义已隐藏」只说一次（2026-10-09 用户被词义剧透尴尬过）：说在浮窗 hint 里，
+           不弹 toast —— 进 ② 的瞬间屏上挂着 toast 会把 axe 的对比度快照搅成 incomplete。 */
+        const glNote = _glHintShown ? '' : ' <span class="bp-gl">行内词义已暂时隐藏，防止剧透</span>';
+        _glHintShown = true;
+        pop.innerHTML = `<div class="bp-hint">${readonly ? '这题你已经答过' : '选出填回空格的词（按 1–4 也能选）'} · 这里的意思：<b>${esc(core || q.sense || '')}</b>${glNote}</div>
           <div class="qz-opts" role="group" aria-label="四个候选单词">${q.opts.map((o, i) => {
             const cls = st ? (o === q.answer ? ' right' : (st.pick === o ? ' wrong' : '')) : '';
-            return `<button class="qz-opt${cls}" type="button" data-i="${i}"${readonly ? ' disabled' : ''} aria-label="选项 ${i + 1}，共 ${q.opts.length} 个，${esc(o)}"><span class="n">${i + 1}</span>${esc(o)}</button>`;
+            return `<button class="qz-opt${cls}" type="button" data-i="${i}" data-w="${esc(o)}"${readonly ? ' disabled' : ''} aria-label="选项 ${i + 1}，共 ${q.opts.length} 个，${esc(o)}"><span class="n">${i + 1}</span>${esc(o)}</button>`;
           }).join('')}</div>` + (readonly ? '' : '<button class="qz-mini" type="button" onclick="TASK.flagQuiz()">这题有问题</button>');
         if (!readonly) {
           pop.querySelectorAll('.qz-opt').forEach(function (b) {
@@ -8327,7 +8377,9 @@ let listenOn = false;
         const first = pop.querySelector('.qz-opt:not([disabled])');
         if (first && !_suppressPopFocus) first.focus({ preventScroll: true });
       }
-      /* 锚在空上方；上方放不下就翻到下方；左右夹在屏幕内（390 宽也不越界）。
+      /* 锚在空**下方**（2026-10-09 用户：浮窗在上方时把刚答完的句子遮得严严实实，
+         上一个空的红/绿和辨析表全看不见 —— 下方优先，回顾上一题正是答题节奏的一部分）；
+         下方放不下才翻上方；左右夹在屏幕内（390 宽也不越界）。
          W5-5：底部有固定的任务条 / 小结卡，浮窗翻到下方时必须避让，绝不压住「下一题」。
          W5-8：按翻转方向加 .below/.above，CSS 据此画朝向那个空的小箭头。 */
       function positionBlankPop(blankEl) {
@@ -8358,14 +8410,16 @@ let listenOn = false;
         const belowTop = r.bottom + GAP;
         const fitsAbove = aboveTop >= M;
         const fitsBelow = belowTop <= maxTop;
-        /* 选边（2026-09-25 修：原来只判「上方是否越顶」就翻下方，下方再被 maxTop 夹回来会盖住空）：
-           上方放得下优先上方；否则下方放得下就下方；两边都放不下才取空间更大的一侧并夹住。
-           这样「下方」永远不会被夹回到空上面，浮窗不遮挡被锚定的空。 */
+        /* 选边（2026-10-09 反转：用户要浮窗长在空的下方 —— 上一个空的红/绿反馈和辨析表
+           要留在视野里，被浮窗盖住就等于刚答完的题白答了）：下方放得下优先下方；
+           否则上方；两边都放不下才取空间更大的一侧并夹住（此时盖住空已不可避免，
+           取大的那侧至少少盖点正文）。renderQuiz 给 .qz-blank 留了 scroll-margin-bottom，
+           正常节奏下当前空滚在屏幕偏上，下方几乎总是装得下。 */
         let below, top;
-        if (fitsAbove) { below = false; top = aboveTop; }
-        else if (fitsBelow) { below = true; top = belowTop; }
+        if (fitsBelow) { below = true; top = belowTop; }
+        else if (fitsAbove) { below = false; top = aboveTop; }
         else {
-          below = r.top > innerHeight - r.bottom;
+          below = (innerHeight - r.bottom) >= r.top;
           top = Math.max(M, Math.min(below ? belowTop : aboveTop, maxTop));
         }
         pop.classList.toggle('below', below);
@@ -8454,7 +8508,8 @@ let listenOn = false;
         if (bi === undefined) { closeBlankPop(); return; }   // 'ex' 等没有正文空位的题：不弹
         if (reveal && reveal.s === item.s && String(reveal.q && reveal.q.w).toLowerCase() === String(item.w).toLowerCase()) {
           fillBlank(bi, item, q);
-          closeBlankPop();
+          _curBlank = bi;              // 反馈态浮窗继续跟随滚动（reflowBlankPop 靠它定位）
+          markBlankPopReveal(bi, q);   // 浮窗不收：选项标色 + 提示语换成判词（2026-10-09 用户，不背单词式反馈）
           return;
         }
         if (item.retake) resetBlank(bi);       // 补考：把上一次的红字收掉，重新问
@@ -8471,6 +8526,43 @@ let listenOn = false;
         if (!q || !q.opts || !q.opts[i]) return;
         answerQuiz(q.opts[i]);
       }
+      /* ---- 答题反馈（2026-10-09 用户，对标不背单词）----
+         答完浮窗不收：选错的选项标红、正确项标绿，跟空格里的红/绿同一拍；
+         同时朗读 —— 答对读答案；答错先读选错的（耳朵对上红色），停一拍再读正确的（对上绿色）。
+         _qSpeak 是朗读链自己的代次：推进 / 换题 / 离开时 ++，旧链的每一拍先验代次再出声，
+         断得干干净净（正在播的那个短音让它自然落完，不会续读第二个）。 */
+      let _qSpeak = 0;
+      function speakQuizFeedback(pick, answer, ok) {
+        const seq = ++_qSpeak;
+        const alive = function () { return seq === _qSpeak && taskMode && pass >= 2 && !!reveal; };
+        const say = function (w, cb) {
+          try { speak(w, function () { if (alive() && cb) cb(); }, {}); } catch (e) { if (cb) cb(); }
+        };
+        if (ok) { say(answer); return; }
+        say(pick, function () {
+          setTimeout(function () { if (alive()) say(answer); }, 300);
+        });
+      }
+      /* 反馈态的浮窗：正确项补 .right、错选补 .wrong、提示语换成判词、「这题有问题」收掉
+         （题已经答完，flag 无从谈起）；回看态（readonly）不走这里 —— 它出厂就是这套颜色。 */
+      function markBlankPopReveal(bi, q) {
+        const pop = document.getElementById('blankPop');
+        if (!pop || pop.hidden || _curBlank !== bi) return;
+        const st = _ans[bi];
+        if (!st) return;
+        pop.querySelectorAll('.qz-opt').forEach(function (b) {
+          b.disabled = true;
+          const w = String(b.dataset.w || '').toLowerCase();
+          if (w === String(q.answer).toLowerCase()) b.classList.add('right');
+          else if (w === String(st.pick).toLowerCase()) b.classList.add('wrong');
+        });
+        const hint = pop.querySelector('.bp-hint');
+        if (hint) hint.innerHTML = st.ok
+          ? '<b>对了</b>，读一遍听听'
+          : '选了 <b>' + esc(st.pick) + '</b>，正确的是 <b>' + esc(q.answer) + '</b> · 再听听两个读音';
+        const flag = pop.querySelector('.qz-mini');
+        if (flag) flag.remove();
+      }
       /* W5-6：原「回看句子」动作（reviewSentence）按 PRD §4.4 删除 —— ② 的句子就在眼前，
          不需要"回看"；那颗节点（#tbPrev）本身保留，它在 ① 态是「上一句」。 */
       function renderPassSummary(n) {
@@ -8480,13 +8572,17 @@ let listenOn = false;
         const nums = n === 1 ? [[doneToday(), '句读完了'], [todayPlan(true).words.length, '个词今天见过'], [d.promote || 0, '个词往前走了一步']]
                              : [[quizAnsweredN, '题答了'], [quizWrongN, '题答错（不倒退）'], [d.promote || 0, '个词累计晋升']];
         /* 2026-09-24 用户：圈号 ①/② 全部去掉 —— 小结标题写成「通读完成 / 挖空选择完成」，
-           阶段仍从文字读得出，不靠一个圈。 */
-        const title = n === 1 ? '通读完成' : '挖空选择完成';
-        const label = n === 1 ? '开始答题' : '今天完成';
+           阶段仍从文字读得出，不靠一个圈。
+           2026-10-09 收工分岔：全局队列还有剩时不许说「今天完成」（按篇走完 ≠ 今天完成）——
+           标题、副行、按钮全部改说「本篇完成 + 还剩几句 + 继续读」，答完题去哪一眼可见。 */
+        const _left2 = (n === 2 && (ROOT2 && ROOT2.plan)) ? queueLeftToday() : 0;
+        const title = n === 1 ? '通读完成' : (_left2 > 0 ? '本篇完成' : '挖空选择完成');
+        const label = n === 1 ? '开始答题' : (_left2 > 0 ? '继续读 · 今天还剩 ' + _left2 + ' 句' : '今天完成');
         /* 补考的账只在这句里说一次：任务条不加、也不另起一格（条上是三个数，见 updateTaskBar）。
            措辞不用「欠 / 待补」—— 补考是本遍里做完的事，不是留给明天的账。 */
         const sub = n === 1 ? '这一遍读完了，下一遍是这一批句子的词'
-          : '这一批过了两遍：读到 → 选得出' + (retakeServedN ? ` · 补考 ${retakeServedN} 个，对 ${retakeOkN} 个` : '');
+          : '这一批过了两遍：读到 → 选得出' + (retakeServedN ? ` · 补考 ${retakeServedN} 个，对 ${retakeOkN} 个` : '')
+            + (_left2 > 0 ? ' · 接下来接着读今天的剩余句（会跳到下一篇）' : '');
         el.innerHTML = `<div class="pass-summary"><h4>${title}</h4>
           <div class="sub">${sub}</div>
           <div class="nums">${nums.map(x => `<div><b>${x[0]}</b><span>${esc(x[1])}</span></div>`).join('')}</div>
@@ -8936,11 +9032,13 @@ let listenOn = false;
         try { speechSynthesis.cancel(); } catch (e) {}
         try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
         clearAutoNext();   // 离开任务模式：别让待触发的自动推进在别的屏上叫 nextBlank
+        _qSpeak++;         // 答题朗读链一并断掉：别让「正确的是 X」念在已退出的页面上
         // ② 的答题卡浮窗跟着退出一起收（2026-09-25 用户实测：答题页返回后答题卡还悬在别的页面上）
         try { closeBlankPop(); } catch (e) {}
         // 回首页 = 回全局：横幅/绿点/今日账都按全量算，别把上一篇的 scope 留在缓存里。
         // （_pendingArticle 不在这里清：空状态点「去设置」就是先退出、再建计划回到这一篇。）
         currentArticle = null; _cachedPlan = null;
+        syncQuizGl();   // taskMode 已置 false：答题的词义遮挡、按钮禁用就地还原
         document.body.classList.remove('task-mode', 'quiz-mode');
         dockAudiobar(false);
         const bar = document.getElementById('taskBar');
@@ -9000,7 +9098,7 @@ let listenOn = false;
           const ch = artOfSentGlobal(globalIdx);
           if (ch !== currentChapter) {
             const sel = document.getElementById('chapSel');
-            if (sel) { sel.value = String(ch); onChapterChange(String(ch)); }
+            if (sel) { sel.value = String(ch); onChapterChange(String(ch), true); }   // 任务链路：toast 说清「本篇读完了，队列接着读」
             // 切换后延迟定位
             setTimeout(() => {
               // 300ms 内用户已退出任务模式：只定位不自动播，别把人拽回播放链
@@ -9089,7 +9187,11 @@ let listenOn = false;
       function next() {
         const _bar = document.getElementById('taskBar');
         if (_bar && _bar.dataset.state === 'noplan') { noPlanGoSetup(); return; }  // 空状态：这颗是「去设置」
-        if (_bar && _bar.dataset.state === 'done') { exitToWords(); return; }     // 收工态：这颗是「看词本」
+        if (_bar && _bar.dataset.state === 'done') {
+          // 收工态的推进位（2026-10-09 分岔）：今天还有剩 = 「继续读」扩回全局队列；真读完 = 「看词本」
+          if (taskMode && queueLeftToday() > 0) { continueTodayQueue(); return; }
+          exitToWords(); return;
+        }     // 收工态：这颗是「看词本 / 继续读」
         // 记录当前句完成，跳下一个；② 态下这个键是「下一题 / 跳过这题」
         if (!taskMode) return;
         if (pass >= 2) {
@@ -9102,6 +9204,10 @@ let listenOn = false;
            队列已一句不剩的那条（M1 既有路径：本篇走完）仍走下面的 finishPass(1)，小结照旧端出来，
            两条路都必须在。 */
         if (todayQuotaDone() && todayQueue.some(q => !readToday2(q.i))) {
+          /* 提前进 ② 先交代去路（2026-10-09 用户：「答完题会继续跳转到另外章吗？不迷失」）：
+             额度读满了，把读过的词考一考；队列剩的句子答完接着读 —— 任务条 sub 行
+             也会一直挂着「答完接着读剩的 N 句」。 */
+          try { showAbToast('今天的量读够了 · 先把读过的词考一考，答完接着读剩的 ' + queueLeftToday() + ' 句'); } catch (e) {}
           finishPass(1);           // 复用 §13.1 那条路：切 ② + 给正文挖空
           startSummaryContinue();  // 「开始答题」的动作：收掉小结、进 ②
           return;
@@ -9321,6 +9427,7 @@ let listenOn = false;
       function updateTaskBar(allDone) {
         const bar = document.getElementById('taskBar');
         if (!bar) return;
+        syncQuizGl();        // ② 压剧透源（行内词义/辨析卡），① 与收工还原 —— 状态的锚放在这，各条路都不漏
         paintTodayRange();   // 收工 / 无计划 / 换批都会走到这里，横线随任务条状态一起更新
         const titleEl = document.getElementById('tbTitle');
         const subEl = document.getElementById('tbSub');
@@ -9372,6 +9479,20 @@ let listenOn = false;
         document.body.classList.toggle('quiz-mode', !!taskMode && !fin && pass >= 2);
         if (clockEl) clockEl.textContent = !spent ? '' : '本次 ' + spent;
         if (fin) {
+          /* 收工分岔（2026-10-09 用户：「今天还有一半在别的章，答完题会继续跳吗？」）：
+             按篇走完 ≠ 今天完成 —— 全局队列还有没读的句时，主行不许写「今天完成」，
+             唯一推进位改「继续读」，点了扩回全局队列接着走。真读完才兑现「今天完成」。 */
+          const _left = (ROOT2 && ROOT2.plan) ? queueLeftToday() : 0;
+          if (_left > 0) {
+            titleEl.innerHTML = '<i class="ri-trophy-line" aria-hidden="true"></i> 本篇完成';
+            /* 这一行不报「今天 X/Y」：currentArticle 还收窄在本篇，plannedToday 是本篇分母，
+               冒充「今天」就是假账 —— 只说确定为真的：本篇完了、全局还剩几句、去路是什么。 */
+            subEl.textContent = '这一篇的量走完了 · 今天还剩 ' + _left + ' 句（点「继续读」，会接着读到下一篇）';
+            againBtn.style.display = '';
+            againBtn.innerHTML = '<i class="ri-home-4-line" aria-hidden="true"></i> 回首页';
+            againBtn.title = '回首页'; againBtn.setAttribute('aria-label', '回首页');
+            setTaskNext('继续读');
+          } else {
           titleEl.innerHTML = '<i class="ri-trophy-line" aria-hidden="true"></i> 今天完成';
           /* 口径 A（2026-09-25）：收工行也说「今天」；本篇没读完才补「本篇还剩 Y 句」
              （本篇读完 lifetime 追上 planned，Y=0 就不说）。
@@ -9389,13 +9510,18 @@ let listenOn = false;
           againBtn.innerHTML = '<i class="ri-home-4-line" aria-hidden="true"></i> 回首页';
           againBtn.title = '回首页'; againBtn.setAttribute('aria-label', '回首页');
           setTaskNext('看词本');
+          }
           setProg(1);
         } else if (pass >= 2) {
           titleEl.textContent = '挖空选择 ' + quizDoneN + '/' + quizN
             + (quizWrongN ? ' · 错 ' + quizWrongN : '');
           /* ② 这一行原来是提示语（「选出填回空格的那个词」），现在让给「还剩几分钟」——
-             他 2026-09-22：显示。四选一没什么要教的，而「还要多久收工」正是这一步唯一想知道的数。 */
-          subEl.textContent = quizPaceLeft(Math.max(0, quizN - quizDoneN));
+             他 2026-09-22：显示。四选一没什么要教的，而「还要多久收工」正是这一步唯一想知道的数。
+             2026-10-09：额度读满提前进 ②、队列还有剩时，把去路钉在这行上 ——
+             「答完接着读剩的 N 句」，答完题去哪不用猜（收工主行与小结卡同口径）。 */
+          const _qLeft = queueLeftToday();
+          subEl.textContent = quizPaceLeft(Math.max(0, quizN - quizDoneN))
+            + (_qLeft > 0 ? ' · 答完接着读剩的 ' + _qLeft + ' 句' : '');
           /* 「回看句子」已移除（PRD §4.4）：句子就在眼前，不需要"回看"。
              「这题有问题」也搬进了浮窗（renderBlankPop），任务条上不再有它。 */
           againBtn.style.display = 'none';
@@ -9886,6 +10012,42 @@ let listenOn = false;
           return Math.max(1, q.length);
         } catch (e) { return 0; }
         finally { currentArticle = cur; _cachedPlan = null; }
+      }
+      /* 今天还剩多少句没读（**全局**视角，不看按篇收窄）：按篇流程走完 ≠ 今天完成 ——
+         2026-10-09 用户：「今天还有一半要从其他章节接着读，前一半正好读完一篇就开始答题，
+         答完题会继续跳到另外章吗？」—— 答完题的去路、收工承诺的真假，都按这个数分岔。
+         与 globalPromiseN 同款手法：临时摘掉 currentArticle 装配一次，算完恢复。 */
+      function queueLeftToday() {
+        if (!ROOT2 || !ROOT2.plan) return 0;
+        const cur = currentArticle;
+        try {
+          currentArticle = null; _cachedPlan = null;
+          const q = todayPlan().queue || [];
+          let n = 0;
+          for (let k = 0; k < q.length; k++) if (!readToday2(q[k].i)) n++;
+          return n;
+        } catch (e) { return 0; }
+        finally { currentArticle = cur; _cachedPlan = null; }
+      }
+      /* 按篇（或本批）走完但今天还有剩 → 扩回全局队列接着读。唯一的「解除收窄」入口：
+         currentArticle = null（正文还停在本篇，revealTaskPos 会按队列把人带到下一篇并弹
+         「本篇读完了 · 继续第 X 篇」），批次重拍 —— 旧批次是刚考完的那批，② 再开必须考
+         接下来要读的新句，不是旧题重炒。pass 拍回 ①，接着走「读 → 额度满/读完 → 答题」的循环。 */
+      function continueTodayQueue() {
+        hideCard();
+        clearAutoNext();
+        currentArticle = null; _cachedPlan = null;
+        taskFinished = false; pass = 1; resetQuizRun(); _tabStarted = true;
+        syncQuizGl();
+        syncQueueFromPlan();
+        if (!todayQueue.length || !todayQueue.some(q => !readToday2(q.i))) {
+          // 理论兜底：进这函数前 queueLeftToday() > 0；真一头撞上就按收工处理，不开空头支票
+          taskFinished = true; updateTaskBar(true);
+          return;
+        }
+        batchItems = todayPlan(true).items.map(x => Object.assign({}, x));
+        goToNextTask(true);
+        updateTaskBar();
       }
       /* 今天这一段的起止（全局句号）：同 globalPromiseN 的口径 —— 摘掉按篇 scope 问引擎要
          一次全天的装配，取 min/max。todayQueue 是按篇收窄的，拿它算端点就是每篇一条线。 */
@@ -11094,6 +11256,10 @@ let listenOn = false;
         roundInfo, startNewRound, seedRoundSeenForTest, setManualStart, clearManualStart, confirmAutoStart,
         /* 刷句模式（2026-10-10）两个出口：清单点句直达、刷到文末从头再来。 */
         jumpQueueSent, brushAgain,
+        /* 跨篇推进（2026-10-09）：收工/小结「继续读」的去路 + 全局剩余句账（测试对拍用）。 */
+        queueLeftToday, continueTodayQueue,
+        /* 答题反馈（2026-10-09）：朗读链代次（测试用它验证推进断链）、反馈态浮窗标记。 */
+        speakQuizFeedback, markBlankPopReveal,
         /* 今日起点的同步出口（2026-10-09）：applyDaystartEvents 给 cloudPull/新设备重建后调用，
            也是跨设备重放的测试缝；manualStart() 读当前账（含 ts），测试用它对拍两台设备的账；
            testManualStartLocal 在「不经过本机按钮」的前提下改本机账（模拟他机存量状态，
