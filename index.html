@@ -9921,11 +9921,12 @@ let listenOn = false;
         const fLocal = globalToLocal(first), lLocal = globalToLocal(last);
         if (first >= 0 && fLocal >= 0 && sents[fLocal]) sents[fLocal].before(mkLine(first, 'start'));
         if (lLocal >= 0 && lLocal < sents.length - 1 && sents[lLocal]) {
-          /* 尾句后面可能跟着它自己的译文块 / 词卡行，线要落到这些之后、下一句之前 */
+          /* 尾句后面可能跟着它自己的译文块 / 词卡组（nb-group 一整张结构化卡），线要落到这些之后、下一句之前 */
           let anchor = sents[lLocal];
           while (anchor.nextElementSibling &&
                  (anchor.nextElementSibling.classList.contains('sent-zh') ||
-                  anchor.nextElementSibling.classList.contains('notebar'))) {
+                  anchor.nextElementSibling.classList.contains('notebar') ||
+                  anchor.nextElementSibling.classList.contains('nb-group'))) {
             anchor = anchor.nextElementSibling;
           }
           anchor.after(mkLine(last, 'end'));
