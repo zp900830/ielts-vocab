@@ -375,7 +375,10 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
     await page.locator('#blankPop .qz-opt').first().click();
     await expect(page.locator('#art .qz-blank').first()).toHaveClass(/qa-done/);
-    await expect(page.locator('#blankPop')).toBeHidden();
+    /* 2026-10-09 反馈态（不背单词式）：浮窗不收 —— 正确项标绿、提示语换成判词，
+       朗读跟选项颜色同一拍；推进到下一题时才收。 */
+    await expect(page.locator('#blankPop')).toBeVisible();
+    await expect(page.locator('#blankPop .qz-opt.right')).toHaveCount(1);
 
     const before = await page.evaluate(() => APP3.currentBlank());
     await page.locator('#tbNext').click();
@@ -490,8 +493,9 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
       const first = await page.evaluate(() => APP3.currentBlank());
       await answerCorrectlyInPop(page);
 
-      // 反馈看得见：浮窗收掉、答过的空立刻呈现对/错；播报区写入文字
-      await expect(page.locator('#blankPop')).toBeHidden();
+      // 反馈看得见（2026-10-09 不背单词式）：浮窗留着，正确项标绿；答过的空立刻呈现；播报区写入文字
+      await expect(page.locator('#blankPop')).toBeVisible();
+      await expect(page.locator('#blankPop .qz-opt.right')).toHaveCount(1);
       await expect(page.locator(`#art .qz-blank[data-bi="${first}"]`)).toHaveClass(/qa-ok/);
       await expect(page.locator('#quizLive')).not.toHaveText('');
 
@@ -559,8 +563,11 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
       // 最后一题用 UI 答对，然后什么都不点：自动推进 → 收工态
       await answerCorrectlyInPop(page);
       await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done', { timeout: 6000 });
-      await expect(page.locator('#tbNext')).toContainText('看词本');
-      await expect(page.locator('#tbTitle')).toContainText('今天完成');
+      /* 2026-10-09 收工分岔：这条没通读、队列 4 句全没读 → 本篇答完 ≠ 今天完成 →
+         「本篇完成 · 继续读」（读的账还在，继续读把今天的通读接上）。
+         「真收工 · 看词本」分支由「收工态：看词本」那条（readDone 后）单独锁。 */
+      await expect(page.locator('#tbTitle')).toContainText('本篇完成');
+      await expect(page.locator('#tbNext')).toContainText('继续读');
     });
 
     test('手动「下一题」与自动推进不打架：不跳两题', async ({ page }) => {
@@ -573,7 +580,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
 
       const first = await page.evaluate(() => APP3.currentBlank());
       await answerCorrectlyInPop(page);
-      await expect(page.locator('#blankPop')).toBeHidden();
+      await expect(page.locator('#blankPop')).toBeVisible();   // 反馈态浮窗不收（选项已标色）
 
       // 反馈出现后立刻手动推进（抢在自动定时器之前）
       await page.locator('#tbNext').click();
@@ -704,7 +711,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
         TASK.nextQuiz();
       }
     });
-    // 收工态：两颗键换成「回首页 / 看词本」，今天完成的摘要还在
+    // 收工态：① 的队列已全读（readDone 过）→ qLeft=0 真收工 →「今天完成 · 看词本」
     await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
     await expect(page.locator('#tbAgain')).toContainText('回首页');
     await expect(page.locator('#tbNext')).toContainText('看词本');
@@ -760,11 +767,17 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
     await stubData(page, SIXQ);
     await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
-    // 直接进该篇任务模式并切到 ②，答完这批 → 收工态
-    const finishQuiz = async () => {
+    /* 2026-10-09 收工分岔：锁「真收工」（今天完成 → 看词本/回首页）就把队列读满 ——
+       直接答题（未通读）时会走「本篇完成 · 继续读」分支（另一条锁）。 */
+    const finishQuiz = async (readAll: boolean) => {
       await page.locator('.art-card').first().click();
       await expect(page.locator('#taskBar')).toBeVisible();
-      await page.evaluate(() => {
+      await page.evaluate((ra) => {
+        if (ra) {
+          for (let a = 0; a < SECTIONS.length; a++) {
+            Array.from(ShadowPlan.articleScope(SECTIONS, a)).forEach((i: number) => TASK.readDone(i));
+          }
+        }
         TASK.setPass(2);
         for (let g = 0; g < 300; g++) {
           const q = TASK.currentQuiz();
@@ -772,16 +785,18 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
           TASK.answerQuiz(q.answer);
           TASK.nextQuiz();
         }
-      });
+      }, readAll);
       await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
     };
-    await finishQuiz();
+    await finishQuiz(true);
     await page.locator('#tbNext').click();
     await expect(page).toHaveURL(/#\/words/);
     await expect(page.locator('#appView')).toContainText('单词本');
 
+    // 回首页场景：重造一份新计划（清掉读满的账），直接答题 → 「本篇完成」态的「回首页」照样在
     await page.goto(`${rootUrl}/index.html#/home`);
-    await finishQuiz();
+    await freshPlan(page);
+    await finishQuiz(false);
     await page.locator('#tbAgain').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
     await expect(page.locator('.art-card')).toHaveCount(6);
@@ -1073,7 +1088,8 @@ test.describe('3.0 终审顺手项', () => {
       }
     });
     await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
-    await expect(nxt).toContainText('看词本');
-    await expect(nxt).toHaveAttribute('aria-label', '看词本');
+    /* 2026-10-09 收工分岔：直接答题（未通读）→「本篇完成 · 继续读」，title/aria 与可见文字同源 */
+    await expect(nxt).toContainText('继续读');
+    await expect(nxt).toHaveAttribute('aria-label', '继续读');
   });
 });
