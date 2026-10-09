@@ -9826,9 +9826,10 @@ let listenOn = false;
           const tr = ROOT2.plan.todayRange;
           if (!tr || tr.day !== day2()) return null;
           if (Number.isInteger(tr.first) && Number.isInteger(tr.last) && tr.first <= tr.last) {
-            /* 钉子必须和当前生效起点对得上（2026-10-10 接力规则）：手动状态变了、
-               或接力冻结出的起点与钉子不符（升级当天带着旧钉子进来）→ 作废重钉。
-               不加这道校验，昨天的手动钉子/旧自动钉子会把今天的线钉在错误位置。 */
+            /* 走到这里必是记忆模式（manualStartToday 已在函数开头拦截）。钉子只由下方 auto
+               分支当天钉下；两条手动路径（起点选择器、clearManualStart）都会把 todayRange
+               一并清空 —— 不存在「手动状态变了还拿着旧钉子」的组合。钉子即今天自动排程的
+               冻结起点，直接用（防 assemble 漂移正是它的职责），不要在这里拿重算值去比对。 */
             return [tr.first, tr.last];
           }
         } catch (e) {}
@@ -9859,7 +9860,13 @@ let listenOn = false;
               let _cnt = 1;
               try { _cnt = chapterSentCount(currentArticle); } catch (e) {}
               const _hi = Math.min(_lo + _cnt - 1, SENT_RAW.length - 1);
-              first = (ms.gi >= _lo && ms.gi <= _hi) ? ms.gi : _lo;
+              /* 开始线只画在接力书签真正所在的篇（2026-10-09 用户：「两个任务开始线，有按照
+                 约定好的规则来做吗」—— 10-08 约定：一天有且仅有一条开始线。书签不在这篇里时，
+                 本篇的按篇区间虽从篇首起算，但把「今天任务 · 开始」标在篇首是谎报：
+                 今天明明是从隔壁篇的接力点开始的，用户翻到下一篇又看到一条开始线，就成了两条。
+                 first = -1 表示本篇不画开始线（全篇即区间时按 09-25 口径本来也不画）；
+                 结束线照旧：区间末尾落在本篇且不贴篇末才画。 */
+              first = (ms.gi >= _lo && ms.gi <= _hi) ? ms.gi : -1;
               last = _hi;
             } else {
               first = ms.gi;
@@ -9899,7 +9906,7 @@ let listenOn = false;
            开始线一律画，哪怕贴文章第 1 句 —— 它是「点线设起点」的入口，贴边界不画等于
            入口消失（旧规则只顾美观，正是这个 bug 的另一半）；结束线保留贴最后一句不画。 */
         const fLocal = globalToLocal(first), lLocal = globalToLocal(last);
-        if (fLocal >= 0 && sents[fLocal]) sents[fLocal].before(mkLine(first, 'start'));
+        if (first >= 0 && fLocal >= 0 && sents[fLocal]) sents[fLocal].before(mkLine(first, 'start'));
         if (lLocal >= 0 && lLocal < sents.length - 1 && sents[lLocal]) {
           /* 尾句后面可能跟着它自己的译文块 / 词卡行，线要落到这些之后、下一句之前 */
           let anchor = sents[lLocal];
