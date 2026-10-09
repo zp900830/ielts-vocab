@@ -9,6 +9,10 @@
 //    每篇各画一条开始线（2026-10-08 用户：「不应该有且仅有一天起始线吗」）。
 //  · 位置的边界取舍：开始线一律画（哪怕贴文章第 1 句）—— 它是「点线设起点」的入口，
 //    贴边界不画等于入口消失；结束线保留贴文章最后一句不画（顶端/底端没有可隔的东西）。
+//  · 接力书签（手动起点，2026-10-10 起）：开始线只画在书签所在的那一篇；书签不在的篇
+//    一律不画开始线 —— 旧兜底「书签不在就画在篇首」让用户翻一篇见一条「今天任务·开始」
+//    （2026-10-09 用户：「两个任务开始线，有按照约定好的规则来做吗」），违背 10-08 的
+//    「一天有且仅有一条开始线」。结束线仍随按篇区间（落在本篇且不贴篇末才画）。
 //  · 宽度 = 与 .reader-head / .layout 内容框同一口径（min(1084px, 100% − 36px)），±2px。
 //  · 无计划 / 自由跟读 / 已收工：不画线。
 //
@@ -361,6 +365,34 @@ test.describe('文章内「今天任务区间」横线', () => {
     expect(moved.q.length, '按篇从书签连刷到篇末（39-4+1 = 36 句）').toBe(36);
     expect(moved.q[moved.q.length - 1], '队列尾句 = 篇末').toBe(39);
     expect(end && end.gi, '结束线贴篇末不画').toBeUndefined();
+  });
+
+  test('接力书签不在本篇：本篇不画「开始」线（一天有且仅有一条开始线，2026-10-09 用户）', async ({ page }) => {
+    await enterRangeArticle(page);
+    // 在第 0 篇把起点设到第 5 句（全局 4）→ 接力书签落在第 0 篇
+    await page.locator('.today-range-line[data-edge="start"]').click();
+    await page.locator('#spSent').selectOption('5');
+    await page.locator('#startPickPop .sp-actions .btn.primary').click();
+    await expect(page.locator('#startPickPop')).toContainText('重新计算');
+    await page.locator('#startPickPop .sp-actions .btn.primary').click();
+    await expect(page.locator('#startPickPop')).toHaveCount(0);
+
+    // 翻到第 1 篇（书签不在这篇）：旧兜底会在篇首画一条「今天任务·开始」—— 用户翻一篇见一条，乱了。
+    // 新规则：开始线只画在书签所在篇；第 1 篇全篇即区间（结束线贴底不画）→ 一条线都没有。
+    await page.evaluate(() => TASK.exitTaskMode());
+    await page.evaluate(() => TASK.openArticle(1));
+    await expect(page.locator('body'), '第 1 篇应在任务模式').toHaveClass(/task-mode/);
+    const lines1 = await page.evaluate(() => [...document.querySelectorAll('.today-range-line')]
+      .map((el) => ({ e: (el as HTMLElement).dataset.edge || '', gi: (el as HTMLElement).dataset.gi || '' })));
+    expect(lines1.find((x) => x.e === 'start'), '书签不在第 1 篇 → 本篇不得出现开始线').toBeUndefined();
+
+    // 回到第 0 篇：开始线仍在接力点（全局 4），一条没跑
+    await page.evaluate(() => TASK.exitTaskMode());
+    await page.evaluate(() => TASK.openArticle(0));
+    const lines0 = await page.evaluate(() => [...document.querySelectorAll('.today-range-line')]
+      .map((el) => ({ e: (el as HTMLElement).dataset.edge || '', gi: (el as HTMLElement).dataset.gi || '' })));
+    expect(lines0.find((x) => x.e === 'start'), '第 0 篇的开始线仍在接力点（全局 4）')
+      .toEqual({ e: 'start', gi: '4' });
   });
 
   test('不破坏正文结构：句子 / 译文 / 段意数量不变', async ({ page }) => {

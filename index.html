@@ -363,6 +363,16 @@
     background: rgba(0,0,0,.04); border-radius: 5px; padding: 0 6px; margin-right: 5px; line-height: 1.6; vertical-align: 1px; }
   body.dark .notebar { background: rgba(255,255,255,.03); border-color: rgba(255,255,255,.06); }
   body.dark .notebar .nb-label { color: var(--muted); }
+  /* 同句词卡合成一张结构化卡（2026-10-09 用户：一卡一词纵向太空，每卡后半截都是空白）：
+     .nb-group 是本句唯一的卡（外框），内部网格铺词格 —— 桌面 2~3 列自动排，窄屏回落单列。
+     align-items:start：各格高度随内容，长辨析不把同排短格拉长。 */
+  .nb-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: 6px; align-items: start; margin: 6px 0 8px; padding: 6px;
+    border: 1px solid rgba(0,0,0,.08); border-radius: 10px; }
+  .nb-group .notebar { margin: 0; border: none; background: rgba(0,0,0,.025); border-radius: 8px; }
+  .nb-group .notebar.nb-wide { grid-column: 1 / -1; }
+  body.dark .nb-group { border-color: rgba(255,255,255,.06); }
+  body.dark .nb-group .notebar { background: rgba(255,255,255,.03); }
   /* 辨析卡：挂段末、默认只露一行「简单记」，点开才出对比表（PRD §7.2）。
      一段可挂 2–5 张（实测 51 段 ≥2 张），所以每张自带边框、各自折叠，不共用一个表头。 */
   .cmp-block { display: block; margin: 6px 0 10px; }
@@ -487,7 +497,7 @@
   body.hide-gl .gl { display: none; }
   body.hide-gl .w { color: var(--text); font-weight: 400;
     border-bottom: none; cursor: pointer; }
-  body.hide-gl .notebar, body.hide-gl .cmp-block { display: none; } /* 隐藏词义时辨析卡片同步隐藏 */
+  body.hide-gl .notebar, body.hide-gl .nb-group, body.hide-gl .cmp-block { display: none; } /* 隐藏词义时辨析卡片同步隐藏 */
   /* ============ 底部播放条（Liquid Glass 风格） ============ */
   .audiobar { position: fixed; left: 24px; right: 24px; transform: none;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 120;
@@ -1812,7 +1822,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
      四个候选就埋在本句的行内词义与句下辨析卡里 —— 干扰项的词义跟浮窗里的「这里的意思」
      一对照，答案自己走出来。答题期间整体压住这三类剧透源，与「行内词义」用户开关独立：
      进 ② 压住、出 ② 自动还原，用户的开关设置一个字不动。 */
-  body.quiz-gl-off .gl, body.quiz-gl-off .notebar, body.quiz-gl-off .cmp-block { display: none; }
+  body.quiz-gl-off .gl, body.quiz-gl-off .notebar, body.quiz-gl-off .nb-group, body.quiz-gl-off .cmp-block { display: none; }
   /* 浮窗要长在空的**下方**（2026-10-09 用户：现在的位置把刚答完的题遮得严严实实）：
      renderQuiz 把当前空滚进视口时给它压一个下边距 —— 空落在屏幕偏上，
      下面既装得下浮窗，上一句的答题反馈（红/绿 + 辨析表）也留在视野里。 */
@@ -3639,14 +3649,17 @@ let listenOn = false;
     const noteText = info.note;
     if (noteText) {
     // 标题标签按内容类型自适应：同义词/词伙 从 note 前缀抽取；手写辨析归为「辨析」。标签用 nb-label 小胶囊包裹，不再叠「辨析：同义词：」双冒号
-    let label = '辨析', rest = noteText;
+    let label = '辨析', rest = noteText, wide = '';
     const lm = noteText.match(/^(同义词|词伙)(：)/);
     if (lm) { label = lm[1]; rest = noteText.slice(lm[0].length); }
+    // 长辨析占整行（nb-wide）：括注一多，挤在半列里就是细长条，不如横贯整卡
+    if (rest.length > 60) wide = ' nb-wide';
+    html1 = `<span class="notebar${wide}"><span class="nb-t"><span class="nb-w">${esc(k)}</span>${ph ? `<span class="nb-ph">${esc(ph)}</span>` : ''}<span class="nb-m">${esc(info.m || '')}</span></span>`;
     html1 += `<span class="nb-n"><span class="nb-label">${label}</span>${esc(rest)}</span>`;
     }
     html += html1 + `</span>`;
     }
-    return html;
+    return html ? `<span class="nb-group">${html}</span>` : '';
     }
     /* 标题中英双语映射（只做展示层拼接，不动 SECTIONS/VOCAB/CHAPTERS 数据） */
     const TIT_EN = {
@@ -4405,6 +4418,10 @@ let listenOn = false;
     const slowT = setTimeout(() => {
     if (done || my !== speakToken) return;
     if (this._slowT && Date.now() - this._slowT < 20000) return;
+    /* 单词级短合成（答题反馈 / 点词发音，≤2 个词）不弹这句：一两个音节也常超 1.8s，
+       弹出来就成了每答一题弹一次（2026-10-09 用户实测「答题一直提示这个」）。
+       句子级播放保留提示 —— 「等半天突然换人声」的困惑仍值得当场说破。 */
+    if (String(text).trim().split(/\s+/).length <= 2) return;
     this._slowT = Date.now();
     try { showAbToast('☁ 云端语音合成中…（网络慢时会多等一会儿，不会静默换成本地音色）'); } catch (e) {}
     }, 1800);
@@ -8521,6 +8538,16 @@ let listenOn = false;
         }
         if (item.retake) resetBlank(bi);       // 补考：把上一次的红字收掉，重新问
         _curBlank = bi;
+        /* 出题即预热（2026-10-09 用户「为啥每次单词的发音都要单独合成」）：以前答完才合成，
+           每个词都要现场等一趟网络 + TTS，超 1.8s 还弹「云端合成中」。现在题目一亮就把
+           四个选项的短音频丢进后台缓存（cache/_pend 命中直接返回，天然去重），作答时
+           大概率已就绪 → 秒播、零提示。仅云端音色做；本地音色本就不需要合成。 */
+        try {
+          if (isCloudURI(selVoiceURI) && typeof CLOUD !== 'undefined' && CLOUD._on) {
+            const cid = selVoiceURI.slice(6);
+            (q.opts || []).forEach(w => { try { CLOUD.prefetch(String(w), cid, rate); } catch (e) {} });
+          }
+        } catch (e) {}
         renderBlankPop(bi, q);
         const el = _blankEls[bi];
         // 自动推进也会滚：reduced-motion 口径下不用平滑滚动（新动效不许破例）
@@ -9812,9 +9839,10 @@ let listenOn = false;
           const tr = ROOT2.plan.todayRange;
           if (!tr || tr.day !== day2()) return null;
           if (Number.isInteger(tr.first) && Number.isInteger(tr.last) && tr.first <= tr.last) {
-            /* 钉子必须和当前生效起点对得上（2026-10-10 接力规则）：手动状态变了、
-               或接力冻结出的起点与钉子不符（升级当天带着旧钉子进来）→ 作废重钉。
-               不加这道校验，昨天的手动钉子/旧自动钉子会把今天的线钉在错误位置。 */
+            /* 走到这里必是记忆模式（manualStartToday 已在函数开头拦截）。钉子只由下方 auto
+               分支当天钉下；两条手动路径（起点选择器、clearManualStart）都会把 todayRange
+               一并清空 —— 不存在「手动状态变了还拿着旧钉子」的组合。钉子即今天自动排程的
+               冻结起点，直接用（防 assemble 漂移正是它的职责），不要在这里拿重算值去比对。 */
             return [tr.first, tr.last];
           }
         } catch (e) {}
@@ -9845,7 +9873,13 @@ let listenOn = false;
               let _cnt = 1;
               try { _cnt = chapterSentCount(currentArticle); } catch (e) {}
               const _hi = Math.min(_lo + _cnt - 1, SENT_RAW.length - 1);
-              first = (ms.gi >= _lo && ms.gi <= _hi) ? ms.gi : _lo;
+              /* 开始线只画在接力书签真正所在的篇（2026-10-09 用户：「两个任务开始线，有按照
+                 约定好的规则来做吗」—— 10-08 约定：一天有且仅有一条开始线。书签不在这篇里时，
+                 本篇的按篇区间虽从篇首起算，但把「今天任务 · 开始」标在篇首是谎报：
+                 今天明明是从隔壁篇的接力点开始的，用户翻到下一篇又看到一条开始线，就成了两条。
+                 first = -1 表示本篇不画开始线（全篇即区间时按 09-25 口径本来也不画）；
+                 结束线照旧：区间末尾落在本篇且不贴篇末才画。 */
+              first = (ms.gi >= _lo && ms.gi <= _hi) ? ms.gi : -1;
               last = _hi;
             } else {
               first = ms.gi;
@@ -9885,13 +9919,14 @@ let listenOn = false;
            开始线一律画，哪怕贴文章第 1 句 —— 它是「点线设起点」的入口，贴边界不画等于
            入口消失（旧规则只顾美观，正是这个 bug 的另一半）；结束线保留贴最后一句不画。 */
         const fLocal = globalToLocal(first), lLocal = globalToLocal(last);
-        if (fLocal >= 0 && sents[fLocal]) sents[fLocal].before(mkLine(first, 'start'));
+        if (first >= 0 && fLocal >= 0 && sents[fLocal]) sents[fLocal].before(mkLine(first, 'start'));
         if (lLocal >= 0 && lLocal < sents.length - 1 && sents[lLocal]) {
-          /* 尾句后面可能跟着它自己的译文块 / 词卡行，线要落到这些之后、下一句之前 */
+          /* 尾句后面可能跟着它自己的译文块 / 词卡组（nb-group 一整张结构化卡），线要落到这些之后、下一句之前 */
           let anchor = sents[lLocal];
           while (anchor.nextElementSibling &&
                  (anchor.nextElementSibling.classList.contains('sent-zh') ||
-                  anchor.nextElementSibling.classList.contains('notebar'))) {
+                  anchor.nextElementSibling.classList.contains('notebar') ||
+                  anchor.nextElementSibling.classList.contains('nb-group'))) {
             anchor = anchor.nextElementSibling;
           }
           anchor.after(mkLine(last, 'end'));
