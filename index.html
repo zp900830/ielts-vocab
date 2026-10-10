@@ -930,15 +930,30 @@
      只补左右、不补上下，否则会和 44 高叠成 58。 */
   aside .head .t .x::after { content: ""; position: absolute; inset: 0 -9px; border-radius: 999px; }
   @media (hover: hover) { aside .head .t .x:hover { background: var(--accent-soft); color: var(--accent-text); } }
-  /* 本篇目标词 / 全部词库 双视图 tab（2026-10-10 把 1.0 的「目标词速查」面板放回来：
-     不新增右缘把手——两把手在窄屏会挤、触区要重新扫，功能收进现有面板做 tab 最稳） */
-  aside .wq-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
-  aside .wq-tabs .wq-tab { flex: 1; min-height: 44px; border: 1px solid var(--border); background: #fff;
-    color: var(--muted); font-size: 12.5px; font-weight: 600; padding: 6px 10px; border-radius: 10px;
-    cursor: pointer; transition: border-color var(--t-fast), background var(--t-fast), color var(--t-fast);
-    -webkit-tap-highlight-color: transparent; }
-  @media (hover: hover) { aside .wq-tabs .wq-tab:hover { border-color: var(--accent); color: var(--accent-text); } }
-  aside .wq-tabs .wq-tab.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-text); }
+  /* 视图切换 tab（2026-10-10 二次定稿）：下划线文字式——上一版 pill 大按钮被用户否了
+     （「太大太不精致」），照 1.0 头部的克制感做小尺寸文字 tab，热区用 ::after 扩展补足。 */
+  aside .wq-tabs { display: flex; gap: 14px; margin-bottom: 8px;
+    border-bottom: 1px solid var(--border); }
+  aside .wq-tabs .wq-tab { appearance: none; border: none; background: none; cursor: pointer;
+    font-size: 12.5px; font-weight: 600; color: var(--muted); padding: 4px 2px 7px; position: relative;
+    letter-spacing: .02em; -webkit-tap-highlight-color: transparent; }
+  aside .wq-tabs .wq-tab::after { content: ""; position: absolute; inset: -8px -6px; }
+  aside .wq-tabs .wq-tab::before { content: ""; position: absolute; left: 0; right: 0; bottom: -1px;
+    height: 2px; border-radius: 2px; background: transparent; transition: background var(--t-fast); }
+  @media (hover: hover) { aside .wq-tabs .wq-tab:hover { color: var(--accent-text); } }
+  aside .wq-tabs .wq-tab.on { color: var(--accent-text); }
+  aside .wq-tabs .wq-tab.on::before { background: var(--accent-bright); }
+  /* 键盘速记条（照搬 1.0 .wq-keys）：kbd 键帽 + 灰字说明；触屏（无 hover 能力）不显示 */
+  aside .wq-keys { display: flex; align-items: center; gap: 4px; margin: 0 0 8px;
+    padding: 6px 9px; flex: none; font-size: 11px; color: var(--muted);
+    background: rgba(16,180,135,.05); border-radius: 8px; }
+  aside .wq-keys kbd { display: inline-flex; align-items: center; justify-content: center;
+    min-width: 16px; height: 16px; padding: 0 4px; border-radius: 4.5px;
+    border: 1px solid var(--border); background: linear-gradient(180deg, #fff, #f3f8f4);
+    box-shadow: 0 1px 0 rgba(31,45,38,.10), inset 0 1px 0 #fff;
+    font-family: inherit; font-size: 10px; line-height: 1; color: var(--text); }
+  aside .wq-keys i { font-style: normal; color: var(--muted); opacity: .6; margin: 0 1px; }
+  @media (hover: none) { aside .wq-keys { display: none; } }
   aside input { width: 100%; border: 1px solid var(--border); background: #fff;
     border-radius: 10px; padding: 8px 12px; font-size: 16px; outline: none; min-height: 40px;
     transition: border-color var(--t-fast); }
@@ -948,21 +963,48 @@
   aside .list::-webkit-scrollbar-thumb { background: var(--accent-line); border-radius: 8px; }
   aside .g { font-size: 12px; color: var(--accent-text); font-weight: 600;
     padding: 10px 16px 4px; }
-  aside .item { padding: 10px 16px 12px; cursor: pointer; border-bottom: 1px solid var(--border);
-    transition: background var(--t-fast); }
-  @media (hover: hover) { aside .item:hover { background: #eaf5ef; } }
-  aside .item.sel { background: var(--accent-soft); }
-  aside .item .wtop { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 8px; }
-  aside .item .wtop b { font-family: var(--serif); font-size: 16px; color: var(--accent-text); }
-  aside .item .ph { font-size: 12px; color: var(--muted); font-family: var(--serif); }
-  aside .item .ph button { border: none; background: transparent; color: var(--accent-text);
-    cursor: pointer; font-size: 12px; padding: 0 2px; }
-  aside .item .loc { margin-left: auto; border: none; background: transparent; color: var(--muted);
-    cursor: pointer; font-size: 14px; padding: 2px 6px; border-radius: 8px; flex: none; }
-  @media (hover: hover) { aside .item .loc:hover { background: var(--accent-soft); color: var(--accent-text); } }
-  aside .item .mn { font-size: 13px; color: var(--text); margin-top: 2px; white-space: pre-line; }
-  aside .item .ex { font-size: 13px; font-family: var(--serif); background: var(--bg);
-    border-radius: 10px; padding: 7px 10px; margin-top: 6px; }
+  /* 词卡（2026-10-10 照搬 1.0「目标词速查」面板的观感，用户指定）：
+     常态 = 透明底 + 卡间虚线分隔；hover/选中 = 浮起白底绿边卡。
+     词标题绿色衬线；英/美音标各自与小喇叭合成一颗发音钮（去掉独立大喇叭按钮）。 */
+  aside .item { position: relative; padding: 10px 8px 12px; cursor: pointer;
+    border: 1px solid transparent; border-radius: 10px; background: transparent;
+    transition: background var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast);
+    -webkit-tap-highlight-color: transparent; }
+  aside .item:not(:last-child)::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 0;
+    border-bottom: 1px dashed var(--border); pointer-events: none; }
+  aside .item:hover::after, aside .item.sel::after { display: none; }
+  @media (hover: hover) { aside .item:hover { background: #fff; border-color: var(--accent-bright);
+    box-shadow: 0 1px 6px rgba(16,180,135,.14); } }
+  aside .item.sel { background: #f6fbf8; border-color: var(--accent-bright);
+    box-shadow: 0 1px 6px rgba(16,180,135,.14); }
+  aside .item .wtop { display: flex; align-items: flex-start; gap: 4px; }
+  aside .item .ww { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; row-gap: 2px;
+    flex: 1; min-width: 0; }
+  aside .item .wtop b { font-family: var(--serif); font-size: 15px; color: var(--accent-text); flex: none; }
+  aside .item .ph { font-size: 11px; color: var(--muted); font-family: var(--serif);
+    white-space: nowrap; flex: 0 1 auto; min-width: 0; max-width: 100%; }
+  aside .item .ph .ph-tag { font-size: 10px; }
+  aside .item .spk { border: none; background: none; cursor: pointer; font-size: inherit;
+    padding: 2px 6px 2px 2px; color: var(--accent-text); border-radius: 7px;
+    display: inline-flex; align-items: baseline; gap: 3px; -webkit-tap-highlight-color: transparent;
+    position: relative; font-family: var(--serif); }
+  aside .item .spk::after { content: ""; position: absolute; inset: -5px 0; border-radius: 7px; }
+  @media (hover: hover) { aside .item .spk:hover { background: var(--accent-soft); } }
+  aside .item .spk .ph-ico { font-style: normal; line-height: 1; font-size: 11px; }
+  aside .item .loc { flex: none; border: none; background: none; color: var(--muted);
+    cursor: pointer; padding: 6px; margin: -6px -6px 0 0; border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent; position: relative; }
+  aside .item .loc::after { content: ""; position: absolute; inset: -3px 0; border-radius: 10px; }
+  aside .item .loc i { font-size: 15px; line-height: 1; display: block; }
+  @media (hover: hover) { aside .item .loc:hover { color: var(--accent-text); background: var(--accent-soft); } }
+  aside .item .mn { font-size: 12.5px; color: var(--text); line-height: 1.6;
+    padding: 2px 0 2px 11px; position: relative; }
+  aside .item .mn + .mn { border-top: 1px dashed var(--border); }
+  aside .item .mn::before { content: ""; position: absolute; left: 1px; top: .78em;
+    width: 4px; height: 4px; border-radius: 50%; background: var(--accent-bright); opacity: .55; }
+  aside .item .ex { margin-top: 7px; padding: 8px 10px; background: var(--accent-soft);
+    border-radius: 8px; font-size: 12px; line-height: 1.65; font-family: var(--serif); color: var(--text); }
   aside .item .exzh { font-size: 12px; color: var(--muted); margin-top: 3px; }
   aside .cnt { font-size: 12px; color: var(--muted); padding: 8px 16px;
     border-top: 1px solid var(--border); }
@@ -3308,9 +3350,10 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
             <button type="button" class="wq-tab" id="wqTabAll" role="tab" aria-selected="false" title="六篇全量词表（可搜索）">全部词库</button>
           </div>
           <input id="q" placeholder="搜索单词或释义…" oninput="queueRenderList()" aria-label="搜索单词或释义">
+          <div class="wq-keys" aria-hidden="true"><kbd>↑</kbd><kbd>↓</kbd><span>切换卡片</span><i>·</i><kbd>Enter</kbd><span>朗读选中</span><i>·</i><kbd>Esc</kbd><span>收起</span></div>
         </div>
         <div class="list" id="vlist"></div>
-        <div class="cnt" aria-live="polite">共<span id="vcnt"></span> · 点卡片跳到该句 · ⌖文中定位</div>
+        <div class="cnt" aria-live="polite">共<span id="vcnt"></span> · 点卡片朗读 · ⌖ 定位到文中</div>
       </aside>
     </div>
 
@@ -5094,7 +5137,8 @@ let listenOn = false;
     try { if (speechSynthesis.paused) { speechSynthesis.resume(); if (!(speechSynthesis.speaking || speechSynthesis.pending)) { try { speechSynthesis.cancel(); } catch (e) {} } } } catch (e) {}
     const u = new SpeechSynthesisUtterance(text);
     u.rate = rate; u.volume = 1;
-    const v = resolveVoice(exclude || undefined);
+    // opts.voiceAcc：指定口音（'en-GB'/'en-US'，词卡音标按钮用）——V 表没命中再回常规解析
+    const v = opts.voiceAcc ? (V[opts.voiceAcc] || resolveVoice(exclude || undefined)) : resolveVoice(exclude || undefined);
     let triedURI = '';
     if (v) { u.voice = v; u.lang = v.lang; triedURI = v.voiceURI; }
     else u.lang = accent;
@@ -5192,8 +5236,9 @@ let listenOn = false;
     if (idle || NEED_GESTURE) { go(); return; } // iOS：手势内必须同步起播（上面已 cancel，清队列无重叠之忧）
     setTimeout(go, 150);
     }
-    function speakAside(text) {
-    // 旁路发音：连播中点词只duck一下，播完自动回到原位续播；token 守卫防连点旧回调抢跑
+    function speakAside(text, acc) {
+    // 旁路发音：连播中点词只duck一下，播完自动回到原位续播；token 守卫防连点旧回调抢跑。
+    // acc（可选）：'uk'/'us' —— 词卡音标按钮指定口音朗读（词库面板 2026-10-10 照搬 1.0 交互）
     const wasPlaying = playing, resumeIdx = idx, my = speakToken + 1;
     if (wasPlaying) {
     playing = false;
@@ -5203,7 +5248,8 @@ let listenOn = false;
     // 注意：这里不手动 speakToken++，下面 speak() 内会 ++ 一次使旧链失效；
     // 若提前 ++ 会导致回调里的 my 对不上、播完回不到原位续播
     }
-    speak(text, () => { if (my !== speakToken) return; if (wasPlaying) playFrom(resumeIdx); });
+    speak(text, () => { if (my !== speakToken) return; if (wasPlaying) playFrom(resumeIdx); },
+      acc ? { voiceAcc: acc === 'us' ? 'en-US' : 'en-GB' } : undefined);
     }
     let _AC = null;
     function unlockAudio() {
@@ -6147,15 +6193,21 @@ let listenOn = false;
     clearTimeout(_rlT);
     _rlT = setTimeout(renderList, 150);
     }
-    /* 词卡公共模板：本篇目标词 / 全部词库两个视图共用同一份 HTML，防两处漂移 */
+    /* 词卡公共模板：本篇目标词 / 全部词库两个视图共用同一份 HTML，防两处漂移。
+       2026-10-10 照搬 1.0 交互：英/美音标各与小喇叭合成一颗发音钮（data-acc 指定口音），
+       独立大喇叭按钮取消；定位钮用 ri-focus-3-line；义项按 \n 拆行（圆点 + 行间虚线）。 */
     function vocabCardHtml(w, k, info, inTextSet) {
     const inText = inTextSet.has(k) ? '' : ' 📖';
+    const strip = s => String(s || '').replace(/^\/+|\/+$/g, '');
+    const spk = (acc, tag, ipa) => `<button class="spk" data-acc="${acc}" title="${acc === 'us' ? '美' : '英'}式发音">${tag ? `<i class="ph-tag">${tag}</i>` : ''}${ipa ? ` /${esc(ipa)}/` : ''} <i class="ph-ico ri-volume-up-line" aria-hidden="true"></i></button>`;
     const uk = info.uk || info.p || '', us = info.us || '';
-    const ph = [uk && `英 /${esc(uk.replace(/^\//, '').replace(/\/$/, ''))}/`, us && `美 /${esc(us.replace(/^\//, '').replace(/\/$/, ''))}/`].filter(Boolean).join(' ');
+    const ph = spk('uk', '英', strip(uk)) + ' ' + spk('us', '美', strip(us));
+    const mns = String(info.m || '').split('\n').map(s => s.trim()).filter(Boolean)
+      .map(l => `<div class="mn">${esc(l)}</div>`).join('');
     return `<div class="item" data-k="${escAttr(k)}" data-d="${escAttr(w)}" data-ex="${escAttr(info.ex || '')}" tabindex="0" role="button">
-      <div class="wtop"><b>${esc(w)}${inText}</b>${ph ? `<span class="ph">${ph} <button class="spk" title="发音" aria-label="发音">🔊</button></span>` : ''}<button class="loc" title="文中定位" aria-label="文中定位">⌖</button></div>
-      <div class="mn">${esc(info.m).replace(/\n/g, '<br>')}</div>
-    ${info.ex ? `<div class="ex">${esc(info.ex)}</div><div class="exzh">${esc(info.exZh || '')}</div>` : ''}</div>`;
+      <div class="wtop"><div class="ww"><b>${esc(w)}${inText}</b><span class="ph">${ph}</span></div><button class="loc" title="在正文中定位" aria-label="在正文中定位"><i class="ri-focus-3-line" aria-hidden="true"></i></button></div>
+      ${mns}
+      ${info.ex ? `<div class="ex">${esc(info.ex)}</div><div class="exzh">${esc(info.exZh || '')}</div>` : ''}</div>`;
     }
     /* 视图：'cur' = 本篇目标词（1.0「目标词速查」侧栏的等价回归，2026-10-10 用户指令；
        currentChapter<0 全篇模式下自动降级为全库）；'all' = 六篇全量。选择记忆在 localStorage */
@@ -6202,13 +6254,13 @@ let listenOn = false;
     list.innerHTML = html || '<div style="padding:20px;color:var(--muted);font-size:13px">无匹配</div>';
     list.querySelectorAll('.item').forEach(el => {
     el.onclick = e => {
-    list.querySelectorAll('.item.sel').forEach(x => x.classList.remove('sel'));
-    el.classList.add('sel');
-    if (e.target.closest('.loc')) { jumpWord(el.dataset.k, el.dataset.d, true); return; }
-    if (e.target.closest('.spk')) { speakAside(el.dataset.d || el.dataset.k); return; } // 🔊只发音不跳转
+    const mark = () => { list.querySelectorAll('.item.sel').forEach(x => x.classList.remove('sel')); el.classList.add('sel'); };
+    const spkEl = e.target.closest('.spk');
+    if (spkEl) { mark(); speakAside(el.dataset.d || el.dataset.k, spkEl.dataset.acc); return; } // 英/美口音读单词
+    if (e.target.closest('.loc')) { mark(); jumpWord(el.dataset.k, el.dataset.d, true); return; } // ⌖ 只定位不朗读
     const t = e.target.closest('.ex,.exzh');
-    if (t && el.dataset.ex) { speakAside(el.dataset.ex); return; }
-    jumpWord(el.dataset.k, el.dataset.d);
+    if (t && el.dataset.ex) { speakAside(el.dataset.ex); return; } // 点例句读例句
+    mark(); speakAside(el.dataset.d || el.dataset.k);   // 点卡任意空白 = 朗读单词（1.0 语义：不跳转）
     };
     el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } };
     });
@@ -6242,7 +6294,7 @@ let listenOn = false;
     }
 
     /* ============ 键盘 ============ */
-    function visibleCards() { return [...document.querySelectorAll('#vlist .item')]; }
+    function visibleCards() { return [...document.querySelectorAll('#vlist .item')].filter(el => el.style.display !== 'none'); }
     function cardNav(d) {
     const cards = visibleCards();
     if (!cards.length) return;
@@ -6250,13 +6302,24 @@ let listenOn = false;
     i = i < 0 ? (d > 0 ? 0 : cards.length - 1) : Math.max(0, Math.min(cards.length - 1, i + d));
     cards.forEach(el => el.classList.remove('sel'));
     cards[i].classList.add('sel');
-    cards[i].scrollIntoView({ block: 'nearest' });
+    /* 用 scrollBy 把选中卡滚到列表视口垂直居中（scrollIntoView 会牵动整页滚动，1.0 同款） */
+    const list = document.getElementById('vlist');
+    if (list) { const lr = list.getBoundingClientRect(), ir = cards[i].getBoundingClientRect();
+    list.scrollBy({ top: ir.top - lr.top - (lr.height - ir.height) / 2, behavior: 'smooth' }); }
     }
     function cardSpeakSel() {
-    const sel = document.querySelector('#vlist .item.sel') || document.querySelector('#vlist .item');
-    if (sel) { sel.classList.add('sel'); jumpWord(sel.dataset.k, sel.dataset.d); }
+    const sel = document.querySelector('#vlist .item.sel') || visibleCards()[0];
+    if (sel) { sel.classList.add('sel'); speakAside(sel.dataset.d || sel.dataset.k); }  // 只朗读，不跳正文（提示条「朗读选中」的字面语义）
     }
     document.addEventListener('keydown', e => {
+    /* 词库面板打开时 ↑↓/Enter/Esc 优先服务面板（1.0 口径：面板在，全局播放/导航让位）。
+       输入框聚焦的分支在下面单独处理（那里 ↑↓/Enter 也指向面板卡片，不冲突）。 */
+    if (document.body.classList.contains('panel-open')
+        && !/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); cardNav(e.key === 'ArrowDown' ? 1 : -1); return; }
+    if (e.key === 'Enter') { e.preventDefault(); cardSpeakSel(); return; }
+    if (e.key === 'Escape') { e.preventDefault(); togglePanel(); return; }
+    }
     if (/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) {
     if (e.target.id === 'q') {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); cardNav(e.key === 'ArrowDown' ? 1 : -1); }
