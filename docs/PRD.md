@@ -131,7 +131,7 @@
 ### 3.3 文件结构
 
 ```
-雅思背单词项目/
+词汇真经单词速记/
 ├── index.html              # 情境阅读主应用（含任务模式/随身听）
 ├── js/plan-engine.js       # 排程引擎（ShadowPlan：接触账/保温/预算/工期，纯函数 UMD）
 ├── admin/index.html        # 管理后台
