@@ -229,7 +229,8 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
     expect(await page.locator('#taskBar').getAttribute('data-state')).not.toBe('exit');
   });
 
-  // ④ 任务模式（沉浸式阅读）用原背景色（暖白 #faf8f4），不是首页那套主站薄荷底。
+  // ④ 任务模式（沉浸式阅读）用暖白纸面、不是首页那套主站薄荷底。
+  //   纸面色 2026-10-11 用户三版选稿定稿：#faf8f4（黄灰）→ #fdfcf9（加白一点点）。
   test('任务模式底色回到暖白，和首页薄荷底不一样', async ({ page }) => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
@@ -239,7 +240,7 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
     await expect(page.locator('body')).toHaveClass(/task-mode/);
     const taskBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
     expect(taskBg, `任务模式底色 ${taskBg} 应与首页 ${homeBg} 不同`).not.toBe(homeBg);
-    expect(taskBg, '任务模式回到影子跟读那套暖白').toBe('rgb(250, 248, 244)');
+    expect(taskBg, '任务模式纸面 = #fdfcf9（2026-10-11 三版选稿定稿；旧值 rgb(250, 248, 244)）').toBe('rgb(253, 252, 249)');
   });
 
   // 审阅 I2：退出后首页卡片/横幅还停在进任务模式前的进度，要等点导航或刷新才更新。

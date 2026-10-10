@@ -151,3 +151,54 @@ function describeRefine3() {
     expect(m.text, '读数带单位').toBe('15 分钟');
   });
 }
+
+/* ============ 阅读纸面加白（2026-10-11 用户三版选稿定稿：#faf8f4 → #fdfcf9） ============
+   用户原话「任务模式和随身听阅读文章的二级页面的黄灰色底，稍微加白一点点」，三版截图选稿
+   后定在中间档 #fdfcf9。锁两个面：① body 的可见底色（task-mode / listen-mode 两宿主同值）；
+   ② 宿主内的 --bg 覆盖（今日线标签 .today-range-tag 靠 --bg「掐断」线体，若覆盖失效，
+   标签会露一块比页面更黄的补丁）。三处同值必须成对改：CSS 底色 ×2 / theme-color（meta + JS，
+   浏览器状态栏取色在 headless 里没法视觉验证，靠注释互指）。 */
+describeReadingPaper();
+
+function describeReadingPaper() {
+  const fixture: Record<string, string> = (() => {
+    const mk = (title: string, words: string[]) => ({
+      title, zh: title, subheads: ['第一卷'],
+      paragraphs: [['Sentence one about [[atmosphere:atmosphere]].', 'Sentence two about [[oxygen:oxygen]].']],
+      sentZh: [['第一句。', '第二句。']],
+      paraZh: [''],
+      words,
+    });
+    return {
+      'sections.json': JSON.stringify([mk('地球与生命', ['atmosphere', 'oxygen']), mk('校园与文化', ['library'])]),
+      'vocab.json': JSON.stringify({ atmosphere: { m: 'n. 大气' }, oxygen: { m: 'n. 氧气' }, library: { m: 'n. 图书馆' } }),
+      'chapters.json': '[]',
+    };
+  })();
+
+  test('阅读纸面锁定：task-mode / listen-mode 同为 #fdfcf9、宿主内 --bg 跟随（防手滑改回黄灰或改白过头）', async ({ page }) => {
+    await stubData(page, fixture);
+    await page.goto(`${rootUrl}/index.html#/`);
+    await waitShadowReady(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    await page.locator('.art-card .a-open').first().click();
+    await expect(page.locator('body')).toHaveClass(/task-mode/);
+    const t = await page.evaluate(() => ({
+      bg: getComputedStyle(document.body).backgroundColor,
+      v: getComputedStyle(document.body).getPropertyValue('--bg').trim(),
+    }));
+    expect(t.bg, '任务模式纸面 = #fdfcf9（2026-10-11 三版选稿定稿）').toBe('rgb(253, 252, 249)');
+    expect(t.v, '任务模式内 --bg 覆盖跟随纸面（今日线标签掐线色）').toBe('#fdfcf9');
+
+    await page.goto(`${rootUrl}/index.html#/listen`);
+    await expect(page.getByRole('button', { name: '展开全文阅读' }), '随身听页就绪').toBeVisible({ timeout: 15000 });
+    await page.getByRole('button', { name: '展开全文阅读' }).click();
+    await expect(page.locator('body')).toHaveClass(/listen-mode/);
+    const l = await page.evaluate(() => ({
+      bg: getComputedStyle(document.body).backgroundColor,
+      v: getComputedStyle(document.body).getPropertyValue('--bg').trim(),
+    }));
+    expect(l.bg, '随身听展开阅读纸面 = 与任务模式同值').toBe('rgb(253, 252, 249)');
+    expect(l.v, '展开阅读内 --bg 同步').toBe('#fdfcf9');
+  });
+}
