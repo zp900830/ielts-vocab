@@ -15,7 +15,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark">
-    <meta name="theme-color" content="#faf8f4">
+    <meta name="theme-color" content="#fdfcf9">
     <meta name="google" content="notranslate">
     <!-- W6 · PWA（PRD §2.5）：manifest 走 data-URI，service worker 由脚本内联生成。
          iOS 图标（2026-09-25 用户拍板修复）：iOS 不认 manifest/data-URI 图标，安装到主屏
@@ -216,7 +216,9 @@
     linear-gradient(170deg, #f8fdfa 0%, #ffffff 40%, #ffffff 100%);
     background-attachment: fixed; }
   /* ② 右侧内容区用主站首页配色（薄荷调底）；左侧导航保持自己那套（.sidenav 显式给底色）。
-     ④ 任务模式（沉浸式阅读）回到影子跟读原来那套暖白 #faf8f4。 */
+     ④ 任务模式（沉浸式阅读）用暖白纸面 —— 原影子跟读那套 #faf8f4；2026-10-11 用户
+     「黄灰底稍微加白一点点」三版选稿定稿 → #fdfcf9（任务模式 + 随身听展开阅读同值，
+     theme-color 同步；深浅两档仍成对，深色见 body.dark.task-mode）。 */
   body { font-family: var(--sans); color: var(--text);
     background-color: #f8fdfa;
     background-image:
@@ -225,7 +227,11 @@
     background-attachment: fixed;
     line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility; overflow-x: hidden; }
-  body.task-mode { background-color: #faf8f4; background-image: none; min-height: 100vh; }
+  /* 纸面内的 var(--bg) 消费点跟随新纸面色：.today-range-tag 靠 --bg 把今日线「掐断」，
+     不同步的话标签会露一块比页面底更黄的补丁；startPickPop 输入框等同类消费点一并跟随。
+     只在浅色档覆盖（:not(.dark) 保证深色版仍走 body.dark 的 #1c1a17，两档互不干扰）。 */
+  body:not(.dark).task-mode, body:not(.dark).listen-mode { --bg: #fdfcf9; }
+  body.task-mode { background-color: #fdfcf9; background-image: none; min-height: 100vh; }
   body.dark.task-mode { background-color: var(--bg); }
   ::selection { background: var(--accent-soft); }
   :focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 2px; }
@@ -1312,6 +1318,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     html { background: none; background-color: #f8fdfa; }
     html.dark { background-color: #1c1a17; }
     body { overscroll-behavior-y: contain; }
+    /* ⚠️ 实测结论（2026-10-11）：这一层【不可见】—— z-index:-1 排在 body 背景之下，
+       body 背景（#f8fdfa 或 task-mode / listen-mode 的纸面色）始终把它整个盖住；
+       连把它涂成纯红做试验，页面像素采样都看不到红色（Chromium 实测）。
+       保留仅为历史结构，**其色值不参与「阅读纸面加白」的调色**——别照它改色；
+       若哪天真发现它可见（换引擎/大改层叠），再把它与纸面色一起议。 */
     body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
       background-color: #faf8f4;
       background-image:
@@ -3058,7 +3069,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     #lcFab, #lcScrim, #lcDrawer, #lcMini, #lcMini .mb-roll, #lcDrawer .dw-body, #lcDrawer .chev, #lcDrawer .cmp-body { transition-duration: .01ms !important; }
   }
   /* 展开全屏阅读：复用任务模式那套（.layout 正文 + 底部 .audiobar），只是不挂任务条。 */
-  body.listen-mode { background: #faf8f4; }
+  /* 2026-10-11 加白：#faf8f4 → #fdfcf9（与 body.task-mode 成对改；用户三版选稿定稿）。
+     配套的 --bg 纸面覆盖在 228 行一带统一给（task-mode / listen-mode 两个宿主一起）。 */
+  body.listen-mode { background: #fdfcf9; }
   body.listen-mode > .layout { display: block; }
   body.listen-mode #appShell { display: none; }
   body.listen-mode > #audiobar { display: flex; }
@@ -6270,10 +6283,11 @@ let listenOn = false;
     function updateDarkUI(isDark) {
     document.body.classList.toggle('dark', isDark);
     document.documentElement.classList.toggle('dark', isDark);
-    /* 浏览器状态栏取色：meta 读不了 var()，只能写字面量 —— 这两个值就是 --bg 的两档
-       （浅色 #faf8f4 / 深色 #1c1a17）。改 --bg 记得同步这一行。 */
+    /* 浏览器状态栏取色：meta 读不了 var()，只能写字面量 —— 浅色 #fdfcf9 / 深色 #1c1a17。
+       浅色值 = 阅读页暖白纸面（2026-10-11 用户三版选稿定稿）。⚠️ 同值三处必须成对改：
+       本行 / <head> 里的 <meta name="theme-color"> / body.task-mode 与 listen-mode 的底色。 */
     const themeMeta = document.querySelector('meta[name="theme-color"]');
-    if (themeMeta) themeMeta.setAttribute('content', isDark ? '#1c1a17' : '#faf8f4');
+    if (themeMeta) themeMeta.setAttribute('content', isDark ? '#1c1a17' : '#fdfcf9');
     }
     function toggleDark() {
     const isDark = !document.body.classList.contains('dark');
