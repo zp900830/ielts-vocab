@@ -175,4 +175,113 @@ test.describe('词库面板双视图（目标词侧栏回归）', () => {
     await expect(page.locator('aside .wq-keys')).toContainText('朗读选中');
     await expect(page.locator('aside .wq-keys')).toContainText('收起');
   });
+
+  /* ---------- 2026-10-10 二轮（用户截图：左侧无内距 + 对齐 8901 细节）回归锁 ---------- */
+  test('面板细节回归锁（1.0 对齐）：列表两侧 12px 内距、例句译文收进框内 .ex .cn', async ({ page }) => {
+    await stubData(page);
+    await page.goto(`${rootUrl}/index.html#/`);
+    await waitShadowReady(page);
+    await enterReadingAndOpenPanel(page, 0);
+
+    /* 两侧内距：修复前 .list 零内距，卡片左缘贴死面板边框（右缘却因滚动条有空隙）。
+       断言卡片盒到面板盒左右都 ≥12，且左右差不悬殊（差值 = 滚动条占位 0~11px）。 */
+    const m = await page.evaluate(() => {
+      const panel = document.getElementById('panel') as HTMLElement;
+      const list = document.getElementById('vlist') as HTMLElement;
+      const item = list.querySelector('.item') as HTMLElement;
+      const pr = panel.getBoundingClientRect(), ir = item.getBoundingClientRect();
+      return {
+        padL: getComputedStyle(list).paddingLeft,
+        padR: getComputedStyle(list).paddingRight,
+        padB: getComputedStyle(list).paddingBottom,
+        leftGap: Math.round(ir.left - pr.left),
+        rightGap: Math.round(pr.right - ir.right),
+      };
+    });
+    expect(m.padL, 'list 左内距').toBe('12px');
+    expect(m.padR, 'list 右内距').toBe('12px');
+    expect(m.padB, 'list 底内距（1.0 .wq-list 同款 12px）').toBe('12px');
+    expect(m.leftGap, '卡片距面板左缘（边框 1 + 内距 12）').toBeGreaterThanOrEqual(12);
+    expect(m.leftGap).toBeLessThan(16);
+    expect(m.rightGap, '右侧同理，只多滚动条占位').toBeGreaterThanOrEqual(m.leftGap);
+    expect(m.rightGap - m.leftGap, '左右差 = 滚动条占位（overlay=0 / 经典 5~15px），不应再是单侧贴死').toBeLessThanOrEqual(16);
+
+    /* 例句译文收进 .ex 框内（1.0 .wq-ex 的 .en/.cn 结构）；旧的框外 .exzh 已废 */
+    const ex = page.locator('#vlist .item[data-k="atmosphere"] .ex');
+    await expect(ex.locator('.en')).toHaveText('The meeting was held in a relaxed atmosphere.');
+    await expect(ex.locator('.cn')).toHaveText('会议在轻松的气氛中举行。');
+    await expect(page.locator('#vlist .exzh'), '框外译文行已删').toHaveCount(0);
+  });
+
+  test('选中即发音：↑↓ 导航落定朗读该卡、点卡朗读单词、音标钮带口音参数', async ({ page }) => {
+    await stubData(page);
+    await page.goto(`${rootUrl}/index.html#/`);
+    await waitShadowReady(page);
+    await enterReadingAndOpenPanel(page, 0);
+    /* 录音笔：只记「要求朗读什么、带什么口音」，不回放（headless 无声卡） */
+    await page.evaluate(() => {
+      const w = window as unknown as { __said: { t: string; acc?: string }[]; speak: (...a: unknown[]) => void };
+      w.__said = [];
+      w.speak = (text: string, _cb: unknown, opts?: { voiceAcc?: string }) => {
+        w.__said.push({ t: text, acc: opts && opts.voiceAcc });
+      };
+    });
+    const lastSaid = () => page.evaluate(() => (window as unknown as { __said: { t: string; acc?: string }[] }).__said.at(-1));
+
+    /* ↑↓ 落定即发音（用户 2026-10-10：快捷键上下选完的也要发音） */
+    await page.keyboard.press('ArrowDown');
+    await expect(page.locator('#vlist .item').first()).toHaveClass(/sel/);
+    await expect.poll(lastSaid, { message: '↓ 落到第一张卡就朗读 atmosphere' }).toEqual({ t: 'atmosphere' });
+    await page.keyboard.press('ArrowDown');
+    await expect(page.locator('#vlist .item[data-k="oxygen"]')).toHaveClass(/sel/);
+    await expect.poll(lastSaid).toEqual({ t: 'oxygen' });
+    await page.keyboard.press('ArrowUp');
+    await expect.poll(lastSaid).toEqual({ t: 'atmosphere' });
+
+    /* 点卡任意空白 = 朗读单词（1.0 语义回归锁） */
+    await page.locator('#vlist .item[data-k="crust"] .wtop b').click();
+    await expect.poll(lastSaid).toEqual({ t: 'crust' });
+    await expect(page.locator('#vlist .item[data-k="crust"]')).toHaveClass(/sel/);
+
+    /* 音标钮：英/美各带口音参数（data-acc=uk/us → en-GB/en-US） */
+    await page.locator('#vlist .item[data-k="atmosphere"] .spk[data-acc="uk"]').click();
+    await expect.poll(lastSaid, { message: '点「英」按英音朗读' }).toEqual({ t: 'atmosphere', acc: 'en-GB' });
+    await page.locator('#vlist .item[data-k="atmosphere"] .spk[data-acc="us"]').click();
+    await expect.poll(lastSaid, { message: '点「美」按美音朗读' }).toEqual({ t: 'atmosphere', acc: 'en-US' });
+  });
+
+  test('起播前清队列只 cancel 一遍：cancel 后留 150ms 再 speak（曾因 go() 内第二遍 cancel 紧接 speak 被吞，音标钮/词卡偶发静默）', async ({ page }) => {
+    await stubData(page);
+    await page.goto(`${rootUrl}/index.html#/`);
+    await waitShadowReady(page);
+    await enterReadingAndOpenPanel(page, 0);
+    /* 假引擎：cancel 异步生效（300ms 后 speaking 才回落）——复刻真浏览器「cancel 后状态残留一拍」的形状；
+       若代码在残留窗口里又 cancel 一次，第二遍就紧贴 speak，正是被吞组合的形状。 */
+    await page.evaluate(() => {
+      const w = window as unknown as { __eng: Record<string, unknown> };
+      const eng: Record<string, unknown> = {
+        cancels: 0, speaks: 0, lastCancelAt: 0, lastSpeakAt: 0,
+        speaking: true, pending: false, paused: false,
+        getVoices: () => [],
+        cancel() { (eng.cancels as number)++; eng.lastCancelAt = performance.now(); setTimeout(() => { eng.speaking = false; }, 300); },
+        speak(u: SpeechSynthesisUtterance) {
+          (eng.speaks as number)++; eng.lastSpeakAt = performance.now();
+          try { if (u.onstart) (u.onstart as (ev: Event) => void)(new Event('start')); } catch (e) {}
+        },
+        resume() {}, pause() {}, addEventListener() {}, removeEventListener() {},
+      };
+      w.__eng = eng;
+      Object.defineProperty(window, 'speechSynthesis', { value: eng, configurable: true });
+    });
+    const eng = () => page.evaluate(() => {
+      const e = (window as unknown as { __eng: Record<string, number> }).__eng;
+      return { cancels: e.cancels, speaks: e.speaks, gap: Math.round(e.lastSpeakAt - e.lastCancelAt) };
+    });
+
+    await page.locator('#vlist .item[data-k="oxygen"] .wtop b').click();
+    await expect.poll(async () => (await eng()).speaks, { message: '应起播一次' }).toBe(1);
+    const s = await eng();
+    expect(s.cancels, '起播前清队列恰好 cancel 一遍（第二遍已删）').toBe(1);
+    expect(s.gap, 'cancel 与 speak 之间留足 150ms，不构成同 tick 被吞组合').toBeGreaterThanOrEqual(140);
+  });
 });
