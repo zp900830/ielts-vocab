@@ -120,28 +120,6 @@ const main = async () => {
     await ctx.close();
   }
 
-  {
-    const { ctx, page } = await openPage(browser, { width: 1200, height: 900 });
-    await page.goto(`${BASE}/index.html#/home`);
-    await page.evaluate(() => { try { TASK.initPlan(15); } catch (e) {} });
-    await page.reload();
-    await appReady(page);
-    await run(page, 'blank-pop', async (p) => {
-      await p.locator('.art-card .a-open').first().click();
-      await p.waitForTimeout(400);
-      const ok = await p.evaluate(() => {
-        try {
-          if (TASK.seedArticleForTest) TASK.seedArticleForTest(0);
-          if (TASK.openBlank) { TASK.openBlank(); return true; }
-        } catch (e) { return String((e && e.message) || e); }
-        return false;
-      });
-      if (ok !== true) throw new Error('openBlank unavailable: ' + ok);
-      await p.waitForTimeout(300);
-    });
-    await ctx.close();
-  }
-
   await browser.close();
   proc.kill();
   fs.writeFileSync('/tmp/a11y-raw.json', JSON.stringify(out, null, 2));

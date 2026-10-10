@@ -9,14 +9,12 @@ declare const TASK: {
   initPlan(minutes: number): void;
   readDone(i: number): void;
   seedDailyForTest(back: number): void;
-  seedArticleForTest(a: number, o: { quizOk?: number; quizNo?: number; reps?: number; pass2?: boolean }): void;
   state(): {
     daily: Record<string, { sentDone?: number; quizDone?: number; minutes?: number }>;
     words: Record<string, unknown>;
     sents: Record<number, { lastReadAt: number }>;
   };
-  todayStats(): { streak: number; graduated: number; targetWords: number };
-  countStages(): { graduated: number; leech: number };
+  todayStats(): { streak: number; passed: number; targetWords: number };
   listenStat(): { totalSents: number; totalMs: number; byArticle: Record<string, number>; last: Record<string, number> };
 };
 declare const ShadowPlan: {
@@ -27,7 +25,7 @@ declare const ShadowPlan: {
 };
 declare const SECTIONS: unknown[];
 declare const APP3: {
-  articleStat(a: number): { progress: number; stage: string; ever: number; total: number };
+  articleStat(a: number): { progress: number; readPct: number; stage: string; ever: number; total: number };
   route(): void;
 };
 
@@ -150,7 +148,7 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
       let minutes = 0, acts = 0;
       keys.forEach((k) => { const d = daily[k] || {}; minutes += d.minutes || 0; acts += (d.sentDone || 0) + (d.quizDone || 0); });
       let arts = 0;
-      for (let a = 0; a < SECTIONS.length; a++) { const s = APP3.articleStat(a).stage; if (s === 'done' || s === 'pro') arts++; }
+      for (let a = 0; a < SECTIONS.length; a++) { if (APP3.articleStat(a).stage === 'done') arts++; }
       return { days: keys.length, minutes, streak: TASK.todayStats().streak, arts, acts };
     });
     const num = (k: string) => page.locator(`.st-num[data-k="${k}"] b`).innerText().then((t) => Number(t.replace('%', '')));
@@ -188,32 +186,6 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     await page.locator('.st-art[data-a="0"]').click();
     await expect(page).toHaveURL(/#\/home/);
     await expect(page.locator('.art-card[data-a="0"]')).toHaveClass(/hl/);
-  });
-
-  test('单词掌握：4 个数与 countStages/state 同源', async ({ page }) => {
-    await stubData(page, SIX);
-    await gotoStats(page);
-    await page.evaluate(() => {
-      TASK.resetV2(); TASK.initPlan(15);
-      const s = ShadowPlan.articleScope(SECTIONS, 0);
-      Array.from(s).slice(0, 8).forEach((i) => TASK.readDone(i));
-      TASK.seedArticleForTest(0, { quizOk: 2 });     // 造点词状态，别让 4 个数全 0
-    });
-    await reloadStats(page);
-
-    const expected = await page.evaluate(() => {
-      const c = TASK.countStages();
-      const st = TASK.state();
-      const learned = Object.keys(st.words || {}).length;
-      const total = TASK.todayStats().targetWords;
-      return { learned, grad: c.graduated, leech: c.leech, rate: total ? Math.round((c.graduated / total) * 100) : 0 };
-    });
-    const num = (k: string) => page.locator(`.st-num[data-k="${k}"] b`).innerText().then((t) => Number(t.replace('%', '')));
-    expect(await num('learned')).toBe(expected.learned);
-    expect(await num('grad')).toBe(expected.grad);
-    expect(await num('leech')).toBe(expected.leech);
-    expect(await num('rate')).toBe(expected.rate);
-    expect(expected.learned, '夹具要真造出词状态').toBeGreaterThan(0);
   });
 
   test('学习趋势：14 天柱状 + SVG 折线，有文本替代，无图表库', async ({ page }) => {
@@ -270,18 +242,14 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
       const st = TASK.state();
       const old = Date.now() - 3 * 864e5;
       arr.slice(0, 3).forEach((i) => { st.sents[i].lastReadAt = old; });   // 3 天没学 → stale
-      st.words['__leech__'] = Object.assign(ShadowPlan.newWord(), { stage: 'seen', reps: 1, leech: true, due: Date.now() - 1000 });  // 重点词到期 → leech
       APP3.route();
     });
 
-    await expect(page.locator('.st-tip')).toHaveCount(3);
+    // ② 删除后「待加强」只剩 continue / stale 两条（重点词到期随词状态系统退役）
+    await expect(page.locator('.st-tip')).toHaveCount(2);
     await expect(page.locator('.st-tip[data-tip="continue"]')).toContainText('还差');
-    await expect(page.locator('.st-tip[data-tip="leech"]')).toContainText('重点词');
     await expect(page.locator('.st-tip[data-tip="stale"]')).toContainText('天没学');
 
-    // leech → 单词本
-    await page.locator('.st-tip[data-tip="leech"] .tip-go').click();
-    await expect(page).toHaveURL(/#\/words/);
     // continue → 回首页并高亮第 0 篇
     await page.goto(`${rootUrl}/index.html#/stats`);
     await page.locator('.st-tip[data-tip="continue"] .tip-go').click();
@@ -348,7 +316,7 @@ test.describe('3.0 学习数据页（M2，PRD §5）', () => {
     });
     await reloadStats(page);
     await expect(page.locator('.stats-page > h1')).toHaveCount(1);
-    await expect(page.locator('.st-block > h2')).toHaveCount(7);   // 四问四块 + 今天 + 随身听 + 待加强
+    await expect(page.locator('.st-block > h2')).toHaveCount(6);   // 四问三块 + 今天 + 随身听 + 待加强
     const h = await page.locator('.st-tip .tip-go').first().evaluate((el) => el.getBoundingClientRect().height);
     expect(h, '触摸目标 ≥44px').toBeGreaterThanOrEqual(44);
   });

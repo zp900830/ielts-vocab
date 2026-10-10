@@ -8,24 +8,33 @@ declare const TASK: {
   resetV2(): void;
   initPlan(minutes: number): void;
   readDone(i: number): void;
-  seedArticleForTest(a: number, o: { reps?: number; quizOk?: number; pass2?: boolean }): void;
   repsOf(a: number): number;
   backupPayload(): { app: string; backupVer: number; exportedAt: string; data: Record<string, string> };
   parseBackup(o: unknown): { ok: boolean; reason?: string; keys?: string[] };
   applyBackup(o: { data: Record<string, string> }, keys: string[]): { ok: boolean; reason?: string; rolledBack?: boolean };
   exportBackup(): void;
   importBackup(id?: string): void;
-  todayStats(): { streak: number; graduated: number; targetWords: number };
-  state(): { daily: Record<string, unknown> } | null;
+  todayStats(): { streak: number; passed: number; targetWords: number };
+  state(): { daily: Record<string, unknown>; words: Record<string, unknown> } | null;
   planConfig(): { minutes: number; boundary: number; startDate: string } | null;
   hasPlan: boolean;
 };
-declare const ShadowPlan: { articleScope(sections: unknown, article: number): Set<number> };
+declare const ShadowPlan: { articleScope(sections: unknown, article: number): Set<number>; dayKey(ts: number, b: number): string };
 declare const SECTIONS: unknown[];
 declare const CLOUD: { _userMail: string };
 declare const APP3: { renderMePop(): void };
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
+
+/* seedArticleForTest 已随 ② 删除；按篇账（reps）改为直接写 3.0 私有 key + reload 读回。 */
+async function seedReps(page: import('@playwright/test').Page, n: number) {
+  await page.evaluate((n) => {
+    localStorage.setItem('ielts.app3.article', JSON.stringify(
+      { reps: { [ShadowPlan.dayKey(Date.now(), 4)]: { 0: n } } }));
+  }, n);
+  await page.reload();
+  await waitTask(page);
+}
 
 /* 六篇小壳（篇 0 = 6 句，其余各 1 句），够开计划、够造按篇账，又不拖慢并行。 */
 const SIX: Record<string, string> = (() => {
@@ -75,7 +84,7 @@ test.describe('M5 · 导出/导入（§8.1 数据管理）', () => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
-    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.seedArticleForTest(0, { reps: 5 }); });
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
     const before = await page.evaluate(() => localStorage.getItem('ielts.shadow.v2'));
 
     const cases = await page.evaluate(() => {
@@ -108,7 +117,8 @@ test.describe('M5 · 导出/导入（§8.1 数据管理）', () => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
-    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.seedArticleForTest(0, { reps: 2 }); });
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    await seedReps(page, 2);
     const beforeV2 = await page.evaluate(() => localStorage.getItem('ielts.shadow.v2'));
     const beforeArt = await page.evaluate(() => localStorage.getItem('ielts.app3.article'));
 
@@ -143,7 +153,8 @@ test.describe('M5 · 导出/导入（§8.1 数据管理）', () => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
-    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(20); TASK.seedArticleForTest(0, { reps: 4 }); TASK.readDone(0); });
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(20); TASK.readDone(0); });
+    await seedReps(page, 4);
     const payload = await page.evaluate(() => TASK.backupPayload());
     expect(payload.app).toBe('ielts-shadow');
     expect(Object.keys(payload.data), '备份必须含共享根 + 3.0 按篇账').toEqual(
@@ -429,7 +440,7 @@ test.describe('M5 · 重置学习计划', () => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
     await waitTask(page);
-    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.readDone(0); TASK.seedArticleForTest(0, { reps: 5 }); });
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.readDone(0); });
     const before = await page.evaluate(() => ({
       words: Object.keys(TASK.state()!.words).length,
       days: Object.keys(TASK.state()!.daily).length,

@@ -11,33 +11,19 @@ import { setMin } from '../../utils/min-slider';
 declare const TASK: {
   resetV2(): void;
   initPlan(minutes: number): void;
-  enterTaskMode(): void;
-  setPass(n: number): void;
   readDone(i: number): void;
   next(): void;
-  finished(): boolean;
-  answerQuiz(choice: string): boolean;
-  nextQuiz(): void;
-  quizTotal(): number;
-  quizDone(): number;
-  pass(): number;
-  currentQuiz(): { opts: string[]; answer: string } | null;
   queue: { i: number }[];
   hasPlan: boolean;
   state(): { daily: Record<string, unknown> };
   events(): unknown[];
-  openArticleQuiz(a: number): void;
-  seedArticleForTest(a: number, o: { quizOk?: number; quizNo?: number; reps?: number; pass2?: boolean }): void;
   repsOf(a: number): number;
-  articlePass2Done(a: number): boolean;
+  todayProgress(): { done: number; planned: number; left: number };
   exportBackup(): void;
 };
-declare const APP3: { currentBlank(): number; openBlank(bi: number): void };
 declare const ShadowPlan: {
   articleScope(sections: unknown, article: number): Set<number>;
-  assemble(state: unknown, opts: unknown): {
-    items: { w: string; pool: string; s: number | string; kind?: string; pass?: number; from?: number | string }[];
-  };
+  dayKey(ts: number, b: number): string;
 };
 declare const SECTIONS: { title: string; paragraphs: string[][] }[];
 
@@ -142,22 +128,6 @@ test('口径 A：下一句=屏幕上紧邻的下一句（不在今天批次也�
   await page.locator('#tbNext').click();          // 再下一句 → 第 2 句（它回到了队列正轨）
   expect(await curIdx(page)).toBe(2);
 });
-
-/* 在 ② 的浮窗里点「正确」/「错误」的那个选项（不碰游标、不推进）。 */
-async function answerCorrectlyInPop(page: import('@playwright/test').Page) {
-  const idx = await page.evaluate(() => {
-    const q = TASK.currentQuiz()!;
-    return q.opts.indexOf(q.answer);
-  });
-  await page.locator('#blankPop .qz-opt').nth(idx).click();
-}
-async function answerWronglyInPop(page: import('@playwright/test').Page) {
-  const idx = await page.evaluate(() => {
-    const q = TASK.currentQuiz()!;
-    return q.opts.findIndex((o) => o !== q.answer);
-  });
-  await page.locator('#blankPop .qz-opt').nth(idx).click();
-}
 
 test.describe('3.0 文章任务模式（按篇队列）', () => {
   test('点卡片 → 任务模式，主行 n/N 是今天的计划句数（口径 A，不是这一篇）', async ({ page }) => {
@@ -289,598 +259,86 @@ test.describe('3.0 文章任务模式（按篇队列）', () => {
   });
 });
 
-/* ② 文内挖空要用真四选一：引擎（buildQuiz）凑满 4 个候选才出题，所以这几篇的词必须配
-   vocab 卡，且义项互不重叠（n. 苹果 / n. 香蕉 …）—— 否则 blankQuiz 过不了词性/双解闸。
-   四个词轮着出现，同段就有 3 个同词性干扰项，四选一必然凑得齐。 */
-const QWORDS = ['apple', 'banana', 'cherry', 'date'];
-const QSENSES = ['苹果', '香蕉', '樱桃', '枣'];
-const SIXQ: Record<string, string> = (() => {
-  const vocab: Record<string, { m: string }> = {};
-  QWORDS.forEach((w, i) => { vocab[w] = { m: 'n. ' + QSENSES[i] }; });
-  const mk = (title: string, ai: number, n: number) => ({
-    title,
-    zh: title,
-    subheads: [''],
-    paragraphs: [Array.from({ length: n }, (_, i) => {
-      const w = QWORDS[(ai + i) % QWORDS.length];
-      return `Sentence ${i} about [[${w}:${w}]].`;
-    })],
-    sentZh: [Array.from({ length: n }, (_, i) => `第 ${i} 句。`)],
-    paraZh: [''],
-  });
-  const titles = ['地球与生命', '校园与文化', '衣食住行', '社会与规则', '历史与发明', '身体与时间'];
-  return {
-    'sections.json': JSON.stringify(titles.map((t, i) => mk(t, i, i === 0 ? 8 : 2))),
-    'vocab.json': JSON.stringify(vocab),
-    'chapters.json': '[]',
-  };
-})();
-
-test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () => {
-  // 2026-09-25 用户实测：② 答题页切去随身听后，答题卡浮窗和「挖空选择 0/112」任务条
-  // 还悬在听书页上。锁死：离开任务模式的每条路都要把这两样收干净。
-  test('② 态切去随身听：答题卡、答题任务条、quiz 态一起收（不再悬在听书页）', async ({ page }) => {
-    await stubData(page, SIXQ);
+/* ===== 2026-10-10 ② 删除后的收工态 =====
+   ① 队列读满 / 额度读满 → finishTask() → 任务条进 done 态：
+   全局还有剩 → 「本篇完成 / 今天读够了 · 继续读」；真读完 → 「今天完成 · 看词本 / 回首页」。 */
+test.describe('3.0 收工态（② 删除后：① 读满直接收工）', () => {
+  test('今天全读完 → 收工「今天完成 · 看词本」', async ({ page }) => {
+    await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
-    await page.locator('.art-card').first().click();
-    await expect(page.locator('#taskBar')).toBeVisible();
-    await page.evaluate(() => TASK.setPass(2));
-    await page.locator('#art .qz-blank').first().click();
-    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);   // 答题卡开着
-
-    await page.evaluate(() => { location.hash = '#/listen'; });
-    await expect(page.locator('#appView .listen-page')).toBeVisible();
-    await expect(page.locator('#blankPop'), '答题卡必须跟着收走').toBeHidden();
-    expect(await page.locator('#blankPop .qz-opt').count(), '答题卡内容必须清空').toBe(0);
-    await expect(page.locator('#taskBar'), '答题任务条不许出现在听书页').not.toHaveClass(/show/);
-    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'idle');
-    await expect(page.locator('body')).not.toHaveClass(/task-mode/);
-    await expect(page.locator('body')).not.toHaveClass(/quiz-mode/);
-    // 听书态本身是好的：卡片在、悬浮球/播放链没有残留的 quiz 提示
-    await expect(page.locator('.ls-card')).toBeVisible();
-  });
-
-  test('② 态点「返回首页」：答题卡不悬在新页面上（exitTaskMode 一并收）', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    await page.locator('.art-card').first().click();
-    await page.evaluate(() => TASK.setPass(2));
-    await page.locator('#art .qz-blank').first().click();
-    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
-
-    await page.evaluate(() => TASK.exitTaskMode());
-    await expect(page.locator('#appView .art-card').first()).toBeVisible();
-    await expect(page.locator('#blankPop'), '返回后答题卡不许还在').toBeHidden();
-    await expect(page.locator('#taskBar')).not.toHaveClass(/show/);
-  });
-  test('② 挖空长在正文里，点空弹浮窗，下一题定位到下一个空', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    await page.locator('.art-card').first().click();
-    await expect(page.locator('#taskBar')).toBeVisible();
-    await page.evaluate(() => TASK.setPass(2));
-
-    // 2026-09-24：② 态那枚圈去掉后，阶段名「挖空选择」必须自己扛住语义（不是只剩「12/40」）。
-    await expect(page.locator('#tbTitle')).toContainText('挖空');
-    await expect(page.locator('#tbTitle')).not.toContainText(/[①②③④]/);
-
-    // 空是正文里的内联元素，且**不存在**底部题卡
-    expect(await page.locator('#art .sent .qz-blank').count()).toBeGreaterThan(0);
-    expect(await page.locator('#taskCard').count(), '底部题卡必须不存在').toBe(0);
-
-    await page.locator('#art .qz-blank').first().click();
-    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
-    await page.locator('#blankPop .qz-opt').first().click();
-    await expect(page.locator('#art .qz-blank').first()).toHaveClass(/qa-done/);
-    /* 2026-10-09 反馈态（不背单词式）：浮窗不收 —— 正确项标绿、提示语换成判词，
-       朗读跟选项颜色同一拍；推进到下一题时才收。 */
-    await expect(page.locator('#blankPop')).toBeVisible();
-    await expect(page.locator('#blankPop .qz-opt.right')).toHaveCount(1);
-
-    const before = await page.evaluate(() => APP3.currentBlank());
-    await page.locator('#tbNext').click();
-    expect(await page.evaluate(() => APP3.currentBlank())).not.toBe(before);
-  });
-
-  test('390px 宽下浮窗锚在空旁边、不越出屏幕', async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    await page.locator('.art-card').first().click();
-    await expect(page.locator('#taskBar')).toBeVisible();
-    await page.evaluate(() => TASK.setPass(2));
-    // setPass(2) 会 renderQuiz → 自动弹出当前题的浮窗（不必再点空；点空反而被浮窗挡住）
-    await expect(page.locator('#blankPop')).toBeVisible();
-    const box = await page.locator('#blankPop').boundingBox();
-    expect(box, '浮窗必须有几何位置').not.toBeNull();
-    expect(box!.x).toBeGreaterThanOrEqual(0);
-    expect(box!.x + box!.width).toBeLessThanOrEqual(390);
-  });
-
-  // 审阅 Important 1：② 的分母数了答不了的题（词卡例句题 s==='ex' 没有正文空位可挖）。
-  test('② 的分母只数答得出的题：词卡例句题不计入，也不占进度', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    // 往引擎排出的批次里塞一条没有正文空位的 'ex' 题（模拟真实会出现的词卡例句题）
     await page.evaluate(() => {
-      const orig = ShadowPlan.assemble;
-      ShadowPlan.assemble = function (state, opts) {
-        const r = orig(state, opts);
-        if (r && r.items && r.items.length) {
-          const f = r.items[0];
-          r.items.push({ kind: 'quiz', pass: 2, s: 'ex', w: f.w, pool: f.pool, from: f.s });
-        }
-        return r;
-      };
-    });
-    await page.locator('.art-card').first().click();
-    await expect(page.locator('#taskBar')).toBeVisible();
-    await page.evaluate(() => TASK.setPass(2));
-    const raw = await page.evaluate(() => TASK.quizTotal());
-    const blanks = await page.locator('#art .sent .qz-blank').count();
-    const n = await page.evaluate(() =>
-      Number(document.getElementById('tbTitle')!.textContent!.match(/\/\s*(\d+)/)![1]));
-    expect(raw, '夹具里必须真有一条答不了的题，否则这条测不到东西').toBeGreaterThan(blanks);
-    expect(n, '② 的分母 = 真能挖出来的空数，不是 quizList 原始长度').toBe(blanks);
-  });
-
-  // 审阅 Important 2：乱序点空后，「下一题」必须去找下一个未答的空，既不重问也不漏。
-  test('下一题 = 下一个未答的空：乱序点空不漏、不重问', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    await page.locator('.art-card').first().click();
-    await expect(page.locator('#taskBar')).toBeVisible();
-    await page.evaluate(() => TASK.setPass(2));
-
-    const total = await page.locator('#art .qz-blank').count();
-    expect(total, '夹具要有多于一个空，乱序才有意义').toBeGreaterThan(2);
-    // 答对（答错会生成补考，而补考本就是「同一空再问一次」，会把这条断言搅浑）
-    const answerCorrectly = async () => {
-      const idx = await page.evaluate(() => {
-        const q = TASK.currentQuiz()!;
-        return q.opts.indexOf(q.answer);
-      });
-      await page.locator('#blankPop .qz-opt').nth(idx).click();
-    };
-
-    // 乱序：先答第 3 个空（跳过前两个）
-    await page.evaluate(() => APP3.openBlank(3));
-    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
-    await answerCorrectly();
-    await expect(page.locator('#art .qz-blank[data-bi="3"]')).toHaveClass(/qa-done/);
-    expect(await page.evaluate(() => TASK.quizDone())).toBe(1);
-
-    // 下一题去找下一个未答的空，不会落回刚答过的第 3 个
-    const after = await page.evaluate(() => { TASK.next(); return APP3.currentBlank(); });
-    expect(after, '下一题不能落回刚答过的空').not.toBe(3);
-    expect(await page.evaluate(() => TASK.quizDone()), '重问会多记一条 quiz 事件').toBe(1);
-
-    // 点一个已答过的空：只回看（选项禁用），不再记事件
-    await page.evaluate(() => APP3.openBlank(3));
-    expect(await page.evaluate(() => TASK.quizDone()), '回看态不许再记一次').toBe(1);
-    await expect(page.locator('#blankPop .qz-opt[disabled]')).toHaveCount(4);
-
-    // 一路「下一题 + 答对」直到没有空：每个空恰好答一次，一个都不落下
-    for (let guard = 0; guard < total + 5; guard++) {
-      await page.evaluate(() => TASK.next());
-      const open = await page.locator('#blankPop .qz-opt:not([disabled])').count();
-      if (open === 0) break;
-      await answerCorrectly();
-    }
-    await expect(page.locator('#art .qz-blank.qa-done')).toHaveCount(total);
-    expect(await page.evaluate(() => TASK.quizDone()), '每个空恰好答一次，没有重复事件').toBe(total);
-    await expect(page.locator('#blankPop')).toBeHidden();
-  });
-
-  /* ===== 答完自动下一题（2026-09-24 用户：「回答完就自动下一题吧」）=====
-     选完一个选项 → 先让人看清对/错（并让读屏把 #quizLive 念完）→ 自动去下一题。
-     「下一题」按钮保留（键盘 / 想多看一眼 / 自动化），且与自动推进不打架（不跳两题）。 */
-  test.describe('② 答完自动下一题', () => {
-    test('答完不点任何东西：反馈先可见，随后自动到下一题', async ({ page }) => {
-      await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/index.html#/home`);
-      await freshPlan(page);
-      await page.locator('.art-card').first().click();
-      await expect(page.locator('#taskBar')).toBeVisible();
-      await page.evaluate(() => TASK.setPass(2));
-
-      const first = await page.evaluate(() => APP3.currentBlank());
-      await answerCorrectlyInPop(page);
-
-      // 反馈看得见（2026-10-09 不背单词式）：浮窗留着，正确项标绿；答过的空立刻呈现；播报区写入文字
-      await expect(page.locator('#blankPop')).toBeVisible();
-      await expect(page.locator('#blankPop .qz-opt.right')).toHaveCount(1);
-      await expect(page.locator(`#art .qz-blank[data-bi="${first}"]`)).toHaveClass(/qa-ok/);
-      await expect(page.locator('#quizLive')).not.toHaveText('');
-
-      // 不是一闪而过：立即查还在原题（自动推进有可见停留）
-      expect(await page.evaluate(() => APP3.currentBlank()), '反馈必须停留一瞬，不能答完就跳').toBe(first);
-
-      // 不点任何东西 → 自动到下一题（换空 + 浮窗重新弹出）
-      await expect
-        .poll(() => page.evaluate(() => APP3.currentBlank()), { timeout: 6000 })
-        .not.toBe(first);
-      await expect(page.locator('#blankPop')).toBeVisible();
-      await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
-    });
-
-    test('答错也先给反馈：红字 + 正确答案，停留更久后自动推进', async ({ page }) => {
-      await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/index.html#/home`);
-      await freshPlan(page);
-      await page.locator('.art-card').first().click();
-      await expect(page.locator('#taskBar')).toBeVisible();
-      await page.evaluate(() => TASK.setPass(2));
-
-      const first = await page.evaluate(() => APP3.currentBlank());
-      const answer = await page.evaluate(() => TASK.currentQuiz()!.answer);
-      await answerWronglyInPop(page);
-
-      // 答错：空变红、摊出正确的那一个；播报区说「正确的那一个是 X」
-      await expect(page.locator(`#art .qz-blank[data-bi="${first}"]`)).toHaveClass(/qa-no/);
-      await expect(page.locator('#quizLive')).toContainText('正确的那一个是');
-      await expect(page.locator('#quizLive')).toContainText(answer);
-
-      // 答错的停留必须够看清正确答案：立刻仍在原题，且比答对的停留久（≥1.5s 还在）
-      expect(await page.evaluate(() => APP3.currentBlank())).toBe(first);
-      await page.waitForTimeout(1500);
-      expect(await page.evaluate(() => APP3.currentBlank()), '答错不能 1.5s 内就跳走，得让人看清答案').toBe(first);
-
-      await expect
-        .poll(() => page.evaluate(() => APP3.currentBlank()), { timeout: 6000 })
-        .not.toBe(first);
-    });
-
-    test('最后一题答完 → 自动进收工态（不留空白）', async ({ page }) => {
-      await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/index.html#/home`);
-      await freshPlan(page);
-      await page.locator('.art-card').first().click();
-      await expect(page.locator('#taskBar')).toBeVisible();
-      await page.evaluate(() => TASK.setPass(2));
-
-      const total = await page.locator('#art .qz-blank').count();
-      expect(total, '夹具要有多于一题，才能把「最后一题」单独留出来').toBeGreaterThan(1);
-      // 程序化答到只剩最后一题（不等自动定时器）
-      await page.evaluate((n) => {
-        for (let g = 0; g < 500; g++) {
-          const done = document.querySelectorAll('#art .qz-blank.qa-done').length;
-          if (done >= n - 1) break;
-          const q = TASK.currentQuiz();
-          if (!q) break;
-          TASK.answerQuiz(q.answer);
-          TASK.next();
-        }
-      }, total);
-      await expect(page.locator('#art .qz-blank.qa-done')).toHaveCount(total - 1);
-
-      // 最后一题用 UI 答对，然后什么都不点：自动推进 → 收工态
-      await answerCorrectlyInPop(page);
-      await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done', { timeout: 6000 });
-      /* 2026-10-09 收工分岔：这条没通读、队列 4 句全没读 → 本篇答完 ≠ 今天完成 →
-         「本篇完成 · 继续读」（读的账还在，继续读把今天的通读接上）。
-         「真收工 · 看词本」分支由「收工态：看词本」那条（readDone 后）单独锁。 */
-      await expect(page.locator('#tbTitle')).toContainText('本篇完成');
-      await expect(page.locator('#tbNext')).toContainText('继续读');
-    });
-
-    test('手动「下一题」与自动推进不打架：不跳两题', async ({ page }) => {
-      await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/index.html#/home`);
-      await freshPlan(page);
-      await page.locator('.art-card').first().click();
-      await expect(page.locator('#taskBar')).toBeVisible();
-      await page.evaluate(() => TASK.setPass(2));
-
-      const first = await page.evaluate(() => APP3.currentBlank());
-      await answerCorrectlyInPop(page);
-      await expect(page.locator('#blankPop')).toBeVisible();   // 反馈态浮窗不收（选项已标色）
-
-      // 反馈出现后立刻手动推进（抢在自动定时器之前）
-      await page.locator('#tbNext').click();
-      const second = await page.evaluate(() => APP3.currentBlank());
-      expect(second, '手动推进必须换到下一个空').not.toBe(first);
-
-      // 等过自动延迟：仍停在 second —— 手动那次已取消定时器，不许再跳一格
-      await page.waitForTimeout(4000);
-      expect(await page.evaluate(() => APP3.currentBlank()), '手动推进后自动定时器必须被取消').toBe(second);
-    });
-
-    test('乱序点空 + 自动推进：不漏、不重问', async ({ page }) => {
-      await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/index.html#/home`);
-      await freshPlan(page);
-      await page.locator('.art-card').first().click();
-      await expect(page.locator('#taskBar')).toBeVisible();
-      await page.evaluate(() => TASK.setPass(2));
-
-      const total = await page.locator('#art .qz-blank').count();
-      expect(total, '夹具要多于一个空，乱序才有意义').toBeGreaterThan(2);
-
-      // 抢答第 3 个空（跳过前两个）
-      await page.evaluate(() => APP3.openBlank(3));
-      await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
-      await answerCorrectlyInPop(page);
-      expect(await page.evaluate(() => TASK.quizDone())).toBe(1);
-
-      // 自动推进：既不落回刚答过的第 3 个（重问），也不越过未答的空
-      await expect
-        .poll(() => page.evaluate(() => APP3.currentBlank()), { timeout: 6000 })
-        .not.toBe(3);
-      expect(await page.evaluate(() => TASK.quizDone()), '自动推进不许重问第 3 个空').toBe(1);
-
-      // 再把剩下的答完（走 nextBlank 的回卷路径，把跳过的前两个补回来）
-      await page.evaluate(() => {
-        for (let g = 0; g < 500; g++) {
-          if (TASK.finished()) break;      // 收工后 currentQuiz 仍是末题：不 break 会把最后一题再答一遍
-          const q = TASK.currentQuiz();
-          if (!q) break;
-          TASK.answerQuiz(q.answer);
-          TASK.next();
-        }
-      });
-      await expect(page.locator('#art .qz-blank.qa-done')).toHaveCount(total);
-      expect(await page.evaluate(() => TASK.quizDone()), '每个空恰好答一次，没有重复事件').toBe(total);
-    });
-
-    test('prefers-reduced-motion 下自动推进照常工作（不因无障碍偏好失灵）', async ({ page }) => {
-      await page.emulateMedia({ reducedMotion: 'reduce' });
-      await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/index.html#/home`);
-      await freshPlan(page);
-      await page.locator('.art-card').first().click();
-      await expect(page.locator('#taskBar')).toBeVisible();
-      await page.evaluate(() => TASK.setPass(2));
-
-      const first = await page.evaluate(() => APP3.currentBlank());
-      await answerCorrectlyInPop(page);
-      await expect
-        .poll(() => page.evaluate(() => APP3.currentBlank()), { timeout: 6000 })
-        .not.toBe(first);
-    });
-
-    test('自动推进不抢焦点（polite 播报不被截断），手动推进仍送焦', async ({ page }) => {
-      await stubData(page, SIXQ);
-      await page.goto(`${rootUrl}/index.html#/home`);
-      await freshPlan(page);
-      await page.locator('.art-card').first().click();
-      await expect(page.locator('#taskBar')).toBeVisible();
-      await page.evaluate(() => TASK.setPass(2));
-
-      const first = await page.evaluate(() => APP3.currentBlank());
-      await answerCorrectlyInPop(page);
-      await expect
-        .poll(() => page.evaluate(() => APP3.currentBlank()), { timeout: 6000 })
-        .not.toBe(first);
-      const focusInPop = await page.evaluate(() => {
-        const pop = document.getElementById('blankPop');
-        return !!(pop && pop.contains(document.activeElement));
-      });
-      expect(focusInPop, '自动推进不许把焦点抢进新题：polite 播报会被读屏截断').toBe(false);
-      await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
-
-      // 对照：手动「下一题」仍按老规矩把焦点送进浮窗（键盘用户可达）
-      await page.locator('#tbNext').click();
-      const manualFocus = await page.evaluate(() => {
-        const pop = document.getElementById('blankPop');
-        const a = document.activeElement;
-        return !!(pop && a && pop.contains(a) && (a as HTMLElement).classList.contains('qz-opt'));
-      });
-      expect(manualFocus, '手动推进仍要送焦到选项').toBe(true);
-    });
-  });
-
-  /* ===== Task 7：收工态 + 两条入口 + 存档回归 =====
-     入口 1 走真路径（① 完成 → 小结 → ② 答完）；收工态两颗键「回首页 / 看词本」；
-     刷新后 daily 不丢，且 repsByArticle 真的落盘、过了 reload 还在（§7.6 的精读次数）。 */
-  test('入口 1 收工态：① 走完 → 答题 → 收工「回首页 + 看词本」，刷新 daily 不丢', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    await page.locator('.art-card').first().click();
-    await expect(page.locator('#taskBar')).toBeVisible();
-
-    /* ① 真路径（不是 readDone 伪造）：点「放这一句」→ 兑现 speak 回调 → 走
-       taskSentenceFinished → recordRep + bumpArticleRep，精读次数真的记一笔。 */
-    await installSpeakStub(page);
-    await page.locator('#tbNext').click();
-    await finishSpeak(page);
-    // 这一句读完后，后面的读Done会各调一次 push2→recompute2 —— 若没有 copy-back，这一笔就被抹了
-    await page.evaluate(() => {
-      TASK.queue.map((x) => x.i).forEach((i) => TASK.readDone(i));
-    });
-    // 再点一下「下一句」：没有未读 → finishPass(1) → 小结
-    await page.evaluate(() => TASK.next());
-    /* 2026-09-24：小结标题/按钮里的圈号去掉 —— 阶段语义（「答题」）必须自己扛住，圈号不许再出现。 */
-    await expect(page.locator('#passCard .pass-summary .go')).toContainText('答题');
-    await expect(page.locator('#passCard .pass-summary')).not.toContainText(/[①②③④⑤]/);
-
-    await page.locator('#passCard .pass-summary .go').click();
-    // 答完整批（含末尾补考段）
-    await page.evaluate(() => {
-      for (let g = 0; g < 300; g++) {
-        const q = TASK.currentQuiz();
-        if (!q) break;
-        TASK.answerQuiz(q.answer);
-        TASK.nextQuiz();
+      for (let a = 0; a < SECTIONS.length; a++) {
+        Array.from(ShadowPlan.articleScope(SECTIONS, a)).forEach((i: number) => TASK.readDone(i));
       }
     });
-    // 收工态：① 的队列已全读（readDone 过）→ qLeft=0 真收工 →「今天完成 · 看词本」
+    await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
-    await expect(page.locator('#tbAgain')).toContainText('回首页');
-    await expect(page.locator('#tbNext')).toContainText('看词本');
     await expect(page.locator('#tbTitle')).toContainText('今天完成');
-    await expect(page.locator('#tbSub')).toContainText('句');
-
-    // 刷新前：精读次数必须已经记到这一篇上（证明走了 taskSentenceFinished → bumpArticleRep）
-    const repsBefore = await page.evaluate(() => TASK.repsOf(0));
-    expect(repsBefore, '① 只放真一句，精读次数就该 > 0；还是 0 说明没走 taskSentenceFinished').toBeGreaterThan(0);
-    // I2：这份账住 3.0 自己的 key，**不在**共享的 ielts.shadow.v2 里（否则开 /shadow/ 就被抹）
-    const shared = await page.evaluate(() => localStorage.getItem('ielts.shadow.v2') || '');
-    expect(shared.includes('repsByArticle'), '共享 blob 里不该再有 repsByArticle').toBe(false);
-    expect(await page.evaluate(() => !!localStorage.getItem('ielts.app3.article')), '3.0 自己的按篇 key 必须落盘').toBe(true);
-
-    // 存档：刷新后 daily 一字不差，且精读次数原样还在
-    const before = await page.evaluate(() => TASK.state().daily);
-    await page.reload();
-    await page.waitForFunction(() => { try { return !!(TASK.state() && TASK.state().daily); } catch (e) { return false; } });
-    const after = await page.evaluate(() => TASK.state().daily);
-    expect(after).toEqual(before);
-    expect(await page.evaluate(() => TASK.repsOf(0)), '精读次数必须随自己的 key 过 reload').toBe(repsBefore);
-  });
-
-  /* §9.2 第二、三项各自的回归锁：只动一项输入，断言 progress 等于把公式算出来的数。
-     算术写在断言里，谁改了权重或输入来源，这两条就 RED。 */
-  test('熟练度公式：② 正确率（×35）与精读重复度（×25）各自单独动数（§9.2）', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    // 第 0 篇 8 句：通读满 → 第一项 = 40（后面两项的基准）
-    /* 2026-09-26：卡片显示的是通读完成度（这里全读满 = 100%），融合熟练度改从
-       APP3.articleStat(0).progress 读 —— 公式（×35/×25 两项）照样逐项锁。 */
-    const phase = async (seed: { quizOk: number; quizNo: number; reps: number }, expected: number) => {
-      await waitAppReady(page);   // goto/上一次 reload 之后 init 可能还没跑完，evaluate 会空转
-      await page.evaluate((sd) => {
-        TASK.resetV2(); TASK.initPlan(15);
-        Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i: number) => TASK.readDone(i));
-        TASK.seedArticleForTest(0, sd);
-      }, seed);
-      await page.reload();
-      await expect(page.locator('.art-card').first().locator('.a-pct'), '读满 → 显示 100%').toHaveText('100%');
-      expect(await page.evaluate(() => APP3.articleStat(0).progress), '融合熟练度（§9.2 三项）').toBe(expected);
-    };
-    /* 只动第二项：8 题 4 对 4 错 → quizRate = 4/8 = 0.5
-       progress = round(8/8×40 + 0.5×35 + 0×25) = round(40 + 17.5) = round(57.5) = 58 */
-    await phase({ quizOk: 4, quizNo: 4, reps: 0 }, 58);
-    /* 只动第三项：quiz 清零，精读 8 次（= 句数）→ min(8/(8×2),1) = 0.5
-       progress = round(8/8×40 + 0×35 + 0.5×25) = round(40 + 12.5) = round(52.5) = 53 */
-    await phase({ quizOk: 0, quizNo: 0, reps: 8 }, 53);
-  });
-
-  // 收工态两颗键各自去哪：看词本 → #/words 占位屏；回首页 → 首页六张卡片。
-  test('收工态：看词本 → #/words；回首页 → 首页', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    /* 2026-10-09 收工分岔：锁「真收工」（今天完成 → 看词本/回首页）就把队列读满 ——
-       直接答题（未通读）时会走「本篇完成 · 继续读」分支（另一条锁）。 */
-    const finishQuiz = async (readAll: boolean) => {
-      await page.locator('.art-card').first().click();
-      await expect(page.locator('#taskBar')).toBeVisible();
-      await page.evaluate((ra) => {
-        if (ra) {
-          for (let a = 0; a < SECTIONS.length; a++) {
-            Array.from(ShadowPlan.articleScope(SECTIONS, a)).forEach((i: number) => TASK.readDone(i));
-          }
-        }
-        TASK.setPass(2);
-        for (let g = 0; g < 300; g++) {
-          const q = TASK.currentQuiz();
-          if (!q) break;
-          TASK.answerQuiz(q.answer);
-          TASK.nextQuiz();
-        }
-      }, readAll);
-      await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
-    };
-    await finishQuiz(true);
+    await expect(page.locator('#tbNext')).toContainText('看词本');
+    await expect(page.locator('#tbAgain')).toContainText('回首页');
+    // 看词本 → #/words
     await page.locator('#tbNext').click();
     await expect(page).toHaveURL(/#\/words/);
     await expect(page.locator('#appView')).toContainText('单词本');
+  });
 
-    // 回首页场景：重造一份新计划（清掉读满的账），直接答题 → 「本篇完成」态的「回首页」照样在
+  test('收工态「回首页」→ 首页六张卡片', async ({ page }) => {
+    await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
-    await finishQuiz(false);
+    await page.evaluate(() => {
+      for (let a = 0; a < SECTIONS.length; a++) {
+        Array.from(ShadowPlan.articleScope(SECTIONS, a)).forEach((i: number) => TASK.readDone(i));
+      }
+    });
+    await page.locator('.art-card').first().click();
+    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
     await page.locator('#tbAgain').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
     await expect(page.locator('.art-card')).toHaveCount(6);
   });
 
-  /* 入口 2（§4.4）：通读已完成的篇目，首页卡片多一颗「答题」，点了直达 ② —— 不必先跑 ①。
-     批次与「① 后进 ②」同源（都取当天 assemble 的 items 快照）。 */
-  test('入口 2：通读完成的卡片有「答题」，点了直达 ②（不要求先跑 ①）', async ({ page }) => {
-    await stubData(page, SIXQ);
+  test('额度读满、本篇没读完 → 收工分岔「今天读够了 · 继续读」，点了扩回全局队列', async ({ page }) => {
+    await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    // 只通读、不做题 → 该篇「② 可答题」（data-stage="read"）
-    await page.evaluate(() => {
-      Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
-    });
-    await page.reload();
-    const quizBtn = page.locator('.art-card[data-stage="read"] .a-quiz');
-    await expect(quizBtn).toHaveCount(1);
-    await expect(quizBtn).toContainText('答题');
-
-    await quizBtn.click();
-    // 直达 ②：已在任务模式、正文已挖空、点空弹四选一
-    await expect(page.locator('body')).toHaveClass(/task-mode/);
-    expect(await page.locator('#art .sent .qz-blank').count(), '直达 ② 必须立刻挖空').toBeGreaterThan(0);
-    await page.locator('#art .qz-blank').first().click();
-    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
-  });
-
-  // 审阅 Important 3：入口 1（① 走完 → 小结 → 开始答题）没有 E2E，补一条走真路径的。
-  /* 2026-09-26 用户：「答题的位置也得记住啊。中途浏览器刷新了，不能让我再重新答。」
-     —— ② 的已答集合按（篇, 天）存 LS_ARTICLE，重进 ② 直接接着答。 */
-  test('② 答题进度持久化：答两题后刷新，重进 ② 不重答', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    await page.locator('.art-card').first().click();
-    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'read');
-    await page.evaluate(() => { TASK.setPass(2); });
-
-    const answerOne = () => page.evaluate(() => {
-      const q = TASK.currentQuiz();
-      if (!q) return false;
-      TASK.answerQuiz(q.opts[q.opts.indexOf(q.answer)]);
-      TASK.nextQuiz();
-      return true;
-    });
-    expect(await answerOne()).toBe(true);
-    expect(await answerOne()).toBe(true);
-    const before = await page.evaluate(() => document.getElementById('tbTitle')!.textContent);
-    expect(before, '答两题后条上是 2/N').toContain('2/');
-
-    // 刷新（等价于用户中途关掉标签页再进来）
+    await waitAppReady(page);
+    /* 5 分钟档：今天的额度（12 句）小于全书句数（22 句）—— 只有额度比书小，
+       「额度读满、本篇还有没读的」才造得出来。15 分钟档会把 22 句全排进来，
+       读满额度 = 全书读完，「本篇没读完」不存在（2026-10-10 实验修正：
+       旧夹具「第 0 篇尾部补到额度」实际把第 0 篇 12 句全补完了）。 */
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(5); });
     await page.reload();
     await waitAppReady(page);
+    // 读满额度：其它五篇全读（10 句），差的从第 0 篇尾部补 —— 第 0 篇主体（前 10 句）留着不读
+    await page.evaluate(() => {
+      const left = () => { const tp = TASK.todayProgress(); return tp.planned - tp.done; };
+      for (let a = 1; a < SECTIONS.length; a++) {
+        Array.from(ShadowPlan.articleScope(SECTIONS, a)).forEach((i: number) => TASK.readDone(i));
+      }
+      const s0 = Array.from(ShadowPlan.articleScope(SECTIONS, 0)).sort((x, y) => x - y);
+      for (let k = s0.length - 1; k >= 0 && left() > 0; k--) TASK.readDone(s0[k]);
+      const tp = TASK.todayProgress();
+      if (!(tp.planned > 0 && tp.done >= tp.planned)) throw new Error('夹具要真造出「额度读满」');
+    });
+    // 前提：第 0 篇还有没读的句（否则「本篇没读完」无从谈起）
+    const art0Unread = await page.evaluate(() => {
+      const s = (TASK.state() as unknown as { sents: Record<number, { lastReadAt?: number }> }).sents || {};
+      return Array.from(ShadowPlan.articleScope(SECTIONS, 0))
+        .filter((i: number) => !(s[i] && (s[i].lastReadAt || 0) > 0)).length;
+    });
+    expect(art0Unread, '夹具前提：第 0 篇必须还有没读的句').toBeGreaterThan(0);
+
     await page.locator('.art-card').first().click();
     await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'read');
-    await page.evaluate(() => { TASK.setPass(2); });
-    const after = await page.evaluate(() => document.getElementById('tbTitle')!.textContent);
-    expect(after, '刷新后已答的两题不许重来（计数与游标都还原）').toBe(before);
-  });
-
-  test('入口 1：① 走完 → 小结「开始答题」→ 正文立刻挖空（§13.1）', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    await page.locator('.art-card').first().click();
-    await expect(page.locator('#taskBar')).toBeVisible();
-    // headless 不发声：换掉朗读引擎（顶层的 speak 就是 window.speak），再手动把这一篇标成读完
-    await page.evaluate(() => {
-      (window as unknown as { speak: (t: string, cb?: () => void) => void }).speak = () => {};
-      Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
-    });
-    // ① 态点两下「下一句」：第一下放这一句，第二下没有未读 → finishPass(1) → 小结
-    await page.evaluate(() => TASK.next());
-    await page.evaluate(() => TASK.next());
-    await expect(page.locator('#passCard')).toBeVisible();
-    await expect(page.locator('#passCard .pass-summary .go')).toContainText('开始');
-    await expect(page.locator('#passCard .pass-summary')).not.toContainText(/[①②③④⑤]/);
-    // 小结出现时正文已经挖空
-    expect(await page.locator('#art .sent .qz-blank').count()).toBeGreaterThan(0);
-    // 点「开始答题」→ 小结收掉、浮窗弹出
-    await page.locator('#passCard .pass-summary .go').click();
-    await expect(page.locator('#passCard')).toBeHidden();
-    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
+    // 额度闸：推进键一下就进收工态（「今天读够了 · 继续读」）
+    await page.locator('#tbNext').click();
+    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
+    await expect(page.locator('#tbTitle')).toContainText('今天读够了');
+    await expect(page.locator('#tbNext')).toContainText('继续读');
+    // 继续读 → 扩回全局队列，回到 ① 通读态
+    await page.locator('#tbNext').click();
+    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'read');
   });
 });
 
@@ -889,7 +347,7 @@ test.describe('3.0 ② 文内挖空 + 浮窗选择（底部题卡作废）', () 
    点它进 v2.0 设置屏，建完计划回到这一篇换成真任务条。 */
 test.describe('3.0 §2.3 没计划也能进任务模式', () => {
   test('新用户点卡片 → 自由跟读 + 空状态任务条 →「去设置」建计划 → 真任务条回来', async ({ page }) => {
-    await stubData(page, SIXQ);
+    await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
     // 全新用户：清掉真值根与 3.0 按篇账，刷新让首页读到「没计划」
     await page.evaluate(() => {
@@ -931,49 +389,22 @@ test.describe('3.0 §2.3 没计划也能进任务模式', () => {
   });
 });
 
-/* 终审 I1（§9.4）：卡片的「已学完」= 通读一遍 + 这一篇的 ② 批次答过一遍，
-   不是「答对全篇每一句」（一遍 ② 只考当天队列那几十题，后者永远到不了）。 */
-test.describe('3.0 §9.4 已学完判据', () => {
-  test('通读一遍 + ② 批次答过一遍 → 卡片「已学完」（不要求答对全篇）', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    await page.evaluate(() => {
-      Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
-    });
-    await page.reload();
-    await expect(page.locator('.art-card').first()).toHaveAttribute('data-stage', 'read');
-
-    // 入口 2 直达 ②，答完整批（含补考段）
-    await page.locator('.art-card[data-stage="read"] .a-quiz').click();
-    await expect(page.locator('#taskBar')).toBeVisible();
-    await page.evaluate(() => {
-      for (let g = 0; g < 300; g++) {
-        const q = TASK.currentQuiz();
-        if (!q) break;
-        TASK.answerQuiz(q.answer);
-        TASK.nextQuiz();
-      }
-    });
-    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
-    expect(await page.evaluate(() => TASK.articlePass2Done(0)), '② 批次走完必须按篇记凭据').toBe(true);
-
-    // 收工态「回首页」→ 首页立即重渲（I2），卡片变「已学完」
-    await page.locator('#tbAgain').click();
-    await expect(page.locator('body')).not.toHaveClass(/task-mode/);
-    await expect(page.locator('.art-card').first()).toHaveAttribute('data-stage', 'done');
-    await expect(page.locator('.art-card').first().locator('.a-stage')).toHaveText('已学完');
-  });
-});
-
 /* 终审 I2：repsByArticle 过去塞在共享的 ielts.shadow.v2 里（/shadow/ 已下线），重放/抹写
    这类风险已随旧站消失；现在锁两件事——账只住 3.0 自己的 key，且能进 exportBackup。 */
 test.describe('3.0 按篇账不随共享 blob 走', () => {
   test('精读次数住自己的 key，reload 与备份都在', async ({ page }) => {
-    await stubData(page, SIXQ);
+    /* 2026-10-10：本用例 2 次整页加载。当天早些时候 jsdelivr 不可达（本机 curl 也超时），
+       每次加载要等 30s 子资源超时，曾临时把上限抬到 180s —— 当天把图标字体与 supabase-js
+       改成自托管后，加载回到秒级，上限还给默认值：不拿余量掩盖慢。 */
+    await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
-    await page.evaluate(() => TASK.seedArticleForTest(0, { reps: 3 }));
+    await page.evaluate(() => {
+      localStorage.setItem('ielts.app3.article', JSON.stringify(
+        { reps: { [ShadowPlan.dayKey(Date.now(), 4)]: { 0: 3 } } }));
+    });
+    await page.reload();
+    await page.waitForFunction(() => { try { return !!(TASK.state() && TASK.state().daily); } catch (e) { return false; } });
     expect(await page.evaluate(() => TASK.repsOf(0))).toBe(3);
     // 共享 blob 里不许再有这份账（它只该住 ielts.app3.article）
     expect(await page.evaluate(() => (localStorage.getItem('ielts.shadow.v2') || '').includes('repsByArticle'))).toBe(false);
@@ -986,61 +417,18 @@ test.describe('3.0 按篇账不随共享 blob 走', () => {
     const payload = JSON.parse(fs.readFileSync((await download.path()) as string, 'utf8'));
     expect(Object.keys(payload.data), '备份必须含 ielts.app3.article').toContain('ielts.app3.article');
 
-    // reload 后按篇账还在
-    await page.reload();
-    await page.waitForFunction(() => { try { return !!(TASK.state() && TASK.state().daily); } catch (e) { return false; } });
-    expect(await page.evaluate(() => TASK.repsOf(0)), 'reload 不许丢按篇账').toBe(3);
+    /* 备份不许动按篇账（原先要「再 reload 一次复查」）：repsOf 有内存缓存，查不到
+       「存储被抹」这回事，直接查 localStorage 本体更准、也省一次整页加载。 */
+    expect(await page.evaluate(() => {
+      const o = JSON.parse(localStorage.getItem('ielts.app3.article') || 'null') || {};
+      return Object.keys(o.reps || {}).reduce((n: number, d: string) => n + (((o.reps[d] || {}) as Record<string, number>)['0'] || 0), 0);
+    }), '备份不许抹掉按篇账').toBe(3);
   });
 });
 
-/* 终审顺手项：§4.4 空按被遮词形给宽（不是固定 3.2em）。
-   夹具里四个名词长度差得远（cat / banana / elephant / hippopotamus），长词的空必须明显更宽。 */
-const LONGWORDS = [
-  { w: 'cat', m: 'n. 猫' },
-  { w: 'banana', m: 'n. 香蕉' },
-  { w: 'elephant', m: 'n. 大象' },
-  { w: 'hippopotamus', m: 'n. 河马' },
-];
-const SIXLONG: Record<string, string> = (() => {
-  const vocab: Record<string, { m: string }> = {};
-  LONGWORDS.forEach((x) => { vocab[x.w] = { m: x.m }; });
-  const mk = (title: string, ai: number, n: number) => ({
-    title,
-    zh: title,
-    subheads: [''],
-    paragraphs: [Array.from({ length: n }, (_, i) => {
-      const w = LONGWORDS[(ai + i) % LONGWORDS.length].w;
-      return `Sentence ${i} about [[${w}:${w}]].`;
-    })],
-    sentZh: [Array.from({ length: n }, (_, i) => `第 ${i} 句。`)],
-    paraZh: [''],
-  });
-  const titles = ['地球与生命', '校园与文化', '衣食住行', '社会与规则', '历史与发明', '身体与时间'];
-  return {
-    'sections.json': JSON.stringify(titles.map((t, i) => mk(t, i, i === 0 ? 8 : 2))),
-    'vocab.json': JSON.stringify(vocab),
-    'chapters.json': '[]',
-  };
-})();
-
 test.describe('3.0 终审顺手项', () => {
-  test('§4.4 空按被遮词形给宽：长词的空比短词明显宽', async ({ page }) => {
-    await stubData(page, SIXLONG);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    await page.locator('.art-card').first().click();
-    await expect(page.locator('#taskBar')).toBeVisible();
-    await page.evaluate(() => TASK.setPass(2));
-    const vals = await page.evaluate(() =>
-      Array.from(document.querySelectorAll('#art .sent .qz-blank'))
-        .map((el) => (el as HTMLElement).getBoundingClientRect().width));
-    expect(vals.length, '夹具要挖出多个空').toBeGreaterThan(1);
-    const min = Math.min(...vals), max = Math.max(...vals);
-    expect(max, '长词的空必须比短词明显宽（固定 3.2em 时二者相等）').toBeGreaterThan(min * 1.5);
-  });
-
-  test('Global Constraint：.a-quiz / .b-go 触区 ≥44px（头部照抄主站，用 hit-slop 扩热区）', async ({ page }) => {
-    await stubData(page, SIXQ);
+  test('Global Constraint：.b-go 触区 ≥44px（头部照抄主站，用 hit-slop 扩热区）', async ({ page }) => {
+    await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
     await freshPlan(page);
     // .b-go：横幅那颗
@@ -1060,36 +448,5 @@ test.describe('3.0 终审顺手项', () => {
     expect(backHit.hitH, `back 有效触区高 ${JSON.stringify(backHit)}`).toBeGreaterThanOrEqual(44);
     await page.locator('#taskTop .reader-head .back').click();
     await expect(page.locator('body')).not.toHaveClass(/task-mode/);
-    // .a-quiz：通读满后卡片才出「答题」
-    await page.evaluate(() => {
-      Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
-    });
-    await page.reload();
-    const quizH = await page.locator('.art-card .a-quiz').first().evaluate((el) => el.getBoundingClientRect().height);
-    expect(quizH, '.a-quiz 触区').toBeGreaterThanOrEqual(44);
-  });
-
-  test('② / 收工态 #tbNext 的 title/aria 与可见文字一致（不再说「下一句」）', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    await page.locator('.art-card').first().click();
-    await expect(page.locator('#taskBar')).toBeVisible();
-    await page.evaluate(() => TASK.setPass(2));
-    const nxt = page.locator('#tbNext');
-    await expect(nxt).toHaveAttribute('aria-label', '跳过这题');
-    // 答完整批 → 收工态：可见「看词本」，title/aria 也必须说「看词本」
-    await page.evaluate(() => {
-      for (let g = 0; g < 300; g++) {
-        const q = TASK.currentQuiz();
-        if (!q) break;
-        TASK.answerQuiz(q.answer);
-        TASK.nextQuiz();
-      }
-    });
-    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
-    /* 2026-10-09 收工分岔：直接答题（未通读）→「本篇完成 · 继续读」，title/aria 与可见文字同源 */
-    await expect(nxt).toContainText('继续读');
-    await expect(nxt).toHaveAttribute('aria-label', '继续读');
   });
 });

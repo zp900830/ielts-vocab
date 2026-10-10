@@ -14,16 +14,14 @@
 //        对比度（阈值 WCAG：正文 4.5 / 大字 3.0），算不过就红。
 //   自检见文件末尾：注入一个已知低对比度元素，门禁必须变红 —— 证明 incomplete 真的被判定。
 //
-// 覆盖面：首页 + 任务模式①（浅/深）+ 学习数据/单词本/随身听/我的浮窗/② 挖空浮窗。
+// 覆盖面：首页 + 任务模式①（浅/深）+ 学习数据/单词本/随身听/我的浮窗。
 // 用 6 篇小壳夹具保证快且稳（真实 1833 句正文对 axe 太慢）。
 import { test, expect } from '../../fixtures';
 import { AxeBuilder } from '@axe-core/playwright';
 
 declare const TASK: {
   resetV2(): void; initPlan(minutes: number): void;
-  seedArticleForTest(a: number, o?: unknown): void; setPass(p: number): void;
 };
-declare const APP3: { openBlank(bi: number): void };
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
 
@@ -87,7 +85,6 @@ const AXE_UNCALCULABLE: { sel: string; why: string }[] = [
   { sel: '.ls-play', why: '随身听卡片主按钮：底色是 --grad 渐变（白字 1.90:1 为用户知情取舍，同 .b-go），axe 判不了背景' },
   { sel: '.ls-cover', why: '随身听封面卡：accent-soft→白的浅色渐变底，axe 判不了背景（--text 压浅渐变，人工核过）' },
   { sel: '.sidenav', why: '左侧导航：refine2 ⑤ 起底色叠了一道极轻竖向渐变（#fcfcfb→#f6f6f4），axe 判不了 nav 文字的合成背景；nav 字是 --text/--accent-text 压这条近白底，人工核过 ≥4.5' },
-  { sel: '.blank-pop', why: '② 答题浮窗：玻璃浮层，底下正文 .sent.task-new 有高亮底，axe 判不了合成背景' },
   { sel: '.ls-collapse', why: '两枚收起键（2026-10-07 起抽屉与展开全文阅读顶栏共用同一个类）：无底无边，'
     + '--accent-text 字透过按钮落在 .listen-top / #lcDrawer 的玻璃渐变 + backdrop-filter 上，axe 算不出合成背景；'
     + '#0a7558 压近白玻璃人工核 5.68:1（深色那档底色 rgba(30,28,25,…) 同档人工核）' },
@@ -238,15 +235,6 @@ test.describe('3.0 无障碍（axe，WCAG A/AA）', () => {
     await page.locator('#loginModal [data-login-settings]').click();
     await expect(page.locator('#mePop')).toBeVisible();
     await lightAndDark(page, '我的浮窗');
-  });
-
-  test('② 挖空浮窗：浅色 + 深色无 axe 违规、无未登记的对比度 incomplete', async ({ page }) => {
-    await bootHome(page);
-    await page.locator('.art-card .a-open').first().click();
-    await expect(page.locator('#art .sent').first()).toBeVisible();
-    await page.evaluate(() => { TASK.seedArticleForTest(0); TASK.setPass(2); APP3.openBlank(1); });
-    await expect(page.locator('#blankPop')).not.toHaveAttribute('hidden', '');
-    await lightAndDark(page, '② 挖空浮窗');
   });
 
   /* 自检：证明门槛真的会响。注入一个已知对比度不足的元素（同色渐变底 + 同色文字，

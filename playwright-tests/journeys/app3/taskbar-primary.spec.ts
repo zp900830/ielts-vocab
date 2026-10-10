@@ -118,7 +118,7 @@ test.describe('任务条：推进键是主按钮 / 再来与循环可分 / 快�
     expect(geo.overlaps, '任何两颗按钮不许互相压住').toEqual([]);
     const next = geo.next as { w: number; h: number; r: number; text: string };
     // 「按钮形式都一样，凭什么只有它掉到第二行」的解法：让它一看就是主操作，而不是被挤下去
-    expect(next.text, '窄屏推进键要带文字，不再是一颗光秃图标').toMatch(/下一句|放这一句|开始答题/);
+    expect(next.text, '窄屏推进键要带文字，不再是一颗光秃图标').toMatch(/下一句|放这一句|今天读够了/);
     geo.btns.filter((o) => o.id !== 'tbNext').forEach((o) => {
       expect(next.w, `推进键必须比「${o.id}」宽（实测 ${next.w} vs ${o.w}）`).toBeGreaterThan(o.w);
     });

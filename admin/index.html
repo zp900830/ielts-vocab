@@ -6,7 +6,10 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#e8eef6">
 <title>管理后台 · 雅思词汇真经</title>
-<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/element-plus@2/dist/index.css">
+<!-- 2026-10-10：Vue / Element Plus / ECharts / supabase-js 全部改本地自托管（原来走 fastly.jsdelivr.net）——
+     该域名国内常不可达、本机实测直连必超时；本页随 dist 部署，外链一断后台就是白屏打不开。
+     版本钉死在文件名里，升级 = 换 ../vendor/ 下的文件 + 改这里。（回归锁：journeys/smoke.spec.ts） -->
+<link rel="stylesheet" href="../vendor/element-plus/element-plus-2.14.7.css">
 <style>
 :root{
   --glass:rgba(255,255,255,.62); --glass2:rgba(255,255,255,.42);
@@ -317,11 +320,12 @@ body.dark .err{color:#ff6b6b}
 <button class="dark-toggle" id="darkToggle" title="切换深色/浅色模式" aria-label="切换深色模式">🌙</button>
 
 <script src="../config.js" defer></script>
-<script src="https://fastly.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js" defer></script>
-<script src="https://fastly.jsdelivr.net/npm/element-plus@2/dist/index.full.min.js" defer></script>
-<script src="https://fastly.jsdelivr.net/npm/element-plus@2/dist/locale/zh-cn.min.js" defer></script>
-<script src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js" defer></script>
-<script src="https://fastly.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+<!-- 第三方库本地自托管（2026-10-10 起，理由见上方 <link> 注释）；顺序保持：vue → element-plus → 语言包 → echarts → supabase -->
+<script src="../vendor/vue/vue-3.5.43.global.prod.js" defer></script>
+<script src="../vendor/element-plus/element-plus-2.14.7.full.min.js" defer></script>
+<script src="../vendor/element-plus/element-plus-2.14.7.zh-cn.min.js" defer></script>
+<script src="../vendor/echarts/echarts-5.6.0.min.js" defer></script>
+<script src="../vendor/supabase/supabase-js-2.117.3.js" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
 const {createApp,reactive,ref,computed,nextTick,onMounted,onUnmounted}=Vue;
