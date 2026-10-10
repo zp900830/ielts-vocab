@@ -364,15 +364,23 @@
   body.dark .notebar { background: rgba(255,255,255,.03); border-color: rgba(255,255,255,.06); }
   body.dark .notebar .nb-label { color: var(--muted); }
   /* 同句词卡合成一张结构化卡（2026-10-09 用户：一卡一词纵向太空，每卡后半截都是空白）：
-     .nb-group 是本句唯一的卡（外框），内部网格铺词格 —— 桌面 2~3 列自动排，窄屏回落单列。
-     align-items:start：各格高度随内容，长辨析不把同排短格拉长。 */
-  .nb-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-    gap: 6px; align-items: start; margin: 6px 0 8px; padding: 6px;
+     .nb-group 是本句唯一的卡（外框），内部网格铺词格。
+     2026-10-10 用户二轮反馈「长长短短、高高矮矮」定稿三规则：
+     ① 桌面固定 2 列 —— auto-fill 的 2~3 列随视口漂移，行尾落单卡没法确定性补位；
+     ② align-items 恢复 stretch，同排卡等高（10-09 的 start「长辨析不拉短卡」实测观感就是高高矮矮，弃）；
+     ③ 行尾落单的卡由渲染器标 .nb-lone 占满整行，消掉「半张卡 + 一块死空」。
+     nb-wide（长辨析）仍占整行；列游标在渲染端同步维护，落单判定不受它影响。
+     手机档（≤700px）回落单列，见全局媒体查询。 */
+  .nb-group { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px; align-items: stretch; margin: 6px 0 8px; padding: 6px;
     border: 1px solid rgba(0,0,0,.08); border-radius: 10px; }
   .nb-group .notebar { margin: 0; border: none; background: rgba(0,0,0,.025); border-radius: 8px; }
-  .nb-group .notebar.nb-wide { grid-column: 1 / -1; }
+  .nb-group .notebar.nb-wide, .nb-group .notebar.nb-lone { grid-column: 1 / -1; }
   body.dark .nb-group { border-color: rgba(255,255,255,.06); }
   body.dark .nb-group .notebar { background: rgba(255,255,255,.03); }
+  /* 手机档词卡回落单列。必须写在 .nb-group 基础规则**之后**：同特异性靠源序取胜
+     （2026-10-10 踩：放在文件头部 246 行的老媒体查询里会被 370 行的 2 列规则盖掉）。 */
+  @media (max-width: 700px) { .nb-group { grid-template-columns: 1fr; } }
   /* 辨析卡：挂段末、默认只露一行「简单记」，点开才出对比表（PRD §7.2）。
      一段可挂 2–5 张（实测 51 段 ≥2 张），所以每张自带边框、各自折叠，不共用一个表头。 */
   .cmp-block { display: block; margin: 6px 0 10px; }
@@ -3644,7 +3652,7 @@ let listenOn = false;
     // 原先没 note 的词整张跳过，807 处引用无卡）。没 note/辨析的出瘦身卡：
     // 词 + 音标 + 词义，与随身听 listenCards() 的 wcard-slim 同一决策口径；
     // 有 note 才追加笔记行。辨析表不在这里，走 paraCompareHTML 挂段末。
-    const seen = new Set(); let html = '';
+    const seen = new Set(); const cards = [];
     const re = /\[\[([^\]:]+):([^\]]+)\]\]/g; let m;
     while ((m = re.exec(t))) {
     const k = m[1].toLowerCase();
@@ -3652,20 +3660,30 @@ let listenOn = false;
     const info = (typeof VOCAB !== 'undefined' && VOCAB[k]) || null;
     if (!info) continue;
     const ph = glossPhon(k);
-    let html1 = `<span class="notebar"><span class="nb-t"><span class="nb-w">${esc(k)}</span>${ph ? `<span class="nb-ph">${esc(ph)}</span>` : ''}<span class="nb-m">${esc(info.m || '')}</span></span>`;
+    let wide = false, noteLine = '';
     const noteText = info.note;
     if (noteText) {
     // 标题标签按内容类型自适应：同义词/词伙 从 note 前缀抽取；手写辨析归为「辨析」。标签用 nb-label 小胶囊包裹，不再叠「辨析：同义词：」双冒号
-    let label = '辨析', rest = noteText, wide = '';
+    let label = '辨析', rest = noteText;
     const lm = noteText.match(/^(同义词|词伙)(：)/);
     if (lm) { label = lm[1]; rest = noteText.slice(lm[0].length); }
     // 长辨析占整行（nb-wide）：括注一多，挤在半列里就是细长条，不如横贯整卡
-    if (rest.length > 60) wide = ' nb-wide';
-    html1 = `<span class="notebar${wide}"><span class="nb-t"><span class="nb-w">${esc(k)}</span>${ph ? `<span class="nb-ph">${esc(ph)}</span>` : ''}<span class="nb-m">${esc(info.m || '')}</span></span>`;
-    html1 += `<span class="nb-n"><span class="nb-label">${label}</span>${esc(rest)}</span>`;
+    if (rest.length > 60) wide = true;
+    noteLine = `<span class="nb-n"><span class="nb-label">${label}</span>${esc(rest)}</span>`;
     }
-    html += html1 + `</span>`;
+    cards.push({ wide: wide, body: `<span class="nb-t"><span class="nb-w">${esc(k)}</span>${ph ? `<span class="nb-ph">${esc(ph)}</span>` : ''}<span class="nb-m">${esc(info.m || '')}</span></span>${noteLine}` });
     }
+    /* 行尾落单补位（2026-10-10 用户「长长短短、高高矮矮」二轮反馈）：桌面固定 2 列后，
+       非宽卡若落在第 1 列且右侧没有同伴（是最后一卡，或下一张是会独占整行的宽卡），
+       右半就是一块死空 —— 标 .nb-lone 占满整行。宽卡把列游标重置回 1，
+       所以游标在渲染端同步算，不能用 nth-child 奇偶（会被宽卡打乱）。 */
+    let col = 1;
+    const html = cards.map((c, i) => {
+    const stranded = (i === cards.length - 1) || (i + 1 < cards.length && cards[i + 1].wide);
+    const lone = !c.wide && col === 1 && stranded;
+    if (c.wide || lone) col = 1; else col = (col === 1 ? 2 : 1);
+    return `<span class="notebar${c.wide ? ' nb-wide' : ''}${lone ? ' nb-lone' : ''}">${c.body}</span>`;
+    }).join('');
     return html ? `<span class="nb-group">${html}</span>` : '';
     }
     /* 标题中英双语映射（只做展示层拼接，不动 SECTIONS/VOCAB/CHAPTERS 数据） */
