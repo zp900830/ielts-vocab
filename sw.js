@@ -23,7 +23,7 @@ const CACHE_NAME = 'ielts-app3-runtime-v1';
 const OFFLINE_HTML = [
   '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">',
   '<meta name="viewport" content="width=device-width,initial-scale=1">',
-  '<title>离线 · 雅思背单词 3.0</title>',
+  '<title>离线 · 词汇真经单词速记</title>',
   '<style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;',
   'background:#faf8f4;color:#2b3028;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}',
   'main{text-align:center;padding:24px}h1{font-size:20px;margin:0 0 8px}',
