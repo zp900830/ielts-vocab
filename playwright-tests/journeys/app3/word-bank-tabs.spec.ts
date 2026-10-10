@@ -176,6 +176,45 @@ test.describe('词库面板双视图（目标词侧栏回归）', () => {
     await expect(page.locator('aside .wq-keys')).toContainText('收起');
   });
 
+  test('手机档任务模式：抽屉盖过任务条（z 序 + 命中测试双锁；190 那版下沿被任务条压掉）', async ({ page }) => {
+    await stubData(page);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`${rootUrl}/index.html#/`);
+    await waitShadowReady(page);
+    await enterReadingAndOpenPanel(page, 0);
+
+    /* 抽屉滑入有 .28s 过渡（translateY 102% → 0）。命中测试必须等变换落定再量——
+       中途量的还是「滑行中间态」：抽屉顶边还没越过任务条中心，会假红（本用例首版就栽在这）。
+       同 fixtures 的 fabSettled 口径：等 computed transform 回到恒等。 */
+    await expect
+      .poll(() => page.evaluate(() => {
+        const t = getComputedStyle(document.getElementById('panel') as HTMLElement).transform;
+        return t === 'none' || /^matrix\(1, 0, 0, 1, 0, 0\)$/.test(t);
+      }), { message: '等待抽屉滑入过渡落定' })
+      .toBe(true);
+
+    const info = await page.evaluate(() => {
+      const panel = document.getElementById('panel') as HTMLElement;
+      const bar = document.querySelector('.task-bar') as HTMLElement | null;
+      const fallback = { barVisible: false, zPanel: 0, zBar: 0, hitInPanel: false, hitDesc: '' };
+      if (!bar || getComputedStyle(bar).display === 'none') return fallback;
+      const r = bar.getBoundingClientRect();
+      const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2) as HTMLElement | null;
+      return {
+        barVisible: true,
+        zPanel: Number(getComputedStyle(panel).zIndex),
+        zBar: Number(getComputedStyle(bar).zIndex),
+        hitInPanel: !!(hit && panel.contains(hit)),
+        hitDesc: hit ? `${hit.tagName}.${String(hit.className)}` : 'null',
+      };
+    });
+    expect(info.barVisible, '任务模式里任务条应可见（本用例前提）。若任务条改版隐藏，请连同本锁一起复核').toBe(true);
+    expect(info.zPanel, '抽屉 z（=220）必须高过任务条 z（=200）').toBeGreaterThan(info.zBar);
+    /* 命中测试是最硬的锁：任务条几何中心点当时最顶上的元素必须在抽屉里。
+       190 那版这里命中 .task-bar 自己（或它的按钮），视觉上就是任务条画在抽屉上、压掉下沿一截。 */
+    expect(info.hitInPanel, `任务条中心点应由抽屉接住，实际命中 ${info.hitDesc}`).toBe(true);
+  });
+
   /* ---------- 2026-10-10 二轮（用户截图：左侧无内距 + 对齐 8901 细节）回归锁 ---------- */
   test('面板细节回归锁（1.0 对齐）：列表两侧 12px 内距、例句译文收进框内 .ex .cn', async ({ page }) => {
     await stubData(page);
