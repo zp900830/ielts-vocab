@@ -1,31 +1,24 @@
 // 2026-09-25：把任务模式里两条「回到某处」的心智负担合并成**唯一**一条「回到学习位置」。
 //
 // 现状（开工前摸清）：主站任务模式里其实只有一颗浮动的「回到播放位置」(#backToPlay / .back-to-play /
-// scrollToPlaying)，且只在「播放中 + 手动滚走」时才出现；② 里根本不出现。用户口里的「回到学习的位置」
-// 并不是另一颗既有控件，而是「回到学习句 / 当前待答的那一题」这项**能力**。本轮把它落成一颗键，
+// scrollToPlaying)，且只在「播放中 + 手动滚走」时才出现。用户口里的「回到学习的位置」
+// 并不是另一颗既有控件，而是「回到学习句」这项**能力**。本轮把它落成一颗键，
 // 旧的「回到播放位置」整颗删掉（控件 + 逻辑 + CSS + 死函数）。
 //
-// 本锁钉四件事：
+// 本锁钉三件事（2026-10-10 ② 删除后：原第 3 条「② 滚走」随 ② 退役）：
 //   1. 旧控件真的不存在（负向锁），新控件在。
 //   2. ① 手动点偏 → 点它 → 高亮/播放回到学习句，且「下一句」的起点回到学习那条线。
-//   3. ② 滚走 → 点它 → 当前空回到视口并重新弹浮窗（② 不播音）。
-//   4. 没有学习位置（无计划 / 收工）时它不出现（不摆点了没反应的键）。
+//   3. 没有学习位置（无计划 / 收工）时它不出现（不摆点了没反应的键）。
 import { test, expect } from '../../fixtures';
 
 declare const TASK: {
   resetV2(): void;
   initPlan(minutes: number): void;
-  active: boolean;
-  pass(): number;
+  readDone(i: number): void;
   queue: { i: number }[];
-  answerQuiz(choice: string): boolean;
-  nextQuiz(): void;
-  currentQuiz(): { opts: string[]; answer: string } | null;
-  setPass(n: number): void;
   backToLearn(): void;
   state(): { daily: Record<string, unknown> };
 };
-declare const APP3: { currentBlank(): number };
 declare const SECTIONS: unknown[];
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
@@ -131,35 +124,6 @@ test.describe('3.0 「回到学习位置」唯一键（合并「回到播放位�
     await expect.poll(() => playingIdx(page), '下一句应从学习句往后走').toBe(learnLocal + 1);
   });
 
-  test('② 滚走 → 点它 → 当前空回到视口并重新弹浮窗，且不播音', async ({ page }) => {
-    await enterTask(page);
-    await page.evaluate(() => TASK.setPass(2));
-    const bi = await page.evaluate(() => APP3.currentBlank());
-    expect(bi, '夹具要有一个可答的空，否则这条测不到东西').toBeGreaterThanOrEqual(0);
-
-    const blankInView = (page: import('@playwright/test').Page) => page.evaluate((k) => {
-      const el = Array.from(document.querySelectorAll('#art .qz-blank'))
-        .find((n) => Number((n as HTMLElement).dataset.bi) === k) as HTMLElement | undefined;
-      if (!el) return false;
-      const r = el.getBoundingClientRect();
-      return r.height > 0 && r.top >= 0 && r.bottom <= window.innerHeight;
-    }, bi);
-
-    // 刚点进 ②：当前空在视口里，键不该在屏上
-    await expect(page.locator('#backToLearn')).toBeHidden();
-
-    // 滚到页底：当前空离开视口，键出现
-    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-    await expect.poll(() => blankInView(page), '夹具要够高，滚到底后当前空必须离开视口').toBe(false);
-    await expect(page.locator('#backToLearn')).toBeVisible();
-
-    // 点它：当前空回到视口 + 浮窗重新弹出；② 没有句子可播，不许开播
-    await page.locator('#backToLearn').click();
-    await expect.poll(() => blankInView(page), '点「回到学习位置」应把当前空拉回视口').toBe(true);
-    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
-    expect(await isPlaying(page), '② 是答题态，不该播音').toBe(false);
-  });
-
   test('没有学习位置时不出现：无计划态隐藏', async ({ page }) => {
     await stubData(page, MANY);
     await page.goto(`${rootUrl}/index.html#/home`);
@@ -175,15 +139,10 @@ test.describe('3.0 「回到学习位置」唯一键（合并「回到播放位�
 
   test('没有学习位置时不出现：收工态隐藏', async ({ page }) => {
     await enterTask(page);
-    await page.evaluate(() => {
-      TASK.setPass(2);
-      for (let g = 0; g < 500; g++) {
-        const q = TASK.currentQuiz();
-        if (!q) break;
-        TASK.answerQuiz(q.answer);
-        TASK.nextQuiz();
-      }
-    });
+    // ② 删除后的收工路径：把今天队列读完 → 推进键第一下放句、第二下发现队列读空 → finishTask
+    await page.evaluate(() => { TASK.queue.forEach((q: { i: number }) => TASK.readDone(q.i)); });
+    await page.locator('#tbNext').click();
+    await page.locator('#tbNext').click();
     await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'done');
     await expect(page.locator('#backToLearn'), '收工态没有学习位置，键必须隐藏').toBeHidden();
   });

@@ -18,13 +18,12 @@
   let cur = 'home';
   let _hlArticle = null;   // 数据页点文章小卡 → 回首页要高亮的那一篇（§5.4）
   /* ---- 3.0 单词本（M3，PRD §6）----
-     词表 / 筛选档位不再在这里另立一份（报告 A5）：唯一出口是 index.html 内联脚本里的
-     全局 WORD_STAGE_LABEL / WB_FILTERS / WB_FILTER_LABEL（与 posOf 同一处，A5 注释在那里）。
-     以前这里的 WB_FILTER_LABEL 是「待掌握 / 学习中 / 已掌握」三档，fresh（未见面）不属于
-     任何一档 —— 三档相加永远小于「全部」，同一个单词本在两个屏上数出两个总数。 */
+     2026-10-10 ② 下线「连状态系统一起删」：五态档位与筛选整套退役（原词表全局经报告 A5
+     收敛到 index.html 那份，也一并删除），单词本只报接触账 ——
+     见没见过、接触几次、最近一次什么时候。 */
   const W_BATCH = 60;              // 增量渲染每批行数
   let _wordIndex = null, _wordIndexOrder = null, _wordIndexFor = null;
-  let _wordsShown = W_BATCH, _wordsFilter = null;
+  let _wordsShown = W_BATCH;
   function route() {
     const raw = (location.hash || '#/home').replace(/^#\//, '').split('/');
     const h = raw[0];
@@ -78,7 +77,7 @@
     if (cur === 'home') { view.innerHTML = loadingHtml(); return; }
     if (cur === 'stats' && window.APP3 && window.APP3.renderStats) return window.APP3.renderStats(view);
     if (cur === 'stats') { view.innerHTML = loadingHtml(); return; }
-    if (cur === 'words' && window.APP3 && window.APP3.renderWords) return window.APP3.renderWords(view, raw[1] || 'all');
+    if (cur === 'words' && window.APP3 && window.APP3.renderWords) return window.APP3.renderWords(view);
     if (cur === 'words') { view.innerHTML = loadingHtml(); return; }
     if (cur === 'listen' && window.APP3 && window.APP3.renderListen) return window.APP3.renderListen(view);
     if (cur === 'listen') { view.innerHTML = loadingHtml(); return; }
@@ -98,9 +97,7 @@
     if (stBack) { location.hash = '#/home'; return; }
     const stRead = e.target.closest('.sy-read');
     if (stRead && stRead.dataset.a != null) { openArticle(Number(stRead.dataset.a)); return; }
-    // 单词本：筛选 / 展开 / 重学 / 播放 / 加载更多（M3，都是每次重渲的节点，走事件代理）。
-    const wf = e.target.closest('.wb-filter');
-    if (wf) { location.hash = '#/words/' + wf.dataset.f; return; }
+    // 单词本：展开 / 重学 / 播放 / 加载更多（M3，都是每次重渲的节点，走事件代理）。
     const wrel = e.target.closest('.wd-relearn');
     if (wrel) { try { if (TASK.relearn) TASK.relearn(wrel.dataset.relearn); } catch (err) {} window.APP3.route(); return; }
     const wplay = e.target.closest('.wd-play');
@@ -135,10 +132,6 @@
       return;
     }
     // 卡片是 renderHome 每次重渲的，所以走事件代理而不是逐张绑。
-    // 入口 2 的「答题」按钮与卡片里的 .a-open 是同级真按钮，必须先判「答题」——
-    // 否则它会被卡片判定（.a-open 也在 .art-card 里）接走（§4.4）。
-    const quiz = e.target.closest('.a-quiz');
-    if (quiz && quiz.dataset.a != null) { openQuiz(Number(quiz.dataset.a)); return; }
     const card = e.target.closest('.art-card');
     if (card && card.dataset.a != null) openArticle(Number(card.dataset.a));
   });
@@ -153,88 +146,50 @@
 
   /* ---- 3.0 首页：六张文章卡片（M1 Task 3） ----
      ROOT2 是 TASK IIFE 的内部状态，外壳读不到，只能经 TASK.state() / TASK.sentWordsOf 拿。
-     熟练度按 §9.2 三项收口（Task 7）：通读完成度 ×40 + ② 正确率 ×35 + 精读重复度 ×25。 */
+     熟练度 = 通读完成度（2026-10-10 ② 下线用户拍板「只看通读」，原 §9.2 三项融合公式退役）。 */
   function rel(ts) {                       // 相对时间，复用影子跟读口径
     if (!ts) return '还没学过';
     const d = Math.floor((Date.now() - ts) / 864e5);
     return d <= 0 ? '今天' : d === 1 ? '昨天' : d + ' 天前';
   }
-  // 当前阶段的文案（§3.3 / §9.4）。通读满还没做题 = 「可答题」；`已学完` 留给"通读 + ② 各一遍"。
+  // 当前阶段的文案（§3.3）。2026-10-10 ② 下线后文章只剩三态：没碰过 / 通读中 / 已通读。
   // 2026-09-24 用户：圈号 ①/② 全部去掉 —— 阶段靠文字读，别只剩一个圈。
-  /* A5：原名 STAGE_LABEL 与「词」的进度表同名不同轴（那一份现在叫 WORD_STAGE_LABEL，
-     在 index.html 里），印在屏上两个「已学完 / 已毕业」很容易串。改带主语的名字。 */
-  const ART_STAGE_LABEL = { todo: '未开始', reading: '通读中', read: '可答题',
-                            quiz: '做题中', done: '已学完', pro: '熟练' };
+  const ART_STAGE_LABEL = { todo: '未开始', reading: '通读中', done: '已通读' };
   function articleStat(a) {
     const st = (typeof TASK !== 'undefined' && TASK.state()) || window.ShadowPlan.emptyState();
     const wordsOf = (typeof TASK !== 'undefined' && TASK.sentWordsOf) || function () { return []; };
     const scope = window.ShadowPlan.articleScope(SECTIONS, a);
     const total = scope.size;
     let ever = 0;
-    const words = new Set();   // 该篇出现过的**不同目标词**（去重）——「已毕业 X / Y 词」的 Y
+    const words = new Set();   // 该篇出现过的**不同目标词**（去重）—— 卡片「目标词 N 个」的 N
     scope.forEach((i) => {
       const s = st.sents[i]; if (s && s.lastReadAt > 0) ever++;
       wordsOf(i).forEach((w) => words.add(w));
     });
-    const c = window.ShadowPlan.countStagesOf(st, scope, wordsOf);
-    /* ② 正确率走**引擎的 quiz 事件**（type:'quiz'、按本篇全局句号过滤），不是 UI 游标：
-       补考会往同一个空再记一条事件，§9.2 的分母就是「quiz 总数」（题数，不是不同的空数
-       —— T6 台账里那条口径）。'ex' 例句题的 s 是字符串，进不了 scope，天然不计。 */
-    const evs = ((typeof TASK !== 'undefined' && TASK.events) ? TASK.events() : [])
-      .filter(e => e.type === 'quiz' && scope.has(e.s));
-    const quizOf = evs.length, quizOk = evs.filter(e => e.ok).length;
-    const quizRate = quizOf ? quizOk / quizOf : 0;
-    /* 精读次数（§7.6）：只数任务模式的完成（taskSentenceFinished 累加），随身听不计。
-       这份按篇账住 3.0 自己的 key（TASK.repsOf 跨天求和），不在共享的 ielts.shadow.v2 里 ——
-       否则一开 /shadow/ 就被它的 recompute2 抹掉（同源共享的必然，见 index.html 的 LS_ARTICLE）。 */
-    const reps = (typeof TASK !== 'undefined' && TASK.repsOf) ? TASK.repsOf(a) : 0;
-    /* §9.4 的「② 批次答过一遍」凭据：finishPass(2) 时按篇记一笔（TASK.articlePass2Done）。
-       它问的是「这一篇今天那批题走完了没有」，**不是**「全篇每句都答对」——一遍 ② 只考当天
-       队列那 ~20–40 题，拿它去比全篇句数（339）永远到不了「已学完」（终审 I1）。 */
-    const pass2Done = (typeof TASK !== 'undefined' && TASK.articlePass2Done) ? TASK.articlePass2Done(a) : false;
-    const progress = total
-      ? Math.round(Math.min(ever / total, 1) * 40 + quizRate * 35 + Math.min(reps / (total * 2), 1) * 25)
-      : 0;
-    /* 当前阶段（§9.4）：通读满一遍 + 这一篇的 ② 批次答过一遍 = 已学完；
-       熟练 = 已学完 且 熟练度 ≥ 80%（§9.2 的 caveat）。
-       注意「② 一遍」用 pass2Done（finishPass(2) 的凭据），不用 quizOk ≥ 句数 —— 后者要求
-       答对全篇每一句，而一遍 ② 只覆盖当天队列那几十题，永远到不了「已学完」。 */
+    /* 当前阶段（2026-10-10 ② 下线）：只看通读 —— 碰都没碰 = 未开始；碰过没读满 = 通读中；
+       读满 = 已通读。原来的「可答题/做题中/熟练」三档随 ② 一起退役。 */
     let stage;
     if (ever === 0) stage = 'todo';
     else if (ever < total) stage = 'reading';
-    else if (quizOf === 0) stage = 'read';
-    else if (!pass2Done) stage = 'quiz';
     else stage = 'done';
-    if (stage === 'done' && progress >= 80) stage = 'pro';
     let lastAt = 0; scope.forEach((i) => { const s = st.sents[i]; if (s && s.lastReadAt > lastAt) lastAt = s.lastReadAt; });
     /* §7.5：首页卡片「最近学习」也读随身听的最近收听（max(精读 lastReadAt, 收听 last)）。
        听不改 everRead/progress（§7.6），只让「最近」真实反映你刚听过。 */
     const llast = (typeof TASK !== 'undefined' && TASK.listenLast) ? TASK.listenLast(a) : 0;
     if (llast > lastAt) lastAt = llast;
-    /* 展示口径（2026-09-26 用户「卡片上的进度对不上」）：卡片/数据页的百分比改用
+    /* 展示口径（2026-09-26 用户「卡片上的进度对不上」）：卡片/数据页的百分比用
        **通读完成度**（碰过的句数 ÷ 本篇句数）—— 与任务条「本篇 N/M」、正文里读了几句
-       是同一个可核对的数。原来的 progress 是 §9.2 融合熟练度（通读×40+答题×35+重复×25），
-       读了 20/339 句只显示 2%，跟用户在别处看到的对不上，只留给阶段判据用。
+       是同一个可核对的数。2026-10-10 ② 下线、熟练度只看通读后，progress 与 readPct
+       从此是同一个数（原 §9.2 融合公式退役）。
        同时带上「今天在这篇」的任务量（卡片要显示今日任务进度）。 */
     const readPct = total ? Math.round(Math.min(ever / total, 1) * 100) : 0;
     const td = (typeof TASK !== 'undefined' && TASK.todayOfArticle) ? TASK.todayOfArticle(a) : { planned: 0, done: 0 };
-    /* W8：`ever` 读的是 `lastReadAt > 0`（这辈子碰过这句，不是"今天读没读"），与 §9.4 的
-       `everRead` 定义和任务条 ① 的分子同源；§9.3/§9.4 把通读完成度定义在"有没有碰过"上，
-       改成"今天读过"会让跨天后卡片退回未读，与「已学完」判据打架。保留 lifetime。 */
-    // W5-3：卡片胶囊与「答题」按钮口径一致 —— 只有「② 可答题（read）」与「② 做题（quiz）」
-    // 才出「答题」入口；`已学完`/`熟练` 的卡片不再显示（免得与胶囊说的"已经完事儿了"打架）。
-    /* 2026-09-24 用户实测：今天把通读额度读满后（本篇 337/339、今天 180/180），回首页这张卡片
-       既没有「答题」入口、胶囊还写「通读中」—— 而这一篇并不能凭"全篇读完"才进 ②。所以补一条
-       **今天**口径的入口：今天额度读满 + 这一篇正是今天读的那篇 + 还没读完整篇 → 也给「答题」。
-       它与 §9.4 的 stage（lifetime 派生）互不干扰：stage 与胶囊一个字不改，只在它之上补一颗按钮。 */
-    const todayDone = (typeof TASK !== 'undefined' && TASK.todayQuotaDone) ? TASK.todayQuotaDone() : false;
-    const todayA = (typeof TASK !== 'undefined' && TASK.todayArticle) ? TASK.todayArticle() : -1;
-    const todayQuizReady = todayDone && todayA === a && ever > 0 && ever < total;
-    const quizReady = stage === 'read' || stage === 'quiz' || todayQuizReady;
-    // `total` = 句数（进度分母）；`wordTotal` = 词数（掌握分母，与 c.graduated 同单位）
+    /* W8：`ever` 读的是 `lastReadAt > 0`（这辈子碰过这句，不是"今天读没读"），与任务条 ① 的
+       分子同源；通读完成度定义在"有没有碰过"上，改成"今天读过"会让跨天后卡片退回未读。保留 lifetime。 */
+    // `total` = 句数（进度分母）；`wordTotal` = 该篇出现过的不同目标词数（卡片「目标词 N 个」）
     // `ever` = 这一篇里读过的句数 —— 横幅「还剩 N 句」与卡片进度共用这一份派生，别各算各的。
-    return { progress, readPct, todayPlanned: td.planned, todayDone: td.done,
-             stage, grad: c.graduated, total, lastAt, wordTotal: words.size, ever, quizReady };
+    return { progress: readPct, readPct, todayPlanned: td.planned, todayDone: td.done,
+             stage, total, lastAt, wordTotal: words.size, ever };
   }
   function renderHome(view) {
     // 数据未就绪时先占位：initApp 拉完数据会再调一次 route()（见 index.html）。
@@ -244,7 +199,7 @@
     }
     const cards = SECTIONS.map((s, a) => {
       const x = articleStat(a);
-      // W5-4：卡片是容器；内部只放真按钮（.a-open 打开正文 / .a-quiz 直达 ②），不再互相嵌套。
+      // W5-4：卡片是容器；内部只放真按钮（.a-open 打开正文），不再互相嵌套。
       return `<article class="art-card" data-a="${a}" data-stage="${x.stage}">
         <button class="a-open" data-a="${a}" type="button" aria-label="进入《${esc(s.title)}》任务模式">
           <span class="a-head"><span class="a-title">${esc(s.title)}</span>
@@ -252,11 +207,10 @@
           <span class="a-en">${esc((TIT_EN[s.title] || '').replace(/^\s*·\s*/, ''))}</span>
           <span class="a-bar"><i style="width:${x.readPct}%"></i></span>
           <span class="a-meta"><span class="a-pct">${x.readPct}%</span>
-            <span>已毕业 ${x.grad} / ${x.wordTotal} 词</span>
+            <span>目标词 ${x.wordTotal} 个</span>
             <span>${rel(x.lastAt)}</span></span>
           ${x.todayPlanned > 0 ? `<span class="a-today" title="今天这篇排到的句数">今天 ${x.todayDone}/${x.todayPlanned} 句</span>` : ''}
         </button>
-        ${x.quizReady ? `<button class="a-quiz" data-a="${a}" type="button">答题</button>` : ''}
       </article>`;
     }).join('');
     view.innerHTML = `<h1 class="pg-title">首页</h1><div class="home-banner" id="homeBanner"></div><div class="art-grid">${cards}</div>`;
@@ -274,8 +228,9 @@
   window.APP3 = Object.assign(window.APP3 || {}, { renderHome, articleStat });
 
   /* ---- 3.0 学习数据页（M2，PRD §5）----
-     四问四块（每块标题即问题）+ 单词掌握 + 随身听（M4 起接真数据，§5.7）+ 待加强。
-     所有数字从既有 ROOT2 state 派生（§9.4），不新增存储字段。 */
+     四问四块（每块标题即问题）+ 随身听（M4 起接真数据，§5.7）+ 待加强。
+     所有数字从既有 ROOT2 state 派生（§9.4），不新增存储字段。
+     2026-10-10 ② 下线：「单词掌握」块随词状态系统一起删 —— 词的账只看接触（单词本）。 */
   function renderStats(view) {
     if (typeof dataReady === 'undefined' || !dataReady) { view.innerHTML = loadingHtml(); return; }
     const hasPlan = !!(typeof TASK !== 'undefined' && TASK.hasPlan);
@@ -289,17 +244,12 @@
       return;
     }
     const ov = statsOverview();
-    const wd = statsWords();
     const ls = statsListen();
     const tips = statsTips();
     /* §5（2026-09-24 用户加）：一块「今天」——今日读了几句 / 今日学习时长 / 今天还剩多少。
        数字全部经 TASK.todayProgress() 取（与任务条辅行同一份派生），界面不自己数账。 */
     const tp = (typeof TASK !== 'undefined' && TASK.todayProgress)
       ? TASK.todayProgress() : { done: 0, planned: 0, left: 0, minutes: 0 };
-    /* 今天的通读额度读满后，「今天」块给一个与首页卡片同一入口的「去答题」（§4.4 入口 1/2）——
-       三处（卡片 / 今天块 / 待加强）指向同一篇、同一个 TASK.openArticleQuiz。 */
-    const tqDone = (typeof TASK !== 'undefined' && TASK.todayQuotaDone) ? TASK.todayQuotaDone() : false;
-    const tqArt = (typeof TASK !== 'undefined' && TASK.todayArticle) ? TASK.todayArticle() : -1;
     view.innerHTML = `<div class="stats-page">
       <h1 class="pg-title">学习数据</h1>
       <section class="st-block" data-block="today" aria-labelledby="stH0">
@@ -309,7 +259,6 @@
           <div class="st-num" data-k="today-min"><b>${tp.minutes}</b><span>今日学习时长（分钟）</span></div>
           <div class="st-num" data-k="today-left"><b>${tp.left}</b><span>今天还剩句数</span></div>
         </div>
-        ${(tqDone && tqArt >= 0) ? `<button class="st-go" type="button" data-go="quiz" data-a="${tqArt}">去答题</button>` : ''}
       </section>
       <section class="st-block" data-block="overview" aria-labelledby="stH1">
         <h2 id="stH1">我最近学得怎么样？</h2>
@@ -331,15 +280,6 @@
             <span class="sa-meta">${ART_STAGE_LABEL[x.stage] || '未开始'}</span>
           </button>`;
         }).join('')}</div>
-      </section>
-      <section class="st-block" data-block="words" aria-labelledby="stH3">
-        <h2 id="stH3">我的单词掌握到了什么程度？</h2>
-        <div class="st-nums" data-cols="4">
-          <div class="st-num" data-k="learned"><b>${wd.learned}</b><span>已学习单词</span></div>
-          <div class="st-num" data-k="grad"><b>${wd.grad}</b><span>已毕业词</span></div>
-          <div class="st-num" data-k="leech"><b>${wd.leech}</b><span>重点词</span></div>
-          <div class="st-num" data-k="rate"><b>${wd.rate}%</b><span>掌握率</span></div>
-        </div>
       </section>
       <section class="st-block" data-block="trend" aria-labelledby="stH4">
         <h2 id="stH4">我的学习是否持续？</h2>
@@ -387,19 +327,12 @@
     });
     const ts = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats() : { streak: 0 };
     let arts = 0;
-    for (let a = 0; a < SECTIONS.length; a++) { const s = articleStat(a).stage; if (s === 'done' || s === 'pro') arts++; }
+    for (let a = 0; a < SECTIONS.length; a++) { if (articleStat(a).stage === 'done') arts++; }
     return { days: keys.length, minutes: minutes, streak: ts.streak, arts: arts, acts: acts };
   }
   window.APP3 = Object.assign(window.APP3, { statsOverview });
-  /* §5.5 单词掌握：已学习 / 已毕业 / 重点词 / 掌握率（已毕业 ÷ 目标词总数）。 */
-  function statsWords() {
-    const c = (typeof TASK !== 'undefined' && TASK.countStages) ? TASK.countStages() : { graduated: 0, leech: 0 };
-    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
-    const learned = (st && st.words) ? Object.keys(st.words).length : 0;
-    const total = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats().targetWords : 0;
-    return { learned: learned, grad: c.graduated, leech: c.leech, rate: total ? Math.round(c.graduated / total * 100) : 0, total: total };
-  }
-  window.APP3 = Object.assign(window.APP3, { statsWords });
+  /* §5.5 单词掌握块已删（2026-10-10 ② 下线「连状态系统一起删」）：原四格都建立在已退役的
+     五态模型上；词的账只看接触，出口收敛到单词本（#/words）。 */
   /* §5.7 随身听块：真数据（收听句数 / 收听时长 / 最近收听），与 TASK.listenStat 同源。
      不显示「收听掌握度」这类伪造指标 —— 听得多 ≠ 会，掌握看 §5.5 词状态。 */
   function statsListen() {
@@ -454,30 +387,18 @@
   }
   window.APP3 = Object.assign(window.APP3, { statsDays });
   /* §5.8「待加强」：2–3 条具体可点的建议（行动导向，不是数据堆砌）。
-     A 已开始但没读完 / B 重点词今天到期 / C 久没学；不足 2 条时补「没开始的篇目」/「单词本」。 */
+     A 已开始但没读完 / C 久没学；不足 2 条时补「没开始的篇目」/「单词本」。
+     2026-10-10 ② 下线：原 B 一条（词的到期提醒）随词状态系统删；「去答题」改口随 ② 删。 */
   function statsTips() {
     const tips = [];
     const now = Date.now();
-    /* 今天额度读满、且今天读的那篇还没读完 → 建议改成「去答题」，指向与首页卡片、「今天」块
-       同一个入口（TASK.openArticleQuiz）。没读满才维持原来的「继续读」。 */
-    const tqDone = (typeof TASK !== 'undefined' && TASK.todayQuotaDone) ? TASK.todayQuotaDone() : false;
-    const tqArt = (typeof TASK !== 'undefined' && TASK.todayArticle) ? TASK.todayArticle() : -1;
-    const tqStat = (tqDone && tqArt >= 0) ? articleStat(tqArt) : null;
-    if (tqStat && tqStat.ever > 0 && tqStat.ever < tqStat.total) {
-      tips.push({ kind: 'quiz', a: tqArt, text: `《${esc(SECTIONS[tqArt].title)}》今天的通读做完了，去答题`, go: '去答题' });
-    } else {
-      for (let a = 0; a < SECTIONS.length; a++) {
-        const x = articleStat(a);
-        if (x.ever > 0 && x.ever < x.total) {
-          tips.push({ kind: 'continue', a: a, text: `《${esc(SECTIONS[a].title)}》还差 ${x.total - x.ever} 句读完`, go: '继续' });
-          break;
-        }
+    for (let a = 0; a < SECTIONS.length; a++) {
+      const x = articleStat(a);
+      if (x.ever > 0 && x.ever < x.total) {
+        tips.push({ kind: 'continue', a: a, text: `《${esc(SECTIONS[a].title)}》还差 ${x.total - x.ever} 句读完`, go: '继续' });
+        break;
       }
     }
-    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
-    let leechDue = 0;
-    if (st && st.words) Object.keys(st.words).forEach((k) => { const w = st.words[k]; if (w && w.leech && (w.due || 0) <= now) leechDue++; });
-    if (leechDue > 0) tips.push({ kind: 'leech', text: `有 ${leechDue} 个重点词今天到期`, go: '去复习' });
     let stale = null;
     for (let a = 0; a < SECTIONS.length; a++) {
       const x = articleStat(a);
@@ -985,68 +906,38 @@
     for (let k = start; k < pi; k++) n += SECTIONS[a].paragraphs[k].length;
     return n + ti + 1;
   }
-  function wbStatus(w, st) {
-    const s = st && st.words ? st.words[w] : null;
-    if (!s) return { stage: 'fresh', leech: false, s: null };
-    return { stage: s.stage || 'fresh', leech: !!s.leech, s: s };
-  }
-  /* A5：档位 = 五个真状态本身（词表在 index.html 的全局 WORD_STAGE_LABEL，与筛选标签同源）。
-     旧写法是「待掌握(seen|recognized|leech) / 学习中(owned) / 已掌握(graduated)」——
-     没碰过的 fresh 不落在任何一档，三档相加永远小于「全部」，注释还写着「唯一出口」。
-     现在 fresh/seen/recognized/owned/graduated 两两互斥、相加恒等于「全部」；
-     「重点词」是盖在状态上的标记，所以是一档**正交**筛选，不参与相加。
-     §6.3 的判据本身一个字没动，动的只是分档与命名。 */
-  function inFilter(w, st, filter) {
-    if (filter === 'all') return true;
-    const x = wbStatus(w, st);
-    if (filter === 'leech') return x.leech;
-    return x.stage === filter;
-  }
-  function filterWords(filter, st) {
-    return wordIndexOrder().filter((w) => inFilter(w, st, filter));
-  }
-  function countBucket(filter, st) {
-    let n = 0;
-    const order = wordIndexOrder();
-    for (let i = 0; i < order.length; i++) if (inFilter(order[i], st, filter)) n++;
-    return n;
+  /* 词的「状态」只剩接触账（2026-10-10 ② 下线「连状态系统一起删」）：见没见过（有没有槽）
+     · 接触几次 · 最近一次什么时候。原五态分档与整套筛选退役，页面上不再有档位。 */
+  function wordSlot(w, st) {
+    return st && st.words ? (st.words[w] || null) : null;
   }
   function rowHtml(w, st) {
     const e = wordIndex()[w];
     const pos = sentPos(e.sents[0]);
     const a = pos.a;
     const meta = `${esc(SECTIONS[a].title)} · 第 ${volNo(a, pos.pi)} 卷 · 出现 ${e.count} 次`;
-    const x = wbStatus(w, st);
-    /* 一颗胶囊同时说「哪一档 + 是不是重点词」：以前 leech 会把状态整个盖掉，
-       于是按状态筛出来的行里混着一颗读不出状态的「重点词」。底色仍走 .leech（那条在后，压过 s-*）。 */
-    const pill = (WORD_STAGE_LABEL[x.stage] || WORD_STAGE_LABEL.fresh) + (x.leech ? ' · 重点词' : '');
-    const pillCls = ' s-' + x.stage + (x.leech ? ' leech' : '');
-    const relt = (x.s && x.s.lastContactAt) ? rel(x.s.lastContactAt) : '还没学过';
+    const s = wordSlot(w, st);
+    const pill = s ? `接触 ${s.reps || 0} 次` : '还没见过';
+    const relt = (s && s.lastContactAt) ? rel(s.lastContactAt) : '还没学过';
     return `<li class="wb-item">
       <button class="wb-row" type="button" data-w="${esc(w)}" aria-expanded="false">
-        <span class="wr-head"><span class="wr-word">${esc(w)}</span><span class="wr-pill${pillCls}">${pill}</span></span>
+        <span class="wr-head"><span class="wr-word">${esc(w)}</span><span class="wr-pill">${pill}</span></span>
         <span class="wr-meta">${meta}</span>
         <span class="wr-meta2">${relt}</span>
       </button>
     </li>`;
   }
-  function renderWords(view, filter) {
+  function renderWords(view) {
     if (typeof dataReady === 'undefined' || !dataReady) { view.innerHTML = loadingHtml(); return; }
-    if (WB_FILTERS.indexOf(filter) < 0) filter = 'all';
-    if (_wordsFilter !== filter) { _wordsFilter = filter; _wordsShown = W_BATCH; }
     const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
-    const list = filterWords(filter, st);
+    const list = wordIndexOrder();
     const shown = Math.min(_wordsShown, list.length);
-    const filters = WB_FILTERS.map((f) =>
-      `<button class="wb-filter" type="button" data-f="${f}" aria-pressed="${f === filter ? 'true' : 'false'}">`
-      + `${WB_FILTER_LABEL[f]} <span class="wf-n">${countBucket(f, st)}</span></button>`).join('');
     const rows = list.slice(0, shown).map((w) => rowHtml(w, st)).join('');
     const more = shown < list.length
       ? `<button class="wb-more" type="button">加载更多（还剩 ${list.length - shown} 个）</button>` : '';
     view.innerHTML = `<div class="words-page">
       <h1 class="pg-title">单词本</h1>
-      <div class="wb-filters" role="group" aria-label="按词状态筛选（重点词是叠在状态上的标记）">${filters}</div>
-      <p class="wb-hint">共 ${list.length} 个词${filter === 'all' ? '' : '（当前筛选）'} · 点词行看原文语境</p>
+      <p class="wb-hint">共 ${list.length} 个词 · 点词行看原文语境</p>
       <ul class="wb-list" aria-label="单词列表">${rows}</ul>
       ${more}
       <p class="wb-hint">这里不是背单词的入口，是查「我到底会没会」的地方。</p>
@@ -1069,21 +960,23 @@
   function wordDetailHtml(w) {
     const e = wordIndex()[w];
     const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
-    const x = wbStatus(w, st);
+    const s = wordSlot(w, st);
     const v = (typeof VOCAB !== 'undefined' && VOCAB[w]) || {};
     const p = String(v.p || v.us || v.uk || '').replace(/^\//, '').replace(/\/$/, '');
     const gi0 = e ? e.sents[0] : 0;
     const pos0 = sentPos(gi0);
     const a0 = pos0.a;
     const raw0 = (SECTIONS[a0] && SECTIONS[a0].paragraphs[pos0.pi] && SECTIONS[a0].paragraphs[pos0.pi][pos0.ti]) || '';
-    const steps = ['seen', 'recognized', 'owned', 'graduated'].map((k) =>
-      `<span class="wd-step${x.stage === k ? ' on' : ''}">${WORD_STAGE_LABEL[k]}</span>`)
-      .join('<i class="wd-arrow" aria-hidden="true">→</i>');
+    /* 学习状态只剩接触账（2026-10-10 ② 下线「连状态系统一起删」）：接触几次 · 进没进保温 ·
+       最近一次什么时候。原四步进度条与状态胶囊随五态模型退役。 */
+    const baowen = !!s && (s.reps || 0) >= (window.ShadowPlan && ShadowPlan.MASTER_REPS || 12);
+    const stat = s
+      ? `接触 ${s.reps || 0} 次${baowen ? ' · 已进保温' : ''} · 最近一次 ${s.lastContactAt ? rel(s.lastContactAt) : '—'}`
+      : '还没见过这个词';
     const ex = v.ex ? `<div class="wd-block"><h2>📝 例句 / 其他语境</h2>
         <p class="wd-ex">${esc(v.ex)}</p>${v.exZh ? `<p class="wd-exzh">${esc(v.exZh)}</p>` : ''}</div>` : '';
     return `<div class="wb-detail" role="region" aria-label="${esc(w)} 详情">
       <div class="wd-top"><span class="wd-word">${esc(w)}</span>
-        <span class="wd-stage${x.leech ? ' s-' + x.stage + ' leech' : ' s-' + x.stage}">${(WORD_STAGE_LABEL[x.stage] || WORD_STAGE_LABEL.fresh) + (x.leech ? ' · 重点词' : '')}</span>
         <button class="wd-relearn" type="button" data-relearn="${esc(w)}">重学</button></div>
       ${p ? `<div class="wd-phon">/${esc(p)}/</div>` : ''}
       <div class="wd-mean">${esc(v.m || '（词库中无此词条）')}</div>
@@ -1093,8 +986,7 @@
         <button class="wd-play" type="button" data-a="${a0}" data-gi="${gi0}">▶ 播放这句</button></div>
       ${ex}
       <div class="wd-block"><h2>学习状态</h2>
-        <div class="wd-path">${steps}</div>
-        <p class="wd-stat">接触 ${x.s ? (x.s.reps || 0) : 0} 次 · ② 答对 ${x.s ? (x.s.ok3 || 0) : 0} 次 · ${x.s && x.s.err ? '错误 ' + x.s.err + ' 次' : '无错误'}</p></div>
+        <p class="wd-stat">${stat}</p></div>
     </div>`;
   }
   function toggleWordRow(row) {
@@ -1127,15 +1019,10 @@
     if (go) {
       const tip = go.closest('.st-tip');
       const kind = tip ? tip.dataset.tip : go.dataset.go;
-      /* A5：以前跳 #/words/todo（旧「待掌握」档里混着 leech），现在单词本有了正对应的
-         「重点词」档，这条提示该落在它自己的档位上。 */
-      if (kind === 'leech') { location.hash = '#/words/leech'; return; }
       if (kind === 'words') { location.hash = '#/words'; return; }
       if (kind === 'listen') { location.hash = '#/listen'; return; }
       const a = tip && tip.dataset.a != null ? Number(tip.dataset.a)
               : (go.dataset.a != null ? Number(go.dataset.a) : 0);
-      /* 「去答题」（今天块 / 待加强）与首页卡片「答题」同一入口：直达该篇 ②。 */
-      if (kind === 'quiz') { openQuiz(a); return; }
       openHomeHighlight(a);
     }
   });
@@ -1172,7 +1059,7 @@
       main = '还没有学习计划';
       go = '设置你每天的学习时间';
     } else {
-      const s = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats() : { streak: 0, graduated: 0, targetWords: 0, planned: 0, done: 0 };
+      const s = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats() : { streak: 0, passed: 0, targetWords: 0, planned: 0, done: 0 };
       /* refine3 ⑤：底部续读条删掉后，「今天还剩 N 句 / 今天覆盖 K 词」这两个原本只有它说的数
          改由首页横幅承接（与任务条辅行、数据页「今天」块同源：TASK.todayProgress / todayCoverWords）。 */
       const tp = (typeof TASK !== 'undefined' && TASK.todayProgress) ? TASK.todayProgress() : null;
@@ -1186,7 +1073,7 @@
       /* W5-2：刚建计划当天 streak=0，写「连续 0 天」像中断，改口「今天开始」；有天数才报连续。 */
       sum = (s.streak > 0 ? `连续 ${s.streak} 天` : '今天开始') +
             (lastPos >= 0 ? ` · 今天还剩 ${leftToday} 句` : '') +
-            ` · 今天覆盖 ${cover} 词 · 已毕业 ${s.graduated} / ${s.targetWords} 词`;
+            ` · 今天覆盖 ${cover} 词 · 累计过完 ${s.passed} / ${s.targetWords} 词`;
       const nextA = nextArticle();
       if (s.planned > 0 && s.done >= s.planned) {
         const extra = s.done - s.planned;
@@ -1229,24 +1116,7 @@
     if (typeof TASK === 'undefined' || !TASK.openArticle) return;
     TASK.openArticle(a);
   }
-  /* 入口 2（§4.4）：首页卡片「答题」→ 直达该篇 ②。批次由 TASK.openArticleQuiz 现建，
-     与「① 后进 ②」同源 —— 不要求先跑一遍 ①。 */
-  function openQuiz(a) {
-    if (typeof TASK === 'undefined' || !TASK.openArticleQuiz) return;
-    TASK.openArticleQuiz(a);
-  }
-  window.APP3 = Object.assign(window.APP3, { openArticle, openQuiz });
-
-  /* ---- ② 文内挖空 + 浮窗（M1 Task 6）----
-     实现全在 TASK 里（只有它拿得到 quizList / 正文 .sent / 游标），外壳这层只把它挂到
-     APP3 上，给外部与 Playwright 一个稳定出口，别在第二处重写一套。 */
-  window.APP3 = Object.assign(window.APP3, {
-    maskArticle: () => TASK.maskArticle(),
-    openBlank: (bi) => TASK.openBlank(bi),
-    nextBlank: () => TASK.nextBlank(),
-    currentBlank: () => TASK.currentBlank(),
-    closeBlankPop: () => TASK.closeBlankPop(),
-  });
+  window.APP3 = Object.assign(window.APP3, { openArticle });
 
   /* ---- 左下角用户卡 + 「我的」（用户 2026-09-24；2026-10-08 起按宿主分叉）----
      内容一份（meContent）、监听一份（mountMe/wireMeHost），宿主两个：
@@ -1291,7 +1161,7 @@
   // 「我的」的正文模板：PC 浮窗与移动端一级页面共用这一份，两个宿主不许各写一套。
   function meContent() {
     const acc = meAccount();
-    const s = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats() : { streak: 0, graduated: 0, targetWords: 0 };
+    const s = (typeof TASK !== 'undefined' && TASK.todayStats) ? TASK.todayStats() : { streak: 0, passed: 0, targetWords: 0 };
     const state = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
     const days = state && state.daily ? Object.keys(state.daily).length : 0;
     const cfg = (typeof TASK !== 'undefined' && TASK.planConfig) ? TASK.planConfig() : null;
@@ -1316,7 +1186,7 @@
         <div class="mp-nums">
           <div><b>${days}</b><span>累计天数</span></div>
           <div><b>${s.streak}</b><span>连续天数</span></div>
-          <div><b>${s.graduated}</b><span>已毕业词</span></div>
+          <div><b>${s.passed}</b><span>已过完词</span></div>
         </div>
         <div class="mp-status">${hasPlan ? `正在学《${esc(title)}》· 第 ${planDay} 天` : '还没有学习计划'}</div>
       </div>

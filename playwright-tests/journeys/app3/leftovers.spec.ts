@@ -34,6 +34,28 @@ async function waitAppReady(page: import('@playwright/test').Page) {
   });
 }
 
+/* 等「本页 scope 的 service worker 已激活」。
+   ⚠️ 2026-10-10 根因记录：这里**不能**写 `page.waitForFunction(async () => …)`。Playwright 1.63 的
+   waitForFunction 在注入脚本里是**同步**取谓词返回值的（`const success = predicate(); if (success) …`），
+   async 谓词返回的 Promise 对象恒为 truthy ⇒ 第一次轮询就放行，闸门等于没有。W6「真实浏览器里 SW
+   注册成功」就是这么红的：换 Node 测试服务器后页面秒开，后续 evaluate 抢在 SW 激活前读到
+   reg.active = null（python 服务器时代 goto 慢、SW 早已激活，靠运气恒绿）。同文件另 3 处
+   （高重复 reload / 断网 reload / 断网无缓存）一度也是假闸门，一并换掉。
+   expect.poll 会 await 回调返回的 promise，这才是真的等。 */
+async function waitSwActive(page: import('@playwright/test').Page) {
+  await expect.poll(async () => {
+    return await page.evaluate(async () => {
+      try {
+        const reg = await navigator.serviceWorker.getRegistration();
+        return !!(reg && reg.active);
+      } catch (e) { return false; }
+    });
+  }, {
+    timeout: 30000,
+    message: '本页 scope 的 service worker 必须在 30s 内激活（真实浏览器 + 真实 sw.js）',
+  }).toBe(true);
+}
+
 /* 第 0 篇 8 句，每句带一个目标词 + 中文译文（够任务模式渲出 .sent-zh 与行内词义）。 */
 const QWORDS = ['apple', 'banana', 'cherry', 'date'];
 const SIXQ: Record<string, string> = (() => {
@@ -347,13 +369,8 @@ test.describe('3.0 W6 PWA', () => {
   test('真实浏览器里 SW 注册成功、已激活，scope = /，脚本是真实文件', async ({ page }) => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
-    // 条件等待：本页 scope 的注册已激活（不 sleep）
-    await page.waitForFunction(async () => {
-      try {
-        const reg = await navigator.serviceWorker.getRegistration();
-        return !!(reg && reg.active);
-      } catch (e) { return false; }
-    });
+    // 条件等待：本页 scope 的注册已激活（不 sleep；为何不用 waitForFunction(async)，见 waitSwActive 注释）
+    await waitSwActive(page);
     const info = await page.evaluate(async () => {
       const reg = await navigator.serviceWorker.getRegistration();
       return { scope: (reg && reg.scope) || '', scriptURL: (reg && reg.active && reg.active.scriptURL) || '' };
@@ -367,17 +384,14 @@ test.describe('3.0 W6 PWA', () => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
     // 先让真实 SW 激活，后面的 reload 才都在 SW 接管下
-    await page.waitForFunction(async () => {
-      try { const reg = await navigator.serviceWorker.getRegistration(); return !!(reg && reg.active); }
-      catch (e) { return false; }
-    });
+    await waitSwActive(page);
     const RELOADS = 15;
     for (let i = 0; i < RELOADS; i++) {
-      /* 只等到 domcontentloaded：这条锁的是「app.js 每次都真的执行」（下面那道 waitForFunction），
-         而默认 'load' 要等齐所有子资源 —— 图标字体走 CDN，8 worker 抢外网时 15 轮 reload
-         能把单条用例拖过 120s（实测整轮从 6 分钟涨到 36 分钟、这条最先红）。
-         defer 的 app.js 在 DOMContentLoaded 之前就跑完了，所以少等的只有 CDN 字体，锁的强度不变。 */
-      await page.reload({ waitUntil: 'domcontentloaded' });
+      /* 等满 'load'（默认值）。2026-10-10 之前这里只等 domcontentloaded：图标字体走 CDN，
+         8 worker 抢外网时 15 轮 reload 能把单条用例拖过 120s（实测整轮从 6 分钟涨到 36 分钟、
+         这条最先红）。当天字体与 supabase-js 都改自托管后，全页子资源都在本机秒回，
+         顺手把等待还给 'load' —— 这条于是还能替「本地 vendor 资源没被漏掉」作证。 */
+      await page.reload();
       // APP3.route 由 defer 的 app.js 定义；app.js 拿不到就永远等 → 红灯。条件等待，不 sleep。
       await page.waitForFunction(() => {
         const w = window as unknown as { APP3?: { route?: unknown } };
@@ -389,10 +403,7 @@ test.describe('3.0 W6 PWA', () => {
   test('断网后 reload：SW 仍从缓存供上 app.js（network-first 的可靠兜底）', async ({ page, context }) => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
-    await page.waitForFunction(async () => {
-      try { const reg = await navigator.serviceWorker.getRegistration(); return !!(reg && reg.active); }
-      catch (e) { return false; }
-    });
+    await waitSwActive(page);
     // 被接管的一轮：导航与 app.js 进缓存
     await page.reload();
     await page.waitForFunction(() => {
@@ -417,10 +428,7 @@ test.describe('3.0 W6 PWA', () => {
   test('断网且缓存被清空：导航请求兜到离线页，不白屏', async ({ page, context }) => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
-    await page.waitForFunction(async () => {
-      try { const reg = await navigator.serviceWorker.getRegistration(); return !!(reg && reg.active); }
-      catch (e) { return false; }
-    });
+    await waitSwActive(page);
     await page.reload();   // 被 SW 接管的一轮，app.js / index.html 进缓存
     await page.waitForFunction(() => {
       const w = window as unknown as { APP3?: { route?: unknown } };

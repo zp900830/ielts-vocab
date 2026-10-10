@@ -1,9 +1,8 @@
-// 3.0 M1 遗留清单第二半（W3 / W4 / W5 / W7 / W8）。
-// W3 · ② 答题对错的 aria-live 播报（PRD §10.4）
+// 3.0 M1 遗留清单第二半（W4 / W5 / W7）。
 // W4 · buildQueue 里的死按篇闸（M2 风险）
-// W5 · 观感类小项（占位屏 / 连续 0 天 / 已学完卡片不再出答题 / 卡片结构 / 浮窗避让任务条 /
-//      回看句子已删 / 全读完横幅 / 空与浮窗观感）
-// W7 · 终审 5 观察（I1 夹具 / 免费态翻句 / 迁移删旧字段 / _pendingArticle 残留 / pass2 选项）
+// W5 · 观感类小项（占位屏 / 连续 0 天 / 卡片结构 / 全读完横幅）
+// W7 · 终审 5 观察（免费态翻句 / 迁移删旧字段 / _pendingArticle 残留 / 续读条反锁）
+// 2026-10-10 ② 挖空选词删除：W3（② 播报）、W5-3/5/6/8（② 观感）、W7-1（② 凭据）随 ② 一并退役。
 // 服务器归 global-setup.ts 起停（仓库根 8932）；站点在仓库根，所以用 E2E_ROOT_URL。
 import { test, expect } from '../../fixtures';
 
@@ -11,22 +10,12 @@ declare const TASK: {
   resetV2(): void;
   initPlan(minutes: number): void;
   readDone(i: number): void;
-  setPass(n: number): void;
   buildQueue(): void;
   queue: { i: number }[];
-  prev(): void;
-  next(): void;
-  seedArticleForTest(a: number, o: { quizOk?: number; quizNo?: number; reps?: number; pass2?: boolean }): void;
-  articlePass2Done(a: number): boolean;
   repsOf(a: number): number;
   state(): { daily: Record<string, { sentDone?: number; repsByArticle?: Record<string, number> }>; sents: Record<number, { lastReadAt: number }> };
-  events(): { type: string; s?: number | string; ok?: boolean }[];
-  currentQuiz(): { opts: string[]; answer: string } | null;
-  answerQuiz(choice: string): boolean;
-  nextQuiz(): void;
-  quizDone(): number;
 };
-declare const APP3: { currentBlank(): number; openBlank(bi: number): void; renderBanner(el: HTMLElement): void };
+declare const APP3: { renderBanner(el: HTMLElement): void };
 declare const ShadowPlan: { articleScope(sections: unknown, article: number): Set<number> };
 declare const SECTIONS: { title: string; paragraphs: string[][] }[];
 
@@ -85,48 +74,6 @@ async function enterArticle(page: import('@playwright/test').Page, nth: number) 
   await expect(page.locator('body')).toHaveClass(/task-mode/);
   await expect(page.locator('#taskBar')).toBeVisible();
 }
-async function answerCorrectly(page: import('@playwright/test').Page) {
-  const idx = await page.evaluate(() => {
-    const q = TASK.currentQuiz()!;
-    return q.opts.indexOf(q.answer);
-  });
-  await page.locator('#blankPop .qz-opt').nth(idx).click();
-}
-async function answerWrongly(page: import('@playwright/test').Page) {
-  const idx = await page.evaluate(() => {
-    const q = TASK.currentQuiz()!;
-    return q.opts.findIndex((o) => o !== q.answer);
-  });
-  await page.locator('#blankPop .qz-opt').nth(idx).click();
-}
-
-/* ============================== W3 · aria-live ============================== */
-test.describe('3.0 W3 答题对错的 aria-live 播报（PRD §10.4）', () => {
-  test('答对/答错都送进 role=status + aria-live=polite 的播报区', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await enterArticle(page, 0);
-    await page.evaluate(() => TASK.setPass(2));
-
-    const live = page.locator('#quizLive');
-    await expect(live, '承载对错反馈的节点必须存在').toHaveCount(1);
-    await expect(live).toHaveAttribute('role', 'status');
-    await expect(live).toHaveAttribute('aria-live', 'polite');
-
-    // 答对：播报「对了」
-    await page.locator('#art .qz-blank').first().click();
-    await answerCorrectly(page);
-    await expect(live).toContainText('对了');
-
-    // 答错：播报「正确的那一个是 X」，且 X 就是这题的答案
-    await page.evaluate(() => TASK.next());
-    await expect(page.locator('#blankPop .qz-opt')).toHaveCount(4);
-    const answer = await page.evaluate(() => TASK.currentQuiz()!.answer);
-    await answerWrongly(page);
-    await expect(live).toContainText('正确的那一个是');
-    await expect(live).toContainText(answer);
-  });
-});
-
 /* ==================== W4 · buildQueue 死窗口（M2 风险） ==================== */
 test.describe('3.0 W4 buildQueue 不再对非首篇算出 0 句新句窗口', () => {
   test('进第 2 篇后 buildQueue() 产出的队列非空（旧代码恒为 0）', async ({ page }) => {
@@ -168,25 +115,6 @@ test.describe('3.0 W5 观感类小项', () => {
     await expect(sum).not.toContainText('连续 0 天');
   });
 
-  // W5-3：已学完 / 熟练的卡片不再出「答题」
-  test('W5-3 已学完的卡片不再显示「答题」（与胶囊口径一致）', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    // 通读满 → data-stage=read（有「答题」）
-    await page.evaluate(() => {
-      Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
-    });
-    await page.reload();
-    await expect(page.locator('.art-card').first()).toHaveAttribute('data-stage', 'read');
-    await expect(page.locator('.art-card').first().locator('.a-quiz')).toHaveCount(1);
-    // ② 批次也走完 → 已学完，答题入口收掉
-    await page.evaluate(() => TASK.seedArticleForTest(0, { quizOk: 1, pass2: true }));
-    await page.reload();
-    await expect(page.locator('.art-card').first()).toHaveAttribute('data-stage', 'done');
-    await expect(page.locator('.art-card').first().locator('.a-quiz'), '已学完卡片不该再有答题入口').toHaveCount(0);
-  });
-
   // W5-4：卡片是容器、内部只放真按钮
   test('W5-4 卡片不再是 role=button；打开正文的是内部真按钮 .a-open（键盘可达）', async ({ page }) => {
     await stubData(page, SIXQ);
@@ -200,50 +128,6 @@ test.describe('3.0 W5 观感类小项', () => {
     await open.focus();
     await page.keyboard.press('Enter');
     await expect(page.locator('body')).toHaveClass(/task-mode/);
-  });
-
-  // W5-5：浮窗翻到任务条上方，不压住「下一题」
-  test('W5-5 浮窗不压住任务条（空在下方时旧代码会顶到视口底）', async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 380 });
-    await stubData(page, SIXQ);
-    await enterArticle(page, 0);
-    await page.evaluate(() => TASK.setPass(2));
-    // 打开靠下的第 2 个空：上游放不下窄条的余量，浮窗只能上翻，旧代码会一路夹到视口底、
-    // 越过任务条。用 APP3.openBlank() 程序化打开（避开 Playwright 点击前的自动 scrollIntoView）。
-    const opened = await page.evaluate(() => {
-      APP3.openBlank(1);
-      const pop = document.getElementById('blankPop')!;
-      return { visible: !pop.hidden };
-    });
-    expect(opened.visible, '浮窗必须打开，否则这条测不到东西').toBe(true);
-    const m = await page.evaluate(() => {
-      const pop = document.getElementById('blankPop')!.getBoundingClientRect();
-      const bar = document.getElementById('taskBar')!.getBoundingClientRect();
-      return { popBottom: pop.bottom, barTop: bar.top };
-    });
-    expect(m.popBottom, `浮窗底 ${m.popBottom} 不许越过任务条顶 ${m.barTop}`)
-      .toBeLessThanOrEqual(m.barTop + 0.5);
-  });
-
-  // W5-6：「回看句子」动作已从 ② 删除（不再有 playFrom 那个副作用）
-  test('W5-6 ② 态没有「回看句子」：TASK.prev() 不再播放/滚动当前题', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await enterArticle(page, 0);
-    await page.evaluate(() => TASK.setPass(2));
-    // 停在第 3 个空上（≥1），记下正文高亮句 —— 旧代码 prev() 会 reviewSentence() 把高亮挪到这一句
-    await page.evaluate(() => APP3.openBlank(2));
-    const before = await page.evaluate(() => {
-      const p = document.querySelector('#art .sent.playing');
-      return p ? (p as HTMLElement).dataset.gi || p.textContent : null;
-    });
-    await page.evaluate(() => TASK.prev());
-    const after = await page.evaluate(() => {
-      const p = document.querySelector('#art .sent.playing');
-      return p ? (p as HTMLElement).dataset.gi || p.textContent : null;
-    });
-    expect(after, '② 的「上一句/回看」必须是空操作，不许把高亮/播放拽走').toBe(before);
-    // 页面上也不该再有「回看句子」这颗按钮
-    expect(await page.locator('body', { hasText: '回看句子' }).count(), '「回看句子」不存在').toBe(0);
   });
 
   // W5-7：六篇都读完 → 明确文案，不再返回第 1 篇说「还剩 1 句」
@@ -265,49 +149,10 @@ test.describe('3.0 W5 观感类小项', () => {
     await expect(main, '不许再说「继续学《第 1 篇》· 还剩 1 句」').not.toContainText('继续学');
     await expect(page.locator('#homeBanner .b-go')).toContainText('看词本');
   });
-
-  // W5-8：浮窗有朝向那个空的小箭头
-  test('W5-8 浮窗带指向空的小箭头（::after）', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await enterArticle(page, 0);
-    await page.evaluate(() => TASK.setPass(2));
-    await page.locator('#art .qz-blank').first().click();
-    await expect(page.locator('#blankPop')).toBeVisible();
-    const arrow = await page.locator('#blankPop').evaluate((el) => {
-      const s = getComputedStyle(el, '::after');
-      return { content: s.content, topColor: s.borderTopColor, bottomColor: s.borderBottomColor };
-    });
-    expect(arrow.content, '浮窗必须有 ::after 箭头').not.toBe('none');
-    const transparent = ['rgba(0, 0, 0, 0)', 'transparent'];
-    expect(transparent.includes(arrow.topColor) && transparent.includes(arrow.bottomColor),
-      '箭头至少要有一向是可见的实色').toBe(false);
-  });
 });
 
 /* ============================== W7 · 终审 5 观察 ============================== */
 test.describe('3.0 W7 终审 5 条观察', () => {
-  // W7-1 / W7-5：② 批次严格小于全篇也够「已学完」；并用到 seedArticleForTest 的 pass2 选项
-  test('W7-1 部分 ②（批次 < 全篇）也判「已学完」：旧判据 quizOk>=全篇句数 在这里必红', async ({ page }) => {
-    await stubData(page, SIXQ);
-    await page.goto(`${rootUrl}/index.html#/home`);
-    await freshPlan(page);
-    await page.evaluate(() => {
-      Array.from(ShadowPlan.articleScope(SECTIONS, 0)).forEach((i) => TASK.readDone(i));
-    });
-    // ② 批次严格小于全篇：第 0 篇 8 句，只让它有 3 条 quiz 事件（且都答对）+ 一批次凭据
-    await page.evaluate(() => TASK.seedArticleForTest(0, { quizOk: 3, pass2: true }));
-    const info = await page.evaluate(() => {
-      const scope = ShadowPlan.articleScope(SECTIONS, 0);
-      const ok = TASK.events().filter((e) => e.type === 'quiz' && e.ok && scope.has(e.s as number)).length;
-      return { total: scope.size, ok };
-    });
-    expect(info.total, '夹具要有多句，否则「批次 < 全篇」无从谈起').toBeGreaterThan(1);
-    expect(info.ok, '夹具必须让 ② 批次严格小于全篇（旧判据会在这里红）').toBeLessThan(info.total);
-    expect(await page.evaluate(() => TASK.articlePass2Done(0)), '批次凭据按篇记下').toBe(true);
-    await page.reload();
-    await expect(page.locator('.art-card').first()).toHaveAttribute('data-stage', 'done');
-  });
-
   // W7-2：免费态（无计划）也能自由翻句
   test('W7-2 免费态任务条露出上一句/下一句，点了真的挪高亮', async ({ page }) => {
     await stubData(page, SIXQ);

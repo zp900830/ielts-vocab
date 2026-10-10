@@ -34,6 +34,19 @@ const FILES = [
   'apple-touch-icon.png',
   '404.html',
   'admin/index.html',
+  // 第三方自托管（2026-10-10）：图标字体与 supabase-js 从 jsdelivr 挪进仓库 ——
+  // 外链在国内常不可达（本机实测每个卡满 30s 才超时，图标字形全塌、云端同步一起废）。
+  // 这三个漏登记任何一个，线上就是静默 404：页面不报错，只是图标变空白。
+  'vendor/remixicon/remixicon.css',
+  'vendor/remixicon/remixicon.woff2',
+  'vendor/supabase/supabase-js-2.117.3.js',
+  // admin 后台的 Vue / Element Plus / ECharts（5 个文件，2026-10-10 同日自托管，原走 fastly.jsdelivr.net）：
+  // 少登记任何一个，线上后台就是「白屏打不开」（页面引用见 admin/index.html）。
+  'vendor/vue/vue-3.5.43.global.prod.js',
+  'vendor/element-plus/element-plus-2.14.7.css',
+  'vendor/element-plus/element-plus-2.14.7.full.min.js',
+  'vendor/element-plus/element-plus-2.14.7.zh-cn.min.js',
+  'vendor/echarts/echarts-5.6.0.min.js',
 ];
 
 const warn = [];
@@ -79,22 +92,34 @@ function main() {
   }
   writeConfig(path.join(OUT), url, key);
 
-  // 防「白名单漏文件」：扫已复制的 HTML，凡是引用本站相对路径的 json/js/html，必须在 dist 里
+  /* 防「白名单漏文件」：扫已复制的 HTML 与 CSS，凡是引用本站相对路径的资源，必须在 dist 里。
+     2026-10-10 两处加强（配合第三方自托管）：① HTML 那路的扩展名加了 .css；
+     ② 新增 CSS 内部 url() 这一路 —— 自托管字体的真实故障模式恰恰是「CSS 在、woff2 不在」，
+     页面一声不吭、只是图标字形全塌。 */
   const missing = [];
-  for (const html of FILES.filter((f) => f.endsWith('.html'))) {
-    const p = path.join(OUT, html);
+  const checkRef = (owner, here, raw) => {
+    const r = raw.split(/[?#]/)[0];
+    if (!r || /^(https?:|data:|\/\/|#)/.test(r)) return;
+    // 以 / 开头是站点绝对路径，相对 dist 根而不是文件系统根
+    const target = r.startsWith('/') ? path.join(OUT, r) : path.resolve(here, r);
+    if (!fs.existsSync(target)) missing.push(`${owner} → ${raw}`);
+  };
+  for (const f of FILES.filter((f) => f.endsWith('.html'))) {
+    const p = path.join(OUT, f);
     if (!fs.existsSync(p)) continue;
     const src = fs.readFileSync(p, 'utf8');
     const here = path.dirname(p);
     const refs = new Set();
-    for (const m of src.matchAll(/(?:src|href)=["']([^"'#?]+?\.(?:json|js|html))["']/g)) refs.add(m[1]);
+    for (const m of src.matchAll(/(?:src|href)=["']([^"'#?]+?\.(?:json|js|html|css))["']/g)) refs.add(m[1]);
     for (const m of src.matchAll(/get\(\s*["']([^"'#?]+?\.(?:json|js))\?/g)) refs.add(m[1]);
-    for (const r of refs) {
-      if (/^(https?:|data:|\/\/)/.test(r)) continue;
-      // 以 / 开头是站点绝对路径，相对 dist 根而不是文件系统根
-      const target = r.startsWith('/') ? path.join(OUT, r) : path.resolve(here, r);
-      if (!fs.existsSync(target)) missing.push(`${html} → ${r}`);
-    }
+    for (const r of refs) checkRef(f, here, r);
+  }
+  for (const f of FILES.filter((f) => f.endsWith('.css'))) {
+    const p = path.join(OUT, f);
+    if (!fs.existsSync(p)) continue;
+    const src = fs.readFileSync(p, 'utf8');
+    const here = path.dirname(p);
+    for (const m of src.matchAll(/url\(\s*["']?([^"')]+)["']?\s*\)/g)) checkRef(f, here, m[1]);
   }
 
   const total = [];

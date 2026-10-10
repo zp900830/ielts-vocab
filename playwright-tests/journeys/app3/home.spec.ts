@@ -1,4 +1,5 @@
-// 3.0 M1 Task 3：首页六张文章卡片（熟练度 / 阶段 / 已毕业词数 / 最近学习）。
+// 3.0 M1 Task 3：首页六张文章卡片（熟练度 / 阶段 / 目标词数 / 最近学习）。
+// 2026-10-10 ② 删除：熟练度 = 通读完成度，文章只剩 未开始/通读中/已通读 三态。
 // 服务器归 global-setup.ts 起停（仓库根 8932）；
 // 站点在仓库根，所以和 shell.spec.ts / smoke.spec.ts 一样用 E2E_ROOT_URL，不走 baseURL。
 import { test, expect } from '../../fixtures';
@@ -15,7 +16,7 @@ declare const ShadowPlan: {
   articleScope(sections: unknown, article: number): Set<number>;
 };
 declare const SECTIONS: unknown[];
-declare const APP3: { renderHome?: unknown };
+declare const APP3: { renderHome?: unknown; articleStat(a: number): { progress: number } };
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
 
@@ -34,8 +35,8 @@ async function waitHomeReady(page: import('@playwright/test').Page) {
 
 /* 把三份重 JSON 换成 6 篇的小壳：既让首页拿到 6 张卡片，又不再多渲一页 1833 句 + 3242 词
    （和 shell.spec.ts 同一理由：整套并行时那份额外负载会压出 shadow 用例偶发红）。
-   第 0 篇 24 句、30 个不同目标词（前 6 句各多一个词）—— 句数 ≠ 词数，锁住「已毕业 X / Y 词」
-   的 Y 是**词数**而不是句数（Finding 1）；24 句也让「读 20 句」正好落在「通读中」而非终态。 */
+   第 0 篇 24 句、30 个不同目标词（前 6 句各多一个词）—— 句数 ≠ 词数，锁住「目标词 N 个」
+   的 N 是**词数**而不是句数（Finding 1）；24 句也让「读 20 句」正好落在「通读中」而非终态。 */
 const SIX: Record<string, string> = (() => {
   const mk = (title: string, n: number, extra: number) => ({
     title,
@@ -66,7 +67,7 @@ const pctOf = (page: import('@playwright/test').Page) =>
   page.locator('.art-card').first().locator('.a-pct').innerText().then(t => Number(t.replace('%', '')));
 
 test.describe('3.0 首页', () => {
-  test('六张卡片 + 四档状态 + 卡片数据', async ({ page }) => {
+  test('六张卡片 + 三档状态 + 卡片数据', async ({ page }) => {
     await stubData(page, SIX);
     await page.goto(`${rootUrl}/index.html#/home`);
     await waitHomeReady(page);
@@ -87,9 +88,9 @@ test.describe('3.0 首页', () => {
       return { sentences: s.size, words: set.size };
     });
     expect(words, '夹具必须让「词数 ≠ 句数」，否则锁不住 Finding 1').toBeGreaterThan(sentences);
-    await expect(c0.locator('.a-meta')).toContainText(`已毕业 0 / ${words} 词`);
+    await expect(c0.locator('.a-meta')).toContainText(`目标词 ${words} 个`);
 
-    // —— 读前 20 句 → 通读中；熟练度 = round(20/24×40) = 33，落在 (0, 40] ——
+    // —— 读前 20 句 → 通读中；熟练度 = 通读完成度 = 83% ——
     await page.evaluate(() => {
       TASK.resetV2(); TASK.initPlan(15);
       const s = ShadowPlan.articleScope(SECTIONS, 0);
@@ -101,24 +102,24 @@ test.describe('3.0 首页', () => {
     await expect(c0.locator('.a-stage')).toHaveText('通读中');
     /* 2026-09-26 口径：卡片上显示的是**通读完成度**（碰过的句数 ÷ 本篇句数）——
        与任务条「本篇 N/M」同一个可核对的数（读了 20/339 却显示 2% 就是这次改动的由来）。
-       融合熟练度（§9.2 三项）仍存在，只给阶段判据用；这里单独锁它 ≤40（此刻只有第一项在动）。 */
+       2026-10-10 ② 删除、熟练度只看通读后，progress 与 readPct 是同一个数。 */
     expect(await pctOf(page), '通读完成度 20/24 = 83%').toBe(83);
-    expect(await page.evaluate(() => APP3.articleStat(0).progress), '内部融合熟练度只由第一项给（≤40）').toBeLessThanOrEqual(40);
+    expect(await page.evaluate(() => APP3.articleStat(0).progress), '熟练度 = 通读完成度').toBe(83);
 
-    // —— 读满 24 句 → 「可答题」（§9.4：通读满还没做题，`已学完` 留给通读+② 各一遍）——
+    // —— 读满 24 句 → 「已通读」（② 删除后这就是文章的终态）——
     await page.evaluate(() => {
       const s = ShadowPlan.articleScope(SECTIONS, 0);
       Array.from(s).slice(20).forEach((i: number) => TASK.readDone(i));
     });
     await page.reload();
     await waitHomeReady(page);
-    await expect(c0).toHaveAttribute('data-stage', 'read');
-    /* 2026-09-24 用户：卡片胶囊里的圈号去掉 —— 锁两件事：阶段语义文字还在（「可答题」），
+    await expect(c0).toHaveAttribute('data-stage', 'done');
+    /* 2026-09-24 用户：卡片胶囊里的圈号去掉 —— 锁两件事：阶段语义文字还在（「已通读」），
        且不再出现任何圈号徽标（回归锁）。 */
-    await expect(c0.locator('.a-stage')).toHaveText('可答题');
+    await expect(c0.locator('.a-stage')).toHaveText('已通读');
     await expect(c0.locator('.a-stage')).not.toContainText(/[①②③④⑤]/);
     expect(await pctOf(page), '通读满 → 100%').toBe(100);
-    expect(await page.evaluate(() => APP3.articleStat(0).progress), '融合熟练度此时 = 40（②/精读仍为 0）').toBe(40);
+    expect(await page.evaluate(() => APP3.articleStat(0).progress), '熟练度此时 = 100%').toBe(100);
   });
 
   // Task 4：顶部「今天该做什么」横幅 + 没计划的空状态（§2.3 / §3.5）。
@@ -138,7 +139,7 @@ test.describe('3.0 首页', () => {
     await expect(page.locator('#homeBanner .b-go')).toContainText('继续学');
     // 建完计划横幅补一条摘要（§3.5 第四类）。W5-2：新建计划当天 streak=0，文案是「今天开始」不是「连续 0 天」
     await expect(page.locator('#homeBanner .hb-sum')).toContainText('今天开始');
-    await expect(page.locator('#homeBanner .hb-sum')).toContainText('已毕业');
+    await expect(page.locator('#homeBanner .hb-sum')).toContainText('累计过完');
   });
 
   /* refine2 ②（2026-09-25 用户）：横幅从「文字在上、通栏按钮在下」改成**左文字块 / 右按钮**；

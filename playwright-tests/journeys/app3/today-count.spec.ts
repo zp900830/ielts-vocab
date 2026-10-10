@@ -15,7 +15,6 @@ declare const TASK: {
   initPlan(minutes: number): void;
   readDone(i: number): void;
   next(): void;
-  pass(): number;
   queue: { i: number }[];
   state(): { daily: Record<string, { sentDone?: number; minutes?: number }> };
   todayProgress(): { done: number; planned: number; left: number; minutes: number };
@@ -41,29 +40,6 @@ const SIX: Record<string, string> = (() => {
   return {
     'sections.json': JSON.stringify(titles.map((t, i) => mk(t, i, i === 0 ? 12 : 2))),
     'vocab.json': '{}',
-    'chapters.json': '[]',
-  };
-})();
-
-/* ② 要用真四选一（引擎凑满 4 个候选才出题）：四个词、义项互不重叠。与 task.spec.ts 的 SIXQ 同款。 */
-const QWORDS = ['apple', 'banana', 'cherry', 'date'];
-const QSENSES = ['苹果', '香蕉', '樱桃', '枣'];
-const SIXQ: Record<string, string> = (() => {
-  const vocab: Record<string, { m: string }> = {};
-  QWORDS.forEach((w, i) => { vocab[w] = { m: 'n. ' + QSENSES[i] }; });
-  const mk = (title: string, ai: number, n: number) => ({
-    title, zh: title, subheads: [''],
-    paragraphs: [Array.from({ length: n }, (_, i) => {
-      const w = QWORDS[(ai + i) % QWORDS.length];
-      return `Sentence ${i} about [[${w}:${w}]].`;
-    })],
-    sentZh: [Array.from({ length: n }, (_, i) => `第 ${i} 句。`)],
-    paraZh: [''],
-  });
-  const titles = ['地球与生命', '校园与文化', '衣食住行', '社会与规则', '历史与发明', '身体与时间'];
-  return {
-    'sections.json': JSON.stringify(titles.map((t, i) => mk(t, i, i === 0 ? 8 : 2))),
-    'vocab.json': JSON.stringify(vocab),
     'chapters.json': '[]',
   };
 })();
@@ -173,26 +149,6 @@ test.describe('3.0 任务条/数据页的「今天」口径（主行·辅行·�
     expect(await num('today-left')).toBe(tp.left);
   });
 
-  test('① 走完 → 遍间小结「开始答题」→ ② 文内挖空（PRD §4.4 / §13.1）', async ({ page }) => {
-    await enterFirstArticle(page, SIXQ);
-
-    // ① 这一批全部读完 → 再点推进键 = finishPass(1)，小结端上来
-    await page.evaluate(() => { TASK.queue.map((x) => x.i).forEach((i) => TASK.readDone(i)); });
-    await page.evaluate(() => TASK.next());
-    const summary = page.locator('#passCard .pass-summary');
-    await expect(summary).toBeVisible();
-    await expect(summary).toContainText('通读完成');
-    const go = summary.locator('.go');
-    await expect(go).toContainText('答题');
-    await go.click();
-
-    // ② 就位：pass=2、任务条切成挖空态、正文里真的长出空，点空能弹出题
-    await expect.poll(() => page.evaluate(() => TASK.pass())).toBe(2);
-    await expect(page.locator('#taskBar')).toHaveAttribute('data-state', 'quiz');
-    await expect(page.locator('#art .qz-blank').first()).toBeVisible();
-    await page.locator('#art .qz-blank').first().click();
-    await expect(page.locator('#blankPop')).toBeVisible();
-  });
 });
 
 /* 2026-09-25 链路排查：数据页「今日学习时长」以前读 dayplan 事件里的【计划分钟数】
@@ -214,7 +170,7 @@ test.describe('「今日学习时长」= 真实用时', () => {
     await page.evaluate(() => {
       const w = window as unknown as { __day: string };
       const raw = localStorage.getItem('ielts.app3.article');
-      const o = raw ? JSON.parse(raw) : { reps: {}, pass2: {}, listen: {}, read: {} };
+      const o = raw ? JSON.parse(raw) : { reps: {}, listen: {}, read: {} };
       o.read = { ms: { [w.__day]: 180000 } };
       localStorage.setItem('ielts.app3.article', JSON.stringify(o));
     });

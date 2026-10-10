@@ -26,7 +26,6 @@ declare const TASK: {
   mergeArticleAccount(remote: unknown): boolean;   // ⑧ 合并语义锁
   articleAccountSnapshot(): {
     reps: Record<string, Record<string, number>>;
-    pass2: Record<string, boolean>;
     listen: { sents: Record<string, Record<string, number>>; ms: Record<string, Record<string, number>>; last: Record<string, number> };
   };
 };
@@ -272,7 +271,8 @@ test.describe('⑤ 悬浮球只在「停止」时消失', () => {
    ⑥ 展开弹窗按 Esc = 收起（普通浮层都关干净了才轮到它 —— 分层口径）。
    ⑦ 收听计时跨场清零：停止/关闭/收起后 _listenTick 归 0，
       否则下次起播把隔场间隔算进时长（单笔封顶 10 分钟，虚高）。
-   ⑧ 按篇账云同步的合并语义 = 单调 max（reps/ms/sents 累计、last 时间戳、pass2 布尔）。
+   ⑧ 按篇账云同步的合并语义 = 单调 max（reps/ms/sents 累计、last 时间戳）。
+   （pass2 布尔随 ② 挖空选词删除，2026-10-10。）
       拉回快照逐键取 max 就是正确合并 —— 这是「换设备不丢」的地基，钉死它。 */
 test.describe('⑥ 展开弹窗 Esc 关闭', () => {
   test('展开态按 Esc：收起（回到卡片，不离开 #/listen）', async ({ page }) => {
@@ -348,28 +348,25 @@ test.describe('⑦ 收听计时跨场清零', () => {
 });
 
 test.describe('⑧ 按篇账云同步：合并 = 单调 max', () => {
-  test('远端快照逐键取 max：累计数取大、last 取新、pass2 true 赢；本机大的不被冲掉', async ({ page }) => {
+  test('远端快照逐键取 max：累计数取大、last 取新；本机大的不被冲掉', async ({ page }) => {
     await stubData(page, TWO);
     await gotoListen(page);
     // 合并按「日键/篇号」字符串折叠，与真实日期无关 —— 用固定日键断言更稳。
-    // 本机账：reps[D][0]=3、listen.ms[D][0]=5000、listen.sents[D][0]=7、last[0]=1000、pass2[0]=true
+    // 本机账：reps[D][0]=3、listen.ms[D][0]=5000、listen.sents[D][0]=7、last[0]=1000
     const D = '2026-09-25';
     await page.evaluate((day) => {
       TASK.mergeArticleAccount({
         reps: { [day]: { 0: 3 } },
-        pass2: { 0: true },
         listen: { sents: { [day]: { 0: 7 } }, ms: { [day]: { 0: 5000 } }, last: { 0: 1000 } },
       });
     }, D);
     const snap1 = await page.evaluate(() => TASK.articleAccountSnapshot());
     expect(snap1.reps[D][0]).toBe(3);
-    expect(snap1.pass2[0]).toBe(true);
 
     // 远端来了各键都**更小**的快照 + 一个新的篇：max 语义下本机不许被冲掉
     await page.evaluate((day) => {
       TASK.mergeArticleAccount({
         reps: { [day]: { 0: 1, 1: 2 } },
-        pass2: {},
         listen: { sents: { [day]: { 0: 2, 1: 4 } }, ms: { [day]: { 0: 100, 1: 88 } }, last: { 0: 500, 1: 2000 } },
       });
     }, D);
@@ -382,7 +379,6 @@ test.describe('⑧ 按篇账云同步：合并 = 单调 max', () => {
     expect(snap2.listen.ms[D][1]).toBe(88);
     expect(snap2.listen.last[0], 'last 取更大时间戳').toBe(1000);
     expect(snap2.listen.last[1]).toBe(2000);
-    expect(snap2.pass2[0], 'pass2 一旦 true 不回落').toBe(true);
   });
 });
 
@@ -413,7 +409,10 @@ test.describe('⑨ 真实用时 read.ms 的云同步合并', () => {
    部分平台把 cancel 报成 onend，陈旧 end 不许推进链子（onend 已加代际守卫）。 */
 test.describe('⑩ 暂停不推进', () => {
   test('暂停后：高亮停在当前句，3 秒内不许自己走到下一句', async ({ page }) => {
-    test.setTimeout(60000);   // 真实引擎 + 外链字体（load 事件等全部子资源），网络抖动时 30s 会被 goto 吃光
+    /* 60s 上限（比全局 120s 紧）：这条带真实朗读引擎 + 3 秒静置，本该几秒跑完 ——
+       收窄是为了真卡住时立刻红，不是留余量。2026-10-10 起字体与 supabase-js 都自托管，
+       原先「等外链字体会把 goto 吃光」那半句理由已不成立。 */
+    test.setTimeout(60000);
     await stubData(page, TWO);
     await gotoListen(page);
     await page.locator('.ls-play').click();          // 真实引擎起播（headless 静音但不影响链路）

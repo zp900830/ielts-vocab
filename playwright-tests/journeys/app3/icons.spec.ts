@@ -1,9 +1,13 @@
-// 2026-09-24 用户要求：三站图标统一到主站那套（remixicon@4.5.0 + fastly.jsdelivr.net，含 woff2 preload），
+// 2026-09-24 用户要求：三站图标统一到同一套图标源（remixicon 4.5.0，含 woff2 preload），
 // 并给主站的左侧导航补上 PRD §2.2 的五颗图标。
-// 这条锁做两件事：① 源码级 —— 三站都不许再引用旧版 4.2.0 图标源；② 实页级 —— 主站五个导航项
-// 各有一颗 <i class="ri-…">，且该名字在「已加载的 4.5.0 字体样式表」里真的有字形（::before content 非 none）。
-// 名字不存在时 ::before 没有 content 规则 → 量出来是 none，正是要抓的「空白/豆腐块」。
-// 服务器归 global-setup.ts 起停（仓库根 8932）；站点在仓库根，用 E2E_ROOT_URL，不走 baseURL。
+// 2026-10-10：图标源从 fastly.jsdelivr.net 改为本地自托管（vendor/remixicon/，同为 4.5.0）——
+// jsdelivr 在国内常不可达，本机实测三个外链各卡满 30s 才超时、图标字形全塌。
+// 这条锁做两件事：① 源码级 —— 只许引用本地 vendor 那份，页面里不许再出现任何远端图标源，
+// 且本地副本必须自称 4.5.0、woff2 实体必须在（缺了就是线上静默空白，页面一声不吭）；
+// ② 实页级 —— 主站五个导航项各有一颗 <i class="ri-…">，且该名字在「已加载的 4.5.0 字体样式表」
+// 里真的有字形（::before content 非 none）。名字不存在时 ::before 没有 content 规则 → 量出来是 none，
+// 正是要抓的「空白/豆腐块」。服务器归 global-setup.ts 起停（仓库根 8932）；
+// 站点在仓库根，用 E2E_ROOT_URL，不走 baseURL。
 import fs from 'node:fs';
 import path from 'node:path';
 import { test, expect } from '../../fixtures';
@@ -22,24 +26,30 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
 const NAV_ICONS = ['ri-home-5-line', 'ri-headphone-line', 'ri-book-2-line', 'ri-bar-chart-2-line'];
 const NAV_ICONS_FILL = ['ri-home-5-fill', 'ri-headphone-fill', 'ri-book-2-fill', 'ri-bar-chart-2-fill'];
 
-test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
-  test('源码级：图标样式表指向 4.5.0，不再引用 4.2.0', () => {
+test.describe('3.0 图标源（remixicon 4.5.0 · 本地自托管）', () => {
+  test('源码级：只引用本地 vendor 那份，页面里没有远端图标源', () => {
     const root = path.resolve(process.cwd(), '..');
     for (const f of ['index.html']) {
       const src = fs.readFileSync(path.join(root, f), 'utf8');
-      expect(src, `${f} 必须引用 remixicon@4.5.0`).toContain('remixicon@4.5.0');
-      expect(src, `${f} 不许再引用 4.2.0`).not.toContain('remixicon/4.2.0');
-      expect(src, `${f} 不许再引用 cdnjs 的图标字体`).not.toContain('cdnjs.cloudflare.com/ajax/libs/remixicon');
+      expect(src, `${f} 必须引用本地图标样式表`).toContain('vendor/remixicon/remixicon.css');
+      expect(src, `${f} 必须预加载本地 woff2（否则首屏图标晚一拍）`).toContain('vendor/remixicon/remixicon.woff2');
+      /* 用「远端 URL」而不是「版本串」做禁引：历史注释里会写 remixicon@4.5.0 这种字样，
+         拿版本串会假绿/假红；这条正则只认真正的远端引用（jsdelivr / cdnjs / unpkg / 自建都一样抓）。 */
+      expect(src, `${f} 不许再引用任何远端图标源`).not.toMatch(/https?:\/\/[^"'\s)]*remixicon/i);
     }
+    // 本地副本自身也要点名：版本头 + woff2 实体。CSS 在而 woff2 不在 = 线上图标全塌且不报错。
+    const vend = path.join(root, 'vendor/remixicon');
+    expect(fs.readFileSync(path.join(vend, 'remixicon.css'), 'utf8'), '自托管 CSS 的版本头').toContain('Remix Icon v4.5.0');
+    expect(fs.existsSync(path.join(vend, 'remixicon.woff2')), 'woff2 实体缺失 —— 图标会静默全塌').toBe(true);
   });
 
   test('主站导航四颗 + 已登录头像在 4.5.0 字体里真的渲得出', async ({ page }) => {
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/index.html#/home`);
 
-    // 字体样式表版本
+    // 字体样式表：本地 vendor 那份（2026-10-10 起自托管，不再走 CDN）
     const href = await page.locator('link[rel="stylesheet"][href*="remixicon"]').getAttribute('href');
-    expect(href, '图标样式表版本').toContain('remixicon@4.5.0');
+    expect(href, '图标样式表应指向本地 vendor').toContain('vendor/remixicon/remixicon.css');
 
     // 四个导航项各一对图标（线性 + 面性，2026-09-26 用户：默认线性、选中面性）
     const items = page.locator('.sidenav .nav-item');
@@ -70,9 +80,9 @@ test.describe('3.0 图标源统一（remixicon 4.5.0）', () => {
     await expect(page.locator('.sidenav .me-card .i-fill'), '已登录仍带面性用户图标（与其他 tab 同结构）').toHaveClass(/\bri-user-smile-fill\b/);
 
     // 量字形：等 4.5.0 的 CSS 落地后，每个 ::before 必须真有 content（名字不存在 = none）。
-    // M6 抖动排查：这条依赖 CDN（fastly.jsdelivr.net）的 CSS/woff2，全量并行 + 网络抖动时
-    // 15s 偶发不够（实测 1/6 视红）。条件等待本身没问题，只是给足上限；源级锁在第一条，
-    // 就算 CDN 一时挂掉也不会让「版本引用」这件事失守。
+    // 2026-10-10 起 CSS/woff2 都在本地（自托管），这条不再受网络抖动影响（原先依赖 CDN，
+    // 全量并行时 15s 偶发不够、实测 1/6 视红）。上限维持 30s：留着是为了真加载不出来时
+    // 给出清晰红灯，不是缩短等待。源级锁在同文件第一条。
     await page.waitForFunction(() => {
       const els = document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card i');
       /* 4 个导航项 × 2 + 「我的」× 2（线性 + 面性）= 10（2026-10-06 成对图标） */
