@@ -915,7 +915,13 @@
     color: #57534e; letter-spacing: .02em; white-space: normal; } /* 中英文间距由 titEN 前置空格提供，换行后两行英文均顶格对齐 */
 
   /* ============ 侧边词库 ============ */
-  aside { position: fixed; right: 14px; top: 74px; bottom: 18px; width: 340px; max-width: calc(100vw - 28px); z-index: 115;
+  /* z 220（2026-10-10 与手机档统一）：桌面档曾有同一个「任务条压面板」问题——任务条 z 200、
+     播放条 z 120，面板 115 全在它们之下，任务模式下打开面板，任务条就画在面板上、压掉
+     底部计数条一截（与手机档 190 那版同源；手机档同日先修，桌面档是这轮接上的）。
+     桌面档没有手机档那条遮罩（.layout::after），点正文词弹的 #pop 与面板可共存
+     （「点面板不关 pop」是既有设计，见 openPop 旁的「点外面关」判定），
+     所以 .pop 同步抬到 230 保持在面板之上。上层序不动：#lsMini 250 / .voice-pop 300 / .me-pop 400 / #loginModal 450。 */
+  aside { position: fixed; right: 14px; top: 74px; bottom: 18px; width: 340px; max-width: calc(100vw - 28px); z-index: 220;
     display: flex; flex-direction: column;
     transform: translateX(calc(100% + 30px)); visibility: hidden; transition: transform var(--t-slide) ease, visibility var(--t-slide);
     /* 2026-10-10 二轮对齐 1.0（8901 项目实测对照）：从「渐变玻璃」改回 1.0 的近实白卡
@@ -1055,7 +1061,10 @@
   body:not(.dark) #panel .item .loc { color: #b3bdb7; }
 
   /* ============ 单词弹窗（毛玻璃卡） ============ */
-  .pop { position: fixed; z-index: 200; background: var(--glass-strong);
+  /* z 230：必须压在词库面板（220）之上——「点词看详情 → 再开面板对照」是真实路径，
+     且点面板不关 pop 是既有设计（openPop 旁的「点外面关」判定豁免 aside）；
+     与 jumpPop 互斥（MUTUAL_EXCLUSIVE），先后次序无冲突；仍在 #lsMini 250 之下。 */
+  .pop { position: fixed; z-index: 230; background: var(--glass-strong);
     -webkit-backdrop-filter: blur(22px) saturate(170%); backdrop-filter: blur(22px) saturate(170%);
     border-radius: 18px; box-shadow: var(--shadow-lg); padding: 16px 18px 14px; width: 340px;
     max-width: calc(100vw - 24px); border: 1px solid rgba(255,255,255,.65); display: none; }

@@ -387,4 +387,49 @@ test.describe('词库面板双视图（目标词侧栏回归）', () => {
     expect(kept.m, 'selVoiceURI 不被便签改写（全局选择神圣不可侵犯）').toBe('cloud:en-US-AriaNeural');
     expect(kept.ls, 'localStorage 也不被改写').toBe('cloud:en-US-AriaNeural');
   });
+
+  test('桌面档任务模式：面板（z 220）盖过任务条（z 200），且 pop（230）仍压在面板之上', async ({ page }) => {
+    await stubData(page);
+    /* 默认视口 1280×720 = 桌面档（≥701px）；这块曾与手机档同病：面板 z 115 < 任务条 200，
+       任务条的右段画在面板上、压掉底部计数条一截（2026-10-10 二轮截图复核时发现，
+       手机档同日已修、桌面档是这轮接上的）。 */
+    await page.goto(`${rootUrl}/index.html#/`);
+    await waitShadowReady(page);
+    await enterReadingAndOpenPanel(page, 0);
+
+    /* 桌面面板是 translateX 滑入（.28s）：命中测试等过渡落定再量（同第 6 例 fabSettled 口径） */
+    await expect
+      .poll(() => page.evaluate(() => {
+        const t = getComputedStyle(document.getElementById('panel') as HTMLElement).transform;
+        return t === 'none' || /^matrix\(1, 0, 0, 1, 0, 0\)$/.test(t);
+      }), { message: '等待面板滑入过渡落定' })
+      .toBe(true);
+
+    const info = await page.evaluate(() => {
+      const panel = document.getElementById('panel') as HTMLElement;
+      const bar = document.querySelector('.task-bar') as HTMLElement | null;
+      const fallback = { barVisible: false, zPanel: 0, zBar: 0, zPop: 0, hitInPanel: false, hitDesc: '' };
+      if (!bar || getComputedStyle(bar).display === 'none') return fallback;
+      /* 桌面档任务条通栏、面板在右——重叠区只是任务条的右段，命中点取两者交集的中点
+         （手机档那条是全盖，取的是任务条中心；这里不能照抄）。 */
+      const pr = panel.getBoundingClientRect(), br = bar.getBoundingClientRect();
+      const ox = Math.max(pr.left, br.left), ox2 = Math.min(pr.right, br.right);
+      const oy = Math.max(pr.top, br.top), oy2 = Math.min(pr.bottom, br.bottom);
+      const hit = document.elementFromPoint((ox + ox2) / 2, (oy + oy2) / 2) as HTMLElement | null;
+      return {
+        barVisible: true,
+        zPanel: Number(getComputedStyle(panel).zIndex),
+        zBar: Number(getComputedStyle(bar).zIndex),
+        zPop: Number(getComputedStyle(document.getElementById('pop') as HTMLElement).zIndex),
+        hitInPanel: !!(hit && panel.contains(hit)),
+        hitDesc: hit ? `${hit.tagName}.${String(hit.className)}` : 'null',
+      };
+    });
+    expect(info.barVisible, '任务模式里任务条应可见（本用例前提）。若任务条改版隐藏，请连同本锁一起复核').toBe(true);
+    expect(info.zPanel, '面板 z（=220）必须高过任务条 z（=200）；115 那版任务条画在面板上').toBeGreaterThan(info.zBar);
+    expect(info.hitInPanel, `面板与任务条重叠区中心点应由面板接住，实际命中 ${info.hitDesc}`).toBe(true);
+    /* pop 与面板可共存（点面板不关 pop 是既有设计）：「点词看详情 → 再开面板对照」路径下
+       pop 必须仍压在最上，所以它要 > 面板而不是原来的 200。 */
+    expect(info.zPop, '单词详情 pop（=230）必须高过面板（=220）').toBeGreaterThan(info.zPanel);
+  });
 });
