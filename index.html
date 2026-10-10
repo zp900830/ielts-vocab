@@ -3416,7 +3416,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
           <div class="wq-keys" aria-hidden="true"><kbd>↑</kbd><kbd>↓</kbd><span>切换卡片</span><i>·</i><kbd>Enter</kbd><span>朗读选中</span><i>·</i><kbd>Esc</kbd><span>收起</span></div>
         </div>
         <div class="list" id="vlist"></div>
-        <div class="cnt" aria-live="polite">共<span id="vcnt"></span> · 点卡片朗读 · ⌖ 定位到文中</div>
+        <div class="cnt" aria-live="polite"><span id="vcnt"></span> · 点卡片朗读 · ⌖ 定位到文中</div>
       </aside>
     </div>
 
@@ -5125,6 +5125,29 @@ let listenOn = false;
     el.scrollTop = el.scrollHeight;
     } catch (e) {}
     }
+    /* 词卡音标钮的「点英必英音」（2026-10-10 用户裁定：「默认的音色就是全局配置的那个，
+       但我可以点两个小便签按钮听英/美式发音」）：全局配置的是云音色、而它的口音与这次要的
+       口音不符时（如全局 Aria 美式、点「英」），临时借一颗目标口音的云音色合成这一次——
+       只改这次传给云端的 voiceId，绝不写回 selVoiceURI（全局选择神圣不可侵犯，与 5017 行
+       pickVoice 的「用户选择」红线同源）。
+       挑法：目标口音组里优先同性别（「女声/男声」从 VOICES 的 label 解析；同性别第一颗），
+       例：en-US-AriaNeural（美式女声）点英 → en-GB-SoniaNeural（英式女声）。
+       口音相符时原样返回（点「美」而全局本就是美式 → 不换）。 */
+    function cloudVoiceForAcc(cid, voiceAcc) {
+    if (!voiceAcc || typeof CLOUD === 'undefined') return cid;
+    const want = String(voiceAcc).toLowerCase().replace(/_/g, '-');
+    const norm = x => String(x || '').toLowerCase().replace(/_/g, '-');
+    if (norm(cid).startsWith(want)) return cid;
+    try {
+    const list = CLOUD.VOICES || [];
+    const sex = v => (/女声/.test(v.label) ? 'f' : /男声/.test(v.label) ? 'm' : '');
+    const cur = list.find(v => v.id === cid);
+    const pool = list.filter(v => norm(v.id).startsWith(want));
+    if (!pool.length) return cid; // 目标口音没有云音色（不该发生）：保底原样
+    const same = cur && sex(cur) && pool.find(v => sex(v) === sex(cur));
+    return (same || pool[0]).id;
+    } catch (e) { return cid; }
+    }
     function speak(text, cb, opts, tokenIn) {
     opts = opts || {};
     const immediate = !!opts.immediate;
@@ -5143,7 +5166,7 @@ let listenOn = false;
     idx = opts.sent; paint(); syncSeek(opts.sent);
     try { mediaMeta(plainEN(sentRaw(opts.sent)).slice(0, 80)); } catch (e) {}
     }
-    const cid = selVoiceURI.slice(6);
+    const cid = cloudVoiceForAcc(selVoiceURI.slice(6), opts.voiceAcc); // 音标钮口音点将：借目标口音的云音色（不改全局选择）
     const okCb = () => { if (my !== speakToken) return; errStreak = 0; if (cb) cb(); };
     let staleRetried = false;
     const degrade = err => {
@@ -5166,7 +5189,9 @@ let listenOn = false;
        「放着放着就毫无缘由切换本地语音」—— 原因得当场说出来。 */
     try { showAbToast('☁ 云端音色这一句没放出来，本句改用本地音色：' + CLOUD.friendlyErr(err && err.message)); } catch (e2) {}
     }
-    speak(text, cb, { plain: true, exclude: selVoiceURI }, my);
+    /* 降级本地也保口音诉求：本机点将接管（点「英」便签时云失败，不能让本机默默回全局口音）。
+       2026-10-10 云口音点将同批补上。 */
+    speak(text, cb, { plain: true, exclude: selVoiceURI, voiceAcc: opts.voiceAcc }, my);
     };
     CLOUD.play(text, cid, rate, my, okCb, degrade);
     return;
@@ -6347,9 +6372,17 @@ let listenOn = false;
     el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } };
     });
     if (!_vocabCount && typeof VOCAB !== 'undefined') _vocabCount = Object.keys(VOCAB).length;
-    document.getElementById('vcnt').textContent = curMode
-    ? cnt + ' / 本篇' + (((SECTIONS[currentChapter] || {}).words) || []).length + '词'
-    : cnt + ' / ' + _vocabCount + '词';
+    /* 计数条口径（2026-10-10 用户裁定「怎么体验好怎么来，别是错的就行」）：
+       旧文案「共 N / 本篇 M 词」不搜索时 N===M 白重复一遍，两数并列也读不出 N 是「匹配数」。
+       新口径对齐 8901 .wq-cnt 的「匹配/总数」构式（1.0 是 6/571、不搜索时留空；
+       本方计数条底下还挂着「点卡片朗读 · ⌖ 定位到文中」的常驻提示，不能在搜索空时整段留白，
+       所以不搜索时报一个总数）：
+       不搜索 → 「本篇3词」/「共6词」；搜索中 → 「1 / 3词」（匹配 / 范围）。
+       「共」字随状态出现/消失，所以从模板硬编码挪到这里生成。 */
+    const total = curMode ? (((SECTIONS[currentChapter] || {}).words) || []).length : _vocabCount;
+    document.getElementById('vcnt').textContent = q
+    ? cnt + ' / ' + total + '词'
+    : curMode ? '本篇' + total + '词' : '共' + total + '词';
     }
     /* tab 切换：本篇目标词 / 全部词库（aria-selected 同步，选择落 localStorage） */
     function setWqView(v, skipPaint) {

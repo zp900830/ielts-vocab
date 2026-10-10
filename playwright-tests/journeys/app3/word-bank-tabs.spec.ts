@@ -12,6 +12,15 @@ declare const TASK: {
   initPlan(minutes: number): void;
 };
 declare const onChapterChange: (val: string | number, fromTask?: boolean) => void;
+/* 云口音点将锁用：selVoiceURI 是页面顶层 let（词法绑定，非 window 属性，evaluate 里可直接读写）；
+   CLOUD 是顶层 const 对象，测试里换掉 play/stop/prefetch 为录音笔桩（绝不真的连网）。 */
+declare let selVoiceURI: string;
+declare const CLOUD: {
+  _on: boolean;
+  play: (text: string, voiceId: string, rate: number, my: number, cb?: () => void) => void;
+  stop: () => void;
+  prefetch: (...a: unknown[]) => void;
+};
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
 
@@ -84,7 +93,7 @@ test.describe('词库面板双视图（目标词侧栏回归）', () => {
     /* 📖 = 「不在本篇正文」：crust 在本篇词表但正文没有它 */
     await expect(page.locator('#vlist .item[data-k="crust"] .wtop b')).toHaveText(/📖/);
     await expect(page.locator('#vlist .item[data-k="atmosphere"] .wtop b')).not.toHaveText(/📖/);
-    await expect(page.locator('#vcnt')).toContainText('3 / 本篇3词');
+    await expect(page.locator('#vcnt')).toContainText('本篇3词');
   });
 
   test('切「全部词库」：分组头回归；切换结果写 localStorage，切回也记录', async ({ page }) => {
@@ -98,6 +107,7 @@ test.describe('词库面板双视图（目标词侧栏回归）', () => {
     await expect(page.locator('#wqTabAll')).toHaveClass(/on/);
     await expect(page.locator('#wqTabCur')).not.toHaveClass(/on/);
     await expect(page.locator('#vlist .g')).toHaveCount(2);
+    await expect(page.locator('#vcnt')).toContainText('共6词');
     await expect(page.locator('#vcnt')).not.toContainText('本篇');
     expect(await page.evaluate(() => localStorage.getItem('ielts-wq-view'))).toBe('all');
 
@@ -117,7 +127,7 @@ test.describe('词库面板双视图（目标词侧栏回归）', () => {
     await expect(page.locator('#vlist .item')).toHaveCount(3);
     await expect(page.locator('#vlist .item').first()).toContainText('library');
     await expect(page.locator('#vlist .item[data-k="lecture"] .wtop b')).toHaveText(/📖/);
-    await expect(page.locator('#vcnt')).toContainText('3 / 本篇3词');
+    await expect(page.locator('#vcnt')).toContainText('本篇3词');
   });
 
   test('刷新还原视图：all 记忆回 all，cur 记忆回 cur', async ({ page }) => {
@@ -322,5 +332,59 @@ test.describe('词库面板双视图（目标词侧栏回归）', () => {
     const s = await eng();
     expect(s.cancels, '起播前清队列恰好 cancel 一遍（第二遍已删）').toBe(1);
     expect(s.gap, 'cancel 与 speak 之间留足 150ms，不构成同 tick 被吞组合').toBeGreaterThanOrEqual(140);
+  });
+
+  /* ---------- 2026-10-10 二批（用户两项裁定）回归锁 ---------- */
+  test('计数条口径：不搜索只报一个数、搜索中报「匹配 / 范围」（旧「共 N / 本篇 M 词」不搜索时 N===M 冗余）', async ({ page }) => {
+    await stubData(page);
+    await page.goto(`${rootUrl}/index.html#/`);
+    await waitShadowReady(page);
+    await enterReadingAndOpenPanel(page, 0);
+
+    /* 不搜索：只报一个数（旧版这里是「3 / 本篇3词」，两个 3 白摆一遍） */
+    await expect(page.locator('#vcnt')).toHaveText('本篇3词');
+    /* 搜索命中 1：匹配 / 本篇范围（对齐 8901 .wq-cnt 的「n/总数」构式） */
+    await page.locator('#q').fill('atmo');
+    await expect(page.locator('#vcnt')).toHaveText('1 / 3词');
+    /* 搜索保持、切全库视图：分母变全库 6 */
+    await page.locator('#wqTabAll').click();
+    await expect(page.locator('#vcnt')).toHaveText('1 / 6词');
+    /* 清空搜索：只报总数（「共」字随状态生成，模板里的硬编码已删） */
+    await page.locator('#q').fill('');
+    await expect(page.locator('#vcnt')).toHaveText('共6词');
+  });
+
+  test('云音色下点英/美便签：借目标口音的云音色合成（点英必英音）、且不写回全局选择', async ({ page }) => {
+    await stubData(page);
+    await page.goto(`${rootUrl}/index.html#/`);
+    await waitShadowReady(page);
+    await enterReadingAndOpenPanel(page, 0);
+    /* 云桩：全局选美式女声 Aria；_on 打开、play 换录音笔（只记不响、绝不连网）。
+       speak() 进云分支的两个条件：selVoiceURI 以 cloud: 开头 + CLOUD._on 为真。 */
+    await page.evaluate(() => {
+      selVoiceURI = 'cloud:en-US-AriaNeural';
+      try { localStorage.setItem('ielts-voice', selVoiceURI); } catch (e) {}
+      const w = window as unknown as { __cloud: { t: string; v: string }[] };
+      w.__cloud = [];
+      CLOUD._on = true;
+      CLOUD.play = (text, voiceId, _rate, _my, cb) => { w.__cloud.push({ t: text, v: voiceId }); if (cb) cb(); };
+      CLOUD.stop = () => {};
+      CLOUD.prefetch = () => {};
+    });
+    const lastCloud = () => page.evaluate(() => (window as unknown as { __cloud: { t: string; v: string }[] }).__cloud.at(-1));
+
+    /* 点「英」：全局是美式（en-US-*），必须借一颗英式云音色（同性别为女声 → Sonia）；
+       修复前这一下会原样把 Aria（美式）交给云端 —— 便签点英却听到美音。 */
+    await page.locator('#vlist .item[data-k="atmosphere"] .spk[data-acc="uk"]').click();
+    await expect.poll(lastCloud, { message: '点英式便签 → 交给云端的 voiceId 必须是英式' })
+      .toEqual({ t: 'atmosphere', v: 'en-GB-SoniaNeural' });
+    /* 点「美」：全局本就是美式 → 原样复用，不做多余切换 */
+    await page.locator('#vlist .item[data-k="atmosphere"] .spk[data-acc="us"]').click();
+    await expect.poll(lastCloud, { message: '点美式便签 → 就用全局那颗美式云音色' })
+      .toEqual({ t: 'atmosphere', v: 'en-US-AriaNeural' });
+    /* 口音点将只借不改：selVoiceURI 与 localStorage 都不被便签改写 */
+    const kept = await page.evaluate(() => ({ m: selVoiceURI, ls: localStorage.getItem('ielts-voice') }));
+    expect(kept.m, 'selVoiceURI 不被便签改写（全局选择神圣不可侵犯）').toBe('cloud:en-US-AriaNeural');
+    expect(kept.ls, 'localStorage 也不被改写').toBe('cloud:en-US-AriaNeural');
   });
 });
