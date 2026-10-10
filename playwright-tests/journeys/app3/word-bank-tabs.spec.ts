@@ -141,20 +141,38 @@ test.describe('词库面板双视图（目标词侧栏回归）', () => {
     await expect(page.locator('#wqTabCur'), '刷新后回到本篇目标词').toHaveClass(/on/);
   });
 
-  test('手机档（390×844）：两颗 tab 触区 ≥44', async ({ page }) => {
+  test('手机档（390×844）：tab 热区（盒子+::after 外扩）≥44；音标一体钮与快捷键条就位', async ({ page }) => {
     await stubData(page);
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`${rootUrl}/index.html#/`);
     await waitShadowReady(page);
     await enterReadingAndOpenPanel(page, 0);
 
+    /* tab 视觉盒子刻意做小（用户否了大 pill），热区靠 ::after 外扩补到 44 口径 */
     for (const sel of ['#wqTabCur', '#wqTabAll']) {
-      const box = await page.locator(sel).evaluate((el) => {
+      const m = await page.locator(sel).evaluate((el) => {
         const b = (el as HTMLElement).getBoundingClientRect();
-        return { w: Math.round(b.width), h: Math.round(b.height) };
+        const a = getComputedStyle(el, '::after');
+        let w = b.width, h = b.height;
+        if (a.content !== 'none' && a.display !== 'none') {
+          const parts = (a.inset || '0px').split(/\s+/).map((x) => Math.abs(parseFloat(x) || 0));
+          const tb = parts[0] || 0, lr = parts.length > 1 ? parts[1] : tb;
+          w += 2 * lr; h += 2 * tb;
+        }
+        return { w: Math.round(w), h: Math.round(h) };
       });
-      expect(box.w, `${sel} 触区宽`).toBeGreaterThanOrEqual(44);
-      expect(box.h, `${sel} 触区高`).toBeGreaterThanOrEqual(44);
+      expect(m.w, `${sel} 热区宽`).toBeGreaterThanOrEqual(44);
+      expect(m.h, `${sel} 热区高`).toBeGreaterThanOrEqual(44);
     }
+    /* 音标一体钮：每卡两颗（英/美），独立大喇叭按钮已废 */
+    await expect(page.locator('#vlist .item[data-k="atmosphere"] .spk')).toHaveCount(2);
+    await expect(page.locator('#vlist .item[data-k="atmosphere"] .spk[data-acc="uk"]')).toContainText('英');
+    await expect(page.locator('#vlist .item[data-k="atmosphere"] .spk[data-acc="us"]')).toContainText('美');
+    await expect(page.locator('#vlist .item[data-k="atmosphere"] .wtop > .spk')).toHaveCount(0);
+    /* 快捷键速记条（桌面档可见） */
+    await expect(page.locator('aside .wq-keys')).toBeVisible();
+    await expect(page.locator('aside .wq-keys')).toContainText('切换卡片');
+    await expect(page.locator('aside .wq-keys')).toContainText('朗读选中');
+    await expect(page.locator('aside .wq-keys')).toContainText('收起');
   });
 });
