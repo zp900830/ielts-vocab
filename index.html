@@ -5137,8 +5137,15 @@ let listenOn = false;
     try { if (speechSynthesis.paused) { speechSynthesis.resume(); if (!(speechSynthesis.speaking || speechSynthesis.pending)) { try { speechSynthesis.cancel(); } catch (e) {} } } } catch (e) {}
     const u = new SpeechSynthesisUtterance(text);
     u.rate = rate; u.volume = 1;
-    // opts.voiceAcc：指定口音（'en-GB'/'en-US'，词卡音标按钮用）——V 表没命中再回常规解析
-    const v = opts.voiceAcc ? (V[opts.voiceAcc] || resolveVoice(exclude || undefined)) : resolveVoice(exclude || undefined);
+    // opts.voiceAcc：指定口音（'en-GB'/'en-US'，词卡音标按钮用）。V 表那两个键优先装的是
+    // 用户当前选中音色（口音未必相符，还可能是 cloud: 伪音色，塞给 utterance.voice 无效）——
+    // 所以先常规解析再校验口音：不符就从本机 getVoices() 按 lang 挑该口音的；都没有才回默认（保底出声）。
+    let v = resolveVoice(exclude || undefined);
+    if (opts.voiceAcc && (!v || v.lang !== opts.voiceAcc)) {
+      let alt = null;
+      try { alt = speechSynthesis.getVoices().find(x => x.lang === opts.voiceAcc) || null; } catch (e) { alt = null; }
+      if (alt) v = alt;
+    }
     let triedURI = '';
     if (v) { u.voice = v; u.lang = v.lang; triedURI = v.voiceURI; }
     else u.lang = accent;

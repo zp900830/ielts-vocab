@@ -47,6 +47,12 @@ const FILES = [
   'vendor/element-plus/element-plus-2.14.7.full.min.js',
   'vendor/element-plus/element-plus-2.14.7.zh-cn.min.js',
   'vendor/echarts/echarts-5.6.0.min.js',
+  // 第三方 LICENSE 随产物分发（自托管 = 再分发，许可证文件必须跟着走，2026-10-10 复盘补）：
+  'vendor/remixicon/LICENSE',
+  'vendor/supabase/LICENSE',
+  'vendor/vue/LICENSE',
+  'vendor/element-plus/LICENSE',
+  'vendor/echarts/LICENSE',
 ];
 
 const warn = [];
