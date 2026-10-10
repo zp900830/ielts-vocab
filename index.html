@@ -160,7 +160,10 @@
     box-shadow: inset 0 1px 0 rgba(255,255,255,.05), inset 0 -1px 0 rgba(0,0,0,.32); }
   body.dark .btn { background: var(--card); border-color: var(--border); color: var(--text); }
   @media (hover: hover) { body.dark .btn:hover { background: rgba(16,180,135,.12); } }
-  body.dark aside { background: linear-gradient(150deg, rgba(30,28,25,.96), rgba(26,24,21,.88)); border-color: var(--border); }
+  body.dark aside { background: rgba(30,28,25,.96); border-color: var(--border);
+    box-shadow: 0 12px 40px rgba(0,0,0,.4), 0 2px 12px rgba(0,0,0,.25); }
+  /* 暗色选中卡：浅色底 #eaf5ef 是给白面板配的，暗面板上会亮一块 —— 换成薄荷玻璃档（与悬停同族加深） */
+  body.dark aside .item.sel { background: rgba(16,180,135,.12); }
   @media (hover: hover) { body.dark aside .item:hover { background: rgba(16,180,135,.08); } }
   body.dark .pop { background: var(--glass-strong); border-color: var(--border); }
   body.dark .jpop { background: var(--glass-strong); border-color: var(--border); }
@@ -915,14 +918,21 @@
   aside { position: fixed; right: 14px; top: 74px; bottom: 18px; width: 340px; max-width: calc(100vw - 28px); z-index: 115;
     display: flex; flex-direction: column;
     transform: translateX(calc(100% + 30px)); visibility: hidden; transition: transform var(--t-slide) ease, visibility var(--t-slide);
-    background: linear-gradient(150deg, rgba(255,255,255,.88), rgba(248,252,250,.52) 55%, rgba(224,236,229,.38));
-    -webkit-backdrop-filter: blur(28px) saturate(180%); backdrop-filter: blur(28px) saturate(180%);
-    border: 1px solid rgba(255,255,255,.6); border-radius: 20px; overflow: hidden;
-    box-shadow: 0 8px 28px rgba(30,60,48,.08), inset 0 1px 0 rgba(255,255,255,.9); }
+    /* 2026-10-10 二轮对齐 1.0（8901 项目实测对照）：从「渐变玻璃」改回 1.0 的近实白卡
+       —— rgba(255,255,255,.96) + blur(22px) saturate(170%)（=1.0 的 --iel-blur 同参），
+       圆角 20 → 16（=1.0 --iel-radius），投影换成 1.0 单支大影 0 12px 40px rgba(30,60,48,.14)
+       （=1.0 --iel-shadow-lg 同值），删掉原来那圈 inset 内高光。 */
+    background: rgba(255,255,255,.96);
+    -webkit-backdrop-filter: blur(22px) saturate(170%); backdrop-filter: blur(22px) saturate(170%);
+    border: 1px solid rgba(255,255,255,.65); border-radius: 16px; overflow: hidden;
+    box-shadow: 0 12px 40px rgba(30,60,48,.14); }
   @media (min-width: 701px) {
     body.panel-open aside { transform: none; visibility: visible; }
     }
-  aside .head { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); }
+  /* 头部内距对齐 1.0（2026-10-10 二轮）：左右 16 → 12（1.0 .wq-head/.wq-searchrow/.wq-keys
+     全是 12px 一套内距），底边那条通栏分隔线删除（1.0 头部区与列表之间没有线，节奏靠
+     各块自身 margin 撑：标题 8 / 检索 8 / 速记条 8），纵向节奏由块间 margin-bottom 接管。 */
+  aside .head { padding: 12px 12px 0; }
   aside .head .t { font-size: 14px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
   aside .head .t .x { margin-left: auto; border: none; background: transparent; color: var(--muted);
     font-size: 15px; cursor: pointer; padding: 2px 8px; border-radius: 8px; position: relative; }
@@ -954,28 +964,41 @@
     font-family: inherit; font-size: 10px; line-height: 1; color: var(--text); }
   aside .wq-keys i { font-style: normal; color: var(--muted); opacity: .6; margin: 0 1px; }
   @media (hover: none) { aside .wq-keys { display: none; } }
-  aside input { width: 100%; border: 1px solid var(--border); background: #fff;
-    border-radius: 10px; padding: 8px 12px; font-size: 16px; outline: none; min-height: 40px;
-    transition: border-color var(--t-fast); }
+  /* 搜索框对齐 1.0：字号 16 → 13（1.0 桌面 .wq-search 就是 13px；16px 是 iOS 聚焦防缩放的
+     底线，手机档在移动端媒体块里单独补回）、内距 7/10（原 8/12）、底 8px 由自己带
+     （head 的 padding-bottom 已归零，节奏全归各块 margin）。 */
+  aside input { width: 100%; border: 1px solid var(--border); background: rgba(255,255,255,.92);
+    border-radius: 10px; padding: 7px 10px; font-size: 13px; outline: none; min-height: 40px;
+    margin-bottom: 8px; transition: border-color var(--t-fast); }
   aside input:focus { border-color: var(--accent-bright); }
-  aside .list { overflow-y: auto; flex: 1; }
-  aside .list::-webkit-scrollbar, body::-webkit-scrollbar { width: 8px; }
-  aside .list::-webkit-scrollbar-thumb { background: var(--accent-line); border-radius: 8px; }
+  /* 列表内距 = 本轮核心修复（2026-10-10 二轮，用户截图：卡片左缘贴死、右侧却有空隙）。
+     之前 .list 零内距，卡片左缘 = 面板左缘 + 1px 边框，右侧只剩滚动条那 8px 显得「右有左无」。
+     1.0 的 .wq-list 是 padding: 0 12px 12px —— 左右 12 + 卡自身 6，两侧各 ~19px 观感一致。
+     滚动条同步换 1.0 那根细的：5px、#d5e3db（原 8px、accent-line）。 */
+  aside .list { overflow-y: auto; flex: 1; padding: 0 12px 12px;
+    scrollbar-width: thin; scrollbar-color: #d5e3db transparent; }
+  body::-webkit-scrollbar { width: 8px; }
+  aside .list::-webkit-scrollbar { width: 5px; }
+  aside .list::-webkit-scrollbar-thumb { background: #d5e3db; border-radius: 99px; }
+  aside .list::-webkit-scrollbar-thumb:hover { background: #bfd8cb; }
+  /* 分组头（全库视图）内距跟着新口径走：12(list) + 7 = 19，与卡片词标题左缘（12+6+1）对齐 */
   aside .g { font-size: 12px; color: var(--accent-text); font-weight: 600;
-    padding: 10px 16px 4px; }
-  /* 词卡（2026-10-10 照搬 1.0「目标词速查」面板的观感，用户指定）：
+    padding: 10px 7px 4px; }
+  /* 词卡（2026-10-10 照搬 1.0「目标词速查」面板的观感，用户指定；二轮细节对齐）：
      常态 = 透明底 + 卡间虚线分隔；hover/选中 = 浮起白底绿边卡。
-     词标题绿色衬线；英/美音标各自与小喇叭合成一颗发音钮（去掉独立大喇叭按钮）。 */
-  aside .item { position: relative; padding: 10px 8px 12px; cursor: pointer;
+     词标题绿色衬线；英/美音标各自与小喇叭合成一颗发音钮（去掉独立大喇叭按钮）。
+     二轮按 8901 实测改齐：卡内距 10px 6px（原 10/8/12，1.0 是 10px 6px）、
+     虚线内缩 6px（原 8）、选中底 #eaf5ef（1.0 --iel-tint-hover，原 #f6fbf8）。 */
+  aside .item { position: relative; padding: 10px 6px; cursor: pointer;
     border: 1px solid transparent; border-radius: 10px; background: transparent;
     transition: background var(--t-fast), border-color var(--t-fast), box-shadow var(--t-fast);
     -webkit-tap-highlight-color: transparent; }
-  aside .item:not(:last-child)::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 0;
+  aside .item:not(:last-child)::after { content: ""; position: absolute; left: 6px; right: 6px; bottom: 0;
     border-bottom: 1px dashed var(--border); pointer-events: none; }
   aside .item:hover::after, aside .item.sel::after { display: none; }
   @media (hover: hover) { aside .item:hover { background: #fff; border-color: var(--accent-bright);
     box-shadow: 0 1px 6px rgba(16,180,135,.14); } }
-  aside .item.sel { background: #f6fbf8; border-color: var(--accent-bright);
+  aside .item.sel { background: #eaf5ef; border-color: var(--accent-bright);
     box-shadow: 0 1px 6px rgba(16,180,135,.14); }
   aside .item .wtop { display: flex; align-items: flex-start; gap: 4px; }
   aside .item .ww { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; row-gap: 2px;
@@ -985,7 +1008,7 @@
     white-space: nowrap; flex: 0 1 auto; min-width: 0; max-width: 100%; }
   aside .item .ph .ph-tag { font-size: 10px; }
   aside .item .spk { border: none; background: none; cursor: pointer; font-size: inherit;
-    padding: 2px 6px 2px 2px; color: var(--accent-text); border-radius: 7px;
+    padding: 3px 7px 3px 3px; color: var(--accent-text); border-radius: 7px;
     display: inline-flex; align-items: baseline; gap: 3px; -webkit-tap-highlight-color: transparent;
     position: relative; font-family: var(--serif); }
   aside .item .spk::after { content: ""; position: absolute; inset: -5px 0; border-radius: 7px; }
@@ -997,17 +1020,39 @@
     -webkit-tap-highlight-color: transparent; position: relative; }
   aside .item .loc::after { content: ""; position: absolute; inset: -3px 0; border-radius: 10px; }
   aside .item .loc i { font-size: 15px; line-height: 1; display: block; }
-  @media (hover: hover) { aside .item .loc:hover { color: var(--accent-text); background: var(--accent-soft); } }
+  @media (hover: hover) { aside .item .loc:hover { color: var(--accent-bright); background: var(--accent-soft); } }
   aside .item .mn { font-size: 12.5px; color: var(--text); line-height: 1.6;
     padding: 2px 0 2px 11px; position: relative; }
   aside .item .mn + .mn { border-top: 1px dashed var(--border); }
+  /* 义项圆点 = 1.0 的 --iel-accent-line #bfe6d6（实色，不再叠 opacity；我们也早有同值 --accent-line） */
   aside .item .mn::before { content: ""; position: absolute; left: 1px; top: .78em;
-    width: 4px; height: 4px; border-radius: 50%; background: var(--accent-bright); opacity: .55; }
+    width: 4px; height: 4px; border-radius: 50%; background: var(--accent-line); }
+  /* 例句块 = 1.0 .wq-ex：译文收进块内（1.0 是 .en/.cn 同框，2026-10-10 二轮改齐；
+     原来译文明在框外单挂一行）、圆角 8 → 10（1.0 --iel-radius-xs）。
+     浅色底 #f4faf7（=1.0 --iel-tint）在下面 body:not(.dark) 块里换，暗色沿用原 --accent-soft。 */
   aside .item .ex { margin-top: 7px; padding: 8px 10px; background: var(--accent-soft);
-    border-radius: 8px; font-size: 12px; line-height: 1.65; font-family: var(--serif); color: var(--text); }
-  aside .item .exzh { font-size: 12px; color: var(--muted); margin-top: 3px; }
-  aside .cnt { font-size: 12px; color: var(--muted); padding: 8px 16px;
+    border-radius: 10px; font-size: 12px; line-height: 1.65; font-family: var(--serif); color: var(--text); }
+  aside .item .ex .cn { font-size: 12px; color: var(--muted); margin-top: 3px; font-family: var(--sans); }
+  /* 底部信息条内距跟 12px 口径（原 16）；字号 12 → 11.5 与 1.0 .wq-cnt 同档观感 */
+  aside .cnt { font-size: 11.5px; color: var(--muted); padding: 8px 12px;
     border-top: 1px solid var(--border); }
+
+  /* ---- 面板内色阶 → 1.0（2026-10-10 二轮细节对齐，用户要求「按 8901 项目改」）----
+     实测对照 8901：线条/灰字是冷薄荷（#e7eee9 / #63706a），主线绿字是 accent-deep #0c9c74
+     （词标题 1.0 为 #0d9d74，同档），义项与例句正文是 ink3 #4d5a53，定位钮是极浅的
+     ink-faint #b3bdb7。全部只挂 body:not(.dark)：暗色各规则（163 行一带 + 变量组）原样接管，
+     一处都不动。变量级的两条（--border/--muted）以外都用显式色值，防别的组件被顺带带走。 */
+  body:not(.dark) #panel { --border: #e7eee9; --muted: #63706a; }
+  body:not(.dark) #panel .head .t .x { color: #b3bdb7; }
+  body:not(.dark) #panel .item .wtop b { color: #0d9d74; }  /* 1.0 --iel-tw，比 accent-deep 亮半档 */
+  body:not(.dark) #panel .item .spk,
+  body:not(.dark) #panel .wq-tabs .wq-tab.on { color: #0c9c74; }
+  body:not(.dark) #panel .item .mn,
+  body:not(.dark) #panel .item .ex { color: #4d5a53; }
+  body:not(.dark) #panel .item .ex { background: #f4faf7; }
+  body:not(.dark) #panel .item .ex .cn { color: #6e7973; }  /* 1.0 .wq-ex .cn = --iel-mute，比 ink2 浅一档 */
+  body:not(.dark) #panel .item .mn + .mn { border-top-color: #edf2ee; }  /* 1.0 义项间虚线 = --iel-line2 */
+  body:not(.dark) #panel .item .loc { color: #b3bdb7; }
 
   /* ============ 单词弹窗（毛玻璃卡） ============ */
   .pop { position: fixed; z-index: 200; background: var(--glass-strong);
@@ -1310,7 +1355,11 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     article { font-size: 17.5px; }
     .sec .para { line-height: 1.85; text-align: left; }
     /* 词库：改为底部抽屉（划上即用，不占正文空间） */
-    aside { position: fixed; left: 0 !important; right: 0 !important; bottom: 0; top: auto; z-index: 190;
+    /* z 220：抽屉在手机档要盖过两条底栏 —— 播放条 120 / 任务条 200。190 那版会输给任务条，
+       任务模式下抽屉一开，任务条就画在它上面、压掉抽屉下沿一截（2026-10-10 用户实测报表）。
+       与本档既有口径一致：非任务模式里抽屉本来就盖过播放条，任务条不该例外。
+       上层序（别乱动）：#lsMini 250 / .voice-pop 300 / .me-pop 400 / #loginModal 450。 */
+    aside { position: fixed; left: 0 !important; right: 0 !important; bottom: 0; top: auto; z-index: 220;
       width: 100vw !important; max-width: 100vw !important; height: auto; max-height: 62vh;
       border-radius: 18px 18px 0 0; transform: translateY(102%);
       transition: transform var(--t-slide) var(--ease-enter), visibility var(--t-slide);
@@ -1327,6 +1376,20 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     .layout::after { content: ""; position: fixed; inset: 0; z-index: 180; background: rgba(0,0,0,.35);
       opacity: 0; pointer-events: none; transition: opacity var(--t-fast); }
     body.panel-open .layout::after { opacity: 1; pointer-events: auto; }
+    /* 词卡手机档照 1.0 移动块（8901 同款，2026-10-10 二轮）：卡内距 11px 12px、词标题 16px、
+       音标行可换行、定位钮热区升到 9px 12px、音标钮 min-height 30、义项 13、例句 12.5、列表底收 10。
+       必须写在上面基础档之后：媒体查询不另加特异性，同权重按源序取胜（层叠坑，见文件头那组注释）。 */
+    aside .item { padding: 11px 12px; }
+    aside .item .wtop b { font-size: 16px; }
+    aside .item .ph { white-space: normal; }
+    aside .item .loc { padding: 9px 12px; margin: -9px -12px 0 0; }
+    aside .item .loc i { font-size: 17px; }
+    aside .item .spk { min-height: 30px; }
+    aside .item .mn { font-size: 13px; }
+    aside .item .ex { font-size: 12.5px; }
+    aside .list { padding: 0 12px 10px; }
+    /* 搜索框：13px 是桌面口径，手机档必须回到 16px（iOS 聚焦时 <16px 会把整页放大） */
+    aside input { font-size: 16px; }
     /* 单词弹窗：底部抽屉式浮层，避开播放条 */
     .pop { left: 12px !important; right: 12px; width: auto; bottom: calc(90px + env(safe-area-inset-bottom, 0px)); top: auto !important;
       border-radius: 18px; padding: 14px 14px 12px; max-height: calc(100vh - 120px); overflow-y: auto; }
@@ -3353,7 +3416,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
           <div class="wq-keys" aria-hidden="true"><kbd>↑</kbd><kbd>↓</kbd><span>切换卡片</span><i>·</i><kbd>Enter</kbd><span>朗读选中</span><i>·</i><kbd>Esc</kbd><span>收起</span></div>
         </div>
         <div class="list" id="vlist"></div>
-        <div class="cnt" aria-live="polite">共<span id="vcnt"></span> · 点卡片朗读 · ⌖ 定位到文中</div>
+        <div class="cnt" aria-live="polite"><span id="vcnt"></span> · 点卡片朗读 · ⌖ 定位到文中</div>
       </aside>
     </div>
 
@@ -5062,6 +5125,29 @@ let listenOn = false;
     el.scrollTop = el.scrollHeight;
     } catch (e) {}
     }
+    /* 词卡音标钮的「点英必英音」（2026-10-10 用户裁定：「默认的音色就是全局配置的那个，
+       但我可以点两个小便签按钮听英/美式发音」）：全局配置的是云音色、而它的口音与这次要的
+       口音不符时（如全局 Aria 美式、点「英」），临时借一颗目标口音的云音色合成这一次——
+       只改这次传给云端的 voiceId，绝不写回 selVoiceURI（全局选择神圣不可侵犯，与 5017 行
+       pickVoice 的「用户选择」红线同源）。
+       挑法：目标口音组里优先同性别（「女声/男声」从 VOICES 的 label 解析；同性别第一颗），
+       例：en-US-AriaNeural（美式女声）点英 → en-GB-SoniaNeural（英式女声）。
+       口音相符时原样返回（点「美」而全局本就是美式 → 不换）。 */
+    function cloudVoiceForAcc(cid, voiceAcc) {
+    if (!voiceAcc || typeof CLOUD === 'undefined') return cid;
+    const want = String(voiceAcc).toLowerCase().replace(/_/g, '-');
+    const norm = x => String(x || '').toLowerCase().replace(/_/g, '-');
+    if (norm(cid).startsWith(want)) return cid;
+    try {
+    const list = CLOUD.VOICES || [];
+    const sex = v => (/女声/.test(v.label) ? 'f' : /男声/.test(v.label) ? 'm' : '');
+    const cur = list.find(v => v.id === cid);
+    const pool = list.filter(v => norm(v.id).startsWith(want));
+    if (!pool.length) return cid; // 目标口音没有云音色（不该发生）：保底原样
+    const same = cur && sex(cur) && pool.find(v => sex(v) === sex(cur));
+    return (same || pool[0]).id;
+    } catch (e) { return cid; }
+    }
     function speak(text, cb, opts, tokenIn) {
     opts = opts || {};
     const immediate = !!opts.immediate;
@@ -5080,7 +5166,7 @@ let listenOn = false;
     idx = opts.sent; paint(); syncSeek(opts.sent);
     try { mediaMeta(plainEN(sentRaw(opts.sent)).slice(0, 80)); } catch (e) {}
     }
-    const cid = selVoiceURI.slice(6);
+    const cid = cloudVoiceForAcc(selVoiceURI.slice(6), opts.voiceAcc); // 音标钮口音点将：借目标口音的云音色（不改全局选择）
     const okCb = () => { if (my !== speakToken) return; errStreak = 0; if (cb) cb(); };
     let staleRetried = false;
     const degrade = err => {
@@ -5103,7 +5189,9 @@ let listenOn = false;
        「放着放着就毫无缘由切换本地语音」—— 原因得当场说出来。 */
     try { showAbToast('☁ 云端音色这一句没放出来，本句改用本地音色：' + CLOUD.friendlyErr(err && err.message)); } catch (e2) {}
     }
-    speak(text, cb, { plain: true, exclude: selVoiceURI }, my);
+    /* 降级本地也保口音诉求：本机点将接管（点「英」便签时云失败，不能让本机默默回全局口音）。
+       2026-10-10 云口音点将同批补上。 */
+    speak(text, cb, { plain: true, exclude: selVoiceURI, voiceAcc: opts.voiceAcc }, my);
     };
     CLOUD.play(text, cid, rate, my, okCb, degrade);
     return;
@@ -5126,25 +5214,32 @@ let listenOn = false;
     }
     const go = () => {
     if (my !== speakToken) return;
-    // immediate=true 为队列模式（连播/预取），不 cancel 以避免句间大停顿
-    // immediate=false 为单播模式（切句/点读），需 cancel 清空引擎
-    if (!immediate) {
-    try {
-    if (speechSynthesis.speaking || speechSynthesis.pending || speechSynthesis.paused || speechInProgress) speechSynthesis.cancel();
-    } catch (e) {}
-    }
+    /* 起播前清旧队列的 cancel 只留在 speak() 尾部的调用处做（且只做一遍）。
+       2026-10-10 修「点音标钮/词卡偶尔静默不出声」：以前这里还有第二遍同款 cancel，
+       而它读的四个状态里 speechInProgress 只是软标志——它只说明「提交过一句」，
+       引擎完全可能早就把这句静默丢了（无 onstart 也无 onerror，看门狗还没到点），
+       这种「假忙」会命中第二遍 cancel；cancel() 紧接着 speak() 又正是前面注释里那个
+       Chrome 被吞组合 —— 于是点一次哑一次、连点连着哑，要等 6~8s 看门狗重试才出声。
+       清队列判定收拢到外层后，这里不再重复 cancel（immediate 队列模式本来就两处都不 cancel）。 */
     speechInProgress = false;
     try { if (speechSynthesis.paused) { speechSynthesis.resume(); if (!(speechSynthesis.speaking || speechSynthesis.pending)) { try { speechSynthesis.cancel(); } catch (e) {} } } } catch (e) {}
     const u = new SpeechSynthesisUtterance(text);
     u.rate = rate; u.volume = 1;
     // opts.voiceAcc：指定口音（'en-GB'/'en-US'，词卡音标按钮用）。V 表那两个键优先装的是
     // 用户当前选中音色（口音未必相符，还可能是 cloud: 伪音色，塞给 utterance.voice 无效）——
-    // 所以先常规解析再校验口音：不符就从本机 getVoices() 按 lang 挑该口音的；都没有才回默认（保底出声）。
+    // 所以先常规解析再校验口音：不符就从本机 getVoices() 挑该口音的；都没有才回默认（保底出声）。
+    // 2026-10-10 加固：匹配放宽到「同口音族」（lang 归一化后 en-GB 认 en-GB 也认 en-GB-x-…），
+    // 且跳过 exclude —— 失败重试时不会再点回刚失败的那个音色。
     let v = resolveVoice(exclude || undefined);
-    if (opts.voiceAcc && (!v || v.lang !== opts.voiceAcc)) {
-      let alt = null;
-      try { alt = speechSynthesis.getVoices().find(x => x.lang === opts.voiceAcc) || null; } catch (e) { alt = null; }
-      if (alt) v = alt;
+    if (opts.voiceAcc) {
+      const wantAcc = String(opts.voiceAcc).toLowerCase().replace(/_/g, '-');
+      const accOf = x => String(x.lang || '').toLowerCase().replace(/_/g, '-');
+      const matchAcc = x => { const l = accOf(x); return l === wantAcc || l.startsWith(wantAcc + '-'); };
+      if (!v || !matchAcc(v)) {
+        let alt = null;
+        try { alt = speechSynthesis.getVoices().find(x => matchAcc(x) && x.voiceURI !== exclude) || null; } catch (e) { alt = null; }
+        if (alt) v = alt;
+      }
     }
     let triedURI = '';
     if (v) { u.voice = v; u.lang = v.lang; triedURI = v.voiceURI; }
@@ -5161,7 +5256,7 @@ let listenOn = false;
        他 2026-09-23 在 iPad 上报的「发个声就卡住、按钮永远不变」就是这个形状
        （实测复现：一句念完等 12 秒 → 换 Serena 把同一句又念一遍 → 再等 12 秒才前进）。 */
     if (started) { errStreak = 0; cb(); return; }
-    if (!plain) { speak(text, cb, { plain: true, exclude: triedURI }, my); return; } // 换掉坏音色重试
+    if (!plain) { speak(text, cb, { plain: true, exclude: triedURI, voiceAcc: opts.voiceAcc }, my); return; } // 换掉坏音色重试；口音诉求带着走（优先同口音的下一个音色，实在没有才回默认）
     if (!everStarted && NEED_GESTURE) {
     // iOS: cancel后speaking可能仍返回true（已知bug），延迟检查
     let busy = false;
@@ -5234,10 +5329,13 @@ let listenOn = false;
     try { speechSynthesis.speak(u); } catch (e) { speechInProgress = false; if (cb) failOnce(); }
     };
     if (immediate) { go(); return; } // 链式续播/预取：不 cancel 不延迟，消除句间大间隔
-    // Chrome：没在播就别 cancel（空 cancel 会吞掉紧接着的 speak）；真在播才断开，且留 150ms
+    /* Chrome：没在播就别 cancel（空 cancel 会吞掉紧接着的 speak）；真在播才断开，且留 150ms。
+       2026-10-10：清队列的就地判定收拢到这一处（go() 里的第二遍已删，见上）——判定只看引擎
+       真三态；软标志 speechInProgress 先清掉再判，免得静默丢句留下的“假忙”又骗出一次 cancel。 */
+    speechInProgress = false;
     let idle = false;
     try {
-    if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+    if (speechSynthesis.speaking || speechSynthesis.pending || speechSynthesis.paused) speechSynthesis.cancel();
     else idle = true;
     } catch (e) { if (cb) cb(); return; }
     if (idle || NEED_GESTURE) { go(); return; } // iOS：手势内必须同步起播（上面已 cancel，清队列无重叠之忧）
@@ -6202,7 +6300,9 @@ let listenOn = false;
     }
     /* 词卡公共模板：本篇目标词 / 全部词库两个视图共用同一份 HTML，防两处漂移。
        2026-10-10 照搬 1.0 交互：英/美音标各与小喇叭合成一颗发音钮（data-acc 指定口音），
-       独立大喇叭按钮取消；定位钮用 ri-focus-3-line；义项按 \n 拆行（圆点 + 行间虚线）。 */
+       独立大喇叭按钮取消；定位钮用 ri-focus-3-line；义项按 \n 拆行（圆点 + 行间虚线）。
+       二轮细节对齐（用户核 8901）：例句与译文同框（1.0 .wq-ex 的 .en/.cn 结构），
+       译文不再另起一行挂在框外。 */
     function vocabCardHtml(w, k, info, inTextSet) {
     const inText = inTextSet.has(k) ? '' : ' 📖';
     const strip = s => String(s || '').replace(/^\/+|\/+$/g, '');
@@ -6214,7 +6314,7 @@ let listenOn = false;
     return `<div class="item" data-k="${escAttr(k)}" data-d="${escAttr(w)}" data-ex="${escAttr(info.ex || '')}" tabindex="0" role="button">
       <div class="wtop"><div class="ww"><b>${esc(w)}${inText}</b><span class="ph">${ph}</span></div><button class="loc" title="在正文中定位" aria-label="在正文中定位"><i class="ri-focus-3-line" aria-hidden="true"></i></button></div>
       ${mns}
-      ${info.ex ? `<div class="ex">${esc(info.ex)}</div><div class="exzh">${esc(info.exZh || '')}</div>` : ''}</div>`;
+      ${info.ex ? `<div class="ex"><div class="en">${esc(info.ex)}</div>${info.exZh ? `<div class="cn">${esc(info.exZh)}</div>` : ''}</div>` : ''}</div>`;
     }
     /* 视图：'cur' = 本篇目标词（1.0「目标词速查」侧栏的等价回归，2026-10-10 用户指令；
        currentChapter<0 全篇模式下自动降级为全库）；'all' = 六篇全量。选择记忆在 localStorage */
@@ -6265,16 +6365,24 @@ let listenOn = false;
     const spkEl = e.target.closest('.spk');
     if (spkEl) { mark(); speakAside(el.dataset.d || el.dataset.k, spkEl.dataset.acc); return; } // 英/美口音读单词
     if (e.target.closest('.loc')) { mark(); jumpWord(el.dataset.k, el.dataset.d, true); return; } // ⌖ 只定位不朗读
-    const t = e.target.closest('.ex,.exzh');
+    const t = e.target.closest('.ex'); // .cn 译文也在 .ex 内：点译文同样读例句
     if (t && el.dataset.ex) { speakAside(el.dataset.ex); return; } // 点例句读例句
     mark(); speakAside(el.dataset.d || el.dataset.k);   // 点卡任意空白 = 朗读单词（1.0 语义：不跳转）
     };
     el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } };
     });
     if (!_vocabCount && typeof VOCAB !== 'undefined') _vocabCount = Object.keys(VOCAB).length;
-    document.getElementById('vcnt').textContent = curMode
-    ? cnt + ' / 本篇' + (((SECTIONS[currentChapter] || {}).words) || []).length + '词'
-    : cnt + ' / ' + _vocabCount + '词';
+    /* 计数条口径（2026-10-10 用户裁定「怎么体验好怎么来，别是错的就行」）：
+       旧文案「共 N / 本篇 M 词」不搜索时 N===M 白重复一遍，两数并列也读不出 N 是「匹配数」。
+       新口径对齐 8901 .wq-cnt 的「匹配/总数」构式（1.0 是 6/571、不搜索时留空；
+       本方计数条底下还挂着「点卡片朗读 · ⌖ 定位到文中」的常驻提示，不能在搜索空时整段留白，
+       所以不搜索时报一个总数）：
+       不搜索 → 「本篇3词」/「共6词」；搜索中 → 「1 / 3词」（匹配 / 范围）。
+       「共」字随状态出现/消失，所以从模板硬编码挪到这里生成。 */
+    const total = curMode ? (((SECTIONS[currentChapter] || {}).words) || []).length : _vocabCount;
+    document.getElementById('vcnt').textContent = q
+    ? cnt + ' / ' + total + '词'
+    : curMode ? '本篇' + total + '词' : '共' + total + '词';
     }
     /* tab 切换：本篇目标词 / 全部词库（aria-selected 同步，选择落 localStorage） */
     function setWqView(v, skipPaint) {
@@ -6309,6 +6417,10 @@ let listenOn = false;
     i = i < 0 ? (d > 0 ? 0 : cards.length - 1) : Math.max(0, Math.min(cards.length - 1, i + d));
     cards.forEach(el => el.classList.remove('sel'));
     cards[i].classList.add('sel');
+    /* 2026-10-10 用户：「单词选中哪个那个就要发音…快捷键上下选完的也要发音」——
+       ↑↓ 落定即朗读该卡（与点卡同一语义、同一个 speakAside）。按住键连翻时靠 speak()
+       的 token 机制自然合并：中间步骤会被后一步取代，最后停住的那张才真正出声。 */
+    speakAside(cards[i].dataset.d || cards[i].dataset.k);
     /* 用 scrollBy 把选中卡滚到列表视口垂直居中（scrollIntoView 会牵动整页滚动，1.0 同款） */
     const list = document.getElementById('vlist');
     if (list) { const lr = list.getBoundingClientRect(), ir = cards[i].getBoundingClientRect();
