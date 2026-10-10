@@ -6,7 +6,7 @@
 | 版本 | **v2.0.0**（2026-09-24 切 tag `v2.0`，见 `VERSION`；v1.0.0 为 2026-09-17） |
 | 状态 | Released · 迭代中（任务模式 / 间隔引擎 / 保温 已上线） |
 | 维护模式 | 单人维护 · 多 AI Agent 协作 |
-| 线上地址 | https://ielts-vocab.bond/ （主站）<br>https://ielts-vocab.bond/shadow/ （跟读）<br>https://zp900830.github.io/ielts-vocab/ （国际备用） |
+| 线上地址 | https://ielts-vocab.bond/ （主站）<br>https://zp900830.github.io/ielts-vocab/ （国际备用） |
 | 最后更新 | 2026-10-10（删「② 挖空选词」整步：任务模式只剩 ① 通读，词状态系统连 UI 一起删、接触账是词的唯一账，§5.9 已按此重写。上一轮 2026-09-23：两步制任务模式、间隔引擎与保温、工期读数、任务条重排、一步一停播放、续读提示、互跳入口移除、托管平台） |
 
 ---
@@ -97,15 +97,15 @@
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                      前端（纯静态）                        │
-├──────────────┬──────────────────┬───────────────────────┤
-│  index.html  │ shadow/index.html│   admin/index.html    │
-│  情境阅读主站  │    影子跟读       │     管理后台           │
-│  4636 行     │    6575 行        │     611 行            │
-│  Vanilla JS  │    Vanilla JS     │  Vue3+ElementPlus     │
-├──────────────┴──────────────────┴───────────────────────┤
+├──────────────────────────┬──────────────────────────────┤
+│  index.html              │   admin/index.html           │
+│  情境阅读主站（含任务模式）   │     管理后台                  │
+│  10711 行 Vanilla JS     │     615 行 Vue3+ElementPlus  │
+├──────────────────────────┴──────────────────────────────┤
+│  排程引擎：js/plan-engine.js（502 行，纯函数 UMD）           │
+├─────────────────────────────────────────────────────────┤
 │                    数据层（JSON 静态文件）                   │
-│  data/: book(3674) sup(1510) stories(135) vocab(3245)   │
-│  shadow/data/: sections(6) chapters(6) vocab(3245)      │
+│  data/: sections(6 篇/1833 句) chapters(6) vocab(3245)   │
 ├─────────────────────────────────────────────────────────┤
 │                    云端服务（Supabase）                     │
 │  Auth · Postgres · Edge Functions · Realtime            │
@@ -119,41 +119,34 @@
 
 | 层 | 技术选型 | 说明 |
 |----|---------|------|
-| 主站前端 | 单文件 HTML + Vanilla JS | 零构建依赖，4636 行，含 CSS/JS/HTML |
-| 跟读前端 | 单文件 HTML + Vanilla JS | 6575 行，独立运行；排程引擎单独拆成 `shadow/js/plan-engine.js`（723 行，纯函数、可在 Node 里单测） |
+| 主站前端 | 单文件 HTML + Vanilla JS | 零构建依赖，10711 行，含 CSS/JS/HTML |
+| 排程引擎 | `js/plan-engine.js`（502 行，纯函数 UMD） | 从旧跟读站迁入主站仓库；界面与单测共用同一份算式，可在 Node 里单测 |
 | 管理后台 | Vue 3.5 + Element Plus 2.14 + ECharts 5.6 | 本地自托管（`vendor/`，2026-10-10 起不再走 CDN：同一记 jsdelivr 直连超时，线上后台在无代理环境同样打不开），单文件 |
 | 图标 | Remix Icon 4.5（本地自托管，`vendor/remixicon/`） | 2026-10-10 起不再走 CDN：jsdelivr 国内常不可达（详见 §13.4） |
 | 云端 BaaS | Supabase（Auth + Postgres + Edge Functions） | 免费层 |
 | 语音合成 | Azure Cognitive Services Speech | 8 种 Neural 音色 |
 | 静态托管 | **腾讯云 EdgeOne Pages / Makers**（主）/ GitHub Pages（备） | 仅监听 main 分支；发布根是 `dist/` 白名单，不是仓库根 |
-| E2E 测试 | Playwright | 36 个 spec 文件 / 151 条用例（2026-09-23 实测） |
+| E2E 测试 | Playwright | 41 个 spec 文件 / 278 条用例（2026-10-10 实测） |
 | 数据工具 | Python 3 脚本 | inject_config / normalize_vocab / validate_data |
 
 ### 3.3 文件结构
 
 ```
 雅思背单词项目/
-├── index.html              # 情境阅读主应用（含随身听）
-├── shadow/index.html       # 影子跟读应用
-├── shadow/js/plan-engine.js # 排程引擎（ShadowPlan：接触账/保温/预算/工期，纯函数 UMD）
+├── index.html              # 情境阅读主应用（含任务模式/随身听）
+├── js/plan-engine.js       # 排程引擎（ShadowPlan：接触账/保温/预算/工期，纯函数 UMD）
 ├── admin/index.html        # 管理后台
 ├── data/                   # 主站数据
-│   ├── book.json           # 核心词表（3674 条）
-│   ├── sup.json            # 补充词表（1510 条）
-│   ├── stories.json        # 情境故事（135 篇）
-│   ├── vocab.json          # 词汇详情（3245 条）
-│   ├── chapters-raw.json   # 章节原始数据（22 章）
-│   └── covers.json         # 章节封面（22 张 base64）
-├── shadow/data/            # 跟读数据
 │   ├── sections.json       # 6 篇章全文 308 段 / 1833 句（含句译/段注）
 │   ├── chapters.json       # 章节词表索引（6 章）
-│   └── vocab.json          # 跟读词库（3245 条，含例句/辨析）
+│   └── vocab.json          # 词条详情（3245 条，含例句/辨析）
 ├── scripts/                # 构建与校验工具
+│   ├── build_site.mjs      # dist/ 白名单构建（EdgeOne 部署产物，构建期生成 config.js）
 │   ├── inject_config.py    # 环境变量 → config.js
 │   ├── normalize_vocab.py  # 词汇 schema 同步
 │   └── validate_data.py    # 数据完整性校验
 ├── playwright-tests/       # E2E 测试
-│   ├── journeys/shadow/    # 34 个跟读 spec（规格源在 tests/e2e/shadow/*.md，30 份）
+│   ├── journeys/app3/      # 主站 spec（41 文件 / 278 用例，2026-10-10 实测）
 │   └── journeys/smoke.spec.ts
 ├── vendor/                 # 第三方自托管（2026-10-10 起；原来是 jsdelivr CDN）
 │   ├── remixicon/          # 图标字体 4.5.0：remixicon.css（只留 woff2 一种格式）+ woff2 实体 + LICENSE
@@ -394,7 +387,7 @@ score = min(100, 正确次数×12 + 点查次数×3 - 错误次数×8)
 
 ## 5. 功能规格 · 影子跟读
 
-> 文件：`shadow/index.html`（6575 行，单文件应用）+ 排程引擎 `shadow/js/plan-engine.js`（723 行，纯函数 UMD，界面与单测共用同一份算式）
+> 文件：`index.html`（10711 行，单文件应用）+ 排程引擎 `js/plan-engine.js`（502 行，纯函数 UMD，界面与单测共用同一份算式）
 
 ### 5.1 产品定位
 
@@ -509,8 +502,8 @@ score = min(100, 正确次数×12 + 点查次数×3 - 错误次数×8)
 > 10-10 的裁定与改动清单见 `docs/superpowers/specs/2026-10-10-删除挖空选词.md`。
 
 > 详细规格与决策过程见 `docs/2026-09-20-学习计划与任务模式重设计-PRD.md`；
-> 实施拆解与执行期校正见 `docs/superpowers/plans/2026-09-20-task-mode-phase-1.md`；
-> 手工复述案例见 `tests/e2e/shadow/task-mode-phase1.md`。本节只留**代码必须一直满足的口径**。
+> 实施拆解与执行期校正见 `docs/superpowers/plans/2026-09-20-task-mode-phase-1.md`。
+> 本节只留**代码必须一直满足的口径**。
 
 **记忆模型：账记在词上，不记在句上**
 
@@ -575,12 +568,10 @@ score = min(100, 正确次数×12 + 点查次数×3 - 错误次数×8)
   某条边正好是文章第 1 / 最后一句时**不画那一条**（没有可隔的内容，画在顶端/底端反而突兀 ⇒「全篇即区间」时一条都没有）。
   线宽与 `.reader-head` / `.layout` 内容框同口径（`min(1084px, 100% − 36px)`，±2px），装饰性 `aria-hidden`（不进无障碍树），深色随 `--accent-line` 自动换。
   重渲/换批先清旧线再画，不残留。锁：`playwright-tests/journeys/app3/today-range-line.spec.ts`。
-- **刷新时那一行是"续读条"，不是弹窗**（弹窗每刷一次都要点掉一次，就是新的打断源 —— 他 2026-09-20 明确否掉）。判据只剩两条、都在"今天的活"这一本账上：
-  **今天计划句数 > 今天已读句数** 且 **今天没按过「今天先不做」**（后者按天记在 `ielts.shadow.resumeDay`，隔天照常提）。
-  2026-09-23 他把"提几次"拍死：「每次都提（只要今天没完成）」。原先还有一把 sessionStorage 锁记"这趟浏览器会话提过没有"（`:start` / `:resume` 两格），**已删**：
-  它省下的不是屏幕是一致性，而"同一个动作有时有反应有时没反应"被他当场当成 bug 报了上来（实测两个条并没有重叠，多出来那条就是这张卡）。
-  今天一句没读 → 写「今天 N 句」+ 绿按钮「开始」，辅行留空不给第二个数；读了几句 → 写「还没做完 · 已读 N/M · 还剩 X 句」。
-  它**不许把播放条挤掉**；与断更 toast（`gap > 2`）同屏只冒一条；顶栏「今日」绿点与它读同一份 `todayLeftN()`。
+- **首屏续读条已于 2026-09-25 删除**（refine3 ⑤：一级页面底部那条「今天 N 句」续读条整体下线，
+  「今天先不做」按键与 `ielts.shadow.resumeDay` 键随之不存在——旧口径「刷新时弹一条续读提示、判据两条、
+  每次都提」连同那把 sessionStorage 会话锁一并作废）。刷新后从哪继续只由任务条承担；
+  顶栏「今日」绿点的判据与任务条同源（`todayLeftN() > 0`，L9676 一带），旧句子账 `estimateRemaining()` 不再参与。
 - **推进按钮全页只有一颗**，在任务条上（它同时是键盘 `→` 的等价物）。（2026-10-10 ② 删除后，
   「做题卡不复述 n/N」「末题写小结不写下一题」「答错末尾补考」三条随做题卡一并作废。）
 
@@ -600,7 +591,7 @@ score = min(100, 正确次数×12 + 点查次数×3 - 错误次数×8)
 |---|---|
 | 今日进度 `n/N` | 任务栏（面板打开时同一条口径） |
 | 预计剩余 | 任务栏，仅 ① 态 |
-| 今天还剩几句 | **只住在 `todayLeftN()` 这一个函数里**（`shadow/index.html`），三个读者：任务栏那行「还剩」、顶栏「今日」那颗绿点的亮灭、首屏续读条那句「还剩 X 句」。以前绿点走 `estimateRemaining()`（旧句子账 `prog.sentences`）、条子走新词账，两本账一打架，绿点就跟条上的 `n/N` 互相打脸（2026-09-22 走查 #4 + 代码审计 P2-e 两路独立命中）。`estimateRemaining()` 算的是"今天的量"，与工期（`estimateDays`）两回事，**不许接进任何工期展示** |
+| 今天还剩几句 | **只住在 `todayLeftN()` 这一个函数里**（`index.html`），三个读者：任务栏那行「还剩」、顶栏「今日」那颗绿点的亮灭、今天面板的剩余口径。以前绿点走 `estimateRemaining()`（旧句子账 `prog.sentences`）、条子走新词账，两本账一打架，绿点就跟条上的 `n/N` 互相打脸（2026-09-22 走查 #4 + 代码审计 P2-e 两路独立命中）。`estimateRemaining()` 算的是"今天的量"，与工期（`estimateDays`）两回事，**不许接进任何工期展示** |
 | 今天见到 N 词 | 今天面板「词汇」栏（派生 = `todayPlan().words`，与任务条辅行「覆盖 N 词」同源。原「今天晋升词数｜遍间小结 + 面板栏 2」随 ② 删除） |
 | 今天几个词是回炉保温 | 今天面板注脚那一行，取自 `assemble().stats`（`retentionWords` = 词、`baowenSent` = 句、`baowenCap` = 今天的上限、`retentionDropped` = 被上限拦下的）。**界面不许自己数队列、也不许自己写"15 分钟"这个门槛**；保温**只有负载、没有终点** —— 四处工期那句话是"新词全部过完一遍"，保温不改变它的含义（论证见 `docs/superpowers/plans/2026-09-22-保温第一期.md` §1） |
 | 「X 轮」「已读 x/1833」 | **「轮」这个概念仍然删除**（它把"句子遍历"当学习目标，与原则 1 / 原则 4 冲突）。但**完工感要有东西承担**：改由「累计过完词数 / 词表数（3245）」（2026-10-10 状态系统删除前写作「已毕业词数」，口径不变）+「新词全部过完一遍约 <某年某月>（需要 N 天）」提供，出现在**三处**（初次设置屏 `#psEta`、计划页 `#planEta`、今天面板注脚 `#todayEta`），且三处必须调同一个函数（`estimateDays`），不许各自算一遍。见 `docs/superpowers/specs/2026-09-21-走完全部词要多久-设计.md`。**别把这三处当成"又长出来的全局承诺"删掉**（任务条上原先那颗 `#tbEta` 已于 2026-09-22 撤掉 —— 条上只留"还剩几分钟"这类当天负载数，不许再出现第四个工期读数） —— 按词算是他 2026-09-21 拍的口径。**2026-09-22 D10 又改了一次口径**：这个工期【只按通读时间算】，② 挖空选词不占每天分钟数；「过完」数的是"被通读到过一次"，不是毕业（他说"快速刷词，现在这种算法给我压力太大了"）。完工感的另一半：今天面板「词汇」栏的「累计过完 N / 3245」是从存档数出来的真值（2026-10-10 前写作「已毕业 N / 3245」，状态系统删除后改口径） |
@@ -700,59 +691,8 @@ score = min(100, 正确次数×12 + 点查次数×3 - 错误次数×8)
 
 ### 7.1 主站数据（`data/`）
 
-#### book.json — 核心词表（3674 条）
-
-```json
-[章号, "单词", "音标", "释义(多行\\n分隔)", "例句", "例句中文", "英式音标", "美式音标"]
-// 示例：[1, "atmosphere", "ˈætməsfɪr", "n. 大气；气氛", "The atmosphere...", "大气层...", "ˈætməsfɪə", "ˈætməsfɪr"]
-```
-
-#### sup.json — 补充词表（1510 条）
-
-```json
-["单词", "音标", "词性", "中文释义", "英式音标", "美式音标"]
-// 示例：["the", "ðə", "art.", "这；那", "", ""]
-```
-
-#### stories.json — 情境故事（135 篇）
-
-```json
-{
-  "id": "c1s01",          // 章号+序号
-  "ch": 1,                // 所属章节（1-22）
-  "title": "The Egg and the Earth",
-  "tcn": "鸡蛋与地球",
-  "text": "...",          // 英文正文，目标词用 {{word}} 或 {{word|surface}} 标记
-  "tr": "...",            // 中文全文翻译（段落一一对应）
-  "quiz": [               // 篇末测验（5-10 题）
-    {
-      "w": "crust",       // 考查单词
-      "q": "In the story...",  // 英文题干
-      "o": ["opt1","opt2","opt3","opt4"],  // 四选项
-      "a": 0,             // 正确答案索引
-      "ex": "crust 在文中..."  // 中文解析
-    }
-  ]
-}
-```
-
-#### vocab.json — 词汇详情（3245 条）
-
-```json
-{"p": "ˈætməsfɪr", "m": "n. 大气；气氛；氛围", "note": "词伙：lively atmosphere"}
-```
-
-#### covers.json — 章节封面（22 张）
-
-```json
-{"1": "data:image/...;base64,...", "2": "...", ...}
-```
-
-#### chapters-raw.json — 章节原始数据（22 章）
-
-章节标题与词表映射的原始来源。
-
-### 7.2 跟读数据（`shadow/data/`）
+（2.0 时代的 book.json / sup.json / stories.json / covers.json / chapters-raw.json 已随 3.0 改版退出 `data/`；
+现行三件 = 原跟读数据迁入。）
 
 #### sections.json — 6 篇章全文（351KB）
 
@@ -774,7 +714,7 @@ score = min(100, 正确次数×12 + 点查次数×3 - 错误次数×8)
 {"title": "Chapter 1 · Natural Wonders", "words": ["atmosphere", "crust", ...]}
 ```
 
-#### vocab.json — 跟读词库（3245 条，字典）
+#### vocab.json — 词条详情（3245 条，字典）
 
 ```json
 {
@@ -805,15 +745,14 @@ score = min(100, 正确次数×12 + 点查次数×3 - 错误次数×8)
 }
 ```
 
-### 7.3 内容规模统计
+### 7.2 内容规模统计
 
 | 维度 | 数量 |
 |------|------|
-| 核心词（book） | 3674 条 |
-| 补充词（sup） | 1510 条 |
-| 去重词库（= 跟读目标词全集） | 3245 词 |
-| 章节 | 22 章 |
-| 情境故事 | 135 篇 |
+| 篇章 | 6 篇（308 段 / 1833 句，人工校对译文） |
+| 词条详情 | 3245 词 |
+| 辨析卡 | 220 组 |
+| 章节词表索引 | 6 章 |
 | 测验题 | ~800+ 道（每篇 5-10 题） |
 | 跟读篇章 | 6 章 |
 | 跟读句数 | 1833 句（6 篇 / 308 段） |
@@ -1011,7 +950,7 @@ window.IELTS_CONFIG = {
 | Azure 密钥 | ✅ 仅存服务端，客户端不可见 |
 | config.js | ✅ .gitignore 排除，构建时注入 |
 | XSS 防护 | ✅ `esc()` + `escAttr()` 转义 |
-| Supabase anon key 硬编码回退 | ⚠️ index.html 和 shadow/index.html 仍保留（待 v1.1 移除） |
+| Supabase anon key 硬编码回退 | ⚠️ index.html 仍保留（待 v1.1 移除） |
 
 ### 10.3 兼容性
 
@@ -1046,7 +985,7 @@ window.IELTS_CONFIG = {
   **⚠️ 知情取舍（第二轮口径，第三轮已被取代）**：白字压浅薄荷过不了 AA 正文 4.5。用户看过实测后**明确选择**「浅薄荷 + 白字」，第二轮把主按钮这一族对比度**硬底线锁在 3:1**（不是 AA 正文），由 `playwright-tests/journeys/app3/palette.spec.ts` 的 `WHITE_MIN` 与「合成回归」探针兜底。**该 3:1 底线与「合成回归」探针已在 2026-09-24 第三轮被撤销**（见下条），因为用户的最终选择比 3:1 更浅。选中态胶囊等非主按钮仍用深墨（`--cta-ink-dark` 压 `--task-new` = 6.26:1），不参与该降级。
 - **2026-09-24 补（第三轮，用户拍板回退）**：主按钮配色调回「深墨字」之前那一版 —— 渐变 `135deg #2bd4a4→#0fae7e` + 白字/白图标 + 光晕 `0 3px 10px rgba(16,180,135,.25)`；撤销第二轮的 `#2e9c76→#0f7c5a`（第二轮其余改动如 `/app/` 左侧栏保留）。
   **⚠️ 知情取舍（用户 2026-09-24 亲自选定）**：白字压最亮端 `#2bd4a4` 实测 **1.90:1**（最暗端 `#0fae7e` = 2.85:1），**已知低于 WCAG AA 正文 4.5（纯图标 3:1）**，用户看过实测数字后仍选这支品牌色、**知情接受**。门禁**从对比度底线改为锁定色值的回归锁**（`palette.spec.ts` 的 `LOCKED_GRAD` + `cta-and-popups.spec.ts` 的 `scanGradLock`），只防手滑改浅/改深，不再假称达标；非主按钮深墨 `--cta-ink-dark` 不受影响。
-- 上一版评分 58/100（D 级，`全量排查报告_20260915.md`）**已过期**：硬伤族已修，整站重评尚未做（见 §14.1 #12）
+- 上一版评分 58/100（D 级，2026-09-15 全量排查评估）**已过期**：硬伤族已修，整站重评尚未做（见 §14.1 #12）
 
 ---
 
@@ -1122,13 +1061,13 @@ border: 1px solid rgba(255,255,255,.65);
 
 ### 12.1 E2E 测试（Playwright）
 
-**规模（2026-09-23 实测）**：`playwright-tests/` 下 **36 个 `.spec.ts`**（跟读 34 + 主站冒烟 + admin 队列），全量 **151 条用例**，跑完约 2.2–2.5 分钟。
+**规模（2026-10-10 实测）**：`playwright-tests/` 下 **41 个 `.spec.ts`**，全量 **278 条用例**，跑完约 1.5–2 分钟。
 
-**规格源是 `tests/e2e/shadow/*.md`（30 份），不是 spec**：每份 md 手工复述一条用例，spec 头部标着 "Source is authoritative — do not edit; re-compile from markdown if broken"。**改了 spec 必须同步改 md**，否则下次重编译会把修复冲掉。因此本文件不再维护「哪个文件测什么」的清单（它每轮都过期）—— 要看覆盖，`ls tests/e2e/shadow/` 读标题即得。
+**规格就是 spec 本身**（无独立 md 规格源；原 `tests/e2e/shadow/*.md` 30 份体系已随旧站删除）。要看覆盖，读 `playwright-tests/journeys/app3/` 各 spec 的 describe 标题。
 
 **引擎层没有独立单测**（原 `journeys/shadow/plan-engine.spec.ts` 已随 `/shadow/` 下线移除）：引擎行为统一由 app3 的页面级用例经 `TASK` / `ShadowPlan` 出口锁定（`plan-sync` / `today-count` / `minutes-slider` / `task` 等），不需要另开 Node 单测入口。
 
-**几条被咬过之后定下的硬规矩**（全表见 `tests/e2e/shadow/conventions.md`）：
+**几条被咬过之后定下的硬规矩**（原 `tests/e2e/shadow/conventions.md` 已随旧站删除，现行沉淀在 spec 文档附录与 `.workbuddy/memory/MEMORY.md`）：
 - **必须 `cd playwright-tests` 再跑**。在仓库根跑会假报 `did not expect test.describe() to be called here`，症状和「spec 语法坏了」几乎一样。
 - **凡以句子下标为坐标的用例（书签 / 续读位 / A-B），进页面后必须先等正文渲够**：`expect.poll(() => page.locator('.sent').count()).toBeGreaterThan(最大下标)`。正文是异步渲的，没等到就会被 `x.i < sents.length` 静默过滤 —— 这是 2026-09-23 那条「隔几次红一次」的真根因，且**干净 profile 单跑会掩盖它**。
 - 断言里的数字一律现取，不写死（句数、词数、卡面文案都是）。
@@ -1148,8 +1087,7 @@ python3 scripts/validate_data.py
 - [ ] 无合并冲突标记
 - [ ] `config.example.js` 包含所有环境变量
 - [ ] 无误删数据文件
-- [ ] 改过 `shadow/data/sections.json` 的句数 → `SENT_SHIFTS` 已追加一条（validate 第 14 条拦漏记、第 15 条拦中英句数不齐）
-- [ ] 改过 spec → 对应的 `tests/e2e/shadow/*.md` 已同步
+- [ ] 改过 `data/sections.json` 的句数 → `SENT_SHIFTS` 已追加一条（validate 第 14 条拦漏记、第 15 条拦中英句数不齐）
 - [ ] 门禁是否真绿**看日志里的 `NNN passed` 那行**，不看 shell 退出码（`grep` 之后的 `$?` 是管道末尾命令的）
 - [ ] `git add` 按文件名加，**不用 `git add -A`**（iCloud 会在同目录生成「 2」副本，一锅端会把它们提进仓库）
 
@@ -1170,13 +1108,13 @@ python3 scripts/validate_data.py
 ### 13.2 构建流程
 
 ```bash
-# 1. 注入配置
-SUPABASE_URL=xxx SUPABASE_KEY=yyy python3 scripts/inject_config.py --shadow
+# 1. 合并前验证
+cd playwright-tests && npx playwright test          # 全量 E2E（41 spec / 278 用例）
+python3 scripts/validate_data.py                    # 数据校验，输出 "Validation PASSED"
 
-# 2. 同步词汇 schema
-python3 scripts/normalize_vocab.py --apply
-
-# 3. 推到 main —— EdgeOne Pages 自动构建部署（约 1–2 分钟）；平台侧构建命令见 edgeone.json
+# 2. 推到 main —— EdgeOne Pages 自动构建部署（约 1–2 分钟）：
+#    平台侧构建命令 = node scripts/build_site.mjs（见 edgeone.json），
+#    构建期生成 dist/config.js（缺凭证时写空并大声告警，走「未配置云同步」分支）。
 ```
 
 ### 13.3 分支策略
@@ -1194,7 +1132,7 @@ main（生产）
 - **`netlify.toml` 与 `_redirects` 平台完全不认**，是死文件 —— 改缓存 / 重定向要在 EdgeOne 控制台做；修完 404 必须**重新部署**才刷得掉边缘缓存里那个 404。
 - 发布根是 **`dist/`，白名单制**：只有 `scripts/build_site.mjs` 里列出的文件公网可见。新增运行时要抓的文件必须同时加进那份白名单，否则构建自检直接失败。
 - 未加哈希的静态文件：平台默认 `max-age=0`，且**新部署自动失效边缘缓存**（够用，别再自己加版本号）。
-- 数据 JSON 另有 `SHADOW_DATA_VER` 查询串做双保险 —— **只在改 `shadow/data/` 数据时刷**，改 JS / HTML 不要动它。
+- 数据 JSON 另有 `SHADOW_DATA_VER` 查询串做双保险 —— **只在改 `data/` 数据时刷**，改 JS / HTML 不要动它。
 - 静态资源（图标字体 / supabase-js / admin 的 Vue·Element Plus·ECharts）：**2026-10-10 起同源自托管**
   （`vendor/`，原来是跨域 CDN）——平台默认 `max-age=0` 即可（新部署自动失效）；离线路径由 SW 的
   network-first 兜底。admin 页由 `smoke.spec.ts` 的回归锁看着：页面上不许再出现任何 `^https?:` 的
@@ -1217,16 +1155,16 @@ main（生产）
 
 | # | 问题 | 影响 | 状态 |
 |---|------|------|------|
-| 1 | Supabase anon key 硬编码回退（index.html + shadow） | 绕过 config.js 注入机制 | ⚠️ 待修 |
-| 2 | 跟读应用无 PWA/SW | 不能离线使用 | ⚠️ 待补 |
+| 1 | Supabase anon key 硬编码回退（index.html） | 绕过 config.js 注入机制 | ⚠️ 待修 |
+| 2 | 主站 PWA/SW | 离线使用 | ✅ 已修（index.html App3PWA + sw.js，W6 回归锁） |
 | 3 | 注册不迁移访客数据 | 注册前学习记录丢失 | ✅ 已修（游客数据合并） |
 | 4 | 云音频缓存 revoke 正在播放的 URL | 播放中断 | ✅ 已修（淘汰时保护） |
-| 5 | TTS fetch 无 AbortController（主站） | 请求堆积 | ⚠️ shadow 已修，主站待修 |
+| 5 | TTS fetch 无 AbortController（主站） | 请求堆积 | ⚠️ 待修 |
 | 6 | resetAll 未清阅读位置 | 重置后残留 POS_KEY | ⚠️ 待修 |
 | 7 | 单词弹窗不可滚动（长释义溢出） | 移动端看不到完整内容 | ⚠️ 待修 |
 | 8 | admin 导出 blob 提前 revoke | 大文件下载失败 | ⚠️ 待修（已改 2s 延迟） |
 | 9 | 393 条释义含 `；；` 双分号 | 显示异常 | ⚠️ 待数据清洗 |
-| 10 | legacy 副本漂移 673 条 | 根目录大体积 HTML 与 shadow/ 不同步 | ⚠️ 待清理 |
+| 10 | legacy 副本漂移 673 条 | 根目录大体积 HTML 与 shadow/ 不同步 | ✅ 已解决（2026-10-10 旧站 HTML 已删） |
 | 11 | build_ielts.py 会冲掉人工校对数据 | 构建风险 | ⚠️ 待加保护 |
 | 12 | 无障碍整站重评未做（58/100 那份已过期） | 剩余缺口无法量化 | 🟡 底栏改真拖动且键盘可达；主按钮对比度 2026-09-24 第三轮按用户选择退回 1.90:1（⚠️ 已知低于 AA，用户知情接受，门禁改色值回归锁，见 §10.5） |
 
@@ -1283,9 +1221,8 @@ main（生产）
 | 掌握度 | 基于测验对错 + 点查次数计算的 0-100 分数 |
 | 四级等级 | 陌生(<40) / 眼熟(40-64) / 基本掌握(65-84) / 牢固(≥85) |
 | 随身听 | 主站的全局文章连播系统（独立于阅读页朗读条） |
-| 影子跟读 | shadow 子应用，逐句 TTS + 循环 + 跟读 |
-| 辨析卡 | 跟读应用中句下的词义注释/对比卡片 |
-| A-B 循环 | 跟读应用的区间复读功能 |
+| 辨析卡 | 主站阅读页句下的词义注释/对比卡片 |
+| A-B 循环 | 主站播放条的区间复读功能 |
 | 幽灵选项 | 音色下拉中保持上次选择但当前不可用的占位项 |
 | DATA_VER | 数据内容哈希，用于 Cache Storage 版本化 |
 
@@ -1325,7 +1262,6 @@ main（生产）
 | `ielts-dark` | 夜间模式 |
 | `ielts-shadow-prefs` | {rate, loopMode, loopCount, hideZh, hideGl} |
 | `ielts.shadow.v2` | **任务模式的唯一真值**：`{state, plan, events[]（只追加）}`，派生数一律现算（§5.9） |
-| `ielts.shadow.resumeDay` | 「今天先不做」那把**按天**的锁 —— 续读条提不提的第二个判据（§5.9） |
 | `ielts-task-plan` / `ielts-task-progress` | 第一期旧账（迁移来源 + `SENT_SHIFTS` 顺移账本读它），界面不再显示 |
 | `ielts-sent-shift` | 已确认过的 `SENT_SHIFTS` 条目 id 列表 —— 句号位移的登记簿 |
 
@@ -1352,15 +1288,11 @@ main（生产）
 | 文档 | 路径 |
 |------|------|
 | Agent 协作规范 | `AGENTS.md` |
-| 全量排查报告 | `全量排查报告_20260915.md` |
-| 产品优化报告 | `产品优化报告_20260911.md` |
-| 移动端修复报告 | `移动端排查修复报告_20260911.md` |
 | 配置模板 | `config.example.js` |
 | 版本标记 | `VERSION`（仍停在 1.0.0 / 2026-09-17；之后各轮未另切 tag） |
 | 任务模式重设计（第一期全量决策） | `docs/2026-09-20-学习计划与任务模式重设计-PRD.md` |
 | 两步制 / 走查落点 / 保温 等逐轮规格 | `docs/superpowers/specs/`、`docs/superpowers/plans/` |
 | 排程精修量化对照（换算法省多少、保温预算） | `docs/2026-09-21-排程精修量化对照.md` |
-| E2E 用例规格源（权威） | `tests/e2e/shadow/*.md` + `tests/e2e/shadow/conventions.md` |
 
 ---
 
