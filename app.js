@@ -122,7 +122,8 @@
     if (lsSrc && !lsSrc.classList.contains('ls-jump')) { try { TASK.listenSetSrc(TASK.listenSrc === 'today' ? 'all' : 'today'); } catch (err) {} return; }
     // 快速跳转（2026-10-12 用户：随身听一级页支持跳某章某句，与任务模式交互一致 ——
     // 复用同一个 jumpPop 弹窗；落点在 jumpGo 里按「随身听上下文」分叉）。
-    const lsJump = e.target.closest('.ls-jump');
+    // 两个入口：控制条 .ls-jump 按钮 + 信息行 .ls-info（「今日第 1 / 432 句」那块，用户指定）。
+    const lsJump = e.target.closest('.ls-jump, .ls-info');
     if (lsJump) { try { if (typeof toggleJumpPop === 'function') toggleJumpPop(true); } catch (err) {} return; }
     const lsExp = e.target.closest('.ls-expand, .ls-cover');
     if (lsExp) { TASK.listenExpand(); return; }
@@ -485,7 +486,11 @@
             <button class="ls-src ls-jump" type="button" aria-label="快速跳转" title="跳转到某篇某句（与任务模式同一弹窗）"><i class="ri-navigation-line" aria-hidden="true"></i><span>跳转</span></button>
           </div>
           <input class="ls-seek" type="range" min="1" max="1" value="1" step="1" aria-label="句级位置条">
-          <p class="ls-info">—</p>
+          <!-- 信息行 = 第二个快速跳转入口（2026-10-12 用户：这一块也要能跳「某章某句」）：
+               原 <p> 升级为按钮，与 .ls-jump / #abTitle 打开同一个 #jumpPop。尾部小图标明示可点；
+               不写死 aria-label —— 可见文本（「今日第 1 / 4 句 …」）本身是可访问名，读屏顺带把位置报出来。
+               范围语义（全部/今日任务）不在这一层 —— 落点统一由 TASK.listenJumpTo 按当前范围分发。 -->
+          <button class="ls-info" type="button" title="点按快速跳转到某篇某句（与任务模式同一弹窗）"><span class="ls-info-t">—</span><i class="ri-navigation-line" aria-hidden="true"></i></button>
           <button class="ls-expand" type="button" aria-label="展开全文阅读"><i class="ri-book-open-line" aria-hidden="true"></i><span>展开全文阅读</span></button>
         </div>
       </div>
@@ -548,7 +553,7 @@
     if (next) next.disabled = todayMode ? ctx.todayTotal <= 1 : at >= total - 1;
     const seek = card.querySelector('.ls-seek');
     if (seek) { seek.max = String(todayMode ? ctx.todayTotal : total); seek.value = String(todayMode ? ctx.todayPos + 1 : at + 1); }
-    const info = card.querySelector('.ls-info');
+    const info = card.querySelector('.ls-info-t');
     if (info) info.textContent = todayMode
       ? `今日${posOf(ctx.todayPos + 1, ctx.todayTotal)} · 播完自动循环`
       : `${posOf(at + 1, total)} · 还剩 ${Math.max(0, total - at - 1)} 句`;
