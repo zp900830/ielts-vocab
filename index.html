@@ -3802,7 +3802,8 @@ let listenOn = false;
     });
     /* 这里原来还有一层「裸维护句整段删除」（按句读切分后，段以维护词开头就整段删掉）——
        2026-10-12 晚整层移除，理由见上面 CMP_NOTE_HEAD 处的注释：466 条命中里 0 条真维护注，
-       全是「课文里…」这种正文句。维护注的清理只保留**括号层**（上面那一步）。 */
+       全是「课文里…」这种正文句。维护注的清理只保留**括号层**（上面那一步）。
+       防回归：cmp-caret.spec.ts「辨析卡清洗哨兵」会把这一层加回来的后果当场报出来（1070 个字段）。 */
     out = out.replace(/（\s*）|\(\s*\)/g, '');
     out = out.replace(/\s{2,}/g, ' ').trim();
     out = out.replace(/[；;]{2,}/g, '；').replace(/^[；;、，,\s]+|[\s；; ，,]+$/g, '');
@@ -11109,6 +11110,10 @@ let listenOn = false;
         refreshNext: syncTaskNextLabel,
         // 句号→目标词与句总数的出口（测试用）
         sentWordsOf: (i) => wordsOfSent(i), sentTotal: () => SENT_RAW.length,
+        /* 辨析卡显示清洗的测试缝（2026-10-12 事故后补）：全库哨兵锁要拿**真函数**跑 220 张卡 ——
+           在测试里复刻一份正则迟早会与实现漂移，而漂移正是上一轮「整段删除」误伤 89 张卡
+           却没人拦住的间接原因（当时只验了「括号数字残留 0」，没验「删掉的是不是正文」）。 */
+        cmpCleanForTest: (s) => cmpCleanText(s),
         get view() { return _view; }
       };
     })();
