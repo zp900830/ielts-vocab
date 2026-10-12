@@ -3691,7 +3691,72 @@ let listenOn = false;
     function compareLine(note) {
       const sm = String(note.summary || '');
       const m = sm.match(/简单记[:：](.+?)\s*$/);
-      return (m ? m[1] : (note.title || sm.replace(/^辨析[:：]/, ''))).trim();
+      /* 折叠行也过显示清洗（标题可能带「（卡上例句）」类注）——清洗函数是声明提升的，
+         定义在下方也可见。 */
+      return cmpCleanText((m ? m[1] : (note.title || sm.replace(/^辨析[:：]/, ''))).trim());
+    }
+    /* ============ 辨析卡显示清洗（2026-10-12 用户：「同时展示多个词性，n. n.」；
+       「不要什么 79、78 这种在文章中哪里哪里的信息，标的很乱一堆标号」）============
+       数据里带三类「写卡维护语」（对维护仍有价值，显示前统一剥离，数据文件保持不动）：
+       a) it.pos 夹带括号备注（"n.（卡上释义只有名词一档）"）；
+       b) it.sense 又自带词性前缀（"v. 擅自假定…"）→ 与 pos 拼出 "v. v. …"；
+       c) scene/core/diff 等文本里的句号数字（"（879）"、"1398 晚饭后…"）与「（卡上例句）」
+          「（课文 474 走 n.）」「（已 grep）」这类出处/流程注。
+       规则经全量回放验证：220 张卡 18982 个字段，清洗后「括号含数字」残留 0、无空括号。
+       维护提示：改动本组规则后，重跑「清洗回放」（work 里那次 python 回放同款逻辑）抽查。 */
+    const CMP_NOTE_KW = /卡上|卡词伙|卡有|卡里|卡同|没有卡|课文|词伙|本书|全书|全库|书证|自查|grep|审核组|同源|未打标记|未标|归组|并入|不另计|另计|硬约束|见组|见边界|边界一节|组\s*\d|章\s*\d|段\s*\d|整段|原样|条例句|证据只有|不进表|不进成员|不计|只报备|原句|同一处|同句|同段|这一句|这半句|那处|另有|即它|即此|就是它|就是这|就是语料|算\s*1\s*条|登记|订正|更正|已\s*grep|都这样|这样用|计数|同属|一栏/;
+    const CMP_NOTE_HEAD = /^\s*(卡|词伙|课文|本书|全库|书证|grep|自查|审核|未打|另计|同源|章\s*\d|段\s*\d|组\s*\d|已\s*grep)/;
+    function cmpCleanBracket(inner) {
+    if (/^[\s\d]*$/.test(inner)) return '';                                     // （879）
+    if (/^\s*\d+\s*[处条个次句点]/.test(inner)) return '';                      // （2 处）
+    if (/^\s*\d+\s*等[^）)]*[处条个次]/.test(inner)) return '';                 // （1080 等三处）
+    if (/^\s*\d{1,4}\s*[–—-]\s*\d{1,4}\s*$/.test(inner)) return '';            // （1302–1306）
+    if (/^\s*[\d\s、,，/]+(?:[两一二三四五六七八九十]\s*[处条个次句])?\s*$/.test(inner)) return '';  // （1231、1245、1254）
+    if (CMP_NOTE_KW.test(inner)) return '';                                     // （卡上例句）（课文 474 …）
+    let r = inner;
+    r = r.replace(/〔\s*\d+\s*〕/g, '');
+    r = r.replace(/^\s*\d{1,4}\s*[:：]\s*/, '');
+    r = r.replace(/(?<=[\u4e00-\u9fa5])\s+\d{2,4}\s+/g, ' ');
+    r = r.replace(/(?:^|(?<=[，,、\s/]))\d{1,4}(?=[，,、：:\s/]|\s*$)/g, '');
+    r = r.replace(/、\s*(?=\s|$)/g, '');
+    r = r.replace(/^[\s，,、/]+/, '');          // 「（, 顶在名词前）」：编号被删后开头的残逗号
+    r = r.replace(/[\s，,、/]+$/, '').trim();
+    if (!r) return '';
+    return r !== inner ? '（' + r + '）' : null;
+    }
+    function cmpCleanText(s) {
+    if (!s || typeof s !== 'string') return s || '';
+    let out = s.replace(/[（(]([^）)]*)[）)]/g, (m0, inner) => {
+    const r = cmpCleanBracket(inner);
+    return r === null ? m0 : r;
+    });
+    /* 裸维护句：按句读切分（引号/括号内的标点跳过；「、」也算一个切点 —— 「、（卡上例句 X）」
+       这种跟在顿号后的出处注才切得出来），删「维护语开头」的整段。判开头前先剥前导标点。 */
+    const segs = [];
+    let cur = '', depth = 0;
+    for (const ch of out) {
+    if (ch === '「' || ch === '『' || ch === '（' || ch === '(') depth++;
+    else if (ch === '」' || ch === '』' || ch === '）' || ch === ')') depth = Math.max(0, depth - 1);
+    cur += ch;
+    if (depth === 0 && /[；;。！？!?、.]/.test(ch)) { segs.push(cur); cur = ''; }
+    }
+    if (cur) segs.push(cur);
+    out = segs.filter(seg => {
+    const core = seg.replace(/^[\s；;、，,]+/, '');
+    return !(CMP_NOTE_KW.test(core) && CMP_NOTE_HEAD.test(core));
+    }).join('');
+    out = out.replace(/（\s*）|\(\s*\)/g, '');
+    out = out.replace(/\s{2,}/g, ' ').trim();
+    out = out.replace(/[；;]{2,}/g, '；').replace(/^[；;、，,\s]+|[\s；; ，,]+$/g, '');
+    return out;
+    }
+    /* sense 去掉与 pos 首个词性标记的重复前缀（"v." + "v. 擅自假定" → "v. 擅自假定"，
+       中间的义项标记保留：「v. 数；…；n. 计数」只去掉开头那个 v.）。 */
+    function cmpCleanSense(pos, sense) {
+    let s = cmpCleanText(sense);
+    const m = String(pos || '').match(/\b(vt|vi|adj|adv|prep|conj|pron|num|n|v|a|ad)\./i);
+    if (m) s = s.replace(new RegExp('^\\s*' + m[1] + '\\.\\s*', 'i'), '');
+    return s;
     }
     /* 对比表体抽取（2026-10-04 随身听单词卡复用）：下体与 renderCompareNote 原体内逐字节一致，
        renderCompareNote 改调它，旧调用方输出不变。 */
@@ -3701,7 +3766,9 @@ let listenOn = false;
     if (items.length) {
       html += `<table class="nb-table">`;
       for (const it of items) {
-      html += `<tr><td class="nb-tw">${esc(it.w)} <span class="nb-tp">${esc(it.p || '')}</span></td><td class="nb-tm">${esc(it.pos || '')} ${esc(it.sense || '')}</td><td class="nb-tc">${esc(it.core || '')}${it.scene ? `<br><span class="nb-scene">🎬 ${esc(it.scene)}</span>` : ''}${it.eg ? `<br><span class="nb-scene">${esc(it.eg)}</span>` : ''}</td></tr>`;
+      const pos = cmpCleanText(it.pos), sense = cmpCleanSense(it.pos, it.sense);
+      const scene = cmpCleanText(it.scene), eg = cmpCleanText(it.eg);
+      html += `<tr><td class="nb-tw">${esc(it.w)} <span class="nb-tp">${esc(it.p || '')}</span></td><td class="nb-tm">${esc(pos)}${pos && sense ? ' ' : ''}${esc(sense)}</td><td class="nb-tc">${esc(cmpCleanText(it.core))}${scene ? `<br><span class="nb-scene">🎬 ${esc(scene)}</span>` : ''}${eg ? `<br><span class="nb-scene">${esc(eg)}</span>` : ''}</td></tr>`;
       }
       html += `</table>`;
     }
@@ -3719,19 +3786,19 @@ let listenOn = false;
       let prevDim = null;
       for (const row of note.diff) {
       if (row.dim && row.dim !== prevDim) {
-        html += `<tr class="nb-dim"><td colspan="${keys.length + 1}">${esc(row.dim)}</td></tr>`;
+        html += `<tr class="nb-dim"><td colspan="${keys.length + 1}">${esc(cmpCleanText(row.dim))}</td></tr>`;
       }
       prevDim = row.dim || prevDim;
       if (row.both) {
         // 作者把这行写成「两个词一起看」（讲中文怎么译、卡给不给词伙这类），不该按词拆两格
-        html += `<tr><td class="nb-tl">${esc(row.label)}</td><td colspan="${keys.length}">${esc(row.both)}</td></tr>`;
+        html += `<tr><td class="nb-tl">${esc(cmpCleanText(row.label))}</td><td colspan="${keys.length}">${esc(cmpCleanText(row.both))}</td></tr>`;
         continue;
       }
-      html += `<tr><td class="nb-tl">${esc(row.label)}</td>${keys.map(k => `<td>${esc(row[k] || '')}</td>`).join('')}</tr>`;
+      html += `<tr><td class="nb-tl">${esc(cmpCleanText(row.label))}</td>${keys.map(k => `<td>${esc(cmpCleanText(row[k] || ''))}</td>`).join('')}</tr>`;
       }
       html += `</table>`;
     }
-    if (note.summary) html += `<span class="nb-summary">${esc(note.summary)}</span>`;
+    if (note.summary) html += `<span class="nb-summary">${esc(cmpCleanText(note.summary))}</span>`;
     return html;
     }
     function renderCompareNote(note, open) {
@@ -4804,6 +4871,14 @@ let listenOn = false;
     n = Math.max(1, Math.min(total, n));
     toggleJumpPop(false);
     if (abMode === 3) abCancel(true);
+    /* 随身听上下文（2026-10-12 用户：「随身听一级页面要支持快速跳转到某章某句，与任务模式
+       交互一致」——同一个弹窗、同一个「直达」，只是落点并入随身听链）：走 TASK.listenJumpTo
+       （内部切「全部文章」范围 + listenArm + listenPlayGlobal 跨篇跳句，收听账按 listen 记）。
+       ⚠️ 本函数在 TASK IIFE 之外（IIFE 从 6998 行才开始），_listenCtx 等内层变量不可直引。 */
+    if (typeof TASK !== 'undefined' && TASK.listenCtxActive && TASK.listenCtxActive()) {
+      TASK.listenJumpTo(computeChapterStart(ai) + n - 1);
+      return;
+    }
     /* 单篇视图（currentChapter>=0，也就是 3.0 的正常形态）里 sents 只有当前这一篇，
        playFrom 吃的是**本地下标**，所以跳别的章要先换章。onChapterChange 里的 render()
        是同步重建 sents 的，因此紧跟着起播 —— 不绕 setTimeout：那会离开点击这个用户手势，
@@ -7481,7 +7556,19 @@ let listenOn = false;
         _listenToday = []; _listenTodayPos = 0;
         try {
           let ids = [];
-          try { ids = (todayPlan(true).queue || []).map(function (q) { return q.i; }); } catch (e) {}
+          /* 刷句模式（手动起点在账）优先：今日任务 = 起点往后 N 句（manualRange），与
+             currentArticle（在学篇 / 随身听当前篇）无关 —— 2026-10-12 用户 bug：起点设在
+             篇3、进随身听时 currentArticle 被 listenOpen(0) 设成 0（篇1），todayPlan 的按篇
+             分支见「起点不在本篇」就退化成「整篇从头重刷」→ 队列从篇1句1 起，与「今日任务
+             从第三章第一句开始」直接矛盾。记忆模式（无起点）仍走 todayPlan（按在学篇引擎挑句）。 */
+          try {
+            const ms = manualStartToday();
+            const rs = ms ? manualRange() : null;
+            if (rs && rs.size) ids = Array.from(rs);
+          } catch (e0) {}
+          if (!ids.length) {
+            try { ids = (todayPlan(true).queue || []).map(function (q) { return q.i; }); } catch (e) {}
+          }
           if (!ids.length) { try { ids = (todayQueue || []).map(function (q) { return q.i; }); } catch (e2) {} }
           const seen = {};
           ids.forEach(function (gi) { if (Number.isFinite(gi) && !seen[gi]) { seen[gi] = 1; _listenToday.push(gi); } });
@@ -10730,6 +10817,15 @@ let listenOn = false;
         listenSentenceStep, listenStop, listenReplay, listenStep,
         listenExpand, listenCollapse, listenNextArticle, updateListenHud,
         listenSetSrc, get listenSrc() { return _listenSrc; }, listenTodayAdvance,
+        /* 快速跳转（jumpGo）的随身听侧接线（2026-10-12）：jumpGo 在 TASK IIFE 外，
+           只能经这两个口进来。跳转即自由听 —— 切回「全部文章」范围，否则跳到队列外的
+           句子后 HUD 还挂着「今日任务 · 循环播放」对不上。 */
+        listenCtxActive: function () { return _listenCtx; },
+        listenJumpTo: function (gi) {
+          try { if (_listenSrc === 'today') listenSetSrc('all'); } catch (e) {}
+          listenArm();
+          return listenPlayGlobal(gi);
+        },
         listenLeave, listenMiniStop: listenStop,
         listenState, listenCards, listenRoll, listenCardsPref, listenCardsPrefSet, listenStat, listenLast, listenTick, listenFlush, listenSetTickForTest,
         get listenTickMs() { return _listenTick; },   // 测试锁：跨场清零（①②③④）读这根指针

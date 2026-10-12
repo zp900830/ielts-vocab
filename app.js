@@ -119,7 +119,11 @@
     if (lsStop) { TASK.listenStop(); return; }
     // 随身听范围切换（2026-09-28 用户加）：全部文章 ↔ 仅今日任务（循环）
     const lsSrc = e.target.closest('.ls-src');
-    if (lsSrc) { try { TASK.listenSetSrc(TASK.listenSrc === 'today' ? 'all' : 'today'); } catch (err) {} return; }
+    if (lsSrc && !lsSrc.classList.contains('ls-jump')) { try { TASK.listenSetSrc(TASK.listenSrc === 'today' ? 'all' : 'today'); } catch (err) {} return; }
+    // 快速跳转（2026-10-12 用户：随身听一级页支持跳某章某句，与任务模式交互一致 ——
+    // 复用同一个 jumpPop 弹窗；落点在 jumpGo 里按「随身听上下文」分叉）。
+    const lsJump = e.target.closest('.ls-jump');
+    if (lsJump) { try { if (typeof toggleJumpPop === 'function') toggleJumpPop(true); } catch (err) {} return; }
     const lsExp = e.target.closest('.ls-expand, .ls-cover');
     if (lsExp) { TASK.listenExpand(); return; }
     const b = e.target.closest('.nav-item');
@@ -478,6 +482,7 @@
             <button class="ls-stop" type="button" aria-label="停止播放" title="停止（记住当前位置，下次继续）"><i class="ri-stop-fill" aria-hidden="true"></i><span>停止</span></button>
             <button class="ls-next" type="button" aria-label="下一句" title="下一句"><span>下一句</span><i class="ri-play-fill" aria-hidden="true"></i></button>
             <button class="ls-src" type="button" aria-label="随身听范围" title="切换：全部文章 / 仅今日任务（循环）"><i class="ri-calendar-check-line" aria-hidden="true"></i><span>全部</span></button>
+            <button class="ls-src ls-jump" type="button" aria-label="快速跳转" title="跳转到某篇某句（与任务模式同一弹窗）"><i class="ri-navigation-line" aria-hidden="true"></i><span>跳转</span></button>
           </div>
           <input class="ls-seek" type="range" min="1" max="1" value="1" step="1" aria-label="句级位置条">
           <p class="ls-info">—</p>

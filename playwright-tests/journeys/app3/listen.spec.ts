@@ -14,6 +14,10 @@ declare const TASK: {
   listenStat(): { totalSents: number; totalMs: number; byArticle: Record<string, number>; last: Record<string, number> };
   listenLast(a: number): number;
   listenOpen(a: number): void;
+  listenSetSrc(src: 'all' | 'today'): string;
+  listenToggle(): void;
+  setManualStart(gi: number): boolean;
+  openArticle(a: number): void;
   listenExpand(): void;
   listenCollapse(): void;
   listenSeek(local: number): void;
@@ -25,6 +29,10 @@ declare const ShadowPlan: { articleScope(sections: unknown, a: number): Set<numb
 declare const SECTIONS: Array<{ title: string; subheads: string[] }>;
 declare const APP3: { route(): void; articleStat(a: number): { progress: number; lastAt: number; ever: number; total: number }; renderListen?: unknown };
 declare const dataReady: boolean;
+/* 快速跳转（任务模式与随身听共用同一弹窗）：这三个是 index.html 的全局函数 */
+declare const toggleJumpPop: (force?: boolean) => void;
+declare const jumpGo: () => void;
+declare const syncJumpHint: () => void;
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
 
@@ -286,4 +294,54 @@ test.describe('3.0 随身听（M4，PRD §7）', () => {
     await btn.click();
     await expect(page.locator('body')).toHaveClass(/listen-mode/);
   });
+});
+
+/* ============ 2026-10-12 随身听二连（bug 修 + 新功能） ============ */
+
+/** 随身听「仅今日任务」从起点播（2026-10-12 用户 bug：设了起点=第三章第一句，
+    随身听却从第一章第一句播）。根因：currentArticle 被 listenOpen(0) 钉成 0 时，
+    todayPlan 的按篇分支见「起点不在本篇」退化成「整篇从头重刷」→ 队列从篇 1 句 1 起。
+    修复：刷句模式（起点在账）直接取起点窗口（manualRange），与 currentArticle 无关。
+    反向验证：把 listenTodayBuild 的起点分支临时去掉 → 该锁红（会从篇 0 播）。 */
+test('今日任务不跟当前篇跑：起点在篇 2 就从篇 2 播（currentArticle 钉在篇 1 也不许回头）', async ({ page }) => {
+  await stubData(page, TWO);
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitShadowReady(page);
+  await page.evaluate(() => {
+    TASK.resetV2(); TASK.initPlan(15);
+    TASK.setManualStart(4);   // TWO：第二篇（校园与文化）首句 = 全局句号 4
+    TASK.openArticle(0);      // 把 currentArticle 钉在篇 0 —— bug 触发条件（真实路径里由 listenOpen(0) 造成）
+  });
+  await gotoListen(page);
+  await installSpeakStub(page);
+  await page.evaluate(() => { TASK.listenSetSrc('today'); TASK.listenOpen(0); });   // listenOpen(0) 复刻真实钉法
+  await page.evaluate(() => TASK.listenToggle());
+  await expect.poll(() => page.evaluate(() => (TASK.listenState() as { a: number }).a),
+    { message: '起播句应在起点所在篇（篇 1/第二篇），不许回篇 0 从头播' }).toBe(1);
+  const st = await page.evaluate(() => TASK.listenState() as unknown as { idx: number; src: string });
+  expect(st.idx, '从起点句（该篇第 1 句）开始').toBe(0);
+  expect(st.src).toBe('today');
+});
+
+/** 一级页快速跳转（2026-10-12 用户：「随身听一级页面要支持快速跳转到某章某句，
+    与任务模式交互一致」）：复用同一个 jumpPop 弹窗，落点走 TASK.listenJumpTo
+    （跨篇 + 起播 + 切回「全部文章」范围 —— 跳到队列外的句子后不能还挂「今日任务」）。 */
+test('一级页快速跳转：跳篇 2 句 1 起播、范围切回「全部文章」', async ({ page }) => {
+  await stubData(page, TWO);
+  await gotoListen(page);
+  await installSpeakStub(page);
+  await page.locator('.ls-jump').click();
+  await expect(page.locator('#jumpPop')).toBeVisible();
+  await page.evaluate(() => {
+    (document.getElementById('jumpCh') as unknown as { value: string }).value = '1';
+    syncJumpHint();
+    (document.getElementById('jumpN') as unknown as { value: string }).value = '1';
+    jumpGo();
+  });
+  await expect(page.locator('#jumpPop')).toBeHidden();
+  await expect.poll(() => page.evaluate(() => (TASK.listenState() as { a: number }).a)).toBe(1);
+  const st = await page.evaluate(() => TASK.listenState() as unknown as { idx: number; src: string; playing: boolean });
+  expect(st.idx).toBe(0);
+  expect(st.playing, '跳转即起播').toBe(true);
+  expect(st.src, '跳转后范围切回「全部文章」').toBe('all');
 });
