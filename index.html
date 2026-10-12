@@ -2774,7 +2774,16 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   @media (hover: hover) { .ls-stop:hover { background: var(--accent-soft); border-color: var(--accent); } }
   .ls-stop i { font-size: 16px; line-height: 1; }
   .ls-seek { width: 100%; min-height: 32px; margin: 0; accent-color: var(--accent); }
-  .ls-info { margin: 0; font-size: 12px; color: var(--muted); text-align: center; font-variant-numeric: tabular-nums; }
+  /* 信息行（2026-10-12 用户：这块也要快速跳转）：<p> 升格为按钮 —— 视觉仍是一行居中小字，
+     悬停出薄荷底提示可点，尾部小导航图标明示跳转；触区按全站口径用 ::after 外扩到 ≥44
+     （视觉小、热区大，与 touch-targets 的盒子+'::after' 口径一致）。 */
+  .ls-info { display: inline-flex; align-items: center; justify-content: center; gap: 5px; align-self: center;
+    margin: 0; padding: 4px 10px; border: none; border-radius: 999px; background: transparent;
+    font: inherit; font-size: 12px; color: var(--muted); text-align: center; font-variant-numeric: tabular-nums;
+    cursor: pointer; position: relative; transition: background var(--t-fast), color var(--t-fast); }
+  .ls-info i { font-size: 13px; line-height: 1; }
+  .ls-info::after { content: ''; position: absolute; inset: -12px -8px; }
+  @media (hover: hover) { .ls-info:hover { background: var(--accent-soft); color: var(--accent-text); } }
   /* 2026-09-25（refine2 ④）：原来整条 --grad 实心绿大按钮太抢，改成 2.0 那套弱化文字按钮
      （主站 index.html 的 .tr-play：无底无框、accent 字、字重 500）。全宽 + 44 触区是本页尺寸覆写。
      唯一登记过的主按钮配色 #2bd4a4 + 白字不动 —— 这颗改弱化正是远离它。 */
@@ -3473,7 +3482,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       /* 数据缓存版本：必须等于 data/ 三个 JSON 的内容哈希，由 scripts/validate_data.py 校验。
          不写它，iOS Safari 会按 Last-Modified 启发式缓存 —— 课文改了、词表没改，句序与词表就会错位。
          改了数据忘了 bump 会直接让门禁 FAIL，而不是静默服务旧数据。 */
-      const SHADOW_DATA_VER = "dd9ddedab8";
+      const SHADOW_DATA_VER = "2eebbac4cc";
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
@@ -4843,8 +4852,15 @@ let listenOn = false;
     /* 句数一律按**全局**章起点算（segRange 读的是已渲染的 .sent，单篇视图里只覆盖当前章，
        拿它算别的章会得到「第 1–N 句」这种错话）。 */
     const s = computeChapterStart(ai), total = chapterSentCount(ai);
-    document.getElementById('jumpHint').textContent =
-      posOf(ai + 1, SECTIONS.length, '篇') + `共 ${total} 句（全文${posRange(s + 1, s + total)}）`;   /* A1/A2 */
+    let hint = posOf(ai + 1, SECTIONS.length, '篇') + `共 ${total} 句（全文${posRange(s + 1, s + total)}）`;   /* A1/A2 */
+    /* 随身听 + 今日任务范围：落点规则与「全部文章」不同（队列内保持队列定位、队列外自动切范围）——
+       在弹窗里先说清楚，免得跳完发现范围按钮变了对不上（2026-10-12 用户：「要注意选的是
+       全部/今日任务时这里的交互」）。只在随身听上下文 + today 时追加，任务模式/全部范围不加。 */
+    try {
+      if (typeof TASK !== 'undefined' && TASK.listenCtxActive && TASK.listenCtxActive() && TASK.listenSrc === 'today')
+        hint += ' · 今日任务中：跳队列外的句子会自动切到「全部文章」';
+    } catch (e) {}
+    document.getElementById('jumpHint').textContent = hint;
     /* 句号是点选不是打字（D9）。选项带上句首几词 —— 只给序号等于让人盲选，
        本来就没读到过这些句。快速跳转与「今日任务从哪开始」共用这一份。 */
     const sel = document.getElementById('jumpN');
@@ -6286,7 +6302,9 @@ let listenOn = false;
     if (t) { openPop(t); return; }
     if (!_inPath(e, '.pop') && !_inPath(e, 'aside')) closeModal(pop);
     const _jp = document.getElementById('jumpPop');
-    if (_jp && _jp.style.display === 'block' && !_inPath(e, '.jpop') && !_inPath(e, '#abTitle') && !_inPath(e, '.jump-btn')) closeModal(_jp);
+    /* 白名单里是 jumpPop 的**触发键**：弹窗开着时再点它们不许走「点外关闭」再被重开的闪烁
+       （.ls-jump / .ls-info 是随身听的两种入口，2026-10-12 加第二个入口时一起登记）。 */
+    if (_jp && _jp.style.display === 'block' && !_inPath(e, '.jpop') && !_inPath(e, '#abTitle') && !_inPath(e, '.jump-btn') && !_inPath(e, '.ls-jump') && !_inPath(e, '.ls-info')) closeModal(_jp);
     /* 移动端：点遮罩关词库抽屉（panel-open 现在只挂 body 一个宿主） */
     if (window.matchMedia('(max-width: 700px)').matches && document.body.classList.contains('panel-open')) {
     const asideEl = document.getElementById('panel');
@@ -10818,11 +10836,27 @@ let listenOn = false;
         listenExpand, listenCollapse, listenNextArticle, updateListenHud,
         listenSetSrc, get listenSrc() { return _listenSrc; }, listenTodayAdvance,
         /* 快速跳转（jumpGo）的随身听侧接线（2026-10-12）：jumpGo 在 TASK IIFE 外，
-           只能经这两个口进来。跳转即自由听 —— 切回「全部文章」范围，否则跳到队列外的
-           句子后 HUD 还挂着「今日任务 · 循环播放」对不上。 */
+           只能经这两个口进来。落点按范围分发（同轮用户补充：「要注意选的是全部/今日任务
+           时这里的交互」）：
+           ① 全部文章 → 直接跳（保持 all）；
+           ② 今日任务 + 目标句在今日队列内 → 先记队列位置再跳（保持 today 循环语义）；
+           ③ 今日任务 + 目标在队列外 → 先切回「全部文章」再跳（否则 HUD 挂着「今日任务」
+              却播队列外的句子，对不上；弹窗 hint 已提前说明这个行为）。
+           _listenToday 可能还没构建（刷新后 pref=today、没播过）——队列内判定前先补一次 build，
+           不然 ② 会被误判成 ③ 白切范围。 */
         listenCtxActive: function () { return _listenCtx; },
         listenJumpTo: function (gi) {
-          try { if (_listenSrc === 'today') listenSetSrc('all'); } catch (e) {}
+          if (_listenSrc === 'today') {
+            let pp = -1;
+            try { if (!_listenToday.length) listenTodayBuild(); } catch (e) {}
+            try { pp = _listenToday.indexOf(gi); } catch (e) { pp = -1; }
+            if (pp >= 0) {
+              _listenTodayPos = pp;
+              listenArm();
+              return listenPlayGlobal(gi);
+            }
+            try { listenSetSrc('all'); showAbToast('已跳出今日任务 · 范围切回「全部文章」'); } catch (e) {}
+          }
           listenArm();
           return listenPlayGlobal(gi);
         },

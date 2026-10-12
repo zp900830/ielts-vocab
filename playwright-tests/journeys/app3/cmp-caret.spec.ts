@@ -6,6 +6,8 @@
 // 2026-10-10 起图标字体已自托管（不再「一断 CDN 就塌」），这条守卫继续留着：
 // 它锁的是「箭头不许依赖 webfont」本身，与字体从哪来无关。
 import { test, expect } from '../../fixtures';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
 
@@ -143,5 +145,62 @@ test('辨析卡显示清洗：无「n. n.」重复词性、无句号编号与「
   expect(text, '编号数字（1251 / 3）不许上卡面').not.toMatch(/\b1251\b|\b879\b/);
   expect(text, '清洗后正文本体还在').toContain('n. 大气');
   expect(text, 'pos 的括号备注剥掉后保留词性本体').toContain('n. 与 v.');
+});
+
+/* 辨析卡**数据层**清洗（2026-10-12 用户：「对全部的辨析卡进行排查重构优化……全局排查，
+   仔细核对」（内容/结构/排版））。上一轮只在渲染层剥维护语；这一轮把维护语从数据本体
+   （data/vocab.json，220 卡 / 5505 字段）里全量清掉，渲染层那几条从此只是兜底网。
+   锁三类用户真会看到的东西：
+   ① 写卡维护语（卡上/词伙/书证/落点/回列/未打标记/grep…）；
+   ② 编号删除后悬空的助词（（的、，的、的的、连都…）；
+   ③ 结构粘连（（、」「、）」「、、」「（；」）。
+   扫的只有展示字段（title/summary/items 的 pos/sense/core/scene/diff）——
+   eg 是门禁 16 的出处锚、w/p/at 是运行时键，扫进去只会制造假红。
+   裸「档/卡」带排除集：搭档/高档/归档、卡车/卡着/卡得/卡在/卡死 都是合法中文，不算命中。
+   反向验证（2026-10-12 实测）：同一组模式对清洗前原文（work/vocab_backup_2026-10-12.json）
+   命中 11291 处（卡上系 3351、裸卡 3820、本书系 1534、裸档 1068…），对清洗后数据全为 0。
+   「悬空/粘连」两族只在删除管线的中间态出现（本轮修复全程的计数在 work/ 探针里），清洗后同为 0。 */
+test('辨析卡数据层清洗：220 张卡的展示字段里无维护语、无编号悬空残片', () => {
+  const V = JSON.parse(readFileSync(resolve(process.cwd(), '..', 'data', 'vocab.json'), 'utf8')) as
+    Record<string, { cmp?: Record<string, unknown> } | undefined>;
+  const buf: string[] = [];
+  const walk = (o: unknown): void => {
+    if (typeof o === 'string') { buf.push(o); return; }
+    if (Array.isArray(o)) { o.forEach(walk); return; }
+    if (o && typeof o === 'object') { Object.values(o as Record<string, unknown>).forEach(walk); }
+  };
+  let cards = 0;
+  for (const v of Object.values(V)) {
+    const c = v?.cmp;
+    if (!c || typeof c !== 'object') continue;
+    cards += 1;
+    walk([c.title, c.summary, c.diff]);
+    for (const it of ((c.items as Array<Record<string, unknown>> | undefined) ?? [])) {
+      walk([it.pos, it.sense, it.core, it.scene]);
+    }
+  }
+  const blob = buf.join('\n');
+  expect(cards, '辨析卡数量基线：220 张（数据被回滚到旧版时这条会先红）').toBe(220);
+  expect(blob.length, '文本量兜底（防「扫了个空」的假绿）').toBeGreaterThan(200000);
+
+  const violations: string[] = [];
+  const probe = (name: string, re: RegExp): void => {
+    const m = blob.match(re);
+    if (m) violations.push(`${name}×${(blob.match(re) || []).length}（如「${m[0]}」）`);
+  };
+  probe('维护语·卡上系', /卡上|卡词伙|卡有|卡里/);
+  probe('维护语·本书系', /本书|全书|全库|书证/);
+  probe('维护语·术语系', /词伙|落点|栏位|槽位|句框/);
+  probe('维护语·标记系', /未打标记|没打标记|打了标记|已\s*grep|可\s*grep/);
+  probe('维护语·台账系', /硬约束|只报备|不进表|回列|借位|词头卡|同格同架/);
+  probe('裸档（搭档/高档/归档除外）', /(?<!掉)(?<!了)(?<![搭高归])档(?![位次案])/);
+  probe('裸卡（卡片/卡车/卡住…除外）', /(?<!卡)卡(?![片车住着得死在])/);
+  probe('叠字助词', /的的|了了|是是/);
+  probe('连字悬空', /连(?=[都也就])/);
+  probe('括号悬空助词', /（(?:的|了|是)(?=[\u4e00-\u9fa5])/);
+  probe('标点后悬空「的」', /[，、；：]\s*的(?=[\u4e00-\u9fa5])|——\s*的/);
+  probe('结构粘连', /[、，]\s*）|（[、；，]|、、|，，|；；/);
+  probe('「与…同」缺参照', /与\s*同(?=[型源])/);
+  expect(violations, `数据层清洗出现回退（${violations.join('；')}）`).toEqual([]);
 });
 

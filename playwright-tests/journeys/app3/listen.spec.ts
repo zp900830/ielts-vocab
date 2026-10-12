@@ -325,7 +325,7 @@ test('今日任务不跟当前篇跑：起点在篇 2 就从篇 2 播（currentA
 
 /** 一级页快速跳转（2026-10-12 用户：「随身听一级页面要支持快速跳转到某章某句，
     与任务模式交互一致」）：复用同一个 jumpPop 弹窗，落点走 TASK.listenJumpTo
-    （跨篇 + 起播 + 切回「全部文章」范围 —— 跳到队列外的句子后不能还挂「今日任务」）。 */
+    （跨篇 + 起播；范围分发见下一条例子 —— 这条从「全部文章」出发，跳完仍是 all）。 */
 test('一级页快速跳转：跳篇 2 句 1 起播、范围切回「全部文章」', async ({ page }) => {
   await stubData(page, TWO);
   await gotoListen(page);
@@ -344,4 +344,57 @@ test('一级页快速跳转：跳篇 2 句 1 起播、范围切回「全部文�
   expect(st.idx).toBe(0);
   expect(st.playing, '跳转即起播').toBe(true);
   expect(st.src, '跳转后范围切回「全部文章」').toBe('all');
+});
+
+/** 信息行 = 第二个跳转入口 + 范围感知落点（2026-10-12 用户第二轮：「这一块也要加快速跳转，
+    要注意选的是全部/今日任务时这里的交互」）。三层锁：
+    ① 点信息行开同一个 jumpPop；弹窗开着时再点入口不许「关了又开」闪（点外关闭白名单）；
+    ② 今日任务中跳**队列内**的句子 → 保持 today，队列游标定位到目标句；
+    ③ 今日任务中跳**队列外**的句子 → 自动切回「全部文章」（HUD/范围按钮跟着走）。
+    反向验证：把 listenJumpTo 的队列内分支去掉（退回「一律切 all」）→ ② 必须红。 */
+test('信息行跳转：范围感知 —— 今日任务内跳队列保持队列、跳队列外切「全部文章」', async ({ page }) => {
+  await stubData(page, TWO);
+  await gotoListen(page);
+  await installSpeakStub(page);
+
+  // ① 信息行可点 → 同一个 jumpPop；重复点击保持开着（白名单不许闪烁）
+  await page.locator('.ls-info').click();
+  await expect(page.locator('#jumpPop')).toBeVisible();
+  await page.locator('.ls-info').click();
+  await expect(page.locator('#jumpPop'), '再点入口应保持开着（不走点外关闭）').toBeVisible();
+  await page.evaluate(() => toggleJumpPop(false));
+  await expect(page.locator('#jumpPop')).toBeHidden();
+
+  // ② 今日任务：起点=篇 1 首句（全局句号 4）→ TWO 只到句 5，队列 = [4, 5]
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); TASK.setManualStart(4); });
+  await page.evaluate(() => TASK.listenSetSrc('today'));
+  await expect.poll(() => page.evaluate(() => (TASK.listenState() as { src: string }).src)).toBe('today');
+  await page.locator('.ls-info').click();
+  await expect(page.locator('#jumpHint'), '今日任务中弹窗要有落点说明').toContainText('自动切到「全部文章」');
+  await page.evaluate(() => {
+    (document.getElementById('jumpCh') as unknown as { value: string }).value = '1';
+    syncJumpHint();
+    (document.getElementById('jumpN') as unknown as { value: string }).value = '2';
+    jumpGo();
+  });
+  await expect.poll(() => page.evaluate(() => (TASK.listenState() as { a: number }).a)).toBe(1);
+  let st = await page.evaluate(() => TASK.listenState() as unknown as { idx: number; src: string; todayPos: number; playing: boolean });
+  expect(st.idx).toBe(1);
+  expect(st.src, '队列内跳转保持「今日任务」').toBe('today');
+  expect(st.todayPos, '队列游标定位到目标句').toBe(1);
+  expect(st.playing).toBe(true);
+
+  // ③ 队列外：跳篇 0 句 1（全局句号 0，不在 [4,5]）→ 自动切「全部文章」
+  await page.locator('.ls-info').click();
+  await expect(page.locator('#jumpHint')).toContainText('自动切到「全部文章」');
+  await page.evaluate(() => {
+    (document.getElementById('jumpCh') as unknown as { value: string }).value = '0';
+    syncJumpHint();
+    (document.getElementById('jumpN') as unknown as { value: string }).value = '1';
+    jumpGo();
+  });
+  await expect.poll(() => page.evaluate(() => (TASK.listenState() as { src: string }).src)).toBe('all');
+  st = await page.evaluate(() => TASK.listenState() as unknown as { a: number; idx: number });
+  expect(st.a).toBe(0);
+  expect(st.idx).toBe(0);
 });
