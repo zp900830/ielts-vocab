@@ -742,3 +742,46 @@ test('继续学：按今日起点所在篇续读，不再跳第一篇', async ({
     document.querySelector('.today-range-line[data-edge="start"]')?.getAttribute('data-gi'));
   expect(gi, '开始线仍在篇3起点').toBe('14');
 });
+
+/* 跨设备当天一致（2026-10-12 晚报障）：「我换了台电脑任务的开始线又变了 —— 早上读还是在
+   第三章第一句，晚上就变成我上午读到的位置成今天任务的开始句了。」
+   根因：manualStartToday 的跨天重算判据是「lastReadAt > ts（起点设定时刻之后读过的）」，
+   把**今天读的句**也算进了接力；本机靠 resolvedDay 当天冻结看不出来，云端重放
+   （applyDaystartEvents 落账不带 resolvedDay）立刻暴露 —— 重算把今天的起点推到今天读到的位置。
+   修后判据 = 「阅读日键早于今天」：今天读的句不参与接力，两台设备同一天推出同一个数。 */
+test('接力游标：今天读的句不许推今天的开始线；昨天读的仍接力', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  expect(await page.evaluate(() => TASK.setManualStart(14)), '起点：第 3 篇句 1').toBe(true);
+  await page.evaluate(() => {
+    const KEY = 'ielts.shadow.v2';
+    const root = JSON.parse(localStorage.getItem(KEY)!);
+    const now = Date.now();
+    /* 模拟「今天早上在另一台机器设了起点、然后读了两句」：起点 1 小时前设，
+       14 / 15 分别在 30 / 20 分钟前读过（今天、且晚于 ts）；
+       落账形态照云端重放 —— 不带 resolvedDay（所以本机会重算游标）。 */
+    root.plan.manualStart = { gi: 14, day: 'today', ts: now - 3600000 };
+    root.state.sents[14] = { lastReadAt: now - 1800000 };
+    root.state.sents[15] = { lastReadAt: now - 1200000 };
+    localStorage.setItem(KEY, JSON.stringify(root));
+  });
+  await page.reload();
+  await waitAppReady(page);
+  expect((await page.evaluate(() => TASK.startInfo())).gi, '今天读的句不许推今天的起点').toBe(14);
+
+  // 同一份账，把两句的阅读日挪到「昨天」→ 接力照旧生效（今天从第 16 句起）
+  await page.evaluate(() => {
+    const KEY = 'ielts.shadow.v2';
+    const root = JSON.parse(localStorage.getItem(KEY)!);
+    const now = Date.now();
+    root.plan.manualStart = { gi: 14, day: 'yesterday', ts: now - 27 * 3600000 };
+    root.state.sents[14] = { lastReadAt: now - 26 * 3600000 };
+    root.state.sents[15] = { lastReadAt: now - 26 * 3600000 + 60000 };
+    localStorage.setItem(KEY, JSON.stringify(root));
+  });
+  await page.reload();
+  await waitAppReady(page);
+  expect((await page.evaluate(() => TASK.startInfo())).gi, '昨天读的仍接力').toBe(16);
+});

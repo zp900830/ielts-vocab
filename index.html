@@ -9650,10 +9650,19 @@ let listenOn = false;
             let cursor = m.gi;
             try {
               const ss = ROOT2.state.sents || {};
+              const today = day2();
               let far = m.gi - 1;
               for (let i = m.gi; i < len; i++) {
                 const s = ss[i];
-                if (s && (s.lastReadAt || 0) > (m.ts || 0)) far = i;
+                /* 接力只认「今天以前」的阅读（2026-10-12 晚修）：判据原来是
+                   `lastReadAt > ts`（起点设定时刻之后读过的），把**今天读的句**也算进了接力 ——
+                   本机靠 resolvedDay 当天冻结看不出来，但换电脑/云端重放（applyDaystartEvents
+                   落账不带 resolvedDay）会立刻按「今天读到的位置」重算游标：
+                   早上在 A 机从第三章第一句读到第 N 句，晚上在 B 机打开，开始线跑到第 N 句。
+                   改成「阅读日键 < 今天」后，今天读的句不参与接力 ——
+                   两台设备同一天推出同一个数（原设计意图「接触账已云同步」这才真正成立）。 */
+                if (s && (s.lastReadAt || 0) > 0 &&
+                    ShadowPlan.dayKey(s.lastReadAt, bdHour()) < today) far = i;
               }
               cursor = far + 1;
             } catch (e2) {}
