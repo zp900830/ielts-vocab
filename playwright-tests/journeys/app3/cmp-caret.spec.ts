@@ -201,6 +201,55 @@ test('辨析卡正文清洗不许误删：维度标题与 both/core 正文完整
   expect(text, '括号注剥掉后正文本体保留').toContain('又冷又潮');
 });
 
+/* 辨析卡清洗哨兵（2026-10-12 事故后补）：清洗**只许动括号里的注**，不许碰正文。
+   全库口径：220 张卡的每个展示字段，去掉括号后的正文在清洗后一字不掉
+   （修后实测 8099 个字段保留率全部 100%；事故形态是 dim 保留率 0%、both 掉到 ~47%）。
+   用 TASK.cmpCleanForTest 调**真函数** —— 不在测试里复刻正则（复刻迟早与实现漂移）。 */
+test('辨析卡清洗哨兵：全库 220 卡的非括号正文一字不掉', async ({ page }) => {
+  const V = JSON.parse(readFileSync(resolve(process.cwd(), '..', 'data', 'vocab.json'), 'utf8')) as
+    Record<string, { cmp?: Record<string, unknown> } | undefined>;
+  const fields: string[] = [];
+  const push = (v: unknown): void => { if (typeof v === 'string' && v.trim()) fields.push(v); };
+  let cards = 0;
+  for (const v of Object.values(V)) {
+    const c = v?.cmp;
+    if (!c || typeof c !== 'object') continue;
+    cards += 1;
+    push(c.title); push(c.summary);
+    for (const it of ((c.items as Array<Record<string, unknown>> | undefined) ?? [])) {
+      push(it.pos); push(it.sense); push(it.core); push(it.scene);
+    }
+    for (const r of ((c.diff as Array<Record<string, unknown>> | undefined) ?? [])) {
+      push(r.dim); push(r.label); push(r.both);
+      for (const [k, val] of Object.entries(r)) {
+        if (k === 'dim' || k === 'label' || k === 'both') continue;
+        push(val);
+      }
+    }
+  }
+  expect(cards, '辨析卡数量基线').toBe(220);
+  expect(fields.length, '字段量兜底（防「扫了个空」的假绿）').toBeGreaterThan(3000);
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitAppReady(page);
+  const bad = await page.evaluate((list: string[]) => {
+    /* 裸 TASK：页面的 TASK 是全局词法绑定（let/const 顶层），不是 window 属性 ——
+       window.TASK 取不到（2026-10-12 又一次踩到）。 */
+    const T = TASK as unknown as { cmpCleanForTest(s: string): string };
+    const nonParen = (s: string) => s.replace(/[（(][^）)]*[）)]/g, '');
+    const out: string[] = [];
+    for (const s of list) {
+      const base = nonParen(s).trim();
+      if (!base) continue;                       // 整条就是括注的字段：清空是合法的，不参与
+      const c = T.cmpCleanForTest(s);
+      if (!c) { out.push(`正文被清空：「${s.slice(0, 30)}」`); continue; }
+      const rate = c.length / base.length;
+      if (rate < 0.9) out.push(`正文缩水到 ${Math.round(rate * 100)}%：「${s.slice(0, 30)}」`);
+    }
+    return out;
+  }, fields);
+  expect(bad, `清洗碰了正文（只许删括号里的注）：\n${bad.slice(0, 10).join('\n')}`).toEqual([]);
+});
+
 /* 辨析卡**数据层**清洗（2026-10-12 用户：「对全部的辨析卡进行排查重构优化……全局排查，
    仔细核对」（内容/结构/排版））。上一轮只在渲染层剥维护语；这一轮把维护语从数据本体
    （data/vocab.json，220 卡 / 5505 字段）里全量清掉，渲染层那几条从此只是兜底网。
