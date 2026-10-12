@@ -3491,7 +3491,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       /* 数据缓存版本：必须等于 data/ 三个 JSON 的内容哈希，由 scripts/validate_data.py 校验。
          不写它，iOS Safari 会按 Last-Modified 启发式缓存 —— 课文改了、词表没改，句序与词表就会错位。
          改了数据忘了 bump 会直接让门禁 FAIL，而不是静默服务旧数据。 */
-      const SHADOW_DATA_VER = "2eebbac4cc";
+      const SHADOW_DATA_VER = "58df06e811";
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
@@ -3769,7 +3769,13 @@ let listenOn = false;
        规则经全量回放验证：220 张卡 18982 个字段，清洗后「括号含数字」残留 0、无空括号。
        维护提示：改动本组规则后，重跑「清洗回放」（work 里那次 python 回放同款逻辑）抽查。 */
     const CMP_NOTE_KW = /卡上|卡词伙|卡有|卡里|卡同|没有卡|课文|词伙|本书|全书|全库|书证|自查|grep|审核组|同源|未打标记|未标|归组|并入|不另计|另计|硬约束|见组|见边界|边界一节|组\s*\d|章\s*\d|段\s*\d|整段|原样|条例句|证据只有|不进表|不进成员|不计|只报备|原句|同一处|同句|同段|这一句|这半句|那处|另有|即它|即此|就是它|就是这|就是语料|算\s*1\s*条|登记|订正|更正|已\s*grep|都这样|这样用|计数|同属|一栏/;
-    const CMP_NOTE_HEAD = /^\s*(卡|词伙|课文|本书|全库|书证|grep|自查|审核|未打|另计|同源|章\s*\d|段\s*\d|组\s*\d|已\s*grep)/;
+    /* CMP_NOTE_HEAD（「段以维护词开头就整段删」）2026-10-12 晚**停用**：
+       它把「课文」「卡片」这种**内容词**当维护词 —— 「课文里它挂在什么上」（维度标题）、
+       「课文译文自己把 damp 处理成「潮」」（辨析正文）这类句子整段被删。
+       全库回放：命中 466 段，其中 463 以「课文」开头、3 以「卡片上」开头，逐条看全是内容，
+       真维护注 0 条；后果 = 89 张卡的维度标题行变空白行、both 整格消失/截断、
+       core/scene 被清空（用户 2026-10-12 报「占一行面积什么也没有」）。
+       真维护注都在**括号**里（「（卡上例句）」「（课文 474 走 n.）」），由 cmpCleanBracket 处理。 */
     function cmpCleanBracket(inner) {
     if (/^[\s\d]*$/.test(inner)) return '';                                     // （879）
     if (/^\s*\d+\s*[处条个次句点]/.test(inner)) return '';                      // （2 处）
@@ -3794,21 +3800,9 @@ let listenOn = false;
     const r = cmpCleanBracket(inner);
     return r === null ? m0 : r;
     });
-    /* 裸维护句：按句读切分（引号/括号内的标点跳过；「、」也算一个切点 —— 「、（卡上例句 X）」
-       这种跟在顿号后的出处注才切得出来），删「维护语开头」的整段。判开头前先剥前导标点。 */
-    const segs = [];
-    let cur = '', depth = 0;
-    for (const ch of out) {
-    if (ch === '「' || ch === '『' || ch === '（' || ch === '(') depth++;
-    else if (ch === '」' || ch === '』' || ch === '）' || ch === ')') depth = Math.max(0, depth - 1);
-    cur += ch;
-    if (depth === 0 && /[；;。！？!?、.]/.test(ch)) { segs.push(cur); cur = ''; }
-    }
-    if (cur) segs.push(cur);
-    out = segs.filter(seg => {
-    const core = seg.replace(/^[\s；;、，,]+/, '');
-    return !(CMP_NOTE_KW.test(core) && CMP_NOTE_HEAD.test(core));
-    }).join('');
+    /* 这里原来还有一层「裸维护句整段删除」（按句读切分后，段以维护词开头就整段删掉）——
+       2026-10-12 晚整层移除，理由见上面 CMP_NOTE_HEAD 处的注释：466 条命中里 0 条真维护注，
+       全是「课文里…」这种正文句。维护注的清理只保留**括号层**（上面那一步）。 */
     out = out.replace(/（\s*）|\(\s*\)/g, '');
     out = out.replace(/\s{2,}/g, ' ').trim();
     out = out.replace(/[；;]{2,}/g, '；').replace(/^[；;、，,\s]+|[\s；; ，,]+$/g, '');
