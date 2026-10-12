@@ -464,7 +464,9 @@
   .sec h2 { display: inline-block; font-size: 14px; color: #065f46; font-weight: 600;
     letter-spacing: .06em; margin-bottom: 12px; background: var(--accent-soft);
     border-radius: 999px; padding: 4px 14px; }
-  .sec .para { margin-bottom: 6px; font-family: var(--serif); line-height: 2.05; text-align: justify; }
+  /* ① 字距方案 B（2026-10-12 用户选定）：去 justify —— 行内小字块（nowrap、30~200px）会把
+     所在行词距拉到 ~48px（正常 4.7px），越窄越凶；行距放宽给注音留行间；顶部留 13px 给首行注音。 */
+  .sec .para { margin-bottom: 6px; font-family: var(--serif); line-height: 2.35; text-align: left; padding-top: 13px; }
   .sent { border-radius: 6px; padding: 1px 4px; transition: background var(--t-hover); cursor: pointer; }
   @media (hover: hover) { .sent:hover { background: var(--accent-soft); } }
   .sent.playing { background: linear-gradient(transparent 62%, var(--hl) 62%); border-radius: 3px; }
@@ -515,6 +517,13 @@
   body.hide-gl .w { color: var(--text); font-weight: 400;
     border-bottom: none; cursor: pointer; }
   body.hide-gl .notebar, body.hide-gl .nb-group, body.hide-gl .cmp-block { display: none; } /* 隐藏词义时辨析卡片同步隐藏 */
+  /* ① 字距方案 B（2026-10-12 用户选定）：词义注音式——悬在词正上方，不占行宽。
+     .gl 是 .w 的兄弟节点，纯 CSS 定位不到词 → wrapWords 给它们包一层 .wg 定位壳。
+     作用域收在 .sec：#lcMini 随身听字幕窗复用 .gl（保持行内、音标照旧），不受影响。 */
+  .sec .wg { position: relative; }
+  .sec .gl { position: absolute; left: 50%; bottom: calc(100% + 3px); transform: translateX(-50%);
+    margin: 0; font-size: 10.5px; line-height: 1.1; white-space: nowrap; pointer-events: none; }
+  .sec .gl-p { display: none; }   /* 音标不进注音（点词弹层 / 词卡里照旧） */
   /* ============ 底部播放条（Liquid Glass 风格） ============ */
   .audiobar { position: fixed; left: 24px; right: 24px; transform: none;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 120;
@@ -1373,7 +1382,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     :root { --sec-padx: 2px; }   /* 手机档 .sec 左右内边距收窄，横线口径跟着收（见 .today-range-line） */
     .sec { padding: 4px var(--sec-padx, 2px); margin-bottom: 20px; }
     article { font-size: 17.5px; }
-    .sec .para { line-height: 1.85; text-align: left; }
+    .sec .para { line-height: 2.35; text-align: left; }   /* ① 方案B：两档统一行距（注音要行间空间） */
     /* 词库：改为底部抽屉（划上即用，不占正文空间） */
     /* z 220：抽屉在手机档要盖过两条底栏 —— 播放条 120 / 任务条 200。190 那版会输给任务条，
        任务模式下抽屉一开，任务条就画在它上面、压掉抽屉下沿一截（2026-10-10 用户实测报表）。
@@ -3653,19 +3662,20 @@ let listenOn = false;
     return (g.ph ? `<span class="gl-p">${esc(g.ph)}</span> ` : '') + esc(g.m);
     }
     function elContext(el) {
-    // 从已渲染的句子里重建「不含小字」的上下文：兄弟节点里的 .gl 是释义，不能混进来
+    /* ① 字距方案 B 改造（2026-10-12）：.w 被包进 .wg 定位壳后，不再是 .sent 的直接子节点，
+       旧的「扫直接子节点、遇 el 断开」永远断不了 → 上下文取整句，按句选义项全错。
+       改为文本节点遍历：按文档顺序收句文，跳过注音子树（.gl 是释义不是句文）与词自身文本，
+       以 el 的文本为界分 out（词前）/ tail（词后）。 */
     const box = el.closest('.sent') || el.parentNode;
     if (!box) return '';
-    let out = '';
-    for (const n of box.childNodes) {
-      if (n === el) break;
-      if (n.nodeType === 1) { if (n.classList.contains('gl')) continue; out += n.textContent; }
-      else out += n.textContent;
-    }
-    let tail = '';
-    for (let n = el.nextSibling; n; n = n.nextSibling) {
-      if (n.nodeType === 1) { if (n.classList.contains('gl')) continue; tail += n.textContent; }
-      else tail += n.textContent;
+    let out = '', tail = '', after = false;
+    const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
+    let n;
+    while ((n = walker.nextNode())) {
+    const pe = n.parentElement;
+    if (pe && pe.closest('.gl')) continue;                        // 注音文本不是句文
+    if (el === n || el.contains(n)) { after = true; continue; }   // 词自身文本：其后全归 tail
+    if (after) tail += n.textContent; else out += n.textContent;
     }
     return [out, tail];
     }
@@ -3680,6 +3690,48 @@ let listenOn = false;
     gl.style.display = '';
     }
     });
+    scheduleClampGloss();   // ① 方案B：注音内容变了宽度也变，重夹一次（换口音走这里）
+    }
+    /* ① 字距方案 B：注音夹紧（2026-10-12 用户选定）——注音以词为中心展开，行首/行尾词的
+       注音会越出栏口被裁（实测 mantle 被裁左半）。渲染/进阅读/resize/字体就绪后量一次
+       rect，超出段落左右边就往栏内推；非逐帧（只有行边缘样本需要夹）。 */
+    function clampGloss() {
+    document.querySelectorAll('.sec .para').forEach(p => {
+    if (!p.offsetParent) return;                 // 隐藏视图（预渲染区块）不量
+    const pr = p.getBoundingClientRect();
+    if (!pr.width) return;
+    const gls = [...p.querySelectorAll('.wg > .gl')];
+    if (!gls.length) return;
+    gls.forEach(gl => { gl.style.marginLeft = '0px'; });      // 先全部归零（一次脏）
+    const rects = gls.map(gl => gl.getBoundingClientRect());  // 再统一量（一次回流）
+    gls.forEach((gl, i) => {
+    const gr = rects[i];
+    if (!gr.width) return;                       // hide-gl 等不可见态：不夹
+    let minLeft = pr.left + 2;
+    /* AB 角标让位（2026-10-12）：A/B 徽标挂在句子首行左缘（-4px 起、22px 宽），
+       首行词的注音居中展开后左端会伸进徽标区（实测「Spring」样本 14×8px 重叠）。
+       句子带 ab-a/ab-b 时，与徽标「x 相交且 y 在首行注音带」的注音下限抬到
+       徽标右缘 + 4px。标记随时加/去（paintAB 里重跑本函数），去标记后自然归零。 */
+    const sent = gl.closest('.sent');
+    if (sent && (sent.classList.contains('ab-a') || sent.classList.contains('ab-b'))) {
+    const cr = sent.getClientRects();
+    if (cr.length) {
+    const sl = cr[0].left, st = cr[0].top;
+    const badgeR = sl + 18;                    // ::after left:-4 + 宽 22
+    const xHit = gr.right > sl - 4 && gr.left < badgeR;
+    const yHit = gr.bottom > st - 10 && gr.top < st + 7;
+    if (xHit && yHit) minLeft = Math.max(minLeft, badgeR + 4);
+    }
+    }
+    let shift = 0;
+    if (gr.left < minLeft) shift = minLeft - gr.left;
+    else if (gr.right > pr.right - 2) shift = pr.right - 2 - gr.right;
+    if (shift) gl.style.marginLeft = Math.round(shift) + 'px';
+    });
+    });
+    }
+    function scheduleClampGloss() {
+    try { requestAnimationFrame(() => requestAnimationFrame(() => { try { clampGloss(); } catch (e) {} })); } catch (e) {}
     }
     function wrapWords(text) {
     const plain = text.replace(/\[\[([^\]:]+):([^\]]+)\]\]/g, '$2');
@@ -3691,8 +3743,11 @@ let listenOn = false;
     const at = plain.toLowerCase().indexOf(disp.toLowerCase(), walk);
     if (at >= 0) walk = at + disp.length;
     const gh = glossHTML(k, disp, at >= 0 ? plain.slice(0, at) : '', at >= 0 ? plain.slice(at + disp.length) : plain);
-    return `<span class="${cls}" data-w="${esc(k)}" data-disp="${esc(disp)}" tabindex="0" role="button" aria-label="查看单词 ${esc(disp)}">${esc(disp)}</span>` +
-    (gh ? `<span class="gl" aria-hidden="true">${gh}</span>` : '');
+    const word = `<span class="${cls}" data-w="${esc(k)}" data-disp="${esc(disp)}" tabindex="0" role="button" aria-label="查看单词 ${esc(disp)}">${esc(disp)}</span>`;
+    /* ① 方案B：.gl 是 .w 的兄弟，纯 CSS 定位不到词 → 有注音的词包一层 .wg 定位壳。
+       无注音的词不包壳（refreshGloss 旧口径只认「紧跟着 .gl」的兄弟对，别造死壳）。 */
+    if (!gh) return word;
+    return `<span class="wg">${word}<span class="gl" aria-hidden="true">${gh}</span></span>`;
     });
     }
     /* 默认那一行：作者写给"当天背下来"的是「简单记：」那半句，不是整段 summary。
@@ -4010,6 +4065,7 @@ let listenOn = false;
     _paintIdx = -2; _inTextSet = null;
     buildSeek(currentChapter >= 0 ? currentChapter : 0);
     paintAB(); // 正文重建后恢复 A/B 标记
+    scheduleClampGloss(); // ① 方案B：注音夹紧（隐藏视图静默跳过；进阅读/展开随身听还会再跑）
     }
 
     /* ============ 播放条句子圆点 ============ */
@@ -5918,6 +5974,8 @@ let listenOn = false;
     for (let k = a; k <= b && k < sents.length; k++) { if (sents[k]) sents[k].classList.add('ab-in'); }
     updateABRegion(a, b);
     }
+    /* ① 方案B：标记加/去后注音要重新让位（clampGloss 里按 ab-a/ab-b 抬下限）。 */
+    scheduleClampGloss();
     }
     function updateABRegion(a, b) {
     const art = document.getElementById('art');
@@ -5953,10 +6011,24 @@ let listenOn = false;
     }
     if (minLeft === Infinity) return;
     const pad = 6;
+    /* 顶部让位（2026-10-12）：A 句首行词的注音悬在句子上方约 14px，区间框 2px
+       上边框（原 top - 6 起）会横穿注音。首行带注音时顶边抬到注音上方 4px；
+       只认「悬在首行上方」的注音（gr.bottom ≤ 首行 top），第二行的注音天然排除。 */
+    let padTop = pad;
+    const aSent = sents[a];
+    const aLines = aSent ? aSent.getClientRects() : [];
+    if (aLines.length) {
+    aSent.querySelectorAll('.wg > .gl').forEach(gl => {
+    const gr = gl.getBoundingClientRect();
+    if (!gr.width || gr.bottom > aLines[0].top) return;
+    const need = (top - gr.top) + 4;
+    if (need > padTop) padTop = need;
+    });
+    }
     region.style.left = (minLeft - artR.left - pad) + 'px';
-    region.style.top = (top - artR.top - pad) + 'px';
+    region.style.top = (top - artR.top - padTop) + 'px';
     region.style.width = (maxRight - minLeft + pad * 2) + 'px';
-    region.style.height = (bottom - top + pad * 2) + 'px';
+    region.style.height = (bottom - top + pad + padTop) + 'px';
     region.style.display = 'block';
     region.setAttribute('aria-hidden', 'false');
     }
@@ -7521,6 +7593,7 @@ let listenOn = false;
            没起播就不出声 —— 旧「展开即连播」调 playFrom(idx) 会把当前句从头重播、未播时突然
            自动开始，用户报的两条 bug 都出在这。 */
         try { paint(); } catch (e) {}
+        scheduleClampGloss();   // ① 方案B：展开即露出整页正文，注音夹紧跟着补一次
       }
       /* ④ 收起（2026-09-25 用户改口径）：收起**不停止** —— 播放继续、悬浮球在、收听账继续记；
          只有「停止」才收掉上下文。右上角那颗（2026-10-07 从栏左端挪到右端，和单词卡抽屉那颗同一位置）
@@ -8709,6 +8782,7 @@ let listenOn = false;
         idx = -1; _paintIdx = -2;
         render();
         enterTaskMode(opts);
+        scheduleClampGloss(); // ① 方案B：正文这时才露出，夹紧要等显示后再量一次
         /* M3 §6.5：单词本「▶ 播放这句」——进这一篇后直接落到指定全局句并起播。 */
         if (opts && opts.playGlobal != null) {
           const local = globalToLocal(opts.playGlobal);
@@ -11075,8 +11149,10 @@ let listenOn = false;
     let _rzT = false;
     window.addEventListener('resize', () => {
     if (_rzT) return; _rzT = true;
-    requestAnimationFrame(() => { _rzT = false; mobileBtnIcons(); if (abMode === 3) paintAB(); requestNavSync(); });
+    requestAnimationFrame(() => { _rzT = false; mobileBtnIcons(); if (abMode === 3) paintAB(); requestNavSync(); scheduleClampGloss(); });
     });
+    /* ① 方案B：字体晚到会改注音宽度 —— 就绪后补夹一次（漏掉也会被下次 resize 兜住） */
+    try { if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => scheduleClampGloss()); } catch (e) {}
     // 把在跑的 promise 挂出来：boot 的异步回写有地方 await 了（字段说明见 CLOUD.bootDone）。
     // catch 只为了不把手柄变成「rejected promise」交给调用方，报错本身照旧留在控制台可见。
     if (typeof CLOUD !== 'undefined') CLOUD.bootDone = CLOUD.boot().catch((e) => { try { console.warn('CLOUD.boot 失败：', e); } catch (e2) {} });
