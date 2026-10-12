@@ -141,10 +141,64 @@ test('辨析卡显示清洗：无「n. n.」重复词性、无句号编号与「
   const text = await block.evaluate((el) => el.textContent || '');
   expect(text, 'pos+sense 不许重复成「n. n.」').not.toMatch(/n\.\s+n\./);
   expect(text, '句号编号「（879）」不许上卡面').not.toMatch(/[（(]\s*\d{1,4}\s*[）)]/);
-  expect(text, '「卡上」「课文」「本书」等维护注不许上卡面').not.toMatch(/卡上|卡词伙|课文|本书/);
+  /* 「课文」不进靶子：它是卡片正文的常用词（「课文里它挂在什么上」这类维度标题、
+     「课文译文自己把 damp 处理成「潮」」这类辨析句），一律禁它会连正文一起误杀
+     （2026-10-12 回归）。真维护注限定为「卡上系 / 本书系」，以及**括号内**的
+     「（课文 474 走 n.）」「（课文译文）」这类出处注。 */
+  expect(text, '「卡上」「本书」等维护注不许上卡面').not.toMatch(/卡上|卡词伙|本书/);
   expect(text, '编号数字（1251 / 3）不许上卡面').not.toMatch(/\b1251\b|\b879\b/);
   expect(text, '清洗后正文本体还在').toContain('n. 大气');
   expect(text, 'pos 的括号备注剥掉后保留词性本体').toContain('n. 与 v.');
+});
+
+/* 辨析卡正文不许被清洗误删（2026-10-12 用户报「这个空白单元格是何意，占一行面积什么也没有」）：
+   原「整段删除」规则把「课文里…」当写卡维护语 —— 全库回放 466 个被删段里 463 个以「课文」
+   开头、3 个以「卡片上」开头，逐条看全是正文句，真维护注 0 条；后果是 89 张卡的维度标题行
+   变空白行、both 整格消失/截断、core/scene 被清空。这条锁住：维度标题与 both/core 的正文句
+   完整保留，括号里的出处注仍剥。反向验证：把整段删除层加回去，维度标题断言立刻变空串。 */
+test('辨析卡正文清洗不许误删：维度标题与 both/core 正文完整、「（课文译文）」类括号注仍剥', async ({ page }) => {
+  const DATA: Record<string, string> = (() => {
+    const sections = [{
+      title: '衣食住行', zh: '衣食住行', subheads: ['第二卷'],
+      paragraphs: [['A black school [[belt:belt]] needs holes, and a torn [[strap:strap]] hangs loose.', '校服腰带要打洞，撕破的包带垂着。']],
+      sentZh: ['黑色校服腰带需要打洞，撕破的包带垂着。'],
+      paraZh: [''],
+    }];
+    const mkCmp = {
+      type: 'compare', group: 'belt-strap', title: 'belt 是腰带，strap 是带子。',
+      summary: '辨析：belt 束在身上，strap 挂在包上。简单记：belt 要打洞、strap 挂在包上',
+      items: [
+        { w: 'belt', pos: 'n.', sense: 'n. 腰带', core: '课文里唯一那条要打洞的' },
+        { w: 'strap', pos: 'n.', sense: 'n. 带子', core: '包上垂着的那条' },
+      ],
+      diff: [
+        { dim: '课文里它挂在什么上', label: '区别', belt: '束在身上', strap: '包上撕破了就垂着' },
+        { dim: '课文里同场的邻居', label: '区别', both: '课文里"长条"有 6 张卡片；belt、strap 是成品上的一部分' },
+        { dim: '中文各走哪一路', label: '搭配', both: '「又冷又潮」（课文译文）' },
+      ],
+    };
+    const vocab = {
+      belt: { m: 'n. 腰带', p: 'belt', cmp: mkCmp },
+      strap: { m: 'n. 带子', p: 'stræp', cmp: mkCmp },
+    };
+    return { 'sections.json': JSON.stringify(sections), 'vocab.json': JSON.stringify(vocab), 'chapters.json': '[]' };
+  })();
+  await stubData(page, DATA);
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => TASK.resetV2());
+  await page.locator('.art-card').first().click();
+  const block = page.locator('.cmp-block');
+  await expect(block).toBeVisible();
+  const dims = await block.locator('.nb-dim td').allTextContents();
+  expect(dims, '维度标题行必须有文字（误删时这里是空串 = 空白行）').toEqual(
+    ['课文里它挂在什么上', '课文里同场的邻居', '中文各走哪一路']);
+  const text = await block.evaluate((el) => el.textContent || '');
+  expect(text, 'both 格的正文句不许被截断').toContain('6 张卡片');
+  expect(text, 'both 格后半句也要在').toContain('成品上的一部分');
+  expect(text, 'item.core 里的正文句不许被清空').toContain('课文里唯一那条要打洞的');
+  expect(text, '括号里的出处注仍要剥掉').not.toContain('课文译文');
+  expect(text, '括号注剥掉后正文本体保留').toContain('又冷又潮');
 });
 
 /* 辨析卡**数据层**清洗（2026-10-12 用户：「对全部的辨析卡进行排查重构优化……全局排查，
@@ -193,6 +247,10 @@ test('辨析卡数据层清洗：220 张卡的展示字段里无维护语、无�
   probe('维护语·术语系', /词伙|落点|栏位|槽位|句框/);
   probe('维护语·标记系', /未打标记|没打标记|打了标记|已\s*grep|可\s*grep/);
   probe('维护语·台账系', /硬约束|只报备|不进表|回列|借位|词头卡|同格同架/);
+  /* 2026-10-12：原书草稿的「该段原文（章N 段M）」表标题曾被落地器错位当成 summary 内容
+     （belt/dwelling/exterior 三卡的「辨析：…简单记：…」两槽位都填了它）——已补写正确文案，
+     这里立闸防再写回。 */
+  probe('维护语·出处占位', /该段原文/);
   probe('裸档（搭档/高档/归档除外）', /(?<!掉)(?<!了)(?<![搭高归])档(?![位次案])/);
   probe('裸卡（卡片/卡车/卡住…除外）', /(?<!卡)卡(?![片车住着得死在])/);
   probe('叠字助词', /的的|了了|是是/);
