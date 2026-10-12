@@ -24,6 +24,7 @@ declare const TASK: {
   testManualStartLocal(v: { gi: number; day: string; ts: number } | null): unknown;
   events(): { type: string; day?: string; gi?: number; ts?: number }[];
   startInfo(): { manual: boolean; gi: number | null; text: string };
+  resumeArticle(): number;
   openStartPicker(): void;
   openArticle(a: number): void;
   openPanel(): void;
@@ -701,4 +702,43 @@ test('接力到文末：回显「已到全文末尾」，窗口 clamp 不越界'
   expect(si.manual, '接力模式').toBe(true);
   expect(si.gi, 'clamp 到全文最后一句').toBe(21);
   expect(si.text, '回显明说到头了').toContain('已到全文末尾');
+});
+
+/* 「继续学」回今日位置（2026-10-12 用户报障）：起点设在第 3 篇、已从那里读了一部分，
+   重新进网页点「继续学」——横幅与按钮按今日信号走（接力游标所在篇），
+   不能退回「第一篇未通读完」（第 1 篇）的第一句。 */
+test('继续学：按今日起点所在篇续读，不再跳第一篇', async ({ page }) => {
+  await stubData(page, SIX);
+  await page.goto(`${rootUrl}/index.html#/home`);
+  await waitAppReady(page);
+  await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+  await page.reload();
+  await waitAppReady(page);
+
+  // 起点：第 3 篇（衣食住行）句 1 = 全局 14；此刻「第一篇未通读完」的旧口径指向篇 0
+  expect(await page.evaluate(() => TASK.setManualStart(14)), '设起点在篇3').toBe(true);
+
+  // 从这个位置学一部分：进篇 3 读一句
+  await installSpeakStub(page);
+  await page.evaluate(() => TASK.openArticle(2));
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+  await page.locator('#tbNext').click();
+  await fireStaleSpeak(page);
+  expect((await page.evaluate(() => TASK.todayProgress())).done, '篇3读了一句').toBe(1);
+  await page.evaluate(() => TASK.exitTaskMode());
+
+  // 「继续学」的口径 = 今日信号（篇3），不退回 nextArticle()（篇0）
+  expect(await page.evaluate(() => TASK.resumeArticle()), '派生指向篇3').toBe(2);
+  const main = page.locator('#homeBanner .hb-main');
+  await expect(main).toContainText('衣食住行');
+  await expect(main, '不许报第一篇').not.toContainText('地球与生命');
+  await expect(main, '记着刚才读到的位置').toContainText('上次读到第');
+
+  // 点「继续学」→ 落篇 3 上的接力位置，开始线仍在起点
+  await page.locator('#homeBanner .b-go').click();
+  await expect(page.locator('body')).toHaveClass(/task-mode/);
+  expect(await page.evaluate(() => TASK.queue[0].i), '队列在篇3范围').toBeGreaterThanOrEqual(14);
+  const gi = await page.evaluate(() =>
+    document.querySelector('.today-range-line[data-edge="start"]')?.getAttribute('data-gi'));
+  expect(gi, '开始线仍在篇3起点').toBe('14');
 });
