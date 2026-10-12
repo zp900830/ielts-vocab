@@ -8319,6 +8319,27 @@ let listenOn = false;
         }
         return best;
       }
+      /* 「继续学」该回哪一篇（2026-10-12 用户报障：起点设在篇3、已读一部分，重新进网页点
+         「继续学」却去了第一篇第一句）。此前「该去哪一篇」只有一处口径 nextArticle()
+         （第一篇未通读完），不看今日起点也不看今日进度 —— 入口一多就总有一处漏。
+         今日信号优先：① 刷句模式的接力游标所在篇（用户明说「今天从这开始」，todayPlan
+         的按篇队列也从它起算）；② 今天读得最多的篇（跨天首开无接触账时 todayArticle
+         给 -1）。都给不出返回 -1 —— 由外壳退回「第一篇未通读完」的口径（首页横幅与
+         「我的」CTA 共用这一份，别各自去猜）。 */
+      function resumeArticle() {
+        try {
+          const ms = manualStartToday();
+          if (ms && Number.isInteger(ms.gi) && ms.gi >= 0) {
+            const a = artOfSentGlobal(ms.gi);
+            if (a >= 0 && a < SECTIONS.length) return a;
+          }
+        } catch (e) {}
+        try {
+          const a = todayArticle();
+          if (a >= 0) return a;
+        } catch (e) {}
+        return -1;
+      }
 
       function today() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
       function dayIndex() { if (!plan) return 0; const s = new Date(plan.startDate + 'T00:00:00'); const n = new Date(today() + 'T00:00:00'); return Math.max(0, Math.round((n - s) / 864e5)); }
@@ -11022,8 +11043,10 @@ let listenOn = false;
         /* 今天这批句子覆盖多少个目标词（去重）：任务条辅行与今日面板「覆盖 N 个词」同源。 */
         todayCoverWords: () => (todayPlan().words || []).length,
         /* 今天额度是否读满 / 今天在哪一篇上读的：收工闸与数据页「今天」块走这两个出口
-           （原 §4.4 入口 1 的判据，2026-09-24）。 */
-        todayQuotaDone, todayArticle,
+           （原 §4.4 入口 1 的判据，2026-09-24）。
+           resumeArticle（2026-10-12）：首页横幅与「我的」CTA 的「继续学」目标篇 ——
+           今日信号优先（刷句起点所在篇 / 今天读得最多的篇），无信号给 -1 由外壳兜底。 */
+        todayQuotaDone, todayArticle, resumeArticle,
         /* 今天这一篇排到的句数 / 已读句数（2026-09-26 卡片「今天 N/M 句」那一行的唯一出口）：
            口径 = 今天的全局装配队列里属于这一篇的项，done 只数今天读过的（readToday2）。 */
         todayOfArticle: function (a) {

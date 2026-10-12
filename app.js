@@ -1046,6 +1046,17 @@
     for (let a = 0; a < SECTIONS.length; a++) { const x = articleStat(a); if (x.ever < x.total) return a; }
     return -1;
   }
+  /* 「继续学」该去哪一篇（2026-10-12 用户报障修复）：优先今日信号 —— 刷句模式起点所在篇 /
+     今天读得最多的篇（TASK.resumeArticle）；没有今日信号才退回「第一篇未通读完」。
+     六篇全完（nextArticle() = -1）维持「去词本」的旧口径，今日信号不抢先（W5-7 的锁）。
+     首页横幅与「我的」CTA 都走这一份 —— 别再各自 nextArticle()（入口各算各的正是
+     「起点在篇3却跳篇1」这类报障的根源）。 */
+  function resumeTarget() {
+    const na = nextArticle();
+    if (na < 0) return -1;
+    const a = (typeof TASK !== 'undefined' && TASK.resumeArticle) ? TASK.resumeArticle() : -1;
+    return a >= 0 ? a : na;
+  }
   function openSetup() {
     if (typeof TASK === 'undefined' || !TASK.openPanel) return;
     TASK.openPanel();          // 没计划时 openPanel() 渲的就是 v2.0 设置屏（renderSetup 进 #todayPanel）
@@ -1074,7 +1085,9 @@
          改由首页横幅承接（与任务条辅行、数据页「今天」块同源：TASK.todayProgress / todayCoverWords）。 */
       const tp = (typeof TASK !== 'undefined' && TASK.todayProgress) ? TASK.todayProgress() : null;
       const cover = (typeof TASK !== 'undefined' && TASK.todayCoverWords) ? TASK.todayCoverWords() : 0;
-      const nextA0 = nextArticle();
+      /* 2026-10-12 起「继续学」的目标篇 = resumeTarget()（今日信号优先，见其注释）：
+         旧口径直接用 nextArticle()（第一篇未通读完），起点设在篇3也会跳篇1。 */
+      const nextA0 = resumeTarget();
       /* 上次学习位置（2026-09-26 用户：记住的学习位置要在首页顶部的卡片里显示）：
          存档位置属于「继续学」的那一篇时，主行报「上次读到第 X 句」，今天还剩句数并入辅行。 */
       const lastPos = (nextA0 >= 0 && typeof TASK !== 'undefined' && TASK.savedPosForArticle)
@@ -1084,7 +1097,7 @@
       sum = (s.streak > 0 ? `连续 ${s.streak} 天` : '今天开始') +
             (lastPos >= 0 ? ` · 今天还剩 ${leftToday} 句` : '') +
             ` · 今天覆盖 ${cover} 词 · 累计过完 ${s.passed} / ${s.targetWords} 词`;
-      const nextA = nextArticle();
+      const nextA = nextA0;   // 同一份目标篇（2026-10-12 合并：原来这里又调了一次 nextArticle()）
       if (s.planned > 0 && s.done >= s.planned) {
         const extra = s.done - s.planned;
         main = extra > 0 ? `今天的量读完了 · 多读了 ${extra} 句` : '今天的量读完了';
@@ -1113,7 +1126,10 @@
     el.querySelector('.b-go').onclick = () => {
       if (!hasPlan) return openSetup();
       if (goWords) { location.hash = '#/words'; return; }
-      if (window.APP3.openArticle) return window.APP3.openArticle(nextArticle());
+      /* 点击时现算目标篇（与渲染文案同一口径 resumeTarget()；旧代码这里也是现算）。
+         注意不能引用 else 块里的 nextA —— 那个 const 出了块就没了。
+         t < 0 的兜底与「我的」CTA 同款（六篇全完 + 今天的量已读完的边角）。 */
+      if (window.APP3.openArticle) { const t = resumeTarget(); return window.APP3.openArticle(t >= 0 ? t : 0); }
       if (typeof TASK !== 'undefined' && TASK.enterTaskMode) TASK.enterTaskMode();
     };
   }
@@ -1176,7 +1192,7 @@
     const days = state && state.daily ? Object.keys(state.daily).length : 0;
     const cfg = (typeof TASK !== 'undefined' && TASK.planConfig) ? TASK.planConfig() : null;
     const hasPlan = !!(typeof TASK !== 'undefined' && TASK.hasPlan);
-    const a = nextArticle();
+    const a = resumeTarget();   // 与首页横幅同一份「继续学」口径（2026-10-12）
     const focus = a >= 0 ? a : 0;
     const title = SECTIONS[focus] ? SECTIONS[focus].title : '';
     const planDay = cfg && cfg.startDate ? Math.floor((Date.now() - Date.parse(cfg.startDate)) / 864e5) + 1 : 1;
@@ -1446,7 +1462,7 @@
       e.stopPropagation();
       if (t.hasAttribute('data-me-cta')) {
         meDepart();
-        if (typeof TASK !== 'undefined' && TASK.hasPlan) { const n = nextArticle(); openArticle(n >= 0 ? n : 0); }
+        if (typeof TASK !== 'undefined' && TASK.hasPlan) { const n = resumeTarget(); openArticle(n >= 0 ? n : 0); }
         else openSetup();
       } else if (t.hasAttribute('data-me-theme')) {
         /* 就地翻拨杆，不重渲宿主：页面宿主重渲会把滚动位置甩回顶部、焦点一起丢
