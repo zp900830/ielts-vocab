@@ -10557,7 +10557,8 @@ let listenOn = false;
         if (_view === 'plan') {
           /* 监听也挂在这里：renderPlanView 只管拼字符串，重绘路径由本函数统一收尾，
              否则面板重开一次就多绑一份、松手落账会被 call 两遍。 */
-          bindMinSlider(p, { onInput: paintPlanEta, onCommit: setMinutes });
+          /* 拖动预览走 etaDragSoon 合并（drag=true）：连续滑动只算最后一档；change 落账后按新值立刻定稿。 */
+          bindMinSlider(p, { onInput: (m) => paintPlanEta(m, true), onCommit: setMinutes });
           paintPlanEta();
         } else if (_view === 'today') paintTodayEta();
       }
