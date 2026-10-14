@@ -105,7 +105,7 @@
     const wrow = e.target.closest('.wb-row');
     if (wrow) { toggleWordRow(wrow); return; }
     const wm = e.target.closest('.wb-more');
-    if (wm) { _wordsShown += W_BATCH; window.APP3.route(); return; }
+    if (wm) { appendWordsBatch(wm); return; }
     // 随身听卡片（M4，每次重渲的节点，走事件代理）
     // 2026-09-25：◀/▶ 改为句级（listenSentenceStep，与文章内 ←/→、播放条同一套 step 语义）；
     // ③ 未展开态移除 循环/AB/倍速/书签（只在展开态的全功能播放条里提供）；② 新增停止。
@@ -952,6 +952,20 @@
       ${more}
       <p class="wb-hint">这里不是背单词的入口，是查「我到底会没会」的地方。</p>
     </div>`;
+  }
+  /* 2026-10-15 性能：「加载更多」只追加新一批。原来走 window.APP3.route() 整页重渲 ——
+     每点一次都把已渲染的几百行重新 map 一遍（O(n²)，点到最后一次要重建 3000+ 行）。
+     行点击本来就是 document 级代理（.wb-row），追加不会丢事件；顺带不再把滚动甩回顶部。 */
+  function appendWordsBatch(btn) {
+    const listEl = document.querySelector('.words-page .wb-list');
+    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    const all = wordIndexOrder();
+    const prev = Math.min(_wordsShown, all.length);
+    _wordsShown = Math.min(_wordsShown + W_BATCH, all.length);
+    if (listEl) listEl.insertAdjacentHTML('beforeend', all.slice(prev, _wordsShown).map((w) => rowHtml(w, st)).join(''));
+    const left = all.length - _wordsShown;
+    if (left > 0) btn.textContent = `加载更多（还剩 ${left} 个）`;
+    else btn.remove();
   }
   window.APP3 = Object.assign(window.APP3, { renderWords });
 

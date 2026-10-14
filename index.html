@@ -3943,7 +3943,11 @@ let listenOn = false;
     /* 一张辨析表只挂一个段落末尾。锚点优先用卡片自带的 at=[章,段]（落地器从草稿的「主锚点」写进来），
        没有就退回「第一个 ≥2 个成员同时被标出的段」。只出现一个成员的段不挂 —— 一组近义词散在三个段里
        时，挂三遍等于把一张表复制三遍；挂一遍但那一处只有半个词，等于指错东西。 */
+    /* 2026-10-15 性能：纯静态派生的记忆化 —— 只读 SECTIONS 段落与 VOCAB 辨析卡，装载后不再变。
+       原来每次 render() 都全库重扫（1833 句正则 + 3245 词条遍历 + 220 卡组内匹配）。 */
+    let _cmpIdxCache = null, _cmpIdxForS = null, _cmpIdxForV = null;
     function cmpIndex() {
+      if (_cmpIdxCache && _cmpIdxForS === SECTIONS && _cmpIdxForV === VOCAB) return _cmpIdxCache;
       const marks = [];
       const re = /\[\[([^\]:]+):([^\]]+)\]\]/g;
       SECTIONS.forEach((s, ci) => (s.paragraphs || []).forEach((p, pi) => {
@@ -3972,6 +3976,7 @@ let listenOn = false;
         (idx[key] = idx[key] || []).push({ note, at: hit.at });
       }
       for (const key in idx) idx[key].sort((a, b) => a.at - b.at);   // 同段多张：按撞上的那句先后排
+      _cmpIdxForS = SECTIONS; _cmpIdxForV = VOCAB; _cmpIdxCache = idx;
       return idx;
     }
     function compareAt(idx, ci, pi) {
@@ -4117,7 +4122,7 @@ let listenOn = false;
       const mapIdx = (currentChapter >= 0) ? currentChapter : ai;
       sec.querySelectorAll('.sent').forEach(() => artOfSent.push(mapIdx));
     });
-    _paintIdx = -2; _inTextSet = null;
+    _paintIdx = -2;   // 词库的「不在本篇」集合（_inTextSet）不再在这里清：改为按篇身份自校验（见 renderList）
     buildSeek(currentChapter >= 0 ? currentChapter : 0);
     paintAB(); // 正文重建后恢复 A/B 标记
     scheduleClampGloss(); // ① 方案B：注音夹紧（隐藏视图静默跳过；进阅读/展开随身听还会再跑）
@@ -6549,7 +6554,7 @@ let listenOn = false;
     else if (mq.addListener) mq.addListener(release);
     })();
     const escAttr = s => s.replace(/&/g,'&amp;').replace(/'/g, "&#39;").replace(/"/g, '&quot;');
-    let _inTextSet = null, _vocabCount = 0, _rlT = null;
+    let _inTextSet = null, _inTextSetK = '', _inTextSetSrc = null, _vocabCount = 0, _rlT = null;
     function queueRenderList() { // 搜索防抖：每击键全量重建 3219 卡片太重，150ms 合并一次
     clearTimeout(_rlT);
     _rlT = setTimeout(renderList, 150);
@@ -6579,7 +6584,13 @@ let listenOn = false;
     function renderList() {
     const q = document.getElementById('q').value.trim().toLowerCase();
     const list = document.getElementById('vlist');
-    if (!_inTextSet) _inTextSet = new Set([...document.querySelectorAll('.w')].map(el => el.dataset.w));
+    /* 2026-10-15 性能：按「渲染了哪一篇 + 数据身份」自校验 —— 原来 render() 每次重建都置 null，
+       哪怕只是同篇重渲，打开词库也要把全库 .w 重扫一遍（全篇模式几千个）。 */
+    const _itsK = currentChapter + '#' + (SECTIONS === _inTextSetSrc ? '1' : '0');
+    if (!_inTextSet || _inTextSetK !== _itsK) {
+    _inTextSet = new Set([...document.querySelectorAll('.w')].map(el => el.dataset.w));
+    _inTextSetK = _itsK; _inTextSetSrc = SECTIONS;
+    }
     const inTextSet = _inTextSet;
     let html = '', cnt = 0, shown = 0;
     const seen = new Set();
@@ -11108,19 +11119,8 @@ let listenOn = false;
         openStartPicker, closeStartPicker, confirmStartPicker, startConfirmBack, startConfirmYes, syncStartSent,
         /* 真实用时账出口（2026-09-25 链路排查）：数据页「累计学习时长」按天读真实毫秒。 */
         readMsByDay: function () { return loadArticleStats().read.ms; },
-        /* 今天这一篇排到多少句 / 读过几句（2026-09-26 用户：卡片除了文章进度，必须显示今天任务进度）。
-           走今天的装配队列（home 上 currentArticle 为 null → 全局队列），按篇过滤。 */
-        todayOfArticle: function (a) {
-          try {
-            let planned = 0, done = 0;
-            todayPlan().queue.forEach(function (q) {
-              if (artOfSentGlobal(q.i) !== a) return;
-              planned++;
-              if (readToday2(q.i)) done++;
-            });
-            return { planned: planned, done: done };
-          } catch (e) { return { planned: 0, done: 0 }; }
-        },
+        /* （原处有一份同名的旧版 todayOfArticle，被下方同名键静默覆盖、从未生效；
+           2026-10-15 性能修复时一并删除 —— 功能以文件后面那份为准。） */
         /* 上次学习位置（2026-09-26）：首页横幅要显示「上次读到第 X 句」——
            见 enterTaskMode 的恢复逻辑（存档位置属于这一篇就落回去）。 */
         savedPosForArticle: function (a) {
@@ -11160,12 +11160,16 @@ let listenOn = false;
           try {
             if (!ROOT2 || !ROOT2.plan || a == null) return { planned: 0, done: 0 };
             const saved = currentArticle;
-            currentArticle = null; _cachedPlan = null;        // 取「今天整批」再按篇筛
-            const q = todayPlan().queue.filter(function (x) { return artOfSentGlobal(x.i) === a; });
-            currentArticle = saved; _cachedPlan = null;
-            let done = 0;
-            q.forEach(function (x) { if (readToday2(x.i)) done++; });
-            return { planned: q.length, done: done };
+            currentArticle = null;                          // 取「今天整批」再按篇筛
+            const q = todayPlan().queue;
+            currentArticle = saved;
+            /* 2026-10-15 性能：原来这里前后各清一次 _cachedPlan —— 每次调用都强制全量装配，
+               首页六张卡就是六次、数据页十几处更多。现在不清：留住「今天整批」的装配缓存，
+               下一次按缓存键（日 / 篇 / 手动范围）直接命中；真失效由 push2 / setMinutes 等
+               变化点清 _cachedPlan，下一次进来自然重装（与今日面板/任务条同一套失效纪律）。 */
+            let done = 0, planned = 0;
+            q.forEach(function (x) { if (artOfSentGlobal(x.i) !== a) return; planned++; if (readToday2(x.i)) done++; });
+            return { planned: planned, done: done };
           } catch (e) { return { planned: 0, done: 0 }; }
         },
         // 事件流「安全合并」的对照实验：先冻住派生状态 → 合并 → 重放 → 再比。
