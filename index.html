@@ -3694,8 +3694,14 @@ let listenOn = false;
     }
     /* ① 字距方案 B：注音夹紧（2026-10-12 用户选定）——注音以词为中心展开，行首/行尾词的
        注音会越出栏口被裁（实测 mantle 被裁左半）。渲染/进阅读/resize/字体就绪后量一次
-       rect，超出段落左右边就往栏内推；非逐帧（只有行边缘样本需要夹）。 */
+       rect，超出段落左右边就往栏内推；非逐帧（只有行边缘样本需要夹）。
+       ② 相邻注音互撞消解（2026-10-15 用户报「目标词翻译文字重叠」）：两条注音各自居中
+       悬在词上，词挨得近就压字（clay×artifact 实测同排交叠 27px；全篇 900px 档 27 对、
+       640px 档 30 对，最大 50px）。同一条正文行的注音带按「最小净空 GAP」做左右双向
+       松弛（L→R 推、R→L 顶到栏口时反向内收、迭代至稳定）：整条带装得下就零重叠；
+       锚点（最左一条）尽量保持居中，被迫位移的只有它的右邻们。 */
     function clampGloss() {
+    const GAP = 4;                    // 注音间最小净空（与 AB 徽标让位同口径）
     document.querySelectorAll('.sec .para').forEach(p => {
     if (!p.offsetParent) return;                 // 隐藏视图（预渲染区块）不量
     const pr = p.getBoundingClientRect();
@@ -3703,9 +3709,9 @@ let listenOn = false;
     const gls = [...p.querySelectorAll('.wg > .gl')];
     if (!gls.length) return;
     gls.forEach(gl => { gl.style.marginLeft = '0px'; });      // 先全部归零（一次脏）
-    const rects = gls.map(gl => gl.getBoundingClientRect());  // 再统一量（一次回流）
-    gls.forEach((gl, i) => {
-    const gr = rects[i];
+    const rows = [];
+    gls.forEach(gl => {
+    const gr = gl.getBoundingClientRect();       // 再统一量（一次回流）
     if (!gr.width) return;                       // hide-gl 等不可见态：不夹
     let minLeft = pr.left + 2;
     /* AB 角标让位（2026-10-12）：A/B 徽标挂在句子首行左缘（-4px 起、22px 宽），
@@ -3723,11 +3729,46 @@ let listenOn = false;
     if (xHit && yHit) minLeft = Math.max(minLeft, badgeR + 4);
     }
     }
-    let shift = 0;
-    if (gr.left < minLeft) shift = minLeft - gr.left;
-    else if (gr.right > pr.right - 2) shift = pr.right - 2 - gr.right;
-    if (shift) gl.style.marginLeft = Math.round(shift) + 'px';
+    const maxLeft = pr.right - 2 - gr.width;     // 右栏上限（clamp 前先算，保不出栏）
+    rows.push({ el: gl, w: gr.width, t: Math.round(gr.top), d: gr.left,
+    p: Math.min(Math.max(gr.left, minLeft), maxLeft), lo: minLeft, hi: pr.right - 2 });
     });
+    if (!rows.length) return;
+    // 同一条正文行的注音分带（同一行盒 top 相同；容差 6px 只作保险）
+    const bands = [];
+    for (const r of [...rows].sort((a, b) => a.t - b.t || a.d - b.d)) {
+    const band = bands.find(bd => Math.abs(bd.t - r.t) <= 6);
+    if (band) band.items.push(r); else bands.push({ t: r.t, items: [r] });
+    }
+    for (const bd of bands) {
+    const it = bd.items, k = it.length;
+    if (k > 1) {
+    for (let iter = 0; iter < 6; iter++) {       // 松弛推-拉，实测 ≤3 轮收敛
+    let moved = false;
+    for (let i = 0; i < k; i++) {
+    const lb = Math.max(it[i].lo, i ? it[i - 1].p + it[i - 1].w + GAP : -1e9);
+    if (it[i].p < lb - 0.01) { it[i].p = lb; moved = true; }
+    }
+    if (it[k - 1].p + it[k - 1].w > it[k - 1].hi + 0.01) { it[k - 1].p = it[k - 1].hi - it[k - 1].w; moved = true; }
+    for (let i = k - 2; i >= 0; i--) {
+    const ub = it[i + 1].p - GAP - it[i].w;      // 右端顶栏口 → 整条带向左内收
+    if (it[i].p > ub + 0.01) { it[i].p = ub; moved = true; }
+    }
+    if (!moved) break;
+    }
+    for (let i = 0; i < k; i++) {                // 末轮保界：优先不出栏，间隙差半像素可接受
+    const lb = Math.max(it[i].lo, i ? it[i - 1].p + it[i - 1].w + GAP : -1e9);
+    if (it[i].p < lb - 0.01) it[i].p = lb;
+    }
+    if (it[k - 1].p + it[k - 1].w > it[k - 1].hi + 0.01) it[k - 1].p = it[k - 1].hi - it[k - 1].w;
+    }
+    it.forEach(r => {
+    const ml = r.p - r.d;                        // 亚像素写入：不再 round——round 会把
+    if (Math.abs(ml) > 0.02) {                   // GAP/徽标净空向下取整掉 0.5px（4→3 实测踩过）
+    r.el.style.marginLeft = (Math.round(ml * 100) / 100) + 'px';
+    }
+    });
+    }
     });
     }
     function scheduleClampGloss() {

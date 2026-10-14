@@ -156,28 +156,37 @@ test.describe('字距方案 B · 注音式（只词义）', () => {
     await expect(gl).toBeVisible();
   });
 
-  test('手机档（390px）：注音不出栏（每个注音都被夹在所在段落的左右边内）', async ({ page }) => {
+  test('手机档（390px）：注音不出栏、且互不压字', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await enterArticle(page);
 
-    // 夹紧是渲染后的异步补夹（双 rAF），poll 到「无越界」为止再定稿
+    // 夹紧是渲染后的异步补夹（双 rAF），poll 到「无越界、且注音互不压字」为止再定稿
     await expect
       .poll(
         async () =>
           page.evaluate(() => {
             const paras = [...document.querySelectorAll('.sec .para')].filter((p) => (p as HTMLElement).offsetParent);
             let bad = 0;
+            let pairs = 0;
             for (const p of paras) {
               const pr = p.getBoundingClientRect();
-              for (const g of p.querySelectorAll('.wg > .gl')) {
-                const gr = g.getBoundingClientRect();
-                if (!gr.width) continue;
+              const rects = [...p.querySelectorAll('.wg > .gl')]
+                .map((g) => g.getBoundingClientRect())
+                .filter((q) => q.width > 0);
+              for (const gr of rects) {
                 if (gr.left < pr.left - 1 || gr.right > pr.right + 1) bad++;
               }
+              // 相邻注音碰撞（2026-10-15 消解）：同排 x/y 双相交即为压字
+              for (let i = 0; i < rects.length; i++)
+                for (let j = i + 1; j < rects.length; j++) {
+                  const x = Math.min(rects[i].right, rects[j].right) - Math.max(rects[i].left, rects[j].left);
+                  const y = Math.min(rects[i].bottom, rects[j].bottom) - Math.max(rects[i].top, rects[j].top);
+                  if (x > 0.5 && y > 0.5) pairs++;
+                }
             }
-            return bad;
+            return bad + pairs;
           }),
-        { message: '手机档注音必须被夹在段落栏内', timeout: 10000 },
+        { message: '手机档注音必须被夹在段落栏内，且任何两条注音不得互相压字', timeout: 10000 },
       )
       .toBe(0);
 
@@ -185,6 +194,75 @@ test.describe('字距方案 B · 注音式（只词义）', () => {
       () => document.querySelectorAll('.sec .para .wg > .gl').length,
     );
     expect(total, '手机档同样要有注音样本').toBeGreaterThan(0);
+  });
+
+  /* ② 相邻注音互撞消解（2026-10-15 用户报「目标词翻译文字重叠」）：
+     两条注音各自居中悬在词上，词挨得近就压字——用户截图样本 clay×artifact 实测同排
+     交叠 27px（900px 档全篇 27 对、390px 档 25 对，最大 50px）。修法：clampGloss 对同
+     一条正文行的注音带按「最小净空 4px」做左右双向松弛（L→R 推、R→L 顶栏口反向内收、
+     迭代至稳定，末端保界）。
+     反向验证：注释掉 clampGloss 的松弛段（只留单条夹紧）→ 本用例首断言即红
+     （基线 27 对；clay×artifact gap = −27px 压字）。 */
+  test('相邻注音互不压字：900px 全篇 0 对交叠，clay×artifact 净空 ≥3px', async ({ page }) => {
+    await page.setViewportSize({ width: 900, height: 1100 });
+    // 指定进「衣食住行」篇（clay/artifact 样本在这篇；默认第一篇不含该样本，会变成空断言）
+    await page.goto(`${rootUrl}/index.html#/home`);
+    await waitShadowReady(page);
+    await page.evaluate(() => { TASK.resetV2(); TASK.initPlan(15); });
+    await page.reload();
+    await waitShadowReady(page);
+    const cards = page.locator('.art-card');
+    const n = await cards.count();
+    let clicked = false;
+    for (let i = 0; i < n; i++) {
+      const t = (await cards.nth(i).textContent()) || '';
+      if (t.includes('衣食住行')) { await cards.nth(i).click(); clicked = true; break; }
+    }
+    if (!clicked) await cards.first().click();
+    await expect(page.locator('body')).toHaveClass(/task-mode/);
+    await expect(page.locator('.sec .para').first()).toBeVisible();
+    await page.evaluate(() => (document.fonts && document.fonts.ready ? document.fonts.ready.then(() => true) : true));
+    await page.waitForTimeout(300);   // 首轮夹紧（双 rAF）落定
+
+    const r = await page.evaluate(() => {
+      const visParas = [...document.querySelectorAll('.sec .para')].filter((p) => (p as HTMLElement).offsetParent);
+      let overlap = 0;
+      let worst = 0;
+      let total = 0;
+      for (const p of visParas) {
+        const gls = [...p.querySelectorAll('.wg > .gl')]
+          .map((el) => (el as HTMLElement).getBoundingClientRect())
+          .filter((q) => q.width > 0);
+        total += gls.length;
+        for (let i = 0; i < gls.length; i++) {
+          for (let j = i + 1; j < gls.length; j++) {
+            const x = Math.min(gls[i].right, gls[j].right) - Math.max(gls[i].left, gls[j].left);
+            const y = Math.min(gls[i].bottom, gls[j].bottom) - Math.max(gls[i].top, gls[j].top);
+            if (x > 0.5 && y > 0.5) {
+              overlap++;
+              if (x > worst) worst = x;
+            }
+          }
+        }
+      }
+      // 用户报障样本：clay × artifact（同一句、紧邻的两个目标词）
+      const clay = [...document.querySelectorAll('.sec .para .w')].find((x) => (x as HTMLElement).dataset.disp === 'clay');
+      const art = [...document.querySelectorAll('.sec .para .w')].find((x) => (x as HTMLElement).dataset.disp === 'artifact');
+      let gap: number | null = null;
+      let texts = '';
+      if (clay && art) {
+        const g1 = clay.closest('.wg')!.querySelector('.gl')!.getBoundingClientRect();
+        const g2 = art.closest('.wg')!.querySelector('.gl')!.getBoundingClientRect();
+        gap = Math.round((g2.left - g1.right) * 10) / 10;
+        texts = `${clay.closest('.wg')!.querySelector('.gl')!.textContent} / ${art.closest('.wg')!.querySelector('.gl')!.textContent}`;
+      }
+      return { overlap, worst: Math.round(worst), total, gap, texts };
+    });
+
+    expect(r.total, '要有足量注音样本').toBeGreaterThan(300);
+    expect(r.overlap, `全篇注音交叠对数应为 0（最狠一对 ${r.worst}px）`).toBe(0);
+    expect(r.gap, `该篇应含 clay/artifact 两个目标词（篇目选择或数据变了？样本 ${r.texts}）`).not.toBeNull();
+    expect(r.gap!, `clay×artifact 相邻注音净空应 ≥3px（基线 −27px 压字；实测 ${r.gap}px）`).toBeGreaterThanOrEqual(3);
   });
 
   /* AB 交互面 × 注音（2026-10-12 复盘补）：
