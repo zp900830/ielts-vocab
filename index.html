@@ -7881,9 +7881,10 @@ let listenOn = false;
         }
         return out;
       }
-      function push2(ev) {
-        ev.id = ShadowPlan.eventId(ev);
-        ROOT2.events.push(ev);
+      /* 2026-10-15 性能：批量记账 —— append / 压缩 / 重放 / 落盘 / 上传排程句级只做一次。
+         逐词版 6000 条日志时一句 3 词 ≈ 41ms、20000 条 ≈ 96ms，全是主线程上的全量 replay + stringify。 */
+      function push2Many(evs) {
+        for (const ev of evs) { ev.id = ShadowPlan.eventId(ev); ROOT2.events.push(ev); }
         if (ROOT2.events.length > EVENTS_CAP) {
           const before = ROOT2.events.length;
           let next = compactEvents(ROOT2.events);
@@ -7896,8 +7897,9 @@ let listenOn = false;
         }
         recompute2(); _cachedPlan = null; persist2();
         queueEventUpload();
-        return ev;
       }
+      /* 单条版的薄壳（dayplan / relearn / daystart 仍走这里）。 */
+      function push2(ev) { push2Many([ev]); return ev; }
 
       /* ---------- 事件流上云：只传事实，计划不上传（PRD §12） ----------
          没有 update、没有合并策略：拉回来重放，靠 event_id 去重，天然幂等。
@@ -8232,13 +8234,12 @@ let listenOn = false;
         if (!ROOT2 || !ROOT2.plan) return;
         const day = ShadowPlan.dayKey(Date.now(), bdHour());
         const now = Date.now();
-        wordsOfSent(i).forEach(w => {
-          /* 毕业词以前在这里被挡掉（`stage === 'graduated'` 就 return）。那一刀是
-             "毕业 = 永不再见"的另一半：引擎把到期的毕业词排回队列了，可读到的时候不记账，
-             due 就永远不顺延，同一句会被天天重排、保温配额全浪费在它身上。
-             现在照记 —— 引擎里 reps 续加、due 顺延 14 天。 */
-          push2(ShadowPlan.mkContact(w, i, now, day));
-        });
+        /* 毕业词以前在这里被挡掉（`stage === 'graduated'` 就 return）。那一刀是
+           "毕业 = 永不再见"的另一半：引擎把到期的毕业词排回队列了，可读到的时候不记账，
+           due 就永远不顺延，同一句会被天天重排、保温配额全浪费在它身上。
+           现在照记 —— 引擎里 reps 续加、due 顺延 14 天。 */
+        /* 2026-10-15 性能：整句 map 完一次批量提交（原来逐词 push2 = 逐词全量重放 + 落盘）。 */
+        push2Many(wordsOfSent(i).map(w => ShadowPlan.mkContact(w, i, now, day)));
       }
       function relearn(w) {
         if (!ROOT2 || !ROOT2.state.words[w]) return;
