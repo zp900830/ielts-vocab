@@ -4113,7 +4113,10 @@ let listenOn = false;
     _userScrolled = true;
     clearTimeout(_scrollTimer);
     _scrollTimer = setTimeout(() => { _userScrolled = false; }, 3000);
-    paint();
+    /* 2026-10-15 性能：这里原来每滚一下调一次全量 paint()。逐条核对过 paint 的全部输出 ——
+       高亮 / seek / btnPlay / 点亮标记 / 标题都只由 idx・playing・账本派生，滚动不改它们；
+       真正跟视口走的只有「回到学习位置」的显隐，而它由下面一行 updateBackBtn 单独负责。
+       删掉后滚动链只剩：一个 3s 计时器 + 一次 rect 测量。 */
     }
     /* 「回到学习位置」的显隐跟视口走：② 没有 playing，滚动也要重算，所以放在 if 外面。 */
     try { if (typeof TASK !== 'undefined' && TASK.updateBackBtn) TASK.updateBackBtn(); } catch (e) {}
@@ -4142,6 +4145,7 @@ let listenOn = false;
     }
     ticks.innerHTML = html;
     _ticks = [...ticks.querySelectorAll('.tick')];
+    paintSeek._tk = null;   // 刻度重建（新元素没有 cur/done 类）：下一笔 paintSeek 强制全画
     _ticks.forEach(t => {
     t.onclick = e => { e.stopPropagation(); if (abMode === 3) abCancel(true); playFrom(parseInt(t.dataset.i, 10)); };
     t.onmouseenter = () => showSeekTip(parseInt(t.dataset.i, 10), parseFloat(t.style.left));
@@ -4164,11 +4168,17 @@ let listenOn = false;
       trk.setAttribute('aria-valuenow', String(cur));
       trk.setAttribute('aria-valuetext', '本篇第 ' + cur + ' 句，共 ' + n + ' 句');   /* A2：印给读屏的也叫篇 */
     }
-    _ticks.forEach(t => {
-    const i = parseInt(t.dataset.i, 10);
-    t.classList.toggle('cur', i === idx);
-    t.classList.toggle('done', i < idx);
-    });
+    /* 2026-10-15 性能：cur/done 只由 idx 派生 —— idx 与刻度集都没变时别重扫全篇刻度
+       （paint 多入口重复触发，同一 idx 的重复调用以前每次都白扫 ~400 个 tick）。 */
+    const _tk = idx + '|' + _ticks.length;
+    if (paintSeek._tk !== _tk) {
+      paintSeek._tk = _tk;
+      _ticks.forEach(t => {
+        const i = parseInt(t.dataset.i, 10);
+        t.classList.toggle('cur', i === idx);
+        t.classList.toggle('done', i < idx);
+      });
+    }
     }
     function showSeekTip(i, pct) {
     // rAF 节流：pointermove 高频触发，布局测量收敛到每帧一次
@@ -5693,7 +5703,10 @@ let listenOn = false;
     /* A8：可见文字在「播放 ⇄ 暂停」之间切换，aria-label 也必须跟着表态 ——
        写死「播放或暂停」的键，读屏用户永远听不到现在按下去会发生什么，
        而同栏的 #btnStop 是具体的「停止播放」。口径同 app.js 那颗 .ls-play。 */
-    if (bp) {
+    /* 2026-10-15 性能：只在 playing 真的变化时才重写 —— paint 的入口很多（换句、点亮刷新、
+       面板联动），每次进来都重写一遍按钮 innerHTML 是白白的重解析（唯一写方仍是这里，不会漏修）。 */
+    if (bp && bp._playS !== (playing ? 1 : 0)) {
+      bp._playS = playing ? 1 : 0;
       bp.innerHTML = playing ? '<i class="ri-pause-fill" aria-hidden="true"></i><span class="lbl"> 暂停</span>' : '<i class="ri-play-fill" aria-hidden="true"></i><span class="lbl"> 播放</span>';
       bp.setAttribute('aria-label', playing ? '暂停' : '播放');
     }
