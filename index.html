@@ -4432,6 +4432,7 @@ let listenOn = false;
     await this.checkStatus();
     try { cloudPullMarks(); } catch (e) {} // 启动即拉书签（有 session 才生效，无表/断网静默跳过）
     try { TASK.cloudPullArticleAccount(); } catch (e) {} // 启动即拉按篇账（2026-09-25 云同步；失败静默，本地永远可用）
+    try { cloudPullVoicePref(); } catch (e) {} // 启动即拉音色偏好（2026-10-15：登录态下换设备不再回默认音色）
     },
     async checkStatus() {
     try {
@@ -5051,6 +5052,8 @@ let listenOn = false;
     if ((selVoiceURI || '').indexOf('cloud:') === 0) {
     selVoiceURI = '';
     try { localStorage.setItem('ielts-voice', ''); } catch (e) {}
+    // 记录一并清（2026-10-15）：留着会和 '' 对不上；重新登录后由 voice-pref 云同步拉回来
+    try { localStorage.removeItem('ielts-voice-meta'); } catch (e) {}
     loadVoices();
     }
     cleanup.data.subscription.unsubscribe();
@@ -5102,8 +5105,68 @@ let listenOn = false;
     }
     function goodVoice() { try { return localStorage.getItem('ielts-good-voice') || ''; } catch (e) { return ''; } }
     function rememberGoodVoice(uri) { try { if (uri) localStorage.setItem('ielts-good-voice', uri); } catch (e) {} }
+    /* ---- 音色选择的可携带记录 ielts-voice-meta（2026-10-15「换设备记住音色」）----
+       ielts-voice 只存本机 voiceURI：换一台设备就是悬空的一串旧 URI，而且旧版连
+       「这是哪款音色」都没存。meta = {uri, name, lang, ts}：
+       - name/lang：跨端身份。voiceURI 各平台各写各的（同款音色 Mac / 安卓能差一个字符串），
+         名字+口音才是稳定坐标；云端音色 uri=cloud:<id> 本身稳定，name 存 id。
+       - ts：本机这次选择的时刻，多端合并「最新者胜」用它。
+       - 迁移：旧版只写了裸 ielts-voice —— 第一次加载补记一条（ts=此刻，视为当前意图）。 */
+    function readVoiceMeta() {
+    try { const m = JSON.parse(localStorage.getItem('ielts-voice-meta') || 'null'); return (m && typeof m === 'object' && m.uri) ? m : null; } catch (e) { return null; }
+    }
+    function voiceMetaOf(uri) {
+    if (!uri) return null;
+    if (isCloudURI(uri)) {
+    const id = uri.slice(6);
+    const cv = (typeof CLOUD !== 'undefined' && Array.isArray(CLOUD.VOICES)) ? CLOUD.VOICES.find(v => v.id === id) : null;
+    return { uri, name: id, lang: cv ? (cv.region === '英式' ? 'en-GB' : 'en-US') : '' };
+    }
+    let v = null;
+    try { v = speechSynthesis.getVoices().find(x => x.voiceURI === uri) || null; } catch (e) {}
+    if (!v) v = (V.groups || []).flatMap(g => g.list).find(x => x.voiceURI === uri) || null;
+    return { uri, name: (v && v.name) || '', lang: (v && v.lang) || '' };
+    }
+    function saveVoiceMeta(uri, ts) {
+    const m = voiceMetaOf(uri);
+    if (!m || !m.name) return null;            // 名字还没就绪先不写：迁移路径靠「音色就绪后重试」完成
+    m.ts = ts || Date.now();
+    try { localStorage.setItem('ielts-voice-meta', JSON.stringify(m)); } catch (e) {}
+    return m;
+    }
+    /* 选择与记录对齐：ielts-voice 在、meta 不在/对不上 → 补记（旧版裸 URI 的迁移走这里）。 */
+    function ensureVoiceMeta() {
+    const uri = lsGet('ielts-voice');
+    if (!uri) return null;
+    const m = readVoiceMeta();
+    if (m && m.uri === uri) return m;
+    return saveVoiceMeta(uri);
+    }
+    /* 幽灵选择重解析：meta 记的是跨端名字，本机可能暂时查无此声（音色列表异步就绪、
+       或换平台后同款音色 URI 不同）。每次 loadVoices 按名字对齐一次：
+       找到 → 落地为真 URI；找不到 → 保持悬空（播放回退链兜底，选择不丢）。 */
+    function rehydrateVoicePick() {
+    const m = ensureVoiceMeta();
+    if (!m || !m.name) return;
+    const uri = selVoiceURI || '';
+    if (!uri || isCloudURI(uri)) return;
+    let live = [];
+    try { live = speechSynthesis.getVoices(); } catch (e) { return; }
+    if (!live.length || live.some(v => v.voiceURI === uri)) return;
+    const norm = s => String(s || '').trim().toLowerCase();
+    const hit = live.find(v => norm(v.name) === norm(m.name) && (!m.lang || norm(v.lang) === norm(m.lang)))
+    || live.find(v => norm(v.name) === norm(m.name));
+    if (!hit) return;
+    selVoiceURI = hit.voiceURI;
+    try { localStorage.setItem('ielts-voice', selVoiceURI); } catch (e) {}
+    const nm = voiceMetaOf(selVoiceURI) || { uri: selVoiceURI, name: m.name, lang: m.lang };
+    nm.ts = m.ts || 0;
+    try { localStorage.setItem('ielts-voice-meta', JSON.stringify(nm)); } catch (e) {}
+    }
     function loadVoices() {
     try {
+    /* 幽灵重解析放在 _sig 之前：它可能把悬空的跨端名字换成真 URI，sig 正好随之变化、列表重建 */
+    try { rehydrateVoicePick(); } catch (e) {}
     const _sig = (CLOUD._on ? '1' : '0') + '|' + accent + '|' + selVoiceURI + '|'
     + speechSynthesis.getVoices().map(v => v.voiceURI).join(',');
     if (loadVoices._sig === _sig && V.groups) return; // 列表无变化不重建（防打断下拉选择）
@@ -5228,6 +5291,8 @@ let listenOn = false;
     }
     selVoiceURI = uri;
     try { localStorage.setItem('ielts-voice', selVoiceURI); } catch (e) {}
+    saveVoiceMeta(selVoiceURI);                 // 跨端记录（name/lang/ts → ielts-voice-meta）
+    queueVoicePush();                           // 登录态下推 voice-pref 上云（未登录自会空转）
     syncVoiceUI();
     if (!keepOpen) closeVoicePop();
     /* 音色是全局设置，改完必须立刻生效（他 2026-09-25：「设置完能否立刻生效啊」）。
@@ -6243,6 +6308,9 @@ let listenOn = false;
     try { localStorage.setItem('ielts-voice', selVoiceURI); } catch(e) {}
     syncVoiceUI();
     }
+    /* 口音切换同样是一次音色配置变更（keepCloudPick 里音色没换、口音换了也要记）：
+       更新跨端记录并上云，否则对端只会看到半套配置（2026-10-15） */
+    if (selVoiceURI) { saveVoiceMeta(selVoiceURI); queueVoicePush(); }
     refreshGloss();
     if (playing) playFrom(idx); // 换音色立即在新队列生效
     else if (cur) speakAside(cur);
@@ -6942,6 +7010,112 @@ let listenOn = false;
     try { queueMarkPush(); } catch (e) {}
     } catch (e) { try { dlog('mark-pull-fail', (e && e.message) || e); } catch (err) {} }
     }
+    /* ============ 音色偏好云同步（2026-10-15「刷新/换设备记住音色」）============
+       用户报：换设备（重置后重装）音色回默认，进了随身听才发现不对。
+       通道沿用 shadow_events 快照事件（同 article-account 的守则：不进 ROOT2.events、
+       不动表结构）：type 固定 'voice-pref'，payload = {type, ts, accent, uri, name, lang}。
+       合并语义 = **最新一次选择赢**（断句用 ts）：对端更新 → 本机套用（静默）；本机更新 → 补推。
+       解析：云端音色 uri 跨端稳定直接用；本机音色按 name(+lang) 对齐（voiceURI 各平台不同），
+       本机暂时没有这款就保留悬空选择，等 rehydrateVoicePick 或播放回退链兜底 —— 选择绝不丢。
+       失败一律静默：本地 localStorage 永远可用。 */
+    let _voicePushT = null;
+    function queueVoicePush() {
+    clearTimeout(_voicePushT);
+    _voicePushT = setTimeout(() => { try { cloudPushVoicePref(); } catch (e) {} }, 2000);
+    }
+    async function cloudPushVoicePref() {
+    try {
+    const c = (typeof CLOUD !== 'undefined') ? CLOUD.client() : null;
+    if (!c || !selVoiceURI) return false;
+    const { data: { session } } = await c.auth.getSession();
+    if (!session) return false;
+    const m = ensureVoiceMeta();
+    if (!m || !m.ts) return false;               // 没选过（或从没落盘）：没什么好推
+    const ev = { type: 'voice-pref', ts: m.ts, accent, uri: selVoiceURI, name: m.name || '', lang: m.lang || '' };
+    const s = JSON.stringify([ev.uri, ev.accent, ev.ts]);
+    let h = 2166136261;
+    for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = (h * 16777619) >>> 0; }
+    const { error } = await c.from('shadow_events').upsert(
+    [{ user_id: session.user.id, event_id: 'vp-' + h.toString(16), ts: ev.ts, type: ev.type, payload: ev }],
+    { onConflict: 'event_id,user_id', ignoreDuplicates: true });
+    if (error) { try { dlog('voice-push-fail', error.message || error); } catch (e2) {} return false; }
+    return true;
+    } catch (e) {
+    try { dlog('voice-push-fail', (e && e.message) || e); } catch (e2) {}
+    return false;
+    }
+    }
+    async function cloudPullVoicePref() {
+    try {
+    const c = (typeof CLOUD !== 'undefined') ? CLOUD.client() : null;
+    if (!c) return false;
+    const { data: { session } } = await c.auth.getSession();
+    if (!session) return false;
+    const res = await c.from('shadow_events').select('ts,payload')
+    .eq('user_id', session.user.id).eq('type', 'voice-pref')
+    .order('ts', { ascending: false }).range(0, 9);
+    if (res.error || !Array.isArray(res.data)) return false;
+    let best = null;
+    for (const row of res.data) {
+    const p = row && row.payload;
+    if (!p || p.type !== 'voice-pref' || !p.uri) continue;
+    const ts = Number.isFinite(p.ts) ? p.ts : (Number.isFinite(row.ts) ? row.ts : 0);
+    if (!ts || (best && ts <= best.ts)) continue;
+    best = { uri: p.uri, name: p.name || '', lang: p.lang || '', accent: p.accent, ts };
+    }
+    const local = ensureVoiceMeta();
+    const localTs = (local && local.ts) || 0;
+    if (!best) {                                 // 云端还没有音色记录：本机这份先传上去
+    if (localTs > 0) queueVoicePush();
+    return false;
+    }
+    if (best.ts > localTs) { applyVoicePref(best); return true; }
+    if (localTs > best.ts) queueVoicePush();     // 本机更新：补推让对端跟上
+    return false;
+    } catch (e) {
+    try { dlog('voice-pull-fail', (e && e.message) || e); } catch (e2) {}
+    return false;
+    }
+    }
+    /* 跨端名字落地本机：云 id 直接用；本地音色按「原 URI → 名字+口音 → 只认名字」三级对齐；
+       都没有（换了平台）就留原样，等音色列表就绪后由 rehydrateVoicePick 再对齐 */
+    function resolvePortableVoice(p) {
+    const uri = (p && p.uri) || '';
+    if (!uri) return '';
+    if (isCloudURI(uri)) return uri;
+    let live = [];
+    try { live = speechSynthesis.getVoices(); } catch (e) {}
+    const norm = s => String(s || '').trim().toLowerCase();
+    const hit = live.find(v => v.voiceURI === uri)
+    || (p.name ? live.find(v => norm(v.name) === norm(p.name) && (!p.lang || norm(v.lang) === norm(p.lang))) : null)
+    || (p.name ? live.find(v => norm(v.name) === norm(p.name)) : null);
+    return hit ? hit.voiceURI : uri;
+    }
+    /* 套用对端选择：静默（不试听、不打断播放）；ts 沿用对端的，避免被当成新选择再推回去 */
+    function applyVoicePref(p) {
+    try {
+    if (p.accent === 'en-GB' || p.accent === 'en-US') {
+    accent = p.accent;
+    try { localStorage.setItem('ielts-accent', accent); } catch (e) {}
+    const ab = document.getElementById('btnAccent');
+    if (ab) { ab.textContent = accent === 'en-GB' ? '🇬🇧 英式' : '🇺🇸 美式'; ab.classList.add('active'); }
+    }
+    const uri = resolvePortableVoice(p);
+    if (uri) {
+    selVoiceURI = uri;
+    try { localStorage.setItem('ielts-voice', uri); } catch (e) {}
+    const nm = voiceMetaOf(uri);
+    const m = { uri, name: (nm && nm.name) || p.name || '', lang: (nm && nm.lang) || p.lang || '', ts: p.ts || 0 };
+    try { localStorage.setItem('ielts-voice-meta', JSON.stringify(m)); } catch (e) {}
+    }
+    loadVoices();
+    try { syncVoiceUI(); } catch (e) {}
+    dlog('voice-pref-apply', uri + ' @' + p.ts + ' accent=' + accent);
+    return true;
+    } catch (e) { try { dlog('voice-pref-apply-fail', (e && e.message) || e); } catch (e2) {} return false; }
+    }
+    /* E2E / 控制台出口（与 cloudPullArticleAccount 同一做法：挂上 CLOUD 公开面） */
+    try { CLOUD.cloudPullVoicePref = cloudPullVoicePref; CLOUD.cloudPushVoicePref = cloudPushVoicePref; } catch (e) {}
     function markLabel(i) {
     i = Math.max(0, Math.min(totalSentCount() - 1, i));
     const ch = chapterOfGlobal(i);
@@ -7991,6 +8165,10 @@ let listenOn = false;
           let added = 0;
           rows.forEach(row => {
             if (!row || have[row.event_id] || _wiped(row)) return;
+            /* 快照型辅助通道不进事件流（2026-10-15）：article-account（按篇账）与 voice-pref
+               （音色偏好）是各自链路自己管的快照，塞进 ROOT2.events 只会白占事件流上限、
+               还会被当待传事件重推 —— 与 7246 行那份守则同一口径。 */
+            if (row.type === 'article-account' || row.type === 'voice-pref') return;
             ROOT2.events.push(Object.assign({}, row.payload, { id: row.event_id, ts: row.ts }));
             added++;
           });
@@ -8026,6 +8204,7 @@ let listenOn = false;
         }
         const r = await cloudPush();
         try { await cloudPullArticleAccount(); } catch (e) {}   // 按篇账跟着走一遍（补传/换设备合并）
+        try { await cloudPullVoicePref(); } catch (e) {}        // 音色偏好跟着走一遍（2026-10-15：换设备、回前台时对端刚选的音色跟上）
         try { cloudPushArticleAccount(); } catch (e) {}
         try { renderToday(document.getElementById('todayPanel')); } catch (e) {}
         return r;
