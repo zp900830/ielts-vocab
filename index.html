@@ -4165,7 +4165,9 @@ let listenOn = false;
     let html = '';
     for (let i = seekStart; i < seekEnd; i++) {
     const pct = n === 1 ? 0 : ((i - seekStart) / (n - 1)) * 100;
-    html += `<button class="tick" data-i="${i}" style="left:${pct}%" title="${escAttr(plainEN(sentRaw(i)))}"></button>`;
+    /* 2026-10-15 性能：title 不再内嵌整句（每篇 ~300 个 tick，原来构建时要整个拼一遍带全篇正文的 innerHTML）。
+       悬停看整句由 showSeekTip 的气泡负责（本来就有）；短 aria-label 保住按钮的可访问名。 */
+    html += `<button class="tick" data-i="${i}" style="left:${pct}%" aria-label="本篇第 ${i - seekStart + 1} 句"></button>`;
     }
     ticks.innerHTML = html;
     _ticks = [...ticks.querySelectorAll('.tick')];
@@ -6435,6 +6437,9 @@ let listenOn = false;
        click 到不了 document（旧监听同理必须用 pointerdown）。 */
     const OUTSIDE_CLOSE_IDS = { cloudWrap: 1, markWrap: 1, abWrap: 1, rateWrap: 1, loopWrap: 1, 'menu-open': 1 };
     document.addEventListener('pointerdown', e => {
+    /* 2026-10-15 性能：没有任何「点外关闭」族开着时零成本返回（绝大多数 pointerdown 都是这档）。
+       预查选择器与下面六条各自的 open 条件一一对应 —— 全都落空时 forEach 本来就是空转。 */
+    if (!document.querySelector('.cloud-wrap.open, .rate-wrap.open, .loop-wrap.open, #markWrap.open, #abWrap.open, body.menu-open')) return;
     overlayEntries().forEach(({ el, def }) => {
       if (!OUTSIDE_CLOSE_IDS[def.id]) return;
       if (_inPath(e, def.own)) return;
@@ -6626,6 +6631,7 @@ let listenOn = false;
     }
     if (capped) html += `<div style="padding:12px 16px;color:var(--muted);font-size:12px">仅显示前 ${CAP} 条（共 ${cnt} 条匹配），输入关键词缩小范围…</div>`;
     list.innerHTML = html || '<div style="padding:20px;color:var(--muted);font-size:13px">无匹配</div>';
+    _vlistVer++;   // 内容重建：visibleCards 的缓存作废（2026-10-15 性能）
     list.querySelectorAll('.item').forEach(el => {
     el.onclick = e => {
     const mark = () => { list.querySelectorAll('.item.sel').forEach(x => x.classList.remove('sel')); el.classList.add('sel'); };
@@ -6676,7 +6682,16 @@ let listenOn = false;
     }
 
     /* ============ 键盘 ============ */
-    function visibleCards() { return [...document.querySelectorAll('#vlist .item')].filter(el => el.style.display !== 'none'); }
+    /* 2026-10-15 性能：按 renderList 的版本号缓存 —— #vlist 的内容只在 renderList 里整段重建，
+       按住方向键连翻（keydown 每 ~30ms 一发）不必每下重扫全表。sel 类切换不动元素集合，缓存不必失效。 */
+    let _vlistVer = 0, _visCards = null, _visCardsVer = -1;
+    function visibleCards() {
+    if (_visCardsVer !== _vlistVer) {
+    _visCards = [...document.querySelectorAll('#vlist .item')].filter(el => el.style.display !== 'none');
+    _visCardsVer = _vlistVer;
+    }
+    return _visCards;
+    }
     function cardNav(d) {
     const cards = visibleCards();
     if (!cards.length) return;
