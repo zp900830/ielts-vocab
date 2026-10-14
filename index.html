@@ -3702,15 +3702,29 @@ let listenOn = false;
        锚点（最左一条）尽量保持居中，被迫位移的只有它的右邻们。 */
     function clampGloss() {
     const GAP = 4;                    // 注音间最小净空（与 AB 徽标让位同口径）
+    /* 2026-10-15 性能：两阶段批处理，消灭逐段「写→读」交织的强制回流。
+       旧序：每段 [归零(写) → 量(读) → 写回] —— 每段都要催一次样式/布局 flush，
+       全库 308 段就是几十次强制回流（部分还抵消了 content-visibility 的懒渲染）。
+       新序：一次只读收集 → 全库统一归零（纯写）→ 全库统一测量（只读，第一下 flush 一次、其后全清洁）
+       → 纯数值松弛 → 统一写回（之后不再有读）。
+       读到的几何与旧序逐位一致：.sec .gl 是绝对定位（只随自身 margin 动、不推邻居布局），
+       跨段的归零/位移读不到彼此 —— 这正是原实现「先全零再统一量」在段内成立的同一条前提。 */
+    const jobs = [];
     document.querySelectorAll('.sec .para').forEach(p => {
     if (!p.offsetParent) return;                 // 隐藏视图（预渲染区块）不量
-    const pr = p.getBoundingClientRect();
-    if (!pr.width) return;
     const gls = [...p.querySelectorAll('.wg > .gl')];
     if (!gls.length) return;
-    gls.forEach(gl => { gl.style.marginLeft = '0px'; });      // 先全部归零（一次脏）
-    const rows = [];
-    gls.forEach(gl => {
+    const pr = p.getBoundingClientRect();
+    if (!pr.width) return;
+    jobs.push({ pr: pr, gls: gls, rows: null });
+    });
+    if (!jobs.length) return;
+    /* ② 全库统一归零（纯写）：已是 '0px' 的跳过，别无谓地把布局弄脏 */
+    for (const j of jobs) j.gls.forEach(gl => { if (gl.style.marginLeft !== '0px') gl.style.marginLeft = '0px'; });
+    /* ③ 统一测量（只读） */
+    for (const j of jobs) {
+    const pr = j.pr, rows = [];
+    j.gls.forEach(gl => {
     const gr = gl.getBoundingClientRect();       // 再统一量（一次回流）
     if (!gr.width) return;                       // hide-gl 等不可见态：不夹
     let minLeft = pr.left + 2;
@@ -3733,7 +3747,12 @@ let listenOn = false;
     rows.push({ el: gl, w: gr.width, t: Math.round(gr.top), d: gr.left,
     p: Math.min(Math.max(gr.left, minLeft), maxLeft), lo: minLeft, hi: pr.right - 2 });
     });
-    if (!rows.length) return;
+    j.rows = rows;
+    }
+    /* ④ 纯数值松弛 + 统一写回（此后没有任何读，写不会再弄脏这轮测量） */
+    for (const j of jobs) {
+    const rows = j.rows;
+    if (!rows.length) continue;
     // 同一条正文行的注音分带（同一行盒 top 相同；容差 6px 只作保险）
     const bands = [];
     for (const r of [...rows].sort((a, b) => a.t - b.t || a.d - b.d)) {
@@ -3769,7 +3788,7 @@ let listenOn = false;
     }
     });
     }
-    });
+    }
     }
     function scheduleClampGloss() {
     try { requestAnimationFrame(() => requestAnimationFrame(() => { try { clampGloss(); } catch (e) {} })); } catch (e) {}
