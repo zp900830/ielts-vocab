@@ -10293,6 +10293,20 @@ let listenOn = false;
         _etaPending.set(key, run);
         return run;
       }
+      /* 2026-10-15 性能：拖动滑块的工期预览合并器（设置屏 / 计划页 / 「我的」三处共用）。
+         病根：以前每跨一档（input）立刻 etaFor —— 5→240 一趟最多排 47 个 0.3–0.9s 的全量模拟，
+         拖动整个过程主线程被啃成幻灯片。现在连续滑动期间一概不算，拖停 250ms 或松手才结算最后一档。
+         预览语义（拖动中就出数）不变：数字仍是 estimateDays 唯一来源，缓存与口径一个字没动。 */
+      const _etaDragPend = Object.create(null);
+      function etaDragSoon(tag, m, run) {
+        clearTimeout(_etaDragPend[tag]);
+        _etaDragPend[tag] = setTimeout(() => { _etaDragPend[tag] = null; run(m); }, 250);
+      }
+      function etaDragStop(tag) {
+        if (!_etaDragPend[tag]) return;
+        clearTimeout(_etaDragPend[tag]);
+        _etaDragPend[tag] = null;
+      }
       function etaMonth(ts, exact) {
         const d = new Date(ts);
         return d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月' + (exact ? ' ' + d.getDate() + ' 日' : '');
@@ -10345,13 +10359,16 @@ let listenOn = false;
         el.innerHTML = html;
         el.dataset.days = r && r.done ? String(r.days) : '';
       }
-      /* mOverride：滑块还在拖、计划尚未落账时，用它预览工期（见 bindMinSlider 的 onInput）。 */
-      function paintPlanEta(mOverride) {
+      /* mOverride：滑块还在拖、计划尚未落账时，用它预览工期（见 bindMinSlider 的 onInput）。
+         drag=true：拖动预览走 etaDragSoon 合并 —— 连续滑动只算最后一档（2026-10-15 性能）。 */
+      function paintPlanEta(mOverride, drag) {
         const el = document.getElementById('planEta');
         if (!el || !ROOT2 || !ROOT2.plan) return;
         const m = mOverride == null ? ROOT2.plan.todayMinutes : mOverride;
         el.textContent = '算一下…';
-        etaFor(m).then(r => etaSet(el, etaText(r, m, false) + (milestoneText(r) ? ' · ' + milestoneText(r) : ''), r));
+        const run = (mm) => etaFor(mm).then(r => etaSet(el, etaText(r, mm, false) + (milestoneText(r) ? ' · ' + milestoneText(r) : ''), r));
+        if (drag) etaDragSoon('plan', m, run);
+        else { etaDragStop('plan'); run(m); }
       }
       function paintTodayEta() {
         const el = document.getElementById('todayEta');
@@ -10418,7 +10435,7 @@ let listenOn = false;
           <div class="ps-adjust"><button class="btn" onclick="TASK.importBackup()">导入恢复</button></div>
           <input type="file" id="importFile" accept="application/json,.json" style="display:none">
         </div>`;
-        const refresh = () => {
+        const refresh = (deferEta) => {
           /* 「今天大约」必须用**引擎真实的装配**（三池混合：新句 25s / 复习句 8s）——
              以前按单一「一句约 8 秒」除法出数，30 分钟算出 222 句、60 分钟算出 444 句
              （2026-09-26 用户：「222、333、444 你是认真的么」）。装配出来的才是今天真会排到的量。 */
@@ -10446,14 +10463,20 @@ let listenOn = false;
           if (eta) {
             eta.textContent = '算一下…';
             const want = sel;
-            etaFor(want).then(r => etaSet(eta, etaText(r, want, true), r));
+            const run = (mm) => etaFor(mm).then(r => etaSet(eta, etaText(r, mm, true), r));
+            if (deferEta) etaDragSoon('setup', want, run);
+            else { etaDragStop('setup'); run(want); }
           }
         };
         refresh();
-        /* 这一屏还没有计划可改（建计划要等「开始这个计划」），所以只挂 onInput。
+        /* 这一屏还没有计划可改（建计划要等「开始这个计划」），落账不在滑块的 change 上；
+           change 仍挂 onCommit —— 只为把工期预览立刻定稿（拖动期间走 250ms 合并，见 refresh(deferEta)）。
            rAF 合并：一帧内跨过多档只算一次装配 —— 真数据 3245 句，逐档装配会掉帧。 */
         let raf = 0;
-        bindMinSlider(p, { onInput: (m) => { sel = m; if (raf) return; raf = requestAnimationFrame(() => { raf = 0; refresh(); }); } });
+        bindMinSlider(p, {
+          onInput: (m) => { sel = m; if (raf) return; raf = requestAnimationFrame(() => { raf = 0; refresh(true); }); },
+          onCommit: (m) => { sel = m; refresh(false); },
+        });
         document.getElementById('psStart').onclick = () => {
           /* W7-4：先取走「从空状态点去设置」的那一篇，再建计划 —— initPlan 会把残留清掉，
              顺序反了就把这一篇弄丢了。 */
@@ -11046,7 +11069,7 @@ let listenOn = false;
         /* 「今天从哪开始」的当前读数（2026-10-08）：今日面板与「我的」共用这一份文案，
            面板那一行和线落在同一个句子上。 */
         startInfo,
-        etaFor, etaCalls, etaText, etaMonth, seedDailyForTest,
+        etaFor, etaCalls, etaText, etaMonth, etaDragSoon, etaDragStop, seedDailyForTest,
         // 3.0 按篇账出口：这一篇累计读了几句次（② 批次凭据的按篇出口已随功能删除）
         repsOf,
         roundInfo, startNewRound, seedRoundSeenForTest, setManualStart, clearManualStart, confirmAutoStart,
