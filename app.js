@@ -105,7 +105,7 @@
     const wrow = e.target.closest('.wb-row');
     if (wrow) { toggleWordRow(wrow); return; }
     const wm = e.target.closest('.wb-more');
-    if (wm) { _wordsShown += W_BATCH; window.APP3.route(); return; }
+    if (wm) { appendWordsBatch(wm); return; }
     // 随身听卡片（M4，每次重渲的节点，走事件代理）
     // 2026-09-25：◀/▶ 改为句级（listenSentenceStep，与文章内 ←/→、播放条同一套 step 语义）；
     // ③ 未展开态移除 循环/AB/倍速/书签（只在展开态的全功能播放条里提供）；② 新增停止。
@@ -953,6 +953,20 @@
       <p class="wb-hint">这里不是背单词的入口，是查「我到底会没会」的地方。</p>
     </div>`;
   }
+  /* 2026-10-15 性能：「加载更多」只追加新一批。原来走 window.APP3.route() 整页重渲 ——
+     每点一次都把已渲染的几百行重新 map 一遍（O(n²)，点到最后一次要重建 3000+ 行）。
+     行点击本来就是 document 级代理（.wb-row），追加不会丢事件；顺带不再把滚动甩回顶部。 */
+  function appendWordsBatch(btn) {
+    const listEl = document.querySelector('.words-page .wb-list');
+    const st = (typeof TASK !== 'undefined' && TASK.state) ? TASK.state() : null;
+    const all = wordIndexOrder();
+    const prev = Math.min(_wordsShown, all.length);
+    _wordsShown = Math.min(_wordsShown + W_BATCH, all.length);
+    if (listEl) listEl.insertAdjacentHTML('beforeend', all.slice(prev, _wordsShown).map((w) => rowHtml(w, st)).join(''));
+    const left = all.length - _wordsShown;
+    if (left > 0) btn.textContent = `加载更多（还剩 ${left} 个）`;
+    else btn.remove();
+  }
   window.APP3 = Object.assign(window.APP3, { renderWords });
 
   // 原文句里把目标词高亮（其它 [[词:形式]] 只留形式），其余文本转义
@@ -1263,7 +1277,8 @@
        松手（change）才落账；落完只补工期行，不重渲整个宿主 —— 重渲会换掉滑块节点，
        键盘党按第二下就没靶了（胶囊时代靠 renderMePop 挪选中态，滑块自己就停在那一格）。 */
     if (cfg && TASK.bindMinSlider) TASK.bindMinSlider(root, {
-      onInput: refreshMeEta,
+      /* 拖动预览走 250ms 合并（2026-10-15 性能）：连续滑动只算最后一档；松手 change 立刻定稿。 */
+      onInput: (m) => refreshMeEta(m, true),
       onCommit: (m) => { TASK.setMinutes(m); refreshMeEta(); },
     });
     // 工期行（2026-09-26 用户）：换分钟数/重开都要刷新 —— 与设置屏同一份估算
@@ -1328,7 +1343,7 @@
   /* 工期行（2026-09-26 用户拍板）：「我的」里改每天分钟数也要能看到「新词全部过完一遍（需要 N 天）」
      —— 与设置屏/计划页同一份 estimateDays 估算（TASK.etaFor/etaText 出口）。 */
   /* mOverride：滑块还在拖、计划尚未落账时，用它预览工期（TASK.bindMinSlider 的 onInput）。 */
-  function refreshMeEta(mOverride) {
+  function refreshMeEta(mOverride, drag) {
     const el = document.getElementById('mpEta');
     if (!el) return;
     const cfg = (typeof TASK !== 'undefined' && TASK.planConfig) ? TASK.planConfig() : null;
@@ -1336,12 +1351,15 @@
     const m = mOverride == null ? cfg.minutes : mOverride;
     el.hidden = false;
     el.textContent = '算一下…';   /* A13：与设置屏那六处同一个占位词（成品句两边也都是「按每天 X 分钟…」开头，不带「工期」两字） */
-    TASK.etaFor(m).then((r) => {
+    const run = (mm) => TASK.etaFor(mm).then((r) => {
       if (!el.isConnected) return;
       // r === null = 估算抛错（etaFor 失败也落定，绝不再挂着一颗永不 resolve 的 Promise）
       if (r === null) { el.textContent = '工期暂时算不出来，刷新页面再试'; return; }   // 与 TASK.etaText 同一句
-      el.textContent = '按每天 ' + m + ' 分钟：新词全部过完一遍（需要 ' + (r && r.days ? r.days + ' 天' : '更久') + '）';
+      el.textContent = '按每天 ' + mm + ' 分钟：新词全部过完一遍（需要 ' + (r && r.days ? r.days + ' 天' : '更久') + '）';
     });
+    /* drag=true：拖动中的预览合并到拖停/松手（2026-10-15 性能）；其余路径照旧立刻算。 */
+    if (drag) TASK.etaDragSoon('me', m, run);
+    else { TASK.etaDragStop('me'); run(m); }
   }
   /* 浮窗开在用户卡正上方（桌面 360px 宽，2026-09-26 用户加宽），高度夹在卡片上沿以内。
      2026-10-08：手机端不再是它的形态（移动端走 #/me 页面），所以这里只剩桌面那一条算法。 */

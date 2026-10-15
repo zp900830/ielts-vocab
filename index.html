@@ -3702,15 +3702,29 @@ let listenOn = false;
        锚点（最左一条）尽量保持居中，被迫位移的只有它的右邻们。 */
     function clampGloss() {
     const GAP = 4;                    // 注音间最小净空（与 AB 徽标让位同口径）
+    /* 2026-10-15 性能：两阶段批处理，消灭逐段「写→读」交织的强制回流。
+       旧序：每段 [归零(写) → 量(读) → 写回] —— 每段都要催一次样式/布局 flush，
+       全库 308 段就是几十次强制回流（部分还抵消了 content-visibility 的懒渲染）。
+       新序：一次只读收集 → 全库统一归零（纯写）→ 全库统一测量（只读，第一下 flush 一次、其后全清洁）
+       → 纯数值松弛 → 统一写回（之后不再有读）。
+       读到的几何与旧序逐位一致：.sec .gl 是绝对定位（只随自身 margin 动、不推邻居布局），
+       跨段的归零/位移读不到彼此 —— 这正是原实现「先全零再统一量」在段内成立的同一条前提。 */
+    const jobs = [];
     document.querySelectorAll('.sec .para').forEach(p => {
     if (!p.offsetParent) return;                 // 隐藏视图（预渲染区块）不量
-    const pr = p.getBoundingClientRect();
-    if (!pr.width) return;
     const gls = [...p.querySelectorAll('.wg > .gl')];
     if (!gls.length) return;
-    gls.forEach(gl => { gl.style.marginLeft = '0px'; });      // 先全部归零（一次脏）
-    const rows = [];
-    gls.forEach(gl => {
+    const pr = p.getBoundingClientRect();
+    if (!pr.width) return;
+    jobs.push({ pr: pr, gls: gls, rows: null });
+    });
+    if (!jobs.length) return;
+    /* ② 全库统一归零（纯写）：已是 '0px' 的跳过，别无谓地把布局弄脏 */
+    for (const j of jobs) j.gls.forEach(gl => { if (gl.style.marginLeft !== '0px') gl.style.marginLeft = '0px'; });
+    /* ③ 统一测量（只读） */
+    for (const j of jobs) {
+    const pr = j.pr, rows = [];
+    j.gls.forEach(gl => {
     const gr = gl.getBoundingClientRect();       // 再统一量（一次回流）
     if (!gr.width) return;                       // hide-gl 等不可见态：不夹
     let minLeft = pr.left + 2;
@@ -3733,7 +3747,12 @@ let listenOn = false;
     rows.push({ el: gl, w: gr.width, t: Math.round(gr.top), d: gr.left,
     p: Math.min(Math.max(gr.left, minLeft), maxLeft), lo: minLeft, hi: pr.right - 2 });
     });
-    if (!rows.length) return;
+    j.rows = rows;
+    }
+    /* ④ 纯数值松弛 + 统一写回（此后没有任何读，写不会再弄脏这轮测量） */
+    for (const j of jobs) {
+    const rows = j.rows;
+    if (!rows.length) continue;
     // 同一条正文行的注音分带（同一行盒 top 相同；容差 6px 只作保险）
     const bands = [];
     for (const r of [...rows].sort((a, b) => a.t - b.t || a.d - b.d)) {
@@ -3769,7 +3788,7 @@ let listenOn = false;
     }
     });
     }
-    });
+    }
     }
     function scheduleClampGloss() {
     try { requestAnimationFrame(() => requestAnimationFrame(() => { try { clampGloss(); } catch (e) {} })); } catch (e) {}
@@ -3924,7 +3943,11 @@ let listenOn = false;
     /* 一张辨析表只挂一个段落末尾。锚点优先用卡片自带的 at=[章,段]（落地器从草稿的「主锚点」写进来），
        没有就退回「第一个 ≥2 个成员同时被标出的段」。只出现一个成员的段不挂 —— 一组近义词散在三个段里
        时，挂三遍等于把一张表复制三遍；挂一遍但那一处只有半个词，等于指错东西。 */
+    /* 2026-10-15 性能：纯静态派生的记忆化 —— 只读 SECTIONS 段落与 VOCAB 辨析卡，装载后不再变。
+       原来每次 render() 都全库重扫（1833 句正则 + 3245 词条遍历 + 220 卡组内匹配）。 */
+    let _cmpIdxCache = null, _cmpIdxForS = null, _cmpIdxForV = null;
     function cmpIndex() {
+      if (_cmpIdxCache && _cmpIdxForS === SECTIONS && _cmpIdxForV === VOCAB) return _cmpIdxCache;
       const marks = [];
       const re = /\[\[([^\]:]+):([^\]]+)\]\]/g;
       SECTIONS.forEach((s, ci) => (s.paragraphs || []).forEach((p, pi) => {
@@ -3953,6 +3976,7 @@ let listenOn = false;
         (idx[key] = idx[key] || []).push({ note, at: hit.at });
       }
       for (const key in idx) idx[key].sort((a, b) => a.at - b.at);   // 同段多张：按撞上的那句先后排
+      _cmpIdxForS = SECTIONS; _cmpIdxForV = VOCAB; _cmpIdxCache = idx;
       return idx;
     }
     function compareAt(idx, ci, pi) {
@@ -4098,7 +4122,7 @@ let listenOn = false;
       const mapIdx = (currentChapter >= 0) ? currentChapter : ai;
       sec.querySelectorAll('.sent').forEach(() => artOfSent.push(mapIdx));
     });
-    _paintIdx = -2; _inTextSet = null;
+    _paintIdx = -2;   // 词库的「不在本篇」集合（_inTextSet）不再在这里清：改为按篇身份自校验（见 renderList）
     buildSeek(currentChapter >= 0 ? currentChapter : 0);
     paintAB(); // 正文重建后恢复 A/B 标记
     scheduleClampGloss(); // ① 方案B：注音夹紧（隐藏视图静默跳过；进阅读/展开随身听还会再跑）
@@ -4113,7 +4137,10 @@ let listenOn = false;
     _userScrolled = true;
     clearTimeout(_scrollTimer);
     _scrollTimer = setTimeout(() => { _userScrolled = false; }, 3000);
-    paint();
+    /* 2026-10-15 性能：这里原来每滚一下调一次全量 paint()。逐条核对过 paint 的全部输出 ——
+       高亮 / seek / btnPlay / 点亮标记 / 标题都只由 idx・playing・账本派生，滚动不改它们；
+       真正跟视口走的只有「回到学习位置」的显隐，而它由下面一行 updateBackBtn 单独负责。
+       删掉后滚动链只剩：一个 3s 计时器 + 一次 rect 测量。 */
     }
     /* 「回到学习位置」的显隐跟视口走：② 没有 playing，滚动也要重算，所以放在 if 外面。 */
     try { if (typeof TASK !== 'undefined' && TASK.updateBackBtn) TASK.updateBackBtn(); } catch (e) {}
@@ -4138,10 +4165,13 @@ let listenOn = false;
     let html = '';
     for (let i = seekStart; i < seekEnd; i++) {
     const pct = n === 1 ? 0 : ((i - seekStart) / (n - 1)) * 100;
-    html += `<button class="tick" data-i="${i}" style="left:${pct}%" title="${escAttr(plainEN(sentRaw(i)))}"></button>`;
+    /* 2026-10-15 性能：title 不再内嵌整句（每篇 ~300 个 tick，原来构建时要整个拼一遍带全篇正文的 innerHTML）。
+       悬停看整句由 showSeekTip 的气泡负责（本来就有）；短 aria-label 保住按钮的可访问名。 */
+    html += `<button class="tick" data-i="${i}" style="left:${pct}%" aria-label="本篇第 ${i - seekStart + 1} 句"></button>`;
     }
     ticks.innerHTML = html;
     _ticks = [...ticks.querySelectorAll('.tick')];
+    paintSeek._tk = null;   // 刻度重建（新元素没有 cur/done 类）：下一笔 paintSeek 强制全画
     _ticks.forEach(t => {
     t.onclick = e => { e.stopPropagation(); if (abMode === 3) abCancel(true); playFrom(parseInt(t.dataset.i, 10)); };
     t.onmouseenter = () => showSeekTip(parseInt(t.dataset.i, 10), parseFloat(t.style.left));
@@ -4164,11 +4194,17 @@ let listenOn = false;
       trk.setAttribute('aria-valuenow', String(cur));
       trk.setAttribute('aria-valuetext', '本篇第 ' + cur + ' 句，共 ' + n + ' 句');   /* A2：印给读屏的也叫篇 */
     }
-    _ticks.forEach(t => {
-    const i = parseInt(t.dataset.i, 10);
-    t.classList.toggle('cur', i === idx);
-    t.classList.toggle('done', i < idx);
-    });
+    /* 2026-10-15 性能：cur/done 只由 idx 派生 —— idx 与刻度集都没变时别重扫全篇刻度
+       （paint 多入口重复触发，同一 idx 的重复调用以前每次都白扫 ~400 个 tick）。 */
+    const _tk = idx + '|' + _ticks.length;
+    if (paintSeek._tk !== _tk) {
+      paintSeek._tk = _tk;
+      _ticks.forEach(t => {
+        const i = parseInt(t.dataset.i, 10);
+        t.classList.toggle('cur', i === idx);
+        t.classList.toggle('done', i < idx);
+      });
+    }
     }
     function showSeekTip(i, pct) {
     // rAF 节流：pointermove 高频触发，布局测量收敛到每帧一次
@@ -5758,7 +5794,10 @@ let listenOn = false;
     /* A8：可见文字在「播放 ⇄ 暂停」之间切换，aria-label 也必须跟着表态 ——
        写死「播放或暂停」的键，读屏用户永远听不到现在按下去会发生什么，
        而同栏的 #btnStop 是具体的「停止播放」。口径同 app.js 那颗 .ls-play。 */
-    if (bp) {
+    /* 2026-10-15 性能：只在 playing 真的变化时才重写 —— paint 的入口很多（换句、点亮刷新、
+       面板联动），每次进来都重写一遍按钮 innerHTML 是白白的重解析（唯一写方仍是这里，不会漏修）。 */
+    if (bp && bp._playS !== (playing ? 1 : 0)) {
+      bp._playS = playing ? 1 : 0;
       bp.innerHTML = playing ? '<i class="ri-pause-fill" aria-hidden="true"></i><span class="lbl"> 暂停</span>' : '<i class="ri-play-fill" aria-hidden="true"></i><span class="lbl"> 播放</span>';
       bp.setAttribute('aria-label', playing ? '暂停' : '播放');
     }
@@ -6466,6 +6505,9 @@ let listenOn = false;
        click 到不了 document（旧监听同理必须用 pointerdown）。 */
     const OUTSIDE_CLOSE_IDS = { cloudWrap: 1, markWrap: 1, abWrap: 1, rateWrap: 1, loopWrap: 1, 'menu-open': 1 };
     document.addEventListener('pointerdown', e => {
+    /* 2026-10-15 性能：没有任何「点外关闭」族开着时零成本返回（绝大多数 pointerdown 都是这档）。
+       预查选择器与下面六条各自的 open 条件一一对应 —— 全都落空时 forEach 本来就是空转。 */
+    if (!document.querySelector('.cloud-wrap.open, .rate-wrap.open, .loop-wrap.open, #markWrap.open, #abWrap.open, body.menu-open')) return;
     overlayEntries().forEach(({ el, def }) => {
       if (!OUTSIDE_CLOSE_IDS[def.id]) return;
       if (_inPath(e, def.own)) return;
@@ -6585,7 +6627,7 @@ let listenOn = false;
     else if (mq.addListener) mq.addListener(release);
     })();
     const escAttr = s => s.replace(/&/g,'&amp;').replace(/'/g, "&#39;").replace(/"/g, '&quot;');
-    let _inTextSet = null, _vocabCount = 0, _rlT = null;
+    let _inTextSet = null, _inTextSetK = '', _inTextSetSrc = null, _vocabCount = 0, _rlT = null;
     function queueRenderList() { // 搜索防抖：每击键全量重建 3219 卡片太重，150ms 合并一次
     clearTimeout(_rlT);
     _rlT = setTimeout(renderList, 150);
@@ -6615,7 +6657,13 @@ let listenOn = false;
     function renderList() {
     const q = document.getElementById('q').value.trim().toLowerCase();
     const list = document.getElementById('vlist');
-    if (!_inTextSet) _inTextSet = new Set([...document.querySelectorAll('.w')].map(el => el.dataset.w));
+    /* 2026-10-15 性能：按「渲染了哪一篇 + 数据身份」自校验 —— 原来 render() 每次重建都置 null，
+       哪怕只是同篇重渲，打开词库也要把全库 .w 重扫一遍（全篇模式几千个）。 */
+    const _itsK = currentChapter + '#' + (SECTIONS === _inTextSetSrc ? '1' : '0');
+    if (!_inTextSet || _inTextSetK !== _itsK) {
+    _inTextSet = new Set([...document.querySelectorAll('.w')].map(el => el.dataset.w));
+    _inTextSetK = _itsK; _inTextSetSrc = SECTIONS;
+    }
     const inTextSet = _inTextSet;
     let html = '', cnt = 0, shown = 0;
     const seen = new Set();
@@ -6651,6 +6699,7 @@ let listenOn = false;
     }
     if (capped) html += `<div style="padding:12px 16px;color:var(--muted);font-size:12px">仅显示前 ${CAP} 条（共 ${cnt} 条匹配），输入关键词缩小范围…</div>`;
     list.innerHTML = html || '<div style="padding:20px;color:var(--muted);font-size:13px">无匹配</div>';
+    _vlistVer++;   // 内容重建：visibleCards 的缓存作废（2026-10-15 性能）
     list.querySelectorAll('.item').forEach(el => {
     el.onclick = e => {
     const mark = () => { list.querySelectorAll('.item.sel').forEach(x => x.classList.remove('sel')); el.classList.add('sel'); };
@@ -6701,7 +6750,16 @@ let listenOn = false;
     }
 
     /* ============ 键盘 ============ */
-    function visibleCards() { return [...document.querySelectorAll('#vlist .item')].filter(el => el.style.display !== 'none'); }
+    /* 2026-10-15 性能：按 renderList 的版本号缓存 —— #vlist 的内容只在 renderList 里整段重建，
+       按住方向键连翻（keydown 每 ~30ms 一发）不必每下重扫全表。sel 类切换不动元素集合，缓存不必失效。 */
+    let _vlistVer = 0, _visCards = null, _visCardsVer = -1;
+    function visibleCards() {
+    if (_visCardsVer !== _vlistVer) {
+    _visCards = [...document.querySelectorAll('#vlist .item')].filter(el => el.style.display !== 'none');
+    _visCardsVer = _vlistVer;
+    }
+    return _visCards;
+    }
     function cardNav(d) {
     const cards = visibleCards();
     if (!cards.length) return;
@@ -8055,9 +8113,10 @@ let listenOn = false;
         }
         return out;
       }
-      function push2(ev) {
-        ev.id = ShadowPlan.eventId(ev);
-        ROOT2.events.push(ev);
+      /* 2026-10-15 性能：批量记账 —— append / 压缩 / 重放 / 落盘 / 上传排程句级只做一次。
+         逐词版 6000 条日志时一句 3 词 ≈ 41ms、20000 条 ≈ 96ms，全是主线程上的全量 replay + stringify。 */
+      function push2Many(evs) {
+        for (const ev of evs) { ev.id = ShadowPlan.eventId(ev); ROOT2.events.push(ev); }
         if (ROOT2.events.length > EVENTS_CAP) {
           const before = ROOT2.events.length;
           let next = compactEvents(ROOT2.events);
@@ -8070,8 +8129,9 @@ let listenOn = false;
         }
         recompute2(); _cachedPlan = null; persist2();
         queueEventUpload();
-        return ev;
       }
+      /* 单条版的薄壳（dayplan / relearn / daystart 仍走这里）。 */
+      function push2(ev) { push2Many([ev]); return ev; }
 
       /* ---------- 事件流上云：只传事实，计划不上传（PRD §12） ----------
          没有 update、没有合并策略：拉回来重放，靠 event_id 去重，天然幂等。
@@ -8411,13 +8471,12 @@ let listenOn = false;
         if (!ROOT2 || !ROOT2.plan) return;
         const day = ShadowPlan.dayKey(Date.now(), bdHour());
         const now = Date.now();
-        wordsOfSent(i).forEach(w => {
-          /* 毕业词以前在这里被挡掉（`stage === 'graduated'` 就 return）。那一刀是
-             "毕业 = 永不再见"的另一半：引擎把到期的毕业词排回队列了，可读到的时候不记账，
-             due 就永远不顺延，同一句会被天天重排、保温配额全浪费在它身上。
-             现在照记 —— 引擎里 reps 续加、due 顺延 14 天。 */
-          push2(ShadowPlan.mkContact(w, i, now, day));
-        });
+        /* 毕业词以前在这里被挡掉（`stage === 'graduated'` 就 return）。那一刀是
+           "毕业 = 永不再见"的另一半：引擎把到期的毕业词排回队列了，可读到的时候不记账，
+           due 就永远不顺延，同一句会被天天重排、保温配额全浪费在它身上。
+           现在照记 —— 引擎里 reps 续加、due 顺延 14 天。 */
+        /* 2026-10-15 性能：整句 map 完一次批量提交（原来逐词 push2 = 逐词全量重放 + 落盘）。 */
+        push2Many(wordsOfSent(i).map(w => ShadowPlan.mkContact(w, i, now, day)));
       }
       function relearn(w) {
         if (!ROOT2 || !ROOT2.state.words[w]) return;
@@ -10458,6 +10517,20 @@ let listenOn = false;
         _etaPending.set(key, run);
         return run;
       }
+      /* 2026-10-15 性能：拖动滑块的工期预览合并器（设置屏 / 计划页 / 「我的」三处共用）。
+         病根：以前每跨一档（input）立刻 etaFor —— 5→240 一趟最多排 47 个 0.3–0.9s 的全量模拟，
+         拖动整个过程主线程被啃成幻灯片。现在连续滑动期间一概不算，拖停 250ms 或松手才结算最后一档。
+         预览语义（拖动中就出数）不变：数字仍是 estimateDays 唯一来源，缓存与口径一个字没动。 */
+      const _etaDragPend = Object.create(null);
+      function etaDragSoon(tag, m, run) {
+        clearTimeout(_etaDragPend[tag]);
+        _etaDragPend[tag] = setTimeout(() => { _etaDragPend[tag] = null; run(m); }, 250);
+      }
+      function etaDragStop(tag) {
+        if (!_etaDragPend[tag]) return;
+        clearTimeout(_etaDragPend[tag]);
+        _etaDragPend[tag] = null;
+      }
       function etaMonth(ts, exact) {
         const d = new Date(ts);
         return d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月' + (exact ? ' ' + d.getDate() + ' 日' : '');
@@ -10510,13 +10583,16 @@ let listenOn = false;
         el.innerHTML = html;
         el.dataset.days = r && r.done ? String(r.days) : '';
       }
-      /* mOverride：滑块还在拖、计划尚未落账时，用它预览工期（见 bindMinSlider 的 onInput）。 */
-      function paintPlanEta(mOverride) {
+      /* mOverride：滑块还在拖、计划尚未落账时，用它预览工期（见 bindMinSlider 的 onInput）。
+         drag=true：拖动预览走 etaDragSoon 合并 —— 连续滑动只算最后一档（2026-10-15 性能）。 */
+      function paintPlanEta(mOverride, drag) {
         const el = document.getElementById('planEta');
         if (!el || !ROOT2 || !ROOT2.plan) return;
         const m = mOverride == null ? ROOT2.plan.todayMinutes : mOverride;
         el.textContent = '算一下…';
-        etaFor(m).then(r => etaSet(el, etaText(r, m, false) + (milestoneText(r) ? ' · ' + milestoneText(r) : ''), r));
+        const run = (mm) => etaFor(mm).then(r => etaSet(el, etaText(r, mm, false) + (milestoneText(r) ? ' · ' + milestoneText(r) : ''), r));
+        if (drag) etaDragSoon('plan', m, run);
+        else { etaDragStop('plan'); run(m); }
       }
       function paintTodayEta() {
         const el = document.getElementById('todayEta');
@@ -10583,7 +10659,7 @@ let listenOn = false;
           <div class="ps-adjust"><button class="btn" onclick="TASK.importBackup()">导入恢复</button></div>
           <input type="file" id="importFile" accept="application/json,.json" style="display:none">
         </div>`;
-        const refresh = () => {
+        const refresh = (deferEta) => {
           /* 「今天大约」必须用**引擎真实的装配**（三池混合：新句 25s / 复习句 8s）——
              以前按单一「一句约 8 秒」除法出数，30 分钟算出 222 句、60 分钟算出 444 句
              （2026-09-26 用户：「222、333、444 你是认真的么」）。装配出来的才是今天真会排到的量。 */
@@ -10611,14 +10687,20 @@ let listenOn = false;
           if (eta) {
             eta.textContent = '算一下…';
             const want = sel;
-            etaFor(want).then(r => etaSet(eta, etaText(r, want, true), r));
+            const run = (mm) => etaFor(mm).then(r => etaSet(eta, etaText(r, mm, true), r));
+            if (deferEta) etaDragSoon('setup', want, run);
+            else { etaDragStop('setup'); run(want); }
           }
         };
         refresh();
-        /* 这一屏还没有计划可改（建计划要等「开始这个计划」），所以只挂 onInput。
+        /* 这一屏还没有计划可改（建计划要等「开始这个计划」），落账不在滑块的 change 上；
+           change 仍挂 onCommit —— 只为把工期预览立刻定稿（拖动期间走 250ms 合并，见 refresh(deferEta)）。
            rAF 合并：一帧内跨过多档只算一次装配 —— 真数据 3245 句，逐档装配会掉帧。 */
         let raf = 0;
-        bindMinSlider(p, { onInput: (m) => { sel = m; if (raf) return; raf = requestAnimationFrame(() => { raf = 0; refresh(); }); } });
+        bindMinSlider(p, {
+          onInput: (m) => { sel = m; if (raf) return; raf = requestAnimationFrame(() => { raf = 0; refresh(true); }); },
+          onCommit: (m) => { sel = m; refresh(false); },
+        });
         document.getElementById('psStart').onclick = () => {
           /* W7-4：先取走「从空状态点去设置」的那一篇，再建计划 —— initPlan 会把残留清掉，
              顺序反了就把这一篇弄丢了。 */
@@ -10654,7 +10736,8 @@ let listenOn = false;
         if (_view === 'plan') {
           /* 监听也挂在这里：renderPlanView 只管拼字符串，重绘路径由本函数统一收尾，
              否则面板重开一次就多绑一份、松手落账会被 call 两遍。 */
-          bindMinSlider(p, { onInput: paintPlanEta, onCommit: setMinutes });
+          /* 拖动预览走 etaDragSoon 合并（drag=true）：连续滑动只算最后一档；change 落账后按新值立刻定稿。 */
+          bindMinSlider(p, { onInput: (m) => paintPlanEta(m, true), onCommit: setMinutes });
           paintPlanEta();
         } else if (_view === 'today') paintTodayEta();
       }
@@ -11211,7 +11294,7 @@ let listenOn = false;
         /* 「今天从哪开始」的当前读数（2026-10-08）：今日面板与「我的」共用这一份文案，
            面板那一行和线落在同一个句子上。 */
         startInfo,
-        etaFor, etaCalls, etaText, etaMonth, seedDailyForTest,
+        etaFor, etaCalls, etaText, etaMonth, etaDragSoon, etaDragStop, seedDailyForTest,
         // 3.0 按篇账出口：这一篇累计读了几句次（② 批次凭据的按篇出口已随功能删除）
         repsOf,
         roundInfo, startNewRound, seedRoundSeenForTest, setManualStart, clearManualStart, confirmAutoStart,
@@ -11231,19 +11314,8 @@ let listenOn = false;
         openStartPicker, closeStartPicker, confirmStartPicker, startConfirmBack, startConfirmYes, syncStartSent,
         /* 真实用时账出口（2026-09-25 链路排查）：数据页「累计学习时长」按天读真实毫秒。 */
         readMsByDay: function () { return loadArticleStats().read.ms; },
-        /* 今天这一篇排到多少句 / 读过几句（2026-09-26 用户：卡片除了文章进度，必须显示今天任务进度）。
-           走今天的装配队列（home 上 currentArticle 为 null → 全局队列），按篇过滤。 */
-        todayOfArticle: function (a) {
-          try {
-            let planned = 0, done = 0;
-            todayPlan().queue.forEach(function (q) {
-              if (artOfSentGlobal(q.i) !== a) return;
-              planned++;
-              if (readToday2(q.i)) done++;
-            });
-            return { planned: planned, done: done };
-          } catch (e) { return { planned: 0, done: 0 }; }
-        },
+        /* （原处有一份同名的旧版 todayOfArticle，被下方同名键静默覆盖、从未生效；
+           2026-10-15 性能修复时一并删除 —— 功能以文件后面那份为准。） */
         /* 上次学习位置（2026-09-26）：首页横幅要显示「上次读到第 X 句」——
            见 enterTaskMode 的恢复逻辑（存档位置属于这一篇就落回去）。 */
         savedPosForArticle: function (a) {
@@ -11283,12 +11355,16 @@ let listenOn = false;
           try {
             if (!ROOT2 || !ROOT2.plan || a == null) return { planned: 0, done: 0 };
             const saved = currentArticle;
-            currentArticle = null; _cachedPlan = null;        // 取「今天整批」再按篇筛
-            const q = todayPlan().queue.filter(function (x) { return artOfSentGlobal(x.i) === a; });
-            currentArticle = saved; _cachedPlan = null;
-            let done = 0;
-            q.forEach(function (x) { if (readToday2(x.i)) done++; });
-            return { planned: q.length, done: done };
+            currentArticle = null;                          // 取「今天整批」再按篇筛
+            const q = todayPlan().queue;
+            currentArticle = saved;
+            /* 2026-10-15 性能：原来这里前后各清一次 _cachedPlan —— 每次调用都强制全量装配，
+               首页六张卡就是六次、数据页十几处更多。现在不清：留住「今天整批」的装配缓存，
+               下一次按缓存键（日 / 篇 / 手动范围）直接命中；真失效由 push2 / setMinutes 等
+               变化点清 _cachedPlan，下一次进来自然重装（与今日面板/任务条同一套失效纪律）。 */
+            let done = 0, planned = 0;
+            q.forEach(function (x) { if (artOfSentGlobal(x.i) !== a) return; planned++; if (readToday2(x.i)) done++; });
+            return { planned: planned, done: done };
           } catch (e) { return { planned: 0, done: 0 }; }
         },
         // 事件流「安全合并」的对照实验：先冻住派生状态 → 合并 → 重放 → 再比。
