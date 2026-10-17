@@ -4213,6 +4213,13 @@ let listenOn = false;
                        好让「回到学习位置」有东西可回（taskPos 不动，仍记着正轨）。 */
       try { if (typeof TASK !== 'undefined' && TASK.sentenceTapped) TASK.sentenceTapped(); } catch (err) {} };
     el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } };
+    /* 指针停在某一句话上就先把这句合成掉（桌面端）：停在上面 800ms 才算数，
+       划过整篇不会泛洪；播放中不做（接下来要播的由 launch 的 8 句预取负责）。 */
+    el.onpointerenter = () => {
+      if (playing || Date.now() - _hoverAt < 800) return;
+      _hoverAt = Date.now();
+      warmSentenceAt(i);
+    };
     });
     // 单词键盘支持：Enter/Space 打开弹窗
     document.querySelectorAll('.w').forEach(el => {
@@ -4228,11 +4235,56 @@ let listenOn = false;
     buildSeek(currentChapter >= 0 ? currentChapter : 0);
     paintAB(); // 正文重建后恢复 A/B 标记
     scheduleClampGloss(); // ① 方案B：注音夹紧（隐藏视图静默跳过；进阅读/展开随身听还会再跑）
+    /* 预热：进篇即把「当前句 + 后面 7 句」合成好；▶ 悬停再补当前句（重复调用会被 _pend/缓存吃掉） */
+    try { warmResume(); } catch (e) {}
+    try {
+      const bp = document.getElementById('btnPlay');
+      if (bp && !bp._warmBind) {
+        bp._warmBind = 1;
+        bp.addEventListener('pointerenter', () => warmSentenceAt(idx >= 0 ? idx : 0));
+      }
+    } catch (e) {}
     }
 
     /* ============ 播放条句子圆点 ============ */
     let artOfSent = [], dotsArt = -1;
     const plainEN = t => t.replace(/\[\[[^\]:]+:([^\]]+)\]\]/g, '$1');
+    /* ============ 预热：把「点下去才开始」的合成挪到点之前 ============
+       云端合成一句一请求，一次往返 1~3 秒几乎全是固定开销（取 session + 边缘函数接单 +
+       Azure 合成启动），点下去才发就一定要等。已有的 warmupCloudAhead() 只从「下一句」开始
+       预热 —— 当前句恰恰是按 ▶ 最先要的那句，永远冷的。这里补两处：
+       ① warmResume：进篇/换篇后（含自由阅读，不只是任务模式）把当前句起的 8 句合成好；
+       ② 指针停在某句上 800ms 就先合成这一句 —— 桌面端点句播放基本不用等；
+       ③ 只对已连通的云音色做：本机语音本身即时，预热纯属浪费。
+       预取走 CLOUD.prefetch（低优先级，队列满时被播放任务顶掉），不挡真人操作。 */
+    let _warmSig = '', _warmAt = 0, _warmRetry = 0, _hoverAt = 0;
+    function canWarm() {
+      try {
+        return typeof CLOUD !== 'undefined' && CLOUD._on && isCloudURI(selVoiceURI)
+          && !document.hidden && sents.length > 0;
+      } catch (e) { return false; }
+    }
+    function warmSentenceAt(i) {
+      if (!canWarm() || i < 0 || i >= sents.length) return;
+      try {
+        const t = plainEN(sentRaw(i));
+        if (t) CLOUD.prefetch(t, selVoiceURI.slice(6), rate);
+      } catch (e) {}
+    }
+    function warmResume() {
+      try {
+        /* 开屏时 CLOUD._on 要等 checkStatus 回来才有值：这一次先跳过，3 秒后补一次，
+           否则「开机直接按 ▶」永远等不到预热。 */
+        if (!canWarm()) {
+          if (!_warmRetry) _warmRetry = setTimeout(() => { _warmRetry = 0; warmResume(); }, 3000);
+          return;
+        }
+        const sig = selVoiceURI + '|' + rate + '|' + currentChapter + '|' + sents.length;
+        if (sig === _warmSig && Date.now() - _warmAt < 120000) return; // 同一篇同一音色：2 分钟内不重复造轮子
+        _warmSig = sig; _warmAt = Date.now();
+        setTimeout(() => { try { warmupCloudAhead(); } catch (e) {} }, 600); // 首屏先长出来，别和渲染抢连接
+      } catch (e) {}
+    }
     window.addEventListener('scroll', () => {
     // 检测用户手动滚动（播放中且非程序触发的滚动）
     if (playing && !_programmaticScroll) {
@@ -4478,7 +4530,7 @@ let listenOn = false;
        _userMail / _on，谁也不知道这一下落在什么时刻 —— 挂出来才有地方 await，
        测试与「等云端就绪再动 UI」的代码不必再靠 sleep 猜。 */
     bootDone: null,
-    _q: [], _running: 0, _busy: false, _exec: null, _au: null, _auEl: null, _auUrl: null, _playCtl: null, _gen: 0,
+    _q: [], _running: 0, _busy: false, _exec: null, _au: null, _auEl: null, _auUrl: null, _playCtl: null, _playCtlKey: '', _gen: 0,
     _jobTimeout: 0,
     client() {
     if (!window.supabase) return null;
@@ -4676,26 +4728,36 @@ let listenOn = false;
     });
     }
     },
+    /* 缓存键里第 4 段就是原文：≤2 个词算「词条」（点词发音 / 答题反馈），其余算句子。
+       两者体积差 20 倍（词条 3~8KB、句子 40~120KB），却共用同一个 120 条 FIFO 池 ——
+       读长文时 8 句预取一推进，刚点过的词条就被挤出去了，下次再点又得重新合成。
+       2026-10-17 用户报「点单个单词的发音更慢」，一半是这个。 */
+    _keyIsWord(key) {
+    try { return String(key).split('|').slice(3).join('|').trim().split(/\s+/).length <= 2; }
+    catch (e) { return false; }
+    },
+    /* 命中即刷新队尾：Map 的插入序当 LRU 用，常点的词才不会被新句子挤掉 */
+    _touch(key) {
+    const u = this.cache.get(key);
+    if (u === undefined) return u;
+    this.cache.delete(key); this.cache.set(key, u);
+    return u;
+    },
     _cacheSet(key, url) {
-    if (this.cache.size >= 120) {
-    // 保护正在播放的 blob URL：避免回收当前音频导致播放中断
+    if (this.cache.has(key)) this.cache.delete(key); // 重新插入 = 排到队尾（真 LRU，而不是 FIFO）
+    const isWord = this._keyIsWord(key);
+    const cap = isWord ? 400 : 100; // 词池 400 条 ≈ 2~3MB 内存，句池仍是 100 条
     const keys = Array.from(this.cache.keys());
-    let evicted = false;
-    for (const k of keys) {
-      const u = this.cache.get(k);
-      if (u && u !== this._auUrl) {
-      try { URL.revokeObjectURL(u); } catch (e) {}
-      this.cache.delete(k);
-      evicted = true;
-      break;
-      }
-    }
-    // 兜底：若全部 key 都等于当前播放 URL（理论上不可能），回收最旧的一条
-    if (!evicted && keys.length) {
-      const first = keys[0];
-      try { URL.revokeObjectURL(this.cache.get(first)); } catch (e) {}
-      this.cache.delete(first);
-    }
+    let n = 0;
+    for (const k of keys) if (this._keyIsWord(k) === isWord) n++;
+    while (n >= cap) {
+      // 只在同一个池里淘汰最旧的一条；正在播放的那条永不回收（否则当前音频当场断）
+      const victim = keys.find(k => this.cache.has(k) && this._keyIsWord(k) === isWord && this.cache.get(k) !== this._auUrl);
+      if (!victim) break;
+      try { URL.revokeObjectURL(this.cache.get(victim)); } catch (e) {}
+      this.cache.delete(victim);
+      keys.splice(keys.indexOf(victim), 1);
+      n--;
     }
     this.cache.set(key, url);
     },
@@ -4754,12 +4816,16 @@ let listenOn = false;
     s = await this.waitSession();
     }
     if (!s) throw new Error('no-session'); // 真没登录才走这条；有 session 但服务端 401 走下面的 api 错误分支
+    /* 分段时间戳（?debug=1 才打印）：鉴权 / 首字节 / 收完。慢到底慢在哪一段，
+       靠这个数出来，不靠猜 —— 换网络、换音色、换句子长度都能当场对照。 */
+    const _t0 = (window.performance && performance.now) ? performance.now() : 0;
     const r = await fetch(this.URL + '/functions/v1/tts', {
     method: 'POST',
     signal,
     headers: { 'Content-Type': 'application/json', apikey: this.KEY, Authorization: 'Bearer ' + s.access_token },
     body: JSON.stringify({ text, voice: voiceId, rate: Math.min(2, Math.max(0.5, rate)) }),
     });
+    const _t1 = (window.performance && performance.now) ? performance.now() : 0;
     if (!r.ok) {
     let msg = 'api ' + r.status;
     try { const t = await r.text(); const j = JSON.parse(t); if (j && j.error) msg = j.error; } catch (e) {}
@@ -4767,21 +4833,35 @@ let listenOn = false;
     }
     const b = await r.blob();
     if (!b || !b.size) throw new Error('no audio');
+    try {
+      const _t2 = (window.performance && performance.now) ? performance.now() : 0;
+      dlog('tts', Math.round(_t1 - _t0) + 'ms 首字节 / ' + Math.round(_t2 - _t1) + 'ms 收流 / '
+        + Math.round(b.size / 1024) + 'KB', String(text).slice(0, 14));
+    } catch (e) {}
     return b;
+    },
+    /* 缓存坐标的唯一出处：play / synth / 预取 / stop(keepKey) 全走这里。
+       历史上 play 与 synth 各自手写一遍字符串，靠注释「必须与此逐字一致」硬撑 ——
+       现在多了「按 ▶ 时把正在飞的预热留下一份」这条路，第三处再抄一遍迟早漂。
+       text 统一 trim：预热取原始句（plainEN 后可能带首尾空格），播放取 DOM 文本。 */
+    clipKey(text, voiceId, rate) {
+    return 'r2|' + voiceId + '|' + Number(cloudSynthRate(rate)).toFixed(2) + '|' + String(text == null ? '' : text).trim();
     },
     async synth(text, voiceId, rate, isPlay, fresh) {
     /* 缓存坐标用【合成档】而不是【目标档】：0.5 与 0.75 都要的是同一份 1x 音频，
-       各存一份既费流量又费 IndexedDB。play() 里那行 clipKey 必须与此逐字一致。 */
+       各存一份既费流量又费 IndexedDB。 */
     const sr = cloudSynthRate(rate);
-    const key = 'r2|' + voiceId + '|' + Number(sr).toFixed(2) + '|' + text;
-    if (this.cache.has(key)) return this.cache.get(key);
+    const key = this.clipKey(text, voiceId, rate);
+    if (this.cache.has(key)) return this._touch(key);
     // fresh：正式播放时若怀疑 _pend 里那条已被误杀，就丢弃它、重开一份全新合成
     if (!fresh && this._pend.has(key)) return this._pend.get(key);
     if (fresh) { try { this._pend.delete(key); } catch (e) {} }
     // 各自独立 AbortController：创建即绑定，排队等待时也能被取消；
     // 只有正式播放才登记为 _playCtl，预取不许覆盖（否则 stop 会取消错对象）
     const ctl = new AbortController();
-    if (isPlay) this._playCtl = ctl;
+    /* 记住这颗 controller 对应的缓存键：stop(keepKey) 靠它判断「正在合成的就是马上要播的这句」。
+       见 stop() 里那段「同一句连点两下」的说明。 */
+    if (isPlay) { this._playCtl = ctl; this._playCtlKey = key; }
     const p = (async () => {
     const hit = await this._idbGet(key);
     if (hit) { const u = URL.createObjectURL(hit); this._cacheSet(key, u); return u; }
@@ -4804,7 +4884,7 @@ let listenOn = false;
     return u;
     } finally {
     clearTimeout(to);
-    if (this._playCtl === ctl) this._playCtl = null;
+    if (this._playCtl === ctl) { this._playCtl = null; this._playCtlKey = ''; }
     }
     })();
     this._pend.set(key, p);
@@ -4848,7 +4928,15 @@ let listenOn = false;
     stop(keepKey) {
     this._gen = (this._gen || 0) + 1; // 新一代：过期 play 的 fail 不许再碰共享状态
     _cloudIntentionalPause = true; // 标记主动暂停
-    try { if (this._playCtl) { this._playCtl.abort(); this._playCtl = null; } } catch (e) {}
+    /* 「同一句连点两下」不许从头再等（2026-10-17 用户报：点词卡已经自动读了，再点一下「发音」
+       反而要等更久）—— 点词会先 openPop 自动读一次，手快再点「发音」时第一次的合成还在飞；
+       旧写法这里无条件 abort，第二次只能从零再合成一遍，两次的等待还被叠加。
+       正在合成的就是马上要播的这一句（keepKey 相同）→ 放过它，交给 synth 的 _pend 复用。 */
+    const keepCtl = !!(keepKey && this._playCtlKey === keepKey);
+    try {
+    if (this._playCtl && !keepCtl) this._playCtl.abort();
+    if (!keepCtl) { this._playCtl = null; this._playCtlKey = ''; }
+    } catch (e) {}
     /* 正式播放优先（2026-09-28）：串行队列里正在执行的那笔预取（20s 上限）stop 清不掉，
        新起播只能干等它 —— 切句/重播时"卡住"的根因之一。把它掐掉，让新播放立刻拿到槽位。
        正式播放中的（isPlay）和本句自己的预取（keepKey，play 马上要复用）不碰。 */
@@ -4889,9 +4977,9 @@ let listenOn = false;
     setTimeout(() => { _cloudIntentionalPause = false; }, 100); // 短暂延迟后重置
     },
     play(text, voiceId, rate, my, cb, fallback, fresh) {
-    /* 缓存坐标，必须与 synth() 里那行 key 逐字一致（含 cloudSynthRate 映射） */
+    /* 缓存坐标只由 clipKey 一处产出（与 synth 同源，含 cloudSynthRate 映射） */
     const sr = cloudSynthRate(rate);
-    const clipKey = 'r2|' + voiceId + '|' + Number(sr).toFixed(2) + '|' + text;
+    const clipKey = this.clipKey(text, voiceId, rate);
     this.stop(clipKey); // 串行：停旧音频、清旧队列；但留下本句自己的预取（见 stop 的 keepKey）
     if (fresh) { try { this._pend.delete(clipKey); } catch (e) {} }
     const g = this._gen; // 本次播放的代际：过期回调不许 stop 掉新播放
@@ -6092,14 +6180,16 @@ let listenOn = false;
     /* 云预热（2026-09-28 用户要"提前多预合成几句"）：预取以前只在 launch（开播）里发生，
        首句永远冷、切音色后全冷（voiceId 在缓存 key 里）。入口默读的那几秒 / 切完音色立刻
        把后面 8 句丢进后台合成（去重天然：cache/_pend 命中直接返回），轮到播时大概率已就绪。
-       只预热不同步起播，无手势也能跑；iOS 后台节流也只是慢，不会错。 */
+       只预热不同步起播，无手势也能跑；iOS 后台节流也只是慢，不会错。
+       2026-10-17：起点从「下一句」改成「当前句」（有续读位时）。按 ▶ / 点句先要的正是当前句，
+       从 idx+1 起等于把它永远留在冷态 —— 用户报的「句子发音加载慢」有一半是这个。 */
     function warmupCloudAhead() {
     try {
     if (typeof CLOUD === 'undefined' || !CLOUD._on) return;
     if (!isCloudURI(selVoiceURI)) return;
     if (!sents.length) return;
     const vid = selVoiceURI.slice(6);
-    const from = (idx >= 0) ? idx + 1 : 0;
+    const from = (idx >= 0) ? idx : 0;
     for (let k = 0; k < 8 && from + k < sents.length; k++) {
     try { CLOUD.prefetch(plainEN(sentRaw(from + k)), vid, rate); } catch (e) {}
     }
@@ -6114,7 +6204,18 @@ let listenOn = false;
     let hadQueue = false;
     try { hadQueue = !!(speechSynthesis.speaking || speechSynthesis.pending || speechSynthesis.paused); } catch (e) {}
     try { if (hadQueue) speechSynthesis.cancel(); } catch (e) {}
-    try { if (typeof CLOUD !== 'undefined') CLOUD.stop(); } catch (e) {}
+    /* stop 时把「马上要播的这一句」的 key 交出去：入口预热 / 悬停预热刚发出去的那份请求要留着复用。
+       不交的话，点句播放的瞬间先把它掐成 stale，再从头合成一遍 —— 预热的钱白花、要等的时间照旧
+       （悬停预热更是刚发就点，必被掐）。 */
+    try {
+      if (typeof CLOUD !== 'undefined') {
+        let keep = '';
+        try {
+          if (isCloudURI(selVoiceURI) && sents[i]) keep = CLOUD.clipKey(sentText(sents[i]), selVoiceURI.slice(6), rate);
+        } catch (e2) {}
+        CLOUD.stop(keep);
+      }
+    } catch (e) {}
     idx = i; playing = true; launchedUpTo = i - 1;
     lockScreen();
     syncSeek(i);
