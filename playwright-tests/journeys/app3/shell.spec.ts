@@ -46,12 +46,12 @@ const TINY: Record<string, string> = {
 };
 
 test.describe('3.0 外壳', () => {
-  test('左侧导航 4 项 + 底部「我的」一行（分割线），文案与顺序正确，深链选中态正确，三档断点宽度正确', async ({ page }) => {
+  test('左侧导航 5 项 + 底部「我的」一行（分割线），文案与顺序正确，深链选中态正确，三档断点宽度正确', async ({ page }) => {
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/index.html`);
-    await expect(page.locator('.sidenav .nav-item')).toHaveCount(4);
+    await expect(page.locator('.sidenav .nav-item')).toHaveCount(5);
     expect(await page.locator('.sidenav .nav-item').allInnerTexts())
-      .toEqual(['首页', '随身听', '单词本', '学习数据']);
+      .toEqual(['首页', '随身听', '单词本', '词伙表', '学习数据']);
     // 「我的」不再是 nav-item，也不是卡片：一条分割线 + 一行。PC 这一行报登录状态
     // （2026-10-08 用户改口径：未登录写「未登录」，登录后写账号名；手机端才统一写「我的」）
     await expect(page.locator('.sidenav .me-card')).toBeVisible();
@@ -136,15 +136,15 @@ test.describe('3.0 外壳', () => {
   });
 
   // 2026-09-25 用户：四个一级页面有的有大标题有的没有，切页上下跳 ——
-  // 现在四页共用 .pg-title，文案对应路由，且都是可见标题（不再有 sr-only 特例）。
-  test('四个一级页面都有同一样式的大标题（.pg-title），切页顶部高度不跳', async ({ page }) => {
+  // 现在五个一级页面（2026-10-17 加词伙表）共用 .pg-title，文案对应路由，且都是可见标题（不再有 sr-only 特例）。
+  test('五个一级页面都有同一样式的大标题（.pg-title），切页顶部高度不跳', async ({ page }) => {
     // 用 TINY + 建计划：stats 无计划时走「开始你的学习计划」空态（另一种设计，不带 pg-title）
     await stubData(page, TINY);
     await page.goto(`${rootUrl}/index.html`);
     await page.waitForFunction(() => document.querySelectorAll('#art .sent').length > 0);
     await page.evaluate(() => { if (!TASK.hasPlan) { TASK.resetV2(); TASK.initPlan(15); } });
     const cases: Array<[string, string]> = [
-      ['home', '首页'], ['listen', '随身听'], ['words', '单词本'], ['stats', '学习数据'],
+      ['home', '首页'], ['listen', '随身听'], ['words', '单词本'], ['collocations', '词伙表'], ['stats', '学习数据'],
     ];
     let lastTop = -1, lastStyle = '';
     for (const [route, text] of cases) {

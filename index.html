@@ -2546,6 +2546,27 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .wd-exzh { margin: 3px 0 0; font-size: 12px; color: var(--muted); }
   .wd-stat { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
   body.dark .wb-detail { background: var(--card); border-color: var(--border); }
+  /* ============ 3.0 词伙表（2026-10-17，路由 #/collocations） ============
+     复用单词本的 .words-page / .wb-list / .wb-row / .wb-more 骨架；
+     只多三样：搜索框、覆盖状态（未覆盖整行置灰）、分组标题（跨两列的 .cl-sec）。 */
+  .cl-search { width: 100%; min-height: 44px; margin: 0 0 10px; padding: 0 14px; border: 1px solid var(--border);
+    border-radius: 14px; background: var(--card); color: var(--text); font: inherit; font-size: 14px;
+    -webkit-appearance: none; appearance: none; }
+  .cl-search:focus { outline: 2px solid var(--accent-line); outline-offset: 1px; }
+  .cl-jump { display: block; min-height: 32px; margin: 0 0 8px; padding: 0; border: none; background: none;
+    color: var(--accent-text); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; text-align: left; }
+  .cl-jump[hidden] { display: none; }
+  .cl-row { cursor: default; }
+  .cl-top { display: flex; align-items: baseline; gap: 4px 8px; flex-wrap: wrap; }
+  .cl-en { font-size: 14.5px; font-weight: 700; color: var(--text); }
+  .cl-zh { font-size: 12.5px; color: var(--ink2); }
+  .cl-w { margin-left: auto; flex: none; font-size: 10.5px; color: var(--muted); }
+  .cl-sec { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; margin: 18px 0 0;
+    font-size: 11.5px; font-weight: 700; color: var(--muted); }
+  .cl-sec::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+  /* 书里有、六篇课文没用到的搭配：放最后并整行压暗（.42 是深浅两档都能读的下限） */
+  .cl-row.off { opacity: .42; background: transparent; box-shadow: none; border-style: dashed; }
+  body.dark .cl-row.off { background: transparent; }
   /* ============ 3.0 故事脉络二级页（2026-10-10 用户加；入口在「我的」→「故事脉络」，路由 #/story）============
      与学习数据页同族的二级页，但阅读列收窄到 820 并在 #appView 里居中（其它一级页是全宽）。
      ① 前缀一律 sy-（story）。注意 **st- 已被学习数据页整族占用**（.st-block/.st-num/.st-art/.st-tip…），
@@ -3251,6 +3272,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         <button class="nav-item on" data-route="home"><i class="ri-home-5-line i-line" aria-hidden="true"></i><i class="ri-home-5-fill i-fill" aria-hidden="true"></i><span>首页</span></button>
         <button class="nav-item" data-route="listen"><i class="ri-headphone-line i-line" aria-hidden="true"></i><i class="ri-headphone-fill i-fill" aria-hidden="true"></i><span>随身听</span></button>
         <button class="nav-item" data-route="words"><i class="ri-book-2-line i-line" aria-hidden="true"></i><i class="ri-book-2-fill i-fill" aria-hidden="true"></i><span>单词本</span></button>
+        <button class="nav-item" data-route="collocations"><i class="ri-links-line i-line" aria-hidden="true"></i><i class="ri-links-fill i-fill" aria-hidden="true"></i><span>词伙表</span></button>
         <button class="nav-item" data-route="stats"><i class="ri-bar-chart-2-line i-line" aria-hidden="true"></i><i class="ri-bar-chart-2-fill i-fill" aria-hidden="true"></i><span>学习数据</span></button>
         <!-- 侧栏底部：一条分割线 + 一行「我的」（2026-09-24 用户：不要卡片，用分割线）。
              2026-10-08 用户：PC 端这一行按登录态显示文字（未登录 / 账号名），点它开统一登录弹窗或
@@ -3488,12 +3510,13 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       let SECTIONS = [];
       let VOCAB = {};
       let CHAPTERS = [];
+      let COLLOCS = [];      // 词伙表（data/collocations.json，首次进 #/collocations 才拉）
       let SENT_RAW = [];
       let dataReady = false;
       /* 数据缓存版本：必须等于 data/ 三个 JSON 的内容哈希，由 scripts/validate_data.py 校验。
          不写它，iOS Safari 会按 Last-Modified 启发式缓存 —— 课文改了、词表没改，句序与词表就会错位。
          改了数据忘了 bump 会直接让门禁 FAIL，而不是静默服务旧数据。 */
-      const SHADOW_DATA_VER = "d634acdff0";
+      const SHADOW_DATA_VER = "e39f89c1b4";
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
