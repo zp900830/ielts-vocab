@@ -650,6 +650,10 @@
   /* 点击打开（桌面/移动通用） */
   .loop-wrap.open .loop-menu, .rate-wrap.open .rate-menu { opacity: 1; visibility: visible;
     pointer-events: auto; transform: translateX(-50%) translateY(0); }
+  /* 倍速 7 档（2026-10-17）：竖排 7 行会顶到视口上沿（1280×720 实测首项 top=0，再矮一点就点不到），
+     改两列铺开 = 4 行；0.5~2 仍按从慢到快、行优先排列。单句循环菜单只有 3 项，保持原竖排不动。 */
+  .rate-menu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: 136px; }
+  .rate-menu button { text-align: center; }
   /* 桌面悬浮展开（触屏设备禁用，避免 iOS 点击后菜单粘住不关） */
   @media (hover: hover) and (pointer: fine) {
     .loop-wrap:hover .loop-menu, .rate-wrap:hover .rate-menu { opacity: 1; visibility: visible;
@@ -3350,10 +3354,16 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
           <div class="menu-bridge" aria-hidden="true"></div>
           <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速" aria-label="朗读倍速">1x</button>
           <div class="rate-menu">
+            <!-- 7 档（2026-10-17）：慢速端补 0.5（生词多的首读）、快速端补 1.75/2（复习速刷）。
+                 同类产品（每日英语听力 / 不背单词 / 微信读书）都落在 0.5~2.0 这组常规档位上，
+                 0.75~1.5 只有四档时两端都不够用。改这里必须同步 cloudSynthRate 的原生档位表。 -->
+            <button data-mrate="0.5" onclick="pickRate(0.5)">0.5x</button>
             <button data-mrate="0.75" onclick="pickRate(0.75)">0.75x</button>
             <button data-mrate="1" class="active" onclick="pickRate(1)">1x</button>
             <button data-mrate="1.25" onclick="pickRate(1.25)">1.25x</button>
             <button data-mrate="1.5" onclick="pickRate(1.5)">1.5x</button>
+            <button data-mrate="1.75" onclick="pickRate(1.75)">1.75x</button>
+            <button data-mrate="2" onclick="pickRate(2)">2x</button>
           </div>
         </div>
         <div class="ab-wrap" id="markWrap">
@@ -4340,6 +4350,22 @@ let listenOn = false;
     }
     /* ============ Azure 云端语音（与 admin 后台同一服务，需登录） ============ */
     const _CFG = (typeof window !== 'undefined' && window.IELTS_CONFIG) || {};
+    /* 云端合成只按服务端「原生支持」的三档请求（1 / 1.25 / 1.5）。
+       2026-10-17 用户报：0.75x 云端语音加载不出来（其余档正常）—— 慢速档是后加的，
+       服务端没跟着支持。与其等后端改，不如客户端把变速从「合成参数」搬到播放层：
+       合成永远要一份能出的音频，差速用 <audio>.playbackRate 补（浏览器默认保音高）。
+       附带两个好处：① 同一句在 0.5/0.75 之间共用同一份缓存，不再各合成一遍；
+       ② 以后再加档位不必碰服务端。取「播放倍率最接近 1」的原生档，音质最稳。 */
+    const CLOUD_SYNTH_RATES = [1, 1.25, 1.5];
+    function cloudSynthRate(r) {
+    const v = Number(r) || 1;
+    let best = 1, bestD = Infinity;
+    for (const c of CLOUD_SYNTH_RATES) {
+    const d = Math.abs(Math.log(v / c)); // 对数距离 = 判断「放慢/加快多少」的公平尺度
+    if (d < bestD) { bestD = d; best = c; }
+    }
+    return best;
+    }
     const CLOUD = {
     URL: _CFG.SUPABASE_URL || 'https://nhqevdkjqzgnyjbijwso.supabase.co',
     KEY: _CFG.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ocWV2ZGtqcXpnbnlqYmlqd3NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NDQ2MDYsImV4cCI6MjEwMzIyMDYwNn0.WXX79gPNdvV_q37jvwTcACHPGZAvi3bw7CeFpw0QKpE',
@@ -4652,7 +4678,10 @@ let listenOn = false;
     return b;
     },
     async synth(text, voiceId, rate, isPlay, fresh) {
-    const key = 'r2|' + voiceId + '|' + Number(rate).toFixed(2) + '|' + text;
+    /* 缓存坐标用【合成档】而不是【目标档】：0.5 与 0.75 都要的是同一份 1x 音频，
+       各存一份既费流量又费 IndexedDB。play() 里那行 clipKey 必须与此逐字一致。 */
+    const sr = cloudSynthRate(rate);
+    const key = 'r2|' + voiceId + '|' + Number(sr).toFixed(2) + '|' + text;
     if (this.cache.has(key)) return this.cache.get(key);
     // fresh：正式播放时若怀疑 _pend 里那条已被误杀，就丢弃它、重开一份全新合成
     if (!fresh && this._pend.has(key)) return this._pend.get(key);
@@ -4669,12 +4698,12 @@ let listenOn = false;
     try {
     const blob = await this._enqueue(async () => {
     try {
-    return await this._fetchTTS(text, voiceId, rate, ctl.signal);
+    return await this._fetchTTS(text, voiceId, sr, ctl.signal);
     } catch (e) {
     if (ctl.signal.aborted) throw e;
     await new Promise(r => setTimeout(r, 600));
     if (ctl.signal.aborted) throw e;
-    return await this._fetchTTS(text, voiceId, rate, ctl.signal);
+    return await this._fetchTTS(text, voiceId, sr, ctl.signal);
     }
     }, ctl, key, isPlay);
     this._idbSet(key, blob);
@@ -4768,8 +4797,9 @@ let listenOn = false;
     setTimeout(() => { _cloudIntentionalPause = false; }, 100); // 短暂延迟后重置
     },
     play(text, voiceId, rate, my, cb, fallback, fresh) {
-    /* 缓存坐标，必须与 synth() 里那行 key 逐字一致 */
-    const clipKey = 'r2|' + voiceId + '|' + Number(rate).toFixed(2) + '|' + text;
+    /* 缓存坐标，必须与 synth() 里那行 key 逐字一致（含 cloudSynthRate 映射） */
+    const sr = cloudSynthRate(rate);
+    const clipKey = 'r2|' + voiceId + '|' + Number(sr).toFixed(2) + '|' + text;
     this.stop(clipKey); // 串行：停旧音频、清旧队列；但留下本句自己的预取（见 stop 的 keepKey）
     if (fresh) { try { this._pend.delete(clipKey); } catch (e) {} }
     const g = this._gen; // 本次播放的代际：过期回调不许 stop 掉新播放
@@ -4790,7 +4820,7 @@ let listenOn = false;
     try { showAbToast('☁ 云端语音合成中…（网络慢时会多等一会儿，不会静默换成本地音色）'); } catch (e) {}
     }, 1800);
     const fail = e => { if (done) return; done = true; clearTimeout(timer); clearInterval(monitor); clearTimeout(slowT); if (g === this._gen) this.stop(); fallback(e); };
-    const timer = setTimeout(() => fail(new Error('timeout')), 30000); // 30s 合成超时（延长到30s，给网络慢的情况更多时间）
+    let timer = setTimeout(() => fail(new Error('timeout')), 30000); // 30s 合成超时（延长到30s，给网络慢的情况更多时间）
 
     // 监控音频状态：检测暂停和卡住
     const monitor = setInterval(() => {
@@ -4818,8 +4848,20 @@ let listenOn = false;
     }, 1000);
 
     let retried = false;
+    /* 合成档 sr 与目标档 rate 的差额在这里补：0.75 → 用 1x 音频放慢到 0.75；
+       2x → 用 1.5x 音频再加到 1.333。每句都显式重设，避免常驻 <audio> 沿用上一句的倍率。
+       preservesPitch 显式写死：变速不变调（Safari 也认这一项，默认就是 true）。 */
+    const playRate = Math.min(4, Math.max(0.25, (Number(rate) || 1) / sr));
+    /* 注意 HTML 媒体加载算法会把 playbackRate 重置回 defaultPlaybackRate：
+       两个都要写，且 play() 前再补一次（Safari 在换 src 后偶发只认默认值）。 */
+    const applyRate = () => {
+    try { au.preservesPitch = true; } catch (e) {}
+    try { au.defaultPlaybackRate = playRate; } catch (e) {}
+    try { au.playbackRate = playRate; } catch (e) {}
+    };
     const loadInto = u0 => {
     if (done || my !== speakToken) return;
+    applyRate();
     au.src = u0;
     this._auUrl = u0; // 标记当前播放的 blob URL，防止缓存回收时掐断
     };
@@ -4835,6 +4877,7 @@ let listenOn = false;
     this.synth(text, voiceId, rate, true, true).then(url2 => {
     if (done || my !== speakToken) return;
     loadInto(url2);
+    applyRate();
     au.play().catch(() => fail(new Error('play-rejected')));
     }).catch(fail);
     return;
@@ -4844,6 +4887,11 @@ let listenOn = false;
     this.synth(text, voiceId, rate, true, fresh).then(url => {
     if (done || my !== speakToken) { clearTimeout(timer); clearInterval(monitor); clearTimeout(slowT); return; }
     clearTimeout(slowT);
+    /* 上面那条 30s 原本是「合成 + 播放」总超时。0.5x 慢速会把句子时长拉长一倍，
+       长句（>30s）合成明明早就回来了，却会被这条定时器掐断、误降级本地音色。
+       合成完成即换挂一个宽松的播放兜底（只在 onended 真的不来时救场）。 */
+    clearTimeout(timer);
+    timer = setTimeout(() => fail(new Error('play-stall')), 300000);
     loadInto(url);
     au.onended = () => { if (done) return; done = true; clearTimeout(timer); clearInterval(monitor); errStreak = 0; cb(); };
     au.onerror = onAudioErr;
@@ -4853,6 +4901,7 @@ let listenOn = false;
     dlog('cloud-audio-onpause', 'audio paused unexpectedly');
     }
     };
+    applyRate();
     au.play().catch(() => fail(new Error('play-rejected')));
     }).catch(fail);
     },
