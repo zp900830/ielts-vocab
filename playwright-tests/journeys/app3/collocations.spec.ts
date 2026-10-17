@@ -80,6 +80,10 @@ test.describe('3.0 列表页版式（一级页等宽 + 卡片自适应列数）'
       await page.goto(`${rootUrl}/index.html${route}`);
       await page.waitForSelector(sel, { timeout: 20000 });
       widths.push(await page.locator('.words-page').evaluate((el) => el.getBoundingClientRect().width));
+      // 卡片等高（2026-10-17 用户）：同一页前 12 张只允许一种高度
+      const hs = await page.locator(sel).evaluateAll((els) =>
+        [...new Set(els.slice(0, 12).map((e) => Math.round(e.getBoundingClientRect().height)))]);
+      expect(hs.length, `${route} 卡片应当等高：${hs.join('/')}`).toBe(1);
     }
     // 一级页等宽：两页内容区同宽，且没有被人为缩窄（1440 − 侧栏 220 − 内距 ≈ 1170）
     expect(Math.abs(widths[0] - widths[1])).toBeLessThanOrEqual(1);

@@ -652,10 +652,40 @@
   /* 点击打开（桌面/移动通用） */
   .loop-wrap.open .loop-menu, .rate-wrap.open .rate-menu { opacity: 1; visibility: visible;
     pointer-events: auto; transform: translateX(-50%) translateY(0); }
-  /* 倍速 7 档（2026-10-17）：竖排 7 行会顶到视口上沿（1280×720 实测首项 top=0，再矮一点就点不到），
-     改两列铺开 = 4 行；0.5~2 仍按从慢到快、行优先排列。单句循环菜单只有 3 项，保持原竖排不动。 */
-  .rate-menu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: 136px; }
-  .rate-menu button { text-align: center; }
+  /* 倍速菜单（2026-10-17 定版）：单列竖排 = 7 个预设 + 自定义；小屏给滚动上限，避免顶出视口 */
+  .rate-menu { min-width: 108px; max-height: min(72vh, 400px); overflow-y: auto; }
+  .rate-menu button, .rate-custom button { text-align: center; }
+  .rate-menu[hidden], .rate-custom[hidden] { display: none; }
+  /* 自定义倍数：与菜单同一锚点、同一套玻璃底；0.1~5.0 滑块 + 跟手气泡 */
+  .rate-custom { position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%) translateY(4px); width: 244px;
+    background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
+    backdrop-filter: blur(22px) saturate(170%); border: 1px solid rgba(255,255,255,.7);
+    border-radius: 14px; box-shadow: var(--shadow-lg); padding: 10px 12px 12px;
+    display: flex; flex-direction: column; gap: 8px; z-index: 12;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity var(--t-hover) ease, transform var(--t-hover) ease, visibility var(--t-hover); }
+  .rate-wrap.open .rate-custom:not([hidden]) { opacity: 1; visibility: visible;
+    pointer-events: auto; transform: translateX(-50%) translateY(0); }
+  .rc-head { display: flex; align-items: center; gap: 4px; }
+  .rc-back { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px;
+    border: none; background: transparent; color: var(--text); font-size: 18px; line-height: 1;
+    border-radius: 10px; cursor: pointer; }
+  .rc-title { font-size: 13px; font-weight: 700; color: var(--text); }
+  .rc-row { display: flex; align-items: center; gap: 8px; padding: 20px 0 2px; }
+  .rc-slide { position: relative; flex: 1; min-width: 0; }
+  .rc-end { flex: none; font-size: 10.5px; color: var(--muted); }
+  .rc-bubble { position: absolute; bottom: calc(100% + 6px); left: 18%; transform: translateX(-50%);
+    padding: 2px 8px; border-radius: 8px; background: var(--accent-soft); color: var(--accent-text);
+    font-size: 12px; font-weight: 700; white-space: nowrap; pointer-events: none; }
+  .rc-slide input[type="range"] { -webkit-appearance: none; appearance: none; display: block;
+    width: 100%; height: 24px; margin: 0; background: transparent; cursor: pointer; }
+  .rc-slide input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: var(--border); }
+  .rc-slide input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px;
+    margin-top: -7px; border: none; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.28); }
+  .rc-slide input[type="range"]::-moz-range-track { height: 4px; border-radius: 2px; background: var(--border); }
+  .rc-slide input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border: none; border-radius: 50%;
+    background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.28); }
   /* 桌面悬浮展开（触屏设备禁用，避免 iOS 点击后菜单粘住不关） */
   @media (hover: hover) and (pointer: fine) {
     .loop-wrap:hover .loop-menu, .rate-wrap:hover .rate-menu { opacity: 1; visibility: visible;
@@ -2520,16 +2550,19 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
   /* 手机档单列；其余宽度由 330 的最小卡宽自动决定 2/3/4/5 列 */
   @media (max-width: 700px) { .wb-list { grid-template-columns: 1fr; } }
-  .wb-row { display: block; width: 100%; min-height: 44px; text-align: left; padding: 12px 16px;
-    border: 1px solid var(--border); border-radius: 16px; background: var(--card); color: inherit;
-    font: inherit; cursor: pointer; box-shadow: var(--shadow); }
+  .wb-row { display: block; width: 100%; min-height: 44px; text-align: left; padding: 10px 16px;
+    border: 1px solid var(--border); border-radius: 14px; background: var(--card); color: inherit;
+    font: inherit; cursor: pointer; box-shadow: 0 1px 3px rgba(40,35,25,.04); }
+  /* 单词本：所有卡片同高（66），两行内容垂直居中 */
+  .wb-item .wb-row { height: 66px; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
   @media (hover: hover) { .wb-row:hover { border-color: var(--accent-line); } }
   .wb-item.open .wb-row { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
   .wr-head { display: flex; align-items: baseline; justify-content: flex-start; gap: 10px; }
   .wr-word { font-size: 15px; font-weight: 700; }
   .wr-pill { flex: none; font-size: 10.5px; font-weight: 700; line-height: 1.8; padding: 0 9px;
     border-radius: 999px; background: rgba(0,0,0,.05); color: var(--ink2); }
-  .wr-meta, .wr-meta2 { display: block; margin-top: 3px; font-size: 11px; color: var(--muted); }
+  .wr-meta, .wr-meta2 { display: block; margin-top: 0; font-size: 11px; color: var(--muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .wb-more { display: block; width: 100%; min-height: 44px; margin-top: 12px; border: 1px dashed var(--border);
     border-radius: 16px; background: var(--card); color: var(--accent-text); font: inherit; font-weight: 700;
     cursor: pointer; }
@@ -2566,11 +2599,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .cl-jump { flex: none; margin-left: auto; min-height: 32px; margin-top: 0; margin-bottom: 0; padding: 0; border: none; background: none;
     color: var(--accent-text); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; text-align: right; }
   .cl-jump[hidden] { display: none; }
-  .cl-row { cursor: default; }
-  .cl-top { display: flex; align-items: baseline; gap: 4px 8px; flex-wrap: wrap; }
-  .cl-en { font-size: 14.5px; font-weight: 700; color: var(--text); }
-  .cl-zh { font-size: 12.5px; color: var(--ink2); }
-  .cl-w { flex: none; font-size: 10.5px; color: var(--muted); }
+  /* 词伙表：与单词本同高（64），内容最多两行，超出省略——整页卡片齐平 */
+  .cl-row { height: 64px; padding: 0 16px; display: flex; align-items: center; cursor: default; }
+  .cl-top { display: block; max-height: 2.9em; overflow: hidden; width: 100%; line-height: 1.45; text-wrap: pretty; }
+  .cl-en { font-size: 14px; font-weight: 700; color: var(--text); }
+  .cl-zh { margin-left: 8px; font-size: 12.5px; color: var(--ink2); word-break: keep-all; }
+  .cl-w { margin-left: 8px; font-size: 10.5px; color: var(--muted); }
   .cl-w::before { content: "·"; margin-right: 6px; }
   /* 卡片本身窄于 430 时（手机、或多列时的窄卡）词头会折成「· artificial / intelligence」断头行：
      用容器查询按**卡片宽度**收掉，比按视口断点准。 */
@@ -3388,18 +3422,33 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         </div>
         <div class="rate-wrap" id="rateWrap">
           <div class="menu-bridge" aria-hidden="true"></div>
-          <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速" aria-label="朗读倍速"><i class="ri-speed-fill" aria-hidden="true"></i> 1x</button>
+          <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速" aria-label="朗读倍速"><i class="ri-speed-line" aria-hidden="true"></i> 1.0x</button>
           <div class="rate-menu">
-            <!-- 7 档（2026-10-17）：慢速端补 0.5（生词多的首读）、快速端补 1.75/2（复习速刷）。
-                 同类产品（每日英语听力 / 不背单词 / 微信读书）都落在 0.5~2.0 这组常规档位上，
-                 0.75~1.5 只有四档时两端都不够用。改这里必须同步 cloudSynthRate 的原生档位表。 -->
-            <button data-mrate="0.5" onclick="pickRate(0.5)">0.5x</button>
-            <button data-mrate="0.75" onclick="pickRate(0.75)">0.75x</button>
-            <button data-mrate="1" class="active" onclick="pickRate(1)">1x</button>
-            <button data-mrate="1.25" onclick="pickRate(1.25)">1.25x</button>
+            <!-- 预设档位（2026-10-17 用户定版）：5.0 / 3.0 / 2.0 / 1.5 / 1.2 / 1.0 / 0.8，从快到慢，1.0 居中；
+                 末项「自定义」打开 0.1~5.0、步进 0.1 的滑块。改这里必须同步 cloudSynthRate 的原生档位表。 -->
+            <button data-mrate="5" onclick="pickRate(5)">5.0x</button>
+            <button data-mrate="3" onclick="pickRate(3)">3.0x</button>
+            <button data-mrate="2" onclick="pickRate(2)">2.0x</button>
             <button data-mrate="1.5" onclick="pickRate(1.5)">1.5x</button>
-            <button data-mrate="1.75" onclick="pickRate(1.75)">1.75x</button>
-            <button data-mrate="2" onclick="pickRate(2)">2x</button>
+            <button data-mrate="1.2" onclick="pickRate(1.2)">1.2x</button>
+            <button data-mrate="1" class="active" onclick="pickRate(1)">1.0x</button>
+            <button data-mrate="0.8" onclick="pickRate(0.8)">0.8x</button>
+            <button class="rate-custom-open" onclick="openRateCustom(event)">自定义</button>
+          </div>
+          <!-- 自定义倍数：与菜单互斥，同在 .rate-wrap 里（点外部/Esc 仍由 rateWrap 的 open 状态统一关） -->
+          <div class="rate-custom" id="rateCustom" hidden>
+            <div class="rc-head">
+              <button class="rc-back" type="button" onclick="backToRateMenu(event)" aria-label="返回倍速列表"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
+              <span class="rc-title">自定义倍数</span>
+            </div>
+            <div class="rc-row">
+              <span class="rc-end">0.1</span>
+              <div class="rc-slide">
+                <div class="rc-bubble" id="rcBubble">1.0x</div>
+                <input type="range" id="rcRange" min="0.1" max="5" step="0.1" value="1" aria-label="自定义倍速（0.1 到 5.0，步进 0.1）">
+              </div>
+              <span class="rc-end">5.0</span>
+            </div>
           </div>
         </div>
         <div class="ab-wrap" id="markWrap">
@@ -4890,10 +4939,12 @@ let listenOn = false;
     }, 1000);
 
     let retried = false;
-    /* 合成档 sr 与目标档 rate 的差额在这里补：0.75 → 用 1x 音频放慢到 0.75；
-       2x → 用 1.5x 音频再加到 1.333。每句都显式重设，避免常驻 <audio> 沿用上一句的倍率。
+    /* 合成档 sr 与目标档 rate 的差额在这里补：0.8 → 用 1x 音频放慢到 0.8；
+       5x → 用 1.5x 音频再拉到 3.33。每句都显式重设，避免常驻 <audio> 沿用上一句的倍率。
        preservesPitch 显式写死：变速不变调（Safari 也认这一项，默认就是 true）。 */
-    const playRate = Math.min(4, Math.max(0.25, (Number(rate) || 1) / sr));
+    /* 自定义档最低 0.1x：下限必须放到 0.1（旧的 0.25 会把 0.1/0.15 这类值抬成 0.25）；
+       上限 8 给 5x 留余量（5/1.5 = 3.33）。 */
+    const playRate = Math.min(8, Math.max(0.25, (Number(rate) || 1) / sr)); // REVERSE
     /* 注意 HTML 媒体加载算法会把 playbackRate 重置回 defaultPlaybackRate：
        两个都要写，且 play() 前再补一次（Safari 在换 src 后偶发只认默认值）。 */
     const applyRate = () => {
@@ -6446,28 +6497,76 @@ let listenOn = false;
     else if (cur) speakAside(cur);
     else speakAside(a === 'en-GB' ? 'British accent.' : 'American accent.');
     }
+    /* 倍速统一显示一位小数（2026-10-17 定版：1.0x / 0.8x / 1.3x） */
+    function fmtRate(r) { return (Math.round((Number(r) || 1) * 10) / 10).toFixed(1) + 'x'; }
     function toggleRateMenu(e) {
     if (e) e.stopPropagation();
     const w = document.getElementById('rateWrap');
     if (!w) return;
+    // 每次从按钮打开都回到「预设列表」，别停在上次的自定义面板
+    if (!w.classList.contains('open')) backToRateMenu();
     w.classList.toggle('open');
     }
     function pickRate(r) {
     setRate(r);
     savePref('rate', r);
+    backToRateMenu();
     const w = document.getElementById('rateWrap');
     if (w) w.classList.remove('open');
     }
+    function openRateCustom(e) {
+    if (e) e.stopPropagation();
+    const m = document.querySelector('.rate-menu'), c = document.getElementById('rateCustom');
+    if (!m || !c) return;
+    m.hidden = true; c.hidden = false;
+    const rg = document.getElementById('rcRange');
+    if (rg) rg.value = String(rate);
+    syncRateCustom();
+    }
+    function backToRateMenu(e) {
+    if (e) e.stopPropagation();
+    const m = document.querySelector('.rate-menu'), c = document.getElementById('rateCustom');
+    if (c) c.hidden = true;
+    if (m) m.hidden = false;
+    }
+    function syncRateCustom() {
+    const rg = document.getElementById('rcRange'), b = document.getElementById('rcBubble');
+    if (!rg || !b) return;
+    const v = Math.min(5, Math.max(0.1, Number(rg.value) || 1));
+    b.textContent = fmtRate(v);
+    /* 气泡跟手：值线性映射到轨道 0~100%；左右各让出半个拇指（18px）折算，端点不越出卡片 */
+    const p = (v - 0.1) / 4.9;
+    b.style.left = `calc(${(p * 100).toFixed(2)}% + ${((0.5 - p) * 18).toFixed(1)}px)`;
+    }
+    function applyRateCustom() {
+    const rg = document.getElementById('rcRange');
+    if (!rg) return;
+    const v = Math.round((Number(rg.value) || 1) * 10) / 10;
+    setRate(v);
+    savePref('rate', v);
+    }
     function setRate(r) {
     rate = r;
+    const rv = Number(r);
+    /* 自定义值（如 1.3）不落在任何预设上时，菜单里没有高亮项 —— 这是对的，别硬凑 */
     document.querySelectorAll('.rate-menu [data-mrate]').forEach(b =>
-    b.classList.toggle('active', parseFloat(b.dataset.mrate) === r));
+    b.classList.toggle('active', Math.abs(parseFloat(b.dataset.mrate) - rv) < 1e-6));
     const c = document.getElementById('rateCycle');
-    /* 倍速钮图标用【填充】版（2026-10-17 用户指定）：线框在 10px 小字级别太细，填充更压得住。
-       首屏 HTML 里那枚初始图标必须同款，否则没存过倍速的用户看到的是纯文字。 */
-    if (c) c.innerHTML = `<i class="ri-speed-fill" aria-hidden="true"></i> ${r}x`;
+    /* 图标回线性版（2026-10-17 用户第二次定版）；首屏 HTML 里那枚初始图标必须同款 */
+    if (c) c.innerHTML = `<i class="ri-speed-line" aria-hidden="true"></i> ${fmtRate(r)}`;
+    const panel = document.getElementById('rateCustom');
+    if (panel && !panel.hidden) {
+    const rg = document.getElementById('rcRange');
+    if (rg) { rg.value = String(rv); syncRateCustom(); }
+    }
     if (idx >= 0) paint(); // 刷新时长估算
     }
+    (function bindRateCustom() {
+    const rg = document.getElementById('rcRange');
+    if (!rg) return;
+    rg.addEventListener('input', syncRateCustom); // 拖的时候只更新气泡
+    rg.addEventListener('change', applyRateCustom); // 松手才落地（避免每 0.1 都写盘+重绘）
+    })();
 
 
     /* ============ 单词弹窗 ============ */
