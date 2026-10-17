@@ -109,6 +109,32 @@ async function openFirstArticle(page: Page) {
 }
 
 test.describe('云端发音延迟：不重复合成、不互相挤掉', () => {
+  test('clipKey 的 rate 段按合成档记：自定义倍速不产生新的缓存条目', async ({ page }) => {
+    await stubData(page);
+    await page.goto(`${rootUrl}/index.html#/home`);
+    await waitReady(page);
+    const r = await page.evaluate(() => {
+      const c = CLOUD as unknown as { clipKey(t: string, v: string, r: number): string };
+      const txt = 'Probe sentence.';
+      const k = (rt: number) => c.clipKey(txt, 'en-GB-SoniaNeural', rt);
+      return {
+        k01: k(0.1), k08: k(0.8), k1: k(1), k12: k(1.2), k125: k(1.25), k2: k(2), k3: k(3), k5: k(5), k15: k(1.5),
+        trimmed: c.clipKey('  Probe sentence.  ', 'en-GB-SoniaNeural', 1),
+      };
+    });
+    /* 倍速（cloudSynthRate / playRate）与缓存坐标是同一条链：rate 段必须是「合成档」，
+       否则每换一个自定义档位就要多合成一份 —— 0.1/0.8/1 共用 1.00，1.2/1.25 共用 1.25，
+       2/3/5 共用 1.50。自定义档 0.1~5.0 只要落在这三档附近就不该新增条目。 */
+    expect(r.k1).toBe('r2|en-GB-SoniaNeural|1.00|Probe sentence.');
+    expect(r.k08, '0.8x 与 1x 是同一份 1x 音频').toBe(r.k1);
+    expect(r.k01, '0.1x 也归 1x（播放层再放慢）').toBe(r.k1);
+    expect(r.k12, '1.2x 取最近的原生档 1.25').toBe(r.k125);
+    expect(r.k2, '2x 取 1.5').toBe(r.k15);
+    expect(r.k5, '5x 取 1.5（再靠 playbackRate 拉到 3.33）').toBe(r.k15);
+    expect(r.k3, '3x 取 1.5').toBe(r.k15);
+    expect(r.trimmed, '前后空格必须归一：预热取原始句、播放取 DOM 文本，两边得同键').toBe(r.k1);
+  });
+
   test('同一句连点两下：只合成一次，第二下复用还在飞的那份且不降级', async ({ page }) => {
     test.setTimeout(30000);
     await stubData(page);
