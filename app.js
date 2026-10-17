@@ -1030,8 +1030,10 @@
   function renderCollocations(view) {
     view.innerHTML = `<div class="words-page cl-page">
       <h1 class="pg-title">词伙表</h1>
-      <p class="wb-hint" id="clCount">加载中…</p>
-      <button class="cl-jump" id="clJump" type="button" hidden></button>
+      <div class="cl-head">
+        <p class="wb-hint" id="clCount">加载中…</p>
+        <button class="cl-jump" id="clJump" type="button" hidden></button>
+      </div>
       <input class="cl-search" id="clSearch" type="search" enterkeyhint="search"
         placeholder="搜英文或中文，如 pollution / 污染" aria-label="搜索词伙" autocomplete="off">
       <ul class="wb-list" id="clList" aria-label="词伙列表"></ul>

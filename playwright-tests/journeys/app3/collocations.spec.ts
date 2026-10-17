@@ -71,3 +71,20 @@ test.describe('3.0 词伙表', () => {
     await expect(page.locator('#clCount')).toHaveText('匹配 0 条（共 3320 条）');
   });
 });
+
+test.describe('3.0 列表页版式（2026-10-17 用户「横跨太平洋 / 超长创可贴」）', () => {
+  test('两页都收在 980 内、搜索框 ≤460；手机档不显示右侧词头', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    for (const [route, sel] of [['#/words', '.wb-row'], ['#/collocations', '.cl-row']]) {
+      await page.goto(`${rootUrl}/index.html${route}`);
+      await page.waitForSelector(sel, { timeout: 20000 });
+      const w = await page.locator('.words-page').evaluate((el) => el.getBoundingClientRect().width);
+      expect(w).toBeLessThanOrEqual(1000);
+    }
+    const sw = await page.locator('#clSearch').evaluate((el) => el.getBoundingClientRect().width);
+    expect(sw).toBeLessThanOrEqual(460);
+    // 手机档：词头是次要信息，收起来避免折成「· artificial / intelligence」
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(page.locator('#clList .cl-w').first()).toBeHidden();
+  });
+});

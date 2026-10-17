@@ -2512,7 +2512,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   @media (max-width: 700px) { .st-arts { grid-template-columns: 1fr; } }
   /* ============ 3.0 单词本（M3，PRD §6） ============ */
   /* F（2026-09-25）：与首页同宽口径（#appView 全宽），不再锁 880；桌面 2 列、平板/手机单列。 */
-  .words-page { max-width: none; }
+  /* 2026-10-17 用户：「单词本/词伙表横跨太平洋」——两条列表页从全宽收回到 980 居中，
+     行内不再把状态胶囊/词头顶到屏幕另一端；搜索框也收窄成正常输入框宽度。 */
+  .words-page { max-width: 980px; margin: 0 auto; }
   .wb-hint { font-size: 11.5px; color: var(--muted); margin: 0 0 10px; }
   .wb-list { list-style: none; display: grid; grid-template-columns: 1fr; gap: 10px; margin: 0; padding: 0; align-items: start; }
   @media (min-width: 1024px) { .wb-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -2521,7 +2523,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     font: inherit; cursor: pointer; box-shadow: var(--shadow); }
   @media (hover: hover) { .wb-row:hover { border-color: var(--accent-line); } }
   .wb-item.open .wb-row { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-  .wr-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .wr-head { display: flex; align-items: baseline; justify-content: flex-start; gap: 10px; }
   .wr-word { font-size: 15px; font-weight: 700; }
   .wr-pill { flex: none; font-size: 10.5px; font-weight: 700; line-height: 1.8; padding: 0 9px;
     border-radius: 999px; background: rgba(0,0,0,.05); color: var(--ink2); }
@@ -2553,18 +2555,23 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   /* ============ 3.0 词伙表（2026-10-17，路由 #/collocations） ============
      复用单词本的 .words-page / .wb-list / .wb-row / .wb-more 骨架；
      只多三样：搜索框、覆盖状态（未覆盖整行置灰）、分组标题（跨两列的 .cl-sec）。 */
-  .cl-search { width: 100%; min-height: 44px; margin: 0 0 10px; padding: 0 14px; border: 1px solid var(--border);
+  .cl-search { width: 100%; max-width: 440px; min-height: 44px; margin: 0 0 10px; padding: 0 14px; border: 1px solid var(--border);
     border-radius: 14px; background: var(--card); color: var(--text); font: inherit; font-size: 14px;
     -webkit-appearance: none; appearance: none; }
   .cl-search:focus { outline: 2px solid var(--accent-line); outline-offset: 1px; }
-  .cl-jump { display: block; min-height: 32px; margin: 0 0 8px; padding: 0; border: none; background: none;
-    color: var(--accent-text); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; text-align: left; }
+  .cl-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; margin: 0 0 10px; }
+  .cl-head .wb-hint { margin: 0; }
+  .cl-jump { flex: none; margin-left: auto; min-height: 32px; margin-top: 0; margin-bottom: 0; padding: 0; border: none; background: none;
+    color: var(--accent-text); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; text-align: right; }
   .cl-jump[hidden] { display: none; }
   .cl-row { cursor: default; }
   .cl-top { display: flex; align-items: baseline; gap: 4px 8px; flex-wrap: wrap; }
   .cl-en { font-size: 14.5px; font-weight: 700; color: var(--text); }
   .cl-zh { font-size: 12.5px; color: var(--ink2); }
-  .cl-w { margin-left: auto; flex: none; font-size: 10.5px; color: var(--muted); }
+  .cl-w { flex: none; font-size: 10.5px; color: var(--muted); }
+  .cl-w::before { content: "·"; margin-right: 6px; }
+  /* 手机档：词头是次要信息，窄屏上容易折成「· artificial / intelligence」这种断头行，直接收掉 */
+  @media (max-width: 700px) { .cl-w { display: none; } }
   .cl-sec { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; margin: 18px 0 0;
     font-size: 11.5px; font-weight: 700; color: var(--muted); }
   .cl-sec::after { content: ""; flex: 1; height: 1px; background: var(--border); }
