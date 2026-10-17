@@ -2,9 +2,9 @@
 // 根因方向：服务端只稳定支持「≥1」的原生档，0.75 是后加的慢速档，请求被拒。
 // 本文件把修法锁死（改法见 index.html 的 cloudSynthRate）：
 // ① 云端合成只按原生档 1 / 1.25 / 1.5 请求，其余档位不外发；
-// ② 差速由 <audio>.playbackRate 补（0.75 档：合成 1x、播放 0.75）；
-// ③ 0.75 与 1x 共用同一份缓存（同一句在倍速间切换不再各合成一遍）；
-// ④ 菜单扩到 7 档（0.5 / 0.75 / 1 / 1.25 / 1.5 / 1.75 / 2）。
+// ② 差速由 <audio>.playbackRate 补（0.8 档：合成 1x、播放 0.8）；
+// ③ 0.8 与 1x 共用同一份缓存（同一句在倍速间切换不再各合成一遍）；
+// ④ 菜单 = 预设 5.0/3.0/2.0/1.5/1.2/1.0/0.8 + 自定义（0.1~5.0，步进 0.1）。
 import { test, expect } from '../../fixtures';
 import type { Page } from '@playwright/test';
 
@@ -21,6 +21,10 @@ declare const CLOUD: {
 };
 declare const speakToken: number;
 declare function pickRate(r: number): void;
+declare function openRateCustom(e?: Event): void;
+declare function backToRateMenu(e?: Event): void;
+declare const rate: number;
+declare function setRate(r: number): void;
 declare function toggleRateMenu(e?: Event): void;
 
 const rootUrl = process.env.E2E_ROOT_URL || '';
@@ -71,16 +75,16 @@ function silentWav(): Buffer {
 }
 
 test.describe('云端倍速：只发原生档 + playbackRate 补差', () => {
-  test('映射表：0.5/0.75 → 1x，1.75/2 → 1.5x，中间三档原样', async ({ page }) => {
+  test('映射表：0.8 → 1x，1.2 → 1.25x，2/3/5 → 1.5x', async ({ page }) => {
     await gotoApp(page);
     const got = await page.evaluate(() => [
-      cloudSynthRate(0.5), cloudSynthRate(0.75), cloudSynthRate(1),
-      cloudSynthRate(1.25), cloudSynthRate(1.5), cloudSynthRate(1.75), cloudSynthRate(2),
+      cloudSynthRate(0.8), cloudSynthRate(1), cloudSynthRate(1.2),
+      cloudSynthRate(1.5), cloudSynthRate(2), cloudSynthRate(3), cloudSynthRate(5),
     ]);
-    expect(got, '云端合成档位表（服务端只认这三档）').toEqual([1, 1, 1, 1.25, 1.5, 1.5, 1.5]);
+    expect(got, '云端合成档位表（服务端只认这三档）').toEqual([1, 1, 1.25, 1.5, 1.5, 1.5, 1.5]);
   });
 
-  test('0.75x：请求体 rate=1，播放倍率 0.75，且与 1x 共用缓存', async ({ page }) => {
+  test('0.8x：请求体 rate=1，播放倍率 0.8，且与 1x 共用缓存', async ({ page }) => {
     const bodies: Array<{ text: string; voice: string; rate: number }> = [];
     await page.route('**/functions/v1/tts', (r) => {
       // 只统计 POST：跨域请求的 OPTIONS 预检没有 body，算进来就会把「复用缓存」误判成二次合成
@@ -99,15 +103,15 @@ test.describe('云端倍速：只发原生档 + playbackRate 补差', () => {
       CLOUD.URL = 'https://sb.test';
       CLOUD.KEY = 'test-key';
       CLOUD.session = async () => ({ access_token: 'test-token' });
-      CLOUD.play('A rate probe sentence.', 'en-GB-SoniaNeural', 0.75, speakToken, () => {}, () => {});
+      CLOUD.play('A rate probe sentence.', 'en-GB-SoniaNeural', 0.8, speakToken, () => {}, () => {});
     });
 
-    await expect.poll(() => bodies.length, { message: '0.75 档应发起一次合成', timeout: 8000 }).toBe(1);
-    expect(bodies[0].rate, '0.75 不许原样发给服务端（服务端不支持 → 整句加载失败）').toBe(1);
+    await expect.poll(() => bodies.length, { message: '0.8 档应发起一次合成', timeout: 8000 }).toBe(1);
+    expect(bodies[0].rate, '0.8 不许原样发给服务端（服务端不支持 → 整句加载失败）').toBe(1);
     await expect.poll(() => page.evaluate(() => {
       const au = CLOUD._auEl as HTMLAudioElement | null;
       return au ? Number(au.playbackRate.toFixed(3)) : -1;
-    }), { message: '差速要在播放层补齐', timeout: 5000 }).toBe(0.75);
+    }), { message: '差速要在播放层补齐', timeout: 5000 }).toBe(0.8);
 
     // 换到 1x：同一句、同一合成档 → 直接命中缓存，不该再发一次合成
     const before1x = bodies.length;
@@ -116,12 +120,12 @@ test.describe('云端倍速：只发原生档 + playbackRate 补差', () => {
     });
     await page.waitForTimeout(400);
     const cacheKeys = await page.evaluate(() => Array.from(CLOUD.cache.keys()));
-    expect(bodies.length - before1x, '1x 复用了 0.75 那份 1x 音频，不该再合成').toBe(0);
-    expect(cacheKeys, '缓存坐标按合成档记：0.75 与 1x 是同一条').toContain('r2|en-GB-SoniaNeural|1.00|A rate probe sentence.');
+    expect(bodies.length - before1x, '1x 复用了 0.8 那份 1x 音频，不该再合成').toBe(0);
+    expect(cacheKeys, '缓存坐标按合成档记：0.8 与 1x 是同一条').toContain('r2|en-GB-SoniaNeural|1.00|A rate probe sentence.');
     await expect.poll(() => page.evaluate(() => {
       const au = CLOUD._auEl as HTMLAudioElement | null;
       return au ? Number(au.playbackRate.toFixed(3)) : -1;
-    }), { message: '1x 播放倍率必须回到 1（不许沿用上一句的 0.75）', timeout: 5000 }).toBe(1);
+    }), { message: '1x 播放倍率必须回到 1（不许沿用上一句的 0.8）', timeout: 5000 }).toBe(1);
   });
 
   test('2x：请求体 rate=1.5，播放倍率 1.333（任何档位都不外发未支持值）', async ({ page }) => {
@@ -155,31 +159,113 @@ test.describe('云端倍速：只发原生档 + playbackRate 补差', () => {
   });
 });
 
-test.describe('倍速菜单 7 档', () => {
-  test('档位齐全、点 0.75 后按钮与激活项同步', async ({ page }) => {
+test.describe('倍速菜单与自定义倍数', () => {
+  test('档位齐全、点 0.8 后按钮与激活项同步', async ({ page }) => {
     await gotoApp(page);
-    const labels = await page.locator('.rate-menu [data-mrate]').evaluateAll((els) =>
+    const labels = await page.locator('.rate-menu button').evaluateAll((els) =>
       els.map((el) => (el as HTMLElement).textContent!.trim()));
-    expect(labels).toEqual(['0.5x', '0.75x', '1x', '1.25x', '1.5x', '1.75x', '2x']);
+    expect(labels).toEqual(['5.0x', '3.0x', '2.0x', '1.5x', '1.2x', '1.0x', '0.8x', '自定义']);
 
-    await page.evaluate(() => pickRate(0.75));
-    await expect(page.locator('#rateCycle')).toContainText('0.75x');
+    await page.evaluate(() => pickRate(0.8));
+    await expect(page.locator('#rateCycle')).toContainText('0.8x');
     const active = await page.locator('.rate-menu [data-mrate].active').evaluateAll((els) =>
       els.map((el) => (el as HTMLElement).dataset.mrate));
-    expect(active, '激活项只能有一个').toEqual(['0.75']);
+    expect(active, '激活项只能有一个').toEqual(['0.8']);
 
-    /* 7 档比原来多 3 行：竖排时 1280×720 已顶到视口上沿（首项 top=0），矮一点就点不到最慢档。
-       所以菜单必须是两列 grid（4 行）；这条锁住的不是"好看"，是"点得到"。 */
-    const cols = await page.evaluate(() => {
+    /* 单列竖排（2026-10-17 用户定版；8 项靠 max-height 兜住小屏）。 */
+    const layout = await page.evaluate(() => {
       const m = document.querySelector('.rate-menu') as HTMLElement;
       const cs = getComputedStyle(m);
-      /* 隐藏态下 computed 会原样回 repeat(...)，只有真正布局后才展开成 px 列表 —— 直接认声明里的 2 */
-      return { display: cs.display, raw: cs.gridTemplateColumns };
+      return { display: cs.display, dir: cs.flexDirection, maxH: cs.maxHeight };
     });
-    expect(cols.display, '倍速菜单必须用 grid（竖排 7 行会顶出视口）').toBe('grid');
-    expect(cols.raw, '两列铺开').toMatch(/repeat\(2\b/);
+    expect(layout.display).toBe('flex');
+    expect(layout.dir).toBe('column');
+    expect(layout.maxH, '小屏要能滚，不能顶出视口').not.toBe('none');
 
-    await page.evaluate(() => pickRate(0.5));
-    await expect(page.locator('#rateCycle')).toContainText('0.5x');
+    await page.evaluate(() => pickRate(5));
+    await expect(page.locator('#rateCycle')).toContainText('5.0x');
+
+    // 旧版存过 0.75 的用户：读回来必须归到 0.1 步进，别出现「显示 0.8x、实际 0.75x」
+    const migrated = await page.evaluate(() => { setRate(0.75); return { r: rate, label: document.getElementById('rateCycle')!.textContent!.trim() }; });
+    expect(migrated).toEqual({ r: 0.8, label: '0.8x' });
+  });
+
+  test('自定义：0.1~5.0 步进 0.1，松手落地，自定义值不硬凑预设高亮', async ({ page }) => {
+    await gotoApp(page);
+    const range = await page.evaluate(() => {
+      openRateCustom();
+      const rg = document.getElementById('rcRange') as HTMLInputElement;
+      return { min: rg.min, max: rg.max, step: rg.step, val: rg.value,
+        menuHidden: (document.querySelector('.rate-menu') as HTMLElement).hidden,
+        panelShown: !(document.getElementById('rateCustom') as HTMLElement).hidden };
+    });
+    expect(range, '滑块口径：0.1 ~ 5.0，步进 0.1').toMatchObject({ min: '0.1', max: '5', step: '0.1', val: '1' });
+    expect(range.menuHidden, '打开自定义时预设列表要收起').toBe(true);
+    expect(range.panelShown).toBe(true);
+
+    // 拖到 1.3：input 只更新气泡，change（松手）才落地
+    const bubble = await page.evaluate(() => {
+      const rg = document.getElementById('rcRange') as HTMLInputElement;
+      rg.value = '1.3';
+      rg.dispatchEvent(new Event('input', { bubbles: true }));
+      return document.getElementById('rcBubble')!.textContent;
+    });
+    expect(bubble).toBe('1.3x');
+    expect(await page.locator('#rateCycle').textContent(), '未松手前不许改实际倍速').toContain('1.0x');
+
+    await page.evaluate(() => {
+      const rg = document.getElementById('rcRange') as HTMLInputElement;
+      rg.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    await expect(page.locator('#rateCycle')).toContainText('1.3x');
+    expect(await page.locator('.rate-menu [data-mrate].active').count(), '1.3 不属于任何预设').toBe(0);
+    expect(await page.evaluate(() => rate), '松手后实际倍速要落地').toBe(1.3);
+
+    // 最低档也要走得通（playRate 下限不能把 0.1 抬成 0.25）
+    await page.evaluate(() => {
+      const rg = document.getElementById('rcRange') as HTMLInputElement;
+      rg.value = '0.1';
+      rg.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    await expect(page.locator('#rateCycle')).toContainText('0.1x');
+
+    // 返回：面板收起、列表回来，且 0.1 没有任何预设高亮
+    await page.evaluate(() => backToRateMenu());
+    expect(await page.evaluate(() => ({
+      panel: (document.getElementById('rateCustom') as HTMLElement).hidden,
+      menu: (document.querySelector('.rate-menu') as HTMLElement).hidden,
+    }))).toEqual({ panel: true, menu: false });
+  });
+
+  test('自定义 0.1x：播放倍率不许被下限抬成 0.25', async ({ page }) => {
+    const bodies: Array<{ rate: number }> = [];
+    await page.route('**/functions/v1/tts', (r) => {
+      if (r.request().method() === 'POST') {
+        try {
+          const b = r.request().postDataJSON();
+          if (b && typeof b.text === 'string') bodies.push(b);
+        } catch (e) {}
+      }
+      return r.fulfill({ status: 200, contentType: 'audio/wav', body: silentWav() });
+    });
+    await gotoApp(page);
+
+    await page.evaluate(() => {
+      CLOUD.URL = 'https://sb.test';
+      CLOUD.KEY = 'test-key';
+      CLOUD.session = async () => ({ access_token: 'test-token' });
+      openRateCustom();
+      const rg = document.getElementById('rcRange') as HTMLInputElement;
+      rg.value = '0.1';
+      rg.dispatchEvent(new Event('change', { bubbles: true }));
+      CLOUD.play('A very slow probe.', 'en-GB-SoniaNeural', rate, speakToken, () => {}, () => {});
+    });
+
+    await expect.poll(() => bodies.length, { message: '0.1x 也要能合成', timeout: 8000 }).toBeGreaterThan(0);
+    expect(bodies[0].rate, '0.1 走 1x 合成').toBe(1);
+    await expect.poll(() => page.evaluate(() => {
+      const au = CLOUD._auEl as HTMLAudioElement | null;
+      return au ? Number(au.playbackRate.toFixed(3)) : -1;
+    }), { message: '0.1x = 1x 音频 × 0.1（不能被 0.25 下限抬速）', timeout: 5000 }).toBe(0.1);
   });
 });

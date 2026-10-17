@@ -683,9 +683,7 @@
   .rc-slide input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: var(--border); }
   .rc-slide input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px;
     margin-top: -7px; border: none; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.28); }
-  .rc-slide input[type="range"]::-moz-range-track { height: 4px; border-radius: 2px; background: var(--border); }
-  .rc-slide input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border: none; border-radius: 50%;
-    background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.28); }
+  /* 不写 ::-moz-range-*：css-integrity 门禁用 Chromium 解析，未识别伪元素会被判成「规则被吞」 */
   /* 桌面悬浮展开（触屏设备禁用，避免 iOS 点击后菜单粘住不关） */
   @media (hover: hover) and (pointer: fine) {
     .loop-wrap:hover .loop-menu, .rate-wrap:hover .rate-menu { opacity: 1; visibility: visible;
@@ -1921,6 +1919,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #taskBar .tb-play .btn, #taskBar .tb-btn.again { color: #4a554f;
     background: var(--card); border-color: var(--border); }
   #taskBar .tb-play .btn i, #taskBar .tb-btn.again i { font-size: 16px !important; }
+  /* 任务条这一行要塞下 8 颗键：倍速只留数字（2026-10-17 按钮文案从 1x 变 1.0x 后，
+     图标 + 多出的字符把 tbNext 挤到同一行，破了「推进键独占一行」）。图标在自由播放条里照旧。 */
+  #taskBar #rateCycle i { display: none; }
   body.dark .task-bar .tb-sub, body.dark .task-bar .tb-eta { color: #bdb5a8; }
   body.dark #taskBar .tb-play .btn, body.dark #taskBar .tb-btn.again { color: #cfc7ba;
     background: var(--card); border-color: var(--border); }
@@ -4944,7 +4945,7 @@ let listenOn = false;
        preservesPitch 显式写死：变速不变调（Safari 也认这一项，默认就是 true）。 */
     /* 自定义档最低 0.1x：下限必须放到 0.1（旧的 0.25 会把 0.1/0.15 这类值抬成 0.25）；
        上限 8 给 5x 留余量（5/1.5 = 3.33）。 */
-    const playRate = Math.min(8, Math.max(0.25, (Number(rate) || 1) / sr)); // REVERSE
+    const playRate = Math.min(8, Math.max(0.1, (Number(rate) || 1) / sr));
     /* 注意 HTML 媒体加载算法会把 playbackRate 重置回 defaultPlaybackRate：
        两个都要写，且 play() 前再补一次（Safari 在换 src 后偶发只认默认值）。 */
     const applyRate = () => {
@@ -6546,8 +6547,10 @@ let listenOn = false;
     savePref('rate', v);
     }
     function setRate(r) {
-    rate = r;
-    const rv = Number(r);
+    /* 一律归到 0.1 步进：旧版存过 0.75 / 1.25 / 1.75 的用户，读回来要落到新预设或自定义值上，
+       否则按钮显示 0.8x、实际却跑 0.75x。 */
+    const rv = Math.round((Number(r) || 1) * 10) / 10;
+    rate = rv;
     /* 自定义值（如 1.3）不落在任何预设上时，菜单里没有高亮项 —— 这是对的，别硬凑 */
     document.querySelectorAll('.rate-menu [data-mrate]').forEach(b =>
     b.classList.toggle('active', Math.abs(parseFloat(b.dataset.mrate) - rv) < 1e-6));
