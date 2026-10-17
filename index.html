@@ -370,6 +370,8 @@
   .notebar .nb-n { display: inline; color: var(--ink2); margin-left: 6px; }
   .notebar .nb-label { display: inline-block; font-size: 10.5px; font-weight: 700; color: var(--ink2);
     background: rgba(0,0,0,.04); border-radius: 5px; padding: 0 6px; margin-right: 5px; line-height: 1.6; vertical-align: 1px; }
+  /* 词伙的中文释义：压一档颜色，别和英文搭配抢同一层（2026-10-17 词伙补译） */
+  .notebar .nb-zh { opacity: .68; }
   body.dark .notebar { background: rgba(255,255,255,.03); border-color: rgba(255,255,255,.06); }
   body.dark .notebar .nb-label { color: var(--muted); }
   /* 同句词卡合成一张结构化卡（2026-10-09 用户：一卡一词纵向太空，每卡后半截都是空白）：
@@ -3491,7 +3493,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
       /* 数据缓存版本：必须等于 data/ 三个 JSON 的内容哈希，由 scripts/validate_data.py 校验。
          不写它，iOS Safari 会按 Last-Modified 启发式缓存 —— 课文改了、词表没改，句序与词表就会错位。
          改了数据忘了 bump 会直接让门禁 FAIL，而不是静默服务旧数据。 */
-      const SHADOW_DATA_VER = "58df06e811";
+      const SHADOW_DATA_VER = "af649251e1";
       async function loadData() {
         if (dataReady) return;
         const art = document.getElementById('art');
@@ -3983,6 +3985,11 @@ let listenOn = false;
       const list = idx[ci + ':' + pi];
       return list && list.length ? `<div class="cmp-block">${list.map(x => renderCompareNote(x.note)).join('')}</div>` : '';
     }
+    function noteRestHtml(label, rest) {
+      // 词伙的中文释义用全角括注跟在英文后（数据层 2026-10-17 补），显示层压一档颜色
+      const safe = esc(rest);
+      return label === '词伙' ? safe.replace(/（[^）]*）/g, m => `<span class="nb-zh">${m}</span>`) : safe;
+    }
     function noteBar(t) {
     // 句下词卡：每个目标词都有一张（2026-10-09 用户实测「很多词卡没展示」——
     // 原先没 note 的词整张跳过，807 处引用无卡）。没 note/辨析的出瘦身卡：
@@ -4005,7 +4012,7 @@ let listenOn = false;
     if (lm) { label = lm[1]; rest = noteText.slice(lm[0].length); }
     // 长辨析占整行（nb-wide）：括注一多，挤在半列里就是细长条，不如横贯整卡
     if (rest.length > 60) wide = true;
-    noteLine = `<span class="nb-n"><span class="nb-label">${label}</span>${esc(rest)}</span>`;
+    noteLine = `<span class="nb-n"><span class="nb-label">${label}</span>${noteRestHtml(label, rest)}</span>`;
     }
     cards.push({ wide: wide, body: `<span class="nb-t"><span class="nb-w">${esc(k)}</span>${ph ? `<span class="nb-ph">${esc(ph)}</span>` : ''}<span class="nb-m">${esc(info.m || '')}</span></span>${noteLine}` });
     }
@@ -7642,7 +7649,7 @@ let listenOn = false;
         let label = '辨析', rest = noteText;
         const lm = noteText.match(/^(同义词|词伙)(：)/);
         if (lm) { label = lm[1]; rest = noteText.slice(lm[0].length); }
-        return `<span class="notebar"><span class="nb-t"><span class="nb-w">${esc(k)}</span>${ph ? `<span class="nb-ph">${esc(ph)}</span>` : ''}<span class="nb-m">${esc(info.m || '')}</span></span><span class="nb-n"><span class="nb-label">${label}</span>${esc(rest)}</span></span>`;
+        return `<span class="notebar"><span class="nb-t"><span class="nb-w">${esc(k)}</span>${ph ? `<span class="nb-ph">${esc(ph)}</span>` : ''}<span class="nb-m">${esc(info.m || '')}</span></span><span class="nb-n"><span class="nb-label">${label}</span>${noteRestHtml(label, rest)}</span></span>`;
       }
       function listenCardCmp(k) {
         const info = (typeof VOCAB !== 'undefined' && VOCAB[k]) || null;
