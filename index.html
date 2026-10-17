@@ -2520,16 +2520,19 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
     grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
   /* 手机档单列；其余宽度由 330 的最小卡宽自动决定 2/3/4/5 列 */
   @media (max-width: 700px) { .wb-list { grid-template-columns: 1fr; } }
-  .wb-row { display: block; width: 100%; min-height: 44px; text-align: left; padding: 12px 16px;
-    border: 1px solid var(--border); border-radius: 16px; background: var(--card); color: inherit;
-    font: inherit; cursor: pointer; box-shadow: var(--shadow); }
+  .wb-row { display: block; width: 100%; min-height: 44px; text-align: left; padding: 10px 16px;
+    border: 1px solid var(--border); border-radius: 14px; background: var(--card); color: inherit;
+    font: inherit; cursor: pointer; box-shadow: 0 1px 3px rgba(40,35,25,.04); }
+  /* 单词本：所有卡片同高（66），两行内容垂直居中 */
+  .wb-item .wb-row { height: 66px; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
   @media (hover: hover) { .wb-row:hover { border-color: var(--accent-line); } }
   .wb-item.open .wb-row { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
   .wr-head { display: flex; align-items: baseline; justify-content: flex-start; gap: 10px; }
   .wr-word { font-size: 15px; font-weight: 700; }
   .wr-pill { flex: none; font-size: 10.5px; font-weight: 700; line-height: 1.8; padding: 0 9px;
     border-radius: 999px; background: rgba(0,0,0,.05); color: var(--ink2); }
-  .wr-meta, .wr-meta2 { display: block; margin-top: 3px; font-size: 11px; color: var(--muted); }
+  .wr-meta, .wr-meta2 { display: block; margin-top: 0; font-size: 11px; color: var(--muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .wb-more { display: block; width: 100%; min-height: 44px; margin-top: 12px; border: 1px dashed var(--border);
     border-radius: 16px; background: var(--card); color: var(--accent-text); font: inherit; font-weight: 700;
     cursor: pointer; }
@@ -2566,11 +2569,12 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   .cl-jump { flex: none; margin-left: auto; min-height: 32px; margin-top: 0; margin-bottom: 0; padding: 0; border: none; background: none;
     color: var(--accent-text); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; text-align: right; }
   .cl-jump[hidden] { display: none; }
-  .cl-row { cursor: default; }
-  .cl-top { display: flex; align-items: baseline; gap: 4px 8px; flex-wrap: wrap; }
-  .cl-en { font-size: 14.5px; font-weight: 700; color: var(--text); }
-  .cl-zh { font-size: 12.5px; color: var(--ink2); }
-  .cl-w { flex: none; font-size: 10.5px; color: var(--muted); }
+  /* 词伙表：与单词本同高（64），内容最多两行，超出裁切——整页卡片齐平 */
+  .cl-row { height: 64px; padding: 0 16px; display: flex; align-items: center; cursor: default; }
+  .cl-top { display: block; max-height: 2.9em; overflow: hidden; width: 100%; line-height: 1.45; text-wrap: pretty; }
+  .cl-en { font-size: 14px; font-weight: 700; color: var(--text); }
+  .cl-zh { margin-left: 8px; font-size: 12.5px; color: var(--ink2); word-break: keep-all; }
+  .cl-w { margin-left: 8px; font-size: 10.5px; color: var(--muted); }
   .cl-w::before { content: "·"; margin-right: 6px; }
   /* 卡片本身窄于 430 时（手机、或多列时的窄卡）词头会折成「· artificial / intelligence」断头行：
      用容器查询按**卡片宽度**收掉，比按视口断点准。 */

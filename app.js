@@ -927,15 +927,16 @@
     const e = wordIndex()[w];
     const pos = sentPos(e.sents[0]);
     const a = pos.a;
-    const meta = `${esc(SECTIONS[a].title)} · 第 ${volNo(a, pos.pi)} 卷 · 出现 ${e.count} 次`;
     const s = wordSlot(w, st);
     const pill = s ? `接触 ${s.reps || 0} 次` : '还没见过';
     const relt = (s && s.lastContactAt) ? rel(s.lastContactAt) : '还没学过';
+    /* 2026-10-17 用户「卡片等高、排版简约」：原来三条信息压成两行——时间并进 meta 行，
+       行高固定 66，整页卡片一样高。 */
+    const meta = `${esc(SECTIONS[a].title)} · 第 ${volNo(a, pos.pi)} 卷 · 出现 ${e.count} 次 · ${relt}`;
     return `<li class="wb-item">
       <button class="wb-row" type="button" data-w="${esc(w)}" aria-expanded="false">
         <span class="wr-head"><span class="wr-word">${esc(w)}</span><span class="wr-pill">${pill}</span></span>
         <span class="wr-meta">${meta}</span>
-        <span class="wr-meta2">${relt}</span>
       </button>
     </li>`;
   }
