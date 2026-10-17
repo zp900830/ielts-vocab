@@ -3352,7 +3352,7 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         </div>
         <div class="rate-wrap" id="rateWrap">
           <div class="menu-bridge" aria-hidden="true"></div>
-          <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速" aria-label="朗读倍速">1x</button>
+          <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速" aria-label="朗读倍速"><i class="ri-speed-fill" aria-hidden="true"></i> 1x</button>
           <div class="rate-menu">
             <!-- 7 档（2026-10-17）：慢速端补 0.5（生词多的首读）、快速端补 1.75/2（复习速刷）。
                  同类产品（每日英语听力 / 不背单词 / 微信读书）都落在 0.5~2.0 这组常规档位上，
@@ -6421,7 +6421,9 @@ let listenOn = false;
     document.querySelectorAll('.rate-menu [data-mrate]').forEach(b =>
     b.classList.toggle('active', parseFloat(b.dataset.mrate) === r));
     const c = document.getElementById('rateCycle');
-    if (c) c.innerHTML = `<i class="ri-speed-line" aria-hidden="true"></i> ${r}x`;
+    /* 倍速钮图标用【填充】版（2026-10-17 用户指定）：线框在 10px 小字级别太细，填充更压得住。
+       首屏 HTML 里那枚初始图标必须同款，否则没存过倍速的用户看到的是纯文字。 */
+    if (c) c.innerHTML = `<i class="ri-speed-fill" aria-hidden="true"></i> ${r}x`;
     if (idx >= 0) paint(); // 刷新时长估算
     }
 
