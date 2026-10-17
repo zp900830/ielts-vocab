@@ -652,10 +652,38 @@
   /* 点击打开（桌面/移动通用） */
   .loop-wrap.open .loop-menu, .rate-wrap.open .rate-menu { opacity: 1; visibility: visible;
     pointer-events: auto; transform: translateX(-50%) translateY(0); }
-  /* 倍速 7 档（2026-10-17）：竖排 7 行会顶到视口上沿（1280×720 实测首项 top=0，再矮一点就点不到），
-     改两列铺开 = 4 行；0.5~2 仍按从慢到快、行优先排列。单句循环菜单只有 3 项，保持原竖排不动。 */
-  .rate-menu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: 136px; }
-  .rate-menu button { text-align: center; }
+  /* 倍速菜单（2026-10-17 定版）：单列竖排 = 7 个预设 + 自定义；小屏给滚动上限，避免顶出视口 */
+  .rate-menu { min-width: 108px; max-height: min(72vh, 400px); overflow-y: auto; }
+  .rate-menu button, .rate-custom button { text-align: center; }
+  .rate-menu[hidden], .rate-custom[hidden] { display: none; }
+  /* 自定义倍数：与菜单同一锚点、同一套玻璃底；0.1~5.0 滑块 + 跟手气泡 */
+  .rate-custom { position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%) translateY(4px); width: 244px;
+    background: var(--glass-strong); -webkit-backdrop-filter: blur(22px) saturate(170%);
+    backdrop-filter: blur(22px) saturate(170%); border: 1px solid rgba(255,255,255,.7);
+    border-radius: 14px; box-shadow: var(--shadow-lg); padding: 10px 12px 12px;
+    display: flex; flex-direction: column; gap: 8px; z-index: 12;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity var(--t-hover) ease, transform var(--t-hover) ease, visibility var(--t-hover); }
+  .rate-wrap.open .rate-custom:not([hidden]) { opacity: 1; visibility: visible;
+    pointer-events: auto; transform: translateX(-50%) translateY(0); }
+  .rc-head { display: flex; align-items: center; gap: 4px; }
+  .rc-back { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px;
+    border: none; background: transparent; color: var(--text); font-size: 18px; line-height: 1;
+    border-radius: 10px; cursor: pointer; }
+  .rc-title { font-size: 13px; font-weight: 700; color: var(--text); }
+  .rc-row { display: flex; align-items: center; gap: 8px; padding: 20px 0 2px; }
+  .rc-slide { position: relative; flex: 1; min-width: 0; }
+  .rc-end { flex: none; font-size: 10.5px; color: var(--muted); }
+  .rc-bubble { position: absolute; bottom: calc(100% + 6px); left: 18%; transform: translateX(-50%);
+    padding: 2px 8px; border-radius: 8px; background: var(--accent-soft); color: var(--accent-text);
+    font-size: 12px; font-weight: 700; white-space: nowrap; pointer-events: none; }
+  .rc-slide input[type="range"] { -webkit-appearance: none; appearance: none; display: block;
+    width: 100%; height: 24px; margin: 0; background: transparent; cursor: pointer; }
+  .rc-slide input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: var(--border); }
+  .rc-slide input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px;
+    margin-top: -7px; border: none; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.28); }
+  /* 不写 ::-moz-range-*：css-integrity 门禁用 Chromium 解析，未识别伪元素会被判成「规则被吞」 */
   /* 桌面悬浮展开（触屏设备禁用，避免 iOS 点击后菜单粘住不关） */
   @media (hover: hover) and (pointer: fine) {
     .loop-wrap:hover .loop-menu, .rate-wrap:hover .rate-menu { opacity: 1; visibility: visible;
@@ -1891,6 +1919,9 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
   #taskBar .tb-play .btn, #taskBar .tb-btn.again { color: #4a554f;
     background: var(--card); border-color: var(--border); }
   #taskBar .tb-play .btn i, #taskBar .tb-btn.again i { font-size: 16px !important; }
+  /* 任务条这一行要塞下 8 颗键：倍速只留数字（2026-10-17 按钮文案从 1x 变 1.0x 后，
+     图标 + 多出的字符把 tbNext 挤到同一行，破了「推进键独占一行」）。图标在自由播放条里照旧。 */
+  #taskBar #rateCycle i { display: none; }
   body.dark .task-bar .tb-sub, body.dark .task-bar .tb-eta { color: #bdb5a8; }
   body.dark #taskBar .tb-play .btn, body.dark #taskBar .tb-btn.again { color: #cfc7ba;
     background: var(--card); border-color: var(--border); }
@@ -3392,18 +3423,33 @@ body.scrolled .audiobar.expanded { padding: 10px 16px; gap: 12px; border-radius:
         </div>
         <div class="rate-wrap" id="rateWrap">
           <div class="menu-bridge" aria-hidden="true"></div>
-          <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速" aria-label="朗读倍速"><i class="ri-speed-fill" aria-hidden="true"></i> 1x</button>
+          <button class="btn ab-btn" id="rateCycle" onclick="toggleRateMenu(event)" title="倍速" aria-label="朗读倍速"><i class="ri-speed-line" aria-hidden="true"></i> 1.0x</button>
           <div class="rate-menu">
-            <!-- 7 档（2026-10-17）：慢速端补 0.5（生词多的首读）、快速端补 1.75/2（复习速刷）。
-                 同类产品（每日英语听力 / 不背单词 / 微信读书）都落在 0.5~2.0 这组常规档位上，
-                 0.75~1.5 只有四档时两端都不够用。改这里必须同步 cloudSynthRate 的原生档位表。 -->
-            <button data-mrate="0.5" onclick="pickRate(0.5)">0.5x</button>
-            <button data-mrate="0.75" onclick="pickRate(0.75)">0.75x</button>
-            <button data-mrate="1" class="active" onclick="pickRate(1)">1x</button>
-            <button data-mrate="1.25" onclick="pickRate(1.25)">1.25x</button>
+            <!-- 预设档位（2026-10-17 用户定版）：5.0 / 3.0 / 2.0 / 1.5 / 1.2 / 1.0 / 0.8，从快到慢，1.0 居中；
+                 末项「自定义」打开 0.1~5.0、步进 0.1 的滑块。改这里必须同步 cloudSynthRate 的原生档位表。 -->
+            <button data-mrate="5" onclick="pickRate(5)">5.0x</button>
+            <button data-mrate="3" onclick="pickRate(3)">3.0x</button>
+            <button data-mrate="2" onclick="pickRate(2)">2.0x</button>
             <button data-mrate="1.5" onclick="pickRate(1.5)">1.5x</button>
-            <button data-mrate="1.75" onclick="pickRate(1.75)">1.75x</button>
-            <button data-mrate="2" onclick="pickRate(2)">2x</button>
+            <button data-mrate="1.2" onclick="pickRate(1.2)">1.2x</button>
+            <button data-mrate="1" class="active" onclick="pickRate(1)">1.0x</button>
+            <button data-mrate="0.8" onclick="pickRate(0.8)">0.8x</button>
+            <button class="rate-custom-open" onclick="openRateCustom(event)">自定义</button>
+          </div>
+          <!-- 自定义倍数：与菜单互斥，同在 .rate-wrap 里（点外部/Esc 仍由 rateWrap 的 open 状态统一关） -->
+          <div class="rate-custom" id="rateCustom" hidden>
+            <div class="rc-head">
+              <button class="rc-back" type="button" onclick="backToRateMenu(event)" aria-label="返回倍速列表"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
+              <span class="rc-title">自定义倍数</span>
+            </div>
+            <div class="rc-row">
+              <span class="rc-end">0.1</span>
+              <div class="rc-slide">
+                <div class="rc-bubble" id="rcBubble">1.0x</div>
+                <input type="range" id="rcRange" min="0.1" max="5" step="0.1" value="1" aria-label="自定义倍速（0.1 到 5.0，步进 0.1）">
+              </div>
+              <span class="rc-end">5.0</span>
+            </div>
           </div>
         </div>
         <div class="ab-wrap" id="markWrap">
@@ -4894,10 +4940,12 @@ let listenOn = false;
     }, 1000);
 
     let retried = false;
-    /* 合成档 sr 与目标档 rate 的差额在这里补：0.75 → 用 1x 音频放慢到 0.75；
-       2x → 用 1.5x 音频再加到 1.333。每句都显式重设，避免常驻 <audio> 沿用上一句的倍率。
+    /* 合成档 sr 与目标档 rate 的差额在这里补：0.8 → 用 1x 音频放慢到 0.8；
+       5x → 用 1.5x 音频再拉到 3.33。每句都显式重设，避免常驻 <audio> 沿用上一句的倍率。
        preservesPitch 显式写死：变速不变调（Safari 也认这一项，默认就是 true）。 */
-    const playRate = Math.min(4, Math.max(0.25, (Number(rate) || 1) / sr));
+    /* 自定义档最低 0.1x：下限必须放到 0.1（旧的 0.25 会把 0.1/0.15 这类值抬成 0.25）；
+       上限 8 给 5x 留余量（5/1.5 = 3.33）。 */
+    const playRate = Math.min(8, Math.max(0.1, (Number(rate) || 1) / sr));
     /* 注意 HTML 媒体加载算法会把 playbackRate 重置回 defaultPlaybackRate：
        两个都要写，且 play() 前再补一次（Safari 在换 src 后偶发只认默认值）。 */
     const applyRate = () => {
@@ -6450,28 +6498,78 @@ let listenOn = false;
     else if (cur) speakAside(cur);
     else speakAside(a === 'en-GB' ? 'British accent.' : 'American accent.');
     }
+    /* 倍速统一显示一位小数（2026-10-17 定版：1.0x / 0.8x / 1.3x） */
+    function fmtRate(r) { return (Math.round((Number(r) || 1) * 10) / 10).toFixed(1) + 'x'; }
     function toggleRateMenu(e) {
     if (e) e.stopPropagation();
     const w = document.getElementById('rateWrap');
     if (!w) return;
+    // 每次从按钮打开都回到「预设列表」，别停在上次的自定义面板
+    if (!w.classList.contains('open')) backToRateMenu();
     w.classList.toggle('open');
     }
     function pickRate(r) {
     setRate(r);
     savePref('rate', r);
+    backToRateMenu();
     const w = document.getElementById('rateWrap');
     if (w) w.classList.remove('open');
     }
+    function openRateCustom(e) {
+    if (e) e.stopPropagation();
+    const m = document.querySelector('.rate-menu'), c = document.getElementById('rateCustom');
+    if (!m || !c) return;
+    m.hidden = true; c.hidden = false;
+    const rg = document.getElementById('rcRange');
+    if (rg) rg.value = String(rate);
+    syncRateCustom();
+    }
+    function backToRateMenu(e) {
+    if (e) e.stopPropagation();
+    const m = document.querySelector('.rate-menu'), c = document.getElementById('rateCustom');
+    if (c) c.hidden = true;
+    if (m) m.hidden = false;
+    }
+    function syncRateCustom() {
+    const rg = document.getElementById('rcRange'), b = document.getElementById('rcBubble');
+    if (!rg || !b) return;
+    const v = Math.min(5, Math.max(0.1, Number(rg.value) || 1));
+    b.textContent = fmtRate(v);
+    /* 气泡跟手：值线性映射到轨道 0~100%；左右各让出半个拇指（18px）折算，端点不越出卡片 */
+    const p = (v - 0.1) / 4.9;
+    b.style.left = `calc(${(p * 100).toFixed(2)}% + ${((0.5 - p) * 18).toFixed(1)}px)`;
+    }
+    function applyRateCustom() {
+    const rg = document.getElementById('rcRange');
+    if (!rg) return;
+    const v = Math.round((Number(rg.value) || 1) * 10) / 10;
+    setRate(v);
+    savePref('rate', v);
+    }
     function setRate(r) {
-    rate = r;
+    /* 一律归到 0.1 步进：旧版存过 0.75 / 1.25 / 1.75 的用户，读回来要落到新预设或自定义值上，
+       否则按钮显示 0.8x、实际却跑 0.75x。 */
+    const rv = Math.round((Number(r) || 1) * 10) / 10;
+    rate = rv;
+    /* 自定义值（如 1.3）不落在任何预设上时，菜单里没有高亮项 —— 这是对的，别硬凑 */
     document.querySelectorAll('.rate-menu [data-mrate]').forEach(b =>
-    b.classList.toggle('active', parseFloat(b.dataset.mrate) === r));
+    b.classList.toggle('active', Math.abs(parseFloat(b.dataset.mrate) - rv) < 1e-6));
     const c = document.getElementById('rateCycle');
-    /* 倍速钮图标用【填充】版（2026-10-17 用户指定）：线框在 10px 小字级别太细，填充更压得住。
-       首屏 HTML 里那枚初始图标必须同款，否则没存过倍速的用户看到的是纯文字。 */
-    if (c) c.innerHTML = `<i class="ri-speed-fill" aria-hidden="true"></i> ${r}x`;
+    /* 图标回线性版（2026-10-17 用户第二次定版）；首屏 HTML 里那枚初始图标必须同款 */
+    if (c) c.innerHTML = `<i class="ri-speed-line" aria-hidden="true"></i> ${fmtRate(r)}`;
+    const panel = document.getElementById('rateCustom');
+    if (panel && !panel.hidden) {
+    const rg = document.getElementById('rcRange');
+    if (rg) { rg.value = String(rv); syncRateCustom(); }
+    }
     if (idx >= 0) paint(); // 刷新时长估算
     }
+    (function bindRateCustom() {
+    const rg = document.getElementById('rcRange');
+    if (!rg) return;
+    rg.addEventListener('input', syncRateCustom); // 拖的时候只更新气泡
+    rg.addEventListener('change', applyRateCustom); // 松手才落地（避免每 0.1 都写盘+重绘）
+    })();
 
 
     /* ============ 单词弹窗 ============ */
