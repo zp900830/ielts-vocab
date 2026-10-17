@@ -12,7 +12,7 @@ from check_compare_draft import sec_variants   # 课文标记的拆法也只有�
 
 # 主站（3.0，2026-10-08 起即根站点）原先完全没有版本戳，改课文后 iOS Safari 会按 Last-Modified 命中旧缓存，
 # 出现 sections.json 是新的、vocab.json 是旧的 → 句序与词表错位。
-SHADOW_VER_FILES = ['data/sections.json', 'data/vocab.json', 'data/chapters.json']
+SHADOW_VER_FILES = ['data/sections.json', 'data/vocab.json', 'data/chapters.json', 'data/collocations.json']
 
 def digest(rels):
     h = hashlib.sha256()

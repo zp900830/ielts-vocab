@@ -23,8 +23,8 @@ async function stubData(page: import('@playwright/test').Page, payloads: Record<
   }
 }
 
-const NAV_ICONS = ['ri-home-5-line', 'ri-headphone-line', 'ri-book-2-line', 'ri-bar-chart-2-line'];
-const NAV_ICONS_FILL = ['ri-home-5-fill', 'ri-headphone-fill', 'ri-book-2-fill', 'ri-bar-chart-2-fill'];
+const NAV_ICONS = ['ri-home-5-line', 'ri-headphone-line', 'ri-book-2-line', 'ri-links-line', 'ri-bar-chart-2-line'];
+const NAV_ICONS_FILL = ['ri-home-5-fill', 'ri-headphone-fill', 'ri-book-2-fill', 'ri-links-fill', 'ri-bar-chart-2-fill'];
 
 test.describe('3.0 图标源（remixicon 4.5.0 · 本地自托管）', () => {
   test('源码级：只引用本地 vendor 那份，页面里没有远端图标源', () => {
@@ -43,7 +43,7 @@ test.describe('3.0 图标源（remixicon 4.5.0 · 本地自托管）', () => {
     expect(fs.existsSync(path.join(vend, 'remixicon.woff2')), 'woff2 实体缺失 —— 图标会静默全塌').toBe(true);
   });
 
-  test('主站导航四颗 + 已登录头像在 4.5.0 字体里真的渲得出', async ({ page }) => {
+  test('主站导航五颗 + 已登录头像在 4.5.0 字体里真的渲得出', async ({ page }) => {
     await stubData(page, EMPTY);
     await page.goto(`${rootUrl}/index.html#/home`);
 
@@ -53,7 +53,7 @@ test.describe('3.0 图标源（remixicon 4.5.0 · 本地自托管）', () => {
 
     // 四个导航项各一对图标（线性 + 面性，2026-09-26 用户：默认线性、选中面性）
     const items = page.locator('.sidenav .nav-item');
-    await expect(items).toHaveCount(4);
+    await expect(items).toHaveCount(5);
     for (let i = 0; i < NAV_ICONS.length; i++) {
       const item = items.nth(i);
       await expect(item.locator(`i.${NAV_ICONS[i]}`), `第 ${i + 1} 个导航项的线性图标`).toHaveCount(1);
@@ -85,8 +85,8 @@ test.describe('3.0 图标源（remixicon 4.5.0 · 本地自托管）', () => {
     // 给出清晰红灯，不是缩短等待。源级锁在同文件第一条。
     await page.waitForFunction(() => {
       const els = document.querySelectorAll('.sidenav .nav-item i, .sidenav .me-card i');
-      /* 4 个导航项 × 2 + 「我的」× 2（线性 + 面性）= 10（2026-10-06 成对图标） */
-      if (els.length !== 10) return false;
+      /* 5 个导航项 × 2 + 「我的」× 2（线性 + 面性）= 12（2026-10-17 加词伙表） */
+      if (els.length !== 12) return false;
       return Array.from(els).every((el) => {
         const c = getComputedStyle(el, '::before').content;
         return !!c && c !== 'none' && c !== 'normal';

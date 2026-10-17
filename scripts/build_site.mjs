@@ -28,6 +28,7 @@ const FILES = [
   'data/sections.json',
   'data/vocab.json',
   'data/chapters.json',
+  'data/collocations.json',
   // 3.0 PWA：真实 service worker 文件（scope /，/admin/ 与数据 JSON 放行）。缺它则 SW 注册 404、离线兜底失效。
   'sw.js',
   // 3.0 PWA iOS 图标（2026-09-25）：iOS 只认 apple-touch-icon，manifest 的 data-URI 图标它不收。

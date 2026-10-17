@@ -5,7 +5,7 @@
    #/story 是 2026-10-10 加的**二级页**（六篇故事脉络，入口在「我的」里）：不进侧栏导航、
    可深链，页内「返回首页」回 #/home，选中态不落在任何 nav-item 上。 */
 (function () {
-  const ROUTES = ['home', 'stats', 'words', 'listen', 'me', 'story'];
+  const ROUTES = ['home', 'stats', 'words', 'collocations', 'listen', 'me', 'story'];
   /* refine3 ⑦：「正在载入…」占位统一出口。薄荷绿三点轻脉冲（纯 CSS，见 index.html 的 .iel-loading），
      尊重 prefers-reduced-motion；role=status 让读屏知道在加载，而不是一片空白。 */
   function loadingHtml() {
@@ -79,6 +79,8 @@
     if (cur === 'stats') { view.innerHTML = loadingHtml(); return; }
     if (cur === 'words' && window.APP3 && window.APP3.renderWords) return window.APP3.renderWords(view);
     if (cur === 'words') { view.innerHTML = loadingHtml(); return; }
+    if (cur === 'collocations' && window.APP3 && window.APP3.renderCollocations) return window.APP3.renderCollocations(view);
+    if (cur === 'collocations') { view.innerHTML = loadingHtml(); return; }
     if (cur === 'listen' && window.APP3 && window.APP3.renderListen) return window.APP3.renderListen(view);
     if (cur === 'listen') { view.innerHTML = loadingHtml(); return; }
     if (cur === 'me') return renderMe(view);
@@ -968,6 +970,98 @@
     else btn.remove();
   }
   window.APP3 = Object.assign(window.APP3, { renderWords });
+
+  /* ---- 3.0 词伙表（2026-10-17）----
+     数据来自 data/collocations.json：3.0 全书 3320 条，能挂到课文目标词的（已覆盖）排前面，
+     挂不上的排最后并置灰。懒加载：只有进这一页才拉，不拖慢首屏。 */
+  const CL_BATCH = 100;
+  let _clShown = CL_BATCH, _clQ = '', _clLoading = false, _clError = '';
+  function clListHtml(list) {
+    const shown = Math.min(_clShown, list.length);
+    let out = '', header = false;
+    for (let i = 0; i < shown; i++) {
+      const r = list[i];
+      if (!r.c && !header) {
+        header = true;
+        const off = list.reduce((n, x) => n + (x.c ? 0 : 1), 0);
+        out += `<li class="cl-sec">未覆盖 · 书里有、六篇课文没用到（${off} 条）</li>`;
+      }
+      const ws = (r.w || []).slice(0, 2).join(' / ');
+      out += `<li class="wb-row cl-row${r.c ? '' : ' off'}">
+        <span class="cl-top"><span class="cl-en">${esc(r.e)}</span><span class="cl-zh">${esc(r.z)}</span>${ws ? `<span class="cl-w">${esc(ws)}</span>` : ''}</span></li>`;
+    }
+    return out || '<li class="cl-sec">没有匹配的词伙</li>';
+  }
+  function paintCollocList() {
+    const ul = document.getElementById('clList');
+    if (!ul) return;
+    const all = (typeof COLLOCS !== 'undefined' && COLLOCS) || [];
+    /* 数据还没回来（或路由重渲时 fetch 仍在飞）：保持「加载中…」，别先画一个「共 0 条」的假口径。
+       全量并行下 route() 可能重渲一次，第二次进来时 _clLoading=true，这里必须继续等。 */
+    if (!all.length && !_clError) {
+      const c0 = document.getElementById('clCount');
+      if (c0) c0.textContent = '加载中…';
+      return;
+    }
+    const q = _clQ.trim().toLowerCase();
+    const list = q ? all.filter((r) => (r.e + ' ' + r.z + ' ' + (r.w || []).join(' ')).toLowerCase().includes(q)) : all;
+    ul.innerHTML = clListHtml(list);
+    const more = document.getElementById('clMore');
+    if (more) {
+      const left = list.length - Math.min(_clShown, list.length);
+      more.hidden = left <= 0;
+      if (left > 0) more.textContent = `加载更多（还剩 ${left} 条）`;
+    }
+    const cnt = document.getElementById('clCount');
+    if (cnt) {
+      const cov = all.reduce((n, r) => n + (r.c ? 1 : 0), 0);
+      cnt.textContent = _clError ? _clError
+        : (q ? `匹配 ${list.length} 条（共 ${all.length} 条）`
+             : `共 ${all.length} 条 · 已覆盖 ${cov} 条 · 未覆盖 ${all.length - cov} 条`);
+    }
+    const jump = document.getElementById('clJump');
+    if (jump) {
+      const firstOff = all.findIndex((r) => !r.c);
+      const usable = !q && firstOff >= 0 && firstOff > 0;
+      jump.hidden = !usable;
+      if (usable) jump.textContent = `跳到未覆盖（${all.length - firstOff} 条）`;
+    }
+  }
+  function renderCollocations(view) {
+    view.innerHTML = `<div class="words-page cl-page">
+      <h1 class="pg-title">词伙表</h1>
+      <p class="wb-hint" id="clCount">加载中…</p>
+      <button class="cl-jump" id="clJump" type="button" hidden></button>
+      <input class="cl-search" id="clSearch" type="search" enterkeyhint="search"
+        placeholder="搜英文或中文，如 pollution / 污染" aria-label="搜索词伙" autocomplete="off">
+      <ul class="wb-list" id="clList" aria-label="词伙列表"></ul>
+      <button class="wb-more" id="clMore" type="button" hidden>加载更多</button>
+      <p class="wb-hint">全部取自《顾家北手把手教你雅思词伙》3.0；置灰的是书里有、六篇课文没用到的搭配。</p>
+    </div>`;
+    document.getElementById('clSearch').addEventListener('input', (e) => {
+      _clQ = e.target.value; _clShown = CL_BATCH; paintCollocList();
+    });
+    document.getElementById('clMore').addEventListener('click', () => {
+      _clShown += CL_BATCH; paintCollocList();
+    });
+    document.getElementById('clJump').addEventListener('click', () => {
+      const all = (typeof COLLOCS !== 'undefined' && COLLOCS) || [];
+      const firstOff = all.findIndex((r) => !r.c);
+      if (firstOff >= 0) { _clShown = firstOff + CL_BATCH; paintCollocList(); }
+      const sec = document.querySelector('#clList .cl-sec');
+      if (sec) sec.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    });
+
+    if (typeof COLLOCS !== 'undefined' && COLLOCS.length) { paintCollocList(); return; }
+    if (_clLoading) { paintCollocList(); return; }
+    _clLoading = true;
+    fetch('/data/collocations.json?v=' + SHADOW_DATA_VER)
+      .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then((d) => { COLLOCS = d; _clError = ''; })
+      .catch(() => { _clError = '词伙数据加载失败，请检查网络后重试'; })
+      .finally(() => { _clLoading = false; paintCollocList(); });
+  }
+  window.APP3 = Object.assign(window.APP3, { renderCollocations });
 
   // 原文句里把目标词高亮（其它 [[词:形式]] 只留形式），其余文本转义
   function sentenceHtml(raw, word) {
