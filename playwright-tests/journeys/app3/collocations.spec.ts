@@ -72,19 +72,30 @@ test.describe('3.0 词伙表', () => {
   });
 });
 
-test.describe('3.0 列表页版式（2026-10-17 用户「横跨太平洋 / 超长创可贴」）', () => {
-  test('两页都收在 980 内、搜索框 ≤460；手机档不显示右侧词头', async ({ page }) => {
+test.describe('3.0 列表页版式（一级页等宽 + 卡片自适应列数）', () => {
+  test('与一级页同宽、宽屏多列、手机单列且不显示词头', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
+    const widths: number[] = [];
     for (const [route, sel] of [['#/words', '.wb-row'], ['#/collocations', '.cl-row']]) {
       await page.goto(`${rootUrl}/index.html${route}`);
       await page.waitForSelector(sel, { timeout: 20000 });
-      const w = await page.locator('.words-page').evaluate((el) => el.getBoundingClientRect().width);
-      expect(w).toBeLessThanOrEqual(1000);
+      widths.push(await page.locator('.words-page').evaluate((el) => el.getBoundingClientRect().width));
     }
+    // 一级页等宽：两页内容区同宽，且没有被人为缩窄（1440 − 侧栏 220 − 内距 ≈ 1170）
+    expect(Math.abs(widths[0] - widths[1])).toBeLessThanOrEqual(1);
+    expect(widths[0]).toBeGreaterThan(1100);
+
+    // 自适应列数：1440 下至少 3 列（330 最小卡宽）
+    const cols = await page.locator('#clList').evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(' ').length);
+    expect(cols).toBeGreaterThanOrEqual(3);
+    // 搜索框仍收在 440
     const sw = await page.locator('#clSearch').evaluate((el) => el.getBoundingClientRect().width);
     expect(sw).toBeLessThanOrEqual(460);
-    // 手机档：词头是次要信息，收起来避免折成「· artificial / intelligence」
+
+    // 手机档：单列 + 不显示右侧词头
     await page.setViewportSize({ width: 390, height: 844 });
+    const colsM = await page.locator('#clList').evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(' ').length);
+    expect(colsM).toBe(1);
     await expect(page.locator('#clList .cl-w').first()).toBeHidden();
   });
 });
